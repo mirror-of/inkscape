@@ -7,21 +7,22 @@
 # Davorin Šego <davorin.sego@gmail.com>
 # Marin F <mf.sile@gmail.com>, 2018.
 # Milo Ivir <mail@milotype.de>, 2019.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: Incscape\n"
+"Project-Id-Version: Inkcscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-26 19:57+0200\n"
-"PO-Revision-Date: 2019-07-10 01:33+0200\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"PO-Revision-Date: 2019-08-15 20:04+0200\n"
+"Last-Translator: Marin F <mf.sile@gmail.com>\n"
 "Language-Team: \n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Language: hr_HR\n"
+"X-Source-Language: C\n"
 "X-Generator: Poedit 2.2.3\n"
 
 #: ../inkscape.desktop.in.h:1
@@ -3982,13 +3983,13 @@ msgstr "Offline skladište podataka"
 #: ../share/symbols/symbols.h:172
 msgctxt "Symbol"
 msgid "Logical Or"
-msgstr "Logički „ili”"
+msgstr "[Symbol] Logical Or"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:173
 msgctxt "Symbol"
 msgid "Logical And"
-msgstr "Logički „i”"
+msgstr "[Symbol] Logical And"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:174
@@ -4847,6 +4848,7 @@ msgid "Memory document %d"
 msgstr "Dokument memorije %d"
 
 #: ../src/document.cpp:577
+#, qt-format
 msgid "Memory document %1"
 msgstr "Dokument memorije %1"
 
@@ -4886,7 +4888,7 @@ msgstr " tekst: "
 
 #: ../src/extension/dependency.cpp:261
 msgid "  description: "
-msgstr " opis: "
+msgstr "  opis: "
 
 #: ../src/extension/effect.cpp:41
 msgid " (No preferences)"
@@ -5026,6 +5028,8 @@ msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
 "will not be loaded."
 msgstr ""
+"Direktorij sa modulima (%s) je nedostupan. Spoljašnji moduli u tom "
+"direktoriju neće biti učitani."
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:39
 msgid "Adaptive Threshold"
@@ -8403,6 +8407,7 @@ msgid "Document not saved yet.  Cannot revert."
 msgstr "Dokument nije spremljen. Nije moguće vratiti na prijašnje stanje."
 
 #: ../src/file.cpp:370
+#, qt-format
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr "Izgubit ćeš sve promjene! Zaista želiš ponovo učitati dokument: %1?"
 
@@ -8469,6 +8474,7 @@ msgid "drawing"
 msgstr "crtež"
 
 #: ../src/file.cpp:878
+#, qt-format
 msgid "drawing-%1"
 msgstr "crtež-%1"
 
@@ -8866,10 +8872,12 @@ msgstr ""
 "Vježbe možeš nači i na https://inkscape.org/learn/tutorials/"
 
 #: ../src/inkscape.cpp:242
+#, qt-format
 msgid "Autosave failed! Cannot create directory %1."
 msgstr "Automatsko spremanje nije moguće! Nije moguće stvoriti mapu %1."
 
 #: ../src/inkscape.cpp:251
+#, qt-format
 msgid "Autosave failed! Cannot open directory %1."
 msgstr "Automatsko spremanje nije moguće! Ne mogu otvoriti mapu %1."
 
@@ -8986,6 +8994,8 @@ msgstr "Promijenjive veličine"
 #: ../src/libgdl/gdl-dock-item.c:315
 msgid "If set, the dock item can be resized when docked in a GtkPanel widget"
 msgstr ""
+"Ako je postavljeno, dijaloškom okviru se može promijeniti veličina ako se "
+"priključi u GtkPanel komponentu"
 
 #: ../src/libgdl/gdl-dock-item.c:322
 msgid "Item behavior"
@@ -9032,6 +9042,8 @@ msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
 msgstr ""
+"Ne možete dodati objekt dijaloški okvir (%p u tip %s) unutar %s. Koristite "
+"GdlDock ili drugi spojni objekt dijaloškog okvira."
 
 #: ../src/libgdl/gdl-dock-item.c:723
 #, c-format
@@ -9039,11 +9051,14 @@ msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
 msgstr ""
+"Nastoji dodati komponente sučelja tipa %s u %s, ali ovo može imati samo "
+"jednu komponentu istovremeno; ovdje se već nalazi komponenta tipa %s"
 
 #: ../src/libgdl/gdl-dock-item.c:1474 ../src/libgdl/gdl-dock-item.c:1524
 #, c-format
 msgid "Unsupported docking strategy %s in dock object of type %s"
 msgstr ""
+"Nije podržana strategija pristajanja %s u objekt dijaloškog okvira tipa %s"
 
 #. UnLock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1632
@@ -9063,7 +9078,7 @@ msgstr "Zaključaj"
 #: ../src/libgdl/gdl-dock-item.c:1907
 #, c-format
 msgid "Attempt to bind an unbound item %p"
-msgstr ""
+msgstr "Nastoji da spoji nevezani dio %p"
 
 #: ../src/libgdl/gdl-dock-master.c:141 ../src/libgdl/gdl-dock.c:184
 msgid "Default title"
@@ -9071,13 +9086,16 @@ msgstr "Standardni naslov"
 
 #: ../src/libgdl/gdl-dock-master.c:142
 msgid "Default title for newly created floating docks"
-msgstr ""
+msgstr "Uobičajeno ime za novo stvoreni lebdeći dijaloški okvir"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
+"Ako je postavljeno na 1, svi dijaloški okviri povezani sa sučeljem su "
+"zaključani; ako je 0, svi su otključani; -1 pokazuje neusuglašenost među "
+"stavkama"
 
 #: ../src/libgdl/gdl-dock-master.c:157 ../src/libgdl/gdl-switcher.c:737
 msgid "Switcher Style"
@@ -9093,6 +9111,8 @@ msgid ""
 "master %p: unable to add object %p[%s] to the hash.  There already is an "
 "item with that name (%p)."
 msgstr ""
+"sučelje %p: nije moguće dodati objekt  %p[%s] . Tamo se već nalazi stavka sa "
+"imenom (%p)."
 
 #: ../src/libgdl/gdl-dock-master.c:955
 #, c-format
@@ -9100,6 +9120,8 @@ msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
 msgstr ""
+"Novi controller dijaloškog okvira %p je automatski napravljen.  Samo ručno "
+"napravljeni objekti dijaloškog okvira trebaju se imenovati controller."
 
 #: ../src/libgdl/gdl-dock-notebook.c:132
 #: ../src/ui/dialog/align-and-distribute.cpp:1098
@@ -9125,7 +9147,7 @@ msgstr "Naziv"
 
 #: ../src/libgdl/gdl-dock-object.c:126
 msgid "Unique name for identifying the dock object"
-msgstr ""
+msgstr "Jedinstveno ime za prepoznavanje objekta dijaloškog okvira"
 
 #: ../src/libgdl/gdl-dock-object.c:133
 msgid "Long name"
@@ -9133,7 +9155,7 @@ msgstr "Dugi naziv"
 
 #: ../src/libgdl/gdl-dock-object.c:134
 msgid "Human readable name for the dock object"
-msgstr ""
+msgstr "Ljudski čitljivo ime za objekt dijaloškog okvira"
 
 #: ../src/libgdl/gdl-dock-object.c:140
 msgid "Stock Icon"
@@ -9157,7 +9179,7 @@ msgstr "Osnovna priključna traka"
 
 #: ../src/libgdl/gdl-dock-object.c:154
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "Osnovna priključna traka ovaj objekt dijaloškog okvira je spojen sa"
 
 #: ../src/libgdl/gdl-dock-object.c:463
 #, c-format
@@ -9165,6 +9187,8 @@ msgid ""
 "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
 "hasn't implemented this method"
 msgstr ""
+"Poziva gdl_dock_object_dock u dijaloški okvir %p (tip objekta je %s) koji "
+"nema implementiranu ovu metodu"
 
 #: ../src/libgdl/gdl-dock-object.c:602
 #, c-format
@@ -9172,17 +9196,23 @@ msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
 msgstr ""
+"Operacija priključivanja okvira zatražena u ne povezanom objektu %p. Moguće "
+"rušenje aplikacije"
 
 #: ../src/libgdl/gdl-dock-object.c:609
 #, c-format
 msgid "Cannot dock %p to %p because they belong to different masters"
 msgstr ""
+"Nije moguće priključiti dijaloški okvir %p u %p zato što on pripada drugom "
+"sučelju"
 
 #: ../src/libgdl/gdl-dock-object.c:651
 #, c-format
 msgid ""
 "Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
+"Nastoji priključiti %p na već vezani objekt spajanja %p (trenutno pripada "
+"master: %p)"
 
 #: ../src/libgdl/gdl-dock-paned.c:130 ../src/widgets/ruler.cpp:239
 msgid "Position"
@@ -9194,13 +9224,15 @@ msgstr "Položaj razdjeljivača u pikselima"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:141
 msgid "Sticky"
-msgstr ""
+msgstr "Ljepljiv"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:142
 msgid ""
 "Whether the placeholder will stick to its host or move up the hierarchy when "
 "the host is redocked"
 msgstr ""
+"Da li držač mjesta kod ponovog pripajanja domaćina će biti pričvršćen na "
+"njega ili će se pomjeriti u hijerarhiji"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:149
 msgid "Host"
@@ -9208,7 +9240,7 @@ msgstr "Host"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:150
 msgid "The dock object this placeholder is attached to"
-msgstr ""
+msgstr "Objekt dijaloškog okvira ovaj držač mjesta je dodan u"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:157
 msgid "Next placement"
@@ -9219,14 +9251,16 @@ msgid ""
 "The position an item will be docked to our host if a request is made to dock "
 "to us"
 msgstr ""
+"Pozicija na koju će jedan novi objekt biti priključen na domaćina , ako se "
+"traži priključenje"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:168
 msgid "Width for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Širina komponente ako je dodana na držač mjesta"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:176
 msgid "Height for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Visina komponente ako je dodana na držač mjesta"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:182
 msgid "Floating Toplevel"
@@ -9234,7 +9268,7 @@ msgstr "Lebdeći na najvišoj razini"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:183
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
-msgstr ""
+msgstr "Da li držač mjesta za lebdeći toplevel dijaloški okvir stoji"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:189
 msgid "X Coordinate"
@@ -9254,12 +9288,14 @@ msgstr "Y koordinata priključne trake kad pluta"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:499
 msgid "Attempt to dock a dock object to an unbound placeholder"
-msgstr ""
+msgstr "Nastoji da spoji objekt spajanja na nevezani držač mjesta"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:611
 #, c-format
 msgid "Got a detach signal from an object (%p) who is not our host %p"
 msgstr ""
+"Dobivam odvojeni signal od jednog objekta (%p) koji nije naš domaćin (host) "
+"%p"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:636
 #, c-format
@@ -9267,6 +9303,7 @@ msgid ""
 "Something weird happened while getting the child placement for %p from "
 "parent %p"
 msgstr ""
+"Nešto se čudno desilo kod dobivanja postavljanja potomka %p od pretka %p"
 
 #: ../src/libgdl/gdl-dock-tablabel.c:126
 msgid "Dockitem which 'owns' this tablabel"
@@ -9279,19 +9316,19 @@ msgstr "Lebdeći"
 
 #: ../src/libgdl/gdl-dock.c:177
 msgid "Whether the dock is floating in its own window"
-msgstr ""
+msgstr "Da li dijaloški oblik lebdi u svom prozoru"
 
 #: ../src/libgdl/gdl-dock.c:185
 msgid "Default title for the newly created floating docks"
-msgstr ""
+msgstr "Uobičajeno ime za novo stvoreni lebdeći dijaloški okvir"
 
 #: ../src/libgdl/gdl-dock.c:192
 msgid "Width for the dock when it's of floating type"
-msgstr ""
+msgstr "Širina dijaloškog okvira ako je tipa lebdeći"
 
 #: ../src/libgdl/gdl-dock.c:200
 msgid "Height for the dock when it's of floating type"
-msgstr ""
+msgstr "Visina dijaloškog okvira ako je tipa lebdeći"
 
 #: ../src/libgdl/gdl-dock.c:207
 msgid "Float X"
@@ -9807,6 +9844,8 @@ msgstr "Proširi stazu"
 #: ../src/live_effects/lpe-copy_rotate.cpp:48
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
 msgstr ""
+"Proširi stazu na pomoćne linije, koristi pravilo ispune: (evenodd) za bolji "
+"rezultat"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:41
 msgid "Stitch path:"
@@ -10024,7 +10063,7 @@ msgstr "Polumjer (jedinica ili postotak):"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:60
 msgid "Radius, in unit or %"
-msgstr "Polumjer zadan u jedinicama ili postotku"
+msgstr "Polumjer zadan u jedinicama ili postotku %"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:61
 msgid "Chamfer steps:"
@@ -10297,7 +10336,7 @@ msgstr "U mjern_im jedinicama debljine linije"
 
 #: ../src/live_effects/lpe-knot.cpp:352
 msgid "Consider 'Interruption width' as a ratio of stroke width"
-msgstr ""
+msgstr "Drži 'širinu prekida' kao proporciju širine poteza"
 
 #: ../src/live_effects/lpe-knot.cpp:353
 msgid "St_roke width"
@@ -10305,7 +10344,7 @@ msgstr "Ši_rina linije"
 
 #: ../src/live_effects/lpe-knot.cpp:353
 msgid "Add the stroke width to the interruption size"
-msgstr ""
+msgstr "Dodaje širinu poteza prema veličini dužine prekida"
 
 #: ../src/live_effects/lpe-knot.cpp:354
 msgid "_Crossing path stroke width"
@@ -10313,7 +10352,7 @@ msgstr "_Širina poteza presijecajuće linije"
 
 #: ../src/live_effects/lpe-knot.cpp:354
 msgid "Add crossed stroke width to the interruption size"
-msgstr ""
+msgstr "Dodaje širinu ukrštenih poteza prema veličini dužine prekida"
 
 #: ../src/live_effects/lpe-knot.cpp:355
 msgid "S_witcher size:"
@@ -11018,11 +11057,11 @@ msgstr "Varijanca: Prva strana:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 msgid "Randomness of 'bottom' half-turns smoothness"
-msgstr "Slučajnost uglađivanja polu-okretaja ‚dna‘"
+msgstr "Slučajna izglađenost 'dno' pola okreta"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:237
 msgid "Randomness of 'top' half-turns smoothness"
-msgstr "Slučajnost uglađivanja polu-okretaja ‚vrha‘"
+msgstr "Nasumice ‚vrh‘ pola-okretaja uglađivanja"
 
 #.
 #: ../src/live_effects/lpe-rough-hatches.cpp:239
@@ -11352,7 +11391,7 @@ msgstr "Samo stopi"
 
 #: ../src/live_effects/lpe-simplify.cpp:36
 msgid "Simplify just coalesce"
-msgstr "Pojednostavni „Samo stopi”"
+msgstr "Pojednostavni Samo stopi"
 
 #. initialise your parameters here:
 #. testpointA(_("Test Point A"), _("Test A"), "ptA", &wr, this, Geom::Point(100,100)),
@@ -11836,6 +11875,7 @@ msgstr "Promijeni parametar mjerne jedinice"
 #, c-format
 msgid "Unable to find verb ID '%s' specified on the command line.\n"
 msgstr ""
+"Nije moguće pronaći ID „%s“ interne naredbe zadane u naredbenom retku.\n"
 
 #: ../src/main-cmdlineact.cpp:60
 #, c-format
@@ -11957,6 +11997,8 @@ msgstr "ID"
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
+"Izvezi samo objekt sa svojstvom „export-id“, skriva sve druge (samo sa "
+"„export-id“)"
 
 #: ../src/main.cpp:390
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
@@ -12013,6 +12055,8 @@ msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
 "found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
+"Izvoz u PDF u zadanoj verziji. (savjet: budite sigurni da uvozite točno "
+"string nađen u PDF dialogu izvoza, (npr. \"PDF 1.4\", ovo je PDF usklađeno)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 570
@@ -12026,14 +12070,17 @@ msgid ""
 "exported, putting the text on top of the PDF/PS/EPS file. Include the result "
 "in LaTeX like: \\input{latexfile.tex}"
 msgstr ""
+"Izvoz kao PDF/PS/EPS bez teksta. Pored PDF/PS/EPS, biti će izvežena i jedna "
+"LaTeX datoteka, stavljajući tekst na vrh PDF/PS/EPS datoteke. Uključi "
+"rezultat u LaTeX sa: \\input{latexfile.tex}"
 
 #: ../src/main.cpp:442
 msgid "Export document to an Enhanced Metafile (EMF) File"
-msgstr ""
+msgstr "Izvoz dokumenta u Enhanced Metafile (EMF) datoteku"
 
 #: ../src/main.cpp:447
 msgid "Export document to a Windows Metafile (WMF) File"
-msgstr ""
+msgstr "Izvoz dokumenta u Windows-Metadatei (WMF) datoteku"
 
 #: ../src/main.cpp:452
 msgid "Convert text object to paths on export (PS, EPS, PDF, SVG)"
@@ -12101,6 +12148,7 @@ msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
 msgstr ""
+"Odredite ime D-Bus-a, za prikazivanje poruka (uobičajeno je org.inkscape)"
 
 #: ../src/main.cpp:514
 msgid "BUS-NAME"
@@ -12112,7 +12160,7 @@ msgstr "Stvori popis svih dostupnih glagola"
 
 #: ../src/main.cpp:524
 msgid "Verb to call when Inkscape opens."
-msgstr ""
+msgstr "Interna naredba koja će se pozvati kada se Inkscape otvori."
 
 #: ../src/main.cpp:525
 msgid "VERB-ID"
@@ -12120,7 +12168,7 @@ msgstr "GLAGOL-ID"
 
 #: ../src/main.cpp:529
 msgid "Object ID to select when Inkscape opens."
-msgstr ""
+msgstr "ID objekta koji će biti odabran kada se Inkscape otvori."
 
 #: ../src/main.cpp:530
 msgid "OBJECT-ID"
@@ -12128,7 +12176,7 @@ msgstr "OBJEKT-ID"
 
 #: ../src/main.cpp:534
 msgid "Start Inkscape in interactive shell mode."
-msgstr "Pokreni Inkskape u interaktivnom modusu konzole"
+msgstr "Pokreni Inkskape u interaktivnom modusu konzole."
 
 #: ../src/main.cpp:539
 msgid "Do not fix legacy (pre-0.92) files' text baseline spacing on opening."
@@ -12575,7 +12623,7 @@ msgstr "Odlomak:"
 
 #: ../src/rdf.cpp:296
 msgid "XML fragment for the RDF 'License' section"
-msgstr "XML dio za RDF odjelak „Licenca”"
+msgstr "XML dio za RDF 'License' odjeljak"
 
 #: ../src/resource-manager.cpp:340
 msgid "Fixup broken links"
@@ -13133,9 +13181,9 @@ msgstr "Koristi <b>Shift+D</b> za pronalaženje okvira"
 #, c-format
 msgid "<b>%1$i</b> objects selected of type %2$s"
 msgid_plural "<b>%1$i</b> objects selected of types %2$s"
-msgstr[0] "<b>%1$i</b> odabrani objekt, vrste „%2$s”"
-msgstr[1] "<b>%1$i</b> odabrana objekta, vrste „%2$s”"
-msgstr[2] "<b>%1$i</b> odabranih objekata, vrste „%2$s”"
+msgstr[0] "<b>%1$i</b> odabrani objekt, vrste %2$s"
+msgstr[1] "<b>%1$i</b> odabrana objekta, vrste %2$s"
+msgstr[2] "<b>%1$i</b> odabranih objekata, vrste %2$s"
 
 #: ../src/selection-describer.cpp:246
 #, c-format
@@ -13771,6 +13819,7 @@ msgstr "Ne možeš urediti <b>podatke kloniranog pismovnog znaka</b>."
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:511
 #: ../src/trace/potrace/inkscape-potrace.cpp:574
+#, qt-format
 msgid "Trace: %1.  %2 nodes"
 msgstr "Precrtaj: %1.%2 čvorova"
 
@@ -15554,6 +15603,7 @@ msgid "No items selected."
 msgstr "Nijedan element nije odabran."
 
 #: ../src/ui/dialog/export.cpp:1027 ../src/ui/dialog/export.cpp:1029
+#, qt-format
 msgid "Exporting %1 files"
 msgstr "Izvoz %1 datoteka"
 
@@ -15600,6 +15650,7 @@ msgstr "Direktorij %s ne postoji ili nije direktorij.\n"
 
 #. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image
 #: ../src/ui/dialog/export.cpp:1155 ../src/ui/dialog/export.cpp:1157
+#, qt-format
 msgid "Exporting %1 (%2 x %3)"
 msgstr "Izvoz %1 (%2 × %3)"
 
@@ -15933,7 +15984,7 @@ msgstr "Z koordinata"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1206
 msgid "Points At"
-msgstr "Ukazuje na:"
+msgstr "Točke kod"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1207
 msgid "Specular Exponent"
@@ -16834,6 +16885,7 @@ msgstr "djelomično"
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
 #: ../src/ui/dialog/find.cpp:848
+#, qt-format
 msgid "%1 match replaced"
 msgid_plural "%1 matches replaced"
 msgstr[0] "%1 poklapanje je zamijenjeno"
@@ -16842,6 +16894,7 @@ msgstr[2] "%1 poklapanja je zamijenjeno"
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
 #: ../src/ui/dialog/find.cpp:852
+#, qt-format
 msgid "%1 object found"
 msgid_plural "%1 objects found"
 msgstr[0] "pronađen je %1 objekt"
@@ -16889,6 +16942,7 @@ msgid "Don't show this warning again"
 msgstr "Nemoj više prikazivati ovo upozorenje"
 
 #: ../src/ui/dialog/font-substitution.cpp:245
+#, qt-format
 msgid "Font '%1' substituted with '%2'"
 msgstr "Font „%1” je zamijenjen sa „%2”"
 
@@ -19874,12 +19928,12 @@ msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
 msgstr ""
-"Ako je moguće, primjenjuje se transformacija objekta bez dodavanja svojstva "
-"„transform=”"
+"Ako je moguće, primjenjuje se transformacija objekta bez dodavanja "
+"transform= svojstva"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1257
 msgid "Always store transformation as a transform= attribute on objects"
-msgstr "Uvijek spremi transformaciju objekata, kao svojstvo „transform=”"
+msgstr "Uvijek spremi transformaciju kao svojstvo transform= od objekata"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1259
 msgid "Transforms"
@@ -20129,7 +20183,7 @@ msgid ""
 "[ or ] rotates by this amount"
 msgstr ""
 "Rotacija s pritisnutom Ctrl-tipkom se dešava u koracima od ovoliko "
-"stupnjeva; ista rotacija se dešava i pritiskom tipke za „[” ili „]”"
+"stupnjeva; ista rotacija se dešava i pritiskom na [ ili ] tipke"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1344
 msgid "Relative snapping of guideline angles"
@@ -20390,6 +20444,8 @@ msgid ""
 "Set the relative size of tiles used to render the canvas. The larger the "
 "value, the bigger the tile size."
 msgstr ""
+"Postavi relativnu veličinu pločice korištenu za prikaz platna. Veća "
+"vrijednost, veća veličina pločice."
 
 #. blur quality
 #. filter quality
@@ -20508,7 +20564,7 @@ msgstr "Rezolucija za stvaranje bitmap _kopije:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1520
 msgid "Resolution used by the Create Bitmap Copy command"
-msgstr "Rezolucija, korištena za naredbu „Stvori bitmap kopiju”"
+msgstr "Rezolucija, korištena za naredbu Stvori Bitmap Kopiju"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1523
 msgid "Ask about linking and scaling when importing"
@@ -21079,7 +21135,7 @@ msgstr "Stvori i primijeni efekt staze"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:478
 msgid "Create and apply Clone original path effect"
-msgstr "Stvori i primijeni efekt staze „Kloniraj orginal”"
+msgstr "Stvori i primijeni originalni efekt staze klona"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:500
 msgid "Remove path effect"
@@ -21134,6 +21190,7 @@ msgid "Position (%):"
 msgstr "Položaj (%):"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:216
+#, qt-format
 msgid "%1:"
 msgstr "%1:"
 
@@ -21590,6 +21647,7 @@ msgid "Could not parse search results"
 msgstr "Nije moguće obraditi rezultate pretrage"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:1178
+#, qt-format
 msgid "No clipart named <b>%1</b> was found."
 msgstr "Nije nađena sličica s imenom <b>%1</b>."
 
@@ -22677,7 +22735,7 @@ msgstr "Novi čvor za tekst"
 
 #: ../src/ui/dialog/xml-tree.cpp:72 ../src/ui/dialog/xml-tree.cpp:146
 msgid "nodeAsInXMLdialogTooltip|Delete node"
-msgstr "Ukloni čvor"
+msgstr "nodeAsInXMLdialogTooltip|Ukloni čvor"
 
 #: ../src/ui/dialog/xml-tree.cpp:73 ../src/ui/dialog/xml-tree.cpp:138
 #: ../src/ui/dialog/xml-tree.cpp:986
@@ -22764,7 +22822,7 @@ msgstr "Stvori novi čvor teksta"
 
 #: ../src/ui/dialog/xml-tree.cpp:1003
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
-msgstr "Ukloni čvor"
+msgstr "nodeAsInXMLinHistoryDialog|Ukloni čvor"
 
 #: ../src/ui/dialog/xml-tree.cpp:1047
 msgid "Change attribute"
@@ -22855,6 +22913,7 @@ msgstr "Idi na nadređeni objekt"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/ui/interface.cpp:1514
+#, qt-format
 msgid "Enter group #%1"
 msgstr "Uđi u grupu #%1"
 
@@ -25423,7 +25482,7 @@ msgstr "Promijeni neprozirnost"
 
 #: ../src/ui/widget/page-sizer.cpp:236
 msgid "U_nits:"
-msgstr "_Mjerne jedinice:"
+msgstr "Mjer_ne jedinice:"
 
 #: ../src/ui/widget/page-sizer.cpp:237
 msgid "Width of paper"
@@ -25697,7 +25756,7 @@ msgstr "N:"
 
 #: ../src/ui/widget/selected-style.cpp:179
 msgid "N/A"
-msgstr "/"
+msgstr "N/A"
 
 #: ../src/ui/widget/selected-style.cpp:182
 #: ../src/ui/widget/selected-style.cpp:1117
@@ -27912,27 +27971,27 @@ msgstr "Prethodno zumiranje (iz popisa prethodnih)"
 
 #: ../src/verbs.cpp:2862
 msgid "Zoom 1:_1"
-msgstr "_100 %"
+msgstr "Zoom 1:_1"
 
 #: ../src/verbs.cpp:2862
 msgid "Zoom to 1:1"
-msgstr "Zumiraj na 100 %"
+msgstr "Zoom to 1:_1"
 
 #: ../src/verbs.cpp:2864
 msgid "Zoom 1:_2"
-msgstr "_50 %"
+msgstr "Zoom 1:_2"
 
 #: ../src/verbs.cpp:2864
 msgid "Zoom to 1:2"
-msgstr "Zumiraj na 50 %"
+msgstr "Zoom to 1:2"
 
 #: ../src/verbs.cpp:2866
 msgid "_Zoom 2:1"
-msgstr "_200 %"
+msgstr "_Zoom 2:1"
 
 #: ../src/verbs.cpp:2866
 msgid "Zoom to 2:1"
-msgstr "Zumiraj na 200 %"
+msgstr "Zoom to 2:1"
 
 #: ../src/verbs.cpp:2868
 msgid "_Fullscreen"
@@ -29708,7 +29767,7 @@ msgstr "Broj decimala za mjerenje"
 
 #: ../src/widgets/measure-toolbar.cpp:315
 msgid "Scale %"
-msgstr "Postotak skaliranja"
+msgstr "Skaliraj %"
 
 #: ../src/widgets/measure-toolbar.cpp:315
 msgid "Scale %:"
@@ -30921,7 +30980,7 @@ msgstr "(maksimalni odmak)"
 
 #: ../src/widgets/spray-toolbar.cpp:608
 msgid "Offset %"
-msgstr "Postotak odmaka"
+msgstr "Pomak %"
 
 #: ../src/widgets/spray-toolbar.cpp:608
 msgid "Offset %:"
@@ -32038,7 +32097,7 @@ msgid ""
 "option"
 msgstr ""
 "Greška: Polje „Poklapajuće ime sloja” mora biti ispunjeno, kad se koristi "
-"opcija „Poklapanje po imenu”"
+"opcija „Poklapanje po imenu"
 
 #: ../share/extensions/dxf_outlines.py:368
 #, python-format
@@ -32072,6 +32131,8 @@ msgid ""
 "The export_gpl.py module requires PyXML.  Please download the latest version "
 "from http://pyxml.sourceforge.net/."
 msgstr ""
+"Izvoz export_gpl.py modula traži PyXML.  Molimo učitajte najnoviju verziju "
+"sa http://pyxml.sourceforge.net/."
 
 #: ../share/extensions/extractimage.py:66
 #, python-format
@@ -32154,7 +32215,7 @@ msgstr ""
 #: ../share/extensions/gcodetools.py:4063
 #, python-format
 msgid "There are more than one orientation point groups in '%s' layer"
-msgstr "Postoji više od jedne grupe točaka orijentacije u sloju „%s”"
+msgstr "Postoji više od jedne grupe točaka orijentacije u '%s' sloju"
 
 #: ../share/extensions/gcodetools.py:4094
 #: ../share/extensions/gcodetools.py:4096
@@ -32371,6 +32432,8 @@ msgid ""
 "Failed to import the subprocess module. Please report this as a bug at: "
 "https://bugs.launchpad.net/inkscape."
 msgstr ""
+"Nije uspio uvoz modula pod procesa. Molimo prijavite grešku na: https://bugs."
+"launchpad.net/inkscape."
 
 #: ../share/extensions/generate_voronoi.py:34
 msgid "Python version is: "
@@ -32439,6 +32502,13 @@ msgid ""
 "Technical details:\n"
 "%s"
 msgstr ""
+"Fantastičan lxml wrapper za libxml2 je potreban kod inkex.py i ovaj dodatak. "
+"Molimo učitajte i instalirajte zadnj verziju sa  http://cheeseshop.python."
+"org/pypi/lxml/, ili instalirajte kroz paket menađer sa komandama kao: sudo "
+"apt-get install python-lxml\n"
+"\n"
+"Tehnički detlji:\n"
+"%s"
 
 #: ../share/extensions/inkex.py:189
 #, python-format
@@ -32936,6 +33006,12 @@ msgid ""
 "name=Products&product=uniconvertor&op=download\n"
 "and install into your Inkscape's Python location\n"
 msgstr ""
+"Trebate instalirati UniConvertor program.\n"
+"Za GNU/Linux: instalirajte paket python-uniconvertor.\n"
+"Za Windows: učitajte sa\n"
+"https://sk1project.net/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
+"i instalirajte na vašu Inkscape's Python lokaciju\n"
 
 #: ../share/extensions/voronoi2svg.py:205
 msgid "Please select objects!"
@@ -33877,6 +33953,7 @@ msgstr "Izlazni DXF"
 #: ../share/extensions/dxf_output.inx.h:2
 msgid "pstoedit must be installed to run; see http://www.pstoedit.net/pstoedit"
 msgstr ""
+"pstoedit mora biti instaliran, pogledajte http://www.pstoedit.net/pstoedit"
 
 #: ../share/extensions/dxf_output.inx.h:3
 msgid "AutoCAD DXF R12 (*.dxf)"
@@ -34709,7 +34786,7 @@ msgstr "Zaokruži sve vrijednosti na četiri brojke"
 #: ../share/extensions/gcodetools_lathe.inx.h:51
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:38
 msgid "Fast pre-penetrate"
-msgstr "Brzi „pre-penetrate”"
+msgstr "Brzi  pre-penetrate"
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:1
 msgid "DXF Points"
@@ -34755,7 +34832,7 @@ msgstr "postavi kao „dxfpoint” i nacrtaj strelice"
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:12
 msgid "clear dxfpoint sign"
-msgstr "izbriši znak za „dxfpoint”"
+msgstr "izbriši znak za dxfpoint"
 
 #: ../share/extensions/gcodetools_engraving.inx.h:1
 msgid "Engraving"
@@ -34956,7 +35033,7 @@ msgid ""
 "\t\t"
 msgstr ""
 "\t\n"
-"\t\t\tOva funkcija mijenja stazu na taj način, da se može rezati s "
+"\t\t\t Ova funkcija mijenja stazu na taj način, da se može rezati s "
 "pravokutnim rezačem.\n"
 "\t\t"
 
@@ -37517,7 +37594,7 @@ msgstr "Tipografske točke"
 
 #: ../share/extensions/perfectboundcover.inx.h:12
 msgid "Bond Weight #"
-msgstr "Debljina papira"
+msgstr "Debljina papira #"
 
 #: ../share/extensions/perfectboundcover.inx.h:13
 msgid "Specify Width"
@@ -38664,7 +38741,7 @@ msgstr "Silazni potez:"
 
 #: ../share/extensions/sk1_input.inx.h:1
 msgid "sK1 vector graphics files input"
-msgstr "Ulazne sK1 datoteke vektorskih grafika"
+msgstr "ulazne datoteke sK1 vektorskih grafika"
 
 #: ../share/extensions/sk1_input.inx.h:2 ../share/extensions/sk1_output.inx.h:2
 msgid "sK1 vector graphics files (*.sk1)"
@@ -38678,7 +38755,7 @@ msgstr ""
 
 #: ../share/extensions/sk1_output.inx.h:1
 msgid "sK1 vector graphics files output"
-msgstr "Izlazne sK1 datoteke vektorskih datoteka"
+msgstr "izlazne datoteke sK1 vektorskih grafika"
 
 #: ../share/extensions/sk1_output.inx.h:3
 msgid "File format for use in sK1 vector graphics editor"
