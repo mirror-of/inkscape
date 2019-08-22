@@ -8,7 +8,7 @@
 # --- unset environment inherited from inkscape.app
 get_env_current ()
 {
-    env | awk -F= '/[a-zA-Z_][a-zA-Z_0-9]*=/ {if (!system("[ -n \"${" $1 "+y}\" ]")) print $1 }' | sort | uniq
+	awk 'BEGIN { for (v in ENVIRON) print v }' | sort -u
 }
 
 if [ ! -z "$_env_orig" ]; then
