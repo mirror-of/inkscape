@@ -4,13 +4,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-02-03 23:41+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Sensu Iun <cieltero@gmail.com>\n"
+"Last-Translator: sensu iun <cieltero@gmail.com>\n"
 "Language-Team: <Dokdo@korea.land>\n"
 "Language: ko_KR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
@@ -4393,7 +4393,7 @@ msgstr "LaText LeTeX latex 격자 비머"
 
 #: ../share/templates/templates.h:1
 msgid "Typography Canvas"
-msgstr "활판인새 캔버스"
+msgstr "활판인쇄 캔버스"
 
 #: ../share/templates/templates.h:1
 msgid "Empty typography canvas with helping guidelines."
@@ -8302,9 +8302,8 @@ msgstr ""
 "험적.)"
 
 #: ../src/file-update.cpp:339
-#, fuzzy
 msgid "Create a backup file in same directory."
-msgstr "백업 파일 만들기 (같은 폴더에)."
+msgstr "같은 디렉터리 안에 백업 파일 만들기."
 
 #: ../src/file-update.cpp:340
 msgid "More details..."
@@ -8332,22 +8331,22 @@ msgid ""
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
-"<small 더 나은 브라우저 호환성 때문에 96 DPI의 CSS 표준을 따르려고 우리는 ‘잉"
-"크스케이프’를 업데이트했습니다. 우리는 90 DPI를 사용했었습니다. 화면 디스플레"
-"이용 디지털 미술품은 크기 조정 없이 96 DPI로 변환되므로 영향받지 않을 것입니"
-"다. 특정 물리적 크기에 맞추어 90 DPI에서 그려진 미술품은 크기 조정 없이 96 "
-"DPI로 변환하면 너무 작습니다. 두 가지 크기 조정 방법이 있습니다:\n"
+"<small>더 나은 브라우저 호환성을 위해 CSS 표준인 96 DPI를 따르려고 ‘잉크스케"
+"이프’를 업데이트 했습니다. 전에는 90 DPI를 사용했습니다. 화면 표시용 디지털 "
+"미술작품은 크기 조정 없이 96 DPI로 변환되므로 영향받지 않을 것입니다. 특정 물"
+"리적 크기에 맞추어 90 DPI에서 그려진 미술품은 크기 조정 없이 96 DPI로 변환하"
+"면 너무 작아질 것입니다. 두 가지 크기 조정 방법이 있습니다:\n"
 "\n"
 "<b>전체 문서 크기 조정:</b> 가장 오류가 발생하지 않는 방법이며, 필터 및 마스"
-"크 위치 등등 미술품의 모습을 보존합니다. 문서 크기에 상대적인 미술품의 크기"
-"는 정확하지 않을 수 있습니다.\n"
+"크 위치 등등 미술작품의 모습을 보존합니다. 문서 크기에 상대적인 미술작품의 크"
+"기는 정확하지 않을 수 있습니다.\n"
 "\n"
-"<b>미술품의 개별 요소 크기 조정:</b>이 방법은 신뢰성이 떨어지며 결과적으로 모"
-"습이 변경될 수 있지만, 정확한 크기와 위치에 의존하는 실제 출력(예: 3D 인쇄)에"
-"는 더 적합합니다.\n"
+"<b>미술작품 안의 개별 요소 크기 조정:</b>이 방법은 신뢰성이 떨어지며 결과적으"
+"로 모습이 바뀔 수 있지만, 정확한 크기와 위치에 의존하는 실제 출력(예: 3D 인"
+"쇄)에는 더 적합합니다.\n"
 "\n"
 "이 변경 사항에 대한 자세한 정보는 <a href='https://inkscape.org/en/learn/"
-"faq#dpi_change'>잉크 스케이프 최FAQ</a></small>에서 확인할 수 있습니다"
+"faq#dpi_change'>잉크스케이프 FAQ</a>에서 확인할 수 있습니다.</small>"
 
 #: ../src/file-update.cpp:387
 msgid "OK"
@@ -11821,6 +11820,8 @@ msgid ""
 "Sets margin around exported area (default 0) in units of page size for SVG "
 "and mm for PS/EPS/PDF"
 msgstr ""
+"내보내는 영역 주위의 여백 설정 (기본값 0). SVG에는 페이지 크기의 단위 사용. "
+"PS/EPS/PDF에는 mm 단위 사용."
 
 #: ../src/main.cpp:356 ../src/main.cpp:398
 msgid "VALUE"
@@ -12042,11 +12043,12 @@ msgid "Do not fix legacy (pre-0.92) files' text baseline spacing on opening."
 msgstr "열 때, 구식(0.92 이전) 파일의 텍스트 기준선 간격을 수정하지 않습니다."
 
 #: ../src/main.cpp:541
-#, fuzzy
 msgid ""
 "Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|"
 "scale-document])"
-msgstr "필요하면, 0.92 이전 문서 dpi를 변환하는 데 사용되는 방법."
+msgstr ""
+"필요하면 0.92 이전 문서 DPI를 변환하는 데 사용되는 방법: ([none|scale-"
+"viewbox|scale-document])"
 
 #: ../src/main.cpp:891 ../src/main.cpp:1379
 msgid ""
@@ -20407,7 +20409,6 @@ msgid "Ignore words in ALL CAPITALS"
 msgstr "“모두 대문자”인 단어 무시"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1963
-#, fuzzy
 msgid "Ignore words in all capitals, such as \"IUPAC\""
 msgstr "모두 대문자인 단어 무시. 예: “IUPAC”"
 
@@ -21317,7 +21318,7 @@ msgstr "설명 없음"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:1079
 msgid "Searching clipart..."
-msgstr "클립하트 검색하기..."
+msgstr "클립아트 검색하기..."
 
 #: ../src/ui/dialog/ocaldialogs.cpp:1121
 msgid "Could not connect to the Open Clip Art Library"
@@ -28082,9 +28083,8 @@ msgid "Center on horizontal and vertical axis"
 msgstr "중심을 수평 및 수직 축 위로"
 
 #: ../src/widgets/arc-toolbar.cpp:143
-#, fuzzy
 msgid "Change arc"
-msgstr "흐림 변경"
+msgstr "원호 변경"
 
 #: ../src/widgets/arc-toolbar.cpp:209
 msgid "Arc: Change start/end"
@@ -28119,9 +28119,8 @@ msgid "Rx:"
 msgstr "Rx:"
 
 #: ../src/widgets/arc-toolbar.cpp:435
-#, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
-msgstr "둥근 모퉁이의 수평 반지름"
+msgstr "원, 타원, 원호의 수평 반지름"
 
 #: ../src/widgets/arc-toolbar.cpp:452 ../src/widgets/rect-toolbar.cpp:366
 msgid "Vertical radius"
@@ -28132,9 +28131,8 @@ msgid "Ry:"
 msgstr "Ry:"
 
 #: ../src/widgets/arc-toolbar.cpp:452
-#, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
-msgstr "원, 타원, 원호를 만듭니다"
+msgstr "원, 타원, 원호의 수직 반지름"
 
 #. Add the units menu.
 #: ../src/widgets/arc-toolbar.cpp:466 ../src/widgets/lpe-toolbar.cpp:387
