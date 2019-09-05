@@ -532,7 +532,9 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     checksBox.pack_start(fileTypeCheckbox);
     checksBox.pack_start(previewCheckbox);
     checksBox.pack_start(svgexportCheckbox);
-    checksBox.pack_start(selectedCheckbox);
+    if (save_method == Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY) {
+        checksBox.pack_start(selectedCheckbox);
+    }
 
     set_extra_widget(childBox);
 

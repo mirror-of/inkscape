@@ -694,18 +694,18 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
             }
         }
 
-        // FIXME: does the argument !is_copy really convey the correct meaning here?
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool const selected_only = prefs->getBool("/dialogs/save_as/selected_only", false);
 
-        if(selected_only) {
+        // Selected_only only available for save as copy.
+        if(is_copy && selected_only) {
             auto selection = SP_ACTIVE_DESKTOP->getSelection();
             std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-            SPDocument *new_doc = SPDocument::createNewDocFromItems(items, false);
-            success = file_save(parentWindow, new_doc, fileName, selectionType, TRUE, false, save_method);
-        } else {
-            success = file_save(parentWindow, doc, fileName, selectionType, TRUE, !is_copy, save_method);
+            doc = SPDocument::createNewDocFromItems(items, false);
         }
+
+        // FIXME: does the argument !is_copy really convey the correct meaning here?
+        success = file_save(parentWindow, doc, fileName, selectionType, TRUE, !is_copy, save_method);
 
         if (success && doc->getDocumentURI()) {
             // getDocumentURI does not return an actual URI... it is an UTF-8 encoded filename (!)
