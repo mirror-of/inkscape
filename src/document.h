@@ -121,6 +121,7 @@ public:
     static SPDocument *createNewDoc(char const*uri, bool keepalive,
             bool make_new = false, SPDocument *parent=nullptr );
     static SPDocument *createNewDocFromMem(char const*buffer, int length, bool keepalive);
+    static SPDocument *createNewDocFromItems(const std::vector<SPItem*> &items, bool keepalive);
            SPDocument *createChildDoc(std::string const &uri);
 
 

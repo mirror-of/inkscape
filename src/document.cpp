@@ -51,6 +51,7 @@
 #include "inkscape.h"
 #include "inkscape-window.h"
 #include "profile-manager.h"
+#include "selection-chemistry.h"
 #include "rdf.h"
 
 #include "display/drawing.h"
@@ -588,6 +589,28 @@ SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, bo
     }
 
     return doc;
+}
+
+/*
+ * Creates a new document, adds in the selected items (including defs), and resizes to fit.
+ */
+SPDocument *SPDocument::createNewDocFromItems(std::vector<SPItem*> const &items, bool keepalive)
+{
+    // Create empty document
+    SPDocument *new_doc = createNewDoc(nullptr, keepalive, true, nullptr);
+    Inkscape::XML::Document *xml_doc = new_doc->getReprDoc();
+
+    for(auto item : items){
+      Inkscape::XML::Node *copy = item->getRepr()->duplicate(xml_doc);
+      // Clone item and add to doc (making sure defs are copied too)
+      xml_doc->appendChild(copy);
+    }
+
+    // Resize the new document to the new items
+    fit_canvas_to_drawing(new_doc, false);
+
+    // Return new document with new items
+    return new_doc;
 }
 
 SPDocument *SPDocument::doRef()

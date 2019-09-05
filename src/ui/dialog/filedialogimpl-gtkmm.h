@@ -128,6 +128,7 @@ protected:
      */
     Gtk::CheckButton previewCheckbox;
     Gtk::CheckButton svgexportCheckbox;
+    Gtk::CheckButton selectedCheckbox;
 
 private:
     void internalSetup();
@@ -146,6 +147,11 @@ private:
      * Callback to for SVG 2 to SVG 1.1 export.
      */
     void _svgexportEnabledCB();
+
+    /**
+     * Callback to for SVG selected objects only.
+     */
+    void _selectedEnabledCB();
 };
 
 

@@ -120,6 +120,7 @@ void FileDialogBaseGtk::internalSetup()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool enablePreview   = prefs->getBool(preferenceBase + "/enable_preview", true);
         bool enableSVGExport = prefs->getBool(preferenceBase + "/enable_svgexport", false);
+        bool enableSelected  = prefs->getBool(preferenceBase + "/selected_only", false);
 
         previewCheckbox.set_label(Glib::ustring(_("Enable preview")));
         previewCheckbox.set_active(enablePreview);
@@ -130,6 +131,11 @@ void FileDialogBaseGtk::internalSetup()
         svgexportCheckbox.set_active(enableSVGExport);
 
         svgexportCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_svgexportEnabledCB));
+
+        selectedCheckbox.set_label(Glib::ustring(_("Export selected objects only.")));
+        selectedCheckbox.set_active(enableSelected);
+
+        selectedCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_selectedEnabledCB));
 
         // Catch selection-changed events, so we can adjust the text widget
         signal_update_preview().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_updatePreviewCallback));
@@ -172,6 +178,12 @@ void FileDialogBaseGtk::_svgexportEnabledCB()
     prefs->setBool(preferenceBase + "/enable_svgexport", enabled);
 }
 
+void FileDialogBaseGtk::_selectedEnabledCB()
+{
+    bool enabled = selectedCheckbox.get_active();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool(preferenceBase + "/selected_only", enabled);
+}
 
 
 /**
@@ -520,6 +532,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     checksBox.pack_start(fileTypeCheckbox);
     checksBox.pack_start(previewCheckbox);
     checksBox.pack_start(svgexportCheckbox);
+    checksBox.pack_start(selectedCheckbox);
 
     set_extra_widget(childBox);
 
