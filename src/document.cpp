@@ -603,7 +603,7 @@ SPDocument *SPDocument::createNewDocFromItems(std::vector<SPItem*> const &items,
     for(auto item : items){
       Inkscape::XML::Node *copy = item->getRepr()->duplicate(xml_doc);
       // Clone item and add to doc (making sure defs are copied too)
-      xml_doc->appendChild(copy);
+      xml_doc->root()->appendChild(copy);
     }
 
     // Resize the new document to the new items
