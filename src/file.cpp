@@ -695,7 +695,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
         }
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool const selected_only = prefs->getBool("/dialogs/save_as/selected_only", false);
+        bool const selected_only = prefs->getBool("/dialogs/save_copy/selected_only", false);
 
         // Selected_only only available for save as copy.
         if(is_copy && selected_only) {
