@@ -74,6 +74,11 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tool/control-point-selection.h"
 
+#ifdef GDK_WINDOWING_QUARTZ
+// Workaround for #include <gdk/gdkquartz.h> which doesn't work for me
+extern "C" int gdk_quartz_osx_version(void);
+#endif
+
 namespace Inkscape { namespace XML { class Node; }}
 
 // Callback declarations
@@ -230,9 +235,15 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
 
     // pinch zoom
-    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(getCanvas()));
-    g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
-    g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
+#ifdef GDK_WINDOWING_QUARTZ
+    // crashes macOS 10.9 https://gitlab.com/inkscape/inkscape/issues/406
+    if (gdk_quartz_osx_version() >= 11 /* GDK_OSX_EL_CAPITAN */)
+#endif
+    {
+        zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(getCanvas()));
+        g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
+        g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
+    }
 
     SP_CANVAS_ARENA (drawing)->drawing.delta = prefs->getDouble("/options/cursortolerance/value", 1.0); // default is 1 px
 
