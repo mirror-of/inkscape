@@ -919,7 +919,8 @@ sp_desktop_widget_realize (GtkWidget *widget)
     if (settings && window) {
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        bool dark = gtkApplicationPreferDarkTheme || Glib::ustring(gtkThemeName).find(":dark") != -1;
+        bool dark = gtkApplicationPreferDarkTheme || Glib::ustring(gtkThemeName).find(":dark") != std::string::npos ||
+                    prefs->getString("/theme/gtkTheme").find("_dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
             Gdk::RGBA rgba;
@@ -941,6 +942,29 @@ sp_desktop_widget_realize (GtkWidget *widget)
         } else {
             window->get_style_context()->add_class("regular");
             window->get_style_context()->remove_class("symbolic");
+        }
+        Glib::ustring customthemename = prefs->getString("/theme/gtkTheme");
+        if (customthemename.find("inkscapecustom_sys") != std::string::npos) {
+            if (customthemename.find("_dark") != std::string::npos &&
+                customthemename.find("_darker") == std::string::npos) {
+                window->get_style_context()->add_class("notdarker");
+            } else {
+                window->get_style_context()->remove_class("notdarker");
+            }
+            if (customthemename.find("_xsmall") != std::string::npos) {
+                window->get_style_context()->add_class("inkxsmall");
+                window->get_style_context()->remove_class("inksmall");
+            } else if (customthemename.find("_small") != std::string::npos) {
+                window->get_style_context()->add_class("inksmall");
+                window->get_style_context()->remove_class("inkxsmall");
+            } else {
+                window->get_style_context()->remove_class("inkxsmall");
+                window->get_style_context()->remove_class("inksmall");
+            }
+        } else {
+            window->get_style_context()->remove_class("inkxsmall");
+            window->get_style_context()->remove_class("inksmall");
+            window->get_style_context()->remove_class("notdarker");
         }
         INKSCAPE.signal_change_theme.emit();
     }

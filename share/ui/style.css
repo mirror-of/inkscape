@@ -303,6 +303,12 @@ font-size:13px;
     margin-bottom: 1px;
     font-weight:bold;
 }
+/*This is used by XML and CSS switch (need to be fixed pre merge
+* because coflict with fixed style on theme
+*/
+.inksmall {
+    font-size: 11px;
+}
 #LPEDialogSelector.LPEList flowboxchild {
     padding:3px 1px 3px 10px;
     margin:1px 0px 1px;
@@ -483,4 +489,59 @@ combobox window.popup scrolledwindow treeview separator {}
 #InkSpinScale spinbutton entry {
     padding: 0;
     outline-style: none;
+}
+
+/*Normal Size*/
+button{
+    min-height:30px;
+    min-width:30px;
+    padding:7px;
+}
+toolbutton button{
+    padding:0px;
+}
+/*mall Size*/
+.inksmall button{
+    min-height:16px;
+    min-width:16px;
+    padding:6px;
+}
+.inksmall toolbutton button{
+    padding:6px;
+}
+/*xmall Size*/
+.inkxsmall button{
+    min-height:10px;
+    min-width:10px;
+    padding:3px;
+}
+.inkxsmall toolbutton button{
+    padding:3px;
+}
+
+/*Color Bright*/
+.bright *{
+}
+
+/*Color Dark*/
+.notdarker,
+.notdarker *{
+    color:mix(@theme_fg_color,#555555, 0.2);
+    background-color:mix(@theme_bg_color,#555555, 0.5);
+    background-image: image(mix(@theme_bg_color,#555555, 0.4));
+
+}
+
+.notdarker .brightstyle,
+.notdarker .brightstyle *,
+.notdarker .invertstyle,
+.notdarker .invertstyle *{
+    color:mix(@theme_bg_color,#555555, 0.2);
+    background-color:mix(@theme_fg_color,#555555, 0.5);
+    background-image: image(mix(@theme_fg_color,#555555, 0.4));
+
+}
+
+/*Color Darker*/
+.dark *{
 }

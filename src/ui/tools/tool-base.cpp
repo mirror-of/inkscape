@@ -1223,16 +1223,39 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
     ContextMenu* CM = new ContextMenu(desktop, item);
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (window->get_style_context()->has_class("dark")) {
             CM->get_style_context()->add_class("dark");
         } else {
             CM->get_style_context()->add_class("bright");
         }
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             CM->get_style_context()->add_class("symbolic");
         } else {
             CM->get_style_context()->add_class("regular");
+        }
+        Glib::ustring customthemename = prefs->getString("/theme/gtkTheme");
+        if (customthemename.find("inkscapecustom_sys") != std::string::npos) {
+            if (customthemename.find("_dark") != std::string::npos &&
+                customthemename.find("_darker") == std::string::npos) {
+                CM->get_style_context()->add_class("notdarker");
+            } else {
+                CM->get_style_context()->remove_class("notdarker");
+            }
+            if (customthemename.find("_xsmall") != std::string::npos) {
+                CM->get_style_context()->add_class("inkxsmall");
+                CM->get_style_context()->remove_class("inksmall");
+            } else if (customthemename.find("_small") != std::string::npos) {
+                CM->get_style_context()->add_class("inksmall");
+                CM->get_style_context()->remove_class("inkxsmall");
+            } else {
+                CM->get_style_context()->remove_class("inkxsmall");
+                CM->get_style_context()->remove_class("inksmall");
+            }
+        } else {
+            CM->get_style_context()->remove_class("inkxsmall");
+            CM->get_style_context()->remove_class("inksmall");
+            CM->get_style_context()->remove_class("notdarker");
         }
     }
     CM->show();

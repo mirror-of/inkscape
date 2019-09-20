@@ -767,15 +767,38 @@ void InkscapePreferences::themeChange()
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
         bool darktheme = prefs->getBool("/theme/preferDarkTheme", false);
         Glib::ustring themename = prefs->getString("/theme/gtkTheme");
+        Glib::ustring customthemename = prefs->getString("/theme/gtkTheme");
+        if (customthemename.find("inkscapecustom_") != std::string::npos) {
+            // we use adwaita as base of all custom CSS, seems more standar than user default theme than can make
+            // unwanted results
+            if (themename.find(":dark") != std::string::npos || themename.find("_dark") != std::string::npos ||
+                prefs->getBool("/theme/preferDarkTheme", false)) {
+                themename = "Adwaita-dark";
+            } else {
+                themename = "Adwaita";
+            }
+        }
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         GtkSettings *settings = gtk_settings_get_default();
         g_object_set(settings, "gtk-theme-name", themename.c_str(), NULL);
         g_object_set(settings, "gtk-application-prefer-dark-theme", darktheme, NULL);
+
         gchar *gtkThemeName;
         gboolean gtkApplicationPreferDarkTheme;
-        bool dark = darktheme || themename.find(":dark") != -1;
+        bool dark =
+            darktheme || themename.find(":dark") != std::string::npos || themename.find("_dark") != std::string::npos;
+        if (customthemename.find("inkscapecustom_") != std::string::npos) {
+            dark = prefs->getBool("/theme/preferDarkTheme", false) ||
+                   customthemename.find(":dark") != std::string::npos ||
+                   customthemename.find("_dark") != std::string::npos;
+            INKSCAPE.add_inkscape_css();
+        } else if (INKSCAPE.customcssprovider) {
+            auto const screen = Gdk::Screen::get_default();
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.customcssprovider);
+        }
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
             Gdk::RGBA rgba;
@@ -794,6 +817,28 @@ void InkscapePreferences::themeChange()
             prefs->setBool("/theme/darkTheme", false);
             window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
+        }
+        if (customthemename.find("inkscapecustom_sys") != std::string::npos) {
+            if (customthemename.find("_dark") != std::string::npos &&
+                customthemename.find("_darker") == std::string::npos) {
+                window->get_style_context()->add_class("notdarker");
+            } else {
+                window->get_style_context()->remove_class("notdarker");
+            }
+            if (customthemename.find("_xsmall") != std::string::npos) {
+                window->get_style_context()->add_class("inkxsmall");
+                window->get_style_context()->remove_class("inksmall");
+            } else if (customthemename.find("_small") != std::string::npos) {
+                window->get_style_context()->add_class("inksmall");
+                window->get_style_context()->remove_class("inkxsmall");
+            } else {
+                window->get_style_context()->remove_class("inkxsmall");
+                window->get_style_context()->remove_class("inksmall");
+            }
+        } else {
+            window->get_style_context()->remove_class("inkxsmall");
+            window->get_style_context()->remove_class("inksmall");
+            window->get_style_context()->remove_class("notdarker");
         }
         INKSCAPE.signal_change_theme.emit();
         resetIconsColors(toggled);
@@ -1095,15 +1140,47 @@ void InkscapePreferences::initPageUI()
 
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
+        labels.emplace_back(_("Use system theme"));
+        values.push_back(prefs->getString("/theme/defaultTheme"));
         for (l = list; l; l = l->next) {
             theme = (gchar *)l->data;
             labels.emplace_back(theme);
             values.emplace_back(theme);
         }
-        labels.emplace_back(_("Use system theme"));
-        values.push_back(prefs->getString("/theme/defaultTheme"));
         g_list_free(list);
         g_hash_table_destroy(t);
+        using namespace Inkscape::IO::Resource;
+        auto folders = get_foldernames(THEMES, { "application" });
+        for (auto &folder : folders) {
+            // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
+            // Maybe we can link boost path utilities
+            // Remove directory if present.
+            // Do this before extension removal incase directory has a period character.
+            const size_t last_slash_idx = folder.find_last_of("\\/");
+            if (std::string::npos != last_slash_idx) {
+                folder.erase(0, last_slash_idx + 1);
+            }
+            labels.push_back(folder);
+            values.push_back("inkscapecustom_" + folder);
+        }
+        values.emplace_back("inkscapecustom_sys");
+        labels.emplace_back("Inkscape");
+        values.emplace_back("inkscapecustom_sys_small");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Small")));
+        values.emplace_back("inkscapecustom_sys_xsmall");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Extra Small")));
+        values.emplace_back("inkscapecustom_sys_dark");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Dark")));
+        values.emplace_back("inkscapecustom_sys_small_dark");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Dark Small")));
+        values.emplace_back("inkscapecustom_sys_xsmall_dark");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Dark Extra Small")));
+        values.emplace_back("inkscapecustom_sys_darker");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Darker")));
+        values.emplace_back("inkscapecustom_sys_small_darker");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Darker Small")));
+        values.emplace_back("inkscapecustom_sys_xsmall_darker");
+        labels.push_back(Glib::ustring("Inkscape ") + Glib::ustring(_("Darker Extra Small")));
 
         _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
@@ -2558,7 +2635,8 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
 
-    _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
+    _sys_user_themes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::THEMES, ""),
+                              _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
     _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),

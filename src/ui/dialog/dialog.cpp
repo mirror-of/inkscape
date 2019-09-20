@@ -332,6 +332,21 @@ void Dialog::addTopWindowClasses()
                 dialog_window->get_style_context()->remove_class("symbolic");
                 dialog_window->get_style_context()->add_class("regular");
             }
+            if (toplevel_window->get_style_context()->has_class("inksmall")) {
+                dialog_window->get_style_context()->add_class("inksmall");
+                dialog_window->get_style_context()->remove_class("inkxsmall");
+            } else if (toplevel_window->get_style_context()->has_class("inkxsmall")) {
+                dialog_window->get_style_context()->add_class("inkxsmall");
+                dialog_window->get_style_context()->remove_class("inksmall");
+            } else {
+                dialog_window->get_style_context()->remove_class("inkxsmall");
+                dialog_window->get_style_context()->remove_class("inksmall");
+            }
+            if (toplevel_window->get_style_context()->has_class("notdarker")) {
+                dialog_window->get_style_context()->add_class("notdarker");
+            } else {
+                dialog_window->get_style_context()->remove_class("notdarker");
+            }
         }
     }
 }
