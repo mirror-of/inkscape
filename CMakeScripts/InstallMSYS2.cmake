@@ -173,7 +173,7 @@ if(WIN32)
   # adjust fonts.conf
   #   - add "%localappdata%\Microsoft\Windows\Fonts" as font dir
   #     which is the default path for fonts installed per-user in Windows 10 (version 1809)
-  #   - store font cache in non-temporary directory in "%localappdata%\fontconfig\cache" 
+  #   - store font cache in non-temporary directory in "%localappdata%\fontconfig\cache"
   set(fontdir_default    "\\t^<dir^>WINDOWSFONTDIR^</dir^>")  # the '^' are needed to escape angle brackets on Windows command shell
   set(fontdir_additional "\\t^<dir^>~/AppData/Local/Microsoft/Windows/Fonts^</dir^>")
   set(cachedir_default   "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>")
@@ -249,6 +249,8 @@ if(WIN32)
     DESTINATION lib
     PATTERN "python2.7/site-packages" EXCLUDE # specify individual packages to install below
     PATTERN "python2.7/test" EXCLUDE # we don't need the Python testsuite
+    PATTERN "*.pyc" EXCLUDE
+    PATTERN "*.pyo" EXCLUDE
   )
 
   set(site_packages "lib/python2.7/site-packages")
@@ -259,6 +261,7 @@ if(WIN32)
     install_list(FILES ${paths}
       ROOT ${MINGW_PATH}
       INCLUDE ${site_packages} # only include content from "site-packages" (we might consider to install everything)
+      EXCLUDE ".py[co]$"
     )
   endforeach()
   # Python packages installed via pip
@@ -269,6 +272,11 @@ if(WIN32)
       ROOT ${MINGW_PATH}/${site_packages}
       DESTINATION ${site_packages}/
       EXCLUDE "^\\.\\.\\/" # exclude content in parent directories (notably scripts installed to /bin)
+      EXCLUDE ".py[co]$"
     )
   endforeach()
+  install(CODE
+    "MESSAGE(\"Pre-compiling Python byte-code (.pyc files)\")
+     execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/python -m compileall -qq \${CMAKE_INSTALL_PREFIX})")
+
 endif()
