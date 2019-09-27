@@ -3037,9 +3037,9 @@ Verb *Verb::_base_verbs[] = {
 
     // Dialogs
     new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."), N_("Prototype Dialog"),
-                   INKSCAPE_ICON("preferences-system")),
+                   INKSCAPE_ICON("preferences-system-inapp")),
     new DialogVerb(SP_VERB_DIALOG_DISPLAY, "DialogPreferences", N_("P_references..."),
-                   N_("Edit global Inkscape preferences"), INKSCAPE_ICON("preferences-system")),
+                   N_("Edit global Inkscape preferences"), INKSCAPE_ICON("preferences-system-inapp")),
     new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogDocumentProperties", N_("_Document Properties..."),
                    N_("Edit properties of this document (to be saved with the document)"),
                    INKSCAPE_ICON("document-properties")),
@@ -3120,7 +3120,7 @@ Verb *Verb::_base_verbs[] = {
     new HelpVerb(SP_VERB_HELP_MEMORY, "HelpAboutMemory", N_("About _Memory"), N_("Memory usage information"),
                  INKSCAPE_ICON("dialog-memory")),
     new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"), N_("Inkscape version, authors, license"),
-                 INKSCAPE_ICON("inkscape-logo")),
+                 INKSCAPE_ICON("inkscape-logo-inapp")),
     // new HelpVerb(SP_VERB_SHOW_LICENSE, "ShowLicense", N_("_License"),
     //           N_("Distribution terms"), /*"show_license"*/"inkscape_options"),
 

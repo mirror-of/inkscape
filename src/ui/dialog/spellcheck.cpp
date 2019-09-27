@@ -149,7 +149,7 @@ SpellCheck::SpellCheck () :
     ignore_button.set_tooltip_text(_("Ignore this word in this session"));
     add_button.set_tooltip_text(_("Add this word to the chosen dictionary"));
     pref_button.set_tooltip_text(_("Preferences"));
-    pref_button.set_image_from_icon_name("preferences-system");
+    pref_button.set_image_from_icon_name("preferences");
 
     dictionary_hbox.pack_start(dictionary_label, false, false, 6);
     dictionary_hbox.pack_start(dictionary_combo, true, true, 0);
