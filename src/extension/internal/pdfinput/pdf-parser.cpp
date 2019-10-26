@@ -2414,7 +2414,7 @@ void PdfParser::doShowText(GooString *s) {
   int wMode;
   double riseX, riseY;
   CharCode code;
-  Unicode *u = NULL;
+  Unicode _POPPLER_CONST_82 *u = NULL;
   double x, y, dx, dy, tdx, tdy;
   double originX, originY, tOriginX, tOriginY;
   double oldCTM[6], newCTM[6];
