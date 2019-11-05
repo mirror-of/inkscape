@@ -84,13 +84,17 @@ $ARCH-python2-lxml \
 $ARCH-python2-numpy \
 $ARCH-python2-pillow \
 $ARCH-python2-six
+
+PACKAGES="coverage pyserial scour"
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)
-      /mingw32/bin/pip2 install --upgrade coverage pyserial scour
+      /mingw32/bin/pip2 install --upgrade --upgrade-strategy eager ${PACKAGES} || \
+      /mingw32/bin/pip2 install --upgrade ${PACKAGES}
       ;;
     mingw-w64-x86_64)
-      /mingw64/bin/pip2 install --upgrade coverage pyserial scour
+      /mingw64/bin/pip2 install --upgrade --upgrade-strategy eager ${PACKAGES} || \
+      /mingw64/bin/pip2 install --upgrade ${PACKAGES}
       ;;
   esac
 done
