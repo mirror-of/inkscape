@@ -139,18 +139,6 @@ InkscapeWindow::setup_view()
     }
 }
 
-// Change a document, leaving desktop/view the same. (Eventually move all code here.)
-void
-InkscapeWindow::change_document(SPDocument* document)
-{
-    _document = document;
-    if (_app) {
-        _app->set_active_document(_document);
-    } else {
-        std::cerr << "Inkscapewindow::change_document: app is nullptr!" << std::endl;
-    }
-}
-
 /**
  * Return true if this is the Cmd-Q shortcut on macOS
  */
