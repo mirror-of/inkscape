@@ -276,8 +276,8 @@ void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
         this->_setToNearestHorizVert(compare, 0);
         if (this->npoints == 2 && 
            (state & GDK_SHIFT_MASK) && 
-           ((std::abs(compare[Geom::X] - pt[Geom::X]) > 1e-9) ||
-            (std::abs(compare[Geom::Y] - pt[Geom::Y]) > 1e-9)))
+           ((std::abs(compare[Geom::X] - p[Geom::X]) > 1e-9) ||
+            (std::abs(compare[Geom::Y] - p[Geom::Y]) > 1e-9)))
         {
             this->paraxial_angle = this->paraxial_angle.ccw();
             this->_setToNearestHorizVert(p, state);
