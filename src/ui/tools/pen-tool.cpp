@@ -271,7 +271,7 @@ void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
         if (this->npoints == 2) && 
             this->polylines_paraxial &&
             (state & GDK_CONTROL_MASK) && 
-            (state & GDK_SHIFT_MASK) &&
+            (state & GDK_SHIFT_MASK))
         {
             this->_setToNearestHorizVert(p, state);
         } else if ((this->npoints > 0) && poly) {
