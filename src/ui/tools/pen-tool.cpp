@@ -268,7 +268,13 @@ void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
         // We cannot use shift here to disable snapping because the shift-key is already used
         // to toggle the paraxial direction; if the user wants to disable snapping (s)he will
         // have to use the %-key, the menu, or the snap toolbar
-        if ((this->npoints > 0) && poly) {
+        if (this->npoints == 2) && 
+            this->polylines_paraxial &&
+            (state & GDK_CONTROL_MASK) && 
+            (state & GDK_SHIFT_MASK) &&
+        {
+            this->_setToNearestHorizVert(p, state);
+        } else if ((this->npoints > 0) && poly) {
             // snap constrained
             this->_setToNearestHorizVert(p, state);
         } else {
@@ -2059,6 +2065,16 @@ void PenTool::nextParaxialDirection(Geom::Point const &pt, Geom::Point const &or
         this->paraxial_angle = Geom::Point(h, v).ccw();
     }
     if(!(state & GDK_SHIFT_MASK)) {
+        this->paraxial_angle = this->paraxial_angle.ccw();
+    }
+    Geom::Point compare(pt);
+    this->_setToNearestHorizVert(compare, 0);
+    if (this->npoints == 2 && 
+        (state & GDK_SHIFT_MASK) && 
+        (state & GDK_CONTROL_MASK) && 
+        ((std::abs(compare[Geom::X] - pt[Geom::X]) > 1e-9) ||
+         (std::abs(compare[Geom::Y] - pt[Geom::Y]) > 1e-9)))
+    {
         this->paraxial_angle = this->paraxial_angle.ccw();
     }
 }
