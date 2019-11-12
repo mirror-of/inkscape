@@ -268,7 +268,7 @@ void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
         // We cannot use shift here to disable snapping because the shift-key is already used
         // to toggle the paraxial direction; if the user wants to disable snapping (s)he will
         // have to use the %-key, the menu, or the snap toolbar
-        if (this->npoints == 2) && 
+        if (this->npoints == 2 && 
             this->polylines_paraxial &&
             (state & GDK_CONTROL_MASK) && 
             (state & GDK_SHIFT_MASK))
