@@ -137,6 +137,7 @@ private:
     void _setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_to_compare, gchar const *message);
 
     void _lastpointToLine();
+    void _startConstrained(Geom::Point const p, guint const state);
     void _lastpointToCurve();
     void _lastpointMoveScreen(gdouble x, gdouble y);
     void _lastpointMove(gdouble x, gdouble y);

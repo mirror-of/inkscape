@@ -250,10 +250,22 @@ bool PenTool::hasWaitingLPE() {
             this->waiting_LPE_type != Inkscape::LivePathEffect::INVALID_LPE);
 }
 
+void PenTool::_startConstrained(Geom::Point const p, guint const state) {
+    Geom::Point compare(p);
+    this->_setToNearestHorizVert(compare, 0);
+    if (this->npoints == 2 && 
+       (state & GDK_SHIFT_MASK) && 
+       ((std::abs(compare[Geom::X] - p[Geom::X]) > 1e-9) ||
+        (std::abs(compare[Geom::Y] - p[Geom::Y]) > 1e-9)))
+    {
+        this->paraxial_angle = this->paraxial_angle.ccw();
+    }
+}
+
 /**
  * Snaps new node relative to the previous node.
  */
-void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
+void PenTool::_endpointSnap(Geom::Point &p, guint const state) {
     // Paraxial kicks in after first line has set the angle (before then it's a free line)
     bool poly = this->polylines_paraxial && !this->green_curve->is_unset();
 
@@ -488,6 +500,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
 
                                 // Create green anchor
                                 p = event_dt;
+                                this->_startConstrained(p, bevent.state);
                                 this->_endpointSnap(p, bevent.state);
                                 this->green_anchor = sp_draw_anchor_new(this, this->green_curve, true, p);
                             }
@@ -512,6 +525,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
 
                             } else {
                                 p = event_dt;
+                                this->_startConstrained(p, bevent.state);
                                 this->_endpointSnap(p, bevent.state); // Snap node only if not hitting anchor.
                                 this->_setSubsequentPoint(p, true);
                             }
@@ -603,6 +617,7 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                 case PenTool::POINT:
                     if ( this->npoints != 0 ) {
                         // Only set point, if we are already appending
+                        this->_startConstrained(p, mevent.state);
                         this->_endpointSnap(p, mevent.state);
                         this->_setSubsequentPoint(p, true);
                         ret = true;
@@ -616,6 +631,7 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                 case PenTool::CONTROL:
                 case PenTool::CLOSE:
                     // Placing controls is last operation in CLOSE state
+                    this->_startConstrained(p, mevent.state);
                     this->_endpointSnap(p, mevent.state);
                     this->_setCtrl(p, mevent.state);
                     ret = true;
@@ -639,6 +655,7 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         // Only set point, if we are already appending
 
                         if (!anchor) {   // Snap node only if not hitting anchor
+                            this->_startConstrained(p, mevent.state);
                             this->_endpointSnap(p, mevent.state);
                             this->_setSubsequentPoint(p, true, mevent.state);
                         } else {
@@ -761,6 +778,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                         break;
                     case PenTool::CONTROL:
                         // End current segment
+                        this->_startConstrained(p, revent.state);
                         this->_endpointSnap(p, revent.state);
                         this->_finishSegment(p, revent.state);
                         this->state = PenTool::POINT;
@@ -790,6 +808,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                 switch (this->state) {
                     case PenTool::POINT:
                     case PenTool::CONTROL:
+                        this->_startConstrained(p, revent.state);
                         this->_endpointSnap(p, revent.state);
                         this->_finishSegment(p, revent.state);
                         break;
