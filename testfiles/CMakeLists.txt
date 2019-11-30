@@ -43,6 +43,7 @@ foreach(source ${TEST_SOURCES})
     set_tests_properties(${source} PROPERTIES ENVIRONMENT "${CMAKE_CTEST_ENV}")
 	add_dependencies(tests ${source})
 endforeach()
+add_test(NAME py-crash-test1 COMMAND "python3" ${CMAKE_CURRENT_SOURCE_DIR}/src/crash1.py "${CMAKE_BINARY_DIR}")
 add_subdirectory(rendering_tests)
 
 
