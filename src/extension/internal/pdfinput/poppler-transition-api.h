@@ -3,6 +3,12 @@
 
 #include <glib/poppler-features.h>
 
+#if POPPLER_CHECK_VERSION(0, 83, 0)
+#define _POPPLER_CONST_83 const
+#else
+#define _POPPLER_CONST_83
+#endif
+
 #if POPPLER_CHECK_VERSION(0, 82, 0)
 #define _POPPLER_CONST_82 const
 #else
@@ -13,6 +19,12 @@
 #define _POPPLER_NEW_PARSER(xref, obj) Parser(xref, obj, gFalse)
 #else
 #define _POPPLER_NEW_PARSER(xref, obj) Parser(xref, new Lexer(xref, obj), gFalse)
+#endif
+
+#if POPPLER_CHECK_VERSION(0, 83, 0)
+#define _POPPLER_NEW_GLOBAL_PARAMS(args...) std::unique_ptr<GlobalParams>(new GlobalParams(args))
+#else
+#define _POPPLER_NEW_GLOBAL_PARAMS(args...) new GlobalParams(args)
 #endif
 
 

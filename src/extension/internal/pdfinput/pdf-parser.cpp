@@ -272,7 +272,7 @@ public:
     ClipHistoryEntry *save();
     ClipHistoryEntry *restore();
     GBool hasSaves() { return saved != NULL; }
-    void setClip(GfxPath *newClipPath, GfxClipType newClipType = clipNormal);
+    void setClip(_POPPLER_CONST_83 GfxPath *newClipPath, GfxClipType newClipType = clipNormal);
     GfxPath *getClipPath() { return clipPath; }
     GfxClipType getClipType() { return clipType; }
 
@@ -3394,7 +3394,7 @@ ClipHistoryEntry::~ClipHistoryEntry()
     }
 }
 
-void ClipHistoryEntry::setClip(GfxPath *clipPathA, GfxClipType clipTypeA) {
+void ClipHistoryEntry::setClip(_POPPLER_CONST_83 GfxPath *clipPathA, GfxClipType clipTypeA) {
     // Free previous clip path
     if (clipPath) {
         delete clipPath;
