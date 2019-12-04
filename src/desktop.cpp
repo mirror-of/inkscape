@@ -1287,13 +1287,6 @@ SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
     set_display_area(c, viewbox.midpoint());
 }
 
-bool
-SPDesktop::is_flipped (CanvasFlip flip)
-{
-    return _current_affine.isFlipped(flip);
-}
-
-
 /**
  * Scroll canvas by to a particular point (window coordinates).
  */
