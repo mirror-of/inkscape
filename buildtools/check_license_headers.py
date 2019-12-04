@@ -33,6 +33,7 @@ IGNORE_PATHS = [
     "share",
     "src/2geom",
     "src/3rdparty",
+    "testfiles/rendering_tests/fonts/LICENSES",
 ]
 
 # do not check licenses for the following file endings:
