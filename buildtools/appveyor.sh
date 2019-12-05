@@ -40,7 +40,11 @@ wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_
 message "--- Installing dependencies"
 source ../buildtools/msys2installdeps.sh
 pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} $PACMAN_OPTIONS
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> CI/AppVeyor: Use same ccache across branches and increase size
 export CCACHE_DIR=$(cygpath -a ccache)
 ccache --max-size=500M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
