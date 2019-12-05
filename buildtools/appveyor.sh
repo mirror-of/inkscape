@@ -37,8 +37,8 @@ message "--- Installing dependencies"
 source ../buildtools/msys2installdeps.sh
 pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} $PACMAN_OPTIONS
 
-export CCACHE_DIR=$(cygpath -a ccache/0.92.x)
-ccache --max-size=200M
+export CCACHE_DIR=$(cygpath -a ccache)
+ccache --max-size=500M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
 
 
