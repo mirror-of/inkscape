@@ -418,6 +418,44 @@ Application::Application(bool use_gui) :
         /* Load the preferences and menus */
         load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
+        gchar *gtkIconThemeName = nullptr;
+        Glib::ustring themeiconname;
+        gboolean gtkApplicationPreferDarkTheme;
+         gchar *gtkThemeName = nullptr;
+        GtkSettings *settings = gtk_settings_get_default();
+        if (settings) {
+            g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
+            g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+            g_object_set(settings, "gtk-application-prefer-dark-theme",
+                        prefs->getBool("/theme/preferDarkTheme", gtkApplicationPreferDarkTheme), NULL);
+            g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+            prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
+            Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
+            if (gtkthemename != "") {
+                g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
+            } else {
+#ifdef _WIN32
+                prefs->setString("/theme/defaultTheme", Glib::ustring("Windows-10"));
+                prefs->setString("/theme/gtkTheme", Glib::ustring("Windows-10"));
+#else
+#ifdef GDK_WINDOWING_QUARTZ
+                //want a OSX bundled?
+                prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
+#else
+                prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
+#endif
+#endif
+            }
+            prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
+            themeiconname = prefs->getString("/theme/iconTheme");
+            if (themeiconname != "") {
+                g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+            } else {
+                prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
+            }
+        }
+        g_free(gtkThemeName);
+        g_free(gtkIconThemeName);  
     }
 
     Inkscape::ResourceManager::getManager();
@@ -558,37 +596,6 @@ void Application::add_gtk_css()
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gchar *gtkThemeName = nullptr;
-    gchar *gtkIconThemeName = nullptr;
-    Glib::ustring themeiconname;
-    gboolean gtkApplicationPreferDarkTheme;
-    GtkSettings *settings = gtk_settings_get_default();
-    if (settings) {
-        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
-        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
-        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        g_object_set(settings, "gtk-application-prefer-dark-theme",
-                     prefs->getBool("/theme/preferDarkTheme", gtkApplicationPreferDarkTheme), NULL);
-        prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
-        prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
-        Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
-        if (gtkthemename != "") {
-            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
-        } else {
-            prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
-        }
-        themeiconname = prefs->getString("/theme/iconTheme");
-        if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-        } else {
-            prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
-        }
-
-    }
-
-    g_free(gtkThemeName);
-    g_free(gtkIconThemeName);
-
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
         auto provider = Gtk::CssProvider::create();

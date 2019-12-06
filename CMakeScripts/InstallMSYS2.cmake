@@ -144,7 +144,30 @@ if(WIN32)
 
   install(DIRECTORY ${MINGW_PATH}/share/icons/Adwaita
     DESTINATION share/icons)
+
   install(CODE "execute_process(COMMAND gtk-update-icon-cache \${CMAKE_INSTALL_PREFIX}/share/icons/Adwaita)")
+
+  # Get the Windows 10 theme
+  find_package(Git)
+  if(GIT_FOUND)
+    message("git found: ${GIT_EXECUTABLE}")
+    execute_process(COMMAND ${GIT_EXECUTABLE} clone https://github.com/B00merang-Project/Windows-10 Windows-10-master
+                WORKING_DIRECTORY share/themes/
+                TIMEOUT 300
+                OUTPUT_VARIABLE out
+                ERROR_VARIABLE err)
+    install(FILES share/themes/Windows-10-master/LICENSE.md
+        DESTINATION share/themes/Windows-10)
+    install(FILES share/themes/Windows-10-master/CREDITS
+            DESTINATION share/themes/Windows-10)
+    install(DIRECTORY share/themes/Windows-10-master/gtk-3.20
+            DESTINATION share/themes/Windows-10)
+    execute_process(COMMAND rmdir /q /s Windows-10-master
+                    WORKING_DIRECTORY share/themes/
+    )
+    message( "OUTPUT: ${out}" )
+    message( "ERROR: ${err}" )
+  endif()
 
   # translations for libraries (we usually shouldn't need many)
   file(GLOB inkscape_translations RELATIVE ${CMAKE_SOURCE_DIR}/po/ ${CMAKE_SOURCE_DIR}/po/*.po)

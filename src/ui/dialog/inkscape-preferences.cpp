@@ -1103,7 +1103,7 @@ void InkscapePreferences::initPageUI()
         g_list_free(list);
         g_hash_table_destroy(t);
 
-        _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
+        _gtk_theme.init("/theme/gtkTheme", labels, values, prefs->getString("/theme/defaultTheme"));
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Windows-10
+Comment=Windows 10 Light
+Comment=Author : Christian Medel (Elbullazul); Adapted for Inkscape by Adam Bellis and Jabiertxof see /inkscape/share/ui/Windows10.css for complementary file
+Version=v2.0
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Windows-10
+ButtonLayout=menu:minimize,maximize,close
