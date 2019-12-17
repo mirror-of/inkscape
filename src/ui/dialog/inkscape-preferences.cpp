@@ -2121,7 +2121,13 @@ void InkscapePreferences::on_reset_open_recent_clicked()
     for (element = g_list_first(recent_list); element; element = g_list_next(element)){
         error = NULL;
         GtkRecentInfo* info = (GtkRecentInfo*) element->data;
-        if (gtk_recent_info_has_application(info, g_get_prgname())){
+        if (gtk_recent_info_has_application(info, g_get_prgname())
+            || gtk_recent_info_has_application(info, "org.inkscape.Inkscape")
+            || gtk_recent_info_has_application(info, "inkscape")
+#ifdef _WIN32
+            || gtk_recent_info_has_application(info, "inkscape.exe")
+#endif
+            ) {
             gtk_recent_manager_remove_item(manager, gtk_recent_info_get_uri(info), &error);
         }
         gtk_recent_info_unref (info);

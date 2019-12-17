@@ -902,6 +902,11 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
             // add filter to only open files added by Inkscape
             GtkRecentFilter *inkscape_only_filter = gtk_recent_filter_new();
             gtk_recent_filter_add_application(inkscape_only_filter, g_get_prgname());
+            gtk_recent_filter_add_application(inkscape_only_filter, "org.inkscape.Inkscape");
+            gtk_recent_filter_add_application(inkscape_only_filter, "inkscape");
+#ifdef _WIN32
+            gtk_recent_filter_add_application(inkscape_only_filter, "inkscape.exe");
+#endif
             gtk_recent_chooser_add_filter(GTK_RECENT_CHOOSER(recent_menu), inkscape_only_filter);
 
             gtk_recent_chooser_set_show_tips (GTK_RECENT_CHOOSER(recent_menu), TRUE);
