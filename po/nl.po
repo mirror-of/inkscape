@@ -60,7 +60,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-12-02 14:57+0100\n"
-"PO-Revision-Date: 2019-12-21 12:09+0100\n"
+"PO-Revision-Date: 2019-12-22 11:06+0100\n"
 "Last-Translator: Kris De Gussem <Kris.DeGussem@gmail.com>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -2032,7 +2032,6 @@ msgid "Converts blurred contour to posterized steps"
 msgstr "Vage contouren omzetten in verzadigde banden"
 
 #: ../share/filters/filters.svg.h:842
-#, fuzzy
 msgid "Contouring Discrete"
 msgstr "Discrete contouren"
 
@@ -4128,14 +4127,12 @@ msgid "<b>Guideline</b>: %s"
 msgstr "<b>Hulplijn</b>: %s"
 
 #: ../src/desktop.cpp:837
-#, fuzzy
 msgid "No previous transform."
-msgstr "Er is geen vorige zoom."
+msgstr "Geen vorige transformatie."
 
 #: ../src/desktop.cpp:860
-#, fuzzy
 msgid "No next transform."
-msgstr "Er is geen volgende zoom."
+msgstr "Geen volgende transformatie."
 
 #: ../src/display/canvas-axonomgrid.cpp:265 ../src/display/canvas-grid.cpp:655
 msgid "Grid _units:"
@@ -4283,9 +4280,8 @@ msgstr ""
 "plaats van rasterlijnen."
 
 #: ../src/display/canvas-grid.cpp:335
-#, fuzzy
 msgid "Align to page:"
-msgstr "Bovenzijden uitlijnen"
+msgstr "Op pagina uitlijnen:"
 
 #: ../src/display/canvas-grid.cpp:663
 msgid "Spacing _X:"
@@ -11569,22 +11565,21 @@ msgstr "Pijlen langs buiten"
 #: ../src/live_effects/lpe-measure-segments.cpp:86
 msgid ""
 "Draw arrows pointing in the opposite direction outside the dimension line"
-msgstr ""
+msgstr "Pijlen in de andere richting van de afstandslijn tekenen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:87
 msgid "Flip side"
-msgstr ""
+msgstr "Andere zijde"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 86
 #: ../src/live_effects/lpe-measure-segments.cpp:87
 msgid "Draw dimension lines and labels on the other side of the path"
-msgstr ""
+msgstr "Afstandslijnen en labels aan de andere zijde van het pad tekenen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:88
-#, fuzzy
 msgid "Scale sensitive"
-msgstr "_Hoofdlettergevoelig"
+msgstr "Schaal intelligent"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 87
@@ -11592,11 +11587,12 @@ msgstr "_Hoofdlettergevoelig"
 msgid ""
 "When the path is grouped and the group is then scaled, adjust the dimensions."
 msgstr ""
+"Wanneer het pad gegroepeerd is en de groep wordt geschaald, de afstand "
+"aanpassen."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:89
-#, fuzzy
 msgid "Localize number format"
-msgstr "Numerieke tekens"
+msgstr "Lokale getalweergave"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 88
@@ -26739,27 +26735,24 @@ msgstr ""
 "Inkscapevoorkeuren > Gereedschappen om de standaardwaarden te veranderen)"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:109
-#, fuzzy
 msgid "Use pressure input"
-msgstr "Gomvoorkeuren"
+msgstr "Drukinvoer gebruiken"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:120
 msgid "Min:"
 msgstr "Min:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:121
-#, fuzzy
 msgid "Min percent of pressure"
-msgstr "Een korte samenvatting van de inhoud"
+msgstr "Min percent druk"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max:"
 msgstr "Max:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:133
-#, fuzzy
 msgid "Max percent of pressure"
-msgstr "Waxafdruk op weefsel"
+msgstr "Max percent druk"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:145
 msgid "(many nodes, rough)"
@@ -26820,9 +26813,8 @@ msgstr "Een sequentie van onderling loodrechte lijnstukken maken"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:297
 #: ../src/ui/toolbar/pencil-toolbar.cpp:298
-#, fuzzy
 msgid "LPE spiro or bspline flatten"
-msgstr "Vereenvoudiging padeffect uitvlakken"
+msgstr "LPE spiro of bspline uitvlakken"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:377
 msgid "Shape:"
@@ -26858,15 +26850,13 @@ msgid "Shape of new paths drawn by this tool"
 msgstr "Vorm van nieuwe paden met dit gereedschap"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:432
-#, fuzzy
 msgctxt "Cap"
 msgid "Butt"
-msgstr "Peuk"
+msgstr "Mikpunt"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:438
-#, fuzzy
 msgid "Cap for powerstroke pressure"
-msgstr "Waxafdruk op weefsel"
+msgstr "Punt voor powerstrook druk"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:94
 msgid "W:"
@@ -28726,14 +28716,12 @@ msgid "Picked mesh corner color."
 msgstr "Kleur meshhoek gekozen."
 
 #: ../src/ui/tools/mesh-tool.cpp:411
-#, fuzzy
 msgid "Inserted new row or column."
-msgstr "Patchrij of -kolom toegevoegd"
+msgstr "Nieuwe rij of kolom ingevoegd."
 
 #: ../src/ui/tools/mesh-tool.cpp:482
-#, fuzzy
 msgid "Fit mesh inside bounding box."
-msgstr "Gebruikt het visueel omvattend vak"
+msgstr "Mesh in omvattend vak passen."
 
 #: ../src/ui/tools/mesh-tool.cpp:1117
 msgid "Create mesh"
@@ -28761,9 +28749,8 @@ msgstr[0] "<b>%u van %u</b> knooppunt geselecteerd."
 msgstr[1] "<b>%u van %u</b> knooppunten geselecteerd."
 
 #: ../src/ui/tools/node-tool.cpp:709
-#, fuzzy
 msgid "Angle: %1°."
-msgstr "Hoek (°):"
+msgstr "Hoek: %1°."
 
 #: ../src/ui/tools/node-tool.cpp:716
 #, c-format
@@ -28846,24 +28833,24 @@ msgstr ""
 "zetten. Shift+klik om een hoekig knooppunt te maken."
 
 #: ../src/ui/tools/pen-tool.cpp:1799
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
 "<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
-"<b>Curve</b>: hoek %3.2f&#176;, afstand %s; gebruik <b>Shit+Klik</b> om een "
-"hoekig knooppunt te maken, <b>Enter</b> of <b>Shift+Enter</b> om het pad af "
-"te maken"
+"<b>Segment curve</b>: hoek %3.2f&#176;; gebruik <b>Shit+Klik</b> voor een "
+"hoekig knooppunt, <b>ALT</b> verplaatsen vorige, <b>Enter</b> of <b>Shift"
+"+Enter</b> om het pad af te maken"
 
 #: ../src/ui/tools/pen-tool.cpp:1800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
 "<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
-"<b>Lijnsegment</b>: hoek %3.2f&#176;, afstand %s; gebruik <b>Shit+Klik</b> "
-"om een hoekig knooppunt te maken, <b>Enter</b> of <b>Shift+Enter</b> om het "
-"pad af te maken"
+"<b>Lijnsegment</b>: hoek %3.2f&#176;; gebruik <b>Shit+Klik</b> voor een "
+"hoekig knooppunt, <b>ALT</b> verplaatsen vorige, <b>Enter</b> of <b>Shift"
+"+Enter</b> om het pad af te maken"
 
 #: ../src/ui/tools/pen-tool.cpp:1804
 #, c-format
@@ -39304,7 +39291,6 @@ msgid "Indentation characters:"
 msgstr "Inspringingskarakters:"
 
 #: ../share/extensions/output_scour.inx:61
-#, fuzzy
 msgid ""
 "The type of indentation used for each level of nesting in the output. "
 "Specify \"None\" to disable indentation. This option has no effect if "
@@ -39333,7 +39319,6 @@ msgid "Depth of indentation:"
 msgstr "Inspringingsdiepte:"
 
 #: ../share/extensions/output_scour.inx:68
-#, fuzzy
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
@@ -39342,12 +39327,10 @@ msgstr ""
 "elk niveau in de uitvoer met 2 extra spaties/tabs inspringen."
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid "Strip the \"xml:space\" attribute from the root SVG element"
 msgstr "Het \"xml:space\" attribuut van het hoofd-SVG-element strippen"
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid ""
 "This is useful if the input file specifies \"xml:space='preserve'\" in the "
 "root SVG element which instructs the SVG editor not to change whitespace in "
@@ -39379,7 +39362,6 @@ msgid "Shorten IDs"
 msgstr "ID's afkorten"
 
 #: ../share/extensions/output_scour.inx:80
-#, fuzzy
 msgid ""
 "Minimize the length of IDs using only lowercase letters, assigning the "
 "shortest values to the most-referenced elements. For instance, "
@@ -39428,35 +39410,32 @@ msgid "Preserve IDs starting with:"
 msgstr "ID's behouden die beginnen met:"
 
 #: ../share/extensions/output_scour.inx:93
-#, fuzzy
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr ""
-"ID's behouden die starten met de volgende prefix (vb. geef \"flag\" op om "
+"ID's behouden die starten met bepaalde prefix (vb. geef \"flag\" op om "
 "\"flag-mx\", \"flag-pt\", etc. te behouden)."
 
 #: ../share/extensions/output_scour.inx:101
-#, fuzzy
 msgid "Optimized SVG Output is provided by"
-msgstr "Geoptimaliseerde SVG-uitvoer"
+msgstr "Geoptimaliseerde SVG-uitvoer via"
 
 #: ../share/extensions/output_scour.inx:102
 msgid "Scour - An SVG Scrubber"
-msgstr ""
+msgstr "Scour - een SVG Borstel"
 
 #: ../share/extensions/output_scour.inx:104
 msgid "For details please refer to"
-msgstr ""
+msgstr "Zie voor details op"
 
 #: ../share/extensions/output_scour.inx:105
 msgid "https://github.com/scour-project/scour"
-msgstr ""
+msgstr "https://github.com/scour-project/scour"
 
 #: ../share/extensions/output_scour.inx:110
-#, fuzzy
 msgid "This version of the extension is designed for"
-msgstr "de uitbreiding is alleen voor Windows ontworpen."
+msgstr "Deze versie van de uitbreiding is ontworpen voor"
 
 #: ../share/extensions/output_scour.inx:111
 msgid "Scour 0.31+"
@@ -39513,7 +39492,6 @@ msgid "Samples:"
 msgstr "Punten:"
 
 #: ../share/extensions/param_curves.inx:19
-#, fuzzy
 msgid ""
 "Select a rectangle before calling the extension, it will determine X and Y "
 "scales.\n"
@@ -39537,14 +39515,12 @@ msgid "Envelope"
 msgstr "Envelop"
 
 #: ../share/extensions/path_mesh_m2p.inx:3
-#, fuzzy
 msgid "Mesh-Gradient to Path"
-msgstr "Lijn meshgradiënt"
+msgstr "Meshgradiënt naar pad"
 
 #: ../share/extensions/path_mesh_m2p.inx:12
-#, fuzzy
 msgid "Patches"
-msgstr "Palet"
+msgstr "Patches"
 
 #: ../share/extensions/path_mesh_m2p.inx:13
 #: ../share/extensions/polyhedron_3d.inx:77
@@ -39552,35 +39528,29 @@ msgid "Faces"
 msgstr "Zijden"
 
 #: ../share/extensions/path_mesh_m2p.inx:18
-#, fuzzy
 msgid "Mesh to path"
-msgstr "Object naar pad"
+msgstr "Mesh naar pad"
 
 #: ../share/extensions/path_mesh_m2p.inx:19
-#, fuzzy
 msgid "Convert geometry of selected meshgradient to path data"
-msgstr "Geselecteerd object omzetten naar pad"
+msgstr "Geometrie van geselecteerd meshgradiënt naar pad omzetten"
 
 #: ../share/extensions/path_mesh_m2p.inx:28
 #: ../share/extensions/path_mesh_p2m.inx:23
-#, fuzzy
 msgid "Mesh"
 msgstr "Mesh"
 
 #: ../share/extensions/path_mesh_p2m.inx:3
-#, fuzzy
 msgid "Path to Mesh-Gradient"
-msgstr "Mesh kleurverlopen"
+msgstr "Pad naar meshgradiënt"
 
 #: ../share/extensions/path_mesh_p2m.inx:9
-#, fuzzy
 msgid "Convert each selected path to 1x1 mesh"
 msgstr "Geselecteerd object omzetten naar pad"
 
 #: ../share/extensions/path_mesh_p2m.inx:13
-#, fuzzy
 msgid "Path to mesh"
-msgstr "Pad naar Gcode"
+msgstr "Pad naar mesh"
 
 #: ../share/extensions/path_mesh_p2m.inx:14
 msgid "Convert geometry of selected path (4 corners) to a meshgradient"
@@ -39698,19 +39668,16 @@ msgid "LaTeX (pdflatex)"
 msgstr "LaTeX (pdflatex)"
 
 #: ../share/extensions/pdflatex.inx:6
-#, fuzzy
 msgid "LaTeX input:"
 msgstr "LaTeX invoer: "
 
 #: ../share/extensions/pdflatex.inx:7
-#, fuzzy
 msgid "Additional packages (comma-separated):"
 msgstr "Extra pakettten (gescheiden door komma's): "
 
 #: ../share/extensions/pdflatex.inx:12
-#, fuzzy
 msgid "Mathematics"
-msgstr "Wiskundige operatoren"
+msgstr "Wiskundig"
 
 #: ../share/extensions/perfectboundcover.inx:3
 msgid "Perfect-Bound Cover Template"
@@ -39801,7 +39768,7 @@ msgstr "PixelSnap"
 msgid ""
 "Snap selected paths, images, and rectangles to pixel boundaries. Strokes "
 "with a non-zero odd width are snapped to midpoints, so they align correctly"
-msgstr ""
+msgstr "Geselecteerde paden, afbeeldingen en rechthoeken aan pixelranden kleven. Lijnen met een oneven, niet-nul breedte kleven aan middelpunten voor een correcte uitlijning"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 8
@@ -39809,7 +39776,7 @@ msgstr ""
 msgid ""
 "Snap unselected ancestors' translations (groups, layers, document height) "
 "first"
-msgstr ""
+msgstr "Niet geselecteerde ouders eerst kleven (groupen, lagen, documenthoogte)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 9
@@ -39817,13 +39784,13 @@ msgstr ""
 msgid ""
 "Calculate offset relative to unselected ancestors' transforms (includes "
 "document height offset)"
-msgstr ""
+msgstr "Offset relatief aan niet geselecteerde oudertransformaties berekenen (inclusief offset documenthoogte)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 16
 #: ../share/extensions/pixelsnap.inx:10
 msgid "Maximum slope to consider straight (%)"
-msgstr ""
+msgstr "Maximumhelling die als recht aanzien wordt (%)"
 
 #: ../share/extensions/plotter.inx:3
 msgid "Plot"
@@ -39836,33 +39803,27 @@ msgstr ""
 "Zorg er aub. voor dat alle objecten die je wil plotten omgezet zijn in paden."
 
 #: ../share/extensions/plotter.inx:9
-#, fuzzy
 msgid "Connection Settings"
 msgstr "Verbindingsinstellingen"
 
 #: ../share/extensions/plotter.inx:10
-#, fuzzy
 msgid "Port type:"
-msgstr "Grafiektype:"
+msgstr "Poorttype:"
 
 #: ../share/extensions/plotter.inx:11
-#, fuzzy
 msgid "Serial"
-msgstr "Seriële poort:"
+msgstr "Serieel"
 
 #: ../share/extensions/plotter.inx:14
-#, fuzzy
 msgid "Parallel port:"
-msgstr "Parallelle"
+msgstr "Parallelle poort:"
 
 #: ../share/extensions/plotter.inx:14
-#, fuzzy
 msgid ""
 "The port of your parallel connection, on Windows not currently supported, on "
 "Linux something like: '/dev/usb/lp2' (Default: /dev/usb/lp2)"
 msgstr ""
-"De poort van je seriële verbinding, op Windows zoals 'COM1', op Linux zoals "
-"'/dev/ttyUSB0' (Standaard: COM1)"
+"De poort van je parallelle verbinding, op Windows op dit ogenblik niet ondersteund, op Linux zoals '/dev/usb/lp2' (standaard: /dev/usb/lp2)"
 
 #: ../share/extensions/plotter.inx:15
 msgid "Serial port:"
