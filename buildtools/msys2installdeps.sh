@@ -79,11 +79,13 @@ done
 # install Python and modules used by Inkscape
 eval pacman -S $PACMAN_OPTIONS \
 $ARCH-python2 \
-$ARCH-python2-pip \
-$ARCH-python2-lxml \
-$ARCH-python2-numpy \
-$ARCH-python2-pillow \
-$ARCH-python2-six
+$ARCH-python2-pip
+
+eval pacman -U $PACMAN_OPTIONS \
+http://repo.msys2.org/mingw/${ARCH##*-}/$ARCH-python2-lxml-4.4.1-2-any.pkg.tar.xz \
+http://repo.msys2.org/mingw/${ARCH##*-}/$ARCH-python2-numpy-1.16.4-2-any.pkg.tar.xz \
+http://repo.msys2.org/mingw/${ARCH##*-}/$ARCH-python2-pillow-6.2.1-1-any.pkg.tar.xz \
+http://repo.msys2.org/mingw/${ARCH##*-}/$ARCH-python2-olefile-0.46-2-any.pkg.tar.xz
 
 PACKAGES="coverage pyserial scour"
 for arch in $(eval echo $ARCH); do

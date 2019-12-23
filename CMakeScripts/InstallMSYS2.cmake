@@ -254,7 +254,7 @@ if(WIN32)
 
   set(site_packages "lib/python2.7/site-packages")
   # Python packages installed via pacman
-  set(packages "python2-lxml" "python2-numpy" "python2-pillow" "python2-six")
+  set(packages "python2-lxml" "python2-numpy" "python2-pillow")
   foreach(package ${packages})
     list_files_pacman(${package} paths)
     install_list(FILES ${paths}
@@ -264,7 +264,7 @@ if(WIN32)
     )
   endforeach()
   # Python packages installed via pip
-  set(packages "coverage" "pyserial" "scour")
+  set(packages "coverage" "pyserial" "scour" "six")
   foreach(package ${packages})
     list_files_pip(${package} paths)
     install_list(FILES ${paths}
