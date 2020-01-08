@@ -80,6 +80,7 @@
 
 #ifdef GDK_WINDOWING_QUARTZ
 #include <gtkosxapplication.h>
+#include "ink-osx.h"
 #endif
 
 using Inkscape::DocumentUndo;
@@ -950,6 +951,8 @@ sp_desktop_widget_realize (GtkWidget *widget)
     auto osxapp = gtkosx_application_get();
     auto menushell = static_cast<Gtk::MenuShell *>(dtw->menubar());
     if (osxapp && menushell && window) {
+        Inkscape::removeMacosSpecificMenuItems();
+
         menushell->set_parent(*window);
         gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
         // using quartz accelerators gives menu shortcuts priority over everything else,

@@ -235,6 +235,13 @@ set(inkscape_SRC
   inkview-window.cpp
 )
   
+if(APPLE)
+  list(APPEND inkscape_SRC
+    ink-osx.h
+    ink-osx.mm
+  )
+endif()
+
 # -----------------------------------------------------------------------------
 # Generate version file
 # -----------------------------------------------------------------------------
