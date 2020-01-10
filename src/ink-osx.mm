@@ -26,8 +26,10 @@ static void setNSUserDefaultIfUnset(NSString *key, BOOL value)
  */
 void removeMacosSpecificMenuItems()
 {
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER
     // Remove the "Show Tab Bar" menu item from the "View" menu
     [NSWindow setAllowsAutomaticWindowTabbing:NO];
+#endif
 
     // Remove the "Enter Full Screen" menu item from the "View" menu
     setNSUserDefaultIfUnset(@"NSFullScreenMenuItemEverywhere", NO);
