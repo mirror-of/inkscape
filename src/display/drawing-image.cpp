@@ -10,7 +10,7 @@
  */
 
 #include <2geom/bezier-curve.h>
-
+#include "gdkmm/screen.h"
 #include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "display/drawing-image.h"
@@ -165,8 +165,8 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
             dc.moveTo(c10);
             dc.lineTo(c01);
         }
-
-        dc.setLineWidth(0.5);
+        double device_scale = gdk_screen_get_resolution(gdk_screen_get_default()) / 96.0;
+        dc.setLineWidth(0.5 * device_scale);
         dc.setSource(rgba);
         dc.stroke();
     }
