@@ -4,6 +4,7 @@
 image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
 variables:
+  UPSTREAM_BRANCH: 1.0.x
   GIT_DEPTH: "10"
   GIT_SUBMODULE_STRATEGY: recursive
 
@@ -104,7 +105,7 @@ codequality:
   except:
     - schedules
   script:
-    - git fetch https://gitlab.com/inkscape/inkscape.git
+    - git fetch https://gitlab.com/inkscape/inkscape.git ${UPSTREAM_BRANCH}
     - echo "Your commit does not comply exactly with the clang-format style checker.\nPlease review the following diff or apply it with\n \$ git apply <<EOF"
     - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
     - echo "EOF"
@@ -119,7 +120,7 @@ codeprotect:
   except:
     - schedules
   script:
-    - git fetch https://gitlab.com/inkscape/inkscape.git
+    - git fetch https://gitlab.com/inkscape/inkscape.git ${UPSTREAM_BRANCH}
     - git diff FETCH_HEAD -U0 --no-color src/2geom/ src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
 
@@ -175,9 +176,9 @@ clangtidy:linux:
   stage: build
   except:
     - schedules
-    - branches@inkscape/inkscape
+    - 1.0.x@inkscape/inkscape # UPSTREAM_BRANCH
   script:
-    - git fetch https://gitlab.com/inkscape/inkscape.git
+    - git fetch https://gitlab.com/inkscape/inkscape.git ${UPSTREAM_BRANCH}
     # "borrow" a 2geom file to dump header includes
     - git diff FETCH_HEAD --name-only | (grep '^src/.*\.h$' || true) | sed 's/^src/#include"../;s/$/"/' | tee src/2geom/geom.cpp
     - git diff FETCH_HEAD --name-only | grep '^src/.*\.cpp$' | tee clang_tidy_files
@@ -188,7 +189,7 @@ clangtidyfull:linux:
   except:
     - schedules
   only:
-    - branches@inkscape/inkscape
+    - 1.0.x@inkscape/inkscape # UPSTREAM_BRANCH
   script:
     # skip files which clangtidy-helper.sh will revert anyway
     - find src/3rdparty src/2geom -name CMakeLists.txt | xargs tee
