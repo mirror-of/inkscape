@@ -166,6 +166,9 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
             dc.lineTo(c01);
         }
         double device_scale = gdk_screen_get_resolution(gdk_screen_get_default()) / 96.0;
+        if (device_scale <= 0) {
+            device_scale = 1;
+        }
         dc.setLineWidth(0.5 * device_scale);
         dc.setSource(rgba);
         dc.stroke();

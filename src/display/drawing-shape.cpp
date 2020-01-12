@@ -217,6 +217,9 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
             dc.path(_curve->get_pathvector());
         }
         double device_scale = gdk_screen_get_resolution(gdk_screen_get_default()) / 96.0;
+        if (device_scale <= 0) {
+            device_scale = 1;
+        }
         {   Inkscape::DrawingContext::Save save(dc);
             dc.setSource(rgba);
             dc.setLineWidth(0.5 * device_scale);
