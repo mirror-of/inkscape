@@ -731,7 +731,12 @@ void Inkscape::ObjectSnapper::constrainedSnap( IntermSnapResults &isr,
     _snapNodes(isr, p, unselected_nodes, c, pp);
 
     if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PATH, SNAPTARGET_PATH_INTERSECTION, SNAPTARGET_BBOX_EDGE, SNAPTARGET_PAGE_BORDER, SNAPTARGET_TEXT_BASELINE)) {
-        _snapPathsConstrained(isr, p, c, pp);
+        try {
+            _snapPathsConstrained(isr, p, c, pp);
+        }
+        catch (Geom::LogicalError const &e) {
+            g_warning("%s", e.what());
+        }
     }
 }
 
