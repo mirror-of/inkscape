@@ -97,7 +97,6 @@ static unsigned long next_serial = 0;
 SPDocument::SPDocument() :
     keepalive(false),
     virgin(true),
-    modified_since_save(false),
     rdoc(nullptr),
     rroot(nullptr),
     root(nullptr),
@@ -1717,6 +1716,7 @@ unsigned int SPDocument::vacuumDocument()
  */
 void SPDocument::setModifiedSinceSave(bool modified) {
     this->modified_since_save = modified;
+    this->modified_since_autosave = modified;
     if (SP_ACTIVE_DESKTOP) {
         InkscapeWindow *window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
         if (window) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
