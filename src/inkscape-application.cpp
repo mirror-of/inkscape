@@ -1087,7 +1087,7 @@ ConcreteInkscapeApplication<T>::shell()
         std::string input;
         std::getline(std::cin, input);
 
-        if (input == "quit") break;
+        if (std::cin.eof() || input == "quit") break;
 
         action_vector_t action_vector;
         parse_actions(input, action_vector);
