@@ -9,6 +9,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 
 #include <glibmm/i18n.h>  // Internationalization
 
@@ -1142,7 +1143,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         std::vector<Glib::ustring> actions = T::list_actions();
         std::sort(actions.begin(), actions.end());
         for (auto action : actions) {
-            std::cout << action << std::endl;
+            std::cout << std::left << std::setw(20) << action
+                      << ":  " << _action_extra_data.get_tooltip_for_action(action) << std::endl;
         }
         return EXIT_SUCCESS;
     }
