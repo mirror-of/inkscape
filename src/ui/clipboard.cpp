@@ -867,14 +867,23 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         }
     }
 
-    // Copy text paths
+    // Copy text elements
     {
         SPText *text = dynamic_cast<SPText *>(item);
-        SPTextPath *textpath = (text) ? dynamic_cast<SPTextPath *>(text->firstChild()) : nullptr;
-        if (textpath) {
-            _copyTextPath(textpath);
+        if (text) {
+            // Copy text paths
+            SPTextPath *textpath = dynamic_cast<SPTextPath *>(text->firstChild());
+            if (textpath) {
+                _copyTextPath(textpath);
+            }
+            // Copy text shape-inside
+            Inkscape::XML::Node* rectangle = text->get_first_rectangle();
+            if (rectangle) {
+                _copyNode(rectangle, _doc, _defs);
+            }
         }
     }
+
 
     // Copy clipping objects
     if (SPObject *clip = item->getClipObject()) {
