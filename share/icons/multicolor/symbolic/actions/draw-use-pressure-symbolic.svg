@@ -15,11 +15,10 @@
    sodipodi:docname="draw-use-pressure-symbolic.svg"
    inkscape:version="1.1-dev (1fceb22, 2019-12-30)">
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">

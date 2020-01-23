@@ -39,11 +39,10 @@
        attempt_force_join="true" />
   </defs>
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">
@@ -101,7 +100,7 @@
      class="success"
      sodipodi:nodetypes="cc" />
   <rect
-     class="base"
+     
      ry="1"
      rx="1"
      y="1"
