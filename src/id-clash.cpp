@@ -25,6 +25,7 @@
 #include "live_effects/lpeobject.h"
 #include "object/sp-gradient.h"
 #include "object/sp-object.h"
+#include "object/sp-text.h"
 #include "object/sp-paint-server.h"
 #include "object/sp-root.h"
 #include "style.h"
@@ -156,6 +157,16 @@ find_references(SPObject *elem, refmap_type &refmap)
         }
     }
 
+    /* Special check for shape-inside */
+    SPText *text = dynamic_cast<SPText *>(elem);
+    if (text && style->shape_inside.set) {
+        std::vector<Glib::ustring> shapes = text->get_shapes();
+        for (auto shape: shapes) {
+            IdReference idref = { REF_STYLE, elem, "shape-inside" };
+            refmap[shape.c_str()].push_back(idref);
+        }
+    }
+
     /* check for url(#...) references in markers */
     const gchar *markers[4] = { "", "marker-start", "marker-mid", "marker-end" };
     for (unsigned i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
@@ -237,9 +248,10 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
             // Change to the new ID
 
             elem->setAttribute("id", new_id);
-                // Make a note of this change, if we need to fix up refs to it
-            if (refmap.find(old_id) != refmap.end())
-            id_changes->push_back(id_changeitem_type(elem, old_id));
+            // Make a note of this change, if we need to fix up refs to it
+            if (refmap.find(old_id) != refmap.end()) {
+                id_changes->push_back(id_changeitem_type(elem, old_id));
+            }
         }
     }
 
