@@ -406,6 +406,7 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
             sp_repr_get_double(repr, "x", &text_x);
             sp_repr_get_double(repr, "y", &text_y);
             // std::cout << "text_x: " << text_x << " text_y: " << text_y << std::endl;
+            Glib::ustring residual;
 
             // Loop over all lines in layout.
             for (auto it = text->layout.begin() ; it != text->layout.end() ; ) {
@@ -518,6 +519,13 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                             span_tspan->appendChild(new_text);
                             Inkscape::GC::release(new_text);
                             // std::cout << "  new_string: |" << new_string << "|" << std::endl;
+
+                            // Save the text that spans outside of the layout
+                            if(it_span_end == text->layout.end()) {
+                                while (span_text_end_iter != string->end()) {
+                                    residual += *span_text_end_iter++;
+                                }
+                            }
                         }
                     }
                     it = it_span_end;
@@ -549,6 +557,18 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                     Inkscape::GC::release(space);
                     line_tspan->appendChild(space_tspan);
                     Inkscape::GC::release(space_tspan);
+                }
+
+                if(!residual.empty()) {
+                    // Save the residual text as a new invisible tspan so Inkscape can edit it later.
+                    Inkscape::XML::Node *residual_tspan = repr->document()->createElement("svg:tspan");
+                    // This should hide the residual text from svg 1.1 renderers (i.e. firefox)
+                    residual_tspan->setAttributeOrRemoveIfEmpty("style", "visibility:hidden");
+                    Inkscape::XML::Node *residual_text = repr->document()->createTextNode(residual.c_str());
+                    residual_tspan->appendChild(residual_text);
+                    Inkscape::GC::release(residual_text);
+                    repr->appendChild(residual_tspan);
+                    Inkscape::GC::release(residual_tspan);
                 }
 
             }
