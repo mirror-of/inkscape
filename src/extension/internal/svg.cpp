@@ -966,7 +966,7 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
         prefs->getBool("/dialogs/save_as/enable_svgexport", false);
 
     bool const insert_text_fallback_flag =
-        prefs->getBool("/options/svgexport/text_insertfallback", true);
+        prefs->getBool("/options/svgexport/text_shape_fallback", false);
     bool const insert_mesh_polyfill_flag =
         prefs->getBool("/options/svgexport/mesh_insertpolyfill", true);
     bool const insert_hatch_polyfill_flag =

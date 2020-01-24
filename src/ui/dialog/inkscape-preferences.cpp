@@ -1535,7 +1535,7 @@ void InkscapePreferences::initPageIO()
 
     // SVG 2 Fallbacks
     _page_svgexport.add_group_header( _("SVG 2"));
-    _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text."),                                     "/options/svgexport/text_insertfallback",    true );
+    _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text."), "/options/svgexport/text_shape_fallback", false );
     _svgexport_insert_mesh_polyfill.init( _("Insert JavaScript code for mesh gradients."),                            "/options/svgexport/mesh_insertpolyfill",    true );
     _svgexport_insert_hatch_polyfill.init( _("Insert JavaScript code for SVG2 hatches."),                       "/options/svgexport/hatch_insertpolyfill",   true );
 
