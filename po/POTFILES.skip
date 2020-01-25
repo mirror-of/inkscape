@@ -13,3 +13,11 @@
 ../src/live_effects/lpe-text_label.cpp
 
 ../share/ui/dialog-filter-editor.glade
+
+../src/actions/actions-base.cpp
+../src/actions/actions-file.cpp
+../src/actions/actions-object.cpp
+../src/actions/actions-output.cpp
+../src/actions/actions-selection.cpp
+../src/actions/actions-transform.cpp
+../src/actions/actions-window.cpp
