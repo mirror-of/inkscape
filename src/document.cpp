@@ -1196,7 +1196,7 @@ void SPDocument::setupViewport(SPItemCtx *ctx)
  * been brought fully up to date.
  */
 bool
-SPDocument::_updateDocument()
+SPDocument::_updateDocument(int update_flags)
 {
     /* Process updates */
     if (this->root->uflags || this->root->mflags) {
@@ -1206,7 +1206,7 @@ SPDocument::_updateDocument()
 
             DocumentUndo::ScopedInsensitive _no_undo(this);
 
-            this->root->updateDisplay((SPCtx *)&ctx, 0);
+            this->root->updateDisplay((SPCtx *)&ctx, update_flags);
         }
         this->_emitModified();
     }
@@ -1231,7 +1231,7 @@ gint SPDocument::ensureUpToDate()
     int counter = 32;
     for (unsigned int pass = 1; pass <= 2; ++pass) {
         // Process document updates.
-        while (!_updateDocument()) {
+        while (!_updateDocument(0)) {
             if (counter == 0) {
                 g_warning("More than 32 iteration while updating document '%s'", document_uri);
                 break;
@@ -1265,7 +1265,7 @@ gint SPDocument::ensureUpToDate()
 bool
 SPDocument::idle_handler()
 {
-    bool status = !_updateDocument(); // method TRUE if it does NOT need further modification, so invert
+    bool status = !_updateDocument(SP_OBJECT_IDLE_UPDATE_CHECK); // method TRUE if it does NOT need further modification, so invert
     if (!status) {
         modified_connection.disconnect();
     }
