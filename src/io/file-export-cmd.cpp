@@ -146,6 +146,11 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 std::string
 InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_id)
 {
+    // Pipe out
+    if (export_filename == "-") {
+        return "-";
+    }
+
     // Use filename provided as --export-filename if given (and append proper extension).
     if (!export_filename.empty()) {
         return export_filename + "." + export_type_current;
