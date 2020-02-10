@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-12-02 14:57+0100\n"
-"PO-Revision-Date: 2019-12-06 17:00+0100\n"
+"PO-Revision-Date: 2020-02-09 14:00+0100\n"
 "Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -5532,21 +5532,18 @@ msgstr "Converti testo in tracciato"
 
 #: ../src/extension/internal/emf-inout.cpp:3653
 #: ../src/extension/internal/wmf-inout.cpp:3232
-#, fuzzy
 msgid "Map Unicode to Symbol font"
-msgstr "Map Unicode a Symbol font"
+msgstr "Mappa Unicode a Symbol font"
 
 #: ../src/extension/internal/emf-inout.cpp:3654
 #: ../src/extension/internal/wmf-inout.cpp:3233
-#, fuzzy
 msgid "Map Unicode to Wingdings"
-msgstr "Map Unicode a Wingdings"
+msgstr "Mappa Unicode a Wingdings"
 
 #: ../src/extension/internal/emf-inout.cpp:3655
 #: ../src/extension/internal/wmf-inout.cpp:3234
-#, fuzzy
 msgid "Map Unicode to Zapf Dingbats"
-msgstr "Map Unicode a Zapf Dingbats"
+msgstr "Mappa Unicode a Zapf Dingbats"
 
 #: ../src/extension/internal/emf-inout.cpp:3656
 #: ../src/extension/internal/wmf-inout.cpp:3235
@@ -5574,7 +5571,7 @@ msgstr "Usa gradienti lineari rettangolari nativi"
 
 #: ../src/extension/internal/emf-inout.cpp:3661
 msgid "Map all fill patterns to standard EMF hatches"
-msgstr ""
+msgstr "Mappa tutti i motivi di riempimento a hatch standard EMF"
 
 #: ../src/extension/internal/emf-inout.cpp:3662
 msgid "Ignore image rotations"
@@ -7954,7 +7951,7 @@ msgstr "Output WMF"
 
 #: ../src/extension/internal/wmf-inout.cpp:3239
 msgid "Map all fill patterns to standard WMF hatches"
-msgstr ""
+msgstr "Mappa tutti i motivi di riempimento a hatch standard WMF"
 
 #: ../src/extension/internal/wmf-inout.cpp:3243
 msgid "Windows Metafile (*.wmf)"
@@ -8111,6 +8108,26 @@ msgid ""
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
+"<small>Inkscape è stato aggiornato per seguire gli standard CSS a 96 DPI per "
+"migliorare la compatibilità nei browser (invece dei precedenti 90 DPI).\n"
+"Le grafiche per schermi saranno convertite a 96 DPI senza riscalare o essere "
+"modificate.\n"
+"Le grafiche a 90 DPI per una specifica dimensione fisica sarebbero troppo "
+"piccole se convertite a 96 DPI senza riscalarle. La riscala è eseguita con "
+"due metodi:\n"
+"<b>Scala tutto il documento:</b> soggetto a meno errore, preserva l'aspetto "
+"della grafica, inclusi filtri e posizione delle maschere, ecc.\n"
+"La scala della grafica rispetto alla dimensione del documento potrebbe non "
+"essere accurata.\n"
+"\n"
+"<b>Scala singoli elementi della grafica:</b> soggetto a più errore, può "
+"risultare in un cambiamento,\n"
+"ma è migliore per output fisici che necessitano di dimensioni e posizioni "
+"accurate (e.g. stampa 3D).\n"
+"\n"
+"Ulteriori informazioni sono disponibili qui: "
+"<a href='https://inkscape.org/en/learn/faq#dpi_change'>Inkscape "
+"FAQ</a></small>"
 
 #: ../src/file-update.cpp:446
 msgid "OK"
@@ -8341,12 +8358,10 @@ msgid "Default"
 msgstr "Predefinito"
 
 #: ../src/filter-enums.cpp:96
-#, fuzzy
 msgid "Clear"
-msgstr "Pulisci"
+msgstr "Clear"
 
 #: ../src/filter-enums.cpp:97
-#, fuzzy
 msgid "Copy"
 msgstr "Copia"
 
@@ -8355,27 +8370,22 @@ msgid "Destination"
 msgstr "Destinazione"
 
 #: ../src/filter-enums.cpp:99
-#, fuzzy
 msgid "Destination Over"
-msgstr "Destinazione"
+msgstr "Destinazione Over"
 
 #: ../src/filter-enums.cpp:100
-#, fuzzy
 msgid "Destination In"
-msgstr "Destinazione"
+msgstr "Destinazione In"
 
 #: ../src/filter-enums.cpp:101
-#, fuzzy
 msgid "Destination Out"
-msgstr "Destinazione"
+msgstr "Destinazione Out"
 
 #: ../src/filter-enums.cpp:102
-#, fuzzy
 msgid "Destination Atop"
-msgstr "Destinazione"
+msgstr "Destinazione Atop"
 
 #: ../src/filter-enums.cpp:103
-#, fuzzy
 msgid "Lighter"
 msgstr "Illumina"
 
@@ -9957,9 +9967,8 @@ msgid "positive"
 msgstr "positivo"
 
 #: ../src/live_effects/lpe-bool.cpp:58
-#, fuzzy
 msgid "take from object"
-msgstr "Da oggetto"
+msgstr "prendi da oggetto"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Operand path:"
@@ -9994,15 +10003,16 @@ msgid "Hide linked path"
 msgstr "Nascondi tracciato collegato"
 
 #: ../src/live_effects/lpe-bool.cpp:78
-#, fuzzy
 msgid "Remove inner"
-msgstr "Rimuovi filtro"
+msgstr "Rimuovi interno"
 
 #: ../src/live_effects/lpe-bool.cpp:79
 msgid ""
 "For cut operations: remove inner (non-contour) lines of cutting path to "
 "avoid invisible extra points"
 msgstr ""
+"Per le operazioni di taglio: rimuove linee interne (non contorno) del "
+"tracciato di taglio per evitare punti invisibili aggiuntivi"
 
 #: ../src/live_effects/lpe-bool.cpp:81
 msgid "Fill type this:"
@@ -10014,11 +10024,11 @@ msgstr "Regola dello riempimento per questo tracciato"
 
 #: ../src/live_effects/lpe-bool.cpp:83
 msgid "Fill type operand:"
-msgstr ""
+msgstr "Operando riempimento:"
 
 #: ../src/live_effects/lpe-bool.cpp:83
 msgid "Fill type (winding mode) for operand path"
-msgstr ""
+msgstr "Regola dello riempimento per il tracciato operando"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
@@ -10358,9 +10368,8 @@ msgid "Number of dashes"
 msgstr "Numero di tratteggi"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:19
-#, fuzzy
 msgid "Hole factor"
-msgstr "Selettore"
+msgstr "Fattore tratteggio"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:20
 msgid "Use segments"
@@ -10508,6 +10517,7 @@ msgstr "Mostra punti"
 msgid ""
 "Show stitches as small gaps (just for inspection - don't use for output)"
 msgstr ""
+"Mostra punti come piccoli spazi (solo per ispezione, non usare per output)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Show stitch gap"
@@ -10519,11 +10529,11 @@ msgstr "Spaziatura tra i punti quando vengono mostrati i punti"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
 msgid "Jump if longer"
-msgstr ""
+msgstr "Salta se più lunga"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
 msgid "Jump connection if longer than"
-msgstr ""
+msgstr "Salta la connessione se più lunga del valore"
 
 #: ../src/live_effects/lpe-envelope.cpp:18
 msgid "Top bend path:"
@@ -10602,7 +10612,7 @@ msgstr "LPE sui tracciati collegati"
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:23
 msgid "Fuse coincident points"
-msgstr ""
+msgstr "Fondi punti coincidenti"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:38
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:24
@@ -10620,9 +10630,8 @@ msgid "Close path"
 msgstr "Chiudi tracciato"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
-#, fuzzy
 msgid "Autoreverse"
-msgstr "Inverti"
+msgstr "Inverti automaticamente"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Second path:"
@@ -10933,9 +10942,8 @@ msgid "Overrides the miter limit and forces a join."
 msgstr "Sovrascrive la lunghezza massima dello spigolo e lo forza."
 
 #: ../src/live_effects/lpe-knot.cpp:353
-#, fuzzy
 msgid "_Gap length:"
-msgstr "Lunghezza p_rincipali:"
+msgstr "Lunghezza _spaziatura:"
 
 #: ../src/live_effects/lpe-knot.cpp:353
 msgid "Size of hidden region of lower string"
@@ -10950,24 +10958,26 @@ msgid ""
 "Gap width is given in multiples of stroke width. When unchecked, document "
 "units are used."
 msgstr ""
+"La lunghezza della spaziatura è indicata in multipli della larghezza del "
+"contorno. Se non selezionata usa l'unità del documento."
 
 #: ../src/live_effects/lpe-knot.cpp:359
-#, fuzzy
 msgid "_Both gaps"
-msgstr "Area cuscinetto"
+msgstr "Spaziatura su entrambi"
 
 #: ../src/live_effects/lpe-knot.cpp:359
-#, fuzzy
 msgid "Use gap in both intersection elements"
-msgstr "Aggancia alle intersezioni dei tracciati"
+msgstr "Applica spaziatura su entrambi gli elementi intersecati"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "_Groups: Inverse"
-msgstr ""
+msgstr "_Gruppi: Inverti"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "Use other stroke width, useful in groups with different stroke widths"
 msgstr ""
+"Usa l'altra larghezza contorno, utile per gruppi con differente larghezza "
+"dei contorni"
 
 #: ../src/live_effects/lpe-knot.cpp:366
 msgid "S_witcher size:"
@@ -11006,9 +11016,8 @@ msgid "Mirror movements in vertical"
 msgstr "Rispecchia i movimenti verticalmente"
 
 #: ../src/live_effects/lpe-lattice2.cpp:39
-#, fuzzy
 msgid "Use only perimeter"
-msgstr "Modifica parametri booleani"
+msgstr "Usa solo perimetro"
 
 #: ../src/live_effects/lpe-lattice2.cpp:40
 msgid "Update while moving knots (maybe slow)"
@@ -11716,6 +11725,25 @@ msgid ""
 "<b><i>Set Defaults:</i></b> For every LPE, default values can be set at the "
 "bottom."
 msgstr ""
+"<b><big>Generale</big></b>\n"
+"Aspetto e posizione delle linee di misurazione e del testo\n"
+"\n"
+"<b><big>Proiezione</big></b>\n"
+"Mostra una linea di misurazione secondo gli oggetti selezionati\n"
+"\n"
+"<b><big>Opzioni</big></b>\n"
+"Opzioni per colore, precisione, formattazione e aspetto del testo\n"
+"\n"
+"<b><big>Consigli</big></b>\n"
+"<b><i>Stile personalizzato:</i></b> per personalizzare ulteriormente gli "
+"stili, usa l'editor XML per trovare la classe o l'ID, poi usa la finestra "
+"Stile per applicare un nuovo stile.\n"
+"<b><i>Blacklist</i></b>: nascondi alcuni elementi o proiezioni.\n"
+"<b><i>Misure multiple LPE:</i></b> sullo stesso oggetto, insieme alla "
+"blacklist, permette di aggiungere testi o misure con differenti orientazioni "
+"o proiezioni aggiuntive.\n"
+"<b><i>Imposta predefiniti:</i></b> per ogni LPE, i valori predefiniti "
+"possono essere impostati infondo."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:297
 #: ../src/ui/dialog/find.cpp:77
@@ -11727,9 +11755,8 @@ msgid "Projection"
 msgstr "Proiezione"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:518
-#, fuzzy
 msgid "Non Uniform Scale"
-msgstr "Disturbo uniforme"
+msgstr "Scala non uniforme"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
 msgid "Vertical page center"
@@ -17056,7 +17083,7 @@ msgstr "La cartella %s non esiste o non è una cartella.\n"
 #. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image
 #: ../src/ui/dialog/export.cpp:1136 ../src/ui/dialog/export.cpp:1138
 msgid "Exporting %1 (%2 x %3)"
-msgstr "Sto esportando %1 (%2 x %3) "
+msgstr "Sto esportando %1 (%2 x %3)"
 
 #: ../src/ui/dialog/export.cpp:1169
 #, c-format
@@ -18228,11 +18255,11 @@ msgstr "tutti"
 
 #: ../src/ui/dialog/glyphs.cpp:56
 msgid "common"
-msgstr ""
+msgstr "comune"
 
 #: ../src/ui/dialog/glyphs.cpp:57
 msgid "inherited"
-msgstr ""
+msgstr "ereditato"
 
 #: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:241
 msgid "Arabic"
@@ -18556,11 +18583,11 @@ msgstr "Aramaico imperiale"
 
 #: ../src/ui/dialog/glyphs.cpp:138
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Inscriptional Pahlavi"
 
 #: ../src/ui/dialog/glyphs.cpp:139
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Inscriptional Parthian"
 
 #: ../src/ui/dialog/glyphs.cpp:140 ../src/ui/dialog/glyphs.cpp:357
 msgid "Javanese"
@@ -18751,22 +18778,20 @@ msgid "Old Hungarian"
 msgstr "Ungherese antico"
 
 #: ../src/ui/dialog/glyphs.cpp:187
-#, fuzzy
 msgid "Signwriting"
-msgstr "Script"
+msgstr "Signwriting"
 
 #: ../src/ui/dialog/glyphs.cpp:225
-#, fuzzy
 msgid "Basic Plane"
-msgstr "Latino di base"
+msgstr "Basic Plane"
 
 #: ../src/ui/dialog/glyphs.cpp:226
 msgid "Extended Multilingual Plane"
-msgstr ""
+msgstr "Extended Multilingual Plane"
 
 #: ../src/ui/dialog/glyphs.cpp:227
 msgid "Supplementary Ideographic Plane"
-msgstr ""
+msgstr "Supplementary Ideographic Plane"
 
 #: ../src/ui/dialog/glyphs.cpp:229
 msgid "Basic Latin"
@@ -19074,71 +19099,67 @@ msgstr "Hangul Jamo esteso B"
 
 #: ../src/ui/dialog/glyphs.cpp:364
 msgid "High Surrogates"
-msgstr ""
+msgstr "High Surrogates"
 
 #: ../src/ui/dialog/glyphs.cpp:365
 msgid "High Private Use Surrogates"
-msgstr ""
+msgstr "High Private Use Surrogates"
 
 #: ../src/ui/dialog/glyphs.cpp:366
 msgid "Low Surrogates"
-msgstr ""
+msgstr "Low Surrogates"
 
 #: ../src/ui/dialog/glyphs.cpp:367
 msgid "Private Use Area"
-msgstr ""
+msgstr "Private Use Area"
 
 #: ../src/ui/dialog/glyphs.cpp:368
 msgid "CJK Compatibility Ideographs"
-msgstr ""
+msgstr "CJK Compatibility Ideographs"
 
 #: ../src/ui/dialog/glyphs.cpp:369
 msgid "Alphabetic Presentation Forms"
-msgstr ""
+msgstr "Alphabetic Presentation Forms"
 
 #: ../src/ui/dialog/glyphs.cpp:370
 msgid "Arabic Presentation Forms-A"
-msgstr ""
+msgstr "Arabic Presentation Forms-A"
 
 #: ../src/ui/dialog/glyphs.cpp:371
-#, fuzzy
 msgid "Variation Selectors"
-msgstr "Adatta pagina alla selezione"
+msgstr "Variation Selectors"
 
 #: ../src/ui/dialog/glyphs.cpp:372
-#, fuzzy
 msgid "Vertical Forms"
-msgstr "Raggio verticale"
+msgstr "Vertical Forms"
 
 #: ../src/ui/dialog/glyphs.cpp:373
-#, fuzzy
 msgid "Combining Half Marks"
-msgstr "Margini di stampa"
+msgstr "Combining Half Marks"
 
 #: ../src/ui/dialog/glyphs.cpp:374
 msgid "CJK Compatibility Forms"
-msgstr ""
+msgstr "CJK Compatibility Forms"
 
 #: ../src/ui/dialog/glyphs.cpp:375
 msgid "Small Form Variants"
-msgstr ""
+msgstr "Small Form Variants"
 
 #: ../src/ui/dialog/glyphs.cpp:376
 msgid "Arabic Presentation Forms-B"
-msgstr ""
+msgstr "Arabic Presentation Forms-B"
 
 #: ../src/ui/dialog/glyphs.cpp:377
 msgid "Halfwidth and Fullwidth Forms"
-msgstr ""
+msgstr "Halfwidth and Fullwidth Forms"
 
 #: ../src/ui/dialog/glyphs.cpp:378
 msgid "Specials"
 msgstr "Speciali"
 
 #: ../src/ui/dialog/glyphs.cpp:381
-#, fuzzy
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr "Vari Simboli e Frecce"
+msgstr "Simboli e pittogrammi vari"
 
 #: ../src/ui/dialog/glyphs.cpp:382
 msgid "Emoticons"
@@ -19161,7 +19182,6 @@ msgid "Geometric Shapes Extended"
 msgstr "Forme geometriche esteso"
 
 #: ../src/ui/dialog/glyphs.cpp:387
-#, fuzzy
 msgid "Supplemental Arrows-C"
 msgstr "Supplemento Frecce C"
 
@@ -19175,7 +19195,7 @@ msgstr "Simboli scacchi"
 
 #: ../src/ui/dialog/glyphs.cpp:390
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "Simboli e pittogrammi esteso A"
 
 #: ../src/ui/dialog/glyphs.cpp:452
 msgid "Script: "
@@ -23786,42 +23806,36 @@ msgid "Adjust kerning value"
 msgstr "Modifica valore crenatura"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:456
-#, fuzzy
 msgid "Font Attributes"
-msgstr "Imposta attributi"
+msgstr "Attributi font"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
 msgid "Horiz. Advance X"
-msgstr "Avanzamento orizzontale"
+msgstr "Avanzamento orizzontale X:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
 msgid "Average amount of horizontal space each letter takes up."
 msgstr "Quantità media di spazio occupata da ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
-#, fuzzy
 msgid "Horiz. Origin X"
-msgstr "Origine X:"
+msgstr "Origine orizz. X:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
-#, fuzzy
 msgid "Average horizontal origin location for each letter."
 msgstr "Posizione orizzontale di inizio di ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
-#, fuzzy
 msgid "Horiz. Origin Y"
-msgstr "Origine Y"
+msgstr "Origine orizz. Y:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
-#, fuzzy
 msgid "Average vertical origin location for each letter."
 msgstr "Posizione verticale di inizio di ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:460
-#, fuzzy
 msgid "Font Face Attributes"
-msgstr "Imposta attributi"
+msgstr "Attributi font face"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:461
 msgid "Family Name:"
@@ -23843,7 +23857,6 @@ msgid "Number of display units each letter takes up."
 msgstr "Numero di unità di display occupate da ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:463
-#, fuzzy
 msgid "Ascent:"
 msgstr "Ascendente:"
 
@@ -23854,7 +23867,6 @@ msgstr ""
 "Spazio occupato dalle linee ascendenti come la linea lunga della lettera 'h'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:464
-#, fuzzy
 msgid "Descent:"
 msgstr "Discendente:"
 
@@ -23864,9 +23876,8 @@ msgstr ""
 "Spazio occupato dalle linee discendenti come il ricciolo della lettera 'g'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
-#, fuzzy
 msgid "Cap Height:"
-msgstr "Altezza della maiuscola:"
+msgstr "Altezza maiuscola:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
 msgid ""
@@ -23875,9 +23886,8 @@ msgstr ""
 "Altezza delle lettere maiuscole sulla linea base come le lettere 'H' o 'I'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
-#, fuzzy
 msgid "x Height:"
-msgstr "Altezza della minuscola:"
+msgstr "Altezza minuscola:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid ""
@@ -24011,9 +24021,8 @@ msgid "Add font"
 msgstr "Aggiungi font"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1018
-#, fuzzy
 msgid "_Fonts"
-msgstr "_Carattere"
+msgstr "_Font"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1026
 msgid "_Global Settings"
@@ -37188,7 +37197,6 @@ msgid "HP Graphics Language file (*.hpgl)"
 msgstr "File HP Graphics Language (*.hpgl)"
 
 #: ../share/extensions/hpgl_input.inx:15
-#, fuzzy
 msgid "Import an HP Graphics Language file"
 msgstr "Importa un file HP Graphics Language"
 
@@ -37207,21 +37215,19 @@ msgstr ""
 "collegamento seriale."
 
 #: ../share/extensions/hpgl_output.inx:9 ../share/extensions/plotter.inx:67
-#, fuzzy
 msgid "Plotter Settings"
 msgstr "Impostazioni Plotter"
 
 #: ../share/extensions/hpgl_output.inx:12 ../share/extensions/plotter.inx:70
-#, fuzzy
 msgid "Pen number:"
-msgstr "Numero di penne:"
+msgstr "Numero di penna:"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 13
 # File: ../share/extensions/plotter.inx, line: 71
 #: ../share/extensions/hpgl_output.inx:12 ../share/extensions/plotter.inx:70
 msgid "The number of the pen (tool) to use (Standard: '1')"
-msgstr "Numero di penne da utilizzare (standard: '1')"
+msgstr "Numero della penna da utilizzare (standard: '1')"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 14
@@ -37272,7 +37278,6 @@ msgid "Rotation of the drawing (Default: 0°)"
 msgstr "Rotazione del disegno (predefinito: 0°)"
 
 #: ../share/extensions/hpgl_output.inx:21 ../share/extensions/plotter.inx:79
-#, fuzzy
 msgid "Mirror X axis"
 msgstr "Rifletti asse X"
 
@@ -37284,7 +37289,6 @@ msgid "Check this to mirror the X axis (Default: Unchecked)"
 msgstr "Seleziona per riflettere sull'asse X (predefinito: non selezionato)"
 
 #: ../share/extensions/hpgl_output.inx:22 ../share/extensions/plotter.inx:80
-#, fuzzy
 msgid "Mirror Y axis"
 msgstr "Rifletti asse Y"
 
@@ -37296,7 +37300,6 @@ msgid "Check this to mirror the Y axis (Default: Unchecked)"
 msgstr "Seleziona per riflettere sull'asse Y (predefinito: non selezionato)"
 
 #: ../share/extensions/hpgl_output.inx:23 ../share/extensions/plotter.inx:81
-#, fuzzy
 msgid "Center zero point"
 msgstr "Punto zero centrato"
 
@@ -37423,7 +37426,6 @@ msgstr ""
 "informazioni consultare il manuale o il sito web del plotter."
 
 #: ../share/extensions/hpgl_output.inx:41
-#, fuzzy
 msgid "Export an HP Graphics Language file"
 msgstr "Esporta un file HP Graphics Language"
 
@@ -38267,37 +38269,31 @@ msgstr ""
 
 #: ../share/extensions/layer2png.inx:3
 msgid "Export Layer Slices"
-msgstr ""
+msgstr "Esporta Slice Livello"
 
 #: ../share/extensions/layer2png.inx:7
-#, fuzzy
 msgid "Icon mode"
-msgstr "Modalità indice"
+msgstr "Modalità icona"
 
 #: ../share/extensions/layer2png.inx:8
-#, fuzzy
 msgid "Sizes"
-msgstr "Dimensione"
+msgstr "Dimensioni"
 
 #: ../share/extensions/layer2png.inx:9
-#, fuzzy
 msgid "Layer with Slices:"
-msgstr "Spruzza copie"
+msgstr "Livello con Slice:"
 
 #: ../share/extensions/layer2png.inx:10
-#, fuzzy
 msgid "Overwrite existing exports"
-msgstr "Cancella tracciato esistente"
+msgstr "Sovrascrivi già esportati se presenti"
 
 #: ../share/extensions/layer2png.inx:11
-#, fuzzy
 msgid "Directory"
-msgstr "Cartella:"
+msgstr "Cartella"
 
 #: ../share/extensions/layer2png.inx:15
-#, fuzzy
 msgid "Layer Slicer"
-msgstr "Spruzza copie"
+msgstr "Slicer livello"
 
 #: ../share/extensions/layer2png.inx:16
 msgid ""
@@ -38305,6 +38301,9 @@ msgid ""
 "extension will export a PNG file for each rectangle into the directory with "
 "the name of the {rectangle ID}.png (use Object Properties to set this)."
 msgstr ""
+"Creando un livello (nome predefinito \"slices\") contenente dei rettangoli, "
+"l'estensione esporterà un file PNG per ogni rettangolo nella cartella con il "
+"nome del {rettangolo}.png (modifica le proprietà dell'oggetto per impostarlo)."
 
 #: ../share/extensions/layer2png.inx:17
 msgid ""
@@ -38313,12 +38312,19 @@ msgid ""
 "previously generated, it will color the rectangle RED. For new exports that "
 "did not previously exist, the rectangle will be GREEN."
 msgstr ""
+"Se è già presente il file esportato, lo salterà e assegnerà al rettangolo il "
+"colore GRIGIO. Se la modalità \"Sovrascrivi già esportati se presenti\" è "
+"selezionata e il file è già presente, assegnerà il colore ROSSO. Se nessun "
+"file era presente, assegnerà il colore VERDE."
 
 #: ../share/extensions/layer2png.inx:18
 msgid ""
 "If you want to create (square) icons at different sizes, select \"Icon mode"
 "\". Icon mode will create a square export for each dimension in \"Sizes\"."
 msgstr ""
+"Per creare icone (quadrate) con differenti dimensioni, seleziona \"Modalità "
+"icona\". La modalità esporterà un'immagine quadrata per ogni dimensione "
+"indicata in \"Dimensioni\"."
 
 #: ../share/extensions/layers2svgfont.inx:3
 msgid "3 - Convert Glyph Layers to SVG Font"
@@ -38657,19 +38663,16 @@ msgid "Text anchor:"
 msgstr "Ancoraggio testo:"
 
 #: ../share/extensions/measure.inx:26
-#, fuzzy
 msgid "Left (Start)"
-msgstr "Da sinistra a destra"
+msgstr "Sinistra (inizio)"
 
 #: ../share/extensions/measure.inx:27
-#, fuzzy
 msgid "Center (Middle)"
-msgstr "Centroide"
+msgstr "Centro (metà)"
 
 #: ../share/extensions/measure.inx:28
-#, fuzzy
 msgid "Right (End)"
-msgstr "Destra (px):"
+msgstr "Destra (fine)"
 
 #: ../share/extensions/measure.inx:31
 msgid "Fixed Text"
@@ -38747,7 +38750,7 @@ msgstr "Inkscape SVG compresso con altri media"
 #: ../share/extensions/media_zip.inx:6
 #, fuzzy
 msgid "Image zip directory:"
-msgstr "Cartella di lavoro non valida: %s"
+msgstr ""
 
 #: ../share/extensions/media_zip.inx:7
 msgid "Add font list"
@@ -38767,7 +38770,7 @@ msgstr ""
 
 #: ../share/extensions/merge_styles.inx:3
 msgid "Merge Styles into CSS"
-msgstr ""
+msgstr "Unisci Stili in CSS"
 
 #: ../share/extensions/merge_styles.inx:6
 msgid ""
@@ -38776,17 +38779,20 @@ msgid ""
 "inline style attributes. Please use a name which best describes the kinds of "
 "objects and their common context for best effect."
 msgstr ""
+"Tutti i nodi selezionati saranno raggruppati e i loro attributi di stile "
+"comuni formeranno una nuova classe che sostituirà gli esistenti attributi di "
+"stile inline. Si consiglia di usare un nome descrittivo del tipo di oggetti e "
+"e delle loro caratteristiche."
 
 #
 # File: ../share/extensions/merge_styles.inx, line: 9
 #: ../share/extensions/merge_styles.inx:8
 msgid "New Class Name:"
-msgstr ""
+msgstr "Nome nuova classe:"
 
 #: ../share/extensions/merge_styles.inx:13
-#, fuzzy
 msgid "Stylesheet"
-msgstr "_Stile"
+msgstr "Stylesheet"
 
 #: ../share/extensions/motion.inx:3
 msgid "Motion"
@@ -38801,9 +38807,8 @@ msgid "2 - Add Glyph Layer"
 msgstr "2 - Aggiungi livello glifo"
 
 #: ../share/extensions/new_glyph_layer.inx:5
-#, fuzzy
 msgid "Unicode character:"
-msgstr "Inserisci carattere Unicode"
+msgstr "Carattere Unicode:"
 
 #: ../share/extensions/next_glyph_layer.inx:3
 msgid "View Next Glyph"
@@ -38811,7 +38816,7 @@ msgstr "Visualizza glifo successivo"
 
 #: ../share/extensions/nicechart.inx:29
 msgid "NiceCharts"
-msgstr ""
+msgstr "NiceCharts"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 31
@@ -38820,27 +38825,22 @@ msgid "Data"
 msgstr "Dati"
 
 #: ../share/extensions/nicechart.inx:34
-#, fuzzy
 msgid "Data from file"
 msgstr "Carica da file"
 
 #: ../share/extensions/nicechart.inx:35
-#, fuzzy
 msgid "Enter the full path to a CSV file:"
 msgstr "Percorso completo del file CSV:"
 
 #: ../share/extensions/nicechart.inx:37
-#, fuzzy
 msgid "Delimiter:"
 msgstr "Separatore:"
 
 #: ../share/extensions/nicechart.inx:38
-#, fuzzy
 msgid "Column that contains the keys:"
 msgstr "Colonna contenente le chiavi:"
 
 #: ../share/extensions/nicechart.inx:39
-#, fuzzy
 msgid "Column that contains the values:"
 msgstr "Colonna contenente i valori:"
 
@@ -38857,7 +38857,6 @@ msgid "First line contains headings"
 msgstr "Prima riga con intestazioni"
 
 #: ../share/extensions/nicechart.inx:43
-#, fuzzy
 msgid "Direct input"
 msgstr "Input diretto"
 
@@ -38880,17 +38879,14 @@ msgid "Data:"
 msgstr "Dati:"
 
 #: ../share/extensions/nicechart.inx:50
-#, fuzzy
 msgid "Labels"
 msgstr "Etichette"
 
 #: ../share/extensions/nicechart.inx:51
-#, fuzzy
 msgid "Font:"
 msgstr "Carattere:"
 
 #: ../share/extensions/nicechart.inx:53
-#, fuzzy
 msgid "Font color:"
 msgstr "Colore carattere:"
 
@@ -38901,27 +38897,22 @@ msgid "Charts"
 msgstr "Grafici"
 
 #: ../share/extensions/nicechart.inx:56
-#, fuzzy
 msgid "Draw horizontally"
 msgstr "Disegna in orizzontale"
 
 #: ../share/extensions/nicechart.inx:57
-#, fuzzy
 msgid "Bar length:"
 msgstr "Lunghezza barre:"
 
 #: ../share/extensions/nicechart.inx:58
-#, fuzzy
 msgid "Bar width:"
 msgstr "Larghezza barre:"
 
 #: ../share/extensions/nicechart.inx:59
-#, fuzzy
 msgid "Pie radius:"
 msgstr "Raggio diagramma a torta:"
 
 #: ../share/extensions/nicechart.inx:60
-#, fuzzy
 msgid "Bar offset:"
 msgstr "Spaziatura barre:"
 
@@ -38944,7 +38935,6 @@ msgid "Work around aliasing effects (creates overlapping segments)"
 msgstr "Correggi gli effetti di arrotondamento (crea segmenti sovrapposti)"
 
 #: ../share/extensions/nicechart.inx:66
-#, fuzzy
 msgid "Color scheme:"
 msgstr "Schema di colori:"
 
@@ -38955,47 +38945,38 @@ msgid "SAP"
 msgstr "SAP"
 
 #: ../share/extensions/nicechart.inx:74
-#, fuzzy
 msgid "Custom colors:"
 msgstr "Colori personalizzati:"
 
 #: ../share/extensions/nicechart.inx:76
-#, fuzzy
 msgid "Reverse color scheme"
 msgstr "Inverti schema di colori"
 
 #: ../share/extensions/nicechart.inx:77
-#, fuzzy
 msgid "Drop shadow"
 msgstr "Proietta ombra"
 
 #: ../share/extensions/nicechart.inx:80
-#, fuzzy
 msgid "Show values"
 msgstr "Mostra i valori"
 
 #: ../share/extensions/nicechart.inx:87
-#, fuzzy
 msgid "Chart type:"
 msgstr "Tipo di grafico:"
 
 #: ../share/extensions/nicechart.inx:88
-#, fuzzy
 msgid "Bar chart"
 msgstr "Grafico a barre"
 
 #: ../share/extensions/nicechart.inx:89
-#, fuzzy
 msgid "Pie chart"
 msgstr "Grafico a torta"
 
 #: ../share/extensions/nicechart.inx:90
-#, fuzzy
 msgid "Pie chart (percentage)"
 msgstr "Grafico a torta (percentuale)"
 
 #: ../share/extensions/nicechart.inx:91
-#, fuzzy
 msgid "Stacked bar chart"
 msgstr "Grafico a barre sovrapposte"
 
@@ -39024,7 +39005,6 @@ msgstr ""
 "123.675 verrà rappresentata come 124."
 
 #: ../share/extensions/output_scour.inx:14
-#, fuzzy
 msgid "Shorten color values"
 msgstr "Abbrevia i valori dei colori"
 
@@ -39039,7 +39019,6 @@ msgstr ""
 "possibile)."
 
 #: ../share/extensions/output_scour.inx:17
-#, fuzzy
 msgid "Convert CSS attributes to XML attributes"
 msgstr "Converte gli attributi CSS in attributi XML"
 
@@ -39050,7 +39029,6 @@ msgid ""
 msgstr "Converte i tag style e le dichiarazioni style=\"\" in attributi XML."
 
 #: ../share/extensions/output_scour.inx:21
-#, fuzzy
 msgid "Collapse groups"
 msgstr "Unisci i gruppi"
 
@@ -39063,7 +39041,6 @@ msgstr ""
 "Richiede l'opzione \"Rimouvi ID non utilizzati\"."
 
 #: ../share/extensions/output_scour.inx:24
-#, fuzzy
 msgid "Create groups for similar attributes"
 msgstr "Crea gruppi per attributi simili"
 
@@ -39122,12 +39099,10 @@ msgstr ""
 "producendo un file SVG un po' più grande."
 
 #: ../share/extensions/output_scour.inx:38
-#, fuzzy
 msgid "Document options"
 msgstr "Opzioni documento"
 
 #: ../share/extensions/output_scour.inx:41
-#, fuzzy
 msgid "Remove the XML declaration"
 msgstr "Rimuovi dichiarazione XML"
 
@@ -39143,7 +39118,6 @@ msgstr ""
 "messa, in particolare se il documento contiene caratteri speciali)."
 
 #: ../share/extensions/output_scour.inx:44
-#, fuzzy
 msgid "Remove metadata"
 msgstr "Rimuovi metadati"
 
@@ -39160,7 +39134,6 @@ msgstr ""
 "gestiscono SVG eccetera."
 
 #: ../share/extensions/output_scour.inx:47
-#, fuzzy
 msgid "Remove comments"
 msgstr "Rimuovi commenti"
 
@@ -39171,9 +39144,8 @@ msgid "Remove all XML comments from output."
 msgstr "Rimuove tutti i commenti XML."
 
 #: ../share/extensions/output_scour.inx:50
-#, fuzzy
 msgid "Embed raster images"
-msgstr "Incorpora immagini grezze"
+msgstr "Incorpora immagini raster"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 50
@@ -39186,7 +39158,6 @@ msgstr ""
 "URL codificate in Base64."
 
 #: ../share/extensions/output_scour.inx:53
-#, fuzzy
 msgid "Enable viewboxing"
 msgstr "Attiva anteprima"
 
@@ -39202,7 +39173,6 @@ msgstr ""
 "dimensioni del disegno."
 
 #: ../share/extensions/output_scour.inx:55
-#, fuzzy
 msgid "Pretty-printing"
 msgstr "Formattazione"
 
@@ -39225,7 +39195,6 @@ msgstr ""
 "ridurre la dimensione del file a scapito della leggibilità."
 
 #: ../share/extensions/output_scour.inx:61
-#, fuzzy
 msgid "Indentation characters:"
 msgstr "Caratteri di indentazione:"
 
@@ -39240,32 +39209,28 @@ msgstr ""
 "se \"Output con a capo e indentazioni\" è disabilitato."
 
 #: ../share/extensions/output_scour.inx:62
-#, fuzzy
 msgid "Space"
 msgstr "Spazio"
 
 #: ../share/extensions/output_scour.inx:63
-#, fuzzy
 msgid "Tab"
 msgstr "Tabulazione"
 
 #: ../share/extensions/output_scour.inx:64
-#, fuzzy
 msgctxt "Indent"
 msgid "None"
 msgstr "Nessuno"
 
 #: ../share/extensions/output_scour.inx:68
-#, fuzzy
 msgid "Depth of indentation:"
-msgstr "Ampiezza indentazione:"
+msgstr "Profondità indentazione:"
 
 #: ../share/extensions/output_scour.inx:68
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
 msgstr ""
-"Ampiezza dell'indentazione prescelta. Per esempio, impostando \"2\" ogni "
+"Profondità dell'indentazione prescelta. Per esempio, impostando \"2\" ogni "
 "livello verrà indentato di due spazi/tabulazioni in più."
 
 #: ../share/extensions/output_scour.inx:71
@@ -39280,12 +39245,10 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/output_scour.inx:73
-#, fuzzy
 msgid "IDs"
 msgstr "ID"
 
 #: ../share/extensions/output_scour.inx:76
-#, fuzzy
 msgid "Remove unused IDs"
 msgstr "Rimuovi ID non utilizzati"
 
@@ -39348,7 +39311,6 @@ msgstr ""
 "degli editor SVG, compreso Inkscape) verranno rimossi o abbreviati."
 
 #: ../share/extensions/output_scour.inx:90
-#, fuzzy
 msgid "Preserve the following IDs:"
 msgstr "Mantieni gli ID seguenti:"
 
@@ -39373,7 +39335,6 @@ msgstr ""
 "farà mantenere \"flag-mx\", \"flag-pt\", eccetera)."
 
 #: ../share/extensions/output_scour.inx:101
-#, fuzzy
 msgid "Optimized SVG Output is provided by"
 msgstr "Output SVG ottimizzato fornito da"
 
@@ -39390,7 +39351,6 @@ msgid "https://github.com/scour-project/scour"
 msgstr "https://github.com/scour-project/scour"
 
 #: ../share/extensions/output_scour.inx:110
-#, fuzzy
 msgid "This version of the extension is designed for"
 msgstr "Questa versione dell'estensione è progettata per"
 
@@ -39768,24 +39728,20 @@ msgstr ""
 "Assicurarsi che tutti gli oggetti da disegnare sono convertiti in tracciati."
 
 #: ../share/extensions/plotter.inx:9
-#, fuzzy
 msgid "Connection Settings"
-msgstr "Connessione"
+msgstr "Impostazioni connessione"
 
 #: ../share/extensions/plotter.inx:10
-#, fuzzy
 msgid "Port type:"
 msgstr "Tipo di porta:"
 
 #: ../share/extensions/plotter.inx:11
-#, fuzzy
 msgid "Serial"
 msgstr "Seriale"
 
 #: ../share/extensions/plotter.inx:14
-#, fuzzy
 msgid "Parallel port:"
-msgstr "Parallela:"
+msgstr "Porta parallela:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 15
@@ -39798,7 +39754,6 @@ msgstr ""
 "Linux è del tipo: '/dev/usb/lp2' (predefinito: /dev/usb/lp2)"
 
 #: ../share/extensions/plotter.inx:15
-#, fuzzy
 msgid "Serial port:"
 msgstr "Porta seriale:"
 
@@ -39813,9 +39768,8 @@ msgstr ""
 "Linux è del tipo: '/dev/ttyUSB0' (predefinito: COM1)"
 
 #: ../share/extensions/plotter.inx:16
-#, fuzzy
 msgid "Serial baud rate:"
-msgstr "Baud rate:"
+msgstr "Baud rate seriale:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 17
@@ -39824,9 +39778,8 @@ msgid "The Baud rate of your serial connection (Default: 9600)"
 msgstr "Baud rate della linea seriale (predefinito: 9600)"
 
 #: ../share/extensions/plotter.inx:33
-#, fuzzy
 msgid "Serial byte size:"
-msgstr "Dimensione byte"
+msgstr "Dimensione byte seriale:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 34
@@ -39839,9 +39792,8 @@ msgstr ""
 "il valore predefinito (8 bit)"
 
 #: ../share/extensions/plotter.inx:39
-#, fuzzy
 msgid "Serial stop bits:"
-msgstr "Numero di bit di stop:"
+msgstr "Numero di bit di stop seriale:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 40
@@ -39854,9 +39806,8 @@ msgstr ""
 "usano il valore predefinito (1 bit)"
 
 #: ../share/extensions/plotter.inx:44
-#, fuzzy
 msgid "Serial parity:"
-msgstr "Parità:"
+msgstr "Parità seriale:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 45
@@ -39869,9 +39820,8 @@ msgstr ""
 "valore predefinito (nessuna)"
 
 #: ../share/extensions/plotter.inx:51
-#, fuzzy
 msgid "Serial flow control:"
-msgstr "Controllo di flusso:"
+msgstr "Controllo di flusso seriale:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 52
@@ -39896,7 +39846,6 @@ msgid "Hardware (DSR/DTR + RTS/CTS)"
 msgstr "Hardware (DSR/DTR + RTS/CTS)"
 
 #: ../share/extensions/plotter.inx:57
-#, fuzzy
 msgid "Command language:"
 msgstr "Linguaggio di comando:"
 
@@ -39915,9 +39864,8 @@ msgid "DMPL"
 msgstr "DMPL"
 
 #: ../share/extensions/plotter.inx:60
-#, fuzzy
 msgid "KNK Plotter (HPGL variant)"
-msgstr "KNK Zing (variante HPGL)"
+msgstr "KNK Plotter (variante HPGL)"
 
 #: ../share/extensions/plotter.inx:63
 msgid ""
@@ -40186,7 +40134,6 @@ msgid "View Previous Glyph"
 msgstr "Visualizza glifo precedente"
 
 #: ../share/extensions/print_win32_vector.inx:3
-#, fuzzy
 msgid "Win32 Vector Print"
 msgstr "Stampa Windows 32-bit"
 
@@ -40323,51 +40270,44 @@ msgid "Square size (px):"
 msgstr "Dimensione quadretto (px):"
 
 #: ../share/extensions/render_barcode_qrcode.inx:35
-#, fuzzy
 msgid "Drawing type:"
-msgstr "Miscela disegno:"
+msgstr "Tipo disegno:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:36
-#, fuzzy
 msgid "Smooth: neutral"
-msgstr "Nodo curvo"
+msgstr "Smussato: neutral"
 
 #: ../share/extensions/render_barcode_qrcode.inx:37
-#, fuzzy
 msgid "Smooth: greedy"
-msgstr "Smussata"
+msgstr "Smussato: greedy"
 
 #: ../share/extensions/render_barcode_qrcode.inx:38
-#, fuzzy
 msgid "Smooth: proud"
-msgstr "Nodo curvo"
+msgstr "Smussato: proud"
 
 #: ../share/extensions/render_barcode_qrcode.inx:39
-#, fuzzy
 msgid "Path: simple"
-msgstr "Percorso: "
+msgstr "Percorso: semplice"
 
 #: ../share/extensions/render_barcode_qrcode.inx:40
-#, fuzzy
 msgid "Path: circle"
-msgstr "Cerchi impacchettati"
+msgstr "Percorso: cerchio"
 
 #: ../share/extensions/render_barcode_qrcode.inx:41
-#, fuzzy
 msgid "Path: custom"
-msgstr "Percorso: "
+msgstr "Percorso: personalizzato"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 44
 #: ../share/extensions/render_barcode_qrcode.inx:43
 msgid "Square sharp: obsolete"
-msgstr ""
+msgstr "Quadrato netto: obsoleto"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 46
 #: ../share/extensions/render_barcode_qrcode.inx:45
 msgid "Smooth square value (0-1):"
-msgstr ""
+msgstr "Valore smussatura (0-1):"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 47
@@ -40376,12 +40316,14 @@ msgid ""
 "For Path: custom set the path in relative coordinates (0,0)=(left,up) square "
 "size 1.0 "
 msgstr ""
+"Per Percorso: imposta il percorso personalizzato in coordinate relative "
+"(0,0)=(sinistra,alto) del quadrato di dimensione 1.0 "
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 48
 #: ../share/extensions/render_barcode_qrcode.inx:47
 msgid "Path string (Path: custom) or symbol #url:"
-msgstr ""
+msgstr "Stringa percorso (Percorso: personalizzato) o #url simbolo:"
 
 #: ../share/extensions/render_gear_rack.inx:3
 msgid "Rack Gear"
@@ -40921,9 +40863,8 @@ msgid "Convert SVG Font to Glyph Layers"
 msgstr "Converti SVG Font in livelli glifo"
 
 #: ../share/extensions/svgfont2layers.inx:5
-#, fuzzy
 msgid "Stop after (30 Recommended)"
-msgstr "Carica solo i primi 30 glifi (consigliato)"
+msgstr "Ferma dopo (consigliato 30)"
 
 #: ../share/extensions/synfig_output.inx:3
 msgid "Synfig Output"
@@ -41699,19 +41640,17 @@ msgstr ""
 
 #: ../share/extensions/webslicer_create_group.inx:3
 msgid "Set a layout group"
-msgstr ""
+msgstr "Imposta un gruppo di layout"
 
 #: ../share/extensions/webslicer_create_group.inx:8
 #: ../share/extensions/webslicer_create_rect.inx:33
-#, fuzzy
 msgid "HTML id attribute:"
-msgstr "Imposta attributo"
+msgstr "Attributo id HTML:"
 
 #: ../share/extensions/webslicer_create_group.inx:9
 #: ../share/extensions/webslicer_create_rect.inx:34
-#, fuzzy
 msgid "HTML class attribute:"
-msgstr "Imposta attributo"
+msgstr "Attributo classe HTML:"
 
 #: ../share/extensions/webslicer_create_group.inx:10
 msgid "Width unit:"
@@ -41730,7 +41669,7 @@ msgstr "Percentuale (relativo alla dimensione)"
 #: ../share/extensions/webslicer_create_group.inx:13
 #: ../share/extensions/webslicer_create_group.inx:18
 msgid "Undefined (relative to non-floating content size)"
-msgstr ""
+msgstr "Non definito (relativo a dimensione contenuto non fluttuante)"
 
 #: ../share/extensions/webslicer_create_group.inx:15
 msgid "Height unit:"
@@ -41746,18 +41685,18 @@ msgid ""
 "Layout Group is only about to help a better code generation (if you need "
 "it). To use this, you must to select some \"Slicer rectangles\" first."
 msgstr ""
+"Il gruppo di layout è utile per generare un codice migliore (se necessario). "
+"Per utilizzarlo è necessario selezionare alcuni \"Rettangoli di taglio\"."
 
 #: ../share/extensions/webslicer_create_group.inx:30
 #: ../share/extensions/webslicer_create_rect.inx:64
 #: ../share/extensions/webslicer_export.inx:20
-#, fuzzy
 msgid "Slicer"
-msgstr "Sciame"
+msgstr "Slicer"
 
 #: ../share/extensions/webslicer_create_rect.inx:3
-#, fuzzy
 msgid "Create a slicer rectangle"
-msgstr "Crea rettangolo"
+msgstr "Crea rettangolo di taglio"
 
 #: ../share/extensions/webslicer_create_rect.inx:12
 msgid "DPI:"
@@ -41769,7 +41708,6 @@ msgstr "Forza dimensione:"
 
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx:15
-#, fuzzy
 msgid "Force Dimension must be set as <width>x<height>"
 msgstr "Forza dimensione deve essere impostato come <larghezza>x<altezza>"
 
@@ -41808,14 +41746,12 @@ msgid "GIF specific options"
 msgstr "Opzioni specifiche GIF"
 
 #: ../share/extensions/webslicer_create_rect.inx:28
-#, fuzzy
 msgid "Palette"
-msgstr "Paletta"
+msgstr "Palette"
 
 #: ../share/extensions/webslicer_create_rect.inx:30
-#, fuzzy
 msgid "Palette size:"
-msgstr "Incolla dimensione"
+msgstr "Dimensione palette:"
 
 #
 # File: ../share/extensions/webslicer_create_rect.inx, line: 33
@@ -41828,101 +41764,88 @@ msgid "Options for HTML export"
 msgstr "Opzioni per l'esportazione HTML"
 
 #: ../share/extensions/webslicer_create_rect.inx:36
-#, fuzzy
 msgid "Layout disposition:"
-msgstr "Posizione casuale"
+msgstr "Disposizione layout:"
 
 #: ../share/extensions/webslicer_create_rect.inx:37
 msgid "Positioned html block element with the image as Background"
-msgstr ""
+msgstr "Elemento blocco html posizionato con l'immagine come sfondo"
 
 #: ../share/extensions/webslicer_create_rect.inx:38
 msgid "Tiled Background (on parent group)"
-msgstr ""
+msgstr "Sfondo Tiled (sul gruppo parent)"
 
 #: ../share/extensions/webslicer_create_rect.inx:39
 msgid "Background — repeat horizontally (on parent group)"
-msgstr ""
+msgstr "Sfondo — ripeti orizzontalmente (sul gruppo parent)"
 
 #: ../share/extensions/webslicer_create_rect.inx:40
 msgid "Background — repeat vertically (on parent group)"
-msgstr ""
+msgstr "Sfondo — ripeti verticalmente (sul gruppo parent)"
 
 #: ../share/extensions/webslicer_create_rect.inx:41
 msgid "Background — no repeat (on parent group)"
-msgstr ""
+msgstr "Sfondo — non ripetere (sul gruppo parent)"
 
 #: ../share/extensions/webslicer_create_rect.inx:42
-#, fuzzy
 msgid "Positioned Image"
-msgstr "Posizionamento"
+msgstr "Immagine posizionata"
 
 #: ../share/extensions/webslicer_create_rect.inx:43
-#, fuzzy
 msgid "Non Positioned Image"
-msgstr "Angolo di rotazione"
+msgstr "Immagine non posizionata"
 
 #: ../share/extensions/webslicer_create_rect.inx:44
 msgid "Left Floated Image"
-msgstr ""
+msgstr "Immagine Float a sinistra"
 
 #: ../share/extensions/webslicer_create_rect.inx:45
-#, fuzzy
 msgid "Right Floated Image"
-msgstr "Angolo destro"
+msgstr "Immagine Float a destra"
 
 #: ../share/extensions/webslicer_create_rect.inx:47
-#, fuzzy
 msgid "Position anchor:"
-msgstr "Posizione"
+msgstr "Posizione ancora:"
 
 #: ../share/extensions/webslicer_create_rect.inx:48
-#, fuzzy
 msgid "Top and Left"
-msgstr "Tracciato lato superiore"
+msgstr "Alto a sinistra"
 
 #: ../share/extensions/webslicer_create_rect.inx:49
-#, fuzzy
 msgid "Top and Center"
-msgstr "Tracciato lato superiore"
+msgstr "Alto al centro"
 
 #: ../share/extensions/webslicer_create_rect.inx:50
-#, fuzzy
 msgid "Top and right"
-msgstr "_Trucchi"
+msgstr "Alto a destra"
 
 #: ../share/extensions/webslicer_create_rect.inx:51
-#, fuzzy
 msgid "Middle and Left"
-msgstr "Tracciato lato superiore"
+msgstr "Metà a sinistra"
 
 #: ../share/extensions/webslicer_create_rect.inx:52
 msgid "Middle and Center"
-msgstr ""
+msgstr "Metà al centro"
 
 #: ../share/extensions/webslicer_create_rect.inx:53
-#, fuzzy
 msgid "Middle and Right"
-msgstr "Tracciato lato inferiore"
+msgstr "Metà a destra"
 
 #: ../share/extensions/webslicer_create_rect.inx:54
-#, fuzzy
 msgid "Bottom and Left"
-msgstr "Tracciato lato inferiore"
+msgstr "Basso a sinistra"
 
 #: ../share/extensions/webslicer_create_rect.inx:55
-#, fuzzy
 msgid "Bottom and Center"
-msgstr "Tracciato lato inferiore"
+msgstr "Basso al centro"
 
 #: ../share/extensions/webslicer_create_rect.inx:56
-#, fuzzy
 msgid "Bottom and Right"
-msgstr "Tracciato lato inferiore"
+msgstr "Basso a destra"
 
 #: ../share/extensions/webslicer_export.inx:3
 msgid "Export layout pieces and HTML+CSS code"
-msgstr ""
+msgstr "Esporta parti layout e codice HTML+CSS"
 
 #: ../share/extensions/webslicer_export.inx:8
 msgid "Directory path to export:"
@@ -41941,6 +41864,8 @@ msgid ""
 "All sliced images, and optionally - code, will be generated as you had "
 "configured and saved to one directory."
 msgstr ""
+"Tutte le immagini tagliate e opzionalmente il codice saranno generati come "
+"configurato e salvati in una cartella."
 
 #: ../share/extensions/whirl.inx:3
 msgid "Whirl"
@@ -42027,7 +41952,7 @@ msgstr "immagine;editor;vettoriale;disegno;"
 # File: ../org.inkscape.Inkscape.desktop.template, line: 17
 #: ../org.inkscape.Inkscape.desktop.template:17
 msgid "${INKSCAPE_ICONPATH}"
-msgstr ""
+msgstr "${INKSCAPE_ICONPATH}"
 
 #: ../org.inkscape.Inkscape.desktop.template:21
 msgid "New Drawing"
