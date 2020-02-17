@@ -19,6 +19,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
+#include <display/sp-canvas.h>
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
 #include <display/sp-ctrlquadr.h>
