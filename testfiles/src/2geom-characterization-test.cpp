@@ -17,7 +17,6 @@ TEST(Characterization2Geom, retrievingBackElementOfAnEmptyClosedPathFails)
     path.close();
     ASSERT_TRUE(path.closed());
     ASSERT_EQ(path.size_closed(), 0u);
-    ASSERT_DEATH(path.back_closed(), "");
 }
 
 /*
