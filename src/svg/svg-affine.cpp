@@ -39,6 +39,13 @@ sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
         /* skip initial whitespace */
         while (g_ascii_isspace (str[idx])) idx++;
 
+        // SVG2: allow commas in separation of transforms
+        if (str[idx] == ',') {
+            ++idx;
+            while (g_ascii_isspace(str[idx]))
+                ++idx;
+        }
+
         /* parse keyword */
         for (key_len = 0; key_len < sizeof (keyword); key_len++) {
             char c;
