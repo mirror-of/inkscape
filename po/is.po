@@ -1,60 +1,30 @@
 # Þýðing inkscape.po á íslensku
-# Copyright (C) 2015-2019 Icelandic Inksape Translators
+# Copyright (C) 2020 Icelandic Inksape Translators
 # This file is distributed under the same license as the Inkscape package.
 #
-# Sveinn í Felli (sv1@fellsnet.is), 2015, 2016, 2017, 2018, 2019.
+# Sveinn í Felli (sv1@fellsnet.is), 2015, 2016, 2017, 2018, 2019, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2018-02-03 23:41+0100\n"
-"PO-Revision-Date: 2019-01-09 10:39+0000\n"
+"POT-Creation-Date: 2019-06-26 19:57+0200\n"
+"PO-Revision-Date: 2020-02-20 07:29+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n%10!=1 || n%100==11);\n"
-"\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
+#: ../inkscape.desktop.in.h:1
 msgid "Inkscape"
 msgstr "Inkscape"
 
-#: ../inkscape.appdata.xml.in.h:2 ../inkscape.desktop.in.h:2
+#: ../inkscape.desktop.in.h:2
 msgid "Vector Graphics Editor"
 msgstr "Teikniforrit fyrir vigramyndir / línuteikningar"
-
-#: ../inkscape.appdata.xml.in.h:3
-msgid ""
-"An Open Source vector graphics editor, with capabilities similar to "
-"Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector "
-"Graphics (SVG) file format."
-msgstr ""
-"Frjálst og opið vigurmyndaforrit, með svipuðum eiginleikum og Illustrator, "
-"CorelDraw eða Xara X, sem styðst við W3C-staðla fyrir Scalable Vector "
-"Graphics (SVG) skráasnið."
-
-#: ../inkscape.appdata.xml.in.h:4
-msgid ""
-"Inkscape supports many advanced SVG features (markers, clones, alpha "
-"blending, etc.) and great care is taken in designing a streamlined "
-"interface. It is very easy to edit nodes, perform complex path operations, "
-"trace bitmaps and much more. We also aim to maintain a thriving user and "
-"developer community by using open, community-oriented development."
-msgstr ""
-"Inkscape styður marga af framsæknustu eiginleikum SVG (línumerki, klóna, "
-"gegnsæisblöndun, o.s.frv.), einnig er mikil áhersla lögð á að straumlínulaga "
-"viðmótið. Mjög auðvelt er að breyta hnútum, framkvæma flóknar aðgerðir á "
-"ferlum, línuteikna bitamyndir auk margs annars. Markmið okkar er líka að "
-"viðhalda blómlegu samfélagi notenda og hönnuða og er það gert með opinni, "
-"félagsmiðaðri framþróun."
-
-#: ../inkscape.appdata.xml.in.h:5
-msgid "Main application window"
-msgstr "Aðalgluggi forritsins"
 
 #: ../inkscape.desktop.in.h:3
 msgid "Inkscape Vector Graphics Editor"
@@ -370,7 +340,7 @@ msgstr "Áferð"
 
 #: ../share/filters/filters.svg.h:92
 msgid "Bulging, knotty, slick 3D surface"
-msgstr ""
+msgstr "Upplyft, kögglað, slétt þrívíddaryfirborð"
 
 #: ../share/filters/filters.svg.h:94
 msgid "Barbed Wire"
@@ -499,7 +469,7 @@ msgstr "Neonlýsing"
 
 #: ../share/filters/filters.svg.h:140
 msgid "Neon light effect"
-msgstr ""
+msgstr "Neonljósaáhrif"
 
 #: ../share/filters/filters.svg.h:142
 msgid "Molten Metal"
@@ -1018,7 +988,7 @@ msgstr "Bylgjaður köflóttur vefnaður"
 
 #: ../share/filters/filters.svg.h:392
 msgid "Tartan pattern with a wavy displacement and bevel around the edges"
-msgstr "Vefnaðarmynstur með bylgjuðum tilfærslum og fláa í kringum jaðra"
+msgstr "Hlaupabrautarmynstur með bylguðum tilfærslum og fláa í kringum jaðra"
 
 #: ../share/filters/filters.svg.h:394
 msgid "3D Marble"
@@ -1180,7 +1150,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:434
 msgid "Dark and Glow"
-msgstr "Dökkt og glóandi"
+msgstr "Dökkt og bjarmi"
 
 #: ../share/filters/filters.svg.h:436
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
@@ -1267,7 +1237,7 @@ msgstr "Kjötkveðjuhátíð"
 
 #: ../share/filters/filters.svg.h:476
 msgid "White splotches evocating carnaval masks"
-msgstr ""
+msgstr "Hvítar slettur sem minna á kjötkveðjuhátíðargrímur"
 
 #: ../share/filters/filters.svg.h:478
 msgid "Plastify"
@@ -1871,7 +1841,7 @@ msgstr "Skörp skreyting"
 
 #: ../share/filters/filters.svg.h:780
 msgid "Unrealistic reflections with sharp edges"
-msgstr ""
+msgstr "Óraunverulegar speglanir með skarpar brúnir"
 
 #: ../share/filters/filters.svg.h:782
 msgid "Deep Metal"
@@ -2103,7 +2073,7 @@ msgstr "Hvítt"
 #: ../share/palettes/palettes.h:16
 msgctxt "Palette"
 msgid "Maroon (#800000)"
-msgstr "Kastaníubrúnt (#800000)"
+msgstr "Ljósbrúnt (#800000)"
 
 #. Palette: inkscape.gpl
 #: ../share/palettes/palettes.h:17
@@ -2169,7 +2139,7 @@ msgstr "Purpurablátt (#800080)"
 #: ../share/palettes/palettes.h:27
 msgctxt "Palette"
 msgid "Fuchsia (#FF00FF)"
-msgstr "Bleikt (#FF00FF)"
+msgstr "Dökkbleikt (#FF00FF)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:28
@@ -2259,7 +2229,7 @@ msgstr "ljóskórall (#F08080)"
 #: ../share/palettes/palettes.h:42
 msgctxt "Palette"
 msgid "maroon (#800000)"
-msgstr "kastaníubrúnt (#800000)"
+msgstr "ljósbrúnt (#800000)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:43
@@ -4836,7 +4806,7 @@ msgstr "Margfeldi af millibilum hnitanets"
 
 #: ../src/display/snap-indicator.cpp:286
 msgid " to "
-msgstr " í "
+msgstr " til "
 
 #: ../src/document.cpp:543
 #, c-format
@@ -4920,7 +4890,7 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr "Birta glugga við ræsingu"
 
-#: ../src/extension/execution-env.cpp:136
+#: ../src/extension/execution-env.cpp:125
 #, c-format
 msgid "'%s' working, please wait..."
 msgstr "'%s' í vinnslu, bíddu aðeins..."
@@ -4953,7 +4923,7 @@ msgstr "XML-lýsingin fyrir hana tapaðist."
 
 #: ../src/extension/extension.cpp:294
 msgid "no implementation was defined for the extension."
-msgstr "engin útfærsla var tilgreind fyrir viðbótina."
+msgstr "Engin útfærsla var tilgreind fyrir viðbótina."
 
 #. std::cout << "Failed: " << *(_deps[i]) << std::endl;
 #: ../src/extension/extension.cpp:301
@@ -5008,7 +4978,7 @@ msgstr ""
 " Inkscape-vefsvæðið hvort þar sé nokkuð að finna eða spurðu á póstlistunum ef"
 " þú ert með spurningar varðandi þessa viðbót."
 
-#: ../src/extension/implementation/script.cpp:1119
+#: ../src/extension/implementation/script.cpp:1028
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -5018,11 +4988,11 @@ msgstr ""
 "Skriftan var ekki að tilkynna um villu, en þetta gæti samt gefið til kynna "
 "að útkoman verði ekki eins og búist var við."
 
-#: ../src/extension/init.cpp:288
+#: ../src/extension/init.cpp:286
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr ""
 
-#: ../src/extension/init.cpp:302
+#: ../src/extension/init.cpp:300
 #: ../src/extension/internal/filter/filter-file.cpp:59
 #, c-format
 msgid ""
@@ -6277,7 +6247,7 @@ msgstr "Uppruni ójafna"
 #: ../src/extension/internal/filter/transparency.h:132
 #: ../src/filter-enums.cpp:128 ../src/ui/tools/flood-tool.cpp:92
 #: ../src/ui/widget/color-icc-selector.cpp:176
-#: ../src/ui/widget/color-scales.cpp:386 ../src/ui/widget/color-scales.cpp:387
+#: ../src/ui/widget/color-scales.cpp:395 ../src/ui/widget/color-scales.cpp:396
 msgid "Red"
 msgstr "Rautt"
 
@@ -6289,7 +6259,7 @@ msgstr "Rautt"
 #: ../src/extension/internal/filter/transparency.h:133
 #: ../src/filter-enums.cpp:129 ../src/ui/tools/flood-tool.cpp:93
 #: ../src/ui/widget/color-icc-selector.cpp:177
-#: ../src/ui/widget/color-scales.cpp:389 ../src/ui/widget/color-scales.cpp:390
+#: ../src/ui/widget/color-scales.cpp:398 ../src/ui/widget/color-scales.cpp:399
 msgid "Green"
 msgstr "Grænt"
 
@@ -6301,7 +6271,7 @@ msgstr "Grænt"
 #: ../src/extension/internal/filter/transparency.h:134
 #: ../src/filter-enums.cpp:130 ../src/ui/tools/flood-tool.cpp:94
 #: ../src/ui/widget/color-icc-selector.cpp:178
-#: ../src/ui/widget/color-scales.cpp:392 ../src/ui/widget/color-scales.cpp:393
+#: ../src/ui/widget/color-scales.cpp:401 ../src/ui/widget/color-scales.cpp:402
 #: ../share/extensions/nicechart.inx.h:34
 msgid "Blue"
 msgstr "Blátt"
@@ -6340,7 +6310,7 @@ msgstr "Hæð"
 #: ../src/extension/internal/filter/paint.h:707
 #: ../src/ui/tools/flood-tool.cpp:97
 #: ../src/ui/widget/color-icc-selector.cpp:187
-#: ../src/ui/widget/color-scales.cpp:418 ../src/ui/widget/color-scales.cpp:419
+#: ../src/ui/widget/color-scales.cpp:427 ../src/ui/widget/color-scales.cpp:428
 #: ../src/widgets/tweak-toolbar.cpp:318
 msgid "Lightness"
 msgstr "Ljósleiki (L)"
@@ -6366,7 +6336,7 @@ msgstr "Fjarlægt"
 #: ../src/extension/internal/filter/bumps.h:106
 #: ../src/ui/dialog/inkscape-preferences.cpp:488
 msgid "Point"
-msgstr "Punktur"
+msgstr "Punktljós"
 
 #: ../src/extension/internal/filter/bumps.h:107
 msgid "Spot"
@@ -6539,7 +6509,7 @@ msgstr "Málun litrása"
 #: ../src/ui/tools/flood-tool.cpp:96
 #: ../src/ui/widget/color-icc-selector.cpp:183
 #: ../src/ui/widget/color-icc-selector.cpp:188
-#: ../src/ui/widget/color-scales.cpp:415 ../src/ui/widget/color-scales.cpp:416
+#: ../src/ui/widget/color-scales.cpp:424 ../src/ui/widget/color-scales.cpp:425
 #: ../src/widgets/tweak-toolbar.cpp:302
 msgid "Saturation"
 msgstr "Litmettun (S)"
@@ -6717,21 +6687,21 @@ msgstr "Ná í litrás"
 #: ../src/extension/internal/filter/color.h:715
 #: ../src/ui/widget/color-icc-selector.cpp:190
 #: ../src/ui/widget/color-icc-selector.cpp:195
-#: ../src/ui/widget/color-scales.cpp:440 ../src/ui/widget/color-scales.cpp:441
+#: ../src/ui/widget/color-scales.cpp:449 ../src/ui/widget/color-scales.cpp:450
 msgid "Cyan"
 msgstr "Grænblátt (cyan)"
 
 #: ../src/extension/internal/filter/color.h:716
 #: ../src/ui/widget/color-icc-selector.cpp:191
 #: ../src/ui/widget/color-icc-selector.cpp:196
-#: ../src/ui/widget/color-scales.cpp:443 ../src/ui/widget/color-scales.cpp:444
+#: ../src/ui/widget/color-scales.cpp:452 ../src/ui/widget/color-scales.cpp:453
 msgid "Magenta"
 msgstr "Blárautt (magenta)"
 
 #: ../src/extension/internal/filter/color.h:717
 #: ../src/ui/widget/color-icc-selector.cpp:192
 #: ../src/ui/widget/color-icc-selector.cpp:197
-#: ../src/ui/widget/color-scales.cpp:446 ../src/ui/widget/color-scales.cpp:447
+#: ../src/ui/widget/color-scales.cpp:455 ../src/ui/widget/color-scales.cpp:456
 msgid "Yellow"
 msgstr "Gult"
 
@@ -6757,7 +6727,7 @@ msgstr "Deyfa í:"
 
 #: ../src/extension/internal/filter/color.h:819
 #: ../src/ui/widget/color-icc-selector.cpp:193
-#: ../src/ui/widget/color-scales.cpp:449 ../src/ui/widget/color-scales.cpp:450
+#: ../src/ui/widget/color-scales.cpp:458 ../src/ui/widget/color-scales.cpp:459
 #: ../src/ui/widget/selected-style.cpp:275
 msgid "Black"
 msgstr "Svart"
@@ -7406,7 +7376,7 @@ msgid "Convert image to an engraving made of vertical and horizontal lines"
 msgstr "Umbreyta mynd í myndristu með lóðréttum og láréttum línum"
 
 #: ../src/extension/internal/filter/paint.h:331
-#: ../src/ui/dialog/align-and-distribute.cpp:1090
+#: ../src/ui/dialog/align-and-distribute.cpp:1099
 #: ../src/widgets/desktop-widget.cpp:2094
 msgid "Drawing"
 msgstr "Teikningu"
@@ -8014,9 +7984,10 @@ msgid ""
 "glyphs where each glyph is a path. Images are stored internally. Meshes "
 "cause entire document to be rendered as a raster image."
 msgstr ""
-"Innflutningur með utanaðkomandi aðgerðasafni. Texti samanstendur af hópum sem "
-"innihalda klónuð staftákn sem hvert um sig eru ferill. Myndir eru geymdar "
-"innvortis. Möskvanet valda því að allt skjalið verður myndgert sem rastamynd."
+"Innflutningur með utanaðkomandi aðgerðasafni. Texti samanstendur af hópum "
+"sem innihalda klónuð staftákn sem hvert um sig eru ferill. Myndir eru "
+"geymdar innvortis. Möskvanet valda því að allt skjalið verður myndgert sem "
+"rastamynd."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:136
 msgid "Internal import"
@@ -8115,39 +8086,39 @@ msgstr "PovRay (*.pov) (einungis ferlar og form)"
 msgid "PovRay Raytracer File"
 msgstr "PovRay Raytracer skrá"
 
-#: ../src/extension/internal/svg.cpp:100
+#: ../src/extension/internal/svg.cpp:122
 msgid "SVG Input"
 msgstr "SVG ílag"
 
-#: ../src/extension/internal/svg.cpp:105
+#: ../src/extension/internal/svg.cpp:127
 msgid "Scalable Vector Graphic (*.svg)"
 msgstr "Scalable Vector Graphic vigurteikning (*.svg)"
 
-#: ../src/extension/internal/svg.cpp:106
+#: ../src/extension/internal/svg.cpp:128
 msgid "Inkscape native file format and W3C standard"
 msgstr "Innbyggt snið fyrir Inkscape og staðall frá W3C"
 
-#: ../src/extension/internal/svg.cpp:114
+#: ../src/extension/internal/svg.cpp:136
 msgid "SVG Output Inkscape"
 msgstr "SVG frálag Inkscape"
 
-#: ../src/extension/internal/svg.cpp:119
+#: ../src/extension/internal/svg.cpp:141
 msgid "Inkscape SVG (*.svg)"
 msgstr "Inkscape SVG (*.svg)"
 
-#: ../src/extension/internal/svg.cpp:120
+#: ../src/extension/internal/svg.cpp:142
 msgid "SVG format with Inkscape extensions"
 msgstr "SVG-snið með Inkscape-viðbótum"
 
-#: ../src/extension/internal/svg.cpp:128 ../share/extensions/scour.inx.h:19
+#: ../src/extension/internal/svg.cpp:150 ../share/extensions/scour.inx.h:19
 msgid "SVG Output"
 msgstr "SVG frálag"
 
-#: ../src/extension/internal/svg.cpp:133
+#: ../src/extension/internal/svg.cpp:155
 msgid "Plain SVG (*.svg)"
 msgstr "Hreint SVG (*.svg)"
 
-#: ../src/extension/internal/svg.cpp:134
+#: ../src/extension/internal/svg.cpp:156
 msgid "Scalable Vector Graphics format as defined by the W3C"
 msgstr "SVG vigurteikning eins og sniðið er skilgreint af W3C"
 
@@ -8265,11 +8236,11 @@ msgstr "WordPerfect Graphics (*.wpg)"
 msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "Vigurteikningasnið notað af Corel WordPerfect"
 
-#: ../src/extension/prefdialog.cpp:276
+#: ../src/extension/prefdialog.cpp:291
 msgid "Live preview"
 msgstr "Gagnvirk forskoðun"
 
-#: ../src/extension/prefdialog.cpp:276
+#: ../src/extension/prefdialog.cpp:291
 msgid "Is the effect previewed live on canvas?"
 msgstr "Eru áhrifin forskoðuð á myndfletinum í rauntíma?"
 
@@ -8295,8 +8266,8 @@ msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
-"Þessi skrá inniheldur stafrænt myndefni til birtingar á skjá. <b>(Veldu þetta "
-"ef þú ert ekki viss.)</b>"
+"Þessi skrá inniheldur stafrænt myndefni til birtingar á skjá. <b>(Veldu "
+"þetta ef þú ert ekki viss.)</b>"
 
 #: ../src/file-update.cpp:331
 msgid "This file is intended for physical output, such as paper or 3D prints."
@@ -8390,48 +8361,48 @@ msgstr "sjálfgefið.svg"
 msgid "Broken links have been changed to point to existing files."
 msgstr "Skemmdir tenglar hafa verið lagaðir þannig að þeir beini á skrár."
 
-#: ../src/file.cpp:334 ../src/file.cpp:1283
+#: ../src/file.cpp:338 ../src/file.cpp:1287
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Gat ekki lesið umbeðnu skrána '%s"
 
-#: ../src/file.cpp:360
+#: ../src/file.cpp:364
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Skjalið ekki ennþá vistað. Get ekki endurheimt."
 
-#: ../src/file.cpp:366
+#: ../src/file.cpp:370
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
 "Breytingar munu tapast! Ertu viss um að þú viljir endurlesa skjalið %1?"
 
-#: ../src/file.cpp:392
+#: ../src/file.cpp:396
 msgid "Document reverted."
 msgstr "Skjal endurheimt."
 
-#: ../src/file.cpp:394
+#: ../src/file.cpp:398
 msgid "Document not reverted."
 msgstr "Skjal ekki endurheimt."
 
-#: ../src/file.cpp:544
+#: ../src/file.cpp:548
 msgid "Select file to open"
 msgstr "Veldu skrá til að opna"
 
-#: ../src/file.cpp:626
+#: ../src/file.cpp:630
 msgid "Clean up document"
 msgstr "Hreinsa skjalið"
 
-#: ../src/file.cpp:633
+#: ../src/file.cpp:637
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "Fjarlægði <b>%i</b> ónotaða skilgreiningu í &lt;defs&gt;."
 msgstr[1] "Fjarlægði <b>%i</b> ónotaðar skilgreiningar í &lt;defs&gt;."
 
-#: ../src/file.cpp:638
+#: ../src/file.cpp:642
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Engar ónotaðar skilgreiningar í &lt;defs&gt;."
 
-#: ../src/file.cpp:672
+#: ../src/file.cpp:676
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -8440,65 +8411,65 @@ msgstr ""
 "Fann ekki Inkscape-viðbót til að vista skjalið (%s).  Það gæti stafað af "
 "óþekktri skráarendingu."
 
-#: ../src/file.cpp:673 ../src/file.cpp:683 ../src/file.cpp:692
-#: ../src/file.cpp:699 ../src/file.cpp:705
+#: ../src/file.cpp:677 ../src/file.cpp:687 ../src/file.cpp:696
+#: ../src/file.cpp:703 ../src/file.cpp:709
 msgid "Document not saved."
 msgstr "Skjalið ekki vistað."
 
-#: ../src/file.cpp:682
+#: ../src/file.cpp:686
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr "Skráin %s er ritvarin. Taktu ritvörnina af og reyndu aftur."
 
-#: ../src/file.cpp:691
+#: ../src/file.cpp:695
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Ekki tókst að vista skrána %s."
 
-#: ../src/file.cpp:724 ../src/file.cpp:726
+#: ../src/file.cpp:728 ../src/file.cpp:730
 msgid "Document saved."
 msgstr "Skjalið vistað."
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:869 ../src/file.cpp:1442
+#: ../src/file.cpp:873 ../src/file.cpp:1446
 msgid "drawing"
 msgstr "teikning"
 
-#: ../src/file.cpp:874
+#: ../src/file.cpp:878
 msgid "drawing-%1"
 msgstr "teikning-%1"
 
-#: ../src/file.cpp:891
+#: ../src/file.cpp:895
 msgid "Select file to save a copy to"
 msgstr "Veldu skrá til að vista afrit í"
 
-#: ../src/file.cpp:893
+#: ../src/file.cpp:897
 msgid "Select file to save to"
 msgstr "Veldu skrá til að vista í"
 
-#: ../src/file.cpp:998 ../src/file.cpp:1000
+#: ../src/file.cpp:1002 ../src/file.cpp:1004
 msgid "No changes need to be saved."
 msgstr "Engar breytingar þarf að vista."
 
-#: ../src/file.cpp:1019
+#: ../src/file.cpp:1023
 msgid "Saving document..."
 msgstr "Vista skjal..."
 
-#: ../src/file.cpp:1280 ../src/ui/dialog/inkscape-preferences.cpp:1522
+#: ../src/file.cpp:1284 ../src/ui/dialog/inkscape-preferences.cpp:1522
 #: ../src/ui/dialog/ocaldialogs.cpp:1245
 msgid "Import"
 msgstr "Flytja inn"
 
-#: ../src/file.cpp:1330
+#: ../src/file.cpp:1334
 msgid "Select file to import"
 msgstr "Veldu skrá til að flytja inn"
 
-#: ../src/file.cpp:1463
+#: ../src/file.cpp:1467
 msgid "Select file to export to"
 msgstr "Veldu skrá til að flytja út í"
 
-#: ../src/file.cpp:1716
+#: ../src/file.cpp:1720
 msgid "Import Clip Art"
 msgstr "Flytja inn klippimynd"
 
@@ -8594,7 +8565,7 @@ msgstr "Útilokun"
 #: ../src/filter-enums.cpp:65 ../src/ui/tools/flood-tool.cpp:95
 #: ../src/ui/widget/color-icc-selector.cpp:182
 #: ../src/ui/widget/color-icc-selector.cpp:186
-#: ../src/ui/widget/color-scales.cpp:412 ../src/ui/widget/color-scales.cpp:413
+#: ../src/ui/widget/color-scales.cpp:421 ../src/ui/widget/color-scales.cpp:422
 #: ../src/widgets/tweak-toolbar.cpp:286
 msgid "Hue"
 msgstr "Litblær (H)"
@@ -8846,6 +8817,15 @@ msgstr "Færa miðjumerki litstiguls"
 msgid "Delete gradient stop(s)"
 msgstr "Eyða stoppmerkjum í litstigli"
 
+#: ../src/help.cpp:40
+msgid ""
+"The tutorial files are not installed.\n"
+"For Linux, you may need to install 'inkscape-tutorials'; for Windows, please "
+"re-run the setup and select 'Tutorials'.\n"
+"The tutorials can also be found online at https://inkscape.org/learn/"
+"tutorials/"
+msgstr ""
+
 #: ../src/inkscape.cpp:242
 msgid "Autosave failed! Cannot create directory %1."
 msgstr "Sjálfvirk vistun mistókst! Get ekki búið til möppuna %1."
@@ -9084,7 +9064,7 @@ msgid ""
 msgstr ""
 
 #: ../src/libgdl/gdl-dock-notebook.c:132
-#: ../src/ui/dialog/align-and-distribute.cpp:1089
+#: ../src/ui/dialog/align-and-distribute.cpp:1098
 #: ../src/ui/dialog/document-properties.cpp:161
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1549
 #: ../src/widgets/desktop-widget.cpp:2090
@@ -9864,7 +9844,7 @@ msgstr "Fimm punktar sem þarf til að byggja sporbaug"
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:162
 msgid "No ellipse found for specified points"
-msgstr ""
+msgstr "Enginn sporbaugur fannst fyrir tiltekna punkta"
 
 #: ../src/live_effects/lpe-envelope.cpp:31
 msgid "Top bend path:"
@@ -11010,7 +10990,7 @@ msgstr "Beygja strikaskyggingar"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:240
 msgid "Add a global bend to the hatches (slower)"
-msgstr ""
+msgstr "Bæta viðværri beygu á strikaskyggingar (hægvirkara)"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Thickness: at 1st side:"
@@ -11051,7 +11031,7 @@ msgstr "Breidd og stefna strikaskygginga"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:247
 msgid "Defines hatches frequency and direction"
-msgstr ""
+msgstr "Skilgreinir tíðni og stefnu strikaskyggingar"
 
 #.
 #: ../src/live_effects/lpe-rough-hatches.cpp:249
@@ -11183,13 +11163,13 @@ msgstr "Ekkert"
 
 #: ../src/live_effects/lpe-ruler.cpp:33
 #: ../src/live_effects/lpe-transform_2pts.cpp:37
-#: ../src/ui/tools/measure-tool.cpp:755 ../src/widgets/arc-toolbar.cpp:473
+#: ../src/ui/tools/measure-tool.cpp:729 ../src/widgets/arc-toolbar.cpp:473
 msgid "Start"
 msgstr "Upphaf"
 
 #: ../src/live_effects/lpe-ruler.cpp:34
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
-#: ../src/ui/tools/measure-tool.cpp:756 ../src/widgets/arc-toolbar.cpp:486
+#: ../src/ui/tools/measure-tool.cpp:730 ../src/widgets/arc-toolbar.cpp:486
 msgid "End"
 msgstr "Endir"
 
@@ -11629,7 +11609,7 @@ msgstr "Viðmiðunarbútur:"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:51
 msgid "The reference segment. Defaults to the horizontal midline of the bbox."
-msgstr ""
+msgstr "Viðmiðunarbúturinn. Er sjálfgefið lárétt miðlína umgjarðar."
 
 #. refA(_("Ref Start"), _("Left side middle of the reference box"), "refA", &wr, this),
 #. refB(_("Ref End"), _("Right side middle of the reference box"), "refB", &wr, this),
@@ -11702,7 +11682,7 @@ msgstr "Snúa við"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:137
 #: ../src/live_effects/parameter/originalpatharray.cpp:322
-#: ../src/live_effects/parameter/path.cpp:516
+#: ../src/live_effects/parameter/path.cpp:524
 msgid "Link path parameter to path"
 msgstr ""
 
@@ -11732,23 +11712,23 @@ msgstr "Færa feril niður"
 msgid "Remove path"
 msgstr "Fjarlægja feril"
 
-#: ../src/live_effects/parameter/path.cpp:187
+#: ../src/live_effects/parameter/path.cpp:195
 msgid "Edit on-canvas"
 msgstr "Breyta á myndfleti"
 
-#: ../src/live_effects/parameter/path.cpp:197
+#: ../src/live_effects/parameter/path.cpp:205
 msgid "Copy path"
 msgstr "Afrita feril"
 
-#: ../src/live_effects/parameter/path.cpp:207
+#: ../src/live_effects/parameter/path.cpp:215
 msgid "Paste path"
 msgstr "Líma feril"
 
-#: ../src/live_effects/parameter/path.cpp:217
+#: ../src/live_effects/parameter/path.cpp:225
 msgid "Link to path on clipboard"
 msgstr "Tengja við feril á klippispjaldi"
 
-#: ../src/live_effects/parameter/path.cpp:484
+#: ../src/live_effects/parameter/path.cpp:492
 msgid "Paste path parameter"
 msgstr "Líma viðfang ferils"
 
@@ -11795,39 +11775,39 @@ msgstr ""
 msgid "Unable to find node ID: '%s'\n"
 msgstr "Get ekki fundið ID-auðkenni hnúts: '%s'\n"
 
-#: ../src/main.cpp:305
+#: ../src/main.cpp:308
 msgid "Print the Inkscape version number"
 msgstr "Prenta útgáfunúmer Inkscape"
 
-#: ../src/main.cpp:310
+#: ../src/main.cpp:313
 msgid "Do not use X server (only process files from console)"
 msgstr ""
 
-#: ../src/main.cpp:315
+#: ../src/main.cpp:318
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr ""
 
-#: ../src/main.cpp:320
+#: ../src/main.cpp:323
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Opna tilgreint skjal/skjöl (hægt er að sleppa valrofum)"
 
-#: ../src/main.cpp:321 ../src/main.cpp:326 ../src/main.cpp:331
-#: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
-#: ../src/main.cpp:424 ../src/main.cpp:440 ../src/main.cpp:445
+#: ../src/main.cpp:324 ../src/main.cpp:329 ../src/main.cpp:334
+#: ../src/main.cpp:406 ../src/main.cpp:411 ../src/main.cpp:416
+#: ../src/main.cpp:427 ../src/main.cpp:443 ../src/main.cpp:448
 msgid "FILENAME"
 msgstr "SKRÁARHEITI"
 
-#: ../src/main.cpp:325
+#: ../src/main.cpp:328
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Prenta skjal/skjöl í tiltekna frálagsskrá (nota '| forrit' til að pípa/tengja "
 "áfram)"
 
-#: ../src/main.cpp:330
+#: ../src/main.cpp:333
 msgid "Export document to a PNG file"
 msgstr "Flytja skjal út í PNG-skrá"
 
-#: ../src/main.cpp:335
+#: ../src/main.cpp:338
 msgid ""
 "Resolution for exporting to bitmap and for rasterization of filters in PS/"
 "EPS/PDF (default 96)"
@@ -11835,11 +11815,11 @@ msgstr ""
 "Upplausn fyrir útflutning í bitamynd og fyrir röstun á síum í PS/"
 "EPS/PDF (sjálfgefið 96)"
 
-#: ../src/main.cpp:336 ../src/ui/widget/rendering-options.cpp:37
+#: ../src/main.cpp:339 ../src/ui/widget/rendering-options.cpp:37
 msgid "DPI"
 msgstr "PÁT"
 
-#: ../src/main.cpp:340
+#: ../src/main.cpp:343
 msgid ""
 "Exported area in SVG user units (default is the page; 0,0 is lower-left "
 "corner)"
@@ -11847,19 +11827,19 @@ msgstr ""
 "Útflutt svæði í SVG notandaeiningum (sjálfgefið er síðan; 0,0 er hornið niðri "
 "til vinstri)"
 
-#: ../src/main.cpp:341
+#: ../src/main.cpp:344
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:345
+#: ../src/main.cpp:348
 msgid "Exported area is the entire drawing (not page)"
 msgstr "Útflutt svæði er öll teikningin (ekki síðan)"
 
-#: ../src/main.cpp:350
+#: ../src/main.cpp:353
 msgid "Exported area is the entire page"
 msgstr "Útflutt svæði er öll síðan"
 
-#: ../src/main.cpp:355
+#: ../src/main.cpp:358
 msgid ""
 "Sets margin around exported area (default 0) in units of page size for SVG "
 "and mm for PS/EPS/PDF"
@@ -11868,83 +11848,83 @@ msgstr ""
 "SVG "
 "og mm fyrir PS/EPS/PDF"
 
-#: ../src/main.cpp:356 ../src/main.cpp:398
+#: ../src/main.cpp:359 ../src/main.cpp:401
 msgid "VALUE"
 msgstr "GILDI"
 
-#: ../src/main.cpp:360
+#: ../src/main.cpp:363
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr ""
 
-#: ../src/main.cpp:365
+#: ../src/main.cpp:368
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "Breidd útfluttrar bitamyndar í mynddílum (rétthærra en útflutnings-pát)"
 
-#: ../src/main.cpp:366
+#: ../src/main.cpp:369
 msgid "WIDTH"
 msgstr "BREIDD"
 
-#: ../src/main.cpp:370
+#: ../src/main.cpp:373
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Hæð útfluttrar bitamyndar í mynddílum (rétthærra en útflutnings-pát)"
 
-#: ../src/main.cpp:371
+#: ../src/main.cpp:374
 msgid "HEIGHT"
 msgstr "HÆÐ"
 
-#: ../src/main.cpp:375
+#: ../src/main.cpp:378
 msgid "The ID of the object to export"
 msgstr ""
 
-#: ../src/main.cpp:376 ../src/main.cpp:489
+#: ../src/main.cpp:379 ../src/main.cpp:492
 #: ../src/ui/dialog/inkscape-preferences.cpp:1586
 msgid "ID"
 msgstr "Auðkenni (ID)"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:382
+#: ../src/main.cpp:385
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:390
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:395
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Bakgrunnslitur útfluttrar bitamyndar (einhver SVG-studdur litastrengur)"
 
-#: ../src/main.cpp:393
+#: ../src/main.cpp:396
 msgid "COLOR"
 msgstr "LITUR"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:400
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Ógegnsæi bakgrunns útfluttrar bitamyndar (annað hvort 0.0 til 1.0, eða 1 til "
 "255)"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:405
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Flytja skjal út sem venjulega SVG-skrá (ekki sodipodi eða inkscape "
 "nafnaskilgreiningar)"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:410
 msgid "Export document to a PS file"
 msgstr "Flytja skjal út sem PS-skrá"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:415
 msgid "Export document to an EPS file"
 msgstr "Flytja skjal út sem EPS-skrá"
 
-#: ../src/main.cpp:417
+#: ../src/main.cpp:420
 msgid ""
 "Choose the PostScript Level used to export. Possible choices are 2 and 3 "
 "(the default)"
@@ -11952,16 +11932,16 @@ msgstr ""
 "Veldu stig PostScript sem nota á við útflutning. Möguleg stig eru 2 og 3 "
 "(sjálfgefið)"
 
-#: ../src/main.cpp:419
+#: ../src/main.cpp:422
 msgid "PS Level"
 msgstr "PS stig"
 
-#: ../src/main.cpp:423
+#: ../src/main.cpp:426
 msgid "Export document to a PDF file"
 msgstr "Flytja skjal út sem PDF-skrá"
 
 #. TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:429
+#: ../src/main.cpp:432
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
 "found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
@@ -11970,129 +11950,129 @@ msgstr ""
 " inn nákvæmlega sama strenginn og er í PDF-útflutningsglugganum, t.d. \"1.4\""
 " sem er samhæft við PDF-A)"
 
-#: ../src/main.cpp:430
+#: ../src/main.cpp:433
 msgid "PDF_VERSION"
 msgstr "PDF_VERSION"
 
-#: ../src/main.cpp:434
+#: ../src/main.cpp:437
 msgid ""
 "Export PDF/PS/EPS without text. Besides the PDF/PS/EPS, a LaTeX file is "
 "exported, putting the text on top of the PDF/PS/EPS file. Include the result "
 "in LaTeX like: \\input{latexfile.tex}"
 msgstr ""
 
-#: ../src/main.cpp:439
+#: ../src/main.cpp:442
 msgid "Export document to an Enhanced Metafile (EMF) File"
 msgstr "Flytja skjal út sem Enhanced Metafile (EMF) skrá"
 
-#: ../src/main.cpp:444
+#: ../src/main.cpp:447
 msgid "Export document to a Windows Metafile (WMF) File"
 msgstr "Flytja skjal út sem Windows Metafile (WMF) skrá"
 
-#: ../src/main.cpp:449
+#: ../src/main.cpp:452
 msgid "Convert text object to paths on export (PS, EPS, PDF, SVG)"
 msgstr "Umbreyta textahlutum í ferla við útflutning (PS, EPS, PDF, SVG)"
 
-#: ../src/main.cpp:454
+#: ../src/main.cpp:457
 msgid ""
 "Render filtered objects without filters, instead of rasterizing (PS, EPS, "
 "PDF)"
 msgstr ""
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:460
+#: ../src/main.cpp:463
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:466
+#: ../src/main.cpp:469
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:472
+#: ../src/main.cpp:475
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:478
+#: ../src/main.cpp:481
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
-#: ../src/main.cpp:483
+#: ../src/main.cpp:486
 msgid "List id,x,y,w,h for all objects"
 msgstr ""
 
-#: ../src/main.cpp:488
+#: ../src/main.cpp:491
 msgid "The ID of the object whose dimensions are queried"
 msgstr ""
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:494
+#: ../src/main.cpp:497
 msgid "Print out the extension directory and exit"
 msgstr "Prenta út möppu viðbótarinnar og hætta"
 
-#: ../src/main.cpp:499
+#: ../src/main.cpp:502
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr ""
 
-#: ../src/main.cpp:505
+#: ../src/main.cpp:508
 msgid "Enter a listening loop for D-Bus messages in console mode"
 msgstr ""
 
-#: ../src/main.cpp:510
+#: ../src/main.cpp:513
 msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
 msgstr ""
 
-#: ../src/main.cpp:511
+#: ../src/main.cpp:514
 msgid "BUS-NAME"
 msgstr "BUS-NAME"
 
-#: ../src/main.cpp:516
+#: ../src/main.cpp:519
 msgid "List the IDs of all the verbs in Inkscape"
 msgstr ""
 
-#: ../src/main.cpp:521
+#: ../src/main.cpp:524
 msgid "Verb to call when Inkscape opens."
 msgstr ""
 
-#: ../src/main.cpp:522
+#: ../src/main.cpp:525
 msgid "VERB-ID"
 msgstr "VERB-ID"
 
-#: ../src/main.cpp:526
+#: ../src/main.cpp:529
 msgid "Object ID to select when Inkscape opens."
 msgstr ""
 
-#: ../src/main.cpp:527
+#: ../src/main.cpp:530
 msgid "OBJECT-ID"
 msgstr "OBJECT-ID"
 
-#: ../src/main.cpp:531
+#: ../src/main.cpp:534
 msgid "Start Inkscape in interactive shell mode."
 msgstr "Ræsa Inkscape í gagnvirkum skeljarham."
 
-#: ../src/main.cpp:536
+#: ../src/main.cpp:539
 msgid "Do not fix legacy (pre-0.92) files' text baseline spacing on opening."
 msgstr ""
 
-#: ../src/main.cpp:541
+#: ../src/main.cpp:544
 msgid ""
 "Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|"
 "scale-document])"
 msgstr ""
 
-#: ../src/main.cpp:891 ../src/main.cpp:1379
+#: ../src/main.cpp:899 ../src/main.cpp:1393
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -13079,40 +13059,40 @@ msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
 msgstr ""
-"<b>Kreista eða teygja</b> valið; með <b>Ctrl</b> til að kvarða jafnt; með <b>"
-"Shift</b> til að kvarða um snúningsmiðjuna"
+"<b>Kreista eða teygja</b> valið; með <b>Ctrl</b> til að kvarða jafnt; með "
+"<b>Shift</b> til að kvarða um snúningsmiðjuna"
 
 #: ../src/seltrans-handles.cpp:10
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
 msgstr ""
-"<b>Kvarða</b> valið; með <b>Ctrl</b> til að kvarða jafnt; með <b>Shift</"
-"b> til að kvarða um snúningsmiðjuna"
+"<b>Kvarða</b> valið; með <b>Ctrl</b> til að kvarða jafnt; með <b>Shift</b> "
+"til að kvarða um snúningsmiðjuna"
 
 #: ../src/seltrans-handles.cpp:11
 msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "skew around the opposite side"
 msgstr ""
-"<b>Skekkja</b> vali; með <b>Ctrl</b> til að þrepa horn; með <b>Shift</b> "
-"til að skekkja um gagnstæða hlið"
+"<b>Skekkja</b> vali; með <b>Ctrl</b> til að þrepa horn; með <b>Shift</b> til "
+"að skekkja um gagnstæða hlið"
 
 #: ../src/seltrans-handles.cpp:12
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
 msgstr ""
-"<b>Snúa</b> vali; með <b>Ctrl</b> til að þrepa horn; með <b>Shift</b> "
-"til að snúa um gagnstætt horn"
+"<b>Snúa</b> vali; með <b>Ctrl</b> til að þrepa horn; með <b>Shift</b> til að "
+"snúa um gagnstætt horn"
 
 #: ../src/seltrans-handles.cpp:13
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
 msgstr ""
-"<b>Miðja</b> snúnings og skekkingar: draga til að endurstaðsetja; kvörðun með "
-"Shift notar einnig þessa miðju"
+"<b>Miðja</b> snúnings og skekkingar: draga til að endurstaðsetja; kvörðun "
+"með Shift notar einnig þessa miðju"
 
 #: ../src/seltrans.cpp:487 ../src/ui/dialog/transformation.cpp:979
 msgid "Skew"
@@ -13162,8 +13142,8 @@ msgid ""
 "<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
 "with <b>Shift</b> to disable snapping"
 msgstr ""
-"<b>Færa</b> um %s, %s; með <b>Ctrl</b> til að takmarka lárétt/lóðrétt; "
-"með <b>Shift</b> til að gera grip óvirkt"
+"<b>Færa</b> um %s, %s; með <b>Ctrl</b> til að takmarka lárétt/lóðrétt; með "
+"<b>Shift</b> til að gera grip óvirkt"
 
 #: ../src/shortcuts.cpp:232
 #, c-format
@@ -13336,7 +13316,7 @@ msgstr "%s; <i>síað</i>"
 msgid "Line"
 msgstr "Lína"
 
-#: ../src/sp-lpe-item.cpp:255 ../src/sp-lpe-item.cpp:686
+#: ../src/sp-lpe-item.cpp:257 ../src/sp-lpe-item.cpp:694
 msgid "An exception occurred during execution of the Path Effect."
 msgstr ""
 
@@ -13624,8 +13604,8 @@ msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
 msgstr ""
-"Þú getur ekki sett texta á rétthyrning í þessari útgáfu forritsins. Umbreyttu "
-"fyrst rétthyrningnum í feril."
+"Þú getur ekki sett texta á rétthyrning í þessari útgáfu forritsins. "
+"Umbreyttu fyrst rétthyrningnum í feril."
 
 #: ../src/text-chemistry.cpp:112
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
@@ -13822,268 +13802,268 @@ msgstr "about.svg"
 
 #. TRANSLATORS: Put here your name (and other national contributors')
 #. one per line in the form of: name surname (email). Use \n for newline.
-#: ../src/ui/dialog/aboutbox.cpp:442
+#: ../src/ui/dialog/aboutbox.cpp:443
 msgid "translator-credits"
-msgstr "Sveinn í Felli (sv1@fellsnet.is), 2014-2018"
+msgstr "Sveinn í Felli (sv1@fellsnet.is), 2014-2019"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:206
-#: ../src/ui/dialog/align-and-distribute.cpp:937
+#: ../src/ui/dialog/align-and-distribute.cpp:215
+#: ../src/ui/dialog/align-and-distribute.cpp:946
 msgid "Align"
 msgstr "Jafna"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:382
-#: ../src/ui/dialog/align-and-distribute.cpp:938
+#: ../src/ui/dialog/align-and-distribute.cpp:391
+#: ../src/ui/dialog/align-and-distribute.cpp:947
 msgid "Distribute"
 msgstr "Dreifa"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:461
+#: ../src/ui/dialog/align-and-distribute.cpp:470
 msgid "Minimum horizontal gap (in px units) between bounding boxes"
 msgstr "Lágmarks lárétt millibil (í punktum) milli umgjarða"
 
 #. TRANSLATORS: "H:" stands for horizontal gap
-#: ../src/ui/dialog/align-and-distribute.cpp:463
+#: ../src/ui/dialog/align-and-distribute.cpp:472
 msgctxt "Gap"
 msgid "_H:"
 msgstr "_H:"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:471
+#: ../src/ui/dialog/align-and-distribute.cpp:480
 msgid "Minimum vertical gap (in px units) between bounding boxes"
 msgstr "Lágmarks lóðrétt millibil (í punktum) milli umgjarða"
 
 #. TRANSLATORS: Vertical gap
-#: ../src/ui/dialog/align-and-distribute.cpp:473
+#: ../src/ui/dialog/align-and-distribute.cpp:482
 msgctxt "Gap"
 msgid "_V:"
 msgstr "_V:"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:508
-#: ../src/ui/dialog/align-and-distribute.cpp:940
+#: ../src/ui/dialog/align-and-distribute.cpp:517
+#: ../src/ui/dialog/align-and-distribute.cpp:949
 #: ../src/widgets/connector-toolbar.cpp:405
 msgid "Remove overlaps"
 msgstr "Fjarlægja skaranir"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:539
+#: ../src/ui/dialog/align-and-distribute.cpp:548
 #: ../src/widgets/connector-toolbar.cpp:234
 msgid "Arrange connector network"
 msgstr "Laga til tengilínunet"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:632
+#: ../src/ui/dialog/align-and-distribute.cpp:641
 msgid "Exchange Positions"
 msgstr "Víxla staðsetningum"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:666
+#: ../src/ui/dialog/align-and-distribute.cpp:675
 msgid "Unclump"
 msgstr "Afklumpa"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:737
+#: ../src/ui/dialog/align-and-distribute.cpp:746
 msgid "Randomize positions"
 msgstr "Slemigera staðsetningu"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:838
+#: ../src/ui/dialog/align-and-distribute.cpp:847
 msgid "Distribute text baselines"
 msgstr "Dreifa grunnlínum texta"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:906
+#: ../src/ui/dialog/align-and-distribute.cpp:915
 msgid "Align text baselines"
 msgstr "Jafna grunnlínur texta"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:939
+#: ../src/ui/dialog/align-and-distribute.cpp:948
 msgid "Rearrange"
 msgstr "Endurraða"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:941
+#: ../src/ui/dialog/align-and-distribute.cpp:950
 #: ../src/widgets/toolbox.cpp:1803
 msgid "Nodes"
 msgstr "Hnútar"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:955
-#: ../src/ui/dialog/align-and-distribute.cpp:956
+#: ../src/ui/dialog/align-and-distribute.cpp:964
+#: ../src/ui/dialog/align-and-distribute.cpp:965
 msgid "Relative to: "
 msgstr "Miðað við: "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:957
+#: ../src/ui/dialog/align-and-distribute.cpp:966
 msgid "_Treat selection as group: "
 msgstr "_Meðhöndla valið sem hóp: "
 
 #. Align
-#: ../src/ui/dialog/align-and-distribute.cpp:963 ../src/verbs.cpp:3050
+#: ../src/ui/dialog/align-and-distribute.cpp:972 ../src/verbs.cpp:3050
 #: ../src/verbs.cpp:3051
 msgid "Align right edges of objects to the left edge of the anchor"
 msgstr "Jafna hægri jaðra hluta við vinstri jaðar festipunktsins"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:966 ../src/verbs.cpp:3052
+#: ../src/ui/dialog/align-and-distribute.cpp:975 ../src/verbs.cpp:3052
 #: ../src/verbs.cpp:3053
 msgid "Align left edges"
 msgstr "Jafna vinstri jaðra"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:969 ../src/verbs.cpp:3054
+#: ../src/ui/dialog/align-and-distribute.cpp:978 ../src/verbs.cpp:3054
 #: ../src/verbs.cpp:3055
 msgid "Center on vertical axis"
 msgstr "Miðja á lóðréttum ás"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:972 ../src/verbs.cpp:3056
+#: ../src/ui/dialog/align-and-distribute.cpp:981 ../src/verbs.cpp:3056
 #: ../src/verbs.cpp:3057
 msgid "Align right sides"
 msgstr "Jafna hægri jaðra"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:975 ../src/verbs.cpp:3058
+#: ../src/ui/dialog/align-and-distribute.cpp:984 ../src/verbs.cpp:3058
 #: ../src/verbs.cpp:3059
 msgid "Align left edges of objects to the right edge of the anchor"
 msgstr "Jafna vinstri jaðra hluta við hægri jaðar festipunktsins"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:978 ../src/verbs.cpp:3060
+#: ../src/ui/dialog/align-and-distribute.cpp:987 ../src/verbs.cpp:3060
 #: ../src/verbs.cpp:3061
 msgid "Align bottom edges of objects to the top edge of the anchor"
 msgstr "Jafna neðri jaðra hluta við efri jaðar festipunktsins"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:981 ../src/verbs.cpp:3062
+#: ../src/ui/dialog/align-and-distribute.cpp:990 ../src/verbs.cpp:3062
 #: ../src/verbs.cpp:3063
 msgid "Align top edges"
 msgstr "Jafna efri jaðra"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:984 ../src/verbs.cpp:3064
+#: ../src/ui/dialog/align-and-distribute.cpp:993 ../src/verbs.cpp:3064
 #: ../src/verbs.cpp:3065
 msgid "Center on horizontal axis"
 msgstr "Miðja á láréttum ás"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:987 ../src/verbs.cpp:3066
+#: ../src/ui/dialog/align-and-distribute.cpp:996 ../src/verbs.cpp:3066
 #: ../src/verbs.cpp:3067
 msgid "Align bottom edges"
 msgstr "Jafna neðri jaðra"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:990 ../src/verbs.cpp:3068
+#: ../src/ui/dialog/align-and-distribute.cpp:999 ../src/verbs.cpp:3068
 #: ../src/verbs.cpp:3069
 msgid "Align top edges of objects to the bottom edge of the anchor"
 msgstr "Jafna efri jaðra hluta við neðri jaðar festipunktsins"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:995
+#: ../src/ui/dialog/align-and-distribute.cpp:1004
 msgid "Align baseline anchors of texts horizontally"
 msgstr "Jafna grunnlínum texta lárétt"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:998
+#: ../src/ui/dialog/align-and-distribute.cpp:1007
 msgid "Align baselines of texts"
 msgstr "Jafna grunnlínur texta"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1003
+#: ../src/ui/dialog/align-and-distribute.cpp:1012
 msgid "Make horizontal gaps between objects equal"
 msgstr "Gera lárétt millibil hluta jöfn"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1007
+#: ../src/ui/dialog/align-and-distribute.cpp:1016
 msgid "Distribute left edges equidistantly"
 msgstr "Dreifa vinstri jöðrum með jöfnu millibili"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1010
+#: ../src/ui/dialog/align-and-distribute.cpp:1019
 msgid "Distribute centers equidistantly horizontally"
 msgstr "Dreifa miðjum með jöfnu millibili lárétt"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1013
+#: ../src/ui/dialog/align-and-distribute.cpp:1022
 msgid "Distribute right edges equidistantly"
 msgstr "Dreifa hægri jöðrum með jöfnu millibili"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1017
+#: ../src/ui/dialog/align-and-distribute.cpp:1026
 msgid "Make vertical gaps between objects equal"
 msgstr "Gera lóðrétt millibil hluta jöfn"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1021
+#: ../src/ui/dialog/align-and-distribute.cpp:1030
 msgid "Distribute top edges equidistantly"
 msgstr "Dreifa efri jöðrum með jöfnu millibili"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1024
+#: ../src/ui/dialog/align-and-distribute.cpp:1033
 msgid "Distribute centers equidistantly vertically"
 msgstr "Dreifa miðjum með jöfnu millibili lóðrétt"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1027
+#: ../src/ui/dialog/align-and-distribute.cpp:1036
 msgid "Distribute bottom edges equidistantly"
 msgstr "Dreifa neðri jöðrum með jöfnu millibili"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1032
+#: ../src/ui/dialog/align-and-distribute.cpp:1041
 msgid "Distribute baseline anchors of texts horizontally"
 msgstr "Dreifa grunnlínum texta lárétt"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1035
+#: ../src/ui/dialog/align-and-distribute.cpp:1044
 msgid "Distribute baselines of texts vertically"
 msgstr "Dreifa grunnlínum texta lóðrétt"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1041
+#: ../src/ui/dialog/align-and-distribute.cpp:1050
 #: ../src/widgets/connector-toolbar.cpp:367
 msgid "Nicely arrange selected connector network"
-msgstr "Laga valið tengilínunet"
+msgstr "Laga fallega til valið tengilínunet"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1044
+#: ../src/ui/dialog/align-and-distribute.cpp:1053
 msgid "Exchange positions of selected objects - selection order"
 msgstr "Víxla staðsetningum á völdum hlutum - röð vals"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1047
+#: ../src/ui/dialog/align-and-distribute.cpp:1056
 msgid "Exchange positions of selected objects - stacking order"
 msgstr "Víxla staðsetningum á völdum hlutum - röð stöflunar"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1050
+#: ../src/ui/dialog/align-and-distribute.cpp:1059
 msgid "Exchange positions of selected objects - clockwise rotate"
 msgstr "Víxla staðsetningum á völdum hlutum - snúið réttsælis"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1055
+#: ../src/ui/dialog/align-and-distribute.cpp:1064
 msgid "Randomize centers in both dimensions"
 msgstr "Slembigera miðjur í báðar áttir"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1058
+#: ../src/ui/dialog/align-and-distribute.cpp:1067
 msgid "Unclump objects: try to equalize edge-to-edge distances"
 msgstr "Afklumpa hluti: reyna að jafna út fjarlægðir jaðar-í-jaðar"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1063
+#: ../src/ui/dialog/align-and-distribute.cpp:1072
 msgid ""
 "Move objects as little as possible so that their bounding boxes do not "
 "overlap"
 msgstr ""
 "Færa hluti eins lítið og mögulegt er til að umgjarðir þeirra skarist ekki"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1071
+#: ../src/ui/dialog/align-and-distribute.cpp:1080
 msgid "Align selected nodes to a common horizontal line"
 msgstr "Jafna valda hnúta á sameiginlega lárétta línu"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1074
+#: ../src/ui/dialog/align-and-distribute.cpp:1083
 msgid "Align selected nodes to a common vertical line"
 msgstr "Jafna valda hnúta á sameiginlega lóðrétta línu"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1077
+#: ../src/ui/dialog/align-and-distribute.cpp:1086
 msgid "Distribute selected nodes horizontally"
 msgstr "Dreifa völdum hnútum lárétt"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1080
+#: ../src/ui/dialog/align-and-distribute.cpp:1089
 msgid "Distribute selected nodes vertically"
 msgstr "Dreifa völdum hnútum lóðrétt"
 
 #. Rest of the widgetry
-#: ../src/ui/dialog/align-and-distribute.cpp:1085
-#: ../src/ui/dialog/align-and-distribute.cpp:1095
+#: ../src/ui/dialog/align-and-distribute.cpp:1094
+#: ../src/ui/dialog/align-and-distribute.cpp:1104
 msgid "Last selected"
 msgstr "Síðast valið"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1086
-#: ../src/ui/dialog/align-and-distribute.cpp:1096
+#: ../src/ui/dialog/align-and-distribute.cpp:1095
+#: ../src/ui/dialog/align-and-distribute.cpp:1105
 msgid "First selected"
 msgstr "Fyrst valið"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1087
+#: ../src/ui/dialog/align-and-distribute.cpp:1096
 msgid "Biggest object"
 msgstr "Stærsta hlutinn"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1088
+#: ../src/ui/dialog/align-and-distribute.cpp:1097
 msgid "Smallest object"
 msgstr "Minnsta hlutinn"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1091
+#: ../src/ui/dialog/align-and-distribute.cpp:1100
 msgid "Selection Area"
 msgstr "Valsvæði"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1097
+#: ../src/ui/dialog/align-and-distribute.cpp:1106
 msgid "Middle of selection"
 msgstr "Miðja myndvals"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1098
+#: ../src/ui/dialog/align-and-distribute.cpp:1107
 msgid "Min value"
 msgstr "Lágmarksgildi"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:1099
+#: ../src/ui/dialog/align-and-distribute.cpp:1108
 msgid "Max value"
 msgstr "Hámarksgildi"
 
@@ -15120,7 +15100,7 @@ msgstr "Búa til nýtt hnitanet."
 #: ../src/ui/dialog/document-properties.cpp:155
 msgctxt "Grid"
 msgid "_Remove"
-msgstr "Fja_rlægja"
+msgstr "_Fjarlægja"
 
 #: ../src/ui/dialog/document-properties.cpp:155
 msgid "Remove selected grid."
@@ -15536,7 +15516,6 @@ msgstr "Upplýsingar"
 #: ../share/extensions/dxf_outlines.inx.h:24
 #: ../share/extensions/gcodetools_about.inx.h:13
 #: ../share/extensions/gcodetools_area.inx.h:69
-#: ../share/extensions/gcodetools_check_for_updates.inx.h:3
 #: ../share/extensions/gcodetools_dxf_points.inx.h:30
 #: ../share/extensions/gcodetools_engraving.inx.h:39
 #: ../share/extensions/gcodetools_graffiti.inx.h:53
@@ -17612,7 +17591,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:222
 msgid "Ctrl+click _dot size:"
-msgstr "Ctrl+smella fyrir _punktstærð:"
+msgstr "Ctrl+smella _punktstærð:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:222
 msgid "times current stroke width"
@@ -17652,7 +17631,7 @@ msgstr "Stíll nýrra hluta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:294
 msgid "Last used style"
-msgstr "Síðast notaði stíll"
+msgstr "Síðast notaða stíl"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:296
 msgid "Apply the style you last set on an object"
@@ -17660,7 +17639,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:301
 msgid "This tool's own style:"
-msgstr "Eigin stíll þessa verkfæris:"
+msgstr "Eigin stíl þessa verkfæris:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:305
 msgid ""
@@ -17695,7 +17674,7 @@ msgstr "Myndræn umgjörð"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:336
 msgid "This bounding box includes stroke width, markers, filter margins, etc."
-msgstr ""
+msgstr "Þessi umgjörð inniheldur breidd útlínu, merki, síujaðra, o.s.frv."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:337
 msgid "Geometric bounding box"
@@ -17703,7 +17682,7 @@ msgstr "Rúmfræðileg umgjörð"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:339
 msgid "This bounding box includes only the bare path"
-msgstr ""
+msgstr "Þessi umgjörð inniheldur einungis berann ferilinn"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:341
 msgid "Conversion to guides"
@@ -17739,7 +17718,7 @@ msgstr "Breidd er í algildum einingum"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:351
 msgid "Select new path"
-msgstr "Velja nýjan feril"
+msgstr "Veldu nýjan feril"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:352
 msgid "Don't attach connectors to text objects"
@@ -17748,7 +17727,7 @@ msgstr "Ekki festa tengilínur við textahluti"
 #. Selector
 #: ../src/ui/dialog/inkscape-preferences.cpp:355
 msgid "Selector"
-msgstr "Valtól"
+msgstr "Veljari"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:360
 msgid "When transforming, show"
@@ -18112,7 +18091,7 @@ msgstr ""
 #. disabled, because the LPETool is not finished yet.
 #: ../src/ui/dialog/inkscape-preferences.cpp:545
 msgid "LPE Tool"
-msgstr "LPE-verkfæri (LivePathEffects)"
+msgstr "LPE verkfæri (LivePathEffects)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:552
 msgid "Interface"
@@ -18778,11 +18757,11 @@ msgstr "Gegnsæi samskiptaglugga"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:765
 msgid "_Opacity when focused:"
-msgstr "Ó_gegnsæi þegar eru virkir:"
+msgstr "Ó_gegnsæi þegar er virkt:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:767
 msgid "Opacity when _unfocused:"
-msgstr "Óg_egnsæi þegar eru óvirkir:"
+msgstr "Óg_egnsæi þegar er óvirkt:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:769
 msgid "_Time of opacity change animation:"
@@ -19850,7 +19829,7 @@ msgstr "Þrepun"
 #. Clones options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1353
 msgid "Move in parallel"
-msgstr "Flytjast samsíða"
+msgstr "Flytja samsíða"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1355
 msgid "Stay unmoved"
@@ -20049,7 +20028,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
 msgid "Rendering tile multiplier:"
-msgstr "Margföldun myndgerðarflísa:"
+msgstr "Margfaldari myndgerðarflísa:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
 msgid "requires restart"
@@ -20129,7 +20108,7 @@ msgstr "Gæði síuáhrifa sem birtast"
 
 #. build custom preferences tab
 #: ../src/ui/dialog/inkscape-preferences.cpp:1500
-#: ../src/ui/dialog/print.cpp:219
+#: ../src/ui/dialog/print.cpp:111
 msgid "Rendering"
 msgstr "Myndgerð"
 
@@ -21438,26 +21417,26 @@ msgstr "Fann ekki sporbaug í myndvali"
 msgid "Arrange on ellipse"
 msgstr "Raða upp á sporbaug"
 
-#: ../src/ui/dialog/print.cpp:115
-msgid "Could not open temporary PNG for bitmap printing"
-msgstr "Gat ekki opnað PNG-bráðabirgðaskrá til að prenta bitamynd"
-
-#: ../src/ui/dialog/print.cpp:142
-msgid "Could not set up Document"
-msgstr "Gat ekki sett upp skjal"
-
-#: ../src/ui/dialog/print.cpp:146
-msgid "Failed to set CairoRenderContext"
-msgstr "Gat ekki sett CairoRenderContext"
-
 #. set up dialog title, based on document name
-#: ../src/ui/dialog/print.cpp:184
+#: ../src/ui/dialog/print.cpp:58
 msgid "SVG Document"
 msgstr "SVG skjal"
 
-#: ../src/ui/dialog/print.cpp:185
+#: ../src/ui/dialog/print.cpp:59
 msgid "Print"
 msgstr "Prenta"
+
+#: ../src/ui/dialog/print.cpp:180
+msgid "Could not open temporary PNG for bitmap printing"
+msgstr "Gat ekki opnað PNG-bráðabirgðaskrá til að prenta bitamynd"
+
+#: ../src/ui/dialog/print.cpp:207
+msgid "Could not set up Document"
+msgstr "Gat ekki sett upp skjal"
+
+#: ../src/ui/dialog/print.cpp:211
+msgid "Failed to set CairoRenderContext"
+msgstr "Gat ekki sett CairoRenderContext"
 
 #: ../src/ui/dialog/spellcheck.cpp:73
 msgid "_Accept"
@@ -23608,25 +23587,25 @@ msgid_plural "Area filled, path with <b>%d</b> nodes created."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/tools/flood-tool.cpp:753 ../src/ui/tools/flood-tool.cpp:1063
+#: ../src/ui/tools/flood-tool.cpp:756 ../src/ui/tools/flood-tool.cpp:1066
 msgid "<b>Area is not bounded</b>, cannot fill."
 msgstr "<b>Svæði er ekki afmarkað</b>, get ekki fyllt."
 
-#: ../src/ui/tools/flood-tool.cpp:1068
+#: ../src/ui/tools/flood-tool.cpp:1071
 msgid ""
 "<b>Only the visible part of the bounded area was filled.</b> If you want to "
 "fill all of the area, undo, zoom out, and fill again."
 msgstr ""
 
-#: ../src/ui/tools/flood-tool.cpp:1086 ../src/ui/tools/flood-tool.cpp:1237
+#: ../src/ui/tools/flood-tool.cpp:1089 ../src/ui/tools/flood-tool.cpp:1240
 msgid "Fill bounded area"
 msgstr "Fylla afmarkað svæði"
 
-#: ../src/ui/tools/flood-tool.cpp:1102
+#: ../src/ui/tools/flood-tool.cpp:1105
 msgid "Set style on object"
 msgstr "Setja stíl á hlut"
 
-#: ../src/ui/tools/flood-tool.cpp:1162
+#: ../src/ui/tools/flood-tool.cpp:1165
 msgid "<b>Draw over</b> areas to add to fill, hold <b>Alt</b> for touch fill"
 msgstr ""
 "<b>Draga yfir</b> svæði til að bæta við fyllingu, halda niðri <b>Alt</b> "
@@ -23749,31 +23728,31 @@ msgstr "Upphaf mælingar, <b>Shift+Smella</b> til að fá upp staðsetningarglug
 msgid "Measure end, <b>Shift+Click</b> for position dialog"
 msgstr "Endir mælingar, <b>Shift+Smella</b> til að fá upp staðsetningarglugga"
 
-#: ../src/ui/tools/measure-tool.cpp:746 ../share/extensions/measure.inx.h:2
+#: ../src/ui/tools/measure-tool.cpp:720 ../share/extensions/measure.inx.h:2
 msgid "Measure"
 msgstr "Mæla"
 
-#: ../src/ui/tools/measure-tool.cpp:751
+#: ../src/ui/tools/measure-tool.cpp:725
 msgid "Base"
 msgstr "Grunnur"
 
-#: ../src/ui/tools/measure-tool.cpp:760
+#: ../src/ui/tools/measure-tool.cpp:734
 msgid "Add guides from measure tool"
 msgstr "Setja inn stoðlínur út frá málbandi"
 
-#: ../src/ui/tools/measure-tool.cpp:780
+#: ../src/ui/tools/measure-tool.cpp:754
 msgid "Keep last measure on the canvas, for reference"
 msgstr "Halda síðustu mælingu á myndfleti til viðmiðunar"
 
-#: ../src/ui/tools/measure-tool.cpp:800
+#: ../src/ui/tools/measure-tool.cpp:774
 msgid "Convert measure to items"
 msgstr "Umbreyta mælingum í hluti"
 
-#: ../src/ui/tools/measure-tool.cpp:838
+#: ../src/ui/tools/measure-tool.cpp:812
 msgid "Add global measure line"
 msgstr "Bæta við grunnmælingalínu"
 
-#: ../src/ui/tools/measure-tool.cpp:1289 ../src/ui/tools/measure-tool.cpp:1291
+#: ../src/ui/tools/measure-tool.cpp:1262 ../src/ui/tools/measure-tool.cpp:1264
 #, c-format
 msgid "Crossing %lu"
 msgstr "Þverar %lu"
@@ -24530,18 +24509,18 @@ msgid "Hexadecimal RGBA value of the color"
 msgstr "Hexadesímalt RGBA litagildi"
 
 #: ../src/ui/widget/color-icc-selector.cpp:176
-#: ../src/ui/widget/color-scales.cpp:385
+#: ../src/ui/widget/color-scales.cpp:394
 msgid "_R:"
 msgstr "_R:"
 
 #. TYPE_RGB_16
 #: ../src/ui/widget/color-icc-selector.cpp:177
-#: ../src/ui/widget/color-scales.cpp:388
+#: ../src/ui/widget/color-scales.cpp:397
 msgid "_G:"
 msgstr "_G:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:178
-#: ../src/ui/widget/color-scales.cpp:391
+#: ../src/ui/widget/color-scales.cpp:400
 msgid "_B:"
 msgstr "_B:"
 
@@ -24553,26 +24532,26 @@ msgstr "Grátt"
 #. TYPE_GRAY_16
 #: ../src/ui/widget/color-icc-selector.cpp:182
 #: ../src/ui/widget/color-icc-selector.cpp:186
-#: ../src/ui/widget/color-scales.cpp:411
+#: ../src/ui/widget/color-scales.cpp:420
 msgid "_H:"
 msgstr "_H:"
 
 #. TYPE_HSV_16
 #: ../src/ui/widget/color-icc-selector.cpp:183
 #: ../src/ui/widget/color-icc-selector.cpp:188
-#: ../src/ui/widget/color-scales.cpp:414
+#: ../src/ui/widget/color-scales.cpp:423
 msgid "_S:"
 msgstr "_S:"
 
 #. TYPE_HLS_16
 #: ../src/ui/widget/color-icc-selector.cpp:187
-#: ../src/ui/widget/color-scales.cpp:417
+#: ../src/ui/widget/color-scales.cpp:426
 msgid "_L:"
 msgstr "_L:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:190
 #: ../src/ui/widget/color-icc-selector.cpp:195
-#: ../src/ui/widget/color-scales.cpp:439
+#: ../src/ui/widget/color-scales.cpp:448
 msgid "_C:"
 msgstr "_C:"
 
@@ -24580,18 +24559,18 @@ msgstr "_C:"
 #. TYPE_CMY_16
 #: ../src/ui/widget/color-icc-selector.cpp:191
 #: ../src/ui/widget/color-icc-selector.cpp:196
-#: ../src/ui/widget/color-scales.cpp:442
+#: ../src/ui/widget/color-scales.cpp:451
 msgid "_M:"
 msgstr "_M:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:192
 #: ../src/ui/widget/color-icc-selector.cpp:197
-#: ../src/ui/widget/color-scales.cpp:445
+#: ../src/ui/widget/color-scales.cpp:454
 msgid "_Y:"
 msgstr "_Y:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:193
-#: ../src/ui/widget/color-scales.cpp:448
+#: ../src/ui/widget/color-scales.cpp:457
 msgid "_K:"
 msgstr "_K:"
 
@@ -24609,17 +24588,17 @@ msgstr "Laga varaleið samsvörunar RGB við ICC-litgildi [icc-color()]."
 
 #. Label
 #: ../src/ui/widget/color-icc-selector.cpp:496
-#: ../src/ui/widget/color-scales.cpp:394 ../src/ui/widget/color-scales.cpp:420
-#: ../src/ui/widget/color-scales.cpp:451
+#: ../src/ui/widget/color-scales.cpp:403 ../src/ui/widget/color-scales.cpp:429
+#: ../src/ui/widget/color-scales.cpp:460
 #: ../src/ui/widget/color-wheel-selector.cpp:83
 msgid "_A:"
 msgstr "_A:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:513
 #: ../src/ui/widget/color-icc-selector.cpp:524
-#: ../src/ui/widget/color-scales.cpp:395 ../src/ui/widget/color-scales.cpp:396
-#: ../src/ui/widget/color-scales.cpp:421 ../src/ui/widget/color-scales.cpp:422
-#: ../src/ui/widget/color-scales.cpp:452 ../src/ui/widget/color-scales.cpp:453
+#: ../src/ui/widget/color-scales.cpp:404 ../src/ui/widget/color-scales.cpp:405
+#: ../src/ui/widget/color-scales.cpp:430 ../src/ui/widget/color-scales.cpp:431
+#: ../src/ui/widget/color-scales.cpp:461 ../src/ui/widget/color-scales.cpp:462
 #: ../src/ui/widget/color-wheel-selector.cpp:112
 #: ../src/ui/widget/color-wheel-selector.cpp:142
 msgid "Alpha (opacity)"
@@ -24856,7 +24835,7 @@ msgstr "Venjuleg hástafaritun."
 
 #: ../src/ui/widget/font-variants.cpp:139
 msgid "Small-caps (lowercase). OpenType table: 'smcp'"
-msgstr ""
+msgstr "Litlir hástafir (lágstafa). OpenType tafla: 'smcp'"
 
 #: ../src/ui/widget/font-variants.cpp:140
 msgid ""
@@ -24904,11 +24883,11 @@ msgstr "Venjulegar breiddir."
 
 #: ../src/ui/widget/font-variants.cpp:184
 msgid "Proportional width numerals. OpenType table: 'pnum'"
-msgstr ""
+msgstr "Hlutfallsbreiðar tölur. OpenType tafla: 'pnum'"
 
 #: ../src/ui/widget/font-variants.cpp:185
 msgid "Same width numerals. OpenType table: 'tnum'"
-msgstr ""
+msgstr "Jafnbreiðar tölur. OpenType tafla: 'tnum'"
 
 #: ../src/ui/widget/font-variants.cpp:186
 msgid "Normal fractions."
@@ -24916,15 +24895,15 @@ msgstr "Venjuleg brot."
 
 #: ../src/ui/widget/font-variants.cpp:187
 msgid "Diagonal fractions. OpenType table: 'frac'"
-msgstr ""
+msgstr "Skáuð tölubrot. OpenType tafla: 'frac'"
 
 #: ../src/ui/widget/font-variants.cpp:188
 msgid "Stacked fractions. OpenType table: 'afrc'"
-msgstr ""
+msgstr "Stöfluð tölubrot. OpenType tafla: 'afrc'"
 
 #: ../src/ui/widget/font-variants.cpp:189
 msgid "Ordinals (raised 'th', etc.). OpenType table: 'ordn'"
-msgstr ""
+msgstr "Raðtölur (ordinals - háletrað 'th', o.s.frv.). OpenType tafla: 'ordn'"
 
 #: ../src/ui/widget/font-variants.cpp:190
 msgid "Slashed zeros. OpenType table: 'zero'"
@@ -26604,7 +26583,7 @@ msgstr "Búa til breytilegan hliðraðan hlut tengdan við upprunalegan feril"
 
 #: ../src/verbs.cpp:2633
 msgid "_Stroke to Path"
-msgstr "Út_lína í feril"
+msgstr "Út_lína sem ferill"
 
 #: ../src/verbs.cpp:2634
 msgid "Convert selected object's stroke to paths"
@@ -31446,7 +31425,7 @@ msgstr ""
 msgid "Use the pressure of the input device to alter the force of tweak action"
 msgstr "Notaðu þrýsting frá inntakstæki til að breyta krafti aðgerðar"
 
-#: ../share/extensions/convert2dashes.py:56
+#: ../share/extensions/convert2dashes.py:58
 msgid "Total number of objects not converted: {}\n"
 msgstr "Fjöldi hluta sem ekki var umbreytt: {}\n"
 
@@ -31459,78 +31438,78 @@ msgid "Unable to process this object.  Try changing it into a path first."
 msgstr ""
 "Tókst ekki að vinna með þennan hlut. Prófaðu að umbreyta honum fyrst í feril."
 
-#: ../share/extensions/draw_from_triangle.py:180
+#: ../share/extensions/draw_from_triangle.py:187
 #, python-brace-format
 msgid "Side Length 'a' ({0}): {1}"
 msgstr "Lengd hliðar 'a' ({0}): {1}"
 
-#: ../share/extensions/draw_from_triangle.py:181
+#: ../share/extensions/draw_from_triangle.py:188
 #, python-brace-format
 msgid "Side Length 'b' ({0}): {1}"
 msgstr "Lengd hliðar 'b' ({0}): {1}"
 
-#: ../share/extensions/draw_from_triangle.py:182
+#: ../share/extensions/draw_from_triangle.py:189
 #, python-brace-format
 msgid "Side Length 'c' ({0}): {1}"
 msgstr "Lengd hliðar 'c' ({0}): {1}"
 
-#: ../share/extensions/draw_from_triangle.py:183
+#: ../share/extensions/draw_from_triangle.py:190
 msgid "Angle 'A' (radians): {}"
 msgstr "Horn 'A' (radíanar): {}"
 
-#: ../share/extensions/draw_from_triangle.py:184
+#: ../share/extensions/draw_from_triangle.py:191
 msgid "Angle 'B' (radians): {}"
 msgstr "Horn 'B' (radíanar): {}"
 
-#: ../share/extensions/draw_from_triangle.py:185
+#: ../share/extensions/draw_from_triangle.py:192
 msgid "Angle 'C' (radians): {}"
 msgstr "Horn 'C' (radíanar): {}"
 
-#: ../share/extensions/draw_from_triangle.py:186
+#: ../share/extensions/draw_from_triangle.py:193
 msgid "Semiperimeter (px): {}"
 msgstr "Hálft ummál (px): {}"
 
-#: ../share/extensions/draw_from_triangle.py:187
+#: ../share/extensions/draw_from_triangle.py:194
 #, python-brace-format
 msgid "Area ({0}^2): {1}"
 msgstr "Flötur ({0}^2): {1}"
 
-#: ../share/extensions/dxf_input.py:530
+#: ../share/extensions/dxf_input.py:536
 #, python-format
 msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
 "to Release 13 format using QCad."
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:49
+#: ../share/extensions/dxf_outlines.py:50
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again."
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:315
+#: ../share/extensions/dxf_outlines.py:319
 msgid ""
 "Error: Field 'Layer match name' must be filled when using 'By name match' "
 "option"
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:364
+#: ../share/extensions/dxf_outlines.py:368
 #, python-format
 msgid "Warning: Layer '%s' not found!"
 msgstr "Aðvörun: Lagið '%s' fannst ekki!"
 
-#: ../share/extensions/embedimage.py:83
+#: ../share/extensions/embedimage.py:86
 msgid ""
 "No xlink:href or sodipodi:absref attributes found, or they do not point to "
 "an existing file! Unable to embed image."
 msgstr ""
 
-#: ../share/extensions/embedimage.py:85
+#: ../share/extensions/embedimage.py:88
 #, python-format
 msgid "Sorry we could not locate %s"
 msgstr "Gat ekki staðsett %s"
 
-#: ../share/extensions/embedimage.py:110
+#: ../share/extensions/embedimage.py:113
 #, python-format
 msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
@@ -31571,25 +31550,32 @@ msgstr ""
 msgid "Please select a rectangle"
 msgstr "Veldu rétthyrning"
 
-#: ../share/extensions/gcodetools.py:3319
-#: ../share/extensions/gcodetools.py:4524
-#: ../share/extensions/gcodetools.py:4697
-#: ../share/extensions/gcodetools.py:6230
-#: ../share/extensions/gcodetools.py:6425
+#: ../share/extensions/gcodetools.py:106 ../share/extensions/measure.py:61
+msgid ""
+"Failed to import the numpy modules. These modules are required by this "
+"extension. Please install them and try again.  On a Debian-like system this "
+"can be done with the command, sudo apt-get install python-numpy."
+msgstr ""
+
+#: ../share/extensions/gcodetools.py:3337
+#: ../share/extensions/gcodetools.py:4542
+#: ../share/extensions/gcodetools.py:4715
+#: ../share/extensions/gcodetools.py:6260
+#: ../share/extensions/gcodetools.py:6427
 msgid "No paths are selected! Trying to work on all available paths."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:3322
+#: ../share/extensions/gcodetools.py:3340
 msgid "Nothing is selected. Please select something."
 msgstr "Ekkert er valið. Veldu eitthvað."
 
-#: ../share/extensions/gcodetools.py:3862
+#: ../share/extensions/gcodetools.py:3880
 msgid ""
 "Directory does not exist! Please specify existing directory at Preferences "
 "tab!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:3892
+#: ../share/extensions/gcodetools.py:3910
 #, python-format
 msgid ""
 "Can not write to specified file!\n"
@@ -31598,27 +31584,27 @@ msgstr ""
 "Get ekki skrifað í uppgefna skrá!\n"
 "%s"
 
-#: ../share/extensions/gcodetools.py:4038
+#: ../share/extensions/gcodetools.py:4056
 #, python-format
 msgid ""
 "Orientation points for '%s' layer have not been found! Please add "
 "orientation points using Orientation tab!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4045
+#: ../share/extensions/gcodetools.py:4063
 #, python-format
 msgid "There are more than one orientation point groups in '%s' layer"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4076
-#: ../share/extensions/gcodetools.py:4078
+#: ../share/extensions/gcodetools.py:4094
+#: ../share/extensions/gcodetools.py:4096
 msgid ""
 "Orientation points are wrong! (if there are two orientation points they "
 "should not be the same. If there are three orientation points they should "
 "not be in a straight line.)"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4248
+#: ../share/extensions/gcodetools.py:4266
 #, python-format
 msgid ""
 "Warning! Found bad orientation points in '%s' layer. Resulting Gcode could "
@@ -31627,7 +31613,7 @@ msgstr ""
 "Aðvörun! Fann gallaða stefnupunkta í '%s' laginu. Gcode-kóðinn sem út úr "
 "þessu kemur gæti verið ónothæfur!"
 
-#: ../share/extensions/gcodetools.py:4261
+#: ../share/extensions/gcodetools.py:4279
 #, python-format
 msgid ""
 "Warning! Found bad graffiti reference point in '%s' layer. Resulting Gcode "
@@ -31637,7 +31623,7 @@ msgstr ""
 "sem út úr þessu kemur gæti verið ónothæfur!"
 
 #. xgettext:no-pango-format
-#: ../share/extensions/gcodetools.py:4282
+#: ../share/extensions/gcodetools.py:4300
 msgid ""
 "This extension works with Paths and Dynamic Offsets and groups of them only! "
 "All other objects will be ignored!\n"
@@ -31647,108 +31633,108 @@ msgid ""
 "and File->Import this file."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4288
+#: ../share/extensions/gcodetools.py:4306
 msgid ""
 "Document has no layers! Add at least one layer using layers panel (Ctrl+Shift"
 "+L)"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4292
+#: ../share/extensions/gcodetools.py:4310
 msgid ""
 "Warning! There are some paths in the root of the document, but not in any "
 "layer! Using bottom-most layer for them."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4369
+#: ../share/extensions/gcodetools.py:4387
 #, python-format
 msgid ""
 "Warning! Tool's and default tool's parameter's (%s) types are not the same "
 "( type('%s') != type('%s') )."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4372
+#: ../share/extensions/gcodetools.py:4390
 #, python-format
 msgid "Warning! Tool has parameter that default tool has not ( '%s': '%s' )."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4386
+#: ../share/extensions/gcodetools.py:4404
 #, python-format
 msgid "Layer '%s' contains more than one tool!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4389
+#: ../share/extensions/gcodetools.py:4407
 #, python-format
 msgid ""
 "Can not find tool for '%s' layer! Please add one with Tools library tab!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4551
-#: ../share/extensions/gcodetools.py:4706
+#: ../share/extensions/gcodetools.py:4569
+#: ../share/extensions/gcodetools.py:4724
 msgid ""
 "Warning: One or more paths do not have 'd' parameter, try to Ungroup (Ctrl"
 "+Shift+G) and Object to Path (Ctrl+Shift+C)!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4665
+#: ../share/extensions/gcodetools.py:4683
 msgid ""
 "Nothing is selected. Please select something to convert to drill point "
 "(dxfpoint) or clear point sign."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4748
-#: ../share/extensions/gcodetools.py:4994
+#: ../share/extensions/gcodetools.py:4766
+#: ../share/extensions/gcodetools.py:5012
 msgid "This extension requires at least one selected path."
 msgstr "Viðbótin krefst að minnsta kosti eins valins ferils."
 
-#: ../share/extensions/gcodetools.py:4754
-#: ../share/extensions/gcodetools.py:5000
+#: ../share/extensions/gcodetools.py:4772
+#: ../share/extensions/gcodetools.py:5018
 #, python-format
 msgid "Tool diameter must be > 0 but tool's diameter on '%s' layer is not!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:4765
-#: ../share/extensions/gcodetools.py:4954
-#: ../share/extensions/gcodetools.py:5009
+#: ../share/extensions/gcodetools.py:4783
+#: ../share/extensions/gcodetools.py:4972
+#: ../share/extensions/gcodetools.py:5027
 msgid "Warning: omitting non-path"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:5509
+#: ../share/extensions/gcodetools.py:5545
 msgid "Please select at least one path to engrave and run again."
 msgstr "Veldu a.m.k. einn feril til að rista og keyrðu þetta svo aftur."
 
-#: ../share/extensions/gcodetools.py:5517
+#: ../share/extensions/gcodetools.py:5553
 msgid "Unknown unit selected. mm assumed"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:5538
+#: ../share/extensions/gcodetools.py:5574
 #, python-format
 msgid "Tool '%s' has no shape. 45 degree cone assumed!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:5609
-#: ../share/extensions/gcodetools.py:5614
+#: ../share/extensions/gcodetools.py:5645
+#: ../share/extensions/gcodetools.py:5650
 msgid "csp_normalised_normal error. See log."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:5802
+#: ../share/extensions/gcodetools.py:5838
 msgid "No need to engrave sharp angles."
 msgstr "Ekki þarf að rista hvöss horn."
 
-#: ../share/extensions/gcodetools.py:5846
+#: ../share/extensions/gcodetools.py:5882
 msgid ""
 "Active layer already has orientation points! Remove them or select another "
 "layer!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:5891
+#: ../share/extensions/gcodetools.py:5921
 msgid "Active layer already has a tool! Remove it or select another layer!"
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:6006
+#: ../share/extensions/gcodetools.py:6036
 msgid "Selection is empty! Will compute whole drawing."
 msgstr "Myndvalið er tómt. Mun reikna alla teikninguna."
 
-#: ../share/extensions/gcodetools.py:6060
+#: ../share/extensions/gcodetools.py:6090
 msgid ""
 "Tutorials, manuals and support can be found at\n"
 "English support forum:\n"
@@ -31762,15 +31748,15 @@ msgstr ""
 "og á rússneska spjallsvæðinu:\n"
 "\thttp://www.cnc-club.ru/gcodetoolsru"
 
-#: ../share/extensions/gcodetools.py:6105
+#: ../share/extensions/gcodetools.py:6135
 msgid "Lathe X and Z axis remap should be 'X', 'Y' or 'Z'. Exiting..."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:6108
+#: ../share/extensions/gcodetools.py:6138
 msgid "Lathe X and Z axis remap should be the same. Exiting..."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:6660
+#: ../share/extensions/gcodetools.py:6662
 #, python-format
 msgid ""
 "Select one of the action tabs - Path to Gcode, Area, Engraving, DXF points, "
@@ -31781,13 +31767,13 @@ msgstr ""
 "punktar, Stefna, Hliðrun, Rennibekkur eða Verkfærasafn.\n"
 " Auðkenni virka flipans er %s"
 
-#: ../share/extensions/gcodetools.py:6666
+#: ../share/extensions/gcodetools.py:6668
 msgid ""
 "Orientation points have not been defined! A default set of orientation "
 "points has been automatically added."
 msgstr ""
 
-#: ../share/extensions/gcodetools.py:6670
+#: ../share/extensions/gcodetools.py:6672
 msgid ""
 "Cutting tool has not been defined! A default tool has been automatically "
 "added."
@@ -31825,24 +31811,24 @@ msgstr "Villa kom upp við að vinna með XFC-skrána."
 msgid "This extension requires at least one non empty layer."
 msgstr "Viðbótin krefst að minnsta kosti eins lags sem ekki sé tómt."
 
-#: ../share/extensions/guillotine.py:248
+#: ../share/extensions/guillotine.py:241
 msgid "The sliced bitmaps have been saved as:"
 msgstr "Sneiddu bitamyndirnar hafa verið vistaðar sem:"
 
-#: ../share/extensions/hpgl_decoder.py:42
+#: ../share/extensions/hpgl_decoder.py:47
 msgid "Movements"
 msgstr "Hreyfingar"
 
-#: ../share/extensions/hpgl_decoder.py:43
+#: ../share/extensions/hpgl_decoder.py:48
 msgid "Pen "
 msgstr "Penni "
 
 #. issue error if no hpgl data found
-#: ../share/extensions/hpgl_input.py:58
+#: ../share/extensions/hpgl_input.py:57
 msgid "No HPGL data found."
 msgstr "Engin HPGL gögn fundust."
 
-#: ../share/extensions/hpgl_input.py:66
+#: ../share/extensions/hpgl_input.py:65
 msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
@@ -31854,7 +31840,7 @@ msgid ""
 "No paths where found. Please convert all objects you want to save into paths."
 msgstr ""
 
-#: ../share/extensions/inkex.py:116
+#: ../share/extensions/inkex.py:121
 #, python-format
 msgid ""
 "The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore "
@@ -31866,28 +31852,28 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../share/extensions/inkex.py:184
+#: ../share/extensions/inkex.py:189
 #, python-format
 msgid "Unable to open specified file: %s"
 msgstr "Tókst ekki að opna tilgreinda skrá: %s"
 
-#: ../share/extensions/inkex.py:193
+#: ../share/extensions/inkex.py:198
 #, python-format
 msgid "Unable to open object member file: %s"
 msgstr ""
 
-#: ../share/extensions/inkex.py:299
+#: ../share/extensions/inkex.py:305
 #, python-format
 msgid "No matching node for expression: %s"
 msgstr ""
 
-#: ../share/extensions/inkex.py:358
+#: ../share/extensions/inkex.py:364
 msgid "SVG Width not set correctly! Assuming width = 100"
 msgstr ""
 
-#: ../share/extensions/interp_att_g.py:175
+#: ../share/extensions/interp_att_g.py:174
 msgid "There is no selection to interpolate"
-msgstr ""
+msgstr "Það er ekkert myndval til að brúa"
 
 #: ../share/extensions/jessyInk_autoTexts.py:44
 #: ../share/extensions/jessyInk_effects.py:49
@@ -31896,7 +31882,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_masterSlide.py:44
 #: ../share/extensions/jessyInk_mouseHandler.py:47
 #: ../share/extensions/jessyInk_summary.py:63
-#: ../share/extensions/jessyInk_transitions.py:49
+#: ../share/extensions/jessyInk_transitions.py:53
 #: ../share/extensions/jessyInk_video.py:47
 #: ../share/extensions/jessyInk_view.py:66
 msgid ""
@@ -31936,22 +31922,24 @@ msgstr "Gat ekki fundið Inkscape skipun.\n"
 
 #: ../share/extensions/jessyInk_masterSlide.py:54
 msgid "Layer not found. Removed current master slide selection.\n"
-msgstr ""
+msgstr "Lagið fannst ekki. Fjarlægði val núverandi yfirskyggnu.\n"
 
 #: ../share/extensions/jessyInk_masterSlide.py:56
 msgid ""
 "More than one layer with this name found. Removed current master slide "
 "selection.\n"
 msgstr ""
+"Fleiri en eitt lag með þessu heiti fundust. Fjarlægði val núverandi"
+" yfirskyggnu.\n"
 
 #: ../share/extensions/jessyInk_summary.py:68
 #, python-brace-format
 msgid "JessyInk script version {0} installed."
-msgstr ""
+msgstr "JessyInk skrifta útgáfa {0} uppsett."
 
 #: ../share/extensions/jessyInk_summary.py:70
 msgid "JessyInk script installed."
-msgstr ""
+msgstr "JessyInk skrifta uppsett."
 
 #: ../share/extensions/jessyInk_summary.py:82
 msgid ""
@@ -32027,7 +32015,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_summary.py:173
 #, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
-msgstr ""
+msgstr "{0}\tSýn verður sett miðað við hlutinn \"{1}\""
 
 #: ../share/extensions/jessyInk_summary.py:175
 #, python-brace-format
@@ -32051,15 +32039,15 @@ msgstr " notar sjónbrellu \"{0}\""
 msgid " in {0!s} s"
 msgstr " í {0!s} s"
 
-#: ../share/extensions/jessyInk_transitions.py:54
+#: ../share/extensions/jessyInk_transitions.py:58
 msgid "Layer not found.\n"
 msgstr "Lagið fannst ekki.\n"
 
-#: ../share/extensions/jessyInk_transitions.py:56
+#: ../share/extensions/jessyInk_transitions.py:60
 msgid "More than one layer with this name found.\n"
 msgstr "Fleiri en eitt lag með þessu heiti fundust.\n"
 
-#: ../share/extensions/jessyInk_transitions.py:69
+#: ../share/extensions/jessyInk_transitions.py:73
 msgid "Please enter a layer name.\n"
 msgstr "Settu inn heiti á lagi.\n"
 
@@ -32092,14 +32080,7 @@ msgstr ""
 msgid "unable to locate marker: %s"
 msgstr "Gat ekki fundið merki: %s"
 
-#: ../share/extensions/measure.py:61
-msgid ""
-"Failed to import the numpy modules. These modules are required by this "
-"extension. Please install them and try again.  On a Debian-like system this "
-"can be done with the command, sudo apt-get install python-numpy."
-msgstr ""
-
-#: ../share/extensions/measure.py:123
+#: ../share/extensions/measure.py:127
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr ""
 
@@ -32216,32 +32197,32 @@ msgid ""
 "can be done with the command 'sudo apt-get install python-numpy'."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:338
+#: ../share/extensions/polyhedron_3d.py:344
 msgid "No face data found in specified file."
 msgstr "Engin gögn fundust í umbeðinni skrá."
 
-#: ../share/extensions/polyhedron_3d.py:339
+#: ../share/extensions/polyhedron_3d.py:345
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:345
+#: ../share/extensions/polyhedron_3d.py:351
 msgid "No edge data found in specified file."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:346
+#: ../share/extensions/polyhedron_3d.py:352
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr ""
 
 #. we cannot generate a list of faces from the edges without a lot of computation
-#: ../share/extensions/polyhedron_3d.py:525
+#: ../share/extensions/polyhedron_3d.py:531
 msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:527
+#: ../share/extensions/polyhedron_3d.py:533
 msgid "Internal Error. No view type selected\n"
-msgstr ""
+msgstr "Innri villa. Engin gerð sýnar valin\n"
 
 #: ../share/extensions/print_win32_vector.py:40
 msgid "sorry, this will run only on Windows, exiting..."
@@ -32251,22 +32232,22 @@ msgstr "Því miður, þetta keyrir einungis á Windows, hætti..."
 msgid "Failed to open default printer"
 msgstr "Mistókst að opna sjálfgefinn prentara"
 
-#: ../share/extensions/render_barcode_datamatrix.py:201
+#: ../share/extensions/render_barcode_datamatrix.py:207
 msgid "Unrecognised DataMatrix size"
 msgstr ""
 
 #. we have an invalid bit value
-#: ../share/extensions/render_barcode_datamatrix.py:642
+#: ../share/extensions/render_barcode_datamatrix.py:651
 msgid "Invalid bit value, this is a bug!"
 msgstr ""
 
 #. abort if converting blank text
-#: ../share/extensions/render_barcode_datamatrix.py:677
+#: ../share/extensions/render_barcode_datamatrix.py:686
 msgid "Please enter an input string"
 msgstr "Settu inn inntaksstreng"
 
 #. abort if converting blank text
-#: ../share/extensions/render_barcode_qrcode.py:1053
+#: ../share/extensions/render_barcode_qrcode.py:1059
 msgid "Please enter an input text"
 msgstr "Settu inn inntakstexta"
 
@@ -32277,18 +32258,18 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/replace_font.py:138
-#: ../share/extensions/svg_and_media_zip_output.py:193
+#: ../share/extensions/svg_and_media_zip_output.py:205
 msgid "Didn't find any fonts in this document/selection."
 msgstr "Fann ekki neitt letur í þessu skjali/vali."
 
 #: ../share/extensions/replace_font.py:141
-#: ../share/extensions/svg_and_media_zip_output.py:196
+#: ../share/extensions/svg_and_media_zip_output.py:208
 #, python-format
 msgid "Found the following font only: %s"
 msgstr "Fann einungis eftirfarandi leturgerð: %s"
 
 #: ../share/extensions/replace_font.py:143
-#: ../share/extensions/svg_and_media_zip_output.py:198
+#: ../share/extensions/svg_and_media_zip_output.py:210
 #, python-format
 msgid ""
 "Found the following fonts:\n"
@@ -32325,18 +32306,18 @@ msgstr ""
 "Viðbótin krefst að minnsta kosti tveggja valinna ferla. \n"
 "Seinni ferillinn verður að vera nákvæmlega fjögurra hnúta langur."
 
-#: ../share/extensions/svg_and_media_zip_output.py:128
+#: ../share/extensions/svg_and_media_zip_output.py:138
 #, python-format
 msgid "Could not locate file: %s"
 msgstr "Gat ekki staðsett skrá: %s"
 
-#: ../share/extensions/svgcalendar.py:265
-#: ../share/extensions/svgcalendar.py:287
+#: ../share/extensions/svgcalendar.py:269
+#: ../share/extensions/svgcalendar.py:291
 msgid "You must select a correct system encoding."
 msgstr "Þú verður að velja rétta stafatöflu kerfis."
 
 #: ../share/extensions/uniconv-ext.py:55
-#: ../share/extensions/uniconv_output.py:122
+#: ../share/extensions/uniconv_output.py:123
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
@@ -32414,7 +32395,7 @@ msgstr "Þú verður að setja upp ImageMagick til að vinna með JPG og GIF."
 
 #. PARAMETER PROCESSING
 #. lines of longitude are odd : abort
-#: ../share/extensions/wireframe_sphere.py:116
+#: ../share/extensions/wireframe_sphere.py:118
 msgid "Please enter an even number of lines of longitude."
 msgstr "Settu inn jafna tölu lengdargráðulína."
 
@@ -32909,11 +32890,11 @@ msgstr ""
 
 #: ../share/extensions/draw_from_triangle.inx.h:14
 msgid "Altitudes"
-msgstr ""
+msgstr "Hæðir"
 
 #: ../share/extensions/draw_from_triangle.inx.h:15
 msgid "Angle Bisectors"
-msgstr ""
+msgstr "Helmingalínur horna"
 
 #: ../share/extensions/draw_from_triangle.inx.h:16
 msgid "Centroid"
@@ -32921,7 +32902,7 @@ msgstr "Þyngdarpunktur"
 
 #: ../share/extensions/draw_from_triangle.inx.h:17
 msgid "Nine-Point Centre"
-msgstr ""
+msgstr "Níu-punkta miðja"
 
 #: ../share/extensions/draw_from_triangle.inx.h:18
 msgid "Nine-Point Circle"
@@ -32957,7 +32938,7 @@ msgstr ""
 
 #: ../share/extensions/draw_from_triangle.inx.h:26
 msgid "Point At:"
-msgstr ""
+msgstr "Punktur á:"
 
 #: ../share/extensions/draw_from_triangle.inx.h:27
 msgid "Draw Marker At This Point"
@@ -32986,11 +32967,11 @@ msgstr ""
 
 #: ../share/extensions/draw_from_triangle.inx.h:33
 msgid "Trilinear Coordinates"
-msgstr ""
+msgstr "Þrílínuleg hnit"
 
 #: ../share/extensions/draw_from_triangle.inx.h:34
 msgid "Triangle Function"
-msgstr ""
+msgstr "Þríhyrningafall"
 
 #: ../share/extensions/draw_from_triangle.inx.h:36
 msgid ""
@@ -33104,7 +33085,7 @@ msgstr "Val fyrir útflutning lags:"
 
 #: ../share/extensions/dxf_outlines.inx.h:8
 msgid "Layer match name:"
-msgstr ""
+msgstr "Heiti samsvörunar lags:"
 
 #: ../share/extensions/dxf_outlines.inx.h:9
 msgid "pt"
@@ -33181,7 +33162,7 @@ msgstr "Eingöngu sýnilegt"
 
 #: ../share/extensions/dxf_outlines.inx.h:23
 msgid "By name match"
-msgstr ""
+msgstr "Eftir samsvörun nafna"
 
 #: ../share/extensions/dxf_outlines.inx.h:25
 msgid ""
@@ -33434,7 +33415,7 @@ msgstr "Pappírsþykkt:"
 
 #: ../share/extensions/foldablebox.inx.h:6
 msgid "Tab Proportion:"
-msgstr ""
+msgstr "Hlutfall flipa:"
 
 #: ../share/extensions/foldablebox.inx.h:8
 msgid "Add Guide Lines"
@@ -33531,6 +33512,15 @@ msgid ""
 "\n"
 "The constants pi and e are also available."
 msgstr ""
+"Hægt er að nota staðlaðar Python stærðfræðiaðgerðir:\n"
+"\n"
+"ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
+"modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); \n"
+"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); \n"
+"cos(x); sin(x); tan(x); degrees(x); radians(x); \n"
+"cosh(x); sinh(x); tanh(x).\n"
+"\n"
+"Fastarnir pi og e eru einnig til taks."
 
 #: ../share/extensions/funcplot.inx.h:31
 msgid "Function:"
@@ -33538,7 +33528,7 @@ msgstr "Fall:"
 
 #: ../share/extensions/funcplot.inx.h:32
 msgid "Calculate first derivative numerically"
-msgstr ""
+msgstr "Reikna fyrstu afleiðu tölulega"
 
 #: ../share/extensions/funcplot.inx.h:33
 msgid "First derivative:"
@@ -33599,7 +33589,6 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_about.inx.h:14
 #: ../share/extensions/gcodetools_area.inx.h:70
-#: ../share/extensions/gcodetools_check_for_updates.inx.h:4
 #: ../share/extensions/gcodetools_dxf_points.inx.h:31
 #: ../share/extensions/gcodetools_engraving.inx.h:40
 #: ../share/extensions/gcodetools_graffiti.inx.h:54
@@ -33647,7 +33636,6 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_about.inx.h:29
 #: ../share/extensions/gcodetools_area.inx.h:85
-#: ../share/extensions/gcodetools_check_for_updates.inx.h:19
 #: ../share/extensions/gcodetools_dxf_points.inx.h:46
 #: ../share/extensions/gcodetools_engraving.inx.h:55
 #: ../share/extensions/gcodetools_graffiti.inx.h:69
@@ -33999,15 +33987,6 @@ msgstr "Rúnna af öll gildi í 4 aukastafi"
 msgid "Fast pre-penetrate"
 msgstr ""
 
-#: ../share/extensions/gcodetools_check_for_updates.inx.h:1
-msgid "Check for updates"
-msgstr "Leita að uppfærslum"
-
-#: ../share/extensions/gcodetools_check_for_updates.inx.h:2
-msgid "Check for Gcodetools latest stable version and try to get the updates."
-msgstr ""
-"Athuga með síðustu stöðugu útgáfu Gcodetools og reyna að ná í uppfærslur."
-
 #: ../share/extensions/gcodetools_dxf_points.inx.h:1
 msgid "DXF Points"
 msgstr "DXF punktar"
@@ -34267,7 +34246,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:12
 msgid "Maximum angle for corner (0-180 deg):"
-msgstr ""
+msgstr "Hámarkshorn beygjuhorna (0-180 gráður):"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:14
 msgid "Perpendicular"
@@ -34319,7 +34298,7 @@ msgstr "graffiti"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:10
 msgid "Just check tools"
-msgstr ""
+msgstr "Bara athuga með verkfæri"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:11
 msgid ""
@@ -34411,7 +34390,7 @@ msgstr "X-ás"
 
 #: ../share/extensions/grid_cartesian.inx.h:4
 msgid "Major X Divisions:"
-msgstr ""
+msgstr "Aðaluppskiptingar X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx.h:5
 msgid "Major X Division Spacing (px):"
@@ -34897,7 +34876,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_input.inx.h:7
 msgid "Show movements between paths"
-msgstr ""
+msgstr "Birta hreyfingar á milli ferla"
 
 #: ../share/extensions/hpgl_input.inx.h:8
 msgid "Check this to show movements between paths (Default: Unchecked)"
@@ -34979,7 +34958,7 @@ msgstr "Spegla X-ás"
 #: ../share/extensions/hpgl_output.inx.h:17
 #: ../share/extensions/plotter.inx.h:45
 msgid "Check this to mirror the X axis (Default: Unchecked)"
-msgstr ""
+msgstr "Hakaðu við þetta til að spegla X-ás (sjálfgefið: ekki virkt)"
 
 #: ../share/extensions/hpgl_output.inx.h:18
 #: ../share/extensions/plotter.inx.h:46
@@ -34989,7 +34968,7 @@ msgstr "Spegla Y-ás"
 #: ../share/extensions/hpgl_output.inx.h:19
 #: ../share/extensions/plotter.inx.h:47
 msgid "Check this to mirror the Y axis (Default: Unchecked)"
-msgstr ""
+msgstr "Hakaðu við þetta til að spegla Y-ás (sjálfgefið: ekki virkt)"
 
 #: ../share/extensions/hpgl_output.inx.h:20
 #: ../share/extensions/plotter.inx.h:48
@@ -35001,6 +34980,8 @@ msgstr "Núllpunktur miðju"
 msgid ""
 "Check this if your plotter uses a centered zero point (Default: Unchecked)"
 msgstr ""
+"Hakaðu við þetta ef plotterinn notar miðjaðan núllpunkt (sjálfgefið: ekki"
+" virkt)"
 
 #: ../share/extensions/hpgl_output.inx.h:22
 #: ../share/extensions/plotter.inx.h:50
@@ -35030,7 +35011,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx.h:26
 #: ../share/extensions/plotter.inx.h:54
 msgid "Tool (Knife) offset correction (mm):"
-msgstr ""
+msgstr "Leiðrétting á hliðrun (hnífa)verkfæris (mm):"
 
 #: ../share/extensions/hpgl_output.inx.h:27
 #: ../share/extensions/plotter.inx.h:55
@@ -35104,13 +35085,15 @@ msgstr "Styðja óreglulega kvörðun"
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:7
 msgid "Render images blocky"
-msgstr ""
+msgstr "Gera myndir að blokkum"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:9
 msgid ""
 "Render all bitmap images like in older Inskcape versions. Available options:"
 msgstr ""
+"Myndgera allar bitamyndir eins og í eldri útgáfum Inskcape. Tiltækir"
+" valkostir:"
 
 #. image aspect ratio
 #: ../share/extensions/image_attributes.inx.h:11
@@ -35120,12 +35103,12 @@ msgstr "Stærðarhlutföll myndar"
 #. image aspect ratio
 #: ../share/extensions/image_attributes.inx.h:13
 msgid "preserveAspectRatio attribute:"
-msgstr ""
+msgstr "preserveAspectRatio eigindi:"
 
 #. image aspect ratio
 #: ../share/extensions/image_attributes.inx.h:15
 msgid "meetOrSlice:"
-msgstr ""
+msgstr "meetOrSlice:"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:17
@@ -36392,7 +36375,7 @@ msgstr "Bil á milli grafs og titils:"
 
 #: ../share/extensions/nicechart.inx.h:28
 msgid "Work around aliasing effects (creates overlapping segments)"
-msgstr ""
+msgstr "Fara í kringum afstöllunaráhrif (útbýr skaraða hluta)"
 
 #: ../share/extensions/nicechart.inx.h:29
 msgid "Color scheme:"
@@ -36488,6 +36471,8 @@ msgid ""
 "scales.\n"
 "First derivatives are always determined numerically."
 msgstr ""
+"Veldu ferhyrning áður en viðbótin er keyrð, hún mun greina X og Y kvarðana.\n"
+"Fyrstu afleiður eru ævinlega skilgreindar tölulega."
 
 #: ../share/extensions/param_curves.inx.h:26
 msgid "X-Function:"
@@ -37675,7 +37660,7 @@ msgstr "Fann eftirfarandi auðkenni:"
 
 #: ../share/extensions/scour.inx.h:54
 msgid "A comma-separated list of IDs that are to be preserved."
-msgstr ""
+msgstr "Kommu-aðgreindur listi yfir auðkenni sem á að vernda."
 
 #: ../share/extensions/scour.inx.h:55
 msgid "Preserve IDs starting with:"
@@ -38714,118 +38699,3 @@ msgstr "Vinsælt snið fyrir myndskreytingar"
 msgid "XAML Input"
 msgstr "XAML-ílag"
 
-#~ msgid "Scale Y"
-#~ msgstr "Y-kvarði"
-
-#~ msgid "Old Inkscape file detected (90 DPI)"
-#~ msgstr "Gömul Inkscape-skrá fannst (90 PÁT)"
-
-#~ msgid "Scale elements"
-#~ msgstr "Kvarða einindi"
-
-#~ msgid "The offset size"
-#~ msgstr "Stærð hliðrunar"
-
-#~ msgid "Area ("
-#~ msgstr "Svæði ("
-
-#, fuzzy
-#~ msgid "Adjust the rotation angle"
-#~ msgstr "Breyta litmettun"
-
-#~ msgid "FIXME<b>Ctrl</b>: snap mesh angle"
-#~ msgstr "LAGA<b>Ctrl</b>: þrepa horn möskva"
-
-#~ msgid "FIXME<b>Shift</b>: draw mesh around the starting point"
-#~ msgstr "LAGA<b>Shift</b>: draga möskva í kringum upphafspunkt"
-
-#~ msgid "Show side and tensor handles"
-#~ msgstr "Sýna haldföng hliða og strekkjara"
-
-#~ msgid "Spacing between baselines (percent of font size)"
-#~ msgstr "Bil milli grunnlína (prósent af leturstærð)"
-
-#~ msgid "Create default mesh"
-#~ msgstr "Búa til sjálfgefna möskva"
-
-#~ msgid "<b>Mesh gradient</b>"
-#~ msgstr "<b>Litstigull möskva</b>"
-
-#~ msgid "Add Stored to measure tool"
-#~ msgstr "Bæta geymdu á málband"
-
-#~ msgid "Miter _limit:"
-#~ msgstr "Mörk _hornskeytingar:"
-
-#~ msgid "Use normal distribution"
-#~ msgstr "Nota normaldreifingu"
-
-#~ msgid "Measure start"
-#~ msgstr "Upphaf mælingar"
-
-#~ msgid "Measure end"
-#~ msgstr "Endir mælingar"
-
-#~ msgid "Only visible intersections"
-#~ msgstr "Einungis sýnilegar skaranir"
-
-#~ msgid "Group collapsing"
-#~ msgstr "Innfelling hópa"
-
-#~ msgid "XML indentation (pretty-printing):"
-#~ msgstr "Inndráttur XML (áferðarfalleg prentun):"
-
-#~ msgid "Ids"
-#~ msgstr "Auðkennisnúmer"
-
-#~ msgid "Help (Options)"
-#~ msgstr "Hjálp (valmöguleikar)"
-
-#~ msgid "Help (Ids)"
-#~ msgstr "Hjálp (Ids)"
-
-#~ msgid "Max. smooth handle angle"
-#~ msgstr "Hámarkshorn mjúks haldfangs"
-
-#~ msgctxt "Flow control"
-#~ msgid "None"
-#~ msgstr "Ekkert"
-
-#~ msgid "Text Orientation: "
-#~ msgstr "Stefna texta: "
-
-#~ msgid "Arbitrary Angle"
-#~ msgstr "Frjálst horn"
-
-#~ msgid "import via Poppler"
-#~ msgstr "Flytja inn með Poppler"
-
-#~ msgid "Text handling:"
-#~ msgstr "Meðhöndlun texta:"
-
-#~ msgid "Import text as text"
-#~ msgstr "Flytja texta inn sem texta"
-
-#~ msgid "Boolops"
-#~ msgstr "Bólskar lykkjur"
-
-#~ msgid "Ignore cusp nodes"
-#~ msgstr "Hunsa frjálsa hnúta"
-
-#~ msgid "Helper nodes"
-#~ msgstr "Hjálparhnútar"
-
-#~ msgid "Show helper nodes"
-#~ msgstr "Sýna hjálparhnúta"
-
-#~ msgid "Helper handles"
-#~ msgstr "Hjálparhaldföng"
-
-#~ msgid "Show helper handles"
-#~ msgstr "Sýna hjálparhaldföng"
-
-#~ msgid "%1 (%2):"
-#~ msgstr "%1 (%2):"
-
-#~ msgid "http://wiki.inkscape.org/wiki/index.php/FAQ"
-#~ msgstr "http://wiki.inkscape.org/wiki/index.php/FAQ"
