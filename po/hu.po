@@ -13523,7 +13523,7 @@ msgstr "<b>Sokszög</b>"
 
 #: ../src/object/sp-polyline.cpp:119
 msgid "<b>Polyline</b>"
-msgstr "<b>Kapcsolódó vonalak</b>"
+msgstr "<b>Töröttvonal</b>"
 
 #: ../src/object/sp-rect.cpp:198 ../src/ui/dialog/inkscape-preferences.cpp:422
 msgid "Rectangle"
@@ -18047,7 +18047,7 @@ msgstr "Keresés spirálokra"
 
 #: ../src/ui/dialog/find.cpp:170
 msgid "Search paths, lines, polylines"
-msgstr "Keresés útvonalakra, vonalakra és kapcsolódó vonalakra"
+msgstr "Keresés útvonalakra, vonalakra és töröttvonalakra"
 
 #: ../src/ui/dialog/find.cpp:173
 msgid "Search text objects"
@@ -25718,7 +25718,7 @@ msgstr "Derékszögű"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:95
 msgid "Make connector orthogonal or polyline"
-msgstr "A kapocs derékszögű legyen vagy kapcsolódó vonalakból álljon"
+msgstr "A kapocs derékszögű legyen vagy töröttvonalból álljon"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:108
 msgid "Curvature:"
@@ -25766,7 +25766,7 @@ msgstr "Kapocstípus beállítása: derékszögű"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:247
 msgid "Set connector type: polyline"
-msgstr "Kapocstípus beállítása: kapcsolódó vonalak"
+msgstr "Kapocstípus beállítása: töröttvonal"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:294
 msgid "Change connector curvature"
@@ -33770,7 +33770,7 @@ msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
 "to Release 13 format using QCad."
 msgstr ""
-"%d KAPCSOLÓDÓ VONALAK ENTITÁS fordult elő és lett figyelmen kívül hagyva. "
+"%d TÖRÖTTVONAL ENTITÁS fordult elő és lett figyelmen kívül hagyva. "
 "Érdemes lenne előbb a QCad 13. kiadás formátumára konvertálni."
 
 #: ../share/extensions/embedimage.py:76
@@ -35205,7 +35205,7 @@ msgstr ""
 "    - klónok (az eredetihez való csatolás elveszik)\n"
 "- A „ROBO-Master spline” kimenete egy speciális spline, mely csak a ROBO-"
 "Master és AutoDesk számára olvasható, de az Inkscape számára nem.\n"
-"- A LWPOLYLINE kimenete többszörösen összekapcsolt kapcsolódó vonalakból "
+"- A LWPOLYLINE kimenete többszörösen összekapcsolt töröttvonalból "
 "áll. Érdemes letiltani, hogy a régi VONAL kimenetét lehessen használni.\n"
 "- Ki lehet választani minden réteg exportálását, vagy csak a láthatóakét, "
 "vagy csak a nevük alapján illeszkedőekét (nem kis- és nagybetű érzékeny, "
