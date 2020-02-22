@@ -7563,7 +7563,7 @@ msgstr "Orrialdearen ezarpenak"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:138
 msgid "Precision of approximating gradient meshes:"
-msgstr "Gradientearen mailaren gutxi gorabeherako doitasuna:"
+msgstr "Gradiente-amaraunaren gutxi gorabeherako doitasuna:"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:139
 msgid ""
@@ -7580,7 +7580,7 @@ msgid ""
 "Import via external library. Text consists of groups containing cloned "
 "glyphs where each glyph is a path. Images are stored internally. Meshes "
 "cause entire document to be rendered as a raster image."
-msgstr "Inportatu kanpoko liburutegi bat erabilita. Testua glifo klonatuak dituzten taldez osatuta egonogo da, gliko bakoitza bide bat izanik. Irudiak barnean biltegiratuko dira. Sareak badaude, dokumentu osoa raster irudia bailitzan errendatuko da."
+msgstr "Inportatu kanpoko liburutegi bat erabilita. Testua glifo klonatuak dituzten taldez osatuta egonogo da, glifo bakoitza bide bat izanik. Irudiak barnean biltegiratuko dira. Amaraunak badaude, dokumentu osoa raster irudia bailitzan errendatuko da."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:147
 msgid "Internal import"
@@ -7591,7 +7591,7 @@ msgid ""
 "Import via internal (Poppler derived) library. Text is stored as text but "
 "white space is missing. Meshes are converted to tiles, the number depends on "
 "the precision set below."
-msgstr "Inportatu (Popplerren deribatua den) barneko liburutegi bat erabilita. Testua testu modura biltegiratuko da baina zuriuneak faltako dira. Sareak lauza bihurtuko dira, horien kopurua behean ezarritako zehaztasunaren araberakoa izango da."
+msgstr "Inportatu (Popplerren deribatua den) barneko liburutegi bat erabilita. Testua testu modura biltegiratuko da baina zuriuneak faltako dira. Amaraunak lauza bihurtuko dira, horien kopurua behean ezarritako zehaztasunaren araberakoa izango da."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:155
 msgid "rough"
@@ -8320,17 +8320,17 @@ msgstr "Gradiente erradialaren <b>tarteko etena</b>"
 #: ../src/gradient-drag.cpp:98 ../src/ui/tools/gradient-tool.cpp:95
 #: ../src/ui/tools/mesh-tool.cpp:109
 msgid "Mesh gradient <b>corner</b>"
-msgstr "Sare-gradientearen <b>ertza</b>"
+msgstr "Amaraun-gradientearen <b>ertza</b>"
 
 #: ../src/gradient-drag.cpp:99 ../src/ui/tools/gradient-tool.cpp:96
 #: ../src/ui/tools/mesh-tool.cpp:110
 msgid "Mesh gradient <b>handle</b>"
-msgstr "Sare-gradientearen <b>heldulekua</b>"
+msgstr "Amaraun-gradientearen <b>heldulekua</b>"
 
 #: ../src/gradient-drag.cpp:100 ../src/ui/tools/gradient-tool.cpp:97
 #: ../src/ui/tools/mesh-tool.cpp:111
 msgid "Mesh gradient <b>tensor</b>"
-msgstr "Sare-gradientearen <b>tentsorea</b>"
+msgstr "Amaraun-gradientearen <b>tentsorea</b>"
 
 #: ../src/gradient-drag.cpp:550
 msgid "Added patch row or column"
@@ -20263,7 +20263,7 @@ msgstr "Txertatu SVG 1.1 bertsioko testuaren ordezkoa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1535
 msgid "Insert Mesh Gradient JavaScript polyfill."
-msgstr "Txertatu sare-gradientearen Javascript betegarri anitza"
+msgstr "Txertatu amaraun-gradientearen Javascript betegarri anitza"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1536
 msgid "Insert Hatch Paint Server JavaScript polyfill."
@@ -20275,7 +20275,7 @@ msgstr "Ordezko aukerak gehitzen ditu SVG 2 errendatu ezin dutenentzat."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1539
 msgid "Adds JavaScript polyfill to render meshes."
-msgstr "Javascripten betegarri anitza gehitzen du saretak errendatzeko."
+msgstr "Javascripten betegarri anitza gehitzen du amaraunak errendatzeko."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1540
 msgid "Adds JavaScript polyfill to render hatches (linear and absolute paths)."
@@ -25035,7 +25035,7 @@ msgstr "arrunta"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:169
 msgid "Create mesh gradient"
-msgstr "Sortu sare-gradientea"
+msgstr "Sortu amaraun-gradientea"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:173
 msgid "conical"
@@ -25054,7 +25054,7 @@ msgstr "Errenkadak:"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:220
 msgid "Number of rows in new mesh"
-msgstr "Sare berriko errenkada kopurua"
+msgstr "Amaraun berriaren errenkada kopurua"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:233
 #: ../share/extensions/guides_creator.inx:13
@@ -25064,7 +25064,7 @@ msgstr "Zutabeak:"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:234
 msgid "Number of columns in new mesh"
-msgstr "Sare berriko zutabe kopurua"
+msgstr "Amaraun berriaren zutabe kopurua"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:248
 msgid "Edit Fill"
@@ -25072,7 +25072,7 @@ msgstr "Editatu betegarria"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:249
 msgid "Edit fill mesh"
-msgstr "Editatu sarearen betegarria"
+msgstr "Editatu amaraunaren betegarria"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:257
 msgid "Edit Stroke"
@@ -25080,7 +25080,7 @@ msgstr "Editatu trazua"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:258
 msgid "Edit stroke mesh"
-msgstr "Editatu sarearen trazua"
+msgstr "Editatu amaraunaren trazua"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:266
 #: ../src/ui/toolbar/node-toolbar.cpp:333
@@ -25111,20 +25111,20 @@ msgstr "Aukeratu koloreak:"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:294
 msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr "Aukeratu koloreak azpiko sarean hautatutako izkina-nodoetatik."
+msgstr "Aukeratu koloreak azpiko amaraunean hautatutako izkina-nodoetatik."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:302
 msgid "Scale mesh to bounding box:"
-msgstr "Eskalatu sarea muga-koadrora:"
+msgstr "Eskalatu amarauna muga-koadrora:"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:303
 msgid "Scale mesh to fit inside bounding box."
-msgstr "Eskalatu sarea muga-koadrora doitu dadin."
+msgstr "Eskalatu amarauna muga-koadrora doitu dadin."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:313
 #: ../src/ui/toolbar/mesh-toolbar.cpp:314
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr "ABISUA: Sareen SVG sintaxia aldatu egin daiteke"
+msgstr "ABISUA: Amaraunen SVG sintaxia aldatu egin daiteke"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:323
 #: ../src/ui/toolbar/pencil-toolbar.cpp:151
@@ -25153,7 +25153,7 @@ msgid ""
 "\n"
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
-msgstr "Sare-gradienteak SVG 2 bertsioan berriak dira:\n"
+msgstr "Amaraun-gradienteak SVG 2 bertsioan berriak dira:\n"
 "* Sintaxia desberdina izan daiteke.\n"
 "* Web-nabigatzaileen inplementazioa ez dago bermatuta.\n"
 "\n"
@@ -25162,7 +25162,7 @@ msgstr "Sare-gradienteak SVG 2 bertsioan berriak dira:\n"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:561
 msgid "Set mesh type"
-msgstr "Ezarri sare mota"
+msgstr "Ezarri amaraun mota"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:96
 msgid "Insert node"
@@ -26759,7 +26759,7 @@ msgstr "<b>Arrastatu</b> edo <b>egin klik-bikoitza</b> gradientea sortzeko hauta
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a mesh on selected objects, "
 "<b>drag handles</b> to adjust meshes."
-msgstr "<b>Arrastatu</b> edo <b>egin klik-bikoitza</b> sarea sortzeko hautatutako objektuetan, <b>arrastatu heldulekuak</b> sareak doitzeko."
+msgstr "<b>Arrastatu</b> edo <b>egin klik-bikoitza</b> amarauna sortzeko hautatutako objektuetan, <b>arrastatu heldulekuak</b> sareak doitzeko."
 
 #: ../src/ui/tools-switch.cpp:104
 msgid ""
@@ -27162,47 +27162,47 @@ msgstr "%lu gurutzatzen"
 #, c-format
 msgid " out of %d mesh handle"
 msgid_plural " out of %d mesh handles"
-msgstr[0] " sarearen helduleku %d-etik"
-msgstr[1] " sarearen %d heldulekuetatik"
+msgstr[0] " amaraunaren helduleku %d-etik"
+msgstr[1] " amaraunaren %d heldulekuetatik"
 
 #: ../src/ui/tools/mesh-tool.cpp:156
 #, c-format
 msgid "<b>%d</b> mesh handle selected out of %d"
 msgid_plural "<b>%d</b> mesh handles selected out of %d"
-msgstr[0] "<b>%d</b>/%d sarearen helduleku hautatuta"
-msgstr[1] "<b>%d</b>/%d sarearen helduleku hautatuta"
+msgstr[0] "<b>%d</b>/%d amaraunaren helduleku hautatuta"
+msgstr[1] "<b>%d</b>/%d amaraunaren helduleku hautatuta"
 
 #. TRANSLATORS: The plural refers to number of selected objects
 #: ../src/ui/tools/mesh-tool.cpp:163
 #, c-format
 msgid "<b>No</b> mesh handles selected out of %d on %d selected object"
 msgid_plural "<b>No</b> mesh handles selected out of %d on %d selected objects"
-msgstr[0] "Sarearen %d heldulekutatik <b>ez da ezer</b> hautatu hautatutako %d objektutik"
-msgstr[1] "Sarearen %d heldulekutatik <b>ez da ezer</b> hautatu hautatutako %d objektuetatik"
+msgstr[0] "Amaraunaren %d heldulekutatik <b>ez da ezer</b> hautatu hautatutako %d objektutik"
+msgstr[1] "Amaraunaren %d heldulekutatik <b>ez da ezer</b> hautatu hautatutako %d objektuetatik"
 
 #: ../src/ui/tools/mesh-tool.cpp:294
 msgid "Split mesh row/column"
-msgstr "Zatitu sarearen errenkada/zutabea"
+msgstr "Zatitu amaraunaren errenkada/zutabea"
 
 #: ../src/ui/tools/mesh-tool.cpp:386
 msgid "Toggled mesh path type."
-msgstr "Txandakatu sarearen bide mota."
+msgstr "Txandakatu amaraunaren bide mota."
 
 #: ../src/ui/tools/mesh-tool.cpp:391
 msgid "Approximated arc for mesh side."
-msgstr "Sarearen aldeko gutxi gorabeherako arkua."
+msgstr "Amaraunaren aldeko gutxi gorabeherako arkua."
 
 #: ../src/ui/tools/mesh-tool.cpp:396
 msgid "Toggled mesh tensors."
-msgstr "Sarearen tentsoreak txandakatuta."
+msgstr "Amaraunaren tentsoreak txandakatuta."
 
 #: ../src/ui/tools/mesh-tool.cpp:401
 msgid "Smoothed mesh corner color."
-msgstr "Sarearen ertzeko kolorea leunduta."
+msgstr "Amaraunaren ertzeko kolorea leunduta."
 
 #: ../src/ui/tools/mesh-tool.cpp:406
 msgid "Picked mesh corner color."
-msgstr "Sarearen ertzeko kolorea hartuta."
+msgstr "Amaraunaren ertzeko kolorea hartuta."
 
 #: ../src/ui/tools/mesh-tool.cpp:411
 msgid "Inserted new row or column."
@@ -27210,11 +27210,11 @@ msgstr "Errenkada edo zutabe berria txertatu da."
 
 #: ../src/ui/tools/mesh-tool.cpp:482
 msgid "Fit mesh inside bounding box."
-msgstr "Doitu sarea muga-koadrora."
+msgstr "Doitu amarauna muga-koadrora."
 
 #: ../src/ui/tools/mesh-tool.cpp:1117
 msgid "Create mesh"
-msgstr "Sortu sarea"
+msgstr "Sortu amarauna"
 
 #: ../src/ui/tools/node-tool.cpp:657
 msgctxt "Node tool tip"
@@ -28667,11 +28667,11 @@ msgstr "<b>M</b>"
 
 #: ../src/ui/widget/selected-style.cpp:222
 msgid "Mesh gradient fill"
-msgstr "Sare-gradientearen betegarria"
+msgstr "Amaraun-gradientearen betegarria"
 
 #: ../src/ui/widget/selected-style.cpp:222
 msgid "Mesh gradient stroke"
-msgstr "Sare-gradientearen trazua"
+msgstr "Amaraun-gradientearen trazua"
 
 #: ../src/ui/widget/selected-style.cpp:230
 msgid "Different"
@@ -30389,11 +30389,11 @@ msgstr "Sortu eta editatu gradienteak"
 #: ../src/verbs.cpp:2876
 msgctxt "ContextVerb"
 msgid "Mesh"
-msgstr "Sarea"
+msgstr "Amarauna"
 
 #: ../src/verbs.cpp:2876
 msgid "Create and edit meshes"
-msgstr "Sortu eta editatu sareak"
+msgstr "Sortu eta editatu amaraunak"
 
 #: ../src/verbs.cpp:2878
 msgctxt "ContextVerb"
@@ -30572,11 +30572,11 @@ msgstr "Ireki gradientea tresnaren hobespenak"
 
 #: ../src/verbs.cpp:2923
 msgid "Mesh Preferences"
-msgstr "Sarearen hobespenak"
+msgstr "Amaraunaren hobespenak"
 
 #: ../src/verbs.cpp:2924
 msgid "Open Preferences for the Mesh tool"
-msgstr "Ireki gradiente-sarea tresnaren hobespenak"
+msgstr "Ireki amaraun-tresnaren hobespenak"
 
 #: ../src/verbs.cpp:2925
 msgid "Zoom Preferences"
@@ -31571,11 +31571,11 @@ msgstr "Ezarri gradientea trazuan"
 
 #: ../src/widgets/fill-style.cpp:720
 msgid "Set mesh on fill"
-msgstr "Ezarri sarea betegarrian"
+msgstr "Ezarri amarauna betegarrian"
 
 #: ../src/widgets/fill-style.cpp:720
 msgid "Set mesh on stroke"
-msgstr "Ezarri sarea trazuan"
+msgstr "Ezarri amarauna trazuan"
 
 #: ../src/widgets/fill-style.cpp:781
 msgid "Set pattern on fill"
@@ -31660,7 +31660,7 @@ msgstr "Gradiente erradiala"
 
 #: ../src/widgets/paint-selector.cpp:221
 msgid "Mesh gradient"
-msgstr "Sare-gradientea"
+msgstr "Amaraun-gradientea"
 
 #: ../src/widgets/paint-selector.cpp:228
 msgid "Unset paint (make it undefined so it can be inherited)"
@@ -31709,11 +31709,11 @@ msgstr "<b>Gradiente erradiala</b>"
 
 #: ../src/widgets/paint-selector.cpp:1030
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
-msgstr "Erabili <b>'Sarea' tresna</b> sarea aldatzeko."
+msgstr "Erabili <b>'Amarauna' tresna</b> sarea aldatzeko."
 
 #: ../src/widgets/paint-selector.cpp:1043
 msgid "<b>Mesh fill</b>"
-msgstr "<b>Sare-betegarria</b>"
+msgstr "<b>Amaraun-betegarria</b>"
 
 #: ../src/widgets/paint-selector.cpp:1366
 msgid ""
@@ -37607,7 +37607,7 @@ msgstr "Y funtzioa:"
 
 #: ../share/extensions/path_mesh_m2p.inx:3
 msgid "Mesh-Gradient to Path"
-msgstr "Sare-gradientea bidera"
+msgstr "Amaraun-gradientea bidera"
 
 #: ../share/extensions/path_mesh_m2p.inx:14
 msgid "Patches"
@@ -37620,32 +37620,32 @@ msgstr "Aurpegiak"
 
 #: ../share/extensions/path_mesh_m2p.inx:20
 msgid "Mesh to path"
-msgstr "Sarea bidera"
+msgstr "Amarauna bidera"
 
 #: ../share/extensions/path_mesh_m2p.inx:21
 msgid "Convert geometry of selected meshgradient to path data"
-msgstr "Bihurtu bide-datu hautatutako sare-gradientearen geometria"
+msgstr "Bihurtu bide-datu hautatutako amaraun-gradientearen geometria"
 
 #: ../share/extensions/path_mesh_m2p.inx:30
 #: ../share/extensions/path_mesh_p2m.inx:25
 msgid "Mesh"
-msgstr "Sarea"
+msgstr "Amarauna"
 
 #: ../share/extensions/path_mesh_p2m.inx:3
 msgid "Path to Mesh-Gradient"
-msgstr "Bidea sare-gradientera"
+msgstr "Bidea amaraun-gradientera"
 
 #: ../share/extensions/path_mesh_p2m.inx:11
 msgid "Convert each selected path to 1x1 mesh"
-msgstr "Bihurtu 1x1 sare hautatutako bide bakoitza"
+msgstr "Bihurtu 1x1 amaraun hautatutako bide bakoitza"
 
 #: ../share/extensions/path_mesh_p2m.inx:15
 msgid "Path to mesh"
-msgstr "Bidea sarera"
+msgstr "Bidea amaraunera"
 
 #: ../share/extensions/path_mesh_p2m.inx:16
 msgid "Convert geometry of selected path (4 corners) to a meshgradient"
-msgstr "Bihurtu sare-gradiente hautatutako bidearen geometria (4 izkinak)"
+msgstr "Bihurtu amaraun-gradiente hautatutako bidearen geometria (4 izkinak)"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
