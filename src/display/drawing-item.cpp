@@ -687,7 +687,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // Note 2: We only need to render carea of clip and mask, but
     //         iarea of the object.
     
-    Geom::OptIntRect iarea = carea;
+    Geom::OptIntRect iarea = Geom::intersect(_cacheRect(), _drawbox);
     // expand carea to contain the dependent area of filters.
     if (_filter && render_filters) {
         iarea = _cacheRect();
