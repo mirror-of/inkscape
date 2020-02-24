@@ -241,6 +241,7 @@ test:linux:
   dependencies:
     - inkscape:linux
   script:
+    - sed -i '/<policy domain="coder" rights="none"/d' /etc/ImageMagick-6/policy.xml
     - cd build
     - ctest -V
   artifacts:
