@@ -992,7 +992,12 @@ gchar const* SymbolsDialog::styleFromUse( gchar const* id, SPDocument* document)
   std::vector<SPUse*> l = useInDoc( document );
   for( auto use:l ) {
     if ( use ) {
-      gchar const *href = use->getRepr()->attribute("xlink:href");
+      // Support SVG2 style href
+      const gchar *href = use->getRepr()->attribute("href");
+      if (! href ) {
+        //Deprecated xlink:href reference:
+        href = use->getRepr()->attribute("xlink:href");
+      }
       if( href ) {
         Glib::ustring href2(href);
         Glib::ustring id2(id);

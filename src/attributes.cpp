@@ -54,6 +54,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR, "inkscape:highlight-color"},
     {SP_ATTR_INKSCAPE_SPRAY_ORIGIN, "inkscape:spray-origin"},
     /* SPAnchor */
+    {SP_ATTR_HREF, "href"},
     {SP_ATTR_XLINK_HREF, "xlink:href"},
     {SP_ATTR_XLINK_TYPE, "xlink:type"},
     {SP_ATTR_XLINK_ROLE, "xlink:role"},
