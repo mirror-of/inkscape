@@ -76,7 +76,7 @@ class AbstractShape(Element):
     def get_style(self):
         style = simplestyle.parseStyle(self.attr("style"))
         #remove any trailing space in dict keys/values
-        style = dict([(str.strip(k), str.strip(v)) for k,v in style.items()])
+        style = dict([(str(k).strip(), str(v).strip()) for k,v in style.items()])
         return style
 
     def set_style(self, style):
