@@ -33,6 +33,7 @@ class Timer;
 }
 
 namespace Inkscape {
+class Drawing;
 namespace UI {
 namespace Dialog {
 
@@ -61,6 +62,8 @@ private:
     DesktopTracker deskTrack;
     SPDesktop *desktop;
     SPDocument *document;
+    Drawing *drawing;
+    unsigned int visionkey;
     Glib::Timer *timer;
     Glib::Timer *renderTimer;
     bool pending;
