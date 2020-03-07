@@ -1373,6 +1373,18 @@ SPDesktopWidget::setWindowSize (gint w, gint h)
     }
 }
 
+#ifdef __APPLE__
+/**
+ * This should be a no-op, but on macOS it raises the given transient window to the
+ * top of other transient windows from the same parent.
+ */
+static gboolean transient_focus_in_callback(GtkWindow *window, GdkEvent *, gpointer)
+{
+    gtk_window_set_transient_for(window, gtk_window_get_transient_for(window));
+    return FALSE;
+}
+#endif
+
 /**
  * \note transientizing does not work on windows; when you minimize a document
  * and then open it back, only its transient emerges and you cannot access
@@ -1385,6 +1397,16 @@ SPDesktopWidget::setWindowTransient (void *p, int transient_policy)
     if (window)
     {
         GtkWindow *w = GTK_WINDOW(window->gobj());
+
+#ifdef __APPLE__
+        // Workaround for https://gitlab.gnome.org/GNOME/gtk/issues/2436
+        // The first time this window is made transient, connect the focus-in event to
+        // re-transientize the window in order to raise it above other transient windows.
+        if (gtk_window_get_transient_for(GTK_WINDOW(p)) == nullptr) {
+            g_signal_connect(GTK_WIDGET(p), "focus-in-event", G_CALLBACK(transient_focus_in_callback), nullptr);
+        }
+#endif
+
         gtk_window_set_transient_for (GTK_WINDOW(p), w);
 
         /*
