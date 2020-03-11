@@ -14444,7 +14444,7 @@ msgid ""
 "of horizontally."
 msgstr ""
 "<b>Alinea</b> els objectes amb el centre; <b>Maj</b> clic al centre per fer-ho "
-"verticalment, en lloc de horitzontalment."
+"verticalment, en lloc d'horitzontalment."
 
 #: ../src/seltrans.cpp:496 ../src/ui/dialog/transformation.cpp:907
 msgid "Skew"
@@ -14823,7 +14823,7 @@ msgstr "Desbloca els objectes de sota"
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/ui/contextmenu.cpp:154
 msgid "Enter group #%1"
-msgstr "Introduïu el grup #%1"
+msgstr "Entra al grup #%1"
 
 #: ../src/ui/contextmenu.cpp:168
 msgid "_Pop selection out of group"
@@ -20949,7 +20949,7 @@ msgstr "SVG 2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1537
 msgid "Insert SVG 1.1 fallback in text."
-msgstr "Inserta sistema alternatiu SVG 1.1 en text."
+msgstr "Insereix sistema alternatiu SVG 1.1 en text."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1538
 msgid "Insert Mesh Gradient JavaScript polyfill."
@@ -35348,7 +35348,7 @@ msgstr "Afegeix un sufix numèric al nom del fitxer"
 #: ../share/extensions/gcodetools_lathe.inx:61
 #: ../share/extensions/gcodetools_path_to_gcode.inx:41
 msgid "Directory:"
-msgstr "Directori"
+msgstr "Directori:"
 
 #: ../share/extensions/gcodetools_area.inx:83
 #: ../share/extensions/gcodetools_dxf_points.inx:29
