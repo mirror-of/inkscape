@@ -1558,6 +1558,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     }
 
     Geom::Affine const transform(item->transform);
+    float scaling_factor = item->i2doc_affine().descrim();
 
     item->doWriteTransform(item->getRepr(), Geom::identity());
 
@@ -1572,12 +1573,11 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
     float o_width = 0;
     {
-        {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
-        }
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
+        o_width /= scaling_factor;
 
-        if (o_width < 0.01){
+        if (scaling_factor == 0 || o_width < 0.01) {
             o_width = 0.01;
         }
     }
@@ -1718,7 +1718,12 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
 
 
-
+/**
+ * Apply offset to selected paths
+ * @param desktop Targetted desktop
+ * @param expand True if offset expands, False if it shrinks paths
+ * @param prefOffset Size of offset in pixels
+ */
 void
 sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 {
@@ -1751,6 +1756,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             continue;
 
         Geom::Affine const transform(item->transform);
+        float scaling_factor = item->i2doc_affine().descrim();
 
         item->doWriteTransform(item->getRepr(), Geom::identity());
 
@@ -1777,10 +1783,12 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
                     break;
             }
 
-            o_width = prefOffset;
+            // scale to account for transforms and document units
+            o_width = prefOffset / scaling_factor;
 
-            if (o_width < 0.1)
-                o_width = 0.1;
+            if (scaling_factor == 0 || o_width < 0.01) {
+                o_width = 0.01;
+            }
             o_miter = i_style->stroke_miterlimit.value * o_width;
         }
 
