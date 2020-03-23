@@ -60,3 +60,13 @@ spinbutton undershoot {
 #DesktopMainTable spinbutton{
     font-family: sans-serif;
 }
+toolbar button image {
+    min-width:19px;
+    min-height:19px;
+    padding:3px;
+}
+toolbar button {
+    min-width:25px;
+    min-height:25px;
+    padding:0px;
+}
