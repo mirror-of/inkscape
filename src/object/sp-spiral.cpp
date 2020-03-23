@@ -409,21 +409,29 @@ void SPSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
  */
 Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 {
-    if (pathEffectsEnabled() && !optimizeTransforms()) {
-        return xform;
-    }
-    // Only set transform with proportional scaling
-    if (!xform.withoutTranslation().isUniformScale()) {
-        return xform;
-    }
-    notifyTransform(xform);
-    /* Calculate spiral start in parent coords. */
-    Geom::Point pos( Geom::Point(this->cx, this->cy) * xform );
-
     /* This function takes care of translation and scaling, we return whatever parts we can't
        handle. */
     Geom::Affine ret(Geom::Affine(xform).withoutTranslation());
     gdouble const s = hypot(ret[0], ret[1]);
+    // Only set transform with proportional scaling
+    if (!xform.withoutTranslation().isUniformScale()) {
+        // Adjust stroke width
+        this->adjust_stroke(s);
+
+        // Adjust pattern fill
+        this->adjust_pattern(xform);
+
+        // Adjust gradient fill
+        this->adjust_gradient(xform);
+
+        // Adjust LPE
+        adjust_livepatheffect(Geom::identity(), xform , true);
+        return xform;
+    }
+
+    /* Calculate spiral start in parent coords. */
+    Geom::Point pos( Geom::Point(this->cx, this->cy) * xform );
+
     if (s > 1e-9) {
         ret[0] /= s;
         ret[1] /= s;
@@ -453,6 +461,9 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
+
+    // Adjust LPE
+    this->adjust_livepatheffect(xform, ret, !Geom::are_near(Geom::identity(),ret));
 
     return ret;
 }

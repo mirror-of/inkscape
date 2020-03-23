@@ -117,10 +117,10 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
     end.param_set_default();
 }
 
-void LPETransform2Pts::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void LPETransform2Pts::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
 {
-    start.param_transform_multiply(postmul, false);
-    end.param_transform_multiply(postmul, false);
+    start.param_transform_multiply(premul, postmul, set);
+    end.param_transform_multiply(premul, postmul, set);
 }
 
 void

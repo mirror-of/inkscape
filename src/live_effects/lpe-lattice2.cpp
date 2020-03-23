@@ -101,6 +101,35 @@ LPELattice2::LPELattice2(LivePathEffectObject *lpeobject) :
 LPELattice2::~LPELattice2()
 = default;
 
+void LPELattice2::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
+{
+    grid_point_0.param_transform_multiply(premul, postmul, set);
+    grid_point_1.param_transform_multiply(premul, postmul, set);
+    grid_point_2.param_transform_multiply(premul, postmul, set);
+    grid_point_3.param_transform_multiply(premul, postmul, set);
+    grid_point_4.param_transform_multiply(premul, postmul, set);
+    grid_point_5.param_transform_multiply(premul, postmul, set);
+    grid_point_6.param_transform_multiply(premul, postmul, set);
+    grid_point_7.param_transform_multiply(premul, postmul, set);
+    grid_point_8x9.param_transform_multiply(premul, postmul, set);
+    grid_point_10x11.param_transform_multiply(premul, postmul, set);
+    grid_point_12.param_transform_multiply(premul, postmul, set);
+    grid_point_13.param_transform_multiply(premul, postmul, set);
+    grid_point_14.param_transform_multiply(premul, postmul, set);
+    grid_point_15.param_transform_multiply(premul, postmul, set);
+    grid_point_16.param_transform_multiply(premul, postmul, set);
+    grid_point_17.param_transform_multiply(premul, postmul, set);
+    grid_point_18.param_transform_multiply(premul, postmul, set);
+    grid_point_19.param_transform_multiply(premul, postmul, set);
+    grid_point_20x21.param_transform_multiply(premul, postmul, set);
+    grid_point_22x23.param_transform_multiply(premul, postmul, set);
+    grid_point_24x26.param_transform_multiply(premul, postmul, set);
+    grid_point_25x27.param_transform_multiply(premul, postmul, set);
+    grid_point_28x30.param_transform_multiply(premul, postmul, set);
+    grid_point_29x31.param_transform_multiply(premul, postmul, set);
+    grid_point_32x33x34x35.param_transform_multiply(premul, postmul, set);
+}
+
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPELattice2::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
 {

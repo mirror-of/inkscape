@@ -317,11 +317,23 @@ PathParam::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::Pa
  * Only applies transform when not referring to other path!
  */
 void
-PathParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+PathParam::param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set, Geom::Point origmul)
 {
     // only apply transform when not referring to other path
     if (!href) {
-        set_new_value( _pathvector * postmul, true );
+        if (!Geom::are_near(origmul, Geom::Point())) {
+            Geom::OptRect bboxp = _pathvector.boundsFast();
+            if (bboxp) {
+                Geom::Point gap = origmul - (*bboxp).midpoint();
+                Geom::Affine transform = Geom::identity();
+                transform *= Geom::Translate(gap);
+                transform *= postmul;
+                transform *= Geom::Translate(gap).inverse();
+                set_new_value( _pathvector * transform, true );
+            }
+        } else {
+            set_new_value( _pathvector * postmul, true );
+        }
     }
 }
 

@@ -290,7 +290,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
 /**
  * returns true when LPE write unoptimiced
  */
-bool SPLPEItem::optimizeTransforms()
+bool SPLPEItem::optimizeTransforms(Geom::Affine const &transform)
 {
     bool ret = true;
     if (dynamic_cast<SPGroup *>(this)) {
@@ -309,12 +309,11 @@ bool SPLPEItem::optimizeTransforms()
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
             if (lpe) {
-                if (dynamic_cast<Inkscape::LivePathEffect::LPEMeasureSegments *>(lpe) ||
+                if (//dynamic_cast<Inkscape::LivePathEffect::LPEMeasureSegments *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPECloneOriginal *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPEBool *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe)) {
+                    (dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe) && transform.withoutTranslation() != Geom::identity())) 
+                {
                     ret = false;
                 }
             }
@@ -326,7 +325,7 @@ bool SPLPEItem::optimizeTransforms()
 /**
  * notify tranbsform applied to a LPE
  */
-void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
+void SPLPEItem::adjust_livepatheffect(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
 {
     std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
     for (i = this->path_effect_list->begin(); i != this->path_effect_list->end(); ++i) {
@@ -338,7 +337,7 @@ void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
             if (lpe && !lpe->is_load) {
-                lpe->transform_multiply(postmul, false);
+                lpe->transform_multiply(premul, postmul, set);
             }
         }
     }

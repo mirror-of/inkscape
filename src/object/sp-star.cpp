@@ -491,23 +491,28 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 {
     bool opt_trans = (randomized == 0);
-    if (pathEffectsEnabled() && !optimizeTransforms()) {
-        return xform;
-    }
+    /* This function takes care of translation and scaling, we return whatever parts we can't
+    handle. */
+    Geom::Affine ret(opt_trans ? xform.withoutTranslation() : xform);
+    gdouble const s = hypot(ret[0], ret[1]);
     // Only set transform with proportional scaling
     if (!xform.withoutTranslation().isUniformScale()) {
+        // Adjust stroke width
+        this->adjust_stroke(s);
+
+        // Adjust pattern fill
+        this->adjust_pattern(xform);
+
+        // Adjust gradient fill
+        this->adjust_gradient(xform);
+
+        adjust_livepatheffect(Geom::identity(), xform, true);
         return xform;
     }
-    notifyTransform(xform);
-
-
     /* Calculate star start in parent coords. */
     Geom::Point pos( this->center * xform );
 
-    /* This function takes care of translation and scaling, we return whatever parts we can't
-       handle. */
-    Geom::Affine ret(opt_trans ? xform.withoutTranslation() : xform);
-    gdouble const s = hypot(ret[0], ret[1]);
+
     if (s > 1e-9) {
         ret[0] /= s;
         ret[1] /= s;
@@ -537,6 +542,9 @@ Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
+
+    // Adjust LPE
+    this->adjust_livepatheffect(xform, ret, !Geom::are_near(Geom::identity(),ret));
 
     return ret;
 }

@@ -378,10 +378,6 @@ void SPRect::update_patheffect(bool write) {
 }
 
 Geom::Affine SPRect::set_transform(Geom::Affine const& xform) {
-    if (pathEffectsEnabled() && !optimizeTransforms()) {
-        return xform;
-    }
-    notifyTransform(xform);
     /* Calculate rect start in parent coords. */
     Geom::Point pos(Geom::Point(this->x.computed, this->y.computed) * xform);
 
@@ -434,6 +430,9 @@ Geom::Affine SPRect::set_transform(Geom::Affine const& xform) {
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
+
+    // Adjust LPE
+    this->adjust_livepatheffect(xform, ret, !Geom::are_near(Geom::identity(),ret));
 
     return ret;
 }

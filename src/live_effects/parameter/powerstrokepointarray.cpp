@@ -43,7 +43,7 @@ PowerStrokePointArrayParam::param_newWidget()
     return nullptr;
 }
 
-void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set, Geom::Point origmul)
 {
     // Check if proportional stroke-width scaling is on
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();

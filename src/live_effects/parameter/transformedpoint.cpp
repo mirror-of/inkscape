@@ -137,10 +137,24 @@ TransformedPointParam::set_and_write_new_values(Geom::Point const &new_origin, G
 }
 
 void
-TransformedPointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+TransformedPointParam::param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set, Geom::Point origmul)
 {
     if (!noTransform) {
-        set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );
+        if (!Geom::are_near(origmul, Geom::Point())) {
+            Geom::Point gap = origmul - origin;
+            Geom::Affine transform = Geom::identity();
+            transform *= Geom::Translate(gap);
+            transform *= postmul;
+            transform *= Geom::Translate(gap).inverse();
+            gap = origmul - vector;
+            Geom::Affine transformv = Geom::identity();
+            transformv *= Geom::Translate(gap);
+            transformv *= postmul;
+            transformv *= Geom::Translate(gap).inverse();
+            set_and_write_new_values( origin * transform, vector * transformv.withoutTranslation() );
+        } else {
+            set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );
+        }
     }
 }
 

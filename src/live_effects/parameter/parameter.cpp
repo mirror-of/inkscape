@@ -108,15 +108,9 @@ void ScalarParam::param_update_default(const gchar *default_value)
     }
 }
 
-void ScalarParam::param_transform_multiply(Geom::Affine const &postmul, bool set)
+void ScalarParam::param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set, Geom::Point origmul)
 {
-    // Check if proportional stroke-width scaling is on
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
-    if (transform_stroke || set) {
-        param_set_value(value * postmul.descrim());
-        write_to_SVG();
-    }
+    param_set_value(value * postmul.descrim());
 }
 
 void ScalarParam::param_set_value(gdouble val)

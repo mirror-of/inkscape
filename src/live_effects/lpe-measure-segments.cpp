@@ -209,6 +209,11 @@ LPEMeasureSegments::~LPEMeasureSegments() {
     doOnRemove(nullptr);
 }
 
+void LPEMeasureSegments::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
+{
+
+}
+
 Gtk::Widget *
 LPEMeasureSegments::newWidget()
 {
@@ -514,9 +519,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     if (showindex) {
         label_value = Glib::ustring("[") + Glib::ustring::format(counter) + Glib::ustring("] ") + label_value;
     }
-    if (!valid) {
-        label_value = Glib::ustring(_("Non Uniform Scale"));
-    }
+
     rstring->setContent(label_value.c_str());
     // this boring hack is to update the text with document scale inituialy loaded without root transform
     Geom::OptRect bounds = SP_ITEM(elemref)->geometricBounds();
@@ -657,7 +660,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     sp_repr_css_write_string(css,css_str);
     line->setAttributeOrRemoveIfEmpty("style", css_str);
     if (!elemref) {
-        elemref = document->getRoot()->appendChildRepr(line);
+        elemref = sp_lpe_item->parent->appendChildRepr(line);
         Inkscape::GC::release(line);
     }
 }
@@ -844,7 +847,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     //Avoid crashes on previews
     Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
     Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
-    Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();
     //Projection prepare
     Geom::PathVector pathvector;
     std::vector< Point > nodes;
@@ -853,7 +855,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         if (bbox) {
             Geom::Point mid =  bbox->midpoint();
             double angle = Geom::rad_from_deg(angle_projection);
-            Geom::Affine transform = itemtransform;
+            Geom::Affine transform = affinetransform * parentaffinetransform.inverse();
             transform *= Geom::Translate(mid).inverse();
             transform *= Geom::Rotate(angle).inverse();
             transform *= Geom::Translate(mid);
@@ -864,8 +866,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 if (iter->ref.isAttached() &&  iter->actived && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj)) {
                     SPItem * item = dynamic_cast<SPItem *>(obj);
                     if (item) {
+                        Geom::Affine parentaffinetransform_sub = i2anc_affine(SP_OBJECT(item->parent), SP_OBJECT(document->getRoot()));
                         Geom::Affine affinetransform_sub = i2anc_affine(SP_OBJECT(item), SP_OBJECT(document->getRoot()));
-                        Geom::Affine transform = affinetransform_sub ;
+                        transform = affinetransform_sub * parentaffinetransform_sub.inverse();
                         transform *= Geom::Translate(-mid);
                         transform *= Geom::Rotate(angle).inverse();
                         transform *= Geom::Translate(mid);
@@ -941,7 +944,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::Point next_stored = Geom::Point(0,0);
         if (!active_projection) {
             pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
-            pathvector *= affinetransform;
+            pathvector *= affinetransform * parentaffinetransform.inverse();
         }
         c->unref();
         auto format_str = format.param_getSVGValue();
@@ -1189,8 +1192,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         pos = pos + Point::polar(angle_cross, text_top_bottom + (fontsize/2.5));
                     }
                     double parents_scale = (parentaffinetransform.expansionX() + parentaffinetransform.expansionY()) / 2.0;
-                    if (!scale_sensitive) {
-                        length /= parents_scale;
+                    if (scale_sensitive) {
+                        length *= parents_scale;
                     }
                     if ((anotation_width/2) > Geom::distance(hstart,hend)/2.0) {
                         if (avoid_overlapping) {

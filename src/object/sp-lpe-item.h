@@ -70,8 +70,8 @@ public:
     Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
     virtual void update_patheffect(bool write);
-    bool optimizeTransforms();
-    void notifyTransform(Geom::Affine const &postmul);
+    bool optimizeTransforms(Geom::Affine const &transform);
+    void adjust_livepatheffect(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = false);
     bool performPathEffect(SPCurve *curve, SPShape *current, bool is_clip_or_mask = false);
     bool performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape::LivePathEffect::Effect *lpe, bool is_clip_or_mask = false);
     bool pathEffectsEnabled() const;

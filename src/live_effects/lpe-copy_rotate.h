@@ -44,6 +44,7 @@ public:
     void resetDefaults(SPItem const* item) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
+    void transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0) override;
     Gtk::Widget * newWidget() override;
     void cloneStyle(SPObject *orig, SPObject *dest);
     Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in);

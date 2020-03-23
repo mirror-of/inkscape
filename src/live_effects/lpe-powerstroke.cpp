@@ -847,9 +847,9 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     return path_out;
 }
 
-void LPEPowerStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void LPEPowerStroke::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
 {
-    offset_points.param_transform_multiply(postmul, false);
+    offset_points.param_transform_multiply(premul, postmul, set);
 }
 
 void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem)

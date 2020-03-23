@@ -96,9 +96,9 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
     }
 }
 
-void LPEBendPath::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void LPEBendPath::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
 {
-    bend_path.param_transform_multiply(postmul, false);
+    bend_path.param_transform_multiply(premul, postmul, set);
 }
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >

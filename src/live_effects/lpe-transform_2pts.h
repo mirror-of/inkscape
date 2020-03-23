@@ -34,7 +34,7 @@ public:
 
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
-    void transform_multiply(Geom::Affine const &postmul, bool set) override;
+    void transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0) override;
 
     Gtk::Widget *newWidget() override;
 

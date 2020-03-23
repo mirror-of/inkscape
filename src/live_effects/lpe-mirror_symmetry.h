@@ -46,6 +46,7 @@ public:
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doAfterEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;

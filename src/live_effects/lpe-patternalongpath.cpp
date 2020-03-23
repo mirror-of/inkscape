@@ -114,9 +114,9 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
 LPEPatternAlongPath::~LPEPatternAlongPath()
 = default;
 
-void LPEPatternAlongPath::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void LPEPatternAlongPath::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
 {
-    pattern.param_transform_multiply(postmul, false);
+    pattern.param_transform_multiply(premul, postmul, set);
 }
 
 void

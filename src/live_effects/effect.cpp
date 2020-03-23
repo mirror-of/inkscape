@@ -1156,9 +1156,9 @@ Effect::setCurrentZoom(double cZ)
 }
 
 /**
- * Overrided function to apply transforms for example to powerstrole, jointtype or tapperstroke
+ * Overrided function to apply transforms
  */
-void Effect::transform_multiply(Geom::Affine const &postmul, bool /*set*/) {}
+void Effect::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set) {}
 
 void
 Effect::setSelectedNodePoints(std::vector<Geom::Point> sNP)

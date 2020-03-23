@@ -44,7 +44,7 @@ public:
 
     void resetDefaults(SPItem const* item) override;
 
-    void transform_multiply(Geom::Affine const &postmul, bool set) override;
+    void transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0) override;
 
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
       

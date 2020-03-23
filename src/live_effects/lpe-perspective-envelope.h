@@ -37,7 +37,7 @@ public:
 
     virtual Geom::Point projectPoint(Geom::Point p);
 
-    void transform_multiply(Geom::Affine const &postmul, bool set) override;
+    void transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0) override;
 
     virtual Geom::Point projectPoint(Geom::Point p,  double m[][3]);
 

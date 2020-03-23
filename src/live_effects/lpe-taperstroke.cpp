@@ -94,12 +94,12 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
 // from LPEPowerStroke -- sets fill if stroke color because we will
 // be converting to a fill to make the new join.
 
-void LPETaperStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void LPETaperStroke::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
     if (transform_stroke) {
-        line_width.param_transform_multiply(postmul, false);
+        line_width.param_transform_multiply(premul, postmul, set);
     }
 }
 

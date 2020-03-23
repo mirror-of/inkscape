@@ -35,12 +35,12 @@ LPEEnvelope::LPEEnvelope(LivePathEffectObject *lpeobject) :
 LPEEnvelope::~LPEEnvelope()
 = default;
 
-void LPEEnvelope::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void LPEEnvelope::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
 {
-    bend_path1.param_transform_multiply(postmul, false);
-    bend_path2.param_transform_multiply(postmul, false);
-    bend_path3.param_transform_multiply(postmul, false);
-    bend_path4.param_transform_multiply(postmul, false);
+    bend_path1.param_transform_multiply(premul, postmul, set);
+    bend_path2.param_transform_multiply(premul, postmul, set);
+    bend_path3.param_transform_multiply(premul, postmul, set);
+    bend_path4.param_transform_multiply(premul, postmul, set);
 }
 
 void

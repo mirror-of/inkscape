@@ -50,7 +50,7 @@ public:
     {
         return true;
     }
-    void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/) override;
+    void param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0, Geom::Point origmul = Geom::Point()) override;
     void setUseDistance(bool use_knot_distance);
     void setCurrentZoom(double current_zoom);
     void setGlobalKnotHide(bool global_knot_hide);

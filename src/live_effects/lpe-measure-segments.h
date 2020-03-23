@@ -41,6 +41,7 @@ public:
     void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
     void doEffect (SPCurve * curve) override {};
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
+    void transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0) override;
     Gtk::Widget * newWidget() override;
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);

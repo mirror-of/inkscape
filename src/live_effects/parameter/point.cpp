@@ -141,9 +141,18 @@ PointParam::param_getDefaultSVGValue() const
 }
 
 void
-PointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+PointParam::param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set, Geom::Point origmul)
 {
-    param_setValue( (*this) * postmul, true);
+    if (!Geom::are_near(origmul, Geom::Point())) {
+        Geom::Point gap = origmul - (*this);
+        Geom::Affine transform = Geom::identity();
+        transform *= Geom::Translate(gap);
+        transform *= postmul;
+        transform *= Geom::Translate(gap).inverse();
+        param_setValue( (*this) * transform, true);
+    } else {
+        param_setValue( (*this) * postmul, true);
+    }
 }
 
 Gtk::Widget *

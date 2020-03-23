@@ -80,7 +80,7 @@ class Parameter {
     virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/){};
     virtual void param_setup_nodepath(Inkscape::NodePath::Path * /*np*/){};
 
-    virtual void param_transform_multiply(Geom::Affine const & /*postmul*/, bool set){};
+    virtual void param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0, Geom::Point origmul = Geom::Point()){};
 
     Glib::ustring param_key;
     Glib::ustring param_tooltip;
@@ -109,7 +109,7 @@ class ScalarParam : public Parameter {
     bool param_readSVGValue(const gchar *strvalue) override;
     Glib::ustring param_getSVGValue() const override;
     Glib::ustring param_getDefaultSVGValue() const override;
-    void param_transform_multiply(Geom::Affine const &postmul, bool set) override;
+    void param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0, Geom::Point origmul = Geom::Point()) override;
 
     void param_set_default() override;
     void param_update_default(gdouble default_value);

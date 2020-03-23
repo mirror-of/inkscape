@@ -81,6 +81,15 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
 = default;
 
+void LPEMirrorSymmetry::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
+{
+    // origin keep normal translation but starting point is rotated bsaed on BBOX
+    start_point.param_transform_multiply(premul, postmul, set);
+    end_point.param_transform_multiply(premul, postmul, set);
+    center_point.param_transform_multiply(premul, postmul, set);
+    previous_center = center_point;
+}
+
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {

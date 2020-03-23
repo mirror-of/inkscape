@@ -35,7 +35,7 @@ public:
 
     Gtk::Widget * param_newWidget() override;
 
-    void param_transform_multiply(Geom::Affine const& postmul, bool /*set*/) override;
+    void param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0, Geom::Point origmul = Geom::Point()) override;
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 

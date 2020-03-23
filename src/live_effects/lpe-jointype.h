@@ -25,7 +25,8 @@ public:
 
     void doOnApply(SPLPEItem const* lpeitem) override;
     void doOnRemove(SPLPEItem const* lpeitem) override;
-    void transform_multiply(Geom::Affine const &postmul, bool set) override;
+    void transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set = 0) override;
+
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:

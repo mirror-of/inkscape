@@ -109,6 +109,22 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
 LPECopyRotate::~LPECopyRotate()
 = default;
 
+void LPECopyRotate::transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set)
+{
+    Geom::Point origmul = Geom::Point();
+    // origin keep normal translation but starting point is rotated bsaed on BBOX
+    origin.param_transform_multiply(premul, postmul, set, origmul);
+    Geom::Affine transform = premul;
+    if (!set) {
+        transform = premul * postmul.inverse();
+    }
+    origmul = transform.rotationCenter();
+    if (!origmul.isFinite()) {
+        origmul = sp_lpe_item->getCenter();
+    }
+    starting_point.param_transform_multiply(premul, postmul, set, origmul);
+}
+
 void
 LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {

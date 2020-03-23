@@ -344,15 +344,26 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
         return Geom::identity();
     }
 
-    if (pathEffectsEnabled() && !optimizeTransforms()) {
+    if (!optimizeTransforms(transform)) {
+        // Adjust stroke
+        this->adjust_stroke(transform.descrim());
+
+        // Adjust pattern fill
+        this->adjust_pattern(transform);
+
+        // Adjust gradient fill
+        this->adjust_gradient(transform);
+
+        // Adjust LPE
+        this->adjust_livepatheffect(Geom::identity(), transform, true);
         return transform;
     }
+    
     if (hasPathEffectRecursive() && pathEffectsEnabled()) {
         _curve_before_lpe->transform(transform);
     } else {
         _curve->transform(transform);
     }
-    notifyTransform(transform);
     // Adjust stroke
     this->adjust_stroke(transform.descrim());
 
@@ -361,6 +372,9 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // Adjust gradient fill
     this->adjust_gradient(transform);
+
+    // Adjust LPE
+    this->adjust_livepatheffect(transform, Geom::identity(), false);
 
     // nothing remains - we've written all of the transform, so return identity
     return Geom::identity();

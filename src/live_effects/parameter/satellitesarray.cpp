@@ -176,7 +176,7 @@ void SatellitesArrayParam::addCanvasIndicators(
     hp_vec.push_back(_hp);
 }
 
-void SatellitesArrayParam::param_transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void SatellitesArrayParam::param_transform_multiply(Geom::Affine const &premul, Geom::Affine const &postmul, bool set, Geom::Point origmul)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
