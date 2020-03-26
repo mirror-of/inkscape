@@ -192,7 +192,9 @@
        <verb verb-id="DialogObjectProperties" />
        <verb verb-id="DialogSymbols" />
        <verb verb-id="DialogPaintServers" />
+       <!--
        <verb verb-id="DialogSelectors" />
+       -->
        <separator/>
        <verb verb-id="SelectionGroup" />
        <verb verb-id="SelectionUnGroup" />

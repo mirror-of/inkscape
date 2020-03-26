@@ -31,7 +31,9 @@
     <toolitem action='DialogText' />
     <toolitem action='DialogLayers' />
     <toolitem action='DialogXMLEditor' />
+    <!--
     <toolitem action='DialogSelectors' />
+    -->
     <toolitem action='DialogAlignDistribute' />
     <separator />
     <toolitem action='DialogDocumentProperties' />
