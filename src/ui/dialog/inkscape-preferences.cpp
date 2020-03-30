@@ -776,18 +776,16 @@ void InkscapePreferences::themeChange()
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool darktheme = prefs->getBool("/theme/preferDarkTheme", false);
         Glib::ustring themename = prefs->getString("/theme/gtkTheme");
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         GtkSettings *settings = gtk_settings_get_default();
         g_object_set(settings, "gtk-theme-name", themename.c_str(), NULL);
-        g_object_set(settings, "gtk-application-prefer-dark-theme", darktheme, NULL);
-        bool dark = darktheme || themename.find(":dark") != -1;
+        bool dark = themename.find(":dark") != -1;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
             Gdk::RGBA rgba;
             bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
-            if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
+            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
                 dark = true;
             }
         }
@@ -1121,9 +1119,6 @@ void InkscapePreferences::initPageUI()
     }
     _sys_user_themes_dir_copy.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_theme.add_line(true, _("User themes:"), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true, Gtk::manage(new Gtk::Box()));
-    _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);
-    _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
-    _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     // Icons
     _page_theme.add_group_header(_("Icons"));
     {

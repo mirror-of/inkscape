@@ -239,7 +239,6 @@ protected:
     UI::Widget::PrefOpenFolder _sys_user_themes_dir_copy;
     UI::Widget::PrefOpenFolder _sys_user_icons_dir_copy;
     UI::Widget::PrefCombo _icon_theme;
-    UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;
     UI::Widget::PrefCheckButton _symbolic_base_colors;
     UI::Widget::PrefColorPicker _symbolic_base_color;

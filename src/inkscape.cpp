@@ -378,14 +378,10 @@ void Application::add_gtk_css()
     gchar *gtkThemeName = nullptr;
     gchar *gtkIconThemeName = nullptr;
     Glib::ustring themeiconname;
-    gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
     if (settings) {
         g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
-        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        g_object_set(settings, "gtk-application-prefer-dark-theme",
-                     prefs->getBool("/theme/preferDarkTheme", gtkApplicationPreferDarkTheme), NULL);
         prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
