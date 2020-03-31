@@ -1991,6 +1991,13 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             res->Reset();
             theRes->ConvertToForme(res);
 
+            // Without this, too many nodes are created.
+            // This was removed earlier due to distoring small shapes.
+            // The threshold has been lowered which should reduce distortions.
+            // See: https://gitlab.com/inkscape/inkscape/-/issues/964
+            res->ConvertEvenLines(0.1);
+            res->Simplify(0.1);
+
             delete theShape;
             delete theRes;
         }
