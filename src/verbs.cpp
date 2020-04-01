@@ -2307,7 +2307,7 @@ void HelpUrlVerb::perform(SPAction *action, void *data)
     Glib::ustring url;
 
     static const char *lang = _("en");      // TODO: strip /en/ for English version?
-    static const char *version = "-master"; // TODO: make this auto-updating?
+    static const char *version = "100";     // TODO: make this auto-updating?
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_URL_ASK_QUESTION:
@@ -2323,7 +2323,7 @@ void HelpUrlVerb::perform(SPAction *action, void *data)
             url = Glib::ustring::compose("https://inkscape.org/%1/doc/keys%2.html", lang, version);
             break;
         case SP_VERB_HELP_URL_RELEASE_NOTES:
-            url = Glib::ustring::compose("https://inkscape.org/%1/release/inkscape%2", lang, version);
+            url = Glib::ustring::compose("https://inkscape.org/%1/release/inkscape-1.0", lang, version);
             break;
         case SP_VERB_HELP_URL_REPORT_BUG:
             url = Glib::ustring::compose("https://inkscape.org/%1/contribute/report-bugs/", lang);

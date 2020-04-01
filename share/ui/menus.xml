@@ -311,7 +311,7 @@
        <verb verb-id="HelpUrlReleaseNotes" />
        <verb verb-id="HelpUrlReportBug" />
        <verb verb-id="HelpUrlSvg11Spec" />
-       <verb verb-id="HelpUrlSvg2Spec" />
+       <!-- <verb verb-id="HelpUrlSvg2Spec" /> -->
        <separator/>
        <verb verb-id="HelpAboutMemory" />
        <verb verb-id="HelpAbout" show-icons="true"/>
