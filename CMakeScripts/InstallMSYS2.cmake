@@ -29,6 +29,7 @@ if(WIN32)
     ${MINGW_BIN}/libbrotlidec.dll
     ${MINGW_BIN}/libbz2-[0-9]*.dll
     ${MINGW_BIN}/libcairo-[0-9]*.dll
+    ${MINGW_BIN}/libcairo-gobject-[0-9]*.dll
     ${MINGW_BIN}/libcairomm-1.0-[0-9]*.dll
     ${MINGW_BIN}/libcdr-0.[0-9]*.dll
     ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
