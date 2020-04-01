@@ -39,6 +39,11 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0-rc1" date="2020-04-08">
+      <description>
+        <p>Candidate release for 1.0.</p>
+      </description>
+  </release>
     <release version="1.0-beta2" date="2019-12-01">
       <description>
         <p>Second beta package for the next version of Inkscape, for testing.</p>

@@ -1,3 +1,19 @@
+Inkscape 1.0 rc1
+
+Release hilights
+
+Released on 2020-04-08
+
+  • Improved SVG2 text support
+  • More tests
+  • Various bugfixes
+  • new About artwork :)
+
+Known issues
+
+  • https://gitlab.com/inkscape/inkscape/-/issues?milestone_title=Inkscape+1.0
+
+
 Inkscape 1.0beta2
 
 Release hilights
