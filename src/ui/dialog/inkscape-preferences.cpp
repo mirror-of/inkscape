@@ -782,12 +782,12 @@ void InkscapePreferences::themeChange()
         GtkSettings *settings = gtk_settings_get_default();
         g_object_set(settings, "gtk-theme-name", themename.c_str(), NULL);
         g_object_set(settings, "gtk-application-prefer-dark-theme", darktheme, NULL);
-        bool dark = darktheme || themename.find(":dark") != -1;
+        bool dark = themename.find(":dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
             Gdk::RGBA rgba;
             bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
-            if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
+            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
                 dark = true;
             }
         }
