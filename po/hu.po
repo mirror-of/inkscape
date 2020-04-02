@@ -31895,7 +31895,7 @@ msgstr "Háló"
 
 #: ../src/verbs.cpp:2871
 msgid "Create and edit meshes"
-msgstr "Színátmenetek létrehozása és szerkesztése"
+msgstr "Színátmenetes hálók létrehozása és szerkesztése"
 
 #: ../src/verbs.cpp:2873
 msgctxt "ContextVerb"
