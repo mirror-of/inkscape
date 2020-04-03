@@ -765,6 +765,7 @@ void PencilTool::addPowerStrokePencil()
             if (!lpeitem) {
                 return;
             }
+            Inkscape::DocumentUndo::ScopedInsensitive no_undo(document);
             tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
             if (tol > 30) {
                 tol = tol / (130.0 * (132.0 - tol));
