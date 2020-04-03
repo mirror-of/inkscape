@@ -141,6 +141,7 @@ set(ui_SRC
 	dialog/swatches.cpp
 	dialog/symbols.cpp
 	dialog/paint-servers.cpp
+	dialog/tags.cpp
 	dialog/template-load-tab.cpp
 	dialog/template-widget.cpp
 	dialog/text-edit.cpp
@@ -308,6 +309,7 @@ set(ui_SRC
 	dialog/swatches.h
 	dialog/symbols.h
 	dialog/paint-servers.h
+	dialog/tags.h
 	dialog/template-load-tab.h
 	dialog/template-widget.h
 	dialog/text-edit.h

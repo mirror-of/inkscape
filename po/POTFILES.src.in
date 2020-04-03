@@ -270,6 +270,7 @@
 ../src/ui/dialog/svg-preview.cpp
 ../src/ui/dialog/swatches.cpp
 ../src/ui/dialog/symbols.cpp
+../src/ui/dialog/tags.cpp
 ../src/ui/dialog/template-load-tab.cpp
 ../src/ui/dialog/template-widget.cpp
 ../src/ui/dialog/text-edit.cpp
