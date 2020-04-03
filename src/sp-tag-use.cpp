@@ -37,17 +37,9 @@ SPTagUse::SPTagUse()
 
 SPTagUse::~SPTagUse()
 {
-
-    if (child) {
-        detach(child);
-        child = NULL;
-    }
-
     ref->detach();
     delete ref;
     ref = 0;
-
-    _changed_connection.~connection(); //FIXME why?
 }
 
 void
@@ -64,12 +56,6 @@ SPTagUse::build(SPDocument *document, Inkscape::XML::Node *repr)
 void
 SPTagUse::release()
 {
-
-    if (child) {
-        detach(child);
-        child = NULL;
-    }
-
     _changed_connection.disconnect();
 
     g_free(href);
@@ -123,53 +109,17 @@ SPTagUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, gui
     }
 
     SPObject::write(xml_doc, repr, flags);
-    
-    if (ref->getURI()) {
-        gchar *uri_string = ref->getURI()->toString();
-        repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
-    }
 
     return repr;
 }
 
-/**
- * Returns the ultimate original of a SPTagUse (i.e. the first object in the chain of its originals
- * which is not an SPTagUse). If no original is found, NULL is returned (it is the responsibility
- * of the caller to make sure that this is handled correctly).
- *
- * Note that the returned is the clone object, i.e. the child of an SPTagUse (of the argument one for
- * the trivial case) and not the "true original".
- */
- 
-SPItem * SPTagUse::root()
-{
-    SPObject *orig = child;
-    while (orig && SP_IS_TAG_USE(orig)) {
-        orig = SP_TAG_USE(orig)->child;
-    }
-    if (!orig || !SP_IS_ITEM(orig))
-        return NULL;
-    return SP_ITEM(orig);
-}
-
 void
-SPTagUse::href_changed(SPObject */*old_ref*/, SPObject */*ref*/)
+SPTagUse::href_changed(SPObject *old_ref, SPObject *new_ref)
 {
-    if (href) {
-        SPItem *refobj = ref->getObject();
-        if (refobj) {
-            Inkscape::XML::Node *childrepr = refobj->getRepr();
-            const std::string typeString = NodeTraits::get_type_string(*childrepr);
-            
-            SPObject* child_ = SPFactory::createObject(typeString);
-            if (child_) {
-                child = child_;
-                attach(child_, lastChild());
-                sp_object_unref(child_, 0);
-                child_->invoke_build(this->document, childrepr, TRUE);
-
-            }
+    if (old_ref && getRepr()) {
+        char const *id = old_ref->getAttribute("id");
+        if (id) {
+            getRepr()->setAttribute("xlink:href", Glib::ustring("#") + id);
         }
     }
 }
