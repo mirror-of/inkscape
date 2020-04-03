@@ -32,7 +32,6 @@ class SPTagUse : public SPObject {
 public:
     // item built from the original's repr (the visible clone)
     // relative to the SPUse itself, it is treated as a child, similar to a grouped item relative to its group
-    SPObject *child;
     gchar *href;
 public:
     SPTagUse();
@@ -47,7 +46,6 @@ public:
     
     //virtual SPItem* unlink();
     virtual SPItem* get_original();
-    virtual SPItem* root();
 
     // the reference to the original object
     SPTagUseReference *ref;

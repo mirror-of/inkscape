@@ -101,8 +101,11 @@ public:
     }
     void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
     void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
+
+        static GQuark const _labelID = g_quark_from_string("id");
+
         if ( _pnl && _obj ) {
-            if ( name == _labelAttr ) {
+            if ( name == _labelAttr || name == _labelID ) {
                 _pnl->_updateObject( _obj);
             }
         }
@@ -312,6 +315,9 @@ bool TagsPanel::_checkForUpdated(const Gtk::TreePath &/*path*/, const Gtk::TreeI
         SPTagUse * use = SP_IS_TAG_USE(obj) ? SP_TAG_USE(obj) : nullptr;
         if (use && use->ref->isAttached()) {
             label = use->ref->getObject()->getAttribute("inkscape:label");
+            if (!label || !label[0]) {
+                label = use->ref->getObject()->getId();
+            }
         } else {
              label = obj->getAttribute("inkscape:label");
         }
