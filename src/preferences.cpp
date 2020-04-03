@@ -95,11 +95,6 @@ void Preferences::_loadDefaults()
 #ifdef _WIN32
     setBool("/options/desktopintegration/value", 1);
 #endif
-#if defined(GDK_WINDOWING_QUARTZ)
-    // No maximise for Quartz, see lp:1302627
-    setInt("/options/defaultwindowsize/value", -1);
-#endif
-
 }
 
 /**
