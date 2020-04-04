@@ -198,6 +198,35 @@ Pixbuf::~Pixbuf()
     }
 }
 
+#ifdef GDK_PIXBUF_CHECK_VERSION
+#if GDK_PIXBUF_CHECK_VERSION(2, 41, 0)
+#define HAVE_FIX_FOR_GDK_PIXBUF_ISSUE_70
+#endif
+#endif
+#ifndef HAVE_FIX_FOR_GDK_PIXBUF_ISSUE_70
+/**
+ * Incremental file read introduced to workaround
+ * https://gitlab.gnome.org/GNOME/gdk-pixbuf/issues/70
+ */
+static bool _workaround_issue_70__gdk_pixbuf_loader_write( //
+    GdkPixbufLoader *loader, guchar *decoded, gsize decoded_len, GError **error)
+{
+    bool success = true;
+    gsize bytes_left = decoded_len;
+    gsize secret_limit = 0xffff;
+    guchar *decoded_head = decoded;
+    while (bytes_left && success) {
+        gsize bytes = (bytes_left > secret_limit) ? secret_limit : bytes_left;
+        success = gdk_pixbuf_loader_write(loader, decoded_head, bytes, error);
+        decoded_head += bytes;
+        bytes_left -= bytes;
+    }
+
+    return success;
+}
+#define gdk_pixbuf_loader_write _workaround_issue_70__gdk_pixbuf_loader_write
+#endif
+
 Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
 {
     Pixbuf *pixbuf = NULL;
