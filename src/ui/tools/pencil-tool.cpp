@@ -882,15 +882,12 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
         double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
         double pressure_shrunk = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
         double pressure_computed = pressure_shrunk * dezoomify_factor;
-        double pressure_computed_scaled = pressure_computed * SP_ACTIVE_DOCUMENT->getDocumentScale().inverse()[Geom::X];
+        double pressure_computed_scaled = std::abs(pressure_computed * SP_ACTIVE_DOCUMENT->getDocumentScale().inverse()[Geom::X]);
         if (p != this->p[this->_npoints - 1]) {
-            if (this->pressure < 0.15) {
-                this->_wps.emplace_back(distance, 0);
-            } else {
-                this->_wps.emplace_back(distance, pressure_computed_scaled);
-            }
+            this->_wps.emplace_back(distance, pressure_computed_scaled);
         }
-        if (pressure_computed > 0.5) {
+        pressure_computed = std::abs(pressure_computed);
+        if (pressure_computed) {
             Geom::Circle pressure_dot(p, pressure_computed);
             Geom::Piecewise<Geom::D2<Geom::SBasis>> pressure_piecewise;
             pressure_piecewise.push_cut(0);
@@ -905,38 +902,9 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
             this->_pressure_curve->set_pathvector(pressure_path);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->_pressure_curve);
         }
-        // Example og work with std::future
-        // Retain for other works
-        /* std::future_status status;
-        bool stop = false;
-        bool nofuture = false;
-        try {
-            status = future.wait_for(std::chrono::seconds(0));
-        } catch (const std::future_error& e) {
-            stop = true;
-            if (e.code() == std::future_errc::no_state) {
-                nofuture = true;
-            } else {
-                std::cout << "Caught a future_error with code \"" << e.code()
-                << nofuture << future.valid() << "\"\nMessage: \"" << e.what() << "\"\n";
-            }
-        }
-        if (nofuture || status == std::future_status::ready) {
-            if (!stop && status == std::future_status::ready) {
-                future = std::async(std::launch::async, [this] {
-                    this->addPowerStrokePencil(false);
-                    return true;
-                });
-            }
-        } */
         if (last) {
             this->addPowerStrokePencil();
         }
-        /* sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
-        for (auto i:this->green_bpaths) {
-            sp_canvas_item_destroy(i);
-        }
-        this->green_bpaths.clear(); */
     }
 }
 
@@ -964,16 +932,14 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
     double min10 = 0;
     for (auto wps : this->_wps) {
         i++;
-        max10 = max10 > wps[Geom::Y] ? max10 : wps[Geom::Y];
-        min10 = min10 <= wps[Geom::Y] ? min10 : wps[Geom::Y];
-        if (!original_lenght) {
-            break;
-        }
+        Geom::Coord pressure = wps[Geom::Y];
+        max10 = max10  > pressure ? max10 : pressure;
+        min10 = min10 <= pressure ? min10 : pressure;
 
-        if (wps[Geom::X] > max) {
+        if (!original_lenght || wps[Geom::X] > max) {
             break;
         }
-        if (wps[Geom::Y] == 0 || path_size < 2 || wps[Geom::X] < min) {
+        if (wps[Geom::Y] == 0 || wps[Geom::X] < min) {
             continue;
         }
         if (previous[Geom::Y] < (max10 + min10) / 2.0) {
