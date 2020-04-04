@@ -798,12 +798,8 @@ void TagsPanel::_doTreeMove( )
             }
         }
         _desktop->selection->clear();
-        while (!_dnd_source.empty())
-        {
-            SPTag *src = _dnd_source.back();
-            _select_tag(src);
-            _dnd_source.pop_back();
-        }
+        // moveTo may have deleted src pointers, don't use them anymore
+        _dnd_source.clear();
         DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_TAGS,
                                                 _("Moved sets"));
     }
