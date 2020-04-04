@@ -50,10 +50,6 @@ public:
 
 #undef INK_CSS_STR_OP
 
-    char const *gcharp() const {
-        return ostr.str().c_str();
-    }
-
     std::string str() const {
         return ostr.str();
     }
