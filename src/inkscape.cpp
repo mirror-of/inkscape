@@ -398,7 +398,12 @@ void Application::add_gtk_css()
         if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
         } else {
-            prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
+            if (Glib::ustring(gtkIconThemeName) == "Adwaita") {
+                g_object_set(settings, "gtk-icon-theme-name", "hicolor", NULL);
+                prefs->setString("/theme/iconTheme", "hicolor");
+            } else {
+                prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
+            }
         }
 
     }

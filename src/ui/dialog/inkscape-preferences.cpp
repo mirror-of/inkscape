@@ -1222,10 +1222,10 @@ void InkscapePreferences::initPageUI()
         std::sort(values.begin(), values.end());
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
-        values.push_back(default_icon_theme);
         if (default_icon_theme == "Adwaita") {
             default_icon_theme = "hicolor";
         }
+        values.emplace_back(default_icon_theme);
         Glib::ustring default_icon_label = _("Use system icons");
         default_icon_label += " (" + default_icon_theme + ")";
         labels.emplace_back(default_icon_label);
