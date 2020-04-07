@@ -24,9 +24,6 @@ plugs:
   inkscape-config:
     interface: personal-files
     write: [ $HOME/.config/inkscape ]
-  user-fonts:
-    interface: personal-files
-    read: [ $HOME/.local/share/fonts ]
 
 slots:
   inkscape-dbus:
@@ -136,7 +133,6 @@ apps:
       - cups-control
       - removable-media
       - inkscape-config
-      - user-fonts
     slots:
       - inkscape-dbus
     desktop: share/applications/org.inkscape.Inkscape.desktop
@@ -145,7 +141,6 @@ apps:
       INKSCAPE_PROFILE_DIR: ${AAREALHOME}/.config/inkscape
       INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
       INKSCAPE_DATADIR: ${SNAP}/share
-      XDG_DATA_DIRS: ${XDG_DATA_DIRS}:${AAREALHOME}/.local/share
     extensions: [ gnome-3-28 ]
   viewer:
     command: bin/inkview
@@ -155,11 +150,9 @@ apps:
       - unity7
       - removable-media
       - inkscape-config
-      - user-fonts
     environment:
       AAREALHOME: ${SNAP_USER_DATA}/../../..
       INKSCAPE_PROFILE_DIR: ${AAREALHOME}/.config/inkscape
       INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
       INKSCAPE_DATADIR: ${SNAP}/share
-      XDG_DATA_DIRS: ${XDG_DATA_DIRS}:${AAREALHOME}/.local/share
     extensions: [ gnome-3-28 ]
