@@ -34,6 +34,7 @@ Optionen:
     -C, --export-area-page
     -D, --export-area-drawing
         --export-area-snap
+        --export-margin=WERT
     -i, --export-id=ID
     -j, --export-id-only
     -t, --export-use-hints
@@ -55,6 +56,9 @@ Optionen:
         --export-ignore-filters
 
     -l, --export-plain-svg=DATEINAME
+
+    -m, --export-wmf=DATEINAME
+    -M, --export-emf=DATEINAME
 
     -p, --print=DRUCKER
 
@@ -78,6 +82,7 @@ Optionen:
 
         --vacuum-defs
         --no-convert-text-baseline-spacing
+        --convert-dpi-method=METHODE
 
         --g-fatal-warnings
 
@@ -162,6 +167,12 @@ der Begrenzung eines Objektes gebildet wird (mit L<--export-id> oder
 L<--export-area-drawing>), das selbst nicht am Pixel-Raster ausgerichtet
 ist.
 
+=item B<--export-margin>=I<WERT>
+
+Fügt einen Rand zum Exportbereich hinzu. Die Randgröße wird in Einheiten der
+Seitengröße (für SVG) oder in Millimetern (für PS/EPS/PDF) angegeben. Die
+Option hat für andere Exportformate derzeit keine Funktion.
+
 =item B<-b> I<FARBE>, B<--export-background>=I<FARBE>
 
 Die Hintergrundfarbe für das exportierte PNG-Bild. Jeder Farbwert, der von
@@ -182,13 +193,15 @@ Wert ersetzt den DPI-Hinweis in der SVG-Datei, wenn gleichzeitig
 
 =item B<-e> I<DATEINAME>, B<--export-png>=I<DATEINAME>
 
-Angabe des Dateinamens für den Export nach PNG. Falls die Datei existiert,
-wird sie ohne Nachfrage überschrieben.
+Angabe des Dateinamens für den Export nach PNG. Falls die Datei bereits
+existiert, wird sie ohne Nachfrage überschrieben. Benutzen von `-' als
+Dateiname leitet die Bilddaten auf die Standardausgabe (stdout) um.
 
 =item B<-f> I<DATEINAME>, B<--file>=I<DATEINAME>
 
-Öffnet angegebene(s) Dokument(e). Die Optionen können auch weggelassen
-werden, d.h. Dateinamen können auch ohne -f angegeben werden.
+Öffnet angegebene(s) Dokument(e). Der Optionsname können auch weggelassen
+werden, d.h. Dateinamen können auch ohne -f angegeben werden. Benutzen von
+`-' als Dateiname liest die Vektordaten von der Standardeingabe (stdin).
 
 =item B<-g>, B<--with-gui>
 
@@ -221,7 +234,8 @@ und bewirkt daher nichts.
 =item B<-l>, B<--export-plain-svg>=I<DATEINAME>
 
 Export des Dokumentes als normales SVG ohne jegliche sodipodi:- oder
-inkscape:-Namensräume und ohne RDF-Metadaten.
+inkscape:-Namensräume und ohne RDF-Metadaten. Benutzen von `-' als Dateiname
+leitet die Bilddaten auf die Standardausgabe (stdout) um.
 
 =item B<-x>, B<--extension-directory>
 
@@ -254,8 +268,8 @@ ermöglicht es, diese Objekte mit verschiedenen Verben zu
 bearbeiten. C<--verb=EditDeselect> verwirft die gesamte Auswahl. Die
 verfügbaren Objekt-IDs hängen vom Dokument ab, das geladen werden soll.
 
-Note that the L<--verb> command requires a GUI, and thus cannot be used with
-the L<--z> option.
+Die Option L<--verb> benötigt eine grafische Benutzeroberfläche (GUI) und
+kann deshalb nicht zusammen mit der L<--z> Option verwendet werden.
 
 =item B<-p> I<DRUCKER>, B<--print>=I<DRUCKER>
 
@@ -313,7 +327,8 @@ Seite begrenzt, kann jedoch mittels L<--export-area-drawing> auf die
 Zeichnung beschränkt werden. Mit L<--export-id> kann ein einzelnes Objekt
 zum Export angegeben werden (alle anderen werden versteckt). In diesem Fall
 ist der Exportbereich der Rahmen des entsprechenden Objektes, kann jedoch
-mit L<--export-area-page> auf die Seite gesetzt werden.
+mit L<--export-area-page> auf die Seite gesetzt werden. Benutzen von `-' als
+Dateiname leitet die Bilddaten auf die Standardausgabe (stdout) um.
 
 =item B<-E> I<DATEINAME>, B<--export-eps>=I<DATEINAME>
 
@@ -324,7 +339,8 @@ Schriftarten werden unterteilt und eingebettet. Der Standard-Exportbereich
 ist durch die Seite begrenzt, kann aber auch auf die Zeichnung beschränkt
 werden, siehe L<--export-area-drawing> für Hinweise zu möglichen
 Einschränkungen. Mit L<--export-id> kann ein einzelnes Objekt zum Export
-angegeben werden (alle anderen werden versteckt).
+angegeben werden (alle anderen werden versteckt). Benutzen von `-' als
+Dateiname leitet die Bilddaten auf die Standardausgabe (stdout) um.
 
 =item B<-A> I<DATEINAME>, B<--export-pdf>=I<DATEINAME>
 
@@ -335,7 +351,8 @@ jedoch mittels L<--export-area-drawing> auf die Zeichnung beschränkt
 werden. Mit L<--export-id> kann ein einzelnes Objekt zum Export angegeben
 werden (alle anderen werden versteckt). In diesem Fall ist der Exportbereich
 der Rahmen des entsprechenden Objektes, kann jedoch mit
-L<--export-area-page> auf die Seite gesetzt werden.
+L<--export-area-page> auf die Seite gesetzt werden. Benutzen von `-' als
+Dateiname leitet die Bilddaten auf die Standardausgabe (stdout) um.
 
 =item B<--export-pdf-version>=I<PDF-VERSION>
 
@@ -370,6 +387,14 @@ ignoriert dabei die Filter (für Export nach PS, EPS und PDF). Standardmäßig
 werden alle gefilterten Objekte mit der L<--export-dpi> (standardmäßig 96
 dpi) in Rastergrafiken umgewandelt, so dass sich ihr Aussehen nicht
 verändert.
+
+=item B<-m> I<DATEINAME>, B<--export-wmf>=I<DATEINAME>
+
+Exportiert Dokument(e) in das Windows Metafile (WMF) Format.
+
+=item B<-M> I<DATEINAME>, B<--export-emf>=I<DATEINAME>
+
+Exportiert Dokument(e) in das Enhanced Windows Metafile (EMF) Format.
 
 =item B<-I>, B<--query-id>
 
@@ -440,11 +465,22 @@ worden sind, beim Laden angepasst, um das Erscheinungsbild des Textes zu
 erhalten. Der Kommandozeilenbefehl bewirkt, dass die Anpassung nicht
 vorgenommen wird.
 
+=item B<--convert-dpi-method>=I<METHODE>
+
+Wähle die Methode um ältere (vor Version 0.92) Dateien neu zu skalieren, die
+auf Grund der Umstellung von 90 DPI auf 96 DPI bei der Auswertung von
+Längenangaben in Einheiten von Pixeln etwas kleiner dargestellt
+werden.Mögliche Werte sind "none" (keine Änderung, Dokument wird mit 94% der
+ursprünglichen Größe dargestellt), "scale-viewbox" (Dokument wird als Ganzes
+neu skaliert, einzelne Längenangaben bleiben unverändert) und
+"scale-document" (jede Längenangabe wird einzeln neu skaliert).
+
 =item B<-z>, B<--without-gui>
 
 Öffnet nicht die Benutzeroberfläche (auf Unix: verwendet nicht den
 X-Server). Dateien werden nur vom Terminal aus bearbeitet. Standardmäßig
-aktiv für die Optionen -p, -e,  -l und --vacuum-defs.
+aktiv für die Optionen -p, -e, -l und --vacuum-defs. Kann nicht zusammen mit
+der Option --verb benutzt werden.
 
 =item B<--g-fatal-warnings>
 

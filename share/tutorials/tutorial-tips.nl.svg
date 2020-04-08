@@ -43,307 +43,275 @@
   <flowDiv xml:space="preserve">Deze handleiding demonstreert verschillende tips en trucs die gebruikers leerden door het gebruik van Inkscape, alsook enkele “verborgen” features die je werk kunnen versnellen.</flowDiv>
  </flowRoot>
  <text x="10" y="87.687498" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="87.687498">Radial placement with Tiled Clones</tspan>
+  <tspan x="10" y="87.687498">Radiale positionering met behulp van Getegelde Klonen</tspan>
  </text>
  <rect id="x" x="10" y="92.887" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#x"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">It's easy to see how to use the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Create Tiled Clones</flowSpan> dialog for rectangular grids and
-patterns. But what if you need <flowSpan font-style="italic">radial</flowSpan> placement, where objects
-share a common center of rotation? It's possible too!
-</flowDiv>
+  <flowDiv xml:space="preserve">Het gebruik van <flowSpan font-family="Liberation Sans,Arial,sans-serif">Tegels met klonen</flowSpan> is eenvoudig in te zien voor rechthoekige rasters en patronen. Maar wat als je <flowSpan font-style="italic">radiale</flowSpan> positionering nodig hebt, waar objecten een gemeenschappelijk rotatiemiddelpunt hebben? Dat is ook mogelijk!</flowDiv>
  </flowRoot>
- <rect id="ay" x="10" y="131.67" width="288" height="1e3px" display="none"/>
+ <rect id="ay" x="10" y="131.69" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ay"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">If your radial pattern only needs to have 3, 4, 6, 8, or 12 elements, then you can try the
-P3, P31M, P3M1, P4, P4M, P6, or P6M symmetries. These will work nicely for snowflakes
-and the like. A more general method, however, is as follows.
-</flowDiv>
+  <flowDiv xml:space="preserve">Indien je radiaal patroon slechts 3, 4, 6, 8, of 12 elementen bevat, probeer dan de P3-, P31M-, P3M1-, P4-, P4M-, P6- of P6M-symmetrieën. Deze geven een mooi resultaat voor sneeuwvlokken en dergelijke. Een meer algemene methode is alsvolgt.</flowDiv>
  </flowRoot>
- <rect id="av" x="10" y="170.31" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="170.33" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Kies de P1-symmetrie (eenvoudige verplaatsing) en <flowSpan font-style="italic">compenseer</flowSpan> vervolgens voor de verplaatsing door naar de tab <flowSpan font-family="Liberation Sans,Arial,sans-serif">Verplaatsing</flowSpan> te gaan en <flowSpan font-family="Liberation Sans,Arial,sans-serif">Per rij / Y-verplaatsing</flowSpan> en <flowSpan font-family="Liberation Sans,Arial,sans-serif">Per kolom / X-verplaatsing</flowSpan> beide op -100% in te stellen. Nu zullen alle klonen exact op het origineel liggen. Alles wat nu nog gedaan moet worden is naar de tab <flowSpan font-family="Liberation Sans,Arial,sans-serif">Rotatie</flowSpan> te gaan en een rotatie per kolom in te stellen. Creëer vervolgens het patroon met een rij en meerdere kolommen. Hier is bijvoorbeeld een patroon gemaakt uit een horizontale lijn met 30 kolommen en elke kolom geroteerd over 6 graden:</flowDiv>
  </flowRoot>
- <path id="c" transform="translate(10 259.74)" d="m81.5 58.9h117.5" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:tile-cx="160.25000" inkscape:tile-cy="346.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="117.80000"/>
- <use transform="translate(10 259.74) matrix(.99452 .10453 -.10453 .99452 6.9252 -14.337) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.97815 .20791 -.20791 .97815 15.311 -27.872) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.95106 .30902 -.30902 .95106 25.065 -40.457) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.91354 .40674 -.40674 .91354 36.082 -51.953) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.86602 .5 -.5 .86602 48.24 -62.234) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.80902 .58778 -.58778 .80902 61.406 -71.188) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.74314 .66913 -.66913 .74314 75.436 -78.717) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.66913 .74314 -.74314 .66913 90.176 -84.738) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.58778 .80902 -.80902 .58778 105.46 -89.185) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.5 .86602 -.86602 .5 121.13 -92.01) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.40674 .91354 -.91354 .40674 137.01 -93.181) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.30902 .95106 -.95106 .30902 152.93 -92.687) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.20791 .97815 -.97815 .20791 168.7 -90.531) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(.10453 .99452 -.99452 .10453 184.17 -86.738) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(6.123e-17 1 -1 6.123e-17 199.15 -81.35) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.10453 .99452 -.99452 -.10453 213.49 -74.425) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.20791 .97815 -.97815 -.20791 227.02 -66.039) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.30902 .95106 -.95106 -.30902 239.61 -56.285) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.40674 .91354 -.91354 -.40674 251.1 -45.268) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.5 .86602 -.86602 -.5 261.38 -33.11) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.58778 .80902 -.80902 -.58778 270.34 -19.944) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.66913 .74314 -.74314 -.66913 277.87 -5.9144) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.74314 .66913 -.66913 -.74314 283.89 8.8256) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.80902 .58778 -.58778 -.80902 288.34 24.114) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.86602 .5 -.5 -.86602 291.16 39.784) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.91354 .40674 -.40674 -.91354 292.33 55.663) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.95106 .30902 -.30902 -.95106 291.84 71.577) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.97815 .20791 -.20791 -.97815 289.68 87.353) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <use transform="translate(10 259.74) matrix(-.99452 .10453 -.10453 -.99452 285.89 102.82) translate(-10 -259.74)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
- <rect id="al" x="10" y="389.24" width="288" height="1e3px" display="none"/>
+ <path id="c" transform="translate(10 259.76)" d="m81.5 58.9h117.5" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:tile-cx="160.25000" inkscape:tile-cy="346.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="117.80000"/>
+ <use transform="translate(10 259.76) matrix(.99452 .10453 -.10453 .99452 6.9252 -14.337) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.97815 .20791 -.20791 .97815 15.311 -27.872) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.95106 .30902 -.30902 .95106 25.065 -40.457) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.91354 .40674 -.40674 .91354 36.082 -51.953) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.86602 .5 -.5 .86602 48.24 -62.234) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.80902 .58778 -.58778 .80902 61.406 -71.188) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.74314 .66913 -.66913 .74314 75.436 -78.717) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.66913 .74314 -.74314 .66913 90.176 -84.738) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.58778 .80902 -.80902 .58778 105.46 -89.185) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.5 .86602 -.86602 .5 121.13 -92.01) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.40674 .91354 -.91354 .40674 137.01 -93.181) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.30902 .95106 -.95106 .30902 152.93 -92.687) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.20791 .97815 -.97815 .20791 168.7 -90.531) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(.10453 .99452 -.99452 .10453 184.17 -86.738) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(6.123e-17 1 -1 6.123e-17 199.15 -81.35) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.10453 .99452 -.99452 -.10453 213.49 -74.425) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.20791 .97815 -.97815 -.20791 227.02 -66.039) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.30902 .95106 -.95106 -.30902 239.61 -56.285) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.40674 .91354 -.91354 -.40674 251.1 -45.268) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.5 .86602 -.86602 -.5 261.38 -33.11) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.58778 .80902 -.80902 -.58778 270.34 -19.944) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.66913 .74314 -.74314 -.66913 277.87 -5.9144) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.74314 .66913 -.66913 -.74314 283.89 8.8256) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.80902 .58778 -.58778 -.80902 288.34 24.114) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.86602 .5 -.5 -.86602 291.16 39.784) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.91354 .40674 -.40674 -.91354 292.33 55.663) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.95106 .30902 -.30902 -.95106 291.84 71.577) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.97815 .20791 -.20791 -.97815 289.68 87.353) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <use transform="translate(10 259.76) matrix(-.99452 .10453 -.10453 -.99452 285.89 102.82) translate(-10 -259.76)" width="744.09448" height="1052.3622" xlink:href="#c" inkscape:tiled-clone-of="#path25"/>
+ <rect id="al" x="10" y="389.26" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#al"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Om hier een wijzerplaat van een klok van te maken is het centrale deel wegsnijden (ontlink eerst de klonen voor booleaanse operaties) of overtekenen met een witte cirkel.</flowDiv>
  </flowRoot>
- <rect id="ak" x="10" y="417.14" width="288" height="1e3px" display="none"/>
+ <rect id="ak" x="10" y="417.16" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ak"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Interessantere effecten kunnen gemaakt worden door van zowel rijen als kolommen gebruik te maken. Hier is een patroon met 10 kolommen en 8 rijen met een rotatie van 2 graden per rij en 18 per kolom. Elke groep lijnen is hier een “kolom” zodat de groepen 18 graden van elkaar liggen, met in elke kolom individuele lijnen die 2 graden uit elkaar liggen:</flowDiv>
  </flowRoot>
- <path id="a" transform="translate(10 485.05)" d="m72.5 71.65h143" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:tile-cx="164.00000" inkscape:tile-cy="543.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="143.30000"/>
- <use transform="translate(10 485.05) matrix(.99966 .026177 -.026177 .99966 1.9249 -3.7451) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.99863 .052336 -.052336 .99863 3.9472 -7.438) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.99692 .078459 -.078459 .99692 6.0655 -11.077) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.99452 .10453 -.10453 .99452 8.2785 -14.66) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.99144 .13053 -.13053 .99144 10.584 -18.183) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.98769 .15643 -.15643 .98769 12.982 -21.645) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.98326 .18224 -.18224 .98326 15.468 -25.042) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.95106 .30902 -.30902 .95106 29.189 -40.991) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.94264 .33381 -.33381 .94264 32.177 -43.959) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.93358 .35837 -.35837 .93358 35.241 -46.846) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.92388 .38268 -.38268 .92388 38.381 -49.652) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.91354 .40674 -.40674 .91354 41.592 -52.376) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.90258 .43051 -.43051 .90258 44.874 -55.014) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.89101 .45399 -.45399 .89101 48.224 -57.565) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.87882 .47716 -.47716 .87882 51.639 -60.028) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.80902 .58778 -.58778 .80902 69.617 -70.957) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.79335 .60876 -.60876 .79335 73.375 -72.856) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.77715 .62932 -.62932 .77715 77.182 -74.655) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.76041 .64945 -.64945 .76041 81.034 -76.354) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.74314 .66913 -.66913 .74314 84.93 -77.951) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.72537 .68836 -.68836 .72537 88.866 -79.446) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.70711 .70711 -.70711 .70711 92.841 -80.837) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.68836 .72537 -.72537 .68836 96.85 -82.124) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.58778 .80902 -.80902 .58778 117.32 -86.963) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.56641 .82413 -.82413 .56641 121.49 -87.607) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.54464 .83867 -.83867 .54464 125.66 -88.142) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.5225 .85264 -.85264 .5225 129.85 -88.567) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.5 .86602 -.86602 .5 134.05 -88.883) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.47716 .87882 -.87882 .47716 138.26 -89.088) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.45399 .89101 -.89101 .45399 142.47 -89.184) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.43051 .90258 -.90258 .43051 146.68 -89.168) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.30902 .95106 -.95106 .30902 167.64 -87.443) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.28402 .95882 -.95882 .28402 171.8 -86.77) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.25882 .96593 -.96593 .25882 175.94 -85.988) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.23344 .97237 -.97237 .23344 180.05 -85.098) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.20791 .97815 -.97815 .20791 184.14 -84.1) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.18224 .98326 -.98326 .18224 188.21 -82.996) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.15643 .98769 -.98769 .15643 192.24 -81.786) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(.13053 .99144 -.99144 .13053 196.24 -80.47) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(6.123e-17 1 -1 6.123e-17 215.65 -72.35) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.026177 .99966 -.99966 -.026177 219.4 -70.425) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.052336 .99863 -.99863 -.052336 223.09 -68.403) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.078459 .99692 -.99692 -.078459 226.73 -66.285) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.10453 .99452 -.99452 -.10453 230.31 -64.072) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.13053 .99144 -.99144 -.13053 233.83 -61.766) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.15643 .98769 -.98769 -.15643 237.29 -59.368) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.18224 .98326 -.98326 -.18224 240.69 -56.882) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.30902 .95106 -.95106 -.30902 256.64 -43.161) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.33381 .94264 -.94264 -.33381 259.61 -40.173) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.35837 .93358 -.93358 -.35837 262.5 -37.109) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.38268 .92388 -.92388 -.38268 265.3 -33.969) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.40674 .91354 -.91354 -.40674 268.03 -30.758) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.43051 .90258 -.90258 -.43051 270.66 -27.476) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.45399 .89101 -.89101 -.45399 273.21 -24.126) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.47716 .87882 -.87882 -.47716 275.68 -20.711) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.58778 .80902 -.80902 -.58778 286.61 -2.7335) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.60876 .79335 -.79335 -.60876 288.51 1.0251) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.62932 .77715 -.77715 -.62932 290.3 4.832) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.64945 .76041 -.76041 -.64945 292 8.6844) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.66913 .74314 -.74314 -.66913 293.6 12.58) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.68836 .72537 -.72537 -.68836 295.1 16.517) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.70711 .70711 -.70711 -.70711 296.49 20.491) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.72537 .68836 -.68836 -.72537 297.77 24.5) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.80902 .58778 -.58778 -.80902 302.61 44.976) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.82413 .56641 -.56641 -.82413 303.26 49.138) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.83867 .54464 -.54464 -.83867 303.79 53.311) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.85264 .5225 -.5225 -.85264 304.22 57.504) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.86602 .5 -.5 -.86602 304.53 61.702) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.87882 .47716 -.47716 -.87882 304.74 65.907) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.89101 .45399 -.45399 -.89101 304.83 70.117) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.90258 .43051 -.43051 -.90258 304.82 74.326) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.95106 .30902 -.30902 -.95106 303.09 95.293) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.95882 .28402 -.28402 -.95882 302.42 99.452) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.96593 .25882 -.25882 -.96593 301.64 103.59) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.97237 .23344 -.23344 -.97237 300.75 107.7) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.97815 .20791 -.20791 -.97815 299.75 111.8) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.98326 .18224 -.18224 -.98326 298.65 115.86) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.98769 .15643 -.15643 -.98769 297.44 119.89) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <use transform="translate(10 485.05) matrix(-.99144 .13053 -.13053 -.99144 296.12 123.89) translate(-10 -485.05)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
- <rect id="aj" x="10" y="640.05" width="288" height="1e3px" display="none"/>
+ <path id="a" transform="translate(10 485.08)" d="m72.5 71.65h143" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:tile-cx="164.00000" inkscape:tile-cy="543.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="143.30000"/>
+ <use transform="translate(10 485.08) matrix(.99966 .026177 -.026177 .99966 1.9249 -3.7451) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.99863 .052336 -.052336 .99863 3.9472 -7.438) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.99692 .078459 -.078459 .99692 6.0655 -11.077) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.99452 .10453 -.10453 .99452 8.2785 -14.66) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.99144 .13053 -.13053 .99144 10.584 -18.183) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.98769 .15643 -.15643 .98769 12.982 -21.645) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.98326 .18224 -.18224 .98326 15.468 -25.042) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.95106 .30902 -.30902 .95106 29.189 -40.991) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.94264 .33381 -.33381 .94264 32.177 -43.959) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.93358 .35837 -.35837 .93358 35.241 -46.846) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.92388 .38268 -.38268 .92388 38.381 -49.652) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.91354 .40674 -.40674 .91354 41.592 -52.376) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.90258 .43051 -.43051 .90258 44.874 -55.014) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.89101 .45399 -.45399 .89101 48.224 -57.565) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.87882 .47716 -.47716 .87882 51.639 -60.028) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.80902 .58778 -.58778 .80902 69.617 -70.957) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.79335 .60876 -.60876 .79335 73.375 -72.856) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.77715 .62932 -.62932 .77715 77.182 -74.655) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.76041 .64945 -.64945 .76041 81.034 -76.354) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.74314 .66913 -.66913 .74314 84.93 -77.951) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.72537 .68836 -.68836 .72537 88.866 -79.446) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.70711 .70711 -.70711 .70711 92.841 -80.837) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.68836 .72537 -.72537 .68836 96.85 -82.124) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.58778 .80902 -.80902 .58778 117.32 -86.963) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.56641 .82413 -.82413 .56641 121.49 -87.607) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.54464 .83867 -.83867 .54464 125.66 -88.142) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.5225 .85264 -.85264 .5225 129.85 -88.567) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.5 .86602 -.86602 .5 134.05 -88.883) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.47716 .87882 -.87882 .47716 138.26 -89.088) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.45399 .89101 -.89101 .45399 142.47 -89.184) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.43051 .90258 -.90258 .43051 146.68 -89.168) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.30902 .95106 -.95106 .30902 167.64 -87.443) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.28402 .95882 -.95882 .28402 171.8 -86.77) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.25882 .96593 -.96593 .25882 175.94 -85.988) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.23344 .97237 -.97237 .23344 180.05 -85.098) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.20791 .97815 -.97815 .20791 184.14 -84.1) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.18224 .98326 -.98326 .18224 188.21 -82.996) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.15643 .98769 -.98769 .15643 192.24 -81.786) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(.13053 .99144 -.99144 .13053 196.24 -80.47) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(6.123e-17 1 -1 6.123e-17 215.65 -72.35) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.026177 .99966 -.99966 -.026177 219.4 -70.425) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.052336 .99863 -.99863 -.052336 223.09 -68.403) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.078459 .99692 -.99692 -.078459 226.73 -66.285) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.10453 .99452 -.99452 -.10453 230.31 -64.072) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.13053 .99144 -.99144 -.13053 233.83 -61.766) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.15643 .98769 -.98769 -.15643 237.29 -59.368) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.18224 .98326 -.98326 -.18224 240.69 -56.882) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.30902 .95106 -.95106 -.30902 256.64 -43.161) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.33381 .94264 -.94264 -.33381 259.61 -40.173) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.35837 .93358 -.93358 -.35837 262.5 -37.109) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.38268 .92388 -.92388 -.38268 265.3 -33.969) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.40674 .91354 -.91354 -.40674 268.03 -30.758) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.43051 .90258 -.90258 -.43051 270.66 -27.476) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.45399 .89101 -.89101 -.45399 273.21 -24.126) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.47716 .87882 -.87882 -.47716 275.68 -20.711) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.58778 .80902 -.80902 -.58778 286.61 -2.7335) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.60876 .79335 -.79335 -.60876 288.51 1.0251) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.62932 .77715 -.77715 -.62932 290.3 4.832) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.64945 .76041 -.76041 -.64945 292 8.6844) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.66913 .74314 -.74314 -.66913 293.6 12.58) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.68836 .72537 -.72537 -.68836 295.1 16.517) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.70711 .70711 -.70711 -.70711 296.49 20.491) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.72537 .68836 -.68836 -.72537 297.77 24.5) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.80902 .58778 -.58778 -.80902 302.61 44.976) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.82413 .56641 -.56641 -.82413 303.26 49.138) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.83867 .54464 -.54464 -.83867 303.79 53.311) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.85264 .5225 -.5225 -.85264 304.22 57.504) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.86602 .5 -.5 -.86602 304.53 61.702) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.87882 .47716 -.47716 -.87882 304.74 65.907) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.89101 .45399 -.45399 -.89101 304.83 70.117) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.90258 .43051 -.43051 -.90258 304.82 74.326) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.95106 .30902 -.30902 -.95106 303.09 95.293) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.95882 .28402 -.28402 -.95882 302.42 99.452) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.96593 .25882 -.25882 -.96593 301.64 103.59) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.97237 .23344 -.23344 -.97237 300.75 107.7) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.97815 .20791 -.20791 -.97815 299.75 111.8) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.98326 .18224 -.18224 -.98326 298.65 115.86) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.98769 .15643 -.15643 -.98769 297.44 119.89) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <use transform="translate(10 485.08) matrix(-.99144 .13053 -.13053 -.99144 296.12 123.89) translate(-10 -485.08)" width="320.00000" height="2150.5000" xlink:href="#a" inkscape:tiled-clone-of="#path92"/>
+ <rect id="aj" x="10" y="640.08" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aj"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">In the above examples, the line was rotated around its center. But what if you want the 
-center to be outside of your shape? Just click on the object twice with the Selector tool 
-to enter rotation mode. Now move the object's rotation center (represented by a small cross-shaped handle) 
-to the point you would like to be the center of the rotation for the Tiled Clones operation.
-Then use <flowSpan font-family="Liberation Sans,Arial,sans-serif">Create Tiled Clones</flowSpan> on the object. This is how you can do nice “explosions” 
-or “starbursts” by randomizing scale, rotation, and possibly opacity:
-</flowDiv>
+  <flowDiv xml:space="preserve">In bovenstaande voorbeelden werd de lijn geroteerd rond haar middelpunt. Maar wat indien het rotatiemiddelpunt buiten je vorm ligt? Klik gewoon tweemaal op het object met het Selectiegereedschap om de rotatie mode te openen. Sleep nu het rotatiecentrum (voorgesteld met een klein kruisvormig  handvat) naar het gewenste punt voor de rotatie voor de Getegelde Klonen operatie. Gebruik dan <flowSpan font-family="Liberation Sans,Arial,sans-serif">Tegels met klonen</flowSpan> op dit object. Op deze wijze kan je mooie “explosies” of “ster ontploffing” maken door randomisatie van schaal, rotatie en soms ondoorzichtigheid:</flowDiv>
  </flowRoot>
- <g id="b" transform="translate(10 718.72) matrix(.63768 0 0 .63768 37.609 -470.92)" inkscape:tile-cx="158.99982" inkscape:tile-cy="859.24904" inkscape:tile-h="7.3333200" inkscape:tile-w="87.999840">
+ <g id="b" transform="translate(10 729.3) matrix(.63768 0 0 .63768 37.609 -470.92)" inkscape:tile-cx="158.99982" inkscape:tile-cy="859.24904" inkscape:tile-h="7.3333200" inkscape:tile-w="87.999840">
   <path d="m210.17 859.92c4.533-2.0828 15.804-3.798 15.804-0.12252 0 3.6754-15.804 0.12252-15.804 0.12252z" color="#000000" fill-rule="evenodd"/>
   <rect x="90" y="853.5" width="138" height="11.5" color="#000000" opacity="0" stroke-width=".25px"/>
  </g>
- <use transform="translate(10 718.72) matrix(1.5824 -.94905 .94905 1.5824 -154.03 87.071) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.15802 -.1467 .1467 .15802 105.74 85.229) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.3812 -.31038 .31038 .3812 62.112 90.793) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.9161 -.77244 .77244 .9161 -47.819 113.83) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.27118 1.0204 -1.0204 .27118 179.88 -85.712) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.054495 1.1179 -1.1179 .054495 217.51 -82.582) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(1.3012 -.34248 .34248 1.3012 -68.236 24.413) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.43783 -.057061 .057061 .43783 73.747 51.222) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.30681 .099409 -.099409 .30681 104.01 39.562) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.0307 .73379 -.73379 -.0307 199.77 -22.627) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.5877 1.5039 -1.5039 .5877 173.12 -177.29) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.063589 .24175 -.24175 -.063589 166.45 48.3) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.11279 .4804 -.4804 -.11279 191.67 18.916) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.47048 .34479 -.34479 .47048 100.15 -7.1484) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.90328 1.2976 -1.2976 .90328 113.37 -172.92) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(1.6387 .41348 -.41348 1.6387 -56.943 -106.66) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(1.3754 .84138 -.84138 1.3754 12.615 -145.86) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.37243 1.258 -1.258 .37243 184.1 -126.53) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.97419 .80737 -.80737 .97419 65.759 -110.24) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.73194 1.6333 -1.6333 -.73194 366.51 -93.655) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.67313 .51862 -.51862 .67313 85.372 -46.918) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.02547 .99819 -.99819 .02547 212.32 -63.704) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.036052 .53209 -.53209 -.036052 184.98 5.8221) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.0903 .48582 -.48582 -1.0903 327.96 93.434) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.69835 .18974 -.18974 -.69835 250.68 104.41) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.058852 .81222 -.81222 .058852 193.36 -40.425) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.72687 1.5656 -1.5656 .72687 158.53 -196.59) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.93737 .98403 -.98403 -.93737 345.07 12.409) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.744 -.33229 .33229 -1.744 355.83 257.49) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.22296 1.1443 -1.1443 .22296 196.12 -99.219) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.34393 1.1531 -1.1531 -.34393 275.6 -56.783) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.18401 .80395 -.80395 -.18401 226.49 -20.573) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.65776 .631 -.631 -.65776 279.02 39.948) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.1784 .0080053 -.0080053 -1.1784 303.41 166.64) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.1888 .96076 -.96076 -1.1888 378.22 35.003) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.58046 -.030743 .030743 -.58046 217.32 125.98) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.867 .42505 -.42505 -.867 292.24 84.688) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.70082 .10013 -.10013 -.70082 244.12 117.05) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.7631 -.2264 .2264 -1.7631 366.63 244.24) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.98245 -1.0913 1.0913 -.98245 191.52 304.35) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.1126 -.1117 .1117 -.1126 146.05 101.2) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.46512 -.23192 .23192 -.46512 185.79 145.06) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.3449 .031643 -.031643 -1.3449 328.37 176.17) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.8418 .7111 -.7111 -.8418 310.77 42.986) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.40673 -1.7162 1.7162 -.40673 63.376 346.88) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.51273 -1.1191 1.1191 -.51273 124.1 272.04) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.0098 .39705 -.39705 -1.0098 309.93 99.574) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.34237 -1.2544 1.2544 -.34237 89.992 277.74) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.3214 -.056325 .056325 -1.3214 318.34 186.59) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.081244 -1.4924 1.4924 .081244 12.785 278.19) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.73546 -.52141 .52141 -.73546 201.08 206.12) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.82671 -.39099 .39099 -.82671 223.8 195.01) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.095044 -1.2019 1.2019 .095044 33.234 236.75) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.40752 -.94837 .94837 -.40752 122.62 240.21) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.23737 -.78446 .78446 .23737 45.599 167.77) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.29723 -.3316 .3316 .29723 72.15 100.21) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.070897 -.56023 .56023 -.070897 105.71 160.34) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.0092847 -.5912 .5912 -.0092847 94.765 159.9) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.64749 -.89537 .89537 .64749 -19.949 151.6) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.20617 -.6552 .6552 .20617 59.887 152.2) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.22868 -1.0741 1.0741 -.22868 88.076 243.91) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.157 -1.3956 1.3956 -1.157 192.36 360.09) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-1.0291 -1.2779 1.2779 -1.0291 183.63 333.88) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.83814 -1.3323 1.3323 .83814 -80.094 197.65) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.097413 -1.1509 1.1509 -.097413 63.918 244.48) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(-.21499 -.73072 .73072 -.21499 112.61 195.13) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(1.6883 -.17049 .17049 1.6883 -108.8 -29.305) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.55378 -.20385 .20385 .55378 46.327 62.697) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(1.1627 -.6377 .6377 1.1627 -71.718 76.115) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(1.5217 -.57461 .57461 1.5217 -116.77 39.695) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <use transform="translate(10 718.72) matrix(.54625 -.90456 .90456 .54625 -6.5852 160.68) translate(-10 -718.72)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
- <text x="10" y="897.529948" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="897.529948">Uitsnijden (verschillende rechthoekige exportgebieden)</tspan>
+ <use transform="translate(10 729.3) matrix(1.5824 -.94905 .94905 1.5824 -154.03 87.071) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.15802 -.1467 .1467 .15802 105.74 85.229) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.3812 -.31038 .31038 .3812 62.112 90.793) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.9161 -.77244 .77244 .9161 -47.819 113.83) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.27118 1.0204 -1.0204 .27118 179.88 -85.712) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.054495 1.1179 -1.1179 .054495 217.51 -82.582) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(1.3012 -.34248 .34248 1.3012 -68.236 24.413) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.43783 -.057061 .057061 .43783 73.747 51.222) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.30681 .099409 -.099409 .30681 104.01 39.562) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.0307 .73379 -.73379 -.0307 199.77 -22.627) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.5877 1.5039 -1.5039 .5877 173.12 -177.29) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.063589 .24175 -.24175 -.063589 166.45 48.3) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.11279 .4804 -.4804 -.11279 191.67 18.916) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.47048 .34479 -.34479 .47048 100.15 -7.1484) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.90328 1.2976 -1.2976 .90328 113.37 -172.92) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(1.6387 .41348 -.41348 1.6387 -56.943 -106.66) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(1.3754 .84138 -.84138 1.3754 12.615 -145.86) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.37243 1.258 -1.258 .37243 184.1 -126.53) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.97419 .80737 -.80737 .97419 65.759 -110.24) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.73194 1.6333 -1.6333 -.73194 366.51 -93.655) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.67313 .51862 -.51862 .67313 85.372 -46.918) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.02547 .99819 -.99819 .02547 212.32 -63.704) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.036052 .53209 -.53209 -.036052 184.98 5.8221) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.0903 .48582 -.48582 -1.0903 327.96 93.434) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.69835 .18974 -.18974 -.69835 250.68 104.41) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.058852 .81222 -.81222 .058852 193.36 -40.425) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.72687 1.5656 -1.5656 .72687 158.53 -196.59) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.93737 .98403 -.98403 -.93737 345.07 12.409) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.744 -.33229 .33229 -1.744 355.83 257.49) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.22296 1.1443 -1.1443 .22296 196.12 -99.219) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.34393 1.1531 -1.1531 -.34393 275.6 -56.783) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.18401 .80395 -.80395 -.18401 226.49 -20.573) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.65776 .631 -.631 -.65776 279.02 39.948) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.1784 .0080053 -.0080053 -1.1784 303.41 166.64) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.1888 .96076 -.96076 -1.1888 378.22 35.003) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.58046 -.030743 .030743 -.58046 217.32 125.98) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.867 .42505 -.42505 -.867 292.24 84.688) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.70082 .10013 -.10013 -.70082 244.12 117.05) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.7631 -.2264 .2264 -1.7631 366.63 244.24) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.98245 -1.0913 1.0913 -.98245 191.52 304.35) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.1126 -.1117 .1117 -.1126 146.05 101.2) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.46512 -.23192 .23192 -.46512 185.79 145.06) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.3449 .031643 -.031643 -1.3449 328.37 176.17) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.8418 .7111 -.7111 -.8418 310.77 42.986) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.40673 -1.7162 1.7162 -.40673 63.376 346.88) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.51273 -1.1191 1.1191 -.51273 124.1 272.04) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.0098 .39705 -.39705 -1.0098 309.93 99.574) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.34237 -1.2544 1.2544 -.34237 89.992 277.74) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.3214 -.056325 .056325 -1.3214 318.34 186.59) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.081244 -1.4924 1.4924 .081244 12.785 278.19) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.73546 -.52141 .52141 -.73546 201.08 206.12) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.82671 -.39099 .39099 -.82671 223.8 195.01) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.095044 -1.2019 1.2019 .095044 33.234 236.75) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.40752 -.94837 .94837 -.40752 122.62 240.21) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.23737 -.78446 .78446 .23737 45.599 167.77) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.29723 -.3316 .3316 .29723 72.15 100.21) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.070897 -.56023 .56023 -.070897 105.71 160.34) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.0092847 -.5912 .5912 -.0092847 94.765 159.9) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.64749 -.89537 .89537 .64749 -19.949 151.6) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.20617 -.6552 .6552 .20617 59.887 152.2) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.22868 -1.0741 1.0741 -.22868 88.076 243.91) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.157 -1.3956 1.3956 -1.157 192.36 360.09) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-1.0291 -1.2779 1.2779 -1.0291 183.63 333.88) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.83814 -1.3323 1.3323 .83814 -80.094 197.65) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.097413 -1.1509 1.1509 -.097413 63.918 244.48) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(-.21499 -.73072 .73072 -.21499 112.61 195.13) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(1.6883 -.17049 .17049 1.6883 -108.8 -29.305) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.55378 -.20385 .20385 .55378 46.327 62.697) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(1.1627 -.6377 .6377 1.1627 -71.718 76.115) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(1.5217 -.57461 .57461 1.5217 -116.77 39.695) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <use transform="translate(10 729.3) matrix(.54625 -.90456 .90456 .54625 -6.5852 160.68) translate(-10 -729.3)" width="744.09448" height="1052.3622" xlink:href="#b" inkscape:tiled-clone-of="#g1768"/>
+ <text x="10" y="908.111354" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="908.111354">Uitsnijden (verschillende rechthoekige exportgebieden)</tspan>
  </text>
- <rect id="ai" x="10" y="902.73" width="288" height="1e3px" display="none"/>
+ <rect id="ai" x="10" y="913.31" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ai"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Create a new layer, in that layer create invisible rectangles covering parts of your
-image. Make sure your document uses the px unit (default), turn on grid and snap the
-rects to the grid so that each one spans a whole number of px units. Assign meaningful
-ids to the rects, and export each one to its own file (<flowSpan font-family="Liberation Sans,Arial,sans-serif">File
-&gt; Export PNG Image</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+E</flowSpan>)). Then the rects will remember
-their export filenames. After that, it's very easy to re-export some of the rects:
-switch to the export layer, use Tab to select the one you need (or use Find by id), and
-click Export in the dialog. Or, you can write a shell script or batch file to export
-all of your areas, with a command like:
-</flowDiv>
+  <flowDiv xml:space="preserve">Maak in een nieuwe laag diverse onzichtbare rechthoeken die verschillende delen van je afbeelding bedekken. Zorg ervoor dat je document px als eenheid gebruikt (standaard). Schakel het raster aan en kleef de rechthoeken aan het raster zodat elke rechthoek een geheel aantal px-eenheden omspant. Geef logische ids op aan de rechthoeken en exporteer elk naar zijn eigen bestand (<flowSpan font-family="Liberation Sans,Arial,sans-serif">Bestand &gt; PNG-afbeelding exporteren</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+E</flowSpan>)). Hierdoor zullen de rechthoeken hun exportbestandsnaam onthouden. Hierna is het eenvoudig om sommige rechthoeken te herexporteren: ga naar de exportlaag, gebruik Tab om diegene die je nodig hebt te selecteren (of gebruik Zoeken met id), en klik op Exporteren in de dialoog. Je kan ook een shell script of batch file maken om al je gebieden te exporteren, met een commando zoals:</flowDiv>
  </flowRoot>
- <rect id="ah" x="10" y="994.71" width="288" height="1e3px" display="none"/>
+ <rect id="ah" x="10" y="1026.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ah"/>
   </flowRegion>
   <flowDiv xml:space="preserve">inkscape -i rechthoek-id -t bestandsnaam.svg</flowDiv>
  </flowRoot>
- <rect id="ag" x="10" y="1012" width="288" height="1e3px" display="none"/>
+ <rect id="ag" x="10" y="1043.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ag"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">for each exported area. The -t switch tells it to use the remembered filename hint,
-otherwise you can provide the export filename with the -e switch. Alternatively, you can
-use the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Extensions &gt; Web &gt; Slicer</flowSpan> extensions, or <flowSpan font-family="Liberation Sans,Arial,sans-serif">Extensions &gt; Export &gt; Guillotine</flowSpan> for similar results.
-</flowDiv>
+  <flowDiv xml:space="preserve">voor elk geëxporteerd oppervlak. De -t optie zorgt dat Inkscape de naam van de zone gebruikt voor de bestandsnaam, zoniet kan je de bestandsnaam van de uitvoer geven met de -e optie. Als alternatief kan je <flowSpan font-family="Liberation Sans,Arial,sans-serif">Extensies &gt; Web &gt; Schaar</flowSpan> extensies, of <flowSpan font-family="Liberation Sans,Arial,sans-serif">Extensies &gt; Export &gt; Guillotine</flowSpan> gebruiken voor een gelijkaardig resultaat.</flowDiv>
  </flowRoot>
- <text x="10" y="1072.5571618" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1072.5571618">Niet-lineaire kleurverlopen</tspan>
+ <text x="10" y="1106.0071208" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1106.0071208">Niet-lineaire kleurverlopen</tspan>
  </text>
- <rect id="af" x="10" y="1077.8" width="288" height="1e3px" display="none"/>
+ <rect id="af" x="10" y="1111.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#af"/>
   </flowRegion>
   <flowDiv xml:space="preserve">SVG-versie 1.1 ondersteunt geen niet-lineaire kleurverlopen (dit is deze die geen niet-lineaire overgang hebben tussen de kleuren). Je kan deze echter emuleren door <flowSpan font-style="italic">multi-stop</flowSpan> kleurverlopen.</flowDiv>
  </flowRoot>
- <rect id="ae" x="10" y="1116.3" width="288" height="1e3px" display="none"/>
+ <rect id="ae" x="10" y="1149.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ae"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Start with a simple two-stop gradient (you can assign that in the Fill and Stroke dialog 
-or use the gradient tool). Now, with the gradient tool, add a new gradient stop in
-the middle; either by double-clicking on the gradient line, or by selecting the square-shaped 
-gradient stop and clicking on the button <flowSpan font-family="Liberation Sans,Arial,sans-serif">Insert new stop</flowSpan> in the gradient 
-tool's tool bar at the top. Drag the new stop a bit. Then add more stops before and after the 
-middle stop and drag them too, so that the gradient looks smooth. The more stops you add, the 
-smoother you can make the resulting gradient. Here's the initial black-white gradient with two 
-stops:
-</flowDiv>
+  <flowDiv xml:space="preserve">Begin met een eenvoudig tweestopskleurverloop (door er één toewijzen in de Vulling en Lijn dialoog of door het kleurverloopgereedschap te gebruiken). Voeg een nieuw kleurverloopovergang met de kleurverloopeditor toe in het midden; dubbelklik op de kleurverloop lijn of selecteer het vierkantige teken en klik op <flowSpan font-family="Liberation Sans,Arial,sans-serif">Overgang invoegen</flowSpan> in de gereedschappenbalk aan de top van de kleurverloopeditor. Versleep het nu een beetje. Voeg vervolgens meer kleurverlopen toe voor en na de overgang in het midden zodat het verloop vloeiend is. Hoe meer overgangen, hoe vloeiender je het uiteindelijke kleurverloop kan maken. Hier is het oorspronkelijke zwart-wit kleurverloop met twee stops:</flowDiv>
  </flowRoot>
  <defs>
   <linearGradient id="p" x1="-753.98" x2="-753.98" y1="-71.602" y2="-5.6264" gradientTransform="matrix(.23728 0 0 4.2145 178.9 1.6151e-15)" gradientUnits="userSpaceOnUse">
@@ -351,8 +319,8 @@ stops:
    <stop stop-color="#fff" offset="1"/>
   </linearGradient>
  </defs>
- <rect transform="translate(10 1205.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-16.125" y="-305.42" width="16.125" height="286.4" fill="url(#p)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect id="ac" x="10" y="1233.6" width="288" height="1e3px" display="none"/>
+ <rect transform="translate(10 1260.2) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-16.125" y="-305.42" width="16.125" height="286.4" fill="url(#p)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect id="ac" x="10" y="1288.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ac"/>
@@ -440,18 +408,18 @@ stops:
    <stop stop-color="#fff" offset="1"/>
   </linearGradient>
  </defs>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-79.393" y="-305.42" width="16.125" height="286.4" fill="url(#h)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-63.336" y="-305.42" width="16.125" height="286.4" fill="url(#i)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-47.28" y="-305.42" width="16.125" height="286.4" fill="url(#j)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-95.45" y="-305.42" width="16.125" height="286.4" fill="url(#k)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-111.51" y="-305.42" width="16.125" height="286.4" fill="url(#l)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-31.223" y="-305.42" width="16.125" height="286.4" fill="url(#m)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-15.167" y="-305.42" width="16.125" height="286.4" fill="url(#n)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1269.5) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-127.56" y="-305.42" width="16.125" height="286.4" fill="url(#o)" fill-opacity=".75" fill-rule="evenodd"/>
- <text x="10" y="1422.8549798" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1422.8549798">Excentrische radiale kleurverlopen</tspan>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-79.393" y="-305.42" width="16.125" height="286.4" fill="url(#h)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-63.336" y="-305.42" width="16.125" height="286.4" fill="url(#i)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-47.28" y="-305.42" width="16.125" height="286.4" fill="url(#j)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-95.45" y="-305.42" width="16.125" height="286.4" fill="url(#k)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-111.51" y="-305.42" width="16.125" height="286.4" fill="url(#l)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-31.223" y="-305.42" width="16.125" height="286.4" fill="url(#m)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-15.167" y="-305.42" width="16.125" height="286.4" fill="url(#n)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1324.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-127.56" y="-305.42" width="16.125" height="286.4" fill="url(#o)" fill-opacity=".75" fill-rule="evenodd"/>
+ <text x="10" y="1477.5732188" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1477.5732188">Excentrische radiale kleurverlopen</tspan>
  </text>
- <rect id="ab" x="10" y="1428.1" width="288" height="1e3px" display="none"/>
+ <rect id="ab" x="10" y="1482.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ab"/>
@@ -468,269 +436,216 @@ stops:
    <stop stop-opacity="0" offset="1"/>
   </radialGradient>
  </defs>
- <rect transform="translate(10 1495.9)" x="70.82" y=".55902" width="74.385" height="68.187" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
- <rect transform="translate(10 1495.9)" x="153.67" y=".55902" width="74.385" height="68.187" fill="url(#g)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
- <text x="10" y="1590.0841688" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1590.0841688">Uitlijnen naar het midden van de pagina</tspan>
+ <rect transform="translate(10 1550.6)" x="70.82" y=".55902" width="74.385" height="68.187" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
+ <rect transform="translate(10 1550.6)" x="153.67" y=".55902" width="74.385" height="68.187" fill="url(#g)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
+ <text x="10" y="1644.8024078" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1644.8024078">Uitlijnen naar het midden van de pagina</tspan>
  </text>
- <rect id="aa" x="10" y="1595.3" width="288" height="1e3px" display="none"/>
+ <rect id="aa" x="10" y="1650" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aa"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To align something to the center or side of a page, select the object or group and then
-choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> from the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Relative to:</flowSpan> list in the
-Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
-</flowDiv>
+  <flowDiv xml:space="preserve">Om iets uit te lijnen op het midden of de zijkant van een pagina, selecteer je het object of de groep en kies je, in het dialoogvenster Uitlijnen en Verdelen (<flowSpan font-weight="bold">Ctrl+Shift+A</flowSpan>), <flowSpan font-family="Liberation Sans,Arial,sans-serif">Pagina</flowSpan> bij <flowSpan font-family="Liberation Sans,Arial,sans-serif">Relatief tov:</flowSpan>.</flowDiv>
  </flowRoot>
- <text x="10" y="1646.8394388" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1646.8394388">Document opruimen</tspan>
+ <text x="10" y="1701.6627468" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1701.6627468">Document opruimen</tspan>
  </text>
- <rect id="z" x="10" y="1652" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="1706.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Many of the no-longer-used gradients, patterns, and markers (more precisely, those which
-you edited manually) remain in the corresponding palettes and can be reused for new
-objects. However if you want to optimize your document, use the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Clean up Document</flowSpan> command in File menu. It will remove any gradients, patterns, or markers
-which are not used by anything in the document, making the file smaller.
-</flowDiv>
+  <flowDiv xml:space="preserve">Veel ongebruikte kleurverlopen, patronen en markeringen (de manueel bewerkte) blijven in de corresponderende paletten en kunnen hergebruikt worden voor nieuwe objecten. Voor het optimaliseren van je document kan je de opdracht <flowSpan font-family="Liberation Sans,Arial,sans-serif">Document opschonen</flowSpan> in het menu Bestand gebruiken. Deze verwijdert alle kleurverlopen, patronen of markeringen die nergens gebruikt worden, wat zorgt voor een kleiner bestand.</flowDiv>
  </flowRoot>
- <text x="10" y="1724.8638838" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1724.8638838">Verborgen features en de XML-editor</tspan>
+ <text x="10" y="1779.6051598" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1779.6051598">Verborgen features en de XML-editor</tspan>
  </text>
- <rect id="y" x="10" y="1730.1" width="288" height="1e3px" display="none"/>
+ <rect id="y" x="10" y="1784.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#y"/>
   </flowRegion>
   <flowDiv xml:space="preserve">De XML-editor laat je toe om bijna alle aspecten van het document te bewerken zonder een externe tekstbewerker. Bovendien ondersteunt Inkscape dikwijls meer features dan dat er toegankelijk zijn via de GUI. De XML-editor is een manier om toegang te krijgen tot deze features, indien je SVG kent.</flowDiv>
  </flowRoot>
- <text x="10" y="1792.0377918" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1792.0377918">Aanpassen van de eenheid van de liniaal</tspan>
+ <text x="10" y="1846.7790678" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1846.7790678">Aanpassen van de eenheid van de liniaal</tspan>
  </text>
- <rect id="w" x="10" y="1797.2" width="288" height="1e3px" display="none"/>
+ <rect id="w" x="10" y="1852" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#w"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">In the default template, the unit of measure used by the rulers is mm. This is also the unit used in
-displaying coordinates at the lower-left corner and preselected in all units menus. (You
-can always hover your mouse over a ruler to see the tooltip with the units it uses.) To
-change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Document Properties</flowSpan>
-(<flowSpan font-weight="bold">Shift+Ctrl+D</flowSpan>) and change the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Display units</flowSpan> on the
-<flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
-</flowDiv>
+  <flowDiv xml:space="preserve">In het standaardsjabloon is de standaardeenheid van linialen mm. Dit is ook de eenheid voor weergave van coördinaten in de hoek benedenlinks en wordt voorgeselecteerd in alle dialogen. (Je kan altijd met je muis over een liniaal gaan om de gebruikte eenheid in de tooltip weer te geven.) Open de <flowSpan font-family="Liberation Sans,Arial,sans-serif">Documenteigenschappen</flowSpan> (<flowSpan font-weight="bold">Ctrl+Shift+D</flowSpan>) om dit te veranderen en pas  <flowSpan font-family="Liberation Sans,Arial,sans-serif">Standaardeenheid</flowSpan> aan in de tab <flowSpan font-family="Liberation Sans,Arial,sans-serif">Pagina</flowSpan>.</flowDiv>
  </flowRoot>
- <text x="10" y="1870.1351628" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1870.1351628">Stempelen</tspan>
+ <text x="10" y="1924.8373758" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1924.8373758">Stempelen</tspan>
  </text>
- <rect id="v" x="10" y="1875.3" width="288" height="1e3px" display="none"/>
+ <rect id="v" x="10" y="1930" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#v"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Om snel meerdere kopieën van een object te maken, kan je <flowSpan font-style="italic">stempelen</flowSpan>. Sleep een object (of schaal of roteer het) en tijdens het ingedrukt houden van de linkermuisknop, druk je op de <flowSpan font-weight="bold">Spatiebalk</flowSpan>. Dit maakt een stempel van de huidige objectvorm. Je kan het zo vaak herhalen als je wil.</flowDiv>
  </flowRoot>
- <text x="10" y="1937.3433338" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1937.3433338">Trucken met de pen</tspan>
+ <text x="10" y="1992.0455468" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1992.0455468">Trucken met de pen</tspan>
  </text>
- <rect id="u" x="10" y="1942.5" width="288" height="1e3px" display="none"/>
+ <rect id="u" x="10" y="1997.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>
   </flowRegion>
   <flowDiv xml:space="preserve">In het pengereedschap (Bezier), heb je de volgende mogelijkheden om een lijn te beëindigen:</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1976.5)" r="2"/>
- <rect id="t" x="20" y="1970.5" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2031.2)" r="2"/>
+ <rect id="t" x="20" y="2025.2" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#t"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Drukken op <flowSpan font-weight="bold">Enter</flowSpan></flowDiv>
  </flowRoot>
- <circle transform="translate(15 1993.7)" r="2"/>
- <rect id="bd" x="20" y="1987.7" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2048.4)" r="2"/>
+ <rect id="bd" x="20" y="2042.4" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Dubbelklikken met de linkermuisknop</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2011)" r="2"/>
- <rect id="bc" x="20" y="2005" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2065.7)" r="2"/>
+ <rect id="bc" x="20" y="2059.7" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bc"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Click with the right mouse button
-</flowDiv>
+  <flowDiv xml:space="preserve">Klik met de rectermuisknop</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2028.2)" r="2"/>
- <rect id="bb" x="20" y="2022.2" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2082.9)" r="2"/>
+ <rect id="bb" x="20" y="2076.9" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bb"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Een ander gereedschap selecteren</flowDiv>
  </flowRoot>
- <rect id="ba" x="10" y="2039.5" width="288" height="1e3px" display="none"/>
+ <rect id="ba" x="10" y="2094.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ba"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Noteer dat terwijl het pad nog niet beëindigd is (dit is getoond in groen en het huidige segment rood), het nog niet bestaat als object in het document. Bijgevolg gebruik je om het te annuleren op <flowSpan font-weight="bold">Esc</flowSpan> (volledige pad annuleren) of <flowSpan font-weight="bold">Backspace</flowSpan> (het laatste segment verwijderen) in plaats van <flowSpan font-family="Liberation Sans,Arial,sans-serif">Ongedaan maken</flowSpan>.</flowDiv>
  </flowRoot>
- <rect id="az" x="10" y="2088.8" width="288" height="1e3px" display="none"/>
+ <rect id="az" x="10" y="2143.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#az"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Om een nieuw subpad aan een bestaand pad toe te voegen, selecteer je dat pad en begin je te tekenen met <flowSpan font-weight="bold">Shift</flowSpan> van een willekeurig punt. Indien je echter eenvoudigweg wil <flowSpan font-style="italic">voortgaan</flowSpan> met een bestaand pad, is Shift niet nodig; begin dan te tekenen vanaf een van de uiteinden.</flowDiv>
  </flowRoot>
- <text x="10" y="2149.2588228" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2149.2588228">Ingeven van Unicode tekens</tspan>
+ <text x="10" y="2203.9375982" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2203.9375982">Ingeven van Unicode tekens</tspan>
  </text>
- <rect id="ax" x="10" y="2154.5" width="288" height="1e3px" display="none"/>
+ <rect id="ax" x="10" y="2209.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ax"/>
   </flowRegion>
   <flowDiv xml:space="preserve">In het tekstgereedscap schakelt <flowSpan font-weight="bold">Ctrl+U</flowSpan> tussen Unicode en normale modus. In Unicode modus wordt elke groep van 4 hexadecimale cijfers die je ingeeft een enkel Unicode karakter. Dit laat je toe om arbitraire symbolen in te geven (zolang je de Unicode waarden kent en het lettertype deze ondersteunt). Om Unicode-invoer te beëindigen, druk je op <flowSpan font-weight="bold">Enter</flowSpan>. Bijvoorbeeld, <flowSpan font-weight="bold">Ctrl+U 2 0 1 4 Enter</flowSpan> voegt een liggend streepje (—) in. Om de Unicode modus te verlaten zonder iets in te voegen, druk je op <flowSpan font-weight="bold">Esc</flowSpan>.</flowDiv>
  </flowRoot>
- <rect id="aw" x="10" y="2225" width="288" height="1e3px" display="none"/>
+ <rect id="aw" x="10" y="2279.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aw"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">You can also use the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Text &gt; Glyphs</flowSpan> dialog to search for and insert 
-glyphs into your document.
-</flowDiv>
+  <flowDiv xml:space="preserve">Je kan ook het dialoogvenster <flowSpan font-family="Liberation Sans,Arial,sans-serif">Tekst &gt; Tekens</flowSpan> gebruiken om te zoeken naar glyphs en om ze aan jouw document toe te voegen.</flowDiv>
  </flowRoot>
- <text x="10" y="2264.3548508" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2264.3548508">Het raster gebruiken voor het tekenen van iconen</tspan>
+ <text x="10" y="2320.6469072" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2320.6469072">Het raster gebruiken voor het tekenen van iconen</tspan>
  </text>
- <rect id="au" x="10" y="2269.6" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2325.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Suppose you want to create a 24x24 pixel icon. Create a 24x24 px canvas (use the
-<flowSpan font-family="Liberation Sans,Arial,sans-serif">Document Preferences</flowSpan>) and set the grid to 0.5 px (48x48 gridlines).
-Now, if you align filled objects to <flowSpan font-style="italic">even</flowSpan> gridlines, and stroked
-objects to <flowSpan font-style="italic">odd</flowSpan> gridlines with the stroke width in px being an even
-number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel), you
-get a crisp bitmap image without unneeded antialiasing.
-</flowDiv>
+  <flowDiv xml:space="preserve">Veronderstel dat je een 24x24 pixel icoon wil maken. Creëer een 24x24 px canvas (gebruik de <flowSpan font-family="Liberation Sans,Arial,sans-serif">Document Eigenschappen</flowSpan>) en stel het raster in op 0.5px (48x48 rasterlijnen). Indien je nu gevulde objecten uitlijnd op <flowSpan font-style="italic">even</flowSpan> rasterlijnen, en contouren op <flowSpan font-style="italic">oneven</flowSpan> rasterlijnen met een lijnbreedte een even nummer in px, en je dit exporteert op de standaard 96ppi resolutie (opdat 1 px 1 bitmap pixel wordt), verkrijg je een scherp beeld zonder dat anti-aliasing nodig is.</flowDiv>
  </flowRoot>
- <text x="10" y="2342.2993008" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2342.2993008">Objectrotatie</tspan>
+ <text x="10" y="2409.2333942" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2409.2333942">Objectrotatie</tspan>
  </text>
- <rect id="at" x="10" y="2347.5" width="288" height="1e3px" display="none"/>
+ <rect id="at" x="10" y="2414.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#at"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">When in the Selector tool, <flowSpan font-weight="bold">click</flowSpan> on an object to see the scaling arrows,
-then <flowSpan font-weight="bold">click again</flowSpan> on the object to see the rotation and skew arrows. If
-the arrows at the corners are clicked and dragged, the object will rotate around the
-center (shown as a cross mark). If you hold down the <flowSpan font-weight="bold">Shift</flowSpan> key while
-doing this, the rotation will occur around the opposite corner. You can also drag the
-rotation center to any place.
-</flowDiv>
+  <flowDiv xml:space="preserve">In het selectiegereedschap <flowSpan font-weight="bold">klik</flowSpan> je op een object om de schaalhandvatten te tonen. <flowSpan font-weight="bold">Klik</flowSpan> dan opnieuw op het object om de handvatten voor rotatie en scheeftrekken te tonen. Indien je op de handvatten op de hoeken klikt en ze vervolgens sleept, draait het object rond het centrum (kruisteken). Indien je tegelijkertijd <flowSpan font-weight="bold">Shift</flowSpan> ingedrukt houdt, wordt geroteerd rond de tegenovergestelde hoek.Je kan ook het rotatiecentrum naar gelijk welke plaats slepen.</flowDiv>
  </flowRoot>
- <rect id="as" x="10" y="2407.4" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="2485" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Je kan ook roteren met het toetsenbord met <flowSpan font-weight="bold">[</flowSpan> en <flowSpan font-weight="bold">]</flowSpan> (per 15 graden) of <flowSpan font-weight="bold">Ctrl+[</flowSpan> en <flowSpan font-weight="bold">Ctrl+]</flowSpan> (per 90 graden). Dezelfde <flowSpan font-weight="bold">[]</flowSpan> toetsen met <flowSpan font-weight="bold">Alt</flowSpan> zorgen voor pixelgrootte rotatie.</flowDiv>
  </flowRoot>
- <text x="10" y="2448.2388118" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2448.2388118">Slagschaduwen</tspan>
+ <text x="10" y="2525.7894672" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2525.7894672">Slagschaduwen</tspan>
  </text>
- <rect id="ar" x="10" y="2453.4" width="288" height="1e3px" display="none"/>
+ <rect id="ar" x="10" y="2531" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To quickly create drop shadows for objects, use the 
-<flowSpan font-family="Liberation Sans,Arial,sans-serif">Filters &gt; Shadows and Glows &gt; Drop Shadow...</flowSpan> feature.
-</flowDiv>
+  <flowDiv xml:space="preserve">Om snel slagschaduwen aan een object toe te voegen, gebruik de <flowSpan font-family="Liberation Sans,Arial,sans-serif">Filters &gt; Schaduw en gloed &gt; Slagschaduw...</flowSpan> feature.</flowDiv>
  </flowRoot>
- <rect id="aq" x="10" y="2481.6" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="2559.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">You can also easily create blurred drop shadows for objects manually with blur in the
-Fill and Stroke dialog. Select an object, duplicate it by <flowSpan font-weight="bold">Ctrl+D</flowSpan>, press 
-<flowSpan font-weight="bold">PgDown</flowSpan> to put it beneath original object, place it a little to the right 
-and lower than original object. Now open Fill And Stroke dialog and change Blur value to, 
-say, 5.0. That's it!
-</flowDiv>
+  <flowDiv xml:space="preserve">Je kan ook manueel, op eenvouwige wijze, vage slagschaduwen maken met de vervaging schuifbalk in het dialoogvenster Vulling en Lijn. Selecteer een object. Dupliceer het met <flowSpan font-weight="bold">Ctrl+D</flowSpan>, druk op <flowSpan font-weight="bold">PgDown</flowSpan> om het onder het originele object te plaatsen. Verplaats het een beetje naar rechts en lager dan het origineel. Open nu de dialoog Vulling en lijn en verander Vervaging naar bijvoorbeeld 5.0.</flowDiv>
  </flowRoot>
- <text x="10" y="2543.7545528" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2543.7545528">Tekst op een pad plaatsen</tspan>
+ <text x="10" y="2631.8974392" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2631.8974392">Tekst op een pad plaatsen</tspan>
  </text>
- <rect id="ap" x="10" y="2549" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2637.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Om tekst op een pad te plaatsen, selecteer je de tekst en de curve en kies je <flowSpan font-family="Liberation Sans,Arial,sans-serif">Op pad plaatsen</flowSpan> in het menu Tekst. De tekst zal starten bij het begin van het pad. Algemeen is het best om een expliciet pad te maken waaraan je de tekst wil fitten in plaats van het te fitten op een andere object — dit geeft je meer controle zonder je afbeelding om zeep te helpen.</flowDiv>
  </flowRoot>
- <text x="10" y="2621.9196218" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2621.9196218">Het origineel selecteren</tspan>
+ <text x="10" y="2710.0625082" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2710.0625082">Het origineel selecteren</tspan>
  </text>
- <rect id="ao" x="10" y="2627.1" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="2715.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Wanneer je tekst op een pad hebt, een gekoppelde rand of een kloon, kan het moeilijk zijn om het bronobject/-pad te selecteren, omdat het er direct onder kan liggen, onzichtbaar kan zijn of vergrendeld. De magische toets <flowSpan font-weight="bold">Shift+D</flowSpan> helpt hierbij; selecteer de test, gekoppelde rand of kloon en druk <flowSpan font-weight="bold">Shift+D</flowSpan> om het corresponderende originele pad, rand of kloon te selecteren.</flowDiv>
  </flowRoot>
- <text x="10" y="2698.2942438" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2698.2942438">Indien het venster niet op het scherm staat</tspan>
+ <text x="10" y="2786.4371302" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2786.4371302">Indien het venster niet op het scherm staat</tspan>
  </text>
- <rect id="an" x="10" y="2703.5" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="2791.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">When moving documents between systems with different resolutions or number of displays,
-you may find Inkscape has saved a window position that places the window out of reach on
-your screen. Simply maximise the window (which will bring it back into view, use the
-task bar), save and reload. You can avoid this altogether by unchecking the global
-option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,sans-serif">Inkscape Preferences</flowSpan>,
-<flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
-</flowDiv>
+  <flowDiv xml:space="preserve">Bij het verplaatsen van documenten tussen verschillende systemen met verschillende resoluties of aantal schermen, kan het gebeuren dat Inkscape een vensterpositie heeft bewaard dat buiten het bereik van je scherm valt. Maximaliseer dan het venster (zodat het terug in beeld komt, gebruik de taakbalk), bewaar en herlaad. Je kan dergelijk gedrag algemeen verhinderen door de globale optie voor het bewaren van de venstergeometrie uit te vinken (<flowSpan font-family="Liberation Sans,Arial,sans-serif">Inkscape-voorkeuren</flowSpan>, <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Vensters</flowSpan> sectie).</flowDiv>
  </flowRoot>
- <text x="10" y="2786.9352498" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2786.9352498">Transparantie, kleurverlopen en PostScript export</tspan>
+ <text x="10" y="2874.9961062" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2874.9961062">Transparantie, kleurverlopen en PostScript export</tspan>
  </text>
- <rect id="am" x="10" y="2792.1" width="288" height="1e3px" display="none"/>
+ <rect id="am" x="10" y="2880.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#am"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">PostScript or EPS formats do not support <flowSpan font-style="italic">transparency</flowSpan>, so you
-should never use it if you are going to export to PS/EPS. In the case of flat
-transparency which overlays flat color, it's easy to fix it: Select one of the
-transparent objects; switch to the Dropper tool (<flowSpan font-weight="bold">F7</flowSpan> or <flowSpan font-weight="bold">d</flowSpan>); 
-make sure that the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Opacity: Pick</flowSpan> button in the dropper tool's tool bar 
-is deactivated; click on that same object. That will pick
-the visible color and assign it back to the object, but this time without
-transparency. Repeat for all transparent objects. If your transparent object overlays
-several flat color areas, you will need to break it correspondingly into pieces and
-apply this procedure to each piece. Note that the dropper tool does not change the opacity 
-value of the object, but only the alpha value of its fill or stroke color, so make sure that 
-every object's opacity value is set to 100% before you start out.
-</flowDiv>
+  <flowDiv xml:space="preserve">PostScript of EPS formaten ondersteunen geen <flowSpan font-style="italic">transparantie</flowSpan>, je zou dit nooit mogen gebruiken indien je het naar PS/EPS gaat exporteren. In het geval van een egale transparantie over een egaal kleurvlak is het eenvoudig op te lossen: selecteer een van de transparante objecten, schakel over naar de Pipet (<flowSpan font-weight="bold">F7</flowSpan> of <flowSpan font-weight="bold">d</flowSpan>); zorg dat <flowSpan font-family="Liberation Sans,Arial,sans-serif">Ondoorzichtbaarheid: Kiezen</flowSpan> gedeselecteerd is in de gereedschappenbalk van de pipet. Klik vervolgens op het geselecteerde object. Zo wordt de zichtbare kleur genomen en terug toegekend aan het object, maar dan zonder transparantie. Herhaal dit voor alle transparante objecten. Indien je transparant object over verschillende egale kleurvlakken ligt, moet je het in de overeenkomstige delen opbreken en de procedure voor elk deel toepasen. Wees wel bewust dat de pipet de ondoorzichtigheid waarde van het object niet verandert, maar alleen de alfa waarde van de vulling of lijn kleur, aanpast. Zorg er dus voor dat de ondoorzichtigheid waarde van alle objecten op 100% staat vooraleer je start.</flowDiv>
  </flowRoot>
- <g transform="translate(0 2905.4)">
+ <g transform="translate(0 3014.8)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="r" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#e" inkscape:collect="always"/>
    <filter id="be" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

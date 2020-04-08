@@ -28,19 +28,20 @@ S<options :>
 
     -f, --file=NOM_DE_FICHIER
 
-    -e, --export-png=NOM_DE_FICHIER
+    -e, --export-png=FILENAME
     -a, --export-area=x0:y0:x1:y1
     -C, --export-area-page
     -D, --export-area-drawing
         --export-area-snap
+        --export-margin=VALUE
     -i, --export-id=ID
-    -j, L<--export-id>-only
+    -j, --export-id-only
     -t, --export-use-hints
-    -b, --export-background=COULEUR
-    -y, --export-background-opacity=VALEUR
-    -d, --export-dpi=PPP
-    -w, --export-width=LARGEUR
-    -h, --export-height=HAUTEUR
+    -b, --export-background=COLOR
+    -y, --export-background-opacity=VALUE
+    -d, --export-dpi=DPI
+    -w, --export-width=WIDTH
+    -h, --export-height=HEIGHT
 
     -P, --export-ps=NOM_DE_FICHIER
     -E, --export-eps=NOM_DE_FICHIER
@@ -54,6 +55,9 @@ S<options :>
         --export-ignore-filters
 
     -l, --export-plain-svg=NOM_DE_FICHIER
+
+    -m, --export-wmf=FILENAME
+    -M, --export-emf=FILENAME
 
     -p, --print=IMPRIMANTE
 
@@ -77,6 +81,7 @@ S<options :>
 
         --vacuum-defs
         --no-convert-text-baseline-spacing
+        --convert-dpi-method=METHOD
 
         --g-fatal-warnings
 
@@ -161,6 +166,12 @@ préserver cet alignement même si l'export se fait selon des boîtes de
 contour (avec L<--export-id> ou L<--export-area-drawing>) qui ne sont pas
 correctement alignées sur les pixels.
 
+=item B<--export-margin>=I<VALUE>
+
+Adds a margin around the exported area. The size of the margin is specified
+in units of page size (for SVG) or millimeters (for PS/EPS/PDF).  The option
+currently has no effect for other export formats.
+
 =item B<-b> I<COULEUR>, B<--export-background>=I<COULEUR>
 
 Définit la couleur d'arrière-plan du PNG exporté. La couleur peut être
@@ -182,13 +193,15 @@ avec L<--export-use-hints>.
 
 =item B<-e> I<NOM_DE_FICHIER>, B<--export-png>=I<NOM_DE_FICHIER>
 
-Exporter au format PNG sous le nom I<NOM_DE_FICHIER>. Si un fichier portant
-ce nom existe déjà, il sera écrasé sans demande de confirmation.
+Specify the filename for PNG export.  If it already exists, the file will be
+overwritten without asking. Use `-' as filename to write the image data to
+standard output.
 
 =item B<-f> I<NOM_DE_FICHIER>, B<--file>=I<NOM_DE_FICHIER>
 
-Ouvrir le(s) document(s) spécifié(s). La chaîne d'option peut être omise,
-c'est-à-dire que vous pouvez lister les fichiers sans -f.
+Open specified document(s).  Option string may be omitted, i.e. you can list
+the filenames without -f. Use `-' as filename to read the vector data from
+standard input.
 
 =item B<-g>, B<--with-gui>
 
@@ -220,8 +233,9 @@ par défaut, et cette option n'a donc pas d'effet.
 
 =item B<-l>, B<--export-plain-svg>=I<NOM_DE_FICHIER>
 
-Exporter le(s) document(s) au format SVG simple, sans espace de noms
-sodipodi: ou inkscape: et sans métadonnées RDF.
+Export document(s) to plain SVG format, without sodipodi: or inkscape:
+namespaces and without RDF metadata. Use `-' as filename to write the image
+data to standard output.
 
 =item B<-x>, B<--extension-directory>
 
@@ -306,37 +320,34 @@ valeur 255 (opacité complète) sera utilisée.
 
 =item B<-P> I<NOM_DE_FICHIER>, B<--export-ps>=I<NOM_DE_FICHIER>
 
-Exporter le(s) document(s) au format PostScript. Notez que PostScript ne
-supporte pas la transparence, et que tout objet transparent dans le SVG
-original sera automatiquement rastérisé. Les polices utilisées sont
-incorporées en tant que sous-ensemble. La zone d'exportation par défaut est
-la S<page ;> vous pouvez la configurer comme étant le dessin avec l'option
---export-area-drawing. Vous pouvez spécifier L<--export-id> pour exporter un
-unique objet (tous les autres objets seront S<cachés) ;> dans ce cas, la zone
-d'exportation correspond au cadre englobant l'objet choisi, à moins que vous
-n'ajoutiez l'option L<--export-area-page> pour qu'il s'agisse de la page.
+Export document(s) to PostScript format. Note that PostScript does not
+support transparency, so any transparent objects in the original SVG will be
+automatically rasterized. Used fonts are subset and embedded. The default
+export area is page; you can set it to drawing by
+L<--export-area-drawing>. You can specify L<--export-id> to export a single
+object (all other are hidden); in that case export area is that object's
+bounding box, but can be set to page by L<--export-area-page>.  Use `-' as
+filename to write the image data to standard output.
 
 =item B<-E> I<NOM_DE_FICHIER>, B<--export-eps>=I<NOM_DE_FICHIER>
 
-Exporter le(s) document(s) au format PostScript encapsulé. Notez que
-PostScript ne supporte pas la transparence, et que tout objet transparent
-dans le SVG original sera automatiquement rastérisé. Les polices utilisées
-sont incorporées en tant que sous-ensemble. La zone d'exportation par défaut
-est le S<dessin ;> vous pouvez la configurer comme étant la page, mais
-consultez L<--export-area-page> pour la limitation applicable. Vous pouvez
-spécifier L<--export-id> pour exporter un unique objet (tous les autres
-objets seront cachés).
+Export document(s) to Encapsulated PostScript format. Note that PostScript
+does not support transparency, so any transparent objects in the original
+SVG will be automatically rasterized. Used fonts are subset and
+embedded. The default export area is drawing; you can set it to page,
+however see L<--export-area-page> for applicable limitation. You can specify
+L<--export-id> to export a single object (all other are hidden). Use `-' as
+filename to write the image data to standard output.
 
 =item B<-A> I<NOM_DE_FICHIER>, B<--export-pdf>=I<NOM_DE_FICHIER>
 
-Exporter le(s) document(s) au format PDF. Ce format préserve la transparence
-des objets présents dans le SVG original. Les polices utilisées sont
-incorporées en tant que sous-ensemble. La zone d'exportation par défaut est
-la S<page ;> vous pouvez la configurer comme étant le dessin avec l'option
---export-area-drawing. Vous pouvez spécifier L<--export-id> pour exporter un
-unique objet (tous les autres objets seront S<cachés) ;> dans ce cas, la zone
-d'exportation correspond au cadre englobant l'objet choisi, à moins que vous
-n'ajoutiez l'option L<--export-area-page> pour qu'il s'agisse de la page.
+Export document(s) to PDF format. This format preserves the transparency in
+the original SVG. Used fonts are subset and embedded.  The default export
+area is page; you can set it to drawing by L<--export-area-drawing>. You can
+specify L<--export-id> to export a single object (all other are hidden); in
+that case export area is that object's bounding box, but can be set to page
+by L<--export-area-page>.  Use `-' as filename to write the image data to
+standard output.
 
 =item B<--export-pdf-version>=I<NUMÉRO_DE_VERSION>
 
@@ -370,6 +381,14 @@ Exporter les objets filtrés (avec du flou, par exemple) comme des vecteurs,
 en ignorant les filtres (pour l'export en PS, EPS ou PDF). Par défaut, tous
 les objets filtrés sont rastérisés à une résolution choisie par
 L<--export-dpi> (par défaut 96 ppp), ce qui préserve leur apparence.
+
+=item B<-m> I<FILENAME>, B<--export-wmf>=I<FILENAME>
+
+Export document(s) to Windows Metafile (WMF) format.
+
+=item B<-M> I<FILENAME>, B<--export-emf>=I<FILENAME>
+
+Export document(s) to Windows Enhanced Metafile (EMF) format.
 
 =item B<-I>, B<--query-id>
 
@@ -437,11 +456,20 @@ valeurs de hauteur de ligne dans les fichiers créés avant Inkscape 0.92 vont
 être ajustées au chargement afin de préserver la disposition
 souhaitée. Cette option permet d'éviter cet ajustement.
 
+=item B<--convert-dpi-method>=I<METHOD>
+
+Choose method used to rescale legacy (pre-0.92) files which render slightly
+smaller due to the switch from 90 DPI to 96 DPI when interpreting lengths
+expressed in units of pixels. Possible values are "none" (no change,
+document will render at 94% of its original size), "scale-viewbox" (document
+will be rescaled globally, individual lengths will stay untouched) and
+"scale-document" (each length will be re-scaled individually).
+
 =item B<-z>, B<--without-gui>
 
-Ne pas ouvrir l'interface graphique (sous Unix, ne pas utiliser le serveur
-S<X) ;> ne traiter les fichiers que depuis la console. Ceci est présupposé pour
-les options -p, -e, -l et --vacuum-defs.
+Do not open the GUI (on Unix, do not use X server); only process the files
+from console.  This is assumed for -p, -e, -l, and --vacuum-defs options. It
+cannot be used in conjunction with the --verb option.
 
 =item B<--g-fatal-warnings>
 

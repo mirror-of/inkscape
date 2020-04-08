@@ -28,6 +28,7 @@ options:
     -C, --export-area-page
     -D, --export-area-drawing
         --export-area-snap
+        --export-margin=VALUE
     -i, --export-id=ID
     -j, --export-id-only
     -t, --export-use-hints
@@ -49,6 +50,9 @@ options:
         --export-ignore-filters
 
     -l, --export-plain-svg=FILENAME
+
+    -m, --export-wmf=FILENAME
+    -M, --export-emf=FILENAME
 
     -p, --print=PRINTER
 
@@ -72,6 +76,7 @@ options:
 
         --vacuum-defs
         --no-convert-text-baseline-spacing
+        --convert-dpi-method=METHOD
 
         --g-fatal-warnings
 
@@ -146,6 +151,12 @@ user unit (px) values. If you are using the default export resolution of
 this switch allows you to preserve this alignment even if you are
 exporting some object's bounding box (with L<--export-id>
 or L<--export-area-drawing>) which is itself not pixel-aligned.
+
+=item B<--export-margin>=I<VALUE>
+
+Adds a margin around the exported area. The size of the margin is
+specified in units of page size (for SVG) or millimeters (for PS/EPS/PDF).
+The option currently has no effect for other export formats.
 
 =item B<-b> I<COLOR>, B<--export-background>=I<COLOR>
 
@@ -346,6 +357,14 @@ filters (for PS, EPS, and PDF export).  By default, all filtered objects
 are rasterized at L<--export-dpi> (default 96 dpi), preserving the
 appearance.
 
+=item B<-m> I<FILENAME>, B<--export-wmf>=I<FILENAME>
+
+Export document(s) to Windows Metafile (WMF) format.
+
+=item B<-M> I<FILENAME>, B<--export-emf>=I<FILENAME>
+
+Export document(s) to Windows Enhanced Metafile (EMF) format.
+
 =item B<-I>, B<--query-id>
 
 Set the ID of the object whose dimensions are queried. If not set, query
@@ -406,6 +425,16 @@ opening.  Inkscape 0.92 adopts the CSS standard definition for the
 the line height values in files created prior to Inkscape 0.92 will be
 adjusted on loading to preserve the intended text layout.  This command
 line option will skip that adjustment.
+
+=item B<--convert-dpi-method>=I<METHOD>
+
+Choose method used to rescale legacy (pre-0.92) files which render
+slightly smaller due to the switch from 90 DPI to 96 DPI when interpreting
+lengths expressed in units of pixels. Possible values are "none" (no
+change, document will render at 94% of its original size), "scale-viewbox"
+(document will be rescaled globally, individual lengths will stay
+untouched) and "scale-document" (each length will be re-scaled
+individually).
 
 =item B<-z>, B<--without-gui>
 
@@ -658,7 +687,7 @@ making Open Source more visually stimulating to larger audiences.
 
 =head1 COPYRIGHT AND LICENSE
 
-B<Copyright (C)> 1999-2018 by Authors.
+B<Copyright (C)> 1999-2019 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it
 under the terms of the GPL version 2 or later.

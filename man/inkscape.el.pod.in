@@ -34,6 +34,7 @@ C<inkscape [επιλογές [όνομα_αρχείου ...]>
     -C, --export-area-page
     -D, --export-area-drawing
         --export-area-snap
+        --export-margin=VALUE
     -i, --export-id=ID
     -j, --export-id-only
     -t, --export-use-hints
@@ -55,6 +56,9 @@ C<inkscape [επιλογές [όνομα_αρχείου ...]>
         --export-ignore-filters
 
     -l, --export-plain-svg=FILENAME
+
+    -m, --export-wmf=FILENAME
+    -M, --export-emf=FILENAME
 
     -p, --print=PRINTER
 
@@ -78,6 +82,7 @@ C<inkscape [επιλογές [όνομα_αρχείου ...]>
 
         --vacuum-defs
         --no-convert-text-baseline-spacing
+        --convert-dpi-method=METHOD
 
         --g-fatal-warnings
 
@@ -160,6 +165,12 @@ L<--export-use-hints>.
 οριακά πλαίσια αντικειμένου (με L<--export-id> ή L<--export-area-drawing>)
 που είναι το ίδιο μη ευθυγραμμιζόμενο με εικονοστοιχεία.
 
+=item B<--export-margin>=I<VALUE>
+
+Adds a margin around the exported area. The size of the margin is specified
+in units of page size (for SVG) or millimeters (for PS/EPS/PDF).  The option
+currently has no effect for other export formats.
+
 =item B<-b> I<COLOR>, B<--export-background>=I<COLOR>
 
 Το χρώμα παρασκηνίου του εξαγόμενου PNG. Αυτό μπορεί να είναι οποιοδήποτε
@@ -180,13 +191,15 @@ attribute of sodipodi:namedview).
 
 =item B<-e> I<FILENAME>, B<--export-png>=I<FILENAME>
 
-Καθορισμός του ονόματος αρχείου για εξαγωγή PNG. Εάν ήδη υπάρχει, το αρχείο
-θα αντικατασταθεί χωρίς ερώτηση.
+Specify the filename for PNG export.  If it already exists, the file will be
+overwritten without asking. Use `-' as filename to write the image data to
+standard output.
 
 =item B<-f> I<FILENAME>, B<--file>=I<FILENAME>
 
-Άνοιγμα καθορισμένων εγγράφων. Το αλφαριθμητικό επιλογής μπορεί να
-παραληφθεί, δηλαδή μπορείτε να καταγράψετε τα ονόματα αρχείου χωρίς -f. 
+Open specified document(s).  Option string may be omitted, i.e. you can list
+the filenames without -f. Use `-' as filename to read the vector data from
+standard input.
 
 =item B<-g>, B<--with-gui>
 
@@ -216,8 +229,9 @@ ignored. For PDF export, this is the default, so this option has no effect.
 
 =item B<-l>, B<--export-plain-svg>=I<FILENAME>
 
-Εξαγωγή αντικειμένων σε απλή μορφή SVG, χωρίς κενά ονόματος sodipodi: ή
-inkscape και χωρίς μεταδεδομένα RDF.
+Export document(s) to plain SVG format, without sodipodi: or inkscape:
+namespaces and without RDF metadata. Use `-' as filename to write the image
+data to standard output.
 
 =item B<-x>, B<--extension-directory>
 
@@ -300,37 +314,34 @@ sodipodi:namedview). Εάν δεν οριστεί αλλά χρησιμοποι�
 
 =item B<-P> I<FILENAME>, B<--export-ps>=I<FILENAME>
 
-Εξαγωγή εγγράφων σε μορφή PostScript. Σημειώστε ότι το PostScript δεν
-υποστηρίζει διαφάνεια, έτσι οποιαδήποτε διαφανή αντικείμενα στο αρχικό SVG
-θα εικονογραφικοποιηθούν αυτόματα. Οι χρησιμοποιούμενες γραμματοσειρές είναι
-υποσύνολο και ενσωματωμένες. Η προεπιλεγμένη περιοχή εξαγωγής είναι
-σελίδα. Μπορείτε να την ορίσετε στο σχέδιο με
-L<--export-area-drawing>. Μπορείτε να καθορίσετε  L<--export-id> για εξαγωγή
-ενός μονού αντικειμένου (όλα τα άλλα κρύβονται). Στην περίπτωση αυτή η
-περιοχή εξαγωγής είναι το οριακό πλαίσιο αυτού του αντικειμένου, αλλά μπορεί
-να οριστεί σε σελίδα με L<--export-area-page>.
+Export document(s) to PostScript format. Note that PostScript does not
+support transparency, so any transparent objects in the original SVG will be
+automatically rasterized. Used fonts are subset and embedded. The default
+export area is page; you can set it to drawing by
+L<--export-area-drawing>. You can specify L<--export-id> to export a single
+object (all other are hidden); in that case export area is that object's
+bounding box, but can be set to page by L<--export-area-page>.  Use `-' as
+filename to write the image data to standard output.
 
 =item B<-E> I<FILENAME>, B<--export-eps>=I<FILENAME>
 
-Εξαγωγή εγγράφων σε μορφή ενσωματωμένου PostScript. Σημειώστε ότι το
-PostScript δεν υποστηρίζει διαφάνεια, έτσι οποιαδήποτε διαφανή αντικείμενα
-στο αρχικό SVG θα εικονογραφικοποιηθούν αυτόματα. Οι χρησιμοποιούμενες
-γραμματοσειρές είναι υποσύνολο και ενσωματωμένες. Η προεπιλεγμένη περιοχή
-εξαγωγής είναι σχέδιο. Μπορείτε να το ορίσετε στη σελίδα, όμως δείτε
-L<--export-area-page> για εφαρμοζόμενους περιορισμούς. Μπορείτε να
-καθορίσετε L<--export-id> για να εξάγετε ένα μονό αντικείμενο (όλα τα άλλα
-κρύβονται).
+Export document(s) to Encapsulated PostScript format. Note that PostScript
+does not support transparency, so any transparent objects in the original
+SVG will be automatically rasterized. Used fonts are subset and
+embedded. The default export area is drawing; you can set it to page,
+however see L<--export-area-page> for applicable limitation. You can specify
+L<--export-id> to export a single object (all other are hidden). Use `-' as
+filename to write the image data to standard output.
 
 =item B<-A> I<FILENAME>, B<--export-pdf>=I<FILENAME>
 
-Εξαγωγή εγγράφων σε μορφή PDF. Αυτή η μορφή διατηρεί τη διαφάνεια στο αρχικό
-SVG. Οι χρησιμοποιούμενες γραμματοσειρές είναι υποσύνολο και
-ενσωματωμένες. Η προεπιλεγμένη περιοχή εξαγωγής είναι σελίδα. Μπορείτε να το
-ορίσετε σε σχέδιο, με L<--export-area-drawing>. Μπορείτε να καθορίσετε
-L<--export-id> για να εξάγετε ένα μονό αντικείμενο (όλα τα άλλα
-κρύβονται). Σε αυτή την περίπτωση περιοχή εξαγωγής είναι αυτή του οριακού
-πλαισίου αντικειμένου, αλλά μπορεί να οριστεί σε σελίδα με
-L<--export-area-page>.
+Export document(s) to PDF format. This format preserves the transparency in
+the original SVG. Used fonts are subset and embedded.  The default export
+area is page; you can set it to drawing by L<--export-area-drawing>. You can
+specify L<--export-id> to export a single object (all other are hidden); in
+that case export area is that object's bounding box, but can be set to page
+by L<--export-area-page>.  Use `-' as filename to write the image data to
+standard output.
 
 =item B<--export-pdf-version>=I<PDF-VERSION>
 
@@ -363,6 +374,14 @@ and SVG export).
 αγνοώντας τα φίλτρα (για εξαγωγή PS, EPS και PDF). Από προεπιλογή, όλα τα
 φιλτραρισμένα αντικείμενα εικονογραφικοποιούνται στο L<--export-dpi>
 (προεπιλογή 96 dpi), διατηρώντας την εμφάνιση.
+
+=item B<-m> I<FILENAME>, B<--export-wmf>=I<FILENAME>
+
+Export document(s) to Windows Metafile (WMF) format.
+
+=item B<-M> I<FILENAME>, B<--export-emf>=I<FILENAME>
+
+Export document(s) to Windows Enhanced Metafile (EMF) format.
 
 =item B<-I>, B<--query-id>
 
@@ -428,11 +447,20 @@ line height values in files created prior to Inkscape 0.92 will be adjusted
 on loading to preserve the intended text layout.  This command line option
 will skip that adjustment.
 
+=item B<--convert-dpi-method>=I<METHOD>
+
+Choose method used to rescale legacy (pre-0.92) files which render slightly
+smaller due to the switch from 90 DPI to 96 DPI when interpreting lengths
+expressed in units of pixels. Possible values are "none" (no change,
+document will render at 94% of its original size), "scale-viewbox" (document
+will be rescaled globally, individual lengths will stay untouched) and
+"scale-document" (each length will be re-scaled individually).
+
 =item B<-z>, B<--without-gui>
 
-Μην ανοίγετε το GUI (σε Unix, μην χρησιμοποιείτε εξυπηρετητή X). Μόνο
-επεξεργασία των αρχείων από την κονσόλα. Αυτό αναλαμβάνεται για επιλογές -p,
--e, -l και --vacuum-defs.
+Do not open the GUI (on Unix, do not use X server); only process the files
+from console.  This is assumed for -p, -e, -l, and --vacuum-defs options. It
+cannot be used in conjunction with the --verb option.
 
 =item B<--g-fatal-warnings>
 
@@ -692,7 +720,7 @@ Sodipodi διανθίστηκε με έναν αριθμό μαθηματικώ�
 
 =head1 ΠΝΕΥΜΑΤΙΚΑ ΔΙΚΑΙΩΜΑΤΑ ΚΑΙ ΑΔΕΙΑ
 
-B<Copyright (C)> 1999-2018 by Authors.
+B<Copyright (C)> 1999-2019 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it under
 the terms of the GPL version 2 or later.

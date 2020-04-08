@@ -33,6 +33,7 @@ options:
     -C, --export-area-page
     -D, --export-area-drawing
         --export-area-snap
+        --export-margin=VALUE
     -i, --export-id=ID
     -j, --export-id-only
     -t, --export-use-hints
@@ -54,6 +55,9 @@ options:
         --export-ignore-filters
 
     -l, --export-plain-svg=FILENAME
+
+    -m, --export-wmf=FILENAME
+    -M, --export-emf=FILENAME
 
     -p, --print=PRINTER
 
@@ -77,6 +81,7 @@ options:
 
         --vacuum-defs
         --no-convert-text-baseline-spacing
+        --convert-dpi-method=METHOD
 
         --g-fatal-warnings
 
@@ -137,6 +142,12 @@ PNG エクスポートにおいて、エクスポート領域を拡大方向に�
 96dpi でグラフィックが最小のアンチエイリアスにピクセルスナップされた場合、エクスポートするいくつかのオブジェクトの境界枠 (--export-id
 または L<--export-area-drawing> 指定) がピクセルに揃えていない場合であっても、このスイッチで配置を維持できます。
 
+=item B<--export-margin>=I<VALUE>
+
+Adds a margin around the exported area. The size of the margin is specified
+in units of page size (for SVG) or millimeters (for PS/EPS/PDF).  The option
+currently has no effect for other export formats.
+
 =item B<-b> I<COLOR>, B<--export-background>=I<COLOR>
 
 エクスポートした PNG の背景色になります。SVG がサポートする色指定文字列 ("#ff007f" や "rgb(255,0,128)" など)
@@ -154,12 +165,15 @@ if used with L<--export-use-hints>.
 
 =item B<-e> I<FILENAME>, B<--export-png>=I<FILENAME>
 
-PNG エクスポート時のファイル名を指定します。同名のファイルが存在する場合、問い合わせなしに上書きされます。
+Specify the filename for PNG export.  If it already exists, the file will be
+overwritten without asking. Use `-' as filename to write the image data to
+standard output.
 
 =item B<-f> I<FILENAME>, B<--file>=I<FILENAME>
 
-指定されたドキュメントを開きます。オプション文字 (-f) は省略できます。すなわち、オプション文字が与えられていない場合は -f
-が指定され、パラメーターはすべてファイル名とみなされます。
+Open specified document(s).  Option string may be omitted, i.e. you can list
+the filenames without -f. Use `-' as filename to read the vector data from
+standard input.
 
 =item B<-g>, B<--with-gui>
 
@@ -187,8 +201,9 @@ ignored. For PDF export, this is the default, so this option has no effect.
 
 =item B<-l>, B<--export-plain-svg>=I<FILENAME>
 
-ドキュメントをプレーン SVG 形式にエクスポートします。sodipodi: あるいは inkscape: 名前空間や RDF
-メタデータは破棄されます。
+Export document(s) to plain SVG format, without sodipodi: or inkscape:
+namespaces and without RDF metadata. Use `-' as filename to write the image
+data to standard output.
 
 =item B<-x>, B<--extension-directory>
 
@@ -251,28 +266,34 @@ inkscape:pageopacity= 属性)が使用されます。このオプションを指
 
 =item B<-P> I<FILENAME>, B<--export-ps>=I<FILENAME>
 
-ドキュメントを PostScript (PS) 形式にエクスポートします。PostScript
-は透明度をサポートしていない点に留意してください。オリジナルの SVG
-にあるいかなる透明なオブジェクトも自動的にラスタライズされます。使用しているフォントはサブセット化されて埋め込まれます。デフォルトのエクスポート領域はページになり、--export-area-drawing
-で描画全体に指定できます。L<--export-id> でエクスポートするオブジェクトを 1 つ指定でき
-(その他はすべてエクスポートされません)、その場合はエクスポート領域はそのオブジェクトの境界枠になりますが、L<--export-area-page>
-でそのページに指定できます。
+Export document(s) to PostScript format. Note that PostScript does not
+support transparency, so any transparent objects in the original SVG will be
+automatically rasterized. Used fonts are subset and embedded. The default
+export area is page; you can set it to drawing by
+L<--export-area-drawing>. You can specify L<--export-id> to export a single
+object (all other are hidden); in that case export area is that object's
+bounding box, but can be set to page by L<--export-area-page>.  Use `-' as
+filename to write the image data to standard output.
 
 =item B<-E> I<FILENAME>, B<--export-eps>=I<FILENAME>
 
-ドキュメントを Encapsulated PostScript (EPS) 形式にエクスポートします。PostScript
-は透明度をサポートしていない点に留意してください。オリジナルの SVG
-にあるいかなる透明オブジェクトも自動的にラスタライズされます。使用しているフォントはサブセット化されて埋め込まれます。デフォルトのエクスポート領域は描画全体になり、ページに指定することも出来ますが、その場合の制限事項については
-L<--export-area-page> を参照してください。L<--export-id> でエクスポートするオブジェクトを 1 つ指定できます
-(その他はすべてエクスポートされません)。
+Export document(s) to Encapsulated PostScript format. Note that PostScript
+does not support transparency, so any transparent objects in the original
+SVG will be automatically rasterized. Used fonts are subset and
+embedded. The default export area is drawing; you can set it to page,
+however see L<--export-area-page> for applicable limitation. You can specify
+L<--export-id> to export a single object (all other are hidden). Use `-' as
+filename to write the image data to standard output.
 
 =item B<-A> I<FILENAME>, B<--export-pdf>=I<FILENAME>
 
-ドキュメントを PDF 形式にエクスポートします。この形式ではオリジナル SVG
-の透明度は保持されます。使用しているフォントはサブセット化され埋め込まれます。デフォルトのエクスポート領域はページになり、L<--export-area-drawing>
-で描画全体に指定できます。L<--export-id> でエクスポートするオブジェクトを 1 つ指定でき
-(その他はすべてエクスポートされません)、その場合はエクスポート領域はそのオブジェクトの境界枠になりますが、L<--export-area-page>
-でそのページに指定できます。"
+Export document(s) to PDF format. This format preserves the transparency in
+the original SVG. Used fonts are subset and embedded.  The default export
+area is page; you can set it to drawing by L<--export-area-drawing>. You can
+specify L<--export-id> to export a single object (all other are hidden); in
+that case export area is that object's bounding box, but can be set to page
+by L<--export-area-page>.  Use `-' as filename to write the image data to
+standard output.
 
 =item B<--export-pdf-version>=I<PDF-VERSION>
 
@@ -300,6 +321,14 @@ LaTeX ファイルを入力 (\input{image.tex}) すると、イメージと共�
 ぼかしなどのフィルターが適用されたベクターオブジェクトをエクスポートするとき、フィルターを無視します (PS、EPS、および PDF
 用)。デフォルトでは、フィルターが適用されているオブジェクトは L<--export-dpi> で指定された解像度 (デフォルトは 96 dpi)
 でラスタライズされ、その外見を維持します。
+
+=item B<-m> I<FILENAME>, B<--export-wmf>=I<FILENAME>
+
+Export document(s) to Windows Metafile (WMF) format.
+
+=item B<-M> I<FILENAME>, B<--export-emf>=I<FILENAME>
+
+Export document(s) to Windows Enhanced Metafile (EMF) format.
 
 =item B<-I>, B<--query-id>
 
@@ -359,10 +388,20 @@ line height values in files created prior to Inkscape 0.92 will be adjusted
 on loading to preserve the intended text layout.  This command line option
 will skip that adjustment.
 
+=item B<--convert-dpi-method>=I<METHOD>
+
+Choose method used to rescale legacy (pre-0.92) files which render slightly
+smaller due to the switch from 90 DPI to 96 DPI when interpreting lengths
+expressed in units of pixels. Possible values are "none" (no change,
+document will render at 94% of its original size), "scale-viewbox" (document
+will be rescaled globally, individual lengths will stay untouched) and
+"scale-document" (each length will be re-scaled individually).
+
 =item B<-z>, B<--without-gui>
 
-GUI を使用せず (Unix では X server を使用しません)、コンソールからのみファイルを処理します。これは -p、-e、-l、および
---vacuum-defs オプションでの使用を想定しています。
+Do not open the GUI (on Unix, do not use X server); only process the files
+from console.  This is assumed for -p, -e, -l, and --vacuum-defs options. It
+cannot be used in conjunction with the --verb option.
 
 =item B<--g-fatal-warnings>
 
@@ -567,7 +606,7 @@ Inkscape
 
 =head1 著作権およびライセンス
 
-B<Copyright (C)> 1999-2018 by Authors.
+B<Copyright (C)> 1999-2019 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it under
 the terms of the GPL version 2 or later.

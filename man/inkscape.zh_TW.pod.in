@@ -28,19 +28,20 @@ C<inkscape [選項] [檔名 ...]>
 
     -f, --file=檔名
 
-    -e, --export-png=檔名
+    -e, --export-png=FILENAME
     -a, --export-area=x0:y0:x1:y1
     -C, --export-area-page
     -D, --export-area-drawing
         --export-area-snap
+        --export-margin=VALUE
     -i, --export-id=ID
     -j, --export-id-only
     -t, --export-use-hints
-    -b, --export-background=顏色
-    -y, --export-background-opacity=數值
+    -b, --export-background=COLOR
+    -y, --export-background-opacity=VALUE
     -d, --export-dpi=DPI
-    -w, --export-width=寬度
-    -h, --export-height=高度
+    -w, --export-width=WIDTH
+    -h, --export-height=HEIGHT
 
     -P, --export-ps=檔名
     -E, --export-eps=檔名
@@ -54,6 +55,9 @@ C<inkscape [選項] [檔名 ...]>
         --export-ignore-filters
 
     -l, --export-plain-svg=檔名
+
+    -m, --export-wmf=FILENAME
+    -M, --export-emf=FILENAME
 
     -p, --print=印表機
 
@@ -77,6 +81,7 @@ C<inkscape [選項] [檔名 ...]>
 
         --vacuum-defs
         --no-convert-text-baseline-spacing
+        --convert-dpi-method=METHOD
 
         --g-fatal-warnings
 
@@ -132,6 +137,12 @@ PNG，這個可以和 L<--export-use-hints> 結合使用。
 且你的圖形是像素捉取來最小化平滑，這項改變允許你維持這種校正方式，即使你正要匯出的物件的外框邊界 (使用 L<--export-id> 或
 --export-area-drawing) 是本身而不是像素校正。
 
+=item B<--export-margin>=I<VALUE>
+
+Adds a margin around the exported area. The size of the margin is specified
+in units of page size (for SVG) or millimeters (for PS/EPS/PDF).  The option
+currently has no effect for other export formats.
+
 =item B<-b> I<顏色>, B<--export-background>=I<顏色>
 
 匯出 PNG 的背景顏色。 可以是任何 SVG 的顏色字串，例如 "#ff007f" 或 "rgb(255, 0, 128)"。
@@ -146,11 +157,15 @@ PNG，這個可以和 L<--export-use-hints> 結合使用。
 
 =item B<-e> I<檔名>, B<--export-png>=I<檔名>
 
-指定匯出 PNG 的檔名。 如果指定的檔名已經存在，則不會詢問便覆蓋原有的檔案。
+Specify the filename for PNG export.  If it already exists, the file will be
+overwritten without asking. Use `-' as filename to write the image data to
+standard output.
 
 =item B<-f> I<檔名>, B<--file>=I<檔名>
 
-開啟指定的文件。 選項字串可以省略，即你可以不要輸入 -f 只列出檔名。
+Open specified document(s).  Option string may be omitted, i.e. you can list
+the filenames without -f. Use `-' as filename to read the vector data from
+standard input.
 
 =item B<-g>, B<--with-gui>
 
@@ -174,7 +189,9 @@ DPI 內定值)。
 
 =item B<-l>, B<--export-plain-svg>=I<檔名>
 
-匯出文件為普通的 SVG 格式，沒有 sodipodi: 或 inkscape: 名稱集也沒有 RDF 後設資料。
+Export document(s) to plain SVG format, without sodipodi: or inkscape:
+namespaces and without RDF metadata. Use `-' as filename to write the image
+data to standard output.
 
 =item B<-x>, B<--extension-directory>
 
@@ -229,22 +246,34 @@ DPI 內定值)。
 
 =item B<-P> I<檔名>, B<--export-ps>=I<檔名>
 
-將文件匯出成 PostScript 格式。注意 PostScript 不支援透明，所以原本 SVG 中的透明物件都會自動轉成點
-陣圖。使用的字型成子集合並嵌入。預設的匯出範圍是畫布；你可以用 L<--export-area-drawing> 將匯出範圍設定 成繪圖部份。你可指定
-L<--export-id> 來匯出單一物件 (其餘全部隱藏); 假如那樣的話匯出範圍就是物件的外框邊 界，但可用
---export-area-canvas 設定成畫布。
+Export document(s) to PostScript format. Note that PostScript does not
+support transparency, so any transparent objects in the original SVG will be
+automatically rasterized. Used fonts are subset and embedded. The default
+export area is page; you can set it to drawing by
+L<--export-area-drawing>. You can specify L<--export-id> to export a single
+object (all other are hidden); in that case export area is that object's
+bounding box, but can be set to page by L<--export-area-page>.  Use `-' as
+filename to write the image data to standard output.
 
 =item B<-E> I<檔名>, B<--export-eps>=I<檔名>
 
-將文件匯出成封裝的 PostScript 格式。注意 PostScript 不支援透明，所以原始 SVG 中的透明物件都會自動轉成點
-陣圖。使用的字型成子集合並嵌入。預設的匯出範圍是繪圖部份；你可設定成畫布，不過會看見 --export-area-canvas 的適用限制。你可以指定
-L<--export-id> 來匯出單一物件 (其餘全部隱藏)。
+Export document(s) to Encapsulated PostScript format. Note that PostScript
+does not support transparency, so any transparent objects in the original
+SVG will be automatically rasterized. Used fonts are subset and
+embedded. The default export area is drawing; you can set it to page,
+however see L<--export-area-page> for applicable limitation. You can specify
+L<--export-id> to export a single object (all other are hidden). Use `-' as
+filename to write the image data to standard output.
 
 =item B<-A> I<檔名>, B<--export-pdf>=I<檔名>
 
-將文件匯出成 PDF 格式。這種格式會保存原始 SVG 中的透明度。使用的字型成子集合並嵌入。 預設的匯出範圍是畫 布；你可以用
-L<--export-area-drawing> 將匯出範圍設定成繪圖部份。你可以指定 L<--export-id> 來匯出單一物 件
-(其餘全部隱藏); 假如那樣的話匯出範圍就是物件的外框邊界，但可用 --export-area-canvas 設定成畫布。
+Export document(s) to PDF format. This format preserves the transparency in
+the original SVG. Used fonts are subset and embedded.  The default export
+area is page; you can set it to drawing by L<--export-area-drawing>. You can
+specify L<--export-id> to export a single object (all other are hidden); in
+that case export area is that object's bounding box, but can be set to page
+by L<--export-area-page>.  Use `-' as filename to write the image data to
+standard output.
 
 =item B<--export-pdf-version>=I<PDF 版本>
 
@@ -267,6 +296,14 @@ PDF/PS/EPS 檔案裡，但會出現在 LaTeX 檔案。這個 LaTeX 檔案包含 
 
 將套用濾鏡的物件 (例如這些物件套用模糊) 匯出成向量屬性，忽略濾鏡 (匯出 PS、EPS 和PDF 時)。 在預設情況下，全部套用濾鏡的物件會以
 L<--export-dpi> (預設為 96 dpi) 的解析度轉成點陣圖以維持外觀。
+
+=item B<-m> I<FILENAME>, B<--export-wmf>=I<FILENAME>
+
+Export document(s) to Windows Metafile (WMF) format.
+
+=item B<-M> I<FILENAME>, B<--export-emf>=I<FILENAME>
+
+Export document(s) to Windows Enhanced Metafile (EMF) format.
 
 =item B<-I>, B<--query-id>
 
@@ -320,10 +357,20 @@ line height values in files created prior to Inkscape 0.92 will be adjusted
 on loading to preserve the intended text layout.  This command line option
 will skip that adjustment.
 
+=item B<--convert-dpi-method>=I<METHOD>
+
+Choose method used to rescale legacy (pre-0.92) files which render slightly
+smaller due to the switch from 90 DPI to 96 DPI when interpreting lengths
+expressed in units of pixels. Possible values are "none" (no change,
+document will render at 94% of its original size), "scale-viewbox" (document
+will be rescaled globally, individual lengths will stay untouched) and
+"scale-document" (each length will be re-scaled individually).
+
 =item B<-z>, B<--without-gui>
 
-不要開啟圖形介面 (在 Unix 系統，不使用 X server)；只從終端機處理檔案。 這被假定為 -p、-e、-l 和 --vacuum-defs
-選項。
+Do not open the GUI (on Unix, do not use X server); only process the files
+from console.  This is assumed for -p, -e, -l, and --vacuum-defs options. It
+cannot be used in conjunction with the --verb option.
 
 =item B<--g-fatal-warnings>
 
@@ -509,7 +556,7 @@ Ted Gould 成立 Inkscape 計劃，想要以專注於 SVG 相容、介面外觀�
 
 =head1 著作權和許可證
 
-B<Copyright (C)> 1999-2018 by Authors.
+B<Copyright (C)> 1999-2019 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it under
 the terms of the GPL version 2 or later.

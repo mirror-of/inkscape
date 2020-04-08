@@ -28,19 +28,20 @@ voľby:
 
     -f, --file=NÁZOVSÚBORU
 
-    -e, --export-png=NÁZOVSÚBORU
+    -e, --export-png=FILENAME
     -a, --export-area=x0:y0:x1:y1
     -C, --export-area-page
     -D, --export-area-drawing
         --export-area-snap
+        --export-margin=VALUE
     -i, --export-id=ID
     -j, --export-id-only
     -t, --export-use-hints
-    -b, --export-background=FARBA
-    -y, --export-background-opacity=HODNOTA
+    -b, --export-background=COLOR
+    -y, --export-background-opacity=VALUE
     -d, --export-dpi=DPI
-    -w, --export-width=ŠÍRKA
-    -h, --export-height=VÝŠKA
+    -w, --export-width=WIDTH
+    -h, --export-height=HEIGHT
 
     -P, --export-ps=NÁZOVSÚBORU
     -E, --export-eps=NÁZOVSÚBORU
@@ -54,6 +55,9 @@ voľby:
         --export-ignore-filters
 
     -l, --export-plain-svg=NÁZOVSÚBORU
+
+    -m, --export-wmf=FILENAME
+    -M, --export-emf=FILENAME
 
     -p, --print=TLAČIAREŇ
 
@@ -77,6 +81,7 @@ voľby:
 
         --vacuum-defs
         --no-convert-text-baseline-spacing
+        --convert-dpi-method=METHOD
 
         --g-fatal-warnings
 
@@ -153,6 +158,12 @@ antialiasing, táto voľba vám umožní zachovať toto zarovnanie aj ak
 exportujete ohraničenie nejakého objektu (pomocou L<--export-id> alebo
 L<--export-area-drawing>), ktoré samotné nie je zarovnané na pixle.
 
+=item B<--export-margin>=I<VALUE>
+
+Adds a margin around the exported area. The size of the margin is specified
+in units of page size (for SVG) or millimeters (for PS/EPS/PDF).  The option
+currently has no effect for other export formats.
+
 =item B<-b> I<FARBA>, B<--export-background>=I<FARBA>
 
 Farba pozadia exportovaného PNG.  Toto môže byť akýkoľvek reťazec
@@ -173,12 +184,15 @@ Táto hodnota má precedenciu pred odporúčaným DPI pri použití s prepínač
 
 =item B<-e> I<FILENAME>, B<--export-png>=I<NÁZOVSÚBORU>
 
-Názov súboru pre export PNG.  Ak už existuje, bude prepísaný bez pýtania sa.
+Specify the filename for PNG export.  If it already exists, the file will be
+overwritten without asking. Use `-' as filename to write the image data to
+standard output.
 
 =item B<-f> I<NÁZOVSÚBORU>, B<--file>=I<NÁZOVSÚBORU>
 
-Otvorí zadané dokumenty.  Je možné vynechať reťazec voľby, t.j. môžete
-uviesť zoznam súborov bez -f.
+Open specified document(s).  Option string may be omitted, i.e. you can list
+the filenames without -f. Use `-' as filename to read the vector data from
+standard input.
 
 =item B<-g>, B<--with-gui>
 
@@ -208,8 +222,9 @@ uvedenie nemá žiadny vplyv.
 
 =item B<-l>, B<--export-plain-svg>=I<NÁZOVSÚBORU>
 
-Exportovať dokumenty do formátu čisté SVG, bez menných priestorov sodipodi:
-alebo inkscape: namespaces a bez metadát RDF.
+Export document(s) to plain SVG format, without sodipodi: or inkscape:
+namespaces and without RDF metadata. Use `-' as filename to write the image
+data to standard output.
 
 =item B<-x>, B<--extension-directory>
 
@@ -288,34 +303,34 @@ použije sa hodnota 255 (plné krytie).
 
 =item B<-P> I<NÁZOVSÚBORU>, B<--export-ps>=I<NÁZOVSÚBORU>
 
-Exportovať dokumenty do formátu PostScript. Pamätajte, že PostScript
-nepodporuje priesvitnosť, takže akékoľvek priesvitné objekty v pôvodnom SVG
-sa automaticky rasterizujú. Priložia sa použité písma alebo podmnožina
-použitých znakov. Štandardná oblasť exportu je plátno a môžete ju nastaviť
-na kresbu pomocou L<--export-area-drawing>. Ak chcete exportovať jediný
-objekt, môžete použiť L<--export-id> (všetky ostatné sa skryjú); v tom
-prípade bude oblasťou exportu ohraničenie uvedeného objektu, ale možno ho
-nastaviť na plátno voľbou --export-area-canvas.
+Export document(s) to PostScript format. Note that PostScript does not
+support transparency, so any transparent objects in the original SVG will be
+automatically rasterized. Used fonts are subset and embedded. The default
+export area is page; you can set it to drawing by
+L<--export-area-drawing>. You can specify L<--export-id> to export a single
+object (all other are hidden); in that case export area is that object's
+bounding box, but can be set to page by L<--export-area-page>.  Use `-' as
+filename to write the image data to standard output.
 
 =item B<-E> I<NÁZOVSÚBORU>, B<--export-eps>=I<NÁZOVSÚBORU>
 
-Exportovať dokumenty do formátu Encapsulated PostScript. Pamätajte, že
-PostScript nepodporuje priesvitnosť, takže akékoľvek priesvitné objekty v
-pôvodnom SVG sa automaticky rasterizujú. Priložia sa použité písma alebo
-podmnožina použitých znakov. Štandardná oblasť exportu je kresba a môžete ju
-však nastaviť na plátno, pozrite si však obmedzenia v popise voľby
-L<--export-area-page>. Ak chcete exportovať jediný objekt, môžete použiť
-L<--export-id> (všetky ostatné sa skryjú).
+Export document(s) to Encapsulated PostScript format. Note that PostScript
+does not support transparency, so any transparent objects in the original
+SVG will be automatically rasterized. Used fonts are subset and
+embedded. The default export area is drawing; you can set it to page,
+however see L<--export-area-page> for applicable limitation. You can specify
+L<--export-id> to export a single object (all other are hidden). Use `-' as
+filename to write the image data to standard output.
 
 =item B<-A> I<NÁZOVSÚBORU>, B<--export-pdf>=I<NÁZOVSÚBORU>
 
-Exportovať dokumenty do formátu PDF. Tento formát zachováva priesvitnosť z
-pôvodného SVG. Priložia sa použité písma alebo podmnožina použitých
-znakov. Štandardná oblasť exportu je plátno a môžete ju nastaviť na kresbu
-pomocou --export-area-drawing. Ak chcete exportovať jediný objekt, môžete
-použiť L<--export-id> (všetky ostatné sa skryjú); v tom prípade bude
-oblasťou exportu ohraničenie uvedeného objektu, ale možno ho nastaviť na
-plátno voľbou --export-area-canvas.
+Export document(s) to PDF format. This format preserves the transparency in
+the original SVG. Used fonts are subset and embedded.  The default export
+area is page; you can set it to drawing by L<--export-area-drawing>. You can
+specify L<--export-id> to export a single object (all other are hidden); in
+that case export area is that object's bounding box, but can be set to page
+by L<--export-area-page>.  Use `-' as filename to write the image data to
+standard output.
 
 =item B<--export-pdf-version>=I<VERZIA-PDF>
 
@@ -346,6 +361,14 @@ Exportovať objekty s filtrami (napr. s rozostrením) ako vektorovú grafiku a
 ignorovať filtre (pri exporte PS, EPS a PDF).  Štandardne sa všetky objekty
 s filtrami rasterizujú s rozlíšením L<--export-dpi> (štandardne 96 DPI) čím
 sa zachová ich vzhľad.
+
+=item B<-m> I<FILENAME>, B<--export-wmf>=I<FILENAME>
+
+Export document(s) to Windows Metafile (WMF) format.
+
+=item B<-M> I<FILENAME>, B<--export-emf>=I<FILENAME>
+
+Export document(s) to Windows Enhanced Metafile (EMF) format.
 
 =item B<-I>, B<--query-id>
 
@@ -408,11 +431,20 @@ line height values in files created prior to Inkscape 0.92 will be adjusted
 on loading to preserve the intended text layout.  This command line option
 will skip that adjustment.
 
+=item B<--convert-dpi-method>=I<METHOD>
+
+Choose method used to rescale legacy (pre-0.92) files which render slightly
+smaller due to the switch from 90 DPI to 96 DPI when interpreting lengths
+expressed in units of pixels. Possible values are "none" (no change,
+document will render at 94% of its original size), "scale-viewbox" (document
+will be rescaled globally, individual lengths will stay untouched) and
+"scale-document" (each length will be re-scaled individually).
+
 =item B<-z>, B<--without-gui>
 
-Neotvárať grafické rozhranie (na unixových systémoch nepoužívať X server),
-iba spracovať súbory z konzoly. Táto voľba sa predpokladá pri voľbách -p,
--e, -l a --vacuum-defs.
+Do not open the GUI (on Unix, do not use X server); only process the files
+from console.  This is assumed for -p, -e, -l, and --vacuum-defs options. It
+cannot be used in conjunction with the --verb option.
 
 =item B<--g-fatal-warnings>
 
@@ -653,7 +685,7 @@ vylepšení vizuálnej stránky open source širokému publiku.
 
 =head1 AUTORSKÉ PRÁVA A LICENCIA
 
-B<Copyright (C)> 1999-2018 by Authors.
+B<Copyright (C)> 1999-2019 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it under
 the terms of the GPL version 2 or later.
