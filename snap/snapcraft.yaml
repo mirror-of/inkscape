@@ -21,7 +21,7 @@ grade: stable
 base: core18
 
 plugs:
-  inkscape-config:
+  dot-config-inkscape:
     interface: personal-files
     write: [ $HOME/.config/inkscape ]
 
@@ -132,7 +132,7 @@ apps:
       - unity7
       - cups-control
       - removable-media
-      - inkscape-config
+      - dot-config-inkscape
     slots:
       - inkscape-dbus
     desktop: share/applications/org.inkscape.Inkscape.desktop
@@ -149,7 +149,7 @@ apps:
       - gsettings
       - unity7
       - removable-media
-      - inkscape-config
+      - dot-config-inkscape
     environment:
       AAREALHOME: ${SNAP_USER_DATA}/../../..
       INKSCAPE_PROFILE_DIR: ${AAREALHOME}/.config/inkscape
