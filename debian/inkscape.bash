@@ -11,12 +11,14 @@ _inkscape()
         cur=${COMP_WORDS[COMP_CWORD]}
 
         if [[ "$cur" == -* ]]; then
-                COMPREPLY=( $( compgen -W '-? --help --usage -V --version \
-			-z --without-gui -g --with-gui -f --file= -p --print= \
-			-e --export-png= -d --export-dpi= -a --export-area= \
+                COMPREPLY=( $( compgen -W '-? --help -V --version \
+			-g --with-gui -p --pipe \
+			-o --export-filename= --export-overwrite --export-type=\
+			--export-png= -d --export-dpi= -a --export-area= \
 			-w --export-width= -h --export-height= -i --export-id= \
 			-j --export-id-only  -t --export-use-hints -b --export-background= \
-			-y --export-background-opacity= -l --export-plain-svg= -s --slideshow' -- $cur ) ) 
+			--action-list --select= --actions= --batch-process --pdf-page= \
+			-y --export-background-opacity= ' -- $cur ) )
         else
                 _filedir '@(ai|ani|bmp|cur|dia|eps|gif|ggr|ico|jpe|jpeg|jpg|pbm|pcx|pdf|pgm|png|ppm|pnm|ps|ras|sk|svg|svgz|targa|tga|tif|tiff|txt|wbmp|wmf|xbm|xpm)'
         fi

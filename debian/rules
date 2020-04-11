@@ -23,8 +23,7 @@ override_dh_gnome_clean:
 override_dh_autoreconf:
 
 override_dh_auto_configure:
-	dh_auto_configure -- \
-		-DWITH_DBUS=ON
+	dh_auto_configure --
 
 # Don't run scour, there is no need for it at all, and the defaults are not
 # appropriate for Inkscape's SVGs
