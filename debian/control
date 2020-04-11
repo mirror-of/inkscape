@@ -42,7 +42,6 @@ Build-Depends:
  libxml2-dev (>= 2-2.4.24),
  libxslt1-dev,
  pkg-config,
- python-dev,
  python-lxml,
  zlib1g-dev
 Standards-Version: 3.9.8
