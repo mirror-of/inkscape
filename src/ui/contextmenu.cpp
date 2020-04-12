@@ -46,6 +46,9 @@
 
 #include "include/gtkmm_version.h"
 
+#include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
+
 #include "object/sp-anchor.h"
 #include "object/sp-clippath.h"
 #include "object/sp-image.h"
@@ -56,6 +59,8 @@
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/layer-properties.h"
 #include "verbs.h"
+
+using Inkscape::DocumentUndo;
 
 static bool temporarily_block_actions = false;
 
@@ -576,6 +581,7 @@ void ContextMenu::SetMask()
 
 void ContextMenu::ReleaseMask()
 {
+    Inkscape::LivePathEffect::sp_remove_powermask(_desktop->selection);
     _desktop->selection->unsetMask(false);
 }
 
@@ -592,6 +598,7 @@ void ContextMenu::SetClip()
 
 void ContextMenu::ReleaseClip()
 {
+    Inkscape::LivePathEffect::sp_remove_powerclip(_desktop->selection);
     _desktop->selection->unsetMask(true);
 }
 
