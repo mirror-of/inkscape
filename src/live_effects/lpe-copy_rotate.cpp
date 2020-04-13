@@ -28,6 +28,7 @@
 #include <gdk/gdk.h>
 #include <gtkmm.h>
 
+#include "splivarot.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
 
@@ -67,8 +68,8 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     starting_angle(_("Starting angle"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
     rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
-    gap(_("Gap"), _("Gap space between copies, use small negative gaps to fix some joins"), "gap", &wr, this, 0.05),
-    copies_to_360(_("360° Copies"), _("No rotation angle, fixed to 360°"), "copies_to_360", &wr, this, true),
+    gap(_("Gap"), _("Gap space between copies, use small negative gaps to fix some joins"), "gap", &wr, this, -0.01),
+    copies_to_360(_("Distribute evenly"), _("Angle between copies is 360°/number of copies (ignores rotation angle setting)"), "copies_to_360", &wr, this, true),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, so each can have its own style"), "split_items", &wr, this, false),
     dist_angle_handle(100.0)
@@ -398,7 +399,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if (copies_to_360 && num_copies > 2) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
-    if (method != RM_NORMAL && rotation_angle * num_copies > 360.1 && rotation_angle > 0 && copies_to_360) {
+    if (method != RM_NORMAL && rotation_angle * num_copies > 360 && rotation_angle > 0 && copies_to_360) {
         num_copies.param_set_value(floor(360/rotation_angle));
     }
     if (method != RM_NORMAL  && mirror_copies && copies_to_360) {
@@ -518,9 +519,16 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     Geom::OptRect trianglebounds = divider.boundsFast();
     divider.close();
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
+    FillRuleBool fillrule = fill_nonZero;
+    if (current_shape->style && 
+        current_shape->style->fill_rule.set &&
+        current_shape->style->fill_rule.computed == SP_WIND_RULE_EVENODD) 
+    {
+        fillrule = (FillRuleBool)fill_oddEven;
+    }
     if (method != RM_NORMAL) {
         if (method != RM_KALEIDOSCOPE) {
-            path_out = doEffect_path_post(path_in);
+            path_out = doEffect_path_post(path_in, fillrule);
         } else {
             path_out = pathv_to_linear_and_cubic_beziers(path_in);
         }
@@ -529,23 +537,58 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
         }
         Geom::PathVector triangle;
         triangle.push_back(divider);
-        std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(triangle, path_out));
-        if (pig && !path_out.empty() && !triangle.empty()) {
-            path_out = pig->getIntersection();
-        }
-        path_out *= Geom::Translate(half_dir * gap);
+        path_out = sp_pathvector_boolop(path_out, triangle, bool_op_inters, fillrule, fillrule);
         if ( !split_items ) {
-            path_out *= Geom::Translate(half_dir * gap).inverse();
-            path_out = doEffect_path_post(path_out);
+            path_out = doEffect_path_post(path_out, fillrule);
+        } else {
+            path_out *= Geom::Translate(half_dir * gap);
         }
     } else {
-        path_out = doEffect_path_post(path_in);
+        path_out = doEffect_path_post(path_in, fillrule);
+    }
+    if (!split_items && method != RM_NORMAL) {
+        Geom::PathVector path_out_tmp;
+        for (const auto & path_it : path_out) {
+            if (path_it.empty()) {
+                continue;
+            }
+            Geom::Path::const_iterator curve_it1 = path_it.begin();
+            Geom::Path::const_iterator curve_endit = path_it.end_default();
+            Geom::Path res;
+            if (path_it.closed()) {
+                const Geom::Curve &closingline = path_it.back_closed(); 
+                // the closing line segment is always of type 
+                // Geom::LineSegment.
+                if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                    // closingline.isDegenerate() did not work, because it only checks for
+                    // *exact* zero length, which goes wrong for relative coordinates and
+                    // rounding errors...
+                    // the closing line segment has zero-length. So stop before that one!
+                    curve_endit = path_it.end_open();
+                }
+            }
+            while (curve_it1 != curve_endit) {
+                if (!Geom::are_near(curve_it1->initialPoint(), curve_it1->pointAt(0.5), 0.05)) {
+                    if (!res.empty()) {
+                        res.setFinal(curve_it1->initialPoint());
+                    }
+                    Geom::Curve *c = curve_it1->duplicate();
+                    res.append(c);
+                }
+                ++curve_it1;
+            }
+            if (path_it.closed()) {
+                res.close();
+            }
+            path_out_tmp.push_back(res);
+        }
+        path_out = path_out_tmp;
     }
     return pathv_to_linear_and_cubic_beziers(path_out);
 }
 
 Geom::PathVector
-LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
+LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule)
 {
     if ((split_items || num_copies == 1) && method == RM_NORMAL) {
          if (split_items) {
@@ -574,15 +617,13 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
             t = pre * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
         }
         if (method != RM_NORMAL) {
+            //we use safest way to union
             Geom::PathVector join_pv = original_pathv * t;
             join_pv *= Geom::Translate(half_dir * rot * gap);
-	    std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(output_pv, join_pv));
-            if (pig) {
-                if (!output_pv.empty()) {
-                    output_pv = pig->getUnion();
-                } else {
-                    output_pv = join_pv;
-                }
+            if (!output_pv.empty()) {
+                output_pv = sp_pathvector_boolop(output_pv, join_pv, bool_op_union, fillrule, fillrule);
+            } else {
+                output_pv = join_pv;
             }
         } else {
             t = pre * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
