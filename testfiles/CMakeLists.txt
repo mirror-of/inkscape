@@ -62,7 +62,8 @@ set(TEST_SOURCES
     sp-gradient-test
     object-test
     curve-test
-    2geom-characterization-test)
+    2geom-characterization-test
+    lpe-bool-test)
 
 set(TEST_LIBS
     ${GTEST_LIBRARIES}
