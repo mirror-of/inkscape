@@ -188,6 +188,9 @@ public:
     SPCSSAttr     *current;     ///< current style
     bool           _focusMode;  ///< Whether we're focused working or general working
 
+    // True when any Gtk3 gesture is active
+    bool active_gesture;
+
     unsigned int dkey;
     unsigned int number;
     guint window_state;

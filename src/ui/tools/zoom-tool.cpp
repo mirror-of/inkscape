@@ -78,6 +78,9 @@ bool ZoomTool::root_handler(GdkEvent* event) {
 
     bool ret = false;
 
+    // Tool is deactivated during gestures
+    if(desktop->active_gesture) return false;
+
     switch (event->type) {
         case GDK_BUTTON_PRESS:
         {

@@ -92,6 +92,12 @@ static gdouble _pinch_begin_zoom = 1.;
 static void _pinch_begin_handler(GtkGesture *gesture, GdkEventSequence *sequence, SPDesktop *desktop)
 {
     _pinch_begin_zoom = desktop->current_zoom();
+    desktop->active_gesture = true;
+}
+
+static void _pinch_end_handler(GtkGesture *gesture, GdkEventSequence *sequence, SPDesktop *desktop)
+{
+    desktop->active_gesture = false;
 }
 
 static void _pinch_scale_changed_handler(GtkGesture *gesture, gdouble delta, SPDesktop *desktop)
@@ -239,6 +245,8 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoomgesture), GTK_PHASE_CAPTURE);
     g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
     g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
+    g_signal_connect(zoomgesture, "end", G_CALLBACK(_pinch_end_handler), this);
+    g_signal_connect(zoomgesture, "cancel", G_CALLBACK(_pinch_end_handler), this);
 
     SP_CANVAS_ARENA (drawing)->drawing.delta = prefs->getDouble("/options/cursortolerance/value", 1.0); // default is 1 px
 
