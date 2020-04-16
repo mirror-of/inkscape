@@ -115,7 +115,7 @@ parts:
       snapcraftctl build
   python-deps:
     plugin: python
-    python-version: python2
+    python-version: python3
     python-packages:
       - lxml
       - numpy
