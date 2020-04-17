@@ -1833,13 +1833,13 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     std::vector<SPItem *> to_work;
     for (auto i : itemlist) {
-        SPItem *item = dynamic_cast<SPItem *>(i);
         SPText *text = dynamic_cast<SPText *>(i);
         SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(i);
-        if (item && (text || flowtext)) {
-            to_work.push_back(item);
+        if (text || flowtext) {
+            to_work.push_back(i);
         }
-        if (flowtext) {
+        if (flowtext ||
+            (text && text->style && text->style->shape_inside.set)) {
             isFlow = true;
         }
     }
@@ -2003,7 +2003,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         Glib::RefPtr<Gtk::ListStore> store = _align_item->get_store();
         Gtk::TreeModel::Row row = *(store->get_iter("3"));  // Justify entry
         UI::Widget::ComboToolItemColumns columns;
-        row[columns.col_sensitive] = isFlow || query.shape_inside.set;
+        row[columns.col_sensitive] = isFlow;
 
         int activeButton = 0;
         if (query.text_align.computed  == SP_CSS_TEXT_ALIGN_JUSTIFY)
