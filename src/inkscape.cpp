@@ -195,12 +195,6 @@ Application::instance()
  */
 
 Application::Application(bool use_gui) :
-    _menus(nullptr),
-    _desktops(nullptr),
-    refCount(1),
-    _dialogs_toggle(TRUE),
-    _mapalt(GDK_MOD1_MASK),
-    _trackalt(FALSE),
     _use_gui(use_gui)
 {
     using namespace Inkscape::IO::Resource;
