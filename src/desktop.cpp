@@ -93,11 +93,13 @@ static void _pinch_begin_handler(GtkGesture *gesture, GdkEventSequence *sequence
 {
     _pinch_begin_zoom = desktop->current_zoom();
     desktop->active_gesture = true;
+    g_warning(" <<< Pinch BEGIN!");
 }
 
 static void _pinch_end_handler(GtkGesture *gesture, GdkEventSequence *sequence, SPDesktop *desktop)
 {
     desktop->active_gesture = false;
+    g_warning(" >>> Pinch END!");
 }
 
 static void _pinch_scale_changed_handler(GtkGesture *gesture, gdouble delta, SPDesktop *desktop)

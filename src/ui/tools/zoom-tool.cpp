@@ -79,7 +79,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
     bool ret = false;
 
     // Tool is deactivated during gestures
-    if(desktop->active_gesture) return false;
+    //if(desktop->active_gesture) return false;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -88,6 +88,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             Geom::Point const button_dt(desktop->w2d(button_w));
 
             if (event->button.button == 1 && !this->space_panning) {
+                g_warning(" *** Zooming begin");
                 // save drag origin
                 xp = (gint) event->button.x;
                 yp = (gint) event->button.y;
@@ -159,6 +160,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                 ret = true;
             }
 
+            g_warning(" *** Zooming stop");
             Inkscape::Rubberband::get(desktop)->stop();
 			
             if (this->grabbed) {
