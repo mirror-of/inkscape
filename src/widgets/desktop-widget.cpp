@@ -957,7 +957,13 @@ sp_desktop_widget_realize (GtkWidget *widget)
         // messes up text input because Inkscape has single key shortcuts (e.g. 1-6).
         gtkosx_application_set_use_quartz_accelerators(osxapp, false);
         gtkosx_application_set_help_menu(osxapp, _get_help_menu(menushell->gobj()));
+
+        // Window menu disabled because hidden windows which are brought back
+        // from the menu are non-functional.
+        // https://gitlab.com/inkscape/inkscape/-/issues/1105
+#if 0
         gtkosx_application_set_window_menu(osxapp, nullptr);
+#endif
 
         // move some items to "Inkscape" menu
         unsigned app_menu_verbs[] = {
