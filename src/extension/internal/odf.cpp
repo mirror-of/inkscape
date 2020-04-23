@@ -1022,10 +1022,10 @@ void OdfOutput::preprocess(ZipFile &zf, Inkscape::XML::Node *node)
 
     if (nodeName == "image" || nodeName == "svg:image") {
         Glib::ustring href = getAttribute(node, "href");
-        if (href.size() == 0) {
+        if (href.empty()) {
             href = getAttribute(node, "xlink:href");
         }
-        if (href.size() > 0 && imageTable.count(href) == 0) {
+        if (!href.empty() && imageTable.count(href) == 0) {
             try {
                 auto uri = Inkscape::URI(href.c_str(), docBaseUri.c_str());
                 auto mimetype = uri.getMimeType();
