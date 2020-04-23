@@ -685,8 +685,12 @@ void ContextMenu::AnchorLinkRemove()
 void ContextMenu::MakeImageMenu ()
 {
     Gtk::MenuItem* mi;
-    Inkscape::XML::Node *ir = _object->getRepr();
-    const gchar *href = ir->attribute("xlink:href");
+    const gchar *href = _object->getAttribute("href");
+    if(!href) {
+        href = _object->getAttribute("xlink:href");
+    }
+    
+    bool not_href = !href || strncmp(href, "data:", 5) == 0;
 
     /* Image properties */
     mi = Gtk::manage(new Gtk::MenuItem(_("Image _Properties..."), true));
@@ -699,7 +703,7 @@ void ContextMenu::MakeImageMenu ()
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEdit));
     mi->show();
     insert(*mi,positionOfLastDialog++);
-    if ( (!href) || ((strncmp(href, "data:", 5) == 0)) ) {
+    if ( not_href ) {
         mi->set_sensitive( FALSE );
     }
 
@@ -718,7 +722,7 @@ void ContextMenu::MakeImageMenu ()
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEmbed));
         mi->show();
         insert(*mi,positionOfLastDialog++);
-        if ( (!href) || ((strncmp(href, "data:", 5) == 0)) ) {
+        if ( not_href ) {
             mi->set_sensitive( FALSE );
         }
     }
@@ -729,7 +733,7 @@ void ContextMenu::MakeImageMenu ()
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageExtract));
         mi->show();
         insert(*mi,positionOfLastDialog++);
-        if ( (!href) || ((strncmp(href, "data:", 5) != 0)) ) {
+        if ( not_href ) {
             mi->set_sensitive( FALSE );
         }
     }
@@ -798,8 +802,10 @@ void ContextMenu::ImageEdit()
 
     auto itemlist= _desktop->selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        Inkscape::XML::Node *ir = (*i)->getRepr();
-        const gchar *href = ir->attribute("xlink:href");
+        const gchar *href = (*i)->getAttribute("href");
+        if(!href) {
+            href = (*i)->getAttribute("xlink:href");
+        }
 
         if (strncmp (href,"file:",5) == 0) {
         // URI to filename conversion

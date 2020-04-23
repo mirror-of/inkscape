@@ -303,6 +303,7 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     SPObject::build(document, repr);
 
+    this->readAttr( "href" );
     this->readAttr( "xlink:href" );
     this->readAttr( "id" );
     this->readAttr( "local" );
@@ -321,6 +322,7 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
  */
 void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
+        case SP_ATTR_HREF:
         case SP_ATTR_XLINK_HREF:
             if ( this->href ) {
                 g_free( this->href );

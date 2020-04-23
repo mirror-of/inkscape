@@ -293,6 +293,7 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
     this->readAttr( "gradientUnits" );
     this->readAttr( "gradientTransform" );
     this->readAttr( "spreadMethod" );
+    this->readAttr( "href" );
     this->readAttr( "xlink:href" );
     this->readAttr( "osb:paint" );
 
@@ -387,6 +388,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
+        case SP_ATTR_HREF:
         case SP_ATTR_XLINK_HREF:
             if (value) {
                 try {

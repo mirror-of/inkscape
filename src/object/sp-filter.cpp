@@ -71,6 +71,7 @@ void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "width" );
     this->readAttr( "height" );
     this->readAttr( "filterRes" );
+    this->readAttr( "href" );
     this->readAttr( "xlink:href" );
     this->_refcount = 0;
 
@@ -165,6 +166,7 @@ void SPFilter::set(SPAttributeEnum key, gchar const *value) {
             this->filterRes.set(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+        case SP_ATTR_HREF:
         case SP_ATTR_XLINK_HREF:
             if (value) {
                 try {

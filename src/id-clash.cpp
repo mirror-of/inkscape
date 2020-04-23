@@ -43,13 +43,14 @@ typedef std::pair<SPObject*, Glib::ustring> id_changeitem_type;
 typedef std::list<id_changeitem_type> id_changelist_type;
 
 const char *href_like_attributes[] = {
+    "href",
+    "xlink:href",
+    "inkscape:href",
     "inkscape:connection-end",
     "inkscape:connection-start",
-    "inkscape:href",
     "inkscape:path-effect",
     "inkscape:perspectiveID",
     "inkscape:tiled-clone-of",
-    "xlink:href",
 };
 #define NUM_HREF_LIKE_ATTRIBUTES (sizeof(href_like_attributes) / sizeof(*href_like_attributes))
 

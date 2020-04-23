@@ -131,6 +131,7 @@ SPImage::~SPImage() = default;
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
+    this->readAttr( "href" );
     this->readAttr( "xlink:href" );
     this->readAttr( "x" );
     this->readAttr( "y" );
@@ -174,6 +175,7 @@ void SPImage::release() {
 
 void SPImage::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
+        case SP_ATTR_HREF:
         case SP_ATTR_XLINK_HREF:
             g_free (this->href);
             this->href = (value) ? g_strdup (value) : nullptr;
@@ -339,8 +341,11 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
                 svgdpi = atof(this->getRepr()->attribute("inkscape:svg-dpi"));
             }
             this->dpi = svgdpi;
-            pixbuf = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                              this->getRepr()->attribute("sodipodi:absref"), doc->getDocumentBase(), svgdpi);
+            gchar const *href = this->getAttribute("href");
+            if(!href) {
+                href = this->getAttribute("xlink:href");
+            }
+            pixbuf = sp_image_repr_read_image(href, this->getAttribute("sodipodi:absref"), doc->getDocumentBase(), svgdpi);
 
             if (pixbuf) {
 #if defined(HAVE_LIBLCMS2)
@@ -551,8 +556,11 @@ gchar* SPImage::description() const {
         if (this->getRepr()->attribute("inkscape:svg-dpi")) {
             svgdpi = atof(this->getRepr()->attribute("inkscape:svg-dpi"));
         }
-        pb = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                      this->getRepr()->attribute("sodipodi:absref"), this->document->getDocumentBase(), svgdpi);
+        gchar const *href = this->getAttribute("href");
+        if(!href) {
+            href = this->getAttribute("xlink:href");
+        }
+        pb = sp_image_repr_read_image(href, this->getAttribute("sodipodi:absref"), this->document->getDocumentBase(), svgdpi);
 
         if (pb) {
             ret = g_strdup_printf(_("%d &#215; %d: %s"),

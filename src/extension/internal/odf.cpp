@@ -1021,7 +1021,10 @@ void OdfOutput::preprocess(ZipFile &zf, Inkscape::XML::Node *node)
     }
 
     if (nodeName == "image" || nodeName == "svg:image") {
-        Glib::ustring href = getAttribute(node, "xlink:href");
+        Glib::ustring href = getAttribute(node, "href");
+        if (href.size() == 0) {
+            href = getAttribute(node, "xlink:href");
+        }
         if (href.size() > 0 && imageTable.count(href) == 0) {
             try {
                 auto uri = Inkscape::URI(href.c_str(), docBaseUri.c_str());
@@ -1677,7 +1680,10 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
 
         Glib::ustring itemTransformString = formatTransform(itemTransform);
 
-        Glib::ustring href = getAttribute(node, "xlink:href");
+        Glib::ustring href = getAttribute(node, "href");
+        if (href.size() == 0) {
+            href = getAttribute(node, "xlink:href");
+        }
         std::map<Glib::ustring, Glib::ustring>::iterator iter = imageTable.find(href);
         if (iter == imageTable.end())
         {

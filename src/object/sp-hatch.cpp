@@ -77,6 +77,7 @@ void SPHatch::build(SPDocument* doc, Inkscape::XML::Node* repr)
     readAttr("y");
     readAttr("pitch");
     readAttr("rotate");
+    readAttr("href");
     readAttr("xlink:href");
     readAttr( "style" );
 
@@ -199,6 +200,7 @@ void SPHatch::set(SPAttributeEnum key, const gchar* value)
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
+    case SP_ATTR_HREF:
     case SP_ATTR_XLINK_HREF:
         if (value && href == value) {
             // Href unchanged, do nothing.

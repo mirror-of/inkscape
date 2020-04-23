@@ -75,6 +75,7 @@ void SPPattern::build(SPDocument *doc, Inkscape::XML::Node *repr)
     this->readAttr("height");
     this->readAttr("viewBox");
     this->readAttr("preserveAspectRatio");
+    this->readAttr("href");
     this->readAttr("xlink:href");
     this->readAttr("style");
 
@@ -183,6 +184,7 @@ void SPPattern::set(SPAttributeEnum key, const gchar *value)
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
+        case SP_ATTR_HREF:
         case SP_ATTR_XLINK_HREF:
             if (value && this->href == value) {
                 /* Href unchanged, do nothing. */

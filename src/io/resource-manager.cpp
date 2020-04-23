@@ -221,7 +221,10 @@ std::vector<Glib::ustring> ResourceManagerImpl::findBrokenLinks( SPDocument *doc
         for (auto image : images) {
             Inkscape::XML::Node *ir = image->getRepr();
 
-            gchar const *href = ir->attribute("xlink:href");
+            gchar const *href = ir->attribute("href");
+            if(!href) {
+                href = ir->attribute("xlink:href");
+            }
             if ( href &&  ( uniques.find(href) == uniques.end() ) ) {
                 std::string filename;
                 if (extractFilepath(href, filename)) {
@@ -356,7 +359,10 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
         for (auto image : images) {
             Inkscape::XML::Node *ir = image->getRepr();
 
-            gchar const *href = ir->attribute("xlink:href");
+            gchar const *href = ir->attribute("href");
+            if(!href) {
+                href = ir->attribute("xlink:href");
+            }
             if ( href ) {
                 // TODO debug g_message("                  consider [%s]", href);
                 

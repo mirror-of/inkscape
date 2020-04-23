@@ -966,7 +966,12 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
 
         // if we are pasting a clone to an already existing object, its
         // transform is wrong (see ui/clipboard.cpp)
-        if(obj_copy->attribute("transform-with-parent") && target_document->getObjectById(obj->attribute("xlink:href")+1) ){
+        gchar const *href = obj->attribute("href");
+        if(!href) {
+            href = obj->attribute("xlink:href");
+        }
+
+        if(obj_copy->attribute("transform-with-parent") && target_document->getObjectById(href+1) ){
             obj_copy->setAttribute("transform",obj_copy->attribute("transform-with-parent"));
         }
         if(obj_copy->attribute("transform-with-parent"))

@@ -264,6 +264,7 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "rotate" );
     this->readAttr( "startOffset" );
     this->readAttr( "side" );
+    this->readAttr( "href" );
     this->readAttr( "xlink:href" );
 
     this->readAttr( "style");
@@ -289,6 +290,7 @@ void SPTextPath::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
         switch (key) {
+            case SP_ATTR_HREF:
             case SP_ATTR_XLINK_HREF:
                 this->sourcePath->link((char*)value);
                 break;

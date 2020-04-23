@@ -58,6 +58,7 @@ void
 SPTagUse::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
+    readAttr( "href" );
     readAttr( "xlink:href" );
 
     // We don't need to create child here:
@@ -89,6 +90,7 @@ SPTagUse::set(SPAttributeEnum key, gchar const *value)
 {
 
     switch (key) {
+        case SP_ATTR_HREF:
         case SP_ATTR_XLINK_HREF: {
             if ( value && href && ( strcmp(value, href) == 0 ) ) {
                 /* No change, do nothing. */

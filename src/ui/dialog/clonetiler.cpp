@@ -1854,12 +1854,16 @@ bool CloneTiler::is_a_clone_of(SPObject *tile, SPObject *obj)
         Inkscape::XML::Node *obj_repr = obj->getRepr();
         id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     }
+    
+    const gchar *href = tile->getAttribute("href");
+    if(!href) {
+        href = tile->getAttribute("xlink:href");
+    }
 
     if (dynamic_cast<SPUse *>(tile) &&
-        tile->getRepr()->attribute("xlink:href") &&
-        (!id_href || !strcmp(id_href, tile->getRepr()->attribute("xlink:href"))) &&
-        tile->getRepr()->attribute("inkscape:tiled-clone-of") &&
-        (!id_href || !strcmp(id_href, tile->getRepr()->attribute("inkscape:tiled-clone-of"))))
+        href && (!id_href || !strcmp(id_href, href)) &&
+        tile->getAttribute("inkscape:tiled-clone-of") &&
+        (!id_href || !strcmp(id_href, tile->getAttribute("inkscape:tiled-clone-of"))))
     {
         result = true;
     } else {

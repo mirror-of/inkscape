@@ -35,6 +35,7 @@ struct SPAttrDesc {
 };
 
 static const SPAttrDesc anchor_desc[] = {
+    { N_("Href:"), "href"},
     { N_("Href:"), "xlink:href"},
     { N_("Target:"), "target"},
     { N_("Type:"), "xlink:type"},
@@ -53,6 +54,7 @@ static const SPAttrDesc anchor_desc[] = {
 };
 
 static const SPAttrDesc image_desc[] = {
+    { N_("URL:"), "href"},
     { N_("URL:"), "xlink:href"},
     { N_("X:"), "x"},
     { N_("Y:"), "y"},
@@ -121,8 +123,11 @@ void ObjectAttributes::widget_setup ()
 //    else if (type == SP_TYPE_IMAGE)
     else if (SP_IS_IMAGE(item))
     {
-        Inkscape::XML::Node *ir = obj->getRepr();
-        const gchar *href = ir->attribute("xlink:href");
+        
+        const gchar *href = obj->getAttribute("href");
+        if(!href) {
+            href = obj->getAttribute("xlink:href");
+        }
         if ( (!href) || ((strncmp(href, "data:", 5) == 0)) )
         {
             desc = image_nohref_desc;

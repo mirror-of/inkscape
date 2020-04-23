@@ -134,7 +134,9 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         this->readAttr( "inkscape:original" );
     }
 
-    if (this->getRepr()->attribute("xlink:href")) {
+    if (this->getRepr()->attribute("href")) {
+        this->readAttr( "href" );
+    } else if(this->getAttribute("xlink:href")) {
         this->readAttr( "xlink:href" );
     } else {
         gchar const *oldA = this->getRepr()->attribute("inkscape:href");
@@ -267,6 +269,7 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
             }
             break;
 
+        case SP_ATTR_HREF:
         case SP_ATTR_INKSCAPE_HREF:
         case SP_ATTR_XLINK_HREF:
             if ( value == nullptr ) {

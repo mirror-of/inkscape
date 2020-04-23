@@ -80,7 +80,10 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
         if (!strcmp(node->name(), "image") || !strcmp(node->name(), "svg:image"))
         {
             _nodes[_imageCount] = node;    
-            char const *xlink = node->attribute("xlink:href");
+            char const *xlink = node->attribute("href");
+            if(!xlink) {
+                xlink = node->attribute("xlink:href");
+            }
             char const *id = node->attribute("id");
             _originals[_imageCount] = xlink;
             _caches[_imageCount] = (char*)"";
