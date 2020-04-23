@@ -429,6 +429,8 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
 
     if ( this->sourcePath->sourceHref ) {
     	repr->setAttribute("xlink:href", this->sourcePath->sourceHref);
+        // Remove alternative href attribute
+        repr->removeAttribute("href");
     }
 
     if ( flags & SP_OBJECT_WRITE_BUILD ) {

@@ -461,6 +461,8 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
     }
 
     repr->setAttribute("xlink:href", this->href);
+    // Remove alternative href attribute
+    repr->removeAttribute("href");
 
     /* fixme: Reset attribute if needed (Lauris) */
     if (this->x._set) {
@@ -822,6 +824,8 @@ void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)
     // It would be better to only keep the binary data around,
     // and base64 encode on the fly when saving the XML.
     image_node->setAttribute("xlink:href", buffer);
+    // Remove alternative href attribute
+    image_node->removeAttribute("href");
 
     g_free(buffer);
     if (free_data) g_free(data);
@@ -875,6 +879,8 @@ void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn)
         // It would be better to only keep the binary data around,
         // and base64 encode on the fly when saving the XML.
         image_node->setAttribute("xlink:href", buffer);
+        // Remove alternative href attribute
+        image_node->removeAttribute("href");
 
         g_free(buffer);
         g_free(data);

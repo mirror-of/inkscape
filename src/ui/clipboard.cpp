@@ -342,6 +342,8 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
 
     Inkscape::XML::Node *use = _doc->createElement("svg:use");
     use->setAttribute("xlink:href", id );
+    // Remove alternative href attribute
+    use->removeAttribute("href");
     // Set a default style in <use> rather than <symbol> so it can be changed.
     use->setAttribute("style", style );
     if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {

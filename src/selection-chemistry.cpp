@@ -548,6 +548,8 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                         // std::cout << id  << " old, its ori: " << orig->getId() << "; will relink:" << new_ids[i] << " to " << new_ids[j] << "\n";
                         SPObject *new_clone = doc->getObjectById(new_ids[i]);
                         new_clone->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        // Remove alternative href attribute
+                        new_clone->removeAttribute("href");
                         new_clone->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                     }
                 }
@@ -555,7 +557,10 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                 gchar *source_href = offset->sourceHref;
                 for (guint j = 0; j < old_ids.size(); j++) {
                     if (source_href && source_href[0]=='#' && !strcmp(source_href+1, old_ids[j])) {
-                        doc->getObjectById(new_ids[i])->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        auto obj = doc->getObjectById(new_ids[i]);
+                        obj->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        // Remove alternative href attribute
+                        obj->removeAttribute("href");
                     }
                 }
             } else if (text) {
@@ -564,7 +569,10 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                 const gchar *source_href = sp_textpath_get_path_item(textpath)->getId();
                 for (guint j = 0; j < old_ids.size(); j++) {
                     if (!strcmp(source_href, old_ids[j])) {
-                        doc->getObjectById(new_ids[i])->firstChild()->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        auto obj = doc->getObjectById(new_ids[i])->firstChild();
+                        obj->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        // Remove alternative href attribute
+                        obj->removeAttribute("href");
                     }
                 }
             } else if (path) {
@@ -2682,6 +2690,8 @@ void ObjectSet::relink()
 
         if (dynamic_cast<SPUse *>(item)) {
             item->setAttribute("xlink:href", newref);
+            // Remove alternative href attribute
+            item->removeAttribute("href");
             item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             relinked = true;
         }

@@ -517,6 +517,8 @@ SPHatch *SPHatch::clone_if_necessary(SPItem *item, const gchar *property)
         repr->setAttribute("inkscape:collect", "always");
         Glib::ustring parent_ref = Glib::ustring::compose("#%1", getRepr()->attribute("id"));
         repr->setAttribute("xlink:href", parent_ref);
+        // Make sure alternative href attribute is removed
+        repr->removeAttribute("href");
 
         defsrepr->addChild(repr, nullptr);
         const gchar *child_id = repr->attribute("id");

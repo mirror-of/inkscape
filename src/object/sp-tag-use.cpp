@@ -133,6 +133,8 @@ SPTagUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, gui
     if (ref->getURI()) {
         auto uri_string = ref->getURI()->str();
         repr->setAttributeOrRemoveIfEmpty("xlink:href", uri_string);
+        // Remove alternative href attribute
+        repr->removeAttribute("href");
     }
 
     return repr;

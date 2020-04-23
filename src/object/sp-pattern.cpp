@@ -331,6 +331,8 @@ SPPattern *SPPattern::_chain() const
     repr->setAttribute("inkscape:collect", "always");
     Glib::ustring parent_ref = Glib::ustring::compose("#%1", getRepr()->attribute("id"));
     repr->setAttribute("xlink:href", parent_ref);
+    // Remove alternative href attribute
+    repr->removeAttribute("href");
 
     defsrepr->addChild(repr, nullptr);
     SPObject *child = document->getObjectByRepr(repr);

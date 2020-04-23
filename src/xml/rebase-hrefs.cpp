@@ -212,6 +212,8 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
         href_str = Inkscape::uri_to_iri(href_str.c_str());
 
         ir->setAttribute("xlink:href", href_str);
+        // Remove alternative href attribute
+        ir->removeAttribute("href");
     }
 
     doc->setDocumentBase(new_base);

@@ -121,6 +121,8 @@ Inkscape::XML::Node* SPAnchor::write(Inkscape::XML::Document *xml_doc, Inkscape:
     }
 
     repr->setAttribute("xlink:href", this->href);
+    // Remove alternative href attribute
+    repr->removeAttribute("href");
     if (this->type) repr->setAttribute("xlink:type", this->type);
     if (this->title) repr->setAttribute("xlink:title", this->title);
 

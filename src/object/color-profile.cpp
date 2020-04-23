@@ -435,6 +435,8 @@ Inkscape::XML::Node* ColorProfile::write(Inkscape::XML::Document *xml_doc, Inksc
 
     if ( (flags & SP_OBJECT_WRITE_ALL) || this->href ) {
         repr->setAttribute( "xlink:href", this->href );
+        // Remove alternative href attribute
+        repr->removeAttribute("href");
     }
 
     if ( (flags & SP_OBJECT_WRITE_ALL) || this->local ) {

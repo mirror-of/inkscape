@@ -370,6 +370,8 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
                     // TODO debug g_message("                     Found a replacement");
 
                     ir->setAttributeOrRemoveIfEmpty( "xlink:href", mapping[href] );
+                    // Remove alternative href attribute
+                    ir->removeAttribute("href");
                     if ( ir->attribute( "sodipodi:absref" ) ) {
                         ir->removeAttribute("sodipodi:absref"); // Remove this attribute
                     }

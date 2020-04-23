@@ -1507,6 +1507,8 @@ static void sp_gradient_repr_set_link(Inkscape::XML::Node *repr, SPGradient *lin
     } else {
         repr->removeAttribute("xlink:href");
     }
+    // Always remove alternative href attribute
+    repr->removeAttribute("href");
 }
 
 

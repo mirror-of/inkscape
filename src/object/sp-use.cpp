@@ -177,6 +177,8 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
     if (this->ref->getURI()) {
         auto uri_string = this->ref->getURI()->str();
         repr->setAttributeOrRemoveIfEmpty("xlink:href", uri_string);
+        // Remove alternative href attribute
+        repr->removeAttribute("href");
     }
 
     SPShape *shape = dynamic_cast<SPShape *>(child);
