@@ -584,7 +584,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         BOOL_OP
         , N_("Boolean operation") //label
         , "bool_op" //key
-        , "bool-op" //icon
+        , "experimental" //icon
         , "Boolean operation" //untranslated name
         , N_("Cut, union, subtract, intersect and divide a path non-destructively with another path") //description
         , true  //on_path
@@ -592,7 +592,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true //on_group
         , false //on_image
         , false //on_text
-        , false //experimental
+        , true //experimental
     },
     {
         POWERCLIP
