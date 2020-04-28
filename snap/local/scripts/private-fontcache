@@ -1,8 +1,6 @@
 #!/bin/bash
-
-#########################################
-# Only use the snap's private fontcache #
-#########################################
+# Ensure that we prioritize using the private font cache
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 # ensure_dir_exists calls `mkdir -p` if the given path is not a directory.
 # This speeds up execution time by avoiding unnecessary calls to mkdir.

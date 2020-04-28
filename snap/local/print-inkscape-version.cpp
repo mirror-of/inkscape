@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Use the Inkscape compiled version identifier and print it out with
+// the Snap restrictions on versions. Only a few characters are allowed
+// and a limit of 32 characters total.
+
 #include "inkscape-version.h"
 
 #include <iostream>

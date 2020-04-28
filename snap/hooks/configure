@@ -1,4 +1,6 @@
 #!/bin/sh -e
+# Small hook to build a system font cache in the Snap's system directory
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 mkdir -p $SNAP_DATA/fontconfig
 
