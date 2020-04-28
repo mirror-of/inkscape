@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 name: inkscape
-version-script: packaging/snappy/version.sh
-version: devel # Replaced at build time ^^^
+adopt-info: inkscape
 summary: Vector Graphics Editor
 license: GPL-3.0
 description: >
@@ -113,6 +112,9 @@ parts:
     override-build: |
       sed -i.bak -e 's|Icon=${INKSCAPE_ICONPATH}|Icon=${SNAP}/share/inkscape/branding/inkscape.svg|g' $SNAPCRAFT_PART_SRC/org.inkscape.Inkscape.desktop.template
       snapcraftctl build
+      INKSCAPE_VERSION=`g++ -I${SNAPCRAFT_PART_SRC}/src ${SNAPCRAFT_PART_BUILD}/src/inkscape-version.cpp ${SNAPCRAFT_PROJECT_DIR}/snap/local/print-inkscape-version.cpp -o print-inkscape-version && ./print-inkscape-version`
+      echo "Inkscape Version: ${INKSCAPE_VERSION}"
+      snapcraftctl set-version "${INKSCAPE_VERSION}"
   python-deps:
     plugin: python
     python-version: python3
@@ -156,3 +158,8 @@ apps:
       INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
       INKSCAPE_DATADIR: ${SNAP}/share
     extensions: [ gnome-3-28 ]
+
+hooks:
+  configure:
+    plugs:
+      - desktop
