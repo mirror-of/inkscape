@@ -124,10 +124,14 @@ parts:
       - scour
     stage-packages:
       - pstoedit
+  snap-helpers:
+    plugin: dump
+    source: snap/local/scripts
 
 apps:
   inkscape:
     command: bin/inkscape
+    command-chain: [ private-fontcache ]
     plugs:
       - home
       - gsettings
@@ -146,6 +150,7 @@ apps:
     extensions: [ gnome-3-28 ]
   viewer:
     command: bin/inkview
+    command-chain: [ private-fontcache ]
     plugs:
       - home
       - gsettings
