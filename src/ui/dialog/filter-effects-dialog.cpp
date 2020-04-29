@@ -1577,6 +1577,11 @@ void FilterEffectsDialog::FilterModifier::update_filters()
     SPDesktop* desktop = _dialog.getDesktop();
     SPDocument* document = desktop->getDocument();
 
+    // Workaround for 1.0, not needed in 1.1 (which properly disconnects signals)
+    if (!document) {
+        return;
+    }
+
     std::vector<SPObject *> filters = document->getResourceList( "filter" );
 
     _model->clear();
