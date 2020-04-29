@@ -812,6 +812,7 @@ TextToolbar::fontsize_value_changed()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->mergeStyle("/tools/text/style", css);
     } else {
+        sp_desktop_set_style(_desktop, css, true, true);
         // Save for undo
         DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:size", SP_VERB_NONE,
                              _("Text: Change font size"));
