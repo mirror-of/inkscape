@@ -1,5 +1,7 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Make it so that Ghostscript can find itself in the snap directory
 
-export GS_LIB=`find ${SNAP} -name gs_init.ps | head -1 | xargs dirname`
+export GS_LIB=`find ${SNAP}/usr/share/ghostscript -name gs_init.ps | head -1 | xargs dirname`
 
 exec "$@"
