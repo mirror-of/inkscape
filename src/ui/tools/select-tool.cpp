@@ -1037,7 +1037,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_bracketleft:
                     if (MOD__ALT(event)) {
                         gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
-                        selection->rotateScreen(mul*1);
+                        selection->rotateScreen(-mul * y_dir);
                     } else if (MOD__CTRL(event)) {
                         selection->rotate(-90 * y_dir);
                     } else if (snaps) {
@@ -1050,7 +1050,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_bracketright:
                     if (MOD__ALT(event)) {
                         gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
-                        selection->rotateScreen(-1*mul);
+                        selection->rotateScreen(mul * y_dir);
                     } else if (MOD__CTRL(event)) {
                         selection->rotate(90 * y_dir);
                     } else if (snaps) {
