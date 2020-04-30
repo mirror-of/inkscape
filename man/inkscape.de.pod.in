@@ -122,28 +122,29 @@ Inkscape-Version und Erstellungsdatum anzeigen
 
 =item B<--system-data-directory>
 
-Prints the system data directory where data files that ship with Inkscape
-are stored. This includes files which Inkscape requires to run (like unit
-definitions, built-in key maps, files describing UI layout, icon themes,
-etc.), core extensions, stock resources (filters, fonts, markers, color
-palettes, symbols, templates) and documentation (SVG example files,
-tutorials).
+Gibt das System-Datenverzeichnis aus, in dem die zusammen mit Inkscape
+ausgelieferten Arbeitsdaten gespeichert sind. Diese umfassen Dateien die
+Inkscape zur Ausführung benötigt (Definitionen der Einheiten, eingebaute
+Tastaturbelegungen, Dateien die das Oberflächendesign beschreiben,
+Symbolthemen, etc.), Kernerweiterungen, Standard-Ressourcen (Filter,
+Schriftarten, Marker, Farbpaletten, Symbole, Vorlagen) und die Dokumentation
+(SVG Beispieldateien, Tutorials).
 
-The location in which Inkscape expects the system data directory can be
-overridden with the L<INKSCAPE_DATADIR> environment variable.
+Der Pfad in dem Inkscape das System-Datenverzeichnis erwartet kann mit der
+Umgebungsvariable L<INKSCAPE_DATADIR> überschrieben werden.
 
 =item B<--user-data-directory>
 
-Prints the user profile directory where user-specific data files and
-preferences are stored.  Custom extensions and resources (filters, fonts,
-markers, color palettes, symbols, templates)  should be installed into their
-respective subdirectories in this directory. In addition placing a file with
-a name identical to one in the system data directory here allows to override
-most presets from the system data directory (e.g. default templates, UI
-files, etc.).
+Gibt den Benutzer-Profilordner aus, in dem benutzerspezifische Arbeitsdaten
+und Einstellungen gespeichert werden. Zusätzliche Erweiterungen und
+Ressourcen sollten vom Nutzer in die jeweils entsprechenden
+Unterverzeichnisse in diesem Ordner installiert werden. Weiterhin können die
+meisten Vorgaben aus dem System-Datenverzeichnis überschrieben werden, indem
+eine Datei mit identischem Namen im Profilordner abgelegt wird
+(z.B. Standardvorlagen, UI Dateien, etc.).
 
-The default location of the profile directory can be overridden with the
-L<INKSCAPE_PROFILE_DIR> environment variable.
+Der Standardpfad des Profilordners kann mit der Umgebungsvariable
+L<INKSCAPE_PROFILE_DIR> überschrieben werden.
 
 =item B<-p>, B<--pipe>
 
@@ -187,13 +188,13 @@ vorgenommen wird.
 
 =item B<-o>, B<--export-filename>=I<DATEINAME>
 
-Sets the name of the output file. The default is to re-use the name of the
-input file.  If L<--export-type> is also used, the file extension will be
-adjusted (or added) as appropriate.  Otherwise the file type to export will
-be inferred from the extension of the specified filename.
+Legt den Namen der Ausgabedatei fest. Standardmäßig wird der Name der
+Eingabedatei benutzt. Wird außerdem L<--export-type> benutzt, wird die
+Dateierweiterung nach Bedarf angepasst (oder hinzugefügt). Andernfalls wird
+der Dateityp aus der Erweiterung des angegebenen Dateinamens abgeleitet.
 
-Usage of the special filename "-" makes Inkscape write the image data to
-standard output (stdout).
+Wir der spezielle Dateiname "-" verwendet, gibt Inkscape alle Bilddaten auf
+die Standardausgabe (stdout) aus.
 
 =item B<--export-overwrite>
 
@@ -215,10 +216,11 @@ Das PDF-Format behält Transparenzen in der Originaldatei bei.
 
 =item B<-C>, B<--export-area-page>
 
-In SVG, PNG, PDF, PS exported area is the page. This is the default for SVG,
-PNG, PDF, and PS, so you don't need to specify this unless you are using
-L<--export-id> to export a specific object. For EPS this option is currently
-not supported.
+Beim Export nach SVG, PNG, PDF und PS wird die gesamte Seite
+exportiert. Dies ist die Standardeinstellung für SVG, PNG, PDF und PS, daher
+braucht dies nicht angegeben zu werden - es sei denn, es wird L<--export-id>
+verwendet, um ein bestimmtes Objekt zu exportieren. Für EPS wird diese
+Option derzeit nicht unterstützt.
 
 =item B<-D>, B<--export-area-drawing>
 
@@ -272,9 +274,9 @@ Die Höhe der erstellten Rastergrafik in Pixeln. Dieser Wert hat Vorrang vor
 
 =item B<--export-margin>=I<WERT>
 
-Adds a margin around the exported area. The size of the margin is specified
-in units of page size (for SVG) or millimeters (for PS/PDF).  The option
-currently has no effect for other export formats.
+Fügt einen Rand zum Exportbereich hinzu. Die Randgröße wird in Einheiten der
+Seitengröße (für SVG) oder in Millimetern (für PS/PDF) angegeben. Die Option
+hat für andere Exportformate derzeit keine Funktion.
 
 =item B<-i> I<ID>, B<--export-id>=I<OBJEKT-ID[;OBJEKT-ID]*>
 
@@ -305,8 +307,8 @@ anzugeben wird die Option L<--export-filename> benutzt.
 
 =item B<--export-ps-level>=I<LEVEL>
 
-Set language version for PS and EPS export. PostScript level 2 or 3 is
-supported. Default is 3.
+Setzt den Sprach-Level für den PS- und EPS-Export. Postscript Level 2 und 3
+werden unterstützt. Standard ist 3.
 
 =item B<--export-pdf-version>=I<VERSION>
 
@@ -344,21 +346,21 @@ verändert.
 
 =item B<-t>, B<--export-use-hints>
 
-While exporting to PNG, use export filename and DPI hints stored in the
-exported object (only with L<--export-id>).  These hints are set
-automatically when you export selection from within Inkscape.  So, for
-example, if you export a shape with id="path231" as /home/me/shape.png at
-300 dpi from document.svg using Inkscape GUI, and save the document, then
-later you will be able to reexport that shape to the same file with the same
-resolution simply with
+Beim PNG-Export den Exportdateinamen und den DPI-Hinweis, die im zu
+exportierenden Objekt gespeichert sind, verwenden. Diese Angaben werden
+automatisch gesetzt, wenn man eine Auswahl aus Inkscape heraus
+exportiert. Wenn man also eine Form mit id="path231" als /home/me/form.png
+mit 300 dpi aus dokument.svg exportiert und danach das Dokument speichert,
+kann man später mit folgendem Befehl die Form mit derselben Auflösung in
+dieselbe Datei erneut exportieren:
 
     inkscape -i path231 -t dokument.svg
 
-If you use L<--export-dpi>, L<--export-width>, or L<--export-height> with
-this option, then the DPI hint will be ignored and the value from the
-command line will be used.  If you use L<--export-filename> with this
-option, then the filename hint will be ignored and the filename from the
-command line will be used.
+Bei Verwendung von L<--export-dpi>, L<--export-width> oder
+L<--export-height> zusammen mit dieser Option wird der DPI-Hinweis ignoriert
+und der Wert von der Kommandozeile wird verwendet. Bei Verwendung von
+L<--export-filename> mit dieser Option wird die Dateinamens-Angabe ignoriert
+und der Dateiname von der Kommandozeile wird verwendet.
 
 =item B<-b> I<FARBE>, B<--export-background>=I<FARBE>
 
@@ -451,7 +453,8 @@ Option L<--batch-process> genutzt werden. Zusätzlich gibt es zu allen
 Export-Optionen passende Aktionen (zur Verwendung wird einfach der Prefix
 '--' vor der Option entfernt und '=' durch ':' ersetzt).
 
-If only actions are used L<--batch-process> must be used.
+Wenn auschließlich Aktionen verwendet werden, muss L<--batch-process>
+verwendet werden.
 
 Ein Export kann jederzeit durch die Aktion 'export-do' ausgelöst
 werden. Dies ermöglicht mehrfache Exporte aus einer einzelnen Datei.
@@ -468,11 +471,11 @@ aufgerufen worden wären. Dialoge öffnen sich, wenn dies Teil der Funktion
 des Verbs ist. Der Kommandozeilenbefehl L<--verb-list> zeigt eine Liste
 aller verfügbaren Verb-IDs an.
 
-Note that the L<--verb> command requires a GUI.
+Die Option L<--verb> benötigt eine grafische Benutzeroberfläche (GUI)
 
-Together with L<--select> provides some basic scripting for Inkscape from
-the command line.  They both can receive many arguments as needed on the
-command line and are executed in order on every document.
+Erlaubt zusammen mit L<--select> die Erstellung einfacher Skripte für
+Inkscape auf der Kommandozeile. Beide erlauben beliebig viele Argumente, die
+entsprechend ihrer Reihenfolge für jedes Dokument abgearbeitet werden.
 
 =item B<--verb-list>
 
@@ -492,24 +495,28 @@ Schließt das Fenster nachdem alle Aktionen oder Verben ausgeführt wurden.
 
 =item B<--shell>
 
-With this parameter, Inkscape will enter an interactive command line shell
-mode. In this mode, you type in commands at the prompt and Inkscape executes
-them, without you having to run a new copy of Inkscape for each
-command. This feature is mostly useful for scripting and server uses: it
-adds no new capabilities but allows you to improve the speed and memory
-requirements of any script that repeatedly calls Inkscape to perform command
-line tasks (such as export or conversions).
+Dieser Parameter bewirkt, dass Inkscape interaktiven
+Kommandozeilenmodusgestartet wird. In diesem Modus gibt man Befehle im
+Terminal ein und Inkscape führt diese aus, ohne dass für jeden Befehl eine
+neue Instanz von Inkscape gestartet werden muss. Diese Funktion ist
+hilfreich für die Verwendung mit Skripten und auf Servern: sie fügt keine
+neuen Fähigkeiten hinzu, aber erlaubt die Ausführungsgeschwindigkeit und
+Arbeitsspeicheranforderungen von Skripten zu optimieren, die Inkscape
+wiederholt aufrufen und Kommandozeilenbefehle (wie Export oder Konversionen)
+ausführen.
 
-In shell mode Inkscape expects a sequence of actions (or verbs) as input.
-They will be processed line by line, that means typically when pressing
-enter.  It is possible (but not necessary) to put all actions on a single
-line.
+Im interaktiven Kommandozeilenmodus erwartet Inkscape eine
+aufeinanderfolgende Reihe von Aktionen (oder Verben) als Eingabe. Diese
+werden zeilenweise verarbeitet, also typischerweise wen die Eingabetaste
+gedrückt wird. Es ist möglich (aber nicht erforderlich) alle Aktionen in
+eine einzelne Zeile zusammenzufassen.
 
-The following example opens a file and exports it into two different
-formats, then opens another file and exports a single object:
+Folgendes Beispiel öffnet eine Datei und exportiert sie in zwei
+unterschiedliche Formate, öffnet anschließend eine andere Datei und
+exportiert ein einzelnes Objekt;
 
-    file-open:file1.svg; export-type:pdf; export-do; export-type:png; export-do
-    file-open:file2.svg; export-id:rect2; export-id-only; export-filename:rect_only.svg; export-do
+    file-open:datei1.svg; export-type:pdf; export-do; export-type:png; export-do
+    file-open:datei2.svg; export-id:rechteck2; export-id-only; export-filename:nur_rechteck.svg; export-do
 
 =back
 
@@ -609,17 +616,19 @@ Hintergrund in die Datei 'dreieck_rot.png'.
 
     inkscape --actions="export-id:MeinDreieck; export-id-only; export-background:purple; export-background-opacity:0.5;export-filename:dreieck_lila.png; export-do; export-background:red; export-background-opacity:1; export-filename:dreieck_rot.png" dateiname.svg
 
-Read an SVG from standard input (stdin) and export it to PDF format:
+Eine SVG-Datei von der Standardeingabe (stdin) lesen und ins PDF-Format
+exportieren.
 
     cat dateiname.svg | inkscape --pipe --export-filename=dateiname.pdf
 
-Export an SVG to PNG format and write it to standard output (stdout), then
-convert it to JPG format with ImageMagick's convert program:
+Eine SVG-Datei ins PNG-Format exportieren und auf der Standardausgabe
+(stdout) ausgeben, anschließend mit dem ImageMagick-Programm convert in das
+JPG-Format konvertieren.
 
     inkscape --export-type=png --export-filename=- dateiname.svg | convert - dateiname.jpg
 
-Same as above, but also reading from a pipe (--export-filename can be
-omitted in this case)
+Wie oben, jedoch wird auch die Eingabedatei von einer Pipe gelesen
+(--export-filename kann dann entfallen)
 
     cat dateiname.svg | inkscape --pipe --export-type=png | convert - dateiname.jpg
 
@@ -795,7 +804,7 @@ ${INKSCAPE_AUTHORS}
 
 =head1 URHEBERRECHT UND LIZENZ
 
-B<Copyright (C)> 1999-2019 liegt bei den Autoren.
+B<Copyright (C)> 1999-2020 liegt bei den Autoren.
 
 B<Inkscape> ist freie Software. Sie dürfen es zu den Bedingungen der GPL in
 Version 3 oder höher weiterverbreiten und / oder verändern.

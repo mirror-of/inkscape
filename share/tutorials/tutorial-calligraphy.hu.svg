@@ -283,7 +283,7 @@
  </g>
  <use xlink:href="#cb" inkscape:label="Footer" sodipodi:insensitive="true"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
-  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Művészi toll</tspan></tspan></text>
+  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Ismertető<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Művészi toll</tspan></tspan></text>
   <rect id="ay" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
