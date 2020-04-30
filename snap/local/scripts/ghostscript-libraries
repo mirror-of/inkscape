@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export GS_LIB=`find ${SNAP} -name gs_init.ps | head -1 | xargs dirname`
+
+exec "$@"

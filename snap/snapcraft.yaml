@@ -131,7 +131,7 @@ parts:
 apps:
   inkscape:
     command: bin/inkscape
-    command-chain: [ private-fontcache ]
+    command-chain: [ private-fontcache, ghostscript-libraries ]
     plugs:
       - home
       - gsettings
