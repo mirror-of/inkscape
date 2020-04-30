@@ -71,8 +71,7 @@ void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "width" );
     this->readAttr( "height" );
     this->readAttr( "filterRes" );
-    this->readAttr( "href" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("href", "xlink:href");
     this->_refcount = 0;
 
 	SPObject::build(document, repr);

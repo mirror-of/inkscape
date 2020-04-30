@@ -131,8 +131,7 @@ SPImage::~SPImage() = default;
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr( "href" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("href", "xlink:href");
     this->readAttr( "x" );
     this->readAttr( "y" );
     this->readAttr( "width" );

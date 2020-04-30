@@ -303,8 +303,7 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     SPObject::build(document, repr);
 
-    this->readAttr( "href" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("href", "xlink:href");
     this->readAttr( "id" );
     this->readAttr( "local" );
     this->readAttr( "name" );

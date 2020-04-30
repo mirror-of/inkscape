@@ -134,11 +134,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         this->readAttr( "inkscape:original" );
     }
 
-    if (this->getRepr()->attribute("href")) {
-        this->readAttr( "href" );
-    } else if(this->getAttribute("xlink:href")) {
-        this->readAttr( "xlink:href" );
-    } else {
+    if (this->getRepr()->attribute("inkscape:href")) {
         gchar const *oldA = this->getRepr()->attribute("inkscape:href");
 
         if (oldA) {
@@ -156,9 +152,9 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
             this->removeAttribute("inkscape:href");
         }
-
-        this->readAttr( "xlink:href" );
     }
+
+    this->readAttr("href", "xlink:href");
 }
 
 Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

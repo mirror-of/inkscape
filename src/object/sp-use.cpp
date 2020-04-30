@@ -82,8 +82,7 @@ void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "y" );
     this->readAttr( "width" );
     this->readAttr( "height" );
-    this->readAttr( "href" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("href", "xlink:href");
 
     // We don't need to create child here:
     // reading xlink:href will attach ref, and that will cause the changed signal to be emitted,

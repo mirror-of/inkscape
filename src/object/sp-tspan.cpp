@@ -264,8 +264,7 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "rotate" );
     this->readAttr( "startOffset" );
     this->readAttr( "side" );
-    this->readAttr( "href" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("href", "xlink:href");
 
     this->readAttr( "style");
 

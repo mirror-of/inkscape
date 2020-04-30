@@ -1008,19 +1008,24 @@ void SPObject::setKeyValue(SPAttributeEnum key, gchar const *value)
     this->set(key, value);
 }
 
-void SPObject::readAttr(gchar const *key)
+void SPObject::readAttr(gchar const *key, char const *fallback)
 {
-    //g_assert(object != NULL);
-    //g_assert(SP_IS_OBJECT(object));
     g_assert(key != nullptr);
-
-    //XML Tree being used here.
-    g_assert(this->getRepr() != nullptr);
-
     auto keyid = sp_attribute_lookup(key);
+
     if (keyid != SP_ATTR_INVALID) {
-        /* Retrieve the 'key' attribute from the object's XML representation */
-        gchar const *value = getRepr()->attribute(key);
+
+        //XML Tree being used here.
+        auto repr = this->getRepr();
+        g_assert(repr != nullptr);
+
+        // Retrieve the 'key' attribute from the object's XML representation
+        gchar const *value = repr->attribute(key);
+
+        // Use a fallback key, but apply it to the same attribute name
+        if(!value && fallback) {
+            value = repr->attribute(fallback);
+        }
 
         setKeyValue(keyid, value);
     }

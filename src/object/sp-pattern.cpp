@@ -75,8 +75,7 @@ void SPPattern::build(SPDocument *doc, Inkscape::XML::Node *repr)
     this->readAttr("height");
     this->readAttr("viewBox");
     this->readAttr("preserveAspectRatio");
-    this->readAttr("href");
-    this->readAttr("xlink:href");
+    this->readAttr("href", "xlink:href");
     this->readAttr("style");
 
     /* Register ourselves */

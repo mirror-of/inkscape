@@ -721,8 +721,10 @@ public:
 
     /**
      * Read value of key attribute from XML node into object.
+     *
+     *  fallback - The key to use if the main key isn't available
      */
-    void readAttr(char const *key);
+    void readAttr(char const *key, char const *fallback = nullptr);
 
     char const *getTagName(SPException *ex) const;
 

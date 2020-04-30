@@ -35,8 +35,7 @@ SPAnchor::~SPAnchor() = default;
 void SPAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGroup::build(document, repr);
 
-    this->readAttr( "href" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("href", "xlink:href");
     this->readAttr( "xlink:type" );
     this->readAttr( "xlink:role" );
     this->readAttr( "xlink:arcrole" );

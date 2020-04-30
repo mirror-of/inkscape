@@ -293,8 +293,7 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
     this->readAttr( "gradientUnits" );
     this->readAttr( "gradientTransform" );
     this->readAttr( "spreadMethod" );
-    this->readAttr( "href" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("href", "xlink:href");
     this->readAttr( "osb:paint" );
 
     // Register ourselves
