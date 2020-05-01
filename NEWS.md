@@ -7,42 +7,42 @@ Release highlights
 ------------------
 
 -   [Theming support and more new customization
-    options](#customization "wikilink")
--   [Better HiDPI (high resolution) screen support](#high-resolution-screens "wikilink")
+    options](#customization)
+-   [Better HiDPI (high resolution) screen support](#high-resolution-screens)
 -   [Native support for macOS with a signed and notarized .dmg
-    file](#mac-application "wikilink")
+    file](#mac-application)
 -   [Coordinate origin in top left corner by
-    default](#y-axis-inversion "wikilink")
--   [Canvas rotation and mirroring](#canvas "wikilink")
--   [On-Canvas alignment of objects](#on-canvas-alignment "wikilink")
--   [Split view and X-Ray modes](#view "wikilink")
+    default](#y-axis-inversion)
+-   [Canvas rotation and mirroring](#canvas)
+-   [On-Canvas alignment of objects](#on-canvas-alignment)
+-   [Split view and X-Ray modes](#view)
 -   [PowerPencil for drawing editable, variable width strokes with a
-    pressure sensitive graphics tablet](#powerpencil "wikilink")
--   [New PNG export options](#export-png-images "wikilink")
+    pressure sensitive graphics tablet](#powerpencil)
+-   [New PNG export options](#export-png-images)
 -   [Integrated centerline tracing for vectorizing line
-    drawings](#trace-bitmap "wikilink")
--   [Searchable Symbols dialog](#symbols "wikilink")
+    drawings](#trace-bitmap)
+-   [Searchable Symbols dialog](#symbols)
 -   [New Live Path Effect (LPE) selection
-    dialog](#live-path-effects "wikilink")
+    dialog](#live-path-effects)
 -   [New Corners (Fillet/chamfer) LPE, (lossless) Boolean Operation LPE
     (experimental), Offset LPE and Measure Segments LPE (and
-    more!)](#live-path-effects "wikilink")
+    more!)](#live-path-effects)
 -   [Path operations, deselection of a large number of paths as well as
-    grouping/ungrouping are much faster now](#performance "wikilink")
--   [Much improved text line-height settings](#text-tool "wikilink")
+    grouping/ungrouping are much faster now](#performance)
+-   [Much improved text line-height settings](#text-tool)
 -   [Variable fonts support (only if compiled with pango library
-    version >= 1.41.1)](#variable-font-support "wikilink")
--   [Browser-compatible flowed text](#browser-compatible-flowed-text "wikilink")
+    version >= 1.41.1)](#variable-font-support)
+-   [Browser-compatible flowed text](#browser-compatible-flowed-text)
 -   [Extensions programming interface updated, with many new
-    options](#third-party-extensions "wikilink") - *Note: this introduces
+    options](#third-party-extensions) - *Note: this introduces
     breaking changes, some third-party extensions will have to be
     updated to work with Inkscape 1.0*
--   [Python 3 support for extensions](#for-extension-writers "wikilink")
+-   [Python 3 support for extensions](#for-extension-writers)
 
 General: Application
 --------------------
 
-### Performance <span id="performance"></span>
+### Performance
 
 Lots of small performance improvements in various areas combine to make
 Inkscape run smoother than before:
@@ -58,7 +58,7 @@ Inkscape run smoother than before:
 -   Faster lookup of attributes (MR
     [\#448](https://gitlab.com/inkscape/inkscape/merge_requests/448))
 
-### Mac Application <span id="macos"></span>
+### Mac Application
 
 Inkscape is now a first-rate native macOS application, and no longer
 requires XQuartz to operate. The minimum required operating system
@@ -99,7 +99,7 @@ report those [to our bug tracker](https://inkscape.org/report).
 The dialog opacity options have been removed, because they were causing
 crashes that could not be fixed otherwise.
 
-### High Resolution Screens <span id="hidpi"></span>
+### High Resolution Screens
 
 Inkscape now supports HiDPI (high resolution) screens natively. This
 means that icons and node handles will no longer be tiny on monitors
@@ -136,7 +136,7 @@ field will now change the value in larger steps.
 Canvas
 ------
 
-### Y-Axis Inversion <span id="origin"></span>
+### Y-Axis Inversion
 
 During the [Inkscape Hackfest in
 Kiel](https://inkscape.org/en/news/2018/09/20/inkscape-hackfest-kiel-2018-what-happened/),
@@ -150,7 +150,7 @@ behavior. The old behavior can be reactivated in the preferences, at
 `Edit → Preferences → Interface` (disable 'Origin in upper left with
 y-axis pointing down').
 
-### Canvas Rotation <span id="canvas"></span>
+### Canvas Rotation
 
 With **<kbd>Ctrl + Shift + Scroll wheel</kbd>** or **<kbd>Ctrl + Scroll
 wheel dragging</kbd>** the drawing area can be rotated and viewed from
@@ -213,7 +213,7 @@ This function is available via:
 -   the Zoom tool's tool controls bar
 -   Keyboard shortcut **<kbd>Ctrl + 4</kbd>**
 
-### Split View Mode <span id="view-modes"></span>
+### Split View Mode
 
 The new Split View Mode features a draggable separator that becomes
 visible as soon as the Split view mode has been activated. On one side
@@ -341,7 +341,7 @@ using click-and-drag.
 
 ### Pencil Tool
 
-#### PowerPencil <span id="powerpencil"></span>
+#### PowerPencil
 
 Pressure sensitivity can now be enabled for the Pencil tool. This
 feature makes use of the PowerStroke Live Path Effect (LPE).
@@ -361,11 +361,11 @@ graphics tablet/stylus):
     of the stroke.
 -   Additionally, the PowerStroke LPE itself has been improved, to
     better work when used in this new way, see [the section about LPE
-    updates](#PowerStroke_LPE_Improvements "wikilink").
+    updates](#powerstroke-lpe-improvements).
 
 ### Selection Tool
 
-#### On-Canvas Alignment <span id="on-canvas-align"></span>
+#### On-Canvas Alignment
 
 When the option "Enable on-canvas alignment" is active in the "Align and
 Distribute" dialog, a new set of handles will appear on canvas when an
@@ -384,7 +384,7 @@ area of the current selection.
     to its outer boundaries / corners as a group (i.e. it is moved by
     its own `width` and / or `height`).
 
-### Text Tool <span id="text-tool">
+### Text Tool
 
 #### More Compact Tool Controls Bar
 
@@ -394,7 +394,7 @@ area of the current selection.
 -   Removed the 'Show style of outermost text element' button that made
     settings confusing.
 
-#### Better Line Height Settings <span id="line-height></span>
+#### Better Line Height Settings
 
 -   Line spacing settings got an overhaul and are now much easier to
     use. Gone is the unwieldy `?` button; this is now handled by
@@ -422,12 +422,12 @@ text line now selects the text with both selection and text tool
 (previously, clicking into the space between two letters did not select
 the text).
 
-#### Variable Font Support <span id="variable-fonts"></span>
+#### Variable Font Support
 
 If Inkscape has been compiled with a Pango library version that is at
 least 1.41.1 (which is the case for the Windows and macOS versions, and
 for Ubuntu versions starting from 19.04), it comes with [ support for
-variable fonts](Variable_Fonts_support "wikilink") ([more info about how
+variable fonts](https://wiki.inkscape.org/wiki/index.php/Variable_Fonts_support) ([more info about how
 this looks](https://www.patreon.com/posts/font-variations-17644963)).
 These are fonts that do not come with different faces, but often with
 various sliding scales for different font properties, like 'boldness',
@@ -442,7 +442,7 @@ Some OpenType fonts with glyphs saved as SVG render now in Inkscape.
 With `Text → Flow into Frame`, text now flows into the selected frames
 in selection order (instead of reversed order previously).
 
-#### Browser-compatible flowed text <span id="flowed-text"></span>
+#### Browser-compatible flowed text
 
 **Flowed text** (created by clicking and dragging a text frame) in
 previous Inkscape versions was not compatible with browsers, and
@@ -548,7 +548,7 @@ Live Path Effects
 Live Path Effects received a major overhaul, with lots of improvements
 and new features. The main changes are:
 
--   **New LPE selection dialog**<span id="lpe-dialog"></span>: the LPE
+-   **New LPE selection dialog**: the LPE
     list is now made available as a searchable dialog with an icon for
     each path effect, and options to favorite, to switch between list
     and tile view, to display info about the selected effect and to
@@ -572,7 +572,7 @@ file when a new window is opened.*)
     one selects an LPE in the list of active LPEs for the selected
     object.
 
-### New Live Path Effects <span id="lpes></span>
+### New Live Path Effects
 
 #### Dashed Stroke LPE
 
@@ -591,7 +591,7 @@ is more flexible (since, depending on the number of points available, it
 can fit both circles and ellipses) and has more features). Technical
 illustrators in particular can benefit from these features.
 
-See [LPE:\_Ellipse\_from\_Points](LPE:_Ellipse_from_Points "wikilink")
+See [LPE:\_Ellipse\_from\_Points](https://wiki.inkscape.org/wiki/index.php/LPE:_Ellipse_from_Points)
 for more documentation.
 
 #### Corners (Fillet/Chamfer) LPE
@@ -789,14 +789,14 @@ in web browsers.
 ### SVG 1.1 compatibility
 
 Inkscape includes SVG 1.1 fallbacks for text by default (see [the
-section about text tool updates](#text-tool "wikilink")).
+section about text tool updates](#text-tool)).
 
 When exporting as SVG 1.1 explicitly, using the checkbox in the export
 dialog, some settings are available in
 `Edit → Preferences → Input/Output → SVG Export`, in order to allow for
 correct rendering of markers in other software.
 
-### Export PNG images <span id="png-export"></span>
+### Export PNG images
 
 The export dialog has received several new options which are available
 when you expand the 'Advanced' section.
@@ -837,7 +837,7 @@ Extensions
 Extension dialogs can now have clickable links, images, a better layout
 with separators and indentation, multiline text fields, file chooser
 fields and more. For detailed info for development see the [developer
-section](Release_notes/1.0#For_extension_writers "wikilink") above.
+section](https://wiki.inkscape.org/wiki/index.php/Release_notes/1.0#For_extension_writers) above.
 
 ### Export Layer Slices
 
@@ -1134,7 +1134,7 @@ file in your user preferences' `ui` folder.
     there are a couple crashes, which is the reason why the dialog has
     been hidden for the 1.0 release.
 
-### Symbols <span id="symbols"></span>
+### Symbols
 
 `Object → Symbols`
 
@@ -1142,7 +1142,7 @@ The Symbols dialog can now handle a lot of symbols without delay on
 startup, and also allows searching. Symbols and symbol sets are now
 displayed in alphabetical order.
 
-### Trace Bitmap <span id="centerline"></span>
+### Trace Bitmap
 
 `Path → Trace Bitmap`
 
@@ -1175,7 +1175,7 @@ Menus
 -   New option to `Unlink clones recursively` added into sub-menu at
     `Edit → Clone`
 
-Customization <span id="customization"></span>
+Customization
 ----------------------------------------------
 
 ### Customize many files in the share folder
@@ -1267,7 +1267,7 @@ sizes that you can choose from in the 'Page' tab of the 'Document
 properties' dialog. You can edit the `pages.csv` file to remove the page
 sizes you won't use, or to add new ones.
 
-Command Line <span id="Command_Line"></span>
+Command Line
 --------------------------------------------
 
 The Inkscape command line has undergone a major overhaul with the goal
@@ -1279,7 +1279,7 @@ enhance for the developer. The most important changes are:
     <code>--actions='ObjectFlipVertically;FileSave;FileClose'</code>).
 -   Many *actions* can now take arguments (separated from the *action*
     name by a colon.
--   [xverbs](Using_xverbs "wikilink") have been removed from Inkscape
+-   [xverbs](https://wiki.inkscape.org/wiki/index.php/Using_xverbs) have been removed from Inkscape
     (command line commands that take parameters from a file, e.g. for
     saving the selection under a specified filename as SVG file)
     ([mailing list
@@ -1303,7 +1303,7 @@ enhance for the developer. The most important changes are:
     `--user-data-directory`.
 
 More information about usage and how to update your commands can be
-found at [Using the Command Line](Using_the_Command_Line "wikilink").
+found at [Using the Command Line](https://wiki.inkscape.org/wiki/index.php/Using_the_Command_Line).
 
 Tutorials / Documentation
 -------------------------
@@ -1398,7 +1398,7 @@ Breaking changes / Action required
 
 ### For users
 
-#### Custom Icon Sets <span id="custom_icon_sets"></span>
+#### Custom Icon Sets
 
 Icon sets no longer consist of a single file containing all icons.
 Instead each icon is allocated its own file. The directory structure
@@ -1409,14 +1409,14 @@ If you would like to create or convert your own icon set to the new
 format, please compare the 'hicolor' and 'Tango' icon theme folders, in
 your Inkscape installation's 'share' directory for suitable examples and
 check out [ our guide to making a new multicolor icon
-theme](Creating_a_new_multicolor_icon_theme "wikilink").
+theme](https://wiki.inkscape.org/wiki/index.php/Creating_a_new_multicolor_icon_theme).
 
 As a side effect of a bug fix to the icon preview dialog (see below),
 custom UI icon SVG files need to be updated to have their background
 color alpha channel set to 0 so that they display correctly (see Issue
 \#[1661989 (lp)](https://bugs.launchpad.net/inkscape/+bug/1661989)).
 
-#### Third-party extensions <span id="extensions-api"></span>
+#### Third-party extensions
 
 Most extensions that are maintained by a third-party developer (i.e.
 that are not an Inkscape stock extension) need to be updated to work
@@ -1427,7 +1427,7 @@ compatible with Inkscape 1.0, please point its author to [the section
 about updating one's extension in the
 Wiki](https://wiki.inkscape.org/wiki/index.php/Release_notes/1.0#For_extension_writers).
 
-#### Dropped / Replaced Extensions <span id="dropped_extensions"></span>
+#### Dropped / Replaced Extensions
 
 Extensions that previously used the UniConvertor library for
 saving/opening various file formats have been removed, as well as some
@@ -1467,10 +1467,10 @@ extensions that depended on third-party programs:
 #### Command line changes
 
 The Inkscape command line options [have changed significantly (see
-below)](#Command_Line "wikilink"). Any command line scripts that you
+below)](#command-line). Any command line scripts that you
 have used will need to be updated for Inkscape 1.0.
 
-### For extension writers <span id="extension_updates"></span>
+### For extension writers
 
 Extensions have undergone some fundamental changes.
 
@@ -1482,7 +1482,7 @@ have been added.
 
 #### General
 
--   <span id="python3"></span>Extensions were updated to be compatible
+-   Extensions were updated to be compatible
     with Python 3. While we'll be migrating away from Python 2,
     extension writers should aim for support of Python 2.7 and Python
     3.5+ for maximum compatibility.
@@ -1513,11 +1513,11 @@ Extension dialogs have some new input types and layout options:
 -   new multiline text fields
 -   new file chooser fields
 -   new `appearance="url"` for [INX
-    Parameters](INX_Parameters "wikilink") of type `"description"`. You
+    Parameters](https://wiki.inkscape.org/wiki/index.php/INX_Parameters) of type `"description"`. You
     can now add clickable links to your extension UI.
 -   a simpler version of the color chooser field has been added
 -   new layout options (separator, table-like layouts)
--   all [INX Parameters](INX_Parameters "wikilink") now have the common
+-   all [INX Parameters](https://wiki.inkscape.org/wiki/index.php/INX_Parameters) now have the common
     attribute `indent="`<var>`n`</var>`"` where <var>`n`</var> specifies
     the level of indentation in the extension UI.
 -   new `label` parameter
@@ -1530,12 +1530,12 @@ Extension dialogs have some new input types and layout options:
 #### More info
 
 Please also note the changed [command line
-options](#Command_Line "wikilink"), if your extension calls another
+options](#command-line), if your extension calls another
 instance of Inkscape.
 
 More detailed instructions for updating old extensions are available at
 [Updating your Extension for
-1.0](Updating_your_Extension_for_1.0 "wikilink"). Also check the
+1.0](https://wiki.inkscape.org/wiki/index.php/Updating_your_Extension_for_1.0). Also check the
 [extension (`inkex`) API
 documentation](https://inkscape.gitlab.io/extensions/documentation/) and
 the [stock extensions
@@ -1544,7 +1544,7 @@ comparable extensions. If you have questions about extension
 development, you can join us in our [extension development chat
 channel](https://chat.inkscape.org/channel/inkscape_extensions).
 
-### For packagers and those who compile Inkscape <span id="packaging_updates"></span>
+### For packagers and those who compile Inkscape
 
 -   `autotools` builds have been dropped. Please use `CMake` for
     building Inkscape from now on. More info is available [on our
