@@ -220,8 +220,8 @@ std::vector<Glib::ustring> ResourceManagerImpl::findBrokenLinks( SPDocument *doc
 
     if ( doc ) {
         std::vector<SPObject *> images = doc->getResourceList("image");
-        for (std::vector<SPObject *>::const_iterator it = images.begin(); it != images.end(); ++it) {
-            Inkscape::XML::Node *ir = (*it)->getRepr();
+        for (auto image : images) {
+            Inkscape::XML::Node *ir = image->getRepr();
 
             gchar const *href = ir->attribute("xlink:href");
             if ( href &&  ( uniques.find(href) == uniques.end() ) ) {
@@ -354,8 +354,8 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
         DocumentUndo::setUndoSensitive(doc, true);
         
         std::vector<SPObject *> images = doc->getResourceList("image");
-        for (std::vector<SPObject *>::const_iterator it = images.begin(); it != images.end(); ++it) {
-            Inkscape::XML::Node *ir = (*it)->getRepr();
+        for (auto image : images) {
+            Inkscape::XML::Node *ir = image->getRepr();
 
             gchar const *href = ir->attribute("xlink:href");
             if ( href ) {
