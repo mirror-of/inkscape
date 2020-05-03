@@ -421,9 +421,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
     // first check if all the input objects have shapes
     // otherwise bail out
-    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++)
+    for (auto item : il)
     {
-        SPItem *item = *l;
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
         {
             return ERR_NO_PATHS;
@@ -688,8 +687,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     if (res->descr_cmd.size() <= 1)
     {
         // only one command, presumably a moveto: it isn't a path
-        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-            (*l)->deleteObject();
+        for (auto l : il){
+            l->deleteObject();
         }
         clear();
 
@@ -730,10 +729,10 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     gchar const *id = repr_source->attribute("id");
     // remove source paths
     clear();
-    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        if ((*l) != item_source) {
+    for (auto l : il){
+        if (l != item_source) {
             // delete the object for real, so that its clones can take appropriate action
-            (*l)->deleteObject();
+            l->deleteObject();
         }
     }
 
@@ -1591,8 +1590,7 @@ sp_selected_path_outline(SPDesktop *desktop, bool legacy)
     prefs->setBool("/options/transform/stroke", true);
     bool did = false;
     std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
-    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        SPItem *item = *l;
+    for (auto item : il){
         did = sp_item_path_outline(item, desktop, legacy);
     }
 
@@ -1864,8 +1862,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
     bool did = false;
     std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
-    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        SPItem *item = *l;
+    for (auto item : il){
         SPCurve *curve = nullptr;
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
@@ -2198,9 +2195,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
     // set "busy" cursor
     desktop->setWaitingCursor();
 
-    for (std::vector<SPItem*>::const_iterator l = items.begin(); l != items.end(); l++){
-        SPItem *item = *l;
-
+    for (auto item : items){
         if (!(SP_IS_GROUP(item) || SP_IS_SHAPE(item) || SP_IS_TEXT(item)))
           continue;
 
