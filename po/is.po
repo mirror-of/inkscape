@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-26 19:57+0200\n"
-"PO-Revision-Date: 2020-02-20 07:29+0000\n"
-"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"PO-Revision-Date: 2020-05-03 09:45+0000\n"
+"Last-Translator: Sveinn í Felli <sv@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
@@ -596,7 +596,7 @@ msgstr "Silkiteppi"
 
 #: ../share/filters/filters.svg.h:200
 msgid "Silk carpet texture, horizontal stripes"
-msgstr ""
+msgstr "Silkiteppisáferð, láréttar rendur"
 
 #: ../share/filters/filters.svg.h:202
 msgid "Refractive Gel A"
@@ -1511,7 +1511,7 @@ msgstr "Endurvarpandi upphleyping"
 
 #: ../share/filters/filters.svg.h:602
 msgid "Basic Two Lights Bump"
-msgstr "Einföld tveggja ljósgjafa ójöfnudreifing"
+msgstr "Einföld tveggja-ljósgjafa ójöfnudreifing"
 
 #: ../share/filters/filters.svg.h:604
 msgid "Two types of lighting emboss effect"
@@ -4658,7 +4658,7 @@ msgstr "ferill (hornrétt)"
 
 #: ../src/display/snap-indicator.cpp:115
 msgid "path (tangential)"
-msgstr "ferill (tangens)"
+msgstr "ferill (snertill/tangens)"
 
 #: ../src/display/snap-indicator.cpp:118
 msgid "path intersection"
@@ -4866,7 +4866,7 @@ msgstr " (Engar kjörstillingar)"
 
 #: ../src/extension/effect.h:70 ../src/verbs.cpp:2240
 msgid "Extensions"
-msgstr "Viðbætur"
+msgstr "Forritsviðaukar"
 
 #. \FIXME change this
 #. This is some filler text, needs to change before relase
@@ -4879,12 +4879,12 @@ msgid ""
 "normally but those extensions will be unavailable.  For details to "
 "troubleshoot this problem, please refer to the error log located at: "
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Ein eða fleiri viðbætur hlóðust ekki "
-"inn</span>\n"
+"<span weight=\"bold\" size=\"larger\">Einn eða fleiri forritsviðauki hlóðust "
+"ekki inn</span>\n"
 "\n"
-"Þessum viðbótum hefur verið sleppt.  Inkscape mun keyra eðlilega áfram, en "
-"þessar viðbætur verða ekki tiltækar.  Til að sjá betur hvernig hægt sé að "
-"laga þetta, er best að skoða villuannálinn sem er í: "
+"Þessum forritsviðaukum hefur verið sleppt. Inkscape mun keyra eðlilega "
+"áfram, en þessir forritsviðaukur verða ekki tiltækar. Til að sjá betur "
+"hvernig hægt sé að laga þetta, er best að skoða villuannálinn sem er í: "
 
 #: ../src/extension/error-file.cpp:67
 msgid "Show dialog on startup"
@@ -4902,8 +4902,8 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
-"  Þessu veldur gölluð .inx skrá fyrir þessa viðbót.  Gölluð .inx skrá gæti "
-"verið afleiðing af misheppnaðri uppsetningu Inkscape."
+"  Þessu veldur gölluð .inx skrá fyrir þennan forritsviðauka.  Gölluð .inx "
+"skrá gæti verið afleiðing af misheppnaðri uppsetningu Inkscape."
 
 #: ../src/extension/extension.cpp:277
 msgid "the extension is designed for Windows only."
@@ -4923,7 +4923,7 @@ msgstr "XML-lýsingin fyrir hana tapaðist."
 
 #: ../src/extension/extension.cpp:294
 msgid "no implementation was defined for the extension."
-msgstr "Engin útfærsla var tilgreind fyrir viðbótina."
+msgstr "Engin útfærsla var tilgreind fyrir forritsviðaukann."
 
 #. std::cout << "Failed: " << *(_deps[i]) << std::endl;
 #: ../src/extension/extension.cpp:301
@@ -4941,7 +4941,7 @@ msgstr "\" hlóðst ekki inn vegna "
 #: ../src/extension/extension.cpp:670
 #, c-format
 msgid "Could not create extension error log file '%s'"
-msgstr "Gat ekki búið til villuannálsskrá '%s' fyrir viðbótina"
+msgstr "Gat ekki búið til villuannálsskrá '%s' fyrir forritsviðauka"
 
 #: ../src/extension/extension.cpp:778
 #: ../share/extensions/webslicer_create_rect.inx.h:2
@@ -5568,7 +5568,7 @@ msgstr "Gráður:"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:45
 msgid "Swirl selected bitmap(s) around center point"
-msgstr ""
+msgstr "Þyrla völdum bitamyndum í kringum miðpunkt"
 
 #. TRANSLATORS: see http://docs.gimp.org/en/gimp-tool-threshold.html
 #: ../src/extension/internal/bitmap/threshold.cpp:38
@@ -5583,7 +5583,7 @@ msgstr "Litmörk:"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:46
 msgid "Threshold selected bitmap(s)"
-msgstr ""
+msgstr "Draga litmörk í völdum bitamyndum"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:41
 msgid "Unsharp Mask"
@@ -8108,7 +8108,7 @@ msgstr "Inkscape SVG (*.svg)"
 
 #: ../src/extension/internal/svg.cpp:142
 msgid "SVG format with Inkscape extensions"
-msgstr "SVG-snið með Inkscape-viðbótum"
+msgstr "SVG-snið með Inkscape-forritsviðaukum"
 
 #: ../src/extension/internal/svg.cpp:150 ../share/extensions/scour.inx.h:19
 msgid "SVG Output"
@@ -8408,8 +8408,8 @@ msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
-"Fann ekki Inkscape-viðbót til að vista skjalið (%s).  Það gæti stafað af "
-"óþekktri skráarendingu."
+"Fann ekki Inkscape-forritsviðauka til að vista skjalið (%s).  Það gæti "
+"stafað af óþekktri skráarendingu."
 
 #: ../src/file.cpp:677 ../src/file.cpp:687 ../src/file.cpp:696
 #: ../src/file.cpp:703 ../src/file.cpp:709
@@ -8841,7 +8841,8 @@ msgstr "Sjálfvirk vistun skjala..."
 #: ../src/inkscape.cpp:335
 msgid "Autosave failed! Could not find inkscape extension to save document."
 msgstr ""
-"Sjálfvirk vistun mistókst! Fann ekki Inkscape-viðbót til að vista skjalið."
+"Sjálfvirk vistun mistókst! Fann ekki Inkscape-forritsviðauka til að vista "
+"skjalið."
 
 #: ../src/inkscape.cpp:338 ../src/inkscape.cpp:345
 #, c-format
@@ -9278,7 +9279,7 @@ msgstr "Tengja #%d"
 
 #: ../src/libnrtype/FontFactory.cpp:648
 msgid "Ignoring font without family that will crash Pango"
-msgstr ""
+msgstr "Hunsa letur án leturgerðar (font-family) sem myndi láta Pango hrynja"
 
 #: ../src/live_effects/effect.cpp:100
 msgid "doEffect stack test"
@@ -9585,7 +9586,7 @@ msgstr "Bre_idd er í lengdareiningum"
 
 #: ../src/live_effects/lpe-bendpath.cpp:72
 msgid "Scale the width of the path in units of its length"
-msgstr ""
+msgstr "Kvarða breidd ferilsins í lengdareiningum hans"
 
 #: ../src/live_effects/lpe-bendpath.cpp:73
 msgid "_Original path is vertical"
@@ -9611,7 +9612,7 @@ msgstr "Tengdur ferill:"
 #: ../src/live_effects/lpe-clone-original.cpp:24
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:23
 msgid "Path from which to take the original path data"
-msgstr ""
+msgstr "Ferill þar sem á að ná í upprunaleg ferilgögn"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:25
 msgid "Visual Bounds"
@@ -10956,12 +10957,16 @@ msgid ""
 "Add direction randomness by moving 'bottom' half-turns tangentially to the "
 "boundary."
 msgstr ""
+"Bæta við flökti í stefnu með því að færa 'neðstu' hálfbeygjur í snertil við"
+" svæðismörk."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid ""
 "Add direction randomness by randomly moving 'top' half-turns tangentially to "
 "the boundary."
 msgstr ""
+"Bæta við flökti í stefnu með því að færa tilviljunarkennt 'efstu' hálfbeygjur"
+" í snertil við svæðismörk."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 msgid "Variance: 1st side:"
@@ -11091,7 +11096,7 @@ msgstr "Hámarksfærsla í Y"
 
 #: ../src/live_effects/lpe-roughen.cpp:60
 msgid "Global randomize"
-msgstr "Slemigera víðvært"
+msgstr "Slembigera víðvært"
 
 #: ../src/live_effects/lpe-roughen.cpp:62
 msgid "Handles"
@@ -11384,7 +11389,7 @@ msgstr "Hjálparlínur:"
 
 #: ../src/live_effects/lpe-sketch.cpp:57
 msgid "How many construction lines (tangents) to draw"
-msgstr "Hve margar hjálparlínur (tanges) á að teikna"
+msgstr "Hve margar hjálparlínur (snertla/tangens) á að teikna"
 
 #: ../src/live_effects/lpe-sketch.cpp:58
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2918
@@ -11750,7 +11755,7 @@ msgstr ""
 
 #: ../src/live_effects/parameter/text.cpp:101
 msgid "Change text parameter"
-msgstr ""
+msgstr "Skipta um textabreytu"
 
 #: ../src/live_effects/parameter/togglebutton.cpp:114
 msgid "Change togglebutton parameter"
@@ -11763,7 +11768,7 @@ msgstr "Skipta um færibreytu vigurs"
 
 #: ../src/live_effects/parameter/unit.cpp:80
 msgid "Change unit parameter"
-msgstr ""
+msgstr "Skipta um einingarbreytu"
 
 #: ../src/main-cmdlineact.cpp:49
 #, c-format
@@ -12167,7 +12172,7 @@ msgstr "_Síur"
 
 #: ../src/menus-skeleton.h:285
 msgid "Exte_nsions"
-msgstr "_Viðbætur"
+msgstr "Viðau_kar"
 
 #: ../src/menus-skeleton.h:291
 msgid "_Help"
@@ -12664,15 +12669,15 @@ msgstr "Líma stíl"
 
 #: ../src/selection-chemistry.cpp:1330
 msgid "Paste live path effect"
-msgstr "Líma gagnvirka ferilbrellu"
+msgstr "Líma gagnvirka LPE-ferilbrellu"
 
 #: ../src/selection-chemistry.cpp:1352
 msgid "Select <b>object(s)</b> to remove live path effects from."
-msgstr "Veldu <b>hluti</b> sem á að fjarlægja gagnvirkar ferilbrellur af."
+msgstr "Veldu <b>hluti</b> sem á að fjarlægja gagnvirkar LPE-ferilbrellur af."
 
 #: ../src/selection-chemistry.cpp:1364
 msgid "Remove live path effect"
-msgstr "Fjarlægja gagnvirka ferilbrellu"
+msgstr "Fjarlægja gagnvirka LPE-ferilbrellu"
 
 #: ../src/selection-chemistry.cpp:1375
 msgid "Select <b>object(s)</b> to remove filters from."
@@ -13051,8 +13056,8 @@ msgstr[1] "<b>%1$i</b> valdir hlutir af tegundunum %2$s"
 #, c-format
 msgid "; <i>%d filtered object</i> "
 msgid_plural "; <i>%d filtered objects</i> "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "; <i>%d síað atriði</i> "
+msgstr[1] "; <i>%d síuð atriði</i> "
 
 #: ../src/seltrans-handles.cpp:9
 msgid ""
@@ -13754,7 +13759,7 @@ msgstr "Engin stærð á klippispjaldi."
 
 #: ../src/ui/clipboard.cpp:569
 msgid "Select <b>object(s)</b> to paste live path effect to."
-msgstr "Veldu <b>hluti</b> sem á að líma gagnvirkar ferilbrellur á."
+msgstr "Veldu <b>hluti</b> sem á að líma gagnvirkar LPE-ferilbrellur á."
 
 #. no_effect:
 #: ../src/ui/clipboard.cpp:595
@@ -13804,7 +13809,7 @@ msgstr "about.svg"
 #. one per line in the form of: name surname (email). Use \n for newline.
 #: ../src/ui/dialog/aboutbox.cpp:443
 msgid "translator-credits"
-msgstr "Sveinn í Felli (sv1@fellsnet.is), 2014-2019"
+msgstr "Sveinn í Felli (sv1@fellsnet.is), 2014-2020"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:215
 #: ../src/ui/dialog/align-and-distribute.cpp:946
@@ -13857,7 +13862,7 @@ msgstr "Afklumpa"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:746
 msgid "Randomize positions"
-msgstr "Slemigera staðsetningu"
+msgstr "Slembigera staðsetningu"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:847
 msgid "Distribute text baselines"
@@ -15616,7 +15621,7 @@ msgstr "Bæta skráarendingu við sjálfkrafa"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1227
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1480
 msgid "Guess from extension"
-msgstr "Giska út frá endingu"
+msgstr "Giska út frá skráarendingu"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1499
 msgid "Left edge of source"
@@ -16092,7 +16097,7 @@ msgstr "Dreifilitur:"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2911
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2944
 msgid "Defines the color of the light source"
-msgstr ""
+msgstr "Skilgreinir lit ljósgjafans"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2912
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2945
@@ -16229,6 +16234,8 @@ msgid ""
 "The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, "
 "multiply, darken and lighten."
 msgstr ""
+"Grunnsían <b>feBlend</b> gefur kost á 4 blöndunarhömum mynda: skjár, "
+"margföldun, dekking og lýsing."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2990
 msgid ""
@@ -16310,6 +16317,10 @@ msgid ""
 "compositing for this. This is equivalent to using several feBlend primitives "
 "in 'normal' mode or several feComposite primitives in 'over' mode."
 msgstr ""
+"Grunnsían <b>feMerge</b> setur nokkrar bráðabirgðamyndir innan síunnar saman"
+" í eina mynd. Hún styðst við venjulega alfa-skjásamsetningu til þessa. Þetta"
+" jafngildir því að nota nokkrar feBlend viðmiðunarmyndir í 'venjulegt'-ham"
+" eða nokkrar feComposite viðmiðunarmyndir í 'yfir'-ham."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3030
 msgid ""
@@ -17087,7 +17098,7 @@ msgstr "Hljóðfræðiviðbætur auknar"
 
 #: ../src/ui/dialog/glyphs.cpp:213
 msgid "Combining Diacritical Marks Supplement"
-msgstr "Viðbótar samsetningar broddstafamerkja"
+msgstr "Viðbótar samsett broddstafamerki"
 
 #: ../src/ui/dialog/glyphs.cpp:214
 msgid "Latin Extended Additional"
@@ -18072,6 +18083,7 @@ msgstr "_Horn línulegs litstiguls:"
 msgid ""
 "Default angle of new linear gradients in degrees (clockwise from horizontal)"
 msgstr ""
+"Sjálfgefið horn í gráðum á nýjum línulegum litstiglum (réttsælis frá láréttu)"
 
 #. Dropper
 #: ../src/ui/dialog/inkscape-preferences.cpp:532
@@ -18091,7 +18103,7 @@ msgstr ""
 #. disabled, because the LPETool is not finished yet.
 #: ../src/ui/dialog/inkscape-preferences.cpp:545
 msgid "LPE Tool"
-msgstr "LPE verkfæri (LivePathEffects)"
+msgstr "LPE-verkfæri (LivePathEffects)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:552
 msgid "Interface"
@@ -20358,7 +20370,7 @@ msgstr "Staðsetning kjörstillingaskrár notandans"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2010
 msgid "User extensions: "
-msgstr "Viðbætur notanda: "
+msgstr "Forritsviðaukar notanda: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2010
 msgid "Location of the users extensions"
@@ -20390,11 +20402,11 @@ msgstr "Staðsetning Inkscape gagna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2030
 msgid "Inkscape extensions: "
-msgstr "Inkscape viðbætur: "
+msgstr "Inkscape forritsviðaukar: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2030
 msgid "Location of the Inkscape extensions"
-msgstr "Staðsetning forritsviðbóta Inkscape"
+msgstr "Staðsetning forritsviðauka Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2039
 msgid "System data: "
@@ -21540,21 +21552,21 @@ msgstr "Bæta við staftákni"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:520
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:562
 msgid "Select a <b>path</b> to define the curves of a glyph"
-msgstr ""
+msgstr "Veldu <b>feril</b> sem skilgreinir útlínur staftákns"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:528
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:570
 msgid "The selected object does not have a <b>path</b> description."
-msgstr ""
+msgstr "Valinn hlutur er ekki með neina lýsingu fyrir <b>feril</b>."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:535
 msgid "No glyph selected in the SVGFonts dialog."
-msgstr ""
+msgstr "Ekkert staftákn valið í SVGFonts-glugganum."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:546
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:585
 msgid "Set glyph curves"
-msgstr ""
+msgstr "Setja ferla staftákns"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:605
 msgid "Reset missing-glyph"
@@ -22960,8 +22972,8 @@ msgstr ""
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
 msgstr ""
-"<b>Ctrl</b>: Færa haldfang um eigin þrep sem skilgreind eru í BSpline "
-"gagnvirkri ferilbrellu"
+"<b>Ctrl</b>: Færa haldfang um eigin þrep sem skilgreind eru í gagnvirkri "
+"BSpline LPE-ferilbrellu"
 
 #: ../src/ui/tool/node.cpp:532
 #, c-format
@@ -25023,7 +25035,7 @@ msgid ""
 msgstr ""
 "Þrátt fyrir að SVG leyfi óreglulega kvörðun er mælt með því að nota aðeins "
 "reglulega kvörðun í Inkscape. Til að stilla óreglulega kvörðun, stilltu "
-"'viewBox' sýnikassa beint."
+"'viewBox' sýnireit beint."
 
 #: ../src/ui/widget/page-sizer.cpp:323
 msgid "Orientation:"
@@ -25059,7 +25071,7 @@ msgstr ""
 
 #: ../src/ui/widget/page-sizer.cpp:478
 msgid "_Viewbox..."
-msgstr "Sýni_kassi..."
+msgstr "Sý_nireitur..."
 
 #: ../src/ui/widget/page-sizer.cpp:585
 msgid "Set page size"
@@ -25075,7 +25087,7 @@ msgstr "Stilla kvarða síðu"
 
 #: ../src/ui/widget/page-sizer.cpp:953
 msgid "Set 'viewBox'"
-msgstr "Setja 'viewBox' sýnikassa"
+msgstr "Setja 'viewBox' sýnireit"
 
 #: ../src/ui/widget/panel.cpp:116
 msgid "List"
@@ -26044,7 +26056,7 @@ msgstr "Beita stíl afritaða hlutarins á valið"
 
 #: ../src/verbs.cpp:2479
 msgid "Scale selection to match the size of the copied object"
-msgstr ""
+msgstr "Kvarða myndval þannig að það samsvari stærð afritaða hlutarins"
 
 #: ../src/verbs.cpp:2480
 msgid "Paste _Width"
@@ -26052,7 +26064,7 @@ msgstr "Líma _breidd"
 
 #: ../src/verbs.cpp:2481
 msgid "Scale selection horizontally to match the width of the copied object"
-msgstr ""
+msgstr "Kvarða myndval lárétt þannig að það samsvari breidd afritaða hlutarins"
 
 #: ../src/verbs.cpp:2482
 msgid "Paste _Height"
@@ -26060,7 +26072,7 @@ msgstr "Líma _hæð"
 
 #: ../src/verbs.cpp:2483
 msgid "Scale selection vertically to match the height of the copied object"
-msgstr ""
+msgstr "Kvarða myndval lóðrétt þannig að það samsvari hæð afritaða hlutarins"
 
 #: ../src/verbs.cpp:2484
 msgid "Paste Size Separately"
@@ -26069,6 +26081,7 @@ msgstr "Líma stærð sér"
 #: ../src/verbs.cpp:2485
 msgid "Scale each selected object to match the size of the copied object"
 msgstr ""
+"Kvarða hvern valinn hlut þannig að þeir samsvari stærð afritaða hlutarins"
 
 #: ../src/verbs.cpp:2486
 msgid "Paste Width Separately"
@@ -26079,6 +26092,8 @@ msgid ""
 "Scale each selected object horizontally to match the width of the copied "
 "object"
 msgstr ""
+"Kvarða hvern valinn hlut lárétt þannig að þeir samsvari breidd afritaða"
+" hlutarins"
 
 #: ../src/verbs.cpp:2488
 msgid "Paste Height Separately"
@@ -26089,6 +26104,8 @@ msgid ""
 "Scale each selected object vertically to match the height of the copied "
 "object"
 msgstr ""
+"Kvarða hvern valinn hlut lóðrétt þannig að þeir samsvari hæð afritaða"
+" hlutarins"
 
 #: ../src/verbs.cpp:2490
 msgid "Paste _In Place"
@@ -26164,7 +26181,7 @@ msgstr "Endurtengja við afritað"
 
 #: ../src/verbs.cpp:2507
 msgid "Relink the selected clones to the object currently on the clipboard"
-msgstr ""
+msgstr "Endurtengja valin klón við hlutina sem núna eru á klippispjaldinu"
 
 #: ../src/verbs.cpp:2508
 msgid "Select _Original"
@@ -26473,7 +26490,7 @@ msgstr "S_körun"
 
 #: ../src/verbs.cpp:2594
 msgid "Create intersection of selected paths"
-msgstr ""
+msgstr "Búa til skörun valinna ferla"
 
 #: ../src/verbs.cpp:2595
 msgid "_Difference"
@@ -27748,11 +27765,11 @@ msgstr "Stilla aukaleg inntakstæki, eins og teiknitöflur"
 
 #: ../src/verbs.cpp:2958
 msgid "_Extensions..."
-msgstr "_Viðbætur..."
+msgstr "_Forritsviðaukar..."
 
 #: ../src/verbs.cpp:2959
 msgid "Query information about extensions"
-msgstr "Nálgast upplýsingar um viðbætur"
+msgstr "Nálgast upplýsingar um forritsviðauka"
 
 #: ../src/verbs.cpp:2960
 msgid "Layer_s..."
@@ -27824,11 +27841,11 @@ msgstr "Flytja þetta skjal út eða valin atriði sem PNG bitamynd"
 #. Help
 #: ../src/verbs.cpp:2977
 msgid "About E_xtensions"
-msgstr "Um _viðbætur"
+msgstr "Um _forritsviðauka"
 
 #: ../src/verbs.cpp:2978
 msgid "Information on Inkscape extensions"
-msgstr "Upplýsingar um Inkscape-viðbætur"
+msgstr "Upplýsingar um Inkscape-forritsviðauka"
 
 #: ../src/verbs.cpp:2979
 msgid "About _Memory"
@@ -27905,7 +27922,7 @@ msgstr "Inkscape: _Brúun"
 
 #: ../src/verbs.cpp:3005
 msgid "Using the interpolate extension"
-msgstr "Notkun brúunarviðbótarinnar (interpolate)"
+msgstr "Notkun brúunarviðaukans (interpolate)"
 
 #. "tutorial_interpolate"
 #: ../src/verbs.cpp:3006
@@ -27929,19 +27946,19 @@ msgstr "Ýmsar ábendingar og góð ráð"
 #. Effect -- renamed Extension
 #: ../src/verbs.cpp:3012
 msgid "Previous Exte_nsion"
-msgstr "Síðasta _viðbót"
+msgstr "Síðasti _viðauki"
 
 #: ../src/verbs.cpp:3013
 msgid "Repeat the last extension with the same settings"
-msgstr "Keyra aftur síðustu viðbót með sömu stillingum og áður"
+msgstr "Keyra aftur seinast notaða forritsviðauka með sömu stillingum og áður"
 
 #: ../src/verbs.cpp:3014
 msgid "_Previous Extension Settings..."
-msgstr "Stillin_gar síðustu viðbótar..."
+msgstr "Stillin_gar síðasta forritsviðauka..."
 
 #: ../src/verbs.cpp:3015
 msgid "Repeat the last extension with new settings"
-msgstr "Keyra aftur síðustu viðbót með nýjum stillingum"
+msgstr "Keyra aftur síðast notaðan forritsviðauka með nýjum stillingum"
 
 #: ../src/verbs.cpp:3019
 msgid "Fit the page to the current selection"
@@ -29279,6 +29296,12 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Litstigulsmöskvar (mesh gradient) eru hluti af SVG 2:\n"
+"* Málskipan gæti breyst.\n"
+"* Ekki er hægt að ábyrgjast útfærslu í vöfrum.\n"
+"\n"
+"Fyrir vef: umbreyta í bitamynd (Breyta->Gera afrit sem bitamynd).\n"
+"Fyrir prentun: flytja út í PDF."
 
 #: ../src/widgets/mesh-toolbar.cpp:398
 msgid "normal"
@@ -29400,7 +29423,7 @@ msgstr "Plokkaðir litir:"
 
 #: ../src/widgets/mesh-toolbar.cpp:586
 msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr ""
+msgstr "Sækja liti fyrir valda hornhnúta í undirliggjandi möskva."
 
 #: ../src/widgets/mesh-toolbar.cpp:589
 msgid "Pick Color"
@@ -29628,7 +29651,7 @@ msgstr "Hringlaga litstigull"
 
 #: ../src/widgets/paint-selector.cpp:230
 msgid "Mesh gradient"
-msgstr "Litstigull möskva"
+msgstr "Litstigulsmöskvi"
 
 #: ../src/widgets/paint-selector.cpp:237
 msgid "Unset paint (make it undefined so it can be inherited)"
@@ -31515,6 +31538,9 @@ msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
 "or image/x-icon"
 msgstr ""
+"%s er ekki af tegundinni image/png, image/jpeg, image/bmp, image/gif,"
+" image/tiff, "
+"eða image/x-icon"
 
 #: ../share/extensions/export_gimp_palette.py:16
 msgid ""
@@ -31809,7 +31835,7 @@ msgstr "Villa kom upp við að vinna með XFC-skrána."
 
 #: ../share/extensions/gimp_xcf.py:183
 msgid "This extension requires at least one non empty layer."
-msgstr "Viðbótin krefst að minnsta kosti eins lags sem ekki sé tómt."
+msgstr "Forritsviðaukinn krefst að minnsta kosti eins lags sem ekki sé tómt."
 
 #: ../share/extensions/guillotine.py:241
 msgid "The sliced bitmaps have been saved as:"
@@ -32082,12 +32108,12 @@ msgstr "Gat ekki fundið merki: %s"
 
 #: ../share/extensions/measure.py:127
 msgid "Area is zero, cannot calculate Center of Mass"
-msgstr ""
+msgstr "Flötur er núll, get ekki reiknað þungamiðju"
 
 #: ../share/extensions/pathalongpath.py:207
 #: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:52
 msgid "This extension requires two selected paths."
-msgstr "Viðbótin krefst að minnsta kosti tveggja valinna ferla."
+msgstr "Forritsviðaukinn krefst að minnsta kosti tveggja valinna ferla."
 
 #: ../share/extensions/pathalongpath.py:233
 msgid ""
@@ -32651,7 +32677,7 @@ msgstr "Negatíva"
 #: ../share/extensions/color_randomize.inx.h:1
 #: ../share/extensions/render_alphabetsoup.inx.h:4
 msgid "Randomize"
-msgstr "Slemigera"
+msgstr "Slembigera"
 
 #: ../share/extensions/color_randomize.inx.h:4
 #, no-c-format
@@ -32830,11 +32856,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr "PÁT 90 til 96"
+msgstr "PÁT 90 yfir í 96"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr "PÁT 96 til 90"
+msgstr "PÁT 96 yfir í 90"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 msgid "Draw From Triangle"
@@ -32922,19 +32948,19 @@ msgstr ""
 
 #: ../share/extensions/draw_from_triangle.inx.h:22
 msgid "Gergonne Point"
-msgstr ""
+msgstr "Gergonne-punktur"
 
 #: ../share/extensions/draw_from_triangle.inx.h:23
 msgid "Nagel Point"
-msgstr ""
+msgstr "Nagel-punktur"
 
 #: ../share/extensions/draw_from_triangle.inx.h:24
 msgid "Custom Points and Options"
-msgstr ""
+msgstr "Sérsniðnir punktar og valkostir"
 
 #: ../share/extensions/draw_from_triangle.inx.h:25
 msgid "Custom Point Specified By:"
-msgstr ""
+msgstr "Sérsniðinn punktur skilgreindur af:"
 
 #: ../share/extensions/draw_from_triangle.inx.h:26
 msgid "Point At:"
@@ -33749,7 +33775,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_lathe.inx.h:16
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:3
 msgid "Maximum splitting depth:"
-msgstr ""
+msgstr "Mesta dýpt skiptingar:"
 
 #: ../share/extensions/gcodetools_area.inx.h:34
 #: ../share/extensions/gcodetools_lathe.inx.h:17
@@ -33985,7 +34011,7 @@ msgstr "Rúnna af öll gildi í 4 aukastafi"
 #: ../share/extensions/gcodetools_lathe.inx.h:51
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:38
 msgid "Fast pre-penetrate"
-msgstr ""
+msgstr "Hraðvirk forborun"
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:1
 msgid "DXF Points"
@@ -34014,11 +34040,11 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:10
 msgid "set as dxfpoint and save shape"
-msgstr ""
+msgstr "setja sem dxfpoint og vista lögun"
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:11
 msgid "set as dxfpoint and draw arrow"
-msgstr ""
+msgstr "setja sem dxfpoint og teikna ör"
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:12
 msgid "clear dxfpoint sign"
@@ -34902,7 +34928,7 @@ msgid ""
 "serial connection."
 msgstr ""
 "Gakktu úr skugga um að allir hlutir sem þú ætlar að plotta séu þegar "
-"umbreyttir í ferla. Notaðu plottviðbótina (Viðbótavalmynd) til að plotta "
+"umbreyttir í ferla. Notaðu plottviðaukann (viðaukavalmynd) til að plotta "
 "beint í gegnum raðtengingu."
 
 #: ../share/extensions/hpgl_output.inx.h:3 ../share/extensions/plotter.inx.h:31
@@ -35248,7 +35274,7 @@ msgstr "Nota Z-röð"
 
 #: ../share/extensions/interp.inx.h:8 ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
-msgstr ""
+msgstr "Hjáleið vegna öfugrar raðar á vali í gagnvirkri forskoðun"
 
 #: ../share/extensions/interp_att_g.inx.h:1
 msgid "Interpolate Attribute in a group"
@@ -35374,9 +35400,9 @@ msgid ""
 "JessyInk presentation. Please see code.google.com/p/jessyink for more "
 "details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að setja upp, uppfæra eða fjarlægja sjálfvirka "
-"texta í JessyInk glærukynningu. Skoðaðu code.google.com/p/jessyink fyrir "
-"nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að setja upp, uppfæra eða fjarlægja "
+"sjálfvirka texta í JessyInk glærukynningu. Skoðaðu code.google.com/p/"
+"jessyink fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:10
 #: ../share/extensions/jessyInk_effects.inx.h:15
@@ -35438,9 +35464,9 @@ msgid ""
 "JessyInk presentation. Please see code.google.com/p/jessyink for more "
 "details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að setja upp, uppfæra eða fjarlægja brellur "
-"hluta í JessyInk glærukynningu. Skoðaðu code.google.com/p/jessyink fyrir "
-"nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að setja upp, uppfæra eða fjarlægja "
+"brellur hluta í JessyInk glærukynningu. Skoðaðu code.google.com/p/jessyink "
+"fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_export.inx.h:1
 msgid "JessyInk zipped pdf or png output"
@@ -35464,9 +35490,9 @@ msgid ""
 "an export layer in your browser. Please see code.google.com/p/jessyink for "
 "more details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að flytja út JessyInk glærukynningar, eftir að "
-"hafa búið til útflutningslag í vafranum þínum. Skoðaðu code.google.com/p/"
-"jessyink fyrir nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að flytja út JessyInk glærukynningar, "
+"eftir að hafa búið til útflutningslag í vafranum þínum. Skoðaðu code.google."
+"com/p/jessyink fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_export.inx.h:9
 msgid "JessyInk zipped pdf or png output (*.zip)"
@@ -35490,9 +35516,9 @@ msgid ""
 "to turn your SVG file into a presentation. Please see code.google.com/p/"
 "jessyink for more details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að setja upp eða uppfæra JessyInk skriftuna, "
-"sem notuð er til þess að breyta SVG-skrám í glærukynningar. Skoðaðu code."
-"google.com/p/jessyink fyrir nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að setja upp eða uppfæra JessyInk "
+"skriftuna, sem notuð er til þess að breyta SVG-skrám í glærukynningar. "
+"Skoðaðu code.google.com/p/jessyink fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:1
 msgid "Key bindings"
@@ -35688,8 +35714,8 @@ msgid ""
 "This extension allows you to change the master slide JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að breyta yfirskyggnunni sem JessyInk notar. "
-"Skoðaðu code.google.com/p/jessyink fyrir nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að breyta yfirskyggnunni sem JessyInk "
+"notar. Skoðaðu code.google.com/p/jessyink fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:1
 msgid "Mouse handler"
@@ -35725,9 +35751,9 @@ msgid ""
 "effects and transitions contained in this SVG file. Please see code.google."
 "com/p/jessyink for more details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að skoða upplýsingar um JessyInk skriftuna, "
-"brellurnar og millifærslur sem þessi SVG-skrá inniheldur. Skoðaðu code."
-"google.com/p/jessyink fyrir nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að skoða upplýsingar um JessyInk "
+"skriftuna, brellurnar og millifærslur sem þessi SVG-skrá inniheldur. Skoðaðu "
+"code.google.com/p/jessyink fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_transitions.inx.h:1
 msgid "Transitions"
@@ -35750,8 +35776,9 @@ msgid ""
 "This extension allows you to change the transition JessyInk uses for the "
 "selected layer. Please see code.google.com/p/jessyink for more details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að breyta millifærslunni sem JessyInk notar á "
-"völdu lagi. Skoðaðu code.google.com/p/jessyink fyrir nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að breyta millifærslunni sem JessyInk "
+"notar á völdu lagi. Skoðaðu code.google.com/p/jessyink fyrir nánari "
+"upplýsingar."
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:1
 msgid "Uninstall/remove"
@@ -35790,8 +35817,8 @@ msgid ""
 "This extension allows you to uninstall the JessyInk script. Please see code."
 "google.com/p/jessyink for more details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að fjarlægja JessyInk skriftuna. Skoðaðu code."
-"google.com/p/jessyink fyrir nánari upplýsingar."
+"Þessi forritsviðauki gerir þér kleift að fjarlægja JessyInk skriftuna. "
+"Skoðaðu code.google.com/p/jessyink fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_video.inx.h:1
 msgid "Video"
@@ -35803,8 +35830,8 @@ msgid ""
 "This element allows you to integrate a video into your JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
-"Þessi viðbót setur myndskeiðseiningu inn í núverandi skyggnu (lag). Sú "
-"eining gerir þér síðan kleift að setja myndskeið inn í JessyInk "
+"Þessi forritsviðauki setur myndskeiðseiningu inn í núverandi skyggnu (lag). "
+"Sú eining gerir þér síðan kleift að setja myndskeið inn í JessyInk "
 "glærukynningu. Skoðaðu code.google.com/p/jessyink fyrir nánari upplýsingar."
 
 #: ../share/extensions/jessyInk_view.inx.h:5
@@ -35820,7 +35847,7 @@ msgid ""
 "This extension allows you to set, update and remove views for a JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
-"Þessi viðbót gerir þér kleift að setja upp, uppfæra eða fjarlægja "
+"Þessi forritsviðauki gerir þér kleift að setja upp, uppfæra eða fjarlægja "
 "fjartengdar sýnir fyrir JessyInk glærukynningu. Skoðaðu code.google.com/p/"
 "jessyink fyrir nánari upplýsingar."
 
@@ -36014,7 +36041,7 @@ msgstr "Lengd þreps (px):"
 #: ../share/extensions/lindenmayer.inx.h:8
 #, no-c-format
 msgid "Randomize step (%):"
-msgstr "Slemigera þrep (%):"
+msgstr "Slembigera þrep (%):"
 
 #: ../share/extensions/lindenmayer.inx.h:9
 msgid "Left angle:"
@@ -36471,7 +36498,8 @@ msgid ""
 "scales.\n"
 "First derivatives are always determined numerically."
 msgstr ""
-"Veldu ferhyrning áður en viðbótin er keyrð, hún mun greina X og Y kvarðana.\n"
+"Veldu ferhyrning áður en forritsviðaukinn er keyrð, hann mun greina X og Y "
+"kvarðana.\n"
 "Fyrstu afleiður eru ævinlega skilgreindar tölulega."
 
 #: ../share/extensions/param_curves.inx.h:26
@@ -37534,7 +37562,7 @@ msgstr ""
 
 #: ../share/extensions/scour.inx.h:28
 msgid "Enable viewboxing"
-msgstr "Virkja sýnikassa"
+msgstr "Virkja sýnireit"
 
 #: ../share/extensions/scour.inx.h:30
 #, no-c-format
@@ -37542,6 +37570,8 @@ msgid ""
 "Set page size to 100%/100% (full width and height of the display area) and "
 "introduce a viewBox specifying the drawings dimensions."
 msgstr ""
+"Setja stærð síðu á 100%/100% (full breidd og hæð á birtingarsvæði) og setja"
+" inn sýnireit (viewBox) sem tilgreinir stærðir teikningar."
 
 #: ../share/extensions/scour.inx.h:31
 msgid "Format output with line-breaks and indentation"
@@ -38052,7 +38082,7 @@ msgstr "Synfig teiknimynd (*.sif)"
 
 #: ../share/extensions/synfig_output.inx.h:3
 msgid "Synfig Animation written using the sif-file exporter extension"
-msgstr "Synfig teiknimynd skrifuð með sif-skráaútflutningsviðbótinni"
+msgstr "Synfig teiknimynd skrifuð með sif-skráaútflutningsviðaukanum"
 
 #: ../share/extensions/tar_layers.inx.h:1
 msgid "Collection of SVG files One per root layer"
@@ -38296,7 +38326,7 @@ msgstr "Gildi sem á að setja:"
 #: ../share/extensions/web-set-att.inx.h:6
 #: ../share/extensions/web-transmit-att.inx.h:5
 msgid "Compatibility with previews code to this event:"
-msgstr ""
+msgstr "Samhæfni þessa atburðar við kóða forskoðana:"
 
 #: ../share/extensions/web-set-att.inx.h:7
 msgid "Source and destination of setting:"
@@ -38385,12 +38415,16 @@ msgid ""
 "This effect adds a feature visible (or usable) only on a SVG enabled web "
 "browser (like Firefox)."
 msgstr ""
+"Þetta setur inn eiginleika sem aðeins er sýnilegur (eða nothæfur) í vöfrum"
+" sem styðja SVG (eins og t.d. Firefox)."
 
 #: ../share/extensions/web-set-att.inx.h:27
 msgid ""
 "This effect sets one or more attributes in the second selected element, when "
 "a defined event occurs on the first selected element."
 msgstr ""
+"Þessi eiginleiki stillir eitt eða fleiri eigindi í næsta valda einindi, þegar"
+" tiltekinn atburður gerist í fyrsta valda einindinu."
 
 #: ../share/extensions/web-set-att.inx.h:28
 msgid ""
@@ -38437,6 +38471,8 @@ msgid ""
 "This effect transmits one or more attributes from the first selected element "
 "to the second when an event occurs."
 msgstr ""
+"Þessi eiginleiki miðlar einu eða fleiri eigindum frá fyrsta valda einindi til"
+" þess næsta þegar tiltekinn atburður gerist."
 
 #: ../share/extensions/web-transmit-att.inx.h:26
 msgid ""
@@ -38517,7 +38553,7 @@ msgstr "Þvinga stærðir verður að vera stillt sem <width>x<height>"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:8
 msgid "If set, this will replace DPI."
-msgstr "Ef stillt, mun þetta koma í stað PÁT."
+msgstr "Ef stillt, mun þetta koma í stað PÁT upplausnar."
 
 #: ../share/extensions/webslicer_create_rect.inx.h:10
 msgid "JPG specific options"
