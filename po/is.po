@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-04-20 22:20+0200\n"
-"PO-Revision-Date: 2020-05-02 15:13+0000\n"
+"PO-Revision-Date: 2020-05-03 15:12+0000\n"
 "Last-Translator: Sveinn í Felli <sv@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
@@ -4273,7 +4273,7 @@ msgstr "ferill (hornrétt)"
 
 #: ../src/display/snap-indicator.cpp:116
 msgid "path (tangential)"
-msgstr "ferill (tangens)"
+msgstr "ferill (snertill/tangens)"
 
 #: ../src/display/snap-indicator.cpp:119
 msgid "path intersection"
@@ -8790,7 +8790,7 @@ msgstr "Veldu hluti: kommu-aðgreindur listi yfir auðkenni"
 
 #: ../src/inkscape-application.cpp:633
 msgid "List of actions (with optional arguments) to execute"
-msgstr ""
+msgstr "Listi yfir allar aðgerðir (með valkvæðum breytum) sem á að keyra"
 
 #: ../src/inkscape-application.cpp:633
 msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
@@ -8802,7 +8802,7 @@ msgstr "Telja upp allar tiltækar aðgerðir"
 
 #: ../src/inkscape-application.cpp:638
 msgid "List of verbs to execute"
-msgstr ""
+msgstr "Listi yfir allar sagnir sem á að keyra"
 
 #: ../src/inkscape-application.cpp:638
 msgid "VERB[;VERB]*"
@@ -8810,7 +8810,7 @@ msgstr "VERB[;VERB]*"
 
 #: ../src/inkscape-application.cpp:639
 msgid "List all available verbs"
-msgstr ""
+msgstr "Listi yfir allar tiltækar sagnir"
 
 #: ../src/inkscape-application.cpp:642
 #: ../src/ui/dialog/inkscape-preferences.cpp:929
@@ -8819,11 +8819,12 @@ msgstr "Viðmót"
 
 #: ../src/inkscape-application.cpp:643
 msgid "With graphical user interface (required by some actions/verbs)"
-msgstr ""
+msgstr "Með myndrænu notandaviðmóti (nauðsynlegt fyrir sumar aðgerðir/sagnir)"
 
 #: ../src/inkscape-application.cpp:644
 msgid "Close GUI after executing all actions/verbs"
 msgstr ""
+"Loka myndrænu notandaviðmóti eftir að hafa framkvæmt allar aðgerðir/sagnir"
 
 #: ../src/inkscape-application.cpp:646
 msgid "Start Inkscape in interactive shell mode"
@@ -9001,7 +9002,7 @@ msgstr "<b>Breyta stærð</b> áhrifasvæðis síu"
 
 #: ../src/libnrtype/FontFactory.cpp:660
 msgid "Ignoring font without family that will crash Pango"
-msgstr ""
+msgstr "Hunsa letur án leturgerðar (font-family) sem myndi láta Pango hrynja"
 
 #: ../src/live_effects/effect.cpp:104
 msgid "Bend"
@@ -9339,7 +9340,7 @@ msgstr "Sporbaugur úr punktum"
 
 #: ../src/live_effects/effect.cpp:631
 msgid "Draw a circle, ellipse, arc or slice based on the nodes of a path"
-msgstr "Teikna hring, sporbaug, boga eða sneið út frá hvútum ferils"
+msgstr "Teikna hring, sporbaug, boga eða sneið út frá hnútum ferils"
 
 #: ../src/live_effects/effect.cpp:645
 msgid "Offset the path, optionally keeping cusp corners cusp"
@@ -9429,6 +9430,8 @@ msgid ""
 "Draw a tangent with variable length and additional angle that can be moved "
 "along the path"
 msgstr ""
+"Teikna snertil (tangens) með breytilegri lengd og viðbótarhorni sem hægt er"
+" að færa eftir ferlinum"
 
 #: ../src/live_effects/effect.cpp:782
 msgid "doEffect stack test"
@@ -9799,7 +9802,7 @@ msgstr "Tengdur ferill:"
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 msgid "Path from which to take the original path data"
-msgstr ""
+msgstr "Ferill þar sem á að ná í upprunaleg ferilgögn"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:21
 msgid "Visual Bounds"
@@ -10007,13 +10010,14 @@ msgstr ""
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
 msgid "Distribute evenly"
-msgstr ""
+msgstr "Dreifa jafnt"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
 msgid ""
 "Angle between copies is 360°/number of copies (ignores rotation angle "
 "setting)"
 msgstr ""
+"Horn á milli eintaka er 360°/fjölda eintaka (hunsar stillingu á snúningshorni)"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 msgid "Mirror copies"
@@ -11202,7 +11206,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:87
 msgid "Flip side"
-msgstr ""
+msgstr "Spegla hlið"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:87
 msgid "Draw dimension lines and labels on the other side of the path"
@@ -11541,15 +11545,15 @@ msgstr "Laga hliðrun"
 
 #: ../src/live_effects/lpe-parallel.cpp:49
 msgid "Specifies the left end of the parallel"
-msgstr ""
+msgstr "Skilgreinir vinstri enda á samsíðungi"
 
 #: ../src/live_effects/lpe-parallel.cpp:50
 msgid "Specifies the right end of the parallel"
-msgstr ""
+msgstr "Skilgreinir hægri enda á samsíðungi"
 
 #: ../src/live_effects/lpe-parallel.cpp:104
 msgid "Adjust the \"left\" end of the parallel"
-msgstr ""
+msgstr "Stilla \"vinstri\" endann á samsíðungnum."
 
 #: ../src/live_effects/lpe-parallel.cpp:109
 msgid "Adjust the \"right\" end of the parallel"
@@ -12038,12 +12042,16 @@ msgid ""
 "Add direction randomness by moving 'bottom' half-turns tangentially to the "
 "boundary."
 msgstr ""
+"Bæta við flökti í stefnu með því að færa 'neðstu' hálfbeygjur í snertil við"
+" svæðismörk."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
 msgid ""
 "Add direction randomness by randomly moving 'top' half-turns tangentially to "
 "the boundary."
 msgstr ""
+"Bæta við flökti í stefnu með því að færa tilviljunarkennt 'efstu' hálfbeygjur"
+" í snertil við svæðismörk."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 msgid "Variance: 1st side:"
@@ -12460,7 +12468,7 @@ msgstr "Hjálparlínur:"
 
 #: ../src/live_effects/lpe-sketch.cpp:51
 msgid "How many construction lines (tangents) to draw"
-msgstr "Hve margar hjálparlínur (tanges) á að teikna"
+msgstr "Hve margar hjálparlínur (snertla/tangens) á að teikna"
 
 #: ../src/live_effects/lpe-sketch.cpp:52
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2790
@@ -12522,7 +12530,7 @@ msgstr "Horn:"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:58
 msgid "Additional angle between tangent and curve"
-msgstr ""
+msgstr "Viðbótarhorn milli snertils og ferils"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:59
 msgid "Location along curve:"
@@ -12536,23 +12544,23 @@ msgstr ""
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:60
 msgid "Specifies the left end of the tangent"
-msgstr "Skilgreinir vinstri enda á tangens"
+msgstr "Skilgreinir vinstri enda á snertlinum"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:61
 msgid "Specifies the right end of the tangent"
-msgstr "Skilgreinir hægri enda á tangens"
+msgstr "Skilgreinir hægri enda á snertlinum"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:100
 msgid "Adjust the point of attachment of the tangent"
-msgstr ""
+msgstr "Stilla festipunkt snertilsins"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:105
 msgid "Adjust the <b>left</b> end of the tangent"
-msgstr "Stilla <b>vinstri</b> endann á tangensinum."
+msgstr "Stilla <b>vinstri</b> endann á snertlinum."
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:110
 msgid "Adjust the <b>right</b> end of the tangent"
-msgstr "Stilla <b>hægri</b> endann á tangensinum."
+msgstr "Stilla <b>hægri</b> endann á snertlinum."
 
 #: ../src/live_effects/lpe-taperstroke.cpp:66
 msgid "Extrapolated"
@@ -18271,7 +18279,7 @@ msgstr "Hljóðfræðiviðbætur auknar"
 
 #: ../src/ui/dialog/glyphs.cpp:289
 msgid "Combining Diacritical Marks Supplement"
-msgstr "Viðbótar samsetningar broddstafamerkja"
+msgstr "Viðbótar samsett broddstafamerki"
 
 #: ../src/ui/dialog/glyphs.cpp:290
 msgid "Latin Extended Additional"
@@ -28706,15 +28714,17 @@ msgstr "Litlir hástafir (lágstafa). OpenType tafla: 'smcp'"
 msgid ""
 "All small-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'smcp'"
 msgstr ""
+"Allt litlir hástafir (hástafa og lágstafa). OpenType töflur: 'c2sc' og 'smcp'"
 
 #: ../src/ui/widget/font-variants.cpp:307
 msgid "Petite-caps (lowercase). OpenType table: 'pcap'"
-msgstr ""
+msgstr "Petite-hástafir (lágstafa). OpenType tafla: 'pcap'"
 
 #: ../src/ui/widget/font-variants.cpp:308
 msgid ""
 "All petite-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'pcap'"
 msgstr ""
+"Allt petite-hástafir (hástafa og lágstafa). OpenType töflur: 'c2sc' og 'pcap'"
 
 #: ../src/ui/widget/font-variants.cpp:309
 msgid ""
@@ -28734,11 +28744,11 @@ msgstr "Venjulegur stíll."
 
 #: ../src/ui/widget/font-variants.cpp:351
 msgid "Lining numerals. OpenType table: 'lnum'"
-msgstr ""
+msgstr "Línujafnaðar tölur. OpenType tafla: 'lnum'"
 
 #: ../src/ui/widget/font-variants.cpp:352
 msgid "Old style numerals. OpenType table: 'onum'"
-msgstr ""
+msgstr "Gamalstíls tölur. OpenType tafla: 'onum'"
 
 #: ../src/ui/widget/font-variants.cpp:353
 msgid "Normal widths."
@@ -29648,16 +29658,16 @@ msgstr "Spegla lóðrétt"
 #: ../src/verbs.cpp:1647 ../src/verbs.cpp:1663 ../src/verbs.cpp:2980
 #: ../src/verbs.cpp:2988
 msgid "_Set Inverse (LPE)"
-msgstr ""
+msgstr "_Setja umnúið (LPE)"
 
 #: ../src/verbs.cpp:1702
 #, c-format
 msgid "Set %d"
-msgstr ""
+msgstr "Setja %d"
 
 #: ../src/verbs.cpp:1711 ../src/verbs.cpp:2997
 msgid "Create new selection set"
-msgstr ""
+msgstr "Búa til nýtt valsett"
 
 #: ../src/verbs.cpp:2634 ../src/verbs.cpp:3338
 msgid "Unlock all objects in the current layer"
@@ -30286,7 +30296,7 @@ msgstr "_Mismunur"
 
 #: ../src/verbs.cpp:2844
 msgid "Create difference of selected paths (bottom minus top)"
-msgstr ""
+msgstr "Búa til mismun valinna ferla (neðst mínus efst)"
 
 #: ../src/verbs.cpp:2845
 msgid "E_xclusion"
@@ -30297,6 +30307,8 @@ msgid ""
 "Create exclusive OR of selected paths (those parts that belong to only one "
 "path)"
 msgstr ""
+"Búa til sértækt EÐA (exclusive OR) úr völdum ferlum (þá búta sem tilheyra"
+" aðeins einum ferli)"
 
 #: ../src/verbs.cpp:2848
 msgid "Di_vision"
@@ -30314,7 +30326,7 @@ msgstr "Klippa _feril"
 
 #: ../src/verbs.cpp:2853
 msgid "Cut the bottom path's stroke into pieces, removing fill"
-msgstr ""
+msgstr "Klippa stroku botnferils í parta, fjarlægja fyllingu"
 
 #: ../src/verbs.cpp:2854
 msgid "_Grow"
@@ -31243,7 +31255,7 @@ msgstr "Laga aðdrátt teikningar að glugga"
 
 #: ../src/verbs.cpp:3107
 msgid "Zoom to fit selection in window"
-msgstr "Laga aðdrátt valins að glugga"
+msgstr "Laga aðdrátt myndvals að glugga"
 
 #: ../src/verbs.cpp:3109
 msgid "_Center Page"
@@ -31713,11 +31725,11 @@ msgstr "Skoða hluti"
 
 #: ../src/verbs.cpp:3258
 msgid "Selection Se_ts..."
-msgstr ""
+msgstr "Myndvalsse_tt..."
 
 #: ../src/verbs.cpp:3258
 msgid "View Tags"
-msgstr ""
+msgstr "Skoða merki"
 
 #: ../src/verbs.cpp:3260
 msgid "Style Dialog..."
@@ -31772,7 +31784,7 @@ msgstr "Flytja þetta skjal út eða valin atriði sem PNG bitamynd"
 
 #: ../src/verbs.cpp:3271
 msgid "About E_xtensions"
-msgstr "Um _viðbætur"
+msgstr "Um _forritsviðauka"
 
 #: ../src/verbs.cpp:3272
 msgid "Information on Inkscape extensions"
@@ -31905,7 +31917,7 @@ msgstr "Ýmsar ábendingar og góð ráð"
 
 #: ../src/verbs.cpp:3323
 msgid "Previous Exte_nsion"
-msgstr "Síðasta _viðbót"
+msgstr "Síðasti _viðauki"
 
 #: ../src/verbs.cpp:3324
 msgid "Repeat the last extension with the same settings"
@@ -32588,7 +32600,7 @@ msgstr "Víxla svörtum og hvítum svæðum"
 
 #: ../share/ui/dialog-trace.glade:448
 msgid "Single scan"
-msgstr "Einföld umferð skönnunar"
+msgstr "Einföld umferð"
 
 #: ../share/ui/dialog-trace.glade:480
 msgid "Apply Gaussian blur to the bitmap before tracing"
@@ -32674,7 +32686,7 @@ msgstr ""
 
 #: ../share/ui/dialog-trace.glade:720
 msgid "Favors connections that are part of a long curve"
-msgstr ""
+msgstr "Kýs frekar tengingar sem eru hluti af langri sveiglínu"
 
 #: ../share/ui/dialog-trace.glade:721
 msgid "Curves (multiplier)"
@@ -32682,7 +32694,7 @@ msgstr "Sveiglínur (margfaldari)"
 
 #: ../share/ui/dialog-trace.glade:732
 msgid "Avoid single disconnected pixels"
-msgstr ""
+msgstr "Forðast staka aftengda mynddíla"
 
 #: ../share/ui/dialog-trace.glade:733
 msgid "Islands (weight)"
@@ -32690,7 +32702,7 @@ msgstr "Eyjar (vægi)"
 
 #: ../share/ui/dialog-trace.glade:744 ../share/ui/dialog-trace.glade:757
 msgid "Favors connections that are part of foreground color"
-msgstr ""
+msgstr "Kýs frekar tengingar sem eru hluti af forgrunnslit"
 
 #: ../share/ui/dialog-trace.glade:745
 msgid ""
@@ -32711,14 +32723,15 @@ msgstr ""
 #: ../share/ui/dialog-trace.glade:770 ../share/ui/dialog-trace.glade:813
 msgid "The heuristic computed vote will be multiplied by this value"
 msgstr ""
+"Vægi miðað við leiðsagnarreglur (heuristics) verður margfaldað með þessu gildi"
 
 #: ../share/ui/dialog-trace.glade:785
 msgid "A constant vote value"
-msgstr ""
+msgstr "Fast vægisgildi"
 
 #: ../share/ui/dialog-trace.glade:799
 msgid "The radius of the window analyzed"
-msgstr ""
+msgstr "Radíus gluggans sem verið er að greina"
 
 #: ../share/ui/dialog-trace.glade:835
 msgid ""
@@ -32742,7 +32755,7 @@ msgstr "B-splínur"
 
 #: ../share/ui/dialog-trace.glade:871
 msgid "Preserve staircasing artifacts"
-msgstr ""
+msgstr "Vernda stöllóttar aukamyndanir"
 
 #: ../share/ui/dialog-trace.glade:893
 msgid "Pixel art"
@@ -32774,6 +32787,8 @@ msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
 "to Release 13 format using QCad."
 msgstr ""
+"%d EININDI af gerðinni POLYLINE fundust og voru hunsuð. Prófaðu að nota QCad"
+" til að umbreyta í snið fyrir útgáfu 13 (Release 13)."
 
 #: ../share/extensions/embedimage.py:76
 msgid "File not found \"{}\". Unable to embed image."
@@ -32807,17 +32822,19 @@ msgstr "Penni "
 
 #: ../share/extensions/hpgl_input.py:46
 msgid "No HPGL data found."
-msgstr "Engin HPGL gögn fundust."
+msgstr "Engin HPGL-gögn fundust."
 
 #: ../share/extensions/hpgl_input.py:54
 msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
 msgstr ""
+"HPGL-gögnin innihéldu óþekktar (óstuddar) skipanir, mögulega vantar eitthvað"
+" efni í teikninguna."
 
 #: ../share/extensions/hpgl_output.py:56
 msgid "No paths were found. Please convert objects you want into paths."
-msgstr ""
+msgstr "Engir ferlar fundust. Umbreyttu þeim hlutum sem þú vilt fá í ferla."
 
 #: ../share/extensions/inkex/bezier.py:405
 msgid "Area is zero, cannot calculate Center of Mass"
@@ -32982,7 +32999,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_autoTexts.py:43
 #, python-brace-format
 msgid "Text Element '{0}' is not suitable."
-msgstr ""
+msgstr "Textastakið '{0}' hentar ekki."
 
 #: ../share/extensions/jessyInk_effects.py:44
 msgid ""
@@ -33132,7 +33149,7 @@ msgstr ""
 
 #: ../share/extensions/jessyInk_view.py:61
 msgid "More than one object selected. Please select only one object.\n"
-msgstr ""
+msgstr "Fleiri en einn hlutur valinn. Veldu aðeins einn hlut.\n"
 
 #: ../share/extensions/jessyInk_view.py:65
 msgid ""
@@ -33149,11 +33166,11 @@ msgstr "Gat ekki fundið merki: %s"
 
 #: ../share/extensions/path_envelope.py:29
 msgid "You must select two paths only."
-msgstr ""
+msgstr "Þú verður að velja aðeins tvo ferla."
 
 #: ../share/extensions/path_envelope.py:39
 msgid "Selected path is too short. Must be four or more nodes."
-msgstr ""
+msgstr "Valinn ferill er of stuttur. Verður að vera fjórir eða fleiri hnútar."
 
 #: ../share/extensions/pathscatter.py:186 ../share/extensions/perspective.py:47
 msgid "This extension requires two selected paths."
@@ -33192,7 +33209,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.py:66
 msgid "No paths where found. Please convert objects to paths."
-msgstr ""
+msgstr "Engir ferlar fundust. Umbreyttu hlutum í ferla."
 
 #: ../share/extensions/print_win32_vector.py:175
 msgid "Failed to open default printer"
@@ -33203,6 +33220,8 @@ msgid ""
 "Couldn't find anything using that font, please ensure the spelling and "
 "spacing is correct."
 msgstr ""
+"Fann ekki neitt sem notar þetta letur, gakktu úr skugga um að stafsetning og"
+" bil séu rétt."
 
 #: ../share/extensions/replace_font.py:127
 msgid "Didn't find any fonts in this document/selection."
@@ -33232,11 +33251,11 @@ msgstr "Þú verður að gefa upp leitarstreng í leitarreitinn."
 
 #: ../share/extensions/replace_font.py:225
 msgid "Please enter a replacement font in the replace with box."
-msgstr ""
+msgstr "Settu inn það letur sem á að nota í 'Skipta út með' reitinn."
 
 #: ../share/extensions/replace_font.py:230
 msgid "Please enter a replacement font in the replace all box."
-msgstr ""
+msgstr "Settu inn það letur sem á að nota í 'Skipta út öllu' reitinn."
 
 #: ../share/extensions/voronoi2svg.py:153
 msgid "Please select objects!"
@@ -34291,9 +34310,9 @@ msgid ""
 "Gcodetools ver. 1.7\n"
 msgstr ""
 "\n"
-"Gcodetools viðbótin: umbreytir ferlum í Gcode-kóða, útbýr hliðraða ferla og "
+"Gcodetools viðauki: umbreytir ferlum í Gcode-kóða, útbýr hliðraða ferla og "
 "getur rist hvöss horn með kónískum skurðarhausum.\n"
-"Þessi viðbót reiknar Gcode-kóða fyrir ferla með hringlaga brúun "
+"Þessi viðauki reiknar Gcode-kóða fyrir ferla með hringlaga brúun "
 "(interpolation) eða með línulegri hreyfingu ef þess er óskað.\n"
 "\n"
 "Kennsluefni, leiðbeiningar og annan stuðning er hægt\n"
@@ -34701,7 +34720,7 @@ msgstr "Myndrista"
 
 #: ../share/extensions/gcodetools_engraving.inx:9
 msgid "Smooth convex corners between this value and 180 degrees:"
-msgstr ""
+msgstr "Mýkja úthorn um á milli þessa gildis og 180 gráða:"
 
 #: ../share/extensions/gcodetools_engraving.inx:10
 msgid "Maximum distance for engraving (mm/inch):"
@@ -34713,7 +34732,7 @@ msgstr "Nákvæmnisstuðull (2 lágt til 10 hátt):"
 
 #: ../share/extensions/gcodetools_engraving.inx:12
 msgid "Draw additional graphics to see engraving path"
-msgstr ""
+msgstr "Teikna viðbótarmyndefni til að sjá ristuferil"
 
 #: ../share/extensions/gcodetools_engraving.inx:14
 msgid ""
@@ -34752,7 +34771,7 @@ msgstr "Búa til forskoðun"
 
 #: ../share/extensions/gcodetools_graffiti.inx:13
 msgid "Create linearization preview"
-msgstr ""
+msgstr "Búa til forskoðun á línumyndun"
 
 #: ../share/extensions/gcodetools_graffiti.inx:14
 msgid "Preview's size (px):"
@@ -34909,9 +34928,9 @@ msgid ""
 "      "
 msgstr ""
 "\n"
-"Gcodetools viðbótin: \n"
+"Gcodetools viðauki: \n"
 "Umbreytir ferlum í Gcode-kóða, útbýr hliðraða ferla og getur rist hvöss horn "
-"með kónískum skurðarhausum. Þessi viðbót reiknar Gcode-kóða fyrir ferla með "
+"með kónískum skurðarhausum. Þessi viðauki reiknar Gcode-kóða fyrir ferla með "
 "hringlaga brúun (interpolation) eða með línulegri hreyfingu ef þess er "
 "óskað.\n"
 "\n"
@@ -35060,9 +35079,9 @@ msgid ""
 "Gcodetools ver. 1.7\n"
 msgstr ""
 "\n"
-"Gcodetools viðbótin: umbreytir ferlum í Gcode-kóða, útbýr hliðraða ferla og "
+"Gcodetools viðauki: umbreytir ferlum í Gcode-kóða, útbýr hliðraða ferla og "
 "getur rist hvöss horn með kónískum skurðarhausum.\n"
-"Þessi viðbót reiknar Gcode-kóða fyrir ferla með hringlaga brúun "
+"Þessi viðauki reiknar Gcode-kóða fyrir ferla með hringlaga brúun "
 "(interpolation) eða með línulegri hreyfingu ef þess er óskað.\n"
 "\n"
 "Kennsluefni, leiðbeiningar og annan stuðning er hægt\n"
@@ -35161,15 +35180,15 @@ msgstr "Aðaluppskiptingar X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:16
 msgid "Major X Division Spacing:"
-msgstr "Bil milli uppskiptinga á X-ás:"
+msgstr "Bil milli aðaluppskiptinga á X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:17
 msgid "Major X Division Spacing Unit:"
-msgstr ""
+msgstr "Eining aðaluppskiptinga á X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:23
 msgid "Subdivisions per Major X Division:"
-msgstr ""
+msgstr "Uppskipting aðaluppskiptinga á X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:24
 msgid "Logarithmic X Subdiv. (Base given by entry above)"
@@ -35185,11 +35204,11 @@ msgstr ""
 
 #: ../share/extensions/grid_cartesian.inx:27
 msgid "Major X Division Thickness:"
-msgstr "Þykkt uppskiptinga á X-ás:"
+msgstr "Þykkt aðaluppskiptinga á X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:28
 msgid "Minor X Division Thickness:"
-msgstr ""
+msgstr "Þykkt aukauppskiptinga á X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:29
 msgid "Subminor X Division Thickness:"
@@ -35209,15 +35228,15 @@ msgstr "Aðaluppskiptingar Y:"
 
 #: ../share/extensions/grid_cartesian.inx:39
 msgid "Major Y Division Spacing:"
-msgstr "Bil milli uppskiptinga á Y-ás:"
+msgstr "Bil milli aðaluppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:40
 msgid "Major Y Division Spacing Unit:"
-msgstr ""
+msgstr "Eining aðaluppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:46
 msgid "Subdivisions per Major Y Division:"
-msgstr ""
+msgstr "Uppskipting aðaluppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:47
 msgid "Logarithmic Y Subdiv. (Base given by entry above)"
@@ -35237,7 +35256,7 @@ msgstr "Þykkt uppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:51
 msgid "Minor Y Division Thickness:"
-msgstr ""
+msgstr "Þykkt aukauppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:52
 msgid "Subminor Y Division Thickness:"
@@ -35245,7 +35264,7 @@ msgstr ""
 
 #: ../share/extensions/grid_cartesian.inx:53
 msgid "Y Division Thickness Unit:"
-msgstr ""
+msgstr "Þykktareining uppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_isometric.inx:3
 msgid "Isometric Grid"
@@ -35265,7 +35284,7 @@ msgstr "Bil milli uppskiptinga (px):"
 
 #: ../share/extensions/grid_isometric.inx:8
 msgid "Subdivisions per Major Division:"
-msgstr ""
+msgstr "Uppskipting á hverja aðaluppskiptingu:"
 
 #: ../share/extensions/grid_isometric.inx:9
 msgid "Subsubdivs per Subdivision:"
@@ -35273,11 +35292,11 @@ msgstr ""
 
 #: ../share/extensions/grid_isometric.inx:10
 msgid "Major Division Thickness (px):"
-msgstr ""
+msgstr "Þykkt uppskiptinga (px):"
 
 #: ../share/extensions/grid_isometric.inx:11
 msgid "Minor Division Thickness (px):"
-msgstr ""
+msgstr "Þykkt aukauppskiptinga (px):"
 
 #: ../share/extensions/grid_isometric.inx:12
 msgid "Subminor Division Thickness (px):"
@@ -35317,15 +35336,15 @@ msgstr "Uppskiptingar hringja"
 
 #: ../share/extensions/grid_polar.inx:15
 msgid "Major Circular Divisions:"
-msgstr ""
+msgstr "Aðaluppskiptingar hringja:"
 
 #: ../share/extensions/grid_polar.inx:16
 msgid "Major Circular Division Spacing (px):"
-msgstr ""
+msgstr "Bil milli aðaluppskiptinga hringja (px):"
 
 #: ../share/extensions/grid_polar.inx:17
 msgid "Subdivisions per Major Circular Division:"
-msgstr ""
+msgstr "Uppskipting á hverja hringlaga aðaluppskiptingu:"
 
 #: ../share/extensions/grid_polar.inx:18
 msgid "Logarithmic Subdiv. (Base given by entry above)"
@@ -35333,11 +35352,11 @@ msgstr ""
 
 #: ../share/extensions/grid_polar.inx:19
 msgid "Major Circular Division Thickness (px):"
-msgstr ""
+msgstr "Þykkt aðaluppskiptinga hringja (px):"
 
 #: ../share/extensions/grid_polar.inx:20
 msgid "Minor Circular Division Thickness (px):"
-msgstr ""
+msgstr "Þykkt aukauppskiptinga hringja (px):"
 
 #: ../share/extensions/grid_polar.inx:22
 msgid "Angular Divisions"
@@ -35345,15 +35364,15 @@ msgstr "Uppskiptingar horna"
 
 #: ../share/extensions/grid_polar.inx:23
 msgid "Angle Divisions:"
-msgstr "Uppskipting horns:"
+msgstr "Uppskipting horna:"
 
 #: ../share/extensions/grid_polar.inx:24
 msgid "Angle Divisions at Centre:"
-msgstr "Uppskipting horns við miðju:"
+msgstr "Uppskipting horna við miðju:"
 
 #: ../share/extensions/grid_polar.inx:25
 msgid "Subdivisions per Major Angular Division:"
-msgstr ""
+msgstr "Uppskipting á hverja aðaluppskiptingu horna:"
 
 #: ../share/extensions/grid_polar.inx:26
 msgid "Minor Angle Division End 'n' Divs. Before Centre:"
@@ -35361,11 +35380,11 @@ msgstr ""
 
 #: ../share/extensions/grid_polar.inx:27
 msgid "Major Angular Division Thickness (px):"
-msgstr ""
+msgstr "Þykkt aðaluppskiptinga horna (px):"
 
 #: ../share/extensions/grid_polar.inx:28
 msgid "Minor Angular Division Thickness (px):"
-msgstr ""
+msgstr "Þykkt aukauppskiptinga horna (px):"
 
 #: ../share/extensions/guides_creator.inx:3
 msgid "Guides creator"
@@ -35603,6 +35622,9 @@ msgid ""
 "Hershey Text Utility Functions\n"
 "  "
 msgstr ""
+"\n"
+"Aðgerðir í Hershey-texta tólinu\n"
+"  "
 
 #: ../share/extensions/hershey.inx:68
 msgid "Generate font table"
@@ -35714,6 +35736,8 @@ msgstr "Birta hreyfingar á milli ferla"
 #: ../share/extensions/hpgl_input.inx:10
 msgid "Check this to show movements between paths (Default: Unchecked)"
 msgstr ""
+"Hakaðu við þetta til að birta hreyfingar á milli ferla (Sjálfgefið: ekki"
+" merkt)"
 
 #: ../share/extensions/hpgl_input.inx:14 ../share/extensions/hpgl_output.inx:40
 msgid "HP Graphics Language file (*.hpgl)"
@@ -35734,7 +35758,7 @@ msgid ""
 "serial connection."
 msgstr ""
 "Gakktu úr skugga um að allir hlutir sem þú ætlar að plotta séu þegar "
-"umbreyttir í ferla. Notaðu plottviðbótina (Viðbótavalmynd) til að plotta "
+"umbreyttir í ferla. Notaðu plottviðaukann (viðaukavalmynd) til að plotta "
 "beint í gegnum raðtengingu."
 
 #: ../share/extensions/hpgl_output.inx:9 ../share/extensions/plotter.inx:67
@@ -36971,7 +36995,7 @@ msgstr "Úthluta útlínulit"
 
 #: ../share/extensions/markers_strokepaint.inx:28
 msgid "Modify in Place"
-msgstr ""
+msgstr "Breyta á staðnum"
 
 #: ../share/extensions/measure.inx:3
 msgid "Measure Path"
@@ -37092,7 +37116,7 @@ msgstr "Hliðrun [px]:"
 
 #: ../share/extensions/measure.inx:52
 msgid "Scale Factor (Real:Drawing Length):"
-msgstr ""
+msgstr "Kvörðunarhlutfall (Real:Drawing Length):"
 
 #: ../share/extensions/measure.inx:53
 msgid "Length Unit:"
@@ -37379,7 +37403,7 @@ msgstr ""
 
 #: ../share/extensions/output_scour.inx:31
 msgid "Keep unreferenced definitions"
-msgstr ""
+msgstr "Halda skilgreiningum án tilvísana"
 
 #: ../share/extensions/output_scour.inx:31
 msgid "Keep element definitions that are not currently used in the SVG"
@@ -37457,7 +37481,7 @@ msgstr "Áferðarfalleg prentun"
 
 #: ../share/extensions/output_scour.inx:58
 msgid "Format output with line-breaks and indentation"
-msgstr ""
+msgstr "Sníða frálag með línuskilum og inndrætti"
 
 #: ../share/extensions/output_scour.inx:58
 msgid ""
@@ -37568,7 +37592,7 @@ msgstr "Kommu-aðgreindur listi yfir auðkenni sem á að vernda."
 
 #: ../share/extensions/output_scour.inx:93
 msgid "Preserve IDs starting with:"
-msgstr ""
+msgstr "Halda auðkennum sem byrja á:"
 
 #: ../share/extensions/output_scour.inx:93
 msgid ""
@@ -37742,7 +37766,7 @@ msgstr ""
 
 #: ../share/extensions/path_to_absolute.inx:3
 msgid "To Absolute"
-msgstr ""
+msgstr "Að algildi"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
@@ -38111,12 +38135,16 @@ msgid ""
 "Using wrong settings can under certain circumstances cause Inkscape to "
 "freeze. Always save your work before plotting!"
 msgstr ""
+"Ef notaðar eru rangar stillingar er mögulegt við sérstakar aðstæður að"
+" Inkscape frjósi. Alltaf ætti að vista áður plottun fer fram!"
 
 #: ../share/extensions/plotter.inx:64
 msgid ""
 "This can be a physical serial connection or a USB-to-Serial bridge. Ask your "
 "plotter manufacturer for drivers if needed."
 msgstr ""
+"Þetta getur verið raunveruleg hliðtenging (serial) eða brú fyrir"
+" USB-í-hliðtengi. Spurðu framleiðendur plottersins um rekla ef þess er þörf."
 
 #: ../share/extensions/plotter.inx:65
 msgid "Parallel (LPT) connections are not supported."
@@ -38155,7 +38183,7 @@ msgstr "Afskorinn teningur"
 
 #: ../share/extensions/polyhedron_3d.inx:10
 msgid "Snub Cube"
-msgstr ""
+msgstr "Teningsáttflötungur (snub cuboctahedron)"
 
 #: ../share/extensions/polyhedron_3d.inx:11
 msgid "Cuboctahedron"
@@ -38187,7 +38215,7 @@ msgstr "Afskorinn tvítugflötungur"
 
 #: ../share/extensions/polyhedron_3d.inx:18
 msgid "Small Triambic Icosahedron"
-msgstr ""
+msgstr "Lítill tríambískur tvítugflötungur (small triambic icosahedron)"
 
 #: ../share/extensions/polyhedron_3d.inx:19
 msgid "Dodecahedron"
@@ -38199,7 +38227,7 @@ msgstr "Afskorinn tólfflötungur"
 
 #: ../share/extensions/polyhedron_3d.inx:21
 msgid "Snub Dodecahedron"
-msgstr ""
+msgstr "Teningstólfflötungur (snub dodecahedron)"
 
 #: ../share/extensions/polyhedron_3d.inx:22
 msgid "Great Dodecahedron"
@@ -38528,11 +38556,11 @@ msgstr "Ferill: sérsniðið"
 
 #: ../share/extensions/render_barcode_qrcode.inx:43
 msgid "Square sharp: obsolete"
-msgstr ""
+msgstr "Hvasst ferningslaga: úrelt"
 
 #: ../share/extensions/render_barcode_qrcode.inx:45
 msgid "Smooth square value (0-1):"
-msgstr ""
+msgstr "Mýkt ferningsgildi (0-1):"
 
 #: ../share/extensions/render_barcode_qrcode.inx:46
 msgid ""
@@ -39342,6 +39370,8 @@ msgid ""
 "empty page sheet tabloid ledger letter legal print paper a4 a3 a5 letter "
 "black white opaque"
 msgstr ""
+"auð síða blað dagblað höfuðbók bréfsefni löggiltur prent pappír a4 a3 a5"
+" hvítt ógegnsætt"
 
 #: ../share/extensions/template_seamless_pattern.inx:3
 msgid "Seamless Pattern"
@@ -39618,6 +39648,8 @@ msgid ""
 "Select a set of objects. Their centroids will be used as the sites of the "
 "Voronoi diagram. Text objects are not handled."
 msgstr ""
+"Veldu sett af hlutum. Þyngdarpunktar þeirra verða notaðir sem, upptakapunktar"
+" Voronoi-myndar. Textahlutar eru ekki meðhöndlaðir."
 
 #: ../share/extensions/web_interactive_mockup.inx:3
 msgid "Interactive Mockup"
@@ -40209,7 +40241,7 @@ msgstr "_Síur"
 
 #: ../share/ui/menus.xml:290
 msgid "Exte_nsions"
-msgstr "_Viðbætur"
+msgstr "Viðau_kar"
 
 #: ../share/ui/menus.xml:300
 msgid "Tutorials"
