@@ -722,7 +722,9 @@ public:
     /**
      * Read value of key attribute from XML node into object.
      *
-     *  fallback - The key to use if the main key isn't available
+     * @param key The name of the attribute being read. Is converted to an SPAttributeEnum
+     * @param fallback The key to use if the main key isn't available, does not need
+     *                 to exist in SPAttributeEnum.
      */
     void readAttr(char const *key, char const *fallback = nullptr);
 

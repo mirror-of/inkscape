@@ -290,7 +290,6 @@ void SPTextPath::set(SPAttributeEnum key, const gchar* value) {
     } else {
         switch (key) {
             case SP_ATTR_HREF:
-            case SP_ATTR_XLINK_HREF:
                 this->sourcePath->link((char*)value);
                 break;
             case SP_ATTR_SIDE:

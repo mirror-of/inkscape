@@ -266,8 +266,6 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
             break;
 
         case SP_ATTR_HREF:
-        case SP_ATTR_INKSCAPE_HREF:
-        case SP_ATTR_XLINK_HREF:
             if ( value == nullptr ) {
                 sp_offset_quit_listening(this);
                 if ( this->sourceHref ) {

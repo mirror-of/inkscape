@@ -175,7 +175,6 @@ void SPImage::release() {
 void SPImage::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_HREF:
-        case SP_ATTR_XLINK_HREF:
             g_free (this->href);
             this->href = (value) ? g_strdup (value) : nullptr;
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);

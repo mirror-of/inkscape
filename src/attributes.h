@@ -53,7 +53,6 @@ enum SPAttributeEnum : unsigned {
     SP_ATTR_INKSCAPE_SPRAY_ORIGIN,
     /* SPAnchor */
     SP_ATTR_HREF,
-    SP_ATTR_XLINK_HREF,
     SP_ATTR_XLINK_TYPE,
     SP_ATTR_XLINK_ROLE,
     SP_ATTR_XLINK_ARCROLE,
@@ -193,7 +192,6 @@ enum SPAttributeEnum : unsigned {
     /* SPOffset */
     SP_ATTR_SODIPODI_ORIGINAL,
     SP_ATTR_INKSCAPE_ORIGINAL,
-    SP_ATTR_INKSCAPE_HREF,
     SP_ATTR_INKSCAPE_RADIUS,
     /* SPLine */
     SP_ATTR_X1,

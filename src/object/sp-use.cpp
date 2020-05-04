@@ -129,7 +129,6 @@ void SPUse::set(SPAttributeEnum key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_XLINK_HREF:
         case SP_ATTR_HREF: {
             if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
                 /* No change, do nothing. */

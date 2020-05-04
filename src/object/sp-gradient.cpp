@@ -388,7 +388,6 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
             break;
 
         case SP_ATTR_HREF:
-        case SP_ATTR_XLINK_HREF:
             if (value) {
                 try {
                     this->ref->attach(Inkscape::URI(value));

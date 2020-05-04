@@ -69,7 +69,6 @@ void SPAnchor::release() {
 void SPAnchor::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_HREF:
-	case SP_ATTR_XLINK_HREF:
             g_free(this->href);
             this->href = g_strdup(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);

@@ -2842,7 +2842,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->add_dualspinscale(SP_ATTR_RADIUS, _("Radius:"), 0, 100, 1, 0.01, 1);
 
     _settings->type(NR_FILTER_IMAGE);
-    _settings->add_fileorelement(SP_ATTR_XLINK_HREF, _("Source of Image:"));
+    _settings->add_fileorelement(SP_ATTR_HREF, _("Source of Image:"));
     _image_x = _settings->add_entry(SP_ATTR_X,_("X"),_("X"));
     _image_x->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::image_x_changed));
     //This commented because we want the default empty value of X or Y and couldent get it from SpinButton

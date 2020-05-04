@@ -184,7 +184,6 @@ void SPPattern::set(SPAttributeEnum key, const gchar *value)
             break;
 
         case SP_ATTR_HREF:
-        case SP_ATTR_XLINK_HREF:
             if (value && this->href == value) {
                 /* Href unchanged, do nothing. */
             }

@@ -92,7 +92,7 @@ void SPTRef::set(SPAttributeEnum key, const gchar* value) {
 
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) { // x, y, dx, dy, rotate
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    } else if (key == SP_ATTR_XLINK_HREF || key == SP_ATTR_HREF) { // xlink:href or href
+    } else if (key == SP_ATTR_HREF) { // xlink:href or href
         if ( !value ) {
             // No value
             g_free(this->href);

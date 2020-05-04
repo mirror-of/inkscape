@@ -101,7 +101,6 @@ void SPFeImage::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
     /*DEAL WITH SETTING ATTRIBUTES HERE*/
         case SP_ATTR_HREF:
-        case SP_ATTR_XLINK_HREF:
             if (this->href) {
                 g_free(this->href);
             }

@@ -55,7 +55,6 @@ static SPStyleProp const props[] = {
     {SP_ATTR_INKSCAPE_SPRAY_ORIGIN, "inkscape:spray-origin"},
     /* SPAnchor */
     {SP_ATTR_HREF, "href"},
-    {SP_ATTR_XLINK_HREF, "xlink:href"},
     {SP_ATTR_XLINK_TYPE, "xlink:type"},
     {SP_ATTR_XLINK_ROLE, "xlink:role"},
     {SP_ATTR_XLINK_ARCROLE, "xlink:arcrole"},
@@ -194,7 +193,6 @@ static SPStyleProp const props[] = {
     /* SPOffset */
     {SP_ATTR_SODIPODI_ORIGINAL, "sodipodi:original"},
     {SP_ATTR_INKSCAPE_ORIGINAL, "inkscape:original"},
-    {SP_ATTR_INKSCAPE_HREF, "inkscape:href"},
     {SP_ATTR_INKSCAPE_RADIUS, "inkscape:radius"},
     /* SPLine */
     {SP_ATTR_X1, "x1"},

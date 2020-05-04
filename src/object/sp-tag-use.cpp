@@ -90,7 +90,7 @@ SPTagUse::set(SPAttributeEnum key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_HREF:
-        case SP_ATTR_XLINK_HREF: {
+        {
             if ( value && href && ( strcmp(value, href) == 0 ) ) {
                 /* No change, do nothing. */
             } else {
@@ -113,7 +113,6 @@ SPTagUse::set(SPAttributeEnum key, gchar const *value)
             }
             break;
         }
-
         default:
                 SPObject::set(key, value);
             break;
