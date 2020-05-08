@@ -14,13 +14,20 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 	dh $@ \
 		--buildsystem cmake \
 		--parallel          \
-		--with bash-completion,gnome,python2
+		--with bash-completion,gnome,python3
 
 override_dh_gnome_clean:
 	dh_gnome_clean --no-control
 
 # No need for autoreconf in CMake builds
 override_dh_autoreconf:
+
+
+override_dh_auto_test:
+	@# this is not run in parallel just because I'm too lazy to parse DEB_BUILD_OPTIONS
+	$(MAKE) tests
+	# some tests are not parallel-safe, since they try to look at the same file
+	dh_auto_test -a --no-parallel
 
 override_dh_auto_configure:
 	dh_auto_configure --
