@@ -1867,7 +1867,6 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("IconPreviewPanel", "/dialogs/iconpreview") );
     mapVerbPreference.insert(std::make_pair ("SvgFontsDialog", "/dialogs/svgfonts") );
     mapVerbPreference.insert(std::make_pair ("InputDevices", "/dialogs/inputdevices") );
-    mapVerbPreference.insert(std::make_pair ("InkscapePreferences", "/dialogs/preferences") );
     mapVerbPreference.insert(std::make_pair ("TileDialog", "/dialogs/gridtiler") );
     mapVerbPreference.insert(std::make_pair ("Trace", "/dialogs/trace") );
     mapVerbPreference.insert(std::make_pair ("PixelArt", "/dialogs/pixelart") );
