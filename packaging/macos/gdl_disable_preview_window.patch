@@ -1,6 +1,6 @@
 woraround: don't show GDL preview window
-inkscape: https://gitlab.com/inkscape/inkscape/issues/410
-upstream: https://gitlab.gnome.org/GNOME/gtk/issues/2285
+inkscape: https://gitlab.com/inkscape/inkscape/-/issues/410
+upstream: https://gitlab.gnome.org/GNOME/gtk/-/issues/2285
 --- a/gdl/gdl-preview-window.c
 +++ b/gdl/gdl-preview-window.c
 @@ -134,6 +134,10 @@ gdl_preview_window_update (GdlPreviewWindow * window, GdkRectangle *rect)

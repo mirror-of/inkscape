@@ -54,9 +54,9 @@ Inkscape run smoother than before:
 -   Faster grouping and ungrouping of groups with a large number of
     objects
 -   Speed boost to operations on large sets of objects in the Objects
-    dialog (Issue [\#392](https://gitlab.com/inkscape/inbox/issues/392))
+    dialog (Issue [\#392](https://gitlab.com/inkscape/inbox/-/issues/392))
 -   Faster lookup of attributes (MR
-    [\#448](https://gitlab.com/inkscape/inkscape/merge_requests/448))
+    [\#448](https://gitlab.com/inkscape/inkscape/-/merge_requests/448))
 
 ### Mac Application
 
@@ -91,7 +91,7 @@ Hackfest](https://inkscape.org/en/news/2018/05/22/2018-boston-inkscape-hackfest/
 
 Improvements and fixes to the code for handling/restoring window size
 and position
-[1](https://gitlab.com/inkscape/inkscape/merge_requests/180) were made.
+[1](https://gitlab.com/inkscape/inkscape/-/merge_requests/180) were made.
 The window manager handles most of the jobs now, which should make it
 much more robust. If you still encounter problems with this, please
 report those [to our bug tracker](https://inkscape.org/report).
@@ -1376,22 +1376,22 @@ Notable Bugfixes
 -   As of Windows 10 (version 1809) fonts are installed into a new
     user-specific folder by default. Allow Inkscape to recognize those
     fonts. ([Iusse
-    \#50](https://gitlab.com/inkscape/inkscape/issues/50))
+    \#50](https://gitlab.com/inkscape/inkscape/-/issues/50))
 -   The default Perl interpreter executable on Windows was changed from
     `perl.exe` to `wperl.exe` which should usually avoid flashing a
     console window. ([Issue
-    \#66](https://gitlab.com/inkscape/inkscape/issues/66))
+    \#66](https://gitlab.com/inkscape/inkscape/-/issues/66))
 -   Some printers who don't correctly recognize the page formats sent by
     Inkscape, printed only square excerpts of the whole image that was
     supposed to be printed. Now they print the whole image ([Merge
     request
-    \#407](https://gitlab.com/inkscape/inkscape/merge_requests/407)).
+    \#407](https://gitlab.com/inkscape/inkscape/-/merge_requests/407)).
 
 For an exhaustive list of bugs that have been fixed, please see the
 [milestones page for Inkscape 1.0 on
 Launchpad](https://launchpad.net/inkscape/1.0.x) and the [list of
 milestoned issues on
-GitLab](https://gitlab.com/inkscape/inkscape/issues?scope=all&utf8=%E2%9C%93&state=closed&milestone_title=Inkscape%201.0).
+GitLab](https://gitlab.com/inkscape/inkscape/-/issues?scope=all&utf8=%E2%9C%93&state=closed&milestone_title=Inkscape%201.0).
 
 Breaking changes / Action required
 ----------------------------------
@@ -1566,7 +1566,7 @@ channel](https://chat.inkscape.org/channel/inkscape_extensions).
 -   The environment variable `INKSCAPE_PORTABLE_PROFILE_DIR` has been
     removed. Please use the equivalent `INKSCAPE_PROFILE_DIR` instead
     for changing the location of the profile directory at run time. (see
-    also [\#114](https://gitlab.com/inkscape/inkscape/issues/114))
+    also [\#114](https://gitlab.com/inkscape/inkscape/-/issues/114))
 -   Inkscape extensions have been updated to work with Python 3, they no
     longer depend on Python 2 (but still work with it)
 
@@ -1574,9 +1574,9 @@ Known Issues
 ------------
 
 See [our list of confirmed and ready-to-be-worked-on
-issues](https://gitlab.com/groups/inkscape/inkscape/issues) and [the
+issues](https://gitlab.com/inkscape/inkscape/-/issues) and [the
 list of new user submitted issues, questions and feature
-requests](https://gitlab.com/inkscape/inbox/issues).
+requests](https://gitlab.com/inkscape/inbox/-/issues).
 
 Inkview
 -------
