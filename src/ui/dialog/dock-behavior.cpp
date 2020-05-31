@@ -46,9 +46,6 @@ DockBehavior::DockBehavior(Dialog &dialog) :
     if (_dock_item.getState() == Widget::DockItem::FLOATING_STATE) {
         if (Gtk::Window *floating_win = _dock_item.getWindow()) {
             sp_transientize(GTK_WIDGET(floating_win->gobj()));
-            if(!strcmp(Inkscape::Verb::get(_dialog._verb_num)->get_id() ,"DialogDocumentProperties")) {
-                floating_win->set_resizable(false);
-            }
         }
     }
 }
