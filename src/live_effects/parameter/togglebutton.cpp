@@ -149,7 +149,7 @@ ToggleButtonParam::refresh_button()
     if(!checkwdg){
         return;
     }
-    Gtk::Container *box_button = dynamic_cast<Gtk::Container *>(checkwdg->get_child());
+    auto box_button = dynamic_cast<Gtk::Container *>(checkwdg->get_child());
     if(!box_button){
         return;
     }

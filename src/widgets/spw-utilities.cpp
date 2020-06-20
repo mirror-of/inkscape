@@ -125,29 +125,6 @@ sp_search_by_name_recursive(Gtk::Widget *parent, const Glib::ustring& name)
     return nullptr;
 }
 
-/**
- * Returns the descendant of w which has the given key and value pair, or NULL if there's none.
- */
-GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
-{
-    gchar *r = nullptr;
-
-    if (w && G_IS_OBJECT(w)) {
-        r = (gchar *) g_object_get_data(G_OBJECT(w), key);
-    }
-    if (r && !strcmp (r, value)) return w;
-
-    if (GTK_IS_CONTAINER(w)) {
-                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(w))->get_children();
-        for (auto i:children) {
-            GtkWidget *child = sp_search_by_value_recursive(GTK_WIDGET(i->gobj()), key, value);
-            if (child) return child;
-        }
-    }
-
-    return nullptr;
-}
-
 /*
   Local Variables:
   mode:c++

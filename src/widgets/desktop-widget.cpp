@@ -647,7 +647,7 @@ void SPDesktopWidget::on_realize()
     gchar *gtkThemeName;
     gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
-    Gtk::Container *window = get_toplevel();
+    auto window = get_toplevel();
     if (settings && window) {
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
@@ -887,7 +887,7 @@ SPDesktopWidget::shutdown()
             dialog.property_destroy_with_parent() = true;
 
             // fix for bug lp:168809
-            Gtk::Container *ma = dialog.get_message_area();
+            auto ma = dialog.get_message_area();
             std::vector<Gtk::Widget*> ma_labels = ma->get_children();
             ma_labels[0]->set_can_focus(false);
 
@@ -931,7 +931,7 @@ SPDesktopWidget::shutdown()
             dialog.property_destroy_with_parent() = true;
 
             // fix for bug lp:168809
-            Gtk::Container *ma = dialog.get_message_area();
+            auto ma = dialog.get_message_area();
             std::vector<Gtk::Widget*> ma_labels = ma->get_children();
             ma_labels[0]->set_can_focus(false);
 
@@ -1482,8 +1482,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         _canvas_grid->UpdateRulers();
 
         /* This loops through all the grandchildren of aux toolbox,
-         * and for each that it finds, it performs an sp_search_by_data_recursive(),
-         * looking for widgets that hold some "tracker" data (this is used by
+         * and for each that it finds, it performs an sp_search_by_name_recursive(),
+         * looking for widgets that hold a widget named "unit-tracker" (this is used by
          * all toolboxes to refer to the unit selector). The default document units
          * is then selected within these unit selectors.
          *

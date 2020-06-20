@@ -461,7 +461,7 @@ Gtk::Window *
 DockItem::getWindow()
 {
     g_return_val_if_fail(_gdl_dock_item, 0);
-    Gtk::Container *parent = getWidget().get_parent();
+    auto parent = getWidget().get_parent();
     parent = (parent ? parent->get_parent() : nullptr);
     return (parent ? dynamic_cast<Gtk::Window *>(parent) : nullptr);
 }

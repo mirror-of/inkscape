@@ -155,7 +155,7 @@ Gtk::Widget &Dock::getWidget()
 Gtk::Paned *Dock::getParentPaned()
 {
     g_return_val_if_fail(_dock_box, 0);
-    Gtk::Container *parent = getWidget().get_parent();
+    auto parent = getWidget().get_parent();
     return (parent != nullptr ? dynamic_cast<Gtk::Paned *>(parent) : nullptr);
 }
 

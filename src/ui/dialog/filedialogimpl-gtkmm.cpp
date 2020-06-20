@@ -528,7 +528,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
 
     // Let's do some customization
     fileNameEntry = nullptr;
-    Gtk::Container *cont = get_toplevel();
+    auto cont = get_toplevel();
     std::vector<Gtk::Entry *> entries;
     findEntryWidgets(cont, entries);
     // g_message("Found %d entry widgets\n", entries.size());
