@@ -172,15 +172,15 @@ PaintSelector::PaintSelector(FillOrStroke kind)
         _fillrulebox->set_homogeneous(false);
         _style->pack_end(*_fillrulebox, false, false, 0);
 
-        _evenodd = Gtk::manage(new FillRuleRadioButton());
+        _evenodd = Gtk::make_managed<FillRuleRadioButton>();
         _evenodd->set_relief(Gtk::RELIEF_NONE);
         _evenodd->set_mode(false);
         // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
         _evenodd->set_tooltip_text(
             _("Any path self-intersections or subpaths create holes in the fill (fill-rule: evenodd)"));
         _evenodd->set_fillrule(PaintSelector::FILLRULE_EVENODD);
-        auto w = sp_get_icon_image("fill-rule-even-odd", GTK_ICON_SIZE_MENU);
-        gtk_container_add(GTK_CONTAINER(_evenodd->gobj()), w);
+        auto w = Glib::wrap(sp_get_icon_image("fill-rule-even-odd", GTK_ICON_SIZE_MENU));
+        _evenodd->add(*w);
         _fillrulebox->pack_start(*_evenodd, false, false, 0);
         _evenodd->signal_toggled().connect(
             sigc::bind(sigc::mem_fun(*this, &PaintSelector::fillrule_toggled), _evenodd));
@@ -192,8 +192,8 @@ PaintSelector::PaintSelector(FillOrStroke kind)
         // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
         _nonzero->set_tooltip_text(_("Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"));
         _nonzero->set_fillrule(PaintSelector::FILLRULE_NONZERO);
-        w = sp_get_icon_image("fill-rule-nonzero", GTK_ICON_SIZE_MENU);
-        gtk_container_add(GTK_CONTAINER(_nonzero->gobj()), w);
+        w = Glib::wrap(sp_get_icon_image("fill-rule-nonzero", GTK_ICON_SIZE_MENU));
+        _nonzero->add(*w);
         _fillrulebox->pack_start(*_nonzero, false, false, 0);
         _nonzero->signal_toggled().connect(
             sigc::bind(sigc::mem_fun(*this, &PaintSelector::fillrule_toggled), _nonzero));

@@ -24,6 +24,15 @@
 #include "color.h"
 #include "ui/selected-color.h"
 
+namespace Gtk {
+    class Box;
+    class Button;
+    class EventBox;
+    class Label;
+    class Notebook;
+    class RadioButton;
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -33,7 +42,6 @@ class ColorNotebook
 {
 public:
     ColorNotebook(SelectedColor &color);
-    ~ColorNotebook() override;
 
 protected:
     struct Page {
@@ -46,9 +54,9 @@ protected:
     virtual void _initUI();
     void _addPage(Page &page);
 
-    static void _onButtonClicked(GtkWidget *widget, ColorNotebook *colorbook);
-    static void _onPickerClicked(GtkWidget *widget, ColorNotebook *colorbook);
-    static void _onPageSwitched(GtkNotebook *notebook, GtkWidget *page, guint page_num, ColorNotebook *colorbook);
+    void _onButtonClicked(int page_num);
+    void _onPickerClicked();
+    void _onPageSwitched(Gtk::Widget *page, guint page_num);
     virtual void _onSelectedColorChanged();
 
     void _updateICCButtons();
@@ -56,14 +64,16 @@ protected:
 
     Inkscape::UI::SelectedColor &_selected_color;
     gulong _entryId;
-    GtkWidget *_book;
-    GtkWidget *_buttonbox;
-    GtkWidget **_buttons;
-    GtkWidget *_rgbal; /* RGBA entry */
+    Gtk::Notebook *_book;
+    Gtk::Box *_buttonbox;
+    std::vector<Gtk::RadioButton *> _buttons;
+    Gtk::Label *_rgbal; /* RGBA entry */
 #if defined(HAVE_LIBLCMS2)
-    GtkWidget *_box_outofgamut, *_box_colormanaged, *_box_toomuchink;
+    Gtk::EventBox *_box_outofgamut;
+    Gtk::EventBox *_box_colormanaged;
+    Gtk::EventBox *_box_toomuchink;
 #endif // defined(HAVE_LIBLCMS2)
-    GtkWidget *_btn_picker;
+    Gtk::Button *_btn_picker;
     GtkWidget *_p; /* Color preview */
     boost::ptr_vector<Page> _available_pages;
 

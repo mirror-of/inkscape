@@ -19,6 +19,7 @@
 #define noDUMP_CHANGE_INFO
 
 #include <glibmm/i18n.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/label.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/radiobutton.h>
@@ -84,14 +85,6 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
     _selected_color.signal_dragged.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorChanged));
 }
 
-ColorNotebook::~ColorNotebook()
-{
-    if (_buttons) {
-        delete[] _buttons;
-        _buttons = nullptr;
-    }
-}
-
 ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)
     : selector_factory(selector_factory)
     , enabled_full(enabled_full)
@@ -103,103 +96,100 @@ void ColorNotebook::_initUI()
 {
     guint row = 0;
 
-    Gtk::Notebook *notebook = Gtk::manage(new Gtk::Notebook);
-    notebook->show();
-    notebook->set_show_border(false);
-    notebook->set_show_tabs(false);
-    _book = GTK_WIDGET(notebook->gobj());
+    _book = Gtk::make_managed<Gtk::Notebook>();
+    _book->show();
+    _book->set_show_border(false);
+    _book->set_show_tabs(false);
 
-    _buttonbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-    gtk_box_set_homogeneous(GTK_BOX(_buttonbox), TRUE);
+    _buttonbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL, 2);
+    _buttonbox->set_homogeneous(true);
 
-    gtk_widget_show(_buttonbox);
-    _buttons = new GtkWidget *[_available_pages.size()];
+    _buttonbox->show();
 
     for (int i = 0; static_cast<size_t>(i) < _available_pages.size(); i++) {
         _addPage(_available_pages[i]);
     }
 
-    gtk_widget_set_margin_start(_buttonbox, XPAD);
-    gtk_widget_set_margin_end(_buttonbox, XPAD);
-    gtk_widget_set_margin_top(_buttonbox, YPAD);
-    gtk_widget_set_margin_bottom(_buttonbox, YPAD);
-    gtk_widget_set_hexpand(_buttonbox, TRUE);
-    gtk_widget_set_valign(_buttonbox, GTK_ALIGN_CENTER);
-    attach(*Glib::wrap(_buttonbox), 0, row, 2, 1);
+    _buttonbox->set_margin_start( XPAD);
+    _buttonbox->set_margin_end(   XPAD);
+    _buttonbox->set_margin_top(   YPAD);
+    _buttonbox->set_margin_bottom(YPAD);
+    _buttonbox->set_hexpand(true);
+    _buttonbox->set_valign(Gtk::ALIGN_CENTER);
+    attach(*_buttonbox, 0, row, 2, 1);
 
     row++;
 
-    gtk_widget_set_margin_start(_book, XPAD * 2);
-    gtk_widget_set_margin_end(_book, XPAD * 2);
-    gtk_widget_set_margin_top(_book, YPAD);
-    gtk_widget_set_margin_bottom(_book, YPAD);
-    gtk_widget_set_hexpand(_book, TRUE);
-    gtk_widget_set_vexpand(_book, TRUE);
-    attach(*notebook, 0, row, 2, 1);
+    _book->set_margin_start( XPAD * 2);
+    _book->set_margin_end(   XPAD * 2);
+    _book->set_margin_top(   YPAD);
+    _book->set_margin_bottom(YPAD);
+    _book->set_hexpand(true);
+    _book->set_vexpand(true);
+    attach(*_book, 0, row, 2, 1);
 
     // restore the last active page
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _setCurrentPage(prefs->getInt("/colorselector/page", 0));
     row++;
 
-    GtkWidget *rgbabox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    auto rgbabox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL, 0);
 
 #if defined(HAVE_LIBLCMS2)
     /* Create color management icons */
-    _box_colormanaged = gtk_event_box_new();
-    GtkWidget *colormanaged = sp_get_icon_image("color-management", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_container_add(GTK_CONTAINER(_box_colormanaged), colormanaged);
-    gtk_widget_set_tooltip_text(_box_colormanaged, _("Color Managed"));
-    gtk_widget_set_sensitive(_box_colormanaged, false);
-    gtk_box_pack_start(GTK_BOX(rgbabox), _box_colormanaged, FALSE, FALSE, 2);
+    _box_colormanaged = Gtk::make_managed<Gtk::EventBox>();
+    auto colormanaged = Glib::wrap(sp_get_icon_image("color-management", GTK_ICON_SIZE_SMALL_TOOLBAR));
+    _box_colormanaged->add(*colormanaged);
+    _box_colormanaged->set_tooltip_text(_("Color Managed"));
+    _box_colormanaged->set_sensitive(false);
+    rgbabox->pack_start(*_box_colormanaged, false, false, 2);
 
-    _box_outofgamut = gtk_event_box_new();
-    GtkWidget *outofgamut = sp_get_icon_image("out-of-gamut-icon", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_container_add(GTK_CONTAINER(_box_outofgamut), outofgamut);
-    gtk_widget_set_tooltip_text(_box_outofgamut, _("Out of gamut!"));
-    gtk_widget_set_sensitive(_box_outofgamut, false);
-    gtk_box_pack_start(GTK_BOX(rgbabox), _box_outofgamut, FALSE, FALSE, 2);
+    _box_outofgamut = Gtk::make_managed<Gtk::EventBox>();
+    auto outofgamut = Glib::wrap(sp_get_icon_image("out-of-gamut-icon", GTK_ICON_SIZE_SMALL_TOOLBAR));
+    _box_outofgamut->add(*outofgamut);
+    _box_outofgamut->set_tooltip_text(_("Out of gamut!"));
+    _box_outofgamut->set_sensitive(false);
+    rgbabox->pack_start(*_box_outofgamut, false, false, 2);
 
-    _box_toomuchink = gtk_event_box_new();
-    GtkWidget *toomuchink = sp_get_icon_image("too-much-ink-icon", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_container_add(GTK_CONTAINER(_box_toomuchink), toomuchink);
-    gtk_widget_set_tooltip_text(_box_toomuchink, _("Too much ink!"));
-    gtk_widget_set_sensitive(_box_toomuchink, false);
-    gtk_box_pack_start(GTK_BOX(rgbabox), _box_toomuchink, FALSE, FALSE, 2);
+    _box_toomuchink = Gtk::make_managed<Gtk::EventBox>();
+    auto toomuchink = Glib::wrap(sp_get_icon_image("too-much-ink-icon", GTK_ICON_SIZE_SMALL_TOOLBAR));
+    _box_toomuchink->add(*toomuchink);
+    _box_toomuchink->set_tooltip_text(_("Too much ink!"));
+    _box_toomuchink->set_sensitive(false);
+    rgbabox->pack_start(*_box_toomuchink, false, false, 2);
 #endif // defined(HAVE_LIBLCMS2)
 
-
     /* Color picker */
-    GtkWidget *picker = sp_get_icon_image("color-picker", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    _btn_picker = gtk_button_new();
-    gtk_button_set_relief(GTK_BUTTON(_btn_picker), GTK_RELIEF_NONE);
-    gtk_container_add(GTK_CONTAINER(_btn_picker), picker);
-    gtk_widget_set_tooltip_text(_btn_picker, _("Pick colors from image"));
-    gtk_box_pack_start(GTK_BOX(rgbabox), _btn_picker, FALSE, FALSE, 2);
-    g_signal_connect(G_OBJECT(_btn_picker), "clicked", G_CALLBACK(ColorNotebook::_onPickerClicked), this);
+    auto picker = Glib::wrap(sp_get_icon_image("color-picker", GTK_ICON_SIZE_SMALL_TOOLBAR));
+    _btn_picker = Gtk::make_managed<Gtk::Button>();
+    _btn_picker->set_relief(Gtk::RELIEF_NONE);
+    _btn_picker->add(*picker);
+    _btn_picker->set_tooltip_text(_("Pick colors from image"));
+    rgbabox->pack_start(*_btn_picker, false, false, 2);
+    _btn_picker->signal_clicked().connect(sigc::mem_fun(*this, &ColorNotebook::_onPickerClicked));
 
     /* Create RGBA entry and color preview */
-    _rgbal = gtk_label_new_with_mnemonic(_("RGBA_:"));
-    gtk_widget_set_halign(_rgbal, GTK_ALIGN_END);
-    gtk_box_pack_start(GTK_BOX(rgbabox), _rgbal, TRUE, TRUE, 2);
+    _rgbal = Gtk::make_managed<Gtk::Label>(_("RGBA_:"), true);
+    _rgbal->set_halign(Gtk::ALIGN_END);
+    rgbabox->pack_start(*_rgbal, true, true, 2);
 
-    ColorEntry *rgba_entry = Gtk::manage(new ColorEntry(_selected_color));
+    auto rgba_entry = Gtk::make_managed<ColorEntry>(_selected_color);
     sp_dialog_defocus_on_enter(GTK_WIDGET(rgba_entry->gobj()));
-    gtk_box_pack_start(GTK_BOX(rgbabox), GTK_WIDGET(rgba_entry->gobj()), FALSE, FALSE, 0);
-    gtk_label_set_mnemonic_widget(GTK_LABEL(_rgbal), GTK_WIDGET(rgba_entry->gobj()));
+    rgbabox->pack_start(*rgba_entry, false, false, 0);
+    _rgbal->set_mnemonic_widget(*rgba_entry);
 
-    gtk_widget_show_all(rgbabox);
+    rgbabox->show_all();
 
 #if defined(HAVE_LIBLCMS2)
     // the "too much ink" icon is initially hidden
-    gtk_widget_hide(GTK_WIDGET(_box_toomuchink));
+    _box_toomuchink->hide();
 #endif // defined(HAVE_LIBLCMS2)
 
-    gtk_widget_set_margin_start(rgbabox, XPAD);
-    gtk_widget_set_margin_end(rgbabox, XPAD);
-    gtk_widget_set_margin_top(rgbabox, YPAD);
-    gtk_widget_set_margin_bottom(rgbabox, YPAD);
-    attach(*Glib::wrap(rgbabox), 0, row, 2, 1);
+    rgbabox->set_margin_start( XPAD);
+    rgbabox->set_margin_end(   XPAD);
+    rgbabox->set_margin_top(   YPAD);
+    rgbabox->set_margin_bottom(YPAD);
+    attach(*rgbabox, 0, row, 2, 1);
 
 #ifdef SPCS_PREVIEW
     _p = sp_color_preview_new(0xffffffff);
@@ -207,10 +197,10 @@ void ColorNotebook::_initUI()
     attach(*Glib::wrap(_p), 2, 3, row, row + 1, Gtk::FILL, Gtk::FILL, XPAD, YPAD);
 #endif
 
-    g_signal_connect(G_OBJECT(_book), "switch-page", G_CALLBACK(ColorNotebook::_onPageSwitched), this);
+    _book->signal_switch_page().connect(sigc::mem_fun(this, &ColorNotebook::_onPageSwitched));
 }
 
-void ColorNotebook::_onPickerClicked(GtkWidget * /*widget*/, ColorNotebook * /*colorbook*/)
+void ColorNotebook::_onPickerClicked()
 {
     // Set the dropper into a "one click" mode, so it reverts to the previous tool after a click
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -218,24 +208,20 @@ void ColorNotebook::_onPickerClicked(GtkWidget * /*widget*/, ColorNotebook * /*c
     Inkscape::UI::Tools::sp_toggle_dropper(SP_ACTIVE_DESKTOP);
 }
 
-void ColorNotebook::_onButtonClicked(GtkWidget *widget, ColorNotebook *nb)
+void ColorNotebook::_onButtonClicked(int page_num)
 {
-    if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
+    if (!_buttons[page_num]->get_active()) {
         return;
     }
 
-    for (gint i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(nb->_book)); i++) {
-        if (nb->_buttons[i] == widget) {
-            gtk_notebook_set_current_page(GTK_NOTEBOOK(nb->_book), i);
-        }
-    }
+    _book->set_current_page(page_num);
 }
 
 void ColorNotebook::_onSelectedColorChanged() { _updateICCButtons(); }
 
-void ColorNotebook::_onPageSwitched(GtkNotebook *notebook, GtkWidget *page, guint page_num, ColorNotebook *colorbook)
+void ColorNotebook::_onPageSwitched(Gtk::Widget *page, guint page_num)
 {
-    if (colorbook->get_visible()) {
+    if (get_visible()) {
         // remember the page we switched to
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setInt("/colorselector/page", page_num);
@@ -253,23 +239,24 @@ void ColorNotebook::_updateICCButtons()
 
 #if defined(HAVE_LIBLCMS2)
     /* update color management icon*/
-    gtk_widget_set_sensitive(_box_colormanaged, color.icc != nullptr);
+    _box_colormanaged->set_sensitive(color.icc != nullptr);
 
     /* update out-of-gamut icon */
-    gtk_widget_set_sensitive(_box_outofgamut, false);
+    _box_outofgamut->set_sensitive(false);
     if (color.icc) {
         Inkscape::ColorProfile *target_profile =
             SP_ACTIVE_DOCUMENT->getProfileManager()->find(color.icc->colorProfile.c_str());
-        if (target_profile)
-            gtk_widget_set_sensitive(_box_outofgamut, target_profile->GamutCheck(color));
+        if (target_profile) {
+            _box_outofgamut->set_sensitive(target_profile->GamutCheck(color));
+        }
     }
 
     /* update too-much-ink icon */
-    gtk_widget_set_sensitive(_box_toomuchink, false);
+    _box_toomuchink->set_sensitive(false);
     if (color.icc) {
         Inkscape::ColorProfile *prof = SP_ACTIVE_DOCUMENT->getProfileManager()->find(color.icc->colorProfile.c_str());
         if (prof && CMSSystem::isPrintColorSpace(prof)) {
-            gtk_widget_show(GTK_WIDGET(_box_toomuchink));
+            _box_toomuchink->show();
             double ink_sum = 0;
             for (double i : color.icc->colors) {
                 ink_sum += i;
@@ -280,11 +267,10 @@ void ColorNotebook::_updateICCButtons()
                 which means the paper can get too wet due to an excessive amount of ink. This may lead to several
                issues
                 such as misalignment and poor quality of printing in general.*/
-            if (ink_sum > 3.2)
-                gtk_widget_set_sensitive(_box_toomuchink, true);
+            if (ink_sum > 3.2) _box_toomuchink->set_sensitive(true);
         }
         else {
-            gtk_widget_hide(GTK_WIDGET(_box_toomuchink));
+            _box_toomuchink->hide();
         }
     }
 #endif // defined(HAVE_LIBLCMS2)
@@ -292,10 +278,10 @@ void ColorNotebook::_updateICCButtons()
 
 void ColorNotebook::_setCurrentPage(int i)
 {
-    gtk_notebook_set_current_page(GTK_NOTEBOOK(_book), i);
+    _book->set_current_page(i);
 
-    if (_buttons && (static_cast<size_t>(i) < _available_pages.size())) {
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(_buttons[i]), TRUE);
+    if (!_buttons.empty() && (static_cast<size_t>(i) < _available_pages.size())) {
+        _buttons[i]->set_active(true);
     }
 }
 
@@ -310,19 +296,19 @@ void ColorNotebook::_addPage(Page &page)
         Glib::ustring mode_name = page.selector_factory->modeName();
         Gtk::Widget *tab_label = Gtk::manage(new Gtk::Label(mode_name));
         tab_label->set_name("ColorModeLabel");
-        gint page_num = gtk_notebook_append_page(GTK_NOTEBOOK(_book), selector_widget->gobj(), tab_label->gobj());
+        auto page_num = _book->append_page(*selector_widget, *tab_label);
 
-        _buttons[page_num] = gtk_radio_button_new_with_label(nullptr, mode_name.c_str());
-        gtk_widget_set_name(_buttons[page_num], "ColorModeButton");
-        gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(_buttons[page_num]), FALSE);
+        _buttons.push_back(Gtk::make_managed<Gtk::RadioButton>(mode_name));
+        _buttons[page_num]->set_name("ColorModeButton");
+        _buttons[page_num]->set_mode(false);
         if (page_num > 0) {
-            auto g = Glib::wrap(GTK_RADIO_BUTTON(_buttons[0]))->get_group();
-            Glib::wrap(GTK_RADIO_BUTTON(_buttons[page_num]))->set_group(g);
+            auto g = _buttons[0]->get_group();
+            _buttons[page_num]->set_group(g);
         }
-        gtk_widget_show(_buttons[page_num]);
-        gtk_box_pack_start(GTK_BOX(_buttonbox), _buttons[page_num], TRUE, TRUE, 0);
+        _buttons[page_num]->show();
+        _buttonbox->pack_start(*_buttons[page_num], true, true, 0);
 
-        g_signal_connect(G_OBJECT(_buttons[page_num]), "clicked", G_CALLBACK(_onButtonClicked), this);
+        _buttons[page_num]->signal_clicked().connect(sigc::bind(sigc::mem_fun(this, &ColorNotebook::_onButtonClicked), page_num));
     }
 }
 }
