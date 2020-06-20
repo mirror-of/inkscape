@@ -115,10 +115,11 @@ br_locate (void *symbol)
 
         if (!fgets (line, sizeof (line), f))
             continue;
-        if (!strstr (line, " r-xp ") || !strchr (line, '/'))
+
+        int inode = 0;
+        if (sscanf(line, "%lx-%lx r%*s %*x %*s %d", &start, &end, &inode) != 3 || inode == 0)
             continue;
 
-        sscanf (line, "%lx-%lx ", &start, &end);
         if (symbol >= (void *) start && symbol < (void *) end)
         {
             char *tmp;
@@ -126,6 +127,8 @@ br_locate (void *symbol)
 
             /* Extract the filename; it is always an absolute path */
             path = strchr (line, '/');
+            if (!path)
+                continue;
 
             /* Get rid of the newline */
             tmp = strrchr (path, '\n');
