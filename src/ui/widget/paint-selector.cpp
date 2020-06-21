@@ -58,6 +58,7 @@
 #include "svg/svg-icc-color.h"
 #endif // SP_PS_VERBOSE
 
+#include <gtkmm/combobox.h>
 #include <gtkmm/label.h>
 
 using Inkscape::UI::SelectedColor;
@@ -210,7 +211,6 @@ PaintSelector::PaintSelector(FillOrStroke kind)
     _frame = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     _frame->set_homogeneous(false);
     _frame->show();
-    // gtk_container_set_border_width(GTK_CONTAINER(psel->frame), 0);
     pack_start(*_frame, true, true, 0);
 
 
@@ -242,8 +242,6 @@ PaintSelector::~PaintSelector()
 
 StyleToggleButton *PaintSelector::style_button_add(gchar const *pixmap, PaintSelector::Mode mode, gchar const *tip)
 {
-    GtkWidget *w;
-
     auto b = Gtk::manage(new StyleToggleButton());
     b->set_tooltip_text(tip);
     b->show();
@@ -252,8 +250,8 @@ StyleToggleButton *PaintSelector::style_button_add(gchar const *pixmap, PaintSel
     b->set_mode(false);
     b->set_style(mode);
 
-    w = sp_get_icon_image(pixmap, GTK_ICON_SIZE_BUTTON);
-    gtk_container_add(GTK_CONTAINER(b->gobj()), w);
+    auto w = Glib::wrap(sp_get_icon_image(pixmap, GTK_ICON_SIZE_BUTTON));
+    b->add(*w);
 
     _style->pack_start(*b, false, false);
     b->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &PaintSelector::style_button_toggled), b));
@@ -478,7 +476,6 @@ void PaintSelector::clear_frame()
         // The widget is hidden first so it can recognize that it should not process signals from notebook child
         _selector->set_visible(false);
         remove(*_selector);
-        // gtk_widget_destroy(_selector);
         //_selector = nullptr;
     }
 }
@@ -652,14 +649,10 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
 
 // ************************* MESH ************************
 #ifdef WITH_MESH
-void PaintSelector::mesh_destroy(GtkWidget *widget, PaintSelector * /*psel*/)
+void PaintSelector::mesh_change()
 {
-    // drop our reference to the mesh menu widget
-    g_object_unref(G_OBJECT(widget));
+    _signal_changed.emit();
 }
-
-void PaintSelector::mesh_change(GtkWidget * /*widget*/, PaintSelector *psel) { psel->_signal_changed.emit(); }
-
 
 /**
  *  Returns a list of meshes in the defs of the given source document as a vector
@@ -684,28 +677,27 @@ static std::vector<SPMeshGradient *> ink_mesh_list_get(SPDocument *source)
 /**
  * Adds menu items for mesh list.
  */
-static void sp_mesh_menu_build(GtkWidget *combo, std::vector<SPMeshGradient *> &mesh_list, SPDocument * /*source*/)
+void PaintSelector::mesh_menu_build(std::vector<SPMeshGradient *> &mesh_list, SPDocument * /*source*/)
 {
-    GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
-    GtkTreeIter iter;
-
     for (auto i : mesh_list) {
-
         Inkscape::XML::Node *repr = i->getRepr();
 
         gchar const *meshid = repr->attribute("id");
         gchar const *label = meshid;
 
         // Only relevant if we supply a set of canned meshes.
-        gboolean stockid = false;
+        bool stockid = false;
         if (repr->attribute("inkscape:stockid")) {
             label = _(repr->attribute("inkscape:stockid"));
             stockid = true;
         }
 
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, COMBO_COL_LABEL, label, COMBO_COL_STOCK, stockid, COMBO_COL_MESH, meshid,
-                           COMBO_COL_SEP, FALSE, -1);
+        auto iter = _mesh_tree_model->append();
+        auto row = *iter;
+        row[_mesh_cols._col_label] = label;
+        row[_mesh_cols._col_stock] = stockid;
+        row[_mesh_cols._col_mesh]  = meshid;
+        row[_mesh_cols._col_sep]   = false;
     }
 }
 
@@ -713,15 +705,14 @@ static void sp_mesh_menu_build(GtkWidget *combo, std::vector<SPMeshGradient *> &
  * Pick up all meshes from source, except those that are in
  * current_doc (if non-NULL), and add items to the mesh menu.
  */
-static void sp_mesh_list_from_doc(GtkWidget *combo, SPDocument * /*current_doc*/, SPDocument *source,
-                                  SPDocument * /*mesh_doc*/)
+void PaintSelector::mesh_list_from_doc(SPDocument *source, SPDocument * /* mesh_doc */)
 {
-    std::vector<SPMeshGradient *> pl = ink_mesh_list_get(source);
-    sp_mesh_menu_build(combo, pl, source);
+    auto pl = ink_mesh_list_get(source);
+    mesh_menu_build(pl, source);
 }
 
 
-static void ink_mesh_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
+void PaintSelector::ink_mesh_menu_populate_menu(SPDocument *doc)
 {
     static SPDocument *meshes_doc = nullptr;
 
@@ -737,56 +728,53 @@ static void ink_mesh_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     // }
 
     // suck in from current doc
-    sp_mesh_list_from_doc(combo, nullptr, doc, meshes_doc);
+    mesh_list_from_doc(doc, meshes_doc);
 
     // add separator
     // {
-    //     GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
-    //     GtkTreeIter iter;
-    //     gtk_list_store_append (store, &iter);
-    //     gtk_list_store_set(store, &iter,
-    //             COMBO_COL_LABEL, "", COMBO_COL_STOCK, false, COMBO_COL_MESH, "", COMBO_COL_SEP, true, -1);
+    //     auto iter = _mesh_tree_model->append();
+    //     (*iter)[_mesh_cols._col_label] = "";
+    //     (*iter)[_mesh_cols._col_stock] = false;
+    //     (*iter)[_mesh_cols._col_mesh]  = "";
+    //     (*iter)[_mesh_cols._col_sep]   = true;
     // }
 
     // suck in from meshes.svg
     // if (meshes_doc) {
     //     doc->ensureUpToDate();
-    //     sp_mesh_list_from_doc ( combo, doc, meshes_doc, NULL );
+    //     mesh_list_from_doc(doc, meshes_doc);
     // }
 }
 
 
-static GtkWidget *ink_mesh_menu(GtkWidget *combo)
+void PaintSelector::ink_mesh_menu()
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
-    GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
-    GtkTreeIter iter;
-
     if (!doc) {
-
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, COMBO_COL_LABEL, _("No document selected"), COMBO_COL_STOCK, false,
-                           COMBO_COL_MESH, "", COMBO_COL_SEP, false, -1);
-        gtk_widget_set_sensitive(combo, FALSE);
-
+        auto iter = _mesh_tree_model->append();
+        auto row = *iter;
+        row[_mesh_cols._col_label] = _("No document selected");
+        row[_mesh_cols._col_stock] = false;
+        row[_mesh_cols._col_mesh]  = "";
+        row[_mesh_cols._col_sep]   = false;
+        _meshmenu->set_sensitive(false);
     } else {
-
-        ink_mesh_menu_populate_menu(combo, doc);
-        gtk_widget_set_sensitive(combo, TRUE);
+        ink_mesh_menu_populate_menu(doc);
+        _meshmenu->set_sensitive(true);
     }
 
-    // Select the first item that is not a separator
-    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter)) {
-        gboolean sep = false;
-        gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, COMBO_COL_SEP, &sep, -1);
+    if (!_mesh_tree_model->children().empty()) {
+        // Select the first item that is not a separator
+        auto iter = _mesh_tree_model->children().begin();
+        auto row = *iter;
+        auto sep = row[_mesh_cols._col_sep];
         if (sep) {
-            gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
+            ++iter;
         }
-        gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter);
-    }
 
-    return combo;
+        _meshmenu->set_active(iter);
+    }
 }
 
 
@@ -800,10 +788,9 @@ void PaintSelector::updateMeshList(SPMeshGradient *mesh)
     g_assert(_meshmenu != nullptr);
 
     /* Clear existing menu if any */
-    GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(_meshmenu));
-    gtk_list_store_clear(GTK_LIST_STORE(store));
+    _mesh_tree_model->clear();
 
-    ink_mesh_menu(_meshmenu);
+    ink_mesh_menu();
 
     /* Set history */
 
@@ -812,26 +799,21 @@ void PaintSelector::updateMeshList(SPMeshGradient *mesh)
         gchar const *meshname = mesh->getRepr()->attribute("id");
 
         // Find this mesh and set it active in the combo_box
-        GtkTreeIter iter;
-        gchar *meshid = nullptr;
-        bool valid = gtk_tree_model_get_iter_first(store, &iter);
-        if (!valid) {
+        auto iter = _mesh_tree_model->children().begin();
+        if (!iter) {
             return;
         }
-        gtk_tree_model_get(store, &iter, COMBO_COL_MESH, &meshid, -1);
-        while (valid && strcmp(meshid, meshname) != 0) {
-            valid = gtk_tree_model_iter_next(store, &iter);
-            g_free(meshid);
-            meshid = nullptr;
-            gtk_tree_model_get(store, &iter, COMBO_COL_MESH, &meshid, -1);
+        Glib::ustring meshid = (*iter)[_mesh_cols._col_mesh];
+        while (iter && strcmp(meshid.c_str(), meshname) != 0) {
+            ++iter;
+            meshid = (*iter)[_mesh_cols._col_mesh];
         }
 
-        if (valid) {
-            gtk_combo_box_set_active_iter(GTK_COMBO_BOX(_meshmenu), &iter);
+        if (iter) {
+            _meshmenu->set_active(iter);
         }
 
         _meshmenu_update = false;
-        g_free(meshid);
     }
 }
 
@@ -858,30 +840,21 @@ void PaintSelector::set_mode_mesh(PaintSelector::Mode mode)
             auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 1));
             hb->set_homogeneous(false);
 
-            /**
-             * Create a combo_box and store with 4 columns,
-             * The label, a pointer to the mesh, is stockid or not, is a separator or not.
-             */
-            GtkListStore *store =
-                gtk_list_store_new(COMBO_N_COLS, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_BOOLEAN);
-            GtkWidget *combo = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
-            gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(combo), PaintSelector::isSeparator, nullptr, nullptr);
+            _mesh_tree_model = Gtk::ListStore::create(_mesh_cols);
+            _meshmenu = Gtk::make_managed<Gtk::ComboBox>();
+            _meshmenu->set_model(_mesh_tree_model);
+            _meshmenu->set_row_separator_func(sigc::mem_fun(*this, &PaintSelector::isSeparator));
 
-            GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
-            gtk_cell_renderer_set_padding(renderer, 2, 0);
-            gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
-            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), renderer, "text", COMBO_COL_LABEL, NULL);
+            _mesh_cell_renderer = Gtk::make_managed<Gtk::CellRendererText>();
+            _mesh_cell_renderer->set_padding(2, 0);
+            _meshmenu->pack_start(*_mesh_cell_renderer, true);
+            _meshmenu->add_attribute(*_mesh_cell_renderer, "text", _mesh_cols._col_label);
 
-            ink_mesh_menu(combo);
-            g_signal_connect(G_OBJECT(combo), "changed", G_CALLBACK(PaintSelector::mesh_change), this);
-            g_signal_connect(G_OBJECT(combo), "destroy", G_CALLBACK(PaintSelector::mesh_destroy), this);
-            _meshmenu = combo;
-            g_object_ref(G_OBJECT(combo));
+            ink_mesh_menu();
+            _meshmenu->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::mesh_change));
 
-            gtk_container_add(GTK_CONTAINER(hb->gobj()), combo);
+            hb->add(*_meshmenu);
             _selector->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
-
-            g_object_unref(G_OBJECT(store));
         }
 
         {
@@ -914,34 +887,27 @@ SPMeshGradient *PaintSelector::getMeshGradient()
     if (_meshmenu == nullptr) {
         return nullptr;
     }
-    GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(_meshmenu));
 
     /* Get the selected mesh */
-    GtkTreeIter iter;
-    if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(_meshmenu), &iter) ||
-        !gtk_list_store_iter_is_valid(GTK_LIST_STORE(store), &iter)) {
+    auto iter = _meshmenu->get_active();
+    if (!iter) {
         return nullptr;
     }
 
-    gchar *meshid = nullptr;
-    gboolean stockid = FALSE;
-    // gchar *label = nullptr;
-    gtk_tree_model_get(store, &iter, COMBO_COL_STOCK, &stockid, COMBO_COL_MESH, &meshid, -1);
-    // gtk_tree_model_get (store, &iter, COMBO_COL_LABEL, &label, COMBO_COL_STOCK, &stockid, COMBO_COL_MESH, &meshid,
-    // -1); std::cout << "  .. meshid: " << (meshid?meshid:"null") << "   label: " << (label?label:"null") << std::endl;
-    // g_free(label);
+    Glib::ustring meshid = (*iter)[_mesh_cols._col_mesh];
+    auto stockid = (*iter)[_mesh_cols._col_stock];
+
     if (meshid == nullptr) {
         return nullptr;
     }
 
     SPMeshGradient *mesh = nullptr;
-    if (strcmp(meshid, "none")) {
-
+    if (strcmp(meshid.c_str(), "none")) {
         gchar *mesh_name;
         if (stockid) {
-            mesh_name = g_strconcat("urn:inkscape:mesh:", meshid, NULL);
+            mesh_name = g_strconcat("urn:inkscape:mesh:", meshid.c_str(), NULL);
         } else {
-            mesh_name = g_strdup(meshid);
+            mesh_name = g_strdup(meshid.c_str());
         }
 
         SPObject *mesh_obj = get_stock_item(mesh_name);
@@ -952,8 +918,6 @@ SPMeshGradient *PaintSelector::getMeshGradient()
     } else {
         std::cerr << "PaintSelector::getMeshGradient: Unexpected meshid value." << std::endl;
     }
-
-    g_free(meshid);
 
     return mesh;
 }
@@ -975,13 +939,10 @@ void PaintSelector::set_style_buttons(Gtk::ToggleButton *active)
     _unset->set_active(active == _unset);
 }
 
-void PaintSelector::pattern_destroy(GtkWidget *widget, PaintSelector * /*psel*/)
+void PaintSelector::pattern_change()
 {
-    // drop our reference to the pattern menu widget
-    g_object_unref(G_OBJECT(widget));
+    _signal_changed.emit();
 }
-
-void PaintSelector::pattern_change(GtkWidget * /*widget*/, PaintSelector *psel) { psel->_signal_changed.emit(); }
 
 
 /**
@@ -1007,11 +968,8 @@ static std::vector<SPPattern *> ink_pattern_list_get(SPDocument *source)
  * Adds menu items for pattern list - derived from marker code, left hb etc in to make addition of previews easier at
  * some point.
  */
-static void sp_pattern_menu_build(GtkWidget *combo, std::vector<SPPattern *> &pl, SPDocument * /*source*/)
+void PaintSelector::pattern_menu_build(std::vector<SPPattern *> &pl, SPDocument * /*source*/)
 {
-    GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
-    GtkTreeIter iter;
-
     for (auto i = pl.rbegin(); i != pl.rend(); ++i) {
 
         Inkscape::XML::Node *repr = (*i)->getRepr();
@@ -1031,9 +989,12 @@ static void sp_pattern_menu_build(GtkWidget *combo, std::vector<SPPattern *> &pl
             stockid = true;
         }
 
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, COMBO_COL_LABEL, label, COMBO_COL_STOCK, stockid, COMBO_COL_PATTERN, patid,
-                           COMBO_COL_SEP, FALSE, -1);
+        auto iter = _pattern_tree_model->append();
+        auto row = *iter;
+        row[_pattern_cols._col_label]   = label;
+        row[_pattern_cols._col_stock]   = stockid;
+        row[_pattern_cols._col_pattern] = patid;
+        row[_pattern_cols._col_sep]     = false;
     }
 }
 
@@ -1041,15 +1002,16 @@ static void sp_pattern_menu_build(GtkWidget *combo, std::vector<SPPattern *> &pl
  * Pick up all patterns from source, except those that are in
  * current_doc (if non-NULL), and add items to the pattern menu.
  */
-static void sp_pattern_list_from_doc(GtkWidget *combo, SPDocument * /*current_doc*/, SPDocument *source,
-                                     SPDocument * /*pattern_doc*/)
+void PaintSelector::pattern_list_from_doc(SPDocument * /* current_doc */,
+                                          SPDocument *source,
+                                          SPDocument * /*pattern_doc */)
 {
-    std::vector<SPPattern *> pl = ink_pattern_list_get(source);
-    sp_pattern_menu_build(combo, pl, source);
+    auto pl = ink_pattern_list_get(source);
+    pattern_menu_build(pl, source);
 }
 
 
-static void ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
+void PaintSelector::ink_pattern_menu_populate_menu(SPDocument *doc)
 {
     static SPDocument *patterns_doc = nullptr;
 
@@ -1063,56 +1025,53 @@ static void ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     }
 
     // suck in from current doc
-    sp_pattern_list_from_doc(combo, nullptr, doc, patterns_doc);
+    pattern_list_from_doc(nullptr, doc, patterns_doc);
 
     // add separator
     {
-        GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
-        GtkTreeIter iter;
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, COMBO_COL_LABEL, "", COMBO_COL_STOCK, false, COMBO_COL_PATTERN, "",
-                           COMBO_COL_SEP, true, -1);
+        auto iter = _pattern_tree_model->append();
+        auto row = *iter;
+        row[_pattern_cols._col_label]   = "";
+        row[_pattern_cols._col_stock]   = false;
+        row[_pattern_cols._col_pattern] = "";
+        row[_pattern_cols._col_sep]     = true;
     }
 
     // suck in from patterns.svg
     if (patterns_doc) {
         doc->ensureUpToDate();
-        sp_pattern_list_from_doc(combo, doc, patterns_doc, nullptr);
+        pattern_list_from_doc(doc, patterns_doc, nullptr);
     }
 }
 
 
-static GtkWidget *ink_pattern_menu(GtkWidget *combo)
+void PaintSelector::ink_pattern_menu()
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
-    GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
-    GtkTreeIter iter;
-
     if (!doc) {
-
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, COMBO_COL_LABEL, _("No document selected"), COMBO_COL_STOCK, false,
-                           COMBO_COL_PATTERN, "", COMBO_COL_SEP, false, -1);
-        gtk_widget_set_sensitive(combo, FALSE);
-
+        auto iter = _pattern_tree_model->append();
+        auto row = *iter;
+        row[_pattern_cols._col_label]   = _("No document selected");
+        row[_pattern_cols._col_stock]   = false;
+        row[_pattern_cols._col_pattern] = "";
+        row[_pattern_cols._col_sep]     = false;
+        _patternmenu->set_sensitive(false);
     } else {
-
-        ink_pattern_menu_populate_menu(combo, doc);
-        gtk_widget_set_sensitive(combo, TRUE);
+        ink_pattern_menu_populate_menu(doc);
+        _patternmenu->set_sensitive(true);
     }
 
     // Select the first item that is not a separator
-    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter)) {
-        gboolean sep = false;
-        gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, COMBO_COL_SEP, &sep, -1);
+    if (!_pattern_tree_model->children().empty()) {
+        auto iter = _pattern_tree_model->children().begin();
+        auto row = *iter;
+        auto sep = row[_pattern_cols._col_sep];
         if (sep) {
-            gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
+            ++iter;
         }
-        gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter);
+        _patternmenu->set_active(iter);
     }
-
-    return combo;
 }
 
 
@@ -1125,10 +1084,9 @@ void PaintSelector::updatePatternList(SPPattern *pattern)
     g_assert(_patternmenu != nullptr);
 
     /* Clear existing menu if any */
-    auto store = gtk_combo_box_get_model(GTK_COMBO_BOX(_patternmenu));
-    gtk_list_store_clear(GTK_LIST_STORE(store));
+    _pattern_tree_model->clear();
 
-    ink_pattern_menu(_patternmenu);
+    ink_pattern_menu();
 
     /* Set history */
 
@@ -1137,23 +1095,18 @@ void PaintSelector::updatePatternList(SPPattern *pattern)
         gchar const *patname = pattern->getRepr()->attribute("id");
 
         // Find this pattern and set it active in the combo_box
-        GtkTreeIter iter;
-        gchar *patid = nullptr;
-        bool valid = gtk_tree_model_get_iter_first(store, &iter);
-        if (!valid) {
+        auto iter = _pattern_tree_model->children().begin();
+        if (!iter) {
             return;
         }
-        gtk_tree_model_get(store, &iter, COMBO_COL_PATTERN, &patid, -1);
-        while (valid && strcmp(patid, patname) != 0) {
-            valid = gtk_tree_model_iter_next(store, &iter);
-            g_free(patid);
-            patid = nullptr;
-            gtk_tree_model_get(store, &iter, COMBO_COL_PATTERN, &patid, -1);
+        Glib::ustring patid = (*iter)[_pattern_cols._col_pattern];
+        while (iter && strcmp(patid.c_str(), patname) != 0) {
+            ++iter;
+            patid = (*iter)[_pattern_cols._col_pattern];
         }
-        g_free(patid);
 
-        if (valid) {
-            gtk_combo_box_set_active_iter(GTK_COMBO_BOX(_patternmenu), &iter);
+        if (iter) {
+            _patternmenu->set_active(iter);
         }
 
         _patternmenu_update = false;
@@ -1182,30 +1135,21 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
             auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 1));
             hb->set_homogeneous(false);
 
-            /**
-             * Create a combo_box and store with 4 columns,
-             * The label, a pointer to the pattern, is stockid or not, is a separator or not.
-             */
-            GtkListStore *store =
-                gtk_list_store_new(COMBO_N_COLS, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_BOOLEAN);
-            _patternmenu = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
-            gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(_patternmenu), PaintSelector::isSeparator, nullptr,
-                                                 nullptr);
+            _pattern_tree_model = Gtk::ListStore::create(_pattern_cols);
+            _patternmenu = Gtk::make_managed<Gtk::ComboBox>();
+            _patternmenu->set_model(_pattern_tree_model);
+            _patternmenu->set_row_separator_func(sigc::mem_fun(*this, &PaintSelector::isSeparator));
 
-            GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
-            gtk_cell_renderer_set_padding(renderer, 2, 0);
-            gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(_patternmenu), renderer, TRUE);
-            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(_patternmenu), renderer, "text", COMBO_COL_LABEL, NULL);
+            _pattern_cell_renderer = Gtk::make_managed<Gtk::CellRendererText>();
+            _pattern_cell_renderer->set_padding(2, 0);
+            _patternmenu->pack_start(*_pattern_cell_renderer, true);
+            _patternmenu->add_attribute(*_pattern_cell_renderer, "text", _pattern_cols._col_label);
 
-            ink_pattern_menu(_patternmenu);
-            g_signal_connect(G_OBJECT(_patternmenu), "changed", G_CALLBACK(PaintSelector::pattern_change), this);
-            g_signal_connect(G_OBJECT(_patternmenu), "destroy", G_CALLBACK(PaintSelector::pattern_destroy), this);
-            g_object_ref(G_OBJECT(_patternmenu));
+            ink_pattern_menu();
+            _patternmenu->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::pattern_change));
 
-            gtk_container_add(GTK_CONTAINER(hb->gobj()), _patternmenu);
+            hb->add(*_patternmenu);
             _selector->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
-
-            g_object_unref(G_OBJECT(store));
         }
 
         {
@@ -1251,12 +1195,10 @@ void PaintSelector::set_mode_hatch(PaintSelector::Mode mode)
 #endif
 }
 
-gboolean PaintSelector::isSeparator(GtkTreeModel *model, GtkTreeIter *iter, gpointer /*data*/)
+bool PaintSelector::isSeparator(const Glib::RefPtr<Gtk::TreeModel> &model,
+                                const Gtk::TreeModel::iterator     &iter)
 {
-
-    gboolean sep = FALSE;
-    gtk_tree_model_get(model, iter, COMBO_COL_SEP, &sep, -1);
-    return sep;
+    return (*iter)[_mesh_cols._col_sep];
 }
 
 SPPattern *PaintSelector::getPattern()
@@ -1269,33 +1211,26 @@ SPPattern *PaintSelector::getPattern()
         return nullptr;
     }
 
-    auto store = gtk_combo_box_get_model(GTK_COMBO_BOX(_patternmenu));
-
     /* Get the selected pattern */
-    GtkTreeIter iter;
-    if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(_patternmenu), &iter) ||
-        !gtk_list_store_iter_is_valid(GTK_LIST_STORE(store), &iter)) {
+    auto iter = _patternmenu->get_active();
+    if (!iter) {
         return nullptr;
     }
 
-    gchar *patid = nullptr;
-    gboolean stockid = FALSE;
-    // gchar *label = nullptr;
-    gtk_tree_model_get(store, &iter,
-                       // COMBO_COL_LABEL, &label,
-                       COMBO_COL_STOCK, &stockid, COMBO_COL_PATTERN, &patid, -1);
-    // g_free(label);
-    if (patid == nullptr) {
+    Glib::ustring patid   = (*iter)[_pattern_cols._col_pattern];
+    auto stockid = (*iter)[_pattern_cols._col_stock];
+
+    if (patid.empty()) {
         return nullptr;
     }
 
-    if (strcmp(patid, "none") != 0) {
+    if (strcmp(patid.c_str(), "none") != 0) {
         gchar *paturn;
 
         if (stockid) {
-            paturn = g_strconcat("urn:inkscape:pattern:", patid, NULL);
+            paturn = g_strconcat("urn:inkscape:pattern:", patid.c_str(), NULL);
         } else {
-            paturn = g_strdup(patid);
+            paturn = g_strdup(patid.c_str());
         }
         SPObject *pat_obj = get_stock_item(paturn);
         if (pat_obj) {
@@ -1310,8 +1245,6 @@ SPPattern *PaintSelector::getPattern()
             pat = SP_PATTERN(pat_obj)->rootPattern();
         }
     }
-
-    g_free(patid);
 
     return pat;
 }

@@ -16,6 +16,7 @@
 #include "fill-or-stroke.h"
 #include <glib.h>
 #include <gtkmm/box.h>
+#include <gtkmm/treemodel.h>
 
 #include "object/sp-gradient-spread.h"
 #include "object/sp-gradient-units.h"
@@ -31,7 +32,10 @@ class SPPattern;
 class SPStyle;
 
 namespace Gtk {
+class CellRendererText;
+class ComboBox;
 class Label;
+class ListStore;
 class RadioButton;
 class ToggleButton;
 } // namespace Gtk
@@ -91,11 +95,52 @@ class PaintSelector : public Gtk::Box {
     Gtk::Box *_frame;
     Gtk::Box *_selector = nullptr;
     Gtk::Label *_label;
-    GtkWidget *_patternmenu = nullptr;
+    Gtk::ComboBox *_patternmenu = nullptr;
     bool _patternmenu_update = false;
+
+    class PatternModelColumns : public Gtk::TreeModel::ColumnRecord {
+    public:
+        PatternModelColumns()
+        {
+            add(_col_label);
+            add(_col_stock);
+            add(_col_pattern);
+            add(_col_sep);
+        }
+
+        Gtk::TreeModelColumn<Glib::ustring> _col_label;   ///< Label for the mesh
+        Gtk::TreeModelColumn<bool>          _col_stock;   ///< Stock-ID or not
+        Gtk::TreeModelColumn<Glib::ustring> _col_pattern; ///< Pointer to the pattern
+        Gtk::TreeModelColumn<bool>          _col_sep;     ///< Separator or not
+    };
+
+    PatternModelColumns _pattern_cols;
+    Glib::RefPtr<Gtk::ListStore> _pattern_tree_model;
+    Gtk::CellRendererText *_pattern_cell_renderer;
+
 #ifdef WITH_MESH
-    GtkWidget *_meshmenu = nullptr;
+    Gtk::ComboBox *_meshmenu = nullptr;
     bool _meshmenu_update = false;
+
+    class MeshModelColumns : public Gtk::TreeModel::ColumnRecord {
+    public:
+        MeshModelColumns()
+        {
+            add(_col_label);
+            add(_col_stock);
+            add(_col_mesh);
+            add(_col_sep);
+        }
+
+        Gtk::TreeModelColumn<Glib::ustring> _col_label; ///< Label for the mesh
+        Gtk::TreeModelColumn<bool>          _col_stock; ///< Stock-ID or not
+        Gtk::TreeModelColumn<Glib::ustring> _col_mesh;  ///< Pointer to the mesh
+        Gtk::TreeModelColumn<bool>          _col_sep;   ///< Separator or not
+    };
+
+    MeshModelColumns _mesh_cols;
+    Glib::RefPtr<Gtk::ListStore> _mesh_tree_model;
+    Gtk::CellRendererText *_mesh_cell_renderer;
 #endif
 
     Inkscape::UI::SelectedColor *_selected_color;
@@ -129,8 +174,23 @@ class PaintSelector : public Gtk::Box {
     void set_mode_unset();
     void set_mode_color(PaintSelector::Mode mode);
     void set_mode_gradient(PaintSelector::Mode mode);
+    void ink_pattern_menu();
+    void ink_pattern_menu_populate_menu(SPDocument *doc);
+    void pattern_list_from_doc(SPDocument *current_doc,
+                               SPDocument *source,
+                               SPDocument *pattern_doc);
+    void pattern_menu_build(std::vector<SPPattern *> &pl, SPDocument *source);
 #ifdef WITH_MESH
     void set_mode_mesh(PaintSelector::Mode mode);
+    void ink_mesh_menu();
+    void ink_mesh_menu_populate_menu(SPDocument *doc);
+    void mesh_list_from_doc(SPDocument *source,
+                            SPDocument *mesh_doc);
+    void mesh_menu_build(std::vector<SPMeshGradient *> &mesh_list, SPDocument *source);
+    bool isSeparator(const Glib::RefPtr<Gtk::TreeModel> &model,
+                     const Gtk::TreeModel::iterator     &iter);
+
+    void mesh_change();
 #endif
     void set_mode_pattern(PaintSelector::Mode mode);
     void set_mode_hatch(PaintSelector::Mode mode);
@@ -141,11 +201,7 @@ class PaintSelector : public Gtk::Box {
     void gradient_released();
     void gradient_changed(SPGradient *gr);
 
-    static void mesh_change(GtkWidget *widget, PaintSelector *psel);
-    static void mesh_destroy(GtkWidget *widget, PaintSelector *psel);
-
-    static void pattern_change(GtkWidget *widget, PaintSelector *psel);
-    static void pattern_destroy(GtkWidget *widget, PaintSelector *psel);
+    void pattern_change();
 
   public:
     PaintSelector(FillOrStroke kind);
@@ -185,15 +241,6 @@ class PaintSelector : public Gtk::Box {
     SPGradient *getGradientVector();
     void pushAttrsToGradient(SPGradient *gr) const;
     SPPattern *getPattern();
-};
-
-enum {
-    COMBO_COL_LABEL = 0,
-    COMBO_COL_STOCK = 1,
-    COMBO_COL_PATTERN = 2,
-    COMBO_COL_MESH = COMBO_COL_PATTERN,
-    COMBO_COL_SEP = 3,
-    COMBO_N_COLS = 4
 };
 
 } // namespace Widget
