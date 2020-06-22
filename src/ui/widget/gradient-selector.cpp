@@ -42,9 +42,9 @@ namespace Widget {
 
 void GradientSelector::style_button(Gtk::Button *btn, char const *iconName)
 {
-    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show(child);
-    btn->add(*manage(Glib::wrap(child)));
+    auto child = Glib::wrap(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR));
+    child->show();
+    btn->add(*child);
     btn->set_relief(Gtk::RELIEF_NONE);
 }
 
@@ -153,7 +153,6 @@ GradientSelector::GradientSelector()
 void GradientSelector::setSpread(SPGradientSpread spread)
 {
     _gradientSpread = spread;
-    // gtk_combo_box_set_active (GTK_COMBO_BOX(this->spread), gradientSpread);
 }
 
 void GradientSelector::setMode(SelectorMode mode)
