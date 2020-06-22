@@ -14,6 +14,11 @@
 
 #include "ui/selected-color.h"
 
+namespace Gtk {
+class Label;
+class SpinButton;
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -28,8 +33,7 @@ enum SPColorScalesMode {
     SP_COLOR_SCALES_MODE_HSV = 4
 };
 
-class ColorScales
-    : public Gtk::Grid
+class ColorScales : public Gtk::Grid
 {
 public:
     static const gchar *SUBMODE_NAMES[];
@@ -70,8 +74,8 @@ protected:
     gboolean _dragging : 1;
     std::vector<Glib::RefPtr<Gtk::Adjustment>> _a;        /* Channel adjustments */
     Inkscape::UI::Widget::ColorSlider *_s[5]; /* Channel sliders */
-    GtkWidget *_b[5];                         /* Spinbuttons */
-    GtkWidget *_l[5];                         /* Labels */
+    Gtk::SpinButton *_b[5];                        ///< Spinbuttons
+    Gtk::Label      *_l[5];                        ///< Labels
 
 private:
     // By default, disallow copy constructor and assignment operator

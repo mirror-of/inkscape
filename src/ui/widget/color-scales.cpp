@@ -10,11 +10,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/adjustment.h>
+#include "ui/widget/color-scales.h"
+
 #include <glibmm/i18n.h>
 
+#include <gtkmm/adjustment.h>
+#include <gtkmm/label.h>
+#include <gtkmm/spinbutton.h>
+
 #include "ui/dialog-events.h"
-#include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
 
 #define CSC_CHANNEL_R (1 << 0)
@@ -77,26 +81,22 @@ ColorScales::~ColorScales()
 
 void ColorScales::_initUI(SPColorScalesMode mode)
 {
-    gint i;
-
     _updating = FALSE;
     _dragging = FALSE;
 
-    GtkWidget *t = GTK_WIDGET(gobj());
-
     /* Create components */
-    for (i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {
         /* Label */
-        _l[i] = gtk_label_new("");
+        _l[i] = Gtk::make_managed<Gtk::Label>("");
 
-        gtk_widget_set_halign(_l[i], GTK_ALIGN_START);
-        gtk_widget_show(_l[i]);
+        _l[i]->set_halign(Gtk::ALIGN_START);
+        _l[i]->show();
 
-        gtk_widget_set_margin_start(_l[i], XPAD);
-        gtk_widget_set_margin_end(_l[i], XPAD);
-        gtk_widget_set_margin_top(_l[i], YPAD);
-        gtk_widget_set_margin_bottom(_l[i], YPAD);
-        gtk_grid_attach(GTK_GRID(t), _l[i], 0, i, 1, 1);
+        _l[i]->set_margin_start( XPAD);
+        _l[i]->set_margin_end(   XPAD);
+        _l[i]->set_margin_top(   YPAD);
+        _l[i]->set_margin_bottom(YPAD);
+        attach(*_l[i], 0, i, 1, 1);
 
         /* Adjustment */
         _a.push_back(Gtk::Adjustment::create(0.0, 0.0, _rangeLimit, 1.0, 10.0, 10.0));
@@ -109,21 +109,21 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         _s[i]->set_margin_top(YPAD);
         _s[i]->set_margin_bottom(YPAD);
         _s[i]->set_hexpand(true);
-        gtk_grid_attach(GTK_GRID(t), _s[i]->gobj(), 1, i, 1, 1);
+        attach(*_s[i], 1, i, 1, 1);
 
         /* Spinbutton */
-        _b[i] = gtk_spin_button_new(GTK_ADJUSTMENT(_a[i]->gobj()), 1.0, 0);
-        sp_dialog_defocus_on_enter(_b[i]);
-        gtk_label_set_mnemonic_widget(GTK_LABEL(_l[i]), _b[i]);
-        gtk_widget_show(_b[i]);
+        _b[i] = Gtk::make_managed<Gtk::SpinButton>(_a[i], 1.0, 0);
+        sp_dialog_defocus_on_enter(GTK_WIDGET(_b[i]->gobj()));
+        _l[i]->set_mnemonic_widget(*_b[i]);
+        _b[i]->show();
 
-        gtk_widget_set_margin_start(_b[i], XPAD);
-        gtk_widget_set_margin_end(_b[i], XPAD);
-        gtk_widget_set_margin_top(_b[i], YPAD);
-        gtk_widget_set_margin_bottom(_b[i], YPAD);
-        gtk_widget_set_halign(_b[i], GTK_ALIGN_END);
-        gtk_widget_set_valign(_b[i], GTK_ALIGN_CENTER);
-        gtk_grid_attach(GTK_GRID(t), _b[i], 2, i, 1, 1);
+        _b[i]->set_margin_start( XPAD);
+        _b[i]->set_margin_end(   XPAD);
+        _b[i]->set_margin_top(   YPAD);
+        _b[i]->set_margin_bottom(YPAD);
+        _b[i]->set_halign(Gtk::ALIGN_END);
+        _b[i]->set_valign(Gtk::ALIGN_CENTER);
+        attach(*_b[i], 2, i, 1, 1);
 
         /* Signals */
 	_a[i]->signal_value_changed().connect(sigc::bind(sigc::mem_fun(this, &ColorScales::adjustment_changed),i));
@@ -133,9 +133,9 @@ void ColorScales::_initUI(SPColorScalesMode mode)
     }
 
     //Prevent 5th bar from being shown by PanelDialog::show_all_children
-    gtk_widget_set_no_show_all(_l[4], TRUE);
+    _l[4]->set_no_show_all(true);
     _s[4]->set_no_show_all(true);
-    gtk_widget_set_no_show_all(_b[4], TRUE);
+    _b[4]->set_no_show_all(true);
 
     /* Initial mode is none, so it works */
     setMode(mode);
@@ -357,22 +357,22 @@ void ColorScales::setMode(SPColorScalesMode mode)
         case SP_COLOR_SCALES_MODE_RGB:
             _setRangeLimit(255.0);
             _a[3]->set_upper(100.0);
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_R:"));
+            _l[0]->set_markup_with_mnemonic(_("_R:"));
             _s[0]->set_tooltip_text(_("Red"));
-            gtk_widget_set_tooltip_text(_b[0], _("Red"));
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[1]), _("_G:"));
+            _b[0]->set_tooltip_text(_("Red"));
+            _l[1]->set_markup_with_mnemonic(_("_G:"));
             _s[1]->set_tooltip_text(_("Green"));
-            gtk_widget_set_tooltip_text(_b[1], _("Green"));
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[2]), _("_B:"));
+            _b[1]->set_tooltip_text(_("Green"));
+            _l[2]->set_markup_with_mnemonic(_("_B:"));
             _s[2]->set_tooltip_text(_("Blue"));
-            gtk_widget_set_tooltip_text(_b[2], _("Blue"));
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[3]), _("_A:"));
+            _b[2]->set_tooltip_text(_("Blue"));
+            _l[3]->set_markup_with_mnemonic(_("_A:"));
             _s[3]->set_tooltip_text(_("Alpha (opacity)"));
-            gtk_widget_set_tooltip_text(_b[3], _("Alpha (opacity)"));
+            _b[3]->set_tooltip_text(_("Alpha (opacity)"));
             _s[0]->setMap(nullptr);
-            gtk_widget_hide(_l[4]);
+            _l[4]->hide();
             _s[4]->hide();
-            gtk_widget_hide(_b[4]);
+            _b[4]->hide();
             _updating = TRUE;
             setScaled(_a[0], rgba[0]);
             setScaled(_a[1], rgba[1]);
@@ -384,26 +384,26 @@ void ColorScales::setMode(SPColorScalesMode mode)
         case SP_COLOR_SCALES_MODE_HSL:
             _setRangeLimit(100.0);
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_H:"));
+            _l[0]->set_markup_with_mnemonic(_("_H:"));
             _s[0]->set_tooltip_text(_("Hue"));
-            gtk_widget_set_tooltip_text(_b[0], _("Hue"));
+            _b[0]->set_tooltip_text(_("Hue"));
             _a[0]->set_upper(360.0);
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[1]), _("_S:"));
+            _l[1]->set_markup_with_mnemonic(_("_S:"));
             _s[1]->set_tooltip_text(_("Saturation"));
-            gtk_widget_set_tooltip_text(_b[1], _("Saturation"));
+            _b[1]->set_tooltip_text(_("Saturation"));
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[2]), _("_L:"));
+            _l[2]->set_markup_with_mnemonic(_("_L:"));
             _s[2]->set_tooltip_text(_("Lightness"));
-            gtk_widget_set_tooltip_text(_b[2], _("Lightness"));
+            _b[2]->set_tooltip_text(_("Lightness"));
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[3]), _("_A:"));
+            _l[3]->set_markup_with_mnemonic(_("_A:"));
             _s[3]->set_tooltip_text(_("Alpha (opacity)"));
-            gtk_widget_set_tooltip_text(_b[3], _("Alpha (opacity)"));
+            _b[3]->set_tooltip_text(_("Alpha (opacity)"));
             _s[0]->setMap((guchar *)(sp_color_scales_hue_map()));
-            gtk_widget_hide(_l[4]);
+            _l[4]->hide();
             _s[4]->hide();
-            gtk_widget_hide(_b[4]);
+            _b[4]->hide();
             _updating = TRUE;
             c[0] = 0.0;
 
@@ -420,26 +420,26 @@ void ColorScales::setMode(SPColorScalesMode mode)
         case SP_COLOR_SCALES_MODE_HSV:
             _setRangeLimit(100.0);
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_H:"));
+            _l[0]->set_markup_with_mnemonic(_("_H:"));
             _s[0]->set_tooltip_text(_("Hue"));
-            gtk_widget_set_tooltip_text(_b[0], _("Hue"));
+            _b[0]->set_tooltip_text(_("Hue"));
             _a[0]->set_upper(360.0);
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[1]), _("_S:"));
+            _l[1]->set_markup_with_mnemonic(_("_S:"));
             _s[1]->set_tooltip_text(_("Saturation"));
-            gtk_widget_set_tooltip_text(_b[1], _("Saturation"));
+            _b[1]->set_tooltip_text(_("Saturation"));
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[2]), _("_V:"));
+            _l[2]->set_markup_with_mnemonic(_("_V:"));
             _s[2]->set_tooltip_text(_("Value"));
-            gtk_widget_set_tooltip_text(_b[2], _("Value"));
+            _b[2]->set_tooltip_text(_("Value"));
 
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[3]), _("_A:"));
+            _l[3]->set_markup_with_mnemonic(_("_A:"));
             _s[3]->set_tooltip_text(_("Alpha (opacity)"));
-            gtk_widget_set_tooltip_text(_b[3], _("Alpha (opacity)"));
+            _b[3]->set_tooltip_text(_("Alpha (opacity)"));
             _s[0]->setMap((guchar *)(sp_color_scales_hue_map()));
-            gtk_widget_hide(_l[4]);
+            _l[4]->hide();
             _s[4]->hide();
-            gtk_widget_hide(_b[4]);
+            _b[4]->hide();
             _updating = TRUE;
             c[0] = 0.0;
 
@@ -455,25 +455,25 @@ void ColorScales::setMode(SPColorScalesMode mode)
             break;
         case SP_COLOR_SCALES_MODE_CMYK:
             _setRangeLimit(100.0);
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_C:"));
+            _l[0]->set_markup_with_mnemonic(_("_C:"));
             _s[0]->set_tooltip_text(_("Cyan"));
-            gtk_widget_set_tooltip_text(_b[0], _("Cyan"));
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[1]), _("_M:"));
+            _b[0]->set_tooltip_text(_("Cyan"));
+            _l[1]->set_markup_with_mnemonic(_("_M:"));
             _s[1]->set_tooltip_text(_("Magenta"));
-            gtk_widget_set_tooltip_text(_b[1], _("Magenta"));
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[2]), _("_Y:"));
+            _b[1]->set_tooltip_text(_("Magenta"));
+            _l[2]->set_markup_with_mnemonic(_("_Y:"));
             _s[2]->set_tooltip_text(_("Yellow"));
-            gtk_widget_set_tooltip_text(_b[2], _("Yellow"));
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[3]), _("_K:"));
+            _b[2]->set_tooltip_text(_("Yellow"));
+            _l[3]->set_markup_with_mnemonic(_("_K:"));
             _s[3]->set_tooltip_text(_("Black"));
-            gtk_widget_set_tooltip_text(_b[3], _("Black"));
-            gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[4]), _("_A:"));
+            _b[3]->set_tooltip_text(_("Black"));
+            _l[4]->set_markup_with_mnemonic(_("_A:"));
             _s[4]->set_tooltip_text(_("Alpha (opacity)"));
-            gtk_widget_set_tooltip_text(_b[4], _("Alpha (opacity)"));
+            _b[4]->set_tooltip_text(_("Alpha (opacity)"));
             _s[0]->setMap(nullptr);
-            gtk_widget_show(_l[4]);
+            _l[4]->show();
             _s[4]->show();
-            gtk_widget_show(_b[4]);
+            _b[4]->show();
             _updating = TRUE;
 
             SPColor::rgb_to_cmyk_floatv(c, rgba[0], rgba[1], rgba[2]);
