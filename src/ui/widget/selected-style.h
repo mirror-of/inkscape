@@ -61,6 +61,8 @@ enum {
     SS_STROKE
 };
 
+struct DropTracker;
+
 class GradientImage;
 class SelectedStyle;
 
@@ -85,7 +87,7 @@ private:
 
     gchar const *undokey;
 
-    GdkCursor *cr;
+    Glib::RefPtr<Gdk::Cursor> cr;
     bool cr_set;
 };
 
@@ -207,13 +209,14 @@ protected:
     sigc::connection *selection_modified_connection;
     sigc::connection *subselection_changed_connection;
 
-    static void dragDataReceived( GtkWidget *widget,
-                                  GdkDragContext *drag_context,
-                                  gint x, gint y,
-                                  GtkSelectionData *data,
-                                  guint info,
-                                  guint event_time,
-                                  gpointer user_data );
+    std::vector<Gtk::TargetEntry> ui_drop_target_entries;
+
+    void dragDataReceived(const Glib::RefPtr<Gdk::DragContext> &drag_context,
+                          int x, int y,
+                          const Gtk::SelectionData &data,
+                          guint info,
+                          guint event_time,
+                          DropTracker *tracker);
 
     bool on_fill_click(GdkEventButton *event);
     bool on_stroke_click(GdkEventButton *event);
@@ -274,7 +277,7 @@ protected:
     void on_popup_preset(int i);
     Gtk::MenuItem _popup_sw_remove;
 
-    void *_drop[2];
+    DropTracker *_drop[2];
     bool _dropEnabled[2];
 };
 

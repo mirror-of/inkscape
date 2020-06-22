@@ -14,6 +14,7 @@
 
 #include <vector>
 
+#include <gdkmm/pixbuf.h>
 #include <gtkmm/separatormenuitem.h>
 
 
@@ -96,28 +97,10 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-
 struct DropTracker {
     SelectedStyle* parent;
     int item;
 };
-
-/* Drag and Drop */
-enum ui_drop_target_info {
-    APP_OSWB_COLOR
-};
-
-//TODO: warning: deprecated conversion from string constant to ‘gchar*’
-//
-//Turn out to be warnings that we should probably leave in place. The
-// pointers/types used need to be read-only. So until we correct the using
-// code, those warnings are actually desired. They say "Hey! Fix this". We
-// definitely don't want to hide/ignore them. --JonCruz
-static const GtkTargetEntry ui_drop_target_entries [] = {
-    {g_strdup("application/x-oswb-color"), 0, APP_OSWB_COLOR}
-};
-
-static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 
 /* convenience function */
 static Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop);
@@ -147,6 +130,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     set_name("SelectedStyle");
     _drop[0] = _drop[1] = nullptr;
     _dropEnabled[0] = _dropEnabled[1] = false;
+
+    ui_drop_target_entries.push_back(Gtk::TargetEntry("application/x-oswb-color"));
 
     _fill_label.set_halign(Gtk::ALIGN_START);
     _fill_label.set_valign(Gtk::ALIGN_CENTER);
@@ -397,15 +382,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     ((DropTracker*)_drop[SS_STROKE])->parent = this;
     ((DropTracker*)_drop[SS_STROKE])->item = SS_STROKE;
 
-    g_signal_connect(_stroke_place.gobj(),
-                     "drag_data_received",
-                     G_CALLBACK(dragDataReceived),
-                     _drop[SS_STROKE]);
-
-    g_signal_connect(_fill_place.gobj(),
-                     "drag_data_received",
-                     G_CALLBACK(dragDataReceived),
-                     _drop[SS_FILL]);
+    _stroke_place.signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(this, &SelectedStyle::dragDataReceived), _drop[SS_STROKE]));
+    _fill_place.signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &SelectedStyle::dragDataReceived), _drop[SS_FILL]));
 
     _fill_place.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_fill_click));
     _stroke_place.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_stroke_click));
@@ -471,25 +449,22 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
     }
 }
 
-void SelectedStyle::dragDataReceived( GtkWidget */*widget*/,
-                                      GdkDragContext */*drag_context*/,
-                                      gint /*x*/, gint /*y*/,
-                                      GtkSelectionData *data,
-                                      guint /*info*/,
-                                      guint /*event_time*/,
-                                      gpointer user_data )
+void SelectedStyle::dragDataReceived(const Glib::RefPtr<Gdk::DragContext> & /*drag_context*/,
+                                     int /*x*/, int /*y*/,
+                                     const Gtk::SelectionData &data,
+                                     guint /*info*/,
+                                     guint /*event_time*/,
+                                     DropTracker *tracker)
 {
-    DropTracker* tracker = (DropTracker*)user_data;
-
     // copied from drag-and-drop.cpp, case APP_OSWB_COLOR
     bool worked = false;
     Glib::ustring colorspec;
-    if (gtk_selection_data_get_format(data) == 8) {
+    if (data.get_format() == 8) {
         ege::PaintDef color;
         worked = color.fromMIMEData("application/x-oswb-color",
-                                    reinterpret_cast<char const *>(gtk_selection_data_get_data(data)),
-                                    gtk_selection_data_get_length(data),
-                                    gtk_selection_data_get_format(data));
+                                    reinterpret_cast<char const *>(data.get_data()),
+                                    data.get_length(),
+                                    data.get_format());
         if (worked) {
             if (color.getType() == ege::PaintDef::CLEAR) {
                 colorspec = ""; // TODO check if this is sufficient
@@ -922,7 +897,11 @@ SelectedStyle::update()
             place->set_tooltip_text(__na[i]);
             _mode[i] = SS_NA;
             if ( _dropEnabled[i] ) {
-                gtk_drag_dest_unset( GTK_WIDGET((i==SS_FILL) ? _fill_place.gobj():_stroke_place.gobj()) );
+                if (i == SS_FILL) {
+                    _fill_place.drag_dest_unset();
+                } else {
+                    _stroke_place.drag_dest_unset();
+                }
                 _dropEnabled[i] = false;
             }
             break;
@@ -930,11 +909,15 @@ SelectedStyle::update()
         case QUERY_STYLE_MULTIPLE_AVERAGED:
         case QUERY_STYLE_MULTIPLE_SAME:
             if ( !_dropEnabled[i] ) {
-                gtk_drag_dest_set( GTK_WIDGET( (i==SS_FILL) ? _fill_place.gobj():_stroke_place.gobj()),
-                                   GTK_DEST_DEFAULT_ALL,
-                                   ui_drop_target_entries,
-                                   nui_drop_target_entries,
-                                   GdkDragAction(GDK_ACTION_COPY | GDK_ACTION_MOVE) );
+                if (i == SS_FILL) {
+                    _fill_place.drag_dest_set(ui_drop_target_entries,
+                                              Gtk::DEST_DEFAULT_ALL,
+                                              Gdk::ACTION_COPY | Gdk::ACTION_MOVE);
+                } else {
+                    _stroke_place.drag_dest_set(ui_drop_target_entries,
+                                                Gtk::DEST_DEFAULT_ALL,
+                                                Gdk::ACTION_COPY | Gdk::ACTION_MOVE);
+                }
                 _dropEnabled[i] = true;
             }
             SPIPaint *paint;
@@ -1256,25 +1239,23 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         return;
 
     if (!scrolling && !cr_set) {
-        GtkWidget *w = GTK_WIDGET(gobj());
-        GdkPixbuf *pixbuf = nullptr;
+        Glib::RefPtr<Gdk::Pixbuf> pixbuf = Glib::RefPtr<Gdk::Pixbuf>();
 
         if (modifier == 2) { // saturation
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_s_xpm);
+            pixbuf = Gdk::Pixbuf::create_from_xpm_data((const gchar **)cursor_adj_s_xpm);
         } else if (modifier == 1) { // lightness
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_l_xpm);
+            pixbuf = Gdk::Pixbuf::create_from_xpm_data((const gchar **)cursor_adj_l_xpm);
         } else if (modifier == 3) { // alpha
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_a_xpm);
+            pixbuf = Gdk::Pixbuf::create_from_xpm_data((const gchar **)cursor_adj_a_xpm);
         } else { // hue
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_h_xpm);
+            pixbuf = Gdk::Pixbuf::create_from_xpm_data((const gchar **)cursor_adj_h_xpm);
         }
 
-        if (pixbuf != nullptr) {
-            cr = gdk_cursor_new_from_pixbuf(gdk_display_get_default(), pixbuf, 16, 16);
-            g_object_unref(pixbuf);
-            gdk_window_set_cursor(gtk_widget_get_window(w), cr);
-            g_object_unref(cr);
-            cr = nullptr;
+        if (pixbuf) {
+            auto display = Gdk::Display::get_default();
+            cr = Gdk::Cursor::create(display, pixbuf, 16, 16);
+            auto window = get_window();
+            window->set_cursor(cr);
             cr_set = true;
         }
     }
@@ -1334,12 +1315,8 @@ RotateableSwatch::do_release(double by, guint modifier) {
     color_adjust(hsla, by, startcolor, modifier);
 
     if (cr_set) {
-        GtkWidget *w = GTK_WIDGET(gobj());
-        gdk_window_set_cursor(gtk_widget_get_window(w), nullptr);
-        if (cr) {
-           g_object_unref(cr);
-           cr = nullptr;
-        }
+        auto window = get_window();
+        window->set_cursor();
         cr_set = false;
     }
 
