@@ -24,9 +24,7 @@ namespace Widget {
 
 class ColorICCSelectorImpl;
 
-class ColorICCSelector
-    : public Gtk::Grid
-      {
+class ColorICCSelector : public Gtk::Grid {
   public:
     static const gchar *MODE_NAME;
 
@@ -48,6 +46,19 @@ class ColorICCSelector
     // By default, disallow copy constructor and assignment operator
     ColorICCSelector(const ColorICCSelector &obj);
     ColorICCSelector &operator=(const ColorICCSelector &obj);
+
+    static const guint XPAD = 4;
+    static const guint YPAD = 4;
+
+    void attachToGrid(Gtk::Widget *child,
+                      guint        left,
+                      guint        top,
+                      guint        width,
+                      guint        height,
+                      bool         hexpand  = false,
+                      bool         centered = false,
+                      guint        xpadding = XPAD,
+                      guint        ypadding = YPAD);
 
     ColorICCSelectorImpl *_impl;
 };

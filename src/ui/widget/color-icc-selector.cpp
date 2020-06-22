@@ -68,10 +68,6 @@ extern guint update_in_progress;
     }
 #endif // DEBUG_LCMS
 
-
-#define XPAD 4
-#define YPAD 1
-
 namespace {
 
 size_t maxColorspaceComponentCount = 0;
@@ -85,28 +81,6 @@ std::set<cmsUInt32Number> knownColorspaces;
 
 #endif
 
-/**
- * Helper function to handle GTK2/GTK3 attachment #ifdef code.
- */
-void attachToGridOrTable(GtkWidget *parent, Gtk::Widget *child, guint left, guint top, guint width, guint height,
-                         bool hexpand = false, bool centered = false, guint xpadding = XPAD, guint ypadding = YPAD)
-{
-    child->set_margin_start( xpadding);
-    child->set_margin_end(   xpadding);
-    child->set_margin_top(   ypadding);
-    child->set_margin_bottom(ypadding);
-
-    if (hexpand) {
-        child->set_hexpand(true);
-    }
-
-    if (centered) {
-        child->set_halign(Gtk::ALIGN_CENTER);
-        child->set_valign(Gtk::ALIGN_CENTER);
-    }
-
-    gtk_grid_attach(GTK_GRID(parent), child->gobj(), left, top, width, height);
-}
 
 } // namespace
 
@@ -347,14 +321,35 @@ ColorICCSelectorImpl::ColorICCSelectorImpl(ColorICCSelector *owner, SelectedColo
 {
 }
 
+/**
+ * Helper function to handle attachment of child widget to the grid.
+ */
+void ColorICCSelector::attachToGrid(Gtk::Widget *child, guint left, guint top, guint width, guint height,
+                  bool hexpand, bool centered, guint xpadding, guint ypadding)
+{
+    child->set_margin_start( xpadding);
+    child->set_margin_end(   xpadding);
+    child->set_margin_top(   ypadding);
+    child->set_margin_bottom(ypadding);
+
+    if (hexpand) {
+        child->set_hexpand(true);
+    }
+
+    if (centered) {
+        child->set_halign(Gtk::ALIGN_CENTER);
+        child->set_valign(Gtk::ALIGN_CENTER);
+    }
+
+    attach(*child, left, top, width, height);
+}
+
 void ColorICCSelector::init()
 {
     gint row = 0;
 
     _impl->_updating = FALSE;
     _impl->_dragging = FALSE;
-
-    GtkWidget *t = GTK_WIDGET(gobj());
 
     _impl->_compUI.clear();
 
@@ -368,7 +363,7 @@ void ColorICCSelector::init()
     _impl->_fixupBtn->set_tooltip_text(_("Fix RGB fallback to match icc-color() value."));
     _impl->_fixupBtn->show();
 
-    attachToGridOrTable(t, _impl->_fixupBtn, 0, row, 1, 1);
+    attachToGrid(_impl->_fixupBtn, 0, row, 1, 1);
 
     // Combobox and store with 2 columns : label (0) and full name (1)
     _impl->_profile_store = Gtk::ListStore::create(_impl->_profile_cols);
@@ -386,7 +381,7 @@ void ColorICCSelector::init()
     _impl->_profileSel->show();
     _impl->_profileSel->set_active(0);
 
-    attachToGridOrTable(t, _impl->_profileSel, 1, row, 1, 1);
+    attachToGrid(_impl->_profileSel, 1, row, 1, 1);
 
 #if defined(HAVE_LIBLCMS2)
     _impl->_profChangedID = _impl->_profileSel->signal_changed().connect(sigc::mem_fun(*_impl, &ColorICCSelectorImpl::_profileSelected));
@@ -424,7 +419,7 @@ void ColorICCSelector::init()
         _impl->_compUI[i]._label->show();
         _impl->_compUI[i]._label->set_no_show_all(true);
 
-        attachToGridOrTable(t, _impl->_compUI[i]._label, 0, row, 1, 1);
+        attachToGrid(_impl->_compUI[i]._label, 0, row, 1, 1);
 
         // Adjustment
         guint scaleValue = _impl->_compUI[i]._component.scale;
@@ -444,7 +439,7 @@ void ColorICCSelector::init()
         _impl->_compUI[i]._slider->show();
         _impl->_compUI[i]._slider->set_no_show_all();
 
-        attachToGridOrTable(t, _impl->_compUI[i]._slider, 1, row, 1, 1, true);
+        attachToGrid(_impl->_compUI[i]._slider, 1, row, 1, 1, true);
 
         _impl->_compUI[i]._btn = Gtk::make_managed<Gtk::SpinButton>(_impl->_compUI[i]._adj, step, digits);
 #if defined(HAVE_LIBLCMS2)
@@ -457,7 +452,7 @@ void ColorICCSelector::init()
         _impl->_compUI[i]._btn->show();
         _impl->_compUI[i]._btn->set_no_show_all(true);
 
-        attachToGridOrTable(t, _impl->_compUI[i]._btn, 2, row, 1, 1, false, true);
+        attachToGrid(_impl->_compUI[i]._btn, 2, row, 1, 1, false, true);
 
         _impl->_compUI[i]._map = g_new(guchar, 4 * 1024);
         memset(_impl->_compUI[i]._map, 0x0ff, 1024 * 4);
@@ -481,7 +476,7 @@ void ColorICCSelector::init()
     _impl->_label->set_halign(Gtk::ALIGN_END);
     _impl->_label->show();
 
-    attachToGridOrTable(t, _impl->_label, 0, row, 1, 1);
+    attachToGrid(_impl->_label, 0, row, 1, 1);
 
     // Adjustment
     _impl->_adj = Gtk::Adjustment::create(0.0, 0.0, 100.0, 1.0, 10.0, 10.0);
@@ -491,7 +486,7 @@ void ColorICCSelector::init()
     _impl->_slider->set_tooltip_text(_("Alpha (opacity)"));
     _impl->_slider->show();
 
-    attachToGridOrTable(t, _impl->_slider, 1, row, 1, 1, true);
+    attachToGrid(_impl->_slider, 1, row, 1, 1, true);
 
     _impl->_slider->setColors(SP_RGBA32_F_COMPOSE(1.0, 1.0, 1.0, 0.0), SP_RGBA32_F_COMPOSE(1.0, 1.0, 1.0, 0.5),
                               SP_RGBA32_F_COMPOSE(1.0, 1.0, 1.0, 1.0));
@@ -504,7 +499,7 @@ void ColorICCSelector::init()
     _impl->_label->set_mnemonic_widget(*_impl->_sbtn);
     _impl->_sbtn->show();
 
-    attachToGridOrTable(t, _impl->_sbtn, 2, row, 1, 1, false, true);
+    attachToGrid(_impl->_sbtn, 2, row, 1, 1, false, true);
 
     // Signals
     _impl->_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_adjustmentChanged), _impl->_adj));
@@ -513,7 +508,7 @@ void ColorICCSelector::init()
     _impl->_slider->signal_released.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderReleased));
     _impl->_slider->signal_value_changed.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderChanged));
 
-    gtk_widget_show(t);
+    show();
 }
 
 void ColorICCSelectorImpl::_fixupHit()
@@ -818,22 +813,9 @@ void ColorICCSelectorImpl::_setProfile(SVGICCColor *profile)
                     _compUI[i]._slider->setColors(SPColor(0.0, 0.0, 0.0).toRGBA32(0xff),
                                                   SPColor(0.5, 0.5, 0.5).toRGBA32(0xff),
                                                   SPColor(1.0, 1.0, 1.0).toRGBA32(0xff));
-                    /*
-                                        _compUI[i]._adj = GTK_ADJUSTMENT( gtk_adjustment_new( val, 0.0, _fooScales[i],
-                       step, page, page ) );
-                                        g_signal_connect( G_OBJECT( _compUI[i]._adj ), "value_changed", G_CALLBACK(
-                       _adjustmentChanged ), _csel );
-
-                                        sp_color_slider_set_adjustment( SP_COLOR_SLIDER(_compUI[i]._slider),
-                       _compUI[i]._adj );
-                                        _compUI[i]._btn->set_adjustment(_compUI[i]._adj);
-                                        _compUI[i]._btn->set_digits(digits);
-                    */
                     _compUI[i]._label->show();
                     _compUI[i]._slider->show();
                     _compUI[i]._btn->show();
-                    // gtk_adjustment_set_value( _compUI[i]._adj, 0.0 );
-                    // gtk_adjustment_set_value( _compUI[i]._adj, val );
                 }
                 for (size_t i = _profChannelCount; i < _compUI.size(); i++) {
                     _compUI[i]._label->hide();
