@@ -99,7 +99,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
                                                               _width_adj,
                                                               "width",
                                                               &SPRect::setVisibleWidth));
-        _tracker->addAdjustment(_width_adj->gobj());
+        _tracker->addAdjustment(_width_adj);
         _width_item->set_sensitive(false);
 
         std::vector<double> values = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
@@ -115,7 +115,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
                                                                _height_adj,
                                                                "height",
                                                                &SPRect::setVisibleHeight));
-        _tracker->addAdjustment(_height_adj->gobj());
+        _tracker->addAdjustment(_height_adj);
 
         std::vector<double> values = { 1,  2,  3,  5, 10, 20, 50, 100, 200, 500};
         _height_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-height", _("H:"), _height_adj));
@@ -135,7 +135,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
                                                            _rx_adj,
                                                            "rx",
                                                            &SPRect::setVisibleRx));
-        _tracker->addAdjustment(_rx_adj->gobj());
+        _tracker->addAdjustment(_rx_adj);
         _rx_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-rx", _("Rx:"), _rx_adj));
         _rx_item->set_all_tooltip_text(_("Horizontal radius of rounded corners"));
         _rx_item->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
@@ -152,7 +152,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
                                                            _ry_adj,
                                                            "ry",
                                                            &SPRect::setVisibleRy));
-        _tracker->addAdjustment(_ry_adj->gobj());
+        _tracker->addAdjustment(_ry_adj);
         _ry_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-ry", _("Ry:"), _ry_adj));
         _ry_item->set_all_tooltip_text(_("Vertical radius of rounded corners"));
         _ry_item->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));

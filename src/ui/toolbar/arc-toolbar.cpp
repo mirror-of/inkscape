@@ -95,7 +95,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
         _rx_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("arc-rx", _("Rx:"), _rx_adj));
         _rx_item->set_tooltip_text(_("Horizontal radius of the circle, ellipse, or arc"));
         _rx_item->set_custom_numeric_menu_data(values);
-        _tracker->addAdjustment(_rx_adj->gobj());
+        _tracker->addAdjustment(_rx_adj);
         _rx_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &ArcToolbar::value_changed),
                                                            _rx_adj, "rx"));
@@ -111,7 +111,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
         _ry_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("arc-ry", _("Ry:"), _ry_adj));
         _ry_item->set_tooltip_text(_("Vertical radius of the circle, ellipse, or arc"));
         _ry_item->set_custom_numeric_menu_data(values);
-        _tracker->addAdjustment(_ry_adj->gobj());
+        _tracker->addAdjustment(_ry_adj);
         _ry_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &ArcToolbar::value_changed),
                                                            _ry_adj, "ry"));
@@ -242,7 +242,6 @@ ArcToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
     g_return_if_fail(unit != nullptr);
 
     SPDocument* document = _desktop->getDocument();
-    Geom::Scale scale = document->getDocumentScale();
 
     if (DocumentUndo::getUndoSensitive(document)) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();

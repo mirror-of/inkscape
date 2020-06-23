@@ -26,9 +26,9 @@
 using Inkscape::Util::Unit;
 using Inkscape::Util::UnitType;
 
-typedef struct _GObject       GObject;
-typedef struct _GtkAdjustment GtkAdjustment;
-typedef struct _GtkListStore  GtkListStore;
+namespace Gtk {
+class Adjustment;
+}
 
 namespace Inkscape {
 namespace UI {
@@ -47,9 +47,9 @@ public:
     Inkscape::Util::Unit const * getActiveUnit() const;
 
     void addUnit(Inkscape::Util::Unit const *u);
-    void addAdjustment(GtkAdjustment *adj);
+    void addAdjustment(Glib::RefPtr<Gtk::Adjustment> &adj);
     void prependUnit(Inkscape::Util::Unit const *u);
-    void setFullVal(GtkAdjustment *adj, gdouble val);
+    void setFullVal(Glib::RefPtr<Gtk::Adjustment> &adj, gdouble val);
     void changeLabel(Glib::ustring new_label, gint pos, bool onlylabel = false);
 
     ComboToolItem *create_tool_item(Glib::ustring const &label,
@@ -61,13 +61,9 @@ protected:
 private:
     // Callbacks
     void _unitChangedCB(int active);
-    static void _adjustmentFinalizedCB(gpointer data, GObject *where_the_object_was);
 
     void _setActive(gint index);
     void _fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscape::Util::Unit const *newUnit);
-
-    // Cleanup
-    void _adjustmentFinalized(GObject *where_the_object_was);
 
     gint _active;
     bool _isUpdating;
@@ -76,8 +72,8 @@ private:
 
     Glib::RefPtr<Gtk::ListStore> _store;
     std::vector<ComboToolItem *> _combo_list;
-    std::vector<GtkAdjustment*> _adjList;
-    std::map <GtkAdjustment *, gdouble> _priorValues;
+    std::vector<Glib::RefPtr<Gtk::Adjustment>> _adjList;
+    std::map <Glib::RefPtr<Gtk::Adjustment>, gdouble> _priorValues;
 };
 
 } // namespace Widget

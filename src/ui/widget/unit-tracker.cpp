@@ -14,10 +14,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "unit-tracker.h"
+
 #include <algorithm>
 #include <iostream>
 
-#include "unit-tracker.h"
+#include <gtkmm/adjustment.h>
 
 #include "combo-tool-item.h"
 
@@ -68,11 +70,6 @@ UnitTracker::UnitTracker(UnitType unit_type) :
 UnitTracker::~UnitTracker()
 {
     _combo_list.clear();
-
-    // Unhook weak references to GtkAdjustments
-    for (auto i : _adjList) {
-        g_object_weak_unref(G_OBJECT(i), _adjustmentFinalizedCB, this);
-    }
     _adjList.clear();
 }
 
@@ -118,10 +115,9 @@ void UnitTracker::setActiveUnitByAbbr(gchar const *abbr)
     setActiveUnit(u);
 }
 
-void UnitTracker::addAdjustment(GtkAdjustment *adj)
+void UnitTracker::addAdjustment(Glib::RefPtr<Gtk::Adjustment> &adj)
 {
     if (std::find(_adjList.begin(),_adjList.end(),adj) == _adjList.end()) {
-        g_object_weak_ref(G_OBJECT(adj), _adjustmentFinalizedCB, this);
         _adjList.push_back(adj);
     } else {
         std::cerr << "UnitTracker::addAjustment: Adjustment already added!" << std::endl;
@@ -158,7 +154,7 @@ void UnitTracker::prependUnit(Inkscape::Util::Unit const *u)
 
 }
 
-void UnitTracker::setFullVal(GtkAdjustment *adj, gdouble val)
+void UnitTracker::setFullVal(Glib::RefPtr<Gtk::Adjustment> &adj, gdouble val)
 {
     _priorValues[adj] = val;
 }
@@ -178,25 +174,6 @@ UnitTracker::create_tool_item(Glib::ustring const &label,
 void UnitTracker::_unitChangedCB(int active)
 {
     _setActive(active);
-}
-
-void UnitTracker::_adjustmentFinalizedCB(gpointer data, GObject *where_the_object_was)
-{
-    if (data && where_the_object_was) {
-        UnitTracker *self = reinterpret_cast<UnitTracker *>(data);
-        self->_adjustmentFinalized(where_the_object_was);
-    }
-}
-
-void UnitTracker::_adjustmentFinalized(GObject *where_the_object_was)
-{
-    GtkAdjustment* adj = (GtkAdjustment*)(where_the_object_was);
-    auto it = std::find(_adjList.begin(),_adjList.end(), adj);
-    if (it != _adjList.end()) {
-        _adjList.erase(it);
-    } else {
-        g_warning("Received a finalization callback for unknown object %p", where_the_object_was);
-    }
 }
 
 void UnitTracker::_setActive(gint active)
@@ -255,7 +232,7 @@ void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscap
 {
     _isUpdating = true;
     for ( auto adj : _adjList ) {
-        gdouble oldVal = gtk_adjustment_get_value(adj);
+        auto oldVal = adj->get_value();
         gdouble val = oldVal;
 
         if ( (oldUnit->type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
@@ -273,7 +250,7 @@ void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscap
             val = Inkscape::Util::Quantity::convert(oldVal, oldUnit, newUnit);
         }
 
-        gtk_adjustment_set_value(adj, val);
+        adj->set_value(val);
     }
     _isUpdating = false;
 }

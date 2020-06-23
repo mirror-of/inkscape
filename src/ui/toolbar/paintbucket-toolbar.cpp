@@ -103,7 +103,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
         _offset_adj = Gtk::Adjustment::create(offset_val, -1e4, 1e4, 0.1, 0.5);
         auto offset_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:paintbucket-offset", _("Grow/shrink by:"), _offset_adj, 1, 2));
         offset_item->set_tooltip_text(_("The amount to grow (positive) or shrink (negative) the created fill path"));
-        _tracker->addAdjustment(_offset_adj->gobj());
+        _tracker->addAdjustment(_offset_adj);
         offset_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _offset_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::offset_changed));
         add(*offset_item);

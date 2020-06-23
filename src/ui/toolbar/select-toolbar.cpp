@@ -106,7 +106,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     auto x_val = prefs->getDouble("/tools/select/X", 0.0);
     _adj_x = Gtk::Adjustment::create(x_val, -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
     _adj_x->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_x));
-    _tracker->addAdjustment(_adj_x->gobj());
+    _tracker->addAdjustment(_adj_x);
 
     auto x_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-x",
                                                                 C_("Select toolbar", "X:"),
@@ -121,7 +121,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     auto y_val = prefs->getDouble("/tools/select/Y", 0.0);
     _adj_y = Gtk::Adjustment::create(y_val, -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
     _adj_y->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_y));
-    _tracker->addAdjustment(_adj_y->gobj());
+    _tracker->addAdjustment(_adj_y);
 
     auto y_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-y",
                                                                 C_("Select toolbar", "Y:"),
@@ -136,7 +136,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     auto w_val = prefs->getDouble("/tools/select/width", 0.0);
     _adj_w = Gtk::Adjustment::create(w_val, 0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
     _adj_w->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_w));
-    _tracker->addAdjustment(_adj_w->gobj());
+    _tracker->addAdjustment(_adj_w);
 
     auto w_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-width",
                                                                 C_("Select toolbar", "W:"),
@@ -158,7 +158,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     auto h_val = prefs->getDouble("/tools/select/height", 0.0);
     _adj_h = Gtk::Adjustment::create(h_val, 0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
     _adj_h->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_h));
-    _tracker->addAdjustment(_adj_h->gobj());
+    _tracker->addAdjustment(_adj_h);
 
     auto h_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-height",
                                                                 C_("Select toolbar", "H:"),
@@ -400,10 +400,10 @@ SelectToolbar::layout_widget_update(Inkscape::Selection *sel)
                 _adj_y->set_value(val);
                 _adj_w->set_value(val);
                 _adj_h->set_value(val);
-                _tracker->setFullVal( _adj_x->gobj(), keyval[0].val );
-                _tracker->setFullVal( _adj_y->gobj(), keyval[1].val );
-                _tracker->setFullVal( _adj_w->gobj(), keyval[2].val );
-                _tracker->setFullVal( _adj_h->gobj(), keyval[3].val );
+                _tracker->setFullVal( _adj_x, keyval[0].val );
+                _tracker->setFullVal( _adj_y, keyval[1].val );
+                _tracker->setFullVal( _adj_w, keyval[2].val );
+                _tracker->setFullVal( _adj_h, keyval[3].val );
             } else {
                 _adj_x->set_value(Quantity::convert(keyval[0].val, "px", unit));
                 _adj_y->set_value(Quantity::convert(keyval[1].val, "px", unit));
