@@ -54,7 +54,7 @@ private:
     UI::Widget::SpinButtonToolItem *_angle_item;
     Gtk::ComboBoxText *_profile_selector_combo;
 
-    std::map<Glib::ustring, GObject *> _widget_map;
+    std::map<Glib::ustring, Gtk::Widget *> _widget_map;
 
     Glib::RefPtr<Gtk::Adjustment> _width_adj;
     Glib::RefPtr<Gtk::Adjustment> _mass_adj;
