@@ -24,6 +24,11 @@
 
 class SPDesktop;
 
+namespace Gtk {
+class Bin;
+class EventBox;
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Tools {
@@ -47,19 +52,19 @@ namespace Widget {
 class ToolboxFactory
 {
 public:
-    static void setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop);
-    static void setOrientation(GtkWidget* toolbox, GtkOrientation orientation);
-    static void showAuxToolbox(GtkWidget* toolbox);
+    static void setToolboxDesktop(Gtk::Bin *toolbox, SPDesktop *desktop);
+    static void setOrientation(Gtk::EventBox *toolbox, Gtk::Orientation orientation);
+    static void showAuxToolbox(Gtk::Bin *toolbox);
 
-    static GtkWidget *createToolToolbox();
-    static GtkWidget *createAuxToolbox();
-    static GtkWidget *createCommandsToolbox();
-    static GtkWidget *createSnapToolbox();
+    static Gtk::EventBox * createToolToolbox();
+    static Gtk::EventBox * createAuxToolbox();
+    static Gtk::EventBox * createCommandsToolbox();
+    static Gtk::EventBox * createSnapToolbox();
 
 
     static Glib::ustring getToolboxName(GtkWidget* toolbox);
 
-    static void updateSnapToolbox(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext, GtkWidget *toolbox);
+    static void updateSnapToolbox(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext, Gtk::Bin *toolbox);
 
     static GtkIconSize prefToSize(Glib::ustring const &path, int base = 0 );
     static Gtk::IconSize prefToSize_mm(Glib::ustring const &path, int base = 0);

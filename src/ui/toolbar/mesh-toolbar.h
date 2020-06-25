@@ -87,7 +87,7 @@ protected:
     MeshToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * create(SPDesktop *desktop);
+    static Toolbar * create(SPDesktop *desktop);
 };
 
 }

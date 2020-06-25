@@ -102,8 +102,8 @@ using Inkscape::UI::Tools::ToolBase;
 using Inkscape::IO::Resource::get_filename;
 using Inkscape::IO::Resource::UIS;
 
-typedef void (*SetupFunction)(GtkWidget *toolbox, SPDesktop *desktop);
-typedef void (*UpdateFunction)(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
+typedef void (*SetupFunction)(Gtk::Bin *toolbox, SPDesktop *desktop);
+typedef void (*UpdateFunction)(SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *toolbox);
 
 enum BarId {
     BAR_TOOL = 0,
@@ -170,7 +170,7 @@ static struct {
 static struct {
     gchar const *type_name;
     gchar const *data_name;
-    GtkWidget *(*create_func)(SPDesktop *desktop);
+    Inkscape::UI::Toolbar::Toolbar *(*create_func)(SPDesktop *desktop);
     gchar const *ui_name;
     gint swatch_verb_id;
     gchar const *swatch_tool;
@@ -229,16 +229,16 @@ static struct {
 
 static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* desktop );
 
-static void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
+static void setup_snap_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
 
-static void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
-static void update_tool_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
+static void setup_tool_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
+static void update_tool_toolbox(SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *toolbox);
 
-static void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
-static void update_aux_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
+static void setup_aux_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
+static void update_aux_toolbox(SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *toolbox);
 
-static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
-static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
+static void setup_commands_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
+static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *toolbox);
 
 static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
 {
@@ -379,73 +379,72 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
 }
 
 
-static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType /*handlePos*/ )
+static Gtk::EventBox * toolboxNewCommon(Gtk::Box * tb, BarId id, Gtk::PositionType /*handlePos*/)
 {
-    g_object_set_data(G_OBJECT(tb), "desktop", nullptr);
+    tb->set_data("desktop", nullptr);
 
-    gtk_widget_set_sensitive(tb, FALSE);
+    tb->set_sensitive(false);
 
-    GtkWidget *hb = gtk_event_box_new(); // A simple, neutral container.
-    gtk_widget_set_name(hb, "ToolboxCommon");
+    auto hb = Gtk::make_managed<Gtk::EventBox>(); // A simple, neutral container.
+    hb->set_name("ToolboxCommon");
 
-    gtk_container_add(GTK_CONTAINER(hb), tb);
-    gtk_widget_show(GTK_WIDGET(tb));
+    hb->add(*tb);
+    tb->show();
 
     sigc::connection* conn = new sigc::connection;
-    g_object_set_data(G_OBJECT(hb), "event_context_connection", conn);
+    hb->set_data("event_context_connection", conn);
 
     gpointer val = GINT_TO_POINTER(id);
-    g_object_set_data(G_OBJECT(hb), BAR_ID_KEY, val);
+    hb->set_data(BAR_ID_KEY, val);
 
     return hb;
 }
 
-GtkWidget *ToolboxFactory::createToolToolbox()
+Gtk::EventBox * ToolboxFactory::createToolToolbox()
 {
-    auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(tb, "ToolToolbox");
-    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
+    auto tb = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL, 0);
+    tb->set_name("ToolToolbox");
+    tb->set_homogeneous(false);
 
-    return toolboxNewCommon( tb, BAR_TOOL, GTK_POS_TOP );
+    return toolboxNewCommon(tb, BAR_TOOL, Gtk::POS_TOP);
 }
 
-GtkWidget *ToolboxFactory::createAuxToolbox()
+Gtk::EventBox * ToolboxFactory::createAuxToolbox()
 {
-    auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(tb, "AuxToolbox");
-    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
+    auto tb = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL, 0);
+    tb->set_name("AuxToolbox");
+    tb->set_homogeneous(false);
 
-    return toolboxNewCommon( tb, BAR_AUX, GTK_POS_LEFT );
+    return toolboxNewCommon(tb, BAR_AUX, Gtk::POS_LEFT);
 }
 
 //####################################
 //# Commands Bar
 //####################################
 
-GtkWidget *ToolboxFactory::createCommandsToolbox()
+Gtk::EventBox * ToolboxFactory::createCommandsToolbox()
 {
-    auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(tb, "CommandsToolbox");
-    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
+    auto tb = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL, 0);
+    tb->set_name("CommandsToolbox");
+    tb->set_homogeneous(false);
 
-    return toolboxNewCommon( tb, BAR_COMMANDS, GTK_POS_LEFT );
+    return toolboxNewCommon(tb, BAR_COMMANDS, Gtk::POS_LEFT);
 }
 
-GtkWidget *ToolboxFactory::createSnapToolbox()
+Gtk::EventBox * ToolboxFactory::createSnapToolbox()
 {
-    auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(tb, "SnapToolbox");
-    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
+    auto tb = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL, 0);
+    tb->set_name("SnapToolbox");
+    tb->set_homogeneous(false);
 
-    return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
+    return toolboxNewCommon(tb, BAR_SNAP, Gtk::POS_LEFT);
 }
 
-void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
+void ToolboxFactory::setToolboxDesktop(Gtk::Bin *toolbox, SPDesktop *desktop)
 {
-    sigc::connection *conn = static_cast<sigc::connection*>(g_object_get_data(G_OBJECT(toolbox),
-                                                                              "event_context_connection"));
+    auto conn = static_cast<sigc::connection*>(toolbox->get_data("event_context_connection"));
 
-    BarId id = static_cast<BarId>( GPOINTER_TO_INT(g_object_get_data(G_OBJECT(toolbox), BAR_ID_KEY)) );
+    BarId id = static_cast<BarId>(GPOINTER_TO_INT(toolbox->get_data(BAR_ID_KEY)));
 
     SetupFunction setup_func = nullptr;
     UpdateFunction update_func = nullptr;
@@ -457,7 +456,7 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
             break;
 
         case BAR_AUX:
-            toolbox = gtk_bin_get_child(GTK_BIN(toolbox));
+            toolbox = dynamic_cast<Gtk::Bin *>(toolbox->get_child());
             setup_func = setup_aux_toolbox;
             update_func = update_aux_toolbox;
             break;
@@ -475,169 +474,141 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
             g_warning("Unexpected toolbox id encountered.");
     }
 
-    gpointer ptr = g_object_get_data(G_OBJECT(toolbox), "desktop");
+    gpointer ptr = toolbox->get_data("desktop");
     SPDesktop *old_desktop = static_cast<SPDesktop*>(ptr);
 
     if (old_desktop) {
-        std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(toolbox))->get_children();
+        auto children = toolbox->get_children();
         for ( auto i:children ) {
-            gtk_container_remove( GTK_CONTAINER(toolbox), i->gobj() );
+            gtk_container_remove(GTK_CONTAINER(toolbox->gobj()), i->gobj());
         }
     }
 
-    g_object_set_data(G_OBJECT(toolbox), "desktop", (gpointer)desktop);
+    toolbox->set_data("desktop", (gpointer)desktop);
 
     if (desktop && setup_func && update_func) {
-        gtk_widget_set_sensitive(toolbox, TRUE);
+        toolbox->set_sensitive(true);
         setup_func(toolbox, desktop);
         update_func(desktop, desktop->event_context, toolbox);
-        *conn = desktop->connectEventContextChanged(sigc::bind (sigc::ptr_fun(update_func), toolbox));
+        *conn = desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(update_func), toolbox));
     } else {
-        gtk_widget_set_sensitive(toolbox, FALSE);
+        toolbox->set_sensitive(false);
     }
 
 } // end of sp_toolbox_set_desktop()
 
 
-static void setupToolboxCommon( GtkWidget *toolbox,
+static void setupToolboxCommon( Gtk::Bin  *toolbox,
                                 SPDesktop *desktop,
                                 gchar const *ui_file,
                                 gchar const* toolbarName,
                                 gchar const* sizePref )
 {
-    Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto mainActions = create_or_fetch_actions(desktop);
+    auto prefs = Inkscape::Preferences::get();
+    auto mgr = Gtk::UIManager::create();
+    auto orientation = Gtk::ORIENTATION_HORIZONTAL;
 
-    GtkUIManager* mgr = gtk_ui_manager_new();
-    GError* err = nullptr;
+    mgr->insert_action_group(mainActions, 0);
 
-    GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
-
-    gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
-
-    Glib::ustring filename = get_filename(UIS, ui_file);
-    gtk_ui_manager_add_ui_from_file( mgr, filename.c_str(), &err );
-    if(err) {
-        g_warning("Failed to load %s: %s", filename.c_str(), err->message);
-        g_error_free(err);
+    auto filename = get_filename(UIS, ui_file);
+    try {
+        mgr->add_ui_from_file(filename);
+    } catch (Glib::Error &err) {
+        g_warning("Failed to load %s: %s", filename.c_str(), err.what().c_str());
         return;
     }
 
-    GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, toolbarName );
+    auto toolBar = dynamic_cast<Gtk::Toolbar *>(mgr->get_widget(toolbarName));
     if ( prefs->getBool("/toolbox/icononly", true) ) {
-        gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
+        toolBar->set_toolbar_style(Gtk::TOOLBAR_ICONS);
     }
 
-    GtkIconSize toolboxSize = ToolboxFactory::prefToSize(sizePref);
-    gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
+    auto toolboxSize = ToolboxFactory::prefToSize(sizePref);
+    toolBar->set_icon_size(static_cast<Gtk::IconSize>(toolboxSize));
 
-    GtkPositionType pos = static_cast<GtkPositionType>(GPOINTER_TO_INT(g_object_get_data( G_OBJECT(toolbox), HANDLE_POS_MARK )));
-    orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    gtk_orientable_set_orientation (GTK_ORIENTABLE(toolBar), orientation);
-    gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolBar), TRUE);
+    auto pos = static_cast<Gtk::PositionType>(GPOINTER_TO_INT(toolbox->get_data(HANDLE_POS_MARK)));
+    orientation = ((pos == Gtk::POS_LEFT) || (pos == Gtk::POS_RIGHT)) ? Gtk::ORIENTATION_HORIZONTAL : Gtk::ORIENTATION_VERTICAL;
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(toolBar->gobj()), static_cast<GtkOrientation>(orientation));
+    toolBar->set_show_arrow(true);
 
-    g_object_set_data(G_OBJECT(toolBar), "desktop", nullptr);
+    toolBar->set_data("desktop", nullptr);
 
-    GtkWidget* child = gtk_bin_get_child(GTK_BIN(toolbox));
-    if ( child ) {
-        gtk_container_remove( GTK_CONTAINER(toolbox), child );
+    auto child = toolbox->get_child();
+    if (child) {
+        gtk_container_remove(GTK_CONTAINER(toolbox->gobj()), child->gobj());
     }
 
-    gtk_container_add( GTK_CONTAINER(toolbox), toolBar );
+    toolbox->add(*toolBar);
 }
 
 #define noDUMP_DETAILS 1
 
-void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientation)
+void ToolboxFactory::setOrientation(Gtk::EventBox *toolbox, Gtk::Orientation orientation)
 {
-#if DUMP_DETAILS
-    g_message("Set orientation for %p to be %d", toolbox, orientation);
-    GType type = G_OBJECT_TYPE(toolbox);
-    g_message("        [%s]", g_type_name(type));
-    g_message("             %p", g_object_get_data(G_OBJECT(toolbox), BAR_ID_KEY));
-#endif
+    auto pos = (orientation == Gtk::ORIENTATION_HORIZONTAL) ? Gtk::POS_LEFT : Gtk::POS_TOP;
 
-    GtkPositionType pos = (orientation == GTK_ORIENTATION_HORIZONTAL) ? GTK_POS_LEFT : GTK_POS_TOP;
+    auto child = toolbox->get_child();
+    if (child) {
+        auto child_box = dynamic_cast<Gtk::Box *>(child);
+        auto child_toolbar = dynamic_cast<Gtk::Toolbar *>(child);
 
-    if (GTK_IS_BIN(toolbox)) {
-#if DUMP_DETAILS
-        g_message("            is a BIN");
-#endif // DUMP_DETAILS
-        GtkWidget* child = gtk_bin_get_child(GTK_BIN(toolbox));
-        if (child) {
-#if DUMP_DETAILS
-            GType type2 = G_OBJECT_TYPE(child);
-            g_message("            child    [%s]", g_type_name(type2));
-#endif // DUMP_DETAILS
+        if (child_box) {
+            auto children = child_box->get_children();
+            if (!children.empty()) {
+                for (auto child2:children) {
+                    auto child2_container = dynamic_cast<Gtk::Container *>(child2);
 
-            if (GTK_IS_BOX(child)) {
-#if DUMP_DETAILS
-                g_message("                is a BOX");
-#endif // DUMP_DETAILS
-
-                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(child))->get_children();
-                if (!children.empty()) {
-                    for (auto curr:children) {
-                        GtkWidget* child2 = curr->gobj();
-#if DUMP_DETAILS
-                        GType type3 = G_OBJECT_TYPE(child2);
-                        g_message("                child2   [%s]", g_type_name(type3));
-#endif // DUMP_DETAILS
-
-                        if (GTK_IS_CONTAINER(child2)) {
-                            std::vector<Gtk::Widget*> children2 = Glib::wrap(GTK_CONTAINER(child2))->get_children();
-                            if (!children2.empty()) {
-                                for (auto curr2:children2) {
-                                    GtkWidget* child3 = curr2->gobj();
-#if DUMP_DETAILS
-                                    GType type4 = G_OBJECT_TYPE(child3);
-                                    g_message("                    child3   [%s]", g_type_name(type4));
-#endif // DUMP_DETAILS
-                                    if (GTK_IS_TOOLBAR(child3)) {
-                                        GtkToolbar* childBar = GTK_TOOLBAR(child3);
-                                        gtk_orientable_set_orientation(GTK_ORIENTABLE(childBar), orientation);
-                                    }
+                    if (child2_container) {
+                        auto children2 = child2_container->get_children();
+                        if (!children2.empty()) {
+                            for (auto child3:children2) {
+                                auto child3_toolbar = dynamic_cast<Gtk::Toolbar *>(child3);
+                                if (child3_toolbar) {
+                                    gtk_orientable_set_orientation(GTK_ORIENTABLE(child3_toolbar->gobj()),
+                                                                   static_cast<GtkOrientation>(orientation));
                                 }
                             }
                         }
-
-
-                        if (GTK_IS_TOOLBAR(child2)) {
-                            GtkToolbar* childBar = GTK_TOOLBAR(child2);
-                            gtk_orientable_set_orientation(GTK_ORIENTABLE(childBar), orientation);
-                        } else {
-                            g_message("need to add dynamic switch");
-                        }
                     }
-                } else {
-                    // The call is being made before the toolbox proper has been setup.
-                    g_object_set_data(G_OBJECT(toolbox), HANDLE_POS_MARK, GINT_TO_POINTER(pos));
+
+                    auto child2_toolbar = dynamic_cast<Gtk::Toolbar *>(child2);
+
+                    if (child2_toolbar) {
+                        gtk_orientable_set_orientation(GTK_ORIENTABLE(child2_toolbar->gobj()),
+                                                       static_cast<GtkOrientation>(orientation));
+                    } else {
+                        g_message("need to add dynamic switch");
+                    }
                 }
-            } else if (GTK_IS_TOOLBAR(child)) {
-                GtkToolbar* toolbar = GTK_TOOLBAR(child);
-                gtk_orientable_set_orientation( GTK_ORIENTABLE(toolbar), orientation );
+            } else {
+                // The call is being made before the toolbox proper has been setup.
+                toolbox->set_data(HANDLE_POS_MARK, GINT_TO_POINTER(pos));
             }
+        } else if (child_toolbar) {
+            gtk_orientable_set_orientation(GTK_ORIENTABLE(child_toolbar->gobj()),
+                                           static_cast<GtkOrientation>(orientation));
         }
     }
 }
 
-void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
+void setup_tool_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop)
 {
     setupToolboxCommon(toolbox, desktop, "toolbar-tool.ui", "/ui/ToolToolbar", "/toolbox/tools/small");
 }
 
-void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget * /*toolbox*/ )
+void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin * /*toolbox*/ )
 {
     gchar const *const tname = ( eventcontext
                                  ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                                  : nullptr );
-    Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
+    auto mainActions = create_or_fetch_actions( desktop );
 
     for (int i = 0 ; tools[i].type_name ; i++ ) {
-        Glib::RefPtr<Gtk::Action> act = mainActions->get_action( Inkscape::Verb::get(tools[i].verb)->get_id() );
+        auto act = mainActions->get_action( Inkscape::Verb::get(tools[i].verb)->get_id() );
         if ( act ) {
             bool setActive = tname && !strcmp(tname, tools[i].type_name);
-            Glib::RefPtr<VerbAction> verbAct = Glib::RefPtr<VerbAction>::cast_dynamic(act);
+            auto verbAct = Glib::RefPtr<VerbAction>::cast_dynamic(act);
             if ( verbAct ) {
                 verbAct->set_active(setActive);
             }
@@ -655,7 +626,7 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
  *          The actual method used for each toolbar is specified in the
  *          "aux_toolboxes" array, defined above.
  */
-void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
+void setup_aux_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -663,20 +634,20 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     // their "create" methods.
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         if (aux_toolboxes[i].create_func) {
-            GtkWidget *sub_toolbox = aux_toolboxes[i].create_func(desktop);
-            gtk_widget_set_name( sub_toolbox, "SubToolBox" );
+            auto sub_toolbox = aux_toolboxes[i].create_func(desktop);
+            sub_toolbox->set_name("SubToolBox");
 
-            auto holder = gtk_grid_new();
-            gtk_grid_attach(GTK_GRID(holder), sub_toolbox, 0, 0, 1, 1);
+            auto holder = Gtk::make_managed<Gtk::Grid>();
+            holder->attach(*sub_toolbox, 0, 0, 1, 1);
 
             // This part is just for styling
             if ( prefs->getBool( "/toolbox/icononly", true) ) {
-                gtk_toolbar_set_style( GTK_TOOLBAR(sub_toolbox), GTK_TOOLBAR_ICONS );
+                sub_toolbox->set_toolbar_style(Gtk::TOOLBAR_ICONS);
             }
 
-            GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
-            gtk_toolbar_set_icon_size( GTK_TOOLBAR(sub_toolbox), static_cast<GtkIconSize>(toolboxSize) );
-            gtk_widget_set_hexpand(sub_toolbox, TRUE);
+            auto toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
+            sub_toolbox->set_icon_size(static_cast<Gtk::IconSize>(toolboxSize));
+            sub_toolbox->set_hexpand(true);
 
             // Add a swatch widget if one was specified
             if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
@@ -689,85 +660,82 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                 swatch->set_margin_top(AUX_SPACING);
                 swatch->set_margin_bottom(AUX_SPACING);
 
-                auto swatch_ = GTK_WIDGET( swatch->gobj() );
-                gtk_grid_attach( GTK_GRID(holder), swatch_, 1, 0, 1, 1);
+                holder->attach(*swatch, 1, 0, 1, 1);
             }
 
             // Add the new toolbar into the toolbox (i.e., make it the visible toolbar)
             // and also store a pointer to it inside the toolbox.  This allows the
             // active toolbar to be changed.
-            gtk_container_add(GTK_CONTAINER(toolbox), holder);
-            gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
+            toolbox->add(*holder);
+            holder->set_name(aux_toolboxes[i].ui_name);
 
             // TODO: We could make the toolbox a custom subclass of GtkEventBox
             //       so that we can store a list of toolbars, rather than using
             //       GObject data
-            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, holder);
-            gtk_widget_show(sub_toolbox);
-            gtk_widget_show(holder);
+            toolbox->set_data(aux_toolboxes[i].data_name, holder);
+            sub_toolbox->show();
+            holder->show();
         } else if (aux_toolboxes[i].swatch_verb_id != SP_VERB_NONE) {
             g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
     }
 }
 
-void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidget *toolbox)
+void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, Gtk::Bin *toolbox)
 {
     gchar const *tname = ( eventcontext
                            ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                            : nullptr );
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name));
+        auto sub_toolbox = reinterpret_cast<Gtk::Widget *>(toolbox->get_data(aux_toolboxes[i].data_name));
         if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
-            gtk_widget_show_now(sub_toolbox);
-            g_object_set_data(G_OBJECT(toolbox), "shows", sub_toolbox);
+            sub_toolbox->show_now();
+            toolbox->set_data("shows", sub_toolbox);
         } else {
-            gtk_widget_hide(sub_toolbox);
+            toolbox->hide();
         }
         //FIX issue #Inkscape686
-        GtkAllocation allocation;
-        gtk_widget_get_allocation(sub_toolbox, &allocation);
-        gtk_widget_size_allocate(sub_toolbox, &allocation);
+        auto allocation = sub_toolbox->get_allocation();
+        sub_toolbox->size_allocate(allocation);
     }
     //FIX issue #Inkscape125
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(toolbox, &allocation);
-    gtk_widget_size_allocate(toolbox, &allocation);  
+    auto allocation = toolbox->get_allocation();
+    toolbox->size_allocate(allocation);
 }
 
-void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
+void setup_commands_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop)
 {
     setupToolboxCommon(toolbox, desktop, "toolbar-commands.ui", "/ui/CommandsToolbar", "/toolbox/small");
 }
 
-void update_commands_toolbox(SPDesktop * /*desktop*/, ToolBase * /*eventcontext*/, GtkWidget * /*toolbox*/)
+void update_commands_toolbox(SPDesktop * /*desktop*/, ToolBase * /*eventcontext*/, Gtk::Bin * /*toolbox*/)
 {
 }
 
-void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
+void setup_snap_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop)
 {
     Glib::ustring sizePref("/toolbox/secondary");
     auto toolBar = Inkscape::UI::Toolbar::SnapToolbar::create(desktop);
     auto prefs = Inkscape::Preferences::get();
 
     if ( prefs->getBool("/toolbox/icononly", true) ) {
-        gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
+        toolBar->set_toolbar_style(Gtk::TOOLBAR_ICONS);
     }
 
-    GtkIconSize toolboxSize = ToolboxFactory::prefToSize(sizePref.c_str());
-    gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
+    auto toolboxSize = ToolboxFactory::prefToSize(sizePref.c_str());
+    toolBar->set_icon_size(static_cast<Gtk::IconSize>(toolboxSize));
 
-    GtkPositionType pos = static_cast<GtkPositionType>(GPOINTER_TO_INT(g_object_get_data( G_OBJECT(toolbox), HANDLE_POS_MARK )));
-    auto orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    gtk_orientable_set_orientation (GTK_ORIENTABLE(toolBar), orientation);
-    gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolBar), TRUE);
+    auto pos = static_cast<Gtk::PositionType>(GPOINTER_TO_INT(toolbox->get_data(HANDLE_POS_MARK)));
+    auto orientation = ((pos == Gtk::POS_LEFT) || (pos == Gtk::POS_RIGHT)) ? Gtk::ORIENTATION_HORIZONTAL : Gtk::ORIENTATION_VERTICAL;
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(toolBar->gobj()), static_cast<GtkOrientation>(orientation));
+    toolBar->set_show_arrow(true);
 
-    GtkWidget* child = gtk_bin_get_child(GTK_BIN(toolbox));
-    if ( child ) {
-        gtk_container_remove( GTK_CONTAINER(toolbox), child );
+    auto child = toolbox->get_child();
+    if (child) {
+        gtk_container_remove(GTK_CONTAINER(toolbox->gobj()), child->gobj());
     }
 
-    gtk_container_add( GTK_CONTAINER(toolbox), toolBar );
+    toolbox->add(*toolBar);
 }
 
 Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
@@ -792,9 +760,9 @@ Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
     return name;
 }
 
-void ToolboxFactory::updateSnapToolbox(SPDesktop *desktop, ToolBase * /*eventcontext*/, GtkWidget *toolbox)
+void ToolboxFactory::updateSnapToolbox(SPDesktop *desktop, ToolBase * /*eventcontext*/, Gtk::Bin *toolbox)
 {
-    auto tb = dynamic_cast<Inkscape::UI::Toolbar::SnapToolbar*>(Glib::wrap(GTK_TOOLBAR(gtk_bin_get_child(GTK_BIN(toolbox)))));
+    auto tb = dynamic_cast<Inkscape::UI::Toolbar::SnapToolbar*>(toolbox->get_child());
 
     if (!tb) {
         std::cerr << "Can't get snap toolbar" << std::endl;
@@ -804,16 +772,16 @@ void ToolboxFactory::updateSnapToolbox(SPDesktop *desktop, ToolBase * /*eventcon
     Inkscape::UI::Toolbar::SnapToolbar::update(tb);
 }
 
-void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)
+void ToolboxFactory::showAuxToolbox(Gtk::Bin *toolbox_toplevel)
 {
-    gtk_widget_show(toolbox_toplevel);
-    GtkWidget *toolbox = gtk_bin_get_child(GTK_BIN(toolbox_toplevel));
+    toolbox_toplevel->show();
+    auto toolbox = toolbox_toplevel->get_child();
 
-    GtkWidget *shown_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), "shows"));
+    auto shown_toolbox = reinterpret_cast<Gtk::Bin *>(toolbox->get_data("shows"));
     if (!shown_toolbox) {
         return;
     }
-    gtk_widget_show(toolbox);
+    toolbox->show();
 }
 
 #define MODE_LABEL_WIDTH 70

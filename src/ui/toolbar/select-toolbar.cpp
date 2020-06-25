@@ -233,11 +233,10 @@ void SelectToolbar::on_unrealize()
     parent_type::on_unrealize();
 }
 
-GtkWidget *
+Toolbar *
 SelectToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new SelectToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new SelectToolbar(desktop);
 }
 
 void

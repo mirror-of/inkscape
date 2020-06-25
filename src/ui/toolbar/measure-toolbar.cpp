@@ -224,12 +224,11 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 MeasureToolbar::create(SPDesktop * desktop)
 {
-    auto toolbar = new MeasureToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
-} // MeasureToolbar::prep()
+    return new MeasureToolbar(desktop);
+} // MeasureToolbar::create()
 
 void
 MeasureToolbar::fontsize_value_changed()

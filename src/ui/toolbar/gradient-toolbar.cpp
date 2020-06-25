@@ -549,11 +549,10 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
  * Gradient auxiliary toolbar construction and setup.
  *
  */
-GtkWidget *
+Toolbar *
 GradientToolbar::create(SPDesktop * desktop)
 {
-    auto toolbar = new GradientToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new GradientToolbar(desktop);
 }
 
 void

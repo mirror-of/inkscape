@@ -215,11 +215,10 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
     set_eraser_mode_visibility(eraser_mode);
 }
 
-GtkWidget *
+Toolbar *
 EraserToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new EraserToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new EraserToolbar(desktop);
 }
 
 void

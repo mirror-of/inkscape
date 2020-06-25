@@ -173,11 +173,10 @@ Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 Box3DToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new Box3DToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new Box3DToolbar(desktop);
 }
 
 void

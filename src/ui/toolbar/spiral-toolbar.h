@@ -82,7 +82,7 @@ protected:
     ~SpiralToolbar() override;
 
 public:
-    static GtkWidget * create(SPDesktop *desktop);
+    static Toolbar * create(SPDesktop *desktop);
 
     static void event_attr_changed(Inkscape::XML::Node *repr,
                                    gchar const         *name,

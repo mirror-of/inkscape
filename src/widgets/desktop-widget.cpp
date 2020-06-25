@@ -251,18 +251,18 @@ SPDesktopWidget::SPDesktopWidget()
 
     /* Toolboxes */
     dtw->aux_toolbox = ToolboxFactory::createAuxToolbox();
-    dtw->_vbox->pack_end(*Glib::wrap(dtw->aux_toolbox), false, true);
+    dtw->_vbox->pack_end(*dtw->aux_toolbox, false, true);
 
     dtw->snap_toolbox = ToolboxFactory::createSnapToolbox();
-    ToolboxFactory::setOrientation( dtw->snap_toolbox, GTK_ORIENTATION_VERTICAL );
-    dtw->_hbox->pack_end(*Glib::wrap(dtw->snap_toolbox), false, true);
+    ToolboxFactory::setOrientation(dtw->snap_toolbox, Gtk::ORIENTATION_VERTICAL);
+    dtw->_hbox->pack_end(*dtw->snap_toolbox, false, true);
 
     dtw->commands_toolbox = ToolboxFactory::createCommandsToolbox();
-    dtw->_vbox->pack_end(*Glib::wrap(dtw->commands_toolbox), false, true);
+    dtw->_vbox->pack_end(*dtw->commands_toolbox, false, true);
 
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
-    ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
-    dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
+    ToolboxFactory::setOrientation(dtw->tool_toolbox, Gtk::ORIENTATION_VERTICAL);
+    dtw->_hbox->pack_start(*dtw->tool_toolbox, false, true);
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
     dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
@@ -1229,19 +1229,19 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "commands/state", true)) {
-        gtk_widget_hide (dtw->commands_toolbox);
+        dtw->commands_toolbox->hide();
     } else {
-        gtk_widget_show_all (dtw->commands_toolbox);
+        dtw->commands_toolbox->show_all();
     }
 
     if (!prefs->getBool(pref_root + "snaptoolbox/state", true)) {
-        gtk_widget_hide (dtw->snap_toolbox);
+        dtw->snap_toolbox->hide();
     } else {
-        gtk_widget_show_all (dtw->snap_toolbox);
+        dtw->snap_toolbox->show_all();
     }
 
     if (!prefs->getBool(pref_root + "toppanel/state", true)) {
-        gtk_widget_hide (dtw->aux_toolbox);
+        dtw->aux_toolbox->hide();
     } else {
         // we cannot just show_all because that will show all tools' panels;
         // this is a function from toolbox.cpp that shows only the current tool's panel
@@ -1249,9 +1249,9 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "toolbox/state", true)) {
-        gtk_widget_hide (dtw->tool_toolbox);
+        dtw->tool_toolbox->hide();
     } else {
-        gtk_widget_show_all (dtw->tool_toolbox);
+        dtw->tool_toolbox->show_all();
     }
 
     if (!prefs->getBool(pref_root + "statusbar/state", true)) {
@@ -1275,7 +1275,7 @@ SPDesktopWidget::get_toolbar_by_name(const Glib::ustring& name)
 {
     // The name is actually attached to the GtkGrid that contains
     // the toolbar, so we need to get the grid first
-    auto widget = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), name);
+    auto widget = sp_search_by_name_recursive(aux_toolbox, name);
     auto grid = dynamic_cast<Gtk::Grid*>(widget);
 
     if (!grid) return nullptr;
@@ -1290,11 +1290,11 @@ void
 SPDesktopWidget::setToolboxFocusTo (const gchar* label)
 {
     // First try looking for a named widget
-    auto hb = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), label);
+    auto hb = sp_search_by_name_recursive(aux_toolbox, label);
 
     // Fallback to looking for a named data member (deprecated)
     if (!hb) {
-        hb = Glib::wrap(GTK_WIDGET(sp_search_by_data_recursive(aux_toolbox, (gpointer) label)));
+        hb = Glib::wrap(GTK_WIDGET(sp_search_by_data_recursive(GTK_WIDGET(aux_toolbox->gobj()), (gpointer) label)));
     }
 
     if (hb)
@@ -1307,11 +1307,11 @@ void
 SPDesktopWidget::setToolboxAdjustmentValue (gchar const *id, double value)
 {
     // First try looking for a named widget
-    auto hb = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), id);
+    auto hb = sp_search_by_name_recursive(aux_toolbox, id);
 
     // Fallback to looking for a named data member (deprecated)
     if (!hb) {
-        hb = Glib::wrap(GTK_WIDGET(sp_search_by_data_recursive(aux_toolbox, (gpointer)id)));
+        hb = Glib::wrap(GTK_WIDGET(sp_search_by_data_recursive(GTK_WIDGET(aux_toolbox->gobj()), (gpointer)id)));
     }
 
     if (hb) {
@@ -1329,7 +1329,7 @@ bool
 SPDesktopWidget::isToolboxButtonActive (const gchar* id)
 {
     bool isActive = false;
-    gpointer thing = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
+    gpointer thing = sp_search_by_data_recursive(GTK_WIDGET(aux_toolbox->gobj()), (gpointer) id);
     if ( !thing ) {
         //g_message( "Unable to locate item for {%s}", id );
     } else if ( GTK_IS_TOGGLE_BUTTON(thing) ) {
@@ -1351,7 +1351,7 @@ SPDesktopWidget::isToolboxButtonActive (const gchar* id)
 void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionType pos)
 {
     // Note - later on these won't be individual member variables.
-    GtkWidget* toolbox = nullptr;
+    Gtk::EventBox *toolbox = nullptr;
     if (id == "ToolToolbar") {
         toolbox = tool_toolbox;
     } else if (id == "AuxToolbar") {
@@ -1367,33 +1367,33 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
         switch(pos) {
             case GTK_POS_TOP:
             case GTK_POS_BOTTOM:
-                if ( gtk_widget_is_ancestor(toolbox, GTK_WIDGET(_hbox->gobj())) ) {
+                if (toolbox->is_ancestor(*_hbox)) {
                     // Removing a widget can reduce ref count to zero
-                    g_object_ref(G_OBJECT(toolbox));
-                    _hbox->remove(*Glib::wrap(toolbox));
-                    _vbox->add(*Glib::wrap(toolbox));
-                    g_object_unref(G_OBJECT(toolbox));
+                    // g_object_ref(G_OBJECT(toolbox));
+                    _hbox->remove(*toolbox);
+                    _vbox->add(*toolbox);
+                    // g_object_unref(G_OBJECT(toolbox));
 
                     // Function doesn't seem to be in Gtkmm wrapper yet
-                    gtk_box_set_child_packing(_vbox->gobj(), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
+                    gtk_box_set_child_packing(_vbox->gobj(), GTK_WIDGET(toolbox->gobj()), FALSE, TRUE, 0, GTK_PACK_START);
                 }
-                ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_HORIZONTAL);
+                ToolboxFactory::setOrientation(toolbox, Gtk::ORIENTATION_HORIZONTAL);
                 break;
             case GTK_POS_LEFT:
             case GTK_POS_RIGHT:
-                if ( !gtk_widget_is_ancestor(toolbox, GTK_WIDGET(_hbox->gobj())) ) {
-                    g_object_ref(G_OBJECT(toolbox));
-                    _vbox->remove(*Glib::wrap(toolbox));
-                    _hbox->add(*Glib::wrap(toolbox));
-                    g_object_unref(G_OBJECT(toolbox));
+                if (!toolbox->is_ancestor(*_hbox)) {
+                    // g_object_ref(G_OBJECT(toolbox));
+                    _vbox->remove(*toolbox);
+                    _hbox->add(*toolbox);
+                    // g_object_unref(G_OBJECT(toolbox));
 
                     // Function doesn't seem to be in Gtkmm wrapper yet
-                    gtk_box_set_child_packing(_hbox->gobj(), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
+                    gtk_box_set_child_packing(_hbox->gobj(), GTK_WIDGET(toolbox->gobj()), FALSE, TRUE, 0, GTK_PACK_START);
                     if (pos == GTK_POS_LEFT) {
-                        _hbox->reorder_child(*Glib::wrap(toolbox), 0 );
+                        _hbox->reorder_child(*toolbox, 0);
                     }
                 }
-                ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_VERTICAL);
+                ToolboxFactory::setOrientation(toolbox, Gtk::ORIENTATION_VERTICAL);
                 break;
         }
     }
@@ -1440,10 +1440,14 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
 
     dtw->layoutWidgets();
 
-    std::vector<GtkWidget *> toolboxes;
+    std::vector<Gtk::EventBox *> toolboxes;
+    if(!tool_toolbox) g_warning("Can't get tool_toolbox");
     toolboxes.push_back(dtw->tool_toolbox);
+    if(!aux_toolbox) g_warning("Can't get aux_toolbox");
     toolboxes.push_back(dtw->aux_toolbox);
+    if(!commands_toolbox) g_warning("Can't get commands_toolbox");
     toolboxes.push_back(dtw->commands_toolbox);
+    if(!snap_toolbox) g_warning("Can't get snap_toolbox");
     toolboxes.push_back(dtw->snap_toolbox);
 
     dtw->_panels->setDesktop( dtw->desktop );

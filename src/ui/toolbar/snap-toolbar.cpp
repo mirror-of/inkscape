@@ -196,11 +196,10 @@ SnapToolbar::SnapToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 SnapToolbar::create(SPDesktop *desktop)
 {
-    auto tb = Gtk::manage(new SnapToolbar(desktop));
-    return GTK_WIDGET(tb->gobj());
+    return new SnapToolbar(desktop);
 }
 
 void

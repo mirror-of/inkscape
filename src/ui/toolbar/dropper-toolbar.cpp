@@ -95,11 +95,10 @@ DropperToolbar::DropperToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 DropperToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = Gtk::manage(new DropperToolbar(desktop));
-    return GTK_WIDGET(toolbar->gobj());
+    return new DropperToolbar(desktop);
 }
 }
 }

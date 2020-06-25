@@ -48,7 +48,7 @@ protected:
     void add_separator();
 
 protected:
-    static GtkWidget * create(SPDesktop *desktop);
+    static Toolbar * create(SPDesktop *desktop);
 };
 }
 }

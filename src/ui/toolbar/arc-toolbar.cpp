@@ -221,11 +221,10 @@ ArcToolbar::~ArcToolbar()
     }
 }
 
-GtkWidget *
+Toolbar *
 ArcToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new ArcToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new ArcToolbar(desktop);
 }
 
 void

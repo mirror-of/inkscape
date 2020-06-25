@@ -267,11 +267,10 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 CalligraphyToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new CalligraphyToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new CalligraphyToolbar(desktop);
 }
 
 void

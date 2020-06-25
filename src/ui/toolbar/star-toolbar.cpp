@@ -201,11 +201,10 @@ StarToolbar::~StarToolbar()
     }
 }
 
-GtkWidget *
+Toolbar *
 StarToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new StarToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new StarToolbar(desktop);
 }
 
 void

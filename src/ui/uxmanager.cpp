@@ -10,10 +10,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <vector>
-#include "widgets/desktop-widget.h"
-
 #include "uxmanager.h"
+
+#include <vector>
+
+#include <gtkmm/eventbox.h>
+
+#include "widgets/desktop-widget.h"
 #include "desktop.h"
 #include "ui/monitor.h"
 #include "widgets/toolbox.h"
@@ -27,7 +30,7 @@ public:
     {}
 
     sigc::connection destroyConn;
-    std::vector<GtkWidget*> boxes;
+    std::vector<Gtk::EventBox *> boxes;
 };
 
 static std::vector<SPDesktop*> desktops;
@@ -79,7 +82,7 @@ public:
     void addTrack( SPDesktopWidget* dtw ) override;
     void delTrack( SPDesktopWidget* dtw ) override;
 
-    void connectToDesktop( std::vector<GtkWidget *> const & toolboxes, SPDesktop *desktop ) override;
+    void connectToDesktop( std::vector<Gtk::EventBox *> const & toolboxes, SPDesktop *desktop ) override;
 
     gint getDefaultTask( SPDesktop *desktop ) override;
     void setTask(SPDesktop* dt, gint val) override;
@@ -196,17 +199,20 @@ void UXManagerImpl::delTrack( SPDesktopWidget* dtw )
     }
 }
 
-void UXManagerImpl::connectToDesktop( std::vector<GtkWidget *> const & toolboxes, SPDesktop *desktop )
+void UXManagerImpl::connectToDesktop( std::vector<Gtk::EventBox *> const & toolboxes, SPDesktop *desktop )
 {
     if (!desktop)
     {
         return;
     }
     TrackItem &tracker = trackedBoxes[desktop];
-    std::vector<GtkWidget*>& tracked = tracker.boxes;
+    auto & tracked = tracker.boxes;
     tracker.destroyConn = desktop->connectDestroy(&desktopDestructHandler);
 
     for (auto toolbox : toolboxes) {
+        if(!toolbox) {
+            g_warning("Can't get toolbox in connectToDesktop");
+        }
         ToolboxFactory::setToolboxDesktop( toolbox, desktop );
         if (find(tracked.begin(), tracked.end(), toolbox) == tracked.end()) {
             tracked.push_back(toolbox);

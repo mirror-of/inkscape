@@ -250,11 +250,10 @@ TweakToolbar::set_mode(int mode)
     _mode_buttons[mode]->set_active();
 }
 
-GtkWidget *
+Toolbar *
 TweakToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new TweakToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new TweakToolbar(desktop);
 }
 
 void

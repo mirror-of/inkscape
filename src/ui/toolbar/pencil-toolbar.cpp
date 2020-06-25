@@ -168,11 +168,10 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
     }
 }
 
-GtkWidget *
+Toolbar *
 PencilToolbar::create_pencil(SPDesktop *desktop)
 {
-    auto toolbar = new PencilToolbar(desktop, true);
-    return GTK_WIDGET(toolbar->gobj());
+    return new PencilToolbar(desktop, true);
 }
 
 PencilToolbar::~PencilToolbar()
@@ -507,11 +506,10 @@ PencilToolbar::flatten_spiro_bspline()
     }
 }
 
-GtkWidget *
+Toolbar *
 PencilToolbar::create_pen(SPDesktop *desktop)
 {
-    auto toolbar = new PencilToolbar(desktop, false);
-    return GTK_WIDGET(toolbar->gobj());
+    return new PencilToolbar(desktop, false);
 }
 
 void

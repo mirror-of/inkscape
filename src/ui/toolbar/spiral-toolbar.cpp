@@ -150,11 +150,10 @@ SpiralToolbar::~SpiralToolbar()
     }
 }
 
-GtkWidget *
+Toolbar *
 SpiralToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new SpiralToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new SpiralToolbar(desktop);
 }
 
 void

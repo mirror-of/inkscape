@@ -49,7 +49,7 @@ protected:
     SnapToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * create(SPDesktop *desktop);
+    static Toolbar * create(SPDesktop *desktop);
     static void update(SnapToolbar *tb);
 };
 

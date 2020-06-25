@@ -154,11 +154,10 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 PaintbucketToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new PaintbucketToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new PaintbucketToolbar(desktop);
 }
 
 void

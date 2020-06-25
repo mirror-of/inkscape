@@ -359,11 +359,10 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
     init();
 }
 
-GtkWidget *
+Toolbar *
 SprayToolbar::create(SPDesktop *desktop)
 {
-   auto toolbar = new SprayToolbar(desktop);
-   return GTK_WIDGET(toolbar->gobj());
+   return new SprayToolbar(desktop);
 }
 
 void

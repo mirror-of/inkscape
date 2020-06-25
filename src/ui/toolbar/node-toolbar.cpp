@@ -356,12 +356,11 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 NodeToolbar::create(SPDesktop *desktop)
 {
-    auto holder = new NodeToolbar(desktop);
-    return GTK_WIDGET(holder->gobj());
-} // NodeToolbar::prep()
+    return new NodeToolbar(desktop);
+} // NodeToolbar::create()
 
 void
 NodeToolbar::value_changed(Geom::Dim2 d)

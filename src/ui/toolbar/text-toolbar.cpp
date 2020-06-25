@@ -745,11 +745,10 @@ TextToolbar::fontfamily_value_changed()
 #endif
 }
 
-GtkWidget *
+Toolbar *
 TextToolbar::create(SPDesktop *desktop)
 {
-    auto tb = Gtk::manage(new TextToolbar(desktop));
-    return GTK_WIDGET(tb->gobj());
+    return new TextToolbar(desktop);
 }
 
 void

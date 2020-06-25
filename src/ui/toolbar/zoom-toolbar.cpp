@@ -63,11 +63,10 @@ ZoomToolbar::ZoomToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 ZoomToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = Gtk::manage(new ZoomToolbar(desktop));
-    return GTK_WIDGET(toolbar->gobj());
+    return new ZoomToolbar(desktop);
 }
 }
 }

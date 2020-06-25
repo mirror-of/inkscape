@@ -212,10 +212,10 @@ public:
     void sticky_zoom_toggled();
 
 private:
-    GtkWidget *tool_toolbox;
-    GtkWidget *aux_toolbox;
-    GtkWidget *commands_toolbox;
-    GtkWidget *snap_toolbox;
+    Gtk::EventBox *tool_toolbox     = nullptr;
+    Gtk::EventBox *aux_toolbox      = nullptr;
+    Gtk::EventBox *commands_toolbox = nullptr;
+    Gtk::EventBox *snap_toolbox     = nullptr;
 
     void namedviewModified(SPObject *obj, guint flags);
     int zoom_input(double *new_val);

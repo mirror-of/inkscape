@@ -96,8 +96,8 @@ protected:
   ~PencilToolbar() override;
 
 public:
-    static GtkWidget * create_pencil(SPDesktop *desktop);
-    static GtkWidget * create_pen(SPDesktop *desktop);
+    static Toolbar * create_pencil(SPDesktop *desktop);
+    static Toolbar * create_pen(SPDesktop *desktop);
 };
 }
 }

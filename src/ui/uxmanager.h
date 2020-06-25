@@ -19,6 +19,10 @@ extern "C" typedef struct _GtkWidget GtkWidget;
 class SPDesktop;
 struct SPDesktopWidget;
 
+namespace Gtk {
+class EventBox;
+}
+
 namespace Inkscape {
 namespace UI {
 
@@ -31,7 +35,7 @@ public:
     virtual void addTrack( SPDesktopWidget* dtw ) = 0;
     virtual void delTrack( SPDesktopWidget* dtw ) = 0;
 
-    virtual void connectToDesktop( std::vector<GtkWidget *> const & toolboxes, SPDesktop *desktop ) = 0;
+    virtual void connectToDesktop(std::vector<Gtk::EventBox *> const & toolboxes, SPDesktop *desktop) = 0;
 
     virtual gint getDefaultTask( SPDesktop *desktop ) = 0;
     virtual void setTask( SPDesktop* dt, gint val ) = 0;

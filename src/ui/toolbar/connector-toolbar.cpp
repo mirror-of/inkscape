@@ -183,12 +183,11 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     show_all();
 }
 
-GtkWidget *
+Toolbar *
 ConnectorToolbar::create( SPDesktop *desktop)
 {
-    auto toolbar = new ConnectorToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
-} // end of ConnectorToolbar::prep()
+    return new ConnectorToolbar(desktop);
+} // end of ConnectorToolbar::create()
 
 void
 ConnectorToolbar::path_set_avoid()

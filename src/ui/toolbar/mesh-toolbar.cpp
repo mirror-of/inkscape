@@ -350,11 +350,10 @@ MeshToolbar::MeshToolbar(SPDesktop *desktop)
  * Don't forget to add to XML in widgets/toolbox.cpp!
  *
  */
-GtkWidget *
+Toolbar *
 MeshToolbar::create(SPDesktop * desktop)
 {
-    auto toolbar = new MeshToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new MeshToolbar(desktop);
 }
 
 void

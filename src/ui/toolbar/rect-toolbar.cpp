@@ -196,11 +196,10 @@ RectToolbar::~RectToolbar()
     }
 }
 
-GtkWidget *
+Toolbar *
 RectToolbar::create(SPDesktop *desktop)
 {
-    auto toolbar = new RectToolbar(desktop);
-    return GTK_WIDGET(toolbar->gobj());
+    return new RectToolbar(desktop);
 }
 
 void

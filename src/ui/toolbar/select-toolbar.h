@@ -68,7 +68,7 @@ protected:
     void on_unrealize() override;
 
 public:
-    static GtkWidget * create(SPDesktop *desktop);
+    static Toolbar * create(SPDesktop *desktop);
 };
 
 }
