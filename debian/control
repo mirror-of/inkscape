@@ -47,7 +47,7 @@ Build-Depends:
  libxslt1-dev,
  pkg-config,
  python3-dev,
- python-lxml,
+ python3-lxml,
  zlib1g-dev
 Build-Conflicts:
  libpng12-dev
@@ -60,7 +60,7 @@ Package: inkscape-trunk
 Architecture: any
 Depends:
  ${misc:Depends},
- ${python:Depends},
+ ${python3:Depends},
  ${shlibs:Depends},
  inkscape-trunk-data
 Recommends:
@@ -68,10 +68,9 @@ Recommends:
  imagemagick,
  libwmf-bin,
  perlmagick,
- python-numpy,
- python-lxml,
- python-scour,
- python-uniconvertor,
+ python3-numpy,
+ python3-lxml,
+ python3-scour,
  adwaita-icon-theme-full
 Suggests:
  dia | dia-gnome, 
@@ -110,7 +109,7 @@ Package: inkscape-trunk-data
 Architecture: all
 Depends:
  ${misc:Depends},
- ${python:Depends},
+ ${python3:Depends},
  ruby | ruby-interpreter
 Conflicts:
  inkscape
