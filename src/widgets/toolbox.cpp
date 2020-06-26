@@ -274,7 +274,7 @@ static std::map<SPDesktop*, Glib::RefPtr<Gtk::ActionGroup> > groups;
 
 static void desktopDestructHandler(SPDesktop *desktop)
 {
-    std::map<SPDesktop*, Glib::RefPtr<Gtk::ActionGroup> >::iterator it = groups.find(desktop);
+    auto it = groups.find(desktop);
     if (it != groups.end())
     {
         groups.erase(it);
@@ -474,8 +474,11 @@ void ToolboxFactory::setToolboxDesktop(Gtk::Bin *toolbox, SPDesktop *desktop)
             g_warning("Unexpected toolbox id encountered.");
     }
 
-    gpointer ptr = toolbox->get_data("desktop");
-    SPDesktop *old_desktop = static_cast<SPDesktop*>(ptr);
+    SPDesktop *old_desktop = nullptr;
+
+    if (toolbox) {
+        old_desktop = static_cast<SPDesktop*>(toolbox->get_data("desktop"));
+    }
 
     if (old_desktop) {
         auto children = toolbox->get_children();
@@ -484,17 +487,18 @@ void ToolboxFactory::setToolboxDesktop(Gtk::Bin *toolbox, SPDesktop *desktop)
         }
     }
 
-    toolbox->set_data("desktop", (gpointer)desktop);
+    if (toolbox) {
+        toolbox->set_data("desktop", (gpointer)desktop);
 
-    if (desktop && setup_func && update_func) {
-        toolbox->set_sensitive(true);
-        setup_func(toolbox, desktop);
-        update_func(desktop, desktop->event_context, toolbox);
-        *conn = desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(update_func), toolbox));
-    } else {
-        toolbox->set_sensitive(false);
+        if (desktop && setup_func && update_func) {
+            toolbox->set_sensitive(true);
+            setup_func(toolbox, desktop);
+            update_func(desktop, desktop->event_context, toolbox);
+            *conn = desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(update_func), toolbox));
+        } else {
+            toolbox->set_sensitive(false);
+        }
     }
-
 } // end of sp_toolbox_set_desktop()
 
 
