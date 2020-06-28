@@ -38,6 +38,7 @@ set(ui_SRC
 	tool/transform-handle-set.cpp
 
 	toolbar/arc-toolbar.cpp
+	toolbar/aux-toolbox.cpp
 	toolbar/box3d-toolbar.cpp
 	toolbar/calligraphy-toolbar.cpp
 	toolbar/connector-toolbar.cpp
@@ -341,6 +342,7 @@ set(ui_SRC
 	tool/transform-handle-set.h
 
 	toolbar/arc-toolbar.h
+	toolbar/aux-toolbox.h
 	toolbar/box3d-toolbar.h
 	toolbar/calligraphy-toolbar.h
 	toolbar/connector-toolbar.h

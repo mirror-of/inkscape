@@ -296,6 +296,7 @@
 ../src/ui/tool/path-manipulator.cpp
 ../src/ui/tool/transform-handle-set.cpp
 ../src/ui/toolbar/arc-toolbar.cpp
+../src/ui/toolbar/aux-toolbox.cpp
 ../src/ui/toolbar/box3d-toolbar.cpp
 ../src/ui/toolbar/calligraphy-toolbar.cpp
 ../src/ui/toolbar/connector-toolbar.cpp

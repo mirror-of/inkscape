@@ -57,6 +57,9 @@
 #include "ui/icon-names.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
+
+#include "ui/toolbar/aux-toolbox.h"
+
 #include "ui/widget/button.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
@@ -250,7 +253,7 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_vbox->pack_end(*dtw->_hbox, true, true);
 
     /* Toolboxes */
-    dtw->aux_toolbox = Gtk::make_managed<Inkscape::UI::AuxToolbox>();
+    dtw->aux_toolbox = Gtk::make_managed<Inkscape::UI::Toolbar::AuxToolbox>();
     dtw->_vbox->pack_end(*dtw->aux_toolbox, false, true);
 
     dtw->snap_toolbox = ToolboxFactory::createSnapToolbox();

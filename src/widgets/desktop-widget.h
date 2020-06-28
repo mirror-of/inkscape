@@ -39,11 +39,14 @@ class SPObject;
 
 namespace Inkscape {
 namespace UI {
-class AuxToolbox;
 
 namespace Dialog {
 class SwatchesPanel;
 } // namespace Dialog
+
+namespace Toolbar {
+class AuxToolbox;
+} // namespace Toolbar
 
 namespace Widget {
   class Button;
@@ -215,7 +218,7 @@ public:
 
 private:
     Gtk::EventBox *tool_toolbox     = nullptr;
-    Inkscape::UI::AuxToolbox *aux_toolbox      = nullptr;
+    Inkscape::UI::Toolbar::AuxToolbox *aux_toolbox      = nullptr;
     Gtk::EventBox *commands_toolbox = nullptr;
     Gtk::EventBox *snap_toolbox     = nullptr;
 

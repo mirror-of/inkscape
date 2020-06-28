@@ -16,7 +16,6 @@
 
 #include <glibmm/ustring.h>
 
-#include <gtkmm/eventbox.h>
 #include <gtkmm/enums.h>
 
 #include "preferences.h"
@@ -27,9 +26,7 @@ class SPDesktop;
 
 namespace Gtk {
 class Bin;
-class Box;
 class EventBox;
-class Grid;
 }
 
 namespace Inkscape {
@@ -69,40 +66,6 @@ public:
 
     ToolboxFactory() = delete;
 };
-
-/**
- * A toolbox that can hold tool-specific widgets and swatches.
- * This is the bar that normally appears directly below the main menu.
- *
- * The contents depends on the currently-selected tool.
- */
-class AuxToolbox : public Gtk::EventBox {
-private:
-    SPDesktop *_desktop = nullptr;
-    sigc::connection _event_context_connection;
-
-    /**
-     * This box stores each possible toolbar that could be displayed within
-     * a different cell.  Only one of them should be shown at a time.
-     */
-    Gtk::Box *_box = nullptr;
-
-    /// A map of all the toolbars that can be shown here
-    std::map<Glib::ustring, Gtk::Grid *> _toolbar_map;
-
-    /// The toolbar that is currently being shown
-    Gtk::Grid *_shows = nullptr;
-
-    void update(SPDesktop *desktop, Tools::ToolBase *eventcontext);
-    void setup(SPDesktop *desktop);
-
-public:
-    AuxToolbox();
-
-    void show_aux_toolbox();
-    void set_desktop(decltype(_desktop) desktop);
-};
-
 
 } // namespace UI
 } // namespace Inkscape
