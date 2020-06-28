@@ -250,7 +250,7 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_vbox->pack_end(*dtw->_hbox, true, true);
 
     /* Toolboxes */
-    dtw->aux_toolbox = ToolboxFactory::createAuxToolbox();
+    dtw->aux_toolbox = Gtk::make_managed<Inkscape::UI::AuxToolbox>();
     dtw->_vbox->pack_end(*dtw->aux_toolbox, false, true);
 
     dtw->snap_toolbox = ToolboxFactory::createSnapToolbox();
@@ -1245,7 +1245,7 @@ void SPDesktopWidget::layoutWidgets()
     } else {
         // we cannot just show_all because that will show all tools' panels;
         // this is a function from toolbox.cpp that shows only the current tool's panel
-        ToolboxFactory::showAuxToolbox(dtw->aux_toolbox);
+        dtw->aux_toolbox->show_aux_toolbox();
     }
 
     if (!prefs->getBool(pref_root + "toolbox/state", true)) {

@@ -107,7 +107,6 @@ typedef void (*UpdateFunction)(SPDesktop *desktop, ToolBase *eventcontext, Gtk::
 
 enum BarId {
     BAR_TOOL = 0,
-    BAR_AUX,
     BAR_COMMANDS,
     BAR_SNAP,
 };
@@ -233,9 +232,6 @@ static void setup_snap_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
 
 static void setup_tool_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
 static void update_tool_toolbox(SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *toolbox);
-
-static void setup_aux_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
-static void update_aux_toolbox(SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *toolbox);
 
 static void setup_commands_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *toolbox);
@@ -409,14 +405,137 @@ Gtk::EventBox * ToolboxFactory::createToolToolbox()
     return toolboxNewCommon(tb, BAR_TOOL, Gtk::POS_TOP);
 }
 
-Gtk::EventBox * ToolboxFactory::createAuxToolbox()
-{
-    auto tb = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL, 0);
-    tb->set_name("AuxToolbox");
-    tb->set_homogeneous(false);
 
-    return toolboxNewCommon(tb, BAR_AUX, Gtk::POS_LEFT);
+namespace Inkscape {
+namespace UI {
+AuxToolbox::AuxToolbox()
+{
+    set_name("AuxToolbox");
+
+    _box = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL, 0);
+    _box->set_homogeneous(false);
+    add(*_box);
+    set_sensitive(false);
+    show_all();
 }
+
+void
+AuxToolbox::setup(SPDesktop *desktop)
+{
+    _desktop = desktop;
+    auto prefs = Inkscape::Preferences::get();
+
+    // Loop through all the toolbars that can be shown here, create them and
+    // store each one in a different cell of the main box
+    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+        if (aux_toolboxes[i].create_func) {
+            auto sub_toolbox = aux_toolboxes[i].create_func(desktop);
+
+            // We use a Gtk::Grid here so that we can show a tool-specific
+            // swatch next to the toolbar
+            auto holder = Gtk::make_managed<Gtk::Grid>();
+            holder->attach(*sub_toolbox, 0, 0, 1, 1);
+
+            // This part is just for styling
+            if ( prefs->getBool( "/toolbox/icononly", true) ) {
+                sub_toolbox->set_toolbar_style(Gtk::TOOLBAR_ICONS);
+            }
+
+            auto toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
+            sub_toolbox->set_icon_size(static_cast<Gtk::IconSize>(toolboxSize));
+            sub_toolbox->set_hexpand(true);
+
+            // Add a swatch widget if one was specified
+            if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
+                auto swatch = Gtk::make_managed<Inkscape::UI::Widget::StyleSwatch>(nullptr, _(aux_toolboxes[i].swatch_tip));
+                swatch->setDesktop(desktop);
+                swatch->setClickVerb(aux_toolboxes[i].swatch_verb_id);
+                swatch->setWatchedTool(aux_toolboxes[i].swatch_tool, true);
+                swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
+                swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
+                swatch->set_margin_top(AUX_SPACING);
+                swatch->set_margin_bottom(AUX_SPACING);
+
+                holder->attach(*swatch, 1, 0, 1, 1);
+            }
+
+            // Add the new toolbar into the toolbox
+            // and also store a pointer to it inside the toolbox.  This allows the
+            // active toolbar to be changed.
+            _box->add(*holder);
+            holder->set_name(aux_toolboxes[i].ui_name);
+            _toolbar_map[aux_toolboxes[i].data_name] = holder;
+            sub_toolbox->show();
+            holder->show_all();
+        } else if (aux_toolboxes[i].swatch_verb_id != SP_VERB_NONE) {
+            g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
+        }
+    }
+}
+
+void
+AuxToolbox::update(SPDesktop * /*desktop*/, ToolBase *eventcontext)
+{
+    gchar const *tname = ( eventcontext
+            ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
+            : nullptr );
+    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+        auto sub_toolbox = _toolbar_map[aux_toolboxes[i].data_name];
+        if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
+            sub_toolbox->show_all();
+            _shows = sub_toolbox;
+        } else {
+            sub_toolbox->hide();
+        }
+        //FIX issue #Inkscape686
+        auto allocation = sub_toolbox->get_allocation();
+        sub_toolbox->size_allocate(allocation);
+    }
+    //FIX issue #Inkscape125
+    auto allocation = get_allocation();
+    size_allocate(allocation);
+}
+
+void
+AuxToolbox::set_desktop(decltype(_desktop) desktop)
+{
+    auto old_desktop = _desktop;
+
+    // purge all existing toolbars
+    if (old_desktop) {
+        auto children = get_children();
+        for (auto i:children) {
+            gtk_container_remove(GTK_CONTAINER(gobj()), i->gobj());
+        }
+    }
+
+    _desktop = desktop;
+
+    if (desktop) {
+        set_sensitive(true);
+        setup(desktop);
+        update(desktop, desktop->event_context);
+        _event_context_connection = desktop->connectEventContextChanged(sigc::mem_fun(*this, &AuxToolbox::update));
+    } else {
+        set_sensitive(false);
+    }
+}
+
+/**
+ * Shows the currently selected tool-specific toolbar
+ */
+void
+AuxToolbox::show_aux_toolbox()
+{
+    show();
+
+    if (_shows) {
+        _shows->show_all();
+    }
+}
+
+} // namespace UI
+} // namespace Inkscape
 
 //####################################
 //# Commands Bar
@@ -440,54 +559,50 @@ Gtk::EventBox * ToolboxFactory::createSnapToolbox()
     return toolboxNewCommon(tb, BAR_SNAP, Gtk::POS_LEFT);
 }
 
-void ToolboxFactory::setToolboxDesktop(Gtk::Bin *toolbox, SPDesktop *desktop)
+void ToolboxFactory::setToolboxDesktop(Gtk::EventBox *toolbox, SPDesktop *desktop)
 {
-    auto conn = static_cast<sigc::connection*>(toolbox->get_data("event_context_connection"));
+    auto aux_toolbox = dynamic_cast<AuxToolbox *>(toolbox);
 
-    BarId id = static_cast<BarId>(GPOINTER_TO_INT(toolbox->get_data(BAR_ID_KEY)));
-
-    SetupFunction setup_func = nullptr;
-    UpdateFunction update_func = nullptr;
-
-    switch (id) {
-        case BAR_TOOL:
-            setup_func = setup_tool_toolbox;
-            update_func = update_tool_toolbox;
-            break;
-
-        case BAR_AUX:
-            toolbox = dynamic_cast<Gtk::Bin *>(toolbox->get_child());
-            setup_func = setup_aux_toolbox;
-            update_func = update_aux_toolbox;
-            break;
-
-        case BAR_COMMANDS:
-            setup_func = setup_commands_toolbox;
-            update_func = update_commands_toolbox;
-            break;
-
-        case BAR_SNAP:
-            setup_func = setup_snap_toolbox;
-            update_func = updateSnapToolbox;
-            break;
-        default:
-            g_warning("Unexpected toolbox id encountered.");
+    if (aux_toolbox) {
+        aux_toolbox->set_desktop(desktop);
     }
+    else {
+        auto conn = static_cast<sigc::connection*>(toolbox->get_data("event_context_connection"));
 
-    SPDesktop *old_desktop = nullptr;
+        BarId id = static_cast<BarId>(GPOINTER_TO_INT(toolbox->get_data(BAR_ID_KEY)));
 
-    if (toolbox) {
-        old_desktop = static_cast<SPDesktop*>(toolbox->get_data("desktop"));
-    }
+        SetupFunction setup_func = nullptr;
+        UpdateFunction update_func = nullptr;
 
-    if (old_desktop) {
-        auto children = toolbox->get_children();
-        for ( auto i:children ) {
-            gtk_container_remove(GTK_CONTAINER(toolbox->gobj()), i->gobj());
+        switch (id) {
+            case BAR_TOOL:
+                setup_func = setup_tool_toolbox;
+                update_func = update_tool_toolbox;
+                break;
+
+            case BAR_COMMANDS:
+                setup_func = setup_commands_toolbox;
+                update_func = update_commands_toolbox;
+                break;
+
+            case BAR_SNAP:
+                setup_func = setup_snap_toolbox;
+                update_func = updateSnapToolbox;
+                break;
+
+            default:
+                g_warning("Unexpected toolbox id encountered.");
         }
-    }
 
-    if (toolbox) {
+        SPDesktop *old_desktop = static_cast<SPDesktop*>(toolbox->get_data("desktop"));
+
+        if (old_desktop) {
+            auto children = toolbox->get_children();
+            for ( auto i:children ) {
+                gtk_container_remove(GTK_CONTAINER(toolbox->gobj()), i->gobj());
+            }
+        }
+
         toolbox->set_data("desktop", (gpointer)desktop);
 
         if (desktop && setup_func && update_func) {
@@ -620,92 +735,6 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, Gtk::Bin *
     }
 }
 
-/**
- * \brief Generate the auxiliary toolbox
- *
- * \details This is the one that appears below the main menu, and contains
- *          tool-specific toolbars.  Each toolbar is created here, using
- *          its "create" method.
- *
- *          The actual method used for each toolbar is specified in the
- *          "aux_toolboxes" array, defined above.
- */
-void setup_aux_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    // Loop through all the toolboxes and create them using either
-    // their "create" methods.
-    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        if (aux_toolboxes[i].create_func) {
-            auto sub_toolbox = aux_toolboxes[i].create_func(desktop);
-            sub_toolbox->set_name("SubToolBox");
-
-            auto holder = Gtk::make_managed<Gtk::Grid>();
-            holder->attach(*sub_toolbox, 0, 0, 1, 1);
-
-            // This part is just for styling
-            if ( prefs->getBool( "/toolbox/icononly", true) ) {
-                sub_toolbox->set_toolbar_style(Gtk::TOOLBAR_ICONS);
-            }
-
-            auto toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
-            sub_toolbox->set_icon_size(static_cast<Gtk::IconSize>(toolboxSize));
-            sub_toolbox->set_hexpand(true);
-
-            // Add a swatch widget if one was specified
-            if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
-                auto swatch = new Inkscape::UI::Widget::StyleSwatch( nullptr, _(aux_toolboxes[i].swatch_tip) );
-                swatch->setDesktop( desktop );
-                swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
-                swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
-                swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_top(AUX_SPACING);
-                swatch->set_margin_bottom(AUX_SPACING);
-
-                holder->attach(*swatch, 1, 0, 1, 1);
-            }
-
-            // Add the new toolbar into the toolbox (i.e., make it the visible toolbar)
-            // and also store a pointer to it inside the toolbox.  This allows the
-            // active toolbar to be changed.
-            toolbox->add(*holder);
-            holder->set_name(aux_toolboxes[i].ui_name);
-
-            // TODO: We could make the toolbox a custom subclass of GtkEventBox
-            //       so that we can store a list of toolbars, rather than using
-            //       GObject data
-            toolbox->set_data(aux_toolboxes[i].data_name, holder);
-            sub_toolbox->show();
-            holder->show();
-        } else if (aux_toolboxes[i].swatch_verb_id != SP_VERB_NONE) {
-            g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
-        }
-    }
-}
-
-void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, Gtk::Bin *toolbox)
-{
-    gchar const *tname = ( eventcontext
-                           ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
-                           : nullptr );
-    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        auto sub_toolbox = reinterpret_cast<Gtk::Widget *>(toolbox->get_data(aux_toolboxes[i].data_name));
-        if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
-            sub_toolbox->show_now();
-            toolbox->set_data("shows", sub_toolbox);
-        } else {
-            toolbox->hide();
-        }
-        //FIX issue #Inkscape686
-        auto allocation = sub_toolbox->get_allocation();
-        sub_toolbox->size_allocate(allocation);
-    }
-    //FIX issue #Inkscape125
-    auto allocation = toolbox->get_allocation();
-    toolbox->size_allocate(allocation);
-}
 
 void setup_commands_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop)
 {
@@ -742,51 +771,17 @@ void setup_snap_toolbox(Gtk::Bin *toolbox, SPDesktop *desktop)
     toolbox->add(*toolBar);
 }
 
-Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
-{
-    Glib::ustring name;
-    BarId id = static_cast<BarId>( GPOINTER_TO_INT(g_object_get_data(G_OBJECT(toolbox), BAR_ID_KEY)) );
-    switch(id) {
-        case BAR_TOOL:
-            name = "ToolToolbar";
-            break;
-        case BAR_AUX:
-            name = "AuxToolbar";
-            break;
-        case BAR_COMMANDS:
-            name = "CommandsToolbar";
-            break;
-        case BAR_SNAP:
-            name = "SnapToolbar";
-            break;
-    }
-
-    return name;
-}
-
 void ToolboxFactory::updateSnapToolbox(SPDesktop *desktop, ToolBase * /*eventcontext*/, Gtk::Bin *toolbox)
 {
     auto tb = dynamic_cast<Inkscape::UI::Toolbar::SnapToolbar*>(toolbox->get_child());
 
     if (!tb) {
-        std::cerr << "Can't get snap toolbar" << std::endl;
         return;
     }
 
     Inkscape::UI::Toolbar::SnapToolbar::update(tb);
 }
 
-void ToolboxFactory::showAuxToolbox(Gtk::Bin *toolbox_toplevel)
-{
-    toolbox_toplevel->show();
-    auto toolbox = toolbox_toplevel->get_child();
-
-    auto shown_toolbox = reinterpret_cast<Gtk::Bin *>(toolbox->get_data("shows"));
-    if (!shown_toolbox) {
-        return;
-    }
-    toolbox->show();
-}
 
 #define MODE_LABEL_WIDTH 70
 
