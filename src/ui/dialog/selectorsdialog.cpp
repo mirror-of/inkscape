@@ -642,8 +642,11 @@ void SelectorsDialog::_readStyleElement()
         row[_mColumns._colSelected] = 400;
         // Add as children, objects that match selector.
         for (auto &obj : objVec) {
+            auto *id = obj->getId();
+            if (!id)
+                continue;
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-            childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
+            childrow[_mColumns._colSelector] = "#" + Glib::ustring(id);
             childrow[_mColumns._colExpand] = false;
             childrow[_mColumns._colType] = colType == OBJECT;
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
@@ -865,7 +868,9 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
         row[_mColumns._colExpand] = true;
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", multiselector);
         for (auto &obj : toAddObjVec) {
-            Glib::ustring id = (obj->getId() ? obj->getId() : "");
+            auto *id = obj->getId();
+            if (!id)
+                continue;
             for (auto tok : tokens) {
                 Glib::ustring clases = sp_get_selector_classes(tok);
                 if (!clases.empty()) {
@@ -873,7 +878,7 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
                     std::vector<SPObject *> currentobjs = _getObjVec(multiselector);
                     bool removeclass = true;
                     for (auto currentobj : currentobjs) {
-                        if (currentobj->getId() == id) {
+                        if (g_strcmp0(currentobj->getId(), id) == 0) {
                             removeclass = false;
                         }
                     }
@@ -885,7 +890,7 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
             std::vector<SPObject *> currentobjs = _getObjVec(multiselector);
             bool insertid = true;
             for (auto currentobj : currentobjs) {
-                if (currentobj->getId() == id) {
+                if (g_strcmp0(currentobj->getId(), id) == 0) {
                     insertid = false;
                 }
             }
@@ -1302,8 +1307,11 @@ void SelectorsDialog::_addSelector()
         row[_mColumns._colVisible] = true;
         row[_mColumns._colSelected] = 400;
         for (auto &obj : objVec) {
+            auto *id = obj->getId();
+            if (!id)
+                continue;
             Gtk::TreeModel::Row childrow = *(_store->prepend(row->children()));
-            childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
+            childrow[_mColumns._colSelector] = "#" + Glib::ustring(id);
             childrow[_mColumns._colExpand] = false;
             childrow[_mColumns._colType] = OBJECT;
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);

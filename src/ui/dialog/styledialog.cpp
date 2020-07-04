@@ -633,10 +633,8 @@ void StyleDialog::readStyleElement()
         if (!obj) {
             bool present = false;
             for (auto objv : objVec) {
-                Glib::ustring id = objv->getId();
                 for (auto objsel : selection->objects()) {
-                    Glib::ustring idsel = objsel->getId();
-                    if (idsel == id) {
+                    if (objv == objsel) {
                         present = true;
                         break;
                     }
