@@ -15742,11 +15742,11 @@ msgstr "<b>H:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:682
 msgid "Change the tile hue by this percentage for each row"
-msgstr "Canvia el to del mosaic per a aquest percentatge per a cada fila"
+msgstr "Canvia el to del mosaic per aquest percentatge per a cada fila"
 
 #: ../src/ui/dialog/clonetiler.cpp:688
 msgid "Change the tile hue by this percentage for each column"
-msgstr "Canvia el to del mosaic per a aquest percentatge per a cada columna"
+msgstr "Canvia el to del mosaic per aquest percentatge per a cada columna"
 
 #: ../src/ui/dialog/clonetiler.cpp:694
 msgid "Randomize the tile hue by this percentage"
@@ -15774,12 +15774,12 @@ msgstr "<b>L:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:737
 msgid "Change the color lightness by this percentage for each row"
-msgstr "Canvia la lluminositat del color per a aquest percentatge per a cada fila"
+msgstr "Canvia la lluminositat del color per aquest percentatge per a cada fila"
 
 #: ../src/ui/dialog/clonetiler.cpp:743
 msgid "Change the color lightness by this percentage for each column"
 msgstr ""
-"Canvia la lluminositat del color per a aquest percentatge per a cada columna"
+"Canvia la lluminositat del color per aquest percentatge per a cada columna"
 
 #: ../src/ui/dialog/clonetiler.cpp:749
 msgid "Randomize the color lightness by this percentage"
