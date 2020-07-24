@@ -388,6 +388,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
     GdkCursor *cursor = sp_cursor_from_xpm(xpm, this->get_color(this->invert));
     GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
     gdk_window_set_cursor(window, cursor);
+    g_object_unref(cursor);
 
     if (!ret) {
     	ret = ToolBase::root_handler(event);
