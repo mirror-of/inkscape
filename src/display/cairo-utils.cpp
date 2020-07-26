@@ -206,7 +206,7 @@ Pixbuf::~Pixbuf()
 #ifndef HAVE_FIX_FOR_GDK_PIXBUF_ISSUE_70
 /**
  * Incremental file read introduced to workaround
- * https://gitlab.gnome.org/GNOME/gdk-pixbuf/issues/70
+ * https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/issues/70
  */
 static bool _workaround_issue_70__gdk_pixbuf_loader_write( //
     GdkPixbufLoader *loader, guchar *decoded, gsize decoded_len, GError **error)
