@@ -150,6 +150,7 @@ apps:
       INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
       INKSCAPE_DATADIR: ${SNAP}/share
     extensions: [ gnome-3-28 ]
+    completer: share/bash-completion/completions/inkscape
   viewer:
     command: bin/inkview
     command-chain: [ private-fontcache ]
