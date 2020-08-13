@@ -86,10 +86,6 @@
   <binary>
     ${prefix}/lib/gio/modules/*.so
   </binary>
-  <!-- fontconfig binaries TODO are they really required? -->
-  <binary>
-    ${prefix}/bin/fc-*
-  </binary>
   <!-- GObject Introspection repository manager -->
   <binary>
     ${prefix}/lib/libgirepository-1.0.1.dylib

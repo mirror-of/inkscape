@@ -11,9 +11,8 @@
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-run_annotated
-
-set -e
+set -o errtrace
+trap 'catch_error "$SELF_NAME" "$LINENO" "$FUNCNAME" "${BASH_COMMAND}" "${?}"' ERR
 
 ### create disk image for distribution #########################################
 
@@ -39,15 +38,7 @@ convert -size 560x400 xc:transparent \
 
 cp $SELF_DIR/inkscape_dmg.py $SRC_DIR
 
-cat <<EOF >$SRC_DIR/run_dmgbuild.sh
-#!/usr/bin/env bash
-SCRIPT_DIR=$SELF_DIR
-for script in \$SCRIPT_DIR/0??-*.sh; do source \$script; done
-create_dmg \$ARTIFACT_DIR/Inkscape.app \$TMP_DIR/Inkscape.dmg \$SRC_DIR/inkscape_dmg.py
-EOF
-
-chmod 755 $SRC_DIR/run_dmgbuild.sh
-run_in_terminal $SRC_DIR/run_dmgbuild.sh
+create_dmg $ARTIFACT_DIR/Inkscape.app $TMP_DIR/Inkscape.dmg $SRC_DIR/inkscape_dmg.py
 
 rm -rf $APP_DIR
 mv $TMP_DIR/Inkscape.dmg $ARTIFACT_DIR
@@ -58,4 +49,3 @@ if [ ! -z $CI_JOB_ID ]; then
   [ -d $INK_DIR/artifacts ] && rm -rf $INK_DIR/artifacts
   mv $ARTIFACT_DIR $INK_DIR/artifacts
 fi
-
