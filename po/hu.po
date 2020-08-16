@@ -6,15 +6,16 @@
 # Translators:
 # Arpad Biro <biro.arpad gmail>, 2004-2006, 2007, 2008, 2009, 2010.
 # Peter Bojtos <ptr@ulx.hu>, 2015.
-# Meskó Balázs <mesko.balazs@fsf.hu>, 2018-2019.
+# Meskó Balázs <mesko.balazs@fsf.hu>, 2018-2020.
 # Gyuris Gellért <bubu@ujevangelizacio.hu>, 2017-2020.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2020-04-19 08:41+0000\n"
-"PO-Revision-Date: 2020-04-19 12:17+0200\n"
+"POT-Creation-Date: 2020-04-20 22:20+0200\n"
+"PO-Revision-Date: 2020-08-16 20:08+0200\n"
 "Last-Translator: Gyuris Gellért <bubu@ujevangelizacio.hu>, 2020\n"
 "Language-Team: Hungarian (https://www.transifex.com/fsf-hu/teams/77907/hu/)\n"
 "Language: hu\n"
@@ -8638,11 +8639,11 @@ msgstr "Inkscape verziószámának kiíratása"
 
 #: ../src/inkscape-application.cpp:575
 msgid "Print system data directory"
-msgstr "Rendszer adatmappájának kiíratása"
+msgstr "Rendszeradatmappa kiíratása"
 
 #: ../src/inkscape-application.cpp:576
 msgid "Print user data directory"
-msgstr "Felhasználó adatmappájának kiíratása"
+msgstr "Felhasználói adatmappa kiirítása"
 
 #: ../src/inkscape-application.cpp:579
 msgid "File import"
@@ -10213,8 +10214,8 @@ msgid ""
 "Angle between copies is 360°/number of copies (ignores rotation angle "
 "setting)"
 msgstr ""
-"A másolatok közötti szög 360°/példányszám (figyelmen kívül hagyja a "
-"forgásszög beállítást)"
+"Másolatok közötti szög 360°/példányszám (figyelmen kívül hagyja a forgásszög "
+"beállítást)"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 msgid "Mirror copies"
@@ -15164,11 +15165,7 @@ msgstr "about.svg"
 #. one per line in the form of: name surname (email). Use \n for newline.
 #: ../src/ui/dialog/aboutbox.cpp:181
 msgid "translator-credits"
-msgstr ""
-"Bíró Árpád <biro.arpad at gmail dot com>\n"
-"Bojtos Péter <ptr at ulx dot hu>\n"
-"Gyuris Gellért <bubu at ujevangelizacio dot hu>\n"
-"Meskó Balázs <mesko.balazs at fsf dot hu>"
+msgstr "Gyuris Gellért <bubu@ujevangelizacio.hu>, 2018, 2019, 2020"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:210
 #: ../src/ui/dialog/align-and-distribute.cpp:928
@@ -24195,7 +24192,7 @@ msgstr "Kijelölés hozzáadása a készlethez"
 
 #: ../src/ui/dialog/tags.cpp:804
 msgid "Moved sets"
-msgstr "Elmozgatott készlet"
+msgstr "Átmozgatott készletek"
 
 #: ../src/ui/dialog/tags.cpp:983
 msgid "Add a new selection set"
@@ -26044,7 +26041,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:142
 msgid "Line Type"
-msgstr "Vonaltípus"
+msgstr "Vonaltípus:"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:142
 msgid "Choose a line segment type"
@@ -29478,7 +29475,7 @@ msgstr "Nagybetűk"
 #: ../src/ui/widget/font-variants.cpp:167
 msgctxt "Font feature"
 msgid "Small"
-msgstr "Kicsi"
+msgstr "Kiskapitális"
 
 #: ../src/ui/widget/font-variants.cpp:168
 msgctxt "Font feature"
@@ -30629,7 +30626,7 @@ msgstr "_Inverz beállítása (élő útvonaleffektus)"
 #: ../src/verbs.cpp:1702
 #, c-format
 msgid "Set %d"
-msgstr "%d készlet"
+msgstr "%d beállítása"
 
 #: ../src/verbs.cpp:1711 ../src/verbs.cpp:2997
 msgid "Create new selection set"
@@ -32735,7 +32732,7 @@ msgstr "Objektumok megjelenítése"
 
 #: ../src/verbs.cpp:3258
 msgid "Selection Se_ts..."
-msgstr "Kijelöléskészletek..."
+msgstr "_Kijelöléskészletek…"
 
 #: ../src/verbs.cpp:3258
 msgid "View Tags"
@@ -32846,11 +32843,11 @@ msgstr "Inkscape-kézikönyv"
 
 #: ../src/verbs.cpp:3297 ../share/extensions/inkscape_help_svgspec.inx:3
 msgid "SVG 1.1 Specification"
-msgstr "SVG 1.1 specifikáció"
+msgstr "SVG 1.1-specifikáció"
 
 #: ../src/verbs.cpp:3299
 msgid "SVG 2 Specification"
-msgstr "SVG 2 specifikáció"
+msgstr "SVG 2-specifikáció"
 
 #: ../src/verbs.cpp:3302
 msgid "Inkscape: _Basic"
@@ -34673,7 +34670,7 @@ msgstr "Cserélendő szín"
 
 #: ../share/extensions/color_replace.inx:7
 msgid "From color"
-msgstr "Erről a színről"
+msgstr "Eredeti szín"
 
 #: ../share/extensions/color_replace.inx:9
 msgid "New color"
@@ -34681,7 +34678,7 @@ msgstr "Új szín"
 
 #: ../share/extensions/color_replace.inx:10
 msgid "To color"
-msgstr "Erre a színre"
+msgstr "Csereszín"
 
 #: ../share/extensions/color_rgbbarrel.inx:3
 msgid "RGB Barrel"
@@ -38364,9 +38361,8 @@ msgstr ""
 "\n"
 "]: visszatérés a megjegyzett pontra\n"
 "\n"
-"\n"
-"Többszörös szabályok kettősponttal (;)\n"
-"elválasztva adhatóak meg.\n"
+"Több szabály is megadható pontosvesszővel (;) \n"
+"elválasztva őket.\n"
 
 #: ../share/extensions/lorem_ipsum.inx:3
 msgid "Lorem ipsum"
@@ -38573,7 +38569,7 @@ msgstr "Eltolás (px):"
 
 #: ../share/extensions/measure.inx:52
 msgid "Scale Factor (Real:Drawing Length):"
-msgstr "Méretezési tényező (valós:rajzolt hossz):"
+msgstr "Méretezési tényező (valós: rajzolt hossz)"
 
 #: ../share/extensions/measure.inx:53
 msgid "Length Unit:"
@@ -39286,7 +39282,7 @@ msgstr ""
 
 #: ../share/extensions/path_to_absolute.inx:3
 msgid "To Absolute"
-msgstr "Abszolútra"
+msgstr "Abszolúttá"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
@@ -41936,126 +41932,3 @@ msgstr "fél em"
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr "A betűméret fele"
-
-#~ msgid "Console interface only (no visible GUI)"
-#~ msgstr ""
-#~ "Csak parancssori felület  (látható grafikus felhasználói felület nélkül)"
-
-#~ msgid "Autosave failed! Cannot open directory %1."
-#~ msgstr ""
-#~ "Az automatikus mentés nem sikerült, a(z) %1 könyvtár nem nyitható meg."
-
-#~ msgid "Autosaving documents..."
-#~ msgstr "Dokumentumok automatikus mentése..."
-
-#~ msgid "Autosave complete."
-#~ msgstr "Az automatikus mentés befejeződött."
-
-#~ msgid "360° Copies"
-#~ msgstr "360°-os másolatok"
-
-#~ msgid "No rotation angle, fixed to 360°"
-#~ msgstr "Nincs elforgatási szög, rögzítve 360°-ra"
-
-#~ msgid "Dialog Transparency"
-#~ msgstr "Párbeszédablak-átlátszóság"
-
-#~ msgid "_Opacity when focused:"
-#~ msgstr "Átlátszatlanság, amikor _rajta van a fókusz:"
-
-#~ msgid "Opacity when _unfocused:"
-#~ msgstr "Átlátszatlanság, amikor _nem rajta van a fókusz:"
-
-#~ msgid "_Time of opacity change animation:"
-#~ msgstr "Átlátszatlanság-változtatási animáció _időtartama:"
-
-#~ msgid "Please select an object."
-#~ msgstr "Válasszon előbb egy objektumot."
-
-#~ msgid "Need at least 2 paths selected"
-#~ msgstr "Legalább 2 útvonalat ki kell jelölni"
-
-#~ msgid ""
-#~ "{} is now a method in the svg. Use `self.svg.get_center_position()` "
-#~ "instead."
-#~ msgstr ""
-#~ "{} immár egy metódus az SVG-ben. A „self.svg.get_center_position()” "
-#~ "használandó helyette."
-
-#~ msgid ""
-#~ "The total length of the pattern is too small :\n"
-#~ "Please choose a larger object or set 'Space between copies' > 0"
-#~ msgstr ""
-#~ "A minta teljes hosszúsága túl kicsi:\n"
-#~ "Jelöljön ki egy nagyobb objektumot vagy állítsa be a „Helykihagyás a "
-#~ "másolatok között” értékét nagyobbra, mint nulla."
-
-#~ msgid ""
-#~ "The 'stretch' option requires that the pattern must have non-zero "
-#~ "width :\n"
-#~ "Please edit the pattern width."
-#~ msgstr ""
-#~ "A „Nyújtás” beállítás igényli, hogy a minta ne 0 szélességű legyen:\n"
-#~ "Módosítsa a minta szélességét."
-
-#~ msgid "No face data found in specified file."
-#~ msgstr "A megadott fájlban nem találhatók oldaladatok."
-
-#~ msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
-#~ msgstr ""
-#~ "Érdemes lenne az „Élekkel megadott” opciót megpróbálni a Modellfájl "
-#~ "lapon.\n"
-
-#~ msgid "No edge data found in specified file."
-#~ msgstr "A megadott fájlban nem találhatók éladatok."
-
-#~ msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
-#~ msgstr ""
-#~ "Érdemes lenne az „Oldalakkal megadott” opciót megpróbálni a Modellfájl "
-#~ "lapon.\n"
-
-#~ msgid ""
-#~ "Failed to import the numpy module. This module is required by this "
-#~ "extension. Please install it and try again.  On a Debian-like system this "
-#~ "can be done with the command 'sudo apt-get install python-numpy'."
-#~ msgstr ""
-#~ "Nem sikerült importálni a numpy modult. Ez a kiterjesztés igényli ezt a "
-#~ "modult. Telepítse a modult, majd próbálkozzon újra. Debian-szerű rendszer "
-#~ "esetén a telepítés elvégezhető a „sudo apt-get install python-numpy” "
-#~ "paranccsal."
-
-#~ msgid ""
-#~ "Face Data Not Found. Ensure file contains face data, and check the file "
-#~ "is imported as \"Face-Specified\" under the \"Model File\" tab.\n"
-#~ msgstr ""
-#~ "Oldaladatok nem találhatók. Olyan fájlt adjon meg, amely oldaladatokat "
-#~ "tartalmaz, és ellenőrizze, hogy a fájl „Oldalakkal megadott” módban van-e "
-#~ "importálva (Modellfájl lap).\n"
-
-#~ msgid "Internal Error. No view type selected\n"
-#~ msgstr "Belső hiba. Nincs kijelölve nézettípus.\n"
-
-#~ msgid "There is no selection to restack."
-#~ msgstr "Nincs újrarendezhető kijelölés."
-
-#~ msgid "Replace color (RRGGBB hex):"
-#~ msgstr "Ezen szín cserélése (VVZZKK hexa):"
-
-#~ msgid "By color (RRGGBB hex):"
-#~ msgstr "Erre a színre (VVZZKK hexa):"
-
-#~ msgid "Show page info"
-#~ msgstr "Információk megjelenítése a lapról"
-
-#~ msgid ""
-#~ "Choose this tab if you would like to see page info previously to apply "
-#~ "DPI Switcher."
-#~ msgstr ""
-#~ "Akkor válassza ezt a fület, ha látni szeretné a lapinformációkat a DPI-"
-#~ "váltó alkalmazása előtt."
-
-#~ msgid "Report this triangle's properties"
-#~ msgstr "A háromszög tulajdonságainak listázása"
-
-#~ msgid "Paper Thickness:"
-#~ msgstr "Papírvastagság:"
