@@ -23,6 +23,7 @@ private:
     bool _freeze;
 
     // Toolbar widgets
+    Gtk::ToggleToolButton *add_toggle_snap_verb(int verb_id);
     Gtk::ToggleToolButton *_snap_global_item;
     Gtk::ToggleToolButton *_snap_from_bbox_corner_item;
     Gtk::ToggleToolButton *_snap_to_bbox_path_item;
@@ -43,7 +44,7 @@ private:
     Gtk::ToggleToolButton *_snap_to_grids_item;
     Gtk::ToggleToolButton *_snap_to_guides_item;
 
-    void on_snap_toggled(SPAttr attr);
+    void on_snap_toggled_verb(int verb_id);
 
 protected:
     SnapToolbar(SPDesktop *desktop);

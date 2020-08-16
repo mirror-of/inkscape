@@ -261,6 +261,27 @@ public:
 
 
 /**
+ * A class to encompass all of the verbs which deal with snapping
+ */
+class SnapVerb : public Verb {
+private:
+    static void perform(SPAction *action, void *mydata);
+protected:
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
+public:
+    /** Use the Verb initializer with the same parameters. */
+    SnapVerb(unsigned int const code,
+             gchar const *id,
+             gchar const *name,
+             gchar const *tip,
+             gchar const *image) :
+        Verb(code, id, name, tip, image, _("View"))
+    { }
+}; // SnapVerb class
+
+
+
+/**
  * A class to encompass all of the verbs which deal with dialog operations.
  */
 class DialogVerb : public Verb {
@@ -507,6 +528,19 @@ SPAction *ContextVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *ZoomVerb::make_action(Inkscape::ActionContext const & context)
+{
+    return make_action_helper(context, &perform);
+}
+
+/**
+ * Create an action for a \c SnapVerb.
+ *
+ * Calls \c make_action_helper with the \c vector.
+ *
+ * @param  context  Which context the action should be created for.
+ * @return The built action.
+ */
+SPAction *SnapVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -2067,12 +2101,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_TOGGLE_GUIDES:
             sp_namedview_toggle_guides(doc, dt->namedview);
             break;
-        case SP_VERB_TOGGLE_SNAPPING:
-        {
-            DocumentUndo::ScopedInsensitive _no_undo(doc);
-            dt->toggleSnapGlobal();
-            break;
-        }
         case SP_VERB_TOGGLE_GRID:
             dt->toggleGrids();
             break;
@@ -2136,6 +2164,119 @@ void ZoomVerb::perform(SPAction *action, void *data)
     // dt->updateNow();
 
 } // end of sp_verb_action_zoom_perform()
+
+/**
+ * Decode the verb code and take appropriate snapping action.
+ */
+void SnapVerb::perform(SPAction *action, void *data)
+{
+    g_return_if_fail(ensure_desktop_valid(action));
+    SPDesktop *dt = sp_action_get_desktop(action);
+    SPDocument *doc = dt->getDocument();
+    auto nv = dt->getNamedView();
+
+    if(!nv) {
+        g_warning("No namedview specified in toggle-snap callback");
+        return;
+    }
+    auto repr = nv->getRepr();
+    if(!repr) {
+        g_warning("This namedview doesn't have an XML representation attached!");
+        return;
+    }
+    DocumentUndo::ScopedInsensitive _no_undo(doc);
+    auto prefs = nv->snap_manager.snapprefs;
+    bool val = false;
+
+    switch (reinterpret_cast<std::size_t>(data)) {
+        case SP_VERB_TOGGLE_SNAP_GLOBAL:
+            dt->toggleSnapGlobal();
+            break;
+        case SP_VERB_TOGGLE_SNAP_BBOX:
+            val = prefs.isTargetSnappable(Inkscape::SNAPTARGET_BBOX_CATEGORY);
+            sp_repr_set_boolean(repr, "inkscape:snap-bbox", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_BBOX_EDGE:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_EDGE);
+            sp_repr_set_boolean(repr, "inkscape:bbox-paths", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_BBOX_CORNER:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_CORNER);
+            sp_repr_set_boolean(repr, "inkscape:bbox-nodes", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_NODE:
+            val = prefs.isTargetSnappable(Inkscape::SNAPTARGET_NODE_CATEGORY);
+            sp_repr_set_boolean(repr, "inkscape:snap-nodes", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_PATH:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH);
+            sp_repr_set_boolean(repr, "inkscape:object-paths", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_PATH_CLIP:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_CLIP);
+            sp_repr_set_boolean(repr, "inkscape:snap-path-clip", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_PATH_MASK:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_MASK);
+            sp_repr_set_boolean(repr, "inkscape:snap-path-mask", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_NODE_CUSP:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_NODE_CUSP);
+            sp_repr_set_boolean(repr, "inkscape:object-nodes", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_NODE_SMOOTH:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_NODE_SMOOTH);
+            sp_repr_set_boolean(repr, "inkscape:snap-smooth-nodes", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_PATH_INTERSECTION:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_INTERSECTION);
+            sp_repr_set_boolean(repr, "inkscape:snap-intersection-paths", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_OTHERS:
+            val = prefs.isTargetSnappable(Inkscape::SNAPTARGET_OTHERS_CATEGORY);
+            sp_repr_set_boolean(repr, "inkscape:snap-others", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_ROTATION_CENTER:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_ROTATION_CENTER);
+            sp_repr_set_boolean(repr, "inkscape:snap-center", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_GRID:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_GRID);
+            sp_repr_set_boolean(repr, "inkscape:snap-grids", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_GUIDE:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_GUIDE);
+            sp_repr_set_boolean(repr, "inkscape:snap-to-guides", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_PAGE_BORDER:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PAGE_BORDER);
+            sp_repr_set_boolean(repr, "inkscape:snap-page", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_LINE_MIDPOINT:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_LINE_MIDPOINT);
+            sp_repr_set_boolean(repr, "inkscape:snap-midpoints", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_OBJECT_MIDPOINT:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_OBJECT_MIDPOINT);
+            sp_repr_set_boolean(repr, "inkscape:snap-object-midpoints", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_TEXT_BASELINE:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_TEXT_BASELINE);
+            sp_repr_set_boolean(repr, "inkscape:snap-text-baseline", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_BBOX_EDGE_MIDPOINT:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_EDGE_MIDPOINT);
+            sp_repr_set_boolean(repr, "inkscape:snap-bbox-edge-midpoints", !val);
+            break;
+        case SP_VERB_TOGGLE_SNAP_BBOX_MIDPOINT:
+            val = prefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_MIDPOINT);
+            sp_repr_set_boolean(repr, "inkscape:snap-bbox-midpoints", !val);
+            break;
+        default:
+            break;
+    }
+    doc->setModifiedSinceSave();
+}
 
 /**
  * Decode the verb code and take appropriate action.
@@ -3052,7 +3193,6 @@ Verb *Verb::_base_verbs[] = {
                  N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
     new ZoomVerb(SP_VERB_TOGGLE_ROTATION_LOCK, "ToggleRotationLock", N_("Lock rotation"),
                  N_("Lock canvas rotation"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_SNAPPING, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
     new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"),
                  N_("Show or hide the Commands bar (under the menu)"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SNAP_TOOLBAR, "ToggleSnapToolbar", N_("Sn_ap Controls Bar"),
@@ -3106,6 +3246,29 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview..."),
                  N_("Open a window to preview objects at different icon resolutions"),
                  INKSCAPE_ICON("dialog-icon-preview")),
+
+    // Snap
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_GLOBAL, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_BBOX, "ToggleSnapBBox", N_("Bounding box"), N_("Snap bounding boxes"), INKSCAPE_ICON("snap")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_NODE, "ToggleSnapNode", _("Nodes"), _("Snap nodes, paths, and handles"), INKSCAPE_ICON("snap")), 
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_OTHERS, "ToggleSnapOthers", _("Others"), _("Snap other points (centers, guide origins, gradient handles, etc.)"), INKSCAPE_ICON("snap")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_ROTATION_CENTER, "ToggleSnapRotation", _("Rotation Centers"), _("Snap an item's rotation center"), INKSCAPE_ICON("snap-nodes-rotation-center")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_GRID, "ToggleSnapGrids", N_("Grids"), N_("Snap to grids"), INKSCAPE_ICON("grid-rectangular")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_GUIDE, "ToggleSnapGuide", _("Guides"), _("Snap guides"), INKSCAPE_ICON("guides")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_NODE_SMOOTH, "ToggleSnapNodeSmooth", _("Smooth nodes"), _("Snap smooth nodes, incl. quadrant points of ellipses"), INKSCAPE_ICON("snap-nodes-smooth")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_LINE_MIDPOINT, "ToggleSnapLineMid", _("Line Midpoints"), _("Snap midpoints of line segments"), INKSCAPE_ICON("snap-nodes-midpoint")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_OBJECT_MIDPOINT, "ToggleSnapObjMid", _("Object Centers"), _("Snap centers of objects"), INKSCAPE_ICON("snap-nodes-center")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_TEXT_BASELINE, "ToggleSnapTextBase", _("Text baseline"), _("Snap text anchors and baselines"), INKSCAPE_ICON("snap-text-baseline")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_BBOX_EDGE_MIDPOINT, "ToggleSnapBBoxEdgeMid", _("BBox Edge Midpoints"), _("Snap midpoints of bounding box edges"), INKSCAPE_ICON("snap-bounding-box-midpoints")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_BBOX_MIDPOINT, "ToggleSnapBBoxMid", _("BBox Centers"), _("Snapping centers of bounding boxes"), INKSCAPE_ICON("snap-bounding-box-center")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_PATH_INTERSECTION, "ToggleSnapIntersection", _("Path intersections"), _("Snap to path intersections"), INKSCAPE_ICON("snap-nodes-intersection")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_PATH, "ToggleSnapPath", _("Paths"), _("Snap to paths"), INKSCAPE_ICON("snap-nodes-path")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_PATH_CLIP, "ToggleSnapPathClip", _("Path Clip"), _("Snap to the path clip"), INKSCAPE_ICON("snap-nodes-path")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_PATH_MASK, "ToggleSnapPathMask", _("Path Mask"), _("Snap to the path mask"), INKSCAPE_ICON("snap-nodes-path")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_NODE_CUSP, "ToggleSnapNodeCusp", _("To nodes"), _("Snap to cusp nodes, incl. rectangle corners"), INKSCAPE_ICON("snap-nodes-cusp")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_BBOX_EDGE, "ToggleSnapBBoxEdge", _("Bounding box edges"), _("Snap to edges of a bounding box"), INKSCAPE_ICON("snap-bounding-box-edges")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_BBOX_CORNER, "ToggleSnapBBoxCorner", _("Bounding box corners"), _("Snap bounding box corners"), INKSCAPE_ICON("snap-bounding-box-corners")),
+    new SnapVerb(SP_VERB_TOGGLE_SNAP_PAGE_BORDER, "ToggleSnapPageBorder", _("Page border"), _("Snap to the page border"), INKSCAPE_ICON("snap-page")),
 
     // Dialogs
     new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."), N_("Prototype Dialog"),
