@@ -32,7 +32,6 @@
 #include "ui/dialog/memory.h"
 #include "ui/dialog/messages.h"
 #include "ui/dialog/paint-servers.h"
-#include "ui/dialog/prototype.h"
 #include "ui/dialog/symbols.h"
 #include "ui/dialog/tile.h"
 # include "ui/dialog/tracedialog.h"
@@ -105,7 +104,6 @@ DialogManager::DialogManager() {
     registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
 
     if (dialogs_type == FLOATING) {
-        registerFactory("Prototype",           &create<Prototype,            FloatingBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     FloatingBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   FloatingBehavior>);
@@ -149,7 +147,6 @@ DialogManager::DialogManager() {
 
     } else {
 
-        registerFactory("Prototype",           &create<Prototype,            DockBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   DockBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     DockBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   DockBehavior>);
