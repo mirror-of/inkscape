@@ -314,12 +314,14 @@ void sp_update_helperpath() {
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
             Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(lpeitem)->getCurrentLPE();
-            if (lpe && lpe->isVisible() /* && lpe->showOrigPath()*/) {
-                Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
+            if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
                 std::vector<Geom::Point> selectedNodesPositions;
-                for (auto selectionNode : *selectionNodes) {
-                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selectionNode);
-                    selectedNodesPositions.push_back(n->position());
+                if (nt->_selected_nodes) {
+                    Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
+                    for (auto selectionNode : *selectionNodes) {
+                        Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selectionNode);
+                        selectedNodesPositions.push_back(n->position());
+                    }
                 }
                 lpe->setSelectedNodePoints(selectedNodesPositions);
                 lpe->setCurrentZoom(desktop->current_zoom());
@@ -434,10 +436,13 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     auto items= sel->items();
     for(auto i=items.begin();i!=items.end();++i){
-        SPObject *obj = *i;
-
-        if (SP_IS_ITEM(obj)) {
-            gather_items(this, nullptr, static_cast<SPItem*>(obj), SHAPE_ROLE_NORMAL, shapes);
+        SPItem *item = *i;
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+            sp_lpe_item_update_patheffect(lpeitem, true, true);
+        }
+        if (item) {
+            gather_items(this, nullptr, item, SHAPE_ROLE_NORMAL, shapes);
         }
     }
 
