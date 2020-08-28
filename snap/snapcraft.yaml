@@ -124,6 +124,7 @@ parts:
       - lxml
       - numpy
       - scour
+      - pyserial
     stage-packages:
       - pstoedit
   snap-helpers:
@@ -141,6 +142,7 @@ apps:
       - cups-control
       - removable-media
       - dot-config-inkscape
+      - raw-usb # plotter support
     slots:
       - inkscape-dbus
     desktop: share/applications/org.inkscape.Inkscape.desktop
