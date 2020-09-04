@@ -39791,7 +39791,7 @@ msgstr "Октаедр"
 
 #: ../share/extensions/polyhedron_3d.inx:15
 msgid "Truncated Octahedron"
-msgstr "Обрізаний додекаедр"
+msgstr "Обрізаний октаедр"
 
 #: ../share/extensions/polyhedron_3d.inx:16
 msgid "Icosahedron"
