@@ -85,6 +85,17 @@ echo "./../../../../../../../Resources/lib/python$PY3_MAJOR.$PY3_MINOR/site-pack
 
 pip_install $PYTHON_LXML
 
+# patch 'etree'
+relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libxslt.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libexslt.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+# patch 'objectify'
+relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libxslt.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libexslt.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+
 ### install Python package: NumPy ##############################################
 
 pip_install $PYTHON_NUMPY
