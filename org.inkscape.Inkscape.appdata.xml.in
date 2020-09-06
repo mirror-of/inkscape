@@ -39,6 +39,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0" date="2020-09-07">
+      <description>
+        <p>Inkscape 1.0.1</p>
+        <ul>
+	  <li>Selectors/CSS dialog added</li>
+          <li>Experimental Scribus export extension</li>
+          <li>Various bugs and crashes fixed</li>
+        </ul>
+      </description>
+      <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0.1</url>
+    </release>
     <release version="1.0" date="2020-05-01">
       <description>
         <p>Inkscape 1.0</p>

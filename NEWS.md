@@ -1,3 +1,35 @@
+Inkscape 1.0.1
+------------
+
+Released on **2020-09-07**.
+
+Release highlights
+------------------
+
+- Selectors/CSS dialog is now available
+- Experimental color-managed PDF export through Scribus
+- Many crash fixes and bugs fixed
+
+
+
+### Selectors and CSS dialog
+
+The Selectors and CSS dialog that was hidden and labelled as 'experimental' in
+Inkscape 1.0 is now available from the Object menu in 1.0.1. This new dialog
+allows users to edit a CSS stylesheet for the document and also to select all
+objects with a certain CSS selector, thus providing a replacement for the
+Selection Sets dialog, that had to be removed for Inkscape 1.0.
+
+### Scribus PDF export
+
+An experimental PDF export extensions was added that uses Scribus 1.5.5+ if it
+can be found in the path. You'll need to use a color profile in the SVG file
+and make sure to double-check the exported image, as there are many SVG
+features not supported by Scribus.
+
+
+
+
 Inkscape 1.0
 ------------
 
