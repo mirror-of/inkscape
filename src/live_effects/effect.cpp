@@ -1354,6 +1354,7 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
     doOnApply(lpeitem);
     setReady();
     has_exception = false;
+    lpeversion.param_setValue("1", true); // we can override this value in each LPE when we change backward copat
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)

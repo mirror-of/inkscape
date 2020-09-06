@@ -240,38 +240,6 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
-void spdc_apply_style(SPObject *obj)
-{
-    SPCSSAttr *css = sp_repr_css_attr_new();
-    if (obj->style) {
-        if (obj->style->stroke.isPaintserver()) {
-            SPPaintServer *server = obj->style->getStrokePaintServer();
-            if (server) {
-                Glib::ustring str;
-                str += "url(#";
-                str += server->getId();
-                str += ")";
-                sp_repr_css_set_property(css, "fill", str.c_str());
-            }
-        } else if (obj->style->stroke.isColor()) {
-            gchar c[64];
-            sp_svg_write_color(
-                c, sizeof(c),
-                obj->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(obj->style->stroke_opacity.value)));
-            sp_repr_css_set_property(css, "fill", c);
-        } else {
-            sp_repr_css_set_property(css, "fill", "none");
-        }
-    } else {
-        sp_repr_css_unset_property(css, "fill");
-    }
-
-    sp_repr_css_set_property(css, "fill-rule", "nonzero");
-    sp_repr_css_set_property(css, "stroke", "none");
-
-    sp_desktop_apply_css_recursive(obj, css, true);
-    sp_repr_css_attr_unref(css);
-}
 static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, FreehandBase *dc, SPItem *item,
                                          gint maxrecursion = 0)
 {
@@ -285,11 +253,9 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         if (dc->tablet_enabled) {
             SPObject *elemref = nullptr;
             if ((elemref = document->getObjectById("power_stroke_preview"))) {
-                elemref->getRepr()->removeAttribute("style");
                 SPItem *successor = dynamic_cast<SPItem *>(elemref);
                 sp_desktop_apply_style_tool(desktop, successor->getRepr(),
-                                            Glib::ustring("/tools/freehand/pencil").data(), false);
-                spdc_apply_style(successor);
+                                            "/tools/freehand/pencil", false);
                 sp_object_ref(item);
                 item->deleteObject(false);
                 item->setSuccessor(successor);
@@ -616,15 +582,18 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
 
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            if (!strcmp(cfill, "none")) {
-                sp_repr_css_set_property (css, "fill", cstroke);
-            } else {
-                sp_repr_css_set_property (css, "fill", cfill);
+            //we need to take account on ellipse_not PowerStroke:
+            if (previous_shape_type == ELLIPSE) {
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                if (!strcmp(cfill, "none")) {
+                    sp_repr_css_set_property (css, "fill", cstroke);
+                } else {
+                    sp_repr_css_set_property (css, "fill", cfill);
+                }
+                sp_repr_css_set_property (css, "stroke", "none");
+                sp_desktop_apply_css_recursive(dc->white_item, css, true);
+                sp_repr_css_attr_unref(css);
             }
-            sp_repr_css_set_property (css, "stroke", "none");
-            sp_desktop_apply_css_recursive(dc->white_item, css, true);
-            sp_repr_css_attr_unref(css);
             return;
         }
         if (dc->waiting_LPE_type != INVALID_LPE) {
