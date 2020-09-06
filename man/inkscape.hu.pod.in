@@ -606,7 +606,7 @@ elforgatja azokat 90°-kal, elmenti SVG-be és kilép.
 Kijelöl minden ellipszis elemet, elforgatja azokat 30°-kal, elmenti a fájlt
 és kilép.
 
-    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process fájlnév.svg
+    inkscape --actions="select-by-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
 
 A „MyTriangle” azonosítójú objektumot exportálja először egy félig áttetsző
 lila háttérrel a lila_háromszög.png-be, majd vörös háttérrel a

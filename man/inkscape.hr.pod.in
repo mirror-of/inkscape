@@ -575,7 +575,7 @@ duplikate za 90 stupnjeva, spremi SVG i zatvori program:
 Odaberi sve objekte s oznakom elipse, rotiraj ih za 30 stupnjeva, spremi SVG
 i zatvori program:
 
-    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process datoteka.svg
+    inkscape --actions="select-by-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
 
 Izvezi objekt s ID oznakom „MojTrokut” s polu-transparetnom ljubičastom
 pozadinom u datoteku trokut_ljubičasti.png i s crvenom pozadinom u datoteku

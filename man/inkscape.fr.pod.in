@@ -612,7 +612,7 @@ S<quitter :>
 Sélectionner tous les objets avec l'étiquette ellipse, leur appliquer à tous
 une rotation de 30 degrés, enregistrer le fichier et quitter.
 
-    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process fichier.svg
+    inkscape --actions="select-by-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
 
 Exporter l'objet avec l'ID MonTriangle avec un fond violet semi-transparent
 vers le fichier triangle_violet.png, et avec un fond rouge vers le fichier

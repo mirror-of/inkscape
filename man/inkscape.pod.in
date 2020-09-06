@@ -548,7 +548,7 @@ degrees, save SVG, and quit:
 
 Select all objects with ellipse tag, rotate them 30 degrees, save the file, and quit.
 
-    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
+    inkscape --actions="select-by-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
 
 Export the object with the ID MyTriangle with a semi transparent purple background
 to the file triangle_purple.png and with a red background to the file triangle_red.png.
