@@ -535,7 +535,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
         }
         break;
 
-    case GDK_BUTTON_RELEASE:
+    case GDK_BUTTON_RELEASE: {
+        bool middle_mouse_zoom = prefs->getBool("/options/middlemousezoom/value");
 
         xp = yp = 0;
 
@@ -545,7 +546,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             w->get_window()->set_cursor(cursor);
         }
 
-        if (within_tolerance && (panning || zoom_rb)) {
+        if (middle_mouse_zoom && within_tolerance && (panning || zoom_rb)) {
             zoom_rb = 0;
 
             if (panning) {
@@ -589,6 +590,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             }
 
             ret = TRUE;
+        }
         }
         break;
 
