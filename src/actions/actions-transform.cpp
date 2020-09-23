@@ -24,23 +24,13 @@
 void
 transform_translate(const Glib::VariantBase& value, InkscapeApplication *app)
 {
-    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
-
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
-    if (tokens.size() != 2) {
-        std::cerr << "action:transform_translate: requires two comma separated numbers" << std::endl;
-        return;
+    if (value.get_type_string() != "(dd)") {
+        std::cerr << "transform_translate:  wrong variant type: " << value.get_type_string() << " (should be '(dd)')" << std::endl;
     }
-    double dx = 0;
-    double dy = 0;
 
-    try {
-        dx = std::stod(tokens[0]);
-        dy = std::stod(tokens[1]);
-    } catch (...) {
-        std::cerr << "action:transform-move: invalid arguments" << std::endl;
-        return;
-    }
+    auto tuple = Glib::VariantBase::cast_dynamic<Glib::Variant<std::tuple<double, double>>>(value);
+
+    auto [dx, dy] = tuple.get();
 
     auto selection = app->get_active_selection();
     selection->move(dx, dy);
@@ -102,12 +92,14 @@ add_actions_transform(ConcreteInkscapeApplication<T>* app)
     Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
     Glib::VariantType Double(Glib::VARIANT_TYPE_DOUBLE);
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
+    std::vector<Glib::VariantType> dd = {Glib::VARIANT_TYPE_DOUBLE, Glib::VARIANT_TYPE_DOUBLE};
+    Glib::VariantType Tuple_DD = Glib::VariantType::create_tuple(dd);
 
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
     // clang-format off
-    app->add_action_with_parameter( "transform-translate",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_translate),       app));
+    app->add_action_with_parameter( "transform-translate",    Tuple_DD, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_translate),       app));
     app->add_action_with_parameter( "transform-rotate",         Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_rotate),          app));
     app->add_action_with_parameter( "transform-scale",          Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_scale),           app));
     app->add_action(                "transform-remove",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_remove),          app));

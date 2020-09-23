@@ -1110,6 +1110,25 @@ ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action
                 } else if (type.get_string() == "s") {
                     action_vector.push_back(
                         std::make_pair( action, Glib::Variant<Glib::ustring>::create(value) ));
+                } else if (type.get_string() == "(dd)") {
+                    std::vector<Glib::ustring> tokens3 = Glib::Regex::split_simple(",", value);
+                    if (tokens3.size() != 2) {
+                        std::cerr << "InkscapeApplication::parse_actions: " << action << " requires two comma separated numbers" << std::endl;
+                        continue;
+                    }
+                    double d0 = 0;
+                    double d1 = 0;
+
+                    try {
+                        d0 = std::stod(tokens3[0]);
+                        d1 = std::stod(tokens3[1]);
+                    } catch (...) {
+                        std::cerr << "InkscapeApplication::parse_actions: " << action << " requires two comma separated numbers" << std::endl;
+                        continue;
+                    }
+
+                    action_vector.push_back(
+                        std::make_pair( action, Glib::Variant<std::tuple<double, double>>::create(std::tuple<double, double>(d0, d1))));
                 } else {
                     std::cerr << "InkscapeApplication::parse_actions: unhandled action value: "
                               << action << ": " << type.get_string() << std::endl;
