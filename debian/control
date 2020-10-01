@@ -15,6 +15,7 @@ Build-Depends:
  libart-2.0-dev (>= 2.3.10),
  libaspell-dev,
  libboost-dev,
+ libboost-filesystem-dev,
  libcairo2-dev (>=1.12.16),
  libcdr-dev,
  libdouble-conversion-dev,
