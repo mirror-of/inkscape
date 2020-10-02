@@ -57,13 +57,14 @@
 #include "object/sp-clippath.h"
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-mesh-gradient.h"
 #include "object/sp-hatch.h"
 #include "object/sp-item-transform.h"
-#include "object/sp-linear-gradient.h"
 #include "object/sp-marker.h"
 #include "object/sp-mask.h"
 #include "object/sp-pattern.h"
-#include "object/sp-radial-gradient.h"
 #include "object/sp-rect.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
@@ -838,7 +839,7 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
 
     if (style && (style->fill.isPaintserver())) {
         SPPaintServer *server = item->style->getFillPaintServer();
-        if ( dynamic_cast<SPLinearGradient *>(server) || dynamic_cast<SPRadialGradient *>(server) ) {
+        if ( dynamic_cast<SPLinearGradient *>(server) || dynamic_cast<SPRadialGradient *>(server) || dynamic_cast<SPMeshGradient *>(server) ) {
             _copyGradient(dynamic_cast<SPGradient *>(server));
         }
         SPPattern *pattern = dynamic_cast<SPPattern *>(server);
@@ -852,7 +853,7 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     }
     if (style && (style->stroke.isPaintserver())) {
         SPPaintServer *server = item->style->getStrokePaintServer();
-        if ( dynamic_cast<SPLinearGradient *>(server) || dynamic_cast<SPRadialGradient *>(server) ) {
+        if ( dynamic_cast<SPLinearGradient *>(server) || dynamic_cast<SPRadialGradient *>(server) || dynamic_cast<SPMeshGradient *>(server) ) {
             _copyGradient(dynamic_cast<SPGradient *>(server));
         }
         SPPattern *pattern = dynamic_cast<SPPattern *>(server);
