@@ -432,6 +432,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point.param_setValue(point_c, true);
     previous_center = center_point;
+    lpeversion.param_setValue("1.0.2", true);
 }
 
 
@@ -557,6 +558,9 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         portion.clear();
                     }
                 }
+            }
+            if (lpeversion.param_getSVGValue() > "1.0.1" && original.closed() && !tmp_pathvector[0].closed()) {
+                tmp_pathvector[0].close();
             }
             if (cs.size() == 0 && position == 1) {
                 tmp_pathvector.push_back(original);
