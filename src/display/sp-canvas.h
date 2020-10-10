@@ -202,6 +202,7 @@ public:
     double _xray_radius;
     bool _xray;
     bool _is_dragging;
+    bool _in_full_redraw;
     guint _changecursor;
     double _dx0;
     double _dy0;

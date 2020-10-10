@@ -988,7 +988,7 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
-
+    canvas->_in_full_redraw = false;
     // Split view controls
     canvas->_spliter = Geom::OptIntRect();
     canvas->_spliter_area = Geom::OptIntRect();
@@ -2593,7 +2593,11 @@ void SPCanvas::addIdle()
     if (_idle_id == 0) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint redrawPriority = prefs->getIntLimited("/options/redrawpriority/value", G_PRIORITY_HIGH_IDLE, G_PRIORITY_HIGH_IDLE, G_PRIORITY_DEFAULT_IDLE);
-
+        SPCanvas *canvas = SP_CANVAS(this);
+        if (canvas->_in_full_redraw) {
+            canvas->_in_full_redraw = false;
+            redrawPriority = G_PRIORITY_DEFAULT_IDLE;
+        }
 #ifdef DEBUG_PERFORMANCE
         _idle_time = g_get_monotonic_time();
 #endif
@@ -2780,6 +2784,8 @@ void SPCanvas::requestRedraw(int x0, int y0, int x1, int y1)
 }
 void SPCanvas::requestFullRedraw()
 {
+    SPCanvas *canvas = SP_CANVAS(this);
+    canvas->_in_full_redraw = true;
     dirtyAll();
     addIdle();
 }
