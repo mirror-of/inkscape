@@ -1302,7 +1302,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
             sp_selected_path_simplify(dt);
             break;
         case SP_VERB_SELECTION_REVERSE:
-            selection->toCurves(true);
             SelectionHelper::reverse(dt);
             break;
         case SP_VERB_SELECTION_TRACE:
