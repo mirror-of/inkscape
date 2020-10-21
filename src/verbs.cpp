@@ -1041,7 +1041,7 @@ void EditVerb::perform(SPAction *action, void *data)
             dt->selection->unlink();
             break;
         case SP_VERB_EDIT_UNLINK_CLONE_RECURSIVE:
-            dt->selection->unlinkRecursive();
+            dt->selection->unlinkRecursive(false, true);
             break;
         case SP_VERB_EDIT_RELINK_CLONE:
             dt->selection->relink();
@@ -1149,27 +1149,33 @@ void SelectionVerb::perform(SPAction *action, void *data)
     bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_UNION:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             selection->pathUnion();
             break;
         case SP_VERB_SELECTION_INTERSECT:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             selection->pathIntersect();
             break;
         case SP_VERB_SELECTION_DIFF:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             selection->pathDiff();
             break;
         case SP_VERB_SELECTION_SYMDIFF:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             selection->pathSymDiff();
             break;
         case SP_VERB_SELECTION_CUT:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             selection->pathCut();
             break;
         case SP_VERB_SELECTION_SLICE:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             selection->pathSlice();
             break;
         case SP_VERB_SELECTION_GROW:
@@ -1229,7 +1235,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->ungroup();
             break;
         case SP_VERB_SELECTION_UNGROUP_POP_SELECTION:
-        selection->popFromGroup();
+            selection->popFromGroup();
             break;
         default:
             handled = false;
@@ -1257,41 +1263,48 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
 
         case SP_VERB_SELECTION_OFFSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_offset(dt);
             break;
         case SP_VERB_SELECTION_OFFSET_SCREEN:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_offset_screen(dt, 1);
             break;
         case SP_VERB_SELECTION_OFFSET_SCREEN_10:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_offset_screen(dt, 10);
             break;
         case SP_VERB_SELECTION_INSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_inset(dt);
             break;
         case SP_VERB_SELECTION_INSET_SCREEN:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_inset_screen(dt, 1);
             break;
         case SP_VERB_SELECTION_INSET_SCREEN_10:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_inset_screen(dt, 10);
             break;
         case SP_VERB_SELECTION_DYNAMIC_OFFSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_create_offset_object_zero(dt);
             tools_switch(dt, TOOLS_NODES);
             break;
         case SP_VERB_SELECTION_LINKED_OFFSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_create_updating_offset_object_zero(dt);
             tools_switch(dt, TOOLS_NODES);
             break;
         case SP_VERB_SELECTION_OUTLINE:
-            selection->toCurves(true);
             sp_selected_path_outline(dt);
             break;
         case SP_VERB_SELECTION_OUTLINE_LEGACY:
@@ -1302,7 +1315,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
             sp_selected_path_simplify(dt);
             break;
         case SP_VERB_SELECTION_REVERSE:
-            selection->toCurves(true);
             SelectionHelper::reverse(dt);
             break;
         case SP_VERB_SELECTION_TRACE:
@@ -1314,11 +1326,10 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
 
         case SP_VERB_SELECTION_COMBINE:
-            selection->toCurves(true);
+            selection->unlinkRecursive(true);
             selection->combine();
             break;
         case SP_VERB_SELECTION_BREAK_APART:
-            selection->toCurves(true);
             selection->breakApart();
             break;
         case SP_VERB_SELECTION_ARRANGE:
