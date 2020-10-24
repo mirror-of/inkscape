@@ -277,6 +277,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
 
     // write powerstroke parameters:
+    sp_desktop_apply_style_tool(desktop, item->getRepr(), tool_name(dc), false);
     lpe->getRepr()->setAttribute("start_linecap_type", "zerowidth");
     lpe->getRepr()->setAttribute("end_linecap_type", "zerowidth");
     lpe->getRepr()->setAttribute("sort_points", "true");
@@ -286,9 +287,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     lpe->getRepr()->setAttribute("miter_limit", "4");
     lpe->getRepr()->setAttribute("scale_width", "1");
     lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
-
-    sp_desktop_apply_style_tool(desktop, item->getRepr(), tool_name(dc), false);
-    static_cast<LPEPowerStroke*>(lpe)->applyStyle(nullptr);
+    lpe->applyStyle(nullptr);
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
