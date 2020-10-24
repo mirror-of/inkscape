@@ -286,6 +286,9 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     lpe->getRepr()->setAttribute("miter_limit", "4");
     lpe->getRepr()->setAttribute("scale_width", "1");
     lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
+
+    sp_desktop_apply_style_tool(desktop, item->getRepr(), tool_name(dc), false);
+    static_cast<LPEPowerStroke*>(lpe)->applyStyle(nullptr);
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
