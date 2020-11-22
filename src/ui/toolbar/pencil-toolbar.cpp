@@ -566,7 +566,7 @@ PencilToolbar::simplify_flatten()
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
                             auto c = SPCurve::copy(shape->curveForEdit());
-                            lpe->doEffect(c.get());
+                            lpe->doEffect_impl(c.get());
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){
                                 lpeitem->removeCurrentPathEffect(true);
@@ -610,7 +610,7 @@ PencilToolbar::flatten_spiro_bspline()
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
                             auto c = SPCurve::copy(shape->curveForEdit());
-                            lpe->doEffect(c.get());
+                            lpe->doEffect_impl(c.get());
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){
                                 lpeitem->removeCurrentPathEffect(true);

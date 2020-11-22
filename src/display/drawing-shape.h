@@ -47,7 +47,7 @@ protected:
     void _renderStroke(DrawingContext &dc);
     void _renderMarkers(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
                         DrawingItem *stop_at);
-
+    friend class DrawingItem;
     std::unique_ptr<SPCurve> _curve;
     NRStyle _nrstyle;
 

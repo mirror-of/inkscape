@@ -10,6 +10,7 @@
 
 #include "display/curve.h"
 #include "live_effects/lpe-bendpath.h"
+#include "live_effects/lpeobject.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-holder-entity.h"
 
@@ -96,11 +97,15 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
         }
         _knot_entity->update_knot();
     }
+    
 }
 
 void LPEBendPath::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) && 
+        sp_lpe_item->pathEffectsEnabled() && 
+        sp_lpe_item->optimizeTransforms()) 
+    {
         bend_path.param_transform_multiply(postmul, false);
     }
 }
@@ -111,13 +116,11 @@ LPEBendPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
     using namespace Geom;
 
 /* Much credit should go to jfb and mgsloan of lib2geom development for the code below! */
-
     if (bend_path.changed) {
         uskeleton = arc_length_parametrization(Piecewise<D2<SBasis> >(bend_path.get_pwd2()),2,.1);
         uskeleton = remove_short_cuts(uskeleton,.01);
         n = rot90(derivative(uskeleton));
         n = force_continuity(remove_short_cuts(n,.01));
-
         bend_path.changed = false;
     }
 

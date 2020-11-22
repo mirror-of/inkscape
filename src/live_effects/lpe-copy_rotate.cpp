@@ -129,6 +129,8 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                     id += std::to_string(counter);
                     id += "-";
                     id += this->lpeobj->getId();
+                    id += "_";
+                    id += this->sp_lpe_item->getId();
                     if (id.empty()) {
                         return;
                     }
@@ -146,11 +148,18 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         guint counter = 0;
         Glib::ustring id = "rotated-0-";
         id += this->lpeobj->getId();
+        id += "_";
+        id += this->sp_lpe_item->getId();
         while((elemref = document->getObjectById(id.c_str()))) {
             id = Glib::ustring("rotated-");
             id += std::to_string(counter);
             id += "-";
             id += this->lpeobj->getId();
+            id += "_";
+            id += this->sp_lpe_item->getId();
+            if (id.empty()) {
+                return;
+            }
             if (SP_ITEM(elemref)->isHidden()) {
                 items.push_back(id);
             }
@@ -181,8 +190,39 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         }
         reset = false;
     } else {
+        SPDocument *document = getSPDoc();
+        if (!document) {
+            return;
+        }
+        regenerateItems();
         processObjects(LPE_ERASE);
         items.clear();
+    }
+}
+
+void
+LPECopyRotate::upgradeLegacy() {
+    lpeversion.param_setValue("1.1", true); // to avoid multiple applyes
+    SPDocument *document = getSPDoc();
+    if (!document) {
+        return;
+    }
+    items.clear();
+    SPObject *elemref = nullptr;
+    guint counter = 0;
+    Glib::ustring id = "rotated-0-";
+    id += this->lpeobj->getId();
+    while((elemref = document->getObjectById(id.c_str()))) {
+        id = Glib::ustring("rotated-");
+        id += std::to_string(counter);
+        id += "-";
+        id += this->lpeobj->getId();
+        Glib::ustring new_elemref_id = id;
+        new_elemref_id += "_";
+        new_elemref_id += this->sp_lpe_item->getId();
+        items.push_back(new_elemref_id);
+        elemref->setAttribute("id",new_elemref_id.c_str());
+        counter++;
     }
 }
 
@@ -297,11 +337,12 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
     if (!document) {
         return;
     }
-    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Glib::ustring elemref_id = Glib::ustring("rotated-");
     elemref_id += std::to_string(i);
     elemref_id += "-";
     elemref_id += this->lpeobj->getId();
+    elemref_id += "_";
+    elemref_id += this->sp_lpe_item->getId();
     items.push_back(elemref_id);
     SPObject *elemref = document->getObjectById(elemref_id.c_str());
     Inkscape::XML::Node *phantom = nullptr;
@@ -312,10 +353,12 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         phantom->setAttribute("id", elemref_id);
         reset = true;
         elemref = container->appendChildRepr(phantom);
+        elemref->parent->reorder(elemref, sp_lpe_item);
         Inkscape::GC::release(phantom);
     }
     cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, reset);
     elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SP_ITEM(elemref)->setHidden(false);
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
@@ -376,6 +419,7 @@ Gtk::Widget * LPECopyRotate::newWidget()
 void
 LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 {
+
     using namespace Geom;
     original_bbox(lpeitem, false, true);
 
@@ -385,11 +429,15 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
     origin.param_update_default(A);
     dist_angle_handle = L2(B - A);
     dir = unit_vector(B - A);
+    lpeversion.param_setValue("1.1", true);
 }
 
 void
 LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    if (is_load && lpeversion.param_getSVGValue() < "1.1") {
+        upgradeLegacy();
+    }
     using namespace Geom;
     original_bbox(lpeitem, false, true);
     if (copies_to_360 && num_copies > 2) {
@@ -658,14 +706,49 @@ LPECopyRotate::resetDefaults(SPItem const* item)
 }
 
 void
+LPECopyRotate::regenerateItems() {
+    SPDocument *document = getSPDoc();
+    items.clear();
+    sp_lpe_item = dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin());
+    if (!document || !sp_lpe_item) {
+        return;
+    }
+    SPObject *elemref = nullptr;
+    guint counter = 0;
+    Glib::ustring id = "rotated-0-";
+    id += getLPEObj()->getId();
+    if (sp_lpe_item->getId()) {
+        id  += "_";
+        id  += sp_lpe_item->getId();
+    }
+    while((elemref = document->getObjectById(id.c_str()))) {
+        id = Glib::ustring("rotated-");
+        id += std::to_string(counter);
+        id += "-";
+        id += this->lpeobj->getId();
+        if (sp_lpe_item->getId()) {
+            id += "_";
+            id += this->sp_lpe_item->getId();
+        }
+        if (id.empty()) {
+            return;
+        }
+        items.push_back(id);
+        counter++;
+    }
+}
+
+void
 LPECopyRotate::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
+    regenerateItems();
     processObjects(LPE_VISIBILITY);
 }
 
 void 
 LPECopyRotate::doOnRemove (SPLPEItem const* lpeitem)
 {
+    regenerateItems();
     //set "keep paths" hook on sp-lpe-item.cpp
     if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);

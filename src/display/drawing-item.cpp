@@ -14,6 +14,7 @@
 
 #include "display/drawing-context.h"
 #include "display/drawing-group.h"
+#include "display/drawing-shape.h"
 #include "display/drawing-item.h"
 #include "display/drawing-pattern.h"
 #include "display/drawing-surface.h"
@@ -65,6 +66,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _transform(nullptr)
     , _clip(nullptr)
     , _mask(nullptr)
+    , _satellite(nullptr)
     , _fill_pattern(nullptr)
     , _stroke_pattern(nullptr)
     , _filter(nullptr)
@@ -146,6 +148,7 @@ DrawingItem::~DrawingItem()
     delete _clip;
     delete _mask;
     delete _filter;
+    _satellite = nullptr;
     if(_style)
         sp_style_unref(_style);
 }
@@ -278,6 +281,21 @@ DrawingItem::setVisible(bool v)
         _visible = v;
         _markForRendering();
     }
+}
+
+
+void
+DrawingItem::setSatellite(DrawingItem *s)
+{
+    _satellite = s;
+    _markForUpdate(STATE_ALL, true);
+}
+
+void
+DrawingItem::unsetSatellite()
+{
+    _satellite = nullptr;
+    _markForUpdate(STATE_ALL, true);
 }
 
 /// This is currently unused
@@ -584,6 +602,11 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
                 // for masking, we need full drawbox of mask
                 _drawbox.intersectWith(_mask->_drawbox);
             }
+        }
+        // Satellite
+        if (_satellite) {
+            _bbox.unionWith(_satellite->_bbox);
+            _drawbox.unionWith(_satellite->_drawbox);
         }
     }
     if (to_update & STATE_CACHE) {
@@ -987,10 +1010,9 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
         return nullptr;
     }
     // ignore invisible and insensitive items unless sticky
-    if (!(flags & PICK_STICKY) && !(_visible && _sensitive)) {
+    if (!_satellite && !(flags & PICK_STICKY) && !(_visible && _sensitive)) {
         return nullptr;
     }
-
     bool outline = _drawing.outline() || _drawing.outlineOverlay() || _drawing.getOutlineSensitive();
 
     if (!_drawing.outline() && !_drawing.outlineOverlay() && !_drawing.getOutlineSensitive()) {
@@ -1023,6 +1045,9 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
     }
 
     if (expanded.contains(p)) {
+        if (_satellite && _satellite->_pickItem(p, delta, PICK_STICKY)) {
+            return this;
+        }
         return _pickItem(p, delta, flags);
     }
     return nullptr;

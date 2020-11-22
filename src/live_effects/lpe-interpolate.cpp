@@ -11,6 +11,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "live_effects/lpe-interpolate.h"
+#include "live_effects/lpeobject.h"
 
 #include <2geom/sbasis-to-bezier.h>
 
@@ -49,7 +50,10 @@ LPEInterpolate::~LPEInterpolate() = default;
 
 void LPEInterpolate::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) && 
+        sp_lpe_item->pathEffectsEnabled() && 
+        sp_lpe_item->optimizeTransforms()) 
+    {
         trajectory_path.param_transform_multiply(postmul, false);
     }
 }

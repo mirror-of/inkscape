@@ -67,6 +67,9 @@ void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, boo
     }
     
     Geom::OptRect bbox = lpeitem->geometricBounds(transform);
+    if (lpeitem->satellite) {
+        //bbox.unionWith(lpeitem->satellite->geometricBounds(transform));
+    }
     if (clip_mask) {
         SPLPEItem * item = const_cast<SPLPEItem *>(lpeitem);
         bbox.unionWith(clip_mask_bbox(item, transform * item->transform.inverse()));

@@ -27,6 +27,7 @@
 
 #include "display/curve.h"
 #include "display/control/canvas-item-enums.h"
+#include "display/drawing-item.h"
 #include "helper/geom.h"
 #include "object/sp-shape.h"
 #include "svg/css-ostringstream.h"
@@ -169,7 +170,9 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     end_linecap_type(_("End cap:"), _("Determines the shape of the path's end"), "end_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ZERO_WIDTH)
 {
     show_orig_path = true;
-
+    elemref = nullptr;
+    forked = false;
+ 
     /// @todo offset_points are initialized with empty path, is that bug-save?
 
     interpolator_beta.addSlider(true);
@@ -190,19 +193,130 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     scale_width.param_set_digits(4);
     recusion_limit = 0;
     has_recursion = false;
+    displays = 0;
+    transforming = false;
 }
 
 LPEPowerStroke::~LPEPowerStroke()
 {
-    modified_connection.disconnect();
+    if (modified_connection) {
+        modified_connection.disconnect();
+    }
+    if (satellite_modified_connection) {
+        satellite_modified_connection.disconnect();
+    }
+    if (parent_modified_connection) {
+        parent_modified_connection.disconnect();
+    }
 };
+
+void
+LPEPowerStroke::regenerateItems() {
+    sp_lpe_item = dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin());
+    if (sp_lpe_item) {
+        Glib::ustring lpobjid = getLPEObj()->getId();
+        Glib::ustring strokeid  = lpobjid + "_stroke";
+        if (sp_lpe_item->getId()) {
+            strokeid  += "_";
+            strokeid  += sp_lpe_item->getId();
+        }
+        items.clear();
+        items.push_back(strokeid);
+    }
+}
+
+void
+LPEPowerStroke::inicialize() {
+    if (sp_lpe_item) {
+        if (!elemref) {
+            SPDocument *document = getSPDoc();
+            regenerateItems();
+            elemref = document->getObjectById(items[0].c_str());
+        }
+        if (elemref) {
+            size_t cdisplays = 0;
+            for (SPItemView *v = ((SPItem *) (elemref))->display; v != nullptr; v = v->next) {
+                ++cdisplays;
+            }
+            if (displays == 0 || cdisplays != displays) {
+                Inkscape::DrawingItem *strokeds = nullptr;
+                SPItemView *v2 = ((SPItem *) (sp_lpe_item))->display;
+
+                for (SPItemView *v = ((SPItem *) (elemref))->display; v != nullptr; v = v->next) {
+                    ++displays;
+                    strokeds = dynamic_cast<Inkscape::DrawingItem *>(v->arenaitem);
+                    if (strokeds) {
+                        Inkscape::DrawingItem *sh = dynamic_cast<Inkscape::DrawingItem *>(v2->arenaitem);
+                        sh->setSatellite(strokeds);
+                    }
+                    v2 = v2->next;
+                }
+            }
+            if (!sp_lpe_item->satellite) {
+                SPLPEItem *satelliteitem = dynamic_cast<SPLPEItem *>(elemref);
+                sp_lpe_item->satellite = satelliteitem;
+            }
+            if (!modified_connection) {
+                modified_connection = sp_lpe_item->connectModified(sigc::mem_fun(*this, &LPEPowerStroke::modified));
+            }
+            if (!satellite_modified_connection) {
+                satellite_modified_connection = elemref->connectModified(sigc::mem_fun(*this, &LPEPowerStroke::satellite_modified));
+            }
+            if (!parent_modified_connection) {
+                satellite_modified_connection = sp_lpe_item->parent->connectModified(sigc::mem_fun(*this, &LPEPowerStroke::parent_modified));
+            }
+        }
+    }
+}
+
+int LPEPowerStroke::_enableforked(gpointer data) {
+    LPEPowerStroke *pslpe = static_cast<LPEPowerStroke *>(data);
+    sp_lpe_item_enable_path_effects(pslpe->sp_lpe_item, true);
+    return FALSE;
+}
+
+void 
+LPEPowerStroke::doOnFork (SPLPEItem const* lpeitem) {
+    sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    sp_lpe_item_enable_path_effects(sp_lpe_item, false);
+    g_timeout_add(2500, &LPEPowerStroke::_enableforked, this);
+    doOnLoad(lpeitem);
+}
+
+void 
+LPEPowerStroke::doOnLoad (SPLPEItem const *lpeitem) {
+    sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    displays = 0;
+    applyStyle(nullptr);
+    elemref = nullptr;
+    inicialize();
+    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+}
 
 void 
 LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 {
-    SPObject *obj = dynamic_cast<SPObject *>(sp_lpe_item);
-    if (is_load && obj) {
-        modified_connection = obj->connectModified(sigc::mem_fun(*this, &LPEPowerStroke::modified));
+
+    SPDocument *document = getSPDoc();
+    regenerateItems();
+    elemref = document->getObjectById(items[0].c_str());
+    if (elemref) {
+        SPLPEItem *satellite = dynamic_cast<SPLPEItem *>(elemref);
+        sp_lpe_item_enable_path_effects(satellite, false);
+        SPObject *obj = dynamic_cast<SPObject *>(sp_lpe_item);
+        if (obj->getAttribute("clip-path") && !elemref->getAttribute("clip-path")) {
+            elemref->setAttribute("clip-path", obj->getAttribute("clip-path"));
+        } else if ((g_strcmp0(obj->getAttribute("clip-path"),"none") == 0 || !obj->getAttribute("clip-path")) && elemref->getAttribute("clip-path")) {
+            elemref->setAttribute("clip-path", nullptr);
+        }
+        if (obj->getAttribute("mask") && !elemref->getAttribute("mask")) {
+            elemref->setAttribute("mask", obj->getAttribute("mask"));
+        } else if ((g_strcmp0(obj->getAttribute("mask"),"none") == 0 || !obj->getAttribute("mask")) && elemref->getAttribute("mask")) {
+            elemref->setAttribute("mask", nullptr);
+        }
+        if (g_strcmp0(obj->getAttribute("transform"), elemref->getAttribute("transform")) != 0) {
+            elemref->setAttribute("transform", obj->getAttribute("transform"));
+        }
     }
     offset_points.set_scale_width(scale_width);
     if (has_recursion) {
@@ -218,31 +332,55 @@ LPEPowerStroke::createStroke(Geom::PathVector strokepv)
     if (!document || !sp_lpe_item|| !sp_lpe_item->getId()) {
         return;
     }
-    //we use the LPE object (defs defined) id to construct the unique id for the linked item
-    //we dont use sp_lpe_item (Current LPE Item) id because it can conflict
-    Glib::ustring lpobjid = this->lpeobj->getId();
-    Glib::ustring strokeid  = lpobjid + "_stroke";
-    //We dalay to later style
-    Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    SPObject *elemref = nullptr;
-    //here we set the stroke
-    gchar *strokestr = sp_svg_write_path(strokepv);
-    //Here we find if the element of the strokeid exist or not
-    if ((elemref = document->getObjectById(strokeid.c_str()))) {
-        Inkscape::XML::Node *stroke = elemref->getRepr();
-        stroke->setAttribute("d", strokestr);
-        //we also lock the item to not be selectable
-        stroke->setAttribute("sodipodi:insensitive", "true");
-    } else {
-        Inkscape::XML::Node *stroke = xml_doc->createElement("svg:path");
-        stroke->setAttribute("id", strokeid.c_str());
-        stroke->setAttribute("d", strokestr);
-        stroke->setAttribute("sodipodi:insensitive", "true");
-        elemref = SP_OBJECT(sp_lpe_item->parent->appendChildRepr(stroke));
-        Inkscape::GC::release(stroke);
+    if (!elemref) {
+        regenerateItems();
+        //Here we find if the element of the strokeid exist or not
+        if (!(elemref = document->getObjectById(items[0].c_str()))) {
+            Inkscape::XML::Document *xml_doc = document->getReprDoc();
+            Inkscape::XML::Node *stroke = xml_doc->createElement("svg:path");
+            stroke->setAttribute("id", items[0].c_str());
+            elemref = SP_OBJECT(sp_lpe_item->parent->appendChildRepr(stroke));
+            Inkscape::GC::release(stroke);
+            satellite_modified_connection = elemref->connectModified(sigc::mem_fun(*this, &LPEPowerStroke::satellite_modified));
+            SPLPEItem *satelliteitem = dynamic_cast<SPLPEItem *>(elemref);
+            sp_lpe_item->satellite = satelliteitem;
+        }
+
     }
-    //we use the ID of the new element to add to extra items list
-    items.push_back(strokeid);
+    std::string strokestr = sp_svg_write_path(strokepv);
+    //Here we find if the element of the strokeid exist or not
+    Glib::ustring effects = sp_lpe_item->getAttribute("inkscape:path-effect");
+    Glib::ustring lpobjid = this->lpeobj->getId();
+    Glib::ustring pseffectid = "#" + lpobjid + ";";
+    size_t pos = effects.find(pseffectid);
+    if (pos != Glib::ustring::npos) {
+        effects.erase(0,pos+pseffectid.size());
+    } else {
+        pseffectid = "#" + lpobjid;
+        size_t pos = effects.find(pseffectid);
+        if (pos != Glib::ustring::npos) {
+            effects.erase(0,pos+pseffectid.size());
+        }
+    }
+    Inkscape::XML::Node *stroke = elemref->getRepr();
+    
+    elemref->setAttribute("d", strokestr.c_str());
+    if (effects.empty()) {
+        elemref->setAttribute("inkscape:original-d", nullptr);
+    } else {
+        elemref->setAttribute("inkscape:original-d", strokestr.c_str());
+    }
+
+    if (!effects.empty() && g_strcmp0(stroke->attribute("inkscape:path-effect"), effects.c_str()) != 0) {
+        stroke->setAttribute("inkscape:path-effect", effects.c_str());
+    } else if (effects.empty() && stroke->attribute("inkscape:path-effect")) {
+        stroke->setAttribute("inkscape:path-effect", nullptr);
+    }
+    //we also lock the item to not be selectable
+    if (!stroke->attribute("sodipodi:insensitive")) {
+        stroke->setAttribute("sodipodi:insensitive", "true");
+    }
+    inicialize();
 }
 
 void
@@ -256,55 +394,108 @@ LPEPowerStroke::upgradeLegacy() {
     sp_lpe_item->updateRepr();
 }
 
+
+
+void
+LPEPowerStroke::satellite_modified(SPObject *obj, guint flags)
+{
+    if ((flags & SP_OBJECT_MODIFIED_FLAG) && !transforming) {
+        //inicialize();
+    }
+}
+
+
+void
+LPEPowerStroke::parent_modified(SPObject *obj, guint flags)
+{
+    // TODO:not use flags directy
+    if (flags == 3) {
+        SPDocument *document = getSPDoc();
+        sp_lpe_item = dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin());
+        if (!sp_lpe_item || !document) {
+            return;
+        }
+        elemref = document->getObjectById(items[0].c_str());
+        if (elemref && elemref->parent != sp_lpe_item->parent) {
+            sp_lpe_item->satellite = nullptr;
+            elemref->deleteObject(true);
+            elemref = nullptr;
+            SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(sp_lpe_item);
+            sp_lpe_item_update_patheffect(lpeitem, false, false);
+            applyStyle(nullptr);
+        } 
+    }
+}
+
+
 void
 LPEPowerStroke::modified(SPObject *obj, guint flags)
 {
-    // Now we are going to link styles
-    // this function is executed each time the item style is changed
-    if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) { //style changed
-        //get the fill item
-        SPDocument *document = getSPDoc();
-        if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
-            return;
+    // TODO get the flags for transforms
+    SPDocument *document = getSPDoc();
+    if (!document || !sp_lpe_item) {
+        return;
+    }
+    if (elemref && flags == 65) {
+        elemref = document->getObjectById(items[0].c_str());
+        SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(elemref);
+        if (sp_lpe_item->transform == Geom::identity()) {
+            lpeitem->setAttribute("transform",sp_lpe_item->getAttribute("transform"));
+            transforming = false;
+        } else if (sp_lpe_item->transform != Geom::identity()){
+            lpeitem->transform = sp_lpe_item->transform;
+            lpeitem->updateRepr();
+            transforming = true;
         }
-        Glib::ustring lpobjid = this->lpeobj->getId();
-        Glib::ustring strokeid  = lpobjid + "_stroke";
-        SPObject * elemref = document->getObjectById(strokeid);
-
-        if(elemref) {
+    }
+    regenerateItems();
+    // this function is executed each time the item style is changed
+    if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG && items.size()) { //style changed
+        //get the fill item
+        elemref = document->getObjectById(items[0].c_str());
+        if (elemref) {
             elemref->style->fill.read(sp_lpe_item->style->stroke.get_value().c_str());
             elemref->style->fill_opacity.read(sp_lpe_item->style->stroke_opacity.get_value().c_str());
+
+            if (sp_lpe_item->style->filter.set) {
+                elemref->style->filter.read(sp_lpe_item->style->filter.get_value().c_str());
+            } else {
+                elemref->style->filter.read(nullptr);
+            }
             elemref->style->stroke.read(nullptr);
             elemref->style->stroke_opacity.read("1.0");
             elemref->updateRepr();
-        }
 
-        sp_lpe_item->style->fill.readIfUnset("none");
-        sp_lpe_item->style->stroke_width.read("0.0");
-        sp_lpe_item->updateRepr();
-
-        auto paint_order = sp_lpe_item->style->paint_order.get_value();
-        auto item_a = dynamic_cast<SPItem *>(sp_lpe_item);
-        auto item_b = dynamic_cast<SPItem *>(elemref);
-        if(item_a && item_b) {
-            // We're ignoring markers at the moment, there isn't any markers
-            // Paint order where stroke or fill doesn't appear 'normal' will be Fill, then stroke
-            if(paint_order.find("stroke") < paint_order.find("fill")) {
-                // Stroke, then fill
-                item_a->moveTo(item_b, false);
-            } else {
-                // Fill, then stroke (normal)
-                item_b->moveTo(item_a, false);
+            sp_lpe_item->style->fill.readIfUnset("none");
+            sp_lpe_item->style->stroke_width.read("0.0");
+            sp_lpe_item->updateRepr();
+            auto paint_order = sp_lpe_item->style->paint_order.get_value();
+            auto item_a = dynamic_cast<SPItem *>(sp_lpe_item);
+            auto item_b = dynamic_cast<SPItem *>(elemref);
+            if(item_a && item_b) {
+                // We're ignoring markers at the moment, there isn't any markers
+                // Paint order where stroke or fill doesn't appear 'normal' will be Fill, then stroke
+                if(paint_order.find("stroke") < paint_order.find("fill")) {
+                    // Stroke, then fill
+                    if (item_a->getPosition() < item_b->getPosition()) {
+                        item_a->moveTo(item_b, false);
+                    }
+                } else {
+                    // Fill, then stroke (normal)
+                    if (item_a->getPosition() > item_b->getPosition()) {
+                        item_b->moveTo(item_a, false);
+                    }
+                }
             }
         }
-
-    } 
+    }
 }
 
 //now adding common to handle external items
 void
 LPEPowerStroke::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
+    regenerateItems();
     processObjects(LPE_VISIBILITY);
 }
 
@@ -312,18 +503,29 @@ void
 LPEPowerStroke::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
     //set "keep paths" hook on sp-lpe-item.cpp
+    regenerateItems();
+    for (SPItemView *v = ((SPItem *) (sp_lpe_item))->display; v != nullptr; v = v->next) {
+        Inkscape::DrawingItem *sh = dynamic_cast<Inkscape::DrawingItem *>(v->arenaitem);
+        sh->unsetSatellite();
+    }
     if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);
         items.clear();
         return;
     }
-    processObjects(LPE_ERASE);
-    
-    //we see later how to handle remove
     SPShape *shape = dynamic_cast<SPShape *>(sp_lpe_item);
     if (shape) {
-        lpe_shape_revert_stroke_and_fill(shape, offset_points.median_width()*2);
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        Inkscape::CSSOStringStream os;
+        os << fabs(offset_points.median_width() * 2 * sp_lpe_item->i2doc_affine().descrim());
+        sp_repr_css_set_property(css, "stroke-width", os.str().c_str());
+
+        sp_desktop_apply_css_recursive(shape, css, true);
+        sp_repr_css_attr_unref(css);
     }
+    sp_lpe_item->satellite = nullptr;
+    processObjects(LPE_ERASE);
+    
 }
 
 void LPEPowerStroke::applyStyle(SPLPEItem */*lpeitem*/)
@@ -541,11 +743,11 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         if (solok) {
                             arc0 = circle1.arc(B[prev_i].at1(), 0.5*(B[prev_i].at1()+sol), sol);
                             arc1 = circle2.arc(sol, 0.5*(sol+B[i].at0()), B[i].at0());
-                            if (arc0) {
+                            if (arc0 && !arc0->isDegenerate() && !arc0->isLineSegment()) {
                                 // FIX: Some assertions errors here
                                 build_from_sbasis(pb,arc0->toSBasis(), tol, false);
                                 build = true;
-                            } else if (arc1) {
+                            } else if (arc1 && !arc1->isDegenerate() && !arc1->isLineSegment()) {
                                 boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                                 B[i].at0(), tang2 );
                                 if (p) {
@@ -888,9 +1090,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     }
     if (path_out.empty()) {
         return path_in;
-        // doEffect_path (path_in);
     }
-    
     createStroke(path_out);
     if (is_load && lpeversion.param_getSVGValue() < "1.1") {
         upgradeLegacy();
@@ -900,7 +1100,35 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
 void LPEPowerStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    offset_points.param_transform_multiply(postmul, false);
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin())) {
+        offset_points.param_transform_multiply(postmul, false);
+    }
+}
+
+/**
+ * Is performed at the end of all lpe`s stack
+ */
+void LPEPowerStroke::doAfterAllEffects (SPLPEItem const* /*lpeitem*/)
+{
+    inicialize();
+    SPDocument *document = getSPDoc();
+    if (!document || !sp_lpe_item|| !sp_lpe_item->getId()) {
+        return;
+    }
+    regenerateItems();
+    elemref = document->getObjectById(items[0].c_str());
+    if (elemref && elemref->parent != sp_lpe_item->parent) {
+        SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(sp_lpe_item);
+        sp_lpe_item->satellite = nullptr;
+        elemref->deleteObject(true);
+        elemref = nullptr;
+        
+        sp_lpe_item_update_patheffect(lpeitem, false, false);
+    } else {
+        SPLPEItem *satellite = dynamic_cast<SPLPEItem *>(elemref);
+        sp_lpe_item_enable_path_effects(satellite, true);
+        sp_lpe_item_update_patheffect(satellite, false, false);
+    }
 }
 
 void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem, SPCurve *curve)

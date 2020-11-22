@@ -473,7 +473,11 @@ Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
             bbox_vis_cache_transform = transform;
             bbox_vis_cache_is_valid = true;
         }
-        return bbox_vis_cache;
+        Geom::OptRect bbox = bbox_vis_cache;
+        if (satellite) {
+            bbox.unionWith(satellite->bbox(transform, bboxtype));
+        }
+        return bbox;
     } else {
         bbox_geom_cache =
             either_bbox(transform, bboxtype, bbox_geom_cache_is_valid, bbox_geom_cache, bbox_geom_cache_transform);
@@ -481,7 +485,11 @@ Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
             bbox_geom_cache_transform = transform;
             bbox_geom_cache_is_valid = true;
         }
-        return bbox_geom_cache;
+        Geom::OptRect bbox = bbox_geom_cache;
+        if (satellite) {
+            bbox.unionWith(satellite->bbox(transform, bboxtype));
+        }
+        return bbox;
     }
 }
 
@@ -837,6 +845,9 @@ void SPShape::update_patheffect(bool write)
             } else {
                 repr->removeAttribute("d");
             }
+        }
+        if (hasPathEffectRecursive() && pathEffectsEnabled()) {
+            finishPatheffectStack();
         }
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }

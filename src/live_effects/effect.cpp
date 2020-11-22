@@ -1186,7 +1186,7 @@ void Effect::transform_multiply(Geom::Affine const &postmul, bool /*set*/) {}
  * FIXME Probably only makes sense if this effect is referenced by exactly one
  * item (`this->lpeobj->hrefList` contains exactly one element)?
  */
-void Effect::transform_multiply(Geom::Affine const &postmul, SPLPEItem *lpeitem)
+void Effect::transform_multiply_impl(Geom::Affine const &postmul, SPLPEItem *lpeitem)
 {
     assert("pre: effect is referenced by lpeitem" &&
            std::any_of(lpeobj->hrefList.begin(), lpeobj->hrefList.end(),
@@ -1240,9 +1240,11 @@ void
 Effect::processObjects(LPEAction lpe_action)
 {
     SPDocument *document = getSPDoc();
-    if (!document) {
+    sp_lpe_item = dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin());
+    if (!document || !sp_lpe_item) {
         return;
     }
+    sp_lpe_item_enable_path_effects(sp_lpe_item, false);
     for (auto id : items) {
         if (id.empty()) {
             return;
@@ -1296,6 +1298,7 @@ Effect::processObjects(LPEAction lpe_action)
     if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
         items.clear();
     }
+    sp_lpe_item_enable_path_effects(sp_lpe_item, true);
 }
 
 /**
@@ -1306,6 +1309,16 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     //Do nothing for simple effects
 }
+
+/**
+ * Is performed each time lpe is load into document.
+ */
+void
+Effect::doOnLoad (SPLPEItem const*/*lpeitem*/)
+{
+    //Do nothing for simple effects
+}
+
 /**
  * Is performed at the end of the LPE only one time per "lpeitem"
  * in paths/shapes is called in middle of the effect so we add the
@@ -1318,6 +1331,19 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/, SPCurve *curve)
 {
     is_load = false;
+}
+/**
+ * Is performed at the end of all lpe`s stack
+ */
+void Effect::doAfterAllEffects (SPLPEItem const* /*lpeitem*/)
+{
+}
+
+/**
+ * Is performed at lpe`s fork
+ */
+void Effect::doOnFork (SPLPEItem const* /*lpeitem*/)
+{
 }
 
 void Effect::doOnException(SPLPEItem const * /*lpeitem*/)
@@ -1340,6 +1366,19 @@ void Effect::doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve)
     is_load = false;
     is_applied = false;
 }
+
+void Effect::doOnFork_impl(SPLPEItem const *lpeitem)
+{
+    is_load = true;
+    is_applied = false;
+    doOnFork(lpeitem);
+}
+
+void Effect::doAfterAllEffects_impl(SPLPEItem const* lpeitem)
+{
+    doAfterAllEffects(lpeitem);
+}
+
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
@@ -1362,6 +1401,11 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
     doBeforeEffect(lpeitem);
     update_helperpath();
+}
+
+void Effect::doEffect_impl(SPCurve * curve)
+{
+    doEffect(curve);
 }
 
 void

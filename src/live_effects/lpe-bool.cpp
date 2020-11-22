@@ -508,7 +508,9 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
 
 void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    if (operand && !isOnClipboard()) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) && 
+        operand && !isOnClipboard()) 
+    {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop && !desktop->getSelection()->includes(operand)) {
             prev_affine = operand->transform * sp_item_transform_repr(sp_lpe_item).inverse() * postmul;

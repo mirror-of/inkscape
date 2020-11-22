@@ -14,6 +14,7 @@
 
 #include "live_effects/lpe-taperstroke.h"
 #include "live_effects/fill-conversion.h"
+#include "live_effects/lpeobject.h"
 
 #include <2geom/circle.h>
 #include <2geom/sbasis-to-bezier.h>
@@ -120,7 +121,7 @@ void LPETaperStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
-    if (transform_stroke) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) && transform_stroke) {
         line_width.param_transform_multiply(postmul, false);
     }
 }

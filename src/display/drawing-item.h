@@ -111,6 +111,8 @@ public:
 
     bool visible() const { return _visible; }
     void setVisible(bool v);
+    void setSatellite(DrawingItem *s);
+    void unsetSatellite();
     bool sensitive() const { return _sensitive; }
     void setSensitive(bool v);
     bool cached() const { return _cached; }
@@ -208,6 +210,7 @@ protected:
 
     DrawingItem *_clip;
     DrawingItem *_mask;
+    DrawingItem *_satellite; //satellite item for pick item extended by LPE not to render
     DrawingPattern *_fill_pattern;
     DrawingPattern *_stroke_pattern;
     Inkscape::Filters::Filter *_filter;

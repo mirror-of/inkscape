@@ -36,7 +36,7 @@ void
 LPEdoEffectStackTest::doEffect (SPCurve * curve)
 {
     if (step >= 1) {
-        Effect::doEffect(curve);
+        Effect::doEffect_impl(curve);
     } else {
         // return here
         return;

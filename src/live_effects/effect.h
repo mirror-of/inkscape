@@ -68,25 +68,31 @@ public:
 
     //basically, to get this method called before the derived classes, a bit
     //of indirection is needed. We first call these methods, then the below.
-    void doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve);
-    void doOnApply_impl(SPLPEItem const* lpeitem);
-    void doBeforeEffect_impl(SPLPEItem const* lpeitem);
+    
     void setCurrentZoom(double cZ);
     void setSelectedNodePoints(std::vector<Geom::Point> sNP);
     bool isNodePointSelected(Geom::Point const &nodePoint) const;
     bool isOnClipboard();
+    void doOnApply_impl(SPLPEItem const* lpeitem);
+    void doBeforeEffect_impl(SPLPEItem const* lpeitem);
+    void doOnFork_impl(SPLPEItem const* lpeitem);
+    void doEffect_impl(SPCurve * curve);
+    void doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve);
+    void doAfterAllEffects_impl(SPLPEItem const* lpeitem);
+    void transform_multiply_impl(Geom::Affine const &postmul, SPLPEItem *);
+private:
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-
-private:
-    virtual void transform_multiply(Geom::Affine const &postmul, bool set);
-
-public:
-    void transform_multiply(Geom::Affine const &postmul, SPLPEItem *);
+    virtual void doOnFork (SPLPEItem const* lpeitem);
+    virtual void doEffect (SPCurve * curve);
     virtual void doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve);
-    virtual void doOnException(SPLPEItem const *lpeitem);
+    virtual void doAfterAllEffects (SPLPEItem const* sp_lpe_item);
+    virtual void transform_multiply(Geom::Affine const &postmul, bool set);
+public:
+    virtual void doOnLoad (SPLPEItem const* lpeitem);
+    virtual void doOnException (SPLPEItem const *lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);
-    virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
+    virtual void doOnVisibilityToggled (SPLPEItem const* lpeitem);
     void writeParamsToSVG();
 
     virtual void acceptParamPath (SPPath const* param_path);
@@ -104,7 +110,6 @@ public:
     inline bool isReady() const { return is_ready; }
     inline void setReady(bool ready = true) { is_ready = ready; }
 
-    virtual void doEffect (SPCurve * curve);
 
     virtual Gtk::Widget * newWidget();
     virtual Gtk::Widget * defaultParamSet();
@@ -153,6 +158,7 @@ public:
     SPLPEItem *sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with
                             // them.
     SPShape *current_shape; // these get stored in performPathEffects.
+    std::vector<Glib::ustring> items;
   protected:
     Effect(LivePathEffectObject *lpeobject);
 
@@ -188,7 +194,6 @@ public:
     // this boolean defaults to false, it concatenates the input path to one pwd2,
     // instead of normally 'splitting' the path into continuous pwd2 paths and calling doEffect_pwd2 for each.
     bool concatenate_before_pwd2;
-    std::vector<Glib::ustring> items;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
 

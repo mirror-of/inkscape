@@ -6,6 +6,7 @@
  */
 
 #include "live_effects/lpe-envelope.h"
+#include "live_effects/lpeobject.h"
 #include "display/curve.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -37,7 +38,10 @@ LPEEnvelope::~LPEEnvelope()
 
 void LPEEnvelope::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) && 
+        sp_lpe_item->pathEffectsEnabled() && 
+        sp_lpe_item->optimizeTransforms()) 
+    {
         bend_path1.param_transform_multiply(postmul, false);
         bend_path2.param_transform_multiply(postmul, false);
         bend_path3.param_transform_multiply(postmul, false);

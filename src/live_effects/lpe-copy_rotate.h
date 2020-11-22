@@ -54,6 +54,8 @@ public:
     void toItem(Geom::Affine transform, size_t i, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
+    void upgradeLegacy();
+    void regenerateItems();
     void resetStyles();
     //virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
 protected:

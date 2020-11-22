@@ -53,6 +53,8 @@ public:
     void toMirror(Geom::Affine transform);
     void cloneD(SPObject *orig, SPObject *dest);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
+    void upgradeLegacy();
+    void regenerateItems();
     void resetStyles();
     void centerVert();
     void centerHoriz();

@@ -34,7 +34,17 @@ namespace Inkscape{
     namespace LivePathEffect{
         class LPEObjectReference;
         class Effect;
+        class LPEPowerStroke;
+        class GroupBBoxEffect;
     }
+}
+
+namespace Inkscape { 
+class DrawingItem;
+namespace LivePathEffect {
+class LPEPowerStroke;
+class GroupBBoxEffect;
+}
 }
 
 typedef std::list<Inkscape::LivePathEffect::LPEObjectReference *> PathEffectList;
@@ -91,6 +101,7 @@ public:
 
     void downCurrentPathEffect();
     void upCurrentPathEffect();
+    void finishPatheffectStack();
     Inkscape::LivePathEffect::LPEObjectReference* getCurrentLPEReference();
     Inkscape::LivePathEffect::Effect* getCurrentLPE();
     Inkscape::LivePathEffect::LPEObjectReference* getPrevLPEReference(Inkscape::LivePathEffect::LPEObjectReference* lperef);
@@ -107,9 +118,13 @@ public:
     void applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe = nullptr);
     void applyToClipPathOrMask(SPItem * clip_mask, SPItem* to, Inkscape::LivePathEffect::Effect *lpe = nullptr);
     bool forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users = 1, bool recursive = true);
-
     void editNextParamOncanvas(SPDesktop *dt);
+    friend class Inkscape::LivePathEffect::LPEPowerStroke;
+    friend class Inkscape::LivePathEffect::GroupBBoxEffect;
+    // Maybe we need a vector in the future, keep single and use groups for simplicity
+    SPLPEItem * satellite;
 };
+void sp_lpe_item_onload_patheffect (SPLPEItem *lpeitem);
 void sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write); // careful, class already has method with *very* similar name!
 void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
 

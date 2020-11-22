@@ -1148,6 +1148,10 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         // select and move the imported item
         if (new_obj && SP_IS_ITEM(new_obj)) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(new_obj);
+            if (lpeitem) {
+                sp_lpe_item_onload_patheffect(lpeitem);
+            }  
             Inkscape::Selection *selection = desktop->getSelection();
             selection->set(SP_ITEM(new_obj));
 

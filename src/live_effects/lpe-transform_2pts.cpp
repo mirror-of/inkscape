@@ -16,6 +16,7 @@
 #include "display/curve.h"
 #include "helper/geom.h"
 #include "live_effects/lpe-transform_2pts.h"
+#include "live_effects/lpeobject.h"
 #include "object/sp-path.h"
 #include "svg/svg.h"
 #include "ui/icon-names.h"
@@ -119,7 +120,10 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
 
 void LPETransform2Pts::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) &&
+        sp_lpe_item->pathEffectsEnabled() && 
+        sp_lpe_item->optimizeTransforms()) 
+    {
         start.param_transform_multiply(postmul, false);
         end.param_transform_multiply(postmul, false);
     }

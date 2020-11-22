@@ -103,10 +103,26 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         m *= sp_lpe_item->transform;
         toMirror(m);
     } else {
+        regenerateItems();
         processObjects(LPE_ERASE);
         items.clear();
     }
 }
+void
+LPEMirrorSymmetry::regenerateItems() {
+    items.clear();
+    sp_lpe_item = dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin());
+    if (sp_lpe_item) {
+        Glib::ustring elemref_id = Glib::ustring("mirror-");
+        elemref_id += getLPEObj()->getId();
+        if (sp_lpe_item->getId()) {
+            elemref_id  += "_";
+            elemref_id  += sp_lpe_item->getId();
+        }
+        items.push_back(elemref_id);
+    }
+}
+
 
 Gtk::Widget *
 LPEMirrorSymmetry::newWidget()
@@ -176,6 +192,9 @@ LPEMirrorSymmetry::centerHoriz(){
 void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    if (is_load && lpeversion.param_getSVGValue() < "1.1") {
+        upgradeLegacy();
+    }
     using namespace Geom;
     original_bbox(lpeitem, false, true);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
@@ -358,6 +377,27 @@ LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
 }
 
 void
+LPEMirrorSymmetry::upgradeLegacy() {
+    lpeversion.param_setValue("1.1", true); // to avoid multiple applyes
+    SPDocument *document = getSPDoc();
+    if (!document) {
+        return;
+    }
+    Glib::ustring elemref_id = Glib::ustring("mirror-");
+    elemref_id += this->lpeobj->getId();
+    Glib::ustring new_elemref_id = Glib::ustring("mirror-");
+    new_elemref_id += this->lpeobj->getId();
+    new_elemref_id += "_";
+    new_elemref_id += this->sp_lpe_item->getId();
+    items.clear();
+    items.push_back(new_elemref_id);
+    SPObject *elemref = document->getObjectById(elemref_id.c_str());
+    if (elemref) {
+        elemref->setAttribute("id",new_elemref_id.c_str());
+    }
+}
+
+void
 LPEMirrorSymmetry::toMirror(Geom::Affine transform)
 {
     SPDocument *document = getSPDoc();
@@ -365,19 +405,17 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    Glib::ustring elemref_id = Glib::ustring("mirror-");
-    elemref_id += this->lpeobj->getId();
-    items.clear();
-    items.push_back(elemref_id);
-    SPObject *elemref = document->getObjectById(elemref_id.c_str());
+    regenerateItems();
+    SPObject *elemref = document->getObjectById(items[0].c_str());
     Inkscape::XML::Node *phantom = nullptr;
     if (elemref) {
         phantom = elemref->getRepr();
     } else {
         phantom = createPathBase(sp_lpe_item);
-        phantom->setAttribute("id", elemref_id);
+        phantom->setAttribute("id", items[0]);
         reset = true;
         elemref = container->appendChildRepr(phantom);
+        elemref->parent->reorder(elemref, sp_lpe_item);
         Inkscape::GC::release(phantom);
     }
     cloneD(SP_OBJECT(sp_lpe_item), elemref);
@@ -385,7 +423,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
     elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
-        copy->setAttribute("id", elemref_id);
+        copy->setAttribute("id", items[0]);
         container->appendChildRepr(copy);
         Inkscape::GC::release(copy);
         elemref->deleteObject();
@@ -405,6 +443,7 @@ LPEMirrorSymmetry::resetStyles(){
 void
 LPEMirrorSymmetry::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
+    regenerateItems();
     processObjects(LPE_VISIBILITY);
 }
 
@@ -412,6 +451,7 @@ void
 LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
     //set "keep paths" hook on sp-lpe-item.cpp
+    regenerateItems();
     if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);
         items.clear();

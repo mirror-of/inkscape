@@ -15,6 +15,7 @@
  */
 
 #include "lpe-offset.h"
+#include "live_effects/lpeobject.h"
 
 #include <2geom/path-intersection.h>
 #include <2geom/piecewise.h>
@@ -180,7 +181,9 @@ void LPEOffset::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
     refresh_widgets = true;
     if (!postmul.isTranslation()) {
         Geom::Affine current_affine = sp_item_transform_repr(sp_lpe_item);
-        offset.param_transform_multiply(postmul * current_affine.inverse(), true);
+        if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin())) {
+            offset.param_transform_multiply(postmul * current_affine.inverse(), true);
+        }
     }
     offset_pt *= postmul;
 }

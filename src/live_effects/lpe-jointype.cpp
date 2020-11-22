@@ -10,6 +10,7 @@
 
 #include "live_effects/parameter/enum.h"
 #include "live_effects/fill-conversion.h"
+#include "live_effects/lpeobject.h"
 #include "helper/geom-pathstroke.h"
 
 #include "desktop-style.h"
@@ -116,7 +117,7 @@ void LPEJoinType::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
-    if (transform_stroke) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) && transform_stroke) {
         line_width.param_transform_multiply(postmul, false);
     }
 }

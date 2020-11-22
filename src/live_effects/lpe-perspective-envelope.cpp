@@ -17,6 +17,7 @@
 
 #include <gtkmm.h>
 #include "live_effects/lpe-perspective-envelope.h"
+#include "live_effects/lpeobject.h"
 #include "helper/geom.h"
 #include "display/curve.h"
 #include <gsl/gsl_linalg.h>
@@ -69,7 +70,10 @@ LPEPerspectiveEnvelope::~LPEPerspectiveEnvelope()
 
 void LPEPerspectiveEnvelope::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+    if (sp_lpe_item == dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin()) &&
+        sp_lpe_item->pathEffectsEnabled() && 
+        sp_lpe_item->optimizeTransforms()) 
+    {
         up_left_point.param_transform_multiply(postmul, false);
         up_right_point.param_transform_multiply(postmul, false);
         down_left_point.param_transform_multiply(postmul, false);

@@ -272,22 +272,22 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
     Effect::createAndApply(POWERSTROKE, document, item);
-    Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-
-    static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
-
+    LPEPowerStroke* lpe = dynamic_cast<LPEPowerStroke *>(SP_LPE_ITEM(item)->getCurrentLPE());
     // write powerstroke parameters:
-    sp_desktop_apply_style_tool(desktop, item->getRepr(), tool_name(dc), false);
-    lpe->getRepr()->setAttribute("start_linecap_type", "zerowidth");
-    lpe->getRepr()->setAttribute("end_linecap_type", "zerowidth");
-    lpe->getRepr()->setAttribute("sort_points", "true");
-    lpe->getRepr()->setAttribute("not_jump", "false");
-    lpe->getRepr()->setAttribute("interpolator_type", "CubicBezierJohan");
-    lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
-    lpe->getRepr()->setAttribute("miter_limit", "4");
-    lpe->getRepr()->setAttribute("scale_width", "1");
-    lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
-    lpe->applyStyle(nullptr);
+    if (lpe) {
+        sp_desktop_apply_style_tool(desktop, item->getRepr(), tool_name(dc), false);
+        lpe->offset_points.param_set_and_write_new_value(points);
+        lpe->getRepr()->setAttribute("start_linecap_type", "zerowidth");
+        lpe->getRepr()->setAttribute("end_linecap_type", "zerowidth");
+        lpe->getRepr()->setAttribute("sort_points", "true");
+        lpe->getRepr()->setAttribute("not_jump", "false");
+        lpe->getRepr()->setAttribute("interpolator_type", "CubicBezierJohan");
+        lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
+        lpe->getRepr()->setAttribute("miter_limit", "4");
+        lpe->getRepr()->setAttribute("scale_width", "1");
+        lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
+        lpe->applyStyle(nullptr);
+    }
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
@@ -897,7 +897,11 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             item->updateRepr();
             item->doWriteTransform(item->transform, nullptr, true);
             spdc_check_for_and_apply_waiting_LPE(dc, item, c.get(), false);
-            if(previous_shape_type == BEND_CLIPBOARD){
+            if (previous_shape_type == TRIANGLE_IN || previous_shape_type == TRIANGLE_OUT) {
+                dc->selection->set(repr);
+                SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+                sp_lpe_item_onload_patheffect(lpeitem);
+            } else if(previous_shape_type == BEND_CLIPBOARD){
                 repr->parent()->removeChild(repr);
             } else {
                 dc->selection->set(repr);

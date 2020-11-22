@@ -43,12 +43,19 @@ public:
     void doBeforeEffect(SPLPEItem const *lpeItem) override;
     void doOnApply(SPLPEItem const* lpeitem) override;
     void doOnRemove(SPLPEItem const* lpeitem) override;
+    void doOnLoad (SPLPEItem const* lpeitem) override;
+    void doOnFork (SPLPEItem const* lpeitem) override;
     void doAfterEffect(SPLPEItem const *lpeitem, SPCurve *curve) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void applyStyle(SPLPEItem *lpeitem);
     void createStroke(Geom::PathVector stroke);
+    void inicialize();
+    void doAfterAllEffects (SPLPEItem const* /*lpeitem*/) override;
     void modified(SPObject *obj, guint flags);
+    void satellite_modified(SPObject *obj, guint flags);
+    void parent_modified(SPObject *obj, guint flags);
+    void regenerateItems();
     void upgradeLegacy();
     // methods called by path-manipulator upon edits
     void adjustForNewPath(Geom::PathVector const & path_in);
@@ -56,6 +63,7 @@ public:
     PowerStrokePointArrayParam offset_points;
     BoolParam not_jump;
 private:
+    static int _enableforked(gpointer data);
     BoolParam sort_points;
     EnumParam<unsigned> interpolator_type;
     ScalarParam interpolator_beta;
@@ -64,9 +72,15 @@ private:
     EnumParam<unsigned> linejoin_type;
     ScalarParam miter_limit;
     EnumParam<unsigned> end_linecap_type;
+    SPObject * elemref;
     size_t recusion_limit;
     sigc::connection modified_connection;
+    sigc::connection satellite_modified_connection;
+    sigc::connection parent_modified_connection;
     bool has_recursion;
+    bool transforming;
+    bool forked;
+    size_t displays;
 };
 
 } //namespace LivePathEffect
