@@ -142,7 +142,7 @@ sp_canvas_arena_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned
     arena->ctx.ctm = affine;
 
     unsigned reset = flags & SP_CANVAS_UPDATE_AFFINE ? DrawingItem::STATE_ALL : 0;
-    arena->drawing.update(Geom::IntRect::infinite(), arena->ctx, DrawingItem::STATE_ALL, reset);
+    arena->drawing.update(Geom::IntRect::infinite(), DrawingItem::STATE_ALL, reset);
 
     Geom::OptIntRect b = arena->drawing.root()->visualBounds();
     if (b) {
@@ -196,7 +196,7 @@ sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     Inkscape::DrawingContext dc(buf->ct, r->min());
 
-    arena->drawing.update(Geom::IntRect::infinite(), arena->ctx);
+    arena->drawing.update(Geom::IntRect::infinite());
     arena->drawing.render(dc, *r);
 }
 
@@ -205,7 +205,7 @@ sp_canvas_arena_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_
 {
     SPCanvasArena *arena = SP_CANVAS_ARENA (item);
 
-    arena->drawing.update(Geom::IntRect::infinite(), arena->ctx, DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX);
+    arena->drawing.update(Geom::IntRect::infinite(), DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX);
     DrawingItem *picked = arena->drawing.pick(p, arena->drawing.delta, arena->sticky);
 
     arena->picked = picked;
@@ -253,7 +253,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
                 arena->c = Geom::Point(event->crossing.x, event->crossing.y);
 
                 /* fixme: Not sure abut this, but seems the right thing (Lauris) */
-                arena->drawing.update(Geom::IntRect::infinite(), arena->ctx,
+                arena->drawing.update(Geom::IntRect::infinite(),
                     DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX, 0);
                 arena->active = arena->drawing.pick(arena->c, arena->drawing.delta, arena->sticky);
                 ret = sp_canvas_arena_send_event (arena, event);
@@ -273,7 +273,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
             arena->c = Geom::Point(event->motion.x, event->motion.y);
 
             /* fixme: Not sure abut this, but seems the right thing (Lauris) */
-            arena->drawing.update(Geom::IntRect::infinite(), arena->ctx,
+            arena->drawing.update(Geom::IntRect::infinite(),
                 DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX);
             new_arena = arena->drawing.pick(arena->c, arena->drawing.delta, arena->sticky);
             if (new_arena != arena->active) {
@@ -369,7 +369,7 @@ sp_canvas_arena_render_surface (SPCanvasArena *ca, cairo_surface_t *surface, Geo
     g_return_if_fail (SP_IS_CANVAS_ARENA (ca));
 
     Inkscape::DrawingContext dc(surface, r.min());
-    ca->drawing.update(Geom::IntRect::infinite(), ca->ctx);
+    ca->drawing.update(Geom::IntRect::infinite());
     ca->drawing.render(dc, r);
 }
 

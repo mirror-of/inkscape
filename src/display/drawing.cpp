@@ -19,6 +19,7 @@
 //grayscale colormode:
 #include "cairo-templates.h"
 #include "drawing-context.h"
+#include "canvas-arena.h"
 
 
 namespace Inkscape {
@@ -167,9 +168,10 @@ Drawing::setGrayscaleMatrix(gdouble value_matrix[20]) {
 }
 
 void
-Drawing::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigned flags, unsigned reset)
+Drawing::update(Geom::IntRect const &area, unsigned flags, unsigned reset)
 {
     if (_root) {
+        auto ctx = _canvasarena ? _canvasarena->ctx : UpdateContext();
         _root->update(area, ctx, flags, reset);
     }
     if ((flags & DrawingItem::STATE_CACHE) || (flags & DrawingItem::STATE_ALL)) {
