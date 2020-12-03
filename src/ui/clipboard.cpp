@@ -1344,7 +1344,8 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     for ( ; out != outlist.end() && target != (*out)->get_mimetype() ; ++out) {
     };
     if ( out == outlist.end() && target != "image/png") {
-        return; // this also shouldn't happen
+        // This happens when hitting "optpng" extensions
+        return;
     }
 
     // FIXME: Temporary hack until we add support for memory output.
@@ -1352,6 +1353,11 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export", NULL );
     gchar *data = nullptr;
     gsize len;
+
+    // XXX This is a crude fix for clipboards accessing extensions
+    // Remove when gui is extracted from extension execute and uses exceptions.
+    bool previous_gui = INKSCAPE.use_gui();
+    INKSCAPE.use_gui(false);
 
     try {
         if (out == outlist.end() && target == "image/png")
@@ -1385,7 +1391,6 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
                 (*out)->set_state(Inkscape::Extension::Extension::STATE_LOADED);
             }
 
-
             (*out)->save(_clipboardSPDoc, filename, true);
         }
         g_file_get_contents(filename, &data, &len, nullptr);
@@ -1394,6 +1399,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     } catch (...) {
     }
 
+    INKSCAPE.use_gui(previous_gui);
     g_unlink(filename); // delete the temporary file
     g_free(filename);
     g_free(data);
