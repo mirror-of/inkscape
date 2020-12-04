@@ -18,6 +18,8 @@
 #include "ui/widget/point.h"
 
 #include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpe-clone-original.h"
 #include "svg/svg.h"
 
 #include "desktop.h"
