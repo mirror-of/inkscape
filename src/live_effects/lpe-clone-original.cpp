@@ -59,7 +59,10 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
     };
     listening = false;
     sync = false;
-    linked = this->getRepr()->attribute("linkeditem");
+    linked = "";
+    if (this->getRepr()->attribute("linkeditem")) {
+        linked = this->getRepr()->attribute("linkeditem");
+    }
     registerParameter(&linkeditem);
     registerParameter(&method);
     registerParameter(&attributes);
@@ -296,6 +299,10 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     if (!document) {
         return;
     }
+    if (!deleted_connection) {
+        deleted_connection = sp_lpe_item->connectDelete(sigc::mem_fun(*this, &LPECloneOriginal::lpeitem_deleted));
+    }
+    
     if (linkeditem.linksToItem()) {
         SPItem *orig = dynamic_cast<SPItem *>(linkeditem.getObject());
         if(!orig) {
@@ -305,7 +312,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         SPGroup  *group_origin = dynamic_cast<SPGroup *>(orig);
         SPItem *dest = dynamic_cast<SPItem *>(sp_lpe_item);
         const gchar * id = orig->getId();
-        bool init = g_strcmp0(id, linked) != 0 && !is_load;
+        bool init = !is_load && g_strcmp0(id, linked.c_str()) != 0;
         /* if (sp_lpe_item->getRepr()->attribute("style")) {
             init = false;
         } */
@@ -355,7 +362,6 @@ LPECloneOriginal::start_listening()
         return;
     }
     quit_listening();
-    deleted_connection = sp_lpe_item->connectDelete(sigc::mem_fun(*this, &LPECloneOriginal::lpeitem_deleted));
     listening = true;
 }
 
