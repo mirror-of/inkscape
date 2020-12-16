@@ -1939,22 +1939,22 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
     
     auto sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
     GdkRGBA bg_color, fg_color;
-    gdk_rgba_parse(&bg_color, "#f0f0f0"); // Fix bg as a light gray
     gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
+    gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
+    GdkRGBA orig_color {fg_color};
 
-    GdkRGBA mid_color = {(bg_color.red + fg_color.red)/2.0,
-                         (bg_color.green + fg_color.green)/2.0,
-                         (bg_color.blue + fg_color.blue)/2.0,
-                         (bg_color.alpha + fg_color.alpha)/2.0};
-    
-    GdkRGBA bg_color_active, fg_color_active;
-    gdk_rgba_parse(&bg_color_active, "#f0f0f0"); // Fix bg as a light gray
-    gtk_style_context_get_color(sc, GTK_STATE_FLAG_ACTIVE, &fg_color_active);
-
-    GdkRGBA mid_color_active = {(bg_color_active.red + fg_color_active.red)/2.0,
-                                (bg_color_active.green + fg_color_active.green)/2.0,
-                                (bg_color_active.blue + fg_color_active.blue)/2.0,
-                                (bg_color_active.alpha + fg_color_active.alpha)/2.0};
+    auto lerp = [](double v0, double v1, double t){ return (1.0 - t) * v0 + t * v1; };
+    fg_color.red   = lerp(bg_color.red,     orig_color.red,     0.95);
+    fg_color.green = lerp(bg_color.green,   orig_color.green,   0.95);
+    fg_color.blue  = lerp(bg_color.blue,    orig_color.blue,    0.95);
+    bg_color.red   = lerp(bg_color.red,     orig_color.red,     0.05);
+    bg_color.green = lerp(bg_color.green,   orig_color.green,   0.05);
+    bg_color.blue  = lerp(bg_color.blue,    orig_color.blue,    0.05);
+    GdkRGBA mid_color {
+            lerp(bg_color.red,   fg_color.red,   0.65),
+            lerp(bg_color.green, fg_color.green, 0.65),
+            lerp(bg_color.blue,  fg_color.blue,  0.65),
+            fg_color.alpha};
 
     SPFilterPrimitive* prim = get_selected();
     int row_count = get_model()->children().size();
@@ -2033,10 +2033,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 
 		cr->save();
 
-                gdk_cairo_set_source_rgba(cr->cobj(),
-                                          (inside && mask & GDK_BUTTON1_MASK) ?
-                                          &mid_color : 
-                                          &mid_color_active);
+                gdk_cairo_set_source_rgba(cr->cobj(), inside ? &mid_color : &fg_color);
 
 		draw_connection_node(cr, con_poly, inside);
 
@@ -2050,7 +2047,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 
                 if(_in_drag != (i + 1) || row_prim != prim)
 		    {
-                    draw_connection(cr, row, i, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+                    draw_connection(cr, row, i, text_start_x, outline_x, con_poly[2].get_y(), row_count, fg_color, mid_color);
 		    }
             }
         }
@@ -2062,10 +2059,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             
 	    cr->save();
 		
-            gdk_cairo_set_source_rgba(cr->cobj(),
-                                      (inside && mask & GDK_BUTTON1_MASK) ?
-                                      &mid_color : 
-                                      &mid_color_active);
+            gdk_cairo_set_source_rgba(cr->cobj(), inside ? &mid_color : &fg_color);
 
             draw_connection_node(cr, con_poly, inside);
 
@@ -2074,7 +2068,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             // Draw "in" connection
             if(_in_drag != 1 || row_prim != prim)
 		{
-                draw_connection(cr, row, SP_ATTR_IN, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+                draw_connection(cr, row, SP_ATTR_IN, text_start_x, outline_x, con_poly[2].get_y(), row_count, fg_color, mid_color);
 		}
 
             if(inputs == 2) {
@@ -2088,10 +2082,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 		
 		cr->save();
 
-                gdk_cairo_set_source_rgba(cr->cobj(),
-                                          (inside && mask & GDK_BUTTON1_MASK) ?
-                                          &mid_color : 
-                                          &mid_color_active);
+                gdk_cairo_set_source_rgba(cr->cobj(), inside ? &mid_color : &fg_color);
 
                 draw_connection_node(cr, con_poly, inside);
   
@@ -2100,7 +2091,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
                 // Draw "in2" connection
                 if(_in_drag != 2 || row_prim != prim)
 		    {
-                    draw_connection(cr, row, SP_ATTR_IN2, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+                    draw_connection(cr, row, SP_ATTR_IN2, text_start_x, outline_x, con_poly[2].get_y(), row_count, fg_color, mid_color);
 		    }
             }
         }
@@ -2108,7 +2099,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
         // Draw drag connection
         if(row_prim == prim && _in_drag) {
 		cr->save();
-                cr->set_source_rgb(0.0, 0.0, 0.0);
+                gdk_cairo_set_source_rgba(cr->cobj(), &orig_color);
 		cr->move_to(con_drag_x, con_drag_y);
 		cr->line_to(mx, con_drag_y);  
 		cr->line_to(mx, my);
@@ -2123,20 +2114,9 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cairo::Context>& cr,
                                                          const Gtk::TreeIter& input, const int attr,
                                                          const int text_start_x, const int x1, const int y1,
-                                                         const int row_count)
+                                                         const int row_count, const GdkRGBA fg_color, const GdkRGBA mid_color)
 {
     cr->save();
-
-    auto sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
-    
-    GdkRGBA bg_color, fg_color;
-    gdk_rgba_parse(&bg_color, "f0f0f0"); // Fix bg as a light gray
-    gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
-
-    GdkRGBA mid_color = {(bg_color.red + fg_color.red)/2.0,
-                         (bg_color.green + fg_color.green)/2.0,
-                         (bg_color.blue + fg_color.blue)/2.0,
-                         (bg_color.alpha + fg_color.alpha)/2.0};
 
     int src_id = 0;
     Gtk::TreeIter res = find_result(input, attr, src_id);
@@ -2154,7 +2134,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
 	if(use_default && is_first)
             gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
 	else
-            cr->set_source_rgb(0.0, 0.0, 0.0);
+            gdk_cairo_set_source_rgba(cr->cobj(), &fg_color);
 	
 	cr->rectangle(end_x-2, y1-2, 5, 5);
 	cr->fill_preserve();
@@ -2182,7 +2162,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
             const int y2 = rct.get_y() + rct.get_height();
 
             // Draw a bevelled 'L'-shaped connection
-	    cr->set_source_rgb(0.0, 0.0, 0.0);
+            gdk_cairo_set_source_rgba(cr->cobj(), &fg_color);
 	    cr->move_to(x1, y1);
 	    cr->line_to(x2-fheight/4, y1);
 	    cr->line_to(x2, y1-fheight/4);
