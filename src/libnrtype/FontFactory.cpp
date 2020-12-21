@@ -803,6 +803,7 @@ void font_factory::AddFontsDir(char const *utf8dir)
     FcBool res = FcConfigAppFontAddDir(conf, (FcChar8 const *)dir);
     if (res == FcTrue) {
         g_info("Fonts dir '%s' added successfully.", utf8dir);
+        pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
     } else {
         g_warning("Could not add fonts dir '%s'.", utf8dir);
     }
@@ -835,6 +836,7 @@ void font_factory::AddFontFile(char const *utf8file)
     FcBool res = FcConfigAppFontAddFile(conf, (FcChar8 const *)file);
     if (res == FcTrue) {
         g_info("Font file '%s' added successfully.", utf8file);
+        pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
     } else {
         g_warning("Could not add font file '%s'.", utf8file);
     }
