@@ -127,6 +127,7 @@ protected:
     std::vector<Gtk::Widget *> _search_results;
     Glib::RefPtr<Glib::Regex> _rx;
     int _num_results = 0;
+    bool _show_all = false;
 
     //Pagelist model columns:
     class PageListModelColumns : public Gtk::TreeModel::ColumnRecord

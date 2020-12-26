@@ -441,7 +441,9 @@ void InkscapePreferences::on_search_changed()
         _page_list.set_cursor(Gtk::TreePath(iter));
     } else if (_num_results == 0 && key != "") {
         _page_list.set_has_tooltip(false);
-        // TODO:Show all contents
+        _show_all = true;
+        _page_list_model_filter->refilter();
+        _show_all = false;
         show_not_found();
     } else {
         _page_list.expand_all();
@@ -647,6 +649,8 @@ void InkscapePreferences::highlight_results(Glib::ustring const &key, Gtk::TreeM
  */
 bool InkscapePreferences::recursive_filter(Glib::ustring &key, Gtk::TreeModel::const_iterator const &iter)
 {
+    if(_show_all)
+        return true;
     auto row_label = iter->get_value(_page_list_columns._col_name).lowercase();
     if (key == "") {
         return true;
