@@ -292,7 +292,6 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
  */
 bool SPLPEItem::optimizeTransforms()
 {
-    bool ret = true;
     if (dynamic_cast<SPGroup *>(this)) {
         return false;
     }
@@ -309,9 +308,6 @@ bool SPLPEItem::optimizeTransforms()
         if (!lperef) {
             continue;
         }
-        if (!ret) {
-            break;
-        }
         LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
@@ -322,7 +318,7 @@ bool SPLPEItem::optimizeTransforms()
                     dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPEBool *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe)) {
-                    ret = false;
+                    return false;
                 }
             }
         }
