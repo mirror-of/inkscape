@@ -3142,7 +3142,7 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("show-grid")),
     new ZoomVerb(SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"),
                  N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
-    new ZoomVerb(SP_VERB_TOGGLE_ROTATION_LOCK, "ToggleRotationLock", N_("Lock rotation"),
+    new ZoomVerb(SP_VERB_TOGGLE_ROTATION_LOCK, "ToggleRotationLock", N_("Lock Rotation"),
                  N_("Lock canvas rotation"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SNAPPING, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
     new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"),
