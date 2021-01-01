@@ -16,6 +16,7 @@ add_subdirectory(pixmaps)
 add_subdirectory(tutorials)
 add_subdirectory(ui)
 add_subdirectory(doc)
+add_subdirectory(themes)
 
 install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL}
     COMPONENT extensions

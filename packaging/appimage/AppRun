@@ -42,6 +42,7 @@ export PATH="${HERE}/usr/bin:${PATH}"
 
 if [ -e "$HERE/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" ] ; then
   echo "Run experimental bundle that bundles everything"
+  export XDG_DATA_DIRS="$HERE/usr/share/:/usr/local/share/:/usr/share/"
   export GCONV_PATH="$HERE/usr/lib/x86_64-linux-gnu/gconv"
   export FONTCONFIG_FILE="$HERE/etc/fonts/fonts.conf"
   export LIBRARY_PATH="$HERE/usr/lib":$LIBRARY_PATH
