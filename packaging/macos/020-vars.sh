@@ -37,7 +37,7 @@ export SDKROOT=$SDKROOT_DIR/MacOSX${SDK_VERSION}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.37.5
+TOOLSET_VERSION=0.37.6
 
 ### ramdisk ####################################################################
 
@@ -144,7 +144,7 @@ PY3_BUILD=2  # custom framework build number
 
 # https://github.com/dehesselle/gtk-osx
 # Forked from https://gitlab.gnome.org/GNOME/gtk-osx
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-9
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-10
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 
@@ -200,7 +200,7 @@ PYTHON_CAIROSVG=cairosvg==2.4.2
 # create DMG
 # https://dmgbuild.readthedocs.io/en/latest/
 # https://github.com/al45tair/dmgbuild
-PYTHON_DMGBUILD=dmgbuild==1.3.3
+PYTHON_DMGBUILD="biplist==1.0.3 dmgbuild==1.4.2"
 
 ### path #######################################################################
 
