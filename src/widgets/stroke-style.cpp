@@ -510,6 +510,8 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
         Inkscape::XML::Node *selrepr = item->getRepr();
         if (selrepr) {
             sp_repr_css_change_recursive(selrepr, css, "style");
+            SPObject *markerObj = getMarkerObj(marker, document);
+            spw->setMarkerColor(markerObj, marker_combo->get_loc(), item);
         }
 
         item->requestModified(SP_OBJECT_MODIFIED_FLAG);
