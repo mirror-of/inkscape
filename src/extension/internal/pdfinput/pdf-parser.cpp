@@ -998,6 +998,49 @@ void PdfParser::opSetRenderingIntent(Object /*args*/[], int /*numArgs*/)
 // color operators
 //------------------------------------------------------------------------
 
+/**
+ * Get a newly allocated color space instance by CS operation argument.
+ *
+ * Maintains a cache for named color spaces to avoid expensive re-parsing.
+ */
+GfxColorSpace *PdfParser::lookupColorSpaceCopy(Object &arg)
+{
+  assert(!arg.isNull());
+
+  char const *name = arg.isName() ? arg.getName() : nullptr;
+  GfxColorSpace *colorSpace = nullptr;
+
+  if (name && (colorSpace = colorSpacesCache[name].get())) {
+    return colorSpace->copy();
+  }
+
+  Object *argPtr = &arg;
+  Object obj;
+
+  if (name) {
+    _POPPLER_CALL_ARGS(obj, res->lookupColorSpace, name);
+    if (!obj.isNull()) {
+      argPtr = &obj;
+    }
+  }
+
+#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
+  colorSpace = GfxColorSpace::parse(res, argPtr, nullptr, state);
+#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
+  colorSpace = GfxColorSpace::parse(argPtr, nullptr, nullptr);
+#else
+  colorSpace = GfxColorSpace::parse(argPtr, nullptr);
+#endif
+
+  _POPPLER_FREE(obj);
+
+  if (name && colorSpace) {
+    colorSpacesCache[name].reset(colorSpace->copy());
+  }
+
+  return colorSpace;
+}
+
 // TODO not good that numArgs is ignored but args[] is used:
 void PdfParser::opSetFillGray(Object args[], int /*numArgs*/)
 {
@@ -1079,34 +1122,13 @@ void PdfParser::opSetStrokeRGBColor(Object args[], int /*numArgs*/) {
 }
 
 // TODO not good that numArgs is ignored but args[] is used:
-void PdfParser::opSetFillColorSpace(Object args[], int /*numArgs*/)
+void PdfParser::opSetFillColorSpace(Object args[], int numArgs)
 {
-  Object obj;
+  assert(numArgs >= 1);
+  GfxColorSpace *colorSpace = lookupColorSpaceCopy(args[0]);
 
   state->setFillPattern(nullptr);
-  _POPPLER_CALL_ARGS(obj, res->lookupColorSpace, args[0].getName());
 
-  GfxColorSpace *colorSpace = nullptr;
-#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
-  if (obj.isNull()) {
-    colorSpace = GfxColorSpace::parse(nullptr, &args[0], nullptr, nullptr);
-  } else {
-    colorSpace = GfxColorSpace::parse(nullptr, &obj, nullptr, nullptr);
-  }
-#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
-  if (obj.isNull()) {
-    colorSpace = GfxColorSpace::parse(&args[0], NULL, NULL);
-  } else {
-    colorSpace = GfxColorSpace::parse(&obj, NULL, NULL);
-  }
-#else
-  if (obj.isNull()) {
-    colorSpace = GfxColorSpace::parse(&args[0], NULL);
-  } else {
-    colorSpace = GfxColorSpace::parse(&obj, NULL);
-  }
-#endif
-  _POPPLER_FREE(obj);
   if (colorSpace) {
   GfxColor color;
     state->setFillColorSpace(colorSpace);
@@ -1119,33 +1141,13 @@ void PdfParser::opSetFillColorSpace(Object args[], int /*numArgs*/)
 }
 
 // TODO not good that numArgs is ignored but args[] is used:
-void PdfParser::opSetStrokeColorSpace(Object args[], int /*numArgs*/)
+void PdfParser::opSetStrokeColorSpace(Object args[], int numArgs)
 {
-  Object obj;
-  GfxColorSpace *colorSpace = nullptr;
+  assert(numArgs >= 1);
+  GfxColorSpace *colorSpace = lookupColorSpaceCopy(args[0]);
 
   state->setStrokePattern(nullptr);
-  _POPPLER_CALL_ARGS(obj, res->lookupColorSpace, args[0].getName());
-#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
-  if (obj.isNull()) {
-    colorSpace = GfxColorSpace::parse(nullptr, &args[0], nullptr, nullptr);
-  } else {
-    colorSpace = GfxColorSpace::parse(nullptr, &obj, nullptr, nullptr);
-  }
-#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
-  if (obj.isNull()) {
-    colorSpace = GfxColorSpace::parse(&args[0], NULL, NULL);
-  } else {
-    colorSpace = GfxColorSpace::parse(&obj, NULL, NULL);
-  }
-#else
-  if (obj.isNull()) {
-    colorSpace = GfxColorSpace::parse(&args[0], NULL);
-  } else {
-    colorSpace = GfxColorSpace::parse(&obj, NULL);
-  }
-#endif
-  _POPPLER_FREE(obj);
+
   if (colorSpace) {
     GfxColor color;
     state->setStrokeColorSpace(colorSpace);
@@ -2716,23 +2718,8 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
             _POPPLER_FREE(obj1);
             _POPPLER_CALL_ARGS(obj1, dict->lookup, "CS");
         }
-        if (obj1.isName()) {
-            _POPPLER_CALL_ARGS(obj2, res->lookupColorSpace, obj1.getName());
-            if (!obj2.isNull()) {
-	            _POPPLER_FREE(obj1);
-                    obj1 = std::move(obj2);
-            } else {
-	            _POPPLER_FREE(obj2);
-            }
-        }
         if (!obj1.isNull()) {
-#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
-            colorSpace = GfxColorSpace::parse(nullptr, &obj1, nullptr, nullptr);
-#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
-            colorSpace = GfxColorSpace::parse(&obj1, NULL, NULL);
-#else
-            colorSpace = GfxColorSpace::parse(&obj1, NULL);
-#endif
+            colorSpace = lookupColorSpaceCopy(obj1);
         } else if (csMode == streamCSDeviceGray) {
             colorSpace = new GfxDeviceGrayColorSpace();
         } else if (csMode == streamCSDeviceRGB) {
@@ -2821,22 +2808,7 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
 	            _POPPLER_FREE(obj1);
                     _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "CS");
             }
-            if (obj1.isName()) {
-	            _POPPLER_CALL_ARGS(obj2, res->lookupColorSpace, obj1.getName());
-	            if (!obj2.isNull()) {
-	                _POPPLER_FREE(obj1);
-                        obj1 = std::move(obj2);
-	            } else {
-	                _POPPLER_FREE(obj2);
-	            }
-            }
-#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
-            GfxColorSpace *maskColorSpace = GfxColorSpace::parse(nullptr, &obj1, nullptr, nullptr);
-#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
-            GfxColorSpace *maskColorSpace = GfxColorSpace::parse(&obj1, NULL, NULL);
-#else
-            GfxColorSpace *maskColorSpace = GfxColorSpace::parse(&obj1, NULL);
-#endif
+            GfxColorSpace *maskColorSpace = lookupColorSpaceCopy(obj1);
             _POPPLER_FREE(obj1);
             if (!maskColorSpace || maskColorSpace->getMode() != csDeviceGray) {
                 goto err1;
