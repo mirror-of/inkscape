@@ -872,7 +872,7 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
 	  GBool knockout = gFalse;
 	  if (!_POPPLER_CALL_ARGS_DEREF(obj5, obj4.dictLookup, "CS").isNull()) {
 #if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
-	    blendingColorSpace = GfxColorSpace::parse(nullptr, &obj5, nullptr, nullptr);
+	    blendingColorSpace = GfxColorSpace::parse(nullptr, &obj5, nullptr, state);
 #elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
 	    blendingColorSpace = GfxColorSpace::parse(&obj5, NULL, NULL);
 #else
@@ -1214,7 +1214,7 @@ void PdfParser::opSetFillColorN(Object args[], int numArgs) {
     GfxPattern *pattern;
 #if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
     if (args[numArgs-1].isName() &&
-	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, nullptr))) {
+	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, state))) {
       state->setFillPattern(pattern);
       builder->updateStyle(state);
     }
@@ -1266,7 +1266,7 @@ void PdfParser::opSetStrokeColorN(Object args[], int numArgs) {
     GfxPattern *pattern;
 #if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
     if (args[numArgs-1].isName() &&
-	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, nullptr))) {
+	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, state))) {
       state->setStrokePattern(pattern);
       builder->updateStyle(state);
     }
@@ -1688,7 +1688,7 @@ void PdfParser::opShFill(Object args[], int /*numArgs*/)
   GBool savedState = gFalse;
 
 #if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
-  if (!(shading = res->lookupShading(args[0].getName(), nullptr, nullptr))) {
+  if (!(shading = res->lookupShading(args[0].getName(), nullptr, state))) {
     return;
   }
 #else
@@ -2993,7 +2993,7 @@ void PdfParser::doForm(Object *str) {
       transpGroup = gTrue;
       if (!_POPPLER_CALL_ARGS_DEREF(obj3, obj1.dictLookup, "CS").isNull()) {
 #if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
-	blendingColorSpace = GfxColorSpace::parse(nullptr, &obj3, nullptr, nullptr);
+	blendingColorSpace = GfxColorSpace::parse(nullptr, &obj3, nullptr, state);
 #elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
 	blendingColorSpace = GfxColorSpace::parse(&obj3, NULL, NULL);
 #else
