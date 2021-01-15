@@ -39,6 +39,17 @@
     </screenshot>
   </screenshots>
   <releases>
+        <release version="1.0.2" date="2021-01-17">
+      <description>
+        <p>Inkscape 1.0.2</p>
+        <ul>
+          <li>More granular controls for canvas zooming and rotation</li>
+          <li>Fixes extensions popping up when a clipboard manager was used</li>
+          <li>Several crashes fixed</li>
+        </ul>
+      </description>
+      <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0.2</url>
+    </release>
     <release version="1.0.1" date="2020-09-07">
       <description>
         <p>Inkscape 1.0.1</p>

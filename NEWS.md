@@ -1,3 +1,21 @@
+Inkscape 1.0.2
+------------
+
+Released on **2021-01-17**
+
+Release highlights
+------------------
+
+This is a bugfix release:
+
+- More granular controls for canvas zooming and rotation
+- Fixes extensions popping up when a clipboard manager was used
+- Several crashes fixed
+
+
+
+
+
 Inkscape 1.0.1
 ------------
 
