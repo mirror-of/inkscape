@@ -134,10 +134,11 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
 
     // Find the rendered size of the icon.
     int scale = 1;
+    bool cursor_scaling = false;
 #ifndef GDK_WINDOWING_QUARTZ
     // Default cursor size (get_default_cursor_size()) fixed to 32 on Quartz. Cursor scaling handled elsewhere.
 
-    bool cursor_scaling = prefs->getBool("/options/cursorscaling"); // Fractional scaling is broken but we can't detect it.
+    cursor_scaling = prefs->getBool("/options/cursorscaling"); // Fractional scaling is broken but we can't detect it.
     if (cursor_scaling) {
         scale = window->get_scale_factor(); // Adjust for HiDPI screens.
     }
@@ -161,18 +162,15 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
     int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0);
 
     auto ink_pixbuf = sp_generate_internal_bitmap(document.get(), nullptr, 0, 0, w, h, sw, sh, dpix, dpiy, 0, nullptr);
-    auto pixbufr = ink_pixbuf->getPixbufRaw();
-    auto pixbuf = Glib::wrap(pixbufr);
-
-    if (pixbuf) {
+    if (auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw())) {
         if (cursor_scaling) {
             // creating cursor from Cairo surface rather than pixbuf gives up opportunity to set device scaling;
             // what that means in practice is we can prepare high-res image and it will be used as-is on
             // a high-res display; cursors created from pixbuf are up-scaled to device pixels (blurry)
-            if (auto cairosur = gdk_cairo_surface_create_from_pixbuf(pixbufr, 1, window->gobj())) {
-                cairo_surface_set_device_scale(cairosur, scale, scale);
-                Cairo::RefPtr<Cairo::Surface> csptr(new Cairo::Surface(cairosur));
-                cursor = Gdk::Cursor::create(display, csptr, hotspot_x, hotspot_y);
+            auto surface = ink_pixbuf->getSurface();
+				if (surface && surface->cobj()) {
+                cairo_surface_set_device_scale(surface->cobj(), scale, scale);
+                cursor = Gdk::Cursor::create(display, surface, hotspot_x, hotspot_y);
                 window->set_cursor(cursor);
             }
         }
