@@ -168,7 +168,7 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
             // what that means in practice is we can prepare high-res image and it will be used as-is on
             // a high-res display; cursors created from pixbuf are up-scaled to device pixels (blurry)
             auto surface = ink_pixbuf->getSurface();
-				if (surface && surface->cobj()) {
+            if (surface && surface->cobj()) {
                 cairo_surface_set_device_scale(surface->cobj(), scale, scale);
                 cursor = Gdk::Cursor::create(display, surface, hotspot_x, hotspot_y);
                 window->set_cursor(cursor);
