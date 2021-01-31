@@ -161,11 +161,26 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
     int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0);
 
     auto ink_pixbuf = sp_generate_internal_bitmap(document.get(), nullptr, 0, 0, w, h, sw, sh, dpix, dpiy, 0, nullptr);
-    auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw());
+    auto pixbufr = ink_pixbuf->getPixbufRaw();
+    auto pixbuf = Glib::wrap(pixbufr);
 
     if (pixbuf) {
-        cursor = Gdk::Cursor::create(display, pixbuf, hotspot_x, hotspot_y);
-        window->set_cursor(cursor);
+        if (cursor_scaling) {
+            // creating cursor from Cairo surface rather than pixbuf gives up opportunity to set device scaling;
+            // what that means in practice is we can prepare high-res image and it will be used as-is on
+            // a high-res display; cursors created from pixbuf are up-scaled to device pixels (blurry)
+            if (auto cairosur = gdk_cairo_surface_create_from_pixbuf(pixbufr, 1, window->gobj())) {
+                cairo_surface_set_device_scale(cairosur, scale, scale);
+                Cairo::RefPtr<Cairo::Surface> csptr(new Cairo::Surface(cairosur));
+                cursor = Gdk::Cursor::create(display, csptr, hotspot_x, hotspot_y);
+                window->set_cursor(cursor);
+            }
+        }
+        else {
+            // original code path just in case Win32/MacOS don't like above approach
+            cursor = Gdk::Cursor::create(display, pixbuf, hotspot_x, hotspot_y);
+            window->set_cursor(cursor);
+        }
     } else {
         std::cerr << "load_svg_cursor: failed to create pixbuf for: " << full_file_path << std::endl;
     }
