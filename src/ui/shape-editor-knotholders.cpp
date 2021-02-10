@@ -1844,6 +1844,60 @@ TextKnotHolderEntityInlineSize::knot_click(unsigned int state)
     }
 }
 
+/**
+ * Shape padding editor knot positioned top right corner of first object
+ */
+class TextKnotHolderEntityShapePadding : public KnotHolderEntity {
+public:
+    Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+};
+
+Geom::Point
+TextKnotHolderEntityShapePadding::knot_get() const
+{
+    SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+    Geom::Point corner;
+    if (text->has_shape_inside()) {
+        auto shape = text->get_first_shape_dependency();
+        Geom::OptRect bounds = shape->geometricBounds();
+        if (bounds) {
+            corner = (*bounds).corner(1);
+            if (text->style->shape_padding.set) {
+                auto padding = text->style->shape_padding.computed;
+                corner *= Geom::Affine(Geom::Translate(-padding, padding));
+            }
+            corner *= shape->transform;
+        }
+    }
+    return corner;
+}
+
+void
+TextKnotHolderEntityShapePadding::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
+{
+    // Text in a shape: rectangle
+    SPText *text = dynamic_cast<SPText *>(item);
+
+    if (text->has_shape_inside()) {
+        auto shape = text->get_first_shape_dependency();
+        Geom::OptRect bounds = shape->geometricBounds();
+        if (bounds) {
+            Geom::Point const point_a = snap_knot_position(p, state);
+            Geom::Point point_b = point_a * shape->transform.inverse();
+            auto padding = (*bounds).corner(1)[Geom::X] - point_b[Geom::X];
+            gchar *pad = g_strdup_printf("%f", padding);
+            text->style->shape_padding.read(pad);
+            g_free(pad);
+
+            text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            text->updateRepr();
+        }
+    }
+}
+
 class TextKnotHolderEntityShapeInside : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
@@ -1860,7 +1914,7 @@ TextKnotHolderEntityShapeInside::knot_get() const
     // we have a crash on undo cration so remove assert
     // g_assert(text->style->shape_inside.set);
     Geom::Point p;
-    if (text->style->shape_inside.set) {
+    if (text->has_shape_inside()) {
         Geom::OptRect frame = text->get_frame();
         if (frame) {
             p = (*frame).corner(2);
@@ -1902,11 +1956,18 @@ TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
 
     if (text->style->shape_inside.set) {
         // 'shape-inside'
-        TextKnotHolderEntityShapeInside *entity_shapeinside = new TextKnotHolderEntityShapeInside();
 
-        entity_shapeinside->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Text:shapeinside",
-                                   _("Adjust the <b>rectangular</b> region of the text."));
-        entity.push_back(entity_shapeinside);
+        if (text->get_first_rectangle()) {
+            auto entity_shapeinside = new TextKnotHolderEntityShapeInside();
+            entity_shapeinside->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Text:shapeinside",
+                                       _("Adjust the <b>rectangular</b> region of the text."));
+            entity.push_back(entity_shapeinside);
+        }
+
+        auto entity_shapepadding = new TextKnotHolderEntityShapePadding();
+        entity_shapepadding->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "Text:shapepadding",
+                                    _("Adjust the text <b>shape padding</b>."));
+        entity.push_back(entity_shapepadding);
 
     } else {
         // 'inline-size' or normal text

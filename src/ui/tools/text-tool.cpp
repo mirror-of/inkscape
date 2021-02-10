@@ -154,10 +154,7 @@ void TextTool::setup() {
     this->shape_editor = new ShapeEditor(this->desktop);
 
     SPItem *item = this->desktop->getSelection()->singleItem();
-    if (item && (
-            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
-            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside())           )
-        ) {
+    if (item && (SP_IS_FLOWTEXT(item) || SP_IS_TEXT(item))) {
         this->shape_editor->set_item(item);
     }
 
@@ -1480,23 +1477,17 @@ bool sp_text_delete_selection(ToolBase *ec)
 void TextTool::_selectionChanged(Inkscape::Selection *selection)
 {
     g_assert(selection != nullptr);
-
-    shape_editor->unset_item();
     SPItem *item = selection->singleItem();
-    if (item && (
-            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
-            (SP_IS_TEXT(item) &&
-             !(SP_TEXT(item)->has_shape_inside() && !SP_TEXT(item)->get_first_rectangle()))
-            )) {
-        shape_editor->set_item(item);
-    }
 
     if (this->text && (item != this->text)) {
         sp_text_context_forget_text(this);
     }
     this->text = nullptr;
 
+    shape_editor->unset_item();
     if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
+        shape_editor->set_item(item);
+
         this->text = item;
         Inkscape::Text::Layout const *layout = te_get_layout(this->text);
         if (layout)
