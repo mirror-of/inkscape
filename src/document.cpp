@@ -444,10 +444,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     // ************* Fix Document **************
     // Move to separate function?
 
-    /** Fix OSB **/
-    sp_file_fix_osb(document->getRoot());
-
-
     /** Fix baseline spacing (pre-92 files) **/
     if ( (!sp_no_convert_text_baseline_spacing)
          && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
@@ -463,6 +459,17 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 0)) {
         sp_file_fix_empty_lines(document);
     }
+
+    /** Fix OSB (pre-1.1 files) **/
+    if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 1)) {
+        sp_file_fix_osb(document->getRoot());
+    }
+
+    /** Fix feComposite (pre-1.2 files) **/
+    if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 1)) {
+        sp_file_fix_feComposite(document->getRoot());
+    }
+
 
     /** Fix dpi (pre-92 files). With GUI fixed in Inkscape::Application::fix_document. **/
     if ( !(INKSCAPE.use_gui()) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {

@@ -250,9 +250,9 @@ if(WITH_DBUS)
 endif()
 
 if(WITH_SVG2)
-    add_definitions(-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE -DWITH_SVG2)
+    add_definitions(-DWITH_MESH -DWITH_CSSBLEND -DWITH_SVG2)
 else()
-    add_definitions(-UWITH_MESH -UWITH_CSSBLEND -UWITH_CSSCOMPOSITE -UWITH_SVG2)
+    add_definitions(-UWITH_MESH -UWITH_CSSBLEND -UWITH_SVG2)
 endif()
 
 if(APPLE)

@@ -27,17 +27,7 @@ enum FeCompositeOperator {
     COMPOSITE_ATOP,              /* Source Atop */
     COMPOSITE_XOR,
     COMPOSITE_ARITHMETIC,        /* Not a fundamental PorterDuff operator, nor Cairo */
-#ifdef WITH_CSSCOMPOSITE
-    // New in CSS
-    COMPOSITE_CLEAR,
-    COMPOSITE_COPY,              /* Source      */
-    COMPOSITE_DESTINATION,
-    COMPOSITE_DESTINATION_OVER,
-    COMPOSITE_DESTINATION_IN,
-    COMPOSITE_DESTINATION_OUT,
-    COMPOSITE_DESTINATION_ATOP,
     COMPOSITE_LIGHTER,           /* Plus, Add (Not a fundamental PorterDuff operator  */
-#endif
     COMPOSITE_ENDOPERATOR        /* Cairo Saturate is not included in CSS */
 };
 

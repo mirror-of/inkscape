@@ -71,17 +71,7 @@ const EnumData<FeCompositeOperator> CompositeOperatorData[COMPOSITE_ENDOPERATOR]
     {COMPOSITE_OUT,              _("Out"),             "out"              },
     {COMPOSITE_ATOP,             _("Atop"),            "atop"             },
     {COMPOSITE_XOR,              _("XOR"),             "xor"              },
-#ifdef WITH_CSSCOMPOSITE
-// New CSS
-    {COMPOSITE_CLEAR,            _("Clear"),           "clear"            },
-    {COMPOSITE_COPY,             _("Copy"),            "copy"             },
-    {COMPOSITE_DESTINATION,      _("Destination"),     "destination"      },
-    {COMPOSITE_DESTINATION_OVER, _("Destination Over"),"destination-over" },
-    {COMPOSITE_DESTINATION_IN,   _("Destination In"),  "destination-in"   },
-    {COMPOSITE_DESTINATION_OUT,  _("Destination Out"), "destination-out"  },
-    {COMPOSITE_DESTINATION_ATOP, _("Destination Atop"),"destination-atop" },
     {COMPOSITE_LIGHTER,          _("Lighter"),         "lighter"          },
-#endif
     {COMPOSITE_ARITHMETIC,       _("Arithmetic"),      "arithmetic"       }
     // clang-format on
 };

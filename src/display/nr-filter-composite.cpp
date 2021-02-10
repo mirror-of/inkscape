@@ -102,33 +102,9 @@ void FilterComposite::render_cairo(FilterSlot &slot)
         case COMPOSITE_XOR:
             cairo_set_operator(ct, CAIRO_OPERATOR_XOR);
             break;
-#ifdef WITH_CSSCOMPOSITE
-        /* New CSS Operators */
-        case COMPOSITE_CLEAR:
-            cairo_set_operator(ct, CAIRO_OPERATOR_CLEAR);
-            break;
-        case COMPOSITE_COPY:
-            cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
-            break;
-        case COMPOSITE_DESTINATION:
-            cairo_set_operator(ct, CAIRO_OPERATOR_DEST);
-            break;
-        case COMPOSITE_DESTINATION_OVER:
-            cairo_set_operator(ct, CAIRO_OPERATOR_DEST_OVER);
-            break;
-        case COMPOSITE_DESTINATION_IN:
-            cairo_set_operator(ct, CAIRO_OPERATOR_DEST_IN);
-            break;
-        case COMPOSITE_DESTINATION_OUT:
-            cairo_set_operator(ct, CAIRO_OPERATOR_DEST_OUT);
-            break;
-        case COMPOSITE_DESTINATION_ATOP:
-            cairo_set_operator(ct, CAIRO_OPERATOR_DEST_ATOP);
-            break;
         case COMPOSITE_LIGHTER:
             cairo_set_operator(ct, CAIRO_OPERATOR_ADD);
             break;
-#endif
         case COMPOSITE_OVER:
         case COMPOSITE_DEFAULT:
         default:

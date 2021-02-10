@@ -59,6 +59,7 @@
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
+#include "object/filters/composite.h"
 #include "style.h"
 
 #include "ui/shape-editor.h"
@@ -644,6 +645,67 @@ void sp_file_convert_dpi(SPDocument *doc)
 
     // desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
     DocumentUndo::done(doc, SP_VERB_NONE, _("Update Document"));
+}
+
+
+// pre-1.1:
+// Do not use canvas API-specific feComposite operators, they do *not* apply to SVG.
+// https://github.com/w3c/csswg-drafts/issues/5267
+void fix_feComposite(SPObject *i){
+    if (!SP_IS_FECOMPOSITE(i)) return;
+    std::string oper = i->getAttribute("operator");
+    if (oper == "clear") {
+        i->setAttribute("operator", "arithmetic");
+        i->setAttribute("k1", "0");
+        i->setAttribute("k2", "0");
+        i->setAttribute("k3", "0");
+        i->setAttribute("k4", "0");
+    } else if (oper == "copy") {
+        i->setAttribute("operator", "arithmetic");
+        i->setAttribute("k1", "0");
+        i->setAttribute("k2", "1");
+        i->setAttribute("k3", "0");
+        i->setAttribute("k4", "0");
+    } else if (oper == "destination") {
+        i->setAttribute("operator", "arithmetic");
+        i->setAttribute("k1", "0");
+        i->setAttribute("k2", "0");
+        i->setAttribute("k3", "1");
+        i->setAttribute("k4", "0");
+    } else if (oper == "destination-over") {
+        auto in1 = i->getAttribute("in");
+        auto in2 = i->getAttribute("in2");
+        i->setAttribute("in", in2);
+        i->setAttribute("in2", in1);
+        i->setAttribute("operator", "over");
+    } else if (oper == "destination-in") {
+        auto in1 = i->getAttribute("in");
+        auto in2 = i->getAttribute("in2");
+        i->setAttribute("in", in2);
+        i->setAttribute("in2", in1);
+        i->setAttribute("operator", "in");
+    } else if (oper == "destination-out") {
+        auto in1 = i->getAttribute("in");
+        auto in2 = i->getAttribute("in2");
+        i->setAttribute("in", in2);
+        i->setAttribute("in2", in1);
+        i->setAttribute("operator", "out");
+    } else if (oper == "destination-atop") {
+        auto in1 = i->getAttribute("in");
+        auto in2 = i->getAttribute("in2");
+        i->setAttribute("in", in2);
+        i->setAttribute("in2", in1);
+        i->setAttribute("operator", "atop");
+    } // else do nothing, we're good
+    i->updateRepr();
+}
+
+void sp_file_fix_feComposite(SPObject *o)
+{
+    fix_feComposite(o);
+    std::vector<SPObject *> cl = o->childList(false);
+    for (auto ci : cl)
+        sp_file_fix_feComposite(ci);
 }
 
 
