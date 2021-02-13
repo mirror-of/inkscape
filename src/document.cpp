@@ -868,16 +868,14 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double margin_bottom = 0.0;
 
     if (with_margins && nv) {
-        if (nv != nullptr) {
-            margin_top = nv->getMarginLength("fit-margin-top", nv_units, unit_table.getUnit("px"), w, h, false);
-            margin_left = nv->getMarginLength("fit-margin-left", nv_units, unit_table.getUnit("px"), w, h, true);
-            margin_right = nv->getMarginLength("fit-margin-right", nv_units, unit_table.getUnit("px"), w, h, true);
-            margin_bottom = nv->getMarginLength("fit-margin-bottom", nv_units, unit_table.getUnit("px"), w, h, false);
-            margin_top = Inkscape::Util::Quantity::convert(margin_top, nv_units, "px");
-            margin_left = Inkscape::Util::Quantity::convert(margin_left, nv_units, "px");
-            margin_right = Inkscape::Util::Quantity::convert(margin_right, nv_units, "px");
-            margin_bottom = Inkscape::Util::Quantity::convert(margin_bottom, nv_units, "px");
-        }
+        margin_top = nv->getMarginLength("fit-margin-top", nv_units, unit_table.getUnit("px"), w, h, false);
+        margin_left = nv->getMarginLength("fit-margin-left", nv_units, unit_table.getUnit("px"), w, h, true);
+        margin_right = nv->getMarginLength("fit-margin-right", nv_units, unit_table.getUnit("px"), w, h, true);
+        margin_bottom = nv->getMarginLength("fit-margin-bottom", nv_units, unit_table.getUnit("px"), w, h, false);
+        margin_top = Inkscape::Util::Quantity::convert(margin_top, nv_units, "px");
+        margin_left = Inkscape::Util::Quantity::convert(margin_left, nv_units, "px");
+        margin_right = Inkscape::Util::Quantity::convert(margin_right, nv_units, "px");
+        margin_bottom = Inkscape::Util::Quantity::convert(margin_bottom, nv_units, "px");
     }
 
     double y_dir = yaxisdir();
