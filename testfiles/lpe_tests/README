@@ -1,0 +1,16 @@
+HOWTO
+
+# Add a LPE test:
+  - create the svg file with some examples of the same LPE (clip, mask shape, path, group....
+  - add the test in CMakeLists.txt
+  - use 1.0 if posible as base to generarte files
+  - store the file in "lpe_tests/expected" folder
+  - copy also the file to "lpe_tests" folder open it in a text editoer and remove all d attributes of the file
+ 
+
+# Fix a failing test (due to a change in code):
+  - DO *NOT* MODIFY the expected rendering (or the svg) before getting advice from inkscape-devel@
+  - fix your code if possible
+  - manually double check the changes
+
+

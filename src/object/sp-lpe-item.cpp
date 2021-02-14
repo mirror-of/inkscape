@@ -419,7 +419,8 @@ lpeobject_ref_modified(SPObject */*href*/, guint flags, SPLPEItem *lpeitem)
 #ifdef SHAPE_VERBOSE
     g_message("lpeobject_ref_modified");
 #endif
-    if (flags != 29 && flags != 253) {
+    auto lprtestenv = Glib::getenv("INKTESTENV");
+    if (!lprtestenv.empty() || (flags != 29 && flags != 253)) {
         sp_lpe_item_update_patheffect (lpeitem, true, true);
     }
 }

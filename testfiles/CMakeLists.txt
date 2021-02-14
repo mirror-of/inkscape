@@ -96,6 +96,7 @@ endforeach()
 ### CLI and rendering tests
 add_subdirectory(cli_tests)
 add_subdirectory(rendering_tests)
+add_subdirectory(lpe_tests)
 
 
 ### Fuzz test
