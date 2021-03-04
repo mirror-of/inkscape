@@ -1611,6 +1611,9 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_FLOW_TEXT:
             text_flow_into_shape();
             break;
+        case SP_VERB_OBJECT_FLOW_SUBTRACT:
+            text_flow_shape_subtract();
+            break;
         case SP_VERB_OBJECT_UNFLOW_TEXT:
             text_unflow();
             break;
@@ -2656,6 +2659,9 @@ Verb *Verb::_base_verbs[] = {
     new ObjectVerb(SP_VERB_OBJECT_FLOW_TEXT, "ObjectFlowText", N_("_Flow into Frame"),
                    N_("Put text into a frame (path or shape), creating a flowed text linked to the frame object"),
                    "text-flow-into-frame"),
+    new ObjectVerb(SP_VERB_OBJECT_FLOW_SUBTRACT, "ObjectFlowSubtract", N_("Set _Subtraction Frames"),
+                   N_("Flow text around a frame (path or shape), only available for SVG 2.0 Flow text."),
+                   "text-flow-subtract-frame"),
     new ObjectVerb(SP_VERB_OBJECT_UNFLOW_TEXT, "ObjectUnFlowText", N_("_Unflow"),
                    N_("Remove text from frame (creates a single-line text object)"), INKSCAPE_ICON("text-unflow")),
     new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Convert to Text"),

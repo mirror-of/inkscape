@@ -224,6 +224,16 @@ gchar const* SPObject::getId() const {
     return id;
 }
 
+/**
+ * Returns the id as a url param, in the form 'url(#{id})'
+ */
+std::string SPObject::getUrl() const {
+    if (id) {
+        return std::string("url(#") + id + ")";
+    }
+    return "";
+}
+
 Inkscape::XML::Node * SPObject::getRepr() {
     return repr;
 }

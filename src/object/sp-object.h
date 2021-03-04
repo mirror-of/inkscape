@@ -216,6 +216,11 @@ public:
     char const* getId() const;
 
     /**
+     * Get the id in a URL format.
+     */
+    std::string getUrl() const;
+
+    /**
      * Returns the XML representation of tree
      */
 //protected:

@@ -281,6 +281,7 @@
        <verb verb-id="SelectionTextFromPath" />
        <separator/>
        <verb verb-id="ObjectFlowText" />
+       <verb verb-id="ObjectFlowSubtract" />
        <verb verb-id="ObjectUnFlowText" />
        <verb verb-id="ObjectFlowtextToText" />
        <separator/>
