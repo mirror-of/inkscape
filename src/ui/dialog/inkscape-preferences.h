@@ -346,6 +346,7 @@ protected:
     UI::Widget::PrefRadioButton _sel_recursive;
     UI::Widget::PrefCheckButton _sel_hidden;
     UI::Widget::PrefCheckButton _sel_locked;
+    UI::Widget::PrefCheckButton _sel_inlayer_same;
     UI::Widget::PrefCheckButton _sel_layer_deselects;
     UI::Widget::PrefCheckButton _sel_cycle;
 

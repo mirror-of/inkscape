@@ -1959,15 +1959,29 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
         return;
     }
 
+    Inkscape::Selection *selection = desktop->getSelection();
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool inlayersame = prefs->getBool("/options/selection/samelikeall", false);
     bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
     bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
-    bool ingroups = TRUE;
+
+    SPObject *root = desktop->currentRoot();
+    bool ingroup = true;
+
+    // Apply the same layer logic to select same as used for select all.
+    if (inlayersame) {
+        PrefsSelectionContext inlayer = (PrefsSelectionContext)prefs->getInt("/options/kbselection/inlayer", PREFS_SELECTION_LAYER);
+        if (PREFS_SELECTION_ALL != inlayer) {
+            root = selection->activeContext();
+            ingroup = (inlayer == PREFS_SELECTION_LAYER_RECURSIVE);
+        }
+    }
+
     std::vector<SPItem*> x,y;
-    std::vector<SPItem*> all_list = get_all_items(x, desktop->currentRoot(), desktop, onlyvisible, onlysensitive, ingroups, y);
+    std::vector<SPItem*> all_list = get_all_items(x, root, desktop, onlyvisible, onlysensitive, ingroup, y);
     std::vector<SPItem*> all_matches;
 
-    Inkscape::Selection *selection = desktop->getSelection();
     auto items = selection->items();
 
     std::vector<SPItem*> tmp;
