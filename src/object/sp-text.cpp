@@ -512,7 +512,7 @@ void SPText::_buildLayoutInit()
             // Find union of all exclusion shapes
             Shape *exclusion_shape = nullptr;
             if(style->shape_subtract.set) {
-                exclusion_shape = _buildExclusionShape();
+                exclusion_shape = getExclusionShape();
             }
 
             // Find inside shape curves
@@ -764,7 +764,7 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
     return length;
 }
 
-Shape* SPText::_buildExclusionShape() const
+Shape* SPText::getExclusionShape() const
 {
     std::unique_ptr<Shape> result(new Shape()); // Union of all exclusion shapes
     std::unique_ptr<Shape> shape_temp(new Shape());

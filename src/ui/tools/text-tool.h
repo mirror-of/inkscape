@@ -66,6 +66,7 @@ public:
     Inkscape::CanvasItemCurve *cursor = nullptr;
     Inkscape::CanvasItemRect *indicator = nullptr;
     Inkscape::CanvasItemBpath *frame = nullptr; // Highlighting flowtext shapes or textpath path
+    Inkscape::CanvasItemBpath *padding_frame = nullptr; // Highlighting flowtext padding
     std::vector<CanvasItemQuad*> text_selection_quads;
 
     gint timeout = 0;

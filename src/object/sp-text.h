@@ -69,6 +69,9 @@ public:
 
     bool _optimizeTextpathText = false;
 
+    /** Union all exclusion shapes. */
+    Shape* getExclusionShape() const;
+
 private:
 
     /** Initializes layout from <text> (i.e. this node). */
@@ -80,9 +83,6 @@ private:
     breaks and makes sure both that they are assigned the correct SPObject and
     that we don't get a spurious extra one at the end of the flow. */
     unsigned _buildLayoutInput(SPObject *object, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
-
-    /** Union all exclusion shapes. */
-    Shape* _buildExclusionShape() const;
 
     /** Find first x/y values which may be in a descendent element. */
     SVGLength* _getFirstXLength();
