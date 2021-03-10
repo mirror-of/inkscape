@@ -423,22 +423,26 @@ const gchar *ClipboardManagerImpl::getFirstObjectID()
     }
 
     Inkscape::XML::Node *ch = root->firstChild();
+    Inkscape::XML::Node *child = nullptr;
+    // now clipboard is wrapped on copy since 202d57ea fix
     while (ch != nullptr &&
-           strcmp(ch->name(), "svg:g") &&
-           strcmp(ch->name(), "svg:path") &&
-           strcmp(ch->name(), "svg:use") &&
-           strcmp(ch->name(), "svg:text") &&
-           strcmp(ch->name(), "svg:image") &&
-           strcmp(ch->name(), "svg:rect") &&
-           strcmp(ch->name(), "svg:ellipse")
+           g_strcmp0(ch->name(), "svg:g") &&
+           g_strcmp0(child?child->name():nullptr, "svg:g") &&
+           g_strcmp0(child?child->name():nullptr, "svg:path") &&
+           g_strcmp0(child?child->name():nullptr, "svg:use") &&
+           g_strcmp0(child?child->name():nullptr, "svg:text") &&
+           g_strcmp0(child?child->name():nullptr, "svg:image") &&
+           g_strcmp0(child?child->name():nullptr, "svg:rect") &&
+           g_strcmp0(child?child->name():nullptr, "svg:ellipse") &&
+           g_strcmp0(child?child->name():nullptr, "svg:circle")
         ) {
         ch = ch->next();
+        child = ch ? ch->firstChild(): nullptr;
     }
 
-    if (ch) {
-        return ch->attribute("id");
+    if (child) {
+        return child->attribute("id");
     }
-
     return nullptr;
 }
 
