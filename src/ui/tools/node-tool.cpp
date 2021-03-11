@@ -721,11 +721,24 @@ void NodeTool::select_area(Geom::Rect const &sel, GdkEventButton *event) {
         std::vector<SPItem*> items = this->desktop->getDocument()->getItemsInBox(this->desktop->dkey, sel_doc);
         selection->setList(items);
     } else {
-        if (!held_shift(*event)) {
+        bool shift = held_shift(*event);
+        bool ctrl = held_control(*event);
+
+        if (!shift) {
+            // A/C. No modifier, selects all nodes, or selects all other nodes.
             this->_selected_nodes->clear();
         }
-
-        this->_selected_nodes->selectArea(sel);
+        if (shift && ctrl) {
+            // D. Shift+Ctrl pressed, removes nodes under box from existing selection.
+            this->_selected_nodes->selectArea(sel, true);
+        } else {
+            // A/B/C. Adds nodes under box to existing selection.
+            this->_selected_nodes->selectArea(sel);
+            if (ctrl) {
+                // C. Selects the inverse of all nodes under the box.
+                this->_selected_nodes->invertSelection();
+            }
+        }
     }
 }
 
