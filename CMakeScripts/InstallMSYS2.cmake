@@ -331,4 +331,12 @@ if(WIN32)
   install(FILES
     packaging/win32/gdb_create_backtrace.bat
     DESTINATION bin)
+    
+  # convenience launchers
+  install(FILES
+    "packaging/win32/Run Inkscape !.bat"
+    "packaging/win32/Run Inkscape and create debug trace.bat"
+    "packaging/win32/Run Inkscape with GTK Inspector.bat"
+    DESTINATION .)
+  
 endif()
