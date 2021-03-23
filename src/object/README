@@ -102,9 +102,7 @@ Other related files:
   sp-gradient-spread.h
   sp-gradient-units.h
   sp-gradient-vector.h
-  sp-item-rm-unsatisfied-cns.h
   sp-item-transform.h
-  sp-item-update-cns.h
   sp-marker-loc.h
   sp-mesh-array.h
   sp-paint-server-reference.h

@@ -16,7 +16,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <algorithm>
 #include <cstring>
 #include <vector>
 #include <glibmm/i18n.h>
@@ -27,11 +26,9 @@
 #include "document-undo.h"
 #include "helper-fns.h"
 #include "inkscape.h"
-#include "remove-last.h"
 #include "verbs.h"
 
 #include "sp-guide.h"
-#include "sp-item-notify-moveto.h"
 #include "sp-namedview.h"
 #include "sp-root.h"
 
@@ -253,7 +250,14 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
 }
 
 SPGuide *SPGuide::duplicate(){
-    return SPGuide::createSPGuide(document, point_on_line, Geom::Point(point_on_line[Geom::X] + normal_to_line[Geom::Y],point_on_line[Geom::Y] - normal_to_line[Geom::X]));
+    return SPGuide::createSPGuide(
+        document,
+        point_on_line,
+        Geom::Point(
+            point_on_line[Geom::X] + normal_to_line[Geom::Y],
+            point_on_line[Geom::Y] - normal_to_line[Geom::X]
+            )
+        );
 }
 
 void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts)
@@ -352,16 +356,6 @@ void SPGuide::sensitize(Inkscape::UI::Widget::Canvas *canvas, bool sensitive)
     assert(false);
 }
 
-Geom::Point SPGuide::getPositionFrom(Geom::Point const &pt) const
-{
-    return -(pt - point_on_line);
-}
-
-double SPGuide::getDistanceFrom(Geom::Point const &pt) const
-{
-    return Geom::dot(pt - point_on_line, normal_to_line);
-}
-
 /**
  * \arg commit False indicates temporary moveto in response to motion event while dragging,
  *      true indicates a "committing" version: in response to button release event after
@@ -405,16 +399,6 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
         //XML Tree being used here directly while it shouldn't be.
         sp_repr_set_point(getRepr(), "position", Geom::Point(newx, newy) );
     }
-
-/*  DISABLED CODE BECAUSE  SPGuideAttachment  IS NOT USE AT THE MOMENT (johan)
-    for (std::vector<SPGuideAttachment>::const_iterator i(attached_items.begin()),
-             iEnd(attached_items.end());
-         i != iEnd; ++i)
-    {
-        SPGuideAttachment const &att = *i;
-        sp_item_notify_moveto(*att.item, this, att.snappoint_ix, position, commit);
-    }
-*/
 }
 
 /**
@@ -444,16 +428,6 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
 
         sp_repr_set_point(getRepr(), "orientation", normal);
     }
-
-/*  DISABLED CODE BECAUSE  SPGuideAttachment  IS NOT USE AT THE MOMENT (johan)
-    for (std::vector<SPGuideAttachment>::const_iterator i(attached_items.begin()),
-             iEnd(attached_items.end());
-         i != iEnd; ++i)
-    {
-        SPGuideAttachment const &att = *i;
-        sp_item_notify_moveto(*att.item, this, att.snappoint_ix, position, commit);
-    }
-*/
 }
 
 void SPGuide::set_color(const unsigned r, const unsigned g, const unsigned b, bool const commit)
@@ -550,15 +524,6 @@ char* SPGuide::description(bool const verbose) const
 void sp_guide_remove(SPGuide *guide)
 {
     g_assert(SP_IS_GUIDE(guide));
-
-    for (std::vector<SPGuideAttachment>::const_iterator i(guide->attached_items.begin()),
-             iEnd(guide->attached_items.end());
-         i != iEnd; ++i)
-    {
-        SPGuideAttachment const &att = *i;
-        remove_last(att.item->constraints, SPGuideConstraint(guide, att.snappoint_ix));
-    }
-    guide->attached_items.clear();
 
     //XML Tree being used directly while it shouldn't be.
     sp_repr_unparent(guide->getRepr());

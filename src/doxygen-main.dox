@@ -201,7 +201,7 @@ namespace XML {}
  *   - SPFlowline [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
  *   - SPFlowregionbreak [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
  *   - SPGuide [\ref sp-guide.cpp, \ref sp-guide.h]
- *   - SPItem [\ref sp-item.cpp, \ref sp-item.h, \ref sp-item-notify-moveto.cpp, \ref sp-item-rm-unsatisfied-cns.cpp, \ref sp-item-transform.cpp, \ref sp-item-update-cns.cpp, ]
+ *   - SPItem [\ref sp-item.cpp, \ref sp-item.h, \ref sp-item-transform.cpp, ]
  *     - SPFlowdiv [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
  *     - SPFlowpara [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
  *     - SPFlowregion [\ref sp-flowregion.cpp, \ref sp-flowregion.h]
@@ -295,7 +295,7 @@ namespace XML {}
  *
  * Snapper, GridSnapper, GuideSnapper [\ref snap.cpp, \ref snap.h]
  *
- * SPGuide [\ref sp-guide.cpp, \ref sp-guide.h, \ref satisfied-guide-cns.cpp, \ref sp-guide-attachment.h, \ref sp-guide-constraint.h]
+ * SPGuide [\ref sp-guide.cpp, \ref sp-guide.h]
  *
  * [\ref help.cpp] [\ref inkscape.cpp] [\ref inkscape-stock.cpp]
  * [\ref interface.cpp] [\ref main.cpp, \ref winmain.cpp]

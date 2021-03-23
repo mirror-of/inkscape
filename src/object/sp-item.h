@@ -30,8 +30,6 @@
 #include "snap-preferences.h"
 #include "snap-candidate.h"
 
-//class SPGuideConstraint;
-#include "sp-guide-constraint.h"
 #include "xml/repr.h"
 
 class SPClipPath;
@@ -173,8 +171,6 @@ public:
 
   public:
     SPItemView *display;
-
-    std::vector<SPGuideConstraint> constraints;
 
     sigc::signal<void, Geom::Affine const *, SPItem *> _transformed_signal;
 

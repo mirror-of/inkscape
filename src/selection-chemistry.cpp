@@ -1662,11 +1662,6 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
         if (set_i2d && item->isCenterSet())
             old_center = item->getCenter();
 
-#if 0 /* Re-enable this once persistent guides have a graphical indication.
-         At the time of writing, this is the only place to re-enable. */
-        sp_item_update_cns(*item, desktop());
-#endif
-
         // we're moving both a clone and its original or any ancestor in clone chain?
         bool transform_clone_with_original = object_set_contains_original(item, this);
 
