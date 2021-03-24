@@ -17,10 +17,9 @@
 
 TEST(UtilTest, NearestCommonAncestor)
 {
-    // TODO change name of implementation to `nearest_common_ancestor`
     // TODO remove `pred` argument
 #define nearest_common_ancestor(a, b, c) \
-    Inkscape::Algorithms::longest_common_suffix(a, b, c, [](Node const &lhs, Node const &rhs) { return &lhs == &rhs; })
+    Inkscape::Algorithms::nearest_common_ancestor(a, b, c, [](Node const &lhs, Node const &rhs) { return &lhs == &rhs; })
 
     // simple node with a parent
     struct Node

@@ -332,8 +332,8 @@ bool same_objects(SPObject const &a, SPObject const &b) {
 SPObject const *SPObject::nearestCommonAncestor(SPObject const *object) const {
     g_return_val_if_fail(object != nullptr, NULL);
 
-    using Inkscape::Algorithms::longest_common_suffix;
-    return longest_common_suffix<SPObject::ConstParentIterator>(this, object, nullptr, &same_objects);
+    using Inkscape::Algorithms::nearest_common_ancestor;
+    return nearest_common_ancestor<SPObject::ConstParentIterator>(this, object, nullptr, &same_objects);
 }
 
 static SPObject const *AncestorSon(SPObject const *obj, SPObject const *ancestor) {

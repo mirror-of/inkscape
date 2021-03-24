@@ -21,8 +21,8 @@ static bool same_repr(Inkscape::XML::Node const &a, Inkscape::XML::Node const &b
 
 Inkscape::XML::Node const *LCA(Inkscape::XML::Node const *a, Inkscape::XML::Node const *b)
 {
-    using Inkscape::Algorithms::longest_common_suffix;
-    Inkscape::XML::Node const *ancestor = longest_common_suffix<Inkscape::XML::NodeConstParentIterator>(
+    using Inkscape::Algorithms::nearest_common_ancestor;
+    Inkscape::XML::Node const *ancestor = nearest_common_ancestor<Inkscape::XML::NodeConstParentIterator>(
         a, b, nullptr, &same_repr);
     bool OK = false;
     if (ancestor) {
