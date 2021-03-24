@@ -17,9 +17,8 @@
 
 TEST(UtilTest, NearestCommonAncestor)
 {
-    // TODO remove `pred` argument
 #define nearest_common_ancestor(a, b, c) \
-    Inkscape::Algorithms::nearest_common_ancestor(a, b, c, [](Node const &lhs, Node const &rhs) { return &lhs == &rhs; })
+    Inkscape::Algorithms::nearest_common_ancestor(a, b, c)
 
     // simple node with a parent
     struct Node

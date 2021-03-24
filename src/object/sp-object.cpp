@@ -321,19 +321,11 @@ bool SPObject::isAncestorOf(SPObject const *object) const {
     return false;
 }
 
-namespace {
-
-bool same_objects(SPObject const &a, SPObject const &b) {
-    return &a == &b;
-}
-
-}
-
 SPObject const *SPObject::nearestCommonAncestor(SPObject const *object) const {
     g_return_val_if_fail(object != nullptr, NULL);
 
     using Inkscape::Algorithms::nearest_common_ancestor;
-    return nearest_common_ancestor<SPObject::ConstParentIterator>(this, object, nullptr, &same_objects);
+    return nearest_common_ancestor<SPObject::ConstParentIterator>(this, object, nullptr);
 }
 
 static SPObject const *AncestorSon(SPObject const *obj, SPObject const *ancestor) {

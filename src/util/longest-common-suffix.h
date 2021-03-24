@@ -31,16 +31,7 @@ namespace Algorithms {
  */
 
 template <typename ForwardIterator>
-ForwardIterator nearest_common_ancestor(ForwardIterator a, ForwardIterator b,
-                                      ForwardIterator end)
-{
-    typedef typename std::iterator_traits<ForwardIterator>::value_type value_type;
-    return nearest_common_ancestor(a, b, end, std::equal_to<value_type>());
-}
-
-template <typename ForwardIterator, typename BinaryPredicate>
-ForwardIterator nearest_common_ancestor(ForwardIterator a, ForwardIterator b,
-                                      ForwardIterator end, BinaryPredicate pred)
+ForwardIterator nearest_common_ancestor(ForwardIterator a, ForwardIterator b, ForwardIterator end)
 {
     if ( a == end || b == end ) {
         return end;
@@ -83,7 +74,7 @@ ForwardIterator nearest_common_ancestor(ForwardIterator a, ForwardIterator b,
     ForwardIterator longest_common(end);
 
     while ( !suffixes[0].empty() && !suffixes[1].empty() &&
-            pred(*(suffixes[0].back()), *(suffixes[1].back())) )
+             suffixes[0].back() == suffixes[1].back() )
     {
         longest_common = suffixes[0].back();
         suffixes[0].pop_back();
