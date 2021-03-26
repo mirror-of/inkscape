@@ -18,9 +18,6 @@
 typedef struct _cairo cairo_t;
 typedef struct _cairo_pattern cairo_pattern_t;
 
-#define SP_SOLIDCOLOR(obj) (dynamic_cast<SPSolidColor*>((SPObject*)obj))
-#define SP_IS_SOLIDCOLOR(obj) (dynamic_cast<const SPSolidColor*>((SPObject*)obj) != NULL)
-
 /** Gradient SolidColor. */
 class SPSolidColor : public SPPaintServer {
 public:

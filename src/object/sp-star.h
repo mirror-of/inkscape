@@ -18,9 +18,6 @@
 #include "sp-polygon.h"
 
 
-#define SP_STAR(obj) (dynamic_cast<SPStar*>((SPObject*)obj))
-#define SP_IS_STAR(obj) (dynamic_cast<const SPStar*>((SPObject*)obj) != NULL)
-
 enum SPStarPoint {
 	SP_STAR_POINT_KNOT1,
 	SP_STAR_POINT_KNOT2
@@ -64,5 +61,7 @@ void sp_star_position_set (SPStar *star, int sides, Geom::Point center, double r
 Geom::Point sp_star_get_xy (SPStar const *star, SPStarPoint point, int index, bool randomized = false);
 
 
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_STAR, SPStar)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_STAR, SPStar)
 
 #endif

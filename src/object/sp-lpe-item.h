@@ -19,9 +19,6 @@
 #include <string>
 #include "sp-item.h"
 
-#define SP_LPE_ITEM(obj) (dynamic_cast<SPLPEItem*>((SPObject*)obj))
-#define SP_IS_LPE_ITEM(obj) (dynamic_cast<const SPLPEItem*>((SPObject*)obj) != NULL)
-
 class LivePathEffectObject;
 class SPCurve;
 class SPShape;
@@ -116,6 +113,9 @@ public:
 void sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write); // careful, class already has method with *very* similar name!
 void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
 SPObject * sp_lpe_item_remove_autoflatten(SPItem *item, const gchar *id);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_LPE_ITEM, SPLPEItem)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_LPE_ITEM, SPLPEItem)
 
 #endif /* !SP_LPE_ITEM_H_SEEN */
 

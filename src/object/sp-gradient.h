@@ -30,9 +30,6 @@
 class SPGradientReference;
 class SPStop;
 
-#define SP_GRADIENT(obj) (dynamic_cast<SPGradient*>((SPObject*)obj))
-#define SP_IS_GRADIENT(obj) (dynamic_cast<const SPGradient*>((SPObject*)obj) != NULL)
-
 enum SPGradientType {
     SP_GRADIENT_TYPE_UNKNOWN,
     SP_GRADIENT_TYPE_LINEAR,
@@ -224,6 +221,9 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
                                  Geom::OptRect const &bbox,
                                  double opacity);
 
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_GRADIENT, SPGradient)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_GRADIENT, SPGradient)
 
 #endif // SEEN_SP_GRADIENT_H
 

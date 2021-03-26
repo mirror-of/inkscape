@@ -20,9 +20,6 @@
 #include "svg/svg-length.h"
 #include "sp-shape.h"
 
-#define SP_RECT(obj) (dynamic_cast<SPRect*>((SPObject*)obj))
-#define SP_IS_RECT(obj) (dynamic_cast<const SPRect*>((SPObject*)obj) != NULL)
-
 class SPRect : public SPShape {
 public:
 	SPRect();
@@ -76,6 +73,9 @@ public:
 private:
 	static double vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_RECT, SPRect)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_RECT, SPRect)
 
 #endif // SEEN_SP_RECT_H
 

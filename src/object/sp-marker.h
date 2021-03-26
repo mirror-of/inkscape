@@ -18,10 +18,6 @@
  * Maybe we should merge them somehow (Lauris)
  */
 
-#define SP_TYPE_MARKER (sp_marker_get_type ())
-#define SP_MARKER(obj) (dynamic_cast<SPMarker*>((SPObject*)obj))
-#define SP_IS_MARKER(obj) (dynamic_cast<const SPMarker*>((SPObject*)obj) != NULL)
-
 class SPMarkerView;
 
 #include <map>
@@ -85,6 +81,9 @@ public:
 	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
 	void print(SPPrintContext *ctx) override;
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_MARKER, SPMarker)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_MARKER, SPMarker)
 
 class SPMarkerReference : public Inkscape::URIReference {
 	SPMarkerReference(SPObject *obj) : URIReference(obj) {}

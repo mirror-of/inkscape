@@ -25,9 +25,6 @@
 
 #include <memory>
 
-#define SP_SHAPE(obj) (dynamic_cast<SPShape*>((SPObject*)obj))
-#define SP_IS_SHAPE(obj) (dynamic_cast<const SPShape*>((SPObject*)obj) != NULL)
-
 #define SP_SHAPE_WRITE_PATH (1 << 2)
 
 class SPDesktop;
@@ -107,6 +104,9 @@ void sp_shape_set_marker (SPObject *object, unsigned int key, const char *value)
 Geom::Affine sp_shape_marker_get_transform(Geom::Curve const & c1, Geom::Curve const & c2);
 Geom::Affine sp_shape_marker_get_transform_at_start(Geom::Curve const & c);
 Geom::Affine sp_shape_marker_get_transform_at_end(Geom::Curve const & c);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_SHAPE, SPShape)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_SHAPE, SPShape)
 
 #endif // SEEN_SP_SHAPE_H
 

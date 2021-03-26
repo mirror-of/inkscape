@@ -19,9 +19,6 @@
 
 #include "sp-object.h"
 
-#define SP_STRING(obj) (dynamic_cast<SPString*>((SPObject*)obj))
-#define SP_IS_STRING(obj) (dynamic_cast<const SPString*>((SPObject*)obj) != NULL)
-
 class SPString : public SPObject {
 public:
 	SPString();
@@ -36,5 +33,8 @@ public:
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_STRING, SPString)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_STRING, SPString)
 
 #endif

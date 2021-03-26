@@ -15,12 +15,6 @@
 
 #include "sp-item.h"
 
-#define SP_FLOWREGION(obj) (dynamic_cast<SPFlowregion*>((SPObject*)obj))
-#define SP_IS_FLOWREGION(obj) (dynamic_cast<const SPFlowregion*>((SPObject*)obj) != NULL)
-
-#define SP_FLOWREGIONEXCLUDE(obj) (dynamic_cast<SPFlowregionExclude*>((SPObject*)obj))
-#define SP_IS_FLOWREGIONEXCLUDE(obj) (dynamic_cast<const SPFlowregionExclude*>((SPObject*)obj) != NULL)
-
 class Path;
 class Shape;
 class flow_dest;
@@ -58,5 +52,9 @@ public:
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 	const char* displayName() const override;
 };
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWREGION, SPFlowregion)
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWREGIONEXCLUDE, SPFlowregionExclude)
 
 #endif

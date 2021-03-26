@@ -21,10 +21,6 @@
 
 #include <memory>
 
-#define SP_FLOWTEXT(obj) (dynamic_cast<SPFlowtext*>((SPObject*)obj))
-#define SP_IS_FLOWTEXT(obj) (dynamic_cast<const SPFlowtext*>((SPObject*)obj) != NULL)
-
-
 namespace Inkscape {
 
 class DrawingGroup;
@@ -101,6 +97,9 @@ public:
 };
 
 SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p1, Geom::Point p2);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_FLOWTEXT, SPFlowtext)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWTEXT, SPFlowtext)
 
 #endif // SEEN_SP_ITEM_FLOWTEXT_H
 

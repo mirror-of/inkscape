@@ -15,9 +15,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#define SP_NAMEDVIEW(obj) (dynamic_cast<SPNamedView*>((SPObject*)obj))
-#define SP_IS_NAMEDVIEW(obj) (dynamic_cast<const SPNamedView*>((SPObject*)obj) != NULL)
-
 #include "sp-object-group.h"
 #include "snap.h"
 #include "document.h"
@@ -130,6 +127,7 @@ void sp_namedview_guides_toggle_lock(SPDocument *doc, SPNamedView *namedview);
 void sp_namedview_show_grids(SPNamedView *namedview, bool show, bool dirty_document);
 Inkscape::CanvasGrid * sp_namedview_get_first_enabled_grid(SPNamedView *namedview);
 
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_NAMEDVIEW, SPNamedView)
 
 #endif /* !INKSCAPE_SP_NAMEDVIEW_H */
 

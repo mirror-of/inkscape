@@ -21,9 +21,6 @@
 #include "viewbox.h"
 #include "sp-dimensions.h"
 
-#define SP_ROOT(obj) (dynamic_cast<SPRoot*>((SPObject*)obj))
-#define SP_IS_ROOT(obj) (dynamic_cast<const SPRoot*>((SPObject*)obj) != NULL)
-
 class SPDefs;
 
 /** \<svg\> element */
@@ -64,6 +61,9 @@ private:
     void unset_x_and_y();
     void setRootDimensions();
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_ROOT, SPRoot)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_ROOT, SPRoot)
 
 #endif /* !SP_ROOT_H_SEEN */
 

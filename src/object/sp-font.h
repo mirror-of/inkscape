@@ -15,9 +15,6 @@
 
 #include "sp-object.h"
 
-#define SP_FONT(obj) (dynamic_cast<SPFont*>((SPObject*)obj))
-#define SP_IS_FONT(obj) (dynamic_cast<const SPFont*>((SPObject*)obj) != NULL)
-
 class SPFont : public SPObject {
 public:
 	SPFont();
@@ -43,5 +40,8 @@ protected:
 
 	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_FONT, SPFont)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FONT, SPFont)
 
 #endif //#ifndef SP_FONT_H_SEEN

@@ -25,8 +25,6 @@ extern "C" {
 }
 
 class SPDesktop;
-#define SP_GUIDE(obj) (dynamic_cast<SPGuide*>((SPObject*)obj))
-#define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj) != NULL)
 
 namespace Inkscape {
   class CanvasItemGroup;
@@ -101,6 +99,9 @@ void sp_guide_create_guides_around_page(SPDesktop *dt);
 void sp_guide_delete_all_guides(SPDesktop *dt);
 
 void sp_guide_remove(SPGuide *guide);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_GUIDE, SPGuide)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_GUIDE, SPGuide)
 
 #endif // SEEN_SP_GUIDE_H
 

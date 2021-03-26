@@ -16,9 +16,6 @@
 
 #include "sp-object.h"
 
-#define SP_DEFS(obj) (dynamic_cast<SPDefs*>((SPObject*)obj))
-#define SP_IS_DEFS(obj) (dynamic_cast<const SPDefs*>((SPObject*)obj) != NULL)
-
 class SPDefs : public SPObject {
 public:
 	SPDefs();
@@ -31,6 +28,9 @@ protected:
 	void modified(unsigned int flags) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_DEFS, SPDefs)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_DEFS, SPDefs)
 
 #endif // !SEEN_SP_DEFS_H
 

@@ -16,9 +16,6 @@
 
 #include "sp-item-group.h"
 
-#define SP_ANCHOR(obj) (dynamic_cast<SPAnchor*>((SPObject*)obj))
-#define SP_IS_ANCHOR(obj) (dynamic_cast<const SPAnchor*>((SPObject*)obj) != NULL)
-
 class SPAnchor : public SPGroup {
 public:
 	SPAnchor();
@@ -39,5 +36,7 @@ public:
 	char* description() const override;
 	int event(SPEvent *event) override;
 };
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_ANCHOR, SPAnchor)
 
 #endif

@@ -28,9 +28,6 @@
 
 #include <memory>
 
-#define SP_TEXT(obj) (dynamic_cast<SPText*>((SPObject*)obj))
-#define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj) != NULL)
-
 /* Text specific flags */
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 #define SP_TEXT_LAYOUT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
@@ -131,6 +128,9 @@ private:
 
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);
 SPItem *create_text_with_rectangle   (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_TEXT, SPText)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_TEXT, SPText)
 
 #endif
 

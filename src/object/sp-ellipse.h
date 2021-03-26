@@ -20,10 +20,6 @@
 #include "svg/svg-length.h"
 #include "sp-shape.h"
 
-/* Common parent class */
-#define SP_GENERICELLIPSE(obj) (dynamic_cast<SPGenericEllipse*>((SPObject*)obj))
-#define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((SPObject*)obj) != NULL)
-
 enum GenericEllipseType {
     SP_GENERIC_ELLIPSE_UNDEFINED, // FIXME shouldn't exist
     SP_GENERIC_ELLIPSE_ARC,
@@ -98,6 +94,9 @@ protected:
 private:
     static double vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_GENERICELLIPSE, SPGenericEllipse)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_GENERICELLIPSE, SPGenericEllipse)
 
 #endif
 
