@@ -5,7 +5,7 @@ set(io_SRC
   file.cpp
   file-export-cmd.cpp
   resource.cpp
-  resource-manager.cpp
+  fix-broken-links.cpp
   stream/bufferstream.cpp
   stream/gzipstream.cpp
   stream/inkscapestream.cpp
@@ -21,7 +21,7 @@ set(io_SRC
   file.h
   file-export-cmd.h
   resource.h
-  resource-manager.h
+  fix-broken-links.h
   stream/bufferstream.h
   stream/gzipstream.h
   stream/inkscapestream.h

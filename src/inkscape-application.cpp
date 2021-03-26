@@ -23,26 +23,26 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 
-#include "auto-save.h"            // Auto-save
-#include "desktop.h"              // Access to window
-#include "file.h"                 // sp_file_convert_dpi
-#include "inkscape.h"             // Inkscape::Application
+#include "auto-save.h"              // Auto-save
+#include "desktop.h"                // Access to window
+#include "file.h"                   // sp_file_convert_dpi
+#include "inkscape.h"               // Inkscape::Application
 
 #include "include/glibmm_version.h"
 
-#include "inkgc/gc-core.h"        // Garbage Collecting init
-#include "debug/logger.h"         // INKSCAPE_DEBUG_LOG support
+#include "inkgc/gc-core.h"          // Garbage Collecting init
+#include "debug/logger.h"           // INKSCAPE_DEBUG_LOG support
 
-#include "io/file.h"              // File open (command line).
-#include "io/resource.h"          // TEMPLATE
-#include "io/resource-manager.h"  // Fix up references.
+#include "io/file.h"                // File open (command line).
+#include "io/resource.h"            // TEMPLATE
+#include "io/fix-broken-links.h"  // Fix up references.
 
-#include "object/sp-root.h"       // Inkscape version.
+#include "object/sp-root.h"         // Inkscape version.
 
-#include "ui/interface.h"         // sp_ui_error_dialog
+#include "ui/interface.h"           // sp_ui_error_dialog
 #include "ui/dialog/startup.h"
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
-#include "ui/shortcuts.h"         // Shortcuts... init
+#include "ui/shortcuts.h"           // Shortcuts... init
 #include "widgets/desktop-widget.h" // Close without saving dialog
 #include "ui/dialog/dialog-manager.h" // save state
 
@@ -325,7 +325,7 @@ InkscapeApplication::document_fix(InkscapeWindow* window)
         SPDocument* document = window->get_document();
 
         // Perform a fixup pass for hrefs.
-        if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(document) ) {
+        if ( Inkscape::fixBrokenLinks(document) ) {
             Glib::ustring msg = _("Broken links have been changed to point to existing files.");
             SPDesktop* desktop = window->get_desktop();
             if (desktop != nullptr) {

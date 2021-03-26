@@ -48,7 +48,6 @@
 #include "path-prefix.h"
 #include "print.h"
 #include "rdf.h"
-#include "selection-chemistry.h"
 #include "verbs.h"
 
 #include "extension/db.h"
@@ -56,11 +55,9 @@
 #include "extension/input.h"
 #include "extension/output.h"
 
-#include "helper/png-write.h"
-
 #include "io/file.h"
 #include "io/resource.h"
-#include "io/resource-manager.h"
+#include "io/fix-broken-links.h"
 #include "io/sys.h"
 
 #include "object/sp-defs.h"
@@ -69,7 +66,6 @@
 #include "object/sp-use.h"
 #include "style.h"
 
-#include "ui/dialog/font-substitution.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"

@@ -15,18 +15,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cerrno>
 #include <unistd.h>
 
 #include <map>
 
-#include <glibmm/fileutils.h>
 #include <glibmm/regex.h>
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/messagedialog.h>
 
-#include <glib/gstdio.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/convert.h>
@@ -49,18 +46,14 @@
 #include "helper/action-context.h"
 
 #include "io/resource.h"
-#include "io/resource-manager.h"
+#include "io/fix-broken-links.h"
 #include "io/sys.h"
 
 #include "libnrtype/FontFactory.h"
 
 #include "object/sp-root.h"
-#include "object/sp-style-elem.h"
 
 #include "svg/svg-color.h"
-
-#include "object/sp-root.h"
-#include "object/sp-style-elem.h"
 
 #include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
@@ -233,8 +226,6 @@ Application::Application(bool use_gui) :
         load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
     }
-
-    Inkscape::ResourceManager::getManager();
 
     /* set language for user interface according setting in preferences */
     Glib::ustring ui_language = prefs->getString("/ui/language");

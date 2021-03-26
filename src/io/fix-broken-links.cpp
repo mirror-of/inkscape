@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Inkscape::ResourceManager - tracks external resources such as image and css files.
+ * tracks external resources such as image and css files.
  *
  * Copyright 2011  Jon A. Cruz  <jon@joncruz.org>
  *
@@ -19,7 +19,7 @@
 #include <glibmm/uriutils.h>
 #include <glibmm/convert.h>
 
-#include "resource-manager.h"
+#include "fix-broken-links.h"
 
 #include "document.h"
 #include "document-undo.h"
@@ -106,62 +106,47 @@ static std::string convertPathToRelative( std::string const &path, std::string c
 }
 
 
-class ResourceManagerImpl : public ResourceManager {
-public:
-    ResourceManagerImpl();
-    ~ResourceManagerImpl() override;
-
-    bool fixupBrokenLinks(SPDocument *doc) override;
+bool fixBrokenLinks(SPDocument *doc);
     
 
-    /**
-     * Walk all links in a document and create a listing of unique broken links.
-     *
-     * @return a list of all broken links.
-     */
-    std::vector<Glib::ustring> findBrokenLinks(SPDocument *doc);
+/**
+ * Walk all links in a document and create a listing of unique broken links.
+ *
+ * @return a list of all broken links.
+ */
+static std::vector<Glib::ustring> findBrokenLinks(SPDocument *doc);
 
-    /**
-     * Resolve broken links as a whole and return a map for those that can be found.
-     *
-     * Note: this will allow for future enhancements including relinking to new locations
-     * with the most broken files found, etc.
-     *
-     * @return a map of found links.
-     */
-    std::map<Glib::ustring, Glib::ustring> locateLinks(Glib::ustring const & docbase, std::vector<Glib::ustring> const & brokenLinks);
-
-
-    /**
-     * Try to parse href into a local filename using standard methods.
-     *
-     * @return true if successful.
-     */
-    bool extractFilepath(Glib::ustring const &href, std::string &filename);
-
-    /**
-     * Try to parse href into a local filename using some non-standard methods.
-     * This means the href is likely invalid and should be rewritten.
-     *
-     * @return true if successful.
-     */
-    bool reconstructFilepath(Glib::ustring const &href, std::string &filename);
-
-    bool searchUpwards( std::string const &base, std::string const &subpath, std::string &dest );
-
-protected:
-};
+/**
+ * Resolve broken links as a whole and return a map for those that can be found.
+ *
+ * Note: this will allow for future enhancements including relinking to new locations
+ * with the most broken files found, etc.
+ *
+ * @return a map of found links.
+ */
+static std::map<Glib::ustring, Glib::ustring> locateLinks(Glib::ustring const & docbase, std::vector<Glib::ustring> const & brokenLinks);
 
 
-ResourceManagerImpl::ResourceManagerImpl()
-    : ResourceManager()
-{
-}
+/**
+ * Try to parse href into a local filename using standard methods.
+ *
+ * @return true if successful.
+ */
+static bool extractFilepath(Glib::ustring const &href, std::string &filename);
 
-ResourceManagerImpl::~ResourceManagerImpl()
-= default;
+/**
+ * Try to parse href into a local filename using some non-standard methods.
+ * This means the href is likely invalid and should be rewritten.
+ *
+ * @return true if successful.
+ */
+static bool reconstructFilepath(Glib::ustring const &href, std::string &filename);
 
-bool ResourceManagerImpl::extractFilepath(Glib::ustring const &href, std::string &filename)
+static bool searchUpwards( std::string const &base, std::string const &subpath, std::string &dest );
+
+
+
+static bool extractFilepath(Glib::ustring const &href, std::string &filename)
 {                    
     bool isFile = false;
 
@@ -191,7 +176,7 @@ bool ResourceManagerImpl::extractFilepath(Glib::ustring const &href, std::string
     return isFile;
 }
 
-bool ResourceManagerImpl::reconstructFilepath(Glib::ustring const &href, std::string &filename)
+static bool reconstructFilepath(Glib::ustring const &href, std::string &filename)
 {                    
     bool isFile = false;
 
@@ -211,7 +196,7 @@ bool ResourceManagerImpl::reconstructFilepath(Glib::ustring const &href, std::st
 }
 
 
-std::vector<Glib::ustring> ResourceManagerImpl::findBrokenLinks( SPDocument *doc )
+static std::vector<Glib::ustring> findBrokenLinks( SPDocument *doc )
 {
     std::vector<Glib::ustring> result;
     std::set<Glib::ustring> uniques;
@@ -249,7 +234,7 @@ std::vector<Glib::ustring> ResourceManagerImpl::findBrokenLinks( SPDocument *doc
 }
 
 
-std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::ustring const & docbase, std::vector<Glib::ustring> const & brokenLinks)
+static std::map<Glib::ustring, Glib::ustring> locateLinks(Glib::ustring const & docbase, std::vector<Glib::ustring> const & brokenLinks)
 {
     std::map<Glib::ustring, Glib::ustring> result;
 
@@ -323,7 +308,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
     return result;
 }
 
-bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
+bool fixBrokenLinks(SPDocument *doc)
 {
     bool changed = false;
     if ( doc ) {
@@ -387,8 +372,7 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
     return changed;
 }
 
-
-bool ResourceManagerImpl::searchUpwards( std::string const &base, std::string const &subpath, std::string &dest )
+static bool searchUpwards( std::string const &base, std::string const &subpath, std::string &dest )
 {
     bool exists = false;
     // TODO debug g_message("............");
@@ -417,23 +401,6 @@ bool ResourceManagerImpl::searchUpwards( std::string const &base, std::string co
 
     return exists;
 }
-
-
-static ResourceManagerImpl* theInstance = nullptr;
-
-ResourceManager::ResourceManager()
-= default;
-
-ResourceManager::~ResourceManager() = default;
-
-ResourceManager& ResourceManager::getManager() {
-    if ( !theInstance ) {
-        theInstance = new ResourceManagerImpl();
-    }
-
-    return *theInstance;
-}
-
 
 } // namespace Inkscape
 
