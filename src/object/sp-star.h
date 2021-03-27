@@ -26,7 +26,7 @@ enum SPStarPoint {
 	SP_STAR_POINT_KNOT2
 };
 
-class SPStar : public SPPolygon {
+class SPStar : public SPShape {
 public:
 	SPStar();
 	~SPStar() override;
