@@ -333,7 +333,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 
                 if ( !this->sa && !this->green_anchor ) {
                     /* Create green anchor */
-                    this->green_anchor = sp_draw_anchor_new(this, this->green_curve.get(), TRUE, this->p[0]);
+                    this->green_anchor = SPDrawAnchor::anchorNew(this, this->green_curve.get(), TRUE, this->p[0]);
                 }
                 if (anchor) {
                     p = anchor->dp;
@@ -448,7 +448,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     this->_sketchInterpolate();
 
                     if (this->green_anchor) {
-                        this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
+                        this->green_anchor = this->green_anchor->anchorDestroy();
                     }
 
                     this->_state = SP_PENCIL_CONTEXT_SKETCH;
@@ -496,7 +496,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     this->ps.clear();
                     this->_wps.clear();
                     if (this->green_anchor) {
-                        this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
+                        this->green_anchor = this->green_anchor->anchorDestroy();
                     }
                     this->_state = SP_PENCIL_CONTEXT_IDLE;
                     // reset sketch mode too
@@ -531,7 +531,7 @@ void PencilTool::_cancel() {
     this->green_bpaths.clear();
     this->green_curve->reset();
     if (this->green_anchor) {
-        this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
+        this->green_anchor = this->green_anchor->anchorDestroy();
     }
 
     this->message_context->clear();
@@ -605,7 +605,7 @@ bool PencilTool::_handleKeyRelease(GdkEventKey const &event) {
                 this->sa = nullptr;
                 this->ea = nullptr;
                 if (this->green_anchor) {
-                    this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
+                    this->green_anchor = this->green_anchor->anchorDestroy();
                 }
                 this->_state = SP_PENCIL_CONTEXT_IDLE;
                 sp_event_context_discard_delayed_snap_event(this);

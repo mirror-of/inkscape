@@ -28,7 +28,7 @@ const guint32 FILL_COLOR_MOUSEOVER = 0xff0000ff;
 /**
  * Creates an anchor object and initializes it.
  */
-SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start, Geom::Point delta)
+SPDrawAnchor *SPDrawAnchor::anchorNew(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start, Geom::Point delta)
 {
     if (SP_IS_LPETOOL_CONTEXT(dc)) {
         // suppress all kinds of anchors in LPEToolContext
@@ -61,9 +61,9 @@ SPDrawAnchor::~SPDrawAnchor()
 /**
  * Destroys the anchor's canvas item and frees the anchor object.
  */
-SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor)
+SPDrawAnchor * SPDrawAnchor::anchorDestroy()
 {
-    delete anchor;
+    delete this;
     return nullptr;
 }
 
@@ -71,22 +71,22 @@ SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor)
  * Test if point is near anchor, if so fill anchor on canvas and return
  * pointer to it or NULL.
  */
-SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool activate)
+SPDrawAnchor *SPDrawAnchor::anchorTest(Geom::Point w, bool activate)
 {
-    if ( activate && anchor->ctrl->contains(w)) {
+    if ( activate && this->ctrl->contains(w)) {
         
-        if (!anchor->active) {
-            anchor->ctrl->set_size_extra(4);
-            anchor->ctrl->set_fill(FILL_COLOR_MOUSEOVER);
-            anchor->active = TRUE;
+        if (!this->active) {
+            this->ctrl->set_size_extra(4);
+            this->ctrl->set_fill(FILL_COLOR_MOUSEOVER);
+            this->active = TRUE;
         }
-        return anchor;
+        return this;
     }
 
-    if (anchor->active) {
-        anchor->ctrl->set_size_extra(0);
-        anchor->ctrl->set_fill(FILL_COLOR_NORMAL);
-        anchor->active = FALSE;
+    if (this->active) {
+        this->ctrl->set_size_extra(0);
+        this->ctrl->set_fill(FILL_COLOR_NORMAL);
+        this->active = FALSE;
     }
 
     return nullptr;

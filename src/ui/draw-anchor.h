@@ -35,7 +35,13 @@ class SPCurve;
 
 /// The drawing anchor.
 /// \todo Make this a regular knot, this will allow setting statusbar tips.
-struct SPDrawAnchor { 
+
+// TODO Get rid of this class.
+
+class SPDrawAnchor
+{
+public:
+
     ~SPDrawAnchor();
 
     Inkscape::UI::Tools::FreehandBase *dc;
@@ -44,14 +50,12 @@ struct SPDrawAnchor {
     bool active : 1;
     Geom::Point dp;
     Inkscape::CanvasItemCtrl *ctrl = nullptr;
+
+    static SPDrawAnchor *anchorNew(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start,
+                                     Geom::Point delta);
+    SPDrawAnchor *anchorDestroy();
+    SPDrawAnchor *anchorTest(Geom::Point w, bool activate);
 };
-
-
-SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start,
-                                 Geom::Point delta);
-SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor);
-SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool activate);
-
 
 #endif /* !SEEN_DRAW_ANCHOR_H */
 

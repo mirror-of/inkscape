@@ -681,10 +681,10 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
             g_return_if_fail( c->get_segment_count() > 0 );
             if ( !c->is_closed() ) {
                 SPDrawAnchor *a;
-                a = sp_draw_anchor_new(dc, c, TRUE, *(c->first_point()));
+                a = SPDrawAnchor::anchorNew(dc, c, TRUE, *(c->first_point()));
                 if (a)
                     dc->white_anchors.push_back(a);
-                a = sp_draw_anchor_new(dc, c, FALSE, *(c->last_point()));
+                a = SPDrawAnchor::anchorNew(dc, c, FALSE, *(c->last_point()));
                 if (a)
                     dc->white_anchors.push_back(a);
             }
@@ -944,11 +944,11 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
 
     // Test green anchor
     if (dc->green_anchor) {
-        active = sp_draw_anchor_test(dc->green_anchor, p, TRUE);
+        active = dc->green_anchor->anchorTest(p, TRUE);
     }
 
     for (auto i:dc->white_anchors) {
-        SPDrawAnchor *na = sp_draw_anchor_test(i, p, !active);
+        SPDrawAnchor *na = i->anchorTest(p, !active);
         if ( !active && na ) {
             active = na;
         }
@@ -964,7 +964,7 @@ static void spdc_reset_white(FreehandBase *dc)
     }
     dc->white_curves.clear();
     for (auto i:dc->white_anchors)
-        sp_draw_anchor_destroy(i);
+        i->anchorDestroy();
     dc->white_anchors.clear();
 }
 
@@ -993,7 +993,7 @@ static void spdc_free_colors(FreehandBase *dc)
     dc->green_bpaths.clear();
     dc->green_curve.reset();
     if (dc->green_anchor) {
-        dc->green_anchor = sp_draw_anchor_destroy(dc->green_anchor);
+        dc->green_anchor = dc->green_anchor->anchorDestroy();
     }
 
     // White
@@ -1003,7 +1003,7 @@ static void spdc_free_colors(FreehandBase *dc)
     }
     dc->white_curves.clear();
     for (auto i : dc->white_anchors)
-        sp_draw_anchor_destroy(i);
+        i->anchorDestroy();
     dc->white_anchors.clear();
 }
 

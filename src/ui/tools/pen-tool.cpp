@@ -420,7 +420,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                                 // Create green anchor
                                 p = event_dt;
                                 this->_endpointSnap(p, bevent.state);
-                                this->green_anchor = sp_draw_anchor_new(this, this->green_curve.get(), true, p);
+                                this->green_anchor = SPDrawAnchor::anchorNew(this, this->green_curve.get(), true, p);
                             }
                             this->_setInitialPoint(p);
                         } else {
@@ -1194,7 +1194,7 @@ void PenTool::_resetColors() {
     this->green_bpaths.clear();
     this->green_curve->reset();
     if (this->green_anchor) {
-        this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
+        this->green_anchor = this->green_anchor->anchorDestroy();
     }
     this->sa = nullptr;
     this->ea = nullptr;
@@ -1962,7 +1962,7 @@ void PenTool::_finish(gboolean const closed) {
     cl1->hide();
 
     if (this->green_anchor) {
-        this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
+        this->green_anchor = this->green_anchor->anchorDestroy();
     }
 
     forced_redraws_stop();
