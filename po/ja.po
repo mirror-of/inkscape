@@ -10019,7 +10019,7 @@ msgstr "エラー"
 msgid "No (valid) files to open."
 msgstr "開けるファイルがありません。"
 
-#: ../src/io/resource-manager.cpp:382
+#: ../src/io/fix-broken-links.cpp:382
 msgid "Fixup broken links"
 msgstr "壊れたリンクの修正"
 

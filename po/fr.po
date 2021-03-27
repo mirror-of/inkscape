@@ -9142,7 +9142,7 @@ msgstr "Erreur"
 msgid "No (valid) files to open."
 msgstr "Aucun fichier valide à charger."
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr "Réparer les liens brisés"
 

@@ -9202,7 +9202,7 @@ msgstr "Villa"
 msgid "No (valid) files to open."
 msgstr "Engar (gildar) skrár til að opna."
 
-#: ../src/io/resource-manager.cpp:382
+#: ../src/io/fix-broken-links.cpp:382
 msgid "Fixup broken links"
 msgstr "Laga rofna tengla"
 

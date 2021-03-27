@@ -8933,7 +8933,7 @@ msgstr "错误：%s"
 msgid "No (valid) files to open."
 msgstr "选择要打开的文件"
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr "修复损坏的链接"
 

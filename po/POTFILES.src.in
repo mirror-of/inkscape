@@ -116,7 +116,7 @@
 ../src/inkscape-application.cpp
 ../src/inkscape.cpp
 ../src/inkview-application.cpp
-../src/io/resource-manager.cpp
+../src/io/fix-broken-links.cpp
 ../src/io/resource.cpp
 ../src/libnrtype/FontFactory.cpp
 ../src/live_effects/effect.cpp

@@ -9074,7 +9074,7 @@ msgstr "錯誤"
 msgid "No (valid) files to open."
 msgstr "無 (有效的) 檔案可開啟。"
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr "修復損壞的連結"
 

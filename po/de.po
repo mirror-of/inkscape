@@ -10135,7 +10135,7 @@ msgstr "Fehler"
 msgid "No (valid) files to open."
 msgstr "Keine (gültigen) Dateien zum Öffnen"
 
-#: ../src/io/resource-manager.cpp:382
+#: ../src/io/fix-broken-links.cpp:382
 msgid "Fixup broken links"
 msgstr "Defekte Verknüpfungen reparieren"
 

@@ -8999,7 +8999,7 @@ msgstr "Greška"
 msgid "No (valid) files to open."
 msgstr "Nema (ispravnih) datoteka, koje bi se mogle otvoriti."
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr "Popravi pokidane poveznice"
 

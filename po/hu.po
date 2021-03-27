@@ -9361,7 +9361,7 @@ msgstr "Hiba"
 msgid "No (valid) files to open."
 msgstr "Nincs (érvényes) megnyitható fájl."
 
-#: ../src/io/resource-manager.cpp:382
+#: ../src/io/fix-broken-links.cpp:382
 msgid "Fixup broken links"
 msgstr "Törött linkek javítása"
 

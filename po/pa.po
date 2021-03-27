@@ -9787,7 +9787,7 @@ msgstr "ਗਲਤੀਆਂ"
 msgid "No (valid) files to open."
 msgstr "ਖੋਲਣ ਲਈ ਫਾਇਲ ਖੋਲੋ"
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr ""
 
