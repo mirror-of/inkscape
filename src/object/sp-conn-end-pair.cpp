@@ -254,7 +254,7 @@ bool SPConnEndPair::isOrthogonal() const
 
 static void redrawConnectorCallback(void *ptr)
 {
-    SPPath *path = SP_PATH(ptr);
+    auto path = static_cast<SPPath *>(ptr);
     if (path->document == nullptr) {
         // This can happen when the document is being destroyed.
         return;

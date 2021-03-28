@@ -1541,9 +1541,9 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         sp_event_context_virtual_root_handler(ec, dse->getEvent());
         break;
     case DelayedSnapEvent::EVENTCONTEXT_ITEM_HANDLER: {
-        gpointer item = dse->getItem();
-        if (item && SP_IS_ITEM(item)) {
-            sp_event_context_virtual_item_handler(ec, static_cast<SPItem*>(item), dse->getEvent());
+        auto item = static_cast<SPItem *>(dse->getItem());
+        if (item) {
+            sp_event_context_virtual_item_handler(ec, item, dse->getEvent());
         }
     }
         break;
