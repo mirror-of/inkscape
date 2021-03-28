@@ -42,8 +42,6 @@ class SPDrawAnchor
 {
 public:
 
-    ~SPDrawAnchor();
-
     Inkscape::UI::Tools::FreehandBase *dc;
     std::unique_ptr<SPCurve> curve;
     bool start : 1;
@@ -51,10 +49,14 @@ public:
     Geom::Point dp;
     Inkscape::CanvasItemCtrl *ctrl = nullptr;
 
-    static SPDrawAnchor *anchorNew(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start,
-                                     Geom::Point delta);
-    SPDrawAnchor *anchorDestroy();
+    SPDrawAnchor(Inkscape::UI::Tools::FreehandBase *dc,
+                 SPCurve *curve, bool start, Geom::Point delta);
+
+    ~SPDrawAnchor();
+
     SPDrawAnchor *anchorTest(Geom::Point w, bool activate);
+
+    SPDrawAnchor *anchorDestroy();
 };
 
 #endif /* !SEEN_DRAW_ANCHOR_H */

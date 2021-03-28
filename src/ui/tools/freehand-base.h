@@ -71,7 +71,7 @@ public:
     // White
     SPItem *white_item;
     std::list<std::unique_ptr<SPCurve>> white_curves;
-    std::vector<SPDrawAnchor*> white_anchors;
+    std::vector<std::unique_ptr<SPDrawAnchor>> white_anchors;
 
     // Temporary modified curve when start anchor
     std::unique_ptr<SPCurve> sa_overwrited;

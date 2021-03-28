@@ -333,7 +333,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 
                 if ( !this->sa && !this->green_anchor ) {
                     /* Create green anchor */
-                    this->green_anchor = SPDrawAnchor::anchorNew(this, this->green_curve.get(), TRUE, this->p[0]);
+                    this->green_anchor = new SPDrawAnchor(this, this->green_curve.get(), TRUE, this->p[0]);
                 }
                 if (anchor) {
                     p = anchor->dp;

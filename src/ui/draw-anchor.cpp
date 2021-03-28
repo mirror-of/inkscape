@@ -15,7 +15,6 @@
 
 
 #include "ui/draw-anchor.h"
-#include "desktop.h"
 #include "ui/tools/tool-base.h"
 #include "ui/tools/lpe-tool.h"
 
@@ -28,27 +27,19 @@ const guint32 FILL_COLOR_MOUSEOVER = 0xff0000ff;
 /**
  * Creates an anchor object and initializes it.
  */
-SPDrawAnchor *SPDrawAnchor::anchorNew(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start, Geom::Point delta)
+SPDrawAnchor::SPDrawAnchor(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start, Geom::Point delta)
+    : dc(dc), curve(curve->ref()), start(start), active(FALSE), dp(delta),
+      ctrl(
+        new Inkscape::CanvasItemCtrl(
+          dc->getDesktop()->getCanvasControls(),
+          Inkscape::CANVAS_ITEM_CTRL_TYPE_ANCHOR
+        )
+      )
 {
-    if (SP_IS_LPETOOL_CONTEXT(dc)) {
-        // suppress all kinds of anchors in LPEToolContext
-        return nullptr;
-    }
-
-    SPDrawAnchor *a = new SPDrawAnchor;
-
-    a->dc = dc;
-    a->curve = curve->ref();
-    a->start = start;
-    a->active = FALSE;
-    a->dp = delta;
-    a->ctrl = new Inkscape::CanvasItemCtrl(dc->getDesktop()->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ANCHOR);
-    a->ctrl->set_name("CanvasItemCtrl:DrawAnchor");
-    a->ctrl->set_fill(FILL_COLOR_NORMAL);
-    a->ctrl->set_position(delta);
-    a->ctrl->set_pickable(false); // We do our own checking. (TODO: Should be fixed!)
-
-    return a;
+    ctrl->set_name("CanvasItemCtrl:DrawAnchor");
+    ctrl->set_fill(FILL_COLOR_NORMAL);
+    ctrl->set_position(delta);
+    ctrl->set_pickable(false); // We do our own checking. (TODO: Should be fixed!)
 }
 
 SPDrawAnchor::~SPDrawAnchor()
@@ -56,15 +47,6 @@ SPDrawAnchor::~SPDrawAnchor()
     if (ctrl) {
         delete (ctrl);
     }
-}
-
-/**
- * Destroys the anchor's canvas item and frees the anchor object.
- */
-SPDrawAnchor * SPDrawAnchor::anchorDestroy()
-{
-    delete this;
-    return nullptr;
 }
 
 /**
@@ -89,6 +71,15 @@ SPDrawAnchor *SPDrawAnchor::anchorTest(Geom::Point w, bool activate)
         this->active = FALSE;
     }
 
+    return nullptr;
+}
+
+/**
+ * Destroys the anchor's canvas item and frees the anchor object.
+ */
+SPDrawAnchor *SPDrawAnchor::anchorDestroy()
+{
+    delete this;
     return nullptr;
 }
 

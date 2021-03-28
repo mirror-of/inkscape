@@ -680,13 +680,13 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
             auto *c = c_smart_ptr.get();
             g_return_if_fail( c->get_segment_count() > 0 );
             if ( !c->is_closed() ) {
-                SPDrawAnchor *a;
-                a = SPDrawAnchor::anchorNew(dc, c, TRUE, *(c->first_point()));
+                std::unique_ptr<SPDrawAnchor> a =
+                    std::make_unique<SPDrawAnchor>(dc, c, TRUE, *(c->first_point()));
                 if (a)
-                    dc->white_anchors.push_back(a);
-                a = SPDrawAnchor::anchorNew(dc, c, FALSE, *(c->last_point()));
+                    dc->white_anchors.push_back(std::move(a));
+                a = std::make_unique<SPDrawAnchor>(dc, c, FALSE, *(c->last_point()));
                 if (a)
-                    dc->white_anchors.push_back(a);
+                    dc->white_anchors.push_back(std::move(a));
             }
         }
         // fixme: recalculate active anchor?
@@ -947,7 +947,7 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
         active = dc->green_anchor->anchorTest(p, TRUE);
     }
 
-    for (auto i:dc->white_anchors) {
+    for (auto& i:dc->white_anchors) {
         SPDrawAnchor *na = i->anchorTest(p, !active);
         if ( !active && na ) {
             active = na;
@@ -963,8 +963,6 @@ static void spdc_reset_white(FreehandBase *dc)
         dc->white_item = nullptr;
     }
     dc->white_curves.clear();
-    for (auto i:dc->white_anchors)
-        i->anchorDestroy();
     dc->white_anchors.clear();
 }
 
@@ -1002,8 +1000,6 @@ static void spdc_free_colors(FreehandBase *dc)
         dc->white_item = nullptr;
     }
     dc->white_curves.clear();
-    for (auto i : dc->white_anchors)
-        i->anchorDestroy();
     dc->white_anchors.clear();
 }
 

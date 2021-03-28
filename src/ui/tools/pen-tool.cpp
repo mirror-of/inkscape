@@ -420,7 +420,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                                 // Create green anchor
                                 p = event_dt;
                                 this->_endpointSnap(p, bevent.state);
-                                this->green_anchor = SPDrawAnchor::anchorNew(this, this->green_curve.get(), true, p);
+                                this->green_anchor = new SPDrawAnchor(this, this->green_curve.get(), true, p);
                             }
                             this->_setInitialPoint(p);
                         } else {
