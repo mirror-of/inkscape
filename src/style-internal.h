@@ -450,7 +450,6 @@ public:
   // To do: make private
 public:
     bool normal : 1;
-    bool inherit : 1;
     std::map<Glib::ustring, float> axes;
 };
 

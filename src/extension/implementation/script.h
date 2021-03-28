@@ -48,7 +48,7 @@ public:
     Gtk::Widget *prefs_output(Inkscape::Extension::Output *module) override;
     void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename) override;
     void export_raster(Inkscape::Extension::Output *module,
-            const SPDocument *doc, std::string const png_file, gchar const *filename) override;
+            const SPDocument *doc, std::string const &png_file, gchar const *filename) override;
     void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc, ImplementationDocumentCache * docCache) override;
     bool cancelProcessing () override;
 

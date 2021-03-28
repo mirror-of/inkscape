@@ -60,7 +60,6 @@ struct EMF_DEVICE_CONTEXT {
         textAlign(0)
         // worldTransform, cur
     {
-        font_name = nullptr;
         sizeWnd  = sizel_set( 0.0, 0.0 );
         sizeView = sizel_set( 0.0, 0.0 );
         winorg  = point32_set( 0.0, 0.0 );

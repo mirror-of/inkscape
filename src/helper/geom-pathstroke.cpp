@@ -142,7 +142,7 @@ void round_join(join_data jd)
     jd.res.append(jd.outgoing);
 }
 
-void miter_join_internal(join_data jd, bool clip)
+void miter_join_internal(join_data const &jd, bool clip)
 {
     using namespace Geom;
 
@@ -350,7 +350,7 @@ Geom::Point adjust_circles( Geom::Circle &circle1, Geom::Circle &circle2, Geom::
     }
 }
 
-void extrapolate_join_internal(join_data jd, int alternative)
+void extrapolate_join_internal(join_data const &jd, int alternative)
 {
     // std::cout << "\nextrapolate_join: entrance: alternative: " << alternative << std::endl;
     using namespace Geom;

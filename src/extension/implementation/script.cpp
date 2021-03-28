@@ -503,7 +503,7 @@ void Script::save(Inkscape::Extension::Output *module,
 
 void Script::export_raster(Inkscape::Extension::Output *module,
              const SPDocument *doc,
-             const std::string png_file,
+             const std::string &png_file,
              const gchar *filenameArg)
 {
     if(!module->is_raster()) {

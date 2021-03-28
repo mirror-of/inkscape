@@ -316,7 +316,7 @@ Glib::ustring Application::get_symbolic_colors()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     guint32 colorsetbase = 0x2E3436ff;
-    guint32 colorsetbase_inverse = colorsetbase ^ 0xffffff00;
+    guint32 colorsetbase_inverse;
     guint32 colorsetsuccess = 0x4AD589ff;
     guint32 colorsetwarning = 0xF57900ff;
     guint32 colorseterror = 0xCC0000ff;
@@ -366,7 +366,7 @@ Glib::ustring Application::get_symbolic_colors()
     return css_str;
 }
 
-std::string sp_get_contrasted_color(std::string cssstring, std::string define, std::string define_b,
+std::string sp_get_contrasted_color(std::string const &cssstring, std::string const &define, std::string const &define_b,
                                     double contrast)
 {
     std::smatch m;

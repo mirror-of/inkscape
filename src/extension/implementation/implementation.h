@@ -57,7 +57,7 @@ class ImplementationDocumentCache {
          */
     Inkscape::UI::View::View * _view;
 public:
-    ImplementationDocumentCache (Inkscape::UI::View::View * view) { return; };
+    explicit ImplementationDocumentCache (Inkscape::UI::View::View * view) { _view = view;};
 
     virtual ~ImplementationDocumentCache ( ) { return; };
     Inkscape::UI::View::View const * view ( ) { return _view; };
@@ -112,7 +112,7 @@ public:
     virtual void export_raster(
             Inkscape::Extension::Output * /*module*/,
             const SPDocument * /*doc*/,
-            std::string const /*png_file*/,
+            std::string const &/*png_file*/,
             gchar const * /*filename*/) {}
 
     // ----- Effect functions -----

@@ -58,7 +58,6 @@ struct WMF_DEVICE_CONTEXT {
         textAlign(0)
         // worldTransform, cur
     {
-        font_name = nullptr;
         sizeWnd = point16_set( 0.0, 0.0 );
         sizeView = point16_set( 0.0, 0.0 );
         winorg = point16_set( 0.0, 0.0 );

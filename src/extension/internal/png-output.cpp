@@ -32,7 +32,7 @@ namespace Extension {
 namespace Internal {
 
 void PngOutput::export_raster(Inkscape::Extension::Output * /*module*/,
-        const SPDocument * /*doc*/, std::string const png_file, gchar const *filename)
+        const SPDocument * /*doc*/, std::string const &png_file, gchar const *filename)
 {
     // We want to move the png file to the new location
     auto input_fn = filesystem::path(png_file);
