@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-08-18 17:11+0200\n"
-"PO-Revision-Date: 2021-03-15 14:14+0100\n"
+"PO-Revision-Date: 2021-04-05 23:26+0200\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -3623,7 +3623,7 @@ msgstr "Děrný pásek"
 #: ../share/symbols/symbols.h:158
 msgctxt "Symbol"
 msgid "Online Storage"
-msgstr "Úložiště online"
+msgstr "Online úložiště"
 
 #: ../share/symbols/symbols.h:159
 msgctxt "Symbol"
@@ -3658,7 +3658,7 @@ msgstr "Komunikační propojení"
 #: ../share/symbols/symbols.h:165
 msgctxt "Symbol"
 msgid "Collate"
-msgstr "Shromáždění"
+msgstr "Porovnat"
 
 #: ../share/symbols/symbols.h:166
 msgctxt "Symbol"
@@ -3688,7 +3688,7 @@ msgstr "Magnetický buben (přímý přístup)"
 #: ../share/symbols/symbols.h:171
 msgctxt "Symbol"
 msgid "Offline Storage"
-msgstr "Offline uložiště"
+msgstr "Offline úložiště"
 
 #: ../share/symbols/symbols.h:172
 msgctxt "Symbol"
@@ -4029,7 +4029,7 @@ msgstr ""
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold"
-msgstr ""
+msgstr "Leták A4 se třemi přehyby"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -9352,7 +9352,7 @@ msgid ""
 "extrapolated arc, ...)"
 msgstr ""
 "Vyberte mezi různými typy spojení pro rohové uzly objektu (špičaté, zaoblené, "
-"extrapolovaný oblouk, ..."
+"extrapolovaný oblouk, …"
 
 #: ../src/live_effects/effect.cpp:443
 msgid "Taper stroke"
@@ -9394,7 +9394,7 @@ msgstr "Připojit cestu"
 msgid ""
 "Glue the current path's ends to a specific position on one or two other paths"
 msgstr ""
-"Konce aktuální cesty nalepte na konkrétní pozici na jedné nebo dvou dalších "
+"Konce aktuální cesty nalepit na konkrétní pozici na jedné nebo dvou dalších "
 "cestách"
 
 #: ../src/live_effects/effect.cpp:500
@@ -9668,7 +9668,7 @@ msgstr "<b>Výchozí hodnota:</b> "
 
 #: ../src/live_effects/effect.cpp:1579 ../src/live_effects/effect.cpp:1652
 msgid "<b>Default value overridden:</b> "
-msgstr ""
+msgstr "<b>Výchozí hodnota přepsána:</b> "
 
 #: ../src/live_effects/effect.cpp:1581 ../src/live_effects/effect.cpp:1648
 #: ../share/ui/dialog-trace.glade:994
@@ -12380,7 +12380,7 @@ msgstr "<b>Variace uzlů</b> Posouvá uzly/úchyty"
 
 #: ../src/live_effects/lpe-roughen.cpp:163
 msgid "<b>Extra roughen</b> Add an extra layer of rough"
-msgstr "<b>Extra zdrsnění</ b> Přidává další vrstvu drsnosti"
+msgstr "<b>Extra zdrsnění</b> Přidává další vrstvu drsnosti"
 
 #: ../src/live_effects/lpe-roughen.cpp:171
 msgid "<b>Options</b> Modify options to rough"
@@ -12453,7 +12453,7 @@ msgstr "Hlavní _kroky:"
 
 #: ../src/live_effects/lpe-ruler.cpp:43
 msgid "Draw a major mark every ... steps"
-msgstr "Nakreslit hlavní značku každých ... kroků"
+msgstr "Nakreslit hlavní značku každých … kroků"
 
 #: ../src/live_effects/lpe-ruler.cpp:44
 msgid "Shift marks _by:"
@@ -13485,7 +13485,7 @@ msgstr "Klon"
 #: ../src/object/sp-use.cpp:248
 #, c-format
 msgid "called %s"
-msgstr ""
+msgstr "nazvaný %s"
 
 #: ../src/object/sp-use.cpp:248
 msgid "Unnamed Symbol"
@@ -14116,9 +14116,8 @@ msgid "Unlink clone"
 msgstr "Odpojit klon"
 
 #: ../src/selection-chemistry.cpp:2818
-#, fuzzy
 msgid "Unlink clone recursively"
-msgstr "Od_pojit klony rekurzivně"
+msgstr "Odpojit klony rekurzivně"
 
 #: ../src/selection-chemistry.cpp:2828
 msgid ""
@@ -14335,9 +14334,8 @@ msgstr[1] " ve <b>%i</b> vrstvách"
 msgstr[2] " v <b>%i</b> vrstvách"
 
 #: ../src/selection-describer.cpp:182
-#, fuzzy
 msgid "Convert symbol to group to edit"
-msgstr "Převést obrys na křivku"
+msgstr "Převést symbol na skupinu k upravení"
 
 #: ../src/selection-describer.cpp:186
 msgid "Remove from symbols tray to edit symbol"
@@ -16102,6 +16100,7 @@ msgid "Capture log messages"
 msgstr "Zachytávat zprávy logu"
 
 #: ../src/ui/dialog/debug.cpp:83
+#, fuzzy
 msgid "Release log messages"
 msgstr "Zprávy záznamu o vydání"
 
@@ -16138,11 +16137,8 @@ msgid "Checkerboard background"
 msgstr "Šachovnicové pozadí"
 
 #: ../src/ui/dialog/document-properties.cpp:104
-#, fuzzy
 msgid "If set, use a colored checkerboard for the canvas background"
-msgstr ""
-"Je-li nastaveno, použijte šachovnici pro pozadí, jinak použijte barvu pozadí s "
-"plným krytím."
+msgstr "Je-li nastaveno, použít barevnou šachovnici pro pozadí plátna"
 
 #: ../src/ui/dialog/document-properties.cpp:105
 msgid "Show page _border"
@@ -16180,6 +16176,8 @@ msgid ""
 "Color of the canvas background. Note: opacity is ignored except when exporting to "
 "bitmap."
 msgstr ""
+"Barva pozadí plátna. Poznámka: průhlednost je ignorována, kromě exportu do "
+"bitmapy."
 
 #: ../src/ui/dialog/document-properties.cpp:109
 msgid "Border _color:"
@@ -18300,7 +18298,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:166
 msgid "Linear A"
-msgstr ""
+msgstr "Lineární A"
 
 #: ../src/ui/dialog/glyphs.cpp:167
 msgid "Mahajani"
@@ -18745,7 +18743,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:367
 msgid "Private Use Area"
-msgstr ""
+msgstr "Oblast pro soukromé použití"
 
 #: ../src/ui/dialog/glyphs.cpp:368
 msgid "CJK Compatibility Ideographs"
@@ -19977,6 +19975,9 @@ msgid ""
 "length. This information is used when zooming to 1:1, 1:2, etc., to display "
 "objects in their true sizes"
 msgstr ""
+"Upravte posuvník tak, aby se délka pravítka na obrazovce shodovala s jeho "
+"skutečnou délkou. Tyto informace se používají při přiblížení na 1:1, 1:2 atd., "
+"aby se objekty zobrazily v jejich skutečné velikosti."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1030
 msgid "Enable dynamic relayout for incomplete sections"
@@ -20492,7 +20493,7 @@ msgstr "Vstup/Výstup"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1435
 msgid "Use current directory for \"Save As ...\""
-msgstr "Použít aktuální adresář pro \"Uložit jako ...\""
+msgstr "Použít aktuální adresář pro \"Uložit jako …\""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1437
 msgid ""
@@ -22062,7 +22063,7 @@ msgstr "Systémové informace"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2535
 msgid "Reset Preferences"
-msgstr "Resetovat předvolby"
+msgstr "Obnovit předvolby"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2538
 msgid "User preferences: "
@@ -23210,7 +23211,7 @@ msgstr "Není ve slovníku: <b>%s</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:661
 msgid "<i>Checking...</i>"
-msgstr "<i>Kontrola...</i>"
+msgstr "<i>Kontrola…</i>"
 
 #: ../src/ui/dialog/spellcheck.cpp:730
 msgid "Fix spelling"
@@ -24033,27 +24034,27 @@ msgstr "<b>Kliknutím</b> vyberete uzly, <b>tažením</b> je upravíte."
 #: ../src/ui/dialog/xml-tree.cpp:562
 msgctxt "Undo History / XML dialog"
 msgid "Drag XML subtree"
-msgstr ""
+msgstr "Táhnout podstrom XML"
 
 #: ../src/ui/dialog/xml-tree.cpp:778
 msgctxt "Undo History / XML dialog"
 msgid "Create new element node"
-msgstr ""
+msgstr "Vytvořit nový uzel prvku"
 
 #: ../src/ui/dialog/xml-tree.cpp:793
 msgctxt "Undo History / XML dialog"
 msgid "Create new text node"
-msgstr ""
+msgstr "Vytvořit nový textový uzel"
 
 #: ../src/ui/dialog/xml-tree.cpp:807
 msgctxt "Undo History / XML dialog"
 msgid "Duplicate node"
-msgstr ""
+msgstr "Duplikovat uzel"
 
 #: ../src/ui/dialog/xml-tree.cpp:834
 msgctxt "Undo History / XML dialog"
 msgid "Delete node"
-msgstr ""
+msgstr "Odstranit uzel"
 
 #: ../src/ui/dialog/xml-tree.cpp:855
 msgctxt "Undo History / XML dialog"
@@ -24068,7 +24069,7 @@ msgstr ""
 #: ../src/ui/dialog/xml-tree.cpp:902
 msgctxt "Undo History / XML dialog"
 msgid "Indent node"
-msgstr ""
+msgstr "Odsadit uzel"
 
 #: ../src/ui/dialog/xml-tree.cpp:923
 msgctxt "Undo History / XML dialog"
@@ -24179,7 +24180,7 @@ msgstr "Upraví <b>šířku</b> elipsy, s <b>Ctrl</b> vytvoří kružnici"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1168
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
-msgstr "Upraví <b>výšku</b> elipsy, with <b>Ctrl</b> to make circle"
+msgstr "Upraví <b>výšku</b> elipsy, s <b>Ctrl</b> vytvoří kružnici"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1172
 msgid ""
@@ -24492,7 +24493,7 @@ msgstr "Shift, Ctrl, Alt"
 #: ../src/ui/tool/node.cpp:683
 msgctxt "Path handle tip"
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: ../src/ui/tool/node.cpp:687
 msgctxt "Path handle tip"
@@ -25503,7 +25504,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:142
 msgid "Line Type"
-msgstr ""
+msgstr "Typ čáry"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:142
 #, fuzzy
@@ -31541,7 +31542,7 @@ msgstr "Otočit plátnem proti směru hodinových ručiček"
 
 #: ../src/verbs.cpp:3112
 msgid "Reset Rotation"
-msgstr "Resetovat rotaci"
+msgstr "Obnovit rotaci"
 
 #: ../src/verbs.cpp:3112
 msgid "Reset canvas rotation to zero"
@@ -32789,7 +32790,7 @@ msgstr "Zobrazit experimentální"
 
 #: ../share/ui/dialog-livepatheffect-add.glade:291
 msgid "Message"
-msgstr ""
+msgstr "Zpráva"
 
 #: ../share/ui/dialog-livepatheffect-effect.glade:77
 msgid "LPEName"
@@ -36279,7 +36280,7 @@ msgstr ""
 # File: ../share/extensions/plotter.inx, line: 73
 #: ../share/extensions/hpgl_output.inx:14 ../share/extensions/plotter.inx:72
 msgid "Pen speed (cm/s or mm/s):"
-msgstr ""
+msgstr "Rychlost pera (cm/s nebo mm/s):"
 
 #: ../share/extensions/hpgl_output.inx:14
 #, fuzzy
@@ -37236,7 +37237,7 @@ msgstr "Režim ikon"
 
 #: ../share/extensions/layer2png.inx:8
 msgid "Sizes"
-msgstr ""
+msgstr "Velikosti"
 
 #: ../share/extensions/layer2png.inx:9
 msgid "Layer with Slices:"
@@ -38397,7 +38398,7 @@ msgstr ""
 
 #: ../share/extensions/path_to_absolute.inx:3
 msgid "To Absolute"
-msgstr ""
+msgstr "Na absolutní"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
@@ -39497,7 +39498,7 @@ msgstr "Záměr vykreslování"
 
 #: ../share/extensions/scribus_export_pdf.inx:34
 msgid "Scribus CMYK PDF (*.PDF)"
-msgstr ""
+msgstr "Scribus CMYK PDF (*.PDF)"
 
 #: ../share/extensions/scribus_export_pdf.inx:35
 msgid "Exports the document to PDF using scribus"
@@ -41188,14 +41189,116 @@ msgstr ""
 msgid "Half of font height"
 msgstr "Polovina výšky písma"
 
+#~ msgid "Inkscape Version"
+#~ msgstr "Verze Inkscape"
+
+#~ msgid "Print Inkscape version and exit"
+#~ msgstr "Vypsat verzi Inkscape a ukončit"
+
+#~ msgid "System Directory"
+#~ msgstr "Systémový adresář"
+
+#~ msgid "Print system data directory and exit"
+#~ msgstr "Vypsat adresář systémových dat a ukončit"
+
+#~ msgid "User Directory"
+#~ msgstr "Uživatelský adresář"
+
+#~ msgid "Print user data directory and exit"
+#~ msgstr "Vypsat adresář uživatelských dat a ukončit"
+
+#~ msgid "List Actions"
+#~ msgstr "Seznam akcí"
+
+#~ msgid "Print a list of actions and exit"
+#~ msgstr "Vypsat seznam akcí a ukončit"
+
+#~ msgid "Clean up Document"
+#~ msgstr "Vyčistit dokument"
+
+#~ msgid "Remove unused definitions (gradients, etc.)"
+#~ msgstr "Odebere nepoužívané definice (přechody atd.)"
+
+#~ msgid "Quit"
+#~ msgstr "Ukončit"
+
+#~ msgid "Immediately quit Inkscape"
+#~ msgstr "Okamžitě ukončí Inkscape"
+
+#~ msgid "Import Page Number"
+#~ msgstr "Importovat číslo stránky"
+
+#~ msgid "Select PDF page number to import"
+#~ msgstr "Vyberte číslo stránky PDF, které chcete importovat"
+
+#~ msgid "Set DPI conversion method for legacy Inkscape files"
+#~ msgstr "Nastavit metodu převodu DPI pro starší soubory Inkscape"
+
+#~ msgid "Display Mode: Normal"
+#~ msgstr "Režim zobrazení: Normální"
+
+#~ msgid "Use normal rendering mode"
+#~ msgstr "Použít normální režim vykreslování"
+
+#~ msgid "Display Mode: Outline"
+#~ msgstr "Režim zobrazení: Obrys"
+
+#~ msgid "Show only object outlines"
+#~ msgstr "Zobrazit pouze obrysy objektu"
+
+#~ msgid "Display Mode: No Filters"
+#~ msgstr "Režim zobrazení: Bez filtrů"
+
+#~ msgid "Do not render filters (for speed)"
+#~ msgstr "Nevykreslovat filtry (kvůli rychlosti)"
+
 #~ msgid "Display Mode: Hairlines"
 #~ msgstr "Režim zobrazení: Vlasové čáry"
+
+#~ msgid "Render thin lines visibly"
+#~ msgstr "Viditelně vykreslite tenké čáry"
+
+#~ msgid "Display Mode Cycle"
+#~ msgstr "Cyklovat režim zobrazení"
+
+#~ msgid "Cycle through display modes"
+#~ msgstr "Procházet režimy zobrazení"
+
+#~ msgid "Display Mode Toggle"
+#~ msgstr "Přepnout režim zobrazení"
+
+#~ msgid "Toggle between normal and last non-normal mode"
+#~ msgstr "Přepnout mezi normálním a posledním speciálním režimem"
+
+#~ msgid "Split Mode: Normal"
+#~ msgstr "Režim rozdělení: Normální"
+
+#~ msgid "Do not split canvas"
+#~ msgstr "Nerozdělovat plátno"
+
+#~ msgid "Split Mode: Split"
+#~ msgstr "Režim rozdělení: Rozdělení"
+
+#~ msgid "Render part of the canvas in outline mode"
+#~ msgstr "Vykreslit část plátna v režimu obrysu"
+
+#~ msgid "Split Mode: X-Ray"
+#~ msgstr "Režim rozdělení: Rentgen"
+
+#~ msgid "Render a circular area in outline mode"
+#~ msgstr "Vykreslit kruhovou oblast v režimu obrysu"
 
 #~ msgid "Color Mode"
 #~ msgstr "Barevný režim"
 
 #~ msgid "Toggle between normal and grayscale modes"
 #~ msgstr "Přepnout mezi normálním režimem a režimem stupňů šedi"
+
+#~ msgid "Color Managed Mode"
+#~ msgstr "Režim správy barev"
+
+#~ msgid "Toggle between normal and color managed modes"
+#~ msgstr "Přepnout mezi normálním režimem a režimem správy barev"
 
 #~ msgid "Toggle snapping on/off"
 #~ msgstr "Zapnout/vypnout přichytávání"
@@ -41332,11 +41435,32 @@ msgstr "Polovina výšky písma"
 #~ msgid "Zoom Selection"
 #~ msgstr "Výběr přiblížení"
 
+#~ msgid "Zoom Drawing"
+#~ msgstr "Přiblížit na kresbu"
+
 #~ msgid "Zoom Page"
 #~ msgstr "Přiblížení stránky"
 
+#~ msgid "Zoom Page Width"
+#~ msgstr "Přiblížit na šířku stránky"
+
+#~ msgid "Zoom Center Page"
+#~ msgstr "Přiblížit na střed stránky"
+
+#~ msgid "Zoom Prev"
+#~ msgstr "Předchozí přiblížení"
+
+#~ msgid "Go back to previous zoom (from the history of zooms)"
+#~ msgstr "Přejít zpět na předchozí přiblížení (z historie přiblížení)"
+
+#~ msgid "Zoom Next"
+#~ msgstr "Další přiblížení"
+
+#~ msgid "Go to next zoom (from the history of zooms)"
+#~ msgstr "Přejít na další přiblížení (z historie přiblížení)"
+
 #~ msgid "Reset canvas rotation"
-#~ msgstr "Resetovat otáčení plátna"
+#~ msgstr "Obnovit otáčení plátna"
 
 #~ msgid "Flip Horizontal"
 #~ msgstr "Překlopit vodorovně"
@@ -41344,11 +41468,134 @@ msgstr "Polovina výšky písma"
 #~ msgid "Flip Vertical"
 #~ msgstr "Překlopit svisle"
 
+#~ msgid "Reset Flipping"
+#~ msgstr "Obnovit překlápění"
+
 #~ msgid "Lock Rotation"
 #~ msgstr "Uzamknout rotaci"
 
 #~ msgid "Lock canvas rotation"
 #~ msgstr "Zamknout rotaci plátna"
+
+#~ msgid "File Open"
+#~ msgstr "Otevřít soubor"
+
+#~ msgid "Open file"
+#~ msgstr "Otevře soubor"
+
+#~ msgid "File New"
+#~ msgstr "Nový soubor"
+
+#~ msgid "Open new document using template"
+#~ msgstr "Otevřít nový dokument pomocí šablony"
+
+#~ msgid "File Close"
+#~ msgstr "Zavřít soubor"
+
+#~ msgid "Close active document"
+#~ msgstr "Zavře aktivní dokument"
+
+#~ msgid "Set Attribute"
+#~ msgstr "Nastavit atribut"
+
+#~ msgid "Set Property"
+#~ msgstr "Nastavit vlastnost"
+
+#~ msgid "Unlink Clones"
+#~ msgstr "Odpojit klony"
+
+#~ msgid "Unlink clones and symbols"
+#~ msgstr "Odpojit klony a symboly"
+
+#~ msgid "Object To Path"
+#~ msgstr "Objekt na cestu"
+
+#~ msgid "Convert shapes to paths"
+#~ msgstr "Převést tvary na cesty"
+
+#~ msgid "Stroke to Path"
+#~ msgstr "Tah na cestu"
+
+#~ msgid "Convert strokes to paths"
+#~ msgstr "Převést tahy na cesty"
+
+#~ msgid "Simplify Path"
+#~ msgstr "Zjednodušit cestu"
+
+#~ msgid "Simplify paths, reducing node counts"
+#~ msgstr "Zjednodušit cesty, snižit počet uzlů"
+
+#~ msgid "Export Type"
+#~ msgstr "Typ exportu"
+
+#~ msgid "Export File Name"
+#~ msgstr "Exportovat název souboru"
+
+#~ msgid "Export Area"
+#~ msgstr "Oblast exportu"
+
+#~ msgid "Set export area"
+#~ msgstr "Nastavit exportovanou oblast"
+
+#~ msgid "Export drawing area"
+#~ msgstr "Exportovat kreslicí oblast"
+
+#~ msgid "Export selected ID(s)"
+#~ msgstr "Exportovat vybraná ID"
+
+#~ msgid "Export Plain SVG"
+#~ msgstr "Exportovat prosté SVG"
+
+#~ msgid "Export as plain SVG"
+#~ msgstr "Exportovat jako prosté SVG"
+
+#~ msgid "Export Text to Path"
+#~ msgstr "Exportovat text na cestu"
+
+#~ msgid "Convert texts to paths in the exported file"
+#~ msgstr "Převést texty na cesty v exportovaném souboru"
+
+#~ msgid "Export PDF Version"
+#~ msgstr "Exportovat verzi PDF"
+
+#~ msgid "Set PDF version"
+#~ msgstr "Nastavit verzi PDF"
+
+#~ msgid "Export LaTeX"
+#~ msgstr "Exportovat LaTeX"
+
+#~ msgid "Export Background"
+#~ msgstr "Exportovat pozadí"
+
+#~ msgid "Export PNG Color Mode"
+#~ msgstr "Exportovat barevný režim PNG"
+
+#~ msgid "Set color mode for PNG export"
+#~ msgstr "Nastavit barevný režim pro export PNG"
+
+#~ msgid "Clear Selection"
+#~ msgstr "Vymazat výběr"
+
+#~ msgid "Clear selection"
+#~ msgstr "Vymaže výběr"
+
+#~ msgid "Select All"
+#~ msgstr "Vybrat vše"
+
+#~ msgid "Invert Selection"
+#~ msgstr "Prohodit výběr"
+
+#~ msgid "Translate"
+#~ msgstr "Přetransformovat"
+
+#~ msgid "Translate selected objects (dx,dy)"
+#~ msgstr "Přetransformovat vybrané objekty (dx, dy)"
+
+#~ msgid "Remove Transforms"
+#~ msgstr "Odebrat transformace"
+
+#~ msgid "Close the active window"
+#~ msgstr "Zavřít aktivní okno"
 
 #~ msgid "Margin around export area: units of page size for SVG, mm for PS/PDF"
 #~ msgstr ""
@@ -41357,11 +41604,66 @@ msgstr "Polovina výšky písma"
 #~ msgid "PDF version (1.4 or 1.5); default is 1.5"
 #~ msgstr "Verze PDF (1.4 nebo 1.5); výchozí je 1.5"
 
+#~ msgid "Version"
+#~ msgstr "Verze"
+
+#~ msgid "Attributes"
+#~ msgstr "Atributy"
+
+#~ msgid "CSS Properties"
+#~ msgstr "Vlastnosti CSS"
+
+#~ msgid "Create a circle / ellipse segment"
+#~ msgstr "Vytvořit kruh / segment elipsy"
+
 #~ msgid "Center"
 #~ msgstr "Zarovnat na střed"
 
+#~ msgid "History mode"
+#~ msgstr "Režim historie"
+
+#~ msgid "Invalid input! Enter an integer number."
+#~ msgstr "Neplatný vstup! Zadejte celé číslo."
+
+#~ msgid "Invalid input! Enter a decimal number."
+#~ msgstr "Neplatný vstup! Zadejte desetinné číslo."
+
+#~ msgid "Close Tab"
+#~ msgstr "Zavřít kartu"
+
+#~ msgid "You can drop dockable dialogs here."
+#~ msgstr "Zde můžete přetáhnout ukotvitelná dialogová okna."
+
+#~ msgid "Move Tab to New Window"
+#~ msgstr "Přesunout kartu do nového okna"
+
+#~ msgid "Labels: automatic"
+#~ msgstr "Popisky: automatické"
+
+#~ msgid "Labels: always off"
+#~ msgstr "Popisky: vždy vypnuté"
+
+#~ msgid "Dialog Window"
+#~ msgstr "Dialogové okno"
+
 #~ msgid "Export as SVG 1.1 per settings in Preferences dialog"
 #~ msgstr "Exportovat jako SVG 1.1 podle nastavení v dialogu Předvolby"
+
+#~ msgctxt "color"
+#~ msgid "R:"
+#~ msgstr "Č:"
+
+#~ msgctxt "color"
+#~ msgid "G:"
+#~ msgstr "Z:"
+
+#~ msgctxt "color"
+#~ msgid "B:"
+#~ msgstr "M:"
+
+#~ msgctxt "color"
+#~ msgid "A:"
+#~ msgstr "A:"
 
 #~ msgid "_Desc"
 #~ msgstr "_Popis"
@@ -41375,8 +41677,20 @@ msgstr "Polovina výšky písma"
 #~ msgid "Search title"
 #~ msgstr "Hledat titulek"
 
+#~ msgid "_Zoom correction factor (in %)"
+#~ msgstr "Korekční faktor _přiblížení (v %)"
+
 #~ msgid "Lock canvas rotation by default"
 #~ msgstr "Ve výchozím nastavení uzamknout rotaci plátna"
+
+#~ msgid "Handle size"
+#~ msgstr "Velikost úchytu"
+
+#~ msgid "Cursor size"
+#~ msgstr "Velikost kurzoru"
+
+#~ msgid "Enable cursor scaling"
+#~ msgstr "Povolit změnu měřítka kurzoru"
 
 #~ msgid "Change GTK theme:"
 #~ msgstr "Změnit motiv GTK:"
@@ -41384,14 +41698,87 @@ msgstr "Polovina výšky písma"
 #~ msgid "User themes:"
 #~ msgstr "Uživatelské motivy:"
 
+#~ msgid "_Contrast:"
+#~ msgstr "_Kontrast:"
+
 #~ msgid "Icons"
 #~ msgstr "Ikony"
+
+#~ msgid "Use default base color for icons"
+#~ msgstr "Pro ikony použít výchozí základní barvu"
+
+#~ msgid "Use default higlight colors for icons"
+#~ msgstr "Pro ikony použít výchozí barvy zvýraznění"
+
+#~ msgid "Icon color base"
+#~ msgstr "Základní barva ikony"
 
 #~ msgid "Base color for icons"
 #~ msgstr "Základní barva ikon"
 
+#~ msgid "Icon color highlights"
+#~ msgstr "Barva zvýraznění ikony"
+
+#~ msgid "Highlight colors supported by some symbolic icon themes"
+#~ msgstr "Zvýrazněné barvy podporované některými motivy symbolických ikon"
+
+#~ msgid "Reset theme colors for some symbolic icon themes"
+#~ msgstr "Obnovit barvy motivů u některých motivů symbolických ikon"
+
+#~ msgid "Set the size for the tool icons."
+#~ msgstr "Nastavit velikost ikon nástrojů."
+
 #~ msgid "Themeing"
 #~ msgstr "Motivy"
+
+#~ msgid "Show Welcome dialog"
+#~ msgstr "Zobrazovat uvítací dialogové okno"
+
+#~ msgid "Automatic"
+#~ msgstr "Automatické"
+
+#~ msgid "Off"
+#~ msgstr "Vypnuto"
+
+#~ msgid "Saving dialogs' status"
+#~ msgstr "Ukládání stavu dialogových oken"
+
+#~ msgid "Don't save dialogs' status"
+#~ msgstr "Neukládat stav dialogových oken"
+
+#~ msgid "Dialog labels behavior (requires restart)"
+#~ msgstr "Chování popisků dialogových oken (vyžaduje restart)"
+
+#~ msgid "Dialog names will be displayed when there is enough space"
+#~ msgstr "Pokud je dostatek místa, zobrazí se názvy dialogových oken"
+
+#~ msgid "Only show dialog icons"
+#~ msgstr "Zobrazit pouze ikony dialogového okna"
+
+#~ msgid "Whether the Welcome dialog will be shown when Inkscape starts."
+#~ msgstr "Zda se při spuštění Inkscape zobrazí uvítací dialog."
+
+#~ msgid "Display Options"
+#~ msgstr "Volby zobrazení"
+
+#~ msgid "Show command line argument names"
+#~ msgstr "Zobrazovat názvy argumentů příkazového řádku"
+
+#~ msgid ""
+#~ "Show action argument names in the command palette suggestions, most useful for "
+#~ "using them on the command line"
+#~ msgstr ""
+#~ "Zobrazit názvy argumentů akcí v návrzích palety příkazů, což je nejužitečnější "
+#~ "pro jejich použití na příkazovém řádku"
+
+#~ msgid "Show untranslated (English) names"
+#~ msgstr "Zobrazovat nepřeložené (anglické) názvy"
+
+#~ msgid "Also show the English names of the command"
+#~ msgstr "Zobrazit také anglické názvy příkazu"
+
+#~ msgid "Command Palette"
+#~ msgstr "Paleta příkazů"
 
 #~ msgid "Insert SVG 1.1 fallback in text"
 #~ msgstr "Vložit do textu záložní (náhradní) verzi SVG 1.1"
@@ -41469,6 +41856,72 @@ msgstr "Polovina výšky písma"
 #~ msgid "Keyboard"
 #~ msgstr "Klávesnice"
 
+#~ msgid "Loading ..."
+#~ msgstr "Načítání …"
+
+#~ msgid "User preferences:"
+#~ msgstr "Uživatelské předvolby:"
+
+#~ msgid "User config:"
+#~ msgstr "Uživatelská konfigurace:"
+
+#~ msgid "User extensions:"
+#~ msgstr "Uživatelská rozšíření:"
+
+#~ msgid "Open fonts folder"
+#~ msgstr "Otevřít složku písem"
+
+#~ msgid "User fonts:"
+#~ msgstr "Uživatelská písma:"
+
+#~ msgid "Location of the user’s fonts"
+#~ msgstr "Umístění písem uživatele"
+
+#~ msgid "User icons:"
+#~ msgstr "Uživatelské ikony:"
+
+#~ msgid "User templates:"
+#~ msgstr "Uživatelské šablony:"
+
+#~ msgid "User symbols:"
+#~ msgstr "Uživatelské symboly:"
+
+#~ msgid "User paint servers:"
+#~ msgstr "Uživatelské paint servery:"
+
+#~ msgid "User palettes:"
+#~ msgstr "Uživatelské palety:"
+
+#~ msgid "User keys:"
+#~ msgstr "Uživatelské klávesy:"
+
+#~ msgid "User UI:"
+#~ msgstr "Uživatelské rozhraní:"
+
+#~ msgid "User cache:"
+#~ msgstr "Uživatelská mezipaměť:"
+
+#~ msgid "Temporary files:"
+#~ msgstr "Dočasné soubory:"
+
+#~ msgid "Inkscape data:"
+#~ msgstr "Data Inkscape:"
+
+#~ msgid "Inkscape extensions:"
+#~ msgstr "Rozšíření Inkscape:"
+
+#~ msgid "System data:"
+#~ msgstr "Systémová data:"
+
+#~ msgid "Custom Font directories"
+#~ msgstr "Vlastní adresáře písem"
+
+#~ msgid "Icon theme:"
+#~ msgstr "Motiv ikon:"
+
+#~ msgid "<span size='large'><b>No Results</b></span>"
+#~ msgstr "<span size='large'><b>Žádné výsledky</b></span>"
+
 #~ msgid "Save"
 #~ msgstr "Uložit"
 
@@ -41490,6 +41943,20 @@ msgstr "Polovina výšky písma"
 #~ msgid "Smoothing"
 #~ msgstr "Vyhlazení"
 
+#~ msgid ""
+#~ "No objects selected. Click, %s+click, %s+scroll mouse on top of objects, or "
+#~ "drag around objects to select."
+#~ msgstr ""
+#~ "Nejsou vybrány žádné objekty. Kliknutím, kliknutím s přidrženou klávesou %s, "
+#~ "skrolováním myší na objektech s přidrženou klávesou %s, nebo tažením myšíkolem "
+#~ "objektů je vyberete."
+
+#~ msgid "Click selection again to toggle scale/rotation handles"
+#~ msgstr "Opětovným kliknutím na výběr přepnete úchyty měřítka/rotace"
+
+#~ msgid "Distance:"
+#~ msgstr "Vzdálenost:"
+
 #~ msgid "Linear gradient (fill)"
 #~ msgstr "Lineární přechod (výplň)"
 
@@ -41508,8 +41975,17 @@ msgstr "Polovina výšky písma"
 #~ msgid "Mesh gradient (stroke)"
 #~ msgstr "Síťkový přechod (tah)"
 
+#~ msgid "Stroke width: %1"
+#~ msgstr "Šířka tahu: %1"
+
 #~ msgid "Fill between paths"
 #~ msgstr "Výplň mezi cestami"
+
+#~ msgid "_Command Palette"
+#~ msgstr "_Paleta příkazů"
+
+#~ msgid "Show or hide the on-canvas command palette"
+#~ msgstr "Zobrazí nebo skryje paletu příkazů na plátně"
 
 #~ msgid "Lock rotation"
 #~ msgstr "Uzamčení rotace"
@@ -41523,11 +41999,35 @@ msgstr "Polovina výšky písma"
 #~ msgid "P_references"
 #~ msgstr "_Předvolby"
 
+#~ msgctxt "canvas"
+#~ msgid "Z:"
+#~ msgstr "L:"
+
+#~ msgctxt "canvas"
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#~ msgid "Click to Copy"
+#~ msgstr "Kliknutím zkopírujete"
+
+#~ msgid "Ctrl+F"
+#~ msgstr "Ctrl+F"
+
+#~ msgid "Apply"
+#~ msgstr "Použít"
+
 #~ msgid "Inkscape. Draw freely."
 #~ msgstr "Inkscape. Kreslete svobodně."
 
 #~ msgid "Official splash artwork of this version"
 #~ msgstr "Oficiální úvodní kresba této verze"
+
+#~ msgid ""
+#~ "<big><b>Do you want to get involved with Inkscape? <a href=\"https://inkscape."
+#~ "org/contribute/\">Check this page!</a></b></big>"
+#~ msgstr ""
+#~ "<big><b>Chcete se zapojit do vývoje Inkscape? <a href=\"https://inkscape.org/"
+#~ "contribute/\">Koukněte se na tuto stránku!</a></b></big>"
 
 #~ msgid "List of authors who contributed to the code"
 #~ msgstr "Seznam autorů, kteří přispěli kódem"
@@ -41539,7 +42039,7 @@ msgstr "Polovina výšky písma"
 #~ "<big><b>Do you want to contribute to translation activities? <a href=\"https://"
 #~ "inkscape.org/contribute/translations/\">Join us here!</a></b></big>"
 #~ msgstr ""
-#~ "<big><b>Chcete přispívat svými překladatelskými aktivitami? <a href=\"https://"
+#~ "<big><b>Chcete přispět svými překladatelskými aktivitami? <a href=\"https://"
 #~ "inkscape.org/contribute/translations/\">Připojte se k nám zde!</a></b></big>"
 
 #~ msgid "List of translators"
@@ -41548,6 +42048,13 @@ msgstr "Polovina výšky písma"
 #~ msgid "Translators"
 #~ msgstr "Překladatelé"
 
+#~ msgid ""
+#~ "<big><b>See the full details about the Inkscape licenses <a href=\"https://"
+#~ "inkscape.org/about/license/\">here</a>!</b></big>"
+#~ msgstr ""
+#~ "<big><b>Všechny podrobnosti o licencích Inkscape najdete <a href=\"https://"
+#~ "inkscape.org/about/license/\">tady</a>!</b></big>"
+
 #~ msgid "License file failed to load."
 #~ msgstr "Licenční soubor se nepodařilo načíst."
 
@@ -41555,8 +42062,8 @@ msgstr "Polovina výšky písma"
 #~ msgstr "Licence Inkscape"
 
 #~ msgctxt "Brief copyright notice at the footer of the About screen"
-#~ msgid "© 2019 Inkscape Developers"
-#~ msgstr "© 2019 Vývojáři Inkscape"
+#~ msgid "© 2021 Inkscape Developers"
+#~ msgstr "© 2021 Vývojáři Inkscape"
 
 #~ msgid "Link to the official website"
 #~ msgstr "Odkaz na oficiální web"
@@ -41566,6 +42073,18 @@ msgstr "Polovina výšky písma"
 
 #~ msgid "Version Copied!"
 #~ msgstr "Verze zkopírována!"
+
+#~ msgid "Dark"
+#~ msgstr "Tmavé"
+
+#~ msgid "Light Checkerboard"
+#~ msgstr "Světlá šachovnice"
+
+#~ msgid "Dark Checkerboard"
+#~ msgstr "Tmavá šachovnice"
+
+#~ msgid "Solid White"
+#~ msgstr "Plně bílé"
 
 #~ msgid "Inkscape (default)"
 #~ msgstr "Inkscape (výchozí)"
@@ -41591,41 +42110,41 @@ msgstr "Polovina výšky písma"
 #~ msgid "ID Card (ISO 7810)"
 #~ msgstr "Identifikační karty (ISO 7810)"
 
+#~ msgid "A4"
+#~ msgstr "A4"
+
 #~ msgid "A4 (Landscape)"
 #~ msgstr "A4 (na šířku)"
 
-#~ msgid "A4 (Portrait)"
-#~ msgstr "A4 (na výšku)"
+#~ msgid "A0"
+#~ msgstr "A0"
 
 #~ msgid "A0 (Landscape)"
 #~ msgstr "A0 (na šířku)"
 
-#~ msgid "A0 (Portrait)"
-#~ msgstr "A0 (na výšku)"
+#~ msgid "A1"
+#~ msgstr "A1"
 
 #~ msgid "A1 (Landscape)"
 #~ msgstr "A1 (na šířku)"
 
-#~ msgid "A1 (Portrait)"
-#~ msgstr "A1 (na výšku)"
+#~ msgid "A2"
+#~ msgstr "A2"
 
 #~ msgid "A2 (Landscape)"
 #~ msgstr "A2 (na šířku)"
 
-#~ msgid "A2 (Portrait)"
-#~ msgstr "A2 (na výšku)"
+#~ msgid "A3"
+#~ msgstr "A3"
 
 #~ msgid "A3 (Landscape)"
 #~ msgstr "A3 (na šířku)"
 
-#~ msgid "A3 (Portrait)"
-#~ msgstr "A3 (na výšku)"
+#~ msgid "A5"
+#~ msgstr "A5"
 
 #~ msgid "A5 (Landscape)"
 #~ msgstr "A5 (na šířku)"
-
-#~ msgid "A5 (Portrait)"
-#~ msgstr "A5 (na výšku)"
 
 #~ msgid "Business Card EU (Landscape)"
 #~ msgstr "Vizitka EU (na šířku)"
@@ -41635,6 +42154,9 @@ msgstr "Polovina výšky písma"
 
 #~ msgid "Business Card EU (Square)"
 #~ msgstr "Vizitka EU (čtverec)"
+
+#~ msgid "DL Envelope"
+#~ msgstr "Obálka DL"
 
 #~ msgid "Facebook cover photo"
 #~ msgstr "Titulní fotka na Facebooku"
@@ -41716,8 +42238,8 @@ msgstr "Polovina výšky písma"
 #~ "better, please consider joining the Inkscape project today.</b></big>"
 #~ msgstr ""
 #~ "<big><b>Projekt Inkscape je podporován uživateli, jako jste vy.</b> Díky "
-#~ "našemuspolečnému času, penězům a dovednostem jsme tento software vytvořili pro "
-#~ "všechny na světě, aby si ho mohli užívat bez omezení a bez nákladů. <b>\n"
+#~ "našemu společnému času, penězům a dovednostem jsme tento software vytvořili "
+#~ "pro všechny na světě, aby si ho mohli užívat bez omezení a bez nákladů. <b>\n"
 #~ "Pokud se chcete zapojit a vylepšit další verzi Inkscape, zvažte prosím "
 #~ "připojení se k projektu Inkscape ještě dnes.</b></big>"
 
@@ -41763,7 +42285,7 @@ msgstr "Polovina výšky písma"
 
 #~ msgctxt "Document format category"
 #~ msgid "Social"
-#~ msgstr "Sociální"
+#~ msgstr "Sociální sítě"
 
 #~ msgctxt "Document format category"
 #~ msgid "Other"
@@ -41775,6 +42297,15 @@ msgstr "Polovina výšky písma"
 #~ msgid "Show this every time"
 #~ msgstr "Zobrazovat toto okno pokaždé"
 
+#~ msgid "Time to Draw"
+#~ msgstr "Je čas kreslit"
+
+#~ msgid "Center Page"
+#~ msgstr "Střed stránky"
+
+#~ msgid "Zoom Previous"
+#~ msgstr "Předchozí přiblížení"
+
 #~ msgid "_Orientation"
 #~ msgstr "_Orientace"
 
@@ -41783,6 +42314,21 @@ msgstr "Polovina výšky písma"
 
 #~ msgid "Visible Hairlines"
 #~ msgstr "Viditelné vlasové čáry"
+
+#~ msgid "Outline Overlay"
+#~ msgstr "Překryv obrysu"
+
+#~ msgid "Cycle"
+#~ msgstr "Cyklovat"
+
+#~ msgid "Toggle"
+#~ msgstr "Přepnout"
+
+#~ msgid "_Split Mode"
+#~ msgstr "_Režim rozdělení"
+
+#~ msgid "Split"
+#~ msgstr "Rozdělení"
 
 #~ msgid "X-Ray"
 #~ msgstr "Rentgen"
@@ -41795,6 +42341,9 @@ msgstr "Polovina výšky písma"
 
 #~ msgid "Please select a rectangle"
 #~ msgstr "Prosím vyberte čtyřúhelník"
+
+#~ msgid "JessyInk script version {version} installed."
+#~ msgstr "Verze skriptu JessyInk {version} nainstalována."
 
 #~ msgid "Manage Extensions..."
 #~ msgstr "Spravovat rozšíření…"
@@ -41810,6 +42359,88 @@ msgstr "Polovina výšky písma"
 
 #~ msgid "Developing (git required)"
 #~ msgstr "Vývojové (vyžadován git)"
+
+#~ msgid "Export to JPEG"
+#~ msgstr "Export do JPEG"
+
+#~ msgid "Low Quality Warning"
+#~ msgstr "Upozornění na nízkou kvalitu"
+
+#~ msgid "Learn more details about JPEG:"
+#~ msgstr "Další informace o formátu JPEG:"
+
+#~ msgid "Progressive:"
+#~ msgstr "Progresivní:"
+
+#~ msgid "Store image as a progressive JPEG file."
+#~ msgstr "Uložit obrázek jako progresivní JPEG soubor."
+
+#~ msgid "JPEG (*.jpeg)"
+#~ msgstr "JPEG (*.jpeg)"
+
+#~ msgid "Level:"
+#~ msgstr "Úroveň:"
+
+#~ msgid "Export to TIFF"
+#~ msgstr "Export do TIFF"
+
+#~ msgid "Speed:"
+#~ msgstr "Rychlost:"
+
+#~ msgid "Quality between 0 and 95"
+#~ msgstr "Kvalita mezi 0 a 95"
+
+#~ msgid "TIFF (*.tiff)"
+#~ msgstr "TIFF (*.tiff)"
+
+#~ msgid "Export to WebP"
+#~ msgstr "Export do WebP"
+
+#~ msgid "Do not use lossy compression."
+#~ msgstr "Nepoužívejte ztrátovou kompresi."
+
+#~ msgid "Quality between 1 and 100"
+#~ msgstr "Kvalita mezi 1 a 100"
+
+#~ msgid "WebP (*.webp)"
+#~ msgstr "WebP (*.webp)"
+
+#~ msgid "Export to webp file format."
+#~ msgstr "Export do formátu souboru webp."
+
+#~ msgid "PDF version:"
+#~ msgstr "Verze PDF:"
+
+#~ msgid "Show bleed marks"
+#~ msgstr "Zobrazit značky spadávky"
+
+#~ msgid "Exports the document to PDF using Scribus"
+#~ msgstr "Exportuje dokument do PDF pomocí aplikace Scribus"
+
+#~ msgid "Open a New Window"
+#~ msgstr "Otevřít nové okno"
+
+#~ msgctxt "Brief copyright notice at the footer of the About screen"
+#~ msgid "© 2019 Inkscape Developers"
+#~ msgstr "© 2019 Vývojáři Inkscape"
+
+#~ msgid "A4 (Portrait)"
+#~ msgstr "A4 (na výšku)"
+
+#~ msgid "A0 (Portrait)"
+#~ msgstr "A0 (na výšku)"
+
+#~ msgid "A1 (Portrait)"
+#~ msgstr "A1 (na výšku)"
+
+#~ msgid "A2 (Portrait)"
+#~ msgstr "A2 (na výšku)"
+
+#~ msgid "A3 (Portrait)"
+#~ msgstr "A3 (na výšku)"
+
+#~ msgid "A5 (Portrait)"
+#~ msgstr "A5 (na výšku)"
 
 #~ msgid "Print Inkscape version and exit."
 #~ msgstr "Vypsat verzi Inkscape a ukončit."
