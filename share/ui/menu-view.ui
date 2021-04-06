@@ -184,7 +184,7 @@
     </submenu>
 
     <item>
-      <attribute name='label' translatable="yes">Gray Scale</attribute>
+      <attribute name='label' translatable="yes">Grayscale</attribute>
       <attribute name='action'>win.canvas-color-mode</attribute>
     </item>
     <item>
