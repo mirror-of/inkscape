@@ -476,19 +476,17 @@ bool Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool ca
                 return found;
             }
 
-            gchar* replace_text  = g_strdup(entry_replace.getEntry()->get_text().c_str());
+            Glib::ustring replace = entry_replace.getEntry()->get_text();
             gsize n = find_strcmp_pos(item_text.c_str(), ufind.c_str(), exact, casematch);
             static Inkscape::Text::Layout::iterator _begin_w;
             static Inkscape::Text::Layout::iterator _end_w;
             while (n != std::string::npos) {
                 _begin_w = layout->charIndexToIterator(n);
-                _end_w = layout->charIndexToIterator(n + strlen(find));
-                sp_te_replace(item, _begin_w, _end_w, replace_text);
+                _end_w = layout->charIndexToIterator(n + ufind.length());
+                sp_te_replace(item, _begin_w, _end_w, replace.c_str());
                 item_text = sp_te_get_string_multiline (item);
-                n = find_strcmp_pos(item_text.c_str(), ufind.c_str(), exact, casematch, n + strlen(replace_text) + 1);
+                n = find_strcmp_pos(item_text.c_str(), ufind.c_str(), exact, casematch, n + replace.length());
             }
-
-            g_free(replace_text);
         }
 
         return found;
