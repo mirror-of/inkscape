@@ -468,10 +468,10 @@ void Export::update()
  */
 void Export::set_default_filename () {
 
-    if ( SP_ACTIVE_DOCUMENT && SP_ACTIVE_DOCUMENT->getDocumentURI() )
+    if ( SP_ACTIVE_DOCUMENT && SP_ACTIVE_DOCUMENT->getDocumentFilename() )
     {
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
-        const gchar *uri = doc->getDocumentURI();
+        const gchar *filename = doc->getDocumentFilename();
         auto &&text_extension = get_file_save_extension(Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
         Inkscape::Extension::Output * oextension = nullptr;
 
@@ -481,24 +481,24 @@ void Export::set_default_filename () {
 
         if (oextension != nullptr) {
             gchar * old_extension = oextension->get_extension();
-            if (g_str_has_suffix(uri, old_extension)) {
-                gchar * uri_copy;
+            if (g_str_has_suffix(filename, old_extension)) {
+                gchar * filename_copy;
                 gchar * extension_point;
                 gchar * final_name;
 
-                uri_copy = g_strdup(uri);
-                extension_point = g_strrstr(uri_copy, old_extension);
+                filename_copy = g_strdup(filename);
+                extension_point = g_strrstr(filename_copy, old_extension);
                 extension_point[0] = '\0';
 
-                final_name = g_strconcat(uri_copy, ".png", NULL);
+                final_name = g_strconcat(filename_copy, ".png", NULL);
                 filename_entry.set_text(final_name);
                 filename_entry.set_position(strlen(final_name));
 
                 g_free(final_name);
-                g_free(uri_copy);
+                g_free(filename_copy);
             }
         } else {
-            gchar *name = g_strconcat(uri, ".png", NULL);
+            gchar *name = g_strconcat(filename, ".png", NULL);
             filename_entry.set_text(name);
             filename_entry.set_position(strlen(name));
 
@@ -585,9 +585,9 @@ std::string create_filepath_from_id(Glib::ustring id, const Glib::ustring &file_
 
     if (directory.empty()) {
         /* Grab document directory */
-        const gchar* docURI = SP_ACTIVE_DOCUMENT->getDocumentURI();
-        if (docURI) {
-            directory = Glib::path_get_dirname(docURI);
+        const gchar* docFilename = SP_ACTIVE_DOCUMENT->getDocumentFilename();
+        if (docFilename) {
+            directory = Glib::path_get_dirname(docFilename);
         }
     }
 
@@ -955,8 +955,8 @@ static std::string absolutize_path_from_document_location(SPDocument *doc, const
 {
     std::string path;
     //Make relative paths go from the document location, if possible:
-    if (!Glib::path_is_absolute(filename) && doc->getDocumentURI()) {
-        auto dirname = Glib::path_get_dirname(doc->getDocumentURI());
+    if (!Glib::path_is_absolute(filename) && doc->getDocumentFilename()) {
+        auto dirname = Glib::path_get_dirname(doc->getDocumentFilename());
         if (!dirname.empty()) {
             path = Glib::build_filename(dirname, filename);
         }
@@ -1300,15 +1300,15 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
                 Inkscape::XML::Node * repr = *i;
                 const gchar * temp_string;
                 Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
-                const gchar* docURI=SP_ACTIVE_DOCUMENT->getDocumentURI();
+                const gchar* docFilename = SP_ACTIVE_DOCUMENT->getDocumentFilename();
                 Glib::ustring docdir;
-                if (docURI)
+                if (docFilename)
                 {
-                    docdir = Glib::path_get_dirname(docURI);
+                    docdir = Glib::path_get_dirname(docFilename);
                 }
                 if (repr->attribute("id") == nullptr ||
                         !(filename.find_last_of(repr->attribute("id")) &&
-                          ( !docURI ||
+                          ( !docFilename ||
                             (dir == docdir)))) {
                     temp_string = repr->attribute("inkscape:export-filename");
                     if (temp_string == nullptr || (filename != temp_string)) {

@@ -620,7 +620,7 @@ private:
     void onResized (double, double) override;
     void onRedrawRequested() override;
     void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
-    void onDocumentURISet (gchar const* uri) override;
+    void onDocumentFilenameSet(gchar const* filename) override;
     void onDocumentResized (double, double) override;
 
     static void _onActivate (SPDesktop* dt);

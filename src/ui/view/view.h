@@ -98,7 +98,7 @@ public:
     virtual void onResized (double, double) {};
     virtual void onRedrawRequested() {};
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) {};
-    virtual void onDocumentURISet (gchar const* uri) {};
+    virtual void onDocumentFilenameSet (gchar const* filename) {};
     virtual void onDocumentResized (double, double) {};
     virtual bool shutdown() { return false; };
 
@@ -121,7 +121,7 @@ protected:
     virtual void setDocument(SPDocument *doc);
 
     sigc::signal<void,double,double>   _resized_signal;
-    sigc::signal<void,gchar const*>    _document_uri_set_signal;
+    sigc::signal<void,gchar const*>    _document_filename_set_signal;
     sigc::signal<void>                 _redraw_requested_signal;
 
 private:

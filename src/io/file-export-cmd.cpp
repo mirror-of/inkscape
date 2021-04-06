@@ -538,8 +538,8 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
 
         if (filename_from_hint) {
             //Make relative paths go from the document location, if possible:
-            if (!Glib::path_is_absolute(filename_out) && doc->getDocumentURI()) {
-                std::string dirname = Glib::path_get_dirname(doc->getDocumentURI());
+            if (!Glib::path_is_absolute(filename_out) && doc->getDocumentFilename()) {
+                std::string dirname = Glib::path_get_dirname(doc->getDocumentFilename());
                 if (!dirname.empty()) {
                     filename_out = Glib::build_filename(dirname, filename_out);
                 }

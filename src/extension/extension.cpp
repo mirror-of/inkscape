@@ -570,7 +570,7 @@ void Extension::set_environment(const SPDocument *doc) {
 
     // This is needed so files can be saved relative to their document location (see image-extract)
     if (doc) {
-        auto path = doc->getDocumentURI();
+        auto path = doc->getDocumentFilename();
         if (!path) {
             path = ""; // Set to blank string so extensions know the difference between old inkscape and not-saved document.
         }

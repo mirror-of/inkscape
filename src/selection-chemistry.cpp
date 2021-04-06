@@ -3706,8 +3706,8 @@ void ObjectSet::createBitmapCopy()
 
     // Build the complete path by adding document base dir, if set, otherwise home dir
     gchar *directory = nullptr;
-    if ( doc->getDocumentURI() ) {
-        directory = g_path_get_dirname( doc->getDocumentURI() );
+    if ( doc->getDocumentFilename() ) {
+        directory = g_path_get_dirname( doc->getDocumentFilename() );
     }
     if (directory == nullptr) {
         directory = Inkscape::IO::Resource::homedir_path(nullptr);

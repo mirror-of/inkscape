@@ -103,7 +103,7 @@ SPDocument::SPDocument() :
     rroot(nullptr),
     root(nullptr),
     style_cascade(cr_cascade_new(nullptr, nullptr, nullptr)),
-    document_uri(nullptr),
+    document_filename(nullptr),
     document_base(nullptr),
     document_name(nullptr),
     actionkey(),
@@ -198,9 +198,9 @@ SPDocument::~SPDocument() {
         g_free(document_base);
         document_base = nullptr;
     }
-    if (document_uri) {
-        g_free(document_uri);
-        document_uri = nullptr;
+    if (document_filename) {
+        g_free(document_filename);
+        document_filename = nullptr;
     }
 
     modified_connection.disconnect();
@@ -306,7 +306,7 @@ void SPDocument::collectOrphans() {
 }
 
 SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
-                                  gchar const *document_uri,
+                                  gchar const *filename,
                                   gchar const *document_base,
                                   gchar const *document_name,
                                   bool keepalive,
@@ -325,9 +325,9 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         parent->_child_documents.push_back(document);
     }
 
-    if (document->document_uri){
-        g_free(document->document_uri);
-        document->document_uri = nullptr;
+    if (document->document_filename){
+        g_free(document->document_filename);
+        document->document_filename = nullptr;
     }
     if (document->document_base){
         g_free(document->document_base);
@@ -338,10 +338,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         document->document_name = nullptr;
     }
 #ifndef _WIN32
-    document->document_uri = prepend_current_dir_if_relative(document_uri);
+    document->document_filename = prepend_current_dir_if_relative(filename);
 #else
     // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
-    document->document_uri = document_uri? g_strdup(document_uri) : NULL;
+    document->document_filename = filename? g_strdup(filename) : NULL;
 #endif
 
     // base is simply the part of the path before filename; e.g. when running "inkscape ../file.svg" the base is "../"
@@ -490,7 +490,7 @@ std::unique_ptr<SPDocument> SPDocument::copy() const
     new_rdoc->appendChild(root);
     Inkscape::GC::release(root);
 
-    auto doc = createDoc(new_rdoc, document_uri, document_base, document_name, keepalive, nullptr);
+    auto doc = createDoc(new_rdoc, document_filename, document_base, document_name, keepalive, nullptr);
     doc->_original_document = this->doRef();
     Inkscape::GC::release(new_rdoc);
 
@@ -500,14 +500,14 @@ std::unique_ptr<SPDocument> SPDocument::copy() const
 /**
  * Fetches a document and attaches it to the current document as a child href
  */
-SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
+SPDocument *SPDocument::createChildDoc(std::string const &filename)
 {
     SPDocument *parent = this;
     SPDocument *document = nullptr;
 
-    while(parent != nullptr && parent->getDocumentURI() != nullptr && document == nullptr) {
+    while(parent != nullptr && parent->getDocumentFilename() != nullptr && document == nullptr) {
         // Check myself and any parents in the chain
-        if(document_uri == parent->getDocumentURI()) {
+        if(filename == parent->getDocumentFilename()) {
             document = parent;
             break;
         }
@@ -515,7 +515,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
         boost::ptr_list<SPDocument>::iterator iter;
         for (iter = parent->_child_documents.begin();
           iter != parent->_child_documents.end(); ++iter) {
-            if(document_uri == iter->getDocumentURI()) {
+            if(filename == iter->getDocumentFilename()) {
                 document = &*iter;
                 break;
             }
@@ -526,29 +526,29 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
     // Load a fresh document from the svg source.
     if(!document) {
         std::string path;
-        if (Glib::path_is_absolute(document_uri)) {
-            path = document_uri;
+        if (Glib::path_is_absolute(filename)) {
+            path = filename;
         } else {
-            path = this->getDocumentBase() + document_uri;
+            path = this->getDocumentBase() + filename;
         }
         document = createNewDoc(path.c_str(), false, false, this);
     }
     return document;
 }
 /**
- * Fetches document from URI, or creates new, if NULL; public document
+ * Fetches document from filename, or creates new, if NULL; public document
  * appears in document list.
  */
-SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, bool make_new, SPDocument *parent)
+SPDocument *SPDocument::createNewDoc(gchar const *filename, bool keepalive, bool make_new, SPDocument *parent)
 {
     Inkscape::XML::Document *rdoc = nullptr;
     gchar *document_base = nullptr;
     gchar *document_name = nullptr;
 
-    if (document_uri) {
+    if (filename) {
         Inkscape::XML::Node *rroot;
         /* Try to fetch repr from file */
-        rdoc = sp_repr_read_file(document_uri, SP_SVG_NS_URI);
+        rdoc = sp_repr_read_file(filename, SP_SVG_NS_URI);
         /* If file cannot be loaded, return NULL without warning */
         if (rdoc == nullptr) return nullptr;
         rroot = rdoc->root();
@@ -558,13 +558,13 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, 
 
         // Opening a template that points to a sister file should still work
         // this also includes tutorials which point to png files.
-        document_base = g_path_get_dirname(document_uri);
+        document_base = g_path_get_dirname(filename);
 
         if (make_new) {
-            document_uri = nullptr;
+            filename = nullptr;
             document_name = g_strdup_printf(_("New document %d"), ++doc_count);
         } else {
-            document_name = g_path_get_basename(document_uri);
+            document_name = g_path_get_basename(filename);
             if (strcmp(document_base, ".") == 0) {
                 g_free(document_base);
                 document_base = nullptr;
@@ -581,7 +581,7 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, 
     //# These should be set by now
     g_assert(document_name);
 
-    SPDocument *doc = createDoc(rdoc, document_uri, document_base, document_name, keepalive, parent);
+    SPDocument *doc = createDoc(rdoc, filename, document_base, document_name, keepalive, parent);
 
     g_free(document_base);
     g_free(document_name);
@@ -909,32 +909,32 @@ void SPDocument::setDocumentBase( gchar const* document_base )
     }
 }
 
-void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
+void SPDocument::do_change_filename(gchar const *const filename, bool const rebase)
 {
     gchar *new_document_base = nullptr;
     gchar *new_document_name = nullptr;
-    gchar *new_document_uri = nullptr;
+    gchar *new_document_filename = nullptr;
     if (filename) {
 
 #ifndef _WIN32
-        new_document_uri = prepend_current_dir_if_relative(filename);
+        new_document_filename = prepend_current_dir_if_relative(filename);
 #else
         // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
-        new_document_uri = g_strdup(filename);
+        new_document_filename = g_strdup(filename);
 #endif
 
-        new_document_base = g_path_get_dirname(new_document_uri);
-        new_document_name = g_path_get_basename(new_document_uri);
+        new_document_base = g_path_get_dirname(new_document_filename);
+        new_document_name = g_path_get_basename(new_document_filename);
     } else {
-        new_document_uri = g_strdup_printf(_("Unnamed document %d"), ++doc_count);
+        new_document_filename = g_strdup_printf(_("Unnamed document %d"), ++doc_count);
         new_document_base = nullptr;
-        new_document_name = g_strdup(this->document_uri);
+        new_document_name = g_strdup(this->document_filename);
     }
 
     // Update saveable repr attributes.
     Inkscape::XML::Node *repr = getReprRoot();
 
-    // Changing uri in the document repr must not be not undoable.
+    // Changing filename in the document repr must not be not undoable.
     bool const saved = DocumentUndo::getUndoSensitive(this);
     DocumentUndo::setUndoSensitive(this, false);
 
@@ -951,35 +951,33 @@ void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
 
     g_free(this->document_name);
     g_free(this->document_base);
-    g_free(this->document_uri);
+    g_free(this->document_filename);
     this->document_name = new_document_name;
     this->document_base = new_document_base;
-    this->document_uri = new_document_uri;
+    this->document_filename = new_document_filename;
 
-    this->uri_set_signal.emit(this->document_uri);
+    this->filename_set_signal.emit(this->document_filename);
 }
 
 /**
- * Sets base, name and uri members of \a document.  Doesn't update
+ * Sets base, name and filename members of \a document.  Doesn't update
  * any relative hrefs in the document: thus, this is primarily for
  * newly-created documents.
  *
- * \see sp_document_change_uri_and_hrefs
+ * \see SPDocument::changeFilenameAndHrefs
  */
-void SPDocument::setDocumentUri(gchar const *filename)
+void SPDocument::setDocumentFilename(gchar const *filename)
 {
-    do_change_uri(filename, false);
+    do_change_filename(filename, false);
 }
 
 /**
- * Changes the base, name and uri members of \a document, and updates any
+ * Changes the base, name and filename members of \a document, and updates any
  * relative hrefs in the document to be relative to the new base.
- *
- * \see sp_document_set_uri
  */
-void SPDocument::changeUriAndHrefs(gchar const *filename)
+void SPDocument::changeFilenameAndHrefs(gchar const *filename)
 {
-    do_change_uri(filename, true);
+    do_change_filename(filename, true);
 }
 
 void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
@@ -1259,7 +1257,7 @@ gint SPDocument::ensureUpToDate()
         // Process document updates.
         while (!_updateDocument(0)) {
             if (counter == 0) {
-                g_warning("More than 32 iteration while updating document '%s'", document_uri);
+                g_warning("More than 32 iteration while updating document '%s'", document_filename);
                 break;
             }
             counter--;
@@ -1980,9 +1978,9 @@ sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_ty
     return modified_signal.connect(slot);
 }
 
-sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
+sigc::connection SPDocument::connectFilenameSet(SPDocument::FilenameSetSignal::slot_type slot)
 {
-    return uri_set_signal.connect(slot);
+    return filename_set_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)

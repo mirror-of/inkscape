@@ -410,7 +410,7 @@ SPDocument *Script::open(Inkscape::Extension::Input *module,
 
     if (mydoc != nullptr) {
         mydoc->setDocumentBase(nullptr);
-        mydoc->changeUriAndHrefs(filenameArg);
+        mydoc->changeFilenameAndHrefs(filenameArg);
     }
 
     // make sure we don't leak file descriptors from Glib::file_open_tmp
@@ -658,7 +658,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
         SPDocument* vd=doc->doc();
         if (vd != nullptr)
         {
-            mydoc->changeUriAndHrefs(vd->getDocumentURI());
+            mydoc->changeFilenameAndHrefs(vd->getDocumentFilename());
 
             vd->emitReconstructionStart();
             copy_doc(vd->getReprRoot(), mydoc->getReprRoot());

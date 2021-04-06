@@ -222,14 +222,14 @@ bool
 InkscapeApplication::document_revert(SPDocument* document)
 {
     // Find saved document.
-    gchar const *path = document->getDocumentURI();
+    gchar const *path = document->getDocumentFilename();
     if (!path) {
         std::cerr << "InkscapeApplication::revert_document: Document never saved, cannot revert." << std::endl;
         return false;
     }
 
     // Open saved document.
-    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(document->getDocumentURI());
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(document->getDocumentFilename());
     SPDocument* new_document = document_open (file);
     if (!new_document) {
         std::cerr << "InkscapeApplication::revert_document: Cannot open saved document!" << std::endl;

@@ -177,15 +177,15 @@ void sp_file_revert_dialog()
     Inkscape::XML::Node *repr = doc->getReprRoot();
     g_assert(repr != nullptr);
 
-    gchar const *uri = doc->getDocumentURI();
-    if (!uri) {
+    gchar const *filename = doc->getDocumentFilename();
+    if (!filename) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved yet.  Cannot revert."));
         return;
     }
 
     bool do_revert = true;
     if (doc->isModifiedSinceSave()) {
-        Glib::ustring tmpString = Glib::ustring::compose(_("Changes will be lost! Are you sure you want to reload document %1?"), uri);
+        Glib::ustring tmpString = Glib::ustring::compose(_("Changes will be lost! Are you sure you want to reload document %1?"), filename);
         bool response = desktop->warnDialog (tmpString);
         if (!response) {
             do_revert = false;
@@ -561,10 +561,10 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
 
     SP_ACTIVE_DESKTOP->event_log->rememberFileSave();
     Glib::ustring msg;
-    if (doc->getDocumentURI() == nullptr) {
+    if (doc->getDocumentFilename() == nullptr) {
         msg = Glib::ustring::format(_("Document saved."));
     } else {
-        msg = Glib::ustring::format(_("Document saved."), " ", doc->getDocumentURI());
+        msg = Glib::ustring::format(_("Document saved."), " ", doc->getDocumentFilename());
     }
     SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg.c_str());
     return true;
@@ -620,7 +620,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
     save_loc.append(G_DIR_SEPARATOR_S);
 
     int i = 1;
-    if ( !doc->getDocumentURI() ) {
+    if ( !doc->getDocumentFilename() ) {
         // We are saving for the first time; create a unique default filename
         save_loc = save_loc + _("drawing") + filename_extension;
 
@@ -630,7 +630,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
             save_loc = save_loc + Glib::ustring::compose(_("drawing-%1"), i++) + filename_extension;
         }
     } else {
-        save_loc.append(Glib::path_get_basename(doc->getDocumentURI()));
+        save_loc.append(Glib::path_get_basename(doc->getDocumentFilename()));
     }
 
     // convert save_loc from utf-8 to locale
@@ -698,9 +698,9 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
         // FIXME: does the argument !is_copy really convey the correct meaning here?
         success = file_save(parentWindow, doc, fileName, selectionType, TRUE, !is_copy, save_method);
 
-        if (success && doc->getDocumentURI()) {
-            // getDocumentURI does not return an actual URI... it is an UTF-8 encoded filename (!)
-            std::string filename = Glib::filename_from_utf8(doc->getDocumentURI());
+        if (success && doc->getDocumentFilename()) {
+            // getDocumentFilename does not return an actual filename... it is an UTF-8 encoded filename (!)
+            std::string filename = Glib::filename_from_utf8(doc->getDocumentFilename());
             Glib::ustring uri = Glib::filename_to_uri(filename);
 
             Glib::RefPtr<Gtk::RecentManager> recent = Gtk::RecentManager::get_default();
@@ -727,7 +727,7 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
     bool success = true;
 
     if (doc->isModifiedSinceSave()) {
-        if ( doc->getDocumentURI() == nullptr )
+        if ( doc->getDocumentFilename() == nullptr )
         {
             // Hier sollte in Argument mitgegeben werden, das anzeigt, da� das Dokument das erste
             // Mal gespeichert wird, so da� als default .svg ausgew�hlt wird und nicht die zuletzt
@@ -735,8 +735,8 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
             return sp_file_save_dialog(parentWindow, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
         } else {
             Glib::ustring extension = Inkscape::Extension::get_file_save_extension(Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
-            Glib::ustring fn = g_strdup(doc->getDocumentURI());
-            // Try to determine the extension from the uri; this may not lead to a valid extension,
+            Glib::ustring fn = g_strdup(doc->getDocumentFilename());
+            // Try to determine the extension from the filename; this may not lead to a valid extension,
             // but this case is caught in the file_save method below (or rather in Extension::save()
             // further down the line).
             Glib::ustring ext = "";
@@ -754,11 +754,11 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
         }
     } else {
         Glib::ustring msg;
-        if ( doc->getDocumentURI() == nullptr )
+        if (doc->getDocumentFilename() == nullptr )
         {
             msg = Glib::ustring::format(_("No changes need to be saved."));
         } else {
-            msg = Glib::ustring::format(_("No changes need to be saved."), " ", doc->getDocumentURI());
+            msg = Glib::ustring::format(_("No changes need to be saved."), " ", doc->getDocumentFilename());
         }
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, msg.c_str());
         success = TRUE;

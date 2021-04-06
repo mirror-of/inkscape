@@ -645,10 +645,10 @@ Application::crash_handler (int /*signum*/)
             char c[1024];
             g_snprintf (c, 1024, "%.256s.%s.%d.svg", docname, sptstr, count);
 
-            const char* document_uri = doc->getDocumentURI();
+            const char* document_filename = doc->getDocumentFilename();
             char* document_base = nullptr;
-            if (document_uri) {
-                document_base = g_path_get_dirname(document_uri);
+            if (document_filename) {
+                document_base = g_path_get_dirname(document_filename);
             }
 
             // Find a location

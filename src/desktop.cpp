@@ -1653,9 +1653,9 @@ SPDesktop::onStatusMessage
 }
 
 void
-SPDesktop::onDocumentURISet (gchar const* uri)
+SPDesktop::onDocumentFilenameSet (gchar const* filename)
 {
-    _widget->updateTitle(uri);
+    _widget->updateTitle(filename);
 }
 
 /**

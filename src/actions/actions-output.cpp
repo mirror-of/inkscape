@@ -213,8 +213,8 @@ export_do(InkscapeApplication *app)
 {
     SPDocument* document = app->get_active_document();
     std::string filename;
-    if (document->getDocumentURI()) {
-        filename = document->getDocumentURI();
+    if (document->getDocumentFilename()) {
+        filename = document->getDocumentFilename();
     }
     app->file_export()->do_export(document, filename);
 }
