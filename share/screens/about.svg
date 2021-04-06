@@ -98,12 +98,6 @@
          offset="1"
          id="stop2900" />
     </linearGradient>
-    <rect
-       x="72.164909"
-       y="216.21184"
-       width="92.859467"
-       height="11.56936"
-       id="rect1569-6-6" />
   </defs>
   <metadata
      id="metadata11764">
@@ -2402,7 +2396,7 @@
        aria-label="artwork by @rayoliveira.designer"
        transform="matrix(3.1181101,0,0,3.1181101,11.644868,-80.679779)"
        id="text1567"
-       style="font-weight:500;font-size:6.35px;font-family:Roboto;-inkscape-font-specification:'Roboto Medium';white-space:pre;shape-inside:url(#rect1569-6-6);display:inline;fill:#893b46;stroke-width:0.641415;stroke-linecap:round;stroke-linejoin:round">
+       style="font-weight:500;font-size:6.35px;font-family:Roboto;-inkscape-font-specification:'Roboto Medium';white-space:pre;display:inline;fill:#893b46;stroke-width:0.641415;stroke-linecap:round;stroke-linejoin:round">
       <path
          d="m 74.669336,221.76719 q -0.04961,-0.0992 -0.08061,-0.35347 -0.399976,0.41548 -0.954981,0.41548 -0.496094,0 -0.815454,-0.27905 -0.31626,-0.28216 -0.31626,-0.71314 0,-0.524 0.396875,-0.81235 0.399976,-0.29146 1.122412,-0.29146 h 0.558106 v -0.26355 q 0,-0.30075 -0.179834,-0.47749 -0.179834,-0.17983 -0.5302,-0.17983 -0.306958,0 -0.514698,0.15503 -0.207739,0.15503 -0.207739,0.37517 h -0.576709 q 0,-0.25115 0.176734,-0.48369 0.179834,-0.23565 0.483691,-0.37207 0.306958,-0.13643 0.672827,-0.13643 0.57981,0 0.908472,0.29146 0.328662,0.28835 0.341064,0.79685 v 1.54409 q 0,0.46199 0.117823,0.73484 v 0.0496 z M 73.717456,221.33 q 0.269751,0 0.511597,-0.13952 0.241845,-0.13953 0.350366,-0.36277 v -0.68833 h -0.449585 q -1.054199,0 -1.054199,0.61702 0,0.26975 0.179834,0.42168 0.179834,0.15192 0.461987,0.15192 z"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Roboto;-inkscape-font-specification:Roboto;stroke-width:0.641415"
