@@ -1,24 +1,28 @@
-# Explaination
+# Explanation
 
-The start screen can sometimes have text placed upon it, these screens will
-appear in the po file as `../screens/start-$name-text.svg` which is rendered
-on top of the png file `../screens/start-$name.png` when the user interface
-is loaded.
+The start screen can sometimes have text placed upon it. This text will need
+to be translated into other languages and converted into an image, this guide
+will explain how you can translate these texts correctly.
+
+You can identify which screens need translating as they will appear in the
+po file as `../screens/start-$name-text.svg` this file is rendered on top
+of the png file `../screens/start-$name.png` when the interface is loaded.
 
 # Instructions
 
-Each translation should be a seperate svg file, the goal of these instructions
+Each translation should be a separate svg file. The goal of these instructions
 is to create a translated version of the text. In this example we will be
 translating the welcome-start.svg file for Inkscape 1.1 into Japanese.
 
 ## Step One: Get the file
 
-The source files are kept in the media repository here:
+The source files are NOT in the inkscape repository, but are kept in the
+media repository here:
 
 https://gitlab.com/inkscape/vectors/content/-/tree/master/screens/welcome
 
  1. Navigate into the directory which has the same name as the version
-    of Inkscape you are translating. In this example `1.1`
+    of Inkscape you are translating. In this example we will use `1.1`
  2. Install all the fonts in the fonts directory, if it exists. You don't
     have to use these fonts, but they will let you see the original design
     in the way it was intended.
@@ -27,7 +31,8 @@ https://gitlab.com/inkscape/vectors/content/-/tree/master/screens/welcome
 
 ## Step Two: Edit the SVG
 
- 1. Open the svg file in inkscape, the later the better.
+ 1. Open the svg file in the latest version of inkscape. For example, use
+    the Inkscape alpha or beta release if you can.
  2. Open the layers dialog in Inkscape. You should see two layers, one 
     labeled `Text` and one `Base`. If you don't find a `Text` layer,
     this startup graphic might not have any text to translate.
@@ -38,14 +43,17 @@ https://gitlab.com/inkscape/vectors/content/-/tree/master/screens/welcome
     make it more attractive in your language, please do.
  5. Convert the text to paths using `Path > Object To Path`
  6. Delete the Layer that is marked as `Base` so you only have the text layer.
- 7. Run `File > Clean Document` to remove unneeded elements.
+ 7. Run `File > Clean Up Document` to remove unneeded elements.
 
 ## Step Three: Saving and Comitting
 
  1. Save as a `Plain SVG` document in the screens folder. For our example the
     name will be `share/screens/welcome-start-text.ja.svg`
  2. Edit the translation in the po file so `welcome-start-text.svg` is now
-    `welcome-start-text.ja.svg`
+    `welcome-start-text.ja.svg`, where `ja` is your language's code.
+ 2. In your language's po file, translate the string `welcome-start-text.svg`
+    to the file name for your language that you just created,
+    e.g. `welcome-start-text.ja.svg` in our Japanese example case.
  3. Add the new file and the changes to the po file using git tools (see other
     instructions for how to commit and push merge requests or ask for help)
 
