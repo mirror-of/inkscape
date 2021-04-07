@@ -46,10 +46,7 @@ using namespace vpsc;
  * Returns true if item is a connector
  */
 bool isConnector(SPItem const * const item) {
-    SPPath * path = nullptr;
-    if (SP_IS_PATH(item)) {
-        path = SP_PATH(item);
-    }
+    auto path = dynamic_cast<SPPath const *>(item);
     return path && path->connEndPair.isAutoRoutingConn();
 }
 

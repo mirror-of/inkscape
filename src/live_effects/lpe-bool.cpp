@@ -546,9 +546,9 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
         std::vector<SPItem *> item_list = sp_item_group_item_list(group);
         for (auto iter : item_list) {
             if (res.empty()) {
-                res = get_union(SP_OBJECT(iter));
+                res = get_union(iter);
             } else {
-                res = sp_pathvector_boolop(res, get_union(SP_OBJECT(iter)), to_bool_op(bool_op_ex_union), fill_oddEven,
+                res = sp_pathvector_boolop(res, get_union(iter), to_bool_op(bool_op_ex_union), fill_oddEven,
                                            fill_oddEven);
             }
         }
@@ -588,7 +588,7 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
 void LPEBool::doEffect(SPCurve *curve)
 {
     Geom::PathVector path_in = curve->get_pathvector();
-    if (operand == SP_ITEM(current_shape)) {
+    if (operand == current_shape) {
         g_warning("operand and current shape are the same");
         operand_path.param_set_default();
         return;

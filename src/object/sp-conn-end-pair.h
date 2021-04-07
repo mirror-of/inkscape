@@ -52,7 +52,7 @@ public:
     bool reroutePathFromLibavoid();
     void makePathInvalid();
     void update();
-    bool isAutoRoutingConn();
+    bool isAutoRoutingConn() const;
     void rerouteFromManipulation();
 
 private:

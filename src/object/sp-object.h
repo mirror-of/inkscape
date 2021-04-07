@@ -22,19 +22,16 @@
 
 class SPObject;
 
-// TODO:
-// - Remove const_cast and return `T const *`
 #define MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(func, T)                                                                 \
     inline T *func(SPObject *obj) { return dynamic_cast<T *>(obj); }                                               \
-    inline T /* TODO const */ *func(SPObject const *obj) { return const_cast<T *>(dynamic_cast<T const *>(obj)); } \
-    inline T *func(T *derived) { return derived; }                                                                 \
-    inline T /* TODO const */ *func(T const *derived) { return const_cast<T *>(derived); }
+    inline T const *func(SPObject const *obj) { return dynamic_cast<T const *>(obj); } \
+    inline T *func(T *derived) = delete;                                               \
+    inline T const *func(T const *derived) = delete;
 
 #define MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(func, T)                                                       \
     inline bool func(SPObject const *obj) { return dynamic_cast<T const *>(obj); }
 
-#define SP_OBJECT(obj) (dynamic_cast<SPObject*>((SPObject*)obj))
-#define SP_IS_OBJECT(obj) (dynamic_cast<const SPObject*>((SPObject*)obj) != NULL)
+#define SP_IS_OBJECT(obj) (dynamic_cast<const SPObject*>(obj) != nullptr)
 
 /* Async modification flags */
 #define SP_OBJECT_MODIFIED_FLAG (1 << 0)

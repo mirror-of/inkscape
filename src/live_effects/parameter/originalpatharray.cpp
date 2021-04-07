@@ -396,7 +396,7 @@ void OriginalPathArrayParam::linked_changed(SPObject */*old_obj*/, SPObject *new
         linked_modified(new_obj, SP_OBJECT_MODIFIED_FLAG, to);
     } else {
         to->_pathvector = Geom::PathVector();
-        SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
         _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
     }
 }
@@ -464,7 +464,7 @@ void OriginalPathArrayParam::linked_modified(SPObject *linked_obj, guint flags, 
         return;
     }
     setPathVector(linked_obj, flags, to);
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
 }
 

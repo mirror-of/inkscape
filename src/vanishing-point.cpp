@@ -439,7 +439,7 @@ void VPDragger::mergePerspectives()
 
                 this->parent->swap_perspectives_of_VPs(persp2, persp1);
 
-                SP_OBJECT(persp2)->deleteObject(false);
+                persp2->deleteObject(false);
             }
         }
     }

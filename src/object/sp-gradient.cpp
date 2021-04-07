@@ -1186,6 +1186,14 @@ SPGradient::create_preview_pattern(double width)
     return pat;
 }
 
+bool SPGradient::isSolid() const
+{
+    if (swatch && hasStops() && getStopCount() == 0) {
+        return true;
+    }
+    return false;
+}
+
 /*
   Local Variables:
   mode:c++

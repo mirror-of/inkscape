@@ -253,8 +253,11 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 
 void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem) && !keep_paths) {
-        lpe_shape_revert_stroke_and_fill(SP_SHAPE(lpeitem), offset_points.median_width()*2);
+    auto lpeitem_mutable = const_cast<SPLPEItem *>(lpeitem);
+    auto shape = dynamic_cast<SPShape *>(lpeitem_mutable);
+
+    if (shape && !keep_paths) {
+        lpe_shape_revert_stroke_and_fill(shape, offset_points.median_width() * 2);
     }
 }
 

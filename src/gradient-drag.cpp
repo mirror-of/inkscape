@@ -2365,15 +2365,14 @@ void GrDrag::updateDraggers()
 
         if (style && (style->fill.isPaintserver())) {
             SPPaintServer *server = style->getFillPaintServer();
-            if ( server && SP_IS_GRADIENT( server ) ) {
-                if ( server->isSolid()
-                     || (SP_GRADIENT(server)->getVector() && SP_GRADIENT(server)->getVector()->isSolid())) {
+            if (auto gradient = dynamic_cast<SPGradient *>(server)) {
+                if (gradient->isSolid() || (gradient->getVector() && gradient->getVector()->isSolid())) {
                     // Suppress "gradientness" of solid paint
-                } else if ( SP_IS_LINEARGRADIENT(server) ) {
+                } else if (SP_IS_LINEARGRADIENT(server)) {
                     addDraggersLinear( SP_LINEARGRADIENT(server), item, Inkscape::FOR_FILL );
-                } else if ( SP_IS_RADIALGRADIENT(server) ) {
+                } else if (SP_IS_RADIALGRADIENT(server)) {
                     addDraggersRadial( SP_RADIALGRADIENT(server), item, Inkscape::FOR_FILL );
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
+                } else if (SP_IS_MESHGRADIENT(server)) {
                     addDraggersMesh(   SP_MESHGRADIENT(server),   item, Inkscape::FOR_FILL );
                 }
             }
@@ -2381,15 +2380,14 @@ void GrDrag::updateDraggers()
 
         if (style && (style->stroke.isPaintserver())) {
             SPPaintServer *server = style->getStrokePaintServer();
-            if ( server && SP_IS_GRADIENT( server ) ) {
-                if ( server->isSolid()
-                     || (SP_GRADIENT(server)->getVector() && SP_GRADIENT(server)->getVector()->isSolid())) {
+            if (auto gradient = dynamic_cast<SPGradient *>(server)) {
+                if (gradient->isSolid() || (gradient->getVector() && gradient->getVector()->isSolid())) {
                     // Suppress "gradientness" of solid paint
-                } else if ( SP_IS_LINEARGRADIENT(server) ) {
+                } else if (SP_IS_LINEARGRADIENT(server)) {
                     addDraggersLinear( SP_LINEARGRADIENT(server), item, Inkscape::FOR_STROKE );
-                } else if ( SP_IS_RADIALGRADIENT(server) ) {
+                } else if (SP_IS_RADIALGRADIENT(server)) {
                     addDraggersRadial( SP_RADIALGRADIENT(server), item, Inkscape::FOR_STROKE );
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
+                } else if (SP_IS_MESHGRADIENT(server)) {
                     addDraggersMesh(   SP_MESHGRADIENT(server),   item, Inkscape::FOR_STROKE );
                 }
             }
@@ -2475,18 +2473,16 @@ void GrDrag::updateLines()
 
         if (style && (style->fill.isPaintserver())) {
             SPPaintServer *server = item->style->getFillPaintServer();
-            if ( server && SP_IS_GRADIENT( server ) ) {
-                if ( server->isSolid()
-                     || (SP_GRADIENT(server)->getVector() && SP_GRADIENT(server)->getVector()->isSolid())) {
+            if (auto gradient = dynamic_cast<SPGradient *>(server)) {
+                if (gradient->isSolid() || (gradient->getVector() && gradient->getVector()->isSolid())) {
                     // Suppress "gradientness" of solid paint
-                } else if ( SP_IS_LINEARGRADIENT(server) ) {
+                } else if (SP_IS_LINEARGRADIENT(server)) {
                     addLine(item, getGradientCoords(item, POINT_LG_BEGIN, 0, Inkscape::FOR_FILL), getGradientCoords(item, POINT_LG_END, 0, Inkscape::FOR_FILL), Inkscape::FOR_FILL);
-                } else if ( SP_IS_RADIALGRADIENT(server) ) {
+                } else if (SP_IS_RADIALGRADIENT(server)) {
                     Geom::Point center = getGradientCoords(item, POINT_RG_CENTER, 0, Inkscape::FOR_FILL);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R1, 0, Inkscape::FOR_FILL), Inkscape::FOR_FILL);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R2, 0, Inkscape::FOR_FILL), Inkscape::FOR_FILL);
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
-
+                } else if (SP_IS_MESHGRADIENT(server)) {
                     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                     bool edit_fill    = (prefs->getBool("/tools/mesh/edit_fill",    true));
 
@@ -2551,24 +2547,22 @@ void GrDrag::updateLines()
                         }
                     }
                     }
-                }                        
+                }
             }
         }
 
         if (style && (style->stroke.isPaintserver())) {
             SPPaintServer *server = item->style->getStrokePaintServer();
-            if ( server && SP_IS_GRADIENT( server ) ) {
-                if ( server->isSolid()
-                     || (SP_GRADIENT(server)->getVector() && SP_GRADIENT(server)->getVector()->isSolid())) {
+            if (auto gradient = dynamic_cast<SPGradient *>(server)) {
+                if (gradient->isSolid() || (gradient->getVector() && gradient->getVector()->isSolid())) {
                     // Suppress "gradientness" of solid paint
-                } else if ( SP_IS_LINEARGRADIENT(server) ) {
+                } else if (SP_IS_LINEARGRADIENT(server)) {
                     addLine(item, getGradientCoords(item, POINT_LG_BEGIN, 0, Inkscape::FOR_STROKE), getGradientCoords(item, POINT_LG_END, 0, Inkscape::FOR_STROKE), Inkscape::FOR_STROKE);
-                } else if ( SP_IS_RADIALGRADIENT(server) ) {
+                } else if (SP_IS_RADIALGRADIENT(server)) {
                     Geom::Point center = getGradientCoords(item, POINT_RG_CENTER, 0, Inkscape::FOR_STROKE);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R1, 0, Inkscape::FOR_STROKE), Inkscape::FOR_STROKE);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R2, 0, Inkscape::FOR_STROKE), Inkscape::FOR_STROKE);
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
-
+                } else if (SP_IS_MESHGRADIENT(server)) {
                     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                     bool edit_stroke   = (prefs->getBool("/tools/mesh/edit_stroke",   true));
 

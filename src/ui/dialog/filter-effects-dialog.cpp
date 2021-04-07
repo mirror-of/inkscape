@@ -1574,7 +1574,7 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
 void FilterEffectsDialog::FilterModifier::update_counts()
 {
     for(const auto & i : _model->children()) {
-        SPFilter* f = SP_FILTER(i[_columns.filter]);
+        SPFilter* f = i[_columns.filter];
         i[_columns.count] = f->getRefCount();
         }
 }

@@ -34,7 +34,6 @@ public:
 	~SPPaintServer() override;
 
     bool isSwatch() const;
-    bool isSolid() const;
     virtual bool isValid() const;
 
     //There are two ways to render a paint. The simple one is to create cairo_pattern_t structure

@@ -246,7 +246,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         } else if ( mode == MT_V){
             SPDocument *document = getSPDoc();
             if (document) {
-                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
+                Geom::Affine transform = i2anc_affine(lpeitem, nullptr).inverse();
                 Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
                 start_point.param_setValue(sp);
                 Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
@@ -256,7 +256,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         } else { //horizontal page
             SPDocument *document = getSPDoc();
             if (document) {
-                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
+                Geom::Affine transform = i2anc_affine(lpeitem, nullptr).inverse();
                 Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
                 start_point.param_setValue(sp);
                 Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
@@ -383,7 +383,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         elemref->parent->reorder(elemref, sp_lpe_item);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref);
+    cloneD(sp_lpe_item, elemref);
     reset = false;
     elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     if (elemref->parent != container) {

@@ -155,6 +155,10 @@ public:
  * \pre There exists a gradient in the chain that has stops.
  */
     SPGradient *getVector(bool force_private = false);
+    SPGradient const *getVector(bool force_private = false) const
+    {
+        return const_cast<SPGradient *>(this)->getVector(force_private);
+    }
 
  /**
  * Returns private mesh of given gradient (the gradient at the end of the href chain which has
@@ -179,6 +183,8 @@ public:
     SPGradientUnits fetchUnits();
 
     void setSwatch(bool swatch = true);
+
+    bool isSolid() const;
 
     static void gradientRefModified(SPObject *href, unsigned int flags, SPGradient *gradient);
     static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);

@@ -314,8 +314,8 @@ SpellCheck::nextText()
     _text = getText(_root);
     if (_text) {
 
-        _modified_connection = (SP_OBJECT(_text))->connectModified(sigc::mem_fun(*this, &SpellCheck::onObjModified));
-        _release_connection = (SP_OBJECT(_text))->connectRelease(sigc::mem_fun(*this, &SpellCheck::onObjReleased));
+        _modified_connection = _text->connectModified(sigc::mem_fun(*this, &SpellCheck::onObjModified));
+        _release_connection = _text->connectRelease(sigc::mem_fun(*this, &SpellCheck::onObjReleased));
 
         _layout = te_get_layout (_text);
         _begin_w = _layout->begin();

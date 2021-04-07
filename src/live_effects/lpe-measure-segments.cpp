@@ -389,7 +389,7 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
         arrow_path->setAttribute("style", style);
         arrow->addChild(arrow_path, nullptr);
         Inkscape::GC::release(arrow_path);
-        elemref = SP_OBJECT(document->getDefs()->appendChildRepr(arrow));
+        elemref = document->getDefs()->appendChildRepr(arrow);
         Inkscape::GC::release(arrow);
     }
     items.push_back(mode);
@@ -847,8 +847,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         return;
     }
     //Avoid crashes on previews
-    Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
-    Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
+    Geom::Affine parentaffinetransform = i2anc_affine(lpeitem->parent, document->getRoot());
+    Geom::Affine affinetransform = i2anc_affine(lpeitem, document->getRoot());
     Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();
     //Projection prepare
     Geom::PathVector pathvector;
@@ -869,7 +869,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 if (iter->ref.isAttached() &&  iter->actived && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj)) {
                     SPItem * item = dynamic_cast<SPItem *>(obj);
                     if (item) {
-                        Geom::Affine affinetransform_sub = i2anc_affine(SP_OBJECT(item), SP_OBJECT(document->getRoot()));
+                        Geom::Affine affinetransform_sub = i2anc_affine(item, document->getRoot());
                         Geom::Affine transform = affinetransform_sub ;
                         transform *= Geom::Translate(-mid);
                         transform *= Geom::Rotate(angle).inverse();

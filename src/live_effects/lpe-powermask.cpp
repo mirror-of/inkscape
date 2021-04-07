@@ -98,7 +98,7 @@ void LPEPowerMask::tryForkMask()
         Glib::ustring uri = Glib::ustring("url(#") + newmask + Glib::ustring(")");
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
         Inkscape::XML::Node *fork = mask->getRepr()->duplicate(xml_doc);
-        mask = SP_OBJECT(document->getDefs()->appendChildRepr(fork));
+        mask = document->getDefs()->appendChildRepr(fork);
         fork->setAttribute("id", newmask);
         Inkscape::GC::release(fork);
         sp_lpe_item->setAttribute("mask", uri);
@@ -109,27 +109,27 @@ void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     //To avoid close of color dialog and better performance on change color
     tryForkMask();
-    SPObject * mask = SP_ITEM(sp_lpe_item)->getMaskObject();
+    SPObject * mask = sp_lpe_item->getMaskObject();
     auto uri_str = uri.param_getSVGValue();
     if (hide_mask && mask) {
-        SP_ITEM(sp_lpe_item)->getMaskRef().detach();
+        sp_lpe_item->getMaskRef().detach();
     } else if (!hide_mask && !mask && !uri_str.empty()) {
-        SP_ITEM(sp_lpe_item)->getMaskRef().try_attach(uri_str.c_str());
+        sp_lpe_item->getMaskRef().try_attach(uri_str.c_str());
     }
-    mask = SP_ITEM(sp_lpe_item)->getMaskObject();
+    mask = sp_lpe_item->getMaskObject();
     if (mask) {
         if (previous_color != background_color.get_value()) {
             previous_color = background_color.get_value();
             setMask();
         } else {
             uri.param_setValue(Glib::ustring(extract_uri(sp_lpe_item->getRepr()->attribute("mask"))), true);
-            SP_ITEM(sp_lpe_item)->getMaskRef().detach();
+            sp_lpe_item->getMaskRef().detach();
             Geom::OptRect bbox = lpeitem->visualBounds();
             if(!bbox) {
                 return;
             }
             uri_str = uri.param_getSVGValue();
-            SP_ITEM(sp_lpe_item)->getMaskRef().try_attach(uri_str.c_str());
+            sp_lpe_item->getMaskRef().try_attach(uri_str.c_str());
 
             Geom::Rect bboxrect = (*bbox);
             bboxrect.expandBy(1);
@@ -150,7 +150,7 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
 
 void
 LPEPowerMask::setMask(){
-    SPMask *mask = SP_ITEM(sp_lpe_item)->getMaskObject();
+    SPMask *mask = sp_lpe_item->getMaskObject();
     SPObject *elemref = nullptr;
     SPDocument *document = getSPDoc();
     if (!document || !mask) {

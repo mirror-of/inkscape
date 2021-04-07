@@ -44,28 +44,28 @@ TEST_F(SPGradientTest, Init) {
 }
 
 TEST_F(SPGradientTest, SetGradientTransform) {
-    SP_OBJECT(gr)->document = _doc.get();
+    gr->document = _doc.get();
 
-    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "translate(5, 8)");
+    gr->setKeyValue(SPAttr::GRADIENTTRANSFORM, "translate(5, 8)");
     EXPECT_TRUE(Geom::are_near(Geom::Affine(Geom::Translate(5.0, 8.0)), gr->gradientTransform));
 
-    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "");
+    gr->setKeyValue(SPAttr::GRADIENTTRANSFORM, "");
     EXPECT_TRUE(Geom::are_near(Geom::identity(), gr->gradientTransform));
 
-    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "rotate(90)");
+    gr->setKeyValue(SPAttr::GRADIENTTRANSFORM, "rotate(90)");
     EXPECT_TRUE(Geom::are_near(Geom::Affine(Geom::Rotate::from_degrees(90.0)), gr->gradientTransform));
 }
 
 TEST_F(SPGradientTest, Write) {
-    SP_OBJECT(gr)->document = _doc.get();
+    gr->document = _doc.get();
 
-    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "matrix(0, 1, -1, 0, 0, 0)");
+    gr->setKeyValue(SPAttr::GRADIENTTRANSFORM, "matrix(0, 1, -1, 0, 0, 0)");
     Document *xml_doc = _doc->getReprDoc();
 
     ASSERT_TRUE(xml_doc != nullptr);
 
     Node *repr = xml_doc->createElement("svg:radialGradient");
-    SP_OBJECT(gr)->updateRepr(xml_doc, repr, SP_OBJECT_WRITE_ALL);
+    gr->updateRepr(xml_doc, repr, SP_OBJECT_WRITE_ALL);
 
     gchar const *tr = repr->attribute("gradientTransform");
     Geom::Affine svd;
@@ -76,7 +76,7 @@ TEST_F(SPGradientTest, Write) {
 }
 
 TEST_F(SPGradientTest, GetG2dGetGs2dSetGs2) {
-    SP_OBJECT(gr)->document = _doc.get();
+    gr->document = _doc.get();
 
     Geom::Affine grXform(2, 1,
                          1, 3,
@@ -121,7 +121,7 @@ TEST_F(SPGradientTest, GetG2dGetGs2dSetGs2) {
         gr->set_gs2d_matrix(funny, larger_rect, gs2d);
         EXPECT_TRUE(Geom::are_near(gr->gradientTransform, grXform, 1e-12));
 
-        SP_OBJECT(gr)->setKeyValue( SPAttr::GRADIENTUNITS, "userSpaceOnUse");
+        gr->setKeyValue( SPAttr::GRADIENTUNITS, "userSpaceOnUse");
         Geom::Affine user_g2d(gr->get_g2d_matrix(funny, larger_rect));
         Geom::Affine user_gs2d(gr->get_gs2d_matrix(funny, larger_rect));
         EXPECT_TRUE(Geom::are_near(funny, user_g2d));

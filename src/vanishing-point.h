@@ -99,7 +99,7 @@ public:
     }
     inline void updatePerspRepr() const {
         g_return_if_fail (_persp);
-        SP_OBJECT(_persp)->updateRepr(SP_OBJECT_WRITE_EXT);
+        _persp->updateRepr(SP_OBJECT_WRITE_EXT);
     }
     inline void printPt() const {
         g_return_if_fail (_persp);

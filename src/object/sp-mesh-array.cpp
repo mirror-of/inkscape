@@ -1082,9 +1082,10 @@ static SPColor default_color( SPItem *item ) {
         if ( paint.isColor() ) {
             color = paint.value.color;
         } else if ( paint.isPaintserver() ) {
-            SPObject const *server = item->style->getFillPaintServer();
-            if ( SP_IS_GRADIENT(server) && SP_GRADIENT(server)->getVector() ) {
-                SPStop *firstStop = SP_GRADIENT(server)->getVector()->getFirstStop();
+            auto *server = item->style->getFillPaintServer();
+            auto gradient = dynamic_cast<SPGradient *>(server);
+            if (gradient && gradient->getVector()) {
+                SPStop *firstStop = gradient->getVector()->getFirstStop();
                 if ( firstStop ) {
                     color = firstStop->getColor();
                 }
@@ -2307,7 +2308,7 @@ guint SPMeshNodeArray::color_pick( std::vector<guint> icorners, SPItem* item ) {
     // std::cout << item->i2dt_affine() << std::endl;
     // std::cout << " dt2i: " << std::endl;
     // std::cout << item->dt2i_affine() << std::endl;
-    SPGradient* gr = SP_GRADIENT( mg );
+    SPGradient* gr = mg;
     // if( gr->gradientTransform_set ) {
     //     std::cout << " gradient transform set: " << std::endl;
     //     std::cout << gr->gradientTransform << std::endl;

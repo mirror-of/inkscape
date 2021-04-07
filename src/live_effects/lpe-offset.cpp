@@ -431,7 +431,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 {
     Geom::PathVector ret_closed;
     Geom::PathVector ret_open;
-    SPItem * item = SP_ITEM(current_shape);
+    SPItem *item = current_shape;
     SPDocument *document = getSPDoc();
     if (!item || !document) {
         return path_in;

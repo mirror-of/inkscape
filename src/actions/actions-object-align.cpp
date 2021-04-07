@@ -129,10 +129,10 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
 
     switch (target) {
         case ObjectAlignTarget::LAST:
-            focus = SP_ITEM(selected.back());
+            focus = selected.back();
             break;
         case ObjectAlignTarget::FIRST:
-            focus = SP_ITEM(selected.front());
+            focus = selected.front();
             break;
         case ObjectAlignTarget::BIGGEST:
             focus = selection->largestItem(direction);

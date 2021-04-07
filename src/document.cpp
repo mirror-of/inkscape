@@ -1506,7 +1506,7 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
 std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden, bool take_insensitive, bool take_groups, bool enter_groups) const
 {
     std::vector<SPItem*> x;
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_hidden, take_insensitive, take_groups, enter_groups);
+    return find_items_in_area(x, this->root, dkey, box, is_within, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
 /**
@@ -1523,7 +1523,7 @@ std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect con
 std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden, bool take_insensitive, bool take_groups, bool enter_groups) const
 {
     std::vector<SPItem*> x;
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
+    return find_items_in_area(x, this->root, dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
 std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const
@@ -1540,7 +1540,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     // Cache a flattened SVG DOM to speed up selection.
     if(!_node_cache_valid){
         _node_cache.clear();
-        build_flat_item_list(key, SP_GROUP(this->root), true);
+        build_flat_item_list(key, this->root, true);
         _node_cache_valid=true;
     }
     SPObject *current_layer = nullptr;
@@ -1578,11 +1578,11 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
     std::deque<SPItem*> bak(_node_cache);
     if(!into_groups){
         _node_cache.clear();
-        build_flat_item_list(key, SP_GROUP(this->root), into_groups);
+        build_flat_item_list(key, this->root, into_groups);
     }
     if(!_node_cache_valid && into_groups){
         _node_cache.clear();
-        build_flat_item_list(key, SP_GROUP(this->root), true);
+        build_flat_item_list(key, this->root, true);
         _node_cache_valid=true;
     }
 
@@ -1594,7 +1594,7 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
 
 SPItem *SPDocument::getGroupAtPoint(unsigned int key, Geom::Point const &p) const
 {
-    return find_group_at_point(key, SP_GROUP(this->root), p);
+    return find_group_at_point(key, this->root, p);
 }
 
 // Resource management

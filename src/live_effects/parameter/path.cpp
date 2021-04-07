@@ -494,7 +494,7 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 
     must_recalculate_pwd2 = true;
     emit_changed();
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void

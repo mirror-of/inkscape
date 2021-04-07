@@ -434,7 +434,7 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
 {
     g_return_if_fail(lpeitem != nullptr);
 
-    SPClipPath *clip_path = SP_ITEM(lpeitem)->getClipObject();
+    SPClipPath *clip_path = lpeitem->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for (auto iter : clip_path_list) {
@@ -443,7 +443,7 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
         }
     }
 
-    SPMask *mask_path = SP_ITEM(lpeitem)->getMaskObject();
+    SPMask *mask_path = lpeitem->getMaskObject();
     if(mask_path) {
         std::vector<SPObject*> mask_path_list = mask_path->childList(true);
         for (auto iter : mask_path_list) {

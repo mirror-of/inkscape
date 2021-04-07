@@ -298,7 +298,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                 dc->selection->set(item);
                 item->setLocked(false);
                 dc->white_item = item;
-                rename_id(SP_OBJECT(item), "path-1");
+                rename_id(item, "path-1");
             }
             return;
         }
@@ -525,7 +525,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                         Inkscape::XML::Node *path = sp_repr_lookup_name(pasted_clipboard_root, "svg:path", -1); // unlimited search depth
                         if ( path != nullptr ) {
                             gchar const *svgd = path->attribute("d");
-                            dc->selection->remove(SP_OBJECT(pasted_clipboard));
+                            dc->selection->remove(pasted_clipboard);
                             previous_shape_pathv =  sp_svg_read_pathv(svgd);
                             previous_shape_pathv *= pasted_clipboard->transform;
                             spdc_paste_curve_as_freehand_shape(previous_shape_pathv, dc, item);
@@ -563,7 +563,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                     bend_item->moveTo(item,false);
                     bend_item->transform.setTranslation(Geom::Point());
                     spdc_apply_bend_shape(svgd, dc, bend_item);
-                    dc->selection->add(SP_OBJECT(bend_item));
+                    dc->selection->add(bend_item);
 
                     shape = BEND_CLIPBOARD;
                 } else {
@@ -585,9 +585,9 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 } else {
                     if(bend_item != nullptr && bend_item->getRepr() != nullptr){
                         gchar const *svgd = item->getRepr()->attribute("d");
-                        dc->selection->add(SP_OBJECT(bend_item));
+                        dc->selection->add(bend_item);
                         dc->selection->duplicate();
-                        dc->selection->remove(SP_OBJECT(bend_item));
+                        dc->selection->remove(bend_item);
                         bend_item = dc->selection->singleItem();
                         if(bend_item){
                             bend_item->moveTo(item,false);
@@ -597,7 +597,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                             bend_item->transform.setExpansionX(expansion_X);
                             bend_item->transform.setExpansionY(expansion_Y);
                             spdc_apply_bend_shape(svgd, dc, bend_item);
-                            dc->selection->add(SP_OBJECT(bend_item));
+                            dc->selection->add(bend_item);
 
                             shape = BEND_CLIPBOARD;
                         } else {

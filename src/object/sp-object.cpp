@@ -883,21 +883,21 @@ SPObject* SPObject::getNext()
 
 void SPObject::repr_child_added(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->child_added(child, ref);
 }
 
 void SPObject::repr_child_removed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node * /*ref*/, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->remove_child(child);
 }
 
 void SPObject::repr_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->order_changed(child, old, newer);
 }
@@ -1058,7 +1058,7 @@ void SPObject::readAttr(gchar const *key)
 
 void SPObject::repr_attr_changed(Inkscape::XML::Node * /*repr*/, gchar const *key, gchar const * /*oldval*/, gchar const * /*newval*/, bool is_interactive, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->readAttr(key);
 
@@ -1071,7 +1071,7 @@ void SPObject::repr_attr_changed(Inkscape::XML::Node * /*repr*/, gchar const *ke
 
 void SPObject::repr_content_changed(Inkscape::XML::Node * /*repr*/, gchar const * /*oldcontent*/, gchar const * /*newcontent*/, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->read_content();
 }

@@ -317,7 +317,7 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
 
     // Loop over meshes.
     for( std::map<SPMeshGradient*, std::vector<guint> >::const_iterator iter = points.begin(); iter != points.end(); ++iter) {
-        SPMeshGradient *mg = SP_MESHGRADIENT( iter->first );
+        SPMeshGradient *mg = iter->first;
         if( iter->second.size() > 0 ) {
             guint noperation = 0;
             switch (operation) {

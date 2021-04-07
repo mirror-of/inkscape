@@ -289,7 +289,7 @@ void sp_update_helperpath(SPDesktop *desktop)
     for (auto item : vec) {
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
-            Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(lpeitem)->getCurrentLPE();
+            Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
             if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
                 std::vector<Geom::Point> selectedNodesPositions;
                 if (nt->_selected_nodes) {

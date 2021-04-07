@@ -2975,15 +2975,15 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
     SPObject * firstItem = nullptr;
     auto items_= items();
     bool multiple = false;
-    for (auto i=items_.begin();i!=items_.end();++i){
-        if (SP_IS_SHAPE(*i) || SP_IS_TEXT(*i) || SP_IS_GROUP(*i)) {
+    for (auto *item : items_) {
+        if (SP_IS_SHAPE(item) || SP_IS_TEXT(item) || SP_IS_GROUP(item)) {
             if (firstItem) {
                 os << "|";
                 multiple = true;
             } else {
-                firstItem = SP_ITEM(*i);
+                firstItem = item;
             }
-            os << '#' << SP_ITEM(*i)->getId() << ",0,1";
+            os << '#' << item->getId() << ",0,1";
         }
     }
     if (firstItem) {

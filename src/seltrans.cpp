@@ -215,8 +215,7 @@ void Inkscape::SelTrans::setCenter(Geom::Point const &p)
 
     // Write the new center position into all selected items
     auto items= _desktop->selection->items();
-    for (auto iter=items.begin();iter!=items.end(); ++iter) {
-        SPItem *it = SP_ITEM(*iter);
+    for (auto it : items) {
         it->setCenter(p);
         // only set the value; updating repr and document_done will be done once, on ungrab
     }

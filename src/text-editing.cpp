@@ -532,7 +532,7 @@ static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator 
 {
     unsigned char_index = 0;
     unsigned char_count = g_utf8_strlen(utf8, -1);
-    Glib::ustring *string = &SP_STRING(string_item)->string;
+    Glib::ustring *string = &string_item->string;
 
     for (Glib::ustring::iterator it = string->begin() ; it != iter_at ; ++it)
         char_index++;
@@ -755,7 +755,7 @@ static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator i
 {
     unsigned char_index = 0;
     unsigned char_count = 0;
-    Glib::ustring *string = &SP_STRING(string_item)->string;
+    Glib::ustring *string = &string_item->string;
 
     for (Glib::ustring::iterator it = string->begin() ; it != iter_from ; ++it){
         char_index++;

@@ -636,7 +636,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
 static void
 sp_image_update_arenaitem (SPImage *image, Inkscape::DrawingImage *ai)
 {
-    ai->setStyle(SP_OBJECT(image)->style);
+    ai->setStyle(image->style);
     ai->setPixbuf(image->pixbuf);
     ai->setOrigin(Geom::Point(image->ox, image->oy));
     ai->setScale(image->sx, image->sy);
@@ -645,8 +645,7 @@ sp_image_update_arenaitem (SPImage *image, Inkscape::DrawingImage *ai)
 
 static void sp_image_update_canvas_image(SPImage *image)
 {
-    SPItem *item = SP_ITEM(image);
-    for (SPItemView *v = item->display; v != nullptr; v = v->next) {
+    for (SPItemView *v = image->display; v != nullptr; v = v->next) {
         sp_image_update_arenaitem(image, dynamic_cast<Inkscape::DrawingImage *>(v->arenaitem));
     }
 }

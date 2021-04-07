@@ -2320,7 +2320,7 @@ void TextToolbar::prepare_inner()
             if (flowtext) {
                 flowtext->fix_overflow_flowregion(true);
             }
-            if (!rawptr_start || !rawptr_end || !SP_IS_OBJECT(rawptr_start)|| !SP_IS_OBJECT(rawptr_end)) {
+            if (!rawptr_start || !rawptr_end) {
                 return;
             }
             SPObject *startobj = reinterpret_cast<SPObject *>(rawptr_start);

@@ -86,7 +86,7 @@ void SPRoot::build(SPDocument *document, Inkscape::XML::Node *repr)
     }
 
     // clear transform, if any was read in - SVG does not allow transform= on <svg>
-    SP_ITEM(this)->transform = Geom::identity();
+    this->transform = Geom::identity();
 }
 
 void SPRoot::release()

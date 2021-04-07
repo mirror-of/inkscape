@@ -236,7 +236,7 @@ void
 ItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
     emit_changed();
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     last_transform = Geom::identity();
 }
 

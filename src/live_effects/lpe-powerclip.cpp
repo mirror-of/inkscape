@@ -154,7 +154,7 @@ void LPEPowerClip::add()
                     Glib::ustring uri = Glib::ustring("url(#") + newclip + Glib::ustring(")");
                     parent = clip_path->getRepr()->duplicate(xml_doc);
                     parent->setAttribute("id", newclip);
-                    clip_path = SP_OBJECT(document->getDefs()->appendChildRepr(parent));
+                    clip_path = document->getDefs()->appendChildRepr(parent);
                     Inkscape::GC::release(parent);
                     sp_lpe_item->setAttribute("clip-path", uri);
                     SPLPEItem *childitemdel = dynamic_cast<SPLPEItem *>(clip_path->childList(true).back());
@@ -300,7 +300,7 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
         for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
             SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
             if (lpeitem) {
-                SPClipPath *clip_path = SP_ITEM(lpeitem)->getClipObject();
+                SPClipPath *clip_path = lpeitem->getClipObject();
                 if(clip_path) {
                     std::vector<SPObject*> clip_path_list = clip_path->childList(true);
                     for (auto iter : clip_path_list) {

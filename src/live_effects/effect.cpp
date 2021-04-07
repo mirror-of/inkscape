@@ -1270,20 +1270,20 @@ Effect::processObjects(LPEAction lpe_action)
         if ((elemref = document->getObjectById(id.c_str()))) {
             Inkscape::XML::Node * elemnode = elemref->getRepr();
             std::vector<SPItem*> item_list;
-            item_list.push_back(SP_ITEM(elemref));
+            auto item = dynamic_cast<SPItem *>(elemref);
+            item_list.push_back(item);
             std::vector<Inkscape::XML::Node*> item_to_select;
             std::vector<SPItem*> item_selected;
             SPCSSAttr *css;
             Glib::ustring css_str;
-            SPItem *item = SP_ITEM(elemref);
             switch (lpe_action){
             case LPE_TO_OBJECTS:
                 if (item->isHidden()) {
                     item->deleteObject(true);
                 } else {
                     elemnode->removeAttribute("sodipodi:insensitive");
-                    if (!SP_IS_DEFS(SP_ITEM(elemref)->parent)) {
-                        SP_ITEM(elemref)->moveTo(SP_ITEM(sp_lpe_item), false);
+                    if (!SP_IS_DEFS(item->parent)) {
+                        item->moveTo(sp_lpe_item, false);
                     }
                 }
                 break;

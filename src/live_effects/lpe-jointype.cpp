@@ -93,7 +93,8 @@ void LPEJoinType::doOnApply(SPLPEItem const* lpeitem)
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPShape* item = SP_SHAPE(lpeitem);
+    auto lpeitem_mutable = const_cast<SPLPEItem *>(lpeitem);
+    auto item = dynamic_cast<SPShape *>(lpeitem_mutable);
     double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
 
     lpe_shape_convert_stroke_and_fill(item);
@@ -125,11 +126,14 @@ void LPEJoinType::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 
 void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
 {
-    if (!SP_IS_SHAPE(lpeitem)) {
+    auto lpeitem_mutable = const_cast<SPLPEItem *>(lpeitem);
+    auto shape = dynamic_cast<SPShape *>(lpeitem_mutable);
+
+    if (!shape) {
         return;
     }
 
-    lpe_shape_revert_stroke_and_fill(SP_SHAPE(lpeitem), line_width);
+    lpe_shape_revert_stroke_and_fill(shape, line_width);
 }
 
 Geom::PathVector LPEJoinType::doEffect_path(Geom::PathVector const & path_in)

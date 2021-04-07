@@ -315,7 +315,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         elemref->parent->reorder(elemref, sp_lpe_item);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, reset);
+    cloneD(sp_lpe_item, elemref, transform, reset);
     elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     SP_ITEM(elemref)->setHidden(false);
     if (elemref->parent != container) {

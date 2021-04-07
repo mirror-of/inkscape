@@ -141,10 +141,10 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     switch (AlignTarget(prefs->getInt("/dialogs/align/align-to", 6)))
     {
     case LAST:
-        focus = SP_ITEM(selected.back());
+        focus = selected.back();
         break;
     case FIRST:
-        focus = SP_ITEM(selected.front());
+        focus = selected.front();
         break;
     case BIGGEST:
         focus = selection->largestItem(horiz);
@@ -847,10 +847,10 @@ private :
             switch (AlignTarget(prefs->getInt("/dialogs/align/align-to", 6)))
             {
                 case LAST:
-                    focus = SP_ITEM(selected.back());
+                    focus = selected.back();
                     break;
                 case FIRST:
-                    focus = SP_ITEM(selected.front());
+                    focus = selected.front();
                     break;
                 case BIGGEST:
                     focus = selection->largestItem(Selection::AREA);

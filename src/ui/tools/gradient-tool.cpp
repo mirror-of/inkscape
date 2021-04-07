@@ -469,7 +469,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
             if (item) {
                 // we take the first item in selection, because with doubleclick, the first click
                 // always resets selection to the single object under cursor
-                sp_gradient_context_add_stop_near_point(this, SP_ITEM(selection->items().front()), mousepoint_doc, event->button.time);
+                sp_gradient_context_add_stop_near_point(this, selection->items().front(), mousepoint_doc, event->button.time);
             } else {
             	auto items= selection->items();
                 for (auto i = items.begin();i!=items.end();++i) {
@@ -778,7 +778,7 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
         	std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
             sort(items.begin(),items.end(),sp_item_repr_compare_position_bool);
             // take topmost
-            vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(items.back()), fill_or_stroke);
+            vector = sp_gradient_vector_for_object(document, desktop, items.back(), fill_or_stroke);
         }
 
         // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs

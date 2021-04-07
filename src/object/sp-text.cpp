@@ -294,7 +294,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
 
 Geom::OptRect SPText::bbox(Geom::Affine const &transform, SPItem::BBoxType type) const {
-    Geom::OptRect bbox = SP_TEXT(this)->layout.bounds(transform);
+    Geom::OptRect bbox = this->layout.bounds(transform);
 
     // FIXME this code is incorrect
     if (bbox && type == SPItem::VISUAL_BBOX && !this->style->stroke.isNone()) {

@@ -97,9 +97,7 @@ protected:
 
 } // namespace Inkscape
 
-//#define COLORPROFILE_TYPE (Inkscape::colorprofile_get_type())
-#define COLORPROFILE(obj) ((Inkscape::ColorProfile*)obj)
-#define IS_COLORPROFILE(obj) (dynamic_cast<const Inkscape::ColorProfile*>((SPObject*)obj))
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(IS_COLORPROFILE, Inkscape::ColorProfile)
 
 #endif // !SEEN_COLOR_PROFILE_H
 

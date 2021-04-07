@@ -25,6 +25,7 @@
 #include "object/uri.h"
 
 #include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
 
 #include "verbs.h"
 #include "document-undo.h"
@@ -360,7 +361,7 @@ void OriginalItemArrayParam::linked_changed(SPObject */*old_obj*/, SPObject *new
 
         linked_modified(new_obj, SP_OBJECT_MODIFIED_FLAG, to);
     } else {
-        SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
         _store->foreach_iter(sigc::bind<ItemAndActive*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_updateLink), to));
     }
 }
@@ -370,7 +371,7 @@ void OriginalItemArrayParam::linked_modified(SPObject *linked_obj, guint flags, 
     if (!to) {
         return;
     }
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     _store->foreach_iter(sigc::bind<ItemAndActive*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_updateLink), to));
 }
 

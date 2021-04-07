@@ -486,36 +486,31 @@ static int getLcmsIntent( guint svgIntent )
     return intent;
 }
 
-static SPObject* bruteFind( SPDocument* document, gchar const* name )
+static ColorProfile *bruteFind(SPDocument *document, gchar const *name)
 {
-    SPObject* result = nullptr;
     std::vector<SPObject *> current = document->getResourceList("iccprofile");
-    for (std::vector<SPObject *>::const_iterator it = current.begin(); (!result) && (it != current.end()); ++it) {
-        if ( IS_COLORPROFILE(*it) ) {
-            ColorProfile* prof = COLORPROFILE(*it);
-            if ( prof ) {
-                if ( prof->name && (strcmp(prof->name, name) == 0) ) {
-                    result = SP_OBJECT(*it);
-                    break;
-                }
+    for (auto *obj : current) {
+        if (auto prof = dynamic_cast<ColorProfile*>(obj)) {
+            if ( prof->name && (strcmp(prof->name, name) == 0) ) {
+                return prof;
             }
         }
     }
 
-    return result;
+    return nullptr;
 }
 
 cmsHPROFILE Inkscape::CMSSystem::getHandle( SPDocument* document, guint* intent, gchar const* name )
 {
     cmsHPROFILE prof = nullptr;
 
-    SPObject* thing = bruteFind( document, name );
+    auto *thing = bruteFind(document, name);
     if ( thing ) {
-        prof = COLORPROFILE(thing)->impl->_profHandle;
+        prof = thing->impl->_profHandle;
     }
 
     if ( intent ) {
-        *intent = thing ? COLORPROFILE(thing)->rendering_intent : (guint)RENDERING_INTENT_UNKNOWN;
+        *intent = thing ? thing->rendering_intent : (guint)RENDERING_INTENT_UNKNOWN;
     }
 
     DEBUG_MESSAGE( lcmsThree, "<color-profile> queried for profile of '%s'. Returning %p with intent of %d", name, prof, (intent? *intent:0) );

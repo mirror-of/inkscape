@@ -276,8 +276,8 @@ ArcToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
             }
 
             ge->normalize();
-            (SP_OBJECT(ge))->updateRepr();
-            (SP_OBJECT(ge))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            ge->updateRepr();
+            ge->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
             modmade = true;
         }
@@ -326,8 +326,8 @@ ArcToolbar::startend_value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
             }
 
             ge->normalize();
-            (SP_OBJECT(ge))->updateRepr();
-            (SP_OBJECT(ge))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            ge->updateRepr();
+            ge->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
             modmade = true;
         }
