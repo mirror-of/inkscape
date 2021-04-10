@@ -55,8 +55,6 @@ public:
     ~SPDrawAnchor();
 
     SPDrawAnchor *anchorTest(Geom::Point w, bool activate);
-
-    SPDrawAnchor *anchorDestroy();
 };
 
 #endif /* !SEEN_DRAW_ANCHOR_H */

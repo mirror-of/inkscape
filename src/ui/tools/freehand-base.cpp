@@ -990,9 +990,7 @@ static void spdc_free_colors(FreehandBase *dc)
     }
     dc->green_bpaths.clear();
     dc->green_curve.reset();
-    if (dc->green_anchor) {
-        dc->green_anchor = dc->green_anchor->anchorDestroy();
-    }
+    dc->green_anchor.reset();
 
     // White
     if (dc->white_item) {

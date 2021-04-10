@@ -333,7 +333,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 
                 if ( !this->sa && !this->green_anchor ) {
                     /* Create green anchor */
-                    this->green_anchor = new SPDrawAnchor(this, this->green_curve.get(), TRUE, this->p[0]);
+                    this->green_anchor.reset(new SPDrawAnchor(this, this->green_curve.get(), TRUE, this->p[0]));
                 }
                 if (anchor) {
                     p = anchor->dp;
@@ -447,9 +447,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     /* sketch mode: interpolate the sketched path and improve the current output path with the new interpolation. don't finish sketch */
                     this->_sketchInterpolate();
 
-                    if (this->green_anchor) {
-                        this->green_anchor = this->green_anchor->anchorDestroy();
-                    }
+                    this->green_anchor.reset();
 
                     this->_state = SP_PENCIL_CONTEXT_SKETCH;
                 } else {
@@ -495,9 +493,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     this->ea = nullptr;
                     this->ps.clear();
                     this->_wps.clear();
-                    if (this->green_anchor) {
-                        this->green_anchor = this->green_anchor->anchorDestroy();
-                    }
+                    this->green_anchor.reset();
                     this->_state = SP_PENCIL_CONTEXT_IDLE;
                     // reset sketch mode too
                     this->sketch_n = 0;
@@ -530,9 +526,7 @@ void PencilTool::_cancel() {
     }
     this->green_bpaths.clear();
     this->green_curve->reset();
-    if (this->green_anchor) {
-        this->green_anchor = this->green_anchor->anchorDestroy();
-    }
+    this->green_anchor.reset();
 
     this->message_context->clear();
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
@@ -604,9 +598,7 @@ bool PencilTool::_handleKeyRelease(GdkEventKey const &event) {
                 this->sketch_n = 0;
                 this->sa = nullptr;
                 this->ea = nullptr;
-                if (this->green_anchor) {
-                    this->green_anchor = this->green_anchor->anchorDestroy();
-                }
+                this->green_anchor.reset();
                 this->_state = SP_PENCIL_CONTEXT_IDLE;
                 sp_event_context_discard_delayed_snap_event(this);
                 this->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand sketch"));

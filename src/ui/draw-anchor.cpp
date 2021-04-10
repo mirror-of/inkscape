@@ -74,16 +74,6 @@ SPDrawAnchor *SPDrawAnchor::anchorTest(Geom::Point w, bool activate)
     return nullptr;
 }
 
-/**
- * Destroys the anchor's canvas item and frees the anchor object.
- */
-SPDrawAnchor *SPDrawAnchor::anchorDestroy()
-{
-    delete this;
-    return nullptr;
-}
-
-
 /*
   Local Variables:
   mode:c++
