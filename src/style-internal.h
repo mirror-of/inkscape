@@ -45,8 +45,7 @@ static const unsigned SP_STYLE_FLAG_IFSET  (1 << 0);
 static const unsigned SP_STYLE_FLAG_IFDIFF (1 << 1);
 static const unsigned SP_STYLE_FLAG_IFSRC  (1 << 3); // If source matches
 
-// for the bitfield in SPStyle::style_src this must be an unsigned type
-enum class SPStyleSrc : unsigned
+enum class SPStyleSrc : unsigned char
 {
     UNSET,
     ATTRIBUTE,   // fill="red"
@@ -191,7 +190,7 @@ public:
     bool set : 1;         // Property has been explicitly set (vs. inherited).
     bool inherit : 1;     // Property value set to 'inherit'.
     bool important : 1;   // Property rule 'important' has been explicitly set.
-    SPStyleSrc style_src : 2; // Source (attribute, style attribute, style-sheet).
+    SPStyleSrc style_src; // Source (attribute, style attribute, style-sheet).
 
 protected:
     SPStyle* style;       // Used by SPIPaint, SPIFilter... to find values of other properties
