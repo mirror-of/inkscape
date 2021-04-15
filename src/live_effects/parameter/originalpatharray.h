@@ -94,12 +94,8 @@ protected:
     
     ModelColumns *_model;
     Glib::RefPtr<Gtk::TreeStore> _store;
-    Gtk::TreeView _tree;
-    Gtk::CellRendererText *_text_renderer;
-    Gtk::CellRendererToggle *_toggle_reverse;
-    Gtk::CellRendererToggle *_toggle_visible;
-    Gtk::TreeView::Column *_name_column;
-    Gtk::ScrolledWindow _scroller;
+    Gtk::TreeView *_tree;
+    Gtk::ScrolledWindow *_scroller;
     
     void on_link_button_click();
     void on_remove_button_click();
@@ -112,6 +108,7 @@ private:
     bool _from_original_d;
     bool _allow_only_bspline_spiro;
     void update();
+    void initui(); 
     OriginalPathArrayParam(const OriginalPathArrayParam&) = delete;
     OriginalPathArrayParam& operator=(const OriginalPathArrayParam&) = delete;
 };

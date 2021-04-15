@@ -75,11 +75,55 @@ set(TEST_SOURCES
     svg-extension-test
     curve-test
     2geom-characterization-test
-    lpe-bool-test
     xml-test
-    sp-item-group-test)
+    sp-item-group-test
+    #0.92 or lower LPEs
+    lpe-attachpath-test
+    lpe-boundingbox-test
+    lpe-bendpath-test
+    lpe-bool-test
+    lpe-bspline-test
+    lpe-cloneoriginal-test
+    lpe-constructgrid-test
+    lpe-ellipse5pts-test
+    lpe-envelopedeformation-test
+    lpe-fillbetweenmany-test
+    lpe-fillbetweenstrokes-test
+    lpe-gears-test
+    lpe-interpolatesubpaths-test
+    lpe-interpolatepoints-test
+    lpe-jointype-test
+    lpe-knot-test
+    lpe-lattice2-test
+    lpe-mirrorsymmetry-test
+    lpe-patternalongpath-test
+    lpe-perspectiveenvelope-test
+    lpe-powerstroke-test
+    lpe-rotatecopies-test
+    lpe-roughen-test
+    lpe-roughhatches-test
+    lpe-ruler-test
+    lpe-showhandles-test
+    lpe-simplify-test
+    lpe-sketch-test
+    lpe-spiro-test
+    lpe-stitchsubpaths-test
+    lpe-taperstroke-test
+    lpe-transform2points-test
+    lpe-voncoch-test
+    #1.0 LPEs
+    lpe-measuresegments-test
+    lpe-filletchamfer-test
+    lpe-powerclip-test
+    lpe-powermask-test
+    lpe-ellipsefrompoints-test
+    lpe-offset-test
+    lpe-dashedstroke-test
+    #1.1 LPEs
+    lpe-booleanoperation-test
+    lpe-slice-test)
 
-add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp)
+add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp lpespaths-test.h)
 target_link_libraries(cpp_test_static_library PUBLIC ${GTEST_LIBRARIES} inkscape_base)
 
 add_custom_target(tests)

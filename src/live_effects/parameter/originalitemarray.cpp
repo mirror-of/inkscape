@@ -58,41 +58,9 @@ OriginalItemArrayParam::OriginalItemArrayParam( const Glib::ustring& label,
         Inkscape::UI::Widget::Registry* wr,
         Effect* effect )
 : Parameter(label, tip, key, wr, effect), 
-        _vector(),
-        _tree(),
-        _text_renderer(),
-        _toggle_active(),
-        _scroller()
-{    
-    _model = new ModelColumns();
-    _store = Gtk::TreeStore::create(*_model);
-    _tree.set_model(_store);
-
-    _tree.set_reorderable(true);
-    _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
-    
-    Gtk::CellRendererToggle * _toggle_active = manage(new Gtk::CellRendererToggle());
-    int activeColNum = _tree.append_column(_("Active"), *_toggle_active) - 1;
-    Gtk::TreeViewColumn* col_active = _tree.get_column(activeColNum);
-    _toggle_active->set_activatable(true);
-    _toggle_active->signal_toggled().connect(sigc::mem_fun(*this, &OriginalItemArrayParam::on_active_toggled));
-    col_active->add_attribute(_toggle_active->property_active(), _model->_colActive);
-    
-    _text_renderer = manage(new Gtk::CellRendererText());
-    int nameColNum = _tree.append_column(_("Name"), *_text_renderer) - 1;
-    _name_column = _tree.get_column(nameColNum);
-    _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
-
-    _tree.set_expander_column( *_tree.get_column(nameColNum) );
-    _tree.set_search_column(_model->_colLabel);
-    
-    //quick little hack -- newer versions of gtk gave the item zero space allotment
-    _scroller.set_size_request(-1, 120);
-
-    _scroller.add(_tree);
-    _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
-    //_scroller.set_shadow_type(Gtk::SHADOW_IN);
-    
+        _vector()
+{  
+    initui();    
     oncanvas_editable = true;
 }
 
@@ -105,6 +73,45 @@ OriginalItemArrayParam::~OriginalItemArrayParam()
         delete w;
     }
     delete _model;
+}
+
+void
+OriginalItemArrayParam::initui() {
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop) {
+        return;
+    }
+    if (!_tree) {
+        _tree = manage(new Gtk::TreeView());
+        _model = new ModelColumns();
+        _store = Gtk::TreeStore::create(*_model);
+        _tree->set_model(_store);
+
+        _tree->set_reorderable(true);
+        _tree->enable_model_drag_dest (Gdk::ACTION_MOVE);  
+        Gtk::CellRendererToggle * _toggle_active = manage(new Gtk::CellRendererToggle());
+        int activeColNum = _tree->append_column(_("Active"), *_toggle_active) - 1;
+        Gtk::TreeViewColumn* col_active = _tree->get_column(activeColNum);
+        _toggle_active->set_activatable(true);
+        _toggle_active->signal_toggled().connect(sigc::mem_fun(*this, &OriginalItemArrayParam::on_active_toggled));
+        col_active->add_attribute(_toggle_active->property_active(), _model->_colActive);
+        
+        _text_renderer = manage(new Gtk::CellRendererText());
+        int nameColNum = _tree->append_column(_("Name"), *_text_renderer) - 1;
+        _name_column = _tree->get_column(nameColNum);
+        _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
+
+        _tree->set_expander_column( *_tree->get_column(nameColNum) );
+        _tree->set_search_column(_model->_colLabel);
+        
+        //quick little hack -- newer versions of gtk gave the item zero space allotment
+        _scroller->set_size_request(-1, 120);
+
+        _scroller->add(*_tree);
+        _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+        //_scroller->set_shadow_type(Gtk::SHADOW_IN);
+    }
+    param_readSVGValue(param_getSVGValue().c_str());
 }
 
 void OriginalItemArrayParam::on_active_toggled(const Glib::ustring& item)
@@ -130,8 +137,10 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
 {
     Gtk::Box* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
-
-    vbox->pack_start(_scroller, Gtk::PACK_EXPAND_WIDGET);
+    _tree = nullptr;
+    _scroller = nullptr;
+    initui();
+    vbox->pack_start(*_scroller, Gtk::PACK_EXPAND_WIDGET);
     
     
     { // Paste item to link button
@@ -192,7 +201,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
 bool OriginalItemArrayParam::_selectIndex(const Gtk::TreeIter& iter, int* i)
 {
     if ((*i)-- <= 0) {
-        _tree.get_selection()->select(iter);
+        _tree->get_selection()->select(iter);
         return true;
     }
     return false;
@@ -200,7 +209,7 @@ bool OriginalItemArrayParam::_selectIndex(const Gtk::TreeIter& iter, int* i)
 
 void OriginalItemArrayParam::on_up_button_click()
 {
-    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
+    Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         
@@ -226,7 +235,7 @@ void OriginalItemArrayParam::on_up_button_click()
 
 void OriginalItemArrayParam::on_down_button_click()
 {
-    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
+    Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
 
@@ -255,7 +264,7 @@ void OriginalItemArrayParam::on_down_button_click()
 
 void OriginalItemArrayParam::on_remove_button_click()
 {
-    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
+    Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         remove_link(row[_model->_colObject]);
@@ -362,7 +371,9 @@ void OriginalItemArrayParam::linked_changed(SPObject */*old_obj*/, SPObject *new
         linked_modified(new_obj, SP_OBJECT_MODIFIED_FLAG, to);
     } else {
         param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
-        _store->foreach_iter(sigc::bind<ItemAndActive*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_updateLink), to));
+        if (_store.get()) {
+            _store->foreach_iter(sigc::bind<ItemAndActive*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_updateLink), to));
+        }
     }
 }
 
@@ -372,7 +383,9 @@ void OriginalItemArrayParam::linked_modified(SPObject *linked_obj, guint flags, 
         return;
     }
     param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    _store->foreach_iter(sigc::bind<ItemAndActive*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_updateLink), to));
+    if (_store.get()) {
+        _store->foreach_iter(sigc::bind<ItemAndActive*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_updateLink), to));
+    }
 }
 
 bool OriginalItemArrayParam::param_readSVGValue(const gchar* strvalue)
@@ -384,7 +397,9 @@ bool OriginalItemArrayParam::param_readSVGValue(const gchar* strvalue)
             _vector.pop_back();
             delete w;
         }
-        _store->clear();
+        if (_store.get()) {
+            _store->clear();
+        }
 
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
         for (gchar ** iter = strarray; *iter != nullptr; iter++) {
@@ -397,14 +412,15 @@ bool OriginalItemArrayParam::param_readSVGValue(const gchar* strvalue)
                 w->ref.attach(URI(w->href));
 
                 _vector.push_back(w);
+                if (_store.get()) {
+                    Gtk::TreeModel::iterator iter = _store->append();
+                    Gtk::TreeModel::Row row = *iter;
+                    SPObject *obj = w->ref.getObject();
 
-                Gtk::TreeModel::iterator iter = _store->append();
-                Gtk::TreeModel::Row row = *iter;
-                SPObject *obj = w->ref.getObject();
-
-                row[_model->_colObject] = w;
-                row[_model->_colLabel] = obj ? ( obj->label() ? obj->label() : obj->getId() ) : w->href;
-                row[_model->_colActive] = w->actived;
+                    row[_model->_colObject] = w;
+                    row[_model->_colLabel] = obj ? ( obj->label() ? obj->label() : obj->getId() ) : w->href;
+                    row[_model->_colActive] = w->actived;
+                }
                 g_strfreev (substrarray);
             }
         }

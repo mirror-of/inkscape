@@ -266,7 +266,7 @@ gboolean delayupdate(gpointer data)
 void 
 LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
 {
-    bool cleanup = is_load;
+    bool cleanup = is_load && SP_ACTIVE_DESKTOP; // dont crash on tests
     if (is_applied) {
         cleanup = true;
         reloadOriginal(lpeitem);

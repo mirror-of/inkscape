@@ -98,6 +98,7 @@ namespace LivePathEffect {
 
 const EnumEffectData<EffectType> LPETypeData[] = {
     // {constant defined in effect-enum.h, N_("name of your effect"), "name of your effect in SVG"}
+    // please sync order with effect-enum.h
 /* 0.46 */
     {
         BEND_PATH,
@@ -581,20 +582,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//experimental
     },
     {
-        BOOL_OP,
-        N_("Boolean operation") ,//label
-        "bool_op" ,//key
-        "bool-op" ,//icon
-        "Boolean operation" ,//untranslated name
-        N_("Cut, union, subtract, intersect and divide a path non-destructively with another path") ,//description
-        true  ,//on_path
-        true  ,//on_shape
-        true ,//on_group
-        false ,//on_image
-        false ,//on_text
-        false ,//experimental
-    },
-    {
         POWERCLIP,
         N_("Power clip") ,//label
         "powerclip" ,//key
@@ -664,6 +651,36 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//on_text
         false ,//experimental
     },
+    /* 1.1 */
+    {
+        BOOL_OP,
+        N_("Boolean operation") ,//label
+        "bool_op" ,//key
+        "bool-op" ,//icon
+        "Boolean operation" ,//untranslated name
+        N_("Cut, union, subtract, intersect and divide a path non-destructively with another path") ,//description
+        true  ,//on_path
+        true  ,//on_shape
+        true ,//on_group
+        false ,//on_image
+        false ,//on_text
+        false ,//experimental
+    },
+    {
+        SLICE,
+        N_("Slice") ,//label
+        "slice" ,//key
+        "slice" ,//icon
+        "Slice" ,//untranslated name
+        N_("Slices the item into parts. It can also be applied multiple times.") ,//description
+        true  ,//on_path
+        true  ,//on_shape
+        true ,//on_group
+        false ,//on_image
+        false ,//on_text
+        false ,//experimental
+    },
+    // VISIBLE experimental LPE
     {
         ANGLE_BISECTOR,
         N_("Angle bisector") ,//label
@@ -775,21 +792,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//on_image
         false ,//on_text
         true ,//experimental
-    },
-    /* 1.1 */
-    {
-        SLICE,
-        NC_("path effect", "Slice") ,//label
-        "slice" ,//key
-        "slice" ,//icon
-        "Slice" ,//untranslated name
-        N_("Slices the item into parts. It can also be applied multiple times.") ,//description
-        true  ,//on_path
-        true  ,//on_shape
-        true ,//on_group
-        false ,//on_image
-        false ,//on_text
-        false ,//experimental
     },
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {
