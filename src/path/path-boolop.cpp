@@ -419,10 +419,17 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         for (auto item : il)
         {
             // apply live path effects prior to performing boolean operation
-            if (SP_IS_LPE_ITEM(item)) {
-                SP_LPE_ITEM(item)->removeAllPathEffects(true);
+            char const *id = item->getAttribute("id");
+            SPDocument * document = item->document;
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+            if (lpeitem) {
+                SPObject *original = dynamic_cast<SPObject *>(item);
+                lpeitem->removeAllPathEffects(true);
+                SPObject *elemref = document->getObjectById(id);
+                if (elemref && elemref != original) {
+                    item = dynamic_cast<SPItem *>(elemref);
+                }
             }
-
             SPCSSAttr *css = sp_repr_css_attr(reinterpret_cast<SPObject *>(il[0])->getRepr(), "style");
             gchar const *val = sp_repr_css_property(css, "fill-rule", nullptr);
             if (val && strcmp(val, "nonzero") == 0) {
