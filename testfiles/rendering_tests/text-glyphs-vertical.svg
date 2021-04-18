@@ -34,6 +34,8 @@
 
   </style>
 
+  <rect x="0" y="0" width="600" height="600" style="fill:white"/>
+
   <text x="100" y="100">㆕㆖㆘<tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
   <text x="115" y="200" style="writing-mode:vertical-lr">㆕㆖㆘<tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
   <text x="305" y="200" style="writing-mode:vertical-lr;text-orientation:upright">㆕㆖㆘<tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>

@@ -15,6 +15,7 @@
     }
   </style>
 
+  <rect x="0" y="0" width="600" height="600" style="fill:white"/>
   <g>
     <text x="50"  y="200">G̃g̃X̃x̃</text>
     <text x="300" y="200" style="writing-mode:vertical-lr;">G̃g̃X̃x̃</text>

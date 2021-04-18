@@ -20,6 +20,8 @@
 
   </style>
 
+  <rect x="0" y="0" width="600" height="600" style="fill:white"/>
+
   <text x="25%" y="10%">õőo̓ơọo̫o̳o̻o̓o͋o͗o͡</text>
   <text x="25%" y="25%" style="writing-mode:vertical-lr">õőo̓ơọo̫o̳o̻o̓o͋o͗o͡</text>
   <text x="50%" y="25%" style="writing-mode:vertical-lr;text-orientation:upright">õőo̓ơọo̫o̳o̻o̓o͋o͗o͡</text>
