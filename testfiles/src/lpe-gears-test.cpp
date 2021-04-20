@@ -93,7 +93,7 @@ TEST_F(LPEGearsTest, multi_PX_1_0_2)
        teeth="17"
        phi="5.9"
        min_radius="6.2"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -140,7 +140,7 @@ TEST_F(LPEGearsTest, multi_MM_1_0_2)
        teeth="17"
        phi="5.9"
        min_radius="6.2"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"

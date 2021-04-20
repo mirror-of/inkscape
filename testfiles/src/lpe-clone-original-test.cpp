@@ -131,7 +131,7 @@ TEST_F(LPECloneOriginalTest, boken_1_02)
        is_visible="true"
        linkedpath="m 89.540131,132.33983 c 39.825569,-5.82992 71.760559,-64.263684 122.100169,0 v 86.58012 c -41.85049,31.06173 -82.21035,21.87631 -122.100169,0 z"
        visualbounds="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <path
      style="fill:#ffff00;fill-rule:evenodd;stroke-width:0.254511"
@@ -397,7 +397,7 @@ TEST_F(LPECloneOriginalTest, mixed_PX_1_1)
        is_visible="true"
        linkedpath="m 89.540131,132.33983 c 39.825569,-5.82992 71.760559,-64.263684 122.100169,0 v 86.58012 c -41.85049,31.06173 -82.21035,21.87631 -122.100169,0 z"
        visualbounds="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <path
      style="fill:#ffff00;fill-rule:evenodd;stroke-width:0.254511"
@@ -664,7 +664,7 @@ TEST_F(LPECloneOriginalTest, mixed_MM_1_1)
        is_visible="true"
        linkedpath="m 89.540131,132.33983 c 39.825569,-5.82992 71.760559,-64.263684 122.100169,0 v 86.58012 c -41.85049,31.06173 -82.21035,21.87631 -122.100169,0 z"
        visualbounds="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <path
      style="fill:#ffff00;fill-rule:evenodd;stroke-width:0.254511"

@@ -191,7 +191,7 @@ TEST_F(LPEJoinTypeTest, multi_PX_1_0_2)
        linejoin_type="extrp_arc3"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4549"
@@ -201,7 +201,7 @@ TEST_F(LPEJoinTypeTest, multi_PX_1_0_2)
        linejoin_type="miter"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4545"
@@ -211,7 +211,7 @@ TEST_F(LPEJoinTypeTest, multi_PX_1_0_2)
        linejoin_type="bevel"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4541"
@@ -221,7 +221,7 @@ TEST_F(LPEJoinTypeTest, multi_PX_1_0_2)
        linejoin_type="round"
        miter_limit="5"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4537"
@@ -231,7 +231,7 @@ TEST_F(LPEJoinTypeTest, multi_PX_1_0_2)
        linejoin_type="extrp_arc"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -308,7 +308,7 @@ TEST_F(LPEJoinTypeTest, multi_MM_1_0_2)
        linejoin_type="extrp_arc3"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4549"
@@ -318,7 +318,7 @@ TEST_F(LPEJoinTypeTest, multi_MM_1_0_2)
        linejoin_type="miter"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4545"
@@ -328,7 +328,7 @@ TEST_F(LPEJoinTypeTest, multi_MM_1_0_2)
        linejoin_type="bevel"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4541"
@@ -338,7 +338,7 @@ TEST_F(LPEJoinTypeTest, multi_MM_1_0_2)
        linejoin_type="round"
        miter_limit="5"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="join_type"
        id="path-effect4537"
@@ -348,7 +348,7 @@ TEST_F(LPEJoinTypeTest, multi_MM_1_0_2)
        linejoin_type="extrp_arc"
        miter_limit="100"
        attempt_force_join="true"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"

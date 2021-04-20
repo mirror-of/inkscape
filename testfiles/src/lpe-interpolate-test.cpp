@@ -16,11 +16,11 @@
 using namespace Inkscape;
 using namespace Inkscape::LivePathEffect;
 
-class LPEInterpolateSubPathsTest : public LPESPathsTest {};
+class LPEInterpolateTest : public LPESPathsTest {};
 
 // INKSCAPE 0.92.5
 
-TEST_F(LPEInterpolateSubPathsTest, path_0_92_5)
+TEST_F(LPEInterpolateTest, path_0_92_5)
 {
    std::string svg = R""""(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -68,7 +68,7 @@ TEST_F(LPEInterpolateSubPathsTest, path_0_92_5)
 
 // INKSCAPE 1.0.2
 
-TEST_F(LPEInterpolateSubPathsTest, multi_PX_1_0_2)
+TEST_F(LPEInterpolateTest, multi_PX_1_0_2)
 {
    std::string svg = R""""(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -92,7 +92,7 @@ TEST_F(LPEInterpolateSubPathsTest, multi_PX_1_0_2)
        equidistant_spacing="false"
        steps="19"
        trajectory-nodetypes="cc"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect18"
@@ -103,7 +103,7 @@ TEST_F(LPEInterpolateSubPathsTest, multi_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect14"
@@ -114,7 +114,7 @@ TEST_F(LPEInterpolateSubPathsTest, multi_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -134,7 +134,7 @@ TEST_F(LPEInterpolateSubPathsTest, multi_PX_1_0_2)
    testDoc(svg);
 }
 
-TEST_F(LPEInterpolateSubPathsTest, multi_MM_1_0_2)
+TEST_F(LPEInterpolateTest, multi_MM_1_0_2)
 {
    std::string svg = R""""(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -158,7 +158,7 @@ TEST_F(LPEInterpolateSubPathsTest, multi_MM_1_0_2)
        equidistant_spacing="false"
        steps="19"
        trajectory-nodetypes="cc"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect18"
@@ -169,7 +169,7 @@ TEST_F(LPEInterpolateSubPathsTest, multi_MM_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect14"
@@ -180,7 +180,7 @@ TEST_F(LPEInterpolateSubPathsTest, multi_MM_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"

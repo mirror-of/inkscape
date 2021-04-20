@@ -242,7 +242,7 @@ TEST_F(LPESketchTest, multi_PX_1_0_2)
        tgtscale="10"
        tgtlength="100"
        tgtlength_rdm="0.3;1"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="sketch"
        id="path-effect17"
@@ -261,7 +261,7 @@ TEST_F(LPESketchTest, multi_PX_1_0_2)
        tgtscale="10.8"
        tgtlength="107"
        tgtlength_rdm="1;1"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="sketch"
        id="path-effect12"
@@ -280,7 +280,7 @@ TEST_F(LPESketchTest, multi_PX_1_0_2)
        tgtscale="10"
        tgtlength="100"
        tgtlength_rdm="0.3;1"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -429,6 +429,7 @@ TEST_F(LPESketchTest, multi_MM_1_0_2)
        id="path-effect29"
        is_visible="true"
        nbiter_approxstrokes="5"
+       lpeversion="1"
        strokelength="100"
        strokelength_rdm="0.3;1"
        strokeoverlap="1"
@@ -447,6 +448,7 @@ TEST_F(LPESketchTest, multi_MM_1_0_2)
        id="path-effect17"
        is_visible="true"
        nbiter_approxstrokes="3"
+       lpeversion="1"
        strokelength="100"
        strokelength_rdm="0.7;1"
        strokeoverlap="0.6"
@@ -465,6 +467,7 @@ TEST_F(LPESketchTest, multi_MM_1_0_2)
        id="path-effect12"
        is_visible="true"
        nbiter_approxstrokes="5"
+       lpeversion="1"
        strokelength="100"
        strokelength_rdm="0.3;1"
        strokeoverlap="0.3"

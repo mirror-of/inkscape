@@ -178,10 +178,12 @@ TEST_F(LPESpiroTest, spiro_MM_1_0_2)
        tang_offset="0"
        prop_units="false"
        vertical_pattern="false"
+       lpeversion="1"
        fuse_tolerance="0" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect58"
+       lpeversion="1"
        is_visible="true" />
     <inkscape:path-effect
        effect="skeletal"
@@ -195,11 +197,13 @@ TEST_F(LPESpiroTest, spiro_MM_1_0_2)
        normal_offset="0"
        tang_offset="0"
        prop_units="false"
+       lpeversion="1"
        vertical_pattern="false"
        fuse_tolerance="0" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect52"
+       lpeversion="1"
        is_visible="true" />
     <inkscape:path-effect
        effect="skeletal"
@@ -212,16 +216,19 @@ TEST_F(LPESpiroTest, spiro_MM_1_0_2)
        spacing="0"
        normal_offset="0"
        tang_offset="0"
+       lpeversion="1"
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect46"
+       lpeversion="1"
        is_visible="true" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect42"
+       lpeversion="1"
        is_visible="true"
        pattern="m -0.63412468,0.85439748 c 0,-2.75999998 2.23999998,-4.99999998 4.99999998,-4.99999998 2.76,0 5,2.24 5,4.99999998 0,2.76000002 -2.24,4.99999972 -5,4.99999972 -2.76,0 -4.99999998,-2.2399997 -4.99999998,-4.99999972 z"
        copytype="single_stretched"
@@ -235,6 +242,7 @@ TEST_F(LPESpiroTest, spiro_MM_1_0_2)
        fuse_tolerance="0" />
     <inkscape:path-effect
        effect="spiro"
+       lpeversion="1"
        id="path-effect40"
        is_visible="true" />
   </defs>
@@ -309,13 +317,13 @@ TEST_F(LPESpiroTest, spiro_PX_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect58"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect54"
@@ -330,13 +338,13 @@ TEST_F(LPESpiroTest, spiro_PX_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect52"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect48"
@@ -351,13 +359,13 @@ TEST_F(LPESpiroTest, spiro_PX_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect46"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect42"
@@ -372,13 +380,13 @@ TEST_F(LPESpiroTest, spiro_PX_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect40"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g id="t" transform="scale(0.445)">
   <path

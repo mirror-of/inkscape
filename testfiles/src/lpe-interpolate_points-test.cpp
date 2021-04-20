@@ -142,31 +142,31 @@ TEST_F(LPEInterpolatePointsTest, multi_PX_1_0_2)
        id="path-effect48"
        is_visible="true"
        interpolator_type="SpiroInterpolator"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect44"
        is_visible="true"
        interpolator_type="Linear"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect42"
        is_visible="true"
        interpolator_type="CubicBezierFit"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect40"
        is_visible="true"
        interpolator_type="CentripetalCatmullRom"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect32"
        is_visible="true"
        interpolator_type="CubicBezierJohan"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -245,31 +245,31 @@ TEST_F(LPEInterpolatePointsTest, multi_MM_1_0_2)
        id="path-effect48"
        is_visible="true"
        interpolator_type="SpiroInterpolator"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect44"
        is_visible="true"
        interpolator_type="Linear"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect42"
        is_visible="true"
        interpolator_type="CubicBezierFit"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect40"
        is_visible="true"
        interpolator_type="CentripetalCatmullRom"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="interpolate_points"
        id="path-effect32"
        is_visible="true"
        interpolator_type="CubicBezierJohan"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"

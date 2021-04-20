@@ -206,7 +206,7 @@ TEST_F(LPESimplifyTest, multi_PX_1_0_2)
        helper_size="5"
        simplify_individual_paths="false"
        simplify_just_coalesce="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="simplify"
        id="path-effect17"
@@ -217,7 +217,7 @@ TEST_F(LPESimplifyTest, multi_PX_1_0_2)
        helper_size="5"
        simplify_individual_paths="false"
        simplify_just_coalesce="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="simplify"
        id="path-effect12"
@@ -228,7 +228,7 @@ TEST_F(LPESimplifyTest, multi_PX_1_0_2)
        helper_size="5"
        simplify_individual_paths="false"
        simplify_just_coalesce="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -361,7 +361,7 @@ TEST_F(LPESimplifyTest, multi_MM_1_0_2)
        helper_size="5"
        simplify_individual_paths="false"
        simplify_just_coalesce="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="simplify"
        id="path-effect17"
@@ -372,7 +372,7 @@ TEST_F(LPESimplifyTest, multi_MM_1_0_2)
        helper_size="5"
        simplify_individual_paths="false"
        simplify_just_coalesce="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="simplify"
        id="path-effect12"
@@ -383,7 +383,7 @@ TEST_F(LPESimplifyTest, multi_MM_1_0_2)
        helper_size="5"
        simplify_individual_paths="false"
        simplify_just_coalesce="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <sodipodi:namedview
      id="base"

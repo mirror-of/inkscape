@@ -72,7 +72,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, mixed_0_92_5)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+       />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="-42.333332,246.44876"
@@ -85,7 +85,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, mixed_0_92_5)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+        />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="4.9416287,26.026668"
@@ -98,7 +98,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, mixed_0_92_5)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+        />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="123.58118,41.749945"
@@ -111,7 +111,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, mixed_0_92_5)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="true"
-       lpeversion="0" />
+        />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -231,7 +231,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_mm_1_02)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="-42.333332,246.44876"
@@ -244,7 +244,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_mm_1_02)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="5.6012502,54.745291"
@@ -257,7 +257,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_mm_1_02)
        horizontal_mirror="true"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="124.2408,64.65361"
@@ -270,7 +270,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_mm_1_02)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="true"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -382,7 +382,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_px_1_02)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="-42.333332,246.44876"
@@ -395,7 +395,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_px_1_02)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="1.0649927,32.794487"
@@ -408,7 +408,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_px_1_02)
        horizontal_mirror="true"
        vertical_mirror="false"
        overflow_perspective="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="perspective-envelope"
        up_left_point="119.70454,42.719104"
@@ -421,7 +421,7 @@ TEST_F(LPEPerspectiveEnvelopeTest, multi_px_1_02)
        horizontal_mirror="false"
        vertical_mirror="false"
        overflow_perspective="true"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"

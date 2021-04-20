@@ -185,7 +185,7 @@ TEST_F(LPETaperStrokeTest, multi_PX_1_0_2)
        is_visible="true"
        id="path-effect855"
        effect="taper_stroke"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="taper_stroke"
        id="path-effect821"
@@ -196,7 +196,7 @@ TEST_F(LPETaperStrokeTest, multi_PX_1_0_2)
        smoothing="0.5"
        jointype="round"
        miter_limit="100"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="taper_stroke"
        id="path-effect12"
@@ -207,7 +207,7 @@ TEST_F(LPETaperStrokeTest, multi_PX_1_0_2)
        smoothing="0.5"
        jointype="extrapolated"
        miter_limit="100"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -315,6 +315,7 @@ TEST_F(LPETaperStrokeTest, multi_MM_1_0_2)
        stroke_width="10"
        is_visible="true"
        id="path-effect855"
+       lpeversion="1"
        effect="taper_stroke" />
     <inkscape:path-effect
        effect="taper_stroke"
@@ -324,12 +325,14 @@ TEST_F(LPETaperStrokeTest, multi_MM_1_0_2)
        attach_start="0.27032183"
        end_offset="0.34276945"
        smoothing="0.5"
+       lpeversion="1"
        jointype="round"
        miter_limit="100" />
     <inkscape:path-effect
        effect="taper_stroke"
        id="path-effect12"
        is_visible="true"
+       lpeversion="1"
        stroke_width="0.86199427"
        attach_start="0.99999"
        end_offset="0.70967753"

@@ -129,6 +129,7 @@ TEST_F(LPEAttachPathTest, attachpath_MM_1_0_2)
      id="defs2">
     <inkscape:path-effect
        effect="bspline"
+       lpeversion="1"
        id="path-effect3912"
        is_visible="true"
        weight="33.333333"
@@ -140,6 +141,7 @@ TEST_F(LPEAttachPathTest, attachpath_MM_1_0_2)
     <inkscape:path-effect
        effect="attach_path"
        id="path-effect189"
+       lpeversion="1"
        startpath="#path167"
        startposition="5"
        startcurvestart="46.620067,194.49992 , 9.2718385,3.7460659"
@@ -151,6 +153,7 @@ TEST_F(LPEAttachPathTest, attachpath_MM_1_0_2)
     <inkscape:path-effect
        effect="bspline"
        id="path-effect175"
+       lpeversion="1"
        is_visible="true"
        weight="33.333333"
        steps="2"
@@ -162,6 +165,7 @@ TEST_F(LPEAttachPathTest, attachpath_MM_1_0_2)
        effect="bspline"
        id="path-effect169"
        is_visible="true"
+       lpeversion="1"
        weight="33.333333"
        steps="2"
        helper_size="0"
@@ -226,7 +230,7 @@ TEST_F(LPEAttachPathTest, attachpath_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="attach_path"
        id="path-effect189"
@@ -239,7 +243,7 @@ TEST_F(LPEAttachPathTest, attachpath_PX_1_0_2)
        endcurvestart="233.06373,121.8925 , 20.299505,0.14171958"
        endcurveend="171.12075,88.339648 , 20.599969,0.035953764"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect175"
@@ -250,7 +254,7 @@ TEST_F(LPEAttachPathTest, attachpath_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect169"
@@ -261,7 +265,7 @@ TEST_F(LPEAttachPathTest, attachpath_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g id="t" transform="scale(0.445)">
   <path

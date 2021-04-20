@@ -163,6 +163,7 @@ TEST_F(LPEBendpathTest, shape_1_02)
        prop_scale="1"
        scale_y_rel="false"
        vertical="false"
+       lpeversion="1"
        bendpath-nodetypes="cc" />
   </defs>
     <g id="t" transform="scale(0.445)">

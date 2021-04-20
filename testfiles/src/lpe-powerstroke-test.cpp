@@ -248,6 +248,7 @@ TEST_F(LPEPowerStrokeTest, multi_mm_1_02)
      id="defs2">
     <inkscape:path-effect
        effect="powerstroke"
+       lpeversion="1"
        id="path-effect46"
        is_visible="true"
        offset_points="0,5.2641926 | 3,4.9041115 | 1.6759239,1.0180989"
@@ -260,6 +261,7 @@ TEST_F(LPEPowerStrokeTest, multi_mm_1_02)
        end_linecap_type="zerowidth" />
     <inkscape:path-effect
        effect="powerstroke"
+       lpeversion="1"
        id="path-effect42"
        is_visible="true"
        offset_points="0,5.2641926 | 3,4.9041115 | 1.6759239,1.0180989"
@@ -272,6 +274,7 @@ TEST_F(LPEPowerStrokeTest, multi_mm_1_02)
        end_linecap_type="zerowidth" />
     <inkscape:path-effect
        effect="powerstroke"
+       lpeversion="1"
        id="path-effect38"
        is_visible="true"
        offset_points="0,5.2641926 | 3,4.9041115 | 1.6759239,1.0180989"
@@ -284,6 +287,7 @@ TEST_F(LPEPowerStrokeTest, multi_mm_1_02)
        end_linecap_type="zerowidth" />
     <inkscape:path-effect
        end_linecap_type="round"
+       lpeversion="1"
        miter_limit="4"
        linejoin_type="extrp_arc"
        start_linecap_type="zerowidth"
@@ -296,6 +300,7 @@ TEST_F(LPEPowerStrokeTest, multi_mm_1_02)
        effect="powerstroke" />
     <inkscape:path-effect
        end_linecap_type="zerowidth"
+       lpeversion="1"
        miter_limit="4"
        linejoin_type="extrp_arc"
        start_linecap_type="zerowidth"
@@ -308,6 +313,7 @@ TEST_F(LPEPowerStrokeTest, multi_mm_1_02)
        effect="powerstroke" />
     <inkscape:path-effect
        effect="powerstroke"
+       lpeversion="1"
        id="path-effect26"
        is_visible="true"
        offset_points="0,5.2641926 | 3,4.9041115 | 1.6759239,1.0180989"
@@ -321,6 +327,7 @@ TEST_F(LPEPowerStrokeTest, multi_mm_1_02)
     <inkscape:path-effect
        effect="powerstroke"
        id="path-effect18"
+       lpeversion="1"
        is_visible="true"
        offset_points="0,-3.3819627 | 0.70107238,1.0212489 | 7.7147489,1.8587929"
        sort_points="true"
@@ -427,7 +434,7 @@ TEST_F(LPEPowerStrokeTest, multi_px_1_02)
        linejoin_type="extrp_arc"
        miter_limit="4"
        end_linecap_type="zerowidth"
-       lpeversion="0"
+       lpeversion="1"
        scale_width="1" />
     <inkscape:path-effect
        effect="powerstroke"
@@ -441,7 +448,7 @@ TEST_F(LPEPowerStrokeTest, multi_px_1_02)
        linejoin_type="extrp_arc"
        miter_limit="4"
        end_linecap_type="zerowidth"
-       lpeversion="0"
+       lpeversion="1"
        scale_width="1" />
     <inkscape:path-effect
        effect="powerstroke"
@@ -455,7 +462,7 @@ TEST_F(LPEPowerStrokeTest, multi_px_1_02)
        linejoin_type="extrp_arc"
        miter_limit="4"
        end_linecap_type="zerowidth"
-       lpeversion="0"
+       lpeversion="1"
        scale_width="1" />
     <inkscape:path-effect
        end_linecap_type="round"
@@ -469,7 +476,7 @@ TEST_F(LPEPowerStrokeTest, multi_px_1_02)
        is_visible="true"
        id="path-effect34"
        effect="powerstroke"
-       lpeversion="0"
+       lpeversion="1"
        scale_width="1" />
     <inkscape:path-effect
        end_linecap_type="zerowidth"
@@ -483,7 +490,7 @@ TEST_F(LPEPowerStrokeTest, multi_px_1_02)
        is_visible="true"
        id="path-effect30"
        effect="powerstroke"
-       lpeversion="0"
+       lpeversion="1"
        scale_width="1" />
     <inkscape:path-effect
        effect="powerstroke"
@@ -497,7 +504,7 @@ TEST_F(LPEPowerStrokeTest, multi_px_1_02)
        linejoin_type="extrp_arc"
        miter_limit="4"
        end_linecap_type="zerowidth"
-       lpeversion="0"
+       lpeversion="1"
        scale_width="1" />
     <inkscape:path-effect
        effect="powerstroke"
@@ -511,7 +518,7 @@ TEST_F(LPEPowerStrokeTest, multi_px_1_02)
        linejoin_type="extrp_arc"
        miter_limit="4"
        end_linecap_type="zerowidth"
-       lpeversion="0"
+       lpeversion="1"
        scale_width="1" />
   </defs>
   <g

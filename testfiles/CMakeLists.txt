@@ -78,28 +78,27 @@ set(TEST_SOURCES
     xml-test
     sp-item-group-test
     #0.92 or lower LPEs
-    lpe-attachpath-test
-    lpe-boundingbox-test
-    lpe-bendpath-test
-    lpe-bool-test
+    lpe-attach-path-test
+    lpe-bounding-box-test
     lpe-bspline-test
-    lpe-cloneoriginal-test
+    lpe-bendpath-test
+    lpe-clone-original-test
     lpe-constructgrid-test
-    lpe-ellipse5pts-test
-    lpe-envelopedeformation-test
-    lpe-fillbetweenmany-test
-    lpe-fillbetweenstrokes-test
+    lpe-ellipse_5pts-test
+    lpe-envelope-test
+    lpe-fill-between-many-test
+    lpe-fill-between-strokes-test
     lpe-gears-test
-    lpe-interpolatesubpaths-test
-    lpe-interpolatepoints-test
+    lpe-interpolate-test
+    lpe-interpolate_points-test
     lpe-jointype-test
     lpe-knot-test
     lpe-lattice2-test
-    lpe-mirrorsymmetry-test
+    lpe-mirror_symmetry-test
     lpe-patternalongpath-test
-    lpe-perspectiveenvelope-test
+    lpe-perspective-envelope-test
     lpe-powerstroke-test
-    lpe-rotatecopies-test
+    lpe-copy_rotate-test
     #lpe-roughen-test
     #lpe-roughhatches-test
     lpe-ruler-test
@@ -109,18 +108,18 @@ set(TEST_SOURCES
     lpe-spiro-test
     lpe-stitchsubpaths-test
     lpe-taperstroke-test
-    lpe-transform2points-test
-    lpe-voncoch-test
+    lpe-transform_2pts-test
+    lpe-vonkoch-test
     #1.0 LPEs
-    lpe-measuresegments-test
-    lpe-filletchamfer-test
+    lpe-measure-segments-test
+    lpe-fillet-chamfer-test
     lpe-powerclip-test
     lpe-powermask-test
-    lpe-ellipsefrompoints-test
+    lpe-pts2ellipse-test
     lpe-offset-test
-    lpe-dashedstroke-test
+    lpe-dashed-stroke-test
     #1.1 LPEs
-    lpe-booleanoperation-test
+    lpe-bool-test
     lpe-slice-test)
 
 add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp lpespaths-test.h)

@@ -177,7 +177,7 @@ TEST_F(LPEStitchSubPathsTest, multi_PX_1_0_2)
        is_visible="true"
        id="path-effect25"
        effect="curvestitching"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="curvestitching"
        id="path-effect21"
@@ -190,7 +190,7 @@ TEST_F(LPEStitchSubPathsTest, multi_PX_1_0_2)
        strokepath="M 0.01098622,16.036003 190.51099,0.16100278 68.046706,127.161 248.71933,109.01815 127.01099,207.29196"
        prop_scale="1.13"
        scale_y_rel="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="curvestitching"
        id="path-effect12"
@@ -203,7 +203,7 @@ TEST_F(LPEStitchSubPathsTest, multi_PX_1_0_2)
        strokepath="M 0,0 H 1"
        prop_scale="1"
        scale_y_rel="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -300,6 +300,7 @@ TEST_F(LPEStitchSubPathsTest, multi_MM_1_0_2)
        count="37"
        is_visible="true"
        id="path-effect25"
+       lpeversion="1"
        effect="curvestitching" />
     <inkscape:path-effect
        effect="curvestitching"
@@ -312,6 +313,7 @@ TEST_F(LPEStitchSubPathsTest, multi_MM_1_0_2)
        endpoint_spacing_variation="0.8;1"
        strokepath="M 0.01098622,16.036003 190.51099,0.16100278 68.046706,127.161 248.71933,109.01815 127.01099,207.29196"
        prop_scale="1.13"
+       lpeversion="1"
        scale_y_rel="false" />
     <inkscape:path-effect
        effect="curvestitching"
@@ -324,6 +326,7 @@ TEST_F(LPEStitchSubPathsTest, multi_MM_1_0_2)
        endpoint_spacing_variation="0;1"
        strokepath="M 0,0 H 1"
        prop_scale="1"
+       lpeversion="1"
        scale_y_rel="false" />
   </defs>
   <sodipodi:namedview

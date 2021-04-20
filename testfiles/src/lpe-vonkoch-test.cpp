@@ -204,7 +204,7 @@ TEST_F(LPEVonCochTest, multi_PX_1_0_2)
        nbgenerations="2"
        drawall="true"
        maxComplexity="1000"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="vonkoch"
        id="path-effect821"
@@ -216,7 +216,7 @@ TEST_F(LPEVonCochTest, multi_PX_1_0_2)
        drawall="true"
        maxComplexity="1000"
        ref_path-nodetypes="cc"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="vonkoch"
        id="path-effect817"
@@ -228,7 +228,7 @@ TEST_F(LPEVonCochTest, multi_PX_1_0_2)
        drawall="true"
        maxComplexity="996"
        ref_path-nodetypes="cc"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -353,6 +353,7 @@ TEST_F(LPEVonCochTest, multi_MM_1_0_2)
        similar_only="false"
        nbgenerations="2"
        drawall="true"
+       lpeversion="1"
        maxComplexity="1000" />
     <inkscape:path-effect
        effect="vonkoch"
@@ -364,6 +365,7 @@ TEST_F(LPEVonCochTest, multi_MM_1_0_2)
        nbgenerations="2"
        drawall="true"
        maxComplexity="1000"
+       lpeversion="1"
        ref_path-nodetypes="cc" />
     <inkscape:path-effect
        effect="vonkoch"
@@ -375,6 +377,7 @@ TEST_F(LPEVonCochTest, multi_MM_1_0_2)
        nbgenerations="2"
        drawall="true"
        maxComplexity="996"
+       lpeversion="1"
        ref_path-nodetypes="cc" />
   </defs>
   <sodipodi:namedview

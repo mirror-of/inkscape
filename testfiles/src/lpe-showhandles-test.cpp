@@ -189,7 +189,7 @@ TEST_F(LPEShowHandlesTest, multi_PX_1_0_2)
        handles="true"
        original_path="true"
        scale_nodes_and_handles="10"
-       lpeversion="0"
+       lpeversion="1"
        show_center_node="false"
        original_d="false" />
     <inkscape:path-effect
@@ -200,7 +200,7 @@ TEST_F(LPEShowHandlesTest, multi_PX_1_0_2)
        handles="true"
        original_path="true"
        scale_nodes_and_handles="20"
-       lpeversion="0"
+       lpeversion="1"
        show_center_node="false"
        original_d="false" />
     <inkscape:path-effect
@@ -211,7 +211,7 @@ TEST_F(LPEShowHandlesTest, multi_PX_1_0_2)
        handles="true"
        original_path="true"
        scale_nodes_and_handles="10"
-       lpeversion="0"
+       lpeversion="1"
        show_center_node="false"
        original_d="false" />
   </defs>
@@ -335,6 +335,7 @@ TEST_F(LPEShowHandlesTest, multi_MM_1_0_2)
        nodes="true"
        handles="true"
        original_path="true"
+       lpeversion="1"
        scale_nodes_and_handles="10" />
     <inkscape:path-effect
        effect="show_handles"
@@ -343,6 +344,7 @@ TEST_F(LPEShowHandlesTest, multi_MM_1_0_2)
        nodes="true"
        handles="true"
        original_path="true"
+       lpeversion="1"
        scale_nodes_and_handles="20" />
     <inkscape:path-effect
        effect="show_handles"
@@ -350,6 +352,7 @@ TEST_F(LPEShowHandlesTest, multi_MM_1_0_2)
        is_visible="true"
        nodes="true"
        handles="true"
+       lpeversion="1"
        original_path="true"
        scale_nodes_and_handles="10" />
   </defs>

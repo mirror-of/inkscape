@@ -197,7 +197,7 @@ TEST_F(LPERulerTest, multi_PX_1_0_2)
        offset="0"
        mark_dir="left"
        border_marks="both"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="ruler"
        id="path-effect16"
@@ -211,7 +211,7 @@ TEST_F(LPERulerTest, multi_PX_1_0_2)
        offset="0"
        mark_dir="right"
        border_marks="end"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="ruler"
        id="path-effect12"
@@ -225,7 +225,7 @@ TEST_F(LPERulerTest, multi_PX_1_0_2)
        offset="0"
        mark_dir="left"
        border_marks="both"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -329,6 +329,7 @@ TEST_F(LPERulerTest, multi_MM_1_0_2)
     <inkscape:path-effect
        effect="ruler"
        id="path-effect21"
+       lpeversion="1"
        is_visible="true"
        unit="px"
        mark_distance="20"
@@ -343,6 +344,7 @@ TEST_F(LPERulerTest, multi_MM_1_0_2)
        effect="ruler"
        id="path-effect16"
        is_visible="true"
+       lpeversion="1"
        unit="px"
        mark_distance="10"
        mark_length="20"
@@ -361,6 +363,7 @@ TEST_F(LPERulerTest, multi_MM_1_0_2)
        mark_length="14"
        minor_mark_length="7"
        major_mark_steps="5"
+       lpeversion="1"
        shift="0"
        offset="0"
        mark_dir="left"

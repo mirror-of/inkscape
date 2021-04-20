@@ -124,7 +124,7 @@ TEST_F(LPEFillBetweenManyTest, multi_PX_1_0_2)
        close="true"
        autoreverse="true"
        method="bsplinespiro"
-       lpeversion="0"
+       lpeversion="1"
        applied="false" />
     <inkscape:path-effect
        effect="fill_between_many"
@@ -136,13 +136,13 @@ TEST_F(LPEFillBetweenManyTest, multi_PX_1_0_2)
        close="true"
        autoreverse="false"
        method="bsplinespiro"
-       lpeversion="0"
+       lpeversion="1"
        applied="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect130"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect126"
@@ -153,7 +153,7 @@ TEST_F(LPEFillBetweenManyTest, multi_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="fill_between_many"
        id="path-effect3734"
@@ -164,13 +164,13 @@ TEST_F(LPEFillBetweenManyTest, multi_PX_1_0_2)
        close="false"
        autoreverse="false"
        method="bsplinespiro"
-       lpeversion="0"
+       lpeversion="1"
        applied="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect3730"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect3726"
@@ -181,7 +181,7 @@ TEST_F(LPEFillBetweenManyTest, multi_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -260,7 +260,7 @@ TEST_F(LPEFillBetweenManyTest, multi_MM_1_0_2)
        close="true"
        autoreverse="true"
        method="bsplinespiro"
-       lpeversion="0"
+       lpeversion="1"
        applied="false" />
     <inkscape:path-effect
        effect="fill_between_many"
@@ -272,13 +272,13 @@ TEST_F(LPEFillBetweenManyTest, multi_MM_1_0_2)
        close="true"
        autoreverse="false"
        method="bsplinespiro"
-       lpeversion="0"
+       lpeversion="1"
        applied="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect130"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect126"
@@ -289,7 +289,7 @@ TEST_F(LPEFillBetweenManyTest, multi_MM_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="fill_between_many"
        id="path-effect3734"
@@ -300,13 +300,13 @@ TEST_F(LPEFillBetweenManyTest, multi_MM_1_0_2)
        close="false"
        autoreverse="false"
        method="bsplinespiro"
-       lpeversion="0"
+       lpeversion="1"
        applied="false" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect3730"
        is_visible="true"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect3726"
@@ -317,7 +317,7 @@ TEST_F(LPEFillBetweenManyTest, multi_MM_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"

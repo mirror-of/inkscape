@@ -86,6 +86,7 @@ TEST_F(LPEBoundingBoxTest, bbox_MM_1_0_2)
        effect="bounding_box"
        id="path-effect39"
        is_visible="true"
+       lpeversion="1"
        linkedpath="#rect41"
        visualbounds="false" />
   </defs>
@@ -133,7 +134,7 @@ TEST_F(LPEBoundingBoxTest, bbox_PX_1_0_2)
        is_visible="true"
        linkedpath="#rect41"
        visualbounds="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g id="t" transform="scale(0.445)">
   <path

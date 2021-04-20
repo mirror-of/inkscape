@@ -204,7 +204,7 @@ TEST_F(LPERoughHatchesTest, multi_PX_1_0_2)
        stroke_width_bottom="1"
        front_thickness="1.6"
        back_thickness="0.25"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="rough_hatches"
        id="path-effect3721"
@@ -229,7 +229,7 @@ TEST_F(LPERoughHatchesTest, multi_PX_1_0_2)
        stroke_width_bottom="1.6"
        front_thickness="1.7"
        back_thickness="0.65"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="rough_hatches"
        id="path-effect14"
@@ -254,7 +254,7 @@ TEST_F(LPERoughHatchesTest, multi_PX_1_0_2)
        stroke_width_bottom="1"
        front_thickness="1"
        back_thickness="0.25"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect12"
@@ -265,7 +265,7 @@ TEST_F(LPERoughHatchesTest, multi_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -347,7 +347,7 @@ TEST_F(LPERoughHatchesTest, multi_MM_1_0_2)
        stroke_width_bottom="1"
        front_thickness="1.6"
        back_thickness="0.25"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="rough_hatches"
        id="path-effect3721"
@@ -372,7 +372,7 @@ TEST_F(LPERoughHatchesTest, multi_MM_1_0_2)
        stroke_width_bottom="1.6"
        front_thickness="1.7"
        back_thickness="0.65"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="rough_hatches"
        id="path-effect14"
@@ -397,7 +397,7 @@ TEST_F(LPERoughHatchesTest, multi_MM_1_0_2)
        stroke_width_bottom="1"
        front_thickness="1"
        back_thickness="0.25"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect12"
@@ -408,7 +408,7 @@ TEST_F(LPERoughHatchesTest, multi_MM_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g
      inkscape:label="Layer 1"

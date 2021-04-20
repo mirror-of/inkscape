@@ -172,7 +172,7 @@ TEST_F(LPEBSplineTest, bspline_MM_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="bspline"
@@ -184,7 +184,7 @@ TEST_F(LPEBSplineTest, bspline_MM_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect121"
@@ -199,7 +199,7 @@ TEST_F(LPEBSplineTest, bspline_MM_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="bspline"
@@ -211,7 +211,7 @@ TEST_F(LPEBSplineTest, bspline_MM_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect115"
@@ -226,7 +226,7 @@ TEST_F(LPEBSplineTest, bspline_MM_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="bspline"
@@ -238,7 +238,7 @@ TEST_F(LPEBSplineTest, bspline_MM_1_0_2)
        apply_no_weight="false"
        apply_with_weight="false"
        only_selected="true"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g id="t" transform="scale(0.445)">
   <path
@@ -302,7 +302,7 @@ TEST_F(LPEBSplineTest, bspline_PX_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="bspline"
@@ -314,7 +314,7 @@ TEST_F(LPEBSplineTest, bspline_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect121"
@@ -329,7 +329,7 @@ TEST_F(LPEBSplineTest, bspline_PX_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="bspline"
@@ -341,7 +341,7 @@ TEST_F(LPEBSplineTest, bspline_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect115"
@@ -356,7 +356,7 @@ TEST_F(LPEBSplineTest, bspline_PX_1_0_2)
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0"
-       lpeversion="0"
+       lpeversion="1"
        hide_knot="false" />
     <inkscape:path-effect
        effect="bspline"
@@ -368,7 +368,7 @@ TEST_F(LPEBSplineTest, bspline_PX_1_0_2)
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false"
-       lpeversion="0" />
+       lpeversion="1" />
   </defs>
   <g id="t" transform="scale(0.445)">
   <path

@@ -446,6 +446,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point.param_setValue(point_c, true);
     previous_center = center_point;
+    //we bump to 1.1 because prevous 1.0.2 take no effect because a bug on 1.0.2
     lpeversion.param_setValue("1.1", true);
 }
 
@@ -583,7 +584,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             } else {
                                 tmp_pathvector.push_back(portion);
                             }
-                            if (lpeversion.param_getSVGValue() <= "1.0.1") {
+                            if (lpeversion.param_getSVGValue() < "1.1") {
                                 tmp_pathvector[0].close();
                             }
                         }
@@ -591,7 +592,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     }
                 }
             }
-            if (!split_open && lpeversion.param_getSVGValue() > "1.0.1" && original.closed()) {
+            if (!split_open && lpeversion.param_getSVGValue() >= "1.1" && original.closed()) {
                 for (auto &path : tmp_pathvector) {
                     if (!path.closed()) {
                         path.close();

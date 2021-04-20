@@ -214,7 +214,7 @@ TEST_F(LPETransform2PointsTest, multi_PX_1_0_2)
        end="-200.81584,243.9868"
        start="66.930747,552.16325"
        effect="transform_2pts"
-       lpeversion="0"
+       lpeversion="1"
        lock_length="false" />
     <inkscape:path-effect
        effect="transform_2pts"
@@ -233,7 +233,7 @@ TEST_F(LPETransform2PointsTest, multi_PX_1_0_2)
        flip_horizontal="false"
        lock_lenght="false"
        lock_angle="false"
-       lpeversion="0"
+       lpeversion="1"
        lock_length="false" />
     <inkscape:path-effect
        effect="transform_2pts"
@@ -252,7 +252,7 @@ TEST_F(LPETransform2PointsTest, multi_PX_1_0_2)
        flip_horizontal="false"
        lock_lenght="false"
        lock_angle="false"
-       lpeversion="0"
+       lpeversion="1"
        lock_length="false" />
   </defs>
   <sodipodi:namedview
@@ -371,6 +371,7 @@ TEST_F(LPETransform2PointsTest, multi_MM_1_0_2)
        id="path-effect826"
        end="-324.82341,73.95964"
        start="-204.884,212.00996"
+       lpeversion="1"
        effect="transform_2pts" />
     <inkscape:path-effect
        effect="transform_2pts"
@@ -388,6 +389,7 @@ TEST_F(LPETransform2PointsTest, multi_MM_1_0_2)
        flip_vertical="false"
        flip_horizontal="false"
        lock_lenght="false"
+       lpeversion="1"
        lock_angle="false" />
     <inkscape:path-effect
        effect="transform_2pts"
@@ -405,6 +407,7 @@ TEST_F(LPETransform2PointsTest, multi_MM_1_0_2)
        flip_vertical="false"
        flip_horizontal="false"
        lock_lenght="false"
+       lpeversion="1"
        lock_angle="false" />
   </defs>
   <sodipodi:namedview
