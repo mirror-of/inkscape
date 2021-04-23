@@ -7,6 +7,7 @@ set(xml_SRC
 	log-builder.cpp
 	node-fns.cpp
 	node.cpp
+	node-iterators.cpp
 	quote.cpp
 	repr.cpp
 	repr-css.cpp

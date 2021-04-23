@@ -21,8 +21,8 @@ TEST(XmlTest, nodeiter)
     ASSERT_TRUE(testdoc);
 
     auto count = 0;
-    for (auto child : *testdoc->root()->firstChild()) {
-        ASSERT_STREQ(child->name(), "svg:g");
+    for (auto &child : *testdoc->root()) {
+        ASSERT_STREQ(child.name(), "svg:g");
         count++;
     }
     ASSERT_EQ(count, 1);
@@ -32,19 +32,44 @@ TEST(XmlTest, nodeiter)
     ASSERT_TRUE(testdoc);
 
     count = 0;
-    for (auto child : *testdoc->root()->firstChild()) {
-        ASSERT_STREQ(child->name(), "svg:g");
+    for (auto &child : *testdoc->root()) {
+        ASSERT_STREQ(child.name(), "svg:g");
         count++;
     }
     ASSERT_EQ(count, 3);
 
-    testdoc =
-        std::shared_ptr<Inkscape::XML::Document>(sp_repr_read_buf("<svg><g/><g/><g><path/></g></svg>", SP_SVG_NS_URI));
+    testdoc = std::shared_ptr<Inkscape::XML::Document>(sp_repr_read_buf(R"""(
+<svg>
+  <g/>
+  <!-- comment -->
+  <g>
+    <circle/>
+  </g>
+  <g>
+    <circle id='a'/>
+    <path id='b'/>
+    <path id='c'/>
+  </g>
+</svg>
+)""", SP_SVG_NS_URI));
     ASSERT_TRUE(testdoc);
 
     auto path = std::list<std::string>{"svg:g", "svg:path"};
     auto found = testdoc->root()->findChildPath(path);
     ASSERT_NE(found, nullptr);
+    ASSERT_STREQ(found->attribute("id"), "b");
+
+    // no such second element
+    path = {"svg:g", "svg:g"};
+    ASSERT_EQ(testdoc->root()->findChildPath(path), nullptr);
+
+    // no such first element
+    path = {"svg:symbol", "svg:path"};
+    ASSERT_EQ(testdoc->root()->findChildPath(path), nullptr);
+
+    // root with no children
+    testdoc = std::shared_ptr<Inkscape::XML::Document>(sp_repr_read_buf("<svg/>", SP_SVG_NS_URI));
+    ASSERT_EQ(testdoc->root()->findChildPath(path), nullptr);
 }
 
 /*

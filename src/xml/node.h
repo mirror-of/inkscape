@@ -15,12 +15,12 @@
 
 #include <cassert>
 #include <vector>
-#include <glibmm/ustring.h>
 #include <list>
 #include <2geom/point.h>
 
 #include "gc-anchored.h"
 #include "inkgc/gc-alloc.h"
+#include "node-iterators.h"
 #include "util/const_char_ptr.h"
 #include "svg/svg-length.h"
 
@@ -555,43 +555,10 @@ public:
 
     /*@}*/
 
-    /**
-     * @brief A simple forward iterator class to make it so we can use stdlib algorithms
-     *
-     * What I really want is to see clearer code that looks a bit like this:
-     *
-     * for (auto child : *node->firstChild()) {}
-     *
-     * This cleans up the checks and makes it so there can be fewer errors.
-     */
-    class iterator
-    {
-    private:
-        Node *itnode;
+    using iterator = Inkscape::XML::NodeSiblingIterator;
 
-    public:
-        iterator(Node *innode)
-            : itnode(innode)
-        {}
-        iterator &operator++()
-        {
-            assert(itnode != nullptr);
-            itnode = itnode->next();
-            return *this;
-        }
-        Node *operator*() const { return itnode; }
-        bool operator==(const iterator &rhs) const { return this->itnode == rhs.itnode; }
-        bool operator!=(const iterator &rhs) const { return this->itnode != rhs.itnode; }
-        // iterator traits
-        using difference_type = Node *;
-        using value_type = Node *;
-        using pointer = const Node *;
-        using reference = const Node &;
-        using iterator_category = std::forward_iterator_tag;
-    };
-
-    /** @brief Helper to use the standard lib container functions */
-    iterator begin() { return iterator(this); }
+    /** @brief Iterator over children */
+    iterator begin() { return iterator(this->firstChild()); }
     /** @brief Helper to use the standard lib container functions */
     iterator end() { return iterator(nullptr); }
 
@@ -622,9 +589,9 @@ public:
             return this;
         }
 
-        for (auto child : *this->firstChild()) {
-            if (*child == *itr) {
-                auto found = child->findChildPath(std::next(itr), end);
+        for (auto &child : *this) {
+            if (child == *itr) {
+                auto found = child.findChildPath(std::next(itr), end);
                 if (found != nullptr) {
                     return found;
                 }

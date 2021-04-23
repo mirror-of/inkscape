@@ -14,21 +14,18 @@
 #define SEEN_INKSCAPE_XML_SP_REPR_ITERATORS_H
 
 #include "util/forward-pointer-iterator.h"
-#include "xml/node.h"
 
 namespace Inkscape {
 namespace XML {
 
+class Node;
+
 struct NodeSiblingIteratorStrategy {
-    static Node const *next(Node const *node) {
-        return ( node ? node->next() : nullptr );
-    }
+    static Node const *next(Node const *node);
 };
 
 struct NodeParentIteratorStrategy {
-    static Node const *next(Node const *node) {
-        return ( node ? node->parent() : nullptr );
-    }
+    static Node const *next(Node const *node);
 };
 
 typedef Inkscape::Util::ForwardPointerIterator<Node,
