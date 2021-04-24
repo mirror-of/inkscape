@@ -17,6 +17,7 @@
 #include <cairo/cairo.h>
 
 #include "canvas-item-rect.h"
+#include "display/cairo-utils.h"
 
 #include "color.h"    // SP_RGBA_x_F
 #include "inkscape.h" //
@@ -166,9 +167,12 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
         // buf->cr->set_operator(Cairo::OPERATOR_XOR); // Blend mode operators do not have C++ bindings!
         cairo_set_operator(buf->cr->cobj(), CAIRO_OPERATOR_DIFFERENCE);
     }
-
     using Geom::X;
     using Geom::Y;
+
+    cairo_pattern_t *pattern = _canvas->get_background_store()->cobj();
+    guint32 backcolor = ink_cairo_pattern_get_argb32(pattern);
+    EXTRACT_ARGB32(backcolor, ab,rb,gb,bb)
 
     // Draw shadow first. Shadow extends under rectangle to reduce aliasing effects.
     if (_shadow_width > 0 && !_dashed) {
@@ -199,11 +203,25 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
             buf->cr->move_to(corners[0][X] + shadow[X], corners[0][Y] + shadow[Y] );
             buf->cr->line_to(corners[1][X] + shadow[X], corners[1][Y] + shadow[Y] );
             buf->cr->line_to(corners[2][X] + shadow[X], corners[2][Y] + shadow[Y] );
-        }               
-
+        }
+        buf->cr->set_line_width(_shadow_width + 1);
+        // if the color to draw has alpha
+        // we paint down current cairo the background
+        if (SP_RGBA32_A_F(_shadow_color) < 1) {          
+            buf->cr->set_operator(Cairo::Operator::OPERATOR_DEST_OVER);
+            buf->cr->set_source_rgba(rb, gb, bb, ab);
+            buf->cr->set_line_width(1);
+            buf->cr->stroke_preserve();
+            // we maybe have painted the background, back to "normal" compositing
+            if (_inverted) {
+                // buf->cr->set_operator(Cairo::OPERATOR_XOR); // Blend mode operators do not have C++ bindings!
+                cairo_set_operator(buf->cr->cobj(), CAIRO_OPERATOR_DIFFERENCE);
+            } else {
+                buf->cr->set_operator(Cairo::Operator::OPERATOR_OVER);
+            }
+        }
         buf->cr->set_source_rgba(SP_RGBA32_R_F(_shadow_color), SP_RGBA32_G_F(_shadow_color),
                                  SP_RGBA32_B_F(_shadow_color), SP_RGBA32_A_F(_shadow_color));
-        buf->cr->set_line_width(_shadow_width + 1);
         buf->cr->stroke();
     }
     
@@ -225,23 +243,52 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
         buf->cr->line_to(rect_transformed[3][X], rect_transformed[3][Y] );
         buf->cr->close_path();
     }
-
-    // Draw border (stroke).
-    buf->cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
-                             SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
-    buf->cr->set_line_width(1);
-
     static std::valarray<double> dashes = {4.0, 4.0};
     if (_dashed) {
         buf->cr->set_dash(dashes, 0);
     }
+    // Draw border (stroke).
+    buf->cr->set_line_width(1);
+    // if the color to draw has alpha
+    // we paint down current cairo the background
+    if (SP_RGBA32_A_F(_stroke) < 1) {
+        buf->cr->set_operator(Cairo::Operator::OPERATOR_DEST_OVER);
+        buf->cr->set_source_rgba(rb, gb, bb, ab);
+        buf->cr->stroke_preserve();
+        // we maybe have painted the background, back to "normal" compositing
+        if (_inverted) {
+            // buf->cr->set_operator(Cairo::OPERATOR_XOR); // Blend mode operators do not have C++ bindings!
+            cairo_set_operator(buf->cr->cobj(), CAIRO_OPERATOR_DIFFERENCE);
+        } else {
+            buf->cr->set_operator(Cairo::Operator::OPERATOR_OVER);
+        }
+    }
+    // we maybe have painted the background, back to "normal" compositing
+    
+    buf->cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
+                             SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
     buf->cr->stroke_preserve();
 
     // Highlight the border by drawing it in _shadow_color.
     if (_shadow_width == 1 && _dashed) {
+        buf->cr->set_dash(dashes, 4); // Dash offset by dash length.
+        // if the color to draw has alpha
+        // we paint down current cairo the background
+        if (SP_RGBA32_A_F(_shadow_color) < 1) {
+            buf->cr->set_operator(Cairo::Operator::OPERATOR_DEST_OVER);
+            buf->cr->set_source_rgba(rb, gb, bb, ab);
+            buf->cr->stroke_preserve();
+            // we maybe have painted the background, back to "normal" compositing
+            if (_inverted) {
+                // buf->cr->set_operator(Cairo::OPERATOR_XOR); // Blend mode operators do not have C++ bindings!
+                cairo_set_operator(buf->cr->cobj(), CAIRO_OPERATOR_DIFFERENCE);
+            } else {
+                buf->cr->set_operator(Cairo::Operator::OPERATOR_OVER);
+            }
+        }
+        
         buf->cr->set_source_rgba(SP_RGBA32_R_F(_shadow_color), SP_RGBA32_G_F(_shadow_color),
                                  SP_RGBA32_B_F(_shadow_color), SP_RGBA32_A_F(_shadow_color));
-        buf->cr->set_dash(dashes, 4); // Dash offset by dash length.
         buf->cr->stroke_preserve();
     }
 
