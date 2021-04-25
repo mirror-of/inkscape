@@ -599,20 +599,13 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             double size = Geom::L2(Geom::bounds_fast(ret_closed)->dimensions());
             size /= sp_lpe_item->i2doc_affine().descrim();
             ret_closed = sp_pathvector_boolop(outline, ret_closed, bool_op_diff, fill_nonZero, fill_nonZero);
-            if (lpeversion.param_getSVGValue() >= "1.1") {
-                ret_closed = sp_simplify_pathvector(ret_closed, 0.005 * size);
-            } else {
+            if (!liveknot) {
                 ret_closed = sp_simplify_pathvector(ret_closed, 0.0003 * size);
             }
         }
     }
     ret_closed.insert(ret_closed.begin(), ret_open.begin(), ret_open.end());
     return ret_closed;
-}
-
-void LPEOffset::doOnApply (SPLPEItem const* lpeitem) 
-{
-    lpeversion.param_setValue("1.1", true);
 }
 
 void LPEOffset::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
