@@ -41,6 +41,7 @@ public:
     LPEOffset(LivePathEffectObject *lpeobject);
     ~LPEOffset() override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void doOnApply (SPLPEItem const* lpeitem) override;
     void doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
