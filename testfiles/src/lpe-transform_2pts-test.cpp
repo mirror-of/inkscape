@@ -59,13 +59,13 @@ TEST_F(LPETransform2PointsTest, path_0_92_5)
        first_knot="1"
        is_visible="true"
        id="path-effect826"
-       end="-325.79933,68.173992"
-       start="-173.86904,241.81548"
+       end="-324.28743,-27.076008"
+       start="-172.35714,146.56548"
        effect="transform_2pts" />
     <inkscape:path-effect
        effect="transform_2pts"
-       start="475.16408,589.28273"
-       end="214.65926,67.760856"
+       start="476.67598,494.03273"
+       end="216.17116,-27.489144"
        id="path-effect822"
        is_visible="true"
        first_knot="1"
@@ -81,8 +81,8 @@ TEST_F(LPETransform2PointsTest, path_0_92_5)
        lock_angle="false" />
     <inkscape:path-effect
        effect="transform_2pts"
-       start="-104.79822,55.675331"
-       end="73.100292,-14.62824"
+       start="-83.631556,-14.62824"
+       end="130.55267,-29.747288"
        id="path-effect817"
        is_visible="true"
        first_knot="1"
@@ -105,8 +105,8 @@ TEST_F(LPETransform2PointsTest, path_0_92_5)
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.175"
-     inkscape:cx="-1031.0035"
-     inkscape:cy="780.58029"
+     inkscape:cx="-1045.2892"
+     inkscape:cy="71.886311"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -123,7 +123,7 @@ TEST_F(LPETransform2PointsTest, path_0_92_5)
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -145,16 +145,17 @@ TEST_F(LPETransform2PointsTest, path_0_92_5)
        inkscape:flatsided="false"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="m 35.588658,105.58387 -60.190505,-33.025363 -61.328425,30.860913 12.8091,-67.449967 -48.301998,-48.790251 68.10696,-8.661009 31.476147,-61.014951 L 7.4432555,-20.399584 75.198586,-9.3186463 25.189708,37.720526 Z"
+       d="M 49.766767,86.246605 -3.497199,30.551163 -79.573932,42.854149 -43.06389,-25.013731 -78.273729,-93.565172 -2.4453155,-79.814386 51.870541,-134.48449 62.225035,-58.11816 131.00392,-23.354703 61.574935,10.0915 Z"
        inkscape:transform-center-x="-6.0736555"
        inkscape:transform-center-y="2.0919967"
-       inkscape:path-effect="#path-effect817" />
+       inkscape:path-effect="#path-effect817"
+       transform="translate(1.5119048,-95.25)" />
     <path
        inkscape:connector-curvature="0"
-       inkscape:original-d="m -173.86904,241.81548 -63.64938,-21.20931 -53.55552,40.40896 0.50251,-67.08819 -54.98077,-38.44727 63.95994,-20.25348 19.57554,-64.170676 39.02691,54.570856 67.07912,-1.21239 -39.83999,53.98011 z"
+       inkscape:original-d="m -172.35714,146.56548 -63.64938,-21.20931 -53.55552,40.40896 0.50251,-67.08819 -54.98077,-38.44727 63.95994,-20.25348 19.57554,-64.170676 39.02691,54.570856 67.07912,-1.21239 -39.83999,53.98011 z"
        inkscape:path-effect="#path-effect826"
        id="path824"
-       d="m -173.86904,241.81548 -91.28473,-27.84133 -29.25591,65.3705 -54.17894,-102.29662 -95.28131,-54.72799 57.80028,-35.38147 -29.63117,-99.194256 89.90149,80.429678 76.96824,-6.577433 -2.23812,85.089721 z"
+       d="m -172.35714,146.56548 -91.28473,-27.84133 -29.25591,65.3705 -54.17894,-102.29662 -95.28131,-54.727991 57.80028,-35.3814693 -29.63117,-99.1942597 89.90149,80.429682 76.96824,-6.577433 -2.23812,85.089724 z"
        inkscape:transform-center-y="-4.7206335"
        inkscape:transform-center-x="5.0469249"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none" />
@@ -162,10 +163,10 @@ TEST_F(LPETransform2PointsTest, path_0_92_5)
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
        inkscape:transform-center-x="5.0469249"
        inkscape:transform-center-y="-4.7206335"
-       d="M 475.16408,589.28273 282.94832,522.38461 118.86922,642.8018 123.09518,439.3211 -42.131606,320.48357 152.69591,261.62368 214.65926,67.760856 330.84334,234.86417 534.36558,233.88789 411.34375,396.02325 Z"
+       d="M 476.67598,494.03273 284.46022,427.1346 120.38112,547.55179 124.60708,344.0711 -40.619703,225.23357 154.20781,166.37368 216.17116,-27.489144 332.35524,139.61417 535.87748,138.63789 412.85565,300.77325 Z"
        id="path819"
        inkscape:path-effect="#path-effect822"
-       inkscape:original-d="m 475.16408,589.28273 -63.64938,-21.20931 -53.55552,40.40896 0.50251,-67.08819 -54.98077,-38.44727 63.95994,-20.25348 19.57554,-64.17068 39.02691,54.57086 67.07912,-1.21239 -39.83999,53.98011 z"
+       inkscape:original-d="m 476.67598,494.03273 -63.64938,-21.20931 -53.55552,40.40896 0.50251,-67.08819 -54.98077,-38.44727 63.95994,-20.25348 19.57554,-64.17068 39.02691,54.57086 67.07912,-1.21239 -39.83999,53.98011 z"
        inkscape:connector-curvature="0" />
   </g>
 </svg>

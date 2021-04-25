@@ -106,14 +106,13 @@ class LPESPathsTest : public ::testing::Test {
          }
          SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(doc->getRoot());
          sp_lpe_item_update_patheffect (lpeitem, false, true);
+         // we need to double update because clippaths or mask
+         if (doc->getObjectsByElement("clipPath").size() || doc->getObjectsByElement("mask").size()) {
+            sp_lpe_item_update_patheffect (lpeitem, false, true);
+         }
          if (lpeitem->getAttribute("inkscape:test-threshold")) {
             precission = helperfns_read_number(lpeitem->getAttribute("inkscape:test-threshold"));
          }
-         if (doc->getObjectsByElement("clipPath").size() || doc->getObjectsByElement("mask").size()) {
-            // we need to double update because clippaths
-            sp_lpe_item_update_patheffect (lpeitem, false, true);
-         }
-
          size_t index = 0;
          for (auto id : ids) {
             SPObject *obj = doc->getObjectById(id);

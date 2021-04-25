@@ -33,6 +33,7 @@ TEST_F(LPELattice2Test, path_0_92_5)
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
+   inkscape:test-threshold="0.1"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
   <defs
      id="defs2">

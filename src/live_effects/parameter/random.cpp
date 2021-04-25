@@ -25,7 +25,7 @@ namespace LivePathEffect {
 
 RandomParam::RandomParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, gdouble default_value, long default_seed)
+                      Effect* effect, gdouble default_value, long default_seed, bool randomsign)
     : Parameter(label, tip, key, wr, effect)
 {
     defvalue = default_value;
@@ -37,6 +37,7 @@ RandomParam::RandomParam( const Glib::ustring& label, const Glib::ustring& tip,
     defseed = default_seed;
     startseed = defseed;
     seed = startseed;
+    _randomsign = randomsign;
 }
 
 RandomParam::~RandomParam()
@@ -165,7 +166,11 @@ bool RandomParam::on_button_release(GdkEventButton* button_event) {
 
 RandomParam::operator gdouble()
 {
-    return rand() * value;
+    if (_randomsign) {
+        return (rand() * value) - (rand() * value);
+    } else {
+        return rand() * value;
+    }
 };
 
 /* RNG stolen from /display/nr-filter-turbulence.cpp */

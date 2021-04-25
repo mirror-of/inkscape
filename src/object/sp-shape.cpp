@@ -462,8 +462,10 @@ void SPShape::modified(unsigned int flags) {
         }
     }
 
-    if (!_curve) {
+    if (flags != 29 && flags != 253 && !_curve) {
         sp_lpe_item_update_patheffect(this, true, false);
+    } else if (!_curve) {
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 

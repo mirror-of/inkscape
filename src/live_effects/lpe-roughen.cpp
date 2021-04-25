@@ -123,7 +123,12 @@ void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
     displace_x.resetRandomizer();
     displace_y.resetRandomizer();
     global_randomize.resetRandomizer();
-    srand(1);
+    if (lpeversion.param_getSVGValue() < "1.1") {
+        srand(1);
+    } else {
+        displace_x.param_set_randomsign(true);
+        displace_y.param_set_randomsign(true);
+    }
 }
 
 Gtk::Widget *LPERoughen::newWidget()
@@ -190,8 +195,10 @@ Gtk::Widget *LPERoughen::newWidget()
 
 double LPERoughen::sign(double random_number)
 {
-    if (rand() % 100 < 49) {
-        random_number *= -1.;
+    if (lpeversion.param_getSVGValue() < "1.1") {
+        if (rand() % 100 < 49) {
+            random_number *= -1.;
+        }
     }
     return random_number;
 }

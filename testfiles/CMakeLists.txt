@@ -99,8 +99,8 @@ set(TEST_SOURCES
     lpe-perspective-envelope-test
     lpe-powerstroke-test
     lpe-copy_rotate-test
-    #lpe-roughen-test
-    #lpe-roughhatches-test
+    lpe-roughen-test
+    lpe-roughhatches-test
     lpe-ruler-test
     lpe-showhandles-test
     lpe-simplify-test
