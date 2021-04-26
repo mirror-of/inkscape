@@ -793,45 +793,52 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     assert(_backing_store && _outline_store);
     assert(_drawing);
 
+    // This is the only place the widget content is drawn!
+
+    // Blit background (e.g. checkerboard).
     cr->save();
     cr->set_operator(Cairo::OPERATOR_SOURCE);
     cr->set_source(_background);
     cr->paint();
     cr->restore();
+
     // Blit from the backing store, without regard for the clean region.
-    // This is the only place the widget content is drawn!
+    cr->set_source(_backing_store, 0, 0);
+    cr->paint();
+
+    // Draw overlay if required.
     if (_drawing->outlineOverlay()) {
-        // Copy old background unshifted (reduces sensation of flicker while waiting for rendering newly exposed area).
-        //cr->set_operator(Cairo::Operator::OPERATOR_OVER);
+
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         double outline_overlay_opacity = 1 - (prefs->getIntLimited("/options/rendering/outline-overlay-opacity", 50, 1, 100) / 100.0);
-        cr->set_source(_backing_store, 0, 0);
-        cr->paint();
-        cr->save();
+
+        // Partially obscure drawing by painting semi-transparent white.
         cr->set_source_rgb(255,255,255);
         cr->paint_with_alpha(outline_overlay_opacity);
-        cr->restore();
-        cr->save();
+
+        // Overlay outline
         cr->set_source(_outline_store, 0, 0);
         cr->paint();
-        cr->restore();
-    } else {
-        cr->set_source(_backing_store, 0, 0);
-        cr->paint();
     }
+
+    // Draw split if required.
     if (_split_mode != Inkscape::SplitMode::NORMAL) {
+
+        // Move split position to center if not in canvas.
         auto const rect = Geom::Rect(0, 0, _width, _height);
         if (!rect.contains(_split_position)) {
             _split_position = rect.midpoint();
         }
 
-        // Add clipping path and blit outline store.
+        // Add clipping path and blit background.
         cr->save();
         cr->set_operator(Cairo::OPERATOR_SOURCE);
         cr->set_source(_background);
         add_clippath(cr);
         cr->paint();
         cr->restore();
+
+        // Add clipping path and blit outline store.
         cr->save();
         cr->set_source(_outline_store, 0, 0);
         add_clippath(cr);
