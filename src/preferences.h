@@ -145,13 +145,6 @@ public:
         inline bool getBool(bool def=false) const;
 
         /**
-         * Interpret the preference as an point.
-         *
-         * @param def Default value if the preference is not set.
-         */
-        inline Geom::Point getPoint(Geom::Point def=Geom::Point()) const;
-
-        /**
          * Interpret the preference as an integer.
          *
          * @param def Default value if the preference is not set.
@@ -254,7 +247,6 @@ public:
         void const *_value = nullptr;
 
         mutable bool value_bool = false;
-        mutable Geom::Point value_point;
         mutable int value_int = 0;
         mutable unsigned int value_uint = 0;
         mutable double value_double = 0.;
@@ -355,7 +347,10 @@ public:
      * @param def The default value to return if the preference is not set.
      */
     Geom::Point getPoint(Glib::ustring const &pref_path, Geom::Point def=Geom::Point()) {
-        return getEntry(pref_path).getPoint(def);
+        return Geom::Point(
+            getEntry(pref_path + "/x").getDouble(def[Geom::X]),
+            getEntry(pref_path + "/y").getDouble(def[Geom::Y])
+        );
     }
 
     /**
@@ -599,7 +594,6 @@ protected:
      * that v._value is not NULL
      */
     bool _extractBool(Entry const &v);
-    Geom::Point _extractPoint(Entry const &v);
     int _extractInt(Entry const &v);
     unsigned int _extractUInt(Entry const &v);
     double _extractDouble(Entry const &v);
@@ -661,15 +655,6 @@ inline bool Preferences::Entry::getBool(bool def) const
         return def;
     } else {
         return Inkscape::Preferences::get()->_extractBool(*this);
-    }
-}
-
-inline Geom::Point Preferences::Entry::getPoint(Geom::Point def) const
-{
-    if (!this->isValid()) {
-        return def;
-    } else {
-        return Inkscape::Preferences::get()->_extractPoint(*this);
     }
 }
 
