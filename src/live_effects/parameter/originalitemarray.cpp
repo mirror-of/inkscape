@@ -105,6 +105,7 @@ OriginalItemArrayParam::initui() {
         _tree->set_search_column(_model->_colLabel);
         
         //quick little hack -- newer versions of gtk gave the item zero space allotment
+        _scroller = manage(new Gtk::ScrolledWindow());
         _scroller->set_size_request(-1, 120);
 
         _scroller->add(*_tree);
