@@ -91,7 +91,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     hide_back(_("Hide line under label"), _("Hide the dimension line where the label overlaps it"), "hide_back", &wr, this, true),
     hide_arrows(_("Hide arrows"), _("Don't show any arrows"), "hide_arrows", &wr, this, false),
     // active for 1.1
-    smallx100(_("Multiply values < 1"), _("Multiply values smaller than 1 by 100 and leave out the unit"), "smallx100", &wr, this, false),
+    smallx100(_("Multiply values &lt; 1"), _("Multiply values smaller than 1 by 100 and leave out the unit"), "smallx100", &wr, this, false),
     linked_items(_("Linked objects:"), _("Objects whose nodes are projected onto the path and generate new measurements"), "linked_items", &wr, this),
     distance_projection(_("Distance"), _("Distance of the dimension lines from the outermost node"), "distance_projection", &wr, this, 20.0),
     angle_projection(_("Angle of projection"), _("Angle of projection in 90° steps"), "angle_projection", &wr, this, 0.0),
@@ -263,19 +263,7 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "hide_arrows"     )
                 {
                     vbox2->pack_start(*widg, false, true, 2);
-                } else if (//TOD: unhack for 1.1
-                           param->param_key == "smallx100" )
-                {
-                    Glib::ustring widgl =  param->param_label;
-                    size_t pos = widgl.find("<");
-                    if (pos != std::string::npos ) {
-                        widgl.erase(pos, 1);
-                        widgl.insert(pos, "&lt;");
-                    }
-                    param->param_label = widgl.c_str();
-                    vbox2->pack_start(*widg, false, true, 2);
-                } else if (param->param_key == "helpdata")
-                {
+                } else if (param->param_key == "helpdata") {
                     vbox3->pack_start(*widg, false, true, 2);
                 } else {
                     vbox0->pack_start(*widg, false, true, 2);
