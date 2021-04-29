@@ -53,7 +53,7 @@
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
 
-#include "helper/png-write.h"
+#include "helper/pixbuf-ops.h"
 
 #include "io/resource.h"
 
@@ -3684,7 +3684,8 @@ void ObjectSet::createBitmapCopy()
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to make a bitmap copy."));
         return;
     }
-    if(desktop()){
+
+    if (desktop()) {
         desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Rendering bitmap..."));
         // set "busy" cursor
         desktop()->setWaitingCursor();
@@ -3703,32 +3704,7 @@ void ObjectSet::createBitmapCopy()
     std::vector<SPItem*> items_(items().begin(), items().end());
 
     // Sort items so that the topmost comes last
-    sort(items_.begin(),items_.end(),sp_item_repr_compare_position_bool);
-
-    // Generate a random value from the current time (you may create bitmap from the same object(s)
-    // multiple times, and this is done so that they don't clash)
-    guint current = guint(g_get_monotonic_time() % 1024);
-    // Create the filename.
-    gchar *const basename = g_strdup_printf("%s-%s-%u.png",
-                                            doc->getDocumentName(),
-                                            items_[0]->getRepr()->attribute("id"),
-                                            current);
-    // Imagemagick is known not to handle spaces in filenames, so we replace anything but letters,
-    // digits, and a few other chars, with "_"
-    g_strcanon(basename, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.=+~$#@^&!?", '_');
-
-    // Build the complete path by adding document base dir, if set, otherwise home dir
-    gchar *directory = nullptr;
-    if ( doc->getDocumentFilename() ) {
-        directory = g_path_get_dirname( doc->getDocumentFilename() );
-    }
-    if (directory == nullptr) {
-        directory = Inkscape::IO::Resource::homedir_path(nullptr);
-    }
-    gchar *filepath = g_build_filename(directory, basename, NULL);
-    g_free(directory);
-
-    //g_print("%s\n", filepath);
+    sort(items_.begin(), items_.end(), sp_item_repr_compare_position_bool);
 
     // Remember parent and z-order of the topmost one
     gint pos = items_.back()->getRepr()->position();
@@ -3765,91 +3741,25 @@ void ObjectSet::createBitmapCopy()
         }
     }
 
-    // The width and height of the bitmap in pixels
-    unsigned width = (unsigned) floor(bbox->width() * Inkscape::Util::Quantity::convert(res, "px", "in"));
-    unsigned height =(unsigned) floor(bbox->height() * Inkscape::Util::Quantity::convert(res, "px", "in"));
-
-    // Find out if we have to run an external filter
-    gchar const *run = nullptr;
-    Glib::ustring filter = prefs->getString("/options/createbitmap/filter");
-    if (!filter.empty()) {
-        // filter command is given;
-        // see if we have a parameter to pass to it
-        Glib::ustring param1 = prefs->getString("/options/createbitmap/filter_param1");
-        if (!param1.empty()) {
-            if (param1[param1.length() - 1] == '%') {
-                // if the param string ends with %, interpret it as a percentage of the image's max dimension
-                gchar p1[256];
-                g_ascii_dtostr(p1, 256, ceil(g_ascii_strtod(param1.data(), nullptr) * MAX(width, height) / 100));
-                // the first param is always the image filename, the second is param1
-                run = g_strdup_printf("%s \"%s\" %s", filter.data(), filepath, p1);
-            } else {
-                // otherwise pass the param1 unchanged
-                run = g_strdup_printf("%s \"%s\" %s", filter.data(), filepath, param1.data());
-            }
-        } else {
-            // run without extra parameter
-            run = g_strdup_printf("%s \"%s\"", filter.data(), filepath);
-        }
-    }
-
-    // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
-    Geom::Affine eek;
-    {
-        SPItem *parentItem = dynamic_cast<SPItem *>(parent_object);
-        if (parentItem) {
-            eek = parentItem->i2doc_affine();
-        } else {
-            g_assert_not_reached();
-        }
-    }
-    Geom::Affine t;
-
-    double shift_x = bbox->left();
-    double shift_y = bbox->top();
     if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 96 dpi, snap it to pixel grid
-        shift_x = round(shift_x);
-        shift_y = round(shift_y);
-    }
-    t = Geom::Translate(shift_x, shift_y) * eek.inverse();
-
-    // TODO: avoid roundtrip via file
-    // Do the export
-    sp_export_png_file(doc, filepath,
-                       bbox->min()[Geom::X], bbox->min()[Geom::Y],
-                       bbox->max()[Geom::X], bbox->max()[Geom::Y],
-                       width, height, res, res,
-                       (guint32) 0xffffff00,
-                       nullptr, nullptr,
-                       true,  /*bool force_overwrite,*/
-                       items_);
-
-    // Run filter, if any
-    if (run) {
-        g_print("Running external filter: %s\n", run);
-        int result = system(run);
-
-        if(result == -1)
-            g_warning("Could not run external filter: %s\n", run);
+        bbox = bbox->roundOutwards();
     }
 
-    // Import the image back
-    Inkscape::Pixbuf *pb = Inkscape::Pixbuf::create_from_file(filepath);
+    Inkscape::Pixbuf *pb = sp_generate_internal_bitmap(doc, *bbox, res, items_);
+
     if (pb) {
         // Create the repr for the image
-        // TODO: avoid unnecessary roundtrip between data URI and decoded pixbuf
         Inkscape::XML::Node * repr = xml_doc->createElement("svg:image");
         sp_embed_image(repr, pb);
-        if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 96 dpi, snap it to pixel grid
-            sp_repr_set_svg_double(repr, "width", width);
-            sp_repr_set_svg_double(repr, "height", height);
-        } else {
-            sp_repr_set_svg_double(repr, "width", bbox->width());
-            sp_repr_set_svg_double(repr, "height", bbox->height());
-        }
+        sp_repr_set_svg_double(repr, "width", bbox->width());
+        sp_repr_set_svg_double(repr, "height", bbox->height());
+
+        // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
+        SPItem *parentItem = dynamic_cast<SPItem *>(parent_object);
+        Geom::Affine affine = Geom::Translate(bbox->left(), bbox->top()) * parentItem->i2doc_affine().inverse();
 
         // Write transform
-        repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(t));
+        repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(affine));
 
         // add the new repr to the parent
         parent->addChildAtPos(repr, pos + 1);
@@ -3866,11 +3776,10 @@ void ObjectSet::createBitmapCopy()
         DocumentUndo::done(doc, SP_VERB_SELECTION_CREATE_BITMAP,
                            _("Create bitmap"));
     }
-    if(desktop())
-        desktop()->clearWaitingCursor();
 
-    g_free(basename);
-    g_free(filepath);
+    if(desktop()) {
+        desktop()->clearWaitingCursor();
+    }
 }
 
 /* Creates a mask or clipPath from selection.

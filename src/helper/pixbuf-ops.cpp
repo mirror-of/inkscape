@@ -31,26 +31,30 @@
 
 // TODO look for copy-n-paste duplication of this function:
 /**
- * Hide all items except @item, recursively, skipping groups and defs.
+ * Hide all items that are not in list, recursively, skipping groups and defs.
  */
-static void hide_other_items_recursively(SPObject *o, SPItem *i, unsigned dkey)
+static void hide_other_items_recursively(SPObject *object, const std::vector<SPItem*> &items, unsigned dkey)
 {
-    SPItem *item = dynamic_cast<SPItem *>(o);
-    if ( item
-         && !dynamic_cast<SPDefs *>(item)
-         && !dynamic_cast<SPRoot *>(item)
-         && !dynamic_cast<SPGroup *>(item)
-         && !dynamic_cast<SPUse *>(item)
-         && (i != o) )
-    {
+    SPItem *item = dynamic_cast<SPItem *>(object);
+    if (!item) {
+        // <defs>, <metadata>, etc.
+        return;
+    }
+
+    if (std::find (items.begin(), items.end(), item) != items.end()) {
+        // It's in our list, don't hide!
+        return;
+    }
+
+    if ( !dynamic_cast<SPRoot  *>(item) &&
+         !dynamic_cast<SPGroup *>(item) &&
+         !dynamic_cast<SPUse   *>(item) ) {
+        // Hide if not container or def.
         item->invoke_hide(dkey);
     }
 
-    // recurse
-    if (i != o) {
-        for (auto& child: o->children) {
-            hide_other_items_recursively(&child, i, dkey);
-        }
+    for (auto& child: object->children) {
+        hide_other_items_recursively(&child, items, dkey);
     }
 }
 
@@ -58,80 +62,87 @@ static void hide_other_items_recursively(SPObject *o, SPItem *i, unsigned dkey)
 /**
     generates a bitmap from given items
     the bitmap is stored in RAM and not written to file
-    @param x0       area left in document coordinates
-    @param y0       area top in document coordinates
-    @param x1       area right in document coordinates
-    @param y1       area bottom in document coordinates
-    @param width    bitmap width in pixels
-    @param height   bitmap height in pixels
-    @param xdpi
-    @param ydpi
-    @return the created GdkPixbuf structure or NULL if no memory is allocable
+    @param document Inkscape document.
+    @param area     Export area in document units.
+    @param dpi      Resolution.
+    @param items    Vector of pointers to SPItems to export. Export all items if empty.
+    @param opaque   Set items opacity to 1 (used by Cairo renderer for filtered objects rendered as bitmaps).
+    @return The created GdkPixbuf structure or nullptr if rendering failed.
 */
-Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*filename*/,
-                                       double x0, double y0, double x1, double y1,
-                                       unsigned width, unsigned height, double xdpi, double ydpi,
-                                       unsigned long /*bgcolor*/,
-                                       SPItem *item_only)
-
+Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *document,
+                                              Geom::Rect const &area,
+                                              double dpi,
+                                              std::vector<SPItem *> items,
+                                              bool opaque)
 {
-    if (width == 0 || height == 0) return nullptr;
+    // Geometry
+    if (area.hasZeroArea()) {
+        return nullptr;
+    }
 
-    Inkscape::Pixbuf *inkpb = nullptr;
-    /* Create new drawing for offscreen rendering*/
-    Inkscape::Drawing drawing;
-    drawing.setExact(true);
+    Geom::Point origin = area.min();
+    double scale_factor = Inkscape::Util::Quantity::convert(dpi, "px", "in");
+    Geom::Affine affine = Geom::Translate(-origin) * Geom::Scale (scale_factor, scale_factor);
+
+    int width  = std::ceil(scale_factor * area.width());
+    int height = std::ceil(scale_factor * area.height());
+
+    // Document
+    document->ensureUpToDate();
     unsigned dkey = SPItem::display_key_new(1);
 
-    doc->ensureUpToDate();
-
-    Geom::Rect screen=Geom::Rect(Geom::Point(x0,y0), Geom::Point(x1, y1));
-
-    Geom::Point origin = screen.min();
-
-    Geom::Scale scale(Inkscape::Util::Quantity::convert(xdpi, "px", "in"), Inkscape::Util::Quantity::convert(ydpi, "px", "in"));
-    Geom::Affine affine = scale * Geom::Translate(-origin * scale);
+    // Drawing
+    Inkscape::Drawing drawing; // New drawing for offscreen rendering.
+    drawing.setExact(true); // Maximum quality for blurs.
 
     /* Create ArenaItems and set transform */
-    Inkscape::DrawingItem *root = doc->getRoot()->invoke_show( drawing, dkey, SP_ITEM_SHOW_DISPLAY);
+    Inkscape::DrawingItem *root = document->getRoot()->invoke_show( drawing, dkey, SP_ITEM_SHOW_DISPLAY);
     root->setTransform(affine);
     drawing.setRoot(root);
 
-    // We show all and then hide all items we don't want, instead of showing only requested items,
-    // because that would not work if the shown item references something in defs
-    if (item_only) {
-        hide_other_items_recursively(doc->getRoot(), item_only, dkey);
-        // TODO: The following line forces 100% opacity as required by sp_asbitmap_render() in cairo-renderer.cpp
-        //       Make it conditional if 'item_only' is ever used by other callers which need to retain opacity
-        if (item_only->get_arenaitem(dkey)) {
-            item_only->get_arenaitem(dkey)->setOpacity(1.0);
-        } else {
-            g_warning("sp_generate_internal_bitmap: trying to set opacity of non-existing arenaitem");
+    // Hide all items we don't want, instead of showing only requested items,
+    // because that would not work if the shown item references something in defs.
+    if (!items.empty()) {
+        hide_other_items_recursively(document->getRoot(), items, dkey);
+    }
+
+    Geom::IntRect final_area = Geom::IntRect::from_xywh(0, 0, width, height);
+    drawing.update(final_area);
+
+    if (opaque) {
+        // Required by sp_asbitmap_render().
+        for (auto item : items) {
+            if (item->get_arenaitem(dkey)) {
+                item->get_arenaitem(dkey)->setOpacity(1.0);
+            }
         }
     }
 
-    Geom::IntRect final_bbox = Geom::IntRect::from_xywh(0, 0, width, height);
-    drawing.update(final_bbox);
-
+    // Rendering
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    Inkscape::Pixbuf* pixbuf = nullptr;
 
     if (cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS) {
         Inkscape::DrawingContext dc(surface, Geom::Point(0,0));
 
         // render items
-        drawing.render(dc, final_bbox, Inkscape::DrawingItem::RENDER_BYPASS_CACHE);
+        drawing.render(dc, final_area, Inkscape::DrawingItem::RENDER_BYPASS_CACHE);
 
-        inkpb = new Inkscape::Pixbuf(surface);
-    }
-    else
-    {
-        long long size = (long long) height * (long long) cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, width);
+        pixbuf = new Inkscape::Pixbuf(surface);
+
+    } else {
+
+        long long size =
+            (long long) height *
+            (long long) cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, width);
         g_warning("sp_generate_internal_bitmap: not enough memory to create pixel buffer. Need %lld.", size);
         cairo_surface_destroy(surface);
     }
-    doc->getRoot()->invoke_hide(dkey);
 
-    return inkpb;
+    // Return to previous state.
+    document->getRoot()->invoke_hide(dkey);
+
+    return pixbuf;
 }
 
 /*

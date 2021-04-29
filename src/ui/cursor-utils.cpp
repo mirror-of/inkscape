@@ -151,21 +151,20 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
 
     auto w = document->getWidth().value("px");
     auto h = document->getHeight().value("px");
-    int sw = w * scale;
-    int sh = h * scale;
-    int dpix = 96 * scale; // DPI
-    int dpiy = 96 * scale;
-
-    // Calculate the hotspot.
-    int hotspot_x = root->getIntAttribute("inkscape:hotspot_x", 0); // Do not include window scale factor!
-    int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0);
-
-    auto ink_pixbuf = sp_generate_internal_bitmap(document.get(), nullptr, 0, 0, w, h, sw, sh, dpix, dpiy, 0, nullptr);
+    Geom::Rect area(0, 0, w, h);
+    int dpi = 96 * scale;
+    auto ink_pixbuf = sp_generate_internal_bitmap(document.get(), area, dpi);
     auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw());
 
     if (pixbuf) {
+
+        // Calculate the hotspot.
+        int hotspot_x = root->getIntAttribute("inkscape:hotspot_x", 0); // Do not include window scale factor!
+        int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0);
+
         cursor = Gdk::Cursor::create(display, pixbuf, hotspot_x, hotspot_y);
         window->set_cursor(cursor);
+
     } else {
         std::cerr << "load_svg_cursor: failed to create pixbuf for: " << full_file_path << std::endl;
     }
