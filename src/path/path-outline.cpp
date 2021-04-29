@@ -386,14 +386,13 @@ Inkscape::XML::Node*
 item_to_paths(SPItem *item, bool legacy, SPItem *context)
 {
     char const *id = item->getAttribute("id");
-    SPDocument * document = item->document;
     // flatten all paths effects
     SPLPEItem *lpeitem = SP_LPE_ITEM(item);
     if (lpeitem) {
-        SPObject *original = dynamic_cast<SPObject *>(item);
+        SPDocument * document = item->document;
         lpeitem->removeAllPathEffects(true);
         SPObject *elemref = document->getObjectById(id);
-        if (elemref && elemref != original) {
+        if (elemref && elemref != item) {
             // If the LPE item is a shape, it is converted to a path 
             // so we need to reupdate the item
             item = dynamic_cast<SPItem *>(elemref);

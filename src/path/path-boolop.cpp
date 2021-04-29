@@ -420,13 +420,14 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         {
             // apply live path effects prior to performing boolean operation
             char const *id = item->getAttribute("id");
-            SPDocument * document = item->document;
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
             if (lpeitem) {
-                SPObject *original = dynamic_cast<SPObject *>(item);
+                SPDocument * document = item->document;
                 lpeitem->removeAllPathEffects(true);
                 SPObject *elemref = document->getObjectById(id);
-                if (elemref && elemref != original) {
+                if (elemref && elemref != item) {
+                    // If the LPE item is a shape, it is converted to a path 
+                    // so we need to reupdate the item
                     item = dynamic_cast<SPItem *>(elemref);
                 }
             }
