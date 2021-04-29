@@ -1120,8 +1120,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
 
         if (style) {
             // Write if property set by style attribute in this object
-            Glib::ustring s =
-                style->write(SPStyleSrc::STYLE_PROP);
+            Glib::ustring style_prop = style->write(SPStyleSrc::STYLE_PROP);
 
             // Write style attributes (SPStyleSrc::ATTRIBUTE) back to xml object
             bool any_written = false;
@@ -1146,10 +1145,10 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             if( prefs->getBool("/options/svgoutput/check_on_editing") ) {
 
                 unsigned int flags = sp_attribute_clean_get_prefs();
-                Glib::ustring s_cleaned = sp_attribute_clean_style( repr, s.c_str(), flags ); 
+                style_prop = sp_attribute_clean_style(repr, style_prop.c_str(), flags);
             }
 
-            repr->setAttributeOrRemoveIfEmpty("style", s);
+            repr->setAttributeOrRemoveIfEmpty("style", style_prop);
         } else {
             /** \todo I'm not sure what to do in this case.  Bug #1165868
              * suggests that it can arise, but the submitter doesn't know
