@@ -81,6 +81,7 @@ private:
     void _mergeDecl(     CRDeclaration const *const decl,      SPStyleSrc const &source );
     void _mergeProps( CRPropList *const props );
     void _mergeObjectStylesheet( SPObject const *const object );
+    void _mergeObjectStylesheet( SPObject const *const object, SPDocument *const document );
 
 private:
     int _refcount;
