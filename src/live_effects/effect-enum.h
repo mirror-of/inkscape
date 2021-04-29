@@ -204,7 +204,7 @@ class EnumEffectDataConverter {
         return empty_string;
     }
 
-    const bool get_on_path(const E id) const
+    bool get_on_path(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -214,7 +214,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_shape(const E id) const
+    bool get_on_shape(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -224,7 +224,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_group(const E id) const
+    bool get_on_group(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -234,7 +234,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_image(const E id) const
+    bool get_on_image(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -244,7 +244,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_text(const E id) const
+    bool get_on_text(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -254,7 +254,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_experimental(const E id) const
+    bool get_experimental(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)

@@ -127,7 +127,7 @@ public:
     char const * get_id() const { return _id; }
     char const * get_name() const { return _name; }
     char const * get_description() const { return _desc; }
-    const Trigger get_trigger() const { return _category | _trigger; }
+    Trigger get_trigger() const { return _category | _trigger; }
 
     // Set user value
     void set_keys(KeyMask and_mask, KeyMask not_mask) {
@@ -145,12 +145,12 @@ public:
     bool is_set_user() const { return _and_mask_user != NOT_SET; }
 
     // Get value, either user defined value or default
-    const KeyMask get_and_mask() {
+    KeyMask get_and_mask() {
         if(_and_mask_user != NOT_SET) return _and_mask_user;
         if(_and_mask_keys != NOT_SET) return _and_mask_keys;
         return _and_mask_default;
     }
-    const KeyMask get_not_mask() {
+    KeyMask get_not_mask() {
         // The not mask is enabled by the AND mask being set first.
         if(_and_mask_user != NOT_SET) return _not_mask_user;
         if(_and_mask_keys != NOT_SET) return _not_mask_keys;
