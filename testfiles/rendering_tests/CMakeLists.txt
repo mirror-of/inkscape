@@ -13,6 +13,7 @@ set(RENDERING_TESTS
     # -- Generic tests --
     test-empty
     test-dont-crash
+    test-use
 
     # -- Selector tests --
     selector-important-002
