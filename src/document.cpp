@@ -1051,6 +1051,8 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
     std::map<std::string, SPObject *>::const_iterator rv = iddef.find(id);
     if (rv != iddef.end()) {
         return (rv->second);
+    } else if (_parent_document) {
+        return _parent_document->getObjectById(id);
     } else {
         return nullptr;
     }
