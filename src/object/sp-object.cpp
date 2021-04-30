@@ -283,9 +283,8 @@ void SPObject::unhrefObject(SPObject* owner)
 
     if (!owner || !owner->cloned) {
         hrefcount--;
+        _updateTotalHRefCount(-1);
     }
-
-    _updateTotalHRefCount(-1);
 
     if(owner)
         hrefList.remove(owner);
