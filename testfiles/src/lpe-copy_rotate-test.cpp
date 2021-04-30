@@ -250,6 +250,7 @@ TEST_F(LPERotateCopiesTest, multi_mm_1_02)
    viewBox="0 0 250 250"
    version="1.1"
    id="svg8"
+   inkscape:test-threshold="0.1"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <defs
      id="defs2">
@@ -669,6 +670,7 @@ TEST_F(LPERotateCopiesTest, multi_px_1_02)
    version="1.1"
    id="svg8"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:test-threshold="0.1"
    sodipodi:docname="1.svg">
   <defs
      id="defs2">
