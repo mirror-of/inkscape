@@ -480,6 +480,7 @@ SPStyle::~SPStyle() {
     release_connection.disconnect();
     fill_ps_changed_connection.disconnect();
     stroke_ps_changed_connection.disconnect();
+    filter_changed_connection.disconnect();
 
     // The following should be moved into SPIPaint and SPIFilter
     if (fill.value.href) {
@@ -544,7 +545,7 @@ SPStyle::clear() {
 
     if (document) {
         filter.href = new SPFilterReference(document);
-        filter.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), this));
+        filter_changed_connection = filter.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), this));
 
         fill.value.href = new SPPaintServerReference(document);
         fill_ps_changed_connection = fill.value.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_fill_paint_server_ref_changed), this));

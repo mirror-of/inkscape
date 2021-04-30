@@ -312,6 +312,8 @@ public:
     sigc::connection filter_modified_connection;
     sigc::connection fill_ps_modified_connection;
     sigc::connection stroke_ps_modified_connection;
+
+    sigc::connection filter_changed_connection;
     sigc::connection fill_ps_changed_connection;
     sigc::connection stroke_ps_changed_connection;
 

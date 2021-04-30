@@ -1950,7 +1950,7 @@ SPIFilter::read( gchar const *str ) {
             }
             // Do we have href now?
             if ( href ) {
-                href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), style));
+                style->filter_changed_connection = href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), style));
             } else {
                 std::cerr << "SPIFilter::read(): Could not allocate 'href'" << std::endl;
                 return;
