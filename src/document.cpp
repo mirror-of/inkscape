@@ -1212,6 +1212,23 @@ std::vector<Glib::ustring> SPDocument::getLanguages() const
         g_free(rdf_language_stripped);
     }
 
+    // add languages from parent document
+    if (_parent_document) {
+        auto parent_languages = _parent_document->getLanguages();
+
+        // return parent languages directly if we aren't contributing any
+        if (document_languages.empty()) {
+            return parent_languages;
+        }
+
+        // otherwise append parent's languages to what we already have
+        std::move(parent_languages.begin(), parent_languages.end(),
+                  std::back_insert_iterator(document_languages));
+
+        // don't add languages from locale; parent already did that
+        return document_languages;
+    }
+
     // get language from system locale (will also match the interface language preference as we set LANG accordingly)
     // TODO: This includes locales with encodings like "de_DE.UTF-8" - is this useful or should we skip these?
     // TODO: This includes the default "C" locale - is this useful or should we skip it?
