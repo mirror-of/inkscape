@@ -47,6 +47,20 @@ configure_file(CTestCustom.cmake.in ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
 ### tests using gtest
 include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams") # TODO: remove this hack
 
+if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+    set(LPE_TESTS_64bit
+        #0.92 or lower LPEs
+        # (test not stable on 32bit Windows)
+        lpe-bendpath-test
+        lpe-bspline-test
+        lpe-envelope-test
+        lpe-patternalongpath-test
+        lpe-powerstroke-test
+        lpe-sketch-test
+        lpe-taperstroke-test
+    )
+endif()
+
 set(TEST_SOURCES
     uri-test
     util-test
@@ -80,12 +94,9 @@ set(TEST_SOURCES
     #0.92 or lower LPEs
     lpe-attach-path-test
     lpe-bounding-box-test
-    lpe-bspline-test
-    lpe-bendpath-test
     lpe-clone-original-test
     lpe-constructgrid-test
     lpe-ellipse_5pts-test
-    lpe-envelope-test
     lpe-fill-between-many-test
     lpe-fill-between-strokes-test
     lpe-gears-test
@@ -95,19 +106,15 @@ set(TEST_SOURCES
     lpe-knot-test
     lpe-lattice2-test
     lpe-mirror_symmetry-test
-    lpe-patternalongpath-test
     lpe-perspective-envelope-test
-    lpe-powerstroke-test
     lpe-copy_rotate-test
     lpe-roughen-test
     lpe-roughhatches-test
     lpe-ruler-test
     lpe-showhandles-test
     lpe-simplify-test
-    lpe-sketch-test
     lpe-spiro-test
     lpe-stitchsubpaths-test
-    lpe-taperstroke-test
     lpe-transform_2pts-test
     lpe-vonkoch-test
     #1.0 LPEs
@@ -120,7 +127,9 @@ set(TEST_SOURCES
     lpe-dashed-stroke-test
     #1.1 LPEs
     lpe-bool-test
-    lpe-slice-test)
+    lpe-slice-test
+    ${LPE_TESTS_64bit}
+    )
 
 add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp lpespaths-test.h)
 target_link_libraries(cpp_test_static_library PUBLIC ${GTEST_LIBRARIES} inkscape_base)
