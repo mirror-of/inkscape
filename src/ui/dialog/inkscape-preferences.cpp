@@ -1629,7 +1629,7 @@ void InkscapePreferences::initPageUI()
     Gtk::Widget *space = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
     space->set_size_request(_sb_width / 3, -1);
     _page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
-                         _("Make background brighter or darker to reduce contrast"), true, space);
+                         _("Make background brighter or darker to adjust contrast"), true, space);
     _contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     _contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
