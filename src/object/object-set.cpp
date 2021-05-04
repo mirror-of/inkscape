@@ -10,14 +10,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <sigc++/sigc++.h>
-#include <glib.h>
 #include "object-set.h"
+
+#include <boost/range/adaptor/filtered.hpp>
+#include <boost/range/adaptor/transformed.hpp>
+#include <glib.h>
+#include <sigc++/sigc++.h>
+
 #include "box3d.h"
 #include "persp3d.h"
 #include "preferences.h"
-#include <boost/range/adaptor/filtered.hpp>
-#include <boost/range/adaptor/transformed.hpp>
 
 namespace Inkscape {
 
@@ -300,7 +302,26 @@ void ObjectSet::setReprList(std::vector<XML::Node*> const &list) {
     _emitChanged();
 }
 
-
+void ObjectSet::enforceIds()
+{
+    bool idAssigned = false;
+    auto items = this->items();
+    for (auto *item : items) {
+        if (!item->getId()) {
+            // Selected object does not have an ID, so assign it a unique ID
+            gchar *id = sp_object_get_unique_id(item, nullptr);
+            item->setAttribute("id", id);
+            g_free(id);
+            idAssigned = true;
+        }
+    }
+    if (idAssigned) {
+        SPDocument *document = _desktop->getDocument();
+        if (document) {
+            document->setModifiedSinceSave(true);
+        }
+    }
+}
 
 Geom::OptRect ObjectSet::bounds(SPItem::BBoxType type) const
 {

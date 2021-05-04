@@ -294,6 +294,12 @@ public:
     void setReprList(std::vector<XML::Node*> const &list);
 
     /**
+     * Assign IDs to selected objects that don't have an ID attribute
+     * Checks if the object's id attribute is NULL. If it is, assign it a unique ID
+     */
+    void enforceIds();
+
+    /**
      * Adds the specified objects to selection, without deselecting first.
      *
      * @param objs the objects to select

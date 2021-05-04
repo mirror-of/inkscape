@@ -2666,6 +2666,9 @@ void ObjectSet::clone()
         return;
     }
 
+    // Assign IDs to selected objects that don't have an ID attribute
+    enforceIds();
+
     std::vector<Inkscape::XML::Node*> reprs(xmlNodes().begin(), xmlNodes().end());
 
     clear();

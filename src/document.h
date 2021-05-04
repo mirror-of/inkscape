@@ -240,7 +240,6 @@ public:
 
     // Find items -----------------------------
     void bindObjectToId(char const *id, SPObject *object);
-    void enforceObjectIds(); 
     SPObject *getObjectById(Glib::ustring const &id) const;
     SPObject *getObjectById(char const *id) const;
 
