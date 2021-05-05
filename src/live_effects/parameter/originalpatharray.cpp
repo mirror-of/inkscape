@@ -71,7 +71,10 @@ OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
         Effect* effect )
 : Parameter(label, tip, key, wr, effect), 
         _vector()
-{    
+{   
+    _tree = nullptr;
+    _scroller = nullptr;
+    _model = nullptr;
     initui();
     oncanvas_editable = true;
     _from_original_d = false;
@@ -174,6 +177,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
     Gtk::Box* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     _tree = nullptr;
+    _model = nullptr;
     _scroller = nullptr;
     initui();
     vbox->pack_start(*_scroller, Gtk::PACK_EXPAND_WIDGET);

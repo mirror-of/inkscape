@@ -60,6 +60,9 @@ OriginalItemArrayParam::OriginalItemArrayParam( const Glib::ustring& label,
 : Parameter(label, tip, key, wr, effect), 
         _vector()
 {  
+    _tree = nullptr;
+    _scroller = nullptr;
+    _model = nullptr;
     initui();    
     oncanvas_editable = true;
 }
@@ -140,6 +143,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     _tree = nullptr;
     _scroller = nullptr;
+    _model = nullptr;
     initui();
     vbox->pack_start(*_scroller, Gtk::PACK_EXPAND_WIDGET);
     
