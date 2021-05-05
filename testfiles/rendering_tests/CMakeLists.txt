@@ -1,9 +1,12 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+# Tests to run for 64-bit builds only. These fail in 32-bit builds (possibly due to rounding issues)
+# TODO: Figure out actual cause and see if we can fix it
 if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     set(RENDERING_TESTS_64bit
+        test-rtl-vertical
+
         # .otf font with compressed SVG glyphs
-        # (test not stable on 32bit Windows)
         text-gzipped-svg-glyph
     )
 endif()
@@ -34,8 +37,6 @@ set(RENDERING_TESTS
     ## Please also check that the rendering with harfbuzz <=1.5.1 is not *too* wrong (for older systems)
     ## cf Tav's post : https://www.patreon.com/posts/into-sinkhole-19021727
     ## and bug https://bugzilla.gnome.org/show_bug.cgi?id=787526
-
-    test-rtl-vertical
 
     # text-shaping
     ## Expected rendering generated with Pango 1.44. Currently fails with

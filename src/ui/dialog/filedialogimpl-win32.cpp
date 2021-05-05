@@ -1044,8 +1044,8 @@ bool FileOpenDialogImplWin32::set_svg_preview()
     delete pixbuf;
     _preview_document_width = svgWidth_px;
     _preview_document_height = svgHeight_px;
-    _preview_image_width = scaledSvgWidth;
-    _preview_image_height = scaledSvgHeight;
+    _preview_image_width = round(scaleFactor * svgWidth_px);
+    _preview_image_height = round(scaleFactor * svgHeight_px);
     _mutex->unlock();
 
     return true;
