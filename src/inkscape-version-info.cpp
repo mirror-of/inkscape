@@ -21,7 +21,10 @@
 #include <gtkmm.h>
 #include <libxml2/libxml/xmlversion.h>
 #include <libxslt/xsltconfig.h>
+
+#ifdef HAVE_POPPLER
 #include <poppler-config.h>
+#endif
 
 #include "inkscape-version.h" // Inkscape version
 
@@ -91,7 +94,9 @@ std::string debug_info() {
     ss << "    Cairo version:    " << cairo_version_string() << std::endl;
     ss << "    Pango version:    " << pango_version_string() << std::endl;
     ss << "    HarfBuzz version: " << hb_version_string() << std::endl;
+#ifdef HAVE_POPPLER
     ss << "    Poppler version:  " << POPPLER_VERSION << std::endl;
+#endif
     ss << std::endl;
     ss << "    OS version:       " << os_version();
 
