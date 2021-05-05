@@ -496,9 +496,9 @@ void sp_file_convert_dpi(SPDocument *doc)
         }
 
         if (backup && (response != FILE_DPI_UNCHANGED)) {
-            const char* uri = doc->getDocumentURI();
-            if (uri) {
-                sp_file_save_backup(Glib::ustring(uri));
+            const char* filename = doc->getDocumentFilename();
+            if (filename) {
+                sp_file_save_backup(Glib::ustring(filename));
             }
         }
 

@@ -24,6 +24,7 @@
 #include "io/resource.h"
 #include "ui/shortcuts.h"
 #include "ui/util.h"
+#include "ui/themes.h"
 
 #include "object/sp-namedview.h"
 
@@ -94,24 +95,26 @@ class ThemeCols: public Gtk::TreeModel::ColumnRecord {
             this->add(this->theme);
             this->add(this->icons);
             this->add(this->base);
+            this->add(this->base_dark);
             this->add(this->success);
             this->add(this->warn);
             this->add(this->error);
-            this->add(this->dark);
             this->add(this->symbolic);
             this->add(this->smallicons);
+            this->add(this->enabled);
         }
         Gtk::TreeModelColumn<Glib::ustring> id;
         Gtk::TreeModelColumn<Glib::ustring> name;
         Gtk::TreeModelColumn<Glib::ustring> theme;
         Gtk::TreeModelColumn<Glib::ustring> icons;
         Gtk::TreeModelColumn<Glib::ustring> base;
+        Gtk::TreeModelColumn<Glib::ustring> base_dark;
         Gtk::TreeModelColumn<Glib::ustring> success;
         Gtk::TreeModelColumn<Glib::ustring> warn;
         Gtk::TreeModelColumn<Glib::ustring> error;
-        Gtk::TreeModelColumn<bool> dark;
         Gtk::TreeModelColumn<bool> symbolic;
         Gtk::TreeModelColumn<bool> smallicons;
+        Gtk::TreeModelColumn<bool> enabled;
 };
 
 /**
@@ -164,14 +167,17 @@ StartScreen::StartScreen()
     Gtk::ComboBox* keys = nullptr;
     Gtk::Button* save = nullptr;
     Gtk::Button* thanks = nullptr;
+    Gtk::Button* new_btn = nullptr;
     Gtk::Button* show_toggle = nullptr;
-    Gtk::Button* load = nullptr;
+    Gtk::Switch* dark_toggle = nullptr;
     builder->get_widget("canvas", canvas);
     builder->get_widget("keys", keys);
     builder->get_widget("save", save);
     builder->get_widget("thanks", thanks);
     builder->get_widget("show_toggle", show_toggle);
-    builder->get_widget("load", load);
+    builder->get_widget("dark_toggle", dark_toggle);
+    builder->get_widget("load", load_btn);
+    builder->get_widget("new", new_btn);
 
     // Unparent to move to our dialog window.
     auto parent = banners->get_parent();
@@ -186,13 +192,23 @@ StartScreen::StartScreen()
     // Setup the lists of items
     enlist_recent_files();
     enlist_keys();
+    filter_themes();
     set_active_combo("themes", prefs->getString("/options/boot/theme"));
     set_active_combo("canvas", prefs->getString("/options/boot/canvas"));
 
+    // initalise dark depending on prefs and background
+    refresh_dark_switch();
+
     // Welcome! tab
+    std::string welcome_text_file = Resource::get_filename_string(Resource::SCREENS, "start-welcome-text.svg", true);
+    Gtk::Image *welcome_text;
+    builder->get_widget("welcome_text", welcome_text);
+    welcome_text->set(welcome_text_file);
+    
     canvas->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::canvas_changed));
     keys->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::keyboard_changed));
     themes->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
+    dark_toggle->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
     save->signal_clicked().connect(sigc::bind<Gtk::Button *>(sigc::mem_fun(*this, &StartScreen::notebook_next), save));
 
     // "Supported by You" tab
@@ -200,6 +216,8 @@ StartScreen::StartScreen()
 
     // "Time to Draw" tab
     recent_treeview->signal_row_activated().connect(sigc::hide(sigc::hide((sigc::mem_fun(*this, &StartScreen::load_now)))));
+    recent_treeview->get_selection()->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::on_recent_changed));
+    kinds->signal_switch_page().connect(sigc::mem_fun(*this, &StartScreen::on_kind_changed));
 
     for (auto widget : kinds->get_children()) {
         auto container = dynamic_cast<Gtk::Container *>(widget);
@@ -208,12 +226,13 @@ StartScreen::StartScreen()
         }
         auto template_list = dynamic_cast<Gtk::IconView *>(widget);
         if (template_list) {
-            template_list->signal_selection_changed().connect(sigc::mem_fun(*this, &StartScreen::load_now));
+            template_list->signal_selection_changed().connect(sigc::mem_fun(*this, &StartScreen::new_now));
         }
     }
 
     show_toggle->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::show_toggle));
-    load->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_now));
+    load_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_now));
+    new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_now));
 
     // Reparent to our dialog window
     set_titlebar(*banners);
@@ -230,6 +249,11 @@ StartScreen::StartScreen()
         tabs->set_current_page(2);
         notebook_switch(nullptr, 2);
     }
+
+    set_modal(true);
+    set_position(Gtk::WIN_POS_CENTER_ALWAYS);
+    property_resizable() = false;
+    set_default_size(700, 360);
 
     show();
 }
@@ -299,11 +323,9 @@ void
 StartScreen::enlist_recent_files()
 {
     NameIdCols cols;
-    Gtk::TreeView *recent;
-    builder->get_widget("recent_treeview", recent);
-    if (!recent) return;
+    if (!recent_treeview) return;
     // We're not sure why we have to ask C for the TreeStore object
-    auto store = Glib::wrap(GTK_LIST_STORE(gtk_tree_view_get_model(recent->gobj())));
+    auto store = Glib::wrap(GTK_LIST_STORE(gtk_tree_view_get_model(recent_treeview->gobj())));
     store->clear();
 
     Glib::RefPtr<Gtk::RecentManager> manager = Gtk::RecentManager::get_default();
@@ -313,8 +335,10 @@ StartScreen::enlist_recent_files()
             || item->has_application("inkscape")
             || item->has_application("inkscape.exe")
            ) {
-            std::string path = Glib::filename_from_uri(item->get_uri());
-            if (Glib::file_test(path, Glib::FILE_TEST_IS_REGULAR)
+            // This uri is a GVFS uri, so parse it with that or it will fail.
+            auto file = Gio::File::create_for_uri(item->get_uri());
+            std::string path = file->get_path();
+            if (!path.empty() && Glib::file_test(path, Glib::FILE_TEST_IS_REGULAR)
                 && item->get_mime_type() == "image/svg+xml") {
                 Gtk::TreeModel::Row row = *(store->append());
                 row[cols.col_name] = item->get_display_name();
@@ -325,12 +349,34 @@ StartScreen::enlist_recent_files()
 }
 
 /**
- * Called when load button clicked or item is double clicked.
+ * Called when a new recent document is selected.
  */
 void
-StartScreen::load_now()
+StartScreen::on_recent_changed()
 {
-    bool is_template = true;
+    load_btn->set_sensitive(true);
+    // TODO: In the future this is where previews and other information can be loaded.
+}
+
+/**
+ * Called when the left side tabs are changed.
+ */
+void
+StartScreen::on_kind_changed(Gtk::Widget *tab, guint page_num)
+{
+    if (page_num == 0) {
+        load_btn->show();
+    } else {
+        load_btn->hide();
+    }
+}
+
+/**
+ * Called when new button clicked or template is double clicked, or escape pressed.
+ */
+void
+StartScreen::new_now()
+{
     Glib::ustring filename = sp_file_default_template_uri();
     Glib::ustring width = "";
     Glib::ustring height = "";
@@ -338,25 +384,10 @@ StartScreen::load_now()
     // Find requested file name.
     Glib::RefPtr<Gio::File> file;
     if (kinds) {
-
         Gtk::Widget *selected_widget = kinds->get_children()[kinds->get_current_page()];
         auto container = dynamic_cast<Gtk::Container *>(selected_widget);
         if (container) {
             selected_widget = container->get_children()[0];
-        }
-
-        auto recent_list = dynamic_cast<Gtk::TreeView *>(selected_widget);
-        if (recent_list) {
-            auto iter = recent_list->get_selection()->get_selected();
-            if (iter) {
-                Gtk::TreeModel::Row row = *iter;
-                if (row) {
-                    NameIdCols cols;
-                    Glib::ustring _file = row[cols.col_id];
-                    file = Gio::File::create_for_uri(_file);
-                    is_template = false;
-                }
-            }
         }
 
         auto template_list = dynamic_cast<Gtk::IconView *>(selected_widget);
@@ -366,7 +397,6 @@ StartScreen::load_now()
                 auto iter = template_list->get_model()->get_iter(items[0]);
                 Gtk::TreeModel::Row row = *iter;
                 if (row) {
-                    is_template = true; // Already set
                     TemplateCols cols;
                     Glib::ustring template_filename = row[cols.filename];
                     if (!(template_filename == "-")) {
@@ -385,7 +415,6 @@ StartScreen::load_now()
     if (!file) {
         // Failure to open, so open up a new document instead.
         file = Gio::File::create_for_path(filename);
-        is_template = true;
     }
 
     if (!file) {
@@ -399,25 +428,47 @@ StartScreen::load_now()
     auto app = InkscapeApplication::instance();
 
     // If it was a template file, modify the document according to user's input.
-    if (!is_template) {
-        _document = app->document_open (file);
-    } else {
-        _document = app->document_new (filename);
-        auto nv = sp_document_namedview (_document, nullptr);
+    _document = app->document_new (filename);
+    auto nv = sp_document_namedview (_document, nullptr);
 
-        if (!width.empty()) {
-            // Set the width, height and default display units for the selected template
-            auto q_width = unit_table.parseQuantity(width);
-            _document->setWidthAndHeight(q_width, unit_table.parseQuantity(height), true);
-            nv->setAttribute("inkscape:document-units", q_width.unit->abbr);
-        }
-
-        DocumentUndo::clearUndo(_document);
-        _document->setModifiedSinceSave(false);
+    if (!width.empty()) {
+        // Set the width, height and default display units for the selected template
+        auto q_width = unit_table.parseQuantity(width);
+        _document->setWidthAndHeight(q_width, unit_table.parseQuantity(height), true);
+        nv->setAttribute("inkscape:document-units", q_width.unit->abbr);
     }
+
+    DocumentUndo::clearUndo(_document);
+    _document->setModifiedSinceSave(false);
 
     // We're done, hand back to app.
     response(GTK_RESPONSE_OK);
+}
+
+/**
+ * Called when load button clicked.
+ */
+void
+StartScreen::load_now()
+{
+    if (recent_treeview) {
+        auto iter = recent_treeview->get_selection()->get_selected();
+        if (iter) {
+            Gtk::TreeModel::Row row = *iter;
+            if (row) {
+                NameIdCols cols;
+                Glib::ustring _file = row[cols.col_id];
+                auto file = Gio::File::create_for_uri(_file);
+
+                // Now we have filename, open document.
+                auto app = InkscapeApplication::instance();
+                _document = app->document_open (file);
+
+                // We're done, hand back to app.
+                response(GTK_RESPONSE_OK);
+            }
+        }
+    }
 }
 
 /**
@@ -428,7 +479,7 @@ StartScreen::notebook_next(Gtk::Widget *button)
 {
     int page = tabs->get_current_page();
     if (page == 2) {
-        load_now(); // Only occurs from keypress.
+        new_now(); // Only occurs from keypress.
     } else {
         tabs->set_current_page(page + 1);
     }
@@ -444,7 +495,7 @@ StartScreen::on_key_press_event(GdkEventKey* event)
         case GDK_KEY_Escape:
             // Prevent loading any selected items
             kinds = nullptr;
-            load_now();
+            new_now();
             return true;
         case GDK_KEY_Return:
             notebook_next(nullptr);
@@ -486,22 +537,21 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
     auto prefs = Inkscape::Preferences::get();
 
     settings->property_gtk_theme_name() = theme_name;
-    settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/darkTheme", true);
+    settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/preferDarkTheme", true);
     settings->property_gtk_icon_theme_name() = prefs->getString("/theme/iconTheme");
 
-    if (window) {
-        if (prefs->getBool("/theme/symbolicIcons", false)) {
-            window->get_style_context()->add_class("symbolic");
-            window->get_style_context()->remove_class("regular");
-        } else {
-            window->get_style_context()->add_class("regular");
-            window->get_style_context()->remove_class("symbolic");
-        }
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        get_style_context()->add_class("symbolic");
+        get_style_context()->remove_class("regular");
+    } else {
+        get_style_context()->add_class("regular");
+        get_style_context()->remove_class("symbolic");
     }
+
     if (INKSCAPE.colorizeprovider) {
         Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
     }
-    if (!prefs->getBool("/theme/symbolicDefaultColors", false)) {
+    if (!prefs->getBool("/theme/symbolicDefaultHighColors", false)) {
         Gtk::CssProvider::create();
         Glib::ustring css_str = INKSCAPE.get_symbolic_colors();
         try {
@@ -512,6 +562,9 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
         Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+    // set dark switch and disable if there is no prefer option for dark
+    refresh_dark_switch();
+
     INKSCAPE.signal_change_theme.emit();
 }
 
@@ -535,23 +588,32 @@ StartScreen::theme_changed()
         prefs->setBool("/toolbox/tools/small", row[cols.smallicons]);
         prefs->setString("/theme/gtkTheme", row[cols.theme]);
         prefs->setString("/theme/iconTheme", icons);
-        prefs->setBool("/theme/preferDarkTheme", row[cols.dark]);
-        prefs->setBool("/theme/darkTheme", row[cols.dark]);
         prefs->setBool("/theme/symbolicIcons", row[cols.symbolic]);
 
+        Gtk::Switch* dark_toggle = nullptr;
+        builder->get_widget("dark_toggle", dark_toggle);
+        bool is_dark = dark_toggle->get_active();
+        prefs->setBool("/theme/preferDarkTheme", is_dark);
+        prefs->setBool("/theme/darkTheme", is_dark);
         // Symbolic icon colours
         if (get_color_value(row[cols.base]) == 0) {
-            prefs->setBool("/theme/symbolicDefaultColors", true);
+            prefs->setBool("/theme/symbolicDefaultBaseColors", true);
+            prefs->setBool("/theme/symbolicDefaultHighColors", true);
         } else {
             Glib::ustring prefix = "/theme/" + icons;
-            prefs->setBool("/theme/symbolicDefaultColors", false);
-            prefs->setUInt(prefix + "/symbolicBaseColor", get_color_value(row[cols.base]));
+            prefs->setBool("/theme/symbolicDefaultBaseColors", false);
+            prefs->setBool("/theme/symbolicDefaultHighColors", false);
+            if (is_dark) {
+                prefs->setUInt(prefix + "/symbolicBaseColor", get_color_value(row[cols.base_dark]));
+            } else {
+                prefs->setUInt(prefix + "/symbolicBaseColor", get_color_value(row[cols.base]));
+            }
             prefs->setUInt(prefix + "/symbolicSuccessColor", get_color_value(row[cols.success]));
             prefs->setUInt(prefix + "/symbolicWarningColor", get_color_value(row[cols.warn]));
             prefs->setUInt(prefix + "/symbolicErrorColor", get_color_value(row[cols.error]));
         }
 
-        refresh_theme(row[cols.theme]);
+        refresh_theme(prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", "")));
     } catch(int e) {
         g_warning("Couldn't find theme value.");
     }
@@ -585,6 +647,41 @@ StartScreen::canvas_changed()
 
     } catch(int e) {
         g_warning("Couldn't find canvas value.");
+    }
+}
+
+void
+StartScreen::filter_themes()
+{
+    ThemeCols cols;
+    // We need to disable themes which aren't available.
+    auto store = Glib::wrap(GTK_LIST_STORE(gtk_combo_box_get_model(themes->gobj())));
+    auto available = get_available_themes();
+
+    // Detect use of custom theme here, detect defaults used in many systems.
+    auto settings = Gtk::Settings::get_default();
+    Glib::ustring theme_name = settings->property_gtk_theme_name();
+    Glib::ustring icons_name = settings->property_gtk_icon_theme_name();
+
+    bool has_system_theme = false;
+    if (theme_name != "Adwaita" || icons_name != "hicolor") {
+        has_system_theme = true;
+        /* Enable if/when we want custom to be the default.
+        if (prefs->getString("/options/boot/theme").empty()) {
+            prefs->setString("/options/boot/theme", "system")
+            theme_changed();
+        }*/
+    }
+
+    for(auto row : store->children()) {
+        Glib::ustring theme = row[cols.theme];
+        if (!row[cols.enabled]) {
+            // Available themes; We only "enable" them, we don't disable them.
+            row[cols.enabled] = available.find(theme) != available.end();
+        } else if(row[cols.id] == "system" && !has_system_theme) {
+            // Disable system theme option if not available.
+            row[cols.enabled] = false;
+        }
     }
 }
 
@@ -623,10 +720,49 @@ StartScreen::keyboard_changed()
     try {
         auto row = active_combo("keys");
         auto prefs = Inkscape::Preferences::get();
-        prefs->setString("/options/kbshortcuts/shortcutfile", row[cols.col_id]);
+        Glib::ustring set_to = row[cols.col_id];
+        prefs->setString("/options/kbshortcuts/shortcutfile", set_to);
+        Inkscape::Shortcuts::getInstance().init();
+
+        Gtk::InfoBar* keys_warning;
+        builder->get_widget("keys_warning", keys_warning);
+        if (set_to != "inkscape.xml") {
+            keys_warning->set_message_type(Gtk::MessageType::MESSAGE_WARNING);
+            keys_warning->show();
+        } else {
+            keys_warning->hide();
+        }
     } catch(int e) {
         g_warning("Couldn't find keys value.");
     }
+}
+
+/**
+ * Set Dark Switch based on current selected theme.
+ * We will disable switch if current theme doesn't have prefer dark theme option.
+ */
+
+void StartScreen::refresh_dark_switch()
+{
+    auto prefs = Inkscape::Preferences::get();
+
+    Gtk::Container *window = dynamic_cast<Gtk::Container *>(get_toplevel());
+    bool dark = isCurrentThemeDark(window);
+    prefs->setBool("/theme/preferDarkTheme", dark);
+    prefs->setBool("/theme/darkTheme", dark);
+
+    auto themes = get_available_themes();
+    Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
+
+    Gtk::Switch *dark_toggle = nullptr;
+    builder->get_widget("dark_toggle", dark_toggle);
+
+    if (!themes[current_theme]) {
+        dark_toggle->set_sensitive(false);
+    } else {
+        dark_toggle->set_sensitive(true);
+    }
+    dark_toggle->set_active(dark);
 }
 
 } // namespace Dialog

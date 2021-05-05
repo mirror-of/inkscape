@@ -41,22 +41,6 @@ bool SPPaintServer::isSwatch() const
     return swatch;
 }
 
-
-// TODO: So a solid brush is a gradient with a swatch and zero stops?
-// Should we derive a new class for that? Or at least make this method
-// virtual and move it out of the way?
-bool SPPaintServer::isSolid() const
-{
-    bool solid = false;
-    if (swatch && SP_IS_GRADIENT(this)) {
-        SPGradient *grad = SP_GRADIENT(this);
-        if ( grad->hasStops() && (grad->getStopCount() == 0) ) {
-            solid = true;
-        }
-    }
-    return solid;
-}
-
 bool SPPaintServer::isValid() const
 {
     return true;

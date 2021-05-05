@@ -164,7 +164,7 @@ public:
         for(auto it = from; it != to; ++it) {
             _add(*it);
         }
-        _emitSignals();
+        _emitChanged();
     }
 
     /**
@@ -268,6 +268,11 @@ public:
     XML::Node *singleRepr();
 
     /**
+     * The top-most item, or NULL if the selection is empty.
+     */
+    XML::Node *topRepr() const;
+
+    /**
      * Selects exactly the specified objects.
      *
      * @param objs the objects to select
@@ -301,7 +306,7 @@ public:
                 add(obj, true);
             }
         }
-        _emitSignals();
+        _emitChanged();
     }
 
     /** Returns the bounding rectangle of the selection. */
@@ -371,7 +376,7 @@ public:
     void cloneOriginalPathLPE(bool allow_transforms = false);
     Inkscape::XML::Node* group();
     void popFromGroup();
-    void ungroup();
+    void ungroup(bool skip_undo = false);
     
     //z-order management
     //in selection-chemistry.cpp
@@ -460,7 +465,7 @@ public:
 protected:
     virtual void _connectSignals(SPObject* object) {};
     virtual void _releaseSignals(SPObject* object) {};
-    virtual void _emitSignals() {};
+    virtual void _emitChanged(bool persist_selection_context = false) {}
     void _add(SPObject* object);
     void _clear();
     void _remove(SPObject* object);

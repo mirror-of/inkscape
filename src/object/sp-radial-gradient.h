@@ -20,9 +20,6 @@
 typedef struct _cairo cairo_t;
 typedef struct _cairo_pattern cairo_pattern_t;
 
-#define SP_RADIALGRADIENT(obj) (dynamic_cast<SPRadialGradient*>((SPObject*)obj))
-#define SP_IS_RADIALGRADIENT(obj) (dynamic_cast<const SPRadialGradient*>((SPObject*)obj) != NULL)
-
 /** Radial gradient. */
 class SPRadialGradient : public SPGradient {
 public:
@@ -44,6 +41,9 @@ protected:
     void update(SPCtx *ctx, unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_RADIALGRADIENT, SPRadialGradient)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_RADIALGRADIENT, SPRadialGradient)
 
 #endif /* !SP_RADIAL_GRADIENT_H */
 

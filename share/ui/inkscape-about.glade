@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage" id="bug_icon">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">bug</property>
+  </object>
   <object class="GtkImage" id="copy-icon">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -14,7 +19,7 @@
     <property name="title" translatable="yes">Inkscape. Draw freely.</property>
     <property name="resizable">False</property>
     <property name="window-position">center-always</property>
-    <property name="icon-name">help-about</property>
+    <property name="icon-name">org.inkscape.Inkscape</property>
     <property name="gravity">north</property>
     <child>
       <object class="GtkBox">
@@ -110,7 +115,7 @@
               <object class="GtkLabel" id="authors-label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes">List of authors that contributed to the code</property>
+                <property name="tooltip-text" translatable="yes">List of authors who contributed to the code</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Authors</property>
               </object>
@@ -278,7 +283,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">10</property>
-                <property name="label" translatable="yes" context="Brief copyright notice at the footer of the About screen">© 2019 Inkscape Developers</property>
+                <property name="label" translatable="yes" context="Brief copyright notice at the footer of the About screen">© 2021 Inkscape Developers</property>
                 <property name="wrap">True</property>
                 <property name="wrap-mode">char</property>
               </object>
@@ -320,7 +325,7 @@
                     <property name="reveal-child">True</property>
                     <child>
                       <object class="GtkButton" id="version">
-                        <property name="label" translatable="yes">$version</property>
+                        <property name="label">$version</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
@@ -354,11 +359,46 @@
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkRevealer">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="transition-type">slide-right</property>
+                    <property name="transition-duration">1000</property>
+                    <child>
+                      <object class="GtkLabel" id="debug-info-copied">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Debug Info Copied!</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="debug_info">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Click to copy debug info to the clipboard</property>
+                <property name="margin-start">4</property>
+                <property name="image">bug_icon</property>
+                <property name="always-show-image">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>

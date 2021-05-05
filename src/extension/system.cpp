@@ -136,7 +136,7 @@ SPDocument *open(Extension *key, gchar const *filename)
         }
     }
 
-    doc->setDocumentUri(filename);
+    doc->setDocumentFilename(filename);
     if (!show) {
         imod->set_gui(true);
     }
@@ -166,7 +166,8 @@ SPDocument *open(Extension *key, gchar const *filename)
 static void
 open_internal(Extension *in_plug, gpointer in_data)
 {
-    if (!in_plug->deactivated() && dynamic_cast<Input *>(in_plug)) {
+    auto imod = dynamic_cast<Input *>(in_plug);
+    if (imod && !imod->deactivated()) {
         gpointer *parray = (gpointer *)in_data;
         gchar const *filename = (gchar const *)parray[0];
         Input **pimod = (Input **)parray[1];
@@ -174,13 +175,13 @@ open_internal(Extension *in_plug, gpointer in_data)
         // skip all the rest if we already found a function to open it
         // since they're ordered by preference now.
         if (!*pimod) {
-            gchar const *ext = dynamic_cast<Input *>(in_plug)->get_extension();
+            gchar const *ext = imod->get_extension();
 
             gchar *filenamelower = g_utf8_strdown(filename, -1);
             gchar *extensionlower = g_utf8_strdown(ext, -1);
 
             if (g_str_has_suffix(filenamelower, extensionlower)) {
-                *pimod = dynamic_cast<Input *>(in_plug);
+                *pimod = imod;
             }
 
             g_free(filenamelower);
@@ -287,7 +288,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 
 
     // remember attributes in case this is an unofficial save and/or overwrite fails
-    gchar *saved_uri = g_strdup(doc->getDocumentURI());
+    gchar *saved_filename = g_strdup(doc->getDocumentFilename());
     gchar *saved_output_extension = nullptr;
     gchar *saved_dataloss = nullptr;
     bool saved_modified = doc->isModifiedSinceSave();
@@ -295,7 +296,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
     saved_dataloss = g_strdup(repr->attribute("inkscape:dataloss"));
     if (official) {
         // The document is changing name/uri.
-        doc->changeUriAndHrefs(fileName);
+        doc->changeFilenameAndHrefs(fileName);
     }
 
     // Update attributes:
@@ -324,13 +325,13 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
                 store_file_extension_in_prefs (saved_output_extension, save_method);
                 repr->setAttribute("inkscape:dataloss", saved_dataloss);
             }
-            doc->changeUriAndHrefs(saved_uri);
+            doc->changeFilenameAndHrefs(saved_filename);
         }
         doc->setModifiedSinceSave(saved_modified);
         // free used resources
         g_free(saved_output_extension);
         g_free(saved_dataloss);
-        g_free(saved_uri);
+        g_free(saved_filename);
 
         g_free(fileName);
 
@@ -376,7 +377,8 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 static void
 save_internal(Extension *in_plug, gpointer in_data)
 {
-    if (!in_plug->deactivated() && dynamic_cast<Output *>(in_plug)) {
+    auto omod = dynamic_cast<Output *>(in_plug);
+    if (omod && !omod->deactivated()) {
         gpointer *parray = (gpointer *)in_data;
         gchar const *filename = (gchar const *)parray[0];
         Output **pomod = (Output **)parray[1];
@@ -384,13 +386,13 @@ save_internal(Extension *in_plug, gpointer in_data)
         // skip all the rest if we already found someone to save it
         // since they're ordered by preference now.
         if (!*pomod) {
-            gchar const *ext = dynamic_cast<Output *>(in_plug)->get_extension();
+            gchar const *ext = omod->get_extension();
 
             gchar *filenamelower = g_utf8_strdown(filename, -1);
             gchar *extensionlower = g_utf8_strdown(ext, -1);
 
             if (g_str_has_suffix(filenamelower, extensionlower)) {
-                *pomod = dynamic_cast<Output *>(in_plug);
+                *pomod = omod;
             }
 
             g_free(filenamelower);
@@ -629,8 +631,8 @@ get_file_save_path (SPDocument *doc, FileSaveMethod method) {
         case FILE_SAVE_METHOD_SAVE_AS:
         {
             use_current_dir = prefs->getBool("/dialogs/save_as/use_current_dir", true);
-            if (doc->getDocumentURI() && use_current_dir) {
-                path = Glib::path_get_dirname(doc->getDocumentURI());
+            if (doc->getDocumentFilename() && use_current_dir) {
+                path = Glib::path_get_dirname(doc->getDocumentFilename());
             } else {
                 path = prefs->getString("/dialogs/save_as/path");
             }
@@ -641,15 +643,15 @@ get_file_save_path (SPDocument *doc, FileSaveMethod method) {
             break;
         case FILE_SAVE_METHOD_SAVE_COPY:
             use_current_dir = prefs->getBool("/dialogs/save_copy/use_current_dir", prefs->getBool("/dialogs/save_as/use_current_dir", true));
-            if (doc->getDocumentURI() && use_current_dir) {
-                path = Glib::path_get_dirname(doc->getDocumentURI());
+            if (doc->getDocumentFilename() && use_current_dir) {
+                path = Glib::path_get_dirname(doc->getDocumentFilename());
             } else {
                 path = prefs->getString("/dialogs/save_copy/path");
             }
             break;
         case FILE_SAVE_METHOD_INKSCAPE_SVG:
-            if (doc->getDocumentURI()) {
-                path = Glib::path_get_dirname(doc->getDocumentURI());
+            if (doc->getDocumentFilename()) {
+                path = Glib::path_get_dirname(doc->getDocumentFilename());
             } else {
                 // FIXME: should we use the save_as path here or something else? Maybe we should
                 // leave this as a choice to the user.

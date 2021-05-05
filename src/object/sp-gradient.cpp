@@ -270,6 +270,8 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
         repr->removeAttribute("inkscape:collect");
     }
 
+    this->readAttr(SPAttr::STYLE);
+
     SPPaintServer::build(document, repr);
 
     for (auto& ochild: children) {
@@ -1182,6 +1184,14 @@ SPGradient::create_preview_pattern(double width)
     }
 
     return pat;
+}
+
+bool SPGradient::isSolid() const
+{
+    if (swatch && hasStops() && getStopCount() == 0) {
+        return true;
+    }
+    return false;
 }
 
 /*

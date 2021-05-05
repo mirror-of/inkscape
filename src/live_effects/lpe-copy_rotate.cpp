@@ -94,11 +94,11 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&mirror_copies);
     registerParameter(&split_items);
 
-    gap.param_set_range(-99999.0, 99999.0);
+    gap.param_set_range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
     gap.param_set_increments(0.01, 0.01);
     gap.param_set_digits(5);
-    num_copies.param_set_range(1, 999999);
-    num_copies.param_make_integer(true);
+    num_copies.param_set_range(1, std::numeric_limits<gint>::max());
+    num_copies.param_make_integer();
     apply_to_clippath_and_mask = true;
     previous_num_copies = num_copies;
     previous_origin = Geom::Point(0,0);
@@ -315,7 +315,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         elemref->parent->reorder(elemref, sp_lpe_item);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, reset);
+    cloneD(sp_lpe_item, elemref, transform, reset);
     elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     SP_ITEM(elemref)->setHidden(false);
     if (elemref->parent != container) {
@@ -667,13 +667,20 @@ LPECopyRotate::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void 
 LPECopyRotate::doOnRemove (SPLPEItem const* lpeitem)
 {
-    //set "keep paths" hook on sp-lpe-item.cpp
-    if (keep_paths) {
-        processObjects(LPE_TO_OBJECTS);
-        items.clear();
-        return;
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
+        if (!sp_lpe_item->path_effects_enabled) {
+            return;
+        }
+        //set "keep paths" hook on sp-lpe-item.cpp
+        if (keep_paths) {
+            processObjects(LPE_TO_OBJECTS);
+            items.clear();
+            return;
+        }
+        processObjects(LPE_ERASE);
     }
-    processObjects(LPE_ERASE);
 }
 
 } //namespace LivePathEffect

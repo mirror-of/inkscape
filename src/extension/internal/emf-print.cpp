@@ -399,11 +399,11 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
 
             if (SP_IS_LINEARGRADIENT(paintserver)) {
                 lg = SP_LINEARGRADIENT(paintserver);
-                SP_GRADIENT(lg)->ensureVector(); // when exporting from commandline, vector is not built
+                lg->ensureVector(); // when exporting from commandline, vector is not built
                 fill_mode = DRAW_LINEAR_GRADIENT;
             } else if (SP_IS_RADIALGRADIENT(paintserver)) {
                 rg = SP_RADIALGRADIENT(paintserver);
-                SP_GRADIENT(rg)->ensureVector(); // when exporting from commandline, vector is not built
+                rg->ensureVector(); // when exporting from commandline, vector is not built
                 fill_mode = DRAW_RADIAL_GRADIENT;
             } else {
                 // default fill
@@ -599,7 +599,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
             if (SP_IS_LINEARGRADIENT(paintserver)) {
                 SPLinearGradient *lg = SP_LINEARGRADIENT(paintserver);
 
-                SP_GRADIENT(lg)->ensureVector(); // when exporting from commandline, vector is not built
+                lg->ensureVector(); // when exporting from commandline, vector is not built
 
                 Geom::Point p1(lg->x1.computed, lg->y1.computed);
                 Geom::Point p2(lg->x2.computed, lg->y2.computed);
@@ -612,7 +612,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
             } else if (SP_IS_RADIALGRADIENT(paintserver)) {
                 SPRadialGradient *rg = SP_RADIALGRADIENT(paintserver);
 
-                SP_GRADIENT(rg)->ensureVector(); // when exporting from commandline, vector is not built
+                rg->ensureVector(); // when exporting from commandline, vector is not built
                 double r = rg->r.computed;
 
                 Geom::Point c(rg->cx.computed, rg->cy.computed);
@@ -1060,11 +1060,12 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
 
 Geom::PathVector PrintEmf::merge_PathVector_with_group(Geom::PathVector const &combined_pathvector, SPItem const *item, const Geom::Affine &transform)
 {
-    Geom::PathVector new_combined_pathvector;
-    if(!SP_IS_GROUP(item))return(new_combined_pathvector);  // sanity test, only a group should be passed in, return empty if something else happens
+    // sanity test, only a group should be passed in, return empty if something else happens
+    auto group = dynamic_cast<SPGroup const *>(item);
+    if (!group)
+        return {};
 
-    new_combined_pathvector = combined_pathvector;
-    SPGroup *group = SP_GROUP(item);
+    Geom::PathVector new_combined_pathvector = combined_pathvector;
     Geom::Affine tfc = item->transform * transform;
     for (auto& child: group->children) {
         item = SP_ITEM(&child);

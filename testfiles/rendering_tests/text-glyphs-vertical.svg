@@ -20,7 +20,7 @@
 
     @font-face {
       font-family: "GeomTest";
-      src: url("fonts/GeomTest.otf");
+      src: url("fonts/GeomTest-Regular.otf");
     }
 
     text {
@@ -32,12 +32,17 @@
       font-family: GeomTest;
     }
 
+    .cjk {
+      font-family: "Noto Sans CJK JP";
+    }
   </style>
 
-  <text x="100" y="100">㆕㆖㆘<tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
-  <text x="115" y="200" style="writing-mode:vertical-lr">㆕㆖㆘<tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
-  <text x="305" y="200" style="writing-mode:vertical-lr;text-orientation:upright">㆕㆖㆘<tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
-  <text x="495" y="200" style="writing-mode:vertical-lr;text-orientation:sideways">㆕㆖㆘<tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
+  <rect x="0" y="0" width="600" height="600" style="fill:white"/>
+
+  <text x="100" y="100"><tspan class="cjk">㆕㆖㆘</tspan><tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
+  <text x="115" y="200" style="writing-mode:vertical-lr"><tspan class="cjk">㆕㆖㆘</tspan><tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
+  <text x="305" y="200" style="writing-mode:vertical-lr;text-orientation:upright"><tspan class="cjk">㆕㆖㆘</tspan><tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
+  <text x="495" y="200" style="writing-mode:vertical-lr;text-orientation:sideways"><tspan class="cjk">㆕㆖㆘</tspan><tspan class="geomtest">A回ーऄ</tspan>G̃g̃X̃x̃</text>
 
   <!-- Show reference point -->
   <circle cx="100" cy="100" r="2" style="fill:lightblue"/>

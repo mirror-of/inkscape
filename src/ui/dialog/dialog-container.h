@@ -17,10 +17,15 @@
 #include <gdkmm/dragcontext.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
+#include <glibmm/keyfile.h>
 #include <gtkmm/accelkey.h>
 #include <gtkmm/box.h>
 #include <gtkmm/targetentry.h>
 #include <iostream>
+#include <map>
+#include <set>
+#include <memory>
+#include "dialog-manager.h"
 
 class SPDesktop;
 
@@ -31,6 +36,7 @@ namespace Dialog {
 class DialogBase;
 class DialogNotebook;
 class DialogMultipaned;
+class DialogWindow;
 
 /**
  * A widget that manages DialogNotebook's and other widgets inside a
@@ -38,8 +44,11 @@ class DialogMultipaned;
  */
 class DialogContainer : public Gtk::Box
 {
+    using parent_type = Gtk::Box;
+
 public:
     DialogContainer();
+    ~DialogContainer() override;
 
     // Columns-related functions
     DialogMultipaned *get_columns() { return columns; }
@@ -48,7 +57,7 @@ public:
     // Dialog-related functions
     void new_dialog(unsigned int code);
     void new_dialog(unsigned int code, DialogNotebook *notebook);
-    void new_floating_dialog(unsigned int code);
+    DialogWindow* new_floating_dialog(unsigned int code);
     bool has_dialog_of_type(DialogBase *dialog);
     DialogBase *get_dialog(unsigned int code);
     void link_dialog(DialogBase *dialog);
@@ -58,9 +67,15 @@ public:
     void update_dialogs(); // Update all linked dialogs
 
     // State saving functionality
-    void save_container_state();
-    void load_container_state();
-    void load_container_state(Glib::ustring filename);
+    std::unique_ptr<Glib::KeyFile> save_container_state();
+    void load_container_state(Glib::KeyFile* keyfile, bool include_floating);
+
+    void restore_window_position(DialogWindow* window);
+    void store_window_position(DialogWindow* window);
+
+    // get this container's state; provide window position for container embedded in DialogWindow
+    std::shared_ptr<Glib::KeyFile> get_container_state(const window_position_t* position) const;
+    void load_container_state(Glib::KeyFile& state, const std::string& window_id);
 
 private:
     DialogMultipaned *columns;                    // The main widget inside which other children are kept.
@@ -79,6 +94,7 @@ private:
 
     DialogBase *dialog_factory(unsigned int code);
     Gtk::Widget *create_notebook_tab(Glib::ustring label, Glib::ustring image, Gtk::AccelKey shortcut);
+    DialogWindow* create_new_floating_dialog(unsigned int code, bool blink);
 
     // Signal connections
     std::vector<sigc::connection> connections;
@@ -89,6 +105,7 @@ private:
     void prepend_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void append_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void column_empty(DialogMultipaned *column);
+    DialogBase* find_existing_dialog(unsigned int code);
 };
 
 } // namespace Dialog

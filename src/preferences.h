@@ -127,17 +127,7 @@ public:
     friend class Preferences; // Preferences class has to access _value
     public:
         ~Entry() = default;
-        Entry()
-            : _pref_path("")
-            , _value(nullptr)
-            , cached_bool(false)
-            , cached_point(false)
-            , cached_int(false)
-            , cached_uint(false)
-            , cached_double(false)
-            , cached_unit(false)
-            , cached_color(false)
-            , cached_style(false) {} // needed to enable use in maps
+        Entry() {} // needed to enable use in maps
         Entry(Entry const &other) = default;
 
         /**
@@ -153,13 +143,6 @@ public:
          * @param def Default value if the preference is not set.
          */
         inline bool getBool(bool def=false) const;
-
-        /**
-         * Interpret the preference as an point.
-         *
-         * @param def Default value if the preference is not set.
-         */
-        inline Geom::Point getPoint(Geom::Point def=Geom::Point()) const;
 
         /**
          * Interpret the preference as an integer.
@@ -214,7 +197,7 @@ public:
          *
          * To store a filename, convert it using Glib::filename_to_utf8().
          */
-        inline Glib::ustring getString() const;
+        inline Glib::ustring getString(Glib::ustring const &def) const;
 
        /**
          * Interpret the preference as a number followed by a unit (without space), and return this unit string.
@@ -258,36 +241,27 @@ public:
     private:
         Entry(Glib::ustring path, void const *v)
             : _pref_path(std::move(path))
-            , _value(v)
-            , cached_bool(false)
-            , cached_point(false)
-            , cached_int(false)
-            , cached_uint(false)
-            , cached_double(false)
-            , cached_unit(false)
-            , cached_color(false)
-            , cached_style(false) {}
+            , _value(v) {}
 
         Glib::ustring _pref_path;
-        void const *_value;
+        void const *_value = nullptr;
 
-        mutable bool value_bool;
-        mutable Geom::Point value_point;
-        mutable int value_int;
-        mutable unsigned int value_uint;
-        mutable double value_double;
+        mutable bool value_bool = false;
+        mutable int value_int = 0;
+        mutable unsigned int value_uint = 0;
+        mutable double value_double = 0.;
         mutable Glib::ustring value_unit;
-        mutable guint32 value_color;
-        mutable SPCSSAttr* value_style;
+        mutable guint32 value_color = 0;
+        mutable SPCSSAttr* value_style = nullptr;
 
-        mutable bool cached_bool;
-        mutable bool cached_point;
-        mutable bool cached_int;
-        mutable bool cached_uint;
-        mutable bool cached_double;
-        mutable bool cached_unit;
-        mutable bool cached_color;
-        mutable bool cached_style;
+        mutable bool cached_bool = false;
+        mutable bool cached_point = false;
+        mutable bool cached_int = false;
+        mutable bool cached_uint = false;
+        mutable bool cached_double = false;
+        mutable bool cached_unit = false;
+        mutable bool cached_color = false;
+        mutable bool cached_style = false;
     };
 
     // disable copying
@@ -373,7 +347,10 @@ public:
      * @param def The default value to return if the preference is not set.
      */
     Geom::Point getPoint(Glib::ustring const &pref_path, Geom::Point def=Geom::Point()) {
-        return getEntry(pref_path).getPoint(def);
+        return Geom::Point(
+            getEntry(pref_path + "/x").getDouble(def[Geom::X]),
+            getEntry(pref_path + "/y").getDouble(def[Geom::Y])
+        );
     }
 
     /**
@@ -442,9 +419,10 @@ public:
      *
      * @param pref_path Path to the retrieved preference.
      */
-    Glib::ustring getString(Glib::ustring const &pref_path) {
-        return getEntry(pref_path).getString();
+    Glib::ustring getString(Glib::ustring const &pref_path, Glib::ustring const &def = "") {
+        return getEntry(pref_path).getString(def);
     }
+
 
     /**
      * Retrieve the unit string.
@@ -616,7 +594,6 @@ protected:
      * that v._value is not NULL
      */
     bool _extractBool(Entry const &v);
-    Geom::Point _extractPoint(Entry const &v);
     int _extractInt(Entry const &v);
     unsigned int _extractUInt(Entry const &v);
     double _extractDouble(Entry const &v);
@@ -681,15 +658,6 @@ inline bool Preferences::Entry::getBool(bool def) const
     }
 }
 
-inline Geom::Point Preferences::Entry::getPoint(Geom::Point def) const
-{
-    if (!this->isValid()) {
-        return def;
-    } else {
-        return Inkscape::Preferences::get()->_extractPoint(*this);
-    }
-}
-
 inline int Preferences::Entry::getInt(int def) const
 {
     if (!this->isValid()) {
@@ -734,7 +702,7 @@ inline double Preferences::Entry::getDoubleLimited(double def, double min, doubl
     if (!this->isValid()) {
         return def;
     } else {
-        double val = def;
+        double val;
         if (unit.length() == 0) {
             val = Inkscape::Preferences::get()->_extractDouble(*this);
         } else {
@@ -744,13 +712,16 @@ inline double Preferences::Entry::getDoubleLimited(double def, double min, doubl
     }
 }
 
-inline Glib::ustring Preferences::Entry::getString() const
+inline Glib::ustring Preferences::Entry::getString(Glib::ustring const &def = "") const
 {
-    if (!this->isValid()) {
-        return "";
-    } else {
-        return Inkscape::Preferences::get()->_extractString(*this);
+    Glib::ustring ret = def;
+    if (this->isValid()) {
+        ret = Inkscape::Preferences::get()->_extractString(*this);
+        if (ret == "") {
+            ret = def;
+        }
     }
+    return ret;
 }
 
 inline Glib::ustring Preferences::Entry::getUnit() const

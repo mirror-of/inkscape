@@ -42,6 +42,8 @@
 #include "display/control/canvas-item-rect.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/curve.h"
+#include "livarot/Path.h"
+#include "livarot/Shape.h"
 
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
@@ -118,11 +120,17 @@ void TextTool::setup() {
     indicator->set_shadow(0xffffff7f, 1);
     indicator->hide();
 
-    // The rectangle box outlining wrapping the shape for text in a shape.
+    // The shape that the text is flowing into
     frame = new Inkscape::CanvasItemBpath(desktop->getCanvasControls());
     frame->set_fill(0x00 /* zero alpha */, SP_WIND_RULE_NONZERO);
     frame->set_stroke(0x0000ff7f);
     frame->hide();
+
+    // A second frame for showing the padding of the above frame
+    padding_frame = new Inkscape::CanvasItemBpath(desktop->getCanvasControls());
+    padding_frame->set_fill(0x00 /* zero alpha */, SP_WIND_RULE_NONZERO);
+    padding_frame->set_stroke(0xccccccdf);
+    padding_frame->hide();
 
     this->timeout = g_timeout_add(timeout, (GSourceFunc) sp_text_context_timeout, this);
 
@@ -154,10 +162,7 @@ void TextTool::setup() {
     this->shape_editor = new ShapeEditor(this->desktop);
 
     SPItem *item = this->desktop->getSelection()->singleItem();
-    if (item && (
-            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
-            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside())           )
-        ) {
+    if (item && (SP_IS_FLOWTEXT(item) || SP_IS_TEXT(item))) {
         this->shape_editor->set_item(item);
     }
 
@@ -222,6 +227,11 @@ void TextTool::finish() {
     if (this->frame) {
         delete frame;
         this->frame = nullptr;
+    }
+
+    if (this->padding_frame) {
+        delete padding_frame;
+        this->padding_frame = nullptr;
     }
 
     for (auto & text_selection_quad : text_selection_quads) {
@@ -639,25 +649,11 @@ bool TextTool::root_handler(GdkEvent* event) {
                             SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);
 
                             desktop->getSelection()->set(text);
-                            SPCSSAttr *css = sp_repr_css_attr(text->getRepr(), "style" );
-                            sp_repr_css_attr_unref(css);
 
                         } else {
                             // SVG 1.2 text
 
                             SPItem *ft = create_flowtext_with_internal_frame (desktop, this->p0, p1);
-
-                            /* Set style */
-                            sp_desktop_apply_style_tool(desktop, ft->getRepr(), "/tools/text", true);
-                            SPCSSAttr *css = sp_repr_css_attr(ft->getRepr(), "style" );
-                            Geom::Affine const local(ft->i2doc_affine());
-                            double const ex(local.descrim());
-                            if ( (ex != 0.0) && (ex != 1.0) ) {
-                                sp_css_attr_scale(css, 1/ex);
-                            }
-                            ft->setCSS(css,"style");
-                            sp_repr_css_attr_unref(css);
-                            ft->updateRepr();
 
                             desktop->getSelection()->set(ft);
                         }
@@ -1494,23 +1490,17 @@ bool sp_text_delete_selection(ToolBase *ec)
 void TextTool::_selectionChanged(Inkscape::Selection *selection)
 {
     g_assert(selection != nullptr);
-
-    shape_editor->unset_item();
     SPItem *item = selection->singleItem();
-    if (item && (
-            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
-            (SP_IS_TEXT(item) &&
-             !(SP_TEXT(item)->has_shape_inside() && !SP_TEXT(item)->get_first_rectangle()))
-            )) {
-        shape_editor->set_item(item);
-    }
 
     if (this->text && (item != this->text)) {
         sp_text_context_forget_text(this);
     }
     this->text = nullptr;
 
+    shape_editor->unset_item();
     if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
+        shape_editor->set_item(item);
+
         this->text = item;
         Inkscape::Text::Layout const *layout = te_get_layout(this->text);
         if (layout)
@@ -1639,6 +1629,12 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
                 if (opt_frame && (!opt_frame->contains(p0))) {
                     scroll = false;
                 }
+            } else if (SP_IS_FLOWTEXT(tc->text)) {
+                SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame(nullptr); // first frame only
+                Geom::OptRect opt_frame = frame->geometricBounds();
+                if (opt_frame && (!opt_frame->contains(p0))) {
+                    scroll = false;
+                }
             }
 
             if (scroll) {
@@ -1687,6 +1683,8 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         }
 
         std::vector<SPItem const *> shapes;
+        Shape *exclusion_shape = nullptr;
+        double padding;
 
         // Frame around text
         if (SP_IS_FLOWTEXT(tc->text)) {
@@ -1695,10 +1693,18 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
             tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
 
-        } else if (SP_IS_TEXT(tc->text)) {
-            if (tc->text->style->shape_inside.set) {
-                for (auto const *href : tc->text->style->shape_inside.hrefs) {
+        } else if (auto text = dynamic_cast<SPText *>(tc->text)) {
+            if (text->style->shape_inside.set) {
+                for (auto const *href : text->style->shape_inside.hrefs) {
                     shapes.push_back(href->getObject());
+                }
+                if (text->style->shape_padding.set) {
+                    // Calculate it here so we never show padding on FlowText or non-flowed Text (even if set)
+                    padding = text->style->shape_padding.computed;
+                }
+                if(text->style->shape_subtract.set) {
+                    // Find union of all exclusion shapes for later use
+                    exclusion_shape = text->getExclusionShape();
                 }
             } else {
                 for (SPObject &child : tc->text->children) {
@@ -1725,11 +1731,50 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         }
 
         if (!curve.is_empty()) {
+
+
+            if (padding) {
+                // See sp-text.cpp function _buildLayoutInit()
+                Path *temp = new Path;
+                Path *padded = new Path;
+
+                temp->LoadPathVector(curve.get_pathvector());
+                temp->OutsideOutline(padded, padding, join_round, butt_straight, 20.0);
+                padded->Convert(0.25); // Convert to polyline
+
+                Shape* sh = new Shape;
+                padded->Fill(sh, 0);
+                Shape *uncross = new Shape;
+                uncross->ConvertToShape(sh);
+
+                // Remove exclusions plus margins from padding frame
+                Shape *copy = new Shape;
+                if (exclusion_shape && exclusion_shape->hasEdges()) {
+                    copy->Booleen(uncross, const_cast<Shape*>(exclusion_shape), bool_op_diff);
+                } else {
+                    copy->Copy(uncross);
+                }
+                copy->ConvertToForme(padded);
+                padded->Transform(tc->text->i2dt_affine());
+                tc->padding_frame->set_bpath(padded->MakePathVector());
+                tc->padding_frame->show();
+
+                delete temp;
+                delete padded;
+                delete sh;
+                delete uncross;
+                delete copy;
+            } else {
+                tc->padding_frame->hide();
+            }
+
+            // Transform curve after doing padding.
             curve.transform(tc->text->i2dt_affine());
             tc->frame->set_bpath(&curve);
             tc->frame->show();
         } else {
             tc->frame->hide();
+            tc->padding_frame->hide();
         }
 
     } else {

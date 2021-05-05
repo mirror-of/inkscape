@@ -28,7 +28,7 @@
 #include "sp-star.h"
 #include <glibmm/i18n.h>
 
-SPStar::SPStar() : SPPolygon() ,
+SPStar::SPStar() : SPShape() ,
 	sides(5),
 	center(0, 0),
 	flatsided(false),

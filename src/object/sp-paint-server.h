@@ -28,16 +28,12 @@ class DrawingPattern;
 
 }
 
-#define SP_PAINT_SERVER(obj) (dynamic_cast<SPPaintServer*>((SPObject*)obj))
-#define SP_IS_PAINT_SERVER(obj) (dynamic_cast<const SPPaintServer*>((SPObject*)obj) != NULL)
-
 class SPPaintServer : public SPObject {
 public:
 	SPPaintServer();
 	~SPPaintServer() override;
 
     bool isSwatch() const;
-    bool isSolid() const;
     virtual bool isValid() const;
 
     //There are two ways to render a paint. The simple one is to create cairo_pattern_t structure
@@ -92,6 +88,8 @@ PaintServer *chase_hrefs(PaintServer *src, sigc::slot<bool, PaintServer const *>
         }
     }
 }
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_PAINT_SERVER, SPPaintServer)
 
 #endif // SEEN_SP_PAINT_SERVER_H
 /*

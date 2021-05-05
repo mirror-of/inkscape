@@ -17,9 +17,6 @@
 
 #include "sp-object.h"
 
-#define SP_OBJECTGROUP(obj) (dynamic_cast<SPObjectGroup*>((SPObject*)obj))
-#define SP_IS_OBJECTGROUP(obj) (dynamic_cast<const SPObjectGroup*>((SPObject*)obj) != NULL)
-
 class SPObjectGroup : public SPObject {
 public:
 	SPObjectGroup();
@@ -33,6 +30,8 @@ protected:
 
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_OBJECTGROUP, SPObjectGroup)
 
 #endif // SEEN_SP_OBJECTGROUP_H
 /*

@@ -224,6 +224,16 @@ gchar const* SPObject::getId() const {
     return id;
 }
 
+/**
+ * Returns the id as a url param, in the form 'url(#{id})'
+ */
+std::string SPObject::getUrl() const {
+    if (id) {
+        return std::string("url(#") + id + ")";
+    }
+    return "";
+}
+
 Inkscape::XML::Node * SPObject::getRepr() {
     return repr;
 }
@@ -283,9 +293,8 @@ void SPObject::unhrefObject(SPObject* owner)
 
     if (!owner || !owner->cloned) {
         hrefcount--;
+        _updateTotalHRefCount(-1);
     }
-
-    _updateTotalHRefCount(-1);
 
     if(owner)
         hrefList.remove(owner);
@@ -321,19 +330,11 @@ bool SPObject::isAncestorOf(SPObject const *object) const {
     return false;
 }
 
-namespace {
-
-bool same_objects(SPObject const &a, SPObject const &b) {
-    return &a == &b;
-}
-
-}
-
 SPObject const *SPObject::nearestCommonAncestor(SPObject const *object) const {
     g_return_val_if_fail(object != nullptr, NULL);
 
-    using Inkscape::Algorithms::longest_common_suffix;
-    return longest_common_suffix<SPObject::ConstParentIterator>(this, object, nullptr, &same_objects);
+    using Inkscape::Algorithms::nearest_common_ancestor;
+    return nearest_common_ancestor<SPObject::ConstParentIterator>(this, object, nullptr);
 }
 
 static SPObject const *AncestorSon(SPObject const *obj, SPObject const *ancestor) {
@@ -891,21 +892,21 @@ SPObject* SPObject::getNext()
 
 void SPObject::repr_child_added(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->child_added(child, ref);
 }
 
 void SPObject::repr_child_removed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node * /*ref*/, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->remove_child(child);
 }
 
 void SPObject::repr_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->order_changed(child, old, newer);
 }
@@ -1066,7 +1067,7 @@ void SPObject::readAttr(gchar const *key)
 
 void SPObject::repr_attr_changed(Inkscape::XML::Node * /*repr*/, gchar const *key, gchar const * /*oldval*/, gchar const * /*newval*/, bool is_interactive, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->readAttr(key);
 
@@ -1079,7 +1080,7 @@ void SPObject::repr_attr_changed(Inkscape::XML::Node * /*repr*/, gchar const *ke
 
 void SPObject::repr_content_changed(Inkscape::XML::Node * /*repr*/, gchar const * /*oldcontent*/, gchar const * /*newcontent*/, gpointer data)
 {
-    SPObject *object = SP_OBJECT(data);
+    auto object = static_cast<SPObject *>(data);
 
     object->read_content();
 }
@@ -1128,8 +1129,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
 
         if (style) {
             // Write if property set by style attribute in this object
-            Glib::ustring s =
-                style->write(SPStyleSrc::STYLE_PROP);
+            Glib::ustring style_prop = style->write(SPStyleSrc::STYLE_PROP);
 
             // Write style attributes (SPStyleSrc::ATTRIBUTE) back to xml object
             bool any_written = false;
@@ -1154,10 +1154,10 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             if( prefs->getBool("/options/svgoutput/check_on_editing") ) {
 
                 unsigned int flags = sp_attribute_clean_get_prefs();
-                Glib::ustring s_cleaned = sp_attribute_clean_style( repr, s.c_str(), flags ); 
+                style_prop = sp_attribute_clean_style(repr, style_prop.c_str(), flags);
             }
 
-            repr->setAttributeOrRemoveIfEmpty("style", s);
+            repr->setAttributeOrRemoveIfEmpty("style", style_prop);
         } else {
             /** \todo I'm not sure what to do in this case.  Bug #1165868
              * suggests that it can arise, but the submitter doesn't know

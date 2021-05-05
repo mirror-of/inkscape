@@ -81,6 +81,7 @@ private:
     void _mergeDecl(     CRDeclaration const *const decl,      SPStyleSrc const &source );
     void _mergeProps( CRPropList *const props );
     void _mergeObjectStylesheet( SPObject const *const object );
+    void _mergeObjectStylesheet( SPObject const *const object, SPDocument *const document );
 
 private:
     int _refcount;
@@ -312,6 +313,8 @@ public:
     sigc::connection filter_modified_connection;
     sigc::connection fill_ps_modified_connection;
     sigc::connection stroke_ps_modified_connection;
+
+    sigc::connection filter_changed_connection;
     sigc::connection fill_ps_changed_connection;
     sigc::connection stroke_ps_changed_connection;
 

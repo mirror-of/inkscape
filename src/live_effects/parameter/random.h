@@ -27,14 +27,15 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 gdouble default_value = 1.0,
-                long default_seed = 0);
+                long default_seed = 0,
+                bool randomsign = false);
     ~RandomParam() override;
 
     bool param_readSVGValue(const gchar * strvalue) override;
     Glib::ustring param_getSVGValue() const override;
     Glib::ustring param_getDefaultSVGValue() const override;
     void param_set_default() override;
-
+    void param_set_randomsign(bool randomsign) {_randomsign = randomsign;};
     Gtk::Widget * param_newWidget() override;
 
     void param_set_value(gdouble val, long newseed);
@@ -55,6 +56,7 @@ protected:
     gdouble min;
     gdouble max;
     bool integer;
+    bool _randomsign;
     gdouble defvalue;
 
 private:

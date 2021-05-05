@@ -62,7 +62,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
     split_items(_("Split elements"), _("Split original and mirror image into separate paths, so each can have its own style."), "split_items", &wr, this, false),
-    split_open(_("Keep open paths on split"), _("Allow keep paths open over the split line."), "split_open", &wr, this, false),
+    split_open(_("Keep open paths on split"), _("Do not automatically close paths along the split line."), "split_open", &wr, this, false),
     start_point(_("Mirror line start"), _("Start point of mirror line"), "start_point", &wr, this, _("Adjust start point of mirror line")),
     end_point(_("Mirror line end"), _("End point of mirror line"), "end_point", &wr, this, _("Adjust end point of mirror line")),
     center_point(_("Mirror line mid"), _("Center point of mirror line"), "center_point", &wr, this, _("Adjust center point of mirror line"))
@@ -124,7 +124,7 @@ LPEMirrorSymmetry::newWidget()
             Parameter *param = *it;
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
-            if (widg) {
+            if (widg && param->param_key != "split_open") {
                 vbox->pack_start(*widg, true, true, 2);
                 if (tip) {
                     widg->set_tooltip_text(*tip);
@@ -198,10 +198,12 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         if (mode == MT_Y) {
             point_a = Geom::Point(boundingbox_X.min(),center_point[Y]);
             point_b = Geom::Point(boundingbox_X.max(),center_point[Y]);
+            center_point.param_setValue(Geom::middle_point((Geom::Point)point_a, (Geom::Point)point_b));
         }
         if (mode == MT_X) {
             point_a = Geom::Point(center_point[X],boundingbox_Y.min());
             point_b = Geom::Point(center_point[X],boundingbox_Y.max());
+            center_point.param_setValue(Geom::middle_point((Geom::Point)point_a, (Geom::Point)point_b));
         }
         if ((Geom::Point)start_point == (Geom::Point)end_point) {
             start_point.param_setValue(point_a);
@@ -244,7 +246,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         } else if ( mode == MT_V){
             SPDocument *document = getSPDoc();
             if (document) {
-                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
+                Geom::Affine transform = i2anc_affine(lpeitem, nullptr).inverse();
                 Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
                 start_point.param_setValue(sp);
                 Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
@@ -254,7 +256,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         } else { //horizontal page
             SPDocument *document = getSPDoc();
             if (document) {
-                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
+                Geom::Affine transform = i2anc_affine(lpeitem, nullptr).inverse();
                 Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
                 start_point.param_setValue(sp);
                 Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
@@ -381,7 +383,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         elemref->parent->reorder(elemref, sp_lpe_item);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref);
+    cloneD(sp_lpe_item, elemref);
     reset = false;
     elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     if (elemref->parent != container) {
@@ -412,13 +414,20 @@ LPEMirrorSymmetry::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void
 LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    //set "keep paths" hook on sp-lpe-item.cpp
-    if (keep_paths) {
-        processObjects(LPE_TO_OBJECTS);
-        items.clear();
-        return;
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
+        if (!sp_lpe_item->path_effects_enabled) {
+            return;
+        }
+        //set "keep paths" hook on sp-lpe-item.cpp
+        if (keep_paths) {
+            processObjects(LPE_TO_OBJECTS);
+            items.clear();
+            return;
+        }
+        processObjects(LPE_ERASE);
     }
-    processObjects(LPE_ERASE);
 }
 
 void
@@ -437,6 +446,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point.param_setValue(point_c, true);
     previous_center = center_point;
+    //we bump to 1.1 because prevous 1.0.2 take no effect because a bug on 1.0.2
     lpeversion.param_setValue("1.1", true);
 }
 
@@ -574,7 +584,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             } else {
                                 tmp_pathvector.push_back(portion);
                             }
-                            if (lpeversion.param_getSVGValue() <= "1.0.1") {
+                            if (lpeversion.param_getSVGValue() < "1.1") {
                                 tmp_pathvector[0].close();
                             }
                         }
@@ -582,7 +592,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     }
                 }
             }
-            if (!split_open && lpeversion.param_getSVGValue() > "1.0.1" && original.closed()) {
+            if (!split_open && lpeversion.param_getSVGValue() >= "1.1" && original.closed()) {
                 for (auto &path : tmp_pathvector) {
                     if (!path.closed()) {
                         path.close();

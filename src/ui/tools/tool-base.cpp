@@ -480,9 +480,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
         } else if (zoom_rb) {
-            Geom::Point const motion_w(event->motion.x, event->motion.y);
-            Geom::Point const motion_dt(desktop->w2d(motion_w));
-
             if (within_tolerance && (abs((gint) event->motion.x - xp)
                     < tolerance) && (abs((gint) event->motion.y - yp)
                     < tolerance)) {
@@ -495,8 +492,16 @@ bool ToolBase::root_handler(GdkEvent* event) {
             within_tolerance = false;
 
             if (Inkscape::Rubberband::get(desktop)->is_started()) {
+                Geom::Point const motion_w(event->motion.x, event->motion.y);
+                Geom::Point const motion_dt(desktop->w2d(motion_w));
+
                 Inkscape::Rubberband::get(desktop)->move(motion_dt);
             } else {
+                // Start the box where the mouse was clicked, not where it is now
+                // because otherwise our box would be offset by the amount of tolerance.
+                Geom::Point const motion_w(xp, yp);
+                Geom::Point const motion_dt(desktop->w2d(motion_w));
+
                 Inkscape::Rubberband::get(desktop)->start(desktop, motion_dt);
             }
 
@@ -1536,9 +1541,9 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         sp_event_context_virtual_root_handler(ec, dse->getEvent());
         break;
     case DelayedSnapEvent::EVENTCONTEXT_ITEM_HANDLER: {
-        gpointer item = dse->getItem();
-        if (item && SP_IS_ITEM(item)) {
-            sp_event_context_virtual_item_handler(ec, SP_ITEM(item), dse->getEvent());
+        auto item = static_cast<SPItem *>(dse->getItem());
+        if (item) {
+            sp_event_context_virtual_item_handler(ec, item, dse->getEvent());
         }
     }
         break;

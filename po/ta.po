@@ -9529,7 +9529,7 @@ msgstr "பிழைகள்"
 msgid "No (valid) files to open."
 msgstr "திறப்பதற்கு கோப்பினை தேர்ந்தெடுக்கவும்"
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr ""
 

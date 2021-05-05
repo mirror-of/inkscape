@@ -16,9 +16,6 @@
 
 #include "sp-shape.h"
 
-#define SP_POLYGON(obj) (dynamic_cast<SPPolygon*>((SPObject*)obj))
-#define SP_IS_POLYGON(obj) (dynamic_cast<const SPPolygon*>((SPObject*)obj) != NULL)
-
 class SPPolygon : public SPShape {
 public:
 	SPPolygon();

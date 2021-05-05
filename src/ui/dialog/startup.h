@@ -36,14 +36,19 @@ private:
     void show_toggle();
     void enlist_recent_files();
     void enlist_keys();
+    void filter_themes();
     void keyboard_changed();
     void notebook_switch(Gtk::Widget *tab, guint page_num);
 
     void theme_changed();
     void canvas_changed();
     void refresh_theme(Glib::ustring theme_name);
+    void refresh_dark_switch();
 
+    void new_now();
     void load_now();
+    void on_recent_changed();
+    void on_kind_changed(Gtk::Widget *tab, guint page_num);
 
 
 private:
@@ -54,6 +59,7 @@ private:
     Gtk::Fixed    *banners = nullptr;
     Gtk::ComboBox *themes  = nullptr;
     Gtk::TreeView *recent_treeview = nullptr;
+    Gtk::Button   *load_btn = nullptr;
 
     SPDocument* _document = nullptr;
 };

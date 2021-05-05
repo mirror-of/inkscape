@@ -404,11 +404,11 @@ int PrintWmf::create_brush(SPStyle const *style, U_COLORREF *fcolor)
 
             if (SP_IS_LINEARGRADIENT(paintserver)) {
                 lg = SP_LINEARGRADIENT(paintserver);
-                SP_GRADIENT(lg)->ensureVector(); // when exporting from commandline, vector is not built
+                lg->ensureVector(); // when exporting from commandline, vector is not built
                 fill_mode = DRAW_LINEAR_GRADIENT;
             } else if (SP_IS_RADIALGRADIENT(paintserver)) {
                 rg = SP_RADIALGRADIENT(paintserver);
-                SP_GRADIENT(rg)->ensureVector(); // when exporting from commandline, vector is not built
+                rg->ensureVector(); // when exporting from commandline, vector is not built
                 fill_mode = DRAW_RADIAL_GRADIENT;
             } else {
                 // default fill

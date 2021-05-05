@@ -91,7 +91,7 @@ private:
     /**
      * Compare the visual bounds of 2 SPItems referred to by a and b
      */
-    static bool compareTextBboxes (gconstpointer a, gconstpointer b);
+    static bool compareTextBboxes(SPItem const *i1, SPItem const *i2);
     SPItem *getText (SPObject *root);
     void    nextText ();
 

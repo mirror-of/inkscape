@@ -36,7 +36,7 @@ SPConnEndPair::SPConnEndPair(SPPath *const owner)
     , _transformed_connection()
 {
     for (unsigned handle_ix = 0; handle_ix <= 1; ++handle_ix) {
-        this->_connEnd[handle_ix] = new SPConnEnd(SP_OBJECT(owner));
+        this->_connEnd[handle_ix] = new SPConnEnd(owner);
         this->_connEnd[handle_ix]->_changed_connection
             = this->_connEnd[handle_ix]->ref.changedSignal()
             .connect(sigc::bind(sigc::ptr_fun(sp_conn_end_href_changed),
@@ -254,7 +254,7 @@ bool SPConnEndPair::isOrthogonal() const
 
 static void redrawConnectorCallback(void *ptr)
 {
-    SPPath *path = SP_PATH(ptr);
+    auto path = static_cast<SPPath *>(ptr);
     if (path->document == nullptr) {
         // This can happen when the document is being destroyed.
         return;
@@ -292,7 +292,7 @@ void SPConnEndPair::_updateEndPoints()
 }
 
 
-bool SPConnEndPair::isAutoRoutingConn()
+bool SPConnEndPair::isAutoRoutingConn() const
 {
     return _connType != SP_CONNECTOR_NOAVOID;
 }

@@ -69,8 +69,8 @@ appreciate this. New files should have one or two lines describing the
 purpose of the code inside the file.
 
 
-Building
---------
+Building (In Linux distribution)
+--------------------------------
 
 This is the best set of instructions for setting up your build directory...
 
@@ -106,6 +106,8 @@ Now we can run `inkscape` that we have built, with the latest resources and code
 ```bash
 ./bin/inkscape
 ```
+
+To build in Non-Linux Platforms check out `INSTALL.md` (Links to Inkscape Wiki pages are given right below "Basic Installation")
 
 Profiling
 ---------

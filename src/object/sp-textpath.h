@@ -17,9 +17,6 @@
 class SPUsePath;
 class Path;
 
-#define SP_TEXTPATH(obj) (dynamic_cast<SPTextPath*>((SPObject*)obj))
-#define SP_IS_TEXTPATH(obj) (dynamic_cast<const SPTextPath*>((SPObject*)obj) != NULL)
-
 enum TextPathSide {
     SP_TEXT_PATH_SIDE_LEFT,
     SP_TEXT_PATH_SIDE_RIGHT
@@ -51,6 +48,8 @@ public:
 SPItem *sp_textpath_get_path_item(SPTextPath *tp);
 void sp_textpath_to_text(SPObject *tp);
 
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_TEXTPATH, SPTextPath)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_TEXTPATH, SPTextPath)
 
 #endif /* !INKSCAPE_SP_TEXTPATH_H */
 

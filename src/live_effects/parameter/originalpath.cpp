@@ -14,6 +14,7 @@
 
 #include "display/curve.h"
 #include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
 
 #include "object/uri.h"
 #include "object/sp-shape.h"
@@ -93,7 +94,7 @@ OriginalPathParam::on_select_original_button_click()
     Inkscape::Selection *selection = desktop->getSelection();
     selection->clear();
     selection->set(original);
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 } /* namespace LivePathEffect */

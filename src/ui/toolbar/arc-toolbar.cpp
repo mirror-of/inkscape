@@ -42,7 +42,6 @@
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
-#include "ui/pref-pusher.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
@@ -277,8 +276,8 @@ ArcToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
             }
 
             ge->normalize();
-            (SP_OBJECT(ge))->updateRepr();
-            (SP_OBJECT(ge))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            ge->updateRepr();
+            ge->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
             modmade = true;
         }
@@ -327,8 +326,8 @@ ArcToolbar::startend_value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
             }
 
             ge->normalize();
-            (SP_OBJECT(ge))->updateRepr();
-            (SP_OBJECT(ge))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            ge->updateRepr();
+            ge->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
             modmade = true;
         }

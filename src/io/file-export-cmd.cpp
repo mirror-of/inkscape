@@ -192,7 +192,7 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
                 extension_for_fn_exists = true;
                 exts_for_fn.emplace_back(oext->get_id());
                 if (!export_extension_forced ||
-                    (export_extension_forced && export_extension == Glib::ustring(oext->get_id()).lowercase())) {
+                    (export_extension == Glib::ustring(oext->get_id()).lowercase())) {
                     if (type == "svg") {
                         do_export_svg(doc, filename_in, *oext);
                     } else if (type == "ps") {
@@ -519,7 +519,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
                               << "(--export-dpi, --export-width, or --export-height). "
                               << "DPI hint " << dpi_hint << " is ignored." << std::endl;
                 } else {
-                    dpi = atof(dpi_hint);
+                    dpi = g_ascii_strtod(dpi_hint, nullptr);
                 }
             } else {
                 std::cerr << "InkFileExport::do_export_png: "
@@ -538,8 +538,8 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
 
         if (filename_from_hint) {
             //Make relative paths go from the document location, if possible:
-            if (!Glib::path_is_absolute(filename_out) && doc->getDocumentURI()) {
-                std::string dirname = Glib::path_get_dirname(doc->getDocumentURI());
+            if (!Glib::path_is_absolute(filename_out) && doc->getDocumentFilename()) {
+                std::string dirname = Glib::path_get_dirname(doc->getDocumentFilename());
                 if (!dirname.empty()) {
                     filename_out = Glib::build_filename(dirname, filename_out);
                 }
@@ -718,7 +718,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
  *  \param mime MIME type to export as.
  */
 int
-InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string const &filename_in, std::string mime_type)
+InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string const &filename_in, std::string const & mime_type)
 {
     // Check if we support mime type.
     Inkscape::Extension::DB::OutputList o;
@@ -743,7 +743,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string const &filename_
  *  \param mime MIME type to export as.
  *  \param Extension used for exporting
  */
-int InkFileExportCmd::do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string mime_type,
+int InkFileExportCmd::do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string const & mime_type,
                                        Inkscape::Extension::Output &extension)
 {
     // check if the passed extension conforms to the mime type.

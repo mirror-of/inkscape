@@ -40,7 +40,7 @@ class AttributeRecord : public Inkscape::GC::Managed<> {
     GQuark key;
     /** @brief Shared pointer to the value of the attribute */
     Inkscape::Util::ptr_shared value;
-    const bool operator== (const AttributeRecord &o) const {return key==o.key && value==o.value;}
+    bool operator== (const AttributeRecord &o) const {return key==o.key && value==o.value;}
 
     // accept default copy constructor and assignment operator
 };

@@ -16,21 +16,6 @@
 #include "sp-object.h"
 #include "sp-item.h"
 
-#define SP_FLOWDIV(obj) (dynamic_cast<SPFlowdiv*>((SPObject*)obj))
-#define SP_IS_FLOWDIV(obj) (dynamic_cast<const SPFlowdiv*>((SPObject*)obj) != NULL)
-
-#define SP_FLOWTSPAN(obj) (dynamic_cast<SPFlowtspan*>((SPObject*)obj))
-#define SP_IS_FLOWTSPAN(obj) (dynamic_cast<const SPFlowtspan*>((SPObject*)obj) != NULL)
-
-#define SP_FLOWPARA(obj) (dynamic_cast<SPFlowpara*>((SPObject*)obj))
-#define SP_IS_FLOWPARA(obj) (dynamic_cast<const SPFlowpara*>((SPObject*)obj) != NULL)
-
-#define SP_FLOWLINE(obj) (dynamic_cast<SPFlowline*>((SPObject*)obj))
-#define SP_IS_FLOWLINE(obj) (dynamic_cast<const SPFlowline*>((SPObject*)obj) != NULL)
-
-#define SP_FLOWREGIONBREAK(obj) (dynamic_cast<SPFlowregionbreak*>((SPObject*)obj))
-#define SP_IS_FLOWREGIONBREAK(obj) (dynamic_cast<const SPFlowregionbreak*>((SPObject*)obj) != NULL)
-
 // these 3 are derivatives of SPItem to get the automatic style handling
 class SPFlowdiv : public SPItem {
 public:
@@ -101,5 +86,11 @@ protected:
 
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWDIV, SPFlowdiv)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWTSPAN, SPFlowtspan)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWPARA, SPFlowpara)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWLINE, SPFlowline)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FLOWREGIONBREAK, SPFlowregionbreak)
 
 #endif

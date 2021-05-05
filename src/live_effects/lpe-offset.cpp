@@ -18,6 +18,7 @@
 
 #include <2geom/path-intersection.h>
 #include <2geom/piecewise.h>
+#include <2geom/svg-path-parser.h>
 
 #include "inkscape.h"
 #include "style.h"
@@ -28,6 +29,7 @@
 #include "live_effects/parameter/enum.h"
 #include "object/sp-shape.h"
 #include "path/path-boolop.h"
+#include "path/path-util.h"
 #include "svg/svg.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-holder-entity.h"
@@ -272,7 +274,10 @@ void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve)
     is_load = false;
 }
 
-// Taked from Knot LPE duple code
+// TODO: find a way to not remove wanted self intersections
+// previouly are some failed attemps
+
+/* // Taked from Knot LPE duple code
 static Geom::Path::size_type size_nondegenerate(Geom::Path const &path)
 {
     Geom::Path::size_type retval = path.size_default();
@@ -288,8 +293,7 @@ static Geom::Path::size_type size_nondegenerate(Geom::Path const &path)
     }
     return retval;
 }
-
-/* gint get_nearest_corner(Geom::OptRect bbox, Geom::Point point)
+gint get_nearest_corner(Geom::OptRect bbox, Geom::Point point)
 {
     if (bbox) {
         double distance_a = Geom::distance(point, (*bbox).corner(0));
@@ -301,7 +305,7 @@ static Geom::Path::size_type size_nondegenerate(Geom::Path const &path)
         return std::distance(distances.begin(), mindistance);
     }
     return -1;
-} */
+}
 
 // This way not work with good selfintersections on consecutive curves
 // and when there is nodes nearest to points
@@ -310,7 +314,7 @@ static Geom::Path::size_type size_nondegenerate(Geom::Path const &path)
 // if in original path the section into the 2 nearest point dont have
 // self intersections we can supose this is a intersection to remove
 // it works very well but in good selfintersections work only in one offset direction
-/* bool consecutiveCurves(Geom::Path pathin, Geom::Point p) {
+bool consecutiveCurves(Geom::Path pathin, Geom::Point p) {
     Geom::Coord mindist = std::numeric_limits<Geom::Coord>::max();
     size_t pos;
     for (size_t i = 0; i < pathin.size_default(); ++i) {
@@ -345,9 +349,9 @@ static Geom::Path::size_type size_nondegenerate(Geom::Path const &path)
         return true;
     }
     return false;
-} */
+}
 
-/* Geom::Path removeIntersects(Geom::Path pathin, Geom::Path pathorig, size_t skipcross)
+Geom::Path removeIntersects(Geom::Path pathin, Geom::Path pathorig, size_t skipcross)
 {
     Geom::Path out;
     Geom::Crossings crossings = Geom::self_crossings(pathin);
@@ -386,14 +390,22 @@ static Geom::Path::size_type size_nondegenerate(Geom::Path const &path)
     }
     return pathin;
 } */
-// TODO: find a way to not remove wanted self intersections
-// previouly are some failed attemps
 
 Geom::Path removeIntersects(Geom::Path pathin)
 {
-    Geom::Path out;
+    // I have a pending ping to moazin for 1.2 to fix open paths offeset self intesections (Jabiertxof)
+    // For 1.1 I comment the code because simply slow a lot or crash sometimes and never work realy well
+    /* Geom::Path out;
     Geom::Crossings crossings = Geom::self_crossings(pathin);
+    static size_t maxiter = 0;
+    if (!maxiter) {
+        maxiter = crossings.size();
+    }
     for (auto cross : crossings) {
+        maxiter--;
+        if (!maxiter) {
+            return pathin;
+        }
         if (!Geom::are_near(cross.ta, cross.tb, 0.01)) {
             size_t sizepath = size_nondegenerate(pathin);
             double ta = cross.ta > cross.tb ? cross.tb : cross.ta;
@@ -411,8 +423,17 @@ Geom::Path removeIntersects(Geom::Path pathin)
                 return out;
             }
         }
-    }
+    } */
     return pathin;
+}
+
+static Geom::PathVector
+sp_simplify_pathvector(Geom::PathVector original_pathv, double threshold)
+{
+    Path* pathliv = Path_for_pathvector(original_pathv);
+    pathliv->ConvertEvenLines(threshold);
+    pathliv->Simplify(threshold);
+    return Geom::parse_svg_path(pathliv->svg_dump_path());
 }
 
 Geom::PathVector 
@@ -420,7 +441,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 {
     Geom::PathVector ret_closed;
     Geom::PathVector ret_open;
-    SPItem * item = SP_ITEM(current_shape);
+    SPItem *item = current_shape;
     SPDocument *document = getSPDoc();
     if (!item || !document) {
         return path_in;
@@ -452,8 +473,9 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     // Store separated open/closed paths
     Geom::PathVector splitter;
     for (auto &i : orig_pathv) {
-        if (!Geom::path_direction(i)) {
-            i = i.reversed();
+        // this improve offset in near closed paths
+        if (Geom::are_near(i.initialPoint(), i.finalPoint())) {
+            i.close(true);
         }
         if (i.closed()) {
             closed_pathv.push_back(i);
@@ -487,7 +509,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
     }
     for (auto pathin : closed_pathv) {
-        Geom::OptRect pbbox = pathin.boundsFast();
+        // Geom::OptRect bbox = pathin.boundsFast();
         // if (pbbox && (*pbbox).minExtent() > to_offset) {
         mix_pathv_workon.push_back(pathin);
         //}
@@ -543,6 +565,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             Geom::Path tmp =
                 half_outline(i.reversed(), std::abs(to_offset),
                              (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit), join, tolerance);
+            // not remember why i instead tmp, afete 1.1 release we can switch to tmp to tests
             if (i.closed()) {
                 Geom::PathVector out(tmp);
                 for (auto path : out) {
@@ -573,7 +596,12 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                 }
             }
             sp_flatten(outline, fill_nonZero);
+            double size = Geom::L2(Geom::bounds_fast(ret_closed)->dimensions());
+            size /= sp_lpe_item->i2doc_affine().descrim();
             ret_closed = sp_pathvector_boolop(outline, ret_closed, bool_op_diff, fill_nonZero, fill_nonZero);
+            if (!liveknot) {
+                ret_closed = sp_simplify_pathvector(ret_closed, 0.0003 * size);
+            }
         }
     }
     ret_closed.insert(ret_closed.begin(), ret_open.begin(), ret_open.end());
@@ -586,8 +614,10 @@ void LPEOffset::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
     _knot_entity->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE,
                          "LPEOffset", _("Offset point"));
     _knot_entity->knot->setMode(Inkscape::CANVAS_ITEM_CTRL_MODE_COLOR);
-    _knot_entity->knot->setFill(0x0088FFFF, 0x4BA1C7FF, 0xCF1410FF, 0x0088FFFF);
+    _knot_entity->knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+    _knot_entity->knot->setFill(0xFF6600FF, 0x4BA1C7FF, 0xCF1410FF, 0xFF6600FF);
     _knot_entity->knot->setStroke(0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF);
+    _knot_entity->knot->updateCtrl();
     offset_pt = Geom::Point(Geom::infinity(), Geom::infinity());
     knotholder->add(_knot_entity);
 }

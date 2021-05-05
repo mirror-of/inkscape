@@ -48,12 +48,12 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
         if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
             SPItem * linked1 = linked_path.getObject();
             if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
-                SP_ITEM(linked1)->doWriteTransform(transf);
+                linked1->doWriteTransform(transf);
             }
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
             SPItem * linked2 = second_path.getObject();
             if (linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
-                SP_ITEM(linked2)->doWriteTransform(transf);
+                linked2->doWriteTransform(transf);
             }
             Geom::PathVector second_pathv = second_path.get_pathvector();
             Geom::PathVector result_linked_pathv;
@@ -98,7 +98,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
         else if ( linked_path.linksToPath() && linked_path.getObject() ) {
             SPItem *linked1 = linked_path.getObject();
             if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
-                SP_ITEM(linked1)->doWriteTransform(transf);
+                linked1->doWriteTransform(transf);
             }
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
             Geom::PathVector result_pathv;
@@ -116,7 +116,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
         else if ( second_path.linksToPath() && second_path.getObject() ) {
             SPItem *linked2 = second_path.getObject();
             if (linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
-                SP_ITEM(linked2)->doWriteTransform(transf);
+                linked2->doWriteTransform(transf);
             }
             Geom::PathVector second_pathv = second_path.get_pathvector();
             Geom::PathVector result_pathv;

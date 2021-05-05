@@ -478,7 +478,7 @@ private:
 
             for(int i = 0; i < cols; ++i) {
                 _tree.append_column_numeric_editable("", _columns.cols[i], "%.2f");
-                dynamic_cast<Gtk::CellRendererText*>(
+                static_cast<Gtk::CellRendererText*>(
                     _tree.get_column_cell_renderer(i))->signal_edited().connect(
                         sigc::mem_fun(*this, &MatrixAttr::rebind));
             }
@@ -575,8 +575,10 @@ public:
         const Widget* w = get_child();
         if(w == &_label)
             return "";
-        else
-            return dynamic_cast<const AttrWidget*>(w)->get_as_attribute();
+        if (auto attrw = dynamic_cast<const AttrWidget *>(w))
+            return attrw->get_as_attribute();
+        g_assert_not_reached();
+        return "";
     }
 
     void clear_store()
@@ -615,8 +617,9 @@ static Inkscape::UI::Dialog::FileOpenDialog * selectFeImageFileInstance = nullpt
 class FileOrElementChooser : public Gtk::Box, public AttrWidget
 {
 public:
-    FileOrElementChooser(const SPAttr a)
+    FileOrElementChooser(FilterEffectsDialog& d, const SPAttr a)
         : AttrWidget(a)
+        , _dialog(d)
         , Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
     {
         pack_start(_entry, false, false);
@@ -652,13 +655,9 @@ public:
         }
     }
 
-    void set_desktop(SPDesktop* d){
-        _desktop = d;
-    }
-
 private:
-    void select_svg_element(){
-        Inkscape::Selection* sel = _desktop->getSelection();
+    void select_svg_element() {
+        Inkscape::Selection* sel = _dialog.getDesktop()->getSelection();
         if (sel->isEmpty()) return;
         Inkscape::XML::Node* node = sel->xmlNodes().front();
         if (!node || !node->matchAttributeName("id")) return;
@@ -693,7 +692,7 @@ private:
         if (!selectFeImageFileInstance) {
             selectFeImageFileInstance =
                   Inkscape::UI::Dialog::FileOpenDialog::create(
-                     *_desktop->getToplevel(),
+                     *_dialog.getDesktop()->getToplevel(),
                      open_path,
                      Inkscape::UI::Dialog::SVG_TYPES,/*TODO: any image, not just svg*/
                      (char const *)_("Select an image to be used as feImage input"));
@@ -728,7 +727,7 @@ private:
     Gtk::Entry _entry;
     Gtk::Button _fromFile;
     Gtk::Button _fromSVGElement;
-    SPDesktop* _desktop;
+    FilterEffectsDialog &_dialog;
 };
 
 class FilterEffectsDialog::Settings
@@ -942,8 +941,7 @@ public:
     // FileOrElementChooser
     FileOrElementChooser* add_fileorelement(const SPAttr attr, const Glib::ustring& label)
     {
-        FileOrElementChooser* foech = new FileOrElementChooser(attr);
-        foech->set_desktop(_dialog.getDesktop());
+        FileOrElementChooser* foech = new FileOrElementChooser(_dialog, attr);
         add_widget(foech, label);
         add_attr_widget(foech);
         return foech;
@@ -1548,13 +1546,11 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
         if((*iter)[_columns.sel] == 1)
             filter = nullptr;
 
-        auto itemlist= sel->items();
-        for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
-            SPItem * item = *i;
+        for (auto item : sel->items()) {
             SPStyle *style = item->style;
             g_assert(style != nullptr);
 
-            if (filter) {
+            if (filter && filter->valid_for(item)) {
                 sp_style_set_property_url(item, "filter", filter, false);
             } else {
                 ::remove_filter(item, false);
@@ -1572,7 +1568,7 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
 void FilterEffectsDialog::FilterModifier::update_counts()
 {
     for(const auto & i : _model->children()) {
-        SPFilter* f = SP_FILTER(i[_columns.filter]);
+        SPFilter* f = i[_columns.filter];
         i[_columns.count] = f->getRefCount();
         }
 }
@@ -2588,7 +2584,7 @@ void FilterEffectsDialog::PrimitiveList::on_drag_end(const Glib::RefPtr<Gdk::Dra
 bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
 {
     if(_autoscroll_y) {
-        auto a = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
+        auto a = static_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
         double v = a->get_value() + _autoscroll_y;
 
 	if(v < 0)
@@ -2603,7 +2599,7 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
 
 
     if(_autoscroll_x) {
-        auto a_h = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
+        auto a_h = static_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
         double h = a_h->get_value() + _autoscroll_x;
 
 	if(h < 0)
@@ -2773,9 +2769,10 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings_initialized = true;
 
     _filter_general_settings->type(0);
-    _filter_general_settings->add_checkbutton(true, SPAttr::AUTO_REGION, _("Automatic Region"), "true", "false", _("If unset the coordinates and dimensions won't be automatically updated."));
-    _filter_general_settings->add_multispinbutton(/*default x:*/ (double) -0.1, /*default y:*/ (double) -0.1, SPAttr::X, SPAttr::Y, _("Coordinates:"), -100, 100, 0.01, 0.1, 2, _("X coordinate of the left corners of filter effects region"), _("Y coordinate of the upper corners of filter effects region"));
-    _filter_general_settings->add_multispinbutton(/*default width:*/ (double) 1.2, /*default height:*/ (double) 1.2, SPAttr::WIDTH, SPAttr::HEIGHT, _("Dimensions:"), 0, 1000, 0.01, 0.1, 2, _("Width of filter effects region"), _("Height of filter effects region"));
+    auto _region_auto = _filter_general_settings->add_checkbutton(true, SPAttr::AUTO_REGION, _("Automatic Region"), "true", "false", _("If unset, the coordinates and dimensions won't be updated automatically."));
+    _region_pos = _filter_general_settings->add_multispinbutton(/*default x:*/ (double) -0.1, /*default y:*/ (double) -0.1, SPAttr::X, SPAttr::Y, _("Coordinates:"), -100, 100, 0.01, 0.1, 2, _("X coordinate of the left corners of filter effects region"), _("Y coordinate of the upper corners of filter effects region"));
+    _region_size = _filter_general_settings->add_multispinbutton(/*default width:*/ (double) 1.2, /*default height:*/ (double) 1.2, SPAttr::WIDTH, SPAttr::HEIGHT, _("Dimensions:"), 0, 1000, 0.01, 0.1, 2, _("Width of filter effects region"), _("Height of filter effects region"));
+    _region_auto->signal_attr_changed().connect( sigc::bind(sigc::mem_fun(*this, &FilterEffectsDialog::update_automatic_region), _region_auto));
 
     _settings->type(NR_FILTER_BLEND);
     _settings->add_combo(SP_CSS_BLEND_NORMAL, SPAttr::MODE, _("Mode:"), SPBlendModeConverter);
@@ -2786,10 +2783,14 @@ void FilterEffectsDialog::init_settings_widgets()
     colmat->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::update_color_matrix));
 
     _settings->type(NR_FILTER_COMPONENTTRANSFER);
-    _settings->add_componenttransfervalues(_("R:"), SPFeFuncNode::R);
-    _settings->add_componenttransfervalues(_("G:"), SPFeFuncNode::G);
-    _settings->add_componenttransfervalues(_("B:"), SPFeFuncNode::B);
-    _settings->add_componenttransfervalues(_("A:"), SPFeFuncNode::A);
+    // TRANSLATORS: Abbreviation for red color channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "R:"), SPFeFuncNode::R);
+    // TRANSLATORS: Abbreviation for green color channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "G:"), SPFeFuncNode::G);
+    // TRANSLATORS: Abbreviation for blue color channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "B:"), SPFeFuncNode::B);
+    // TRANSLATORS: Abbreviation for alpha channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "A:"), SPFeFuncNode::A);
 
     _settings->type(NR_FILTER_COMPOSITE);
     _settings->add_combo(COMPOSITE_OVER, SPAttr::OPERATOR, _("Operator:"), CompositeOperatorConverter);
@@ -2988,7 +2989,7 @@ bool number_or_empy(const Glib::ustring& text) {
     if (text.empty()) {
         return true;
     }
-    double n = atof( text.c_str() );
+    double n = g_strtod(text.c_str(), nullptr);
     if (n == 0.0 && strcmp(text.c_str(), "0") != 0 && strcmp(text.c_str(), "0.0") != 0) {
         return false;
     }
@@ -3140,6 +3141,14 @@ void FilterEffectsDialog::update_settings_sensitivity()
 void FilterEffectsDialog::update_color_matrix()
 {
     _color_matrix_values->set_from_attribute(_primitive_list.get_selected());
+}
+
+void FilterEffectsDialog::update_automatic_region(Gtk::CheckButton *btn)
+{
+    bool automatic = btn->get_active();
+    _region_pos->set_sensitive(!automatic);
+    _region_size->set_sensitive(!automatic);
+
 }
 
 } // namespace Dialog

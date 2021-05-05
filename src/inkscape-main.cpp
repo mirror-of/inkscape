@@ -13,6 +13,7 @@
 #ifdef _WIN32
 #include <windows.h> // SetDllDirectoryW, SetConsoleOutputCP
 #include <fcntl.h> // _O_BINARY
+#include <boost/algorithm/string/join.hpp>
 #endif
 
 #include "inkscape-application.h"
@@ -57,6 +58,34 @@ static void set_extensions_env()
     SetDllDirectoryW(installation_dir_w);
     g_free(installation_dir_w);
 #endif
+}
+
+/**
+ * Adds the local inkscape directory to the XDG_DATA_DIRS so themes and other Gtk
+ * resources which are specific to inkscape installations can be used.
+ */
+static void set_themes_env()
+{
+    std::string xdg_data_dirs = Glib::getenv("XDG_DATA_DIRS");
+
+    if (xdg_data_dirs.empty()) {
+        // initialize with reasonable defaults (should match what glib would do if the variable were unset!)
+#ifdef _WIN32
+        // g_get_system_data_dirs is actually not cached on Windows,
+        // so we can just call it directly and modify XDG_DATA_DIRS later
+        auto data_dirs = Glib::get_system_data_dirs();
+        xdg_data_dirs = boost::join(data_dirs, G_SEARCHPATH_SEPARATOR_S);
+#elif defined(__APPLE__)
+        // we don't know what the default is, differs for MacPorts, Homebrew, etc.
+        return;
+#else
+        // initialize with glib default (don't call g_get_system_data_dirs; it's cached!)
+        xdg_data_dirs = "/usr/local/share/:/usr/share/";
+#endif
+    }
+
+    std::string inkscape_datadir = Glib::build_filename(get_inkscape_datadir(), "inkscape");
+    Glib::setenv("XDG_DATA_DIRS", xdg_data_dirs + G_SEARCHPATH_SEPARATOR_S + inkscape_datadir);
 }
 
 #ifdef __APPLE__
@@ -224,6 +253,7 @@ int main(int argc, char *argv[])
     _setmode(_fileno(stdout), _O_BINARY); // binary mode seems required for this to work properly
 #endif
 
+    set_themes_env();
     set_extensions_env();
 
     auto ret = InkscapeApplication::singleton().gio_app()->run(argc, argv);

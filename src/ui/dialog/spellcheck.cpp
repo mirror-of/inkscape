@@ -112,7 +112,7 @@ SpellCheck::SpellCheck()
         _langs = get_available_langs();
 
         if (_langs.empty()) {
-            banner_label.set_markup("<i>No dictionaries installed</i>");
+            banner_label.set_markup(Glib::ustring::compose("<i>%1</i>", _("No dictionaries installed")));
         }
     }
 
@@ -277,11 +277,8 @@ SpellCheck::textIsValid (SPObject *root, SPItem *text)
     return (std::find(l.begin(), l.end(), text) != l.end());
 }
 
-bool SpellCheck::compareTextBboxes (gconstpointer a, gconstpointer b)//returns a<b
+bool SpellCheck::compareTextBboxes(SPItem const *i1, SPItem const *i2)//returns a<b
 {
-    SPItem *i1 = SP_ITEM(a);
-    SPItem *i2 = SP_ITEM(b);
-
     Geom::OptRect bbox1 = i1->documentVisualBounds();
     Geom::OptRect bbox2 = i2->documentVisualBounds();
     if (!bbox1 || !bbox2) {
@@ -317,8 +314,8 @@ SpellCheck::nextText()
     _text = getText(_root);
     if (_text) {
 
-        _modified_connection = (SP_OBJECT(_text))->connectModified(sigc::mem_fun(*this, &SpellCheck::onObjModified));
-        _release_connection = (SP_OBJECT(_text))->connectRelease(sigc::mem_fun(*this, &SpellCheck::onObjReleased));
+        _modified_connection = _text->connectModified(sigc::mem_fun(*this, &SpellCheck::onObjModified));
+        _release_connection = _text->connectRelease(sigc::mem_fun(*this, &SpellCheck::onObjReleased));
 
         _layout = te_get_layout (_text);
         _begin_w = _layout->begin();

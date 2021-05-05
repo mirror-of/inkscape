@@ -35,8 +35,8 @@ private:
     int do_export_svg(SPDocument *doc, std::string const &filename_in);
     int do_export_svg(SPDocument *doc, std::string const &filename_in, Inkscape::Extension::Output &extension);
     int do_export_png(SPDocument *doc, std::string const &filename_in);
-    int do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string mime_type);
-    int do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string mime_type,
+    int do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string const &mime_type);
+    int do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string const &mime_type,
                          Inkscape::Extension::Output &extension);
     int do_export_extension(SPDocument *doc, std::string const &filename_in, Inkscape::Extension::Output *extension);
     Glib::ustring export_type_current;

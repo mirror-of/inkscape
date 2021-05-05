@@ -335,7 +335,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
         if (svgdpi && svgdpi > 0) {
             dpi = svgdpi;
         }
-        std::cout << dpi << "dpi" << std::endl;
+
         // Get the size of the document
         Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
         Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
@@ -347,13 +347,9 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
             return nullptr;
         }
         
-        // Now get the resized values
-        const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
-        const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
-
         assert(!pixbuf);
-        pixbuf = sp_generate_internal_bitmap(svgDoc.get(), nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth,
-                                             scaledSvgHeight, dpi, dpi, 0xffffff00, nullptr);
+        Geom::Rect area(0, 0, svgWidth_px, svgHeight_px);
+        pixbuf = sp_generate_internal_bitmap(svgDoc.get(), area, dpi);
         GdkPixbuf const *buf = pixbuf->getPixbufRaw();
 
         // Tidy up
@@ -457,12 +453,8 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
                     return nullptr;
                 }
 
-                // Now get the resized values
-                const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
-                const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
-
-                pb = sp_generate_internal_bitmap(svgDoc.get(), nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth,
-                                                 scaledSvgHeight, dpi, dpi, 0xffffff00);
+                Geom::Rect area(0, 0, svgWidth_px, svgHeight_px);
+                pb = sp_generate_internal_bitmap(svgDoc.get(), area, dpi);
                 buf = pb->getPixbufRaw();
 
                 // Tidy up

@@ -73,10 +73,13 @@ file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}/packaging/nsis/fileassoc.nsh" native_pa
 string(REPLACE "\\" "\\\\" native_path "${native_path}")
 set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "!include ${native_path}")
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "\
+  WriteRegStr SHCTX 'SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\inkscape.exe' '' '$INSTDIR\\\\bin\\\\inkscape.exe'\n\
+  WriteRegStr SHCTX 'SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\inkscape.exe' 'Path' '$INSTDIR\\\\bin'\n\
   !insertmacro APP_ASSOCIATE 'svg' 'Inkscape.SVG' 'Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
   !insertmacro APP_ASSOCIATE 'svgz' 'Inkscape.SVGZ' 'Compressed Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
   !insertmacro UPDATEFILEASSOC")
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "\
+  DeleteRegKey SHCTX 'SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\inkscape.exe'\n\
   !insertmacro APP_UNASSOCIATE 'svg' 'Inkscape.SVG'\n\
   !insertmacro APP_UNASSOCIATE 'svgz' 'Inkscape.SVGZ'\n\
   !insertmacro UPDATEFILEASSOC")
@@ -92,7 +95,7 @@ set(CPACK_WIX_PROPERTY_ARPURLUPDATEINFO "${CPACK_PACKAGE_HOMEPAGE_URL}/release")
 set(CPACK_WIX_ROOT_FEATURE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION_SUMMARY}")
 set(CPACK_WIX_LIGHT_EXTRA_FLAGS "-dcl:high") # set high compression
 
-set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/packaging/wix/file_association.xml"
+set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/packaging/wix/app_registration.xml"
                          "${CMAKE_SOURCE_DIR}/packaging/wix/feature_attributes.xml")
 
 # DEB (Linux .deb bundle)
@@ -143,6 +146,17 @@ cpack_add_component(extensions
                     DESCRIPTION "Inkscape extensions (including many import and export plugins)"
                     GROUP "group_2_inkscape_data"
                     INSTALL_TYPES full compact)
+cpack_add_component(extension_manager
+                    DISPLAY_NAME "Extension Manager"
+                    DESCRIPTION "Extension manager allows user to install extensions from the inkscape website"
+                    DEPENDS "extensions"
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full compact)
+cpack_add_component(themes
+                    DISPLAY_NAME "Themes"
+                    DESCRIPTION "Inkscape themes (look and feel including icons)"
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full compact)
 cpack_add_component(examples
                     DISPLAY_NAME "Examples"
                     DESCRIPTION "Example files created in Inkscape"
@@ -175,5 +189,3 @@ foreach(index RANGE ${length})
                         GROUP "group_3_translations"
                         INSTALL_TYPES full)
 endforeach()
-
-# TODO: Separate themes and make optional depending on size

@@ -421,7 +421,7 @@ bool ConnectorTool::item_handler(SPItem* item, GdkEvent* event)
         if (cc_item_is_shape(item)) {
             this->_setActiveShape(item);
         }
-        ret = true;
+        ret = false;
         break;
     }
     default:
@@ -818,14 +818,16 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
     Avoid::Point src(o[Geom::X], o[Geom::Y]);
     Avoid::Point dst(d[Geom::X], d[Geom::Y]);
 
-    Avoid::Router *router = desktop->getDocument()->getRouter();
-    this->newConnRef = new Avoid::ConnRef(router);
-    this->newConnRef->setEndpoint(Avoid::VertID::src, src);
-    if (this->isOrthogonal)
-        this->newConnRef->setRoutingType(Avoid::ConnType_Orthogonal);
-    else
-        this->newConnRef->setRoutingType(Avoid::ConnType_PolyLine);
-    
+    if (!this->newConnRef) {
+        Avoid::Router *router = desktop->getDocument()->getRouter();
+        this->newConnRef = new Avoid::ConnRef(router);
+        this->newConnRef->setEndpoint(Avoid::VertID::src, src);
+        if (this->isOrthogonal) {
+            this->newConnRef->setRoutingType(Avoid::ConnType_Orthogonal);
+        } else {
+            this->newConnRef->setRoutingType(Avoid::ConnType_PolyLine);
+        }
+    }
     // Set new endpoint.
     this->newConnRef->setEndpoint(Avoid::VertID::tar, dst);
     // Immediately generate new routes for connector.
@@ -973,7 +975,7 @@ static bool cc_generic_knot_handler(GdkEvent *event, SPKnot *knot)
 
     bool consumed = false;
 
-    gchar const *knot_tip = "Click to join at this point";
+    gchar const *knot_tip = _("Click to join at this point");
     switch (event->type) {
     case GDK_ENTER_NOTIFY:
         knot->setFlag(SP_KNOT_MOUSEOVER, TRUE);

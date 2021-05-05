@@ -654,12 +654,11 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
         sp_namedview_add_grid(this, child, nullptr);
     } else {
         SPObject *no = this->document->getObjectByRepr(child);
-        if ( !SP_IS_OBJECT(no) ) {
+        if (!no) {
             return;
         }
 
-        if (SP_IS_GUIDE(no)) {
-            SPGuide *g = (SPGuide *) no;
+        if (auto g = dynamic_cast<SPGuide *>(no)) {
             this->guides.push_back(g);
 
             //g_object_set(G_OBJECT(g), "color", this->guidecolor, "hicolor", this->guidehicolor, NULL);
@@ -675,7 +674,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
                         g->sensitize(view->getCanvas(), TRUE);
                     }
 
-                    sp_namedview_show_single_guide(SP_GUIDE(g), this->showguides);
+                    sp_namedview_show_single_guide(g, this->showguides);
                 }
             }
         }

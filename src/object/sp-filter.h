@@ -23,9 +23,6 @@
 #include "sp-filter-units.h"
 #include "svg/svg-length.h"
 
-#define SP_FILTER(obj) (dynamic_cast<SPFilter*>((SPObject*)obj))
-#define SP_IS_FILTER(obj) (dynamic_cast<const SPFilter*>((SPObject*)obj) != NULL)
-
 #define SP_FILTER_FILTER_UNITS(f) (SP_FILTER(f)->filterUnits)
 #define SP_FILTER_PRIMITIVE_UNITS(f) (SP_FILTER(f)->primitiveUnits)
 
@@ -63,6 +60,9 @@ public:
     void update_filter_region(SPItem *item);
     void set_filter_region(double x, double y, double width, double height);
     Geom::Rect get_automatic_filter_region(SPItem *item);
+
+    // Checks each filter primative to make sure the object won't cause issues
+    bool valid_for(SPObject const *obj) const;
 
     /** Finds image name based on it's slot number. Returns 0 for unknown slot
      * numbers. */
@@ -103,6 +103,9 @@ protected:
 
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_FILTER, SPFilter)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_FILTER, SPFilter)
 
 #endif /* !SP_FILTER_H_SEEN */
 

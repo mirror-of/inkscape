@@ -30,8 +30,6 @@
 #include "snap-preferences.h"
 #include "snap-candidate.h"
 
-//class SPGuideConstraint;
-#include "sp-guide-constraint.h"
 #include "xml/repr.h"
 
 class SPClipPath;
@@ -121,9 +119,6 @@ public:
     Geom::Affine i2vp;
 };
 
-#define SP_ITEM(obj) (dynamic_cast<SPItem*>((SPObject*)obj))
-#define SP_IS_ITEM(obj) (dynamic_cast<const SPItem*>((SPObject*)obj) != NULL)
-
 /**
  * Base class for visual SVG elements.
  * SPItem is an abstract base class for all graphic (visible) SVG nodes. It
@@ -173,8 +168,6 @@ public:
 
   public:
     SPItemView *display;
-
-    std::vector<SPGuideConstraint> constraints;
 
     sigc::signal<void, Geom::Affine const *, SPItem *> _transformed_signal;
 
@@ -458,13 +451,16 @@ int sp_item_repr_compare_position(SPItem const *first, SPItem const *second);
 
 inline bool sp_item_repr_compare_position_bool(SPObject const *first, SPObject const *second)
 {
-    return sp_repr_compare_position(((SPItem*)first)->getRepr(),
-            ((SPItem*)second)->getRepr())<0;
+    return sp_repr_compare_position(first->getRepr(),
+            second->getRepr())<0;
 }
 
 
 SPItem *sp_item_first_item_child (SPObject *obj);
 SPItem const *sp_item_first_item_child (SPObject const *obj);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_ITEM, SPItem)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_ITEM, SPItem)
 
 #endif // SEEN_SP_ITEM_H
 

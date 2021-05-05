@@ -75,6 +75,7 @@
 
 #include "xml/croco-node-iface.h"
 #include "xml/rebase-hrefs.h"
+#include "xml/simple-document.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -102,7 +103,7 @@ SPDocument::SPDocument() :
     rroot(nullptr),
     root(nullptr),
     style_cascade(cr_cascade_new(nullptr, nullptr, nullptr)),
-    document_uri(nullptr),
+    document_filename(nullptr),
     document_base(nullptr),
     document_name(nullptr),
     actionkey(),
@@ -197,9 +198,9 @@ SPDocument::~SPDocument() {
         g_free(document_base);
         document_base = nullptr;
     }
-    if (document_uri) {
-        g_free(document_uri);
-        document_uri = nullptr;
+    if (document_filename) {
+        g_free(document_filename);
+        document_filename = nullptr;
     }
 
     modified_connection.disconnect();
@@ -305,7 +306,7 @@ void SPDocument::collectOrphans() {
 }
 
 SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
-                                  gchar const *document_uri,
+                                  gchar const *filename,
                                   gchar const *document_base,
                                   gchar const *document_name,
                                   bool keepalive,
@@ -324,9 +325,9 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         parent->_child_documents.push_back(document);
     }
 
-    if (document->document_uri){
-        g_free(document->document_uri);
-        document->document_uri = nullptr;
+    if (document->document_filename){
+        g_free(document->document_filename);
+        document->document_filename = nullptr;
     }
     if (document->document_base){
         g_free(document->document_base);
@@ -337,10 +338,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         document->document_name = nullptr;
     }
 #ifndef _WIN32
-    document->document_uri = prepend_current_dir_if_relative(document_uri);
+    document->document_filename = prepend_current_dir_if_relative(filename);
 #else
     // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
-    document->document_uri = document_uri? g_strdup(document_uri) : NULL;
+    document->document_filename = filename? g_strdup(filename) : NULL;
 #endif
 
     // base is simply the part of the path before filename; e.g. when running "inkscape ../file.svg" the base is "../"
@@ -475,16 +476,44 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 }
 
 /**
+ * Create a copy of the document, useful for modifying during save & export.
+ */
+std::unique_ptr<SPDocument> SPDocument::copy() const
+{
+    // New SimpleDocument object where we will put all the same data
+    Inkscape::XML::Document *new_rdoc = new Inkscape::XML::SimpleDocument();
+
+    // Duplicate the svg root node AND any PI and COMMENT nodes, this should be put
+    // into xml/simple-document.h at some point to fix it's duplicate implementation.
+    for (Inkscape::XML::Node *child = rdoc->firstChild(); child; child = child->next()) {
+        if (child) {
+            // Get a new xml repr for the svg root node
+            Inkscape::XML::Node *new_child = child->duplicate(new_rdoc);
+
+            // Add the duplicated svg node as the document's rdoc
+            new_rdoc->appendChild(new_child);
+            Inkscape::GC::release(new_child);
+        }
+    }
+
+    auto doc = createDoc(new_rdoc, document_filename, document_base, document_name, keepalive, nullptr);
+    doc->_original_document = this->doRef();
+    Inkscape::GC::release(new_rdoc);
+
+    return std::unique_ptr<SPDocument>(doc);
+}
+
+/**
  * Fetches a document and attaches it to the current document as a child href
  */
-SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
+SPDocument *SPDocument::createChildDoc(std::string const &filename)
 {
     SPDocument *parent = this;
     SPDocument *document = nullptr;
 
-    while(parent != nullptr && parent->getDocumentURI() != nullptr && document == nullptr) {
+    while(parent != nullptr && parent->getDocumentFilename() != nullptr && document == nullptr) {
         // Check myself and any parents in the chain
-        if(document_uri == parent->getDocumentURI()) {
+        if(filename == parent->getDocumentFilename()) {
             document = parent;
             break;
         }
@@ -492,7 +521,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
         boost::ptr_list<SPDocument>::iterator iter;
         for (iter = parent->_child_documents.begin();
           iter != parent->_child_documents.end(); ++iter) {
-            if(document_uri == iter->getDocumentURI()) {
+            if(filename == iter->getDocumentFilename()) {
                 document = &*iter;
                 break;
             }
@@ -503,29 +532,29 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
     // Load a fresh document from the svg source.
     if(!document) {
         std::string path;
-        if (Glib::path_is_absolute(document_uri)) {
-            path = document_uri;
+        if (Glib::path_is_absolute(filename)) {
+            path = filename;
         } else {
-            path = this->getDocumentBase() + document_uri;
+            path = this->getDocumentBase() + filename;
         }
         document = createNewDoc(path.c_str(), false, false, this);
     }
     return document;
 }
 /**
- * Fetches document from URI, or creates new, if NULL; public document
+ * Fetches document from filename, or creates new, if NULL; public document
  * appears in document list.
  */
-SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, bool make_new, SPDocument *parent)
+SPDocument *SPDocument::createNewDoc(gchar const *filename, bool keepalive, bool make_new, SPDocument *parent)
 {
     Inkscape::XML::Document *rdoc = nullptr;
     gchar *document_base = nullptr;
     gchar *document_name = nullptr;
 
-    if (document_uri) {
+    if (filename) {
         Inkscape::XML::Node *rroot;
         /* Try to fetch repr from file */
-        rdoc = sp_repr_read_file(document_uri, SP_SVG_NS_URI);
+        rdoc = sp_repr_read_file(filename, SP_SVG_NS_URI);
         /* If file cannot be loaded, return NULL without warning */
         if (rdoc == nullptr) return nullptr;
         rroot = rdoc->root();
@@ -535,13 +564,13 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, 
 
         // Opening a template that points to a sister file should still work
         // this also includes tutorials which point to png files.
-        document_base = g_path_get_dirname(document_uri);
+        document_base = g_path_get_dirname(filename);
 
         if (make_new) {
-            document_uri = nullptr;
+            filename = nullptr;
             document_name = g_strdup_printf(_("New document %d"), ++doc_count);
         } else {
-            document_name = g_path_get_basename(document_uri);
+            document_name = g_path_get_basename(filename);
             if (strcmp(document_base, ".") == 0) {
                 g_free(document_base);
                 document_base = nullptr;
@@ -558,7 +587,7 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, 
     //# These should be set by now
     g_assert(document_name);
 
-    SPDocument *doc = createDoc(rdoc, document_uri, document_base, document_name, keepalive, parent);
+    SPDocument *doc = createDoc(rdoc, filename, document_base, document_name, keepalive, parent);
 
     g_free(document_base);
     g_free(document_name);
@@ -591,11 +620,20 @@ std::unique_ptr<SPDocument> SPDocument::doRef()
     Inkscape::GC::anchor(this);
     return std::unique_ptr<SPDocument>(this);
 }
+std::unique_ptr<SPDocument const> SPDocument::doRef() const
+{
+    return const_cast<SPDocument*>(this)->doRef();
+}
 
 /// guaranteed not to return nullptr
 Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 {
-    SPNamedView const* nv = sp_document_namedview(this, nullptr);
+    // The document may not have a namedview (cleaned) so don't crash if it doesn't exist.
+    auto nv_repr = sp_repr_lookup_name (rroot, "sodipodi:namedview");
+    if (!nv_repr) {
+        return unit_table.getUnit("px");
+    }
+    auto nv = dynamic_cast<SPNamedView *> (getObjectByRepr(nv_repr));
     return nv ? nv->getDisplayUnit() : unit_table.getUnit("px");
 }
 
@@ -877,32 +915,32 @@ void SPDocument::setDocumentBase( gchar const* document_base )
     }
 }
 
-void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
+void SPDocument::do_change_filename(gchar const *const filename, bool const rebase)
 {
     gchar *new_document_base = nullptr;
     gchar *new_document_name = nullptr;
-    gchar *new_document_uri = nullptr;
+    gchar *new_document_filename = nullptr;
     if (filename) {
 
 #ifndef _WIN32
-        new_document_uri = prepend_current_dir_if_relative(filename);
+        new_document_filename = prepend_current_dir_if_relative(filename);
 #else
         // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
-        new_document_uri = g_strdup(filename);
+        new_document_filename = g_strdup(filename);
 #endif
 
-        new_document_base = g_path_get_dirname(new_document_uri);
-        new_document_name = g_path_get_basename(new_document_uri);
+        new_document_base = g_path_get_dirname(new_document_filename);
+        new_document_name = g_path_get_basename(new_document_filename);
     } else {
-        new_document_uri = g_strdup_printf(_("Unnamed document %d"), ++doc_count);
+        new_document_filename = g_strdup_printf(_("Unnamed document %d"), ++doc_count);
         new_document_base = nullptr;
-        new_document_name = g_strdup(this->document_uri);
+        new_document_name = g_strdup(this->document_filename);
     }
 
     // Update saveable repr attributes.
     Inkscape::XML::Node *repr = getReprRoot();
 
-    // Changing uri in the document repr must not be not undoable.
+    // Changing filename in the document repr must not be not undoable.
     bool const saved = DocumentUndo::getUndoSensitive(this);
     DocumentUndo::setUndoSensitive(this, false);
 
@@ -919,35 +957,33 @@ void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
 
     g_free(this->document_name);
     g_free(this->document_base);
-    g_free(this->document_uri);
+    g_free(this->document_filename);
     this->document_name = new_document_name;
     this->document_base = new_document_base;
-    this->document_uri = new_document_uri;
+    this->document_filename = new_document_filename;
 
-    this->uri_set_signal.emit(this->document_uri);
+    this->filename_set_signal.emit(this->document_filename);
 }
 
 /**
- * Sets base, name and uri members of \a document.  Doesn't update
+ * Sets base, name and filename members of \a document.  Doesn't update
  * any relative hrefs in the document: thus, this is primarily for
  * newly-created documents.
  *
- * \see sp_document_change_uri_and_hrefs
+ * \see SPDocument::changeFilenameAndHrefs
  */
-void SPDocument::setDocumentUri(gchar const *filename)
+void SPDocument::setDocumentFilename(gchar const *filename)
 {
-    do_change_uri(filename, false);
+    do_change_filename(filename, false);
 }
 
 /**
- * Changes the base, name and uri members of \a document, and updates any
+ * Changes the base, name and filename members of \a document, and updates any
  * relative hrefs in the document to be relative to the new base.
- *
- * \see sp_document_set_uri
  */
-void SPDocument::changeUriAndHrefs(gchar const *filename)
+void SPDocument::changeFilenameAndHrefs(gchar const *filename)
 {
-    do_change_uri(filename, true);
+    do_change_filename(filename, true);
 }
 
 void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
@@ -975,6 +1011,37 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
     }
 }
 
+/**  
+ * Assign IDs to selected objects that don't have an ID attribute
+ * Checks if the object's id attribute is NULL. If it is, assign it a unique ID
+ */
+void SPDocument::enforceObjectIds()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::Selection *selection = desktop->getSelection();
+    bool showInfoDialog = false;
+    Glib::ustring msg = _("Selected objects require IDs.\nThe following IDs have been assigned:\n");
+    auto items = selection->items();
+    for (auto iter = items.begin(); iter != items.end(); ++iter) {
+        SPItem *item = *iter;
+        if(!item->getId())
+        {
+            // Selected object does not have an ID, so assign it a unique ID
+            gchar *id = sp_object_get_unique_id(item, nullptr);
+            item->setAttribute("id", id);
+            item->updateRepr();
+            msg += Glib::ustring::compose(_(" %1\n"), id);
+            g_free(id);
+            showInfoDialog = true;
+        }
+    }
+    if(showInfoDialog) {
+        desktop->showInfoDialog(msg);
+        setModifiedSinceSave(true);
+    }
+    return;
+}
+
 SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
 {
     if (iddef.empty()) {
@@ -984,6 +1051,8 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
     std::map<std::string, SPObject *>::const_iterator rv = iddef.find(id);
     if (rv != iddef.end()) {
         return (rv->second);
+    } else if (_parent_document) {
+        return _parent_document->getObjectById(id);
     } else {
         return nullptr;
     }
@@ -1001,14 +1070,21 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
 void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
 {
     if (parent) {
-        Glib::ustring class_attribute;
         char const *temp = parent->getAttribute("class");
         if (temp) {
-            class_attribute = temp;
-        }
-
-        if (class_attribute.find( klass ) != std::string::npos) {
-            objects.push_back( parent );
+            std::istringstream classes(temp);
+            Glib::ustring token;
+            while (classes >> token) {
+                // we can have multiple class
+                if (classes.str() == " ") {
+                    token = "";
+                    continue;
+                }
+                if (token == klass) {
+                    objects.push_back(parent);
+                    break;
+                }
+            }
         }
 
         // Check children
@@ -1136,6 +1212,23 @@ std::vector<Glib::ustring> SPDocument::getLanguages() const
         g_free(rdf_language_stripped);
     }
 
+    // add languages from parent document
+    if (_parent_document) {
+        auto parent_languages = _parent_document->getLanguages();
+
+        // return parent languages directly if we aren't contributing any
+        if (document_languages.empty()) {
+            return parent_languages;
+        }
+
+        // otherwise append parent's languages to what we already have
+        std::move(parent_languages.begin(), parent_languages.end(),
+                  std::back_insert_iterator(document_languages));
+
+        // don't add languages from locale; parent already did that
+        return document_languages;
+    }
+
     // get language from system locale (will also match the interface language preference as we set LANG accordingly)
     // TODO: This includes locales with encodings like "de_DE.UTF-8" - is this useful or should we skip these?
     // TODO: This includes the default "C" locale - is this useful or should we skip it?
@@ -1220,7 +1313,7 @@ gint SPDocument::ensureUpToDate()
         // Process document updates.
         while (!_updateDocument(0)) {
             if (counter == 0) {
-                g_warning("More than 32 iteration while updating document '%s'", document_uri);
+                g_warning("More than 32 iteration while updating document '%s'", document_filename);
                 break;
             }
             counter--;
@@ -1469,7 +1562,7 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
 std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden, bool take_insensitive, bool take_groups, bool enter_groups) const
 {
     std::vector<SPItem*> x;
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_hidden, take_insensitive, take_groups, enter_groups);
+    return find_items_in_area(x, this->root, dkey, box, is_within, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
 /**
@@ -1486,7 +1579,7 @@ std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect con
 std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden, bool take_insensitive, bool take_groups, bool enter_groups) const
 {
     std::vector<SPItem*> x;
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
+    return find_items_in_area(x, this->root, dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
 std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const
@@ -1503,7 +1596,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     // Cache a flattened SVG DOM to speed up selection.
     if(!_node_cache_valid){
         _node_cache.clear();
-        build_flat_item_list(key, SP_GROUP(this->root), true);
+        build_flat_item_list(key, this->root, true);
         _node_cache_valid=true;
     }
     SPObject *current_layer = nullptr;
@@ -1541,11 +1634,11 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
     std::deque<SPItem*> bak(_node_cache);
     if(!into_groups){
         _node_cache.clear();
-        build_flat_item_list(key, SP_GROUP(this->root), into_groups);
+        build_flat_item_list(key, this->root, into_groups);
     }
     if(!_node_cache_valid && into_groups){
         _node_cache.clear();
-        build_flat_item_list(key, SP_GROUP(this->root), true);
+        build_flat_item_list(key, this->root, true);
         _node_cache_valid=true;
     }
 
@@ -1557,7 +1650,7 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
 
 SPItem *SPDocument::getGroupAtPoint(unsigned int key, Geom::Point const &p) const
 {
-    return find_group_at_point(key, SP_GROUP(this->root), p);
+    return find_group_at_point(key, this->root, p);
 }
 
 // Resource management
@@ -1941,9 +2034,9 @@ sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_ty
     return modified_signal.connect(slot);
 }
 
-sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
+sigc::connection SPDocument::connectFilenameSet(SPDocument::FilenameSetSignal::slot_type slot)
 {
-    return uri_set_signal.connect(slot);
+    return filename_set_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)

@@ -30,7 +30,7 @@ public:
     const_char_ptr(const char* const data) noexcept: m_data(data) {};
     const_char_ptr(const Glib::ustring& str) noexcept: const_char_ptr(str.c_str()) {};
     const_char_ptr(const std::string& str) noexcept: const_char_ptr(str.c_str()) {};
-    const_char_ptr(const ptr_shared& shared) : const_char_ptr(static_cast<const char* const>(shared)) {};
+    const_char_ptr(const ptr_shared& shared) : const_char_ptr(static_cast<const char*>(shared)) {};
 
     const char * data() const noexcept { return m_data; }
 private:

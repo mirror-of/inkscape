@@ -35,7 +35,6 @@
 #include "sp-desc.h"
 #include "sp-guide.h"
 #include "sp-hatch.h"
-#include "sp-item-rm-unsatisfied-cns.h"
 #include "sp-mask.h"
 #include "sp-pattern.h"
 #include "sp-rect.h"
@@ -47,7 +46,6 @@
 #include "sp-use.h"
 
 #include "style.h"
-#include "uri.h"
 
 
 #include "util/find-last-if.h"
@@ -533,7 +531,8 @@ void SPItem::set(SPAttr key, gchar const* value) {
             }
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
-                style->clear(key);
+                // Propergate the property change to all clones
+                style->readFromObject(object);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 SPObject::set(key, value);
@@ -897,8 +896,6 @@ Geom::OptRect SPItem::documentPreferredBounds() const
     }
 }
 
-
-
 Geom::OptRect SPItem::documentGeometricBounds() const
 {
     return geometricBounds(i2doc_affine());
@@ -1086,7 +1083,6 @@ gchar *SPItem::detailedDescription() const {
 bool SPItem::isFiltered() const {
 	return (style && style->filter.href && style->filter.href->getObject());
 }
-
 
 SPObject* SPItem::isInMask() const {
     SPObject* parent = this->parent;
@@ -1538,7 +1534,8 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
              (!preserve && // user did not chose to preserve all transforms
              (!clip_ref || !clip_ref->getObject()) && // the object does not have a clippath
              (!mask_ref || !mask_ref->getObject()) && // the object does not have a mask
-             !(!transform.isTranslation() && style && style->getFilter())) // the object does not have a filter, or the transform is translation (which is supposed to not affect filters)
+             !(!transform.isTranslation() && style && style->getFilter()))
+                // the object does not have a filter, or the transform is translation (which is supposed to not affect filters)
         )
     {
         transform_attr = this->set_transform(transform);
@@ -1593,7 +1590,6 @@ void SPItem::set_item_transform(Geom::Affine const &transform_matrix)
         /* The SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a
            transformation.  It's apparently not used anywhere else. */
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_USER_MODIFIED_FLAG_B);
-        sp_item_rm_unsatisfied_cns(*this);
     }
 }
 

@@ -44,6 +44,7 @@
 #ifdef CAIRO_HAS_PS_SURFACE
 # include "internal/cairo-ps-out.h"
 #endif
+#include "internal/png-output.h"
 #include "internal/pov-out.h"
 #include "internal/odf.h"
 #include "internal/latex-pstricks-out.h"
@@ -141,6 +142,9 @@ update_pref(Glib::ustring const &pref_path,
     }
 }
 
+// A list of user extensions loaded, used for refreshing
+static std::vector<Glib::ustring> user_extensions;
+
 /**
  * Invokes the init routines for internal modules.
  *
@@ -168,6 +172,7 @@ init()
     Internal::Emf::init();
     Internal::PrintWmf::init();
     Internal::Wmf::init();
+    Internal::PngOutput::init();
     Internal::PovOutput::init();
     Internal::OdfOutput::init();
     Internal::PrintLatex::init();
@@ -234,7 +239,10 @@ init()
 
     Internal::Filter::Filter::filters_all();
 
-    for(auto &filename: get_filenames(EXTENSIONS, {SP_MODULE_EXTENSION})) {
+    // User extensions first so they can over-ride
+    load_user_extensions();
+
+    for(auto &filename: get_filenames(SYSTEM, EXTENSIONS, {SP_MODULE_EXTENSION})) {
         build_from_file(filename.c_str());
     }
 
@@ -255,6 +263,38 @@ init()
                 // Inkscape::Extension::db.get_output_list()
         );
 }
+
+void
+load_user_extensions()
+{
+    // There's no need to ask for SYSTEM extensions, just ask for user extensions.
+    for(auto &filename: get_filenames(USER, EXTENSIONS, {SP_MODULE_EXTENSION})) {
+        bool exist = false;
+        for(auto &filename2: user_extensions) {
+            if (filename == filename2) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) {
+            build_from_file(filename.c_str());
+            user_extensions.push_back(filename);
+        }
+    }
+}
+
+/**
+ * Refresh user extensions
+ *
+ * Remember to call check_extensions() once completed.
+ */
+void
+refresh_user_extensions()
+{
+    load_user_extensions();
+    check_extensions();
+}
+
 
 static void
 check_extensions_internal(Extension *in_plug, gpointer in_data)

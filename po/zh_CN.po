@@ -10,6 +10,7 @@
 # Mingye Wang <arthur200126@gmail.com>, 2015.
 # Aron Xu <happyaron.xu@gmail.com>, 2016.
 # 驿窗 <classenu@163.com>, 2020.
+# Rong "Mantle" Bao <mantlejonse@foxmail.com>, 2021.
 #
 msgid ""
 msgstr ""
@@ -8933,7 +8934,7 @@ msgstr "错误：%s"
 msgid "No (valid) files to open."
 msgstr "选择要打开的文件"
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr "修复损坏的链接"
 
@@ -20092,7 +20093,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:1056
 #, fuzzy
 msgid "Theme changes"
-msgstr "相对变化(_T)"
+msgstr "主题修改(_T)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1103
 #, fuzzy
@@ -20102,17 +20103,17 @@ msgstr "删除线段"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
 #, fuzzy
 msgid "Change Gtk theme:"
-msgstr "改变宽度"
+msgstr "修改 GTK 主题："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1112
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
 msgid "Use dark theme"
-msgstr ""
+msgstr "使用深色主题"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1116
 #, fuzzy
 msgid "Display icons"
-msgstr "网格单位(_U)："
+msgstr "图标显示"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1139
 #, fuzzy
@@ -20125,17 +20126,17 @@ msgstr "修改图标主题："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1146
 msgid "Use symbolic icons"
-msgstr ""
+msgstr "使用符号式图标"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1149
 #, fuzzy
 msgid "Use default colors for icons"
-msgstr "设置填充颜色为无"
+msgstr "使用图标默认颜色"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1175
 #, fuzzy
 msgid "Icon color"
-msgstr "月份颜色："
+msgstr "图标颜色"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1195
@@ -20146,7 +20147,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:1182
 #, fuzzy
 msgid "Highlights"
-msgstr "高亮混合："
+msgstr "高亮混合"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1202
@@ -20168,7 +20169,7 @@ msgstr ""
 #, fuzzy
 msgctxt "Icon size"
 msgid "Larger"
-msgstr "大"
+msgstr "更大"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1192
 msgctxt "Icon size"
@@ -20213,21 +20214,21 @@ msgstr "设置第二工具栏中的图标大小(需重启程序)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1210
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1210
 #, fuzzy
 msgid "No"
-msgstr "恩科文"
+msgstr "否"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1210
 #, fuzzy
 msgid "Theme decides"
-msgstr "从三条边"
+msgstr "由主题决定"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1213
 msgid "Show icons in menus:"
-msgstr ""
+msgstr "在菜单中显示图标："
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1054
@@ -20240,7 +20241,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
 msgid "Theme"
-msgstr ""
+msgstr "主题"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1220
 msgid "Save and restore window geometry for each document"
@@ -20849,7 +20850,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1543
 msgid "SVG 2 to SVG 1.1"
-msgstr ""
+msgstr "SVG 2 转换为 SVG 1.1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1545
 msgid "Replace markers with 'auto_start_reverse'."
@@ -21906,7 +21907,7 @@ msgstr "包含隐藏(_H)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2110
 msgid "SVG import mode:"
-msgstr ""
+msgstr "SVG 导入模式："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2117
 #, fuzzy
@@ -22015,13 +22016,13 @@ msgstr ""
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2152
 #: ../src/ui/dialog/inkscape-preferences.cpp:2314
 msgid "Reassign shortcut?"
-msgstr ""
+msgstr "重新指派快捷键？"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2153
 #: ../src/ui/dialog/inkscape-preferences.cpp:2315
 msgid "Are you sure you want to reassign this shortcut?"
-msgstr ""
+msgstr "确实要重新指派快捷键吗？"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2411
 msgid "Misc"
@@ -22154,12 +22155,12 @@ msgstr "用户主题的位置"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2565
 msgid "Open icons folder"
-msgstr ""
+msgstr "打开图标目录"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2566
 #, fuzzy
 msgid "User icons: "
-msgstr "用户设置："
+msgstr "用户图标："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2566
 #, fuzzy
@@ -22181,32 +22182,32 @@ msgstr "用户模板的位置"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2574
 #, fuzzy
 msgid "Open symbols folder"
-msgstr "没有发现对象"
+msgstr "打开符号目录"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2576
 #, fuzzy
 msgid "User symbols: "
-msgstr "柬埔寨语符号"
+msgstr "用户符号："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2576
 #, fuzzy
 msgid "Location of the user’s symbols"
-msgstr "用户扩展的位置"
+msgstr "用户符号的位置"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2580
 #, fuzzy
 msgid "Open paint servers folder"
-msgstr "打开 HPGL 绘图仪文件"
+msgstr "打开绘图服务器目录"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2582
 #, fuzzy
 msgid "User paint servers: "
-msgstr "用户扩展："
+msgstr "用户绘图服务器："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2583
 #, fuzzy
 msgid "Location of the user’s paint servers"
-msgstr "用户扩展的位置"
+msgstr "用户绘图服务器的位置"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2586
 #, fuzzy
@@ -22216,12 +22217,12 @@ msgstr "打开 HPGL 绘图仪文件"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
 #, fuzzy
 msgid "User palettes: "
-msgstr "用户扩展："
+msgstr "用户调色板："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
 #, fuzzy
 msgid "Location of the user’s palettes"
-msgstr "用户扩展的位置"
+msgstr "用户调色板的位置"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2591
 msgid "Open keyboard shortcuts folder"
@@ -22239,17 +22240,17 @@ msgstr "用户首选项文件的位置"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2596
 msgid "Open user interface folder"
-msgstr ""
+msgstr "打开用户自定义界面目录"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2597
 #, fuzzy
 msgid "User UI: "
-msgstr "用户缓存："
+msgstr "用户自定义界面："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2598
 #, fuzzy
 msgid "Location of the user’s user interface description files"
-msgstr "用户首选项文件的位置"
+msgstr "用户自定义界面描述文件的位置"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2602
 msgid "User cache: "

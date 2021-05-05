@@ -26,6 +26,7 @@ namespace UI {
 namespace Dialog {
 
 class DialogContainer;
+class DialogWindow;
 
 /**
  * A widget that wraps a Gtk::Notebook with dialogs as pages.
@@ -48,7 +49,7 @@ public:
     // Notebook callbacks
     void close_tab_callback();
     void close_notebook_callback();
-    void pop_tab_callback();
+    DialogWindow* pop_tab_callback();
 
 private:
     // Widgets
@@ -59,6 +60,7 @@ private:
 
     // State variables
     bool _labels_auto;
+    bool _label_visible;
     bool _detaching_duplicate;
     Gtk::Widget *_selected_page;
     std::vector<sigc::connection> _conn;
@@ -72,6 +74,8 @@ private:
     void on_size_allocate_notebook(Gtk::Allocation &allocation);
     void on_labels_toggled();
     bool on_tab_click_event(GdkEventButton *event, Gtk::Widget *page);
+    void on_close_button_click_event(Gtk::Widget *page);
+    void on_page_switch(Gtk::Widget *page, guint page_number);
 
     // Helpers
     void toggle_tab_labels_callback(bool show);

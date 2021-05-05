@@ -13,17 +13,11 @@
 #include "xml/node-iterators.h"
 #include "repr-sorting.h"
 
-static bool same_repr(Inkscape::XML::Node const &a, Inkscape::XML::Node const &b)
-{
-  /* todo: I'm not certain that it's legal to take the address of a reference.  Check the exact wording of the spec on this matter. */
-    return &a == &b;
-}
-
 Inkscape::XML::Node const *LCA(Inkscape::XML::Node const *a, Inkscape::XML::Node const *b)
 {
-    using Inkscape::Algorithms::longest_common_suffix;
-    Inkscape::XML::Node const *ancestor = longest_common_suffix<Inkscape::XML::NodeConstParentIterator>(
-        a, b, nullptr, &same_repr);
+    using Inkscape::Algorithms::nearest_common_ancestor;
+    Inkscape::XML::Node const *ancestor =
+        nearest_common_ancestor<Inkscape::XML::NodeConstParentIterator>(a, b, nullptr);
     bool OK = false;
     if (ancestor) {
         if (ancestor->type() != Inkscape::XML::NodeType::DOCUMENT_NODE) {

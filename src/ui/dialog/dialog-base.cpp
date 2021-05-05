@@ -13,6 +13,7 @@
 
 #include "dialog-base.h"
 
+#include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/refptr.h>
 #include <gtkmm/cssprovider.h>
@@ -21,6 +22,11 @@
 
 #include "desktop.h"
 #include "ui/dialog/dialog-notebook.h"
+#include "ui/dialog-events.h"
+// get_latin_keyval
+#include "ui/tools/tool-base.h"
+#include "widgets/spw-utilities.h"
+#include "ui/widget/canvas.h"
 
 namespace Inkscape {
 namespace UI {
@@ -39,23 +45,43 @@ DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
     , _verb_num(verb_num)
     , _app(InkscapeApplication::instance())
 {
-    // Get translatable name for the dialog based on the verb
+    // Derive a pretty display name for the dialog based on the verbs name.
+    // TODO: This seems fragile. Should verbs have a proper display name?
     Verb *verb = Verb::get(verb_num);
     if (verb) {
-        _name = verb->get_name();
+        // get translated verb name
+        _name = _(verb->get_name());
+
+        // remove ellipsis and mnemonics
         int pos = _name.find("...", 0);
         if (pos >= 0 && pos < _name.length() - 2) {
-            _name.replace(pos, 3, "");
+            _name.erase(pos, 3);
+        }
+        pos = _name.find("…", 0);
+        if (pos >= 0 && pos < _name.length()) {
+            _name.erase(pos, 1);
         }
         pos = _name.find("_", 0);
         if (pos >= 0 && pos < _name.length()) {
-            _name.replace(pos, 1, "");
+            _name.erase(pos, 1);
         }
     }
 
     set_name(_name); // Essential for dialog functionality
     property_margin().set_value(1); // Essential for dialog UI
+    ensure_size();
 }
+
+bool DialogBase::on_key_press_event(GdkEventKey* key_event) {
+    switch (Inkscape::UI::Tools::get_latin_keyval(key_event)) {
+        case GDK_KEY_Escape:
+            defocus_dialog();
+            return true;
+    }
+
+    return parent_type::on_key_press_event(key_event);
+}
+
 
 /**
  * Highlight notebook where dialog already exists.
@@ -66,17 +92,40 @@ void DialogBase::blink()
     if (notebook && notebook->get_is_drawable()) {
         // Switch notebook to this dialog.
         notebook->set_current_page(notebook->page_num(*this));
-
-        Glib::RefPtr<Gtk::StyleContext> style = notebook->get_style_context();
-
-        Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
-        provider->load_from_data(" *.blink {border: 3px solid @selected_bg_color;}");
-        style->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        style->add_class("blink");
+        notebook->get_style_context()->add_class("blink");
 
         // Add timer to turn off blink.
         sigc::slot<bool> slot = sigc::mem_fun(*this, &DialogBase::blink_off);
-        sigc::connection connection = Glib::signal_timeout().connect(slot, 500); // msec
+        sigc::connection connection = Glib::signal_timeout().connect(slot, 1000); // msec
+    }
+}
+
+void DialogBase::focus_dialog() {
+    if (auto window = dynamic_cast<Gtk::Window*>(get_toplevel())) {
+        window->present();
+    }
+
+    // widget that had focus, if any
+    if (auto child = get_focus_child()) {
+        child->grab_focus();
+    }
+    else {
+        // find first focusable widget
+        if (auto child = sp_find_focusable_widget(this)) {
+            child->grab_focus();
+        }
+    }
+}
+
+void DialogBase::defocus_dialog() {
+    if (auto wnd = dynamic_cast<Gtk::Window*>(get_toplevel())) {
+        // defocus floating dialog:
+        sp_dialog_defocus_cpp(wnd);
+
+        // for docked dialogs, move focus to canvas
+        if (auto desktop = getDesktop()) {
+            desktop->getCanvas()->grab_focus();
+        }
     }
 }
 

@@ -524,7 +524,7 @@ void SPUse::href_changed() {
                 this->attach(this->child, this->lastChild());
                 sp_object_unref(this->child, this);
 
-                this->child->invoke_build(this->document, childrepr, TRUE);
+                this->child->invoke_build(refobj->document, childrepr, TRUE);
 
                 for (SPItemView *v = this->display; v != nullptr; v = v->next) {
                     Inkscape::DrawingItem *ai = this->child->invoke_show(v->arenaitem->drawing(), v->key, v->flags);

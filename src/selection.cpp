@@ -172,10 +172,6 @@ size_t Selection::numberOfParents() {
     return parents.size();
 }
 
-void Selection::_emitSignals() {
-    _emitChanged();
-}
-
 void Selection::_connectSignals(SPObject *object) {
     _modified_connections[object] = object->connectModified(sigc::mem_fun(*this, &Selection::_schedule_modified));
 }
@@ -209,6 +205,9 @@ Selection::setBackup ()
     auto items = const_cast<Selection *>(this)->items();
     for (auto iter = items.begin(); iter != items.end(); ++iter) {
         SPItem *item = *iter;
+        if(!item->getId()) {
+            continue;
+        }
         std::string selected_id;
         selected_id += "--id=";
         selected_id += item->getId();

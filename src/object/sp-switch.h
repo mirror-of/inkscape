@@ -19,9 +19,6 @@
 #include "sp-item-group.h"
 
 
-#define SP_SWITCH(obj) (dynamic_cast<SPSwitch*>((SPObject*)obj))
-#define SP_IS_SWITCH(obj) (dynamic_cast<const SPSwitch*>((SPObject*)obj) != NULL)
-
 class SPSwitch : public SPGroup {
 public:
 	SPSwitch();

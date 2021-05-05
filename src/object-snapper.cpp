@@ -188,7 +188,11 @@ void Inkscape::ObjectSnapper::_findCandidates(SPObject* parent,
                                 // SPObject *obj = (SPObject*)item;
                                 // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
                                 if (_candidates->size() > 200) { // This makes Inkscape crawl already
-                                    std::cout << "Warning: limit of 200 snap target paths reached, some will be ignored" << std::endl;
+                                    static Glib::Timer timer;
+                                    if (timer.elapsed() > 1.0) {
+                                        timer.reset();
+                                        std::cout << "Warning: limit of 200 snap target paths reached, some will be ignored" << std::endl;
+                                    }
                                     break;
                                 }
                             }

@@ -9813,7 +9813,7 @@ msgstr "འཛོལ་བ་ཚུ།"
 msgid "No (valid) files to open."
 msgstr "ཡིག་ཆ་དེ་ཁ་ཕྱེ་ནིའི་དོན་ལུ་སེལ་འཐུ་འབད།"
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr ""
 

@@ -7,6 +7,7 @@
 ../src/actions/actions-canvas-mode.cpp
 ../src/actions/actions-canvas-snapping.cpp
 ../src/actions/actions-canvas-transform.cpp
+../src/actions/actions-extra-data.cpp
 ../src/actions/actions-file.cpp
 ../src/actions/actions-object-align.cpp
 ../src/actions/actions-object.cpp
@@ -92,6 +93,7 @@
 ../src/extension/internal/latex-pstricks.cpp
 ../src/extension/internal/odf.cpp
 ../src/extension/internal/pdfinput/pdf-input.cpp
+../src/extension/internal/png-output.cpp
 ../src/extension/internal/pov-out.cpp
 ../src/extension/internal/svg.cpp
 ../src/extension/internal/svg.h
@@ -114,7 +116,7 @@
 ../src/inkscape-application.cpp
 ../src/inkscape.cpp
 ../src/inkview-application.cpp
-../src/io/resource-manager.cpp
+../src/io/fix-broken-links.cpp
 ../src/io/resource.cpp
 ../src/libnrtype/FontFactory.cpp
 ../src/live_effects/effect.cpp
@@ -240,6 +242,8 @@
 ../src/ui/dialog/color-item.cpp
 ../src/ui/dialog/command-palette.cpp
 ../src/ui/dialog/debug.cpp
+../src/ui/dialog/dialog-base.cpp
+../src/ui/dialog/dialog-container.cpp
 ../src/ui/dialog/dialog-multipaned.cpp
 ../src/ui/dialog/dialog-notebook.cpp
 ../src/ui/dialog/dialog-window.cpp
@@ -367,6 +371,7 @@
 ../src/ui/widget/paint-selector.cpp
 ../src/ui/widget/preferences-widget.cpp
 ../src/ui/widget/random.cpp
+../src/ui/widget/registered-widget.cpp
 ../src/ui/widget/rendering-options.cpp
 ../src/ui/widget/selected-style.cpp
 ../src/ui/widget/spin-scale.cpp

@@ -12,9 +12,6 @@
 
 #include "sp-shape.h"
 
-#define SP_POLYLINE(obj) (dynamic_cast<SPPolyLine*>((SPObject*)obj))
-#define SP_IS_POLYLINE(obj) (dynamic_cast<const SPPolyLine*>((SPObject*)obj) != NULL)
-
 class SPPolyLine : public SPShape {
 public:
 	SPPolyLine();

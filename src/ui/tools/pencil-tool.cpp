@@ -737,7 +737,7 @@ void PencilTool::addPowerStrokePencil()
                 tol = tol / (130.0 * (132.0 - tol));
                 Inkscape::SVGOStringStream threshold;
                 threshold << tol;
-                Effect::createAndApply(SIMPLIFY, document, SP_ITEM(lpeitem));
+                Effect::createAndApply(SIMPLIFY, document, lpeitem);
                 Effect *lpe = lpeitem->getCurrentLPE();
                 Inkscape::LivePathEffect::LPESimplify *simplify =
                     static_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe);

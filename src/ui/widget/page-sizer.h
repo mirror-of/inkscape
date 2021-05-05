@@ -51,16 +51,15 @@ public:
     /**
      * Main constructor.  Use this one.
      */
-    PaperSize(const Glib::ustring &nameArg,
-	          double smallerArg,
-	          double largerArg,
-			  Inkscape::Util::Unit const *unitArg)
-	    {
-	    name    = nameArg;
-	    smaller = smallerArg;
-	    larger  = largerArg;
-	    unit    = unitArg;
-	    }
+    PaperSize(Glib::ustring nameArg,
+              double smallerArg,
+              double largerArg,
+              Inkscape::Util::Unit const *unitArg)
+        : name(std::move(nameArg))
+        , smaller(smallerArg)
+        , larger(largerArg)
+        , unit(unitArg)
+        {}
 
     /**
      * Copy constructor

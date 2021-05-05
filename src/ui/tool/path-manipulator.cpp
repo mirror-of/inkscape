@@ -407,7 +407,7 @@ void PathManipulator::copySelectedPath(Geom::PathBuilder *builder)
         for (auto &node : *subpath) {
             if (node.selected()) {
                 // The node positions are already transformed
-                if (!builder->inPath()) {
+                if (!builder->inPath() || !prev) {
                     builder->moveTo(node.position());
                 } else {
                     build_segment(*builder, prev, &node);
@@ -1557,7 +1557,7 @@ void PathManipulator::_setGeometry()
             if (!_spcurve->is_equal(path->curveBeforeLPE())) {
                 path->setCurveBeforeLPE(_spcurve.get());
                 // this fix the issue inkscape#1990
-                if (!path->hasPathEffectOfType(Inkscape::LivePathEffect::SLICE)) {
+                if (!path->hasPathEffectOfTypeRecursive(Inkscape::LivePathEffect::SLICE)) {
                     sp_lpe_item_update_patheffect(path, true, false);
                 } else {
                     path->setCurve(_spcurve.get());

@@ -568,10 +568,10 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     // Do the export
     SPDocument *document = item->document;
 
-    std::unique_ptr<Inkscape::Pixbuf> pb(
-        sp_generate_internal_bitmap(document, nullptr,
-            bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y],
-            width, height, res, res, (guint32) 0xffffff00, item ));
+    std::vector<SPItem*> items;
+    items.push_back(item);
+
+    std::unique_ptr<Inkscape::Pixbuf> pb(sp_generate_internal_bitmap(document, *bbox, res, items, true));
 
     if (pb) {
         //TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
@@ -587,13 +587,19 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
     if (item->isHidden()) {
         return;
     }
-
-    if(ctx->getFilterToBitmap() && (!item->style || item->style->filter.set != 0)) {
-        // This is not necesary but for cleanup, the filter hide the item
+    if (item->style && item->style->filter.set) {
+        // cleanup only; this is not necessary but the filter hides the item anyway
         SPFilter *filt = item->style->getFilter();
         if (filt && g_strcmp0(filt->getId(), "selectable_hidder_filter") == 0) {
             return;
         }
+    }
+
+    // rasterize filtered items as per user setting
+    // however, clipPaths ignore any filters, so do *not* rasterize
+    // TODO: might apply to some degree to masks with filtered elements as well;
+    //       we need to figure out where in the stack it would be safe to rasterize
+    if (ctx->getFilterToBitmap() && item->style->filter.set && !item->isInClipPath()) {
         return sp_asbitmap_render(item, ctx);
     }
 

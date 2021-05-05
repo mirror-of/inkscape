@@ -1611,6 +1611,9 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_FLOW_TEXT:
             text_flow_into_shape();
             break;
+        case SP_VERB_OBJECT_FLOW_SUBTRACT:
+            text_flow_shape_subtract();
+            break;
         case SP_VERB_OBJECT_UNFLOW_TEXT:
             text_unflow();
             break;
@@ -1977,7 +1980,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_PREFERENCES:
             container->new_floating_dialog(SP_VERB_DIALOG_PREFERENCES);
             break;
+#ifdef DEBUG
         case SP_VERB_DIALOG_PROTOTYPE:
+#endif
         case SP_VERB_DIALOG_DOCPROPERTIES:
         case SP_VERB_DIALOG_FILL_STROKE:
         case SP_VERB_DIALOG_GLYPHS:
@@ -2654,6 +2659,9 @@ Verb *Verb::_base_verbs[] = {
     new ObjectVerb(SP_VERB_OBJECT_FLOW_TEXT, "ObjectFlowText", N_("_Flow into Frame"),
                    N_("Put text into a frame (path or shape), creating a flowed text linked to the frame object"),
                    "text-flow-into-frame"),
+    new ObjectVerb(SP_VERB_OBJECT_FLOW_SUBTRACT, "ObjectFlowSubtract", N_("Set _Subtraction Frames"),
+                   N_("Flow text around a frame (path or shape), only available for SVG 2.0 Flow text."),
+                   "text-flow-subtract-frame"),
     new ObjectVerb(SP_VERB_OBJECT_UNFLOW_TEXT, "ObjectUnFlowText", N_("_Unflow"),
                    N_("Remove text from frame (creates a single-line text object)"), INKSCAPE_ICON("text-unflow")),
     new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Convert to Text"),
@@ -2779,7 +2787,7 @@ Verb *Verb::_base_verbs[] = {
     // WHY ARE THE FOLLOWING ZoomVerbs???
 
     // View
-    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("Command Palette_"), N_("Show or hide the on-canvas command palette"), nullptr),
+    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("_Command Palette"), N_("Show or hide the on-canvas command palette"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"),
                  N_("Show or hide the canvas scrollbars"), nullptr),
@@ -2816,9 +2824,10 @@ Verb *Verb::_base_verbs[] = {
     // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE, "ViewColorModeGrayscale", N_("_Grayscale"),
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Icon Preview"), N_("Preview Icon"),
                  INKSCAPE_ICON("dialog-icon-preview")),
-
+#ifdef DEBUG
     new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."), N_("Prototype Dialog"),
                    INKSCAPE_ICON("document-properties")),
+#endif
     new DialogVerb(SP_VERB_DIALOG_PREFERENCES, "DialogPreferences", N_("P_references"), N_("Edit global Inkscape preferences"),
                    INKSCAPE_ICON("preferences-system")),
     new DialogVerb(SP_VERB_DIALOG_DOCPROPERTIES, "DialogDocumentProperties", N_("_Document Properties..."),

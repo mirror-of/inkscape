@@ -53,9 +53,11 @@ static const Util::EnumData<LPEBool::bool_op_ex> BoolOpData[LPEBool::bool_op_ex_
     // Note on naming of operations:
     // bool_op_cut is called "Division" in the manu, see sp_selected_path_cut
     // bool_op_slice is called "Cut path" in the menu, see sp_selected_path_slice
-    {LPEBool::bool_op_ex_slice, N_("cut"), "slice"},
-    {LPEBool::bool_op_ex_slice_inside, N_("cut inside"), "slice-inside"},
-    {LPEBool::bool_op_ex_slice_outside, N_("cut outside"), "slice-outside"},
+    // TODO: this 3 options are commented because dont work properly
+    // maybe in 1.2 can be fixed but need libarot base to do
+    // {LPEBool::bool_op_ex_slice, N_("cut"), "slice"},
+    // {LPEBool::bool_op_ex_slice_inside, N_("cut inside"), "slice-inside"},
+    // {LPEBool::bool_op_ex_slice_outside, N_("cut outside"), "slice-outside"},
 };
 
 static const Util::EnumDataConverter<LPEBool::bool_op_ex> BoolOpConverter(BoolOpData, sizeof(BoolOpData) / sizeof(*BoolOpData));
@@ -500,6 +502,9 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
     if (operand) {
         if (is_visible) {
             add_filter();
+            if (operand->getPosition() - 1 != sp_lpe_item->getPosition()) {
+                sp_lpe_item->parent->reorder(operand,sp_lpe_item);
+            } 
         } else {
             remove_filter();
         }
@@ -541,9 +546,9 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
         std::vector<SPItem *> item_list = sp_item_group_item_list(group);
         for (auto iter : item_list) {
             if (res.empty()) {
-                res = get_union(SP_OBJECT(iter));
+                res = get_union(iter);
             } else {
-                res = sp_pathvector_boolop(res, get_union(SP_OBJECT(iter)), to_bool_op(bool_op_ex_union), fill_oddEven,
+                res = sp_pathvector_boolop(res, get_union(iter), to_bool_op(bool_op_ex_union), fill_oddEven,
                                            fill_oddEven);
             }
         }
@@ -583,7 +588,7 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
 void LPEBool::doEffect(SPCurve *curve)
 {
     Geom::PathVector path_in = curve->get_pathvector();
-    if (operand == SP_ITEM(current_shape)) {
+    if (operand == current_shape) {
         g_warning("operand and current shape are the same");
         operand_path.param_set_default();
         return;
@@ -618,32 +623,23 @@ void LPEBool::doEffect(SPCurve *curve)
 
         Geom::PathVector path_out;
         if (op == bool_op_ex_cut) {
-            // we do in two pass because wrong sp_pathvector_boolop diference, in commnet they sugest make this to fix
-            Geom::PathVector path_tmp_outside =
-                sp_pathvector_boolop_slice_intersect(path_a, path_b, false, fill_a, fill_b);
             Geom::PathVector path_tmp = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
             for (auto pathit : path_tmp) {
-                bool outside = false;
-                for (auto pathit_out : path_tmp_outside) {
-                    Geom::OptRect outbbox = pathit_out.boundsFast();
-                    if (outbbox) {
-                        (*outbbox).expandBy(1);
-                        if ((*outbbox).contains(pathit.boundsFast())) {
-                            outside = true;
-                        }
-                    }
-                }
-                if (!outside) {
+                if (pathit.size() != 2) {
                     path_out.push_back(pathit);
                 }
             }
-        } else if (op == bool_op_ex_slice) {
-            // For slicing, the bool op is added to the line group which is sliced, not the cut path. This swapped order is correct            
-            path_out = sp_pathvector_boolop(path_b, path_a, to_bool_op(op), fill_b, fill_a);
+        /* } else if (op == bool_op_ex_slice) {
+            path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, true, fill_a, fill_b);
+            Geom::PathVector path_tmp = sp_pathvector_boolop_slice_intersect(path_a, path_b, false, fill_a, fill_b);
+            for (auto pathit : path_tmp) {
+                path_out.push_back(pathit);
+            }
         } else if (op == bool_op_ex_slice_inside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, true, fill_a, fill_b);
         } else if (op == bool_op_ex_slice_outside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, false, fill_a, fill_b);
+         */
         } else {
             path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
         }
@@ -667,15 +663,22 @@ void LPEBool::addCanvasIndicators(SPLPEItem const * /*lpeitem*/, std::vector<Geo
 void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
 {
     // set "keep paths" hook on sp-lpe-item.cpp
-    SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
-    if (operand) {
-        if (keep_paths) {
-            if (is_visible) {
-                operand->deleteObject(true);
-            }
-        } else {
-            if (is_visible) {
-                remove_filter();
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
+        if (!sp_lpe_item->path_effects_enabled) {
+            return;
+        }
+        SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
+        if (operand) {
+            if (keep_paths) {
+                if (is_visible) {
+                    operand->deleteObject(true);
+                }
+            } else {
+                if (is_visible) {
+                    remove_filter();
+                }
             }
         }
     }

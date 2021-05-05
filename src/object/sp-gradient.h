@@ -30,9 +30,6 @@
 class SPGradientReference;
 class SPStop;
 
-#define SP_GRADIENT(obj) (dynamic_cast<SPGradient*>((SPObject*)obj))
-#define SP_IS_GRADIENT(obj) (dynamic_cast<const SPGradient*>((SPObject*)obj) != NULL)
-
 enum SPGradientType {
     SP_GRADIENT_TYPE_UNKNOWN,
     SP_GRADIENT_TYPE_LINEAR,
@@ -158,6 +155,10 @@ public:
  * \pre There exists a gradient in the chain that has stops.
  */
     SPGradient *getVector(bool force_private = false);
+    SPGradient const *getVector(bool force_private = false) const
+    {
+        return const_cast<SPGradient *>(this)->getVector(force_private);
+    }
 
  /**
  * Returns private mesh of given gradient (the gradient at the end of the href chain which has
@@ -182,6 +183,8 @@ public:
     SPGradientUnits fetchUnits();
 
     void setSwatch(bool swatch = true);
+
+    bool isSolid() const;
 
     static void gradientRefModified(SPObject *href, unsigned int flags, SPGradient *gradient);
     static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);
@@ -224,6 +227,9 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
                                  Geom::OptRect const &bbox,
                                  double opacity);
 
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_GRADIENT, SPGradient)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_GRADIENT, SPGradient)
 
 #endif // SEEN_SP_GRADIENT_H
 

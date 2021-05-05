@@ -14,9 +14,6 @@
 
 #include "sp-object.h"
 
-#define SP_MESHROW(obj) (dynamic_cast<SPMeshrow*>((SPObject*)obj))
-#define SP_IS_MESHROW(obj) (dynamic_cast<const SPMeshrow*>((SPObject*)obj) != NULL)
-
 /** Gradient Meshrow. */
 class SPMeshrow : public SPObject {
 public:
@@ -32,6 +29,9 @@ protected:
     void modified(unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_MESHROW, SPMeshrow)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_MESHROW, SPMeshrow)
 
 #endif /* !SEEN_SP_MESHROW_H */
 

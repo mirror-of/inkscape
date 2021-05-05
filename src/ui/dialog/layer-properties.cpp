@@ -30,6 +30,7 @@
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/tools/tool-base.h"
+#include "object/sp-root.h"
 
 namespace Inkscape {
 namespace UI {
@@ -219,7 +220,7 @@ LayerPropertiesDialog::_setup_layers_controls() {
     if ( root ) {
         SPObject* target = _desktop->currentLayer();
         _store->clear();
-        _addLayer( document, SP_OBJECT(root), nullptr, target, 0 );
+        _addLayer( document, root, nullptr, target, 0 );
     }
 
     _layout_table.remove(_layer_name_entry);

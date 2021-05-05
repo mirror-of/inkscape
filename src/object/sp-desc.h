@@ -15,9 +15,6 @@
 
 #include "sp-object.h"
 
-#define SP_DESC(obj) (dynamic_cast<SPDesc*>((SPObject*)obj))
-#define SP_IS_DESC(obj) (dynamic_cast<const SPDesc*>((SPObject*)obj) != NULL)
-
 class SPDesc : public SPObject {
 public:
 	SPDesc();
@@ -26,5 +23,7 @@ public:
 protected:
 	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_DESC, SPDesc)
 
 #endif

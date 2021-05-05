@@ -253,7 +253,7 @@ static SPGradient *sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradi
     if ((gr->hasStops()) ||
         (gr->hasPatches()) ||
         (gr->state != SP_GRADIENT_STATE_UNKNOWN) ||
-        (gr->parent != SP_OBJECT(defs)) ||
+        (gr->parent != defs) ||
         (gr->hrefcount > 1)) {
 
         // we have to clone a fresh new private gradient for the given shared
@@ -1345,7 +1345,7 @@ Geom::Point getGradientCoords(SPItem *item, GrPointType point_type, guint point_
     }
 
 
-    if (SP_GRADIENT(gradient)->getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+    if (gradient->getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
         item->document->ensureUpToDate();
         Geom::OptRect bbox = item->visualBounds(); // we need "true" bbox without item_i2d_affine
         if (bbox) {

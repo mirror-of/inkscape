@@ -15,9 +15,6 @@
 
 #include "sp-object.h"
 
-#define SP_TITLE(obj) (dynamic_cast<SPTitle*>((SPObject*)obj))
-#define SP_IS_TITLE(obj) (dynamic_cast<const SPTitle*>((SPObject*)obj) != NULL)
-
 class SPTitle : public SPObject {
 public:
 	SPTitle();
@@ -25,5 +22,7 @@ public:
 
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
+
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_TITLE, SPTitle)
 
 #endif

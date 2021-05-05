@@ -127,12 +127,14 @@ void LPETaperStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*
 
 void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 {
-    if (!SP_IS_SHAPE(lpeitem)) {
+    auto lpeitem_mutable = const_cast<SPLPEItem *>(lpeitem);
+    auto item = dynamic_cast<SPShape *>(lpeitem_mutable);
+
+    if (!item) {
         printf("WARNING: It only makes sense to apply Taper stroke to paths (not groups).\n");
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPShape* item = SP_SHAPE(lpeitem);
 
     double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
 
@@ -154,11 +156,12 @@ void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 
 void LPETaperStroke::doOnRemove(SPLPEItem const* lpeitem)
 {
-    if (!SP_IS_SHAPE(lpeitem)) {
+    auto lpeitem_mutable = const_cast<SPLPEItem *>(lpeitem);
+    auto item = dynamic_cast<SPShape *>(lpeitem_mutable);
+
+    if (!item) {
         return;
     }
-
-    SPShape *item = SP_SHAPE(lpeitem);
 
     lpe_shape_revert_stroke_and_fill(item, line_width);
 }

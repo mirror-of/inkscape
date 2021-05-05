@@ -76,10 +76,7 @@ FillAndStroke::FillAndStroke()
 
 FillAndStroke::~FillAndStroke()
 {
-    fillWdgt->setDesktop(nullptr);
-    strokeWdgt->setDesktop(nullptr);
-    strokeStyleWdgt->setDesktop(nullptr);
-    _subject.setDesktop(nullptr);
+    setDesktop(nullptr);
 }
 
 void FillAndStroke::update()
@@ -89,8 +86,11 @@ void FillAndStroke::update()
         return;
     }
 
-    SPDesktop *desktop = getDesktop();
+    setDesktop(getDesktop());
+}
 
+void FillAndStroke::setDesktop(SPDesktop *desktop)
+{
     if (targetDesktop != desktop) {
         targetDesktop = desktop;
         if (fillWdgt) {
@@ -102,9 +102,7 @@ void FillAndStroke::update()
         if (strokeStyleWdgt) {
             strokeStyleWdgt->setDesktop(desktop);
         }
-        if (desktop) {
-            _subject.setDesktop(desktop);
-        }
+        _subject.setDesktop(desktop);
     }
 }
 
@@ -141,13 +139,13 @@ FillAndStroke::_layoutPageStrokeStyle()
     strokeStyleWdgt = Gtk::manage(new UI::Widget::StrokeStyle());
     strokeStyleWdgt->set_hexpand();
     strokeStyleWdgt->set_halign(Gtk::ALIGN_START);
-
     _page_stroke_style->table().attach(*strokeStyleWdgt, 0, 0, 1, 1);
 }
 
 void
 FillAndStroke::showPageFill()
 {
+    blink();
     _notebook.set_current_page(0);
     _savePagePref(0);
 
@@ -156,6 +154,7 @@ FillAndStroke::showPageFill()
 void
 FillAndStroke::showPageStrokePaint()
 {
+    blink();
     _notebook.set_current_page(1);
     _savePagePref(1);
 }
@@ -163,6 +162,7 @@ FillAndStroke::showPageStrokePaint()
 void
 FillAndStroke::showPageStrokeStyle()
 {
+    blink();
     _notebook.set_current_page(2);
     _savePagePref(2);
 

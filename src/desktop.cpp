@@ -55,7 +55,7 @@
 #include "helper/action-context.h"
 #include "helper/action.h" //sp_action_perform
 
-#include "io/resource-manager.h"
+#include "io/fix-broken-links.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
@@ -153,7 +153,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
 
     // Temporary workaround for link order issues:
     Inkscape::DeviceManager::getManager().getDevices();
-    Inkscape::ResourceManager::getManager();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     _guides_message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(messageStack()));
@@ -531,6 +530,9 @@ SPDesktop::change_document (SPDocument *theDocument)
     /* unselect everything before switching documents */
     selection->clear();
 
+    // Reset any tool actions currently in progress.
+    setEventContext(event_context->getPrefsPath());
+
     setDocument (theDocument);
 
     /* update the rulers, connect the desktop widget's signal to the new namedview etc.
@@ -542,6 +544,7 @@ SPDesktop::change_document (SPDocument *theDocument)
     if (dtw) {
         dtw->desktop = this;
         dtw->updateNamedview();
+        dtw->updateDocument();
     } else {
         std::cerr << "SPDesktop::change_document: failed to get desktop widget!" << std::endl;
     }
@@ -1653,9 +1656,9 @@ SPDesktop::onStatusMessage
 }
 
 void
-SPDesktop::onDocumentURISet (gchar const* uri)
+SPDesktop::onDocumentFilenameSet (gchar const* filename)
 {
-    _widget->updateTitle(uri);
+    _widget->updateTitle(filename);
 }
 
 /**

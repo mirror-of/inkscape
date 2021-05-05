@@ -9,13 +9,13 @@ set(ui_SRC
 	icon-loader.cpp
 	interface.cpp
 	monitor.cpp
-	pref-pusher.cpp
 	previewholder.cpp
 	selected-color.cpp
 	shape-editor.cpp
 	shape-editor-knotholders.cpp
 	simple-pref-pusher.cpp
 	shortcuts.cpp
+	themes.cpp
 	tool-factory.cpp
 	tools-switch.cpp
 	util.cpp
@@ -103,6 +103,7 @@ set(ui_SRC
 	dialog/debug.cpp
 	dialog/dialog-base.cpp
 	dialog/dialog-container.cpp
+	dialog/dialog-manager.cpp
 	dialog/dialog-multipaned.cpp
 	dialog/dialog-notebook.cpp
 	dialog/dialog-window.cpp
@@ -246,13 +247,13 @@ set(ui_SRC
 	icon-loader.h
 	interface.h
 	monitor.h
-	pref-pusher.h
 	previewable.h
 	previewholder.h
 	selected-color.h
 	shape-editor.h
 	simple-pref-pusher.h
 	shortcuts.h
+	themes.h
 	tool-factory.h
 	tools-switch.h
 	util.h
@@ -275,6 +276,7 @@ set(ui_SRC
 	dialog/debug.h
 	dialog/dialog-base.h
 	dialog/dialog-container.h
+	dialog/dialog-manager.h
 	dialog/dialog-multipaned.h
 	dialog/dialog-notebook.h
 	dialog/dialog-window.h

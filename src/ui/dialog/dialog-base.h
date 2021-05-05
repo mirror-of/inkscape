@@ -41,7 +41,9 @@ class DialogBase : public Gtk::Box
 
 public:
     DialogBase(gchar const *prefs_path = nullptr, int verb_num = 0);
-    ~DialogBase() override{};
+    ~DialogBase() override{
+        ensure_size();
+    };
 
     /**
      * The update() method is essential to state management. DialogBase implementations get updated whenever
@@ -54,23 +56,39 @@ public:
         update();
         parent_type::on_map();
     }
+    /*
+     * Often the dialog won't request the right size until the window has
+     * been pushed to resize all it's children. We do this on dialog creation
+     * and destruction.
+     */
+    void ensure_size()
+    {
+        if (auto desktop = getDesktop()) {
+            desktop->getToplevel()->resize_children();
+        }
+    }
 
     // Getters and setters
-    std::string get_name() { return _name; };
+    Glib::ustring get_name() { return _name; };
     gchar const *getPrefsPath() const { return _prefs_path.data(); }
     int const &getVerb() const { return _verb_num; }
     SPDesktop *getDesktop();
 
     void blink();
+    // find focusable widget to grab focus
+    void focus_dialog();
+    // return focus back to canvas
+    void defocus_dialog();
 
 protected:
-    std::string _name;               // Gtk widget name (must be set!)
+    Glib::ustring _name;             // Gtk widget name (must be set!)
     Glib::ustring const _prefs_path; // Stores characteristic path for loading/saving the dialog position.
     int _verb_num;                   // Dialog associated verb value
     InkscapeApplication *_app; // Used for state management
 
 private:
     bool blink_off(); // timer callback
+    bool on_key_press_event(GdkEventKey* key_event) override;
 };
 
 } // namespace Dialog

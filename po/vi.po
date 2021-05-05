@@ -9621,7 +9621,7 @@ msgstr "Lỗi"
 msgid "No (valid) files to open."
 msgstr "Chọn tập tin cần mở"
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr ""
 

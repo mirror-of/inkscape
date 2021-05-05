@@ -15,18 +15,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cerrno>
 #include <unistd.h>
 
 #include <map>
 
-#include <glibmm/fileutils.h>
 #include <glibmm/regex.h>
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/messagedialog.h>
 
-#include <glib/gstdio.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/convert.h>
@@ -49,18 +46,14 @@
 #include "helper/action-context.h"
 
 #include "io/resource.h"
-#include "io/resource-manager.h"
+#include "io/fix-broken-links.h"
 #include "io/sys.h"
 
 #include "libnrtype/FontFactory.h"
 
 #include "object/sp-root.h"
-#include "object/sp-style-elem.h"
 
 #include "svg/svg-color.h"
-
-#include "object/sp-root.h"
-#include "object/sp-style-elem.h"
 
 #include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
@@ -234,8 +227,6 @@ Application::Application(bool use_gui) :
         Inkscape::DeviceManager::getManager().loadConfig();
     }
 
-    Inkscape::ResourceManager::getManager();
-
     /* set language for user interface according setting in preferences */
     Glib::ustring ui_language = prefs->getString("/ui/language");
     if(!ui_language.empty())
@@ -314,9 +305,9 @@ Glib::ustring Application::get_symbolic_colors()
     gchar colornamederror[64];
     gchar colornamed_inverse[64];
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     guint32 colorsetbase = 0x2E3436ff;
-    guint32 colorsetbase_inverse = colorsetbase ^ 0xffffff00;
+    guint32 colorsetbase_inverse;
     guint32 colorsetsuccess = 0x4AD589ff;
     guint32 colorsetwarning = 0xF57900ff;
     guint32 colorseterror = 0xCC0000ff;
@@ -330,21 +321,21 @@ Glib::ustring Application::get_symbolic_colors()
     sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
     colorsetbase_inverse = colorsetbase ^ 0xffffff00;
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorsetbase_inverse);
-    css_str += "*{-gtk-icon-palette: success ";
-    css_str += colornamedsuccess;
-    css_str += ", warning ";
-    css_str += colornamedwarning;
-    css_str += ", error ";
-    css_str += colornamederror;
-    css_str += ";}";
-    css_str += "#InkRuler,";
+    css_str += "@define-color warning_color " + Glib::ustring(colornamedwarning) + ";\n";
+    css_str += "@define-color error_color " + Glib::ustring(colornamederror) + ";\n";
+    css_str += "@define-color success_color " + Glib::ustring(colornamedsuccess) + ";\n";
     /* ":not(.rawstyle) > image" works only on images in first level of widget container
     if in the future we use a complex widget with more levels and we dont want to tweak the color
-    here, retaining default we can add more lines like ":not(.rawstyle) > > image" */
-    css_str += ":not(.rawstyle) > image";
-    css_str += "{color:";
-    css_str += colornamed;
-    css_str += ";}";
+    here, retaining default we can add more lines like ":not(.rawstyle) > > image" 
+    if we not override the color we use defautt theme colors*/
+    bool overridebasecolor = !prefs->getBool("/theme/symbolicDefaultBaseColors", true);
+    if (overridebasecolor) {
+        css_str += "#InkRuler,";
+        css_str += ":not(.rawstyle) > image";
+        css_str += "{color:";
+        css_str += colornamed;
+        css_str += ";}";
+    }
     css_str += ".dark .forcebright :not(.rawstyle) > image,";
     css_str += ".dark .forcebright image:not(.rawstyle),";
     css_str += ".bright .forcedark :not(.rawstyle) > image,";
@@ -356,12 +347,17 @@ Glib::ustring Application::get_symbolic_colors()
     css_str += ".inverse :not(.rawstyle) > image,";
     css_str += ".inverse image:not(.rawstyle)";
     css_str += "{color:";
-    css_str += colornamed_inverse;
+    if (overridebasecolor) {
+        css_str += colornamed_inverse;
+    } else {
+        // we override base color in this special cases using inverse color
+        css_str += "@theme_bg_color";
+    }
     css_str += ";}";
     return css_str;
 }
 
-std::string sp_get_contrasted_color(std::string cssstring, std::string define, std::string define_b,
+std::string sp_get_contrasted_color(std::string const &cssstring, std::string const &define, std::string const &define_b,
                                     double contrast)
 {
     std::smatch m;
@@ -379,37 +375,39 @@ std::string sp_get_contrasted_color(std::string cssstring, std::string define, s
 
 std::string sp_tweak_background_colors(std::string cssstring, double crossfade)
 {
-    std::regex r("(\n[^\n]*(engine|image/|-gtk-icon-source|resource)[^\n]*)");
+    static std::regex re_no_affect("(inherit|unset|initial|none|url)");
+    static std::regex re_background_color("background-color( ){0,3}:(.*?);");
+    static std::regex re_background_image("background-image( ){0,3}:(.*?\\)) *?;");
     std::string sub = "";
-    cssstring = std::regex_replace(cssstring, r, sub);
-    std::regex f("background-color *?:(?!( *?|)(inherit|unset|initial|none))(.*?);");
-    sub = "background-color:shade($3," + Glib::ustring::format(crossfade) + ");";
-    cssstring = std::regex_replace(cssstring, f, sub);
-    std::regex g("background-image *?:(?!( *?|)(inherit|unset|initial|none))(.*?\\)) *?;");
-    if (crossfade > 1) {
-        crossfade = std::clamp((int)((2 - crossfade) * 80), 0, 100);
-        sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image($3), image(@theme_bg_color));";
+    std::smatch m;
+    std::regex_search(cssstring, m, re_no_affect);
+    if (m.size() == 0) {
+        if (cssstring.find("background-color") != std::string::npos) {
+            sub = "background-color:shade($2," + Glib::ustring::format(crossfade) + ");";
+            cssstring = std::regex_replace(cssstring, re_background_color, sub);
+        } else if (cssstring.find("background-image") != std::string::npos) {
+            if (crossfade > 1) {
+                crossfade = std::clamp((int)((2 - crossfade) * 80), 0, 100);
+                sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image($2), image(@theme_bg_color));";
+            } else {
+                crossfade = std::clamp((int)((1 - crossfade) * 80), 0 , 100);
+                sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image(@theme_bg_color), image($2));";
+            }
+            cssstring = std::regex_replace(cssstring, re_background_image, sub);
+        }
     } else {
-        crossfade = std::clamp((int)((1 - crossfade) * 80), 0 , 100);
-        sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image(@theme_bg_color), image($3));";
-    }  
-    
-    return  std::regex_replace(cssstring, g, sub);
+        cssstring = "";
+    }
+    return cssstring;
 }
 
-/* static void
-show_parsing_error (GtkCssProvider        *provider,
-                    GtkCssSection         *section,
-                    GError                *error,
-                    void *)
+static void
+show_parsing_error(const Glib::RefPtr<const Gtk::CssSection>& section, const Glib::Error& error)
 {
-
-  if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED)) {
-      std::cout << "Gtk WARNING :: There is a warning parsing theme CSS:: " << error->message << std::endl;
-  } else {
-      std::cout << "Gtk ERROR :: There is a error parsing theme CSS:: " << error->message << std::endl;
-  }
-} */
+#ifndef NDEBUG
+  g_warning("There is a warning parsing theme CSS:: %s", error.what().c_str());
+#endif
+}
 
 /**
  * \brief Add our CSS style sheets
@@ -430,23 +428,28 @@ void Application::add_gtk_css(bool only_providers)
         g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        g_object_set(settings, "gtk-application-prefer-dark-theme",
-                     prefs->getBool("/theme/preferDarkTheme", gtkApplicationPreferDarkTheme), NULL);
-        prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
+        prefs->setBool("/theme/defaultPreferDarkTheme", gtkApplicationPreferDarkTheme);
+        prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName));
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
             g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
         } else {
-            prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
+            Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
+            Glib::RefPtr<Gdk::Screen>  screen = display->get_default_screen();
+            Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_for_screen(screen);
+            Gtk::IconInfo iconinfo = icon_theme->lookup_icon("tool-pointer", 22, Gtk::ICON_LOOKUP_FORCE_SIZE);
+            prefs->setBool("/theme/symbolicIcons", iconinfo.is_symbolic());
         }
+        bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
+        g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, NULL);
         themeiconname = prefs->getString("/theme/iconTheme");
-        if (themeiconname != "") {
+        // legacy cleanup
+        if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
+            prefs->setString("/theme/iconTheme", "");
+        } else if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-        } else {
-            prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
         }
-
     }
 
     g_free(gtkThemeName);
@@ -456,7 +459,7 @@ void Application::add_gtk_css(bool only_providers)
     if (!contrastthemeprovider) {
         contrastthemeprovider = Gtk::CssProvider::create();
         // We can uncoment this line to remove warnings and errors on the theme
-        //g_signal_connect (G_OBJECT(themeprovider->gobj()), "parsing-error", G_CALLBACK (show_parsing_error), nullptr);
+        contrastthemeprovider->signal_parsing_error().connect(sigc::ptr_fun(show_parsing_error));
     }
     // we use contast only if is setup (!= 10)
     if (themecontrast < 10) {
@@ -464,24 +467,47 @@ void Application::add_gtk_css(bool only_providers)
         double contrast = (10 - themecontrast) / 40.0;
         double shade = 1 - contrast;
         const gchar *variant = nullptr;
-        if (prefs->getBool("/theme/darkTheme", false)) {
+        if (prefs->getBool("/theme/preferDarkTheme", false)) {
             variant = "dark";
+        }
+        if (prefs->getBool("/theme/darkTheme", false)) {
             contrast *= 2.5;
             shade = 1 + contrast;
         }
+        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
         GtkCssProvider *currentthemeprovider =
-            gtk_css_provider_get_named(prefs->getString("/theme/gtkTheme").c_str(), variant);
+            gtk_css_provider_get_named(current_theme.c_str(), variant);
         std::string cssstring = gtk_css_provider_to_string(currentthemeprovider);
-        std::string appenddefined = ""; 
         if (contrast) {
-            appenddefined  = sp_get_contrasted_color(cssstring, "theme_bg_color", "theme_fg_color", contrast);
-            appenddefined += sp_get_contrasted_color(cssstring, "theme_base_color", "theme_text_color", contrast);
-            appenddefined += sp_get_contrasted_color(cssstring, "theme_selected_bg_color", "theme_selected_fg_color", contrast);
-            cssstring = sp_tweak_background_colors(cssstring, shade);
-            cssstring = cssstring + appenddefined;
+            std::string cssdefined = ""; 
+            std::string appenddefined = ""; 
+            std::string colorsdefined = "";
+            // we do this way to fix issue Inkscape#2345
+            // windows seem crash if text length > 2000;
+            std::istringstream f(cssstring);
+            std::string line;    
+            while (std::getline(f, line)) {
+                if (line.find("@define-color") != std::string::npos) {
+                    colorsdefined += line;
+                    colorsdefined += "\n";
+                }
+                // here we ignore most of class to parse because is in additive mode
+                // so stiles not applyed are set on previous context style
+                if (line.find(";") != std::string::npos &&
+                    line.find("background-image") == std::string::npos &&
+                    line.find("background-color") == std::string::npos)
+                {
+                    continue;
+                }
+                cssdefined += sp_tweak_background_colors(line, shade);
+                cssdefined += "\n";
+            }
+            appenddefined  = sp_get_contrasted_color(colorsdefined, "theme_bg_color", "theme_fg_color", contrast);
+            appenddefined += sp_get_contrasted_color(colorsdefined, "theme_base_color", "theme_text_color", contrast);
+            appenddefined += sp_get_contrasted_color(colorsdefined, "theme_selected_bg_color", "theme_selected_fg_color", contrast);
+            cssstring = cssdefined + appenddefined;
         }
         if (!cssstring.empty()) {
-            // std::cout << cssstring << std::endl;
             // Use c format allow parse with errors or warnings
             gtk_css_provider_load_from_data (contrastthemeprovider->gobj(), cssstring.c_str(), -1, nullptr);
             Gtk::StyleContext::add_provider_for_screen(screen, contrastthemeprovider, GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
@@ -505,8 +531,7 @@ void Application::add_gtk_css(bool only_providers)
         }
         Gtk::StyleContext::add_provider_for_screen(screen, styleprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-
-    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
+    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
     gtkthemename += ".css";
     style = get_filename(UIS, gtkthemename.c_str(), false, true);
     if (!style.empty()) {
@@ -633,9 +658,16 @@ Application::crash_handler (int /*signum*/)
             char c[1024];
             g_snprintf (c, 1024, "%.256s.%s.%d.svg", docname, sptstr, count);
 
+            const char* document_filename = doc->getDocumentFilename();
+            char* document_base = nullptr;
+            if (document_filename) {
+                document_base = g_path_get_dirname(document_filename);
+            }
+
             // Find a location
             const char* locations[] = {
-                doc->getDocumentBase(),
+                // Don't use getDocumentBase as that also can be unsaved template locations.
+                document_base,
                 g_get_home_dir(),
                 g_get_tmp_dir(),
                 curdir,
@@ -650,6 +682,9 @@ Application::crash_handler (int /*signum*/)
                     g_snprintf (c, 1024, "%s", filename); // we want the complete path to be stored in c (for reporting purposes)
                     break;
                 }
+            }
+            if (document_base) {
+                g_free(document_base);
             }
 
             // Save

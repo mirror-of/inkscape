@@ -57,11 +57,13 @@
 
 #include "svg/svg-color.h"
 
+#include "ui/desktop/menubar.h"
 #include "ui/interface.h"
 #include "ui/shortcuts.h"
 #include "ui/modifiers.h"
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/canvas.h"
+#include "ui/themes.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -981,7 +983,7 @@ void InkscapePreferences::initPageTools()
         _font_dialog.init(_("Show font substitution warning dialog"), "/options/font/substitutedlg", false);
         _page_text.add_line( false, "", _font_dialog, "", _("Show font substitution warning dialog when requested fonts are not available on the system"));
         _font_sample.init("/tools/text/font_sample", true);
-        _page_text.add_line( false, _("Font sample"), _font_sample, "", _("Edit font sample for the family in text tool controls"), true);
+        _page_text.add_line( false, _("Font sample"), _font_sample, "", _("Change font preview sample text"), true);
 
         cb = Gtk::manage(new PrefCheckButton);
         cb->init ( _("Use SVG2 auto-flowed text"),  "/tools/text/use_svg2", true);
@@ -1041,44 +1043,12 @@ void InkscapePreferences::initPageTools()
 #endif // WITH_LPETOOL
 }
 
-static void _inkscape_fill_gtk(const gchar *path, std::map<Glib::ustring, bool> &dark_themes)
-{
-    const gchar *dir_entry;
-    GDir *dir = g_dir_open(path, 0, NULL);
-    if (!dir)
-        return;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themename = prefs->getString("/theme/gtkTheme");
-    while ((dir_entry = g_dir_read_name(dir))) {
-        gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", NULL);
-        bool has_prefer_dark = false;
-
-        Glib::ustring theme = dir_entry;
-        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-3.0", "gtk-dark.css", NULL);
-        if (g_file_test(filenamedark, G_FILE_TEST_IS_REGULAR))
-            has_prefer_dark = true;
-        if (dark_themes.find(theme) != dark_themes.end() && !has_prefer_dark) {
-            continue;
-        }
-        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR)) {
-            dark_themes[theme] = has_prefer_dark;
-        }
-        g_free(filename);
-        g_free(filenamedark);
-    }
-
-    g_dir_close(dir);
-}
-
 void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess,
                                                guint32 &colorsetwarning, guint32 &colorseterror)
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-    if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
-        themeiconname = "hicolor";
-    }
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     Glib::ustring prefix = "";
     if (prefs->getBool("/theme/darkTheme", false)) {
         prefix = ".dark ";
@@ -1145,16 +1115,17 @@ void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &c
 void InkscapePreferences::resetIconsColors(bool themechange)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     if (!prefs->getBool("/theme/symbolicIcons", false)) {
         _symbolic_base_colors.set_sensitive(false);
+        _symbolic_highlight_colors.set_sensitive(false);
         _symbolic_base_color.setSensitive(false);
         _symbolic_success_color.setSensitive(false);
         _symbolic_warning_color.setSensitive(false);
         _symbolic_error_color.setSensitive(false);
         return;
     }
-    if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
+    if (prefs->getBool("/theme/symbolicDefaultBaseColors", true) ||
         !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
         auto const screen = Gdk::Screen::get_default();
         if (INKSCAPE.colorizeprovider) {
@@ -1167,36 +1138,48 @@ void InkscapePreferences::resetIconsColors(bool themechange)
         if (themechange) {
             base_color = _symbolic_base_color.get_style_context()->get_background_color();
         }
+        SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
+        //we copy highlight to not use
+        guint32 colorsetbase = base_color_sp.toRGBA32(base_color.get_alpha());
+        guint32 colorsetsuccess = colorsetbase;
+        guint32 colorsetwarning = colorsetbase;
+        guint32 colorseterror = colorsetbase;
+        get_highlight_colors(colorsetbase, colorsetsuccess, colorsetwarning, colorseterror);
+        _symbolic_base_color.setRgba32(colorsetbase);
+        prefs->setUInt("/theme/" + themeiconname + "/symbolicBaseColor", colorsetbase);
+        _symbolic_base_color.setSensitive(false);
+        changeIconsColors();
+    } else {
+        _symbolic_base_color.setSensitive(true);
+    }
+    if (prefs->getBool("/theme/symbolicDefaultHighColors", true)) {
+        auto const screen = Gdk::Screen::get_default();
+        if (INKSCAPE.colorizeprovider) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+        }
         Gdk::RGBA success_color = _symbolic_success_color.get_style_context()->get_color();
         Gdk::RGBA warning_color = _symbolic_warning_color.get_style_context()->get_color();
         Gdk::RGBA error_color = _symbolic_error_color.get_style_context()->get_color();
-        SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
         SPColor success_color_sp(success_color.get_red(), success_color.get_green(), success_color.get_blue());
         SPColor warning_color_sp(warning_color.get_red(), warning_color.get_green(), warning_color.get_blue());
         SPColor error_color_sp(error_color.get_red(), error_color.get_green(), error_color.get_blue());
-        guint32 colorsetbase = base_color_sp.toRGBA32(base_color.get_alpha());
+        //we copy base to not use
+        guint32 colorsetbase = success_color_sp.toRGBA32(success_color.get_alpha());
         guint32 colorsetsuccess = success_color_sp.toRGBA32(success_color.get_alpha());
         guint32 colorsetwarning = warning_color_sp.toRGBA32(warning_color.get_alpha());
         guint32 colorseterror = error_color_sp.toRGBA32(error_color.get_alpha());
         get_highlight_colors(colorsetbase, colorsetsuccess, colorsetwarning, colorseterror);
-        _symbolic_base_color.setRgba32(colorsetbase);
         _symbolic_success_color.setRgba32(colorsetsuccess);
         _symbolic_warning_color.setRgba32(colorsetwarning);
         _symbolic_error_color.setRgba32(colorseterror);
-        prefs->setUInt("/theme/" + themeiconname + "/symbolicBaseColor", colorsetbase);
         prefs->setUInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
         prefs->setUInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
         prefs->setUInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
-        if (prefs->getBool("/theme/symbolicDefaultColors", true)) {
-            _symbolic_base_color.setSensitive(false);
-            _symbolic_success_color.setSensitive(false);
-            _symbolic_warning_color.setSensitive(false);
-            _symbolic_error_color.setSensitive(false);
-            /* _complementary_colors->get_style_context()->add_class("disabled"); */
-        }
+        _symbolic_success_color.setSensitive(false);
+        _symbolic_warning_color.setSensitive(false);
+        _symbolic_error_color.setSensitive(false);
         changeIconsColors();
     } else {
-        _symbolic_base_color.setSensitive(true);
         _symbolic_success_color.setSensitive(true);
         _symbolic_warning_color.setSensitive(true);
         _symbolic_error_color.setSensitive(true);
@@ -1209,7 +1192,7 @@ void InkscapePreferences::resetIconsColorsWrapper() { resetIconsColors(false); }
 void InkscapePreferences::changeIconsColors()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     guint32 colorsetbase = prefs->getUInt("/theme/" + themeiconname + "/symbolicBaseColor", 0x2E3436ff);
     guint32 colorsetsuccess = prefs->getUInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
     guint32 colorsetwarning = prefs->getUInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
@@ -1246,7 +1229,8 @@ void InkscapePreferences::toggleSymbolic()
             window->get_style_context()->remove_class("regular");
         }
         _symbolic_base_colors.set_sensitive(true);
-        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+        _symbolic_highlight_colors.set_sensitive(true);
+        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
         if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
             !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
             resetIconsColors();
@@ -1263,6 +1247,7 @@ void InkscapePreferences::toggleSymbolic()
             Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
         }
         _symbolic_base_colors.set_sensitive(false);
+        _symbolic_highlight_colors.set_sensitive(false);
     }
     INKSCAPE.signal_change_theme.emit();
 }
@@ -1277,7 +1262,6 @@ void InkscapePreferences::themeChange()
 {
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
-
         auto const screen = Gdk::Screen::get_default();
         if (INKSCAPE.contrastthemeprovider) {
             Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.contrastthemeprovider);
@@ -1286,8 +1270,7 @@ void InkscapePreferences::themeChange()
             Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themeprovider);
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
-        auto settings = Gtk::Settings::get_default();
+        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
         _dark_theme.get_parent()->set_no_show_all(false);
         if (dark_themes[current_theme]) {
             _dark_theme.get_parent()->show_all();
@@ -1295,16 +1278,9 @@ void InkscapePreferences::themeChange()
             _dark_theme.get_parent()->hide();
         }
 
+        auto settings = Gtk::Settings::get_default();
         settings->property_gtk_theme_name() = current_theme;
-        bool dark = current_theme.find(":dark") != std::string::npos;
-        if (!dark) {
-            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
-            Gdk::RGBA rgba;
-            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
-            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
-                dark = true;
-            }
-        }
+        bool dark = isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
         bool toggled = prefs->getBool("/theme/darkTheme", false) != dark;
         if (dark) {
             prefs->setBool("/theme/darkTheme", true);
@@ -1326,19 +1302,7 @@ void InkscapePreferences::preferDarkThemeChange()
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool dark_theme = prefs->getBool("/theme/preferDarkTheme", false);
-        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
-        auto settings = Gtk::Settings::get_default();
-        settings->property_gtk_application_prefer_dark_theme() = dark_theme;
-        bool dark = current_theme.find(":dark") != std::string::npos;
-        if (!dark) {
-            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
-            Gdk::RGBA rgba;
-            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
-            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
-                dark = true;
-            }
-        }
+        bool dark = isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
         bool toggled = prefs->getBool("/theme/darkTheme", false) != dark;
         if (dark) {
             prefs->setBool("/theme/darkTheme", true);
@@ -1359,7 +1323,7 @@ void InkscapePreferences::symbolicThemeCheck()
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     bool symbolic = false;
     auto settings = Gtk::Settings::get_default();
     if (settings) {
@@ -1367,7 +1331,9 @@ void InkscapePreferences::symbolicThemeCheck()
             settings->property_gtk_icon_theme_name() = themeiconname;
         }
     }
-    if (prefs->getString("/theme/defaultIconTheme") != prefs->getString("/theme/iconTheme")) {
+    // we always show symbolic in default theme (relays in hicolor theme)
+    if (themeiconname != prefs->getString("/theme/defaultIconTheme", "")) {
+
         auto folders = get_foldernames(ICONS, { "application" });
         for (auto &folder : folders) {
             auto path = folder;
@@ -1375,7 +1341,7 @@ void InkscapePreferences::symbolicThemeCheck()
             if (std::string::npos != last_slash_idx) {
                 folder.erase(0, last_slash_idx + 1);
             }
-            if (folder == prefs->getString("/theme/iconTheme")) {
+            if (folder == themeiconname) {
 #ifdef _WIN32
                 path += g_win32_locale_filename_from_utf8("/symbolic/actions");
 #else
@@ -1396,17 +1362,20 @@ void InkscapePreferences::symbolicThemeCheck()
             _symbolic_icons.set_active(false);
             _symbolic_icons.get_parent()->hide();
             _symbolic_base_colors.get_parent()->hide();
+            _symbolic_highlight_colors.get_parent()->hide();
             _symbolic_base_color.get_parent()->get_parent()->hide();
             _symbolic_success_color.get_parent()->get_parent()->hide();
         } else {
             _symbolic_icons.get_parent()->show();
             _symbolic_base_colors.get_parent()->show();
+            _symbolic_highlight_colors.get_parent()->show();
             _symbolic_base_color.get_parent()->get_parent()->show();
             _symbolic_success_color.get_parent()->get_parent()->show();
         }
     }
     if (symbolic) {
-        if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
+        if (prefs->getBool("/theme/symbolicDefaultHighColors", true) ||
+            prefs->getBool("/theme/symbolicDefaultBaseColors", true) ||
             !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
             resetIconsColors();
         } else {
@@ -1610,7 +1579,7 @@ void InkscapePreferences::initPageUI()
 
     _ui_rotationlock.init(_("Lock canvas rotation by default"), "/options/rotationlock", false);
     _page_ui.add_line(false, "", _ui_rotationlock, "",
-                       _("When enabled, common actions which normally rotate the canvas no longer do so by default"), true);
+                       _("Prevent accidental canvas rotation by disabling on-canvas keyboard and mouse actions for rotation"), true);
 
     _page_ui.add_group_header(_("Handle size"));
         _mouse_grabsize.init("/options/grabsize/value", 1, 15, 1, 2, 3, 0);
@@ -1623,74 +1592,34 @@ void InkscapePreferences::initPageUI()
     // Theme
     _page_theme.add_group_header(_("Theme"));
     _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);
-    Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
-    Glib::ustring default_theme = prefs->getString("/theme/defaultTheme");
+    Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
+    Glib::ustring default_theme = prefs->getString("/theme/defaultGtkTheme");
     Glib::ustring theme = "";
     {
-        using namespace Inkscape::IO::Resource;
-        gchar *path;
-        gchar **builtin_themes;
-        guint i, j;
-        const gchar *const *dirs;
-
-        /* Builtin themes */
-        builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-        for (i = 0; builtin_themes[i] != NULL; i++) {
-            if (g_str_has_suffix(builtin_themes[i], "/")) {
-                theme = builtin_themes[i];
-                theme.resize(theme.size() - 1);
-                Glib::ustring theme_path = "/org/gtk/libgtk/theme";
-                theme_path += "/" + theme;
-                gchar **builtin_themes_files =
-                    g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-                bool has_prefer_dark = false;
-                if (builtin_themes_files != NULL) {
-                    for (j = 0; builtin_themes_files[j] != NULL; j++) {
-                        Glib::ustring file = builtin_themes_files[j];
-                        if (file == "gtk-dark.css") {
-                            has_prefer_dark = true;
-                        }
-                    }
-                }
-                g_strfreev(builtin_themes_files);
-                dark_themes[theme] = has_prefer_dark;
-            }
-        }
-        g_strfreev(builtin_themes);
-
-        path = g_build_filename(g_get_user_data_dir(), "themes", NULL);
-        _inkscape_fill_gtk(path, dark_themes);
-        g_free(path);
-
-        path = g_build_filename(g_get_home_dir(), ".themes", NULL);
-        _inkscape_fill_gtk(path, dark_themes);
-        g_free(path);
-
-        dirs = g_get_system_data_dirs();
-        for (i = 0; dirs[i]; i++) {
-            path = g_build_filename(dirs[i], "themes", NULL);
-            _inkscape_fill_gtk(path, dark_themes);
-            g_free(path);
-        }
-
+        dark_themes = get_available_themes();
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
         std::map<Glib::ustring, bool>::iterator it = dark_themes.begin();
         // Iterate over the map using Iterator till end.
         for (std::pair<std::string, int> element : dark_themes) {
             Glib::ustring theme = element.first;
-            it++;
+            ++it;
             if (theme == default_theme) {
                 continue;
             }
             values.emplace_back(theme);
             labels.emplace_back(theme);
         }
+        std::sort(labels.begin(), labels.end());
+        std::sort(values.begin(), values.end());
+        labels.erase(unique(labels.begin(), labels.end()), labels.end());
+        values.erase(unique(values.begin(), values.end()), values.end());
+        values.emplace_back("");
         Glib::ustring default_theme_label = _("Use system theme");
         default_theme_label += " (" + default_theme + ")";
         labels.emplace_back(default_theme_label);
-        values.push_back(default_theme);
-        _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
+
+        _gtk_theme.init("/theme/gtkTheme", labels, values, "");
         _page_theme.add_line(false, _("Change GTK theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
@@ -1701,7 +1630,8 @@ void InkscapePreferences::initPageUI()
     space->set_size_request(_sb_width / 3, -1);
     _page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
                          _("Make background brighter or darker to reduce contrast"), true, space);
-    _contrast_theme.signal_button_release_event().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastChange));
+    _contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
+    _contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
 
     if (dark_themes[current_theme]) {
@@ -1729,38 +1659,39 @@ void InkscapePreferences::initPageUI()
             if (std::string::npos != last_slash_idx) {
                 folder.erase(0, last_slash_idx + 1);
             }
-            if (folder == default_icon_theme || (default_icon_theme == "Adwaita" && folder == "hicolor")) {
+            // we want use Adwaita intead fallback hicolor theme
+            if (folder == default_icon_theme) {
                 continue;
             }
-            labels.push_back(folder);
-            values.push_back(folder);
+            labels.emplace_back(folder);
+            values.emplace_back(folder);
         }
         std::sort(labels.begin(), labels.end());
         std::sort(values.begin(), values.end());
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
-        values.push_back(default_icon_theme);
-        if (default_icon_theme == "Adwaita") {
-            default_icon_theme = "hicolor";
-        }
+        values.emplace_back("");
         Glib::ustring default_icon_label = _("Use system icons");
         default_icon_label += " (" + default_icon_theme + ")";
         labels.emplace_back(default_icon_label);
 
-        _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
+        _icon_theme.init("/theme/iconTheme", labels, values, "");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
         _sys_user_icons_dir_copy.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
                              _("Open icons folder"));
         _page_theme.add_line(true, _("User icons: "), _sys_user_icons_dir_copy, "", _("Location of the user’s icons"), true, Gtk::manage(new Gtk::Box()));
     }
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", false);
     _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::toggleSymbolic));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true);
-    _symbolic_base_colors.init(_("Use default colors for icons"), "/theme/symbolicDefaultColors", true);
+    _symbolic_base_colors.init(_("Use default base color for icons"), "/theme/symbolicDefaultBaseColors", true);
     _symbolic_base_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColorsWrapper));
     _page_theme.add_line(true, "", _symbolic_base_colors, "", "", true);
+    _symbolic_highlight_colors.init(_("Use default highlight colors for icons"), "/theme/symbolicDefaultHighColors", true);
+    _symbolic_highlight_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColorsWrapper));
+    _page_theme.add_line(true, "", _symbolic_highlight_colors, "", "", true);
     _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor",
                               0x2E3436ff);
     _symbolic_success_color.init(_("Color for symbolic success icons:"),
@@ -1784,14 +1715,14 @@ void InkscapePreferences::initPageUI()
     /* _complementary_colors = Gtk::manage(new Gtk::Image()); */
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
     icon_buttons->pack_start(_symbolic_base_color, true, true, 4);
-    _page_theme.add_line(false, "", *icon_buttons, _("Icon color"),
+    _page_theme.add_line(false, "", *icon_buttons, _("Icon color base"),
                          _("Base color for icons"), false);
     Gtk::Box *icon_buttons_hight = Gtk::manage(new Gtk::Box());
     icon_buttons_hight->pack_start(_symbolic_success_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_warning_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_error_color, true, true, 4);
     /* icon_buttons_hight->pack_start(*_complementary_colors, true, true, 4); */
-    _page_theme.add_line(false, "", *icon_buttons_hight, _("Highlights"),
+    _page_theme.add_line(false, "", *icon_buttons_hight, _("Icon color highlights"),
                          _("Highlight colors supported by some symbolic icon themes"),
                          false);
     Gtk::Box *icon_buttons_def = Gtk::manage(new Gtk::Box());
@@ -1842,7 +1773,7 @@ void InkscapePreferences::initPageUI()
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, nullptr);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
-    _win_show_boot.init ( _("Start screen shows when loaded"), "/options/boot/enabled", true);
+    _win_show_boot.init ( _("Show Welcome dialog"), "/options/boot/enabled", true);
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
@@ -1909,13 +1840,13 @@ void InkscapePreferences::initPageUI()
 #endif
 
     _page_windows.add_group_header( _("Dialog labels behavior (requires restart)"));
-    _page_windows.add_line( true, "", _win_dialogs_labels_auto, "", _("Dialogs' name labels will hide or show according to the space"));
-    _page_windows.add_line( true, "", _win_dialogs_labels_off, "", _("Dialogs' name labels will allways be hidden"));
+    _page_windows.add_line( true, "", _win_dialogs_labels_auto, "", _("Dialog names will be displayed when there is enough space"));
+    _page_windows.add_line( true, "", _win_dialogs_labels_off, "", _("Only show dialog icons"));
 
     _page_windows.add_group_header( _("Miscellaneous"));
 
     _page_windows.add_line( true, "", _win_show_boot, "",
-                            _("Whether the boot/startup screen will be shown."));
+                            _("Whether the Welcome dialog will be shown when Inkscape starts."));
 #ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
     _page_windows.add_line( true, "", _win_hide_task, "",
                             _("Whether dialog windows are to be hidden in the window manager taskbar"));
@@ -2060,7 +1991,7 @@ void InkscapePreferences::initPageIO()
     _mouse_sens.init ( "/options/cursortolerance/value", 0.0, 30.0, 1.0, 1.0, 8.0, true, false);
     _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels (requires restart)"),
                            _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), false);
-    _mouse_thres.init ( "/options/dragtolerance/value", 0.0, 20.0, 1.0, 1.0, 4.0, true, false);
+    _mouse_thres.init ( "/options/dragtolerance/value", 0.0, 100.0, 1.0, 1.0, 8.0, true, false);
     _page_mouse.add_line( false, _("_Click/drag threshold:"), _mouse_thres, _("pixels"),
                            _("Maximum mouse drag (in screen pixels) which is considered a click, not a drag"), false);
 
@@ -2146,9 +2077,9 @@ void InkscapePreferences::initPageIO()
 
     // SVG 2 Fallbacks
     _page_svgexport.add_group_header( _("SVG 2"));
-    _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text."),                                     "/options/svgexport/text_insertfallback",    true );
-    _svgexport_insert_mesh_polyfill.init( _("Insert JavaScript code for mesh gradients."),                            "/options/svgexport/mesh_insertpolyfill",    true );
-    _svgexport_insert_hatch_polyfill.init( _("Insert JavaScript code for SVG2 hatches."),                       "/options/svgexport/hatch_insertpolyfill",   true );
+    _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text"),                                     "/options/svgexport/text_insertfallback",    true );
+    _svgexport_insert_mesh_polyfill.init( _("Insert JavaScript code for mesh gradients"),                            "/options/svgexport/mesh_insertpolyfill",    true );
+    _svgexport_insert_hatch_polyfill.init( _("Insert JavaScript code for SVG2 hatches"),                       "/options/svgexport/hatch_insertpolyfill",   true );
 
     _page_svgexport.add_line( false, "", _svgexport_insert_text_fallback,  "", _("Adds fallback options for non-SVG 2 renderers."), false);
     _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds a JavaScript polyfill for rendering meshes in web browsers."), false);
@@ -2157,8 +2088,8 @@ void InkscapePreferences::initPageIO()
     // SVG Export Options (SVG 2 -> SVG 1)
     _page_svgexport.add_group_header( _("SVG 2 to SVG 1.1"));
 
-    _svgexport_remove_marker_auto_start_reverse.init( _("Use correct marker direction in SVG 1.1 renderers."),               "/options/svgexport/marker_autostartreverse", false);
-    _svgexport_remove_marker_context_paint.init(      _("Use correct marker colors in SVG 1.1 renderers."), "/options/svgexport/marker_contextpaint",     false);
+    _svgexport_remove_marker_auto_start_reverse.init( _("Use correct marker direction in SVG 1.1 renderers"),               "/options/svgexport/marker_autostartreverse", false);
+    _svgexport_remove_marker_context_paint.init(      _("Use correct marker colors in SVG 1.1 renderers"), "/options/svgexport/marker_contextpaint",     false);
 
     _page_svgexport.add_line( false, "", _svgexport_remove_marker_auto_start_reverse, "", _("SVG 2 allows markers to automatically be reversed at the start of a path with 'auto_start_reverse'. This adds a rotated duplicate of the marker's definition."), false);
     _page_svgexport.add_line( false, "", _svgexport_remove_marker_context_paint,      "", _("SVG 2 allows markers to automatically match the stroke color by using 'context_paint' or 'context_fill'. This adjusts the markers own colors."),           false);
@@ -2277,33 +2208,28 @@ void InkscapePreferences::initPageIO()
     this->AddPage(_page_cms, _("Color management"), iter_io, PREFS_PAGE_IO_CMS);
 
     // Autosave options
-    _save_autosave_enable.init( _("Enable autosave (requires restart)"), "/options/autosave/enable", true);
+    _save_autosave_enable.init( _("Enable autosave"), "/options/autosave/enable", true);
     _page_autosave.add_line(false, "", _save_autosave_enable, "", _("Automatically save the current document(s) at a given interval, thus minimizing loss in case of a crash"), false);
     _save_autosave_path.init("/options/autosave/path", true);
     if (prefs->getString("/options/autosave/path").empty()) {
         // Show the default fallback "tmp dir" if autosave path is not set.
         _save_autosave_path.set_text(Glib::build_filename(Glib::get_user_cache_dir(), "inkscape"));
     }
-    _page_autosave.add_line(false, C_("Filesystem", "Autosave _directory:"), _save_autosave_path, "", _("The directory where autosaves will be written. This should be an absolute path (starts with / on UNIX or a drive letter such as C: on Windows). "), false);
+    _page_autosave.add_line(false, C_("Filesystem", "Autosave _directory:"), _save_autosave_path, "", _("The directory where autosaves will be written. This should be an absolute path (starts with / on UNIX or a drive letter such as C: on Windows)."), false);
     _save_autosave_interval.init("/options/autosave/interval", 1.0, 10800.0, 1.0, 10.0, 10.0, true, false);
     _page_autosave.add_line(false, _("_Interval (in minutes):"), _save_autosave_interval, "", _("Interval (in minutes) at which document will be autosaved"), false);
     _save_autosave_max.init("/options/autosave/max", 1.0, 100.0, 1.0, 10.0, 10.0, true, false);
     _page_autosave.add_line(false, _("_Maximum number of autosaves:"), _save_autosave_max, "", _("Maximum number of autosaved files; use this to limit the storage space used"), false);
 
-    /* When changing the interval or enabling/disabling the autosave function,
-     * update our running configuration
-     *
-     * FIXME!
-     * AutoSave::restart() should be called AFTER the values have been changed
-     * (which cannot be guaranteed from here) - use a PrefObserver somewhere.
-     */
-    _save_autosave_enable.signal_toggled(  ).connect( sigc::ptr_fun(Inkscape::AutoSave::restart), true);
-    _save_autosave_interval.signal_changed().connect( sigc::ptr_fun(Inkscape::AutoSave::restart), true);
+    // When changing the interval or enabling/disabling the autosave function,
+    // update our running configuration
+    _save_autosave_enable.changed_signal.connect([](bool) { Inkscape::AutoSave::restart(); });
+    _save_autosave_interval.changed_signal.connect([](double) { Inkscape::AutoSave::restart(); });
 
     this->AddPage(_page_autosave, _("Autosave"), iter_io, PREFS_PAGE_IO_AUTOSAVE);
 
     // No Result
-    _page_notfound.add_group_header("No matches were found, try another search!");
+    _page_notfound.add_group_header(_("No matches were found, try another search!"));
 }
 
 void InkscapePreferences::initPageBehavior()
@@ -2324,6 +2250,8 @@ void InkscapePreferences::initPageBehavior()
     _sel_recursive.init ( _("Select in current layer and sublayers"), "/options/kbselection/inlayer", PREFS_SELECTION_LAYER_RECURSIVE, false, &_sel_all);
     _sel_hidden.init ( _("Ignore hidden objects and layers"), "/options/kbselection/onlyvisible", true);
     _sel_locked.init ( _("Ignore locked objects and layers"), "/options/kbselection/onlysensitive", true);
+    _sel_inlayer_same.init ( _("Select same behaves like select all"), "/options/selection/samelikeall", false);
+
     _sel_layer_deselects.init ( _("Deselect upon layer change"), "/options/selection/layerdeselect", true);
 
     _page_select.add_line( false, "", _sel_layer_deselects, "",
@@ -2340,12 +2268,20 @@ void InkscapePreferences::initPageBehavior()
                            _("Uncheck this to be able to select objects that are hidden (either by themselves or by being in a hidden layer)"));
     _page_select.add_line( true, "", _sel_locked, "",
                            _("Uncheck this to be able to select objects that are locked (either by themselves or by being in a locked layer)"));
+    _page_select.add_line( true, "", _sel_inlayer_same, "",
+                           _("Check this to make the 'select same' functions work like the select all functions, restricting to current layer only."));
 
     _sel_cycle.init ( _("Wrap when cycling objects in z-order"), "/options/selection/cycleWrap", true);
 
     _page_select.add_group_header( _("Alt+Scroll Wheel"));
     _page_select.add_line( true, "", _sel_cycle, "",
                            _("Wrap around at start and end when cycling objects in z-order"));
+
+    auto paste_above_selected = Gtk::manage(new UI::Widget::PrefCheckButton());
+    paste_above_selected->init(_("Paste above selection instead of layer-top"), "/options/paste/aboveselected", true);
+    _page_select.add_line(false, "", *paste_above_selected, "",
+                          _("If checked, pasted items and imported documents will be placed immediately above the "
+                            "current selection (z-order). Otherwise, insertion happens on top of all objects in the current layer."));
 
     this->AddPage(_page_select, _("Selecting"), iter_behavior, PREFS_PAGE_BEHAVIOR_SELECTING);
 
@@ -2472,7 +2408,7 @@ void InkscapePreferences::initPageBehavior()
                           _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), false);
     _middle_mouse_zoom.init ( _("Zoom with middle mouse click"), "/options/middlemousezoom/value", true);
     _page_steps.add_line( true, "", _middle_mouse_zoom, "",
-                            _("When on, clicking the middle mouse button (usually the mouse wheel) makes zoom."));
+                            _("When activated, clicking the middle mouse button (usually the mouse wheel) zooms."));
     _steps_rotate.init ( "/options/rotateincrement/value", 1, 90, 1.0, 5.0, 15, false, false);
     _page_steps.add_line( false, _("_Rotate canvas by:"), _steps_rotate, _("degrees"),
                           _("Rotate canvas clockwise and counter-clockwise by this amount."), false);
@@ -2592,7 +2528,7 @@ void InkscapePreferences::initPageRendering()
     _rendering_outline_overlay_opacity.init("/options/rendering/outline-overlay-opacity", 1.0, 100.0, 1.0, 5.0, 50.0, true, false);
     _rendering_outline_overlay_opacity.signal_focus_out_event().connect(sigc::mem_fun(*this, &InkscapePreferences::on_outline_overlay_changed));
     _page_rendering.add_line( false, _("Outline overlay opacity:"), _rendering_outline_overlay_opacity, _("%"),
-                             _("Opacity of the color on outline overlay render mode"), false);
+                             _("Opacity of the color in outline overlay view mode"), false);
 
     {
         // if these GTK constants ever change, consider adding a compatibility shim to SPCanvas::addIdle()
@@ -2692,10 +2628,10 @@ void InkscapePreferences::initPageBitmaps()
                                       "/options/svgoutput/usesodipodiabsref", false);
     _page_bitmaps.add_line(
         true, "", _svgoutput_usesodipodiabsref, "",
-        _("By default image links are stored as relative paths whenever possible. If this option is enabled Inkscape "
-          "will additionally add an absolute path ('sodipody:absref' attribute) to the image, which is used as a "
-          "fall-back for locating the linked image, for example if the SVG document is moved on disk. Note that this "
-          "will expose your directory structure which can include personal information like your username."),
+        _("By default, image links are stored as relative paths whenever possible. If this option is enabled, Inkscape "
+          "will additionally add an absolute path ('sodipodi:absref' attribute) to the image. This is used as a "
+          "fall-back for locating the linked image, for example if the SVG document has been moved on disk. Note that this "
+          "will expose your directory structure in the file's source code, which can include personal information like your username."),
         false);
 
     {
@@ -2741,8 +2677,10 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     auto labels_and_names = Inkscape::Shortcuts::get_file_names();
     _kb_filelist.init( "/options/kbshortcuts/shortcutfile", labels_and_names, labels_and_names[0].second);
 
-    Glib::ustring tooltip(_("Select a file of predefined shortcuts and modifiers to use. Any customizations you create will be added separately to "));
-    tooltip += Glib::ustring(IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, "default.xml"));
+    auto tooltip =
+        Glib::ustring::compose(_("Select a file of predefined shortcuts and modifiers to use. Any customizations you "
+                                 "create will be added separately to %1"),
+                               IO::Resource::get_path_string(IO::Resource::USER, IO::Resource::KEYS, "default.xml"));
 
     _page_keyshortcuts.add_line( false, _("Keyboard file:"), _kb_filelist, "", tooltip.c_str(), false);
 
@@ -2895,7 +2833,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     Gtk::TreeStore::iterator iter_mods = _mod_store->append();
     (*iter_mods)[_mod_columns.name] = _("Loading ...");
     (*iter_group)[_mod_columns.id] = "";
-    (*iter_group)[_mod_columns.description] = _("It should have loaded by now. Hmmm.");
+    (*iter_group)[_mod_columns.description] = _("Unable to load keyboard modifier list.");
     (*iter_group)[_mod_columns.and_modifiers] = "";
 }
 
@@ -3244,7 +3182,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (section.empty()) section = "Misc";
         if (section != old_section) {
             iter_group = _kb_store->append();
-            Glib::ustring name = "Actions: " + section;
+            Glib::ustring name = Glib::ustring::compose("%1: %2", _("Actions"), section);
             (*iter_group)[_kb_columns.name] = name;
             (*iter_group)[_kb_columns.shortcut] = "";
             (*iter_group)[_kb_columns.description] = "";
@@ -3261,8 +3199,10 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             // Convert to more user friendly notation.
 
             // ::get_label shows key pad and numeric keys identically.
+            // TODO: Results in labels like "Numpad Alt+5"
             if (accel.find("KP") != Glib::ustring::npos) {
-                shortcut_label += "Num Pad ";
+                shortcut_label += _("Numpad");
+                shortcut_label += " ";
             }
             unsigned int key = 0;
             Gdk::ModifierType mod = Gdk::ModifierType(0);
@@ -3336,6 +3276,24 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     for (auto win : gapp->get_windows()) {
         shortcuts.update_gui_text_recursive(win);
     }
+
+    // Update all GUI text
+    std::list< SPDesktop* > listbuf;
+    // Get list of all available desktops
+    INKSCAPE.get_all_desktops(listbuf);
+
+    // Update text of each desktop to correct Shortcuts
+    for(SPDesktop *desktop: listbuf) {
+      // Caution: Checking if pointers are not NULL
+      if(desktop) {
+        InkscapeWindow *window = desktop->getInkscapeWindow();
+        if(window) {
+          SPDesktopWidget *dtw = window->get_desktop_widget();
+          if(dtw)
+            reload_menu(desktop, dtw->_menubar);
+        }
+      }
+    }
 }
 
 void InkscapePreferences::initPageSpellcheck()
@@ -3381,64 +3339,64 @@ void InkscapePreferences::initPageSystem()
     Gtk::Button* reset_prefs = Gtk::manage(new Gtk::Button(_("Reset Preferences")));
     reset_prefs->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::on_reset_prefs_clicked));
 
-    _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "",
+    _page_system.add_line(true, _("User preferences:"), _sys_user_prefs, "",
                           _("Location of the user’s preferences file"), true, reset_prefs);
 
     _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
-    _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
+    _page_system.add_line(true, _("User config:"), _sys_user_config, "", _("Location of users configuration"), true);
 
     auto extensions_folder = IO::Resource::get_path_string(IO::Resource::USER, IO::Resource::EXTENSIONS);
     _sys_user_extension_dir.init(extensions_folder,
                                  _("Open extensions folder"));
-    _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
+    _page_system.add_line(true, _("User extensions:"), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
 
     _sys_user_fonts_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::FONTS, ""),
                              _("Open fonts folder"));
-    _page_system.add_line(true, _("User fonts: "), _sys_user_fonts_dir, "", _("Location of the user’s fonts"), true);
+    _page_system.add_line(true, _("User fonts:"), _sys_user_fonts_dir, "", _("Location of the user’s fonts"), true);
 
     _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
-    _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
+    _page_system.add_line(true, _("User themes:"), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
     _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
                              _("Open icons folder"));
-    _page_system.add_line(true, _("User icons: "), _sys_user_icons_dir, "", _("Location of the user’s icons"), true);
+    _page_system.add_line(true, _("User icons:"), _sys_user_icons_dir, "", _("Location of the user’s icons"), true);
 
     _sys_user_templates_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::TEMPLATES, ""),
                                  _("Open templates folder"));
-    _page_system.add_line(true, _("User templates: "), _sys_user_templates_dir, "",
+    _page_system.add_line(true, _("User templates:"), _sys_user_templates_dir, "",
                           _("Location of the user’s templates"), true);
 
     _sys_user_symbols_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::SYMBOLS, ""),
                                _("Open symbols folder"));
 
-    _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the user’s symbols"),
+    _page_system.add_line(true, _("User symbols:"), _sys_user_symbols_dir, "", _("Location of the user’s symbols"),
                           true);
 
     _sys_user_paint_servers_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PAINT, ""),
                                 _("Open paint servers folder"));
 
-    _page_system.add_line(true, _("User paint servers: "), _sys_user_paint_servers_dir, "",
+    _page_system.add_line(true, _("User paint servers:"), _sys_user_paint_servers_dir, "",
                         _("Location of the user’s paint servers"), true);
 
     _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
                                 _("Open palettes folder"));
-    _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the user’s palettes"),
+    _page_system.add_line(true, _("User palettes:"), _sys_user_palettes_dir, "", _("Location of the user’s palettes"),
                           true);
 
     _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),
                             _("Open keyboard shortcuts folder"));
-    _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "",
+    _page_system.add_line(true, _("User keys:"), _sys_user_keys_dir, "",
                           _("Location of the user’s keyboard mapping files"), true);
 
     _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),
                           _("Open user interface folder"));
-    _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "",
+    _page_system.add_line(true, _("User UI:"), _sys_user_ui_dir, "",
                           _("Location of the user’s user interface description files"), true);
 
     _sys_user_cache.set_text(g_get_user_cache_dir());
     _sys_user_cache.set_editable(false);
-    _page_system.add_line(true, _("User cache: "), _sys_user_cache, "", _("Location of user’s cache"), true);
+    _page_system.add_line(true, _("User cache:"), _sys_user_cache, "", _("Location of user’s cache"), true);
 
     Glib::ustring tmp_dir = prefs->getString("/options/autosave/path");
     if (tmp_dir.empty()) {
@@ -3446,16 +3404,16 @@ void InkscapePreferences::initPageSystem()
     }
     _sys_tmp_files.set_text(tmp_dir);
     _sys_tmp_files.set_editable(false);
-    _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
+    _page_system.add_line(true, _("Temporary files:"), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
 
     _sys_data.set_text(get_inkscape_datadir());
     _sys_data.set_editable(false);
-    _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
+    _page_system.add_line(true, _("Inkscape data:"), _sys_data, "", _("Location of Inkscape data"), true);
 
     extensions_folder = IO::Resource::get_path_string(IO::Resource::SYSTEM, IO::Resource::EXTENSIONS);
     _sys_extension_dir.set_text(extensions_folder);
     _sys_extension_dir.set_editable(false);
-    _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
+    _page_system.add_line(true, _("Inkscape extensions:"), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
 
     Glib::ustring tmp;
     auto system_data_dirs = Glib::get_system_data_dirs();
@@ -3466,7 +3424,7 @@ void InkscapePreferences::initPageSystem()
     _sys_systemdata_scroll.set_size_request(100, 80);
     _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _sys_systemdata_scroll.set_shadow_type(Gtk::SHADOW_IN);
-    _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
+    _page_system.add_line(true,  _("System data:"), _sys_systemdata_scroll, "", _("Locations of system data"), true);
 
     _sys_fontdirs_custom.init("/options/font/custom_fontdirs", 50);
     _page_system.add_line(true, _("Custom Font directories"), _sys_fontdirs_custom, "", _("Load additional fonts from custom locations (one path per line)"), true);
@@ -3481,7 +3439,7 @@ void InkscapePreferences::initPageSystem()
     _sys_icon_scroll.set_size_request(100, 80);
     _sys_icon_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _sys_icon_scroll.set_shadow_type(Gtk::SHADOW_IN);
-    _page_system.add_line(true,  _("Icon theme: "), _sys_icon_scroll, "", _("Locations of icon themes"), true);
+    _page_system.add_line(true,  _("Icon theme:"), _sys_icon_scroll, "", _("Locations of icon themes"), true);
 
     this->AddPage(_page_system, _("System"), PREFS_PAGE_SYSTEM);
 }
@@ -3553,7 +3511,7 @@ void InkscapePreferences::show_not_found()
         _page_frame.remove();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _current_page = &_page_notfound;
-    _page_title.set_markup("<span size='large'><b>No Results</b></span>");
+    _page_title.set_markup(_("<span size='large'><b>No Results</b></span>"));
     _page_frame.add(*_current_page);
     _current_page->show();
     this->show_all_children();

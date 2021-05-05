@@ -42,6 +42,7 @@ public:
 
     static GlyphsPanel& getInstance();
 
+    void setDesktop(SPDesktop *desktop);
     void update() override;
 
 protected:
@@ -61,12 +62,12 @@ private:
     void calcCanInsert();
     void insertText();
 
-
+    SPDesktop* _desktop = nullptr;
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::IconView *iconView;
-    Gtk::Entry *entry;
-    Gtk::Label *label;
-    Gtk::Button *insertBtn;
+    Glib::RefPtr<Gtk::Entry> entry;
+    Glib::RefPtr<Gtk::Label> label;
+    Glib::RefPtr<Gtk::Button> insertBtn;
     Gtk::ComboBoxText *scriptCombo;
     Gtk::ComboBoxText *rangeCombo;
     Inkscape::UI::Widget::FontSelector *fontSelector;

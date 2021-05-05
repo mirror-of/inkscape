@@ -121,6 +121,8 @@ public:
     // void reference()   { /*printf("reference()\n"  );*/ }
     // void unreference() { /*printf("unreference()\n");*/ }
 
+    int get_number_of_windows() const;
+
 protected:
     bool _with_gui    = true;
     bool _batch_process = false; // Temp
@@ -129,6 +131,7 @@ protected:
     bool _auto_export = false;
     int _pdf_page     = 1;
     int _pdf_poppler  = false;
+    bool _use_command_line_argument = false;
     InkscapeApplication();
 
     // Documents are owned by the application which is responsible for opening/saving/exporting. WIP

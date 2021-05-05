@@ -100,6 +100,9 @@ Find::Find()
       check_offsets(_("Offsets")),
       frame_types(_("Object types")),
 
+      _left_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL)),
+      _right_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL)),
+
       status(""),
       button_find(_("_Find")),
       button_replace(_("_Replace All")),
@@ -122,8 +125,6 @@ Find::Find()
       hboxbutton_row(Gtk::ORIENTATION_HORIZONTAL)
 
 {
-    _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
-    _right_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     button_find.set_use_underline();
     button_find.set_tooltip_text(_("Select all objects matching the selection criteria"));
     button_replace.set_use_underline();
@@ -151,7 +152,7 @@ Find::Find()
     check_include_locked.set_tooltip_text(_("Include locked objects in search"));
     check_include_locked.set_active(false);
     check_ids.set_use_underline();
-    check_ids.set_tooltip_text(_("Search id name"));
+    check_ids.set_tooltip_text(_("Search ID name"));
     check_ids.set_active(true);
     check_attributename.set_use_underline();
     check_attributename.set_tooltip_text(_("Search attribute name"));
@@ -864,7 +865,7 @@ bool Find::item_type_match (SPItem *item)
         return (all || check_texts.get_active());
 
     } else if (dynamic_cast<SPGroup *>(item) &&
-               !dynamic_cast<SPDesktop *>(_app->get_active_view())->isLayer(item)) { // never select layers!
+               !getDesktop()->isLayer(item)) { // never select layers!
         return (all || check_groups.get_active());
 
     } else if (dynamic_cast<SPUse *>(item)) {

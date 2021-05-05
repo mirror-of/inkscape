@@ -367,7 +367,7 @@ void
 MarkerComboBox::update_marker_image(gchar const *mname)
 {
     gchar *cache_name = g_strconcat(combo_id, mname, NULL);
-    Glib::ustring key = svg_preview_cache.cache_key(doc->getDocumentURI(), cache_name, 24);
+    Glib::ustring key = svg_preview_cache.cache_key(doc->getDocumentFilename(), cache_name, 24);
     g_free (cache_name);
     svg_preview_cache.remove_preview_from_cache(key);
 
@@ -404,7 +404,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
 
     /* Get from cache right away */
     gchar *cache_name = g_strconcat(combo_id, mname, NULL);
-    Glib::ustring key = svg_preview_cache.cache_key(source->getDocumentURI(), cache_name, psize);
+    Glib::ustring key = svg_preview_cache.cache_key(source->getDocumentFilename(), cache_name, psize);
     g_free (cache_name);
     GdkPixbuf *pixbuf = svg_preview_cache.get_preview_from_cache(key); // no ref created
     if(pixbuf) {
@@ -508,19 +508,19 @@ gchar const *buffer = R"A(
     <defs id="defs"/>
 
     <g id="marker-start">
-      <path style="fill:white;stroke:black;stroke-width:1.7;marker-start:url(#sample)"
+      <path style="fill:white;stroke:black;stroke-width:1.7;stroke-opacity:0.2;marker-start:url(#sample)"
        d="M 12.5,13 L 25,13"/>
       <rect x="0" y="0" width="25" height="25" style="fill:none;stroke:none"/>
     </g>
 
     <g id="marker-mid">
-      <path style="fill:white;stroke:black;stroke-width:1.7;marker-mid:url(#sample)"
+      <path style="fill:white;stroke:black;stroke-width:1.7;stroke-opacity:0.2;marker-mid:url(#sample)"
        d="M 0,113 L 12.5,113 L 25,113"/>
       <rect x="0" y="100" width="25" height="25" style="fill:none;stroke:none"/>
     </g>
 
     <g id="marker-end">
-      <path style="fill:white;stroke:black;stroke-width:1.7;marker-end:url(#sample)"
+      <path style="fill:white;stroke:black;stroke-width:1.7;stroke-opacity:0.2;marker-end:url(#sample)"
        d="M 0,213 L 12.5,213"/>
       <rect x="0" y="200" width="25" height="25" style="fill:none;stroke:none"/>
     </g>

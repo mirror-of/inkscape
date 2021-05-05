@@ -239,20 +239,17 @@ static std::vector<Geom::Point> approxItemWithPoints(SPItem const *item, const G
     std::vector<Geom::Point> poly_points;
     std::unique_ptr<SPCurve> item_curve;
 
-    if (SP_IS_GROUP(item))
-    {
-        SPGroup* group = SP_GROUP(item);
+    auto item_mutable = const_cast<SPItem *>(item);
+
+    if (auto group = dynamic_cast<SPGroup *>(item_mutable)) {
         // consider all first-order children
         std::vector<SPItem*> itemlist = sp_item_group_item_list(group);
         for (auto child_item : itemlist) {
             std::vector<Geom::Point> child_points = approxItemWithPoints(child_item, item_transform * child_item->transform);
             poly_points.insert(poly_points.end(), child_points.begin(), child_points.end());
         }
-    }
-    else if (SP_IS_SHAPE(item))
-    {
-        auto shape = static_cast<SPShape const *>(item);
-        SP_SHAPE(item)->set_shape();
+    } else if (auto shape = dynamic_cast<SPShape *>(item_mutable)) {
+        shape->set_shape();
         item_curve = SPCurve::copy(shape->curve());
         // make sure it has an associated curve
         if (item_curve)

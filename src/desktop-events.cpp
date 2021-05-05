@@ -51,6 +51,8 @@
 #include "ui/tools-switch.h"
 #include "ui/dialog/guides.h"
 #include "ui/tools/tool-base.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/select-tool.h"
 #include "ui/widget/canvas.h"  // Desktop hidden in g_object data.
 
 #include "ui/event-debug.h"
@@ -113,6 +115,11 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
     if (!desktop) {
         std::cerr << "sp_dt_guide_event: No desktop!" << std::endl;
     }
+    // Limit to select tool only.
+    if (!dynamic_cast<Inkscape::UI::Tools::SelectTool *>(desktop->event_context) &&
+        !dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context)) {
+        return false;
+    }
 
     switch (event->type) {
         case GDK_2BUTTON_PRESS:
@@ -151,8 +158,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                 if (drag_type == SP_DRAG_ROTATE || drag_type == SP_DRAG_TRANSLATE) {
                     guide_item->grab((Gdk::BUTTON_RELEASE_MASK      |
                                       Gdk::BUTTON_PRESS_MASK        |
-                                      Gdk::POINTER_MOTION_MASK      |
-                                      Gdk::POINTER_MOTION_HINT_MASK ),
+                                      Gdk::POINTER_MOTION_MASK      ),
                                      nullptr);
                 }
                 ret = true;
@@ -252,7 +258,6 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                     Geom::Point const event_w(event->button.x,
                                               event->button.y);
                     Geom::Point event_dt(desktop->w2d(event_w));
-                    std::cout << "    event_w: " << event_w << ", event_dt: " << event_dt << std::endl;
                     SnapManager &m = desktop->namedview->snap_manager;
                     m.setup(desktop, true, nullptr, nullptr, guide);
                     if (drag_type == SP_DRAG_MOVE_ORIGIN) {

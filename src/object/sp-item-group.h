@@ -17,11 +17,6 @@
 #include <map>
 #include "sp-lpe-item.h"
 
-#define SP_GROUP(obj) (dynamic_cast<SPGroup*>((SPObject*)obj))
-#define SP_IS_GROUP(obj) (dynamic_cast<const SPGroup*>((SPObject*)obj) != NULL)
-
-#define SP_IS_LAYER(obj)         (SP_IS_GROUP(obj) && SP_GROUP(obj)->layerMode() == SPGroup::LAYER)
-
 namespace Inkscape {
 
 class Drawing;
@@ -111,6 +106,15 @@ void sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool
 std::vector<SPItem*> sp_item_group_item_list (SPGroup *group);
 
 SPObject *sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const char *name);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_GROUP, SPGroup)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_GROUP, SPGroup)
+
+inline bool SP_IS_LAYER(SPObject const *obj)
+{
+    auto group = dynamic_cast<SPGroup const *>(obj);
+    return group && group->layerMode() == SPGroup::LAYER;
+}
 
 #endif
 

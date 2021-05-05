@@ -88,11 +88,11 @@ protected:
     
     ModelColumns *_model;
     Glib::RefPtr<Gtk::TreeStore> _store;
-    Gtk::TreeView _tree;
+    Gtk::TreeView *_tree;
+    Gtk::ScrolledWindow *_scroller;
     Gtk::CellRendererText *_text_renderer;
     Gtk::CellRendererToggle *_toggle_active;
     Gtk::TreeView::Column *_name_column;
-    Gtk::ScrolledWindow _scroller;
     
     void on_link_button_click();
     void on_remove_button_click();
@@ -102,6 +102,7 @@ protected:
     
 private:
     void update();
+    void initui(); 
     OriginalItemArrayParam(const OriginalItemArrayParam&);
     OriginalItemArrayParam& operator=(const OriginalItemArrayParam&);
 };

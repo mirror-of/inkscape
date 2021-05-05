@@ -9514,7 +9514,7 @@ msgstr "Σφάλμα"
 msgid "No (valid) files to open."
 msgstr "Δεν υπάρχουν (έγκυρα) άρχεια για άνοιγμα."
 
-#: ../src/io/resource-manager.cpp:383
+#: ../src/io/fix-broken-links.cpp:383
 msgid "Fixup broken links"
 msgstr "Επιδιόρθωση σπασμένων συνδέσμων"
 

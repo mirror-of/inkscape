@@ -236,7 +236,7 @@ void
 ItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
     emit_changed();
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     last_transform = Geom::identity();
 }
 
@@ -255,9 +255,9 @@ ItemParam::linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *m
             // here use moved item because sp_lpe_item never has optimized transforms because clone LPE
             if (sp_lpe_item && !selection->includes(sp_lpe_item) && moved_lpeitem && !last_transform.isTranslation()) {
                 if (!moved_lpeitem->optimizeTransforms()) {
-                    sp_lpe_item->transform *= last_transform.withoutTranslation();
+                    sp_lpe_item->transform *= last_transform;
                 }
-            } else if(sp_lpe_item && moved_lpeitem->optimizeTransforms() && last_transform.isTranslation()) {
+            } else if(sp_lpe_item && moved_lpeitem && moved_lpeitem->optimizeTransforms() && last_transform.isTranslation()) {
                 Geom::Affine orig = sp_lpe_item->transform;
                 sp_lpe_item->transform *= orig.inverse() * last_transform.inverse() * orig;  
             }

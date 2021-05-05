@@ -70,55 +70,12 @@ OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
         Inkscape::UI::Widget::Registry* wr,
         Effect* effect )
 : Parameter(label, tip, key, wr, effect), 
-        _vector(),
-        _tree(),
-        _text_renderer(),
-        _toggle_reverse(),
-        _toggle_visible(),
-        _scroller()
+        _vector()
 {    
-    _model = new ModelColumns();
-    _store = Gtk::TreeStore::create(*_model);
-    _tree.set_model(_store);
-
-    _tree.set_reorderable(true);
-    _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
-    
-    
-    Gtk::CellRendererToggle * _toggle_reverse = manage(new Gtk::CellRendererToggle());
-    int reverseColNum = _tree.append_column(_("Reverse"), *_toggle_reverse) - 1;
-    Gtk::TreeViewColumn* col_reverse = _tree.get_column(reverseColNum);
-    _toggle_reverse->set_activatable(true);
-    _toggle_reverse->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_reverse_toggled));
-    col_reverse->add_attribute(_toggle_reverse->property_active(), _model->_colReverse);
-    
-
-    Gtk::CellRendererToggle * _toggle_visible = manage(new Gtk::CellRendererToggle());
-    int visibleColNum = _tree.append_column(_("Visible"), *_toggle_visible) - 1;
-    Gtk::TreeViewColumn* col_visible = _tree.get_column(visibleColNum);
-    _toggle_visible->set_activatable(true);
-    _toggle_visible->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_visible_toggled));
-    col_visible->add_attribute(_toggle_visible->property_active(), _model->_colVisible);
-    
-    _text_renderer = manage(new Gtk::CellRendererText());
-    int nameColNum = _tree.append_column(_("Name"), *_text_renderer) - 1;
-    _name_column = _tree.get_column(nameColNum);
-    _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
-
-    _tree.set_expander_column( *_tree.get_column(nameColNum) );
-    _tree.set_search_column(_model->_colLabel);
-    
-    //quick little hack -- newer versions of gtk gave the item zero space allotment
-    _scroller.set_size_request(-1, 120);
-
-    _scroller.add(_tree);
-    _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
-    //_scroller.set_shadow_type(Gtk::SHADOW_IN);
-    
+    initui();
     oncanvas_editable = true;
     _from_original_d = false;
     _allow_only_bspline_spiro = false;
-    
 }
 
 OriginalPathArrayParam::~OriginalPathArrayParam()
@@ -130,6 +87,54 @@ OriginalPathArrayParam::~OriginalPathArrayParam()
         delete w;
     }
     delete _model;
+}
+
+void
+OriginalPathArrayParam::initui() {
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop) {
+        return;
+    }
+    if (!_tree) {
+        _tree = manage(new Gtk::TreeView());
+        _model = new ModelColumns();
+        _store = Gtk::TreeStore::create(*_model);
+        _tree->set_model(_store);
+
+        _tree->set_reorderable(true);
+        _tree->enable_model_drag_dest (Gdk::ACTION_MOVE);  
+        
+        Gtk::CellRendererToggle *toggle_reverse = manage(new Gtk::CellRendererToggle());
+        int reverseColNum = _tree->append_column(_("Reverse"), *toggle_reverse) - 1;
+        Gtk::TreeViewColumn* col_reverse = _tree->get_column(reverseColNum);
+        toggle_reverse->set_activatable(true);
+        toggle_reverse->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_reverse_toggled));
+        col_reverse->add_attribute(toggle_reverse->property_active(), _model->_colReverse);
+        
+
+        Gtk::CellRendererToggle *toggle_visible = manage(new Gtk::CellRendererToggle());
+        int visibleColNum = _tree->append_column(_("Visible"), *toggle_visible) - 1;
+        Gtk::TreeViewColumn* col_visible = _tree->get_column(visibleColNum);
+        toggle_visible->set_activatable(true);
+        toggle_visible->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_visible_toggled));
+        col_visible->add_attribute(toggle_visible->property_active(), _model->_colVisible);
+        
+        Gtk::CellRendererText *text_renderer = manage(new Gtk::CellRendererText());
+        int nameColNum = _tree->append_column(_("Name"), *text_renderer) - 1;
+        Gtk::TreeView::Column *name_column = _tree->get_column(nameColNum);
+        name_column->add_attribute(text_renderer->property_text(), _model->_colLabel);
+
+        _tree->set_expander_column(*_tree->get_column(nameColNum) );
+        _tree->set_search_column(_model->_colLabel);
+        _scroller = Gtk::manage(new Gtk::ScrolledWindow());
+        //quick little hack -- newer versions of gtk gave the item zero space allotment
+        _scroller->set_size_request(-1, 120);
+
+        _scroller->add(*_tree);
+        _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+        //_scroller.set_shadow_type(Gtk::SHADOW_IN);
+    }
+    param_readSVGValue(param_getSVGValue().c_str());
 }
 
 void OriginalPathArrayParam::on_reverse_toggled(const Glib::ustring& path)
@@ -165,10 +170,13 @@ void OriginalPathArrayParam::param_set_default()
 
 Gtk::Widget* OriginalPathArrayParam::param_newWidget()
 {
+    
     Gtk::Box* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
-
-    vbox->pack_start(_scroller, Gtk::PACK_EXPAND_WIDGET);
+    _tree = nullptr;
+    _scroller = nullptr;
+    initui();
+    vbox->pack_start(*_scroller, Gtk::PACK_EXPAND_WIDGET);
     
     
     { // Paste path to link button
@@ -229,7 +237,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
 bool OriginalPathArrayParam::_selectIndex(const Gtk::TreeIter& iter, int* i)
 {
     if ((*i)-- <= 0) {
-        _tree.get_selection()->select(iter);
+        _tree->get_selection()->select(iter);
         return true;
     }
     return false;
@@ -237,7 +245,7 @@ bool OriginalPathArrayParam::_selectIndex(const Gtk::TreeIter& iter, int* i)
 
 void OriginalPathArrayParam::on_up_button_click()
 {
-    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
+    Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         
@@ -262,7 +270,7 @@ void OriginalPathArrayParam::on_up_button_click()
 
 void OriginalPathArrayParam::on_down_button_click()
 {
-    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
+    Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
 
@@ -290,7 +298,7 @@ void OriginalPathArrayParam::on_down_button_click()
 
 void OriginalPathArrayParam::on_remove_button_click()
 {
-    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
+    Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         remove_link(row[_model->_colObject]);
@@ -396,8 +404,10 @@ void OriginalPathArrayParam::linked_changed(SPObject */*old_obj*/, SPObject *new
         linked_modified(new_obj, SP_OBJECT_MODIFIED_FLAG, to);
     } else {
         to->_pathvector = Geom::PathVector();
-        SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
-        _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
+        param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        if (_store.get()) {
+            _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
+        }
     }
 }
 
@@ -464,8 +474,10 @@ void OriginalPathArrayParam::linked_modified(SPObject *linked_obj, guint flags, 
         return;
     }
     setPathVector(linked_obj, flags, to);
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    if (_store.get()) {
+        _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
+    }
 }
 
 bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
@@ -477,7 +489,10 @@ bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
             _vector.pop_back();
             delete w;
         }
-        _store->clear();
+        
+        if (_store.get()) {
+            _store->clear();
+        }
 
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
         for (gchar ** iter = strarray; *iter != nullptr; iter++) {
@@ -492,15 +507,16 @@ bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
                 w->ref.attach(URI(w->href));
 
                 _vector.push_back(w);
+                if (_store.get()) {
+                    Gtk::TreeModel::iterator iter = _store->append();
+                    Gtk::TreeModel::Row row = *iter;
+                    SPObject *obj = w->ref.getObject();
 
-                Gtk::TreeModel::iterator iter = _store->append();
-                Gtk::TreeModel::Row row = *iter;
-                SPObject *obj = w->ref.getObject();
-
-                row[_model->_colObject] = w;
-                row[_model->_colLabel] = obj ? ( obj->label() ? obj->label() : obj->getId() ) : w->href;
-                row[_model->_colReverse] = w->reversed;
-                row[_model->_colVisible] = w->visibled;
+                    row[_model->_colObject] = w;
+                    row[_model->_colLabel] = obj ? ( obj->label() ? obj->label() : obj->getId() ) : w->href;
+                    row[_model->_colReverse] = w->reversed;
+                    row[_model->_colVisible] = w->visibled;
+                }
                 g_strfreev (substrarray);
             }
         }

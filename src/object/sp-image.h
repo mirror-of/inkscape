@@ -29,9 +29,6 @@ class SPCurve;
 
 #include <memory>
 
-#define SP_IMAGE(obj) (dynamic_cast<SPImage*>((SPObject*)obj))
-#define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj) != NULL)
-
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
 namespace Inkscape { class Pixbuf; }
@@ -77,5 +74,8 @@ public:
 /* Return duplicate of curve or NULL */
 void sp_embed_image(Inkscape::XML::Node *imgnode, Inkscape::Pixbuf *pb);
 void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn);
+
+MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_IMAGE, SPImage)
+MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_IMAGE, SPImage)
 
 #endif

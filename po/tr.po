@@ -8982,7 +8982,7 @@ msgstr "DOSYA ADI"
 
 #: ../src/inkscape-application.cpp:599
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr "Girdi dosyasının üzerine yaz (veya tür değişmezse '_out' ekini ekle)"
 
 #: ../src/inkscape-application.cpp:600
@@ -9323,7 +9323,7 @@ msgstr "Hata"
 msgid "No (valid) files to open."
 msgstr "Açılacak (geçerli) dosya yok."
 
-#: ../src/io/resource-manager.cpp:382
+#: ../src/io/fix-broken-links.cpp:382
 msgid "Fixup broken links"
 msgstr "Bozuk linkleri tamir et"
 

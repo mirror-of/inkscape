@@ -40,6 +40,7 @@ set(inkscape_SRC
   help.cpp
   id-clash.cpp
   inkscape.cpp
+  inkscape-version-info.cpp
   layer-fns.cpp
   layer-manager.cpp
   layer-model.cpp
@@ -62,7 +63,6 @@ set(inkscape_SRC
   rdf.cpp
   removeoverlap.cpp
   rubberband.cpp
-  satisfied-guide-cns.cpp
   selcue.cpp
   selection-chemistry.cpp
   selection-describer.cpp
@@ -75,7 +75,6 @@ set(inkscape_SRC
   snapped-line.cpp
   snapped-point.cpp
   snapper.cpp
-  sp-item-notify-moveto.cpp 
   style-internal.cpp
   style.cpp
   text-chemistry.cpp
@@ -134,6 +133,7 @@ set(inkscape_SRC
   helper-fns.h
   id-clash.h
   inkscape-version.h
+  inkscape-version-info.h
   inkscape.h
   layer-fns.h
   layer-manager.h
@@ -159,10 +159,8 @@ set(inkscape_SRC
   proj_pt.h
   pure-transform.h
   rdf.h
-  remove-last.h
   removeoverlap.h
   rubberband.h
-  satisfied-guide-cns.h
   selcue.h
   selection-chemistry.h
   selection-describer.h
@@ -177,9 +175,6 @@ set(inkscape_SRC
   snapped-line.h
   snapped-point.h
   snapper.h
-  sp-guide-attachment.h
-  sp-guide-constraint.h
-  sp-item-notify-moveto.h
   streq.h
   strneq.h
   style-enums.h

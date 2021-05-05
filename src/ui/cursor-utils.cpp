@@ -59,7 +59,7 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
 
     // Set in preferences
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring theme_name = prefs->getString("/theme/iconTheme");
+    Glib::ustring theme_name = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     if (!theme_name.empty()) {
         theme_names.push_back(theme_name);
     }
@@ -152,19 +152,16 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
 
     auto w = document->getWidth().value("px");
     auto h = document->getHeight().value("px");
-    int sw = w * scale;
-    int sh = h * scale;
-    int dpix = 96 * scale; // DPI
-    int dpiy = 96 * scale;
-
     // Calculate the hotspot.
     int hotspot_x = root->getIntAttribute("inkscape:hotspot_x", 0); // Do not include window scale factor!
     int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0);
 
+    Geom::Rect area(0, 0, cursor_scaling ? w * scale : w, cursor_scaling ? h * scale : h);
+    int dpi = 96 * scale;
     // render document into internal bitmap; returns null on failure
-    if (auto ink_pixbuf = std::unique_ptr<Inkscape::Pixbuf>(sp_generate_internal_bitmap(document.get(), nullptr, 0, 0, w, h, sw, sh, dpix, dpiy, 0, nullptr))) {
-        if (cursor_scaling) {
-            // creating cursor from Cairo surface rather than pixbuf gives up opportunity to set device scaling;
+    if (auto ink_pixbuf = std::unique_ptr<Inkscape::Pixbuf>(sp_generate_internal_bitmap(document.get(), area, dpi))) {
+       if (cursor_scaling) {
+            // creating cursor from Cairo surface rather than pixbuf gives us opportunity to set device scaling;
             // what that means in practice is we can prepare high-res image and it will be used as-is on
             // a high-res display; cursors created from pixbuf are up-scaled to device pixels (blurry)
             auto surface = ink_pixbuf->getSurface();
@@ -178,14 +175,12 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
             }
         }
         else {
-            // original code path just in case Win32/MacOS don't like above approach
-            auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw(), true);
+            // original code path when cursor scaling is turned off in preferences
+            auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw());
+
             if (pixbuf) {
                 cursor = Gdk::Cursor::create(display, pixbuf, hotspot_x, hotspot_y);
                 window->set_cursor(cursor);
-            }
-            else {
-                std::cerr << "load_svg_cursor: failed to get pixbuf for: " << full_file_path << std::endl;
             }
         }
     } else {

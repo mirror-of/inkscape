@@ -6,8 +6,13 @@
    version="1.1"
    viewBox="0 0 600 600">
   <style type="text/css">
+    @font-face {
+      font-family: "Noto Sans";
+      src: url("fonts/NotoSans-Regular.ttf");
+    }
+
     text {
-      font-family: DejaVu Sans;
+      font-family: Noto Sans;
       font-size: 36px;
     }
     .title {
@@ -15,6 +20,7 @@
     }
   </style>
 
+  <rect x="0" y="0" width="600" height="600" style="fill:white"/>
   <g>
     <text x="50"  y="200">G̃g̃X̃x̃</text>
     <text x="300" y="200" style="writing-mode:vertical-lr;">G̃g̃X̃x̃</text>

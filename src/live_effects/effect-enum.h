@@ -51,12 +51,15 @@ enum EffectType {
     BOUNDING_BOX,
     MEASURE_SEGMENTS,
     FILLET_CHAMFER,
-    BOOL_OP,
     POWERCLIP,
     POWERMASK,
     PTS2ELLIPSE,
     OFFSET,
     DASHED_STROKE,
+    BOOL_OP,
+    SLICE,
+    // PUT NEW LPE BEFORE EXPERIMENTAL IN THE SAME ORDER AS IN effect.cpp
+    // Visible Experimental LPE's
     ANGLE_BISECTOR,
     CIRCLE_WITH_RADIUS,
     CIRCLE_3PTS,
@@ -65,8 +68,7 @@ enum EffectType {
     PARALLEL,
     PERP_BISECTOR,
     TANGENT_TO_CURVE,
-    SLICE,
-    // PUT NEW LPE BEFORE EXPERIMENTAL IN THE SAME ORDER AS IN effect.cpp
+    // Hidden Experimental LPE's
     DOEFFECTSTACK_TEST,
     DYNASTROKE,
     LATTICE,
@@ -202,7 +204,7 @@ class EnumEffectDataConverter {
         return empty_string;
     }
 
-    const bool get_on_path(const E id) const
+    bool get_on_path(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -212,7 +214,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_shape(const E id) const
+    bool get_on_shape(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -222,7 +224,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_group(const E id) const
+    bool get_on_group(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -232,7 +234,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_image(const E id) const
+    bool get_on_image(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -242,7 +244,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_on_text(const E id) const
+    bool get_on_text(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
@@ -252,7 +254,7 @@ class EnumEffectDataConverter {
         return false;
     }
 
-    const bool get_experimental(const E id) const
+    bool get_experimental(const E id) const
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)

@@ -93,7 +93,7 @@ public:
     SPDesktop *desktop = nullptr;
 
     Gtk::Window *window = nullptr;
-
+    Gtk::MenuBar *_menubar;
 private:
     // Flags for ruler event handling
     bool _ruler_clicked = false; ///< True if the ruler has been clicked
@@ -113,7 +113,6 @@ private:
     Inkscape::UI::Dialog::DialogContainer *_container = nullptr;
     Inkscape::UI::Dialog::DialogMultipaned *_columns;
 
-    Gtk::MenuBar *_menubar;  // TEMP
     Gtk::Box     *_statusbar;
 
     Inkscape::UI::Dialog::SwatchesPanel *_panels;
@@ -178,7 +177,7 @@ public:
     bool isToolboxButtonActive (gchar const *id);
     void setToolboxPosition(Glib::ustring const& id, GtkPositionType pos);
     void setCoordinateStatus(Geom::Point p);
-    void storeDesktopPosition();
+    void storeDesktopPosition(bool store_maximize = true);
     void requestCanvasUpdate();
     void requestCanvasUpdateAndWait();
     void enableInteraction();
@@ -191,6 +190,7 @@ public:
 
 
     void updateNamedview();
+    void updateDocument();
     void update_guides_lock();
 
     // Canvas Grid Widget
@@ -225,7 +225,6 @@ private:
     void zoom_value_changed();
     void zoom_menu_handler(double factor);
     void zoom_populate_popup(Gtk::Menu *menu);
-    int rotation_input(double *new_val);
     bool rotation_output();
     void rotation_value_changed();
     void rotation_populate_popup(Gtk::Menu *menu);

@@ -90,7 +90,7 @@ public:
     set_type &allPoints() { return _all_points; }
     // ...for example in these methods. Another useful case is snapping.
     void selectAll();
-    void selectArea(Geom::Rect const &);
+    void selectArea(Geom::Rect const &, bool invert = false);
     void invertSelection();
     void spatialGrow(SelectableControlPoint *origin, int dir);
 

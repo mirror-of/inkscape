@@ -553,8 +553,10 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
 //recursively collect gpaths and stroke widths (stolen from "sp-lpe_item.cpp").
 static void
 collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::vector<double> &stroke_widths){
-    if (SP_IS_GROUP(lpeitem)) {
-    	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
+    auto lpeitem_mutable = const_cast<SPLPEItem *>(lpeitem);
+
+    if (auto group = dynamic_cast<SPGroup *>(lpeitem_mutable)) {
+    	std::vector<SPItem*> item_list = sp_item_group_item_list(group);
         for (auto subitem : item_list) {
             if (SP_IS_LPE_ITEM(subitem)) {
                 collectPathsAndWidths(SP_LPE_ITEM(subitem), paths, stroke_widths);

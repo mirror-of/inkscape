@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <cerrno>  // History file
 #include <regex>
+#include <numeric>
 
 #include <glibmm/i18n.h>  // Internationalization
 
@@ -22,27 +23,28 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 
-#include "auto-save.h"            // Auto-save
-#include "desktop.h"              // Access to window
-#include "file.h"                 // sp_file_convert_dpi
-#include "inkscape.h"             // Inkscape::Application
+#include "auto-save.h"              // Auto-save
+#include "desktop.h"                // Access to window
+#include "file.h"                   // sp_file_convert_dpi
+#include "inkscape.h"               // Inkscape::Application
 
 #include "include/glibmm_version.h"
 
-#include "inkgc/gc-core.h"        // Garbage Collecting init
-#include "debug/logger.h"         // INKSCAPE_DEBUG_LOG support
+#include "inkgc/gc-core.h"          // Garbage Collecting init
+#include "debug/logger.h"           // INKSCAPE_DEBUG_LOG support
 
-#include "io/file.h"              // File open (command line).
-#include "io/resource.h"          // TEMPLATE
-#include "io/resource-manager.h"  // Fix up references.
+#include "io/file.h"                // File open (command line).
+#include "io/resource.h"            // TEMPLATE
+#include "io/fix-broken-links.h"  // Fix up references.
 
-#include "object/sp-root.h"       // Inkscape version.
+#include "object/sp-root.h"         // Inkscape version.
 
-#include "ui/interface.h"         // sp_ui_error_dialog
+#include "ui/interface.h"           // sp_ui_error_dialog
 #include "ui/dialog/startup.h"
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
-#include "ui/shortcuts.h"         // Shortcuts... init
+#include "ui/shortcuts.h"           // Shortcuts... init
 #include "widgets/desktop-widget.h" // Close without saving dialog
+#include "ui/dialog/dialog-manager.h" // save state
 
 #include "util/units.h"           // Redimension window
 
@@ -220,14 +222,14 @@ bool
 InkscapeApplication::document_revert(SPDocument* document)
 {
     // Find saved document.
-    gchar const *path = document->getDocumentURI();
+    gchar const *path = document->getDocumentFilename();
     if (!path) {
         std::cerr << "InkscapeApplication::revert_document: Document never saved, cannot revert." << std::endl;
         return false;
     }
 
     // Open saved document.
-    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(document->getDocumentURI());
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(document->getDocumentFilename());
     SPDocument* new_document = document_open (file);
     if (!new_document) {
         std::cerr << "InkscapeApplication::revert_document: Cannot open saved document!" << std::endl;
@@ -323,7 +325,7 @@ InkscapeApplication::document_fix(InkscapeWindow* window)
         SPDocument* document = window->get_document();
 
         // Perform a fixup pass for hrefs.
-        if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(document) ) {
+        if ( Inkscape::fixBrokenLinks(document) ) {
             Glib::ustring msg = _("Broken links have been changed to point to existing files.");
             SPDesktop* desktop = window->get_desktop();
             if (desktop != nullptr) {
@@ -419,6 +421,11 @@ InkscapeApplication::window_close(InkscapeWindow* window)
             if (it != _documents.end()) {
                 auto it2 = std::find(it->second.begin(), it->second.end(), window);
                 if (it2 != it->second.end()) {
+                    if (get_number_of_windows() == 1) {
+                        // persist layout of docked and floating dialogs before deleting the last window
+                        Inkscape::UI::Dialog::DialogManager::singleton().save_dialogs_state(
+                           window->get_desktop_widget()->getContainer());
+                    }
                     it->second.erase(it2);
                     delete window; // Results in call to SPDesktop::destroy()
                 } else {
@@ -608,6 +615,7 @@ InkscapeApplication::InkscapeApplication()
     // clang-format off
     // General
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",                 'V', N_("Print Inkscape version"),                                                  "");
+    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "debug-info",             '\0', N_("Print debugging information"),                                                        "");
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "system-data-directory",  '\0', N_("Print system data directory"),                                             "");
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "user-data-directory",    '\0', N_("Print user data directory"),                                               "");
 
@@ -622,7 +630,7 @@ InkscapeApplication::InkscapeApplication()
     // Export - File and File Type
     _start_main_option_section(_("File export"));
     gapp->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-filename",        'o', N_("Output file name (defaults to input filename; file type is guessed from extension if present; use '-' to write to stdout)"), N_("FILENAME"));
-    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",      '\0', N_("Overwrite input file (otherwise add '_out' suffix if type doesn't change"), "");
+    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",      '\0', N_("Overwrite input file (otherwise add '_out' suffix if type doesn't change)"), "");
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",           '\0', N_("File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"), N_("TYPE[,TYPE]*"));
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-extension",      '\0', N_("Extension ID to use for exporting"),                         N_("EXTENSION-ID"));
 
@@ -649,7 +657,8 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-ignore-filters", '\0', N_("Render objects without filters instead of rasterizing (PS/EPS/PDF)"),       ""); // xxP
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-use-hints",       't', N_("Use stored filename and DPI hints when exporting object selected by --export-id"), ""); // Bxx
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",      'b', N_("Background color for exported bitmaps (any SVG color string)"),         N_("COLOR")); // Bxx
-    gapp->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"), N_("VALUE")); // Bxx
+    // FIXME: Opacity should really be a DOUBLE, but an upstream bug means 0.0 is detected as NULL
+    gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"), N_("VALUE")); // Bxx
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-png-color-mode", '\0', N_("Color mode (bit depth and color type) for exported bitmaps (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)"), N_("COLOR-MODE")); // Bxx
 
     // Query - Geometry
@@ -961,7 +970,7 @@ InkscapeApplication::on_activate()
         document = document_open (s);
         output = "-";
 
-    } else if(prefs->getBool("/options/boot/enabled", true) && !_use_shell) {
+    } else if(prefs->getBool("/options/boot/enabled", true) && !_use_command_line_argument) {
 
         Inkscape::UI::Dialog::StartScreen start_screen;
 
@@ -1259,6 +1268,11 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         gapp->activate_action("inkscape-version");
         return EXIT_SUCCESS;
     }
+    
+    if (options->contains("debug-info")) {
+        gapp->activate_action("debug-info");
+        return EXIT_SUCCESS;
+    }
 
     if (options->contains("system-data-directory")) {
         gapp->activate_action("system-data-directory");
@@ -1496,9 +1510,13 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         options->lookup_value("export-background",_file_export.export_background);
     }
 
+    // FIXME: Upstream bug means DOUBLE is ignored if set to 0.0 so doesn't exist in options
     if (options->contains("export-background-opacity")) {
-        options->lookup_value("export-background-opacity", _file_export.export_background_opacity);
+        Glib::ustring opacity;
+        options->lookup_value("export-background-opacity", opacity);
+        _file_export.export_background_opacity = Glib::Ascii::strtod(opacity);
     }
+
     if (options->contains("export-png-color-mode")) {
         options->lookup_value("export-png-color-mode", _file_export.export_png_color_mode);
     }
@@ -1516,6 +1534,14 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         }
     }
 #endif
+
+    GVariantDict *options_copy = options->gobj_copy();
+    GVariant *options_var = g_variant_dict_end(options_copy);
+    if (g_variant_get_size(options_var) != 0) {
+        _use_command_line_argument = true;
+    }
+    g_variant_dict_unref(options_copy);
+    g_variant_unref(options_var);
 
     return -1; // Keep going
 }
@@ -1571,6 +1597,17 @@ static gboolean osx_quit_callback(GtkosxApplication *, InkscapeApplication *app)
     return true;
 }
 #endif
+
+/**
+ * Return number of open Inkscape Windows (irrespective of number of documents)
+.*/
+int InkscapeApplication::get_number_of_windows() const {
+    if (_with_gui) {
+        return std::accumulate(_documents.begin(), _documents.end(), 0,
+          [&](int sum, auto& v){ return sum + static_cast<int>(v.second.size()); });
+    }
+    return 0;
+}
 
 /*
   Local Variables:

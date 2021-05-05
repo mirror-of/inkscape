@@ -259,6 +259,7 @@ protected:
     UI::Widget::PrefSlider _contrast_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;
     UI::Widget::PrefCheckButton _symbolic_base_colors;
+    UI::Widget::PrefCheckButton _symbolic_highlight_colors;
     UI::Widget::PrefColorPicker _symbolic_base_color;
     UI::Widget::PrefColorPicker _symbolic_warning_color;
     UI::Widget::PrefColorPicker _symbolic_error_color;
@@ -345,6 +346,7 @@ protected:
     UI::Widget::PrefRadioButton _sel_recursive;
     UI::Widget::PrefCheckButton _sel_hidden;
     UI::Widget::PrefCheckButton _sel_locked;
+    UI::Widget::PrefCheckButton _sel_inlayer_same;
     UI::Widget::PrefCheckButton _sel_layer_deselects;
     UI::Widget::PrefCheckButton _sel_cycle;
 
