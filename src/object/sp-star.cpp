@@ -65,16 +65,16 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         repr->setAttribute("sodipodi:type", "star");
-        sp_repr_set_boolean(repr, "inkscape:flatsided", this->flatsided);
-        sp_repr_set_int (repr, "sodipodi:sides", this->sides);
-        sp_repr_set_svg_double(repr, "sodipodi:cx", this->center[Geom::X]);
-        sp_repr_set_svg_double(repr, "sodipodi:cy", this->center[Geom::Y]);
-        sp_repr_set_svg_double(repr, "sodipodi:r1", this->r[0]);
-        sp_repr_set_svg_double(repr, "sodipodi:r2", this->r[1]);
-        sp_repr_set_svg_double(repr, "sodipodi:arg1", this->arg[0]);
-        sp_repr_set_svg_double(repr, "sodipodi:arg2", this->arg[1]);
-        sp_repr_set_svg_double(repr, "inkscape:rounded", this->rounded);
-        sp_repr_set_svg_double(repr, "inkscape:randomized", this->randomized);
+        repr->setAttributeBoolean("inkscape:flatsided", this->flatsided);
+        repr->setAttributeInt("sodipodi:sides", this->sides);
+        repr->setAttributeSvgDouble("sodipodi:cx", this->center[Geom::X]);
+        repr->setAttributeSvgDouble("sodipodi:cy", this->center[Geom::Y]);
+        repr->setAttributeSvgDouble("sodipodi:r1", this->r[0]);
+        repr->setAttributeSvgDouble("sodipodi:r2", this->r[1]);
+        repr->setAttributeSvgDouble("sodipodi:arg1", this->arg[0]);
+        repr->setAttributeSvgDouble("sodipodi:arg2", this->arg[1]);
+        repr->setAttributeSvgDouble("inkscape:rounded", this->rounded);
+        repr->setAttributeSvgDouble("inkscape:randomized", this->randomized);
     }
 
     this->set_shape();

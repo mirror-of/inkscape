@@ -51,7 +51,7 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        sp_repr_set_int(repr, "inkscape:box3dsidetype", this->dir1 ^ this->dir2 ^ this->front_or_rear);
+        repr->setAttributeInt("inkscape:box3dsidetype", this->dir1 ^ this->dir2 ^ this->front_or_rear);
     }
 
     this->set_shape();

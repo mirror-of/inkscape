@@ -416,8 +416,8 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     elemref = document->getObjectById(id.c_str());
     if (elemref) {
         rtext = elemref->getRepr();
-        sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
-        sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
+        rtext->setAttributeSvgDouble("x", pos[Geom::X]);
+        rtext->setAttributeSvgDouble("y", pos[Geom::Y]);
         rtext->setAttribute("sodipodi:insensitive", "true");
         rtext->removeAttribute("transform");
         rtspan = rtext->firstChild();
@@ -440,8 +440,8 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rtext->setAttribute("class", classlabel);
         rtext->setAttribute("sodipodi:insensitive", "true");
         rtext->removeAttribute("transform");
-        sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
-        sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
+        rtext->setAttributeSvgDouble("x", pos[Geom::X]);
+        rtext->setAttributeSvgDouble("y", pos[Geom::Y]);
         rtspan = xml_doc->createElement("svg:tspan");
         rtspan->setAttribute("sodipodi:role", "line");
         rtspan->removeAttribute("x");
@@ -522,7 +522,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     Geom::OptRect bounds = SP_ITEM(elemref)->geometricBounds();
     if (bounds) {
         anotation_width = bounds->width();
-        sp_repr_set_svg_double(rtext, "x", pos[Geom::X] - (anotation_width / 2.0));
+        rtext->setAttributeSvgDouble("x", pos[Geom::X] - (anotation_width / 2.0));
         rtspan->removeAttribute("style");
     }
 

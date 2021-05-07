@@ -900,7 +900,7 @@ SPGradient::repr_write_vector()
     for (auto & stop : vector.stops) {
         Inkscape::CSSOStringStream os;
         Inkscape::XML::Node *child = xml_doc->createElement("svg:stop");
-        sp_repr_set_css_double(child, "offset", stop.offset);
+        child->setAttributeCssDouble("offset", stop.offset);
         /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no
          * sense for offset proportions. */
         os << "stop-color:" << stop.color.toString() << ";stop-opacity:" << stop.opacity;

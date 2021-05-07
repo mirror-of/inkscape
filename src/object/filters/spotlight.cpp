@@ -287,21 +287,21 @@ Inkscape::XML::Node* SPFeSpotLight::write(Inkscape::XML::Document *doc, Inkscape
     }
 
     if (this->x_set)
-        sp_repr_set_css_double(repr, "x", this->x);
+        repr->setAttributeCssDouble("x", this->x);
     if (this->y_set)
-        sp_repr_set_css_double(repr, "y", this->y);
+        repr->setAttributeCssDouble("y", this->y);
     if (this->z_set)
-        sp_repr_set_css_double(repr, "z", this->z);
+        repr->setAttributeCssDouble("z", this->z);
     if (this->pointsAtX_set)
-        sp_repr_set_css_double(repr, "pointsAtX", this->pointsAtX);
+        repr->setAttributeCssDouble("pointsAtX", this->pointsAtX);
     if (this->pointsAtY_set)
-        sp_repr_set_css_double(repr, "pointsAtY", this->pointsAtY);
+        repr->setAttributeCssDouble("pointsAtY", this->pointsAtY);
     if (this->pointsAtZ_set)
-        sp_repr_set_css_double(repr, "pointsAtZ", this->pointsAtZ);
+        repr->setAttributeCssDouble("pointsAtZ", this->pointsAtZ);
     if (this->specularExponent_set)
-        sp_repr_set_css_double(repr, "specularExponent", this->specularExponent);
+        repr->setAttributeCssDouble("specularExponent", this->specularExponent);
     if (this->limitingConeAngle_set)
-        sp_repr_set_css_double(repr, "limitingConeAngle", this->limitingConeAngle);
+        repr->setAttributeCssDouble("limitingConeAngle", this->limitingConeAngle);
 
     SPObject::write(doc, repr, flags);
 

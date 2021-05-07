@@ -217,15 +217,15 @@ Inkscape::XML::Node* SPFeSpecularLighting::write(Inkscape::XML::Document *doc, I
     }
 
     if (this->surfaceScale_set) {
-        sp_repr_set_css_double(repr, "surfaceScale", this->surfaceScale);
+        repr->setAttributeCssDouble("surfaceScale", this->surfaceScale);
     }
 
     if (this->specularConstant_set) {
-        sp_repr_set_css_double(repr, "specularConstant", this->specularConstant);
+        repr->setAttributeCssDouble("specularConstant", this->specularConstant);
     }
 
     if (this->specularExponent_set) {
-        sp_repr_set_css_double(repr, "specularExponent", this->specularExponent);
+        repr->setAttributeCssDouble("specularExponent", this->specularExponent);
     }
 
     /*TODO kernelUnits */ 

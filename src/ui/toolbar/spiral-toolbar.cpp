@@ -183,8 +183,7 @@ SpiralToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
         SPItem *item = *i;
         if (SP_IS_SPIRAL(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
-            sp_repr_set_svg_double( repr, namespaced_name,
-                adj->get_value() );
+            repr->setAttributeSvgDouble(namespaced_name, adj->get_value() );
             item->updateRepr();
             modmade = true;
         }
@@ -273,15 +272,15 @@ SpiralToolbar::event_attr_changed(Inkscape::XML::Node *repr,
     toolbar->_freeze = true;
 
     double revolution = 3.0;
-    sp_repr_get_double(repr, "sodipodi:revolution", &revolution);
+    repr->getAttributeDouble("sodipodi:revolution", &revolution);
     toolbar->_revolution_adj->set_value(revolution);
 
     double expansion = 1.0;
-    sp_repr_get_double(repr, "sodipodi:expansion", &expansion);
+    repr->getAttributeDouble("sodipodi:expansion", &expansion);
     toolbar->_expansion_adj->set_value(expansion);
 
     double t0 = 0.0;
-    sp_repr_get_double(repr, "sodipodi:t0", &t0);
+    repr->getAttributeDouble("sodipodi:t0", &t0);
     toolbar->_t0_adj->set_value(t0);
 
     toolbar->_freeze = false;

@@ -217,7 +217,7 @@ Inkscape::XML::Node* SPFeDisplacementMap::write(Inkscape::XML::Document *doc, In
         g_warning("Unable to set in2 for feDisplacementMap");
     }
 
-    sp_repr_set_svg_double(repr, "scale", this->scale);
+    repr->setAttributeSvgDouble("scale", this->scale);
     repr->setAttribute("xChannelSelector",
                        get_channelselector_name(this->xChannelSelector));
     repr->setAttribute("yChannelSelector",

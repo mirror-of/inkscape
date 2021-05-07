@@ -1968,8 +1968,8 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::W
                 newx = newx * root->viewBox.width()  / root->width.computed;
                 newy = newy * root->viewBox.height() / root->height.computed;
             }
-            sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
-            sp_repr_set_point(repr, "orientation", _normal);
+            repr->setAttributePoint("position", Geom::Point( newx, newy ));
+            repr->setAttributePoint("orientation", _normal);
             desktop->namedview->appendChild(repr);
             Inkscape::GC::release(repr);
             DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,

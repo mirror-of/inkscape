@@ -404,8 +404,8 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
     _root->appendChild(use);
 
     // This min and max sets offsets, we don't have any so set to zero.
-    sp_repr_set_point(_clipnode, "min", Geom::Point(0,0));
-    sp_repr_set_point(_clipnode, "max", Geom::Point(0,0));
+    _clipnode->setAttributePoint("min", Geom::Point(0, 0));
+    _clipnode->setAttributePoint("max", Geom::Point(0, 0));
 
     fit_canvas_to_drawing(_clipboardSPDoc.get());
     _setClipboardTargets();
@@ -641,8 +641,8 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
     if (clipnode) {
         Geom::Point min, max;
         bool visual_bbox = !Inkscape::Preferences::get()->getInt("/tools/bounding_box");
-        sp_repr_get_point(clipnode, (visual_bbox ? "min" : "geom-min"), &min);
-        sp_repr_get_point(clipnode, (visual_bbox ? "max" : "geom-max"), &max);
+        clipnode->getAttributePoint((visual_bbox ? "min" : "geom-min"), &min);
+        clipnode->getAttributePoint((visual_bbox ? "max" : "geom-max"), &max);
 
         // resize each object in the selection
         if (separately) {
@@ -944,12 +944,12 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     }
 
     if (Geom::OptRect size = selection->visualBounds()) {
-        sp_repr_set_point(_clipnode, "min", size->min());
-        sp_repr_set_point(_clipnode, "max", size->max());
+        _clipnode->setAttributePoint("min", size->min());
+        _clipnode->setAttributePoint("max", size->max());
     }
     if (Geom::OptRect geom_size = selection->geometricBounds()) {
-        sp_repr_set_point(_clipnode, "geom-min", geom_size->min());
-        sp_repr_set_point(_clipnode, "geom-max", geom_size->max());
+        _clipnode->setAttributePoint("geom-min", geom_size->min());
+        _clipnode->setAttributePoint("geom-max", geom_size->max());
     }
 }
 
@@ -1443,7 +1443,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
             }
             if (nv && nv->attribute("inkscape:pageopacity")) {
                 double opacity = 1.0;
-                sp_repr_get_double(nv, "inkscape:pageopacity", &opacity);
+                nv->getAttributeDouble("inkscape:pageopacity", &opacity);
                 bgcolor |= SP_COLOR_F_TO_U(opacity);
             }
             std::vector<SPItem*> x;

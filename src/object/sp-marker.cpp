@@ -244,25 +244,25 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
 	}
 
 	if (this->refX._set) {
-		sp_repr_set_svg_double(repr, "refX", this->refX.computed);
+		repr->setAttributeSvgDouble("refX", this->refX.computed);
 	} else {
 		repr->removeAttribute("refX");
 	}
 
 	if (this->refY._set) {
-		sp_repr_set_svg_double (repr, "refY", this->refY.computed);
+		repr->setAttributeSvgDouble("refY", this->refY.computed);
 	} else {
 		repr->removeAttribute("refY");
 	}
 
 	if (this->markerWidth._set) {
-		sp_repr_set_svg_double (repr, "markerWidth", this->markerWidth.computed);
+		repr->setAttributeSvgDouble("markerWidth", this->markerWidth.computed);
 	} else {
 		repr->removeAttribute("markerWidth");
 	}
 
 	if (this->markerHeight._set) {
-		sp_repr_set_svg_double (repr, "markerHeight", this->markerHeight.computed);
+		repr->setAttributeSvgDouble("markerHeight", this->markerHeight.computed);
 	} else {
 		repr->removeAttribute("markerHeight");
 	}
@@ -273,7 +273,7 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
             } else if (this->orient_mode == MARKER_ORIENT_AUTO_START_REVERSE) {
                 repr->setAttribute("orient", "auto-start-reverse");
             } else {
-                sp_repr_set_css_double(repr, "orient", this->orient.computed);
+                repr->setAttributeCssDouble("orient", this->orient.computed);
             }
 	} else {
             repr->removeAttribute("orient");
@@ -437,10 +437,10 @@ const gchar *generate_marker(std::vector<Inkscape::XML::Node*> &reprs, Geom::Rec
     // stroke width:
     //repr->setAttribute("markerUnits", "userSpaceOnUse");
 
-    sp_repr_set_svg_double(repr, "markerWidth", bounds.dimensions()[Geom::X]);
-    sp_repr_set_svg_double(repr, "markerHeight", bounds.dimensions()[Geom::Y]);
-    sp_repr_set_svg_double(repr, "refX", center[Geom::X]);
-    sp_repr_set_svg_double(repr, "refY", center[Geom::Y]);
+    repr->setAttributeSvgDouble("markerWidth", bounds.dimensions()[Geom::X]);
+    repr->setAttributeSvgDouble("markerHeight", bounds.dimensions()[Geom::Y]);
+    repr->setAttributeSvgDouble("refX", center[Geom::X]);
+    repr->setAttributeSvgDouble("refY", center[Geom::Y]);
 
     repr->setAttribute("orient", "auto");
 

@@ -286,10 +286,10 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
     repr->setAttribute("operator", comp_op);
 
     if (this->composite_operator == COMPOSITE_ARITHMETIC) {
-        sp_repr_set_svg_double(repr, "k1", this->k1);
-        sp_repr_set_svg_double(repr, "k2", this->k2);
-        sp_repr_set_svg_double(repr, "k3", this->k3);
-        sp_repr_set_svg_double(repr, "k4", this->k4);
+        repr->setAttributeSvgDouble("k1", this->k1);
+        repr->setAttributeSvgDouble("k2", this->k2);
+        repr->setAttributeSvgDouble("k3", this->k3);
+        repr->setAttributeSvgDouble("k4", this->k4);
     } else {
         repr->removeAttribute("k1");
         repr->removeAttribute("k2");

@@ -518,8 +518,8 @@ ArcToolbar::event_attr_changed(Inkscape::XML::Node *repr, gchar const * /*name*/
 
     gdouble start = 0.;
     gdouble end = 0.;
-    sp_repr_get_double(repr, "sodipodi:start", &start);
-    sp_repr_get_double(repr, "sodipodi:end", &end);
+    repr->getAttributeDouble("sodipodi:start", &start);
+    repr->getAttributeDouble("sodipodi:end", &end);
 
     toolbar->_start_adj->set_value(mod360((start * 180)/M_PI));
     toolbar->_end_adj->set_value(mod360((end * 180)/M_PI));

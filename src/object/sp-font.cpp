@@ -167,12 +167,12 @@ Inkscape::XML::Node* SPFont::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         repr = xml_doc->createElement("svg:font");
     }
 
-    sp_repr_set_svg_double(repr, "horiz-origin-x", this->horiz_origin_x);
-    sp_repr_set_svg_double(repr, "horiz-origin-y", this->horiz_origin_y);
-    sp_repr_set_svg_double(repr, "horiz-adv-x", this->horiz_adv_x);
-    sp_repr_set_svg_double(repr, "vert-origin-x", this->vert_origin_x);
-    sp_repr_set_svg_double(repr, "vert-origin-y", this->vert_origin_y);
-    sp_repr_set_svg_double(repr, "vert-adv-y", this->vert_adv_y);
+    repr->setAttributeSvgDouble("horiz-origin-x", this->horiz_origin_x);
+    repr->setAttributeSvgDouble("horiz-origin-y", this->horiz_origin_y);
+    repr->setAttributeSvgDouble("horiz-adv-x", this->horiz_adv_x);
+    repr->setAttributeSvgDouble("vert-origin-x", this->vert_origin_x);
+    repr->setAttributeSvgDouble("vert-origin-y", this->vert_origin_y);
+    repr->setAttributeSvgDouble("vert-adv-y", this->vert_adv_y);
 
     if (repr != this->getRepr()) {
         // All the below COPY_ATTR functions are directly using 

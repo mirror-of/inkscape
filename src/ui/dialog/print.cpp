@@ -138,7 +138,7 @@ void Print::draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int /*page
             }
             if (nv && nv->attribute("inkscape:pageopacity")){
                 double opacity = 1.0;
-                sp_repr_get_double (nv, "inkscape:pageopacity", &opacity);
+                nv->getAttributeDouble("inkscape:pageopacity", &opacity);
                 bgcolor |= SP_COLOR_F_TO_U(opacity);
             }
 

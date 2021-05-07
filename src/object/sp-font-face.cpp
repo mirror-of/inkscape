@@ -737,39 +737,39 @@ Inkscape::XML::Node* SPFontFace::write(Inkscape::XML::Document *xml_doc, Inkscap
     }
 
     //TODO:
-    //sp_repr_set_svg_double(repr, "font-family", face->font_family);
-    //sp_repr_set_svg_double(repr, "font-style", face->font_style);
-    //sp_repr_set_svg_double(repr, "font-variant", face->font_variant);
-    //sp_repr_set_svg_double(repr, "font-weight", face->font_weight);
-    //sp_repr_set_svg_double(repr, "font-stretch", face->font_stretch);
-    //sp_repr_set_svg_double(repr, "font-size", face->font_size);
-    //sp_repr_set_svg_double(repr, "unicode-range", face->unicode_range);
-    sp_repr_set_svg_double(repr, "units-per-em", this->units_per_em);
-    //sp_repr_set_svg_double(repr, "panose-1", face->panose_1);
-    sp_repr_set_svg_double(repr, "stemv", this->stemv);
-    sp_repr_set_svg_double(repr, "stemh", this->stemh);
-    sp_repr_set_svg_double(repr, "slope", this->slope);
-    sp_repr_set_svg_double(repr, "cap-height", this->cap_height);
-    sp_repr_set_svg_double(repr, "x-height", this->x_height);
-    sp_repr_set_svg_double(repr, "accent-height", this->accent_height);
-    sp_repr_set_svg_double(repr, "ascent", this->ascent);
-    sp_repr_set_svg_double(repr, "descent", this->descent);
-    //sp_repr_set_svg_double(repr, "widths", face->widths);
-    //sp_repr_set_svg_double(repr, "bbox", face->bbox);
-    sp_repr_set_svg_double(repr, "ideographic", this->ideographic);
-    sp_repr_set_svg_double(repr, "alphabetic", this->alphabetic);
-    sp_repr_set_svg_double(repr, "mathematical", this->mathematical);
-    sp_repr_set_svg_double(repr, "hanging", this->hanging);
-    sp_repr_set_svg_double(repr, "v-ideographic", this->v_ideographic);
-    sp_repr_set_svg_double(repr, "v-alphabetic", this->v_alphabetic);
-    sp_repr_set_svg_double(repr, "v-mathematical", this->v_mathematical);
-    sp_repr_set_svg_double(repr, "v-hanging", this->v_hanging);
-    sp_repr_set_svg_double(repr, "underline-position", this->underline_position);
-    sp_repr_set_svg_double(repr, "underline-thickness", this->underline_thickness);
-    sp_repr_set_svg_double(repr, "strikethrough-position", this->strikethrough_position);
-    sp_repr_set_svg_double(repr, "strikethrough-thickness", this->strikethrough_thickness);
-    sp_repr_set_svg_double(repr, "overline-position", this->overline_position);
-    sp_repr_set_svg_double(repr, "overline-thickness", this->overline_thickness);
+    //repr->setAttributeSvgDouble("font-family", face->font_family);
+    //repr->setAttributeSvgDouble("font-style", face->font_style);
+    //repr->setAttributeSvgDouble("font-variant", face->font_variant);
+    //repr->setAttributeSvgDouble("font-weight", face->font_weight);
+    //repr->setAttributeSvgDouble("font-stretch", face->font_stretch);
+    //repr->setAttributeSvgDouble("font-size", face->font_size);
+    //repr->setAttributeSvgDouble("unicode-range", face->unicode_range);
+    repr->setAttributeSvgDouble("units-per-em", this->units_per_em);
+    //repr->setAttributeSvgDouble("panose-1", face->panose_1);
+    repr->setAttributeSvgDouble("stemv", this->stemv);
+    repr->setAttributeSvgDouble("stemh", this->stemh);
+    repr->setAttributeSvgDouble("slope", this->slope);
+    repr->setAttributeSvgDouble("cap-height", this->cap_height);
+    repr->setAttributeSvgDouble("x-height", this->x_height);
+    repr->setAttributeSvgDouble("accent-height", this->accent_height);
+    repr->setAttributeSvgDouble("ascent", this->ascent);
+    repr->setAttributeSvgDouble("descent", this->descent);
+    //repr->setAttributeSvgDouble("widths", face->widths);
+    //repr->setAttributeSvgDouble("bbox", face->bbox);
+    repr->setAttributeSvgDouble("ideographic", this->ideographic);
+    repr->setAttributeSvgDouble("alphabetic", this->alphabetic);
+    repr->setAttributeSvgDouble("mathematical", this->mathematical);
+    repr->setAttributeSvgDouble("hanging", this->hanging);
+    repr->setAttributeSvgDouble("v-ideographic", this->v_ideographic);
+    repr->setAttributeSvgDouble("v-alphabetic", this->v_alphabetic);
+    repr->setAttributeSvgDouble("v-mathematical", this->v_mathematical);
+    repr->setAttributeSvgDouble("v-hanging", this->v_hanging);
+    repr->setAttributeSvgDouble("underline-position", this->underline_position);
+    repr->setAttributeSvgDouble("underline-thickness", this->underline_thickness);
+    repr->setAttributeSvgDouble("strikethrough-position", this->strikethrough_position);
+    repr->setAttributeSvgDouble("strikethrough-thickness", this->strikethrough_thickness);
+    repr->setAttributeSvgDouble("overline-position", this->overline_position);
+    repr->setAttributeSvgDouble("overline-thickness", this->overline_thickness);
 
     if (repr != this->getRepr()) {
         // In all COPY_ATTR given below the XML tree is 

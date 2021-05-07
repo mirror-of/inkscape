@@ -94,7 +94,7 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
     }
 
     SPObject::write(xml_doc, repr, flags);
-    sp_repr_set_css_double(repr, "offset", this->offset);
+    repr->setAttributeCssDouble("offset", this->offset);
     /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no sense
      * for offset proportions. */
 

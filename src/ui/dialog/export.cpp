@@ -1272,13 +1272,13 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-xdpi");
-            if (temp_string == nullptr || xdpi != g_ascii_strtod(temp_string, nullptr)) {
-                sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
+           if (temp_string == nullptr || xdpi != g_ascii_strtod(temp_string, nullptr)) {
+                repr->setAttributeSvgDouble("inkscape:export-xdpi", xdpi);
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-ydpi");
             if (temp_string == nullptr || ydpi != g_ascii_strtod(temp_string, nullptr)) {
-                sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
+                repr->setAttributeSvgDouble("inkscape:export-ydpi", ydpi);
                 modified = true;
             }
             DocumentUndo::setUndoSensitive(doc, saved);
@@ -1318,12 +1318,12 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
                 }
                 temp_string = repr->attribute("inkscape:export-xdpi");
                 if (temp_string == nullptr || xdpi != g_ascii_strtod(temp_string, nullptr)) {
-                    sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
+                    repr->setAttributeSvgDouble("inkscape:export-xdpi", xdpi);
                     modified = true;
                 }
                 temp_string = repr->attribute("inkscape:export-ydpi");
                 if (temp_string == nullptr || ydpi != g_ascii_strtod(temp_string, nullptr)) {
-                    sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
+                    repr->setAttributeSvgDouble("inkscape:export-ydpi", ydpi);
                     modified = true;
                 }
             }

@@ -109,8 +109,8 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         // Create image node
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *image_node = xml_doc->createElement("svg:image");
-        sp_repr_set_svg_double(image_node, "width", width);
-        sp_repr_set_svg_double(image_node, "height", height);
+        image_node->setAttributeSvgDouble("width", width);
+        image_node->setAttributeSvgDouble("height", height);
 
         // Set default value as we honor "preserveAspectRatio".
         image_node->setAttribute("preserveAspectRatio", "none");

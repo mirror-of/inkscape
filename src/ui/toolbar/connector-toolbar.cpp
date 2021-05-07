@@ -323,7 +323,7 @@ ConnectorToolbar::spacing_changed()
     // in turn, prevent listener from responding
     _freeze = true;
 
-    sp_repr_set_css_double(repr, "inkscape:connector-spacing", _spacing_adj->get_value());
+    repr->setAttributeCssDouble("inkscape:connector-spacing", _spacing_adj->get_value());
     _desktop->namedview->updateRepr();
     bool modmade = false;
 
@@ -413,7 +413,7 @@ ConnectorToolbar::event_attr_changed(Inkscape::XML::Node *repr,
     if ( !toolbar->_freeze
          && (strcmp(name, "inkscape:connector-spacing") == 0) ) {
         gdouble spacing = defaultConnSpacing;
-        sp_repr_get_double(repr, "inkscape:connector-spacing", &spacing);
+        repr->getAttributeDouble("inkscape:connector-spacing", &spacing);
 
         toolbar->_spacing_adj->set_value(spacing);
 

@@ -482,8 +482,8 @@ text_unflow ()
             Geom::OptRect bbox = flowtext->geometricBounds(flowtext->i2doc_affine());
             if (bbox) {
                 Geom::Point xy = bbox->min();
-                sp_repr_set_svg_double(rtext, "x", xy[Geom::X]);
-                sp_repr_set_svg_double(rtext, "y", xy[Geom::Y]);
+                rtext->setAttributeSvgDouble("x", xy[Geom::X]);
+                rtext->setAttributeSvgDouble("y", xy[Geom::Y]);
             }
 
             /* Create <tspan> */
@@ -518,8 +518,8 @@ text_unflow ()
                 Geom::OptRect bbox = text->geometricBounds(text->i2doc_affine());
                 if (bbox) {
                     Geom::Point xy = bbox->min();
-                    sp_repr_set_svg_double(rtext, "x", xy[Geom::X]);
-                    sp_repr_set_svg_double(rtext, "y", xy[Geom::Y]);
+                    rtext->setAttributeSvgDouble("x", xy[Geom::X]);
+                    rtext->setAttributeSvgDouble("y", xy[Geom::Y]);
                 }
 
                 // Remove 'shape-inside' property.

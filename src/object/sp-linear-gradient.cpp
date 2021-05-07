@@ -98,19 +98,19 @@ Inkscape::XML::Node* SPLinearGradient::write(Inkscape::XML::Document *xml_doc, I
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->x1._set) {
-        sp_repr_set_svg_double(repr, "x1", this->x1.computed);
+        repr->setAttributeSvgDouble("x1", this->x1.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->y1._set) {
-        sp_repr_set_svg_double(repr, "y1", this->y1.computed);
+        repr->setAttributeSvgDouble("y1", this->y1.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->x2._set) {
-        sp_repr_set_svg_double(repr, "x2", this->x2.computed);
+        repr->setAttributeSvgDouble("x2", this->x2.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->y2._set) {
-        sp_repr_set_svg_double(repr, "y2", this->y2.computed);
+        repr->setAttributeSvgDouble("y2", this->y2.computed);
     }
 
     SPGradient::write(xml_doc, repr, flags);

@@ -195,7 +195,7 @@ new_filter_gaussian_blur (SPDocument *document, gdouble radius, double expansion
         stdDeviation /= expansion;
 
     //set stdDeviation attribute
-    sp_repr_set_svg_double(b_repr, "stdDeviation", stdDeviation);
+    b_repr->setAttributeSvgDouble("stdDeviation", stdDeviation);
     
     //set feGaussianBlur as child of filter node
     repr->appendChild(b_repr);
@@ -263,7 +263,7 @@ new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdo
             stdDeviation /= expansion;
         
         //set stdDeviation attribute
-        sp_repr_set_svg_double(b_repr, "stdDeviation", stdDeviation);
+        b_repr->setAttributeSvgDouble("stdDeviation", stdDeviation);
      
         //set feGaussianBlur as child of filter node
         repr->appendChild(b_repr);
@@ -365,8 +365,7 @@ SPFilter *modify_filter_gaussian_blur_from_item(SPDocument *document, SPItem *it
     Inkscape::XML::Node *primitive = repr->firstChild();
     while (primitive) {
         if (strcmp("svg:feGaussianBlur", primitive->name()) == 0) {
-            sp_repr_set_svg_double(primitive, "stdDeviation",
-                                   stdDeviation);
+            primitive->setAttributeSvgDouble("stdDeviation", stdDeviation);
             return filter;
         }
         primitive = primitive->next();
@@ -380,7 +379,7 @@ SPFilter *modify_filter_gaussian_blur_from_item(SPDocument *document, SPItem *it
     //b_repr->setAttribute("inkscape:collect", "always");
     
     //set stdDeviation attribute
-    sp_repr_set_svg_double(b_repr, "stdDeviation", stdDeviation);
+    b_repr->setAttributeSvgDouble("stdDeviation", stdDeviation);
     
     //set feGaussianBlur as child of filter node
     filter->getRepr()->appendChild(b_repr);

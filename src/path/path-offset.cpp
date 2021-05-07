@@ -207,7 +207,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         }
 
         repr->setAttribute("sodipodi:type", "inkscape:offset");
-        sp_repr_set_svg_double(repr, "inkscape:radius", ( expand > 0
+        repr->setAttributeSvgDouble("inkscape:radius", ( expand > 0
                                                           ? o_width
                                                           : expand < 0
                                                           ? -o_width

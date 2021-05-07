@@ -140,11 +140,11 @@ Inkscape::XML::Node* SPFeDistantLight::write(Inkscape::XML::Document *doc, Inksc
     }
 
     if (this->azimuth_set) {
-        sp_repr_set_css_double(repr, "azimuth", this->azimuth);
+        repr->setAttributeCssDouble("azimuth", this->azimuth);
     }
 
     if (this->elevation_set) {
-        sp_repr_set_css_double(repr, "elevation", this->elevation);
+        repr->setAttributeCssDouble("elevation", this->elevation);
     }
 
     SPObject::write(doc, repr, flags);

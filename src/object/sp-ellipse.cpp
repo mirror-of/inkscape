@@ -288,15 +288,15 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             if (flags & SP_OBJECT_WRITE_EXT) {
 
                 repr->setAttribute("sodipodi:type", "arc");
-                sp_repr_set_svg_length(repr, "sodipodi:cx", cx);
-                sp_repr_set_svg_length(repr, "sodipodi:cy", cy);
-                sp_repr_set_svg_length(repr, "sodipodi:rx", rx);
-                sp_repr_set_svg_length(repr, "sodipodi:ry", ry);
+                repr->setAttributeSvgLength("sodipodi:cx", cx);
+                repr->setAttributeSvgLength("sodipodi:cy", cy);
+                repr->setAttributeSvgLength("sodipodi:rx", rx);
+                repr->setAttributeSvgLength("sodipodi:ry", ry);
 
                 // write start and end only if they are non-trivial; otherwise remove
                 if (_isSlice()) {
-                    sp_repr_set_svg_double(repr, "sodipodi:start", start);
-                    sp_repr_set_svg_double(repr, "sodipodi:end", end);
+                    repr->setAttributeSvgDouble("sodipodi:start", start);
+                    repr->setAttributeSvgDouble("sodipodi:end", end);
 
                     switch ( arc_type ) {
                         case SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE:
@@ -328,9 +328,9 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             break;
 
         case SP_GENERIC_ELLIPSE_CIRCLE:
-            sp_repr_set_svg_length(repr, "cx", cx);
-            sp_repr_set_svg_length(repr, "cy", cy);
-            sp_repr_set_svg_length(repr, "r",  rx);
+            repr->setAttributeSvgLength("cx", cx);
+            repr->setAttributeSvgLength("cy", cy);
+            repr->setAttributeSvgLength("r", rx);
             repr->removeAttribute("rx");
             repr->removeAttribute("ry");
             repr->removeAttribute("sodipodi:cx");
@@ -346,10 +346,10 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             break;
 
         case SP_GENERIC_ELLIPSE_ELLIPSE:
-            sp_repr_set_svg_length(repr, "cx", cx);
-            sp_repr_set_svg_length(repr, "cy", cy);
-            sp_repr_set_svg_length(repr, "rx", rx);
-            sp_repr_set_svg_length(repr, "ry", ry);
+            repr->setAttributeSvgLength("cx", cx);
+            repr->setAttributeSvgLength("cy", cy);
+            repr->setAttributeSvgLength("rx", rx);
+            repr->setAttributeSvgLength("ry", ry);
             repr->removeAttribute("r");
             repr->removeAttribute("sodipodi:cx");
             repr->removeAttribute("sodipodi:cy");

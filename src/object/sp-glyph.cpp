@@ -249,13 +249,13 @@ Inkscape::XML::Node* SPGlyph::write(Inkscape::XML::Document *xml_doc, Inkscape::
     repr->setAttribute("unicode", glyph->unicode);
     repr->setAttribute("glyph-name", glyph->glyph_name);
     repr->setAttribute("d", glyph->d);
-    sp_repr_set_svg_double(repr, "orientation", (double) glyph->orientation);
-    sp_repr_set_svg_double(repr, "arabic-form", (double) glyph->arabic_form);
+    repr->setAttributeSvgDouble("orientation", (double) glyph->orientation);
+    repr->setAttributeSvgDouble("arabic-form", (double) glyph->arabic_form);
     repr->setAttribute("lang", glyph->lang);
-    sp_repr_set_svg_double(repr, "horiz-adv-x", glyph->horiz_adv_x);
-    sp_repr_set_svg_double(repr, "vert-origin-x", glyph->vert_origin_x);
-    sp_repr_set_svg_double(repr, "vert-origin-y", glyph->vert_origin_y);
-    sp_repr_set_svg_double(repr, "vert-adv-y", glyph->vert_adv_y);
+    repr->setAttributeSvgDouble("horiz-adv-x", glyph->horiz_adv_x);
+    repr->setAttributeSvgDouble("vert-origin-x", glyph->vert_origin_x);
+    repr->setAttributeSvgDouble("vert-origin-y", glyph->vert_origin_y);
+    repr->setAttributeSvgDouble("vert-adv-y", glyph->vert_adv_y);
     */
 
     if (repr != this->getRepr()) {

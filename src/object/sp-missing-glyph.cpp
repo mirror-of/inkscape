@@ -106,10 +106,10 @@ Inkscape::XML::Node* SPMissingGlyph::write(Inkscape::XML::Document* xml_doc, Ink
 
 	/* I am commenting out this part because I am not certain how does it work. I will have to study it later. Juca
 	    repr->setAttribute("d", glyph->d);
-	    sp_repr_set_svg_double(repr, "horiz-adv-x", glyph->horiz_adv_x);
-	    sp_repr_set_svg_double(repr, "vert-origin-x", glyph->vert_origin_x);
-	    sp_repr_set_svg_double(repr, "vert-origin-y", glyph->vert_origin_y);
-	    sp_repr_set_svg_double(repr, "vert-adv-y", glyph->vert_adv_y);
+	    repr->setAttributeSvgDouble("horiz-adv-x", glyph->horiz_adv_x);
+	    repr->setAttributeSvgDouble("vert-origin-x", glyph->vert_origin_x);
+	    repr->setAttributeSvgDouble("vert-origin-y", glyph->vert_origin_y);
+	    repr->setAttributeSvgDouble("vert-adv-y", glyph->vert_adv_y);
 	*/
 	    if (repr != this->getRepr()) {
 

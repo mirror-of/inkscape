@@ -166,19 +166,19 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
         repr->setCodeUnsafe(g_quark_from_string("svg:path"));
         repr->setAttribute("sodipodi:type", "rect");
     }
-    sp_repr_set_svg_length(repr, "width",  this->width);
-    sp_repr_set_svg_length(repr, "height", this->height);
+    repr->setAttributeSvgLength("width", this->width);
+    repr->setAttributeSvgLength("height", this->height);
 
     if (this->rx._set) {
-    	sp_repr_set_svg_length(repr, "rx", this->rx);
+    	repr->setAttributeSvgLength("rx", this->rx);
     }
 
     if (this->ry._set) {
-    	sp_repr_set_svg_length(repr, "ry", this->ry);
+    	repr->setAttributeSvgLength("ry", this->ry);
     }
 
-    sp_repr_set_svg_length(repr, "x", this->x);
-    sp_repr_set_svg_length(repr, "y", this->y);
+    repr->setAttributeSvgLength("x", this->x);
+    repr->setAttributeSvgLength("y", this->y);
     // write d=
     if (strcmp(repr->name(), "svg:rect") != 0) {
         set_rect_path_attribute(repr); // include set_shape()

@@ -344,10 +344,10 @@ int InkFileExportCmd::do_export_svg(SPDocument *doc, std::string const &filename
         SPNamedView *nv;
         Inkscape::XML::Node *nv_repr;
         if ((nv = sp_document_namedview(doc, nullptr)) && (nv_repr = nv->getRepr())) {
-            sp_repr_set_svg_double(nv_repr, "fit-margin-top", margin);
-            sp_repr_set_svg_double(nv_repr, "fit-margin-left", margin);
-            sp_repr_set_svg_double(nv_repr, "fit-margin-right", margin);
-            sp_repr_set_svg_double(nv_repr, "fit-margin-bottom", margin);
+            nv_repr->setAttributeSvgDouble("fit-margin-top", margin);
+            nv_repr->setAttributeSvgDouble("fit-margin-left", margin);
+            nv_repr->setAttributeSvgDouble("fit-margin-right", margin);
+            nv_repr->setAttributeSvgDouble("fit-margin-bottom", margin);
         }
     }
 
@@ -437,7 +437,7 @@ guint32 InkFileExportCmd::get_bgcolor(SPDocument *doc) {
         Inkscape::XML::Node *nv = doc->getReprNamedView();
         if (nv && nv->attribute("inkscape:pageopacity")){
             double opacity = 1.0;
-            sp_repr_get_double (nv, "inkscape:pageopacity", &opacity);
+            nv->getAttributeDouble("inkscape:pageopacity", &opacity);
             bgcolor |= SP_COLOR_F_TO_U(opacity);
         } // else it's transparent
     }

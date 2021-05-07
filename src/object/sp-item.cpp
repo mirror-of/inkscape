@@ -752,13 +752,13 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     if (flags & SP_OBJECT_WRITE_EXT) {
         repr->setAttribute("sodipodi:insensitive", ( item->sensitive ? nullptr : "true" ));
         if (item->transform_center_x != 0)
-            sp_repr_set_svg_double (repr, "inkscape:transform-center-x", item->transform_center_x);
+            repr->setAttributeSvgDouble("inkscape:transform-center-x", item->transform_center_x);
         else
             repr->removeAttribute("inkscape:transform-center-x");
         if (item->transform_center_y != 0) {
             auto y = item->transform_center_y;
             y *= -document->yaxisdir();
-            sp_repr_set_svg_double (repr, "inkscape:transform-center-y", y);
+            repr->setAttributeSvgDouble("inkscape:transform-center-y", y);
         } else
             repr->removeAttribute("inkscape:transform-center-y");
     }

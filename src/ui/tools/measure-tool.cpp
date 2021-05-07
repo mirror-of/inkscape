@@ -933,11 +933,11 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
     /* Set style */
     sp_desktop_apply_style_tool(desktop, rtext, "/tools/text", true);
     if(measure_repr) {
-        sp_repr_set_svg_double(rtext, "x", 2);
-        sp_repr_set_svg_double(rtext, "y", 2);
+        rtext->setAttributeSvgDouble("x", 2);
+        rtext->setAttributeSvgDouble("y", 2);
     } else {
-        sp_repr_set_svg_double(rtext, "x", 0);
-        sp_repr_set_svg_double(rtext, "y", 0);
+        rtext->setAttributeSvgDouble("x", 0);
+        rtext->setAttributeSvgDouble("y", 0);
     }
 
     /* Create <tspan> */
@@ -1000,12 +1000,12 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
         sp_repr_css_write_string(css,css_str);
         rrect->setAttribute("style", css_str);
         sp_repr_css_attr_unref (css);
-        sp_repr_set_svg_double(rgroup, "x", 0);
-        sp_repr_set_svg_double(rgroup, "y", 0);
-        sp_repr_set_svg_double(rrect, "x", -bbox->width()/2.0);
-        sp_repr_set_svg_double(rrect, "y", -bbox->height());
-        sp_repr_set_svg_double(rrect, "width", bbox->width() + 6);
-        sp_repr_set_svg_double(rrect, "height", bbox->height() + 6);
+        rgroup->setAttributeSvgDouble("x", 0);
+        rgroup->setAttributeSvgDouble("y", 0);
+        rrect->setAttributeSvgDouble("x", -bbox->width()/2.0);
+        rrect->setAttributeSvgDouble("y", -bbox->height());
+        rrect->setAttributeSvgDouble("width", bbox->width() + 6);
+        rrect->setAttributeSvgDouble("height", bbox->height() + 6);
         Inkscape::XML::Node *rtextitem = text_item->getRepr();
         text_item->deleteObject();
         rgroup->addChild(rtextitem, nullptr);

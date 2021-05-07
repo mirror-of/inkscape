@@ -1128,10 +1128,10 @@ Geom::OptRect SPText::get_frame()
             double y = 0.0;
             double width = 0.0;
             double height = 0.0;
-            sp_repr_get_double (rectangle, "x",      &x);
-            sp_repr_get_double (rectangle, "y",      &y);
-            sp_repr_get_double (rectangle, "width",  &width);
-            sp_repr_get_double (rectangle, "height", &height);
+            rectangle->getAttributeDouble("x", &x);
+            rectangle->getAttributeDouble("y", &y);
+            rectangle->getAttributeDouble("width", &width);
+            rectangle->getAttributeDouble("height", &height);
             frame = Geom::Rect::from_xywh( x, y, width, height);
             opt_frame = frame;
         }
@@ -1196,8 +1196,8 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
     p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
     p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
 
-    sp_repr_set_svg_double( text_repr, "x", p0[Geom::X]);
-    sp_repr_set_svg_double( text_repr, "y", p0[Geom::Y]);
+    text_repr->setAttributeSvgDouble("x", p0[Geom::X]);
+    text_repr->setAttributeSvgDouble("y", p0[Geom::Y]);
 
     double inline_size = p1[Geom::X] - p0[Geom::X];
 
@@ -1240,10 +1240,10 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
 
     // Create rectangle
     Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
-    sp_repr_set_svg_double( rect_repr, "x", p0[Geom::X]);
-    sp_repr_set_svg_double( rect_repr, "y", p0[Geom::Y]);
-    sp_repr_set_svg_double( rect_repr, "width",  abs(p1[Geom::X]-p0[Geom::X]));
-    sp_repr_set_svg_double( rect_repr, "height", abs(p1[Geom::Y]-p0[Geom::Y]));
+    rect_repr->setAttributeSvgDouble("x", p0[Geom::X]);
+    rect_repr->setAttributeSvgDouble("y", p0[Geom::Y]);
+    rect_repr->setAttributeSvgDouble("width", abs(p1[Geom::X]-p0[Geom::X]));
+    rect_repr->setAttributeSvgDouble("height", abs(p1[Geom::Y]-p0[Geom::Y]));
 
     // Find defs, if does not exist, create.
     Inkscape::XML::Node *defs_repr = sp_repr_lookup_name (xml_doc->root(), "svg:defs");

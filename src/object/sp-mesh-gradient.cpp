@@ -124,11 +124,11 @@ Inkscape::XML::Node* SPMeshGradient::write(Inkscape::XML::Document *xml_doc, Ink
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->x._set) {
-    	sp_repr_set_svg_double(repr, "x", this->x.computed);
+    	repr->setAttributeSvgDouble("x", this->x.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->y._set) {
-    	sp_repr_set_svg_double(repr, "y", this->y.computed);
+    	repr->setAttributeSvgDouble("y", this->y.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->type_set) {

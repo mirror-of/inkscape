@@ -336,8 +336,8 @@ static void sp_text_context_setup_text(TextTool *tc)
     /* Set style */
     sp_desktop_apply_style_tool(desktop, rtext, "/tools/text", true);
 
-    sp_repr_set_svg_double(rtext, "x", tc->pdoc[Geom::X]);
-    sp_repr_set_svg_double(rtext, "y", tc->pdoc[Geom::Y]);
+    rtext->setAttributeSvgDouble("x", tc->pdoc[Geom::X]);
+    rtext->setAttributeSvgDouble("y", tc->pdoc[Geom::Y]);
 
     /* Create <tspan> */
     Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");

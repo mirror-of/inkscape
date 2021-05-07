@@ -234,8 +234,8 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
         }
     }
 
-    sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
-    sp_repr_set_point(repr, "orientation", n);
+    repr->setAttributePoint("position", Geom::Point( newx, newy ));
+    repr->setAttributePoint("orientation", n);
 
     SPNamedView *namedview = sp_document_namedview(doc, nullptr);
     if (namedview) {
@@ -372,7 +372,7 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
         view->set_origin(point_on_line);
     }
 
-    /* Calling sp_repr_set_point must precede calling sp_item_notify_moveto in the commit
+    /* Calling Inkscape::XML::Node::setAttributePoint must precede calling sp_item_notify_moveto in the commit
        case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
     if (commit) {
         // If root viewBox set, interpret guides in terms of viewBox (90/96)
@@ -398,7 +398,7 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
         }
 
         //XML Tree being used here directly while it shouldn't be.
-        sp_repr_set_point(getRepr(), "position", Geom::Point(newx, newy) );
+        getRepr()->setAttributePoint("position", Geom::Point(newx, newy) );
     }
 }
 
@@ -427,7 +427,7 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
             normal[Geom::X] *= -1.0;
         }
 
-        sp_repr_set_point(getRepr(), "orientation", normal);
+        getRepr()->setAttributePoint("orientation", normal);
     }
 }
 

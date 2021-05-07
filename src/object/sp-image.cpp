@@ -410,13 +410,13 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
             proportion_image = this->width.computed / (double)this->height.computed;
             if (proportion_pixbuf != proportion_image) {
                 double new_height = this->height.computed * proportion_pixbuf;
-                sp_repr_set_svg_double(this->getRepr(), "width", new_height);
+                this->getRepr()->setAttributeSvgDouble("width", new_height);
             }
         }
         else {
             if (proportion_pixbuf != proportion_image) {
                 double new_width = this->width.computed * proportion_pixbuf;
-                sp_repr_set_svg_double(this->getRepr(), "height", new_width);
+                this->getRepr()->setAttributeSvgDouble("height", new_width);
             }
         }
     }
@@ -445,19 +445,19 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     /* fixme: Reset attribute if needed (Lauris) */
     if (this->x._set) {
-        sp_repr_set_svg_double(repr, "x", this->x.computed);
+        repr->setAttributeSvgDouble("x", this->x.computed);
     }
 
     if (this->y._set) {
-        sp_repr_set_svg_double(repr, "y", this->y.computed);
+        repr->setAttributeSvgDouble("y", this->y.computed);
     }
 
     if (this->width._set) {
-        sp_repr_set_svg_double(repr, "width", this->width.computed);
+        repr->setAttributeSvgDouble("width", this->width.computed);
     }
 
     if (this->height._set) {
-        sp_repr_set_svg_double(repr, "height", this->height.computed);
+        repr->setAttributeSvgDouble("height", this->height.computed);
     }
     repr->setAttribute("inkscape:svg-dpi", this->getRepr()->attribute("inkscape:svg-dpi"));
     //XML Tree being used directly here while it shouldn't be...

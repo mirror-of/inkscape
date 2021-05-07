@@ -3521,10 +3521,10 @@ void ObjectSet::tile(bool apply)
 
         rect->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(parent_transform.inverse()));
 
-        sp_repr_set_svg_double(rect, "width", bbox.width());
-        sp_repr_set_svg_double(rect, "height", bbox.height());
-        sp_repr_set_svg_double(rect, "x", bbox.left());
-        sp_repr_set_svg_double(rect, "y", bbox.top());
+        rect->setAttributeSvgDouble("width", bbox.width());
+        rect->setAttributeSvgDouble("height", bbox.height());
+        rect->setAttributeSvgDouble("x", bbox.left());
+        rect->setAttributeSvgDouble("y", bbox.top());
 
         // restore parent and position
         parent->getRepr()->addChildAtPos(rect, pos);
@@ -3765,8 +3765,8 @@ void ObjectSet::createBitmapCopy()
         // Create the repr for the image
         Inkscape::XML::Node * repr = xml_doc->createElement("svg:image");
         sp_embed_image(repr, pb);
-        sp_repr_set_svg_double(repr, "width", bbox->width());
-        sp_repr_set_svg_double(repr, "height", bbox->height());
+        repr->setAttributeSvgDouble("width", bbox->width());
+        repr->setAttributeSvgDouble("height", bbox->height());
 
         // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
         SPItem *parentItem = dynamic_cast<SPItem *>(parent_object);

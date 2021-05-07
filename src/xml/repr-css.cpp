@@ -219,7 +219,7 @@ double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double def
     g_assert(name != nullptr);
     
     double val = defval;
-    sp_repr_get_double((Node *) css, name, &val);
+    css->getAttributeDouble(name, &val);
     return val;
 }
 

@@ -6,6 +6,7 @@ set(xml_SRC
 	event.cpp
 	log-builder.cpp
 	node-fns.cpp
+	node.cpp
 	quote.cpp
 	repr.cpp
 	repr-css.cpp

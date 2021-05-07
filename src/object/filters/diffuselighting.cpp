@@ -205,13 +205,13 @@ Inkscape::XML::Node* SPFeDiffuseLighting::write(Inkscape::XML::Document *doc, In
     }
     
     if (this->surfaceScale_set) {
-        sp_repr_set_css_double(repr, "surfaceScale", this->surfaceScale);
+        repr->setAttributeCssDouble("surfaceScale", this->surfaceScale);
     } else {
         repr->removeAttribute("surfaceScale");
     }
 
     if (this->diffuseConstant_set) {
-        sp_repr_set_css_double(repr, "diffuseConstant", this->diffuseConstant);
+        repr->setAttributeCssDouble("diffuseConstant", this->diffuseConstant);
     } else {
         repr->removeAttribute("diffuseConstant");
     }

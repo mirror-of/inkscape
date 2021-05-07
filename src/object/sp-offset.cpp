@@ -170,7 +170,7 @@ Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape:
          * inkscape:offset="cx cy exp revo rad arg t0"
          */
         repr->setAttribute("sodipodi:type", "inkscape:offset");
-        sp_repr_set_svg_double(repr, "inkscape:radius", this->rad);
+        repr->setAttributeSvgDouble("inkscape:radius", this->rad);
         repr->setAttribute("inkscape:original", this->original);
         repr->setAttribute("inkscape:href", this->sourceHref);
     }

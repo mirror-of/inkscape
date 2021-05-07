@@ -63,13 +63,13 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
          * sodipodi:spiral="cx cy exp revo rad arg t0"
          */
         repr->setAttribute("sodipodi:type", "spiral");
-        sp_repr_set_svg_double(repr, "sodipodi:cx", this->cx);
-        sp_repr_set_svg_double(repr, "sodipodi:cy", this->cy);
-        sp_repr_set_svg_double(repr, "sodipodi:expansion", this->exp);
-        sp_repr_set_svg_double(repr, "sodipodi:revolution", this->revo);
-        sp_repr_set_svg_double(repr, "sodipodi:radius", this->rad);
-        sp_repr_set_svg_double(repr, "sodipodi:argument", this->arg);
-        sp_repr_set_svg_double(repr, "sodipodi:t0", this->t0);
+        repr->setAttributeSvgDouble("sodipodi:cx", this->cx);
+        repr->setAttributeSvgDouble("sodipodi:cy", this->cy);
+        repr->setAttributeSvgDouble("sodipodi:expansion", this->exp);
+        repr->setAttributeSvgDouble("sodipodi:revolution", this->revo);
+        repr->setAttributeSvgDouble("sodipodi:radius", this->rad);
+        repr->setAttributeSvgDouble("sodipodi:argument", this->arg);
+        repr->setAttributeSvgDouble("sodipodi:t0", this->t0);
     }
 
      // make sure the curve is rebuilt with all up-to-date parameters

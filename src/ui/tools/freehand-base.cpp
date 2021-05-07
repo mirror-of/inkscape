@@ -1070,10 +1070,10 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
         rad *= 2;
     }
 
-    sp_repr_set_svg_double (repr, "sodipodi:cx", pp[Geom::X]);
-    sp_repr_set_svg_double (repr, "sodipodi:cy", pp[Geom::Y]);
-    sp_repr_set_svg_double (repr, "sodipodi:rx", rad * stroke_width);
-    sp_repr_set_svg_double (repr, "sodipodi:ry", rad * stroke_width);
+    repr->setAttributeSvgDouble("sodipodi:cx", pp[Geom::X]);
+    repr->setAttributeSvgDouble("sodipodi:cy", pp[Geom::Y]);
+    repr->setAttributeSvgDouble("sodipodi:rx", rad * stroke_width);
+    repr->setAttributeSvgDouble("sodipodi:ry", rad * stroke_width);
     item->updateRepr();
     item->doWriteTransform(item->transform, nullptr, true);
 

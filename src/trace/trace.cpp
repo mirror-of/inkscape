@@ -460,14 +460,14 @@ void Tracer::traceThread()
     double height = 0.0;
     double dval   = 0.0;
 
-    if (sp_repr_get_double(imgRepr, "x", &dval))
+    if (imgRepr->getAttributeDouble("x", &dval))
         x = dval;
-    if (sp_repr_get_double(imgRepr, "y", &dval))
+    if (imgRepr->getAttributeDouble("y", &dval))
         y = dval;
 
-    if (sp_repr_get_double(imgRepr, "width", &dval))
+    if (imgRepr->getAttributeDouble("width", &dval))
         width = dval;
-    if (sp_repr_get_double(imgRepr, "height", &dval))
+    if (imgRepr->getAttributeDouble("height", &dval))
         height = dval;
 
     double iwidth  = (double)pixbuf->get_width();

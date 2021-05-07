@@ -167,8 +167,8 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
 
     SPItem::write(xml_doc, repr, flags);
 
-    sp_repr_set_svg_double(repr, "x", this->x.computed);
-    sp_repr_set_svg_double(repr, "y", this->y.computed);
+    repr->setAttributeSvgDouble("x", this->x.computed);
+    repr->setAttributeSvgDouble("y", this->y.computed);
     repr->setAttribute("width", sp_svg_length_write_with_units(this->width));
     repr->setAttribute("height", sp_svg_length_write_with_units(this->height));
 

@@ -167,11 +167,11 @@ Inkscape::XML::Node* SPFePointLight::write(Inkscape::XML::Document *doc, Inkscap
     }
 
     if (this->x_set)
-        sp_repr_set_css_double(repr, "x", this->x);
+        repr->setAttributeCssDouble("x", this->x);
     if (this->y_set)
-        sp_repr_set_css_double(repr, "y", this->y);
+        repr->setAttributeCssDouble("y", this->y);
     if (this->z_set)
-        sp_repr_set_css_double(repr, "z", this->z);
+        repr->setAttributeCssDouble("z", this->z);
 
     SPObject::write(doc, repr, flags);
 

@@ -497,8 +497,8 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
     repr->setAttribute("xml:space", "preserve");
     repr->setAttribute("style", this->getRepr()->attribute("style"));
     Geom::Point anchor_point = this->layout.characterAnchorPoint(this->layout.begin());
-    sp_repr_set_svg_double(repr, "x", anchor_point[Geom::X]);
-    sp_repr_set_svg_double(repr, "y", anchor_point[Geom::Y]);
+    repr->setAttributeSvgDouble("x", anchor_point[Geom::X]);
+    repr->setAttributeSvgDouble("y", anchor_point[Geom::Y]);
 
     for (Inkscape::Text::Layout::iterator it = this->layout.begin() ; it != this->layout.end() ; ) {
         Inkscape::XML::Node *line_tspan = xml_doc->createElement("svg:tspan");
@@ -537,12 +537,12 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
                 attrs.dx[0] = 0.0;
             TextTagAttributes(attrs).writeTo(span_tspan);
             if (set_x)
-                sp_repr_set_svg_double(span_tspan, "x", anchor_point[Geom::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                span_tspan->setAttributeSvgDouble("x", anchor_point[Geom::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
             if (set_y)
-                sp_repr_set_svg_double(span_tspan, "y", anchor_point[Geom::Y]);
+                span_tspan->setAttributeSvgDouble("y", anchor_point[Geom::Y]);
             if (line_tspan->childCount() == 0) {
-                sp_repr_set_svg_double(line_tspan, "x", anchor_point[Geom::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
-                sp_repr_set_svg_double(line_tspan, "y", anchor_point[Geom::Y]);
+                line_tspan->setAttributeSvgDouble("x", anchor_point[Geom::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                line_tspan->setAttributeSvgDouble("y", anchor_point[Geom::Y]);
             }
 
             SPObject *source_obj = nullptr;

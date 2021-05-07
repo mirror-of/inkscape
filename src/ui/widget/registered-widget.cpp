@@ -417,7 +417,7 @@ RegisteredColorPicker::on_changed (guint32 rgba)
     bool saved = DocumentUndo::getUndoSensitive(local_doc);
     DocumentUndo::setUndoSensitive(local_doc, false);
     local_repr->setAttribute(_ckey, c);
-    sp_repr_set_css_double(local_repr, _akey.c_str(), (rgba & 0xff) / 255.0);
+    local_repr->setAttributeCssDouble(_akey.c_str(), (rgba & 0xff) / 255.0);
     DocumentUndo::setUndoSensitive(local_doc, saved);
 
     local_doc->setModifiedSinceSave();

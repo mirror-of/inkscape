@@ -148,27 +148,27 @@ Inkscape::XML::Node* SPRadialGradient::write(Inkscape::XML::Document *xml_doc, I
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->cx._set) {
-    	sp_repr_set_svg_double(repr, "cx", this->cx.computed);
+    	repr->setAttributeSvgDouble("cx", this->cx.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->cy._set) {
-    	sp_repr_set_svg_double(repr, "cy", this->cy.computed);
+    	repr->setAttributeSvgDouble("cy", this->cy.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->r._set) {
-    	sp_repr_set_svg_double(repr, "r", this->r.computed);
+    	repr->setAttributeSvgDouble("r", this->r.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->fx._set) {
-    	sp_repr_set_svg_double(repr, "fx", this->fx.computed);
+    	repr->setAttributeSvgDouble("fx", this->fx.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->fy._set) {
-    	sp_repr_set_svg_double(repr, "fy", this->fy.computed);
+    	repr->setAttributeSvgDouble("fy", this->fy.computed);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->fr._set) {
-    	sp_repr_set_svg_double(repr, "fr", this->fr.computed);
+    	repr->setAttributeSvgDouble("fr", this->fr.computed);
     }
 
     SPGradient::write(xml_doc, repr, flags);

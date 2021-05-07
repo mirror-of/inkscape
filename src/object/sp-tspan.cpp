@@ -419,7 +419,7 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
         } else {
             /* FIXME: This logic looks rather undesirable if e.g. startOffset is to be
                in ems. */
-            sp_repr_set_svg_double(repr, "startOffset", this->startOffset.computed);
+            repr->setAttributeSvgDouble("startOffset", this->startOffset.computed);
         }
     }
 
@@ -516,8 +516,8 @@ void sp_textpath_to_text(SPObject *tp)
     Geom::Point midpoint;
     Geom::Point tangent;
     path->PointAndTangentAt(cut_pos[0].piece, cut_pos[0].t, midpoint, tangent);
-    sp_repr_set_svg_double(text->getRepr(), "x", midpoint[Geom::X]);
-    sp_repr_set_svg_double(text->getRepr(), "y", midpoint[Geom::Y]);
+    text->getRepr()->setAttributeSvgDouble("x", midpoint[Geom::X]);
+    text->getRepr()->setAttributeSvgDouble("y", midpoint[Geom::Y]);
 
     //remove textpath
     tp->deleteObject();

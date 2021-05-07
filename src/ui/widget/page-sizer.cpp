@@ -384,16 +384,16 @@ PageSizer::updateFitMarginsUI(Inkscape::XML::Node *nv_repr)
 {
     if (!_lockMarginUpdate) {
         double value = 0.0;
-        if (sp_repr_get_double(nv_repr, "fit-margin-top", &value)) {
+        if (nv_repr->getAttributeDouble("fit-margin-top", &value)) {
             _marginTop.setValue(value);
         }
-        if (sp_repr_get_double(nv_repr, "fit-margin-left", &value)) {
+        if (nv_repr->getAttributeDouble("fit-margin-left", &value)) {
             _marginLeft.setValue(value);
         }
-        if (sp_repr_get_double(nv_repr, "fit-margin-right", &value)) {
+        if (nv_repr->getAttributeDouble("fit-margin-right", &value)) {
             _marginRight.setValue(value);
         }
-        if (sp_repr_get_double(nv_repr, "fit-margin-bottom", &value)) {
+        if (nv_repr->getAttributeDouble("fit-margin-bottom", &value)) {
             _marginBottom.setValue(value);
         }
     }
@@ -463,10 +463,10 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
         && (nv = sp_document_namedview(doc, nullptr))
         && (nv_repr = nv->getRepr())) {
         _lockMarginUpdate = true;
-        sp_repr_set_svg_double(nv_repr, "fit-margin-top", _marginTop.getValue());
-        sp_repr_set_svg_double(nv_repr, "fit-margin-left", _marginLeft.getValue());
-        sp_repr_set_svg_double(nv_repr, "fit-margin-right", _marginRight.getValue());
-        sp_repr_set_svg_double(nv_repr, "fit-margin-bottom", _marginBottom.getValue());
+        nv_repr->setAttributeSvgDouble("fit-margin-top", _marginTop.getValue());
+        nv_repr->setAttributeSvgDouble("fit-margin-left", _marginLeft.getValue());
+        nv_repr->setAttributeSvgDouble("fit-margin-right", _marginRight.getValue());
+        nv_repr->setAttributeSvgDouble("fit-margin-bottom", _marginBottom.getValue());
         _lockMarginUpdate = false;
     }
 

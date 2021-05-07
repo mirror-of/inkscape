@@ -379,8 +379,8 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:pattern");
     repr->setAttribute("patternUnits", "userSpaceOnUse");
-    sp_repr_set_svg_double(repr, "width", bounds.dimensions()[Geom::X]);
-    sp_repr_set_svg_double(repr, "height", bounds.dimensions()[Geom::Y]);
+    repr->setAttributeSvgDouble("width", bounds.dimensions()[Geom::X]);
+    repr->setAttributeSvgDouble("height", bounds.dimensions()[Geom::Y]);
     repr->setAttributeOrRemoveIfEmpty("patternTransform", sp_svg_transform_write(transform));
     defsrepr->appendChild(repr);
     const gchar *pat_id = repr->attribute("id");
