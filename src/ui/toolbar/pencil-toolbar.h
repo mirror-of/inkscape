@@ -88,7 +88,6 @@ private:
     void tolerance_value_changed();
     void add_advanced_shape_options(bool tool_is_pencil);
     void add_powerstroke_cap(bool tool_is_pencil);
-    void desktop_tool_changed(int tool);
     void change_shape(int shape);
     void update_width_value(int shape);
     void change_cap(int cap);
