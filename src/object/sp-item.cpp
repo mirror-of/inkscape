@@ -407,8 +407,11 @@ void SPItem::moveTo(SPItem *target, bool intoafter) {
 }
 
 void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPItem* object = this;
+#ifdef OBJECT_TRACE
+    objectTrace( "SPItem::build");
+#endif
 
+    SPItem* object = this;
     object->readAttr(SPAttr::STYLE);
     object->readAttr(SPAttr::TRANSFORM);
     object->readAttr(SPAttr::CLIP_PATH);
@@ -421,6 +424,9 @@ void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr(SPAttr::INKSCAPE_HIGHLIGHT_COLOR);
 
     SPObject::build(document, repr);
+#ifdef OBJECT_TRACE
+    objectTrace( "SPItem::build", false);
+#endif
 }
 
 void SPItem::release() {
@@ -455,6 +461,11 @@ void SPItem::release() {
 }
 
 void SPItem::set(SPAttr key, gchar const* value) {
+#ifdef OBJECT_TRACE
+    std::stringstream temp;
+    temp << "SPItem::set: " << sp_attribute_name(key)  << " " << (value?value:"null");
+    objectTrace( temp.str() );
+#endif
     SPItem *item = this;
     SPItem* object = item;
 
@@ -531,6 +542,9 @@ void SPItem::set(SPAttr key, gchar const* value) {
             }
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
+                // FIXME: See if this is really necessary. Also, check after modifying SPIPaint to preserve
+                // non-#abcdef color formats.
+
                 // Propergate the property change to all clones
                 style->readFromObject(object);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
@@ -539,6 +553,9 @@ void SPItem::set(SPAttr key, gchar const* value) {
             }
             break;
     }
+#ifdef OBJECT_TRACE
+    objectTrace( "SPItem::set", false);
+#endif
 }
 
 void SPItem::clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)

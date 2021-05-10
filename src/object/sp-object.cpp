@@ -915,7 +915,7 @@ void SPObject::set(SPAttr key, gchar const* value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;
-    temp << "SPObject::set: " << key  << " " << (value?value:"null");
+    temp << "SPObject::set: " << sp_attribute_name(key)  << " " << (value?value:"null");
     objectTrace( temp.str() );
 #endif
 

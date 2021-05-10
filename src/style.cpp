@@ -562,7 +562,7 @@ SPStyle::clear() {
 void
 SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
 
-    // std::cout << "SPstyle::read( SPObject, Inkscape::XML::Node ): Entrance: "
+    // std::cout << "SPStyle::read( SPObject, Inkscape::XML::Node ): Entrance: "
     //           << (object?(object->getId()?object->getId():"id null"):"object null") << " "
     //           << (repr?(repr->name()?repr->name():"no name"):"repr null")
     //           << std::endl;
@@ -627,7 +627,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
 void
 SPStyle::readFromObject( SPObject *object ) {
 
-    // std::cout << "SPStyle::readFromObject: "<< (object->getId()?object->getId():"null")<< std::endl;
+    // std::cout << "SPStyle::readFromObject: "<< (object->getId()?object->getId():"null") << std::endl;
 
     g_return_if_fail(object != nullptr);
     g_return_if_fail(SP_IS_OBJECT(object));
@@ -670,7 +670,7 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
 void
 SPStyle::readIfUnset(SPAttr id, gchar const *val, SPStyleSrc const &source ) {
 
-    // std::cout << "SPStyle::readIfUnset: Entrance: " << id << ": " << (val?val:"null") << std::endl;
+    // std::cout << "SPStyle::readIfUnset: Entrance: " << sp_attribute_name(id) << ": " << (val?val:"null") << std::endl;
     // To Do: If it is not too slow, use std::map instead of std::vector inorder to remove switch()
     // (looking up SPAttr::xxxx already uses a hash).
     g_return_if_fail(val != nullptr);

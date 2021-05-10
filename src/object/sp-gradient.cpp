@@ -336,7 +336,7 @@ void SPGradient::set(SPAttr key, gchar const *value)
 {
 #ifdef OBJECT_TRACE
     std::stringstream temp;
-    temp << "SPGradient::set: " << key  << " " << (value?value:"null");
+    temp << "SPGradient::set: " << sp_attribute_name(key)  << " " << (value?value:"null");
     objectTrace( temp.str() );
 #endif
 

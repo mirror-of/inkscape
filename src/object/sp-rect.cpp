@@ -56,7 +56,7 @@ void SPRect::set(SPAttr key, gchar const *value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;
-    temp << "SPRect::set: " << key  << " " << (value?value:"null");
+    temp << "SPRect::set: " << sp_attribute_name(key)  << " " << (value?value:"null");
     objectTrace( temp.str() );
 #endif
 
