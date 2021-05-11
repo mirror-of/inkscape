@@ -405,12 +405,17 @@ sanitize_ldflags_for_libs(SIGC++_LDFLAGS)
 list(APPEND INKSCAPE_LIBS ${SIGC++_LDFLAGS})
 list(APPEND INKSCAPE_CXX_FLAGS ${SIGC++_CFLAGS_OTHER})
 
-# Some linkers, like gold, don't find symbols recursively. So we have to link against X11 explicitly
-find_package(X11)
-if(X11_FOUND)
+if(WITH_X11)
+    find_package(X11 REQUIRED)
     list(APPEND INKSCAPE_INCS_SYS ${X11_INCLUDE_DIRS})
     list(APPEND INKSCAPE_LIBS ${X11_LIBRARIES})
-endif(X11_FOUND)
+    add_definitions(-DHAVE_X11)
+
+    pkg_get_variable(GTK3_TARGETS gtk+-3.0 targets)
+    if(NOT("${GTK3_TARGETS}" MATCHES "x11"))
+        message(FATAL_ERROR "GTK+3 doesn't targets X11, this is required for WITH_X11")
+    endif()
+endif(WITH_X11)
 
 # end Dependencies
 

@@ -46,11 +46,11 @@
 
 #include <gtk/gtk.h>
 
-#ifdef GDK_WINDOWING_X11
+#ifdef HAVE_X11
 #include <X11/Xlib.h>
 
 #include <gdk/gdkx.h>
-#endif /* GDK_WINDOWING_X11 */
+#endif /* HAVE_X11 */
 
 #include "ege-color-prof-tracker.h"
 #include "helper/sp-marshal.h"
@@ -69,24 +69,24 @@ static void ege_color_prof_tracker_dispose(GObject *);
 
 class ScreenTrack {
     public:
-#ifdef GDK_WINDOWING_X11
+#ifdef HAVE_X11
     gboolean zeroSeen;
     gboolean otherSeen;
-#endif /* GDK_WINDOWING_X11 */
+#endif /* HAVE_X11 */
     std::vector<EgeColorProfTracker *> *trackers;
     GPtrArray* profiles;
     ~ScreenTrack(){ delete trackers; }
 };
 
 
-#ifdef GDK_WINDOWING_X11
+#ifdef HAVE_X11
 GdkFilterReturn x11_win_filter(GdkXEvent *xevent, GdkEvent *event, gpointer data);
 void handle_property_change(GdkScreen* screen, const gchar* name);
 void add_x11_tracking_for_screen(GdkScreen* screen);
 static void fire(gint monitor);
 static void clear_profile( guint monitor );
 static void set_profile( guint monitor, const guint8* data, guint len );
-#endif /* GDK_WINDOWING_X11 */
+#endif /* HAVE_X11 */
 
 static guint signals[LAST_SIGNAL] = {0};
 
@@ -323,10 +323,10 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
 
         int numMonitors = gdk_display_get_n_monitors(display);
 
-#ifdef GDK_WINDOWING_X11
+#ifdef HAVE_X11
         tracked_screen->zeroSeen = FALSE;
         tracked_screen->otherSeen = FALSE;
-#endif /* GDK_WINDOWING_X11 */
+#endif /* HAVE_X11 */
         tracked_screen->trackers= new std::vector<EgeColorProfTracker *>;
         tracked_screen->trackers->push_back(tracker );
         tracked_screen->profiles = g_ptr_array_new();
@@ -336,14 +336,14 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
 
         g_signal_connect( G_OBJECT(screen), "size-changed", G_CALLBACK( screen_size_changed_cb ), tracker );
 
-#ifdef GDK_WINDOWING_X11
+#ifdef HAVE_X11
         if (GDK_IS_X11_DISPLAY (display) ) {
             // printf( "track_screen: Display is using X11\n" );
             add_x11_tracking_for_screen(screen);
         } else {
             // printf( "track_screen: Display is not using X11\n" );
         }
-#endif // GDK_WINDOWING_X11
+#endif // HAVE_X11
     }
 }
 
@@ -411,13 +411,13 @@ void screen_size_changed_cb(GdkScreen* screen, gpointer user_data)
         if ( numMonitors > (gint)tracked_screen->profiles->len ) {
             for ( guint i = tracked_screen->profiles->len; i < (guint)numMonitors; i++ ) {
                 g_ptr_array_add( tracked_screen->profiles, nullptr );
-#ifdef GDK_WINDOWING_X11
+#ifdef HAVE_X11
                 if (GDK_IS_X11_DISPLAY (display) ) {
                     gchar* name = g_strdup_printf( "_ICC_PROFILE_%d", i );
                     handle_property_change( screen, name );
                     g_free(name);
                 }
-#endif /* GDK_WINDOWING_X11 */
+#endif /* HAVE_X11 */
             }
         } else if ( numMonitors < (gint)tracked_screen->profiles->len ) {
 /*             g_message("The count of monitors decreased, remove some"); */
@@ -425,7 +425,7 @@ void screen_size_changed_cb(GdkScreen* screen, gpointer user_data)
     }
 }
 
-#ifdef GDK_WINDOWING_X11
+#ifdef HAVE_X11
 GdkFilterReturn x11_win_filter(GdkXEvent *xevent,
                                GdkEvent *event,
                                gpointer data)
@@ -618,7 +618,7 @@ static void set_profile( guint monitor, const guint8* data, guint len )
         }
     }
 }
-#endif /* GDK_WINDOWING_X11 */
+#endif /* HAVE_X11 */
 /*
   Local Variables:
   mode:c++

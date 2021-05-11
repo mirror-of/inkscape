@@ -36,6 +36,7 @@ set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME inkscape) # needs to be before any inst
 
 include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
 include(CMakeScripts/ConfigPaths.cmake)
+include(CMakeDependentOption)
 
 set(PROJECT_NAME inkscape)
 
@@ -127,6 +128,7 @@ option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_JEMALLOC "Compile with JEMALLOC support" OFF)
 option(WITH_ASAN "Compile with Clang's AddressSanitizer (for debugging purposes)" OFF)
 option(WITH_INTERNAL_2GEOM "Prefer internal copy of lib2geom" OFF)
+cmake_dependent_option(WITH_X11 "Compile with X11 support" ON "UNIX; NOT APPLE" OFF)
 
 option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
 mark_as_advanced(WITH_FUZZ)
@@ -286,6 +288,7 @@ message("WITH_NLS:                ${WITH_NLS}")
 message("WITH_OPENMP:             ${WITH_OPENMP}")
 message("WITH_JEMALLOC:           ${WITH_JEMALLOC}")
 message("WITH_INTERNAL_2GEOM:     ${WITH_INTERNAL_2GEOM}")
+message("WITH_X11:                ${WITH_X11}")
 
 message("WITH_PROFILING:          ${WITH_PROFILING}")
 message("BUILD_TESTING:           ${BUILD_TESTING}")
