@@ -71,8 +71,7 @@ enum class NodeType
  * To create new nodes, use the methods of the Inkscape::XML::Document class. You can obtain
  * the nodes' document using the document() method. To destroy a node, just unparent it
  * by calling sp_repr_unparent() or node->parent->removeChild() and release any references
- * to it. The garbage collector will reclaim the memory in the next pass. There are additional
- * convenience functions defined in @ref xml/repr.h
+ * to it. The garbage collector will reclaim the memory in the next pass.
  *
  * In addition to regular DOM manipulations, you can register observer objects that will
  * receive notifications about changes made to the node. See the NodeObserver class.
