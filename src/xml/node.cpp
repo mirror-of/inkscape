@@ -26,11 +26,11 @@ void Node::setAttribute(Util::const_char_ptr key, Util::const_char_ptr value)
     this->setAttributeImpl(key.data(), value.data());
 }
 
-bool Node::getAttributeBoolean(Util::const_char_ptr key, bool *val) const
+bool Node::getAttributeBoolean(Util::const_char_ptr key, bool default_value) const
 {
     auto v = this->attribute(key.data());
     if (v == nullptr) {
-        return false;
+        return default_value;
     }
 
     if (!g_ascii_strcasecmp(v, "true") ||
@@ -38,32 +38,29 @@ bool Node::getAttributeBoolean(Util::const_char_ptr key, bool *val) const
         !g_ascii_strcasecmp(v, "y") ||
         (atoi(v) != 0))
     {
-        *val = true;
+        return true;
     } else {
-        *val = false;
+        return false;
     }
-    return true;
 }
 
-bool Node::getAttributeInt(Util::const_char_ptr key, int *val) const
+int Node::getAttributeInt(Util::const_char_ptr key, int default_value) const
 {
     auto v = this->attribute(key.data());
     if (v == nullptr) {
-        return false;
+        return default_value;
     }
-    *val = atoi(v);
-    return true;
+    return atoi(v);
 }
 
-bool Node::getAttributeDouble(Util::const_char_ptr key, double *val) const
+double Node::getAttributeDouble(Util::const_char_ptr key, double default_value) const
 {
     auto v = this->attribute(key.data());
     if (v == nullptr) {
-        return false;
+        return default_value;
     }
 
-    *val = g_ascii_strtod(v, nullptr);
-    return true;
+    return g_ascii_strtod(v, nullptr);
 }
 
 bool Node::setAttributeBoolean(Util::const_char_ptr key, bool val)
@@ -126,13 +123,11 @@ bool Node::setAttributePoint(Util::const_char_ptr key, Geom::Point const &val)
     return true;
 }
 
-bool Node::getAttributePoint(Util::const_char_ptr key, Geom::Point *val) const
+Geom::Point Node::getAttributePoint(Util::const_char_ptr key, Geom::Point default_value) const
 {
-    g_return_val_if_fail(val != nullptr, false);
-
     auto v = this->attribute(key.data());
     if (v == nullptr) {
-        return false;
+        return default_value;
     }
 
     gchar **strarray = g_strsplit(v, ",", 2);
@@ -142,12 +137,11 @@ bool Node::getAttributePoint(Util::const_char_ptr key, Geom::Point *val) const
         newx = g_ascii_strtod(strarray[0], nullptr);
         newy = g_ascii_strtod(strarray[1], nullptr);
         g_strfreev(strarray);
-        *val = Geom::Point(newx, newy);
-        return true;
+        return Geom::Point(newx, newy);
     }
 
     g_strfreev(strarray);
-    return false;
+    return default_value;
 }
 
 void Node::setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key, Inkscape::Util::const_char_ptr value)

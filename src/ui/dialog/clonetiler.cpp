@@ -2218,16 +2218,14 @@ void CloneTiler::apply()
         obj_repr->attribute("inkscape:tile-cx") &&
         obj_repr->attribute("inkscape:tile-cy")) {
 
-        double cx = 0;
-        double cy = 0;
-        obj_repr->getAttributeDouble("inkscape:tile-cx", &cx);
-        obj_repr->getAttributeDouble("inkscape:tile-cy", &cy);
+        double cx = obj_repr->getAttributeDouble("inkscape:tile-cx", 0);
+        double cy = obj_repr->getAttributeDouble("inkscape:tile-cy", 0);
         center = Geom::Point (cx, cy);
 
-        obj_repr->getAttributeDouble("inkscape:tile-w", &w);
-        obj_repr->getAttributeDouble("inkscape:tile-h", &h);
-        obj_repr->getAttributeDouble("inkscape:tile-x0", &x0);
-        obj_repr->getAttributeDouble("inkscape:tile-y0", &y0);
+        w = obj_repr->getAttributeDouble("inkscape:tile-w", w);
+        h = obj_repr->getAttributeDouble("inkscape:tile-h", h);
+        x0 = obj_repr->getAttributeDouble("inkscape:tile-x0", x0);
+        y0 = obj_repr->getAttributeDouble("inkscape:tile-y0", y0);
     } else {
         bool prefs_bbox = prefs->getBool("/tools/bounding_box", false);
         SPItem::BBoxType bbox_type = ( !prefs_bbox ?

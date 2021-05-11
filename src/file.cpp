@@ -1022,8 +1022,8 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         Inkscape::XML::Node *clipnode = sp_repr_lookup_name(root, "inkscape:clipboard", 1);
         if (clipnode) {
             Geom::Point min, max;
-            clipnode->getAttributePoint("min", &min);
-            clipnode->getAttributePoint("max", &max);
+            min = clipnode->getAttributePoint("min", min);
+            max = clipnode->getAttributePoint("max", max);
             pos_original = Geom::Point(min[Geom::X], max[Geom::Y]);
         }
         Geom::Point offset = pos_original - sel_bbox->corner(3);

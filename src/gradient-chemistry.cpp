@@ -913,8 +913,7 @@ void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or
     for (auto& child: vector->children) {
         child_reprs.push_back(child.getRepr());
         child_objects.push_back(&child);
-        offset=0;
-        child.getRepr()->getAttributeDouble("offset", &offset);
+        offset = child.getRepr()->getAttributeDouble("offset", 0);
         offsets.push_back(offset);
     }
 

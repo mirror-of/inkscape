@@ -27,6 +27,7 @@
 #include "object/sp-root.h"
 #include "io/resource.h"
 #include "ui/shortcuts.h"
+#include <limits>
 
 namespace Inkscape {
 namespace UI {
@@ -383,17 +384,18 @@ void
 PageSizer::updateFitMarginsUI(Inkscape::XML::Node *nv_repr)
 {
     if (!_lockMarginUpdate) {
-        double value = 0.0;
-        if (nv_repr->getAttributeDouble("fit-margin-top", &value)) {
+        double value;
+        double nan = std::numeric_limits<double>::quiet_NaN();
+        if (!std::isnan(value = nv_repr->getAttributeDouble("fit-margin-top", nan))) {
             _marginTop.setValue(value);
         }
-        if (nv_repr->getAttributeDouble("fit-margin-left", &value)) {
+        if (!std::isnan(value = nv_repr->getAttributeDouble("fit-margin-left", nan))) {
             _marginLeft.setValue(value);
         }
-        if (nv_repr->getAttributeDouble("fit-margin-right", &value)) {
+        if (!std::isnan(value = nv_repr->getAttributeDouble("fit-margin-right", nan))) {
             _marginRight.setValue(value);
         }
-        if (nv_repr->getAttributeDouble("fit-margin-bottom", &value)) {
+        if (!std::isnan(value = nv_repr->getAttributeDouble("fit-margin-bottom", nan))) {
             _marginBottom.setValue(value);
         }
     }

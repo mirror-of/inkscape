@@ -436,8 +436,7 @@ guint32 InkFileExportCmd::get_bgcolor(SPDocument *doc) {
     } else {
         Inkscape::XML::Node *nv = doc->getReprNamedView();
         if (nv && nv->attribute("inkscape:pageopacity")){
-            double opacity = 1.0;
-            nv->getAttributeDouble("inkscape:pageopacity", &opacity);
+            double opacity = nv->getAttributeDouble("inkscape:pageopacity", 1.0);
             bgcolor |= SP_COLOR_F_TO_U(opacity);
         } // else it's transparent
     }

@@ -287,7 +287,7 @@ SvgFont::flip_coordinate_system(SPFont* spfont, Geom::PathVector pathv){
     for(auto& obj: spfont->children) {
         if (dynamic_cast<SPFontFace *>(&obj)) {
             //XML Tree being directly used here while it shouldn't be.
-            obj.getRepr()->getAttributeDouble("units_per_em", &units_per_em);
+            units_per_em = obj.getRepr()->getAttributeDouble("units_per_em", units_per_em);
         }
     }
 
@@ -413,7 +413,7 @@ double SvgFont::units_per_em() {
     for (auto& obj: font->children) {
         if (dynamic_cast<SPFontFace *>(&obj)) {
             //XML Tree being directly used here while it shouldn't be.
-            obj.getRepr()->getAttributeDouble("units-per-em", &units_per_em);
+            units_per_em = obj.getRepr()->getAttributeDouble("units-per-em", units_per_em);
         }
     }
     if (units_per_em <= 0.0) {

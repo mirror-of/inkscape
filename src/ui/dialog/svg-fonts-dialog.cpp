@@ -585,7 +585,7 @@ SvgFontsDialog::flip_coordinate_system(Geom::PathVector pathv){
     for (auto& obj: get_selected_spfont()->children) {
         if (SP_IS_FONTFACE(&obj)){
             //XML Tree being directly used here while it shouldn't be.
-            obj.getRepr()->getAttributeDouble("units-per-em", &units_per_em);
+            units_per_em = obj.getRepr()->getAttributeDouble("units-per-em", units_per_em);
         }
     }
     double baseline_offset = units_per_em - get_selected_spfont()->horiz_origin_y;

@@ -1057,8 +1057,7 @@ void SvgBuilder::updateFont(GfxState *state) {
     if (font->getFamily()) { // if font family is explicitly given use it.
         sp_repr_css_set_property(_font_style, "font-family", font->getFamily()->getCString());
     } else { 
-        int attr_value = 1;
-        _preferences->getAttributeInt("localFonts", &attr_value);
+        int attr_value = _preferences->getAttributeInt("localFonts", 1);
         if (attr_value != 0) {
             // Find the font that best matches the stripped down (orig)name (Bug LP #179589).
             sp_repr_css_set_property(_font_style, "font-family", _BestMatchingFont(font_family).c_str());
@@ -1521,8 +1520,7 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
         return nullptr;
     }
     // Decide whether we should embed this image
-    int attr_value = 1;
-    _preferences->getAttributeInt("embedImages", &attr_value);
+    int attr_value = _preferences->getAttributeInt("embedImages", 1);
     bool embed_image = ( attr_value != 0 );
     // Set read/write functions
     std::vector<guchar> png_buffer;

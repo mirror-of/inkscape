@@ -218,9 +218,7 @@ double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double def
     g_assert(css != nullptr);
     g_assert(name != nullptr);
     
-    double val = defval;
-    css->getAttributeDouble(name, &val);
-    return val;
+    return css->getAttributeDouble(name, defval);
 }
 
 /**

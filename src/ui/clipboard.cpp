@@ -641,8 +641,8 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
     if (clipnode) {
         Geom::Point min, max;
         bool visual_bbox = !Inkscape::Preferences::get()->getInt("/tools/bounding_box");
-        clipnode->getAttributePoint((visual_bbox ? "min" : "geom-min"), &min);
-        clipnode->getAttributePoint((visual_bbox ? "max" : "geom-max"), &max);
+        min = clipnode->getAttributePoint((visual_bbox ? "min" : "geom-min"), min);
+        max = clipnode->getAttributePoint((visual_bbox ? "max" : "geom-max"), max);
 
         // resize each object in the selection
         if (separately) {
@@ -1442,8 +1442,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
                 bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
             }
             if (nv && nv->attribute("inkscape:pageopacity")) {
-                double opacity = 1.0;
-                nv->getAttributeDouble("inkscape:pageopacity", &opacity);
+                double opacity = nv->getAttributeDouble("inkscape:pageopacity", 1.0);
                 bgcolor |= SP_COLOR_F_TO_U(opacity);
             }
             std::vector<SPItem*> x;

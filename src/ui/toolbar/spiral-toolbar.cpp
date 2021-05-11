@@ -271,16 +271,13 @@ SpiralToolbar::event_attr_changed(Inkscape::XML::Node *repr,
     // in turn, prevent callbacks from responding
     toolbar->_freeze = true;
 
-    double revolution = 3.0;
-    repr->getAttributeDouble("sodipodi:revolution", &revolution);
+    double revolution = repr->getAttributeDouble("sodipodi:revolution", 3.0);
     toolbar->_revolution_adj->set_value(revolution);
 
-    double expansion = 1.0;
-    repr->getAttributeDouble("sodipodi:expansion", &expansion);
+    double expansion = repr->getAttributeDouble("sodipodi:expansion", 1.0);
     toolbar->_expansion_adj->set_value(expansion);
 
-    double t0 = 0.0;
-    repr->getAttributeDouble("sodipodi:t0", &t0);
+    double t0 = repr->getAttributeDouble("sodipodi:t0", 0.0);
     toolbar->_t0_adj->set_value(t0);
 
     toolbar->_freeze = false;

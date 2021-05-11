@@ -19,6 +19,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <limits>
 
 #include <boost/range/adaptor/transformed.hpp>
 
@@ -794,8 +795,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
 
 int SPObject::getIntAttribute(char const *key, int def)
 {
-    getRepr()->getAttributeInt(key, &def);
-    return def;
+    return getRepr()->getAttributeInt(key, def);
 }
 
 unsigned SPObject::getPosition(){
@@ -1459,7 +1459,13 @@ void SPObject::removeAttribute(gchar const *key, SPException *ex)
 bool SPObject::storeAsDouble( gchar const *key, double *val ) const
 {
     g_assert(this->getRepr()!= nullptr);
-    return ((Inkscape::XML::Node *)(this->getRepr()))->getAttributeDouble(key, val);
+    double nan = std::numeric_limits<double>::quiet_NaN();
+    double temp_val = ((Inkscape::XML::Node *)(this->getRepr()))->getAttributeDouble(key, nan);
+    if (std::isnan(temp_val)) {
+        return false;
+    }
+    *val = temp_val;
+    return true;
 }
 
 /** Helper */

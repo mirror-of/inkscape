@@ -39,6 +39,8 @@
 
 #include "siox.h"
 
+#include <limits>
+
 namespace Inkscape {
 namespace Trace {
 
@@ -454,21 +456,10 @@ void Tracer::traceThread()
     Inkscape::XML::Node *par       = imgRepr->parent();
 
     //### Get some information for the new transform()
-    double x      = 0.0;
-    double y      = 0.0;
-    double width  = 0.0;
-    double height = 0.0;
-    double dval   = 0.0;
-
-    if (imgRepr->getAttributeDouble("x", &dval))
-        x = dval;
-    if (imgRepr->getAttributeDouble("y", &dval))
-        y = dval;
-
-    if (imgRepr->getAttributeDouble("width", &dval))
-        width = dval;
-    if (imgRepr->getAttributeDouble("height", &dval))
-        height = dval;
+    double x = imgRepr->getAttributeDouble("x", 0.0);
+    double y = imgRepr->getAttributeDouble("y", 0.0);
+    double width = imgRepr->getAttributeDouble("width", 0.0);
+    double height = imgRepr->getAttributeDouble("height", 0.0);
 
     double iwidth  = (double)pixbuf->get_width();
     double iheight = (double)pixbuf->get_height();

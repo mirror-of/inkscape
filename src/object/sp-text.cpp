@@ -1124,15 +1124,11 @@ Geom::OptRect SPText::get_frame()
         Inkscape::XML::Node* rectangle = get_first_rectangle();
 
         if (rectangle) {
-            double x = 0.0;
-            double y = 0.0;
-            double width = 0.0;
-            double height = 0.0;
-            rectangle->getAttributeDouble("x", &x);
-            rectangle->getAttributeDouble("y", &y);
-            rectangle->getAttributeDouble("width", &width);
-            rectangle->getAttributeDouble("height", &height);
-            frame = Geom::Rect::from_xywh( x, y, width, height);
+            double x = rectangle->getAttributeDouble("x", 0.0);
+            double y = rectangle->getAttributeDouble("y", 0.0);
+            double width = rectangle->getAttributeDouble("width", 0.0);
+            double height = rectangle->getAttributeDouble("height", 0.0);
+            frame = Geom::Rect::from_xywh(x, y, width, height);
             opt_frame = frame;
         }
     }

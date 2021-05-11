@@ -394,10 +394,8 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, const SPDocument *o
             // For round-tripping, xml:space (or 'white-space:pre') must be set.
             repr->setAttribute("xml:space", "preserve");
 
-            double text_x = 0.0;
-            double text_y = 0.0;
-            repr->getAttributeDouble("x", &text_x);
-            repr->getAttributeDouble("y", &text_y);
+            double text_x = repr->getAttributeDouble("x", 0.0);
+            double text_y = repr->getAttributeDouble("y", 0.0);
             // std::cout << "text_x: " << text_x << " text_y: " << text_y << std::endl;
 
             // Loop over all lines in layout.
