@@ -58,7 +58,7 @@ enum class NodeType
  * class used for interfacing with Inkscape's documents. Everything that has to be stored
  * in the SVG has to go through this class at some point.
  *
- * Each node unconditionally has to belong to a document. There no "documentless" nodes,
+ * Each node unconditionally has to belong to a document. There are no "documentless" nodes,
  * and it's not possible to move nodes between documents - they have to be duplicated.
  * Each node can only refer to the nodes in the same document. Name of the node is immutable,
  * it cannot be changed after its creation. Same goes for the type of the node. To simplify
