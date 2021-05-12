@@ -176,7 +176,7 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
         }
         else {
             // original code path when cursor scaling is turned off in preferences
-            auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw());
+            auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw(), true);
 
             if (pixbuf) {
                 cursor = Gdk::Cursor::create(display, pixbuf, hotspot_x, hotspot_y);
