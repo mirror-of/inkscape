@@ -203,12 +203,12 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::D);
 
     /* d is a required attribute */
-    char const *d = this->getAttribute("d", nullptr);
+    char const *d = this->getAttribute("d");
 
     if (d == nullptr) {
         // First see if calculating the path effect will generate "d":
         this->update_patheffect(true);
-        d = this->getAttribute("d", nullptr);
+        d = this->getAttribute("d");
 
         // I guess that didn't work, now we have nothing useful to write ("")
         if (d == nullptr) {

@@ -1407,26 +1407,18 @@ void SPObject::emitModified(unsigned int flags)
 #endif
 }
 
-gchar const *SPObject::getTagName(SPException *ex) const
+gchar const *SPObject::getTagName() const
 {
     g_assert(repr != nullptr);
-    /* If exception is not clear, return */
-    if (!SP_EXCEPTION_IS_OK(ex)) {
-        return nullptr;
-    }
 
     /// \todo fixme: Exception if object is NULL? */
     //XML Tree being used here.
     return getRepr()->name();
 }
 
-gchar const *SPObject::getAttribute(gchar const *key, SPException *ex) const
+gchar const *SPObject::getAttribute(gchar const *key) const
 {
     g_assert(this->repr != nullptr);
-    /* If exception is not clear, return */
-    if (!SP_EXCEPTION_IS_OK(ex)) {
-        return nullptr;
-    }
 
     /// \todo fixme: Exception if object is NULL? */
     //XML Tree being used here.
@@ -1434,11 +1426,9 @@ gchar const *SPObject::getAttribute(gchar const *key, SPException *ex) const
 }
 
 void SPObject::setAttribute(Inkscape::Util::const_char_ptr key,
-                            Inkscape::Util::const_char_ptr value, SPException *ex)
+                            Inkscape::Util::const_char_ptr value)
 {
     g_assert(this->repr != nullptr);
-    /* If exception is not clear, return */
-    g_return_if_fail(SP_EXCEPTION_IS_OK(ex));
 
     /// \todo fixme: Exception if object is NULL? */
     //XML Tree being used here.
@@ -1446,11 +1436,8 @@ void SPObject::setAttribute(Inkscape::Util::const_char_ptr key,
 }
 
 
-void SPObject::removeAttribute(gchar const *key, SPException *ex)
+void SPObject::removeAttribute(gchar const *key)
 {
-    /* If exception is not clear, return */
-    g_return_if_fail(SP_EXCEPTION_IS_OK(ex));
-
     /// \todo fixme: Exception if object is NULL? */
     //XML Tree being used here.
     getRepr()->removeAttribute(key);

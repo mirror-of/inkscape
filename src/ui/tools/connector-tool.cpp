@@ -892,9 +892,9 @@ void ConnectorTool::_flushWhite(SPCurve *c)
 
         bool connection = false;
         this->newconn->setAttribute( "inkscape:connector-type",
-                                   this->isOrthogonal ? "orthogonal" : "polyline", nullptr );
+                                   this->isOrthogonal ? "orthogonal" : "polyline");
         this->newconn->setAttribute( "inkscape:connector-curvature",
-                                   Glib::Ascii::dtostr(this->curvature).c_str(), nullptr );
+                                   Glib::Ascii::dtostr(this->curvature).c_str());
         if (this->shref) {
             connection = true;
             this->newconn->setAttribute( "inkscape:connection-start", this->shref);

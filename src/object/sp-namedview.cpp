@@ -1047,9 +1047,7 @@ void sp_namedview_show_grids(SPNamedView * namedview, bool show, bool dirty_docu
 
 gchar const *SPNamedView::getName() const
 {
-    SPException ex;
-    SP_EXCEPTION_INIT(&ex);
-    return this->getAttribute("id", &ex);
+    return this->getAttribute("id");
 }
 
 guint SPNamedView::getViewCount()
