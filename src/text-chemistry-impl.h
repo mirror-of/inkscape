@@ -33,6 +33,9 @@ text_refs_t text_categorize_refs(SPDocument *doc, InIter begin, InIter end, text
     std::set<Glib::ustring> int_ext;
     auto idVisitor = [doc, which, &res, &int_ext](const Glib::ustring &id) {
         auto ref_obj = doc->getObjectById(id);
+        if (!ref_obj) {
+            return;
+        }
         if (sp_repr_is_def(ref_obj->getRepr())) {
             if (which & TEXT_REF_DEF) {
                 res.emplace_back(id, TEXT_REF_DEF);

@@ -913,7 +913,11 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
                     reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_inside),
                     reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_subtract) }) {
                 for (auto const &shape_id : (text->style->*shape_prop_ptr).shape_ids) {
-                    auto shape_repr = text->document->getObjectById(shape_id)->getRepr();
+                    auto shape_obj = text->document->getObjectById(shape_id);
+                    if (!shape_obj) {
+                        continue;
+                    }
+                    auto shape_repr = shape_obj->getRepr();
                     if (sp_repr_is_def(shape_repr)) {
                         _copyIgnoreDup(shape_repr, _doc, _defs);
                     }
