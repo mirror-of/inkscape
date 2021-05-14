@@ -387,12 +387,13 @@ std::string sp_tweak_background_colors(std::string cssstring, double crossfade)
             cssstring = std::regex_replace(cssstring, re_background_color, sub);
         } else if (cssstring.find("background-image") != std::string::npos) {
             if (crossfade > 1) {
-                crossfade = std::clamp((int)((2 - crossfade) * 80), 0, 100);
-                sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image($2), image(@theme_bg_color));";
-            } else {
-                crossfade = std::clamp((int)((1 - crossfade) * 80), 0 , 100);
+                crossfade = std::clamp((int)((2 - crossfade) * 100), 0, 100);
                 sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image(@theme_bg_color), image($2));";
+            } else {
+                crossfade = std::clamp((int)((1-crossfade) * 100), 0 , 100);
+                sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image(@theme_fg_color), image($2));";
             }
+            
             cssstring = std::regex_replace(cssstring, re_background_image, sub);
         }
     } else {
@@ -434,12 +435,6 @@ void Application::add_gtk_css(bool only_providers)
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
             g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
-        } else {
-            Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
-            Glib::RefPtr<Gdk::Screen>  screen = display->get_default_screen();
-            Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_for_screen(screen);
-            Gtk::IconInfo iconinfo = icon_theme->lookup_icon("tool-pointer", 22, Gtk::ICON_LOOKUP_FORCE_SIZE);
-            prefs->setBool("/theme/symbolicIcons", iconinfo.is_symbolic());
         }
         bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
         g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, NULL);
@@ -464,7 +459,7 @@ void Application::add_gtk_css(bool only_providers)
     // we use contast only if is setup (!= 10)
     if (themecontrast < 10) {
         Glib::ustring css_contrast = "";
-        double contrast = (10 - themecontrast) / 40.0;
+        double contrast = (10 - themecontrast) / 30.0;
         double shade = 1 - contrast;
         const gchar *variant = nullptr;
         if (prefs->getBool("/theme/preferDarkTheme", false)) {
