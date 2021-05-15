@@ -461,13 +461,11 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
 Gtk::AccelKey
 Shortcuts::get_shortcut_from_verb(Verb *verb)
 {
-    for (auto const& it : shortcut_to_verb_map) {
-        if (it.second == verb) {
-            return primary[verb];
-        }
+    if (auto it = primary.find(verb); it != primary.end()) {
+        return it->second;
+    } else {
+        return Gtk::AccelKey();
     }
-
-    return (Gtk::AccelKey());
 }
 
 
