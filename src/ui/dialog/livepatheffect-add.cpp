@@ -24,6 +24,7 @@
 #include "object/sp-shape.h"
 #include "preferences.h"
 #include "ui/widget/canvas.h"
+#include "ui/themes.h"
 
 namespace Inkscape {
 namespace UI {
@@ -295,7 +296,7 @@ LivePathEffectAdd::LivePathEffectAdd()
             viewChanged(2);
     }
     Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(_LPEDialogSelector);
-    INKSCAPE.signal_change_theme.connect(sigc::bind(sigc::ptr_fun(sp_add_top_window_classes), widg));
+    INKSCAPE.themecontext->getChangeThemeSignal().connect(sigc::bind(sigc::ptr_fun(sp_add_top_window_classes), widg));
     sp_add_top_window_classes(widg);
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()

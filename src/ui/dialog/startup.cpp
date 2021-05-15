@@ -529,8 +529,8 @@ void
 StartScreen::refresh_theme(Glib::ustring theme_name)
 {
     auto const screen = Gdk::Screen::get_default();
-    if (INKSCAPE.contrastthemeprovider) {
-        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.contrastthemeprovider);
+    if (INKSCAPE.themecontext->getContrastThemeProvider()) {
+        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getContrastThemeProvider());
     }
     auto settings = Gtk::Settings::get_default();
 
@@ -548,24 +548,24 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
         get_style_context()->remove_class("symbolic");
     }
 
-    if (INKSCAPE.colorizeprovider) {
-        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+    if (INKSCAPE.themecontext->getColorizeProvider()) {
+        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider());
     }
     if (!prefs->getBool("/theme/symbolicDefaultHighColors", false)) {
         Gtk::CssProvider::create();
-        Glib::ustring css_str = INKSCAPE.get_symbolic_colors();
+        Glib::ustring css_str = INKSCAPE.themecontext->get_symbolic_colors();
         try {
-            INKSCAPE.colorizeprovider->load_from_data(css_str);
+            INKSCAPE.themecontext->getColorizeProvider()->load_from_data(css_str);
         } catch (const Gtk::CssProviderError &ex) {
             g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
         }
-        Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
+        Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider(),
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
     // set dark switch and disable if there is no prefer option for dark
     refresh_dark_switch();
 
-    INKSCAPE.signal_change_theme.emit();
+    INKSCAPE.themecontext->getChangeThemeSignal().emit();
 }
 
 /**
@@ -656,7 +656,7 @@ StartScreen::filter_themes()
     ThemeCols cols;
     // We need to disable themes which aren't available.
     auto store = Glib::wrap(GTK_LIST_STORE(gtk_combo_box_get_model(themes->gobj())));
-    auto available = get_available_themes();
+    auto available = INKSCAPE.themecontext->get_available_themes();
 
     // Detect use of custom theme here, detect defaults used in many systems.
     auto settings = Gtk::Settings::get_default();
@@ -747,11 +747,11 @@ void StartScreen::refresh_dark_switch()
     auto prefs = Inkscape::Preferences::get();
 
     Gtk::Container *window = dynamic_cast<Gtk::Container *>(get_toplevel());
-    bool dark = isCurrentThemeDark(window);
+    bool dark = INKSCAPE.themecontext->isCurrentThemeDark(window);
     prefs->setBool("/theme/preferDarkTheme", dark);
     prefs->setBool("/theme/darkTheme", dark);
 
-    auto themes = get_available_themes();
+    auto themes = INKSCAPE.themecontext->get_available_themes();
     Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
 
     Gtk::Switch *dark_toggle = nullptr;

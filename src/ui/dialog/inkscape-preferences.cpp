@@ -1128,8 +1128,8 @@ void InkscapePreferences::resetIconsColors(bool themechange)
     if (prefs->getBool("/theme/symbolicDefaultBaseColors", true) ||
         !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
         auto const screen = Gdk::Screen::get_default();
-        if (INKSCAPE.colorizeprovider) {
-            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+        if (INKSCAPE.themecontext->getColorizeProvider()) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider());
         }
         // This colors are setted on style.css of inkscape
         Gdk::RGBA base_color = _symbolic_base_color.get_style_context()->get_color();
@@ -1154,8 +1154,8 @@ void InkscapePreferences::resetIconsColors(bool themechange)
     }
     if (prefs->getBool("/theme/symbolicDefaultHighColors", true)) {
         auto const screen = Gdk::Screen::get_default();
-        if (INKSCAPE.colorizeprovider) {
-            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+        if (INKSCAPE.themecontext->getColorizeProvider()) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider());
         }
         Gdk::RGBA success_color = _symbolic_success_color.get_style_context()->get_color();
         Gdk::RGBA warning_color = _symbolic_warning_color.get_style_context()->get_color();
@@ -1202,20 +1202,20 @@ void InkscapePreferences::changeIconsColors()
     _symbolic_warning_color.setRgba32(colorsetwarning);
     _symbolic_error_color.setRgba32(colorseterror);
     auto const screen = Gdk::Screen::get_default();
-    if (INKSCAPE.colorizeprovider) {
-        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+    if (INKSCAPE.themecontext->getColorizeProvider()) {
+        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider());
     }
     Gtk::CssProvider::create();
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
-        css_str = INKSCAPE.get_symbolic_colors();
+        css_str = INKSCAPE.themecontext->get_symbolic_colors();
     }
     try {
-        INKSCAPE.colorizeprovider->load_from_data(css_str);
+        INKSCAPE.themecontext->getColorizeProvider()->load_from_data(css_str);
     } catch (const Gtk::CssProviderError &ex) {
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
-    Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
+    Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider(),
                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
@@ -1243,13 +1243,13 @@ void InkscapePreferences::toggleSymbolic()
             window->get_style_context()->remove_class("symbolic");
         }
         auto const screen = Gdk::Screen::get_default();
-        if (INKSCAPE.colorizeprovider) {
-            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+        if (INKSCAPE.themecontext->getColorizeProvider()) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider());
         }
         _symbolic_base_colors.set_sensitive(false);
         _symbolic_highlight_colors.set_sensitive(false);
     }
-    INKSCAPE.signal_change_theme.emit();
+    INKSCAPE.themecontext->getChangeThemeSignal().emit();
 }
 
 bool InkscapePreferences::contrastChange(GdkEventButton *button_event)
@@ -1269,17 +1269,22 @@ void InkscapePreferences::comboThemeChange()
         themeChange();
     }
 }
+void InkscapePreferences::contrastThemeChange()
+{
+    //we reset theming on combo change
+    themeChange(true);
+}
 
-void InkscapePreferences::themeChange()
+void InkscapePreferences::themeChange(bool contrastslider)
 {
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
         auto const screen = Gdk::Screen::get_default();
-        if (INKSCAPE.contrastthemeprovider) {
-            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.contrastthemeprovider);
+        if (INKSCAPE.themecontext->getContrastThemeProvider()) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getContrastThemeProvider());
         }
-        if (INKSCAPE.themeprovider) {
-            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themeprovider);
+        if (INKSCAPE.themecontext->getThemeProvider() ) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getThemeProvider() );
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
@@ -1292,7 +1297,7 @@ void InkscapePreferences::themeChange()
 
         auto settings = Gtk::Settings::get_default();
         settings->property_gtk_theme_name() = current_theme;
-        bool dark = isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
+        bool dark = INKSCAPE.themecontext->isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
         bool toggled = prefs->getBool("/theme/darkTheme", false) != dark;
         if (dark) {
             prefs->setBool("/theme/darkTheme", true);
@@ -1303,8 +1308,8 @@ void InkscapePreferences::themeChange()
             window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
         }
-        INKSCAPE.signal_change_theme.emit();
-        INKSCAPE.add_gtk_css(true);
+        INKSCAPE.themecontext->getChangeThemeSignal().emit();
+        INKSCAPE.themecontext->add_gtk_css(true, contrastslider);
         resetIconsColors(toggled);
     }
 }
@@ -1314,7 +1319,7 @@ void InkscapePreferences::preferDarkThemeChange()
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool dark = isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
+        bool dark = INKSCAPE.themecontext->isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
         bool toggled = prefs->getBool("/theme/darkTheme", false) != dark;
         if (dark) {
             prefs->setBool("/theme/darkTheme", true);
@@ -1325,8 +1330,8 @@ void InkscapePreferences::preferDarkThemeChange()
             window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
         }
-        INKSCAPE.signal_change_theme.emit();
-        INKSCAPE.add_gtk_css(true);
+        INKSCAPE.themecontext->getChangeThemeSignal().emit();
+        INKSCAPE.themecontext->add_gtk_css(true);
         // we avoid switched base colors
         if (!_symbolic_base_colors.get_active()) {
             prefs->setBool("/theme/symbolicDefaultBaseColors", true);
@@ -1616,7 +1621,7 @@ void InkscapePreferences::initPageUI()
     Glib::ustring default_theme = prefs->getString("/theme/defaultGtkTheme");
     Glib::ustring theme = "";
     {
-        dark_themes = get_available_themes();
+        dark_themes = INKSCAPE.themecontext->get_available_themes();
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
         std::map<Glib::ustring, bool>::iterator it = dark_themes.begin();
@@ -1650,8 +1655,8 @@ void InkscapePreferences::initPageUI()
     space->set_size_request(_sb_width / 3, -1);
     _page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
                          _("Make background brighter or darker to adjust contrast"), true, space);
-    _contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
-    _contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
+    _contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastThemeChange));
+    _contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastThemeChange));
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
 
     if (dark_themes[current_theme]) {

@@ -614,7 +614,7 @@ void SPDesktopWidget::on_realize()
     if (settings && window) {
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        bool dark = isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
+        bool dark = INKSCAPE.themecontext->isCurrentThemeDark(dynamic_cast<Gtk::Container *>(window));
         if (dark) {
             prefs->setBool("/theme/darkTheme", true);
             window->get_style_context()->add_class("dark");
@@ -631,7 +631,7 @@ void SPDesktopWidget::on_realize()
             window->get_style_context()->add_class("regular");
             window->get_style_context()->remove_class("symbolic");
         }
-        INKSCAPE.signal_change_theme.emit();
+        INKSCAPE.themecontext->getChangeThemeSignal().emit();
     }
 
 #ifdef GDK_WINDOWING_QUARTZ

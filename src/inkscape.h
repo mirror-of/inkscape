@@ -18,7 +18,6 @@
 #include "selection.h"
 #include <glib-object.h>
 #include <glib.h>
-#include <gtkmm/cssprovider.h>
 #include <map>
 #include <sigc++/signal.h>
 #include <vector>
@@ -31,6 +30,7 @@ namespace Inkscape {
 
 class Application;
 namespace UI {
+class ThemeContext;
 namespace Tools {
 
 class ToolBase;
@@ -107,14 +107,10 @@ public:
     Inkscape::UI::Tools::ToolBase * active_event_context();
     SPDocument * active_document();
     SPDesktop * active_desktop();
-    Glib::RefPtr<Gtk::CssProvider> styleprovider;
-    Glib::RefPtr<Gtk::CssProvider> themeprovider;
-    Glib::RefPtr<Gtk::CssProvider> contrastthemeprovider;
-    Glib::RefPtr<Gtk::CssProvider> colorizeprovider;
     // Use this function to get selection model etc for a document
     Inkscape::ActionContext action_context_for_document(SPDocument *doc);
     Inkscape::ActionContext active_action_context();
-    
+    Inkscape::UI::ThemeContext *themecontext = nullptr;
     bool sole_desktop_for_document(SPDesktop const &desktop);
     
     // Inkscape desktop stuff
@@ -135,7 +131,6 @@ public:
     void selection_changed (Inkscape::Selection * selection);
     void subselection_changed (SPDesktop *desktop);
     void selection_set (Inkscape::Selection * selection);
-    Glib::ustring get_symbolic_colors();
     void eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext);
     
     // Moved document add/remove functions into public inkscape.h as they are used
@@ -171,8 +166,7 @@ public:
     sigc::signal<void, SPDesktop *> signal_activate_desktop;
     // some desktop lost focus
     sigc::signal<void, SPDesktop *> signal_deactivate_desktop;
-    // user change theme
-    sigc::signal<void> signal_change_theme;
+    
     // these are orphaned signals (nothing emits them and nothing connects to them)
     sigc::signal<void, SPDocument *> signal_destroy_document;
     sigc::signal<void, SPColor *, double /*opacity*/> signal_color_set;
@@ -195,9 +189,6 @@ public:
     gint get_pdf_page() {
         return _pdf_page;
     }
-
-    void add_gtk_css(bool only_providers);
-    void add_icon_theme();
 
   private:
     static Inkscape::Application * _S_inst;
