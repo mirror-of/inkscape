@@ -82,6 +82,7 @@ Recommends:
  python3-lxml,
  python3-numpy,
  python3-scour,
+ python3-cssselect,
  adwaita-icon-theme-full
 Suggests:
  dia | dia-gnome,
