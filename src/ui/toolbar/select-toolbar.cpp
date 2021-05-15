@@ -276,47 +276,47 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
     SPDocument *document = desktop->getDocument();
 
     document->ensureUpToDate ();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     Geom::OptRect bbox_vis = selection->visualBounds();
     Geom::OptRect bbox_geom = selection->geometricBounds();
-
-    int prefs_bbox = prefs->getInt("/tools/bounding_box");
-    SPItem::BBoxType bbox_type = (prefs_bbox == 0)?
-        SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
-    Geom::OptRect bbox_user = selection->bounds(bbox_type);
+    Geom::OptRect bbox_user = selection->preferredBounds();
 
     if ( !bbox_user ) {
         _update = false;
         return;
     }
 
-    gdouble x0 = 0;
-    gdouble y0 = 0;
-    gdouble x1 = 0;
-    gdouble y1 = 0;
-    gdouble xrel = 0;
-    gdouble yrel = 0;
     Unit const *unit = _tracker->getActiveUnit();
     g_return_if_fail(unit != nullptr);
 
+    gdouble old_w = bbox_user->dimensions()[Geom::X];
+    gdouble old_h = bbox_user->dimensions()[Geom::Y];
+    gdouble new_w, new_h, new_x, new_y = 0;
+
     if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-        x0 = Quantity::convert(_adj_x->get_value(), unit, "px");
-        y0 = Quantity::convert(_adj_y->get_value(), unit, "px");
-        x1 = x0 + Quantity::convert(_adj_w->get_value(), unit, "px");
-        xrel = Quantity::convert(_adj_w->get_value(), unit, "px") / bbox_user->dimensions()[Geom::X];
-        y1 = y0 + Quantity::convert(_adj_h->get_value(), unit, "px");;
-        yrel = Quantity::convert(_adj_h->get_value(), unit, "px") / bbox_user->dimensions()[Geom::Y];
+        new_w = Quantity::convert(_adj_w->get_value(), unit, "px");
+        new_h = Quantity::convert(_adj_h->get_value(), unit, "px");
+        new_x = Quantity::convert(_adj_x->get_value(), unit, "px");
+        new_y = Quantity::convert(_adj_y->get_value(), unit, "px");
+
     } else {
-        double const x0_propn = _adj_x->get_value() / 100 / unit->factor;
-        x0 = bbox_user->min()[Geom::X] * x0_propn;
-        double const y0_propn = _adj_y->get_value() / 100 / unit->factor;
-        y0 = y0_propn * bbox_user->min()[Geom::Y];
-        xrel = _adj_w->get_value() / (100 / unit->factor);
-        x1 = x0 + xrel * bbox_user->dimensions()[Geom::X];
-        yrel = _adj_h->get_value() / (100 / unit->factor);
-        y1 = y0 + yrel * bbox_user->dimensions()[Geom::Y];
+        gdouble old_x = bbox_user->min()[Geom::X] + (old_w * selection->anchor_x);
+        gdouble old_y = bbox_user->min()[Geom::Y] + (old_h * selection->anchor_y);
+
+        new_x = old_x * (_adj_x->get_value() / 100 / unit->factor);
+        new_y = old_y * (_adj_y->get_value() / 100 / unit->factor);
+        new_w = old_w * (_adj_w->get_value() / 100 / unit->factor);
+        new_h = old_h * (_adj_h->get_value() / 100 / unit->factor);
     }
+
+    // Adjust depending on the selected anchor.
+    gdouble x0 = (new_x - (old_w * selection->anchor_x)) - ((new_w - old_w) * selection->anchor_x);
+    gdouble y0 = (new_y - (old_h * selection->anchor_y)) - ((new_h - old_h) * selection->anchor_y);
+
+    gdouble x1 = x0 + new_w;
+    gdouble xrel = new_w / old_w;
+    gdouble y1 = y0 + new_h;
+    gdouble yrel = new_h / old_h;
 
     // Keep proportions if lock is on
     if ( _lock_btn->get_active() ) {
@@ -356,11 +356,12 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
         // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed
         desktop->getCanvas()->forced_redraws_start(0);
 
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
         bool preserve = prefs->getBool("/options/preservetransform/value", false);
 
         Geom::Affine scaler;
-        if (bbox_type == SPItem::VISUAL_BBOX) {
+        if (prefs->getInt("/tools/bounding_box") == 0) { // SPItem::VISUAL_BBOX
             scaler = get_scale_transform_for_variable_stroke (*bbox_vis, *bbox_geom, transform_stroke, preserve, x0, y0, x1, y1);
         } else {
             // 1) We could have use the newer get_scale_transform_for_variable_stroke() here, but to avoid regressions
@@ -389,25 +390,18 @@ SelectToolbar::layout_widget_update(Inkscape::Selection *sel)
     }
 
     _update = true;
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     using Geom::X;
     using Geom::Y;
     if ( sel && !sel->isEmpty() ) {
-        int prefs_bbox = prefs->getInt("/tools/bounding_box", 0);
-        SPItem::BBoxType bbox_type = (prefs_bbox ==0)?
-            SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
-        Geom::OptRect const bbox(sel->bounds(bbox_type));
+        Geom::OptRect const bbox(sel->preferredBounds());
         if ( bbox ) {
             Unit const *unit = _tracker->getActiveUnit();
             g_return_if_fail(unit != nullptr);
 
-            struct { char const *key; double val; } const keyval[] = {
-                { "X", bbox->min()[X] },
-                { "Y", bbox->min()[Y] },
-                { "width", bbox->dimensions()[X] },
-                { "height", bbox->dimensions()[Y] }
-            };
+            auto width = bbox->dimensions()[X];
+            auto height = bbox->dimensions()[Y];
+            auto x = bbox->min()[X] + (width * sel->anchor_x);
+            auto y = bbox->min()[Y] + (height * sel->anchor_y);
 
             if (unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
                 double const val = unit->factor * 100;
@@ -415,15 +409,15 @@ SelectToolbar::layout_widget_update(Inkscape::Selection *sel)
                 _adj_y->set_value(val);
                 _adj_w->set_value(val);
                 _adj_h->set_value(val);
-                _tracker->setFullVal( _adj_x->gobj(), keyval[0].val );
-                _tracker->setFullVal( _adj_y->gobj(), keyval[1].val );
-                _tracker->setFullVal( _adj_w->gobj(), keyval[2].val );
-                _tracker->setFullVal( _adj_h->gobj(), keyval[3].val );
+                _tracker->setFullVal( _adj_x->gobj(), x );
+                _tracker->setFullVal( _adj_y->gobj(), y );
+                _tracker->setFullVal( _adj_w->gobj(), width );
+                _tracker->setFullVal( _adj_h->gobj(), height );
             } else {
-                _adj_x->set_value(Quantity::convert(keyval[0].val, "px", unit));
-                _adj_y->set_value(Quantity::convert(keyval[1].val, "px", unit));
-                _adj_w->set_value(Quantity::convert(keyval[2].val, "px", unit));
-                _adj_h->set_value(Quantity::convert(keyval[3].val, "px", unit));
+                _adj_x->set_value(Quantity::convert(x, "px", unit));
+                _adj_y->set_value(Quantity::convert(y, "px", unit));
+                _adj_w->set_value(Quantity::convert(width, "px", unit));
+                _adj_h->set_value(Quantity::convert(height, "px", unit));
             }
         }
     }

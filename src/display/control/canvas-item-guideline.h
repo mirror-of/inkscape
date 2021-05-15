@@ -55,6 +55,7 @@ public:
     void show() override;
     void set_label(Glib::ustring const & label);
     void set_locked(bool locked);
+    void set_inverted(bool inverted);
     void set_sensitive(bool sensitive) { _sensitive = sensitive; }
  
 protected:
@@ -62,6 +63,7 @@ protected:
     Geom::Point _normal = Geom::Point(0,1);
     Glib::ustring _label;
     bool _locked = true; // Flipped in constructor to trigger init of _origin_ctrl.
+    bool _inverted = false;
     bool _sensitive = false;
     Inkscape::CanvasItemCtrl *_origin_ctrl = nullptr; // To move guide line.
 

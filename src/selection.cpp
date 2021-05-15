@@ -44,7 +44,9 @@ Selection::Selection(LayerModel *layers, SPDesktop *desktop):
     _layers(layers),
     _selection_context(nullptr),
     _flags(0),
-    _idle(0)
+    _idle(0),
+    anchor_x(0.0),
+    anchor_y(0.0)
 {
 }
 

@@ -59,6 +59,7 @@ private:
     void _updateItemBboxes(Inkscape::Preferences *prefs);
     void _updateItemBboxes(int mode, int prefs_bbox);
     void _newItemBboxes();
+    void _newItemLines();
     void _newTextBaselines();
     void _boundingBoxPrefsChanged(int prefs_bbox);
 
@@ -68,6 +69,7 @@ private:
     sigc::connection _sel_modified_connection;
     std::vector<Inkscape::CanvasItem*> _item_bboxes;
     std::vector<Inkscape::CanvasItem*> _text_baselines;
+    std::vector<Inkscape::CanvasItem*> _item_lines;
 
     BoundingBoxPrefsObserver _bounding_box_prefs_observer;
 };

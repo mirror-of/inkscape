@@ -20,6 +20,7 @@
 
 #include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-rect.h"
+#include "display/control/canvas-item-guideline.h"
 
 #include "libnrtype/Layout-TNG.h"
 
@@ -68,6 +69,11 @@ Inkscape::SelCue::~SelCue()
         delete item;
     }
     _item_bboxes.clear();
+
+    for (auto & item : _item_lines) {
+        delete item;
+    }
+    _item_lines.clear();
 
     for (auto & item : _text_baselines) {
         delete item;
@@ -127,6 +133,7 @@ void Inkscape::SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
         }
     }
 
+    _newItemLines();
     _newTextBaselines();
 }
 
@@ -183,7 +190,35 @@ void Inkscape::SelCue::_newItemBboxes()
         }
     }
 
+    _newItemLines();
     _newTextBaselines();
+}
+
+/**
+ * Create any required visual-only guide lines related to the selection.
+ */
+void Inkscape::SelCue::_newItemLines()
+{
+    for (auto canvas_item : _item_lines) {
+        delete canvas_item;
+    }
+    _item_lines.clear();
+
+    auto bbox = _selection->preferredBounds();
+
+    // Show a set of lines where the anchor is.
+    if (_selection->has_anchor && bbox) {
+        auto anchor = Geom::Scale(_selection->anchor_x, _selection->anchor_y);
+        auto point = bbox->min() + (bbox->dimensions() * anchor);
+        for (bool horz : { false, true }) {
+            auto line = new Inkscape::CanvasItemGuideLine(_desktop->getCanvasGuides(), "", point, Geom::Point(!horz, horz));
+            line->set_z_position(0);
+            line->show();
+            line->set_stroke(0xddddaa11);
+            line->set_inverted(true);
+            _item_lines.emplace_back(line);
+        }
+    }
 }
 
 void Inkscape::SelCue::_newTextBaselines()

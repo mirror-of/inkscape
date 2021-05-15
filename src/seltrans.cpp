@@ -576,8 +576,10 @@ void Inkscape::SelTrans::_updateHandles()
     for (auto & knot : knots)
         knot->hide();
 
-    if ( !_show_handles || _empty )
+    if ( !_show_handles || _empty ) {
+        _desktop->selection->setAnchor(0.0, 0.0, false);
         return;
+    }
 
     if (!_center_is_set) {
         _center = _desktop->selection->center();
@@ -587,6 +589,7 @@ void Inkscape::SelTrans::_updateHandles()
     if ( _state == STATE_SCALE ) {
         _showHandles(HANDLE_STRETCH);
         _showHandles(HANDLE_SCALE);
+        _showHandles(HANDLE_CENTER);
     } else if(_state == STATE_ALIGN) {
        _showHandles(HANDLE_SIDE_ALIGN);
        _showHandles(HANDLE_CORNER_ALIGN);
@@ -596,6 +599,25 @@ void Inkscape::SelTrans::_updateHandles()
         _showHandles(HANDLE_ROTATE);
         _showHandles(HANDLE_CENTER);
     }
+
+    // Set anchor point, 0.0 is always set if nothing is selected (top/left).
+    bool set = false;
+    for (int i = 0; i < NUMHANDS; i++) {
+        if (knots[i]->is_selected()) {
+            double anchor_x, anchor_y = 0.0;
+            if (hands[i].type == HANDLE_CENTER) {
+                anchor_x = (_center->x() - _bbox->min()[Geom::X]) / _bbox->dimensions()[Geom::X];
+                anchor_y = (_center->y() - _bbox->min()[Geom::Y]) / _bbox->dimensions()[Geom::Y];
+            } else {
+                anchor_x = hands[i].x;
+                anchor_y = (hands[i].y - 0.5) * (-_desktop->yaxisdir()) + 0.5;
+            }
+            set = true;
+            _desktop->selection->setAnchor(anchor_x, anchor_y);
+        }
+    }
+    if (!set)
+        _desktop->selection->setAnchor(0.0, 0.0, false);
 }
 
 void Inkscape::SelTrans::_updateVolatileState()
@@ -676,7 +698,7 @@ void Inkscape::SelTrans::_makeHandles()
             }
             case HANDLE_CENTER:
             {
-                auto tip = Glib::ustring::compose(_("<b>Center</b> of rotation and skewing: drag to reposition; scaling with %1 also uses this center"), center_mod);
+                auto tip = Glib::ustring::compose(_("<b>Center</b> of transformation: drag to reposition; scaling, rotation and skew with %1 also uses this center"), center_mod);
                 knots[i] = new SPKnot(_desktop, tip.c_str(), CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER, "SelTrans");
                 break;
             }
@@ -701,8 +723,8 @@ void Inkscape::SelTrans::_makeHandles()
 
         knots[i]->setAnchor(hands[i].anchor);
         knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_XOR);
-        knots[i]->setFill(DEF_COLOR[0], DEF_COLOR[1], DEF_COLOR[1], DEF_COLOR[1]);
-        knots[i]->setStroke(DEF_COLOR[2], DEF_COLOR[3], DEF_COLOR[3], DEF_COLOR[3]);
+        knots[i]->setFill(DEF_COLOR[0], DEF_COLOR[1], DEF_COLOR[1], DEF_COLOR[2]);
+        knots[i]->setStroke(DEF_COLOR[3], DEF_COLOR[4], DEF_COLOR[4], DEF_COLOR[4]);
 
         knots[i]->updateCtrl();
 
@@ -750,7 +772,7 @@ static void sp_sel_trans_handle_click(SPKnot *knot, guint state, SPSelTransHandl
         );
 }
 
-void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHandle const &handle)
+void Inkscape::SelTrans::handleClick(SPKnot *knot, guint state, SPSelTransHandle const &handle)
 {
     switch (handle.type) {
         case HANDLE_CENTER:
@@ -766,6 +788,19 @@ void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHa
                 }
                 DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
                                    _("Reset center"));
+            }
+            // no break, continue.
+        case HANDLE_STRETCH:
+        case HANDLE_SCALE:
+            {
+                bool was_selected = knot->is_selected();
+                for (auto & child_knot : knots) {
+                    child_knot->selectKnot(false);
+                }
+                if (!was_selected) {
+                    knot->selectKnot(true);
+                }
+                _updateHandles();
             }
             break;
         case HANDLE_SIDE_ALIGN:

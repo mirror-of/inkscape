@@ -84,6 +84,18 @@ void CanvasItemGuideLine::set_normal(Geom::Point const &normal)
 }
 
 /**
+ * Sets the inverted nature of the line
+ */
+void CanvasItemGuideLine::set_inverted(bool inverted)
+{
+    if (_inverted != inverted) {
+        _inverted = inverted;
+        request_update();
+    }
+}
+
+
+/**
  * Returns distance between point in canvas units and nearest point on guideLine.
  */
 double CanvasItemGuideLine::closest_distance_to(Geom::Point const &p)
@@ -150,6 +162,11 @@ void CanvasItemGuideLine::render(Inkscape::CanvasItemBuffer *buf)
     buf->cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
                              SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
     buf->cr->set_line_width(1);
+
+    if (_inverted) {
+        // operator not available in cairo C++ bindings
+        cairo_set_operator(buf->cr->cobj(), CAIRO_OPERATOR_DIFFERENCE);
+    }
 
     if (!_label.empty()) {
         int px = std::round(origin.x());
