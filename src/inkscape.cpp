@@ -366,43 +366,27 @@ Glib::ustring Application::get_symbolic_colors()
     return css_str;
 }
 
-std::string sp_get_contrasted_color(std::string cssstring, std::string define, std::string define_b,
-                                    double contrast)
-{
-    std::smatch m;
-    std::regex e("@define-color " + define + " ([^;]*)");
-    std::regex_search(cssstring, m, e);
-    std::smatch n;
-    std::regex f("@define-color " + define_b + " ([^;]*)");
-    std::regex_search(cssstring, n, f);
-    std::string out = "";
-    if (m.size() >= 1 && n.size() >= 1) {
-        out = "@define-color " + define + " mix(" + m[1].str() + ", " + n[1].str() + ", " + Glib::ustring::format(contrast) + ");\n";
-    }
-    return out;
-}
-
-std::string sp_tweak_background_colors(std::string cssstring, double crossfade)
+std::string sp_tweak_background_colors(std::string cssstring, double crossfade, double contrast, bool dark)
 {
     static std::regex re_no_affect("(inherit|unset|initial|none|url)");
-    static std::regex re_background_color("background-color( ){0,3}:(.*?);");
-    static std::regex re_background_image("background-image( ){0,3}:(.*?\\)) *?;");
+    static std::regex re_color("background-color( ){0,3}:(.*?);");
+    static std::regex re_image("background-image( ){0,3}:(.*?\\)) *?;");
     std::string sub = "";
     std::smatch m;
     std::regex_search(cssstring, m, re_no_affect);
     if (m.size() == 0) {
         if (cssstring.find("background-color") != std::string::npos) {
             sub = "background-color:shade($2," + Glib::ustring::format(crossfade) + ");";
-            cssstring = std::regex_replace(cssstring, re_background_color, sub);
+            cssstring = std::regex_replace(cssstring, re_color, sub);
         } else if (cssstring.find("background-image") != std::string::npos) {
-            if (crossfade > 1) {
-                crossfade = std::clamp((int)((2 - crossfade) * 80), 0, 100);
-                sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image($2), image(@theme_bg_color));";
+            if (dark) {
+                contrast = std::clamp((int)((contrast) * 27), 0, 100);
+                sub = "background-image:cross-fade(" + Glib::ustring::format(contrast) + "% image(rgb(255,255,255)), image($2));";
             } else {
-                crossfade = std::clamp((int)((1 - crossfade) * 80), 0 , 100);
-                sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image(@theme_bg_color), image($2));";
+                contrast = std::clamp((int)((contrast) * 90), 0 , 100);
+                sub = "background-image:cross-fade(" + Glib::ustring::format(contrast) + "% image(rgb(0,0,0)), image($2));";
             }
-            cssstring = std::regex_replace(cssstring, re_background_image, sub);
+            cssstring = std::regex_replace(cssstring, re_image, sub);
         }
     } else {
         cssstring = "";
@@ -443,12 +427,6 @@ void Application::add_gtk_css(bool only_providers)
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
             g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
-        } else {
-            Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
-            Glib::RefPtr<Gdk::Screen>  screen = display->get_default_screen();
-            Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_for_screen(screen);
-            Gtk::IconInfo iconinfo = icon_theme->lookup_icon("tool-pointer", 22, Gtk::ICON_LOOKUP_FORCE_SIZE);
-            prefs->setBool("/theme/symbolicIcons", iconinfo.is_symbolic());
         }
         bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
         g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, NULL);
@@ -473,13 +451,14 @@ void Application::add_gtk_css(bool only_providers)
     // we use contast only if is setup (!= 10)
     if (themecontrast < 10) {
         Glib::ustring css_contrast = "";
-        double contrast = (10 - themecontrast) / 40.0;
+        double contrast = (10 - themecontrast) / 30.0;
         double shade = 1 - contrast;
         const gchar *variant = nullptr;
         if (prefs->getBool("/theme/preferDarkTheme", false)) {
             variant = "dark";
         }
-        if (prefs->getBool("/theme/darkTheme", false)) {
+        bool dark = prefs->getBool("/theme/darkTheme", false);
+        if (dark) {
             contrast *= 2.5;
             shade = 1 + contrast;
         }
@@ -489,17 +468,11 @@ void Application::add_gtk_css(bool only_providers)
         std::string cssstring = gtk_css_provider_to_string(currentthemeprovider);
         if (contrast) {
             std::string cssdefined = ""; 
-            std::string appenddefined = ""; 
-            std::string colorsdefined = "";
             // we do this way to fix issue Inkscape#2345
             // windows seem crash if text length > 2000;
             std::istringstream f(cssstring);
             std::string line;    
             while (std::getline(f, line)) {
-                if (line.find("@define-color") != std::string::npos) {
-                    colorsdefined += line;
-                    colorsdefined += "\n";
-                }
                 // here we ignore most of class to parse because is in additive mode
                 // so stiles not applyed are set on previous context style
                 if (line.find(";") != std::string::npos &&
@@ -508,13 +481,10 @@ void Application::add_gtk_css(bool only_providers)
                 {
                     continue;
                 }
-                cssdefined += sp_tweak_background_colors(line, shade);
+                cssdefined += sp_tweak_background_colors(line, shade, contrast, dark);
                 cssdefined += "\n";
             }
-            appenddefined  = sp_get_contrasted_color(colorsdefined, "theme_bg_color", "theme_fg_color", contrast);
-            appenddefined += sp_get_contrasted_color(colorsdefined, "theme_base_color", "theme_text_color", contrast);
-            appenddefined += sp_get_contrasted_color(colorsdefined, "theme_selected_bg_color", "theme_selected_fg_color", contrast);
-            cssstring = cssdefined + appenddefined;
+            cssstring = cssdefined;
         }
         if (!cssstring.empty()) {
             // Use c format allow parse with errors or warnings

@@ -663,6 +663,7 @@ protected:
 private:
   Gtk::TreeModel::iterator searchRows(char const* srch, Gtk::TreeModel::iterator& iter, Gtk::TreeModel::Children list_model_childern);
   void themeChange();
+  void comboThemeChange();
   void preferDarkThemeChange();
   bool contrastChange(GdkEventButton* button_event);
   void symbolicThemeCheck();
