@@ -190,28 +190,6 @@ DialogBase *DialogContainer::dialog_factory(unsigned int code)
         case SP_VERB_VIEW_ICON_PREVIEW:
             return &Inkscape::UI::Dialog::IconPreviewPanel::getInstance();
         case SP_VERB_DIALOG_PREFERENCES:
-        case SP_VERB_CONTEXT_SELECT_PREFS:
-        case SP_VERB_CONTEXT_NODE_PREFS:
-        case SP_VERB_CONTEXT_TWEAK_PREFS:
-        case SP_VERB_CONTEXT_SPRAY_PREFS:
-        case SP_VERB_CONTEXT_RECT_PREFS:
-        case SP_VERB_CONTEXT_3DBOX_PREFS:
-        case SP_VERB_CONTEXT_ARC_PREFS:
-        case SP_VERB_CONTEXT_STAR_PREFS:
-        case SP_VERB_CONTEXT_SPIRAL_PREFS:
-        case SP_VERB_CONTEXT_PENCIL_PREFS:
-        case SP_VERB_CONTEXT_PEN_PREFS:
-        case SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS:
-        case SP_VERB_CONTEXT_TEXT_PREFS:
-        case SP_VERB_CONTEXT_GRADIENT_PREFS:
-        case SP_VERB_CONTEXT_MESH_PREFS:
-        case SP_VERB_CONTEXT_ZOOM_PREFS:
-        case SP_VERB_CONTEXT_MEASURE_PREFS:
-        case SP_VERB_CONTEXT_DROPPER_PREFS:
-        case SP_VERB_CONTEXT_CONNECTOR_PREFS:
-        case SP_VERB_CONTEXT_PAINTBUCKET_PREFS:
-        case SP_VERB_CONTEXT_ERASER_PREFS:
-        case SP_VERB_CONTEXT_LPETOOL_PREFS:
             return &Inkscape::UI::Dialog::InkscapePreferences::getInstance();
         default:
             return nullptr;

@@ -230,9 +230,6 @@ static struct {
 
 static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* desktop );
 
-static void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
-static void update_tool_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
-
 static void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
 
@@ -393,7 +390,35 @@ GtkWidget *ToolboxFactory::createToolToolbox()
     gtk_widget_set_name(tb, "ToolToolbox");
     gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 
-    return toolboxNewCommon( tb, BAR_TOOL, GTK_POS_TOP );
+    Glib::ustring tool_toolbar_builder_file = get_filename(UIS, "toolbar-tool.ui");
+    auto builder = Gtk::Builder::create();
+    try
+    {
+        builder->add_from_file(tool_toolbar_builder_file);
+    }
+    catch (const Glib::Error& ex)
+    {
+        std::cerr << "ToolboxFactor::createToolToolbox: " << tool_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
+    }
+
+    Gtk::Toolbar* toolbar = nullptr;
+    builder->get_widget("tool-toolbar", toolbar);
+    if (!toolbar) {
+        std::cerr << "InkscapeWindow: Failed to load tool toolbar!" << std::endl;
+    } else {
+        gtk_box_pack_start(GTK_BOX(tb), GTK_WIDGET(toolbar->gobj()), false, false, 0);
+
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if ( prefs->getBool("/toolbox/icononly", true) ) {
+            toolbar->set_toolbar_style( Gtk::TOOLBAR_ICONS );
+        }
+
+        // TODO: Change preference path!
+        GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small", 1);
+        toolbar->set_icon_size (static_cast<Gtk::IconSize>(toolboxSize));
+    }
+
+    return toolboxNewCommon( tb, BAR_TOOL, GTK_POS_LEFT );
 }
 
 GtkWidget *ToolboxFactory::createAuxToolbox()
@@ -466,8 +491,8 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
 
     switch (id) {
         case BAR_TOOL:
-            setup_func = setup_tool_toolbox;
-            update_func = update_tool_toolbox;
+            setup_func = nullptr; // setup_tool_toolbox;
+            update_func = nullptr; // update_tool_toolbox;
             break;
 
         case BAR_AUX:
@@ -630,30 +655,6 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
             } else if (GTK_IS_TOOLBAR(child)) {
                 GtkToolbar* toolbar = GTK_TOOLBAR(child);
                 gtk_orientable_set_orientation( GTK_ORIENTABLE(toolbar), orientation );
-            }
-        }
-    }
-}
-
-void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
-{
-    setupToolboxCommon(toolbox, desktop, "toolbar-tool.ui", "/ui/ToolToolbar", "/toolbox/tools/small");
-}
-
-void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget * /*toolbox*/ )
-{
-    gchar const *const tname = ( eventcontext
-                                 ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
-                                 : nullptr );
-    Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
-
-    for (int i = 0 ; tools[i].type_name ; i++ ) {
-        Glib::RefPtr<Gtk::Action> act = mainActions->get_action( Inkscape::Verb::get(tools[i].verb)->get_id() );
-        if ( act ) {
-            bool setActive = tname && !strcmp(tname, tools[i].type_name);
-            Glib::RefPtr<VerbAction> verbAct = Glib::RefPtr<VerbAction>::cast_dynamic(act);
-            if ( verbAct ) {
-                verbAct->set_active(setActive);
             }
         }
     }

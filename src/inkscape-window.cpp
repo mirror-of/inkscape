@@ -24,6 +24,7 @@
 
 #include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-transform.h"
+#include "actions/actions-tools.h"
 
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
@@ -90,6 +91,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // After canvas has been constructed.. move to canvas proper.
     add_actions_canvas_transform(this);    // Actions to transform canvas view.
     add_actions_canvas_mode(this);         // Actions to change canvas display mode.
+    add_actions_tools(this);               // Actions to switch between tools.
 
     // ========== Drag and Drop of Documents =========
     ink_drag_setup(_desktop_widget);

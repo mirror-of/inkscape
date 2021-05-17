@@ -221,6 +221,8 @@ set(inkscape_SRC
   actions/actions-output.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
+  actions/actions-tools.h
+  actions/actions-tools.cpp
   actions/actions-transform.h
   actions/actions-transform.cpp
   actions/actions-window.h

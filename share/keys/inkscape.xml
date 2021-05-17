@@ -69,107 +69,7 @@ override) the bindings in the main default.xml.
 
   <bind key="q" modifiers="Primary" action="FileQuit" display="true" />
 
-<!-- Tools -->
-
-  <bind key="F1" action="ToolSelector" />
-  <bind key="s" action="ToolSelector" display="true" />
-
-  <bind action="SelectPrefs" />
-
-  <bind key="F2" action="ToolNode" />
-  <bind key="n" action="ToolNode" display="true" />
-
-  <bind action="NodePrefs" />
-
-  <bind key="F2" modifiers="Shift" action="ToolTweak" />
-  <bind key="w" action="ToolTweak" display="true" />
-
-  <bind action="TweakPrefs" />
-
-  <bind key="F3" action="ToolZoom" />
-  <bind key="z" action="ToolZoom" display="true" />
-
-  <bind action="ZoomPrefs" />
-
-  <bind key="F4" action="ToolRect" />
-  <bind key="r" action="ToolRect" display="true" />
-
-  <bind action="RectPrefs" />
-
-  <bind key="F4" modifiers="Shift" action="Tool3DBox" />
-  <bind key="x" action="Tool3DBox" display="true" />
-
-  <bind action="3DBoxPrefs" />
-
-  <bind key="F5" action="ToolArc" />
-  <bind key="e" action="ToolArc" display="true" />
-
-  <bind action="ArcPrefs" />
-
-  <bind key="m" action="ToolMeasure" display="true" />
-
-  <bind action="MeasurePrefs" />
-
-  <bind key="F9" modifiers="Shift" action="ToolStar" />
-  <bind key="asterisk" modifiers="Shift" action="ToolStar" />
-  <bind key="asterisk" action="ToolStar" />
-  <bind key="KP_Multiply" action="ToolStar" display="true" />
-
-  <bind action="StarPrefs" />
-
-  <bind key="F9" action="ToolSpiral" />
-  <bind key="i" action="ToolSpiral" display="true" />
-
-  <bind action="SpiralPrefs" />
-
-  <bind key="F6" action="ToolPencil" />
-  <bind key="p" action="ToolPencil" display="true" />
-
-  <bind action="PencilPrefs" />
-
-  <bind key="F6" modifiers="Shift" action="ToolPen" />
-  <bind key="b" action="ToolPen" display="true" />
-
-  <bind action="PenPrefs" />
-
-  <bind key="F6" modifiers="Primary" action="ToolCalligraphic" />
-  <bind key="c" action="ToolCalligraphic" display="true" />
-
-  <bind action="CalligraphicPrefs" />
-
-  <bind key="e" modifiers="Shift" action="ToolEraser" display="true" />
-
-  <bind action="EraserPrefs" />
-
-  <bind key="F7" modifiers="Shift" action="ToolPaintBucket" />
-  <bind key="u" action="ToolPaintBucket" display="true" />
-
-  <bind action="PaintBucketPrefs" />
-
-  <bind key="F8" action="ToolText" />
-  <bind key="t" action="ToolText" display="true" />
-
-  <bind action="TextPrefs" />
-
-  <bind key="F1" modifiers="Primary" action="ToolGradient" />
-  <bind key="g" action="ToolGradient" display="true" />
-
-  <bind action="GradientPrefs" />
-
-  <bind key="F2" modifiers="Primary" action="ToolConnector" />
-  <bind key="o" action="ToolConnector" display="true" />
-
-  <bind action="ConnectorPrefs" />
-
-  <bind key="F7" action="ToolDropper" />
-  <bind key="d" action="ToolDropper" display="true" />
-
-  <bind action="DropperPrefs" />
-
-  <bind key="F3" modifiers="Shift" action="ToolSpray" />
-  <bind key="a" action="ToolSpray" display="true" />
-
-  <bind action="SprayPrefs" />
+<!-- Tools: See actions below -->
 
 <!-- Zoom: See actions below -->
 
@@ -584,8 +484,39 @@ override) the bindings in the main default.xml.
   <!-- Snapping -->
   <bind gaction="doc.snap-global-toggle"           keys="percent"/>
 
+  <!-- Tools -->
+  <bind gaction="win.tool-switch('Select')"        keys="s,   F1"/>
+  <bind gaction="win.tool-switch('Node')"          keys="n,   F2"/>
+
+  <bind gaction="win.tool-switch('Rect')"          keys="r,   F4"/>
+  <bind gaction="win.tool-switch('Arc')"           keys="e,   F5"/>
+  <bind gaction="win.tool-switch('Star')"          keys="asterisk, &lt;shift&gt;F9, KP_Multiply"/>
+  <bind gaction="win.tool-switch('3DBox')"         keys="x,   &lt;shift&gt;F4"/>
+  <bind gaction="win.tool-switch('Spiral')"        keys="i,   F9"/>
+
+  <bind gaction="win.tool-switch('Pencil')"        keys="p,   F6"/>
+  <bind gaction="win.tool-switch('Pen')"           keys="b,   &lt;shift&gt;F6"/>
+  <bind gaction="win.tool-switch('Caligraphic')"   keys="c,   &lt;primary&gt;F6"/>
+  <bind gaction="win.tool-switch('Text')"          keys="t,   F8"/>
+
+  <bind gaction="win.tool-switch('Gradient')"      keys="g,   &lt;primary&gt;F1"/>
+  <bind gaction="win.tool-switch('Mesh')"          keys=""/>
+  <bind gaction="win.tool-switch('Dropper')"       keys="d,   F7"/>
+  <bind gaction="win.tool-switch('PaintBucket')"   keys="u,   &lt;shift&gt;F7"/>
+
+  <bind gaction="win.tool-switch('Tweak')"         keys="w,   &lt;shift&gt;F2"/>
+  <bind gaction="win.tool-switch('Spray')"         keys="a,   &lt;shift&gt;F3"/>
+  <bind gaction="win.tool-switch('Eraser')"        keys="     &lt;primary&gt;e"/>
+  <bind gaction="win.tool-switch('Connector')"     keys="o,   &lt;primary&gt;F2"/>
+  <bind gaction="win.tool-switch('LPETool')"       keys=""/>
+
+  <bind gaction="win.tool-switch('Zoom')"          keys="z,   F3"/>
+  <bind gaction="win.tool-switch('Measure')"       keys="m"/>
+
+  <bind gaction="win.tool-toggle"                  keys="space"/>
+
   <!-- Canvas Transform -->
-  <bind gaction="win.canvas-zoom-in"               keys="plus,  equal,       KP_Add" />
+  <bind gaction="win.canvas-zoom-in"               keys="plus,  equal,       KP_Add"      />
   <bind gaction="win.canvas-zoom-out"              keys="minus, underscore,  KP_Subtract" />
   <bind gaction="win.canvas-zoom-1-1"              keys="1,                  KP_1"/>
   <bind gaction="win.canvas-zoom-1-2"              keys="2,                  KP_2"/>

@@ -49,6 +49,8 @@
 #include "text-chemistry.h"
 #include "verbs.h"
 
+#include "actions/actions-tools.h" // Switching tools
+
 #include "display/cairo-utils.h"
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -101,7 +103,6 @@
 #include "ui/clipboard.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/connector-tool.h"
 #include "ui/tools/dropper-tool.h"
 #include "ui/tools/gradient-tool.h"
@@ -177,7 +178,7 @@ void SelectionHelper::selectNone(SPDesktop *dt)
         dt->getSelection()->clear();
     } else {
         // If nothing selected switch to selection tool
-        tools_switch(dt, TOOLS_SELECT);
+        set_active_tool(dt, "Select");
     }
 }
 
@@ -421,7 +422,7 @@ void ObjectSet::deleteItems()
          * associated selection context.  For example: deleting an object
          * while moving it around the canvas.
          */
-        tools_switch( d, tools_active( d ) );
+        set_active_tool (d, get_active_tool(d));
     }
 
     if(document()) {
@@ -1400,7 +1401,7 @@ void ObjectSet::removeFilter()
         // Refreshing the current tool (by switching to same tool)
         // will refresh tool's private information in it's selection context that
         // depends on desktop items.
-        tools_switch(d, tools_active(d));
+        set_active_tool (d, get_active_tool(d));
     }
     if(document())
         DocumentUndo::done(document(), SP_VERB_EDIT_REMOVE_FILTER,

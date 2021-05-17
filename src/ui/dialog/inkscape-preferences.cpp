@@ -331,7 +331,7 @@ InkscapePreferences::InkscapePreferences()
     initPageRendering();
     initPageSpellcheck();
 
-    signal_map().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
+    signal_map().connect(sigc::mem_fun(*this, &InkscapePreferences::showPage));
 
     //calculate the size request for this dialog
     _page_list.expand_all();
@@ -3486,7 +3486,8 @@ bool InkscapePreferences::GetSizeRequest(const Gtk::TreeModel::iterator& iter)
     return false;
 }
 
-bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
+// Check if iter points to page indicated in preferences.
+bool InkscapePreferences::matchPage(const Gtk::TreeModel::iterator& iter)
 {
     Gtk::TreeModel::Row row = *iter;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -3577,10 +3578,11 @@ void InkscapePreferences::on_pagelist_selection_changed()
     }
 }
 
-void InkscapePreferences::_presentPages()
+// Show page indicated in preferences file.
+void InkscapePreferences::showPage()
 {
     _search.set_text("");
-    _page_list.get_model()->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::PresentPage));
+    _page_list.get_model()->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::matchPage));
 }
 
 } // namespace Dialog

@@ -112,6 +112,7 @@ public:
     ~InkscapePreferences() override;
 
     static InkscapePreferences &getInstance() { return *new InkscapePreferences(); }
+    void showPage(); // Show page indicated by "/dialogs/preferences/page".
 
 protected:
     Gtk::Frame _page_frame;
@@ -601,7 +602,7 @@ protected:
     Gtk::TreeModel::iterator AddPage(UI::Widget::DialogPage& p, Glib::ustring title, Gtk::TreeModel::iterator parent, int id);
     Gtk::TreePath get_next_result(Gtk::TreeIter& iter, bool check_children = true);
     Gtk::TreePath get_prev_result(Gtk::TreeIter& iter, bool iterate = true);
-    bool PresentPage(const Gtk::TreeModel::iterator& iter);
+    bool matchPage(const Gtk::TreeModel::iterator& iter);
 
     static void AddSelcueCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddGradientCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
@@ -640,8 +641,6 @@ protected:
     void initPageSystem();
     void initPageI18n(); // Do we still need it?
     void initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui);
-
-    void _presentPages();
 
     /*
      * Functions for the Keyboard shortcut editor panel

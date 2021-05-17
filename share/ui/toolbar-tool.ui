@@ -1,49 +1,268 @@
-<ui>
-  <toolbar name='ToolToolbar'>
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <!-- Select and Edit -->
-    <toolitem action='ToolSelector' />
-    <toolitem action='ToolNode' />
+<interface>
+  <requires lib="gtk+" version="3.22"/>
 
-<separator />
+  <!-- Toolbox Toolbar -->
 
-    <!-- Create predefined shapes -->
-    <toolitem action='ToolRect' />
-    <toolitem action='ToolArc' />
-    <toolitem action='ToolStar' />
-    <toolitem action='Tool3DBox' />
-    <toolitem action='ToolSpiral' />
+  <object class="GtkToolbar" id="tool-toolbar">
+    <property name="visible">True</property>
 
-<separator />
+    <child>
+      <object class="GtkRadioToolButton" id="ToolGroup">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Select'</property>
+        <property name="icon_name">tool-pointer</property>
+        <property name="label" translatable="true">Select</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Node'</property>
+        <property name="icon_name">tool-node-editor</property>
+        <property name="label" translatable="true">Node</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
 
-    <!-- Create new paths and text -->
-    <toolitem action='ToolPen' />
-    <toolitem action='ToolPencil' />
-    <toolitem action='ToolCalligraphic' />
-    <toolitem action='ToolText' />
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+    </child>
 
-<separator />
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Rect'</property>
+        <property name="icon_name">draw-rectangle</property>
+        <property name="label" translatable="true">Rectangle</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Arc'</property>
+        <property name="icon_name">draw-ellipse</property>
+        <property name="label" translatable="true">Circle/Arc</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Star'</property>
+        <property name="icon_name">draw-polygon-star</property>
+        <property name="label" translatable="true">Star/Polygon</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'3DBox'</property>
+        <property name="icon_name">draw-cuboid</property>
+        <property name="label" translatable="true">3D Box</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Spiral'</property>
+        <property name="icon_name">draw-spiral</property>
+        <property name="label" translatable="true">Spiral</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
 
-    <!-- Edit color of objects -->
-    <toolitem action='ToolGradient' />
-    <toolitem action='ToolMesh' />
-    <toolitem action='ToolDropper' />
-    <toolitem action='ToolPaintBucket' />
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+    </child>
 
-<separator />
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Pen'</property>
+        <property name="icon_name">draw-path</property>
+        <property name="label" translatable="true">Pen</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Pencil'</property>
+        <property name="icon_name">draw-freehand</property>
+        <property name="label" translatable="true">Pencil</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Calligraphic'</property>
+        <property name="icon_name">draw-calligraphic</property>
+        <property name="label" translatable="true">Calligraphic</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Text'</property>
+        <property name="icon_name">draw-text</property>
+        <property name="label" translatable="true">Text</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
 
-    <!-- Other tools to edit objects -->
-    <toolitem action='ToolTweak' />
-    <toolitem action='ToolSpray' />
-    <toolitem action='ToolEraser' />
-    <toolitem action='ToolConnector' />
-    <toolitem action='ToolLPETool' />
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+    </child>
 
-<separator />
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Gradient'</property>
+        <property name="icon_name">color-gradient</property>
+        <property name="label" translatable="true">Gradient</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Mesh'</property>
+        <property name="icon_name">mesh-gradient</property>
+        <property name="label" translatable="true">Mesh</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Dropper'</property>
+        <property name="icon_name">color-picker</property>
+        <property name="label" translatable="true">Dropper</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'PaintBucket'</property>
+        <property name="icon_name">color-fill</property>
+        <property name="label" translatable="true">Paint Bucket</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
 
-    <!-- Other tools that do not modify objects -->
-    <toolitem action='ToolZoom' />
-    <toolitem action='ToolMeasure' />
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+    </child>
 
-  </toolbar>
-</ui>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Tweak'</property>
+        <property name="icon_name">tool-tweak</property>
+        <property name="label" translatable="true">Tweak</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Spray'</property>
+        <property name="icon_name">tool-spray</property>
+        <property name="label" translatable="true">Spray</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Eraser'</property>
+        <property name="icon_name">draw-eraser</property>
+        <property name="label" translatable="true">Eraser</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Connector'</property>
+        <property name="icon_name">draw-connector</property>
+        <property name="label" translatable="true">Connector</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'LPETool'</property>
+        <property name="icon_name">draw-geometry</property>
+        <property name="label" translatable="true">LPE Tool</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+
+
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Zoom'</property>
+        <property name="icon_name">zoom</property>
+        <property name="label" translatable="true">Zoom</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">win.tool-switch</property>
+        <property name="action_target">'Measure'</property>
+        <property name="icon_name">tool-measure</property>
+        <property name="label" translatable="true">Measure</property>
+        <property name="group">ToolGroup</property>
+      </object>
+    </child>
+  </object>
+
+</interface>
