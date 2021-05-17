@@ -343,7 +343,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_tools =
 
     {"win.tool-switch('Pen')",          N_("Tool: Pen"),          "Tool Switch",   N_("Draw Bezier curves and straight lines.")         },
     {"win.tool-switch('Pencil')",       N_("Tool: Pencil"),       "Tool Switch",   N_("Draw freehand lines.")                           },
-    {"win.tool-switch('Caligraphic')",  N_("Tool: Caligraphy"),   "Tool Switch",   N_("Draw calligraphic or brush strokes.")            },
+    {"win.tool-switch('Calligraphic')", N_("Tool: Calligraphy"),  "Tool Switch",   N_("Draw calligraphic or brush strokes.")            },
     {"win.tool-switch('Text')",         N_("Tool: Text"),         "Tool Switch",   N_("Create and edit text objects.")                  },
 
     {"win.tool-switch('Gradient')",     N_("Tool: Gradient"),     "Tool Switch",   N_("Create and edit gradients.")                     },

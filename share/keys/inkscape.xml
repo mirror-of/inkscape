@@ -496,7 +496,7 @@ override) the bindings in the main default.xml.
 
   <bind gaction="win.tool-switch('Pencil')"        keys="p,   F6"/>
   <bind gaction="win.tool-switch('Pen')"           keys="b,   &lt;shift&gt;F6"/>
-  <bind gaction="win.tool-switch('Caligraphic')"   keys="c,   &lt;primary&gt;F6"/>
+  <bind gaction="win.tool-switch('Calligraphic')"  keys="c,   &lt;primary&gt;F6"/>
   <bind gaction="win.tool-switch('Text')"          keys="t,   F8"/>
 
   <bind gaction="win.tool-switch('Gradient')"      keys="g,   &lt;primary&gt;F1"/>
@@ -506,7 +506,7 @@ override) the bindings in the main default.xml.
 
   <bind gaction="win.tool-switch('Tweak')"         keys="w,   &lt;shift&gt;F2"/>
   <bind gaction="win.tool-switch('Spray')"         keys="a,   &lt;shift&gt;F3"/>
-  <bind gaction="win.tool-switch('Eraser')"        keys="     &lt;primary&gt;e"/>
+  <bind gaction="win.tool-switch('Eraser')"        keys="     &lt;shift&gt;e"/>
   <bind gaction="win.tool-switch('Connector')"     keys="o,   &lt;primary&gt;F2"/>
   <bind gaction="win.tool-switch('LPETool')"       keys=""/>
 

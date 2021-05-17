@@ -296,7 +296,12 @@ Shortcuts::_read(XML::Node const &keysnode, bool user_set)
         gchar const *keys    = iter->attribute("keys");
         if (gaction && keys) {
 
-            std::vector<Glib::ustring> key_vector = Glib::Regex::split_simple("\\s*,\\s*", keys);
+            // Trim leading spaces
+            Glib::ustring Keys = keys;
+            auto p = Keys.find_first_not_of(" ");
+            Keys = Keys.erase(0, p);
+
+            std::vector<Glib::ustring> key_vector = Glib::Regex::split_simple("\\s*,\\s*", Keys);
             // Set one shortcut at a time so we can check if it has been previously used.
             for (auto key : key_vector) {
                 add_shortcut(gaction, key, user_set);
