@@ -7634,7 +7634,7 @@ msgstr "niewygładzony"
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:166
 msgid "Replace PDF fonts by closest-named installed fonts"
 msgstr ""
-"Zastąp czcionki PDF najbliższym odpowiednikiem z pośród zainstalowanych czcionek"
+"Zastąp czcionki PDF najbliższym odpowiednikiem spośród zainstalowanych czcionek"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:168
 msgid "Embed images"
