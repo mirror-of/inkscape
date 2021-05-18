@@ -39,7 +39,7 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
 
     // Font family
     family_treecolumn.pack_start (family_cell, false);
-    family_treecolumn.set_fixed_width (200);
+    family_treecolumn.set_fixed_width (120); // limit minimal width to keep entire dialog narrow; column can still grow
     family_treecolumn.add_attribute (family_cell, "text", 0);
     family_treecolumn.set_cell_data_func (family_cell, &font_lister_cell_data_func);
 
@@ -79,6 +79,10 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
 
     // Size
     size_combobox.set_name ("FontSelectorSize");
+    if (auto entry = size_combobox.get_entry()) {
+        // limit min size of the entry box to 6 chars, so it doesn't inflate entire dialog!
+        entry->set_width_chars(6);
+    }
     set_sizes();
     size_combobox.set_active_text( "18" );
 
