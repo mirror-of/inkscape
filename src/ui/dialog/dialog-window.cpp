@@ -21,6 +21,7 @@
 
 #include "enums.h"
 #include "inkscape-application.h"
+#include "inkscape-window.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "ui/dialog/dialog-base.h"
@@ -50,7 +51,7 @@ DialogWindow::~DialogWindow() {}
 
 // Create a dialog window and move page from old notebook.
 DialogWindow::DialogWindow(Gtk::Widget *page)
-    : Gtk::ApplicationWindow()
+    : Gtk::Window()
     , _app(InkscapeApplication::instance())
     , _title(_("Dialog Window"))
 {
@@ -248,7 +249,12 @@ bool DialogWindow::on_key_press_event(GdkEventKey *key_event)
         return true;
     }
 
-    return Inkscape::Shortcuts::getInstance().invoke_verb(key_event, SP_ACTIVE_DESKTOP);
+    // Pass key event to active InkscapeWindow to handle app level shortcuts.
+    if (_app->get_active_window()->on_key_press_event(key_event)) {
+        return true;
+    }
+
+    return false;
 }
 
 } // namespace Dialog

@@ -36,7 +36,7 @@ class DialogMultipaned;
  *
  * It watches the last active InkscapeWindow and updates its inner dialogs, if any.
  */
-class DialogWindow : public Gtk::ApplicationWindow
+class DialogWindow : public Gtk::Window
 {
 public:
     DialogWindow(Gtk::Widget *page = nullptr);
