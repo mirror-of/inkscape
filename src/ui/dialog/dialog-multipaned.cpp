@@ -1076,7 +1076,7 @@ void DialogMultipaned::on_drag_update(double offset_x, double offset_y)
             int minimum_size = get_min_width(child);
             auto width = start_width + offset_x;
             bool resizing = false;
-            bool hide = false;
+            Gtk::Widget* hide = nullptr;
 
             if (!child->is_visible() && can_collapse(child, handle)) {
                 child->show();
