@@ -22,6 +22,7 @@
 
 #include "guide-snapper.h"
 #include "object-snapper.h"
+#include "alignment-snapper.h"
 #include "snap-preferences.h"
 
 
@@ -337,6 +338,7 @@ public:
 
     Inkscape::GuideSnapper guide;      ///< guide snapper
     Inkscape::ObjectSnapper object;    ///< snapper to other objects
+    Inkscape::AlignmentSnapper alignment; ///< snapper to align with other objects
     Inkscape::SnapPreferences snapprefs;
 
     /**

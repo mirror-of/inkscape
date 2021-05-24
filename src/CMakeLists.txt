@@ -4,6 +4,7 @@
 # -----------------------------------------------------------------------------
 
 set(inkscape_SRC
+  alignment-snapper.cpp
   attribute-rel-css.cpp
   attribute-rel-svg.cpp
   attribute-rel-util.cpp
@@ -88,6 +89,7 @@ set(inkscape_SRC
 
   # -------
   # Headers
+  alignment-snapper.h
   attribute-rel-css.h
   attribute-rel-svg.h
   attribute-rel-util.h

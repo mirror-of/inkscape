@@ -43,6 +43,7 @@ using Inkscape::Util::round_to_lower_multiple_plus;
 SnapManager::SnapManager(SPNamedView const *v) :
     guide(this, 0),
     object(this, 0),
+    alignment(this, 0),
     snapprefs(),
     _named_view(v),
     _rotation_center_source_items(std::vector<SPItem*>()),
@@ -58,6 +59,7 @@ SnapManager::SnapperList SnapManager::getSnappers() const
     SnapManager::SnapperList s;
     s.push_back(&guide);
     s.push_back(&object);
+    s.push_back(&alignment);
 
     SnapManager::SnapperList gs = getGridSnappers();
     s.splice(s.begin(), gs);
