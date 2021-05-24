@@ -108,7 +108,7 @@ DocumentProperties::DocumentProperties()
     , _rum_deflt(_("Display _units:"), "inkscape:document-units", _wr)
     , _page_sizer(_wr)
     //---------------------------------------------------------------
-    //General snap options
+    //General guide options
     , _rcb_sgui(_("Show _guides"), _("Show or hide guides"), "showguides", _wr)
     , _rcb_lgui(_("Lock all guides"), _("Toggle lock of all guides in the document"), "inkscape:lockguides", _wr)
     , _rcp_gui(_("Guide co_lor:"), _("Guideline color"), _("Color of guidelines"), "guidecolor", "guideopacity", _wr)
@@ -130,6 +130,11 @@ DocumentProperties::DocumentProperties()
                 _("Snapping distance, in screen pixels, for snapping to guides"), _("Always snap to guides, regardless of the distance"),
                 _("If set, objects only snap to a guide when it's within the range specified below"),
                 "guidetolerance", _wr)
+    //Options for alignement snapping
+    , _rsu_assn(_("Snap dista_nce"), _("Snap only when cl_oser than:"), _("Always snap"),
+                _("Snapping distance, in screen pixels, for alignment snapping"), _("Always snap to alignment guides, regardless of the distance"),
+                _("If set, objects only snap to as alignment guide when it's within the range specified below"),
+                "alignmenttolerance", _wr)
     //---------------------------------------------------------------
     , _rcb_snclp(_("Snap to clip paths"), _("When snapping to paths, then also try snapping to clip paths"), "inkscape:snap-path-clip", _wr)
     , _rcb_snmsk(_("Snap to mask paths"), _("When snapping to paths, then also try snapping to mask paths"), "inkscape:snap-path-mask", _wr)
@@ -361,6 +366,8 @@ void DocumentProperties::build_snap()
     label_gr->set_markup (_("<b>Snap to grids</b>"));
     Gtk::Label *label_gu = Gtk::manage (new Gtk::Label);
     label_gu->set_markup (_("<b>Snap to guides</b>"));
+    Gtk::Label *label_as = Gtk::manage (new Gtk::Label);
+    label_as->set_markup (_("<b>Alignment Snapping</b>"));
     Gtk::Label *label_m = Gtk::manage (new Gtk::Label);
     label_m->set_markup (_("<b>Miscellaneous</b>"));
 
@@ -378,6 +385,9 @@ void DocumentProperties::build_snap()
         nullptr,     nullptr,
         label_gu,    nullptr,
         nullptr,     _rsu_gusn._vbox,
+        nullptr,     nullptr,
+        label_as,    nullptr,
+        nullptr,     _rsu_assn._vbox,
         nullptr,     nullptr,
         label_m,     nullptr,
         nullptr,     &_rcb_perp,
@@ -1404,6 +1414,7 @@ void DocumentProperties::update_widgets()
     _rsu_sno.setValue (nv->snap_manager.snapprefs.getObjectTolerance());
     _rsu_sn.setValue (nv->snap_manager.snapprefs.getGridTolerance());
     _rsu_gusn.setValue (nv->snap_manager.snapprefs.getGuideTolerance());
+    _rsu_assn.setValue (nv->snap_manager.snapprefs.getAlignmentTolerance());
     _rcb_snclp.setActive (nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_CLIP));
     _rcb_snmsk.setActive (nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_MASK));
     _rcb_perp.setActive (nv->snap_manager.snapprefs.getSnapPerp());

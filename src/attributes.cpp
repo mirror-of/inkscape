@@ -71,6 +71,7 @@ static SPStyleProp const props[] = {
     {SPAttr::GRIDTOLERANCE, "gridtolerance"},
     {SPAttr::GUIDETOLERANCE, "guidetolerance"},
     {SPAttr::OBJECTTOLERANCE, "objecttolerance"},
+    {SPAttr::ALIGNMENTTOLERANCE, "alignmenttolerance"},
     {SPAttr::GUIDECOLOR, "guidecolor"},
     {SPAttr::GUIDEOPACITY, "guideopacity"},
     {SPAttr::GUIDEHICOLOR, "guidehicolor"},

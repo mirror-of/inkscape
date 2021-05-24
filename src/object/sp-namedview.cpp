@@ -200,6 +200,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::GRIDTOLERANCE);
     this->readAttr(SPAttr::GUIDETOLERANCE);
     this->readAttr(SPAttr::OBJECTTOLERANCE);
+    this->readAttr(SPAttr::ALIGNMENTTOLERANCE);
     this->readAttr(SPAttr::GUIDECOLOR);
     this->readAttr(SPAttr::GUIDEOPACITY);
     this->readAttr(SPAttr::GUIDEHICOLOR);
@@ -311,6 +312,10 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             break;
     case SPAttr::OBJECTTOLERANCE:
             this->snap_manager.snapprefs.setObjectTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SPAttr::ALIGNMENTTOLERANCE:
+            this->snap_manager.snapprefs.setAlignementTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::GUIDECOLOR:
