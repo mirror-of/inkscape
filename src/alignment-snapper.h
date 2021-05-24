@@ -11,6 +11,8 @@
 #ifndef SEEN_ALIGNMENT_SNAPPER_H
 #define SEEN_ALIGNMENT_SNAPPER_H
 
+#include <2geom/affine.h>
+
 #include "snapper.h"
 #include "snap-candidate.h"
 
@@ -60,10 +62,24 @@ public:
                   std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
 private:
+    // Store some snap candidate, these are cached for the first point and not recalculated for each point
+    std::vector<SnapCandidateItem> *_candidates;
+    std::vector<SnapCandidatePoint> *_points_to_snap_to;
+
+    /** Find candidates that lie withing a certain range (visible on viewport).
+     * @param parent Pointer to the document's root, or to a clipped path or mask object.
+     * @param it List of items to ignore.
+     * @param bbox_to_snap Bounding box hulling the whole bunch of points, all from the same selection and having the same transformation.
+     * @param clip_or_mask The parent object being passed is either a clip or mask.
+     * @param additional_affine Affine of the clipped path or mask object.
+     */
+    void _findCandidates(SPObject* parent,
+                       std::vector<SPItem const*> const *it,
+                       bool const &first_point,
+                       bool const clip_or_mask,
+                       Geom::Affine const additional_affine = Geom::identity()) const;
 
 }; // end of AlignmentSnapper class
-
-void getBBoxPoints(Geom::OptRect const bbox, std::vector<SnapCandidatePoint> *points, bool const isTarget, bool const includeCorners, bool const includeLineMidpoints, bool const includeObjectMidpoints);
 
 } // end of namespace Inkscape
 
