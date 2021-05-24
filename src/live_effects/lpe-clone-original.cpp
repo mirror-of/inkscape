@@ -5,24 +5,24 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpe-clone-original.h"
-#include "live_effects/lpe-spiro.h"
-#include "live_effects/lpe-bspline.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "display/curve.h"
-#include "svg/path-string.h"
-#include "svg/svg.h"
+#include "lpe-clone-original.h"
 
-#include "ui/tools-switch.h"
-#include "ui/tools/node-tool.h"
+#include "lpe-bspline.h"
+#include "lpe-spiro.h"
+#include "lpeobject-reference.h"
+#include "lpeobject.h"
+
+#include "actions/actions-tools.h"
+#include "display/curve.h"
+#include "display/curve.h"
 #include "object/sp-clippath.h"
 #include "object/sp-mask.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
-#include "display/curve.h"
-
+#include "svg/path-string.h"
+#include "svg/svg.h"
+#include "ui/tools/node-tool.h"
 #include "xml/sp-css-attr.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
@@ -78,15 +78,15 @@ LPECloneOriginal::syncOriginal()
 {
     if (method != CLM_NONE) {
         sync = true;
-        // TODO remove the tools_switch atrocity.
         sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
         method.param_set_value(CLM_NONE);
         refresh_widgets = true;
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
         if (desktop && dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context)) {
-            tools_switch(desktop, TOOLS_SELECT);
-            tools_switch(desktop, TOOLS_NODES);
+            // Why is this switching tools twice? Probably to reinitialize Node Tool.
+            set_active_tool(desktop, "select");
+            set_active_tool(desktop, "node");
         }
     }
 }

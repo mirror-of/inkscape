@@ -6,8 +6,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/path.h"
-#include "live_effects/lpeobject.h"
+#include "path.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/utility.h>
@@ -15,45 +14,40 @@
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 
-#include "bad-uri-exception.h"
-#include "ui/widget/point.h"
 
-#include "live_effects/effect.h"
-#include "svg/svg.h"
 #include <2geom/svg-path-parser.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/pathvector.h>
 #include <2geom/d2.h>
+
+#include "bad-uri-exception.h"
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
 #include "message-stack.h"
-#include "selection-chemistry.h"
-#include "ui/icon-loader.h"
-#include "verbs.h"
-#include "xml/repr.h"
-// needed for on-canvas editing:
-#include "ui/tools-switch.h"
-#include "ui/shape-editor.h"
-
 #include "selection.h"
-// clipboard support
-#include "ui/clipboard.h"
-// required for linking to other paths
+#include "selection-chemistry.h"
+#include "verbs.h"
 
+#include "actions/actions-tools.h"
+#include "display/curve.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
 #include "object/uri.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
-
-#include "display/curve.h"
-
+#include "svg/svg.h"
+#include "ui/clipboard.h" // clipboard support
+#include "ui/icon-loader.h"
+#include "ui/icon-names.h"
+#include "ui/shape-editor.h" // needed for on-canvas editing:
 #include "ui/tools/node-tool.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/shape-record.h"
-
-#include "ui/icon-names.h"
+#include "ui/widget/point.h"
+#include "xml/repr.h"
 
 namespace Inkscape {
 
@@ -106,8 +100,8 @@ PathParam::~PathParam()
     if (desktop) {
         if (dynamic_cast<Inkscape::UI::Tools::NodeTool* >(desktop->event_context)) {
             // Why is this switching tools twice? Probably to reinitialize Node Tool.
-            tools_switch(desktop, TOOLS_SELECT);
-            tools_switch(desktop, TOOLS_NODES);
+            set_active_tool(desktop, "select");
+            set_active_tool(desktop, "node");
         }
     }
     g_free(defvalue);
@@ -272,7 +266,7 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
 
     Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     if (!nt) {
-        tools_switch(dt, TOOLS_NODES);
+        set_active_tool(dt, "node");
         nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     }
 

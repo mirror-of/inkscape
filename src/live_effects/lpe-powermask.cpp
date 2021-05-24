@@ -12,7 +12,6 @@
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
-#include "ui/tools-switch.h"
 #include "path-chemistry.h"
 #include "extract-uri.h"
 #include <bad-uri-exception.h>

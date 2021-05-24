@@ -43,7 +43,6 @@
 #include "object/sp-shape.h"
 #include "selection.h"
 #include "ui/icon-names.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"

@@ -38,7 +38,6 @@
 #include "style.h"
 
 #include "ui/shape-editor.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/rect-tool.h"

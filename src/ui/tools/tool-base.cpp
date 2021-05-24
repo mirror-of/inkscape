@@ -28,7 +28,8 @@
 #include "rubberband.h"
 #include "selcue.h"
 #include "selection.h"
-#include "ui/cursor-utils.h"
+
+#include "actions/actions-tools.h"
 
 #include "display/control/canvas-item-catchall.h" // Grab/Ungrab
 #include "display/control/canvas-item-rotate.h"
@@ -39,6 +40,7 @@
 #include "object/sp-guide.h"
 
 #include "ui/contextmenu.h"
+#include "ui/cursor-utils.h"
 #include "ui/event-debug.h"
 #include "ui/interface.h"
 #include "ui/knot/knot.h"
@@ -60,21 +62,17 @@
 #include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h"
 
-#include "ui/tools-switch.h"
-#include "ui/tools/lpe-tool.h"
-#include "ui/tools/tool-base.h"
-
 #include "widgets/desktop-widget.h"
 
 #include "xml/node-event-vector.h"
 
 // globals for temporary switching to selector by space
 static bool selector_toggled = FALSE;
-static int switch_selector_to = 0;
+static Glib::ustring switch_selector_to;
 
 // globals for temporary switching to dropper by 'D'
 static bool dropper_toggled = FALSE;
-static int switch_dropper_to = 0;
+static Glib::ustring switch_dropper_to;
 
 // globals for keeping track of keyboard scroll events in order to accelerate
 static guint32 scroll_event_time = 0;
@@ -214,15 +212,13 @@ static void sp_toggle_selector(SPDesktop *dt) {
 
     if (dynamic_cast<Inkscape::UI::Tools::SelectTool *>(dt->event_context)) {
         if (selector_toggled) {
-            if (switch_selector_to)
-                tools_switch(dt, switch_selector_to);
-            selector_toggled = FALSE;
-        } else
-            return;
+            set_active_tool(dt, switch_selector_to);
+            selector_toggled = false;
+        }
     } else {
         selector_toggled = TRUE;
-        switch_selector_to = tools_active(dt);
-        tools_switch(dt, TOOLS_SELECT);
+        switch_selector_to = get_active_tool(dt);
+        set_active_tool(dt, "Select");
     }
 }
 
@@ -238,15 +234,13 @@ void sp_toggle_dropper(SPDesktop *dt) {
 
     if (dynamic_cast<Inkscape::UI::Tools::DropperTool *>(dt->event_context)) {
         if (dropper_toggled) {
-            if (switch_dropper_to)
-                tools_switch(dt, switch_dropper_to);
+            set_active_tool(dt, switch_dropper_to);
             dropper_toggled = FALSE;
-        } else
-            return;
+        }
     } else {
         dropper_toggled = TRUE;
-        switch_dropper_to = tools_active(dt);
-        tools_switch(dt, TOOLS_DROPPER);
+        switch_dropper_to = get_active_tool(dt);
+        set_active_tool(dt, "Dropper");
     }
 }
 

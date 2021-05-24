@@ -35,17 +35,17 @@
 #include "text-editing.h"
 #include "unclump.h"
 #include "verbs.h"
+
+#include "actions/actions-tools.h"
 #include "live_effects/effect-enum.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-root.h"
 #include "object/sp-text.h"
-
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/spinbutton.h"
 
@@ -911,7 +911,7 @@ static void on_tool_changed(AlignAndDistribute *daad)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && desktop->getEventContext())
-        daad->setMode(tools_active(desktop) == TOOLS_NODES);
+        daad->setMode(get_active_tool(desktop) == "Node");
     else
         daad->setMode(false);
 

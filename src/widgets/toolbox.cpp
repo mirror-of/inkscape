@@ -49,7 +49,6 @@
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
-#include "ui/tools-switch.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
 #include "ui/widget/spinbutton.h"

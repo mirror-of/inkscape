@@ -37,6 +37,8 @@
 #include "selection.h"
 #include "seltrans.h"
 
+#include "actions/actions-tools.h" // set_active_tool()
+
 #include "display/drawing-item.h"
 #include "display/control/canvas-item-catchall.h"
 #include "display/control/canvas-item-drawing.h"
@@ -47,7 +49,6 @@
 #include "ui/cursor-utils.h"
 #include "ui/modifiers.h"
 
-#include "ui/tools-switch.h"
 #include "ui/tools/select-tool.h"
 
 #include "ui/widget/canvas.h"
@@ -466,7 +467,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     } else { // switch tool
                         Geom::Point const button_pt(event->button.x, event->button.y);
                         Geom::Point const p(desktop->w2d(button_pt));
-                        tools_switch_by_item (desktop, clicked_item, p);
+                        set_active_tool(desktop, clicked_item, p);
                     }
                 } else {
                     sp_select_context_up_one_layer(desktop);

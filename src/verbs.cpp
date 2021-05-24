@@ -49,6 +49,8 @@
 #include "seltrans.h"
 #include "text-chemistry.h"
 
+#include "actions/actions-tools.h"
+
 #include "display/curve.h"
 
 #include "extension/effect.h"
@@ -87,7 +89,6 @@
 #include "ui/interface.h"
 #include "ui/shape-editor.h"
 #include "ui/shortcuts.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/pen-tool.h"
@@ -1273,13 +1274,13 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->removeLPESRecursive(true);
             selection->unlinkRecursive(true);
             sp_selected_path_create_offset_object_zero(dt);
-            tools_switch(dt, TOOLS_NODES);
+            set_active_tool(dt, "Node");
             break;
         case SP_VERB_SELECTION_LINKED_OFFSET:
             selection->removeLPESRecursive(true);
             selection->unlinkRecursive(true);
             sp_selected_path_create_updating_offset_object_zero(dt);
-            tools_switch(dt, TOOLS_NODES);
+            set_active_tool(dt, "Node");
             break;
         case SP_VERB_SELECTION_OUTLINE:
             selection->strokesToPaths();
@@ -1702,70 +1703,69 @@ void ContextVerb::perform(SPAction *action, void *data)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     switch (verb) {
         case SP_VERB_CONTEXT_SELECT:
-            tools_switch(dt, TOOLS_SELECT);
             break;
         case SP_VERB_CONTEXT_NODE:
-            tools_switch(dt, TOOLS_NODES);
+            set_active_tool(dt, "Node");
             break;
         case SP_VERB_CONTEXT_TWEAK:
-            tools_switch(dt, TOOLS_TWEAK);
+            set_active_tool(dt, "Tweak");
             break;
         case SP_VERB_CONTEXT_SPRAY:
-            tools_switch(dt, TOOLS_SPRAY);
+            set_active_tool(dt, "Spray");
             break;
         case SP_VERB_CONTEXT_RECT:
-            tools_switch(dt, TOOLS_SHAPES_RECT);
+            set_active_tool(dt, "Rect");
             break;
         case SP_VERB_CONTEXT_3DBOX:
-            tools_switch(dt, TOOLS_SHAPES_3DBOX);
+            set_active_tool(dt, "3DBox");
             break;
         case SP_VERB_CONTEXT_ARC:
-            tools_switch(dt, TOOLS_SHAPES_ARC);
+            set_active_tool(dt, "Arc");
             break;
         case SP_VERB_CONTEXT_STAR:
-            tools_switch(dt, TOOLS_SHAPES_STAR);
+            set_active_tool(dt, "Star");
             break;
         case SP_VERB_CONTEXT_SPIRAL:
-            tools_switch(dt, TOOLS_SHAPES_SPIRAL);
+            set_active_tool(dt, "Spiral");
             break;
         case SP_VERB_CONTEXT_PENCIL:
-            tools_switch(dt, TOOLS_FREEHAND_PENCIL);
+            set_active_tool(dt, "Pencil");
             break;
         case SP_VERB_CONTEXT_PEN:
-            tools_switch(dt, TOOLS_FREEHAND_PEN);
+            set_active_tool(dt, "Pen");
             break;
         case SP_VERB_CONTEXT_CALLIGRAPHIC:
-            tools_switch(dt, TOOLS_CALLIGRAPHIC);
+            set_active_tool(dt, "Calligraphic");
             break;
         case SP_VERB_CONTEXT_TEXT:
-            tools_switch(dt, TOOLS_TEXT);
+            set_active_tool(dt, "Text");
             break;
         case SP_VERB_CONTEXT_GRADIENT:
-            tools_switch(dt, TOOLS_GRADIENT);
+            set_active_tool(dt, "Gradient");
             break;
         case SP_VERB_CONTEXT_MESH:
-            tools_switch(dt, TOOLS_MESH);
+            set_active_tool(dt, "Mesh");
             break;
         case SP_VERB_CONTEXT_ZOOM:
-            tools_switch(dt, TOOLS_ZOOM);
+            set_active_tool(dt, "Zoom");
             break;
         case SP_VERB_CONTEXT_MEASURE:
-            tools_switch(dt, TOOLS_MEASURE);
+            set_active_tool(dt, "Measure");
             break;
         case SP_VERB_CONTEXT_DROPPER:
             Inkscape::UI::Tools::sp_toggle_dropper(dt); // Functionality defined in event-context.cpp
             break;
         case SP_VERB_CONTEXT_CONNECTOR:
-            tools_switch(dt,  TOOLS_CONNECTOR);
+            set_active_tool(dt, "Connector");
             break;
         case SP_VERB_CONTEXT_PAINTBUCKET:
-            tools_switch(dt, TOOLS_PAINTBUCKET);
+            set_active_tool(dt, "PaintBucket");
             break;
         case SP_VERB_CONTEXT_ERASER:
-            tools_switch(dt, TOOLS_ERASER);
+            set_active_tool(dt, "Eraser");
             break;
         case SP_VERB_CONTEXT_LPETOOL:
-            tools_switch(dt, TOOLS_LPETOOL);
+            set_active_tool(dt, "LpeTool");
             break;
 
         case SP_VERB_CONTEXT_SELECT_PREFS:

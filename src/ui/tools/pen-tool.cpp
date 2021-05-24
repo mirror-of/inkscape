@@ -43,7 +43,6 @@
 
 #include "ui/draw-anchor.h"
 #include "ui/shortcuts.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
 
 // we include the necessary files for BSpline & Spiro

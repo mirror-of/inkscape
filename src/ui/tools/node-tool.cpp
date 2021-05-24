@@ -50,9 +50,7 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tool/selector.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
-#include "ui/tools/tool-base.h"
 
 /** @struct NodeTool
  *

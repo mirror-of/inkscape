@@ -35,8 +35,6 @@
 #include "svg/svg-icc-color.h"
 
 #include "ui/dialog-events.h"
-#include "ui/tools-switch.h"
-#include "ui/tools/tool-base.h"
 #include "ui/tools/dropper-tool.h"
 #include "ui/widget/color-entry.h"
 #include "ui/widget/color-icc-selector.h"

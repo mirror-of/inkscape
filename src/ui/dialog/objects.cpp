@@ -29,8 +29,9 @@
 #include "layer-manager.h"
 #include "verbs.h"
 
+#include "actions/actions-tools.h"
+
 #include "helper/action.h"
-#include "ui/icon-loader.h"
 
 #include "include/gtkmm_version.h"
 
@@ -43,11 +44,11 @@
 #include "style.h"
 
 #include "ui/dialog-events.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/selected-color.h"
 #include "ui/shortcuts.h"
 #include "ui/desktop/menu-icon-shift.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
 #include "ui/widget/canvas.h"
@@ -2337,7 +2338,7 @@ void SPItem::setHighlightColor(guint32 const color)
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
-            tools_switch(tool->getDesktop(), TOOLS_NODES);
+            set_active_tool(tool->getDesktop(), "Node");
         }
     }
 }
@@ -2351,7 +2352,7 @@ void SPItem::unsetHighlightColor()
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
-            tools_switch(tool->getDesktop(), TOOLS_NODES);
+            set_active_tool(tool->getDesktop(), "Node");
         }
     }
 }

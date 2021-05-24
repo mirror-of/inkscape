@@ -20,7 +20,6 @@
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/shape-editor.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
 // TODO due to internal breakage in glibmm headers,

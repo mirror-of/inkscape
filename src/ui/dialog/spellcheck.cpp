@@ -40,7 +40,6 @@
 
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/inkscape-preferences.h" // for PREFS_PAGE_SPELLCHECK
-#include "ui/tools-switch.h"
 #include "ui/tools/text-tool.h"
 
 #include <glibmm/i18n.h>
