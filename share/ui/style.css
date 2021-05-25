@@ -204,6 +204,11 @@ iconview *:hover {
     font-size: 11px;
 }
 
+/* Tool Toolbox */
+#ToolToolbox button {
+    min-height: 16px; /* By default this is 24px which adds too much space when using "Smaller" icons. */
+}
+
 #CommandPaletteBase {
     background-color: @theme_base_color; /* some themes don't seem to have a background color for list rows defined and would end up transparent otherwise */
     border: 5px solid @theme_bg_color;
