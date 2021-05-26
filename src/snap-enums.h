@@ -50,6 +50,16 @@ enum SnapSourceType { // When adding source types here, then also update Inkscap
     SNAPSOURCE_TEXT_ANCHOR,
     SNAPSOURCE_OTHER_HANDLE, // eg. the handle of a gradient or of a connector (ie not being tied to a stroke)
     SNAPSOURCE_GRID_PITCH, // eg. when pasting or alt-dragging in the selector tool; not really a snap source
+
+    //-------------------------------------------------------------------
+    // Alignment snapping
+    SNAPSOURCE_ALIGNMENT_CATEGORY = 256,
+    SNAPSOURCE_ALIGNMENT_BBOX_CORNER,
+    SNAPSOURCE_ALIGNMENT_BBOX_MIDPOINT,
+    SNAPSOURCE_ALIGNMENT_BBOX_EDGE_MIDPOINT,
+    SNAPSOURCE_ALIGNMENT_PAGE_CENTER,
+    SNAPSOURCE_ALIGNMENT_PAGE_CORNER,
+    SNAPSOURCE_ALIGNMENT_HANDLE
 };
 
 enum SnapTargetType {
@@ -97,6 +107,16 @@ enum SnapTargetType {
     SNAPTARGET_TEXT_BASELINE,
     SNAPTARGET_CONSTRAINED_ANGLE,
     SNAPTARGET_CONSTRAINT,
+
+    //-------------------------------------------------------------------
+    // Alignment snapping
+    SNAPTARGET_ALIGNMENT_CATEGORY = 256, // will be used as a flag and must therefore be a power of two
+    SNAPTARGET_ALIGNMENT_BBOX_CORNER,
+    SNAPTARGET_ALIGNMENT_BBOX_MIDPOINT,
+    SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT,
+    SNAPTARGET_ALIGNMENT_PAGE_CENTER,
+    SNAPTARGET_ALIGNMENT_PAGE_CORNER,
+    SNAPTARGET_ALIGNMENT_HANDLE,
     //-------------------------------------------------------------------
     SNAPTARGET_MAX_ENUM_VALUE
 };

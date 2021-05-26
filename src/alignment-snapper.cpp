@@ -33,6 +33,7 @@
 #include "object/sp-use.h"
 #include "path/path-util.h" // curve_for_item
 #include "preferences.h"
+#include "snap-enums.h"
 #include "style.h"
 #include "svg/svg.h"
 #include "text-editing.h"
@@ -41,10 +42,13 @@ Inkscape::AlignmentSnapper::AlignmentSnapper(SnapManager *sm, Geom::Coord const 
     : Snapper(sm, d)
 {
     _candidates = new std::vector<SnapCandidateItem>;
+    _points_to_snap_to = new std::vector<Inkscape::SnapCandidatePoint>;
 }
 
 Inkscape::AlignmentSnapper::~AlignmentSnapper()
 {
+    _candidates->clear();
+    _points_to_snap_to->clear();
 }
 
 void Inkscape::AlignmentSnapper::_findCandidates(SPObject* parent,
@@ -155,17 +159,138 @@ void Inkscape::AlignmentSnapper::_findCandidates(SPObject* parent,
 }
 
 
+void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) const
+{
+    if (!first_point)
+        return;
+
+    _points_to_snap_to->clear();
+    SPItem::BBoxType bbox_type = SPItem::GEOMETRIC_BBOX;
+
+    Preferences *prefs = Preferences::get();
+    bool prefs_bbox = prefs->getBool("/tools/bounding_box");
+    bbox_type = !prefs_bbox ?
+        SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
+
+    // collect page corners and center
+    // TODO: use the function in ObjectSnapper
+    if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_CORNER)) {
+        Geom::Coord w = (_snapmanager->getDocument())->getWidth().value("px");
+        Geom::Coord h = (_snapmanager->getDocument())->getHeight().value("px");
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(0,0), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(0,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w,0), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w/2.0f,h/2.0f), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CENTER));
+    }
+
+    // collect bounding boxes of other objects
+    for (const auto & candidate : *_candidates) {
+        SPItem *root_item = candidate.item; 
+
+        // get the root item in case we have a duplicate at hand
+        SPUse *use = dynamic_cast<SPUse *>(candidate.item);
+        if (use) {
+            root_item = use->root();
+        }
+        g_return_if_fail(root_item);
+
+        // if candidate is not a clip or a mask object then extract its BBox points
+        if (!candidate.clip_or_mask) {
+            Geom::OptRect b = root_item->desktopBounds(bbox_type);
+            getBBoxPoints(b, _points_to_snap_to, true, true, true, true, true);
+        }
+    }
+
+    // Debug log
+    //std::cout<<"----------"<<std::endl;
+    //for (auto point : *_points_to_snap_to)
+        //std::cout<<point.getPoint().x()<<","<<point.getPoint().y()<<std::endl;
+}
+
+void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
+                                                 SnapCandidatePoint const &p,
+                                                 std::vector<SnapCandidatePoint> *unselected_nodes,
+                                                 SnapConstraint const &c,
+                                                 Geom::Point const &p_proj_on_constraint) const
+{
+
+    _collectBBoxPoints(p.getSourceNum() <= 0);
+
+    if (unselected_nodes != nullptr && unselected_nodes->size() > 0) {
+        g_assert(_points_to_snap_to != nullptr);
+        _points_to_snap_to->insert(_points_to_snap_to->end(), unselected_nodes->begin(), unselected_nodes->end());
+    }
+
+    SnappedPoint sx;
+    SnappedPoint sy;
+    bool success = false;
+    //bool strict_snapping = _snapmanager->snapprefs.getStrictSnapping();
+
+    for (const auto & k : *_points_to_snap_to) {
+        // TODO:  add strict snpping checks from ObjectSnapper::_allowSourceToSnapToTarget(...)
+        if (true) {
+            Geom::Point target_pt = k.getPoint();
+            // (unconstrained) distace from HORIZONTAL guide 
+            Geom::Point point_on_x(p.getPoint().x(), target_pt.y());
+            Geom::Coord distX = Geom::L2(point_on_x - p.getPoint()); 
+
+            // (unconstrained) distace from VERTICAL guide 
+            Geom::Point point_on_y(target_pt.x(), p.getPoint().y());
+            Geom::Coord distY = Geom::L2(point_on_y - p.getPoint()); 
+
+            // TODO: What about constraints?
+            if (!c.isUndefined()) {
+            }
+
+            if (distX < getSnapperTolerance()) {
+                sx = SnappedPoint(point_on_x, source2alignment(p.getSourceType()), p.getSourceNum(), k.getTargetType(), distX, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, k.getTargetBBox());
+                success = true;
+            }
+
+            if (distY < getSnapperTolerance()) {
+                sy = SnappedPoint(point_on_y, source2alignment(p.getSourceType()), p.getSourceNum(), k.getTargetType(), distY, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, k.getTargetBBox());
+                success = true;
+            }
+        }
+    }
+
+    if (success) {
+        if (sx.getSnapDistance() < sy.getSnapDistance()) {
+            isr.points.push_back(sx);
+            // Debug log
+            //std::cout<<"----X----"<<std::endl;
+            //std::cout<<p.getPoint().x()<<","<<p.getPoint().y()<<" to "<<sx.getPoint().x()<<","<<sx.getPoint().y()<<std::endl;
+        } else {
+            isr.points.push_back(sy);
+            // Debug log
+            //std::cout<<"----Y----"<<std::endl;
+            //std::cout<<p.getPoint().x()<<","<<p.getPoint().y()<<" to "<<sy.getPoint().x()<<","<<sy.getPoint().y()<<std::endl;
+        }
+    }
+
+}
+
 void Inkscape::AlignmentSnapper::freeSnap(IntermSnapResults &isr,
                                           Inkscape::SnapCandidatePoint const &p,
                                           Geom::OptRect const &bbox_to_snap,
                                           std::vector<SPItem const *> const *it,
                                           std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
+    // only snap if the source point is a bounding box or a handel
+    bool p_is_bbox = p.getSourceType() | SNAPSOURCE_BBOX_CATEGORY;
+    bool p_is_handel = p.getSourceType() | SNAPSOURCE_OTHER_HANDLE;
+
+    if (!(p_is_bbox || p_is_handel))
+        return;
+
     // TODO: add toggle checks here
     if (p.getSourceNum() <= 0){
         _candidates->clear();
         _findCandidates(_snapmanager->getDocument()->getRoot(), it, true, false);
     }
+
+    _snapBBoxPoints(isr, p, unselected_nodes);
 }
 
 void Inkscape::AlignmentSnapper::constrainedSnap(IntermSnapResults &isr,
@@ -192,6 +317,24 @@ Geom::Coord Inkscape::AlignmentSnapper::getSnapperTolerance() const
     SPDesktop const *dt = _snapmanager->getDesktop();
     double const zoom =  dt ? dt->current_zoom() : 1;
     return _snapmanager->snapprefs.getAlignmentTolerance() / zoom;
+}
+
+Inkscape::SnapSourceType Inkscape::AlignmentSnapper::source2alignment(SnapSourceType s) const
+{
+    switch (s) {
+        case SNAPSOURCE_BBOX_CATEGORY:
+            return SNAPSOURCE_ALIGNMENT_CATEGORY;
+        case SNAPSOURCE_BBOX_CORNER:
+            return SNAPSOURCE_ALIGNMENT_BBOX_CORNER;
+        case SNAPSOURCE_BBOX_MIDPOINT:
+            return SNAPSOURCE_ALIGNMENT_BBOX_MIDPOINT;
+        case SNAPSOURCE_BBOX_EDGE_MIDPOINT:
+            return SNAPSOURCE_ALIGNMENT_BBOX_EDGE_MIDPOINT;
+        case SNAPSOURCE_OTHER_HANDLE:
+            return SNAPSOURCE_ALIGNMENT_HANDLE;
+        default:
+            return SNAPSOURCE_UNDEFINED;
+    }
 }
 
 

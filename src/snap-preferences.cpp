@@ -11,6 +11,7 @@
  */
 
 #include "inkscape.h"
+#include "snap-enums.h"
 
 Inkscape::SnapPreferences::SnapPreferences() :
     _snap_enabled_globally(true),
@@ -295,6 +296,23 @@ Inkscape::SnapTargetType Inkscape::SnapPreferences::source2target(Inkscape::Snap
             return SNAPTARGET_NODE_CATEGORY;
         case SNAPSOURCE_GRID_PITCH:
             return SNAPTARGET_GRID;
+
+
+        case SNAPSOURCE_ALIGNMENT_CATEGORY:
+            return SNAPTARGET_ALIGNMENT_CATEGORY;
+        case SNAPSOURCE_ALIGNMENT_BBOX_CORNER:
+            return SNAPTARGET_ALIGNMENT_BBOX_CORNER;
+        case SNAPSOURCE_ALIGNMENT_BBOX_MIDPOINT:
+            return SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT;
+        case SNAPSOURCE_ALIGNMENT_BBOX_EDGE_MIDPOINT:
+            return SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT;
+        case SNAPSOURCE_ALIGNMENT_PAGE_CENTER:
+            return SNAPTARGET_ALIGNMENT_PAGE_CENTER;
+        case SNAPSOURCE_ALIGNMENT_PAGE_CORNER:
+            return SNAPTARGET_ALIGNMENT_PAGE_CORNER;
+        case Inkscape::SNAPSOURCE_ALIGNMENT_HANDLE:
+            return SNAPTARGET_ALIGNMENT_HANDLE;
+
         default:
             g_warning("Mapping of snap source to snap target undefined");
             return SNAPTARGET_UNDEFINED;

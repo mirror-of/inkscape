@@ -13,6 +13,7 @@
 
 #include <2geom/affine.h>
 
+#include "snap-enums.h"
 #include "snapper.h"
 #include "snap-candidate.h"
 
@@ -79,6 +80,18 @@ private:
                        bool const clip_or_mask,
                        Geom::Affine const additional_affine = Geom::identity()) const;
 
+    /** Collects and caches points on bounding boxes of the candidates
+     * @param is the point first point in the selection?
+     */
+    void _collectBBoxPoints(bool const &first_point) const;
+
+    void _snapBBoxPoints(IntermSnapResults &isr,
+                         SnapCandidatePoint const &p,
+                         std::vector<SnapCandidatePoint> *unselected_nodes,
+                         SnapConstraint const &c =  SnapConstraint(),
+                         Geom::Point const &p_proj_on_constraint = Geom::Point()) const;
+
+    SnapSourceType source2alignment(SnapSourceType s) const;
 }; // end of AlignmentSnapper class
 
 } // end of namespace Inkscape

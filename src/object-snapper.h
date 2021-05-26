@@ -126,7 +126,7 @@ private:
 
 }; // end of ObjectSnapper class
 
-void getBBoxPoints(Geom::OptRect const bbox, std::vector<SnapCandidatePoint> *points, bool const isTarget, bool const includeCorners, bool const includeLineMidpoints, bool const includeObjectMidpoints);
+void getBBoxPoints(Geom::OptRect const bbox, std::vector<SnapCandidatePoint> *points, bool const isTarget, bool const includeCorners, bool const includeLineMidpoints, bool const includeObjectMidpoints, bool const isAlignment = false);
 
 } // end of namespace Inkscape
 

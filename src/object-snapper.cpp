@@ -36,6 +36,7 @@
 #include "object/sp-use.h"
 #include "path/path-util.h" // curve_for_item
 #include "preferences.h"
+#include "snap-enums.h"
 #include "style.h"
 #include "svg/svg.h"
 #include "text-editing.h"
@@ -814,21 +815,34 @@ void Inkscape::getBBoxPoints(Geom::OptRect const bbox,
                              bool const /*isTarget*/,
                              bool const includeCorners,
                              bool const includeLineMidpoints,
-                             bool const includeObjectMidpoints)
+                             bool const includeObjectMidpoints,
+                             bool const isAlignment)
 {
     if (bbox) {
         // collect the corners of the bounding box
         for ( unsigned k = 0 ; k < 4 ; k++ ) {
             if (includeCorners) {
-                points->push_back(SnapCandidatePoint(bbox->corner(k), SNAPSOURCE_BBOX_CORNER, -1, SNAPTARGET_BBOX_CORNER, *bbox));
+                points->push_back(SnapCandidatePoint(bbox->corner(k),
+                                isAlignment ? SNAPSOURCE_ALIGNMENT_BBOX_CORNER : SNAPSOURCE_BBOX_CORNER,
+                                -1,
+                                isAlignment ? SNAPTARGET_ALIGNMENT_BBOX_CORNER : SNAPTARGET_BBOX_CORNER,
+                                *bbox));
             }
             // optionally, collect the midpoints of the bounding box's edges too
             if (includeLineMidpoints) {
-                points->push_back(SnapCandidatePoint((bbox->corner(k) + bbox->corner((k+1) % 4))/2, SNAPSOURCE_BBOX_EDGE_MIDPOINT, -1, SNAPTARGET_BBOX_EDGE_MIDPOINT, *bbox));
+                points->push_back(SnapCandidatePoint((bbox->corner(k) + bbox->corner((k+1) % 4))/2,
+                                isAlignment ? SNAPSOURCE_ALIGNMENT_BBOX_EDGE_MIDPOINT : SNAPSOURCE_BBOX_EDGE_MIDPOINT,
+                                -1,
+                                isAlignment ? SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT : SNAPTARGET_BBOX_EDGE_MIDPOINT,
+                                *bbox));
             }
         }
         if (includeObjectMidpoints) {
-            points->push_back(SnapCandidatePoint(bbox->midpoint(), SNAPSOURCE_BBOX_MIDPOINT, -1, SNAPTARGET_BBOX_MIDPOINT, *bbox));
+            points->push_back(SnapCandidatePoint(bbox->midpoint(),
+                            isAlignment ? SNAPSOURCE_ALIGNMENT_BBOX_MIDPOINT : SNAPSOURCE_BBOX_MIDPOINT,
+                            -1,
+                            isAlignment ? SNAPTARGET_ALIGNMENT_BBOX_MIDPOINT : SNAPTARGET_BBOX_MIDPOINT,
+                            *bbox));
         }
     }
 }
