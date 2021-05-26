@@ -23,6 +23,7 @@ Build-Depends:
  libblas3,
  liblapack3,
  libboost-dev,
+ libboost-filesystem-dev,
  libboost-python-dev,
  libcdr-dev,
  libdouble-conversion-dev,
