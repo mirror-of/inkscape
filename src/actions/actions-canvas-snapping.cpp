@@ -24,6 +24,7 @@
 #include "document-undo.h"
 
 #include "object/sp-namedview.h"
+#include "snap-enums.h"
 
 // There are four snapping lists that must be connected:
 // 1. The attribute name in NamedView: e.g. "inkscape:snap-bbox".
@@ -61,6 +62,11 @@ canvas_snapping_toggle(SPDocument* document, const SPAttr option)
         case SPAttr::INKSCAPE_SNAP_GLOBAL:
             v = nv->snap_manager.snapprefs.getSnapEnabledGlobally();
             repr->setAttributeBoolean("inkscape:snap-global", !v);
+            break;
+
+        case SPAttr::INKSCAPE_SNAP_ALIGNMENT:
+            v = nv->snap_manager.snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY);
+            repr->setAttributeBoolean("inkscape:snap-alignment", !v);
             break;
 
         // BBox
@@ -184,6 +190,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_snapping =
 {
     {"doc.snap-global-toggle",        N_("Snapping"),                          "Snap",  N_("Toggle snapping on/off")                             },
 
+    {"doc.snap-alignment",            N_("Snap Objects that Align"),           "Snap",  N_("Toggle alignment snapping on/off")                             },
+
     {"doc.snap-bbox",                 N_("Snap Bounding Boxes"),               "Snap",  N_("Toggle snapping to bounding boxes (global)")         },
     {"doc.snap-bbox-edge",            N_("Snap Bounding Box Edges"),           "Snap",  N_("Toggle snapping to bounding-box edges")              },
     {"doc.snap-bbox-corner",          N_("Snap Bounding Box Corners"),         "Snap",  N_("Toggle snapping to bounding-box corners")            },
@@ -216,6 +224,8 @@ add_actions_canvas_snapping(SPDocument* document)
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
     map->add_action_bool( "snap-global-toggle",      sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_GLOBAL));
+
+    map->add_action_bool( "snap-alignment",          sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_ALIGNMENT));
 
     map->add_action_bool( "snap-bbox",               sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_BBOX));
     map->add_action_bool( "snap-bbox-edge",          sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_BBOX_EDGE));
@@ -303,6 +313,9 @@ set_actions_canvas_snapping(SPDocument* document)
 
     bool global = nv->snap_manager.snapprefs.getSnapEnabledGlobally();
     set_actions_canvas_snapping_helper(map, "snap-global-toggle", global, true); // Always enabled
+
+    bool alignment = nv->snap_manager.snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY);
+    set_actions_canvas_snapping_helper(map, "snap-alignment", alignment, global);
 
     bool bbox = nv->snap_manager.snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_BBOX_CATEGORY);
     set_actions_canvas_snapping_helper(map, "snap-bbox", bbox, global);

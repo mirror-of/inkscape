@@ -198,7 +198,7 @@ void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) con
         // if candidate is not a clip or a mask object then extract its BBox points
         if (!candidate.clip_or_mask) {
             Geom::OptRect b = root_item->desktopBounds(bbox_type);
-            getBBoxPoints(b, _points_to_snap_to, true, true, true, true, true);
+            getBBoxPoints(b, _points_to_snap_to, true, true, false, true, true);
         }
     }
 
@@ -277,14 +277,19 @@ void Inkscape::AlignmentSnapper::freeSnap(IntermSnapResults &isr,
                                           std::vector<SPItem const *> const *it,
                                           std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
-    // only snap if the source point is a bounding box or a handel
-    bool p_is_bbox = p.getSourceType() | SNAPSOURCE_BBOX_CATEGORY;
-    bool p_is_handel = p.getSourceType() | SNAPSOURCE_OTHER_HANDLE;
+    bool p_is_bbox = p.getSourceType() & SNAPSOURCE_BBOX_CATEGORY;
+    bool p_is_node = p.getSourceType() & SNAPSOURCE_NODE_HANDLE;
+    bool p_is_handel = p.getSourceType() & SNAPSOURCE_OTHER_HANDLE;
 
-    if (!(p_is_bbox || p_is_handel))
+    
+    // toggle checks 
+    if (!_snap_enabled || !_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY))
         return;
 
-    // TODO: add toggle checks here
+    // only snap if the source point is a bounding box or a handel
+    if (!(p_is_bbox || p_is_handel || p_is_node))
+        return;
+
     if (p.getSourceNum() <= 0){
         _candidates->clear();
         _findCandidates(_snapmanager->getDocument()->getRoot(), it, true, false);

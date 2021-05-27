@@ -99,6 +99,7 @@ static SPStyleProp const props[] = {
     {SPAttr::INKSCAPE_WINDOW_Y, "inkscape:window-y"},
     {SPAttr::INKSCAPE_WINDOW_MAXIMIZED, "inkscape:window-maximized"},
     {SPAttr::INKSCAPE_SNAP_GLOBAL, "inkscape:snap-global"},
+    {SPAttr::INKSCAPE_SNAP_ALIGNMENT, "inkscape:snap-alignment"},
     {SPAttr::INKSCAPE_SNAP_PERP, "inkscape:snap-perpendicular"},
     {SPAttr::INKSCAPE_SNAP_TANG, "inkscape:snap-tangential"},
     {SPAttr::INKSCAPE_SNAP_BBOX, "inkscape:snap-bbox"},

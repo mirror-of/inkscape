@@ -22,6 +22,7 @@ Inkscape::SnapPreferences::SnapPreferences() :
 {
     // Check for powers of two; see the comments in snap-enums.h
     g_assert((SNAPTARGET_BBOX_CATEGORY != 0) && !(SNAPTARGET_BBOX_CATEGORY & (SNAPTARGET_BBOX_CATEGORY - 1)));
+    g_assert((SNAPTARGET_ALIGNMENT_CATEGORY != 0) && !(SNAPTARGET_ALIGNMENT_CATEGORY & (SNAPTARGET_ALIGNMENT_CATEGORY - 1)));
     g_assert((SNAPTARGET_NODE_CATEGORY != 0) && !(SNAPTARGET_NODE_CATEGORY & (SNAPTARGET_NODE_CATEGORY - 1)));
     g_assert((SNAPTARGET_DATUMS_CATEGORY != 0) && !(SNAPTARGET_DATUMS_CATEGORY & (SNAPTARGET_DATUMS_CATEGORY - 1)));
     g_assert((SNAPTARGET_OTHERS_CATEGORY != 0) && !(SNAPTARGET_OTHERS_CATEGORY & (SNAPTARGET_OTHERS_CATEGORY - 1)));
@@ -46,7 +47,8 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
     if (target == SNAPTARGET_BBOX_CATEGORY ||
             target == SNAPTARGET_NODE_CATEGORY ||
             target == SNAPTARGET_OTHERS_CATEGORY ||
-            target == SNAPTARGET_DATUMS_CATEGORY) {
+            target == SNAPTARGET_DATUMS_CATEGORY ||
+            target == SNAPTARGET_ALIGNMENT_CATEGORY) {
         // These main targets should be handled separately, because otherwise we might call isTargetSnappable()
         // for them (to check whether the corresponding group is on) which would lead to an infinite recursive loop
         always_on = (target == SNAPTARGET_DATUMS_CATEGORY);
@@ -116,6 +118,22 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
                 break;
         }
         return;
+    }
+
+    if (target & Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY) {
+        group_on = isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY);
+        //switch (target) {
+            //case SNAPTARGET_ALIGNMENT_BBOX_CORNER:
+            //case SNAPTARGET_ALIGNMENT_BBOX_MIDPOINT:
+            //case SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT:
+            //case SNAPTARGET_ALIGNMENT_PAGE_CENTER:
+            //case SNAPTARGET_ALIGNMENT_PAGE_CORNER:
+            //case SNAPTARGET_ALIGNMENT_HANDLE:
+                //target = SNAPTARGET_ALIGNMENT_CATEGORY;
+            //default:
+                //g_warning("Snap-preferences warning: Undefined snap target (#%i)", target);
+                //break;
+        //}
     }
 
     if (target & SNAPTARGET_OTHERS_CATEGORY) {
