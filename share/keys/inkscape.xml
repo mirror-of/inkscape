@@ -436,7 +436,6 @@ override) the bindings in the main default.xml.
 
 <!-- Help -->
 
-  <bind action="HelpAboutExtensions" />
   <bind action="HelpAboutMemory" />
   <bind action="HelpAbout" />
   <!-- There are also verbs for tutorials, if you really need them -->

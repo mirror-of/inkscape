@@ -1685,14 +1685,13 @@ void ContextVerb::perform(SPAction *action, void *data)
 
     g_return_if_fail(ensure_desktop_valid(action));
     dt = sp_action_get_desktop(action);
-    DialogContainer *container = dt->getContainer();
 
     verb = (sp_verb_t)GPOINTER_TO_INT((gpointer)data);
 
     /** \todo !!! hopefully this can go away soon and actions can look after
      * themselves
      */
-    for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_LPETOOL_PREFS; vidx++)
+    for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_LPETOOL; vidx++)
     {
         SPAction *tool_action= get((sp_verb_t)vidx)->get_action(action->context);
         if (tool_action) {
@@ -1700,7 +1699,6 @@ void ContextVerb::perform(SPAction *action, void *data)
         }
     }
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     switch (verb) {
         case SP_VERB_CONTEXT_SELECT:
             break;
@@ -1768,95 +1766,6 @@ void ContextVerb::perform(SPAction *action, void *data)
             set_active_tool(dt, "LpeTool");
             break;
 
-        case SP_VERB_CONTEXT_SELECT_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SELECTOR);
-            container->new_floating_dialog(SP_VERB_CONTEXT_SELECT_PREFS);
-            break;
-        case SP_VERB_CONTEXT_NODE_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_NODE);
-            container->new_floating_dialog(SP_VERB_CONTEXT_NODE_PREFS);
-            break;
-        case SP_VERB_CONTEXT_TWEAK_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_TWEAK);
-            container->new_floating_dialog(SP_VERB_CONTEXT_TWEAK_PREFS);
-            break;
-        case SP_VERB_CONTEXT_SPRAY_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SPRAY);
-            container->new_floating_dialog(SP_VERB_CONTEXT_SPRAY_PREFS);
-            break;
-        case SP_VERB_CONTEXT_RECT_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_RECT);
-            container->new_floating_dialog(SP_VERB_CONTEXT_RECT_PREFS);
-            break;
-        case SP_VERB_CONTEXT_3DBOX_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_3DBOX);
-            container->new_floating_dialog(SP_VERB_CONTEXT_3DBOX_PREFS);
-            break;
-        case SP_VERB_CONTEXT_ARC_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_ELLIPSE);
-            container->new_floating_dialog(SP_VERB_CONTEXT_ARC_PREFS);
-            break;
-        case SP_VERB_CONTEXT_STAR_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_STAR);
-            container->new_floating_dialog(SP_VERB_CONTEXT_STAR_PREFS);
-            break;
-        case SP_VERB_CONTEXT_SPIRAL_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_SPIRAL);
-            container->new_floating_dialog(SP_VERB_CONTEXT_SPIRAL_PREFS);
-            break;
-        case SP_VERB_CONTEXT_PENCIL_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PENCIL);
-            container->new_floating_dialog(SP_VERB_CONTEXT_PENCIL_PREFS);
-            break;
-        case SP_VERB_CONTEXT_PEN_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PEN);
-            container->new_floating_dialog(SP_VERB_CONTEXT_PEN_PREFS);
-            break;
-        case SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_CALLIGRAPHY);
-            container->new_floating_dialog(SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS);
-            break;
-        case SP_VERB_CONTEXT_TEXT_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_TEXT);
-            container->new_floating_dialog(SP_VERB_CONTEXT_TEXT_PREFS);
-            break;
-        case SP_VERB_CONTEXT_GRADIENT_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_GRADIENT);
-            container->new_floating_dialog(SP_VERB_CONTEXT_GRADIENT_PREFS);
-            break;
-        case SP_VERB_CONTEXT_MESH_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_GRADIENT);
-            container->new_floating_dialog(SP_VERB_CONTEXT_MESH_PREFS);
-            break;
-        case SP_VERB_CONTEXT_ZOOM_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_ZOOM);
-            container->new_floating_dialog(SP_VERB_CONTEXT_ZOOM_PREFS);
-            break;
-        case SP_VERB_CONTEXT_MEASURE_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_MEASURE);
-            container->new_floating_dialog(SP_VERB_CONTEXT_MEASURE_PREFS);
-            break;
-        case SP_VERB_CONTEXT_DROPPER_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_DROPPER);
-            container->new_floating_dialog(SP_VERB_CONTEXT_DROPPER_PREFS);
-            break;
-        case SP_VERB_CONTEXT_CONNECTOR_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_CONNECTOR);
-            container->new_floating_dialog(SP_VERB_CONTEXT_CONNECTOR_PREFS);
-            break;
-        case SP_VERB_CONTEXT_PAINTBUCKET_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PAINTBUCKET);
-            container->new_floating_dialog(SP_VERB_CONTEXT_PAINTBUCKET_PREFS);
-            break;
-        case SP_VERB_CONTEXT_ERASER_PREFS:
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_ERASER);
-            container->new_floating_dialog(SP_VERB_CONTEXT_ERASER_PREFS);
-            break;
-        case SP_VERB_CONTEXT_LPETOOL_PREFS:
-            g_print ("TODO: Create preferences page for LPETool\n");
-            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_LPETOOL);
-            container->new_floating_dialog(SP_VERB_CONTEXT_LPETOOL_PREFS);
-            break;
         case SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR:
         case SP_VERB_ALIGN_HORIZONTAL_LEFT:
         case SP_VERB_ALIGN_HORIZONTAL_CENTER:
@@ -2034,11 +1943,6 @@ void HelpVerb::perform(SPAction *action, void *data)
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_ABOUT:
             sp_help_about();
-            break;
-        case SP_VERB_HELP_ABOUT_EXTENSIONS:
-            // Inkscape::UI::Dialogs::ExtensionsPanel *panel = new Inkscape::UI::Dialogs::ExtensionsPanel();
-            // panel->set_full(true);
-            // show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
             break;
         case SP_VERB_HELP_MEMORY:
             container->new_dialog(SP_VERB_HELP_MEMORY);
@@ -2740,51 +2644,6 @@ Verb *Verb::_base_verbs[] = {
                     INKSCAPE_ICON("draw-eraser")),
     new ContextVerb(SP_VERB_CONTEXT_LPETOOL, "ToolLPETool", NC_("ContextVerb", "LPE Tool"),
                     N_("Do geometric constructions"), "draw-geometry"),
-    // Tool prefs
-    new ContextVerb(SP_VERB_CONTEXT_SELECT_PREFS, "SelectPrefs", N_("Selector Preferences"),
-                    N_("Open Preferences for the Selector tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_NODE_PREFS, "NodePrefs", N_("Node Tool Preferences"),
-                    N_("Open Preferences for the Node tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_TWEAK_PREFS, "TweakPrefs", N_("Tweak Tool Preferences"),
-                    N_("Open Preferences for the Tweak tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_SPRAY_PREFS, "SprayPrefs", N_("Spray Tool Preferences"),
-                    N_("Open Preferences for the Spray tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_RECT_PREFS, "RectPrefs", N_("Rectangle Preferences"),
-                    N_("Open Preferences for the Rectangle tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_3DBOX_PREFS, "3DBoxPrefs", N_("3D Box Preferences"),
-                    N_("Open Preferences for the 3D Box tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_ARC_PREFS, "ArcPrefs", N_("Ellipse Preferences"),
-                    N_("Open Preferences for the Ellipse tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_STAR_PREFS, "StarPrefs", N_("Star Preferences"),
-                    N_("Open Preferences for the Star tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_SPIRAL_PREFS, "SpiralPrefs", N_("Spiral Preferences"),
-                    N_("Open Preferences for the Spiral tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_PENCIL_PREFS, "PencilPrefs", N_("Pencil Preferences"),
-                    N_("Open Preferences for the Pencil tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_PEN_PREFS, "PenPrefs", N_("Pen Preferences"),
-                    N_("Open Preferences for the Pen tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "CalligraphicPrefs", N_("Calligraphic Preferences"),
-                    N_("Open Preferences for the Calligraphy tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_TEXT_PREFS, "TextPrefs", N_("Text Preferences"),
-                    N_("Open Preferences for the Text tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_GRADIENT_PREFS, "GradientPrefs", N_("Gradient Preferences"),
-                    N_("Open Preferences for the Gradient tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_MESH_PREFS, "Mesh_Prefs", N_("Mesh Preferences"),
-                    N_("Open Preferences for the Mesh tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_ZOOM_PREFS, "ZoomPrefs", N_("Zoom Preferences"),
-                    N_("Open Preferences for the Zoom tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_MEASURE_PREFS, "MeasurePrefs", N_("Measure Preferences"),
-                    N_("Open Preferences for the Measure tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_DROPPER_PREFS, "DropperPrefs", N_("Dropper Preferences"),
-                    N_("Open Preferences for the Dropper tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_CONNECTOR_PREFS, "ConnectorPrefs", N_("Connector Preferences"),
-                    N_("Open Preferences for the Connector tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "PaintBucketPrefs", N_("Paint Bucket Preferences"),
-                    N_("Open Preferences for the Paint Bucket tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_ERASER_PREFS, "EraserPrefs", N_("Eraser Preferences"),
-                    N_("Open Preferences for the Eraser tool"), nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_LPETOOL_PREFS, "LPEToolPrefs", N_("LPE Tool Preferences"),
-                    N_("Open Preferences for the LPETool tool"), nullptr),
 
     // Zoom
 
@@ -2903,8 +2762,6 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_EXPORT, "DialogExport", N_("_Export PNG Image..."),
                    N_("Export this document or a selection as a PNG image"), INKSCAPE_ICON("document-export")),
     // Help
-    new HelpVerb(SP_VERB_HELP_ABOUT_EXTENSIONS, "HelpAboutExtensions", N_("About E_xtensions"),
-                 N_("Information on Inkscape extensions"), nullptr),
     new HelpVerb(SP_VERB_HELP_MEMORY, "HelpAboutMemory", N_("About _Memory"), N_("Memory usage information"),
                  INKSCAPE_ICON("dialog-memory")),
     new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"), N_("Inkscape version, authors, license"),

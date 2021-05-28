@@ -135,39 +135,6 @@ Gtk::IconSize ToolboxFactory::prefToSize_mm(Glib::ustring const &path, int base)
 static struct {
     gchar const *type_name;
     gchar const *data_name;
-    sp_verb_t verb;
-    sp_verb_t doubleclick_verb;
-} const tools[] = {
-    // clang-format off
-    { "/tools/select",           "select_tool",       SP_VERB_CONTEXT_SELECT,        SP_VERB_CONTEXT_SELECT_PREFS        },
-    { "/tools/nodes",            "node_tool",         SP_VERB_CONTEXT_NODE,          SP_VERB_CONTEXT_NODE_PREFS          },
-    { "/tools/tweak",            "tweak_tool",        SP_VERB_CONTEXT_TWEAK,         SP_VERB_CONTEXT_TWEAK_PREFS         },
-    { "/tools/spray",            "spray_tool",        SP_VERB_CONTEXT_SPRAY,         SP_VERB_CONTEXT_SPRAY_PREFS         },
-    { "/tools/zoom",             "zoom_tool",         SP_VERB_CONTEXT_ZOOM,          SP_VERB_CONTEXT_ZOOM_PREFS          },
-    { "/tools/measure",          "measure_tool",      SP_VERB_CONTEXT_MEASURE,       SP_VERB_CONTEXT_MEASURE_PREFS       },
-    { "/tools/shapes/rect",      "rect_tool",         SP_VERB_CONTEXT_RECT,          SP_VERB_CONTEXT_RECT_PREFS          },
-    { "/tools/shapes/3dbox",     "3dbox_tool",        SP_VERB_CONTEXT_3DBOX,         SP_VERB_CONTEXT_3DBOX_PREFS         },
-    { "/tools/shapes/arc",       "arc_tool",          SP_VERB_CONTEXT_ARC,           SP_VERB_CONTEXT_ARC_PREFS           },
-    { "/tools/shapes/star",      "star_tool",         SP_VERB_CONTEXT_STAR,          SP_VERB_CONTEXT_STAR_PREFS          },
-    { "/tools/shapes/spiral",    "spiral_tool",       SP_VERB_CONTEXT_SPIRAL,        SP_VERB_CONTEXT_SPIRAL_PREFS        },
-    { "/tools/freehand/pencil",  "pencil_tool",       SP_VERB_CONTEXT_PENCIL,        SP_VERB_CONTEXT_PENCIL_PREFS        },
-    { "/tools/freehand/pen",     "pen_tool",          SP_VERB_CONTEXT_PEN,           SP_VERB_CONTEXT_PEN_PREFS           },
-    { "/tools/calligraphic",     "dyna_draw_tool",    SP_VERB_CONTEXT_CALLIGRAPHIC,  SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS  },
-    { "/tools/lpetool",          "lpetool_tool",      SP_VERB_CONTEXT_LPETOOL,       SP_VERB_CONTEXT_LPETOOL_PREFS       },
-    { "/tools/eraser",           "eraser_tool",       SP_VERB_CONTEXT_ERASER,        SP_VERB_CONTEXT_ERASER_PREFS        },
-    { "/tools/paintbucket",      "paintbucket_tool",  SP_VERB_CONTEXT_PAINTBUCKET,   SP_VERB_CONTEXT_PAINTBUCKET_PREFS   },
-    { "/tools/text",             "text_tool",         SP_VERB_CONTEXT_TEXT,          SP_VERB_CONTEXT_TEXT_PREFS          },
-    { "/tools/connector",        "connector_tool",    SP_VERB_CONTEXT_CONNECTOR,     SP_VERB_CONTEXT_CONNECTOR_PREFS     },
-    { "/tools/gradient",         "gradient_tool",     SP_VERB_CONTEXT_GRADIENT,      SP_VERB_CONTEXT_GRADIENT_PREFS      },
-    { "/tools/mesh",             "mesh_tool",         SP_VERB_CONTEXT_MESH,          SP_VERB_CONTEXT_MESH_PREFS          },
-    { "/tools/dropper",          "dropper_tool",      SP_VERB_CONTEXT_DROPPER,       SP_VERB_CONTEXT_DROPPER_PREFS       },
-    { nullptr,                   nullptr,             0,                             0,                                  },
-    // clang-format on
-};
-
-static struct {
-    gchar const *type_name;
-    gchar const *data_name;
     GtkWidget *(*create_func)(SPDesktop *desktop);
     gchar const *ui_name;
     gint swatch_verb_id;
@@ -180,7 +147,7 @@ static struct {
     { "/tools/nodes",           "node_toolbox",        Inkscape::UI::Toolbar::NodeToolbar::create,          "NodeToolbar",
       SP_VERB_INVALID,                    nullptr,                  nullptr},
     { "/tools/tweak",           "tweak_toolbox",       Inkscape::UI::Toolbar::TweakToolbar::create,         "TweakToolbar",
-      SP_VERB_CONTEXT_TWEAK_PREFS,        "/tools/tweak",           N_("Color/opacity used for color tweaking")},
+      SP_VERB_INVALID,                    "/tools/tweak",           N_("Color/opacity used for color tweaking")},
     { "/tools/spray",           "spray_toolbox",       Inkscape::UI::Toolbar::SprayToolbar::create,         "SprayToolbar",
       SP_VERB_INVALID,                    nullptr,                  nullptr},
     { "/tools/zoom",            "zoom_toolbox",        Inkscape::UI::Toolbar::ZoomToolbar::create,          "ZoomToolbar",
@@ -189,25 +156,25 @@ static struct {
     { "/tools/measure",         "measure_toolbox",     Inkscape::UI::Toolbar::MeasureToolbar::create,       "MeasureToolbar",
       SP_VERB_INVALID,                    nullptr,                  nullptr},
     { "/tools/shapes/star",     "star_toolbox",        Inkscape::UI::Toolbar::StarToolbar::create,          "StarToolbar",
-      SP_VERB_CONTEXT_STAR_PREFS,         "/tools/shapes/star",     N_("Style of new stars")},
+      SP_VERB_INVALID,                    "/tools/shapes/star",     N_("Style of new stars")},
     { "/tools/shapes/rect",     "rect_toolbox",        Inkscape::UI::Toolbar::RectToolbar::create,          "RectToolbar",
-      SP_VERB_CONTEXT_RECT_PREFS,         "/tools/shapes/rect",     N_("Style of new rectangles")},
+      SP_VERB_INVALID,                    "/tools/shapes/rect",     N_("Style of new rectangles")},
     { "/tools/shapes/3dbox",    "3dbox_toolbox",       Inkscape::UI::Toolbar::Box3DToolbar::create,         "3DBoxToolbar",
-      SP_VERB_CONTEXT_3DBOX_PREFS,        "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},
+      SP_VERB_INVALID,                    "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},
     { "/tools/shapes/arc",      "arc_toolbox",         Inkscape::UI::Toolbar::ArcToolbar::create,           "ArcToolbar",
-      SP_VERB_CONTEXT_ARC_PREFS,          "/tools/shapes/arc",      N_("Style of new ellipses")},
+      SP_VERB_INVALID,                    "/tools/shapes/arc",      N_("Style of new ellipses")},
     { "/tools/shapes/spiral",   "spiral_toolbox",      Inkscape::UI::Toolbar::SpiralToolbar::create,        "SpiralToolbar",
-      SP_VERB_CONTEXT_SPIRAL_PREFS,       "/tools/shapes/spiral",   N_("Style of new spirals")},
+      SP_VERB_INVALID,                    "/tools/shapes/spiral",   N_("Style of new spirals")},
     { "/tools/freehand/pencil", "pencil_toolbox",      Inkscape::UI::Toolbar::PencilToolbar::create_pencil, "PencilToolbar",
-      SP_VERB_CONTEXT_PENCIL_PREFS,       "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},
+      SP_VERB_INVALID,                    "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},
     { "/tools/freehand/pen",    "pen_toolbox",         Inkscape::UI::Toolbar::PencilToolbar::create_pen,    "PenToolbar",
-      SP_VERB_CONTEXT_PEN_PREFS,          "/tools/freehand/pen",    N_("Style of new paths created by Pen")},
+      SP_VERB_INVALID,                    "/tools/freehand/pen",    N_("Style of new paths created by Pen")},
     { "/tools/calligraphic",    "calligraphy_toolbox", Inkscape::UI::Toolbar::CalligraphyToolbar::create,   "CalligraphyToolbar",
-      SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "/tools/calligraphic",    N_("Style of new calligraphic strokes")},
+      SP_VERB_INVALID,                    "/tools/calligraphic",    N_("Style of new calligraphic strokes")},
     { "/tools/eraser",          "eraser_toolbox",      Inkscape::UI::Toolbar::EraserToolbar::create,        "EraserToolbar",
-      SP_VERB_CONTEXT_ERASER_PREFS,       "/tools/eraser",           _("TBD")},
+      SP_VERB_INVALID,                    "/tools/eraser",           _("TBD")},
     { "/tools/lpetool",         "lpetool_toolbox",     Inkscape::UI::Toolbar::LPEToolbar::create,           "LPEToolToolbar",
-      SP_VERB_CONTEXT_LPETOOL_PREFS,      "/tools/lpetool",          _("TBD")},
+      SP_VERB_INVALID,                    "/tools/lpetool",          _("TBD")},
     // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",            "text_toolbox",        Inkscape::UI::Toolbar::TextToolbar::create,          "TextToolbar",
       SP_VERB_INVALID,                    nullptr,                   nullptr},
@@ -220,9 +187,9 @@ static struct {
     { "/tools/mesh",            "mesh_toolbox",        Inkscape::UI::Toolbar::MeshToolbar::create,          "MeshToolbar",
       SP_VERB_INVALID,                    nullptr,                   nullptr},
     { "/tools/paintbucket",     "paintbucket_toolbox", Inkscape::UI::Toolbar::PaintbucketToolbar::create,   "PaintbucketToolbar",
-      SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket",       N_("Style of Paint Bucket fill objects")},
+      SP_VERB_INVALID,                    "/tools/paintbucket",       N_("Style of Paint Bucket fill objects")},
     { nullptr,                  nullptr,               nullptr,                                             nullptr,
-        SP_VERB_INVALID,                 nullptr,                    nullptr }
+      SP_VERB_INVALID,                    nullptr,                   nullptr }
     // clang-format on
 };
 
@@ -307,9 +274,9 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
         SP_VERB_FILE_OPEN,
         SP_VERB_FILE_PRINT,
         SP_VERB_FILE_SAVE,
-        SP_VERB_OBJECT_TO_CURVE,
+        //SP_VERB_OBJECT_TO_CURVE,
         SP_VERB_SELECTION_GROUP,
-        SP_VERB_SELECTION_OUTLINE,
+        //SP_VERB_SELECTION_OUTLINE,
         SP_VERB_SELECTION_UNGROUP,
     };
 
@@ -336,24 +303,6 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
             if (!mainActions->get_action(verb->get_id())) {
                 GtkAction* act = create_action_for_verb( verb, view, toolboxSize );
                 mainActions->add(Glib::wrap(act));
-            }
-        }
-    }
-
-    if ( !mainActions->get_action("ToolZoom") ) {
-        for ( guint i = 0; i < G_N_ELEMENTS(tools) && tools[i].type_name; i++ ) {
-            Glib::RefPtr<VerbAction> va = VerbAction::create(Inkscape::Verb::get(tools[i].verb), Inkscape::Verb::get(tools[i].doubleclick_verb), view);
-            if ( va ) {
-                mainActions->add(va);
-                if ( i == 0 ) {
-                    va->set_active(true);
-                }
-            } else {
-                // This creates a blank action using the data_name, this can replace
-                // tools that have been disabled by compile time options.
-                Glib::RefPtr<Gtk::Action> act = Gtk::Action::create(Glib::ustring(tools[i].data_name));
-                act->set_sensitive(false);
-                mainActions->add(act);
             }
         }
     }
