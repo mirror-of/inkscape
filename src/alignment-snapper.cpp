@@ -173,7 +173,6 @@ void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) con
         SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
 
     // collect page corners and center
-    // TODO: use the function in ObjectSnapper
     if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_CORNER)) {
         Geom::Coord w = (_snapmanager->getDocument())->getWidth().value("px");
         Geom::Coord h = (_snapmanager->getDocument())->getHeight().value("px");
@@ -258,14 +257,8 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
     if (success) {
         if (sx.getSnapDistance() < sy.getSnapDistance()) {
             isr.points.push_back(sx);
-            // Debug log
-            //std::cout<<"----X----"<<std::endl;
-            //std::cout<<p.getPoint().x()<<","<<p.getPoint().y()<<" to "<<sx.getPoint().x()<<","<<sx.getPoint().y()<<std::endl;
         } else {
             isr.points.push_back(sy);
-            // Debug log
-            //std::cout<<"----Y----"<<std::endl;
-            //std::cout<<p.getPoint().x()<<","<<p.getPoint().y()<<" to "<<sy.getPoint().x()<<","<<sy.getPoint().y()<<std::endl;
         }
     }
 
@@ -279,15 +272,14 @@ void Inkscape::AlignmentSnapper::freeSnap(IntermSnapResults &isr,
 {
     bool p_is_bbox = p.getSourceType() & SNAPSOURCE_BBOX_CATEGORY;
     bool p_is_node = p.getSourceType() & SNAPSOURCE_NODE_HANDLE;
-    bool p_is_handel = p.getSourceType() & SNAPSOURCE_OTHER_HANDLE;
-
+    bool p_is_other = p.getSourceType() & SNAPSOURCE_OTHER_HANDLE;
     
     // toggle checks 
     if (!_snap_enabled || !_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY))
         return;
 
     // only snap if the source point is a bounding box or a handel
-    if (!(p_is_bbox || p_is_handel || p_is_node))
+    if (!(p_is_bbox || p_is_other || p_is_node))
         return;
 
     if (p.getSourceNum() <= 0){

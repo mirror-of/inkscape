@@ -300,9 +300,9 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
 
     _bbox_points.clear();
     // Collect the bounding box's corners and midpoints for each selected item
-    if (m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CATEGORY)) {
-        bool c = m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CORNER);
-        bool mp = m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_MIDPOINT);
+    if (m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CATEGORY, SNAPTARGET_ALIGNMENT_CATEGORY)) {
+        bool c = m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CORNER, SNAPTARGET_ALIGNMENT_CATEGORY);
+        bool mp = m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_MIDPOINT, SNAPTARGET_ALIGNMENT_CATEGORY);
         bool emp = m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_EDGE_MIDPOINT);
         // Preferably we'd use the bbox of each selected item, but for example 50 items will produce at least 200 bbox points,
         // which might make Inkscape crawl(see the comment a few lines above). In that case we will use the bbox of the selection as a whole
@@ -1702,7 +1702,7 @@ void Inkscape::SelTrans::_keepClosestPointOnly(Geom::Point const &p)
     }
 
     // If we're not going to snap bounding boxes, then we might just as well get rid of their snappoints right away
-    if (!m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CATEGORY)) {
+    if (!m.snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CATEGORY) && !m.snapprefs.isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY)) {
         _bbox_points.clear();
     }
 
