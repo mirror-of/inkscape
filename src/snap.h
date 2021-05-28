@@ -83,7 +83,6 @@ public:
         SKEW,
         ROTATE
     };
-
     /**
      * Construct a SnapManager for a SPNamedView.
      *

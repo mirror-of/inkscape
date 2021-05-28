@@ -272,19 +272,24 @@ void Inkscape::AlignmentSnapper::freeSnap(IntermSnapResults &isr,
 {
     bool p_is_bbox = p.getSourceType() & SNAPSOURCE_BBOX_CATEGORY;
     bool p_is_node = p.getSourceType() & SNAPSOURCE_NODE_HANDLE;
-    bool p_is_other = p.getSourceType() & SNAPSOURCE_OTHER_HANDLE;
     
     // toggle checks 
     if (!_snap_enabled || !_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY))
         return;
 
-    // only snap if the source point is a bounding box or a handel
-    if (!(p_is_bbox || p_is_other || p_is_node))
+    unsigned n = (unselected_nodes == nullptr) ? 0 : unselected_nodes->size();
+
+    // n > 0 : node tool is active
+    if (!(p_is_bbox || (n > 0 && p_is_node) || (p.considerForAlignment() && p_is_node)))
         return;
 
     if (p.getSourceNum() <= 0){
         _candidates->clear();
         _findCandidates(_snapmanager->getDocument()->getRoot(), it, true, false);
+    }
+
+    if (n > 0) {
+        //add unselected nodes to _points_to_snap_to
     }
 
     _snapBBoxPoints(isr, p, unselected_nodes);

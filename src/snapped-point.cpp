@@ -130,18 +130,37 @@ void Inkscape::SnappedPoint::getPointIfSnapped(Geom::Point &p) const
 }
 
 // search for the closest snapped point
+// This function give preference to the snapped points that are not in SNAPTARGET_ALIGNMENT_CATEGORY
+// ie. for example, a longer Corner to Corner snap will be given prefrence over a Corner to alignment snap with lesser snapDistance.
 bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::SnappedPoint &result)
 {
     bool success = false;
+    bool aligned_success = false;
+
+    Inkscape::SnappedPoint aligned = *list.begin();
 
     for (std::list<Inkscape::SnappedPoint>::const_iterator i = list.begin(); i != list.end(); ++i) {
-        if ((i == list.begin()) || (*i).getSnapDistance() < result.getSnapDistance()) {
+        bool alignment = (*i).getTarget() & Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY;
+        if (i == list.begin()) {
+            result = *i;
+            success = true;
+            aligned = *i;
+            aligned_success = true; 
+        } else if (alignment && (*i).getSnapDistance() < aligned.getSnapDistance()) {
+                aligned = *i;
+                aligned_success = true; 
+        } else if ((*i).getSnapDistance() < result.getSnapDistance()){
+            // not alignment snapping
             result = *i;
             success = true;
         }
+        
     }
 
-    return success;
+    if (!success && aligned_success)
+        result = aligned;
+
+    return success ? success : aligned_success;
 }
 
 bool Inkscape::SnappedPoint::isOtherSnapBetter(Inkscape::SnappedPoint const &other_one, bool weighted) const
