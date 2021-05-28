@@ -687,7 +687,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                     hatch_area->set_stroke(0x7f7f7fff);
                     hatch_area->show();
 
-                } else if (this->dragging && !this->hatch_escaped) {
+                } else if (this->dragging && !this->hatch_escaped && hatch_dist != 0) {
                     // Tracking: green, center snapped, fixed radius
 
                     Geom::Point c = motion_dt;
@@ -698,7 +698,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                     hatch_area->set_stroke(0x00FF00ff);
                     hatch_area->show();
 
-                } else if (this->dragging && this->hatch_escaped) {
+                } else if (this->dragging && this->hatch_escaped && hatch_dist != 0) {
                     // Tracking escaped: red, center free, fixed radius
 
                     Geom::Point c = motion_dt;
@@ -713,7 +713,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                     // Not drawing but spacing set: gray, center snapped, fixed radius
 
                     Geom::Point c = (nearest + this->hatch_spacing * hatch_unit_vector) * motion_to_curve.inverse();
-                    if (!std::isnan(c[Geom::X]) && !std::isnan(c[Geom::Y])) {
+                    if (!std::isnan(c[Geom::X]) && !std::isnan(c[Geom::Y]) && this->hatch_spacing!=0) {
                         Geom::Affine const sm (Geom::Scale(this->hatch_spacing, this->hatch_spacing) * Geom::Translate(c));
                         path *= sm;
 
