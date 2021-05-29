@@ -247,6 +247,8 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE);
     this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_CORNER);
     this->readAttr(SPAttr::INKSCAPE_SNAP_PAGE_BORDER);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF);
     this->readAttr(SPAttr::INKSCAPE_CURRENT_LAYER);
     this->readAttr(SPAttr::INKSCAPE_CONNECTOR_SPACING);
     this->readAttr(SPAttr::INKSCAPE_LOCKGUIDES);
@@ -539,6 +541,10 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             break;
     case SPAttr::INKSCAPE_SNAP_ALIGNMENT:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY, value ? sp_str_to_bool(value) : FALSE);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF:
+            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_HANDLE, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_CURRENT_LAYER:

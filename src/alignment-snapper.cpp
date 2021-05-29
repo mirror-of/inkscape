@@ -48,7 +48,10 @@ Inkscape::AlignmentSnapper::AlignmentSnapper(SnapManager *sm, Geom::Coord const 
 Inkscape::AlignmentSnapper::~AlignmentSnapper()
 {
     _candidates->clear();
+    delete _candidates;
+
     _points_to_snap_to->clear();
+    delete _points_to_snap_to;
 }
 
 void Inkscape::AlignmentSnapper::_findCandidates(SPObject* parent,
@@ -216,7 +219,9 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
 
     _collectBBoxPoints(p.getSourceNum() <= 0);
 
-    if (unselected_nodes != nullptr && unselected_nodes->size() > 0) {
+    if (unselected_nodes != nullptr &&
+        unselected_nodes->size() > 0 &&
+        _snapmanager->snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_HANDLE)) {
         g_assert(_points_to_snap_to != nullptr);
         _points_to_snap_to->insert(_points_to_snap_to->end(), unselected_nodes->begin(), unselected_nodes->end());
     }
@@ -286,10 +291,6 @@ void Inkscape::AlignmentSnapper::freeSnap(IntermSnapResults &isr,
     if (p.getSourceNum() <= 0){
         _candidates->clear();
         _findCandidates(_snapmanager->getDocument()->getRoot(), it, true, false);
-    }
-
-    if (n > 0) {
-        //add unselected nodes to _points_to_snap_to
     }
 
     _snapBBoxPoints(isr, p, unselected_nodes);

@@ -122,18 +122,7 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
 
     if (target & Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY) {
         group_on = isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY);
-        //switch (target) {
-            //case SNAPTARGET_ALIGNMENT_BBOX_CORNER:
-            //case SNAPTARGET_ALIGNMENT_BBOX_MIDPOINT:
-            //case SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT:
-            //case SNAPTARGET_ALIGNMENT_PAGE_CENTER:
-            //case SNAPTARGET_ALIGNMENT_PAGE_CORNER:
-            //case SNAPTARGET_ALIGNMENT_HANDLE:
-                //target = SNAPTARGET_ALIGNMENT_CATEGORY;
-            //default:
-                //g_warning("Snap-preferences warning: Undefined snap target (#%i)", target);
-                //break;
-        //}
+        return;
     }
 
     if (target & SNAPTARGET_OTHERS_CATEGORY) {
