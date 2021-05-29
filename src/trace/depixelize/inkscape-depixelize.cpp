@@ -81,15 +81,17 @@ DepixelizeTracingEngine::~DepixelizeTracingEngine() { delete params; }
 
 std::vector<TracingEngineResult> DepixelizeTracingEngine::trace(Glib::RefPtr<Gdk::Pixbuf> pixbuf)
 {
+    std::vector<TracingEngineResult> res;
+
     if (pixbuf->get_width() > 256 || pixbuf->get_height() > 256) {
         char *msg = _("Image looks too big. Process may take a while and it is"
                       " wise to save your document before continuing."
                       "\n\nContinue the procedure (without saving)?");
         Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK_CANCEL, true);
 
-//        if (dialog.run() != Gtk::RESPONSE_OK)
-//            return;
-//            TODO
+        if (dialog.run() != Gtk::RESPONSE_OK) {
+            return res;
+        }
     }
 
     ::Tracer::Splines splines;
@@ -98,8 +100,6 @@ std::vector<TracingEngineResult> DepixelizeTracingEngine::trace(Glib::RefPtr<Gdk
         splines = ::Tracer::Kopf2011::to_voronoi(pixbuf, *params);
     else
         splines = ::Tracer::Kopf2011::to_splines(pixbuf, *params);
-
-    std::vector<TracingEngineResult> res;
 
     for (::Tracer::Splines::const_iterator it = splines.begin(), end = splines.end(); it != end; ++it) {
                 gchar b[64];
