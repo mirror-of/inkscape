@@ -137,20 +137,21 @@ bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::Snapp
     bool success = false;
     bool aligned_success = false;
 
-    Inkscape::SnappedPoint aligned = *list.begin();
+    Inkscape::SnappedPoint aligned;
 
     for (std::list<Inkscape::SnappedPoint>::const_iterator i = list.begin(); i != list.end(); ++i) {
         bool alignment = (*i).getTarget() & Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY;
         if (i == list.begin()) {
             result = *i;
-            success = true;
+            success = !alignment;
             aligned = *i;
-            aligned_success = true; 
-        } else if (alignment && (*i).getSnapDistance() < aligned.getSnapDistance()) {
+            aligned_success = alignment;
+        } else if (alignment) {
+            if (!aligned_success || (*i).getSnapDistance() < aligned.getSnapDistance()) {
                 aligned = *i;
                 aligned_success = true; 
-        } else if ((*i).getSnapDistance() < result.getSnapDistance()){
-            // not alignment snapping
+            }
+        } else if (!success || (*i).getSnapDistance() < result.getSnapDistance()){
             result = *i;
             success = true;
         }
@@ -167,6 +168,10 @@ bool Inkscape::SnappedPoint::isOtherSnapBetter(Inkscape::SnappedPoint const &oth
 {
 
     if (getSnapped() && !other_one.getSnapped()) {
+        return false;
+    }
+
+    if (other_one.getTarget() & Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY) {
         return false;
     }
 
