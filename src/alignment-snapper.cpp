@@ -141,19 +141,36 @@ void Inkscape::AlignmentSnapper::_findCandidates(SPObject* parent,
                     if (dynamic_cast<SPGroup *>(item)) {
                         _findCandidates(&o, it, false, clip_or_mask, additional_affine);
                     } else {
-                        // TODO: check if the item is visible on canvas
-                        // Finally add the object to _candidates.
-                        _candidates->push_back(SnapCandidateItem(item, clip_or_mask, additional_affine));
-                        // For debugging: print the id of the candidate to the console
-                        // SPObject *obj = (SPObject*)item;
-                        // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
-                        if (_candidates->size() > 200) { // This makes Inkscape crawl already
-                            static Glib::Timer timer;
-                            if (timer.elapsed() > 1.0) {
-                                timer.reset();
-                                std::cout << "Warning: limit of 200 snap target paths reached, some will be ignored" << std::endl;
+                        Geom::OptRect bbox_of_item;
+                        Preferences *prefs = Preferences::get();
+                        int prefs_bbox = prefs->getBool("/tools/bounding_box", false);
+                        // We'll only need to obtain the visual bounding box if the user preferences tell
+                        // us to, AND if we are snapping to the bounding box itself. If we're snapping to
+                        // paths only, then we can just as well use the geometric bounding box (which is faster)
+                        SPItem::BBoxType bbox_type = (!prefs_bbox && _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CATEGORY)) ?
+                            SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
+                        if (clip_or_mask) {
+                            // Oh oh, this will get ugly. We cannot use sp_item_i2d_affine directly because we need to
+                            // insert an additional transformation in document coordinates (code copied from sp_item_i2d_affine)
+                            bbox_of_item = item->bounds(bbox_type, item->i2doc_affine() * additional_affine * dt->doc2dt());
+                        } else {
+                            bbox_of_item = item->desktopBounds(bbox_type);
+                        }
+                        if (bbox_of_item) {
+                            if (_snapmanager->getDesktop()->get_display_area().contains(bbox_of_item->midpoint()))
+                            // Finally add the object to _candidates.
+                            _candidates->push_back(SnapCandidateItem(item, clip_or_mask, additional_affine));
+                            // For debugging: print the id of the candidate to the console
+                            // SPObject *obj = (SPObject*)item;
+                            // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
+                            if (_candidates->size() > 200) { // This makes Inkscape crawl already
+                                static Glib::Timer timer;
+                                if (timer.elapsed() > 1.0) {
+                                    timer.reset();
+                                    std::cout << "Warning: limit of 200 snap target paths reached, some will be ignored" << std::endl;
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
