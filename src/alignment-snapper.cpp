@@ -141,6 +141,7 @@ void Inkscape::AlignmentSnapper::_findCandidates(SPObject* parent,
                     if (dynamic_cast<SPGroup *>(item)) {
                         _findCandidates(&o, it, false, clip_or_mask, additional_affine);
                     } else {
+                        // TODO: check if the item is visible on canvas
                         // Finally add the object to _candidates.
                         _candidates->push_back(SnapCandidateItem(item, clip_or_mask, additional_affine));
                         // For debugging: print the id of the candidate to the console

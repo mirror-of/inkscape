@@ -171,10 +171,6 @@ bool Inkscape::SnappedPoint::isOtherSnapBetter(Inkscape::SnappedPoint const &oth
         return false;
     }
 
-    if (other_one.getTarget() & Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY) {
-        return false;
-    }
-
     if (!getSnapped() && other_one.getSnapped()) {
         return true;
     }
