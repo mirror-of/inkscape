@@ -246,6 +246,8 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
 
     SnappedPoint sx;
     SnappedPoint sy;
+    bool consider_x = true;
+    bool consider_y = true;
     bool success = false;
     //bool strict_snapping = _snapmanager->snapprefs.getStrictSnapping();
 
@@ -261,16 +263,19 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
             Geom::Point point_on_y(target_pt.x(), p.getPoint().y());
             Geom::Coord distY = Geom::L2(point_on_y - p.getPoint()); 
 
-            // TODO: What about constraints?
-            if (!c.isUndefined()) {
+            if (!c.isUndefined() && c.isLinear()) {
+                if (c.getDirection().x() == 0)
+                    consider_y = false; // consider vertical snapping if moving vertically
+                else
+                    consider_x = false; // consider horizontal snapping if moving horizontally 
             }
 
-            if (distX < getSnapperTolerance()) {
+            if (consider_x && distX < getSnapperTolerance()) {
                 sx = SnappedPoint(point_on_x, source2alignment(p.getSourceType()), p.getSourceNum(), k.getTargetType(), distX, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, k.getTargetBBox());
                 success = true;
             }
 
-            if (distY < getSnapperTolerance()) {
+            if (consider_y && distY < getSnapperTolerance()) {
                 sy = SnappedPoint(point_on_y, source2alignment(p.getSourceType()), p.getSourceNum(), k.getTargetType(), distY, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, k.getTargetBBox());
                 success = true;
             }
@@ -321,6 +326,28 @@ void Inkscape::AlignmentSnapper::constrainedSnap(IntermSnapResults &isr,
               std::vector<SPItem const *> const *it,
               std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
+    bool p_is_bbox = p.getSourceType() & SNAPSOURCE_BBOX_CATEGORY;
+    bool p_is_node = p.getSourceType() & SNAPSOURCE_NODE_HANDLE;
+    
+    // project the mouse pointer onto the constraint. Only the projected point will be considered for snapping
+    Geom::Point pp = c.projection(p.getPoint());
+    
+    // toggle checks 
+    if (!_snap_enabled || !_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY))
+        return;
+
+    unsigned n = (unselected_nodes == nullptr) ? 0 : unselected_nodes->size();
+
+    // n > 0 : node tool is active
+    if (!(p_is_bbox || (n > 0 && p_is_node) || (p.considerForAlignment() && p_is_node)))
+        return;
+
+    if (p.getSourceNum() <= 0){
+        _candidates->clear();
+        _findCandidates(_snapmanager->getDocument()->getRoot(), it, true, false);
+    }
+
+    _snapBBoxPoints(isr, p, unselected_nodes, c, pp);
 }
 
 bool Inkscape::AlignmentSnapper::ThisSnapperMightSnap() const
