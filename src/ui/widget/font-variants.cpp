@@ -228,20 +228,24 @@ namespace Widget {
     _ligatures_contextual.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::ligatures_callback) );
 
     // Restrict label widths (some fonts have lots of ligatures). Must also set ellipsize mode.
-    _ligatures_label_common.set_max_width_chars(        60 );
-    _ligatures_label_discretionary.set_max_width_chars( 60 );
-    _ligatures_label_historical.set_max_width_chars(    60 );
-    _ligatures_label_contextual.set_max_width_chars(    60 );
-
-    _ligatures_label_common.set_ellipsize(        Pango::ELLIPSIZE_END );
-    _ligatures_label_discretionary.set_ellipsize( Pango::ELLIPSIZE_END );
-    _ligatures_label_historical.set_ellipsize(    Pango::ELLIPSIZE_END );
-    _ligatures_label_contextual.set_ellipsize(    Pango::ELLIPSIZE_END );
-
-    _ligatures_label_common.set_lines(        5 );
-    _ligatures_label_discretionary.set_lines( 5 );
-    _ligatures_label_historical.set_lines(    5 );
-    _ligatures_label_contextual.set_lines(    5 );
+    Gtk::Label* labels[] = {
+        &_ligatures_label_common,
+        &_ligatures_label_discretionary,
+        &_ligatures_label_historical,
+        &_ligatures_label_contextual
+    };
+    for (auto label : labels) {
+        // char limit - not really needed, since number of lines is restricted
+        label->set_max_width_chars(999);
+        // show ellipsis when text overflows
+        label->set_ellipsize(Pango::ELLIPSIZE_END);
+        // up to 5 lines
+        label->set_lines(5);
+        // multiline
+        label->set_line_wrap();
+        // break it as needed
+        label->set_line_wrap_mode(Pango::WRAP_WORD_CHAR);
+    }
 
     // Allow user to select characters. Not useful as this selects the ligatures.
     // _ligatures_label_common.set_selectable(        true );
