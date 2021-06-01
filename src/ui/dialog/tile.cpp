@@ -28,7 +28,7 @@ namespace UI {
 namespace Dialog {
 
 ArrangeDialog::ArrangeDialog()
-    : DialogBase("/dialogs/gridtiler", SP_VERB_SELECTION_ARRANGE)
+    : DialogBase("/dialogs/gridtiler", "Arrange")
 {
     _arrangeBox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     _notebook = Gtk::manage(new Gtk::Notebook());

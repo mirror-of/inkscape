@@ -274,6 +274,7 @@ set(ui_SRC
 	dialog/debug.h
 	dialog/dialog-base.h
 	dialog/dialog-container.h
+	dialog/dialog-data.h
 	dialog/dialog-manager.h
 	dialog/dialog-multipaned.h
 	dialog/dialog-notebook.h

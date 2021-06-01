@@ -60,7 +60,7 @@ namespace UI {
 namespace Dialog {
 
 XmlTree::XmlTree()
-    : DialogBase("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR)
+    : DialogBase("/dialogs/xml/", "XMLEditor")
     , blocked(0)
     , _message_stack(nullptr)
     , _message_context(nullptr)

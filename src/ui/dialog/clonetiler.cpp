@@ -96,7 +96,7 @@ static gdouble trace_zoom;
 static SPDocument *trace_doc = nullptr;
 
 CloneTiler::CloneTiler()
-    : DialogBase("/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER)
+    : DialogBase("/dialogs/clonetiler/", "CloneTiler")
     , table_row_labels(nullptr)
 {
     set_spacing(0);

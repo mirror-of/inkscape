@@ -24,7 +24,7 @@ class InputDialog : public DialogBase
 public:
     static InputDialog &getInstance();
 
-    InputDialog() : DialogBase("/dialogs/inputdevices", SP_VERB_DIALOG_INPUT) {}
+    InputDialog() : DialogBase("/dialogs/inputdevices", "Input") {}
     ~InputDialog() override = default;
 };
 

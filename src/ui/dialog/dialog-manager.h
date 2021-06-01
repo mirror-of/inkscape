@@ -38,20 +38,20 @@ public:
     // store complete dialog window state (including its container state)
     void store_state(DialogWindow &wnd);
 
-    // return true if dialog 'code' should be opened as floating
-    bool should_open_floating(unsigned int code);
+    // return true if dialog 'type' should be opened as floating
+    bool should_open_floating(const Glib::ustring& dialog_type);
 
-    // find instance of dialog 'code' in one of currently open floating dialog windows
-    DialogBase *find_floating_dialog(unsigned int code);
+    // find instance of dialog 'type' in one of currently open floating dialog windows
+    DialogBase *find_floating_dialog(const Glib::ustring& dialog_type);
 
     // find window hosting floating dialog
-    DialogWindow* find_floating_dialog_window(unsigned int code);
+    DialogWindow* find_floating_dialog_window(const Glib::ustring& dialog_type);
 
     // find floating window state hosting dialog 'code', if there was one
-    std::shared_ptr<Glib::KeyFile> find_dialog_state(unsigned int code);
+    std::shared_ptr<Glib::KeyFile> find_dialog_state(const Glib::ustring& dialog_type);
 
     // remove dialog floating state
-    void remove_dialog_floating_state(unsigned int code);
+    void remove_dialog_floating_state(const Glib::ustring& dialog_type);
 
     // save configuration of docked and floating dialogs
     void save_dialogs_state(DialogContainer *docking_container);
@@ -64,15 +64,16 @@ public:
 
     // show/hide dialog window and keep track of it
     void set_floating_dialog_visibility(DialogWindow* wnd, bool show);
+
 private:
     DialogManager() = default;
     ~DialogManager() = default;
 
-    std::vector<unsigned int> count_dialogs(const Glib::KeyFile *state) const;
+    std::vector<Glib::ustring> count_dialogs(const Glib::KeyFile *state) const;
     void load_transient_state(Glib::KeyFile *keyfile);
 
     // transient dialog state for floating windows user closes
-    std::map<unsigned int, std::shared_ptr<Glib::KeyFile>> floating_dialogs;
+    std::map<Glib::ustring, std::shared_ptr<Glib::KeyFile>> floating_dialogs;
     std::set<DialogWindow*> _hidden_dlg_windows;
 };
 
@@ -81,3 +82,14 @@ private:
 } // namespace Inkscape
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

@@ -70,7 +70,7 @@ namespace UI {
 namespace Dialog {
 
 TextEdit::TextEdit()
-    : DialogBase("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
+    : DialogBase("/dialogs/textandfont", "Text"),
       selectChangedConn(),
       subselChangedConn(),
       selectModifiedConn(),

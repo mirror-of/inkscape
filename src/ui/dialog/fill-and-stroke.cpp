@@ -40,7 +40,7 @@ namespace UI {
 namespace Dialog {
 
 FillAndStroke::FillAndStroke()
-    : DialogBase("/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE)
+    : DialogBase("/dialogs/fillstroke", "FillStroke")
     , _page_fill(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_stroke_paint(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))

@@ -72,9 +72,9 @@ void DialogManager::store_state(DialogWindow &wnd)
     }
 }
 
-bool DialogManager::should_open_floating(unsigned int code)
+bool DialogManager::should_open_floating(const Glib::ustring& dialog_type)
 {
-    return floating_dialogs.count(code) > 0;
+    return floating_dialogs.count(dialog_type) > 0;
 }
 
 void DialogManager::set_floating_dialog_visibility(DialogWindow* wnd, bool show) {
@@ -112,12 +112,12 @@ std::vector<DialogWindow*> DialogManager::get_all_floating_dialog_windows() {
     return result;
 }
 
-DialogWindow* DialogManager::find_floating_dialog_window(unsigned int code) {
+DialogWindow* DialogManager::find_floating_dialog_window(const Glib::ustring& dialog_type) {
     auto windows = get_all_floating_dialog_windows();
 
     for (auto dlg_wnd : windows) {
         if (auto container = dlg_wnd->get_container()) {
-            if (auto dlg = container->get_dialog(code)) {
+            if (auto dlg = container->get_dialog(dialog_type)) {
                 return dlg_wnd;
             }
         }
@@ -126,13 +126,13 @@ DialogWindow* DialogManager::find_floating_dialog_window(unsigned int code) {
     return nullptr;
 }
 
-DialogBase *DialogManager::find_floating_dialog(unsigned int code)
+DialogBase *DialogManager::find_floating_dialog(const Glib::ustring& dialog_type)
 {
     auto windows = get_all_floating_dialog_windows();
 
     for (auto dlg_wnd : windows) {
         if (auto container = dlg_wnd->get_container()) {
-            if (auto dlg = container->get_dialog(code)) {
+            if (auto dlg = container->get_dialog(dialog_type)) {
                 return dlg;
             }
         }
@@ -141,9 +141,9 @@ DialogBase *DialogManager::find_floating_dialog(unsigned int code)
     return nullptr;
 }
 
-std::shared_ptr<Glib::KeyFile> DialogManager::find_dialog_state(unsigned int code)
+std::shared_ptr<Glib::KeyFile> DialogManager::find_dialog_state(const Glib::ustring& dialog_type)
 {
-    auto it = floating_dialogs.find(code);
+    auto it = floating_dialogs.find(dialog_type);
     if (it != floating_dialogs.end()) {
         return it->second;
     }
@@ -155,9 +155,9 @@ const char save_dialog_position[] = "/options/savedialogposition/value";
 const char transient_group[] = "transient";
 
 // list of dialogs sharing the same state
-std::vector<unsigned int> DialogManager::count_dialogs(const Glib::KeyFile *state) const
+std::vector<Glib::ustring> DialogManager::count_dialogs(const Glib::KeyFile *state) const
 {
-    std::vector<unsigned int> dialogs;
+    std::vector<Glib::ustring> dialogs;
     for (auto dlg : floating_dialogs) {
         if (dlg.second.get() == state) {
             dialogs.push_back(dlg.first);
@@ -191,7 +191,7 @@ void DialogManager::save_dialogs_state(DialogContainer *docking_container)
         auto index = std::to_string(idx++);
         keyfile->set_string(transient_group, "state" + index, state->to_data());
         auto dialogs = count_dialogs(state);
-        keyfile->set_integer_list("transient", "dialogs" + index, dialogs);
+        keyfile->set_string_list("transient", "dialogs" + index, dialogs);
     }
     keyfile->set_integer(transient_group, "count", files.size());
 
@@ -209,13 +209,13 @@ void DialogManager::load_transient_state(Glib::KeyFile *file)
     int count = file->get_integer(transient_group, "count");
     for (int i = 0; i < count; ++i) {
         auto index = std::to_string(i + 1);
-        auto dialogs = file->get_integer_list(transient_group, "dialogs" + index);
+        auto dialogs = file->get_string_list(transient_group, "dialogs" + index);
         auto state = file->get_string(transient_group, "state" + index);
 
         auto keyfile = std::make_shared<Glib::KeyFile>();
         keyfile->load_from_data(state);
-        for (auto code : dialogs) {
-            floating_dialogs[code] = keyfile;
+        for (auto type : dialogs) {
+            floating_dialogs[type] = keyfile;
         }
     }
 }
@@ -252,8 +252,8 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
     }
 }
 
-void DialogManager::remove_dialog_floating_state(unsigned int code) {
-    auto it = floating_dialogs.find(code);
+void DialogManager::remove_dialog_floating_state(const Glib::ustring& dialog_type) {
+    auto it = floating_dialogs.find(dialog_type);
     if (it != floating_dialogs.end()) {
         floating_dialogs.erase(it);
     }
@@ -262,3 +262,14 @@ void DialogManager::remove_dialog_floating_state(unsigned int code) {
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

@@ -833,7 +833,7 @@ Gtk::AccelKey
 Shortcuts::accelerator_to_shortcut(const Glib::ustring& accelerator)
 {
     Gdk::ModifierType modval = Gdk::ModifierType(0);
-    std::vector<Glib::ustring> parts = Glib::Regex::split_simple("<(<.*?>)", accelerator);
+    std::vector<Glib::ustring> parts = Glib::Regex::split_simple("(<.*?>)", accelerator);
     for (auto part : parts) {
         if (part == "<Ctrl>")  modval |= Gdk::CONTROL_MASK;
         if (part == "<Shift>") modval |= Gdk::SHIFT_MASK;

@@ -217,7 +217,7 @@ Glib::RefPtr<SelectorsDialog::TreeStore> SelectorsDialog::TreeStore::create(Sele
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
 SelectorsDialog::SelectorsDialog()
-    : DialogBase("/dialogs/selectors", SP_VERB_DIALOG_SELECTORS)
+    : DialogBase("/dialogs/selectors", "Selectors")
     , _updating(false)
     , _textNode(nullptr)
     , _scroolpos(0)

@@ -421,7 +421,7 @@ GlyphColumns *GlyphsPanel::getColumns()
  * Constructor
  */
 GlyphsPanel::GlyphsPanel()
-    : DialogBase("/dialogs/glyphs", SP_VERB_DIALOG_GLYPHS)
+    : DialogBase("/dialogs/glyphs", "Glyphs")
     , store(Gtk::ListStore::create(*getColumns()))
     , instanceConns()
     , desktopConns()

@@ -87,7 +87,7 @@ DocumentProperties& DocumentProperties::getInstance()
 }
 
 DocumentProperties::DocumentProperties()
-    : DialogBase("/dialogs/documentoptions", SP_VERB_DIALOG_DOCPROPERTIES)
+    : DialogBase("/dialogs/documentoptions", "DocumentProperties")
     , _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))

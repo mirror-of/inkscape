@@ -95,7 +95,7 @@ SymbolColumns* SymbolsDialog::getColumns()
  * Constructor
  */
 SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
-    : DialogBase(prefsPath, SP_VERB_DIALOG_SYMBOLS)
+    : DialogBase(prefsPath, "Symbols")
     , store(Gtk::ListStore::create(*getColumns()))
     , all_docs_processed(false)
     , icon_view(nullptr)

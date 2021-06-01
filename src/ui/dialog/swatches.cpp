@@ -716,7 +716,7 @@ void SwatchesPanel::_trackDocument( SwatchesPanel *panel, SPDocument *document )
  * Constructor
  */
 SwatchesPanel::SwatchesPanel(gchar const *prefsPath)
-    : DialogBase(prefsPath, SP_VERB_DIALOG_SWATCHES)
+    : DialogBase(prefsPath, "Swatches")
     , _menu(nullptr)
     , _holder(nullptr)
     , _clear(nullptr)

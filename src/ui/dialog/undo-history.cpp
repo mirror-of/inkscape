@@ -90,7 +90,7 @@ UndoHistory& UndoHistory::getInstance()
 }
 
 UndoHistory::UndoHistory()
-    : DialogBase("/dialogs/undo-history", SP_VERB_DIALOG_UNDO_HISTORY),
+    : DialogBase("/dialogs/undo-history", "UndoHistory"),
       _document_replaced_connection(),
       _desktop(nullptr),
       _document(nullptr),

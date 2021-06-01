@@ -87,7 +87,7 @@ static void lpe_style_button(Gtk::Button& btn, char const* iconName)
  */
 
 LivePathEffectEditor::LivePathEffectEditor()
-    : DialogBase("/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT)
+    : DialogBase("/dialogs/livepatheffect", "LivePathEffect")
     , lpe_list_locked(false)
     , effectwidget(nullptr)
     , status_label("", Gtk::ALIGN_CENTER)

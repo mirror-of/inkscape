@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include "desktop.h"
+#include "ui/dialog/dialog-data.h"
 #include "ui/dialog/dialog-notebook.h"
 #include "ui/dialog-events.h"
 // get_latin_keyval
@@ -36,21 +37,22 @@ namespace Dialog {
  * DialogBase constructor.
  *
  * @param prefs_path characteristic path to load/save dialog position.
- * @param verb_num the dialog verb.
+ * @param dialog_type is the "type" string for the dialog.
  */
-DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
+DialogBase::DialogBase(gchar const *prefs_path, Glib::ustring dialog_type)
     : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
     , _name("DialogBase")
     , _prefs_path(prefs_path)
-    , _verb_num(verb_num)
+    , _dialog_type(dialog_type)
     , _app(InkscapeApplication::instance())
 {
     // Derive a pretty display name for the dialog based on the verbs name.
     // TODO: This seems fragile. Should verbs have a proper display name?
-    Verb *verb = Verb::get(verb_num);
-    if (verb) {
+    auto it = dialog_data.find(dialog_type);
+    if (it != dialog_data.end()) {
+
         // get translated verb name
-        _name = _(verb->get_name());
+        _name = _(it->second.label.c_str());
 
         // remove ellipsis and mnemonics
         int pos = _name.find("...", 0);

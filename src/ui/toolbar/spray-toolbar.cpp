@@ -52,11 +52,11 @@
 
 Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
 {
-    Inkscape::UI::Dialog::DialogBase *dialog = desktop->getContainer()->get_dialog(SP_VERB_DIALOG_CLONETILER);
+    Inkscape::UI::Dialog::DialogBase *dialog = desktop->getContainer()->get_dialog("Clonetiler");
     if (!dialog) {
-        desktop->getContainer()->new_dialog(SP_VERB_DIALOG_CLONETILER);
+        desktop->getContainer()->new_dialog("Clonetiler");
         return dynamic_cast<Inkscape::UI::Dialog::CloneTiler *>(
-            desktop->getContainer()->get_dialog(SP_VERB_DIALOG_CLONETILER));
+            desktop->getContainer()->get_dialog("Clonetiler"));
     }
     return dynamic_cast<Inkscape::UI::Dialog::CloneTiler *>(dialog);
 }

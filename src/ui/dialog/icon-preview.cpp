@@ -87,7 +87,7 @@ void IconPreviewPanel::on_button_clicked(int which)
  * Constructor
  */
 IconPreviewPanel::IconPreviewPanel()
-    : DialogBase("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW)
+    : DialogBase("/dialogs/iconpreview", "IconPreview")
     , desktop(nullptr)
     , document(nullptr)
     , drawing(nullptr)

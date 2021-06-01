@@ -2630,7 +2630,7 @@ int FilterEffectsDialog::PrimitiveList::get_input_type_width() const
 /*** FilterEffectsDialog ***/
 
 FilterEffectsDialog::FilterEffectsDialog()
-    : DialogBase("/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
+    : DialogBase("/dialogs/filtereffects", "FilterEffects")
     , _add_primitive_type(FPConverter)
     , _add_primitive(_("Add Effect:"))
     , _empty_settings(_("No effect selected"), Gtk::ALIGN_START)

@@ -82,7 +82,7 @@ static void show_spellcheck_preferences_dialog()
 }
 
 SpellCheck::SpellCheck()
-    : DialogBase("/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK)
+    : DialogBase("/dialogs/spellcheck/", "Spellcheck")
     , _text(nullptr)
     , _layout(nullptr)
     , _stops(0)

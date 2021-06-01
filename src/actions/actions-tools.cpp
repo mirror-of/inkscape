@@ -235,10 +235,10 @@ tool_switch(Glib::ustring const &tool, InkscapeWindow *win)
             Inkscape::UI::Dialog::DialogContainer* container = dt->getContainer();
 
             // Create dialog if it doesn't exist (also sets page if dialog not already in opened tab).
-            container->new_floating_dialog(SP_VERB_DIALOG_PREFERENCES); // TEMP Until we replace verbs in new_floating_dialog().
+            container->new_floating_dialog("Preferences");
 
             // Find dialog and explicitly set page (in case not set in previous line).
-            auto dialog = Inkscape::UI::Dialog::DialogManager::singleton().find_floating_dialog(SP_VERB_DIALOG_PREFERENCES);
+            auto dialog = Inkscape::UI::Dialog::DialogManager::singleton().find_floating_dialog("Preferences");
             if (dialog) {
                 auto pref_dialog = dynamic_cast<Inkscape::UI::Dialog::InkscapePreferences *>(dialog);
                 if (pref_dialog) {

@@ -50,7 +50,7 @@ namespace UI {
 namespace Dialog {
 
 ObjectProperties::ObjectProperties()
-    : DialogBase("/dialogs/object/", SP_VERB_DIALOG_ITEM)
+    : DialogBase("/dialogs/object/", "ObjectProperties")
     , _blocked(false)
     , _current_item(nullptr)
     , _label_id(_("_ID:"), true)

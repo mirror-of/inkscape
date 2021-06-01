@@ -208,6 +208,8 @@ set(inkscape_SRC
   actions/actions-canvas-transform.h
   actions/actions-canvas-transform.cpp
   actions/actions-base.h
+  actions/actions-dialogs.cpp
+  actions/actions-dialogs.h
   actions/actions-base.cpp
   actions/actions-file.h
   actions/actions-file.cpp

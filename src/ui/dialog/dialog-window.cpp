@@ -165,7 +165,7 @@ void DialogWindow::update_dialogs()
     }
 
     if (_container) {
-        const std::multimap<int, DialogBase *> *dialogs = _container->get_dialogs();
+        const std::multimap<Glib::ustring, DialogBase *> *dialogs = _container->get_dialogs();
         if (dialogs->size() > 1) {
             _title = "Multiple dialogs";
         } else if (dialogs->size() == 1) {
@@ -198,7 +198,7 @@ void DialogWindow::update_window_size_to_fit_children()
     // Read needed data
     get_position(pos_x, pos_y);
     get_allocated_size(allocation, baseline);
-    const std::multimap<int, DialogBase *> *dialogs = _container->get_dialogs();
+    const std::multimap<Glib::ustring, DialogBase *> *dialogs = _container->get_dialogs();
 
     // Get largest sizes for dialogs
     for (auto dialog : *dialogs) {

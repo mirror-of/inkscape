@@ -925,7 +925,7 @@ static void on_selection_changed(AlignAndDistribute *daad)
 /////////////////////////////////////////////////////////
 
 AlignAndDistribute::AlignAndDistribute()
-    : DialogBase("/dialogs/align", SP_VERB_DIALOG_ALIGN_DISTRIBUTE)
+    : DialogBase("/dialogs/align", "AlignDistribute")
     , randomize_bbox()
     , _alignFrame(_("Align"))
     , _distributeFrame(_("Distribute"))

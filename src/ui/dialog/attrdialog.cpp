@@ -84,7 +84,7 @@ static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *
  * New attribute can be added by clicking '+' at bottom of the attr pane. '-'
  */
 AttrDialog::AttrDialog()
-    : DialogBase("/dialogs/attr", SP_VERB_DIALOG_ATTR_XML)
+    : DialogBase("/dialogs/attr", "AttrDialog")
     , _repr(nullptr)
     , _mainBox(Gtk::ORIENTATION_VERTICAL)
     , status_box(Gtk::ORIENTATION_HORIZONTAL)

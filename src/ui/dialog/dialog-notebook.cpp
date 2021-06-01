@@ -328,7 +328,7 @@ void DialogNotebook::on_page_added(Gtk::Widget *page, int page_num)
         // We already have a dialog of the same type
 
         // Highlight first dialog
-        DialogBase *other_dialog = _container->get_dialog(dialog->getVerb());
+        DialogBase *other_dialog = _container->get_dialog(dialog->get_type());
         other_dialog->blink();
 
         // Remove page from notebook

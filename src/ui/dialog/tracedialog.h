@@ -32,7 +32,7 @@ public:
     /**
      * Constructor
      */
-    TraceDialog() : DialogBase("/dialogs/trace", SP_VERB_SELECTION_TRACE) {}
+    TraceDialog() : DialogBase("/dialogs/trace", "SelectionTrace") {}
 
 
     /**

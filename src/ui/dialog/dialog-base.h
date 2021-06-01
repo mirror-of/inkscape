@@ -33,14 +33,14 @@ namespace Dialog {
  *
  * DialogsBase derived classes' instances live in DialogNotebook classes and are managed by
  * DialogContainer classes. DialogContainer instances can have at most one type of dialog,
- * differentiated by the associated verb.
+ * differentiated by the associated type.
  */
 class DialogBase : public Gtk::Box
 {
     using parent_type = Gtk::Box;
 
 public:
-    DialogBase(gchar const *prefs_path = nullptr, int verb_num = 0);
+    DialogBase(gchar const *prefs_path = nullptr, Glib::ustring dialog_type = "");
     ~DialogBase() override{
         ensure_size();
     };
@@ -71,7 +71,7 @@ public:
     // Getters and setters
     Glib::ustring get_name() { return _name; };
     gchar const *getPrefsPath() const { return _prefs_path.data(); }
-    int const &getVerb() const { return _verb_num; }
+    Glib::ustring const &get_type() const { return _dialog_type; }
     SPDesktop *getDesktop();
 
     void blink();
@@ -83,7 +83,7 @@ public:
 protected:
     Glib::ustring _name;             // Gtk widget name (must be set!)
     Glib::ustring const _prefs_path; // Stores characteristic path for loading/saving the dialog position.
-    int _verb_num;                   // Dialog associated verb value
+    Glib::ustring const _dialog_type; // Type of dialog (we could just use _pref_path?).
     InkscapeApplication *_app; // Used for state management
 
 private:

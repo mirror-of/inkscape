@@ -55,7 +55,7 @@ namespace UI {
 namespace Dialog {
 
 Find::Find()
-    : DialogBase("/dialogs/find", SP_VERB_DIALOG_FIND),
+    : DialogBase("/dialogs/find", "Find"),
 
       entry_find(_("F_ind:"), _("Find objects by their content or properties (exact or partial match)")),
       entry_replace(_("R_eplace:"), _("Replace match with this value")),

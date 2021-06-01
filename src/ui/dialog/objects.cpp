@@ -1885,7 +1885,7 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
  * Constructor
  */
 ObjectsPanel::ObjectsPanel() :
-    DialogBase("/dialogs/objects", SP_VERB_DIALOG_OBJECTS),
+    DialogBase("/dialogs/objects", "Objects"),
     _rootWatcher(nullptr),
     _desktop(nullptr),
     _document(nullptr),

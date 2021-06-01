@@ -55,14 +55,17 @@ public:
     DialogMultipaned *create_column();
 
     // Dialog-related functions
-    void new_dialog(unsigned int code);
-    void new_dialog(unsigned int code, DialogNotebook *notebook);
-    DialogWindow* new_floating_dialog(unsigned int code);
+    void new_dialog(unsigned int code);  // TEMP TEMP TEMP
+    void new_dialog(const Glib::ustring& dialog_type);
+    void new_dialog(const Glib::ustring& dialog_type, DialogNotebook *notebook);
+
+    DialogWindow* new_floating_dialog(unsigned int code);  // TEMP TEMP TEMP
+    DialogWindow* new_floating_dialog(const Glib::ustring& dialog_type);
     bool has_dialog_of_type(DialogBase *dialog);
-    DialogBase *get_dialog(unsigned int code);
+    DialogBase *get_dialog(const Glib::ustring& dialog_type);
     void link_dialog(DialogBase *dialog);
     void unlink_dialog(DialogBase *dialog);
-    const std::multimap<int, DialogBase *> *get_dialogs() { return &dialogs; };
+    const std::multimap<Glib::ustring, DialogBase *> *get_dialogs() { return &dialogs; };
     void toggle_dialogs();
     void update_dialogs(); // Update all linked dialogs
 
@@ -88,13 +91,13 @@ private:
      * window. (More explicitly, use one group name for all notebooks or
      * use a unique group name for each document window with related
      * floating docks.) For the moment we choose the former which
-     * requires a multimap here as we use the dialog verb code as a key.
+     * requires a multimap here as we use the dialog type as a key.
      */
-    std::multimap<int, DialogBase *> dialogs;
+    std::multimap<Glib::ustring, DialogBase *>dialogs;
 
-    DialogBase *dialog_factory(unsigned int code);
-    Gtk::Widget *create_notebook_tab(Glib::ustring label, Glib::ustring image, Gtk::AccelKey shortcut);
-    DialogWindow* create_new_floating_dialog(unsigned int code, bool blink);
+    DialogBase *dialog_factory(const Glib::ustring& dialog_type);
+    Gtk::Widget *create_notebook_tab(Glib::ustring label, Glib::ustring image, const Glib::ustring shortcut);
+    DialogWindow* create_new_floating_dialog(const Glib::ustring& dialog_type, bool blink);
 
     // Signal connections
     std::vector<sigc::connection> connections;
@@ -105,7 +108,7 @@ private:
     void prepend_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void append_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void column_empty(DialogMultipaned *column);
-    DialogBase* find_existing_dialog(unsigned int code);
+    DialogBase* find_existing_dialog(const Glib::ustring& dialog_type);
 };
 
 } // namespace Dialog

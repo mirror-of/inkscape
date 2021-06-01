@@ -37,7 +37,6 @@
 #include "inkscape-window.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 // required to set status message after export
 #include "desktop.h"
@@ -148,7 +147,7 @@ static const char * selection_labels[SELECTION_NUMBER_OF] = {
 };
 
 Export::Export()
-    : DialogBase("/dialogs/export/", SP_VERB_DIALOG_EXPORT)
+    : DialogBase("/dialogs/export/", "Export")
     , current_key(SELECTION_PAGE)
     , manual_key(SELECTION_PAGE)
     , original_name()

@@ -57,7 +57,6 @@
 #include "object/uri.h"
 #include "preferences.h"
 #include "ui/interface.h"
-#include "verbs.h"
 #include "xml/repr.h"
 
 namespace Inkscape {

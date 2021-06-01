@@ -220,7 +220,7 @@ StyleDialog::_stylesheetChanged( Inkscape::XML::Node &repr ) {
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
 StyleDialog::StyleDialog()
-    : DialogBase("/dialogs/style", SP_VERB_DIALOG_STYLE)
+    : DialogBase("/dialogs/style", "Style")
     , _updating(false)
     , _textNode(nullptr)
     , _scroolpos(0)

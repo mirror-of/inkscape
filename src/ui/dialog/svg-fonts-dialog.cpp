@@ -996,7 +996,7 @@ void SvgFontsDialog::add_font(){
 }
 
 SvgFontsDialog::SvgFontsDialog()
- : DialogBase("/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS)
+ : DialogBase("/dialogs/svgfonts", "SVGFonts")
  , _add(_("_New"), true)
  , _font_settings(Gtk::ORIENTATION_VERTICAL)
  , global_vbox(Gtk::ORIENTATION_VERTICAL)

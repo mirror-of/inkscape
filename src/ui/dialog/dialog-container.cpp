@@ -24,6 +24,7 @@
 #include "inkscape-application.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
+#include "ui/dialog/dialog-data.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-notebook.h"
 #include "ui/dialog/dialog-window.h"
@@ -63,6 +64,48 @@
 #include "ui/icon-names.h"
 #include "ui/widget/canvas-grid.h"
 #include "verbs.h"
+
+// TEMP TEMP TEMP Until dialog verbs are gone.
+static std::map<int, Glib::ustring> verb_to_dialog_map =
+{
+    {SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "AlignDistribute"   },
+    {SP_VERB_SELECTION_ARRANGE,       "Arrange"           },
+    {SP_VERB_DIALOG_ATTR_XML,         "AttrDialog"        },
+    {SP_VERB_DIALOG_CLONETILER,       "Clonetiler"        },
+    {SP_VERB_DIALOG_DOCPROPERTIES,    "DocumentProperties"},
+    {SP_VERB_DIALOG_EXPORT,           "Export"            },
+    {SP_VERB_DIALOG_FILL_STROKE,      "FillStroke"        },
+    {SP_VERB_DIALOG_FILTER_EFFECTS,   "FilterEffects"     },
+    {SP_VERB_DIALOG_FIND,             "Find"              },
+    {SP_VERB_DIALOG_GLYPHS,           "Glyphs"            },
+    {SP_VERB_VIEW_ICON_PREVIEW,       "IconPreview"       },
+    {SP_VERB_DIALOG_INPUT,            "Input"             },
+    {SP_VERB_DIALOG_LAYERS,           "Layers"            },
+    {SP_VERB_DIALOG_LIVE_PATH_EFFECT, "LivePathEffect"    },
+    {SP_VERB_HELP_MEMORY,             "Memory"            },
+    {SP_VERB_DIALOG_DEBUG,            "Messages"          },
+    {SP_VERB_DIALOG_ATTR,             "ObjectAttributes"  },
+    {SP_VERB_DIALOG_ITEM,             "ObjectProperties"  },
+    {SP_VERB_DIALOG_OBJECTS,          "Objects"           },
+    {SP_VERB_DIALOG_PAINT,            "PaintServers"      },
+    {SP_VERB_DIALOG_PREFERENCES,      "Preferences"       },
+    {SP_VERB_DIALOG_SELECTORS,        "Selectors"         },
+    {SP_VERB_DIALOG_STYLE,            "Style"             },
+    {SP_VERB_DIALOG_SVG_FONTS,        "SVGFonts"          },
+    {SP_VERB_DIALOG_SWATCHES,         "Swatches"          },
+    {SP_VERB_DIALOG_SYMBOLS,          "Symbols"           },
+    {SP_VERB_DIALOG_TEXT,             "Text"              },
+    {SP_VERB_SELECTION_TRACE,         "Trace"             },
+    {SP_VERB_DIALOG_TRANSFORM,        "Transform"         },
+    {SP_VERB_DIALOG_UNDO_HISTORY,     "UndoHistory"       },
+    {SP_VERB_DIALOG_XML_EDITOR,       "XMLEditor"         },
+#if WITH_GSPELL
+    {SP_VERB_DIALOG_SPELLCHECK,       "Spellcheck"        },
+#endif
+#ifdef DEBUG
+    {SP_VERB_DIALOG_PROTOTYPE,        "Prototype"         }
+#endif
+};
 
 namespace Inkscape {
 namespace UI {
@@ -118,90 +161,58 @@ DialogMultipaned *DialogContainer::create_column()
 }
 
 /**
- * Get an instance of a DialogBase dialog using the associated verb code.
+ * Get an instance of a DialogBase dialog using the associated dialog name.
  */
-DialogBase *DialogContainer::dialog_factory(unsigned int code)
+DialogBase *DialogContainer::dialog_factory(const Glib::ustring& dialog_type)
 {
-    if (code <= 0) {
+
+    // clang-format off
+    if(     dialog_type == "AlignDistribute")     return &Inkscape::UI::Dialog::AlignAndDistribute::getInstance();
+    else if(dialog_type == "Arrange")             return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
+    else if(dialog_type == "AttrDialog")          return &Inkscape::UI::Dialog::AttrDialog::getInstance();
+    else if(dialog_type == "Clonetiler")          return &Inkscape::UI::Dialog::CloneTiler::getInstance();
+    else if(dialog_type == "DocumentProperties")  return &Inkscape::UI::Dialog::DocumentProperties::getInstance();
+    else if(dialog_type == "Export")              return &Inkscape::UI::Dialog::Export::getInstance();
+    else if(dialog_type == "FillStroke")          return &Inkscape::UI::Dialog::FillAndStroke::getInstance();
+    else if(dialog_type == "FilterEffects")       return &Inkscape::UI::Dialog::FilterEffectsDialog::getInstance();
+    else if(dialog_type == "Find")                return &Inkscape::UI::Dialog::Find::getInstance();
+    else if(dialog_type == "Glyphs")              return &Inkscape::UI::Dialog::GlyphsPanel::getInstance();
+    else if(dialog_type == "IconPreview")         return &Inkscape::UI::Dialog::IconPreviewPanel::getInstance();
+    else if(dialog_type == "Input")               return &Inkscape::UI::Dialog::InputDialog::getInstance();
+    else if(dialog_type == "Layers")              return &Inkscape::UI::Dialog::LayersPanel::getInstance();
+    else if(dialog_type == "LivePathEffect")      return &Inkscape::UI::Dialog::LivePathEffectEditor::getInstance();
+    else if(dialog_type == "Memory")              return &Inkscape::UI::Dialog::Memory::getInstance();
+    else if(dialog_type == "Messages")            return &Inkscape::UI::Dialog::Messages::getInstance();
+    else if(dialog_type == "ObjectAttributes")    return &Inkscape::UI::Dialog::ObjectAttributes::getInstance();
+    else if(dialog_type == "ObjectProperties")    return &Inkscape::UI::Dialog::ObjectProperties::getInstance();
+    else if(dialog_type == "Objects")             return &Inkscape::UI::Dialog::ObjectsPanel::getInstance();
+    else if(dialog_type == "PaintServers")        return &Inkscape::UI::Dialog::PaintServersDialog::getInstance();
+    else if(dialog_type == "Preferences")         return &Inkscape::UI::Dialog::InkscapePreferences::getInstance();
+    else if(dialog_type == "Selectors")           return &Inkscape::UI::Dialog::SelectorsDialog::getInstance();
+    else if(dialog_type == "Style")               return &Inkscape::UI::Dialog::StyleDialog::getInstance();
+    else if(dialog_type == "SVGFonts")            return &Inkscape::UI::Dialog::SvgFontsDialog::getInstance();
+    else if(dialog_type == "Swatches")            return &Inkscape::UI::Dialog::SwatchesPanel::getInstance();
+    else if(dialog_type == "Symbols")             return &Inkscape::UI::Dialog::SymbolsDialog::getInstance();
+    else if(dialog_type == "Text")                return &Inkscape::UI::Dialog::TextEdit::getInstance();
+    else if(dialog_type == "Trace")               return &Inkscape::UI::Dialog::TraceDialog::getInstance();
+    else if(dialog_type == "Transform")           return &Inkscape::UI::Dialog::Transformation::getInstance();
+    else if(dialog_type == "UndoHistory")         return &Inkscape::UI::Dialog::UndoHistory::getInstance();
+    else if(dialog_type == "XMLEditor")           return &Inkscape::UI::Dialog::XmlTree::getInstance();
+#if WITH_GSPELL
+    else if(dialog_type == "SpellCheck")          return &Inkscape::UI::Dialog::SpellCheck::getInstance();
+#endif
+#ifdef DEBUG
+    else if(dialog_type == "Prototype")           return &Inkscape::UI::Dialog::Prototype::getInstance();
+#endif
+    else {
+        std::cerr << "DialogContainer::dialog_factory: Unhandled dialog: " << dialog_type << std::endl;
         return nullptr;
     }
-
-    switch (code) {
-        case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
-            return &Inkscape::UI::Dialog::AlignAndDistribute::getInstance();
-        case SP_VERB_SELECTION_ARRANGE:
-            return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
-        case SP_VERB_DIALOG_CLONETILER:
-            return &Inkscape::UI::Dialog::CloneTiler::getInstance();
-        case SP_VERB_DIALOG_DEBUG:
-            return &Inkscape::UI::Dialog::Messages::getInstance();
-        case SP_VERB_DIALOG_DOCPROPERTIES:
-            return &Inkscape::UI::Dialog::DocumentProperties::getInstance();
-        case SP_VERB_DIALOG_EXPORT:
-            return &Inkscape::UI::Dialog::Export::getInstance();
-        case SP_VERB_DIALOG_FILL_STROKE:
-            return &Inkscape::UI::Dialog::FillAndStroke::getInstance();
-        case SP_VERB_DIALOG_FILTER_EFFECTS:
-            return &Inkscape::UI::Dialog::FilterEffectsDialog::getInstance();
-        case SP_VERB_DIALOG_FIND:
-            return &Inkscape::UI::Dialog::Find::getInstance();
-        case SP_VERB_DIALOG_GLYPHS:
-            return &Inkscape::UI::Dialog::GlyphsPanel::getInstance();
-        case SP_VERB_DIALOG_INPUT:
-            return &Inkscape::UI::Dialog::InputDialog::getInstance();
-        case SP_VERB_DIALOG_LAYERS:
-            return &Inkscape::UI::Dialog::LayersPanel::getInstance();
-        case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
-            return &Inkscape::UI::Dialog::LivePathEffectEditor::getInstance();
-        case SP_VERB_DIALOG_ATTR:
-            return &Inkscape::UI::Dialog::ObjectAttributes::getInstance();
-        case SP_VERB_DIALOG_ITEM:
-            return &Inkscape::UI::Dialog::ObjectProperties::getInstance();
-        case SP_VERB_DIALOG_OBJECTS:
-            return &Inkscape::UI::Dialog::ObjectsPanel::getInstance();
-        case SP_VERB_DIALOG_PAINT:
-            return &Inkscape::UI::Dialog::PaintServersDialog::getInstance();
-#ifdef DEBUG
-        case SP_VERB_DIALOG_PROTOTYPE:
-            return &Inkscape::UI::Dialog::Prototype::getInstance();
-#endif
-        case SP_VERB_DIALOG_SELECTORS:
-            return &Inkscape::UI::Dialog::SelectorsDialog::getInstance();
-#if WITH_GSPELL
-        case SP_VERB_DIALOG_SPELLCHECK:
-            return &Inkscape::UI::Dialog::SpellCheck::getInstance();
-#endif
-        case SP_VERB_DIALOG_STYLE:
-            return &Inkscape::UI::Dialog::StyleDialog::getInstance();
-        case SP_VERB_DIALOG_SVG_FONTS:
-            return &Inkscape::UI::Dialog::SvgFontsDialog::getInstance();
-        case SP_VERB_DIALOG_SWATCHES:
-            return &Inkscape::UI::Dialog::SwatchesPanel::getInstance();
-        case SP_VERB_DIALOG_SYMBOLS:
-            return &Inkscape::UI::Dialog::SymbolsDialog::getInstance();
-        case SP_VERB_DIALOG_TEXT:
-            return &Inkscape::UI::Dialog::TextEdit::getInstance();
-        case SP_VERB_DIALOG_TRANSFORM:
-            return &Inkscape::UI::Dialog::Transformation::getInstance();
-        case SP_VERB_DIALOG_UNDO_HISTORY:
-            return &Inkscape::UI::Dialog::UndoHistory::getInstance();
-        case SP_VERB_DIALOG_XML_EDITOR:
-            return &Inkscape::UI::Dialog::XmlTree::getInstance();
-        case SP_VERB_HELP_MEMORY:
-            return &Inkscape::UI::Dialog::Memory::getInstance();
-        case SP_VERB_SELECTION_TRACE:
-            return &Inkscape::UI::Dialog::TraceDialog::getInstance();
-        case SP_VERB_VIEW_ICON_PREVIEW:
-            return &Inkscape::UI::Dialog::IconPreviewPanel::getInstance();
-        case SP_VERB_DIALOG_PREFERENCES:
-            return &Inkscape::UI::Dialog::InkscapePreferences::getInstance();
-        default:
-            return nullptr;
-    }
+    // clang-format on
 }
 
 // Create the notebook tab
-Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib::ustring image_str, Gtk::AccelKey key)
+Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib::ustring image_str, const Glib::ustring shortcut)
 {
     Gtk::Label *label = Gtk::manage(new Gtk::Label(label_str));
     Gtk::Image *image = Gtk::manage(new Gtk::Image());
@@ -224,8 +235,8 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
     cover->add(*tab);
 
     // Add shortcut tooltip
-    if (!key.is_null()) {
-        auto tlabel = Inkscape::Shortcuts::get_label(key);
+    if (shortcut.size() > 0) {
+        auto tlabel = shortcut;
         int pos = tlabel.find("&", 0);
         if (pos >= 0 && pos < tlabel.length()) {
             tlabel.replace(pos, 1, "&amp;");
@@ -259,9 +270,23 @@ DialogMultipaned* get_dialog_parent(DialogBase* dialog) {
 }
 
 /**
- * Add new dialog to the current container or in a floating window, based on preferences.
+ * Add new dialog to the current container or in a floating window, based on preferences. TEMP TEMP TEMP
  */
 void DialogContainer::new_dialog(unsigned int code)
+{
+    auto it = verb_to_dialog_map.find(code);
+    if (it != verb_to_dialog_map.end()) {
+        return new_dialog(it->second);
+    } else {
+        std::cerr << "DialogContainer::new_dialog: Could not find dialog for verb " << code << std::endl;
+    }
+}
+
+
+/**
+ * Add new dialog to the current container or in a floating window, based on preferences.
+ */
+void DialogContainer::new_dialog(const Glib::ustring& dialog_type )
 {
     // Open all dialogs as floating, if set in preferences
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -270,23 +295,23 @@ void DialogContainer::new_dialog(unsigned int code)
     }
 
     int dockable = prefs->getInt("/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE);
-    bool floating = DialogManager::singleton().should_open_floating(code);
+    bool floating = DialogManager::singleton().should_open_floating(dialog_type);
     if (dockable == PREFS_DIALOGS_BEHAVIOR_FLOATING || floating) {
-        new_floating_dialog(code);
+        new_floating_dialog(dialog_type);
     } else {
-        new_dialog(code, nullptr);
+        new_dialog(dialog_type, nullptr);
     }
 
-    if (DialogBase* dialog = find_existing_dialog(code)) {
+    if (DialogBase* dialog = find_existing_dialog(dialog_type)) {
         dialog->focus_dialog();
     }
 }
 
 
-DialogBase* DialogContainer::find_existing_dialog(unsigned int code) {
-    DialogBase *existing_dialog = get_dialog(code);
+DialogBase* DialogContainer::find_existing_dialog(const Glib::ustring& dialog_type) {
+    DialogBase *existing_dialog = get_dialog(dialog_type);
     if (!existing_dialog) {
-        existing_dialog = DialogManager::singleton().find_floating_dialog(code);
+        existing_dialog = DialogManager::singleton().find_floating_dialog(dialog_type);
     }
     return existing_dialog;
 }
@@ -294,20 +319,12 @@ DialogBase* DialogContainer::find_existing_dialog(unsigned int code) {
 /**
  * Overloaded new_dialog
  */
-void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
+void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNotebook *notebook)
 {
-    // Get the verb with that code
-    Inkscape::Verb *verb = Inkscape::Verb::get(code);
-
-    // Can't understand the dialog's settings without an associated verb
-    if (!verb) {
-        return;
-    }
-
     columns->ensure_multipaned_children();
 
     // Limit each container to containing one of any type of dialog.
-    if (DialogBase* existing_dialog = find_existing_dialog(code)) {
+    if (DialogBase* existing_dialog = find_existing_dialog(dialog_type)) {
         // make sure parent window is not hidden/collapsed
         if (auto panel = get_dialog_parent(existing_dialog)) {
             panel->show();
@@ -318,10 +335,10 @@ void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
     }
 
     // Create the dialog widget
-    DialogBase *dialog = dialog_factory(code);
+    DialogBase *dialog = dialog_factory(dialog_type);
 
     if (!dialog) {
-        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << verb->get_id() << std::endl;
+        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << dialog_type << std::endl;
         return;
     }
 
@@ -329,10 +346,38 @@ void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
     dialog = Gtk::manage(dialog);
 
     // Create the notebook tab
-    auto image = verb->get_image();
-    Gtk::Widget *tab =
-        create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"),
-                            (Inkscape::Shortcuts::getInstance()).get_shortcut_from_verb(verb));
+    Glib::ustring image("inkscape-logo");
+    auto it = dialog_data.find(dialog_type);
+    if (it != dialog_data.end()) {
+        image = it->second.icon_name;
+    }
+
+    Glib::ustring label;
+    Glib::ustring action_name = "win.dialog-open('" + dialog_type + "')";
+    auto app = InkscapeApplication::instance();
+    std::vector<Glib::ustring> accels = app->gtk_app()->get_accels_for_action(action_name);
+    if (accels.size() > 0) {
+        guint key = 0;
+        Gdk::ModifierType mods;
+        Gtk::AccelGroup::parse(accels[0], key, mods);
+        label = Gtk::AccelGroup::get_label(key, mods);
+    } else {
+        // TEMP TEMP TEMP
+        for (auto it : verb_to_dialog_map) {
+            if (it.second == dialog_type) {
+                auto verb = Inkscape::Verb::get(it.first);
+                if (verb) {
+                    auto key = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(verb);
+                    if (!key.is_null()) {
+                        label = Inkscape::Shortcuts::getInstance().get_label(key);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), image, label);
 
     // If not from notebook menu add at top of last column.
     if (!notebook) {
@@ -440,10 +485,10 @@ bool recreate_dialogs_from_state(const Glib::KeyFile *keyfile)
             for (int notebook_idx = 0; notebook_idx < notebook_count; ++notebook_idx) {
                 Glib::ustring key = "Notebook" + std::to_string(notebook_idx) + "Dialogs";
 
-                // Step 3.2.2.0 read the list of dialog verbs in the current notebook
-                std::vector<int> dialogs;
+                // Step 3.2.2.0 read the list of dialogs in the current notebook
+                std::vector<Glib::ustring> dialogs;
                 try {
-                    dialogs = keyfile->get_integer_list(column_group_name, key);
+                    dialogs = keyfile->get_string_list(column_group_name, key);
                 } catch (Glib::Error &error) {
                     std::cerr << G_STRFUNC << ": " << error.what() << std::endl;
                 }
@@ -455,18 +500,20 @@ bool recreate_dialogs_from_state(const Glib::KeyFile *keyfile)
                 DialogNotebook *notebook = nullptr;
 
                 // Step 3.2.2.1 create each dialog in the current notebook
-                for (auto verb_code : dialogs) {
-                    if (DialogManager::singleton().find_floating_dialog(verb_code)) {
+                for (auto type : dialogs) {
+                    if (DialogManager::singleton().find_floating_dialog(type)) {
                         // avoid duplicates
                         continue;
                     }
 
-                    if (Verb *verb = Inkscape::Verb::get(verb_code)) {
+                    if (dialog_data.find(type) != dialog_data.end()) {
                         if (!notebook) {
                             notebook = Gtk::manage(new DialogNotebook(active_container));
                             column->append(notebook);
                         }
-                        active_container->new_dialog(verb_code, notebook);
+                        active_container->new_dialog(type, notebook);
+                    } else {
+                        std::cerr << "recreate_dialogs_from_state: invalid dialog type: " << type << std::endl;
                     }
                 }
             }
@@ -490,26 +537,32 @@ bool recreate_dialogs_from_state(const Glib::KeyFile *keyfile)
  */
 DialogWindow *DialogContainer::new_floating_dialog(unsigned int code)
 {
-    return create_new_floating_dialog(code, true);
-}
-
-DialogWindow *DialogContainer::create_new_floating_dialog(unsigned int code, bool blink)
-{
-    // Get the verb with that code
-    Inkscape::Verb *verb = Inkscape::Verb::get(code);
-
-    // Can't understand the dialog's settings without an associated verb
-    if (!verb) {
+    auto it = verb_to_dialog_map.find(code);
+    if (it != verb_to_dialog_map.end()) {
+        return create_new_floating_dialog(it->second, true);
+    } else {
+        std::cerr << "DialogContainer::new_floating_dialog: Could not find dialog for verb " << code << std::endl;
         return nullptr;
     }
+}
 
+/**
+ * Add a new floating dialog (or reuse existing one if it's already up)
+ */
+DialogWindow *DialogContainer::new_floating_dialog(const Glib::ustring& dialog_type)
+{
+    return create_new_floating_dialog(dialog_type, true);
+}
+
+DialogWindow *DialogContainer::create_new_floating_dialog(const Glib::ustring& dialog_type, bool blink)
+{
     // check if this dialog is already open
-    if (DialogBase* existing_dialog = find_existing_dialog(code)) {
+    if (DialogBase* existing_dialog = find_existing_dialog(dialog_type)) {
         // found existing dialog; blink & exit
         if (blink) {
             existing_dialog->blink();
             // show its window if it is hidden
-            if (auto window = DialogManager::singleton().find_floating_dialog_window(code)) {
+            if (auto window = DialogManager::singleton().find_floating_dialog_window(dialog_type)) {
                 DialogManager::singleton().set_floating_dialog_visibility(window, true);
             }
         }
@@ -517,17 +570,17 @@ DialogWindow *DialogContainer::create_new_floating_dialog(unsigned int code, boo
     }
 
     // check if this dialog *was* open and floating; if so recreate its window
-    if (auto state = DialogManager::singleton().find_dialog_state(code)) {
+    if (auto state = DialogManager::singleton().find_dialog_state(dialog_type)) {
         if (recreate_dialogs_from_state(state.get())) {
             return nullptr;
         }
     }
 
     // Create the dialog widget
-    DialogBase *dialog = dialog_factory(code);
+    DialogBase *dialog = dialog_factory(dialog_type);
 
     if (!dialog) {
-        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << verb->get_id() << std::endl;
+        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << dialog_type << std::endl;
         return nullptr;
     }
 
@@ -535,10 +588,21 @@ DialogWindow *DialogContainer::create_new_floating_dialog(unsigned int code, boo
     dialog = Gtk::manage(dialog);
 
     // Create the notebook tab
-    auto image = verb->get_image();
+    gchar* image = nullptr;
+
+    Glib::ustring label;
+    Glib::ustring action_name = "win.dialog-open('" + dialog_type + "')";
+    auto app = InkscapeApplication::instance();
+    std::vector<Glib::ustring> accels = app->gtk_app()->get_accels_for_action(action_name);
+    if (accels.size() > 0) {
+        guint key = 0;
+        Gdk::ModifierType mods;
+        Gtk::AccelGroup::parse(accels[0], key, mods);
+        label = Gtk::AccelGroup::get_label(key, mods);
+    }
+
     Gtk::Widget *tab =
-        create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"),
-                            (Inkscape::Shortcuts::getInstance()).get_shortcut_from_verb(verb));
+        create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"), label);
 
     // New temporary noteboook
     DialogNotebook *notebook = Gtk::manage(new DialogNotebook(this));
@@ -605,23 +669,22 @@ void DialogContainer::update_dialogs()
 
 bool DialogContainer::has_dialog_of_type(DialogBase *dialog)
 {
-    return (dialogs.find(dialog->getVerb()) != dialogs.end());
+    return (dialogs.find(dialog->get_type()) != dialogs.end());
 }
 
-DialogBase *DialogContainer::get_dialog(unsigned int code)
+DialogBase *DialogContainer::get_dialog(const Glib::ustring& dialog_type)
 {
-    auto found = dialogs.find(code);
+    auto found = dialogs.find(dialog_type);
     if (found != dialogs.end()) {
         return found->second;
     }
-
     return nullptr;
 }
 
 // Add dialog to list.
 void DialogContainer::link_dialog(DialogBase *dialog)
 {
-    dialogs.insert(std::pair<int, DialogBase *>(dialog->getVerb(), dialog));
+    dialogs.insert(std::pair<Glib::ustring, DialogBase *>(dialog->get_type(), dialog));
 
     DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
     if (window) {
@@ -630,7 +693,7 @@ void DialogContainer::link_dialog(DialogBase *dialog)
     else {
         // dialog without DialogWindow has been docked; remove it's floating state
         // so if user closes and reopens it, it shows up docked again, not floating
-        DialogManager::singleton().remove_dialog_floating_state(dialog->getVerb());
+        DialogManager::singleton().remove_dialog_floating_state(dialog->get_type());
     }
 }
 
@@ -641,7 +704,7 @@ void DialogContainer::unlink_dialog(DialogBase *dialog)
         return;
     }
 
-    auto found = dialogs.find(dialog->getVerb());
+    auto found = dialogs.find(dialog->get_type());
     if (found != dialogs.end()) {
         dialogs.erase(found);
     }
@@ -746,10 +809,10 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
             for (int notebook_idx = 0; notebook_idx < notebook_count; ++notebook_idx) {
                 Glib::ustring key = "Notebook" + std::to_string(notebook_idx) + "Dialogs";
 
-                // Step 3.2.2.0 read the list of dialog verbs in the current notebook
-                std::vector<int> dialogs;
+                // Step 3.2.2.0 read the list of dialogs in the current notebook
+                std::vector<Glib::ustring> dialogs;
                 try {
-                    dialogs = keyfile->get_integer_list(column_group_name, key);
+                    dialogs = keyfile->get_string_list(column_group_name, key);
                 } catch (Glib::Error &error) {
                     std::cerr << "DialogContainer::load_container_state: " << error.what() << std::endl;
                 }
@@ -765,15 +828,16 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
                 }
 
                 // Step 3.2.2.1 create each dialog in the current notebook
-                for (auto verb_code : dialogs) {
-                    Verb *verb = Inkscape::Verb::get(verb_code);
+                for (auto type : dialogs) {
 
-                    if (verb) {
+                    if (dialog_data.find(type) != dialog_data.end()) {
                         if (is_dockable) {
-                            active_container->new_dialog(verb_code, notebook);
+                            active_container->new_dialog(type, notebook);
                         } else {
-                            dialog_window = create_new_floating_dialog(verb_code, false);
+                            dialog_window = create_new_floating_dialog(type, false);
                         }
+                    } else {
+                        std::cerr << "load_container_state: invalid dialog type: " << type << std::endl;
                     }
                 }
             }
@@ -828,20 +892,20 @@ std::shared_ptr<Glib::KeyFile> DialogContainer::get_container_state(const window
         Glib::ustring group_name = "Window" + std::to_string(window_idx) + "Column" + std::to_string(column_idx);
         int notebook_count = 0; // non-empty notebooks count
 
-        // Step 3.1.0: for each notebook, get its dialogs' verbs
+        // Step 3.1.0: for each notebook, get its dialogs
         for (auto const &columns_widget : multipanes[column_idx]->get_children()) {
             if (auto dialog_notebook = dynamic_cast<DialogNotebook *>(columns_widget)) {
-                std::vector<int> dialogs;
+                std::vector<Glib::ustring> dialogs;
 
                 for (auto const &widget : dialog_notebook->get_notebook()->get_children()) {
                     if (DialogBase *dialog = dynamic_cast<DialogBase *>(widget)) {
-                        dialogs.push_back(dialog->getVerb());
+                        dialogs.push_back(dialog->get_type());
                     }
                 }
 
-                // save the dialogs verbs
+                // save the dialogs type
                 Glib::ustring key = "Notebook" + std::to_string(notebook_count) + "Dialogs";
-                keyfile->set_integer_list(group_name, key, dialogs);
+                keyfile->set_string_list(group_name, key, dialogs);
 
                 // increase the notebook count
                 notebook_count++;
@@ -882,10 +946,10 @@ std::shared_ptr<Glib::KeyFile> DialogContainer::get_container_state(const window
  *
  * For each column, we have a "WindowWColumnX" group, where X is the index of the column. "BeforeCanvas" checks
  * if the column is before the canvas or not. "NotebookCount" records how many notebooks are in each column and
- * "NotebookXDialogs" records a list of the verb numbers for the dialogs in notebook X.
+ * "NotebookXDialogs" records a list of the types for the dialogs in notebook X.
  *
  * [Window0Column0]
- * Notebook0Dialogs=262;263;
+ * Notebook0Dialogs=Layers;Text;
  * NotebookCount=2
  * BeforeCanvas=false
  *
@@ -946,23 +1010,23 @@ std::unique_ptr<Glib::KeyFile> DialogContainer::save_container_state()
             Glib::ustring group_name = "Window" + std::to_string(window_idx) + "Column" + std::to_string(column_idx);
             int notebook_count = 0; // non-empty notebooks count
 
-            // Step 3.1.0: for each notebook, get its dialogs' verbs
+            // Step 3.1.0: for each notebook, get its dialogs' types
             for (auto const &columns_widget : multipanes[column_idx]->get_children()) {
                 DialogNotebook *dialog_notebook = dynamic_cast<DialogNotebook *>(columns_widget);
 
                 if (dialog_notebook) {
-                    std::vector<int> dialogs;
+                    std::vector<Glib::ustring> dialogs;
 
                     for (auto const &widget : dialog_notebook->get_notebook()->get_children()) {
                         DialogBase *dialog = dynamic_cast<DialogBase *>(widget);
                         if (dialog) {
-                            dialogs.push_back(dialog->getVerb());
+                            dialogs.push_back(dialog->get_type());
                         }
                     }
 
-                    // save the dialogs verbs
+                    // save the dialogs type
                     Glib::ustring key = "Notebook" + std::to_string(notebook_count) + "Dialogs";
-                    keyfile->set_integer_list(group_name, key, dialogs);
+                    keyfile->set_string_list(group_name, key, dialogs);
 
                     // increase the notebook count
                     notebook_count++;
