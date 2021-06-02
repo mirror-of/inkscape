@@ -117,6 +117,7 @@ enum SnapTargetType {
     SNAPTARGET_ALIGNMENT_PAGE_CENTER,
     SNAPTARGET_ALIGNMENT_PAGE_CORNER,
     SNAPTARGET_ALIGNMENT_HANDLE,
+    SNAPTARGET_ALIGNMENT_INTERSECTION,
     //-------------------------------------------------------------------
     SNAPTARGET_MAX_ENUM_VALUE
 };

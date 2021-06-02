@@ -246,9 +246,12 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
 
     SnappedPoint sx;
     SnappedPoint sy;
+    SnappedPoint si;
+
     bool consider_x = true;
     bool consider_y = true;
     bool success = false;
+    bool intersection = false;
     //bool strict_snapping = _snapmanager->snapprefs.getStrictSnapping();
 
     for (const auto & k : *_points_to_snap_to) {
@@ -300,6 +303,30 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
                 success = true;
             }
         }
+
+        if (consider_x && consider_y) {
+            Geom::Point intersection_p = Geom::Point(sy.getPoint().x(), sx.getPoint().y());
+            Geom::Coord d =  Geom::L2(intersection_p - p.getPoint());
+
+            if (d < sqrt(2)*getSnapperTolerance()) {
+                si = SnappedPoint(intersection_p,
+                                 source2alignment(p.getSourceType()),
+                                 p.getSourceNum(),
+                                 SNAPTARGET_ALIGNMENT_INTERSECTION,
+                                 d,
+                                 getSnapperTolerance(),
+                                 getSnapperAlwaysSnap(),
+                                 false,
+                                 true,
+                                 k.getTargetBBox());
+                intersection = true;
+            }
+        }
+    }
+
+    if (intersection) {
+       isr.points.push_back(si); 
+       return;
     }
 
     if (success) {
