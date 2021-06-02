@@ -17,6 +17,28 @@
 // overloaded constructor
 Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained, Geom::OptRect target_bbox) :
     _point(p),
+    _alignment_target(Geom::Point(0,0)),
+    _tangent(Geom::Point(0,0)),
+    _source(source),
+    _source_num(source_num),
+    _target(target),
+    _at_intersection (false),
+    _constrained_snap (constrained_snap),
+    _fully_constrained (fully_constrained),
+    _distance(d),
+    _tolerance(std::max(t,1.0)),// tolerance should never be smaller than 1 px, as it is used for normalization in isOtherSnapBetter. We don't want a division by zero.
+    _always_snap(a),
+    _second_distance (Geom::infinity()),
+    _second_tolerance (1),
+    _second_always_snap (false),
+    _target_bbox(std::move(target_bbox)),
+    _pointer_distance (Geom::infinity())
+{
+}
+
+Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, Geom::Point const &ap, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained, Geom::OptRect target_bbox) :
+    _point(p),
+    _alignment_target(ap),
     _tangent(Geom::Point(0,0)),
     _source(source),
     _source_num(source_num),
@@ -37,6 +59,7 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const 
 
 Inkscape::SnappedPoint::SnappedPoint(Inkscape::SnapCandidatePoint const &p, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained) :
     _point (p.getPoint()),
+    _alignment_target(Geom::Point(0,0)),
     _tangent (Geom::Point(0,0)),
     _source (p.getSourceType()),
     _source_num (p.getSourceNum()),
@@ -57,6 +80,7 @@ Inkscape::SnappedPoint::SnappedPoint(Inkscape::SnapCandidatePoint const &p, Snap
 
 Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &at_intersection, bool const &constrained_snap, bool const &fully_constrained, Geom::Coord const &d2, Geom::Coord const &t2, bool const &a2) :
     _point(p),
+    _alignment_target(Geom::Point(0,0)),
     _tangent (Geom::Point(0,0)),
     _source(source),
     _source_num(source_num),
@@ -79,6 +103,7 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const 
 
 Inkscape::SnappedPoint::SnappedPoint():
     _point (Geom::Point(0,0)),
+    _alignment_target(Geom::Point(0,0)),
     _tangent (Geom::Point(0,0)),
     _source (SNAPSOURCE_UNDEFINED),
     _source_num (-1),
@@ -99,6 +124,7 @@ Inkscape::SnappedPoint::SnappedPoint():
 
 Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p):
     _point (p),
+    _alignment_target(Geom::Point(0,0)),
     _tangent (Geom::Point(0,0)),
     _source (SNAPSOURCE_UNDEFINED),
     _source_num (-1),

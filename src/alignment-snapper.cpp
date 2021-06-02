@@ -271,12 +271,32 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
             }
 
             if (consider_x && distX < getSnapperTolerance()) {
-                sx = SnappedPoint(point_on_x, source2alignment(p.getSourceType()), p.getSourceNum(), k.getTargetType(), distX, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, k.getTargetBBox());
+                sx = SnappedPoint(point_on_x,
+                                 p.getPoint(),
+                                 source2alignment(p.getSourceType()),
+                                 p.getSourceNum(),
+                                 k.getTargetType(),
+                                 distX,
+                                 getSnapperTolerance(),
+                                 getSnapperAlwaysSnap(),
+                                 false,
+                                 true,
+                                 k.getTargetBBox());
                 success = true;
             }
 
             if (consider_y && distY < getSnapperTolerance()) {
-                sy = SnappedPoint(point_on_y, source2alignment(p.getSourceType()), p.getSourceNum(), k.getTargetType(), distY, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, k.getTargetBBox());
+                sy = SnappedPoint(point_on_y,
+                                 p.getPoint(),
+                                 source2alignment(p.getSourceType()),
+                                 p.getSourceNum(),
+                                 k.getTargetType(),
+                                 distY,
+                                 getSnapperTolerance(),
+                                 getSnapperAlwaysSnap(),
+                                 false,
+                                 true,
+                                 k.getTargetBBox());
                 success = true;
             }
         }

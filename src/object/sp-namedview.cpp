@@ -317,7 +317,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::ALIGNMENTTOLERANCE:
-            this->snap_manager.snapprefs.setAlignementTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
+            this->snap_manager.snapprefs.setAlignementTolerance(value ? g_ascii_strtod(value, nullptr) : 5);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::GUIDECOLOR:
