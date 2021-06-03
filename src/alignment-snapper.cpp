@@ -273,12 +273,13 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
                     consider_x = false; // consider horizontal snapping if moving horizontally 
             }
 
+            bool is_target_node = k.getTargetType() & SNAPTARGET_NODE_CATEGORY;
             if (consider_x && distX < getSnapperTolerance()) {
                 sx = SnappedPoint(point_on_x,
-                                 p.getPoint(),
+                                 k.getPoint(),
                                  source2alignment(p.getSourceType()),
                                  p.getSourceNum(),
-                                 k.getTargetType(),
+                                 is_target_node ? SNAPTARGET_ALIGNMENT_HANDLE : k.getTargetType(),
                                  distX,
                                  getSnapperTolerance(),
                                  getSnapperAlwaysSnap(),
@@ -290,10 +291,10 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
 
             if (consider_y && distY < getSnapperTolerance()) {
                 sy = SnappedPoint(point_on_y,
-                                 p.getPoint(),
+                                 k.getPoint(),
                                  source2alignment(p.getSourceType()),
                                  p.getSourceNum(),
-                                 k.getTargetType(),
+                                 is_target_node ? SNAPTARGET_ALIGNMENT_HANDLE : k.getTargetType(),
                                  distY,
                                  getSnapperTolerance(),
                                  getSnapperAlwaysSnap(),
@@ -302,24 +303,26 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
                                  k.getTargetBBox());
                 success = true;
             }
-        }
 
-        if (consider_x && consider_y) {
-            Geom::Point intersection_p = Geom::Point(sy.getPoint().x(), sx.getPoint().y());
-            Geom::Coord d =  Geom::L2(intersection_p - p.getPoint());
+            if (consider_x && consider_y) {
+                Geom::Point intersection_p = Geom::Point(sy.getPoint().x(), sx.getPoint().y());
+                Geom::Coord d =  Geom::L2(intersection_p - p.getPoint());
 
-            if (d < sqrt(2)*getSnapperTolerance()) {
-                si = SnappedPoint(intersection_p,
-                                 source2alignment(p.getSourceType()),
-                                 p.getSourceNum(),
-                                 SNAPTARGET_ALIGNMENT_INTERSECTION,
-                                 d,
-                                 getSnapperTolerance(),
-                                 getSnapperAlwaysSnap(),
-                                 false,
-                                 true,
-                                 k.getTargetBBox());
-                intersection = true;
+                if (d < sqrt(2)*getSnapperTolerance()) {
+                    si = SnappedPoint(intersection_p,
+                                     sy.getAlignmentTarget(),
+                                     sx.getAlignmentTarget(),
+                                     source2alignment(p.getSourceType()),
+                                     p.getSourceNum(),
+                                     SNAPTARGET_ALIGNMENT_INTERSECTION,
+                                     d,
+                                     getSnapperTolerance(),
+                                     getSnapperAlwaysSnap(),
+                                     false,
+                                     true,
+                                     k.getTargetBBox());
+                    intersection = true;
+                }
             }
         }
     }
@@ -425,6 +428,7 @@ Inkscape::SnapSourceType Inkscape::AlignmentSnapper::source2alignment(SnapSource
             return SNAPSOURCE_ALIGNMENT_BBOX_MIDPOINT;
         case SNAPSOURCE_BBOX_EDGE_MIDPOINT:
             return SNAPSOURCE_ALIGNMENT_BBOX_EDGE_MIDPOINT;
+        case SNAPSOURCE_NODE_CATEGORY:
         case SNAPSOURCE_OTHER_HANDLE:
             return SNAPSOURCE_ALIGNMENT_HANDLE;
         default:

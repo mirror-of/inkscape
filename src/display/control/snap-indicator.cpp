@@ -66,191 +66,249 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         return;
     }
 
+    bool is_alignment = p.getTarget() & SNAPTARGET_ALIGNMENT_CATEGORY;
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool value = prefs->getBool("/options/snapindicator/value", true);
 
     if (value) {
-        // TRANSLATORS: undefined target for snapping
         Glib::ustring target_name = _("UNDEFINED");
-        switch (p.getTarget()) {
-            case SNAPTARGET_UNDEFINED:
-                target_name = _("UNDEFINED");
-                g_warning("Snap target has not been specified");
-                break;
-            case SNAPTARGET_GRID:
-                target_name = _("grid line");
-                break;
-            case SNAPTARGET_GRID_INTERSECTION:
-                target_name = _("grid intersection");
-                break;
-            case SNAPTARGET_GRID_PERPENDICULAR:
-                target_name = _("grid line (perpendicular)");
-                break;
-            case SNAPTARGET_GUIDE:
-                target_name = _("guide");
-                break;
-            case SNAPTARGET_GUIDE_INTERSECTION:
-                target_name = _("guide intersection");
-                break;
-            case SNAPTARGET_GUIDE_ORIGIN:
-                target_name = _("guide origin");
-                break;
-            case SNAPTARGET_GUIDE_PERPENDICULAR:
-                target_name = _("guide (perpendicular)");
-                break;
-            case SNAPTARGET_GRID_GUIDE_INTERSECTION:
-                target_name = _("grid-guide intersection");
-                break;
-            case SNAPTARGET_NODE_CUSP:
-                target_name = _("cusp node");
-                break;
-            case SNAPTARGET_NODE_SMOOTH:
-                target_name = _("smooth node");
-                break;
-            case SNAPTARGET_PATH:
-                target_name = _("path");
-                break;
-            case SNAPTARGET_PATH_PERPENDICULAR:
-                target_name = _("path (perpendicular)");
-                break;
-            case SNAPTARGET_PATH_TANGENTIAL:
-                target_name = _("path (tangential)");
-                break;
-            case SNAPTARGET_PATH_INTERSECTION:
-                target_name = _("path intersection");
-                break;
-            case SNAPTARGET_PATH_GUIDE_INTERSECTION:
-                target_name = _("guide-path intersection");
-                break;
-            case SNAPTARGET_PATH_CLIP:
-                target_name = _("clip-path");
-                break;
-            case SNAPTARGET_PATH_MASK:
-                target_name = _("mask-path");
-                break;
-            case SNAPTARGET_BBOX_CORNER:
-                target_name = _("bounding box corner");
-                break;
-            case SNAPTARGET_BBOX_EDGE:
-                target_name = _("bounding box side");
-                break;
-            case SNAPTARGET_PAGE_BORDER:
-                target_name = _("page border");
-                break;
-            case SNAPTARGET_LINE_MIDPOINT:
-                target_name = _("line midpoint");
-                break;
-            case SNAPTARGET_OBJECT_MIDPOINT:
-                target_name = _("object midpoint");
-                break;
-            case SNAPTARGET_ROTATION_CENTER:
-                target_name = _("object rotation center");
-                break;
-            case SNAPTARGET_BBOX_EDGE_MIDPOINT:
-                target_name = _("bounding box side midpoint");
-                break;
-            case SNAPTARGET_BBOX_MIDPOINT:
-                target_name = _("bounding box midpoint");
-                break;
-            case SNAPTARGET_PAGE_CORNER:
-                target_name = _("page corner");
-                break;
-            case SNAPTARGET_ELLIPSE_QUADRANT_POINT:
-                target_name = _("quadrant point");
-                break;
-            case SNAPTARGET_RECT_CORNER:
-            case SNAPTARGET_IMG_CORNER:
-                target_name = _("corner");
-                break;
-            case SNAPTARGET_TEXT_ANCHOR:
-                target_name = _("text anchor");
-                break;
-            case SNAPTARGET_TEXT_BASELINE:
-                target_name = _("text baseline");
-                break;
-            case SNAPTARGET_CONSTRAINED_ANGLE:
-                target_name = _("constrained angle");
-                break;
-            case SNAPTARGET_CONSTRAINT:
-                target_name = _("constraint");
-                break;
-            default:
-                g_warning("Snap target not in SnapTargetType enum");
-                break;
-        }
-
         Glib::ustring source_name = _("UNDEFINED");
-        switch (p.getSource()) {
-            case SNAPSOURCE_UNDEFINED:
-                source_name = _("UNDEFINED");
-                g_warning("Snap source has not been specified");
-                break;
-            case SNAPSOURCE_BBOX_CORNER:
-                source_name = _("Bounding box corner");
-                break;
-            case SNAPSOURCE_BBOX_MIDPOINT:
-                source_name = _("Bounding box midpoint");
-                break;
-            case SNAPSOURCE_BBOX_EDGE_MIDPOINT:
-                source_name = _("Bounding box side midpoint");
-                break;
-            case SNAPSOURCE_NODE_SMOOTH:
-                source_name = _("Smooth node");
-                break;
-            case SNAPSOURCE_NODE_CUSP:
-                source_name = _("Cusp node");
-                break;
-            case SNAPSOURCE_LINE_MIDPOINT:
-                source_name = _("Line midpoint");
-                break;
-            case SNAPSOURCE_OBJECT_MIDPOINT:
-                source_name = _("Object midpoint");
-                break;
-            case SNAPSOURCE_ROTATION_CENTER:
-                source_name = _("Object rotation center");
-                break;
-            case SNAPSOURCE_NODE_HANDLE:
-            case SNAPSOURCE_OTHER_HANDLE:
-                source_name = _("Handle");
-                break;
-            case SNAPSOURCE_PATH_INTERSECTION:
-                source_name = _("Path intersection");
-                break;
-            case SNAPSOURCE_GUIDE:
-                source_name = _("Guide");
-                break;
-            case SNAPSOURCE_GUIDE_ORIGIN:
-                source_name = _("Guide origin");
-                break;
-            case SNAPSOURCE_CONVEX_HULL_CORNER:
-                source_name = _("Convex hull corner");
-                break;
-            case SNAPSOURCE_ELLIPSE_QUADRANT_POINT:
-                source_name = _("Quadrant point");
-                break;
-            case SNAPSOURCE_RECT_CORNER:
-            case SNAPSOURCE_IMG_CORNER:
-                source_name = _("Corner");
-                break;
-            case SNAPSOURCE_TEXT_ANCHOR:
-                source_name = _("Text anchor");
-                break;
-            case SNAPSOURCE_GRID_PITCH:
-                source_name = _("Multiple of grid spacing");
-                break;
-            default:
-                g_warning("Snap source not in SnapSourceType enum");
-                break;
+
+        if (!is_alignment) {
+            // TRANSLATORS: undefined target for snapping
+            switch (p.getTarget()) {
+                case SNAPTARGET_UNDEFINED:
+                    target_name = _("UNDEFINED");
+                    g_warning("Snap target has not been specified");
+                    break;
+                case SNAPTARGET_GRID:
+                    target_name = _("grid line");
+                    break;
+                case SNAPTARGET_GRID_INTERSECTION:
+                    target_name = _("grid intersection");
+                    break;
+                case SNAPTARGET_GRID_PERPENDICULAR:
+                    target_name = _("grid line (perpendicular)");
+                    break;
+                case SNAPTARGET_GUIDE:
+                    target_name = _("guide");
+                    break;
+                case SNAPTARGET_GUIDE_INTERSECTION:
+                    target_name = _("guide intersection");
+                    break;
+                case SNAPTARGET_GUIDE_ORIGIN:
+                    target_name = _("guide origin");
+                    break;
+                case SNAPTARGET_GUIDE_PERPENDICULAR:
+                    target_name = _("guide (perpendicular)");
+                    break;
+                case SNAPTARGET_GRID_GUIDE_INTERSECTION:
+                    target_name = _("grid-guide intersection");
+                    break;
+                case SNAPTARGET_NODE_CUSP:
+                    target_name = _("cusp node");
+                    break;
+                case SNAPTARGET_NODE_SMOOTH:
+                    target_name = _("smooth node");
+                    break;
+                case SNAPTARGET_PATH:
+                    target_name = _("path");
+                    break;
+                case SNAPTARGET_PATH_PERPENDICULAR:
+                    target_name = _("path (perpendicular)");
+                    break;
+                case SNAPTARGET_PATH_TANGENTIAL:
+                    target_name = _("path (tangential)");
+                    break;
+                case SNAPTARGET_PATH_INTERSECTION:
+                    target_name = _("path intersection");
+                    break;
+                case SNAPTARGET_PATH_GUIDE_INTERSECTION:
+                    target_name = _("guide-path intersection");
+                    break;
+                case SNAPTARGET_PATH_CLIP:
+                    target_name = _("clip-path");
+                    break;
+                case SNAPTARGET_PATH_MASK:
+                    target_name = _("mask-path");
+                    break;
+                case SNAPTARGET_BBOX_CORNER:
+                    target_name = _("bounding box corner");
+                    break;
+                case SNAPTARGET_BBOX_EDGE:
+                    target_name = _("bounding box side");
+                    break;
+                case SNAPTARGET_PAGE_BORDER:
+                    target_name = _("page border");
+                    break;
+                case SNAPTARGET_LINE_MIDPOINT:
+                    target_name = _("line midpoint");
+                    break;
+                case SNAPTARGET_OBJECT_MIDPOINT:
+                    target_name = _("object midpoint");
+                    break;
+                case SNAPTARGET_ROTATION_CENTER:
+                    target_name = _("object rotation center");
+                    break;
+                case SNAPTARGET_BBOX_EDGE_MIDPOINT:
+                    target_name = _("bounding box side midpoint");
+                    break;
+                case SNAPTARGET_BBOX_MIDPOINT:
+                    target_name = _("bounding box midpoint");
+                    break;
+                case SNAPTARGET_PAGE_CORNER:
+                    target_name = _("page corner");
+                    break;
+                case SNAPTARGET_ELLIPSE_QUADRANT_POINT:
+                    target_name = _("quadrant point");
+                    break;
+                case SNAPTARGET_RECT_CORNER:
+                case SNAPTARGET_IMG_CORNER:
+                    target_name = _("corner");
+                    break;
+                case SNAPTARGET_TEXT_ANCHOR:
+                    target_name = _("text anchor");
+                    break;
+                case SNAPTARGET_TEXT_BASELINE:
+                    target_name = _("text baseline");
+                    break;
+                case SNAPTARGET_CONSTRAINED_ANGLE:
+                    target_name = _("constrained angle");
+                    break;
+                case SNAPTARGET_CONSTRAINT:
+                    target_name = _("constraint");
+                    break;
+                default:
+                    g_warning("Snap target not in SnapTargetType enum");
+                    break;
+            }
+
+            switch (p.getSource()) {
+                case SNAPSOURCE_UNDEFINED:
+                    source_name = _("UNDEFINED");
+                    g_warning("Snap source has not been specified");
+                    break;
+                case SNAPSOURCE_BBOX_CORNER:
+                    source_name = _("Bounding box corner");
+                    break;
+                case SNAPSOURCE_BBOX_MIDPOINT:
+                    source_name = _("Bounding box midpoint");
+                    break;
+                case SNAPSOURCE_BBOX_EDGE_MIDPOINT:
+                    source_name = _("Bounding box side midpoint");
+                    break;
+                case SNAPSOURCE_NODE_SMOOTH:
+                    source_name = _("Smooth node");
+                    break;
+                case SNAPSOURCE_NODE_CUSP:
+                    source_name = _("Cusp node");
+                    break;
+                case SNAPSOURCE_LINE_MIDPOINT:
+                    source_name = _("Line midpoint");
+                    break;
+                case SNAPSOURCE_OBJECT_MIDPOINT:
+                    source_name = _("Object midpoint");
+                    break;
+                case SNAPSOURCE_ROTATION_CENTER:
+                    source_name = _("Object rotation center");
+                    break;
+                case SNAPSOURCE_NODE_HANDLE:
+                case SNAPSOURCE_OTHER_HANDLE:
+                    source_name = _("Handle");
+                    break;
+                case SNAPSOURCE_PATH_INTERSECTION:
+                    source_name = _("Path intersection");
+                    break;
+                case SNAPSOURCE_GUIDE:
+                    source_name = _("Guide");
+                    break;
+                case SNAPSOURCE_GUIDE_ORIGIN:
+                    source_name = _("Guide origin");
+                    break;
+                case SNAPSOURCE_CONVEX_HULL_CORNER:
+                    source_name = _("Convex hull corner");
+                    break;
+                case SNAPSOURCE_ELLIPSE_QUADRANT_POINT:
+                    source_name = _("Quadrant point");
+                    break;
+                case SNAPSOURCE_RECT_CORNER:
+                case SNAPSOURCE_IMG_CORNER:
+                    source_name = _("Corner");
+                    break;
+                case SNAPSOURCE_TEXT_ANCHOR:
+                    source_name = _("Text anchor");
+                    break;
+                case SNAPSOURCE_GRID_PITCH:
+                    source_name = _("Multiple of grid spacing");
+                    break;
+                default:
+                    g_warning("Snap source not in SnapSourceType enum");
+                    break;
+            }
         }
         //std::cout << "Snapped " << source_name << " to " << target_name << std::endl;
 
         remove_snapsource(); // Don't set both the source and target indicators, as these will overlap
 
+        double timeout_val = prefs->getDouble("/options/snapindicatorpersistence/value", 2.0);
+        if (timeout_val < 0.1) {
+            timeout_val = 0.1; // a zero value would mean infinite persistence (i.e. until new snap occurs)
+            // Besides, negatives values would ....?
+        }
+
         // Display the snap indicator (i.e. the cross)
-        auto ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
-        ctrl->set_size(11);
-        ctrl->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
-        ctrl->set_position(p.getPoint());
+
+        Inkscape::CanvasItemCtrl *ctrl;
+        Inkscape::CanvasItemCtrl *ctrl2;
+        Inkscape::CanvasItemCtrl *ctrl3;
+        Inkscape::CanvasItemCtrl *ctrl4;
+        Inkscape::CanvasItemCtrl *ctrl5;
+        if (is_alignment) {
+            // using floor() or ceil() sometimes causes incomplete lines.
+            double size = round(Geom::L2(p.getPoint() - p.getAlignmentTarget()));
+            ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_LINE, p.getPoint(), p.getAlignmentTarget());
+            ctrl->set_size(size);
+            ctrl->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
+
+            if (p.getTarget() == SNAPTARGET_ALIGNMENT_INTERSECTION) {
+                double size = round(Geom::L2(p.getPoint() - p.getAlignmentTarget2()));
+                ctrl2 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_LINE, p.getPoint(), p.getAlignmentTarget2());
+                ctrl2->set_size(size);
+                ctrl2->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
+                _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl2, 0));
+
+                ctrl3 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+                ctrl3->set_size(9);
+                ctrl3->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
+                ctrl3->set_fill(0x00000000);
+                ctrl3->set_position(p.getAlignmentTarget2());
+                _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl3, 0));
+            }
+
+            ctrl4 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+            ctrl4->set_size(9);
+            ctrl4->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
+            ctrl4->set_fill(0x00000000);
+            ctrl4->set_position(p.getPoint());
+
+            ctrl5 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+            ctrl5->set_size(9);
+            ctrl5->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
+            ctrl5->set_fill(0x00000000);
+            ctrl5->set_position(p.getAlignmentTarget());
+
+            _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl, 0));
+            _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl4, 0));
+            _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl5, 0));
+        } else {
+            ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
+            ctrl->set_size(11);
+            ctrl->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
+            ctrl->set_position(p.getPoint());
+
+            _snaptarget = _desktop->add_temporary_canvasitem(ctrl, timeout_val*1000.0);
+        }
 
         // The snap indicator will be deleted after some time-out, and sp_canvas_item_dispose
         // will be called. This will set canvas->current_item to NULL if the snap indicator was
@@ -265,51 +323,46 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         //     (https://bugs.launchpad.net/inkscape/+bug/1420301/comments/15)
         ctrl->set_pickable(false);
 
-        double timeout_val = prefs->getDouble("/options/snapindicatorpersistence/value", 2.0);
-        if (timeout_val < 0.1) {
-            timeout_val = 0.1; // a zero value would mean infinite persistence (i.e. until new snap occurs)
-            // Besides, negatives values would ....?
-        }
-
-        _snaptarget = _desktop->add_temporary_canvasitem(ctrl, timeout_val*1000.0);
         _snaptarget_is_presnap = pre_snap;
 
         // Display the tooltip, which reveals the type of snap source and the type of snap target
-        Glib::ustring tooltip_str;
-        if ( (p.getSource() != SNAPSOURCE_GRID_PITCH) && (p.getTarget() != SNAPTARGET_UNDEFINED) ) {
-            tooltip_str = source_name + _(" to ") + target_name;
-        } else if (p.getSource() != SNAPSOURCE_UNDEFINED) {
-            tooltip_str = source_name;
-        }
-
-        double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
-
-        if (!tooltip_str.empty()) {
-            Geom::Point tooltip_pos = p.getPoint();
-            if (dynamic_cast<Inkscape::UI::Tools::MeasureTool *>(_desktop->event_context)) {
-                // Make sure that the snap tooltips do not overlap the ones from the measure tool
-                tooltip_pos += _desktop->w2d(Geom::Point(0, -3*fontsize));
-            } else {
-                tooltip_pos += _desktop->w2d(Geom::Point(0, -2*fontsize));
+        if (!is_alignment) {
+            Glib::ustring tooltip_str;
+            if ( (p.getSource() != SNAPSOURCE_GRID_PITCH) && (p.getTarget() != SNAPTARGET_UNDEFINED) ) {
+                tooltip_str = source_name + _(" to ") + target_name;
+            } else if (p.getSource() != SNAPSOURCE_UNDEFINED) {
+                tooltip_str = source_name;
             }
 
-            auto canvas_tooltip = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), tooltip_pos, tooltip_str);
-            canvas_tooltip->set_fontsize(fontsize);
-            canvas_tooltip->set_fill(0xffffffff);
-            canvas_tooltip->set_background(pre_snap ? 0x33337f40 : 0x33337f7f);
+            double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
 
-            _snaptarget_tooltip = _desktop->add_temporary_canvasitem(canvas_tooltip, timeout_val*1000.0);
-        }
+            if (!tooltip_str.empty()) {
+                Geom::Point tooltip_pos = p.getPoint();
+                if (dynamic_cast<Inkscape::UI::Tools::MeasureTool *>(_desktop->event_context)) {
+                    // Make sure that the snap tooltips do not overlap the ones from the measure tool
+                    tooltip_pos += _desktop->w2d(Geom::Point(0, -3*fontsize));
+                } else {
+                    tooltip_pos += _desktop->w2d(Geom::Point(0, -2*fontsize));
+                }
 
-        // Display the bounding box, if we snapped to one
-        Geom::OptRect const bbox = p.getTargetBBox();
-        if (bbox) {
-            auto box = new Inkscape::CanvasItemRect(_desktop->getCanvasTemp(), *bbox);
-            box->set_stroke(pre_snap ? 0x7f7f7fff : 0xff0000ff);
-            box->set_dashed(true);
-            box->set_pickable(false); // Is false by default.
-            box->set_z_position(0);
-            _snaptarget_bbox = _desktop->add_temporary_canvasitem(box, timeout_val*1000.0);
+                auto canvas_tooltip = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), tooltip_pos, tooltip_str);
+                canvas_tooltip->set_fontsize(fontsize);
+                canvas_tooltip->set_fill(0xffffffff);
+                canvas_tooltip->set_background(pre_snap ? 0x33337f40 : 0x33337f7f);
+
+                _snaptarget_tooltip = _desktop->add_temporary_canvasitem(canvas_tooltip, timeout_val*1000.0);
+            }
+
+            // Display the bounding box, if we snapped to one
+            Geom::OptRect const bbox = p.getTargetBBox();
+            if (bbox) {
+                auto box = new Inkscape::CanvasItemRect(_desktop->getCanvasTemp(), *bbox);
+                box->set_stroke(pre_snap ? 0x7f7f7fff : 0xff0000ff);
+                box->set_dashed(true);
+                box->set_pickable(false); // Is false by default.
+                box->set_z_position(0);
+                _snaptarget_bbox = _desktop->add_temporary_canvasitem(box, timeout_val*1000.0);
+            }
         }
     }
 }
@@ -336,6 +389,11 @@ SnapIndicator::remove_snaptarget(bool only_if_presnap)
         _desktop->remove_temporary_canvasitem(_snaptarget_bbox);
         _snaptarget_bbox = nullptr;
     }
+
+    for (auto *item : _alignment_snap_indicators) {
+        _desktop->remove_temporary_canvasitem(item);
+    }
+    _alignment_snap_indicators.clear();
 
 }
 

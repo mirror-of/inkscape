@@ -39,6 +39,7 @@ public:
     CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type, Geom::Point const &p);
     CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlShape shape);
     CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlShape shape, Geom::Point const &p);
+    CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlShape shape, Geom::Point const &p1, Geom::Point const &p2);
 
     // Geometry
     void set_position(Geom::Point const &position);
@@ -73,10 +74,12 @@ protected:
 
     // Geometry
     Geom::Point _position;
+    Geom::Point _position2;
 
     // Display
     guint32 *_cache = nullptr;
     bool _built = false;
+    bool _is_alignment = false;
 
     // Properties
     CanvasItemCtrlType _type   = CANVAS_ITEM_CTRL_TYPE_DEFAULT;

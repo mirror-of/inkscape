@@ -37,7 +37,12 @@ TemporaryItem *
 TemporaryItemList::add_item(CanvasItem *item, unsigned int lifetime)
 {
     // beware of strange things happening due to very short timeouts
-    TemporaryItem * tempitem = new TemporaryItem(item, lifetime);
+    TemporaryItem * tempitem;
+    if (lifetime == 0)
+        tempitem = new TemporaryItem(item, 0, true);
+    else
+        tempitem = new TemporaryItem(item, lifetime);
+
     itemlist.push_back(tempitem);
     tempitem->signal_timeout.connect( sigc::mem_fun(*this, &TemporaryItemList::_item_timeout) );
     return tempitem;

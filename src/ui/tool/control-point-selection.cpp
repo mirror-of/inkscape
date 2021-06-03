@@ -18,6 +18,7 @@
 #include "ui/tool/event-utils.h"
 #include "ui/tool/transform-handle-set.h"
 #include "ui/tool/node.h"
+#include "display/control/snap-indicator.h"
 
 
 
@@ -442,6 +443,7 @@ void ControlPointSelection::_pointDragged(Geom::Point &new_pos, GdkEventMotion *
 
 void ControlPointSelection::_pointUngrabbed()
 {
+    _desktop->snapindicator->remove_snaptarget();
     _original_positions.clear();
     _last_trans.clear();
     _dragging = false;

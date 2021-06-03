@@ -490,6 +490,8 @@ void Inkscape::SelTrans::ungrab()
         _items_centers.clear();
         _updateHandles();
     }
+
+    _desktop->snapindicator->remove_snaptarget();
 }
 
 /* fixme: This is really bad, as we compare positions for each stamp (Lauris) */

@@ -45,6 +45,8 @@ protected:
     TemporaryItem *_snaptarget_tooltip;
     TemporaryItem *_snaptarget_bbox;
     TemporaryItem *_snapsource;
+
+    std::list<TemporaryItem *> _alignment_snap_indicators;
     std::list<TemporaryItem *> _debugging_points;
     bool _snaptarget_is_presnap;
     SPDesktop *_desktop;

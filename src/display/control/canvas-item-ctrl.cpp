@@ -89,6 +89,22 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, Inkscape::CanvasItemCtrlS
 }
 
 /**
+ * Create a control ctrl for alignment guides
+ */
+CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, Inkscape::CanvasItemCtrlShape shape, Geom::Point const &p1, Geom::Point const &p2)
+    : CanvasItemCtrl(group, shape)
+{
+    g_assert(shape == CANVAS_ITEM_CTRL_SHAPE_LINE);
+
+    _position = p1;
+    _position2 = p2;
+    _is_alignment = true;
+
+    request_update();
+}
+
+
+/**
  * Set the postion. Point is in document coordinates.
  */
 void CanvasItemCtrl::set_position(Geom::Point const &position)
@@ -286,7 +302,7 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
         return; // Hidden.
     }
 
-    if (!_built) {
+    if (!_built && !_is_alignment) {
         build_cache(buf->device_scale);
     }
 
@@ -296,6 +312,54 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
 
     buf->cr->save();
 
+    // there is no cache in case of alignment guides
+    if (_is_alignment) {
+
+        Geom::Point p1 = _position * _affine;
+        Geom::Point p2 = _position2 * _affine;
+
+        buf->cr->translate( -buf->rect.left(), -buf->rect.top());
+        buf->cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
+                                 SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
+        buf->cr->set_line_width(1);
+
+        double x1 = p1.x();
+        double y1 = p1.y();
+
+        double x2 = p2.x();
+        double y2 = p2.y();
+
+        // reject lines that are not horizontal or vertical when rounding off
+        //if (x1 != x2 && y1 != y2)
+            //return;
+
+        // this is needed so that the line does not intersect the circles at the ends
+        if (x1 == x2) {
+            if (y1 < y2) {
+                y1 += 4;
+                y2 -= 4;
+            } else {
+                y1 -= 4;
+                y2 += 4;
+            }
+        } else if (y1 == y2) {
+            if (x1 < x2) {
+                x1 += 4;
+                x2 -= 4;
+            } else {
+                x1 -= 4;
+                x2 += 4;
+            }
+        }
+
+        buf->cr->move_to(x1, y1);
+        buf->cr->line_to(x2, y2);
+
+        buf->cr->stroke();
+        buf->cr->restore();
+
+        return;
+    }
     // This code works regardless of source type.
 
     // 1. Copy the affected part of output to a temporary surface
