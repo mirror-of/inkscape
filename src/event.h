@@ -30,16 +30,19 @@ class Event;
 
 namespace Inkscape {
 
-struct Event {
-     
-    Event(XML::Event *_event, unsigned int _type=SP_VERB_NONE, Glib::ustring _description="")
-        : event (_event), type (_type), description (std::move(_description))  { }
+class Event {
+
+public:
+
+    Event(XML::Event *_event, Glib::ustring _description="", Glib::ustring _icon_name="")
+        : event (_event), description (std::move(_description)), icon_name (std::move(_icon_name))  { }
 
     virtual ~Event() { sp_repr_free_log (event); }
 
     XML::Event *event;
-    const unsigned int type;
-    Glib::ustring description;
+    unsigned int type = 0;
+    Glib::ustring description; // The description to use in the Undo dialog.
+    Glib::ustring icon_name;   // The icon to use in the Undo dialog.
 };
 
 } // namespace Inkscape

@@ -184,7 +184,7 @@ EventLog::EventLog(SPDocument* document) :
     
     auto &_columns = getColumns();
     curr_row[_columns.description] = _("[Unchanged]");
-    curr_row[_columns.type] = SP_VERB_FILE_NEW;
+    curr_row[_columns.icon_name] = "document-new";
 }
 
 EventLog::~EventLog() {
@@ -296,13 +296,13 @@ EventLog::notifyUndoCommitEvent(Event* log)
 {
     _clearRedo();
 
-    const unsigned int event_type = log->type;
+    auto icon_name = log->icon_name;
 
     Gtk::TreeRow curr_row;
     auto &_columns = getColumns();
 
     // if the new event is of the same type as the previous then create a new branch
-    if ( event_type == (*_curr_event)[_columns.type] ) {
+    if ( icon_name == (*_curr_event)[_columns.icon_name] ) {
         if ( !_curr_event_parent ) {
             _curr_event_parent = _curr_event;
         }
@@ -325,7 +325,7 @@ EventLog::notifyUndoCommitEvent(Event* log)
     _curr_event = _last_event = curr_row;
 
     curr_row[_columns.event] = log;
-    curr_row[_columns.type] = event_type;
+    curr_row[_columns.icon_name] = icon_name;
     curr_row[_columns.description] = log->description;
 
     checkForVirginity();

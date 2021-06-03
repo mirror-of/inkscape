@@ -34,6 +34,8 @@
 #include "object/sp-root.h"       // "Desktop Bounds"
 #include "path/path-simplify.h"
 
+#include "ui/icon-names.h"        // Icon macro used in undo.
+
 enum class ObjectAlignTarget {
     LAST,
     FIRST,
@@ -203,7 +205,7 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     if (changed) {
-        Inkscape::DocumentUndo::done(document, 0, _("Align"));
+        Inkscape::DocumentUndo::done(document, _("Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 }
 
@@ -346,7 +348,7 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
     if (changed) {
-        Inkscape::DocumentUndo::done( document, 0, _("Distribute"));
+        Inkscape::DocumentUndo::done( document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 }
 

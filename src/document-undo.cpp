@@ -84,10 +84,20 @@ bool Inkscape::DocumentUndo::getUndoSensitive(SPDocument const *document) {
 	return document->sensitive;
 }
 
+// TEMP TEMP Until verbs are removed. event_type is verb number.
 void Inkscape::DocumentUndo::done(SPDocument *doc, const unsigned int event_type, Glib::ustring const &event_description)
 {
     if (doc->sensitive) {
         maybeDone(doc, nullptr, event_type, event_description);
+    }
+}
+
+void Inkscape::DocumentUndo::done(SPDocument *doc,
+                                  Glib::ustring const &event_description,
+                                  Glib::ustring const &icon_name)
+{
+    if (doc->sensitive) {
+        maybeDone(doc, nullptr, event_description, icon_name);
     }
 }
 
@@ -108,25 +118,47 @@ typedef SimpleEvent<Event::INTERACTION> InteractionEvent;
 class CommitEvent : public InteractionEvent {
 public:
 
-    CommitEvent(SPDocument *doc, const gchar *key, const unsigned int type)
+    CommitEvent(SPDocument *doc, const gchar *key, const gchar* event_description, const gchar *icon_name)
     : InteractionEvent("commit")
     {
         _addProperty("timestamp", timestamp());
         _addProperty("document", doc->serial());
-        Verb *verb = Verb::get(type);
-        if (verb) {
-            _addProperty("context", verb->get_id());
-        }
+
         if (key) {
             _addProperty("merge-key", key);
+        }
+
+        if (event_description) {
+            _addProperty("description", event_description);
+        }
+
+        if (icon_name) {
+            _addProperty("icon-name", icon_name);
         }
     }
 };
 
 }
 
+// TEMP TEMP Until verbs are removed.
 void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const unsigned int event_type,
                                        Glib::ustring const &event_description)
+{
+    Glib::ustring icon;
+
+    Verb *verb = Verb::get(event_type);
+    if (verb && verb->get_image()) {
+        icon = verb->get_image();
+    }
+    maybeDone(doc, key, event_description, icon);
+}
+
+// 'key' is used to coalesce changes of the same type.
+// 'event_description' and 'icon_name' are used in the Undo History dialog.
+void Inkscape::DocumentUndo::maybeDone(SPDocument *doc,
+                                       const gchar *key,
+                                       Glib::ustring const &event_description,
+                                       Glib::ustring const &icon_name)
 {
 	g_assert (doc != nullptr);
         g_assert (doc->sensitive);
@@ -134,7 +166,8 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
             g_warning("Blank undo key specified.");
         }
 
-        Inkscape::Debug::EventTracker<CommitEvent> tracker(doc, key, event_type);
+        // This is only used for output to debug log file (and not for undo).
+        Inkscape::Debug::EventTracker<CommitEvent> tracker(doc, key, event_description.c_str(), icon_name.c_str());
 
 	doc->collectOrphans();
 
@@ -154,7 +187,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
                 (doc->undo.back())->event =
                     sp_repr_coalesce_log ((doc->undo.back())->event, log);
 	} else {
-                Inkscape::Event *event = new Inkscape::Event(log, event_type, event_description);
+                Inkscape::Event *event = new Inkscape::Event(log, event_description, icon_name);
                 doc->undo.push_back(event);
 		doc->history_size++;
 		doc->undoStackObservers.notifyUndoCommitEvent(event);
