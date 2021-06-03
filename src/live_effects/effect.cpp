@@ -667,7 +667,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
     },
     {
         SLICE,
-        N_("Slice") ,//label
+        NC_("path effect", "Slice") ,//label
         "slice" ,//key
         "slice" ,//icon
         "Slice" ,//untranslated name
