@@ -266,20 +266,20 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         Inkscape::CanvasItemCtrl *ctrl5;
         if (is_alignment) {
             // using floor() or ceil() sometimes causes incomplete lines.
-            double size = round(Geom::L2(p.getPoint() - p.getAlignmentTarget()));
+            double size = floor(Geom::L2(p.getPoint() - p.getAlignmentTarget()));
             ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_LINE, p.getPoint(), p.getAlignmentTarget());
             ctrl->set_size(size);
             ctrl->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
 
             if (p.getTarget() == SNAPTARGET_ALIGNMENT_INTERSECTION) {
-                double size = round(Geom::L2(p.getPoint() - p.getAlignmentTarget2()));
+                double size = floor(Geom::L2(p.getPoint() - p.getAlignmentTarget2()));
                 ctrl2 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_LINE, p.getPoint(), p.getAlignmentTarget2());
                 ctrl2->set_size(size);
                 ctrl2->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
                 _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl2, 0));
 
                 ctrl3 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-                ctrl3->set_size(9);
+                ctrl3->set_size(7);
                 ctrl3->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
                 ctrl3->set_fill(0x00000000);
                 ctrl3->set_position(p.getAlignmentTarget2());
@@ -287,13 +287,13 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             }
 
             ctrl4 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-            ctrl4->set_size(9);
+            ctrl4->set_size(7);
             ctrl4->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
             ctrl4->set_fill(0x00000000);
             ctrl4->set_position(p.getPoint());
 
             ctrl5 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-            ctrl5->set_size(9);
+            ctrl5->set_size(7);
             ctrl5->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
             ctrl5->set_fill(0x00000000);
             ctrl5->set_position(p.getAlignmentTarget());

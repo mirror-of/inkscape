@@ -40,11 +40,12 @@ TemporaryItemList::add_item(CanvasItem *item, unsigned int lifetime)
     TemporaryItem * tempitem;
     if (lifetime == 0)
         tempitem = new TemporaryItem(item, 0, true);
-    else
+    else {
         tempitem = new TemporaryItem(item, lifetime);
+        tempitem->signal_timeout.connect( sigc::mem_fun(*this, &TemporaryItemList::_item_timeout) );
+    }
 
     itemlist.push_back(tempitem);
-    tempitem->signal_timeout.connect( sigc::mem_fun(*this, &TemporaryItemList::_item_timeout) );
     return tempitem;
 }
 

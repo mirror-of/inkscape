@@ -33,6 +33,7 @@
 
 #include "display/control/canvas-item-catchall.h" // Grab/Ungrab
 #include "display/control/canvas-item-rotate.h"
+#include "display/control/snap-indicator.h"
 
 #include "include/gtkmm_version.h"
 #include "include/macros.h"
@@ -1046,6 +1047,7 @@ void ToolBase::grabCanvasEvents(Gdk::EventMask mask)
  */
 void ToolBase::ungrabCanvasEvents()
 {
+    desktop->snapindicator->remove_snaptarget();
     desktop->getCanvasCatchall()->ungrab();
 }
 

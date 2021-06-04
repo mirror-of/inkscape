@@ -336,19 +336,19 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
         // this is needed so that the line does not intersect the circles at the ends
         if (x1 == x2) {
             if (y1 < y2) {
-                y1 += 4;
-                y2 -= 4;
+                y1 += 3;
+                y2 -= 3;
             } else {
-                y1 -= 4;
-                y2 += 4;
+                y1 -= 3;
+                y2 += 3;
             }
         } else if (y1 == y2) {
             if (x1 < x2) {
-                x1 += 4;
-                x2 -= 4;
+                x1 += 3;
+                x2 -= 3;
             } else {
-                x1 -= 4;
-                x2 += 4;
+                x1 -= 3;
+                x2 += 3;
             }
         }
 
