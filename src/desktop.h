@@ -67,7 +67,6 @@ typedef struct _GdkEventWindowState GdkEventWindowState;
 struct InkscapeApplication;
 
 namespace Inkscape {
-    class EventLog;
     class LayerManager;
     class LayerModel;
     class MessageContext;
@@ -143,7 +142,6 @@ public:
     Inkscape::Selection       *selection;
     Inkscape::UI::Tools::ToolBase            *event_context;
     Inkscape::LayerManager    *layer_manager;
-    Inkscape::EventLog        *event_log;
     DocumentInterface *dbus_document_interface;
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;

@@ -879,7 +879,7 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     }
 
     // FIXME: find a better place to do this
-    desktop->event_log->updateUndoVerbs();
+    document->get_event_log()->updateUndoVerbs();
 }
 
 void sp_namedview_document_from_window(SPDesktop *desktop)

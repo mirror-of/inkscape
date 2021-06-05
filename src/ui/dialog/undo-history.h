@@ -24,7 +24,6 @@
 #include "event-log.h"
 #include "ui/dialog/dialog-base.h"
 
-class SPDesktop;
 
 namespace Inkscape {
 namespace UI {
@@ -115,7 +114,6 @@ public:
 
 protected:
 
-    SPDesktop *_desktop;
     SPDocument *_document;
     EventLog *_event_log;
 
@@ -129,9 +127,8 @@ protected:
 
     static void *_handleEventLogDestroyCB(void *data);
 
-    void _connectDocument(SPDesktop* desktop, SPDocument *document);
+    void _connectDocument(SPDocument *document);
     void _connectEventLog();
-    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void *_handleEventLogDestroy();
     void _onListSelectionChange();
     void _onExpandEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);

@@ -160,7 +160,9 @@ public:
     void setXMLDialogSelectedObject(SPObject *activexmltree) { _activexmltree = activexmltree; }
     SPObject *getXMLDialogSelectedObject() { return _activexmltree; }
 
-  private:
+    Inkscape::EventLog* get_event_log() { return _event_log; }
+
+private:
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
     SPObject *_activexmltree;
 
@@ -351,6 +353,7 @@ private:
 
     // Document undo/redo ----------------------
     friend Inkscape::DocumentUndo;
+    Inkscape::EventLog *_event_log = nullptr;
 
     /* Undo/Redo state */
     bool sensitive; /* If we save actions to undo stack */

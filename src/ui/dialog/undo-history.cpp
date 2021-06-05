@@ -20,8 +20,6 @@
 #include "ui/icon-loader.h"
 #include "util/signal-blocker.h"
 
-#include "desktop.h"
-
 
 namespace Inkscape {
 namespace UI {
@@ -91,7 +89,6 @@ UndoHistory& UndoHistory::getInstance()
 UndoHistory::UndoHistory()
     : DialogBase("/dialogs/undo-history", "UndoHistory"),
       _document_replaced_connection(),
-      _desktop(nullptr),
       _document(nullptr),
       _event_log(nullptr),
       _scrolled_window(),
@@ -156,9 +153,14 @@ UndoHistory::UndoHistory()
 
 UndoHistory::~UndoHistory()
 {
-    _connectDocument(nullptr, nullptr);
+    // disconnect from prior
+    if (_event_log) {
+        _event_log->removeDialogConnection(&_event_list_view, &_callback_connections);
+        _event_log->remove_destroy_notify_callback(this);
+    }
 }
 
+// Required for floating dialogs.
 void UndoHistory::update()
 {
     if (!_app) {
@@ -166,28 +168,16 @@ void UndoHistory::update()
         return;
     }
 
-    SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
-        return;
-    }
-
-    EventLog *newEventLog = desktop ? desktop->event_log : nullptr;
-    if ((_desktop == desktop) && (_event_log == newEventLog)) {
-        // same desktop set
-    }
-    else
-    {
-        _connectDocument(desktop, _app->get_active_document());
-    }
-
-    if (_app->get_active_document()) {
-        _handleDocumentReplaced(desktop, _app->get_active_document());
+    if (_document != _app->get_active_document()) {
+        _connectDocument(_app->get_active_document());
     }
 }
 
-void UndoHistory::_connectDocument(SPDesktop* desktop, SPDocument * /*document*/)
+void UndoHistory::_connectDocument(SPDocument *document)
 {
+    g_assert (document != nullptr);
+    g_assert (document->get_event_log() != nullptr);
+
     // disconnect from prior
     if (_event_log) {
         _event_log->removeDialogConnection(&_event_list_view, &_callback_connections);
@@ -198,10 +188,9 @@ void UndoHistory::_connectDocument(SPDesktop* desktop, SPDocument * /*document*/
 
     _event_list_view.unset_model();
 
-    // connect to new EventLog/Desktop
-    _desktop = desktop;
-    _event_log = desktop ? desktop->event_log : nullptr;
-    _document = desktop ? desktop->doc() : nullptr;
+    // connect to new EventLog
+    _document = document;
+    _event_log = document->get_event_log();
     _connectEventLog();
 }
 
@@ -215,13 +204,6 @@ void UndoHistory::_connectEventLog()
 
         _event_log->addDialogConnection(&_event_list_view, &_callback_connections);
         _event_list_view.scroll_to_row(_event_list_store->get_path(_event_list_selection->get_selected()));
-    }
-}
-
-void UndoHistory::_handleDocumentReplaced(SPDesktop* desktop, SPDocument *document)
-{
-    if ((desktop != _desktop) || (document != _document)) {
-        _connectDocument(desktop, document);
     }
 }
 

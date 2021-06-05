@@ -44,8 +44,8 @@
 #include <2geom/transforms.h>
 
 #include "desktop.h"
-#include "io/dir-util.h"
 #include "document-undo.h"
+#include "event-log.h"
 #include "file.h"
 #include "id-clash.h"
 #include "inkscape-version.h"
@@ -64,6 +64,7 @@
 #include "3rdparty/libcroco/cr-sel-eng.h"
 #include "3rdparty/libcroco/cr-selector.h"
 
+#include "io/dir-util.h"
 #include "live_effects/lpeobject.h"
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
@@ -107,6 +108,7 @@ SPDocument::SPDocument() :
     document_base(nullptr),
     document_name(nullptr),
     actionkey(),
+    _event_log(new Inkscape::EventLog(this)),
     profileManager(nullptr), // deferred until after other initialization
     router(new Avoid::Router(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
     oldSignalsConnected(false),
@@ -135,6 +137,9 @@ SPDocument::SPDocument() :
 
     // Once things are set, hook in the manager
     profileManager = new Inkscape::ProfileManager(this);
+
+    // For undo/redo
+    undoStackObservers.add(*_event_log);
 
     // XXX only for testing!
     undoStackObservers.add(console_output_undo_observer);
@@ -214,6 +219,10 @@ SPDocument::~SPDocument() {
     if (this->current_persp3d_impl)
         delete this->current_persp3d_impl;
     this->current_persp3d_impl = nullptr;
+
+    if (_event_log) {
+        delete _event_log;
+    }
 
     // This is at the end of the destructor, because preceding code adds new orphans to the queue
     collectOrphans();
