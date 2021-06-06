@@ -17,10 +17,10 @@ namespace Bitmap {
 class Unsharpmask : public ImageMagick
 {
 private:
-	float _radius;
-	float _sigma;
-	float _amount;
-	float _threshold;
+	double _radius;
+	double _sigma;
+	double _amount;
+	double _threshold;
 public:
   void applyEffect(Magick::Image *image) override;
   void refreshParameters(Inkscape::Extension::Effect *module) override;

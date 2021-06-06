@@ -17,9 +17,9 @@ namespace Bitmap {
 class Level : public ImageMagick
 {
 private:
-	float _black_point;
-	float _white_point;
-	float _mid_point;
+	double _black_point;
+	double _white_point;
+	double _mid_point;
 public:
 	void applyEffect(Magick::Image *image) override;
 	void refreshParameters(Inkscape::Extension::Effect *module) override;

@@ -32,15 +32,15 @@ public:
     ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /** Returns \c _value. */
-    float get() const { return _value; }
+    double get() const { return _value; }
 
-    float set(float in);
+    double set(double in);
 
-    float max () { return _max; }
+    double max () { return _max; }
 
-    float min () { return _min; }
+    double min () { return _min; }
 
-    float precision () { return _precision; }
+    double precision () { return _precision; }
 
     Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
@@ -48,12 +48,12 @@ public:
 
 private:
     /** Internal value. */
-    float _value = 0;
+    double _value = 0;
 
     /** limits */
     // TODO: do these defaults make sense or should we be unbounded by default?
-    float _min = 0;
-    float _max = 10;
+    double _min = 0;
+    double _max = 10;
 
     /** numeric precision (i.e. number of digits) */
     int _precision = 1;

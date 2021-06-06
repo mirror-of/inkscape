@@ -17,7 +17,7 @@ namespace Bitmap {
 class Solarize : public ImageMagick
 {
 private:
-	float _factor;
+	double _factor;
 public:
 	void applyEffect(Magick::Image *image) override;
 	void refreshParameters(Inkscape::Extension::Effect *module) override;

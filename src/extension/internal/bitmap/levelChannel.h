@@ -17,9 +17,9 @@ namespace Bitmap {
 class LevelChannel : public ImageMagick
 {
 private:
-	float _black_point;
-	float _white_point;
-	float _mid_point;
+	double _black_point;
+	double _white_point;
+	double _mid_point;
 	const gchar * _channelName;
 public:
 	void applyEffect(Magick::Image *image) override;

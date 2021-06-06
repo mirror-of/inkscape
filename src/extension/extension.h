@@ -225,18 +225,18 @@ private:
 public:
     bool        get_param_bool          (const gchar *name) const;
     int         get_param_int           (const gchar *name) const;
-    float       get_param_float         (const gchar *name) const;
+    double      get_param_float         (const gchar *name) const;
     const char *get_param_string        (const gchar *name) const;
     const char *get_param_optiongroup   (const gchar *name) const;
     guint32     get_param_color         (const gchar *name) const;
 
-    bool get_param_optiongroup_contains (const gchar *name, const char *value) const;
+    bool get_param_optiongroup_contains (const gchar *name, const char   *value) const;
 
-    bool        set_param_bool          (const gchar *name, const bool  value);
-    int         set_param_int           (const gchar *name, const int   value);
-    float       set_param_float         (const gchar *name, const float value);
-    const char *set_param_string        (const gchar *name, const char *value);
-    const char *set_param_optiongroup   (const gchar *name, const char *value);
+    bool        set_param_bool          (const gchar *name, const bool    value);
+    int         set_param_int           (const gchar *name, const int     value);
+    double      set_param_float         (const gchar *name, const double  value);
+    const char *set_param_string        (const gchar *name, const char   *value);
+    const char *set_param_optiongroup   (const gchar *name, const char   *value);
     guint32     set_param_color         (const gchar *name, const guint32 color);
 
 

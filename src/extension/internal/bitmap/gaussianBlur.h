@@ -17,8 +17,8 @@ namespace Bitmap {
 class GaussianBlur : public ImageMagick
 {
 private:
-	float _width;
-	float _sigma;
+	double _width;
+	double _sigma;
 public:
 	void applyEffect(Magick::Image *image) override;
 	void refreshParameters(Inkscape::Extension::Effect *module) override;

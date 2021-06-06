@@ -17,9 +17,9 @@ namespace Bitmap {
 class Modulate : public ImageMagick
 {
 private:
-	float _brightness;
-	float _saturation;
-	float _hue;
+	double _brightness;
+	double _saturation;
+	double _hue;
 public:
   void applyEffect(Magick::Image *image) override;
   void refreshParameters(Inkscape::Extension::Effect *module) override;

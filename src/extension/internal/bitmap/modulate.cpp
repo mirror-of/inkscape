@@ -20,7 +20,7 @@ namespace Bitmap {
 	
 void
 Modulate::applyEffect(Magick::Image* image) {
-	float hue = (_hue * 200 / 360.0) + 100;
+	double hue = (_hue * 200 / 360.0) + 100;
 	image->modulate(_brightness, _saturation, hue);
 }
 

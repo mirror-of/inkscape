@@ -17,8 +17,8 @@ namespace Bitmap {
 class Wave : public ImageMagick
 {
 private:
-	float _amplitude;
-	float _wavelength;
+	double _amplitude;
+	double _wavelength;
 public:
 	void applyEffect(Magick::Image *image) override;
 	void refreshParameters(Inkscape::Extension::Effect *module) override;

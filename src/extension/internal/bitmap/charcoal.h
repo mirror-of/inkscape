@@ -17,8 +17,8 @@ namespace Bitmap {
 class Charcoal : public ImageMagick
 {
 private:
-	float _radius;
-	float _sigma;
+	double _radius;
+	double _sigma;
 public:
     void applyEffect(Magick::Image *image) override;
 	void refreshParameters(Inkscape::Extension::Effect *module) override;

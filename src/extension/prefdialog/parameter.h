@@ -47,7 +47,7 @@ public:
     int get_int() const;
 
     /** Wrapper to cast to the object and use it's function. */
-    float get_float() const;
+    double get_float() const;
 
     /** Wrapper to cast to the object and use it's function. */
     const char *get_string() const;
@@ -66,7 +66,7 @@ public:
     int set_int(int  in);
 
     /** Wrapper to cast to the object and use it's function. */
-    float set_float(float in);
+    double set_float(double in);
 
     /** Wrapper to cast to the object and use it's function. */
     const char *set_string(const char *in);

@@ -772,7 +772,7 @@ void CairoRenderer::setMetadata(CairoRenderContext *ctx, SPDocument *doc) {
 }
 
 bool
-CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool pageBoundingBox, float bleedmargin_px, SPItem *base)
+CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool pageBoundingBox, double bleedmargin_px, SPItem *base)
 {
 // PLEASE note when making changes to the boundingbox and transform calculation, corresponding changes should be made to LaTeXTextRenderer::setupDocument !!!
 

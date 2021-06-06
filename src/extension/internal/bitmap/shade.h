@@ -17,8 +17,8 @@ namespace Bitmap {
 class Shade : public ImageMagick
 {
 private:
-	float _azimuth;
-	float _elevation;
+	double _azimuth;
+	double _elevation;
 	bool _colorShading;
 public:
 	void applyEffect(Magick::Image *image) override;

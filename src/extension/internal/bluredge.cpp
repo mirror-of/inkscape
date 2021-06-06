@@ -56,8 +56,8 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 {
     Inkscape::Selection * selection     = static_cast<SPDesktop *>(desktop)->selection;
 
-    float width = module->get_param_float("blur-width");
-    int   steps = module->get_param_int("num-steps");
+    double width = module->get_param_float("blur-width");
+    int    steps = module->get_param_int("num-steps");
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double old_offset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");

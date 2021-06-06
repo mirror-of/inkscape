@@ -58,7 +58,7 @@ namespace Internal {
  */
 bool
 latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
-                                    const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
+                                    const gchar * const exportId, bool exportDrawing, bool exportCanvas, double bleedmargin_px,
                                     bool pdflatex)
 {
     doc->ensureUpToDate();
@@ -655,7 +655,7 @@ LaTeXTextRenderer::writeGraphicPage() {
 }
 
 bool
-LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bleedmargin_px, SPItem *base)
+LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, double bleedmargin_px, SPItem *base)
 {
 // The boundingbox calculation here should be exactly the same as the one by CairoRenderer::setupDocument !
 

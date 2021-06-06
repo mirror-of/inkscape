@@ -17,7 +17,7 @@ namespace Bitmap {
 class Opacity : public ImageMagick
 {
 private:
-	float _opacity;
+	double _opacity;
 public:
 	void applyEffect(Magick::Image *image) override;
 	void refreshParameters(Inkscape::Extension::Effect *module) override;

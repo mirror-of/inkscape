@@ -20,7 +20,7 @@ namespace Bitmap {
 	
 void
 Unsharpmask::applyEffect(Magick::Image* image) {
-	float amount = _amount / 100.0;
+	double amount = _amount / 100.0;
 	image->unsharpmask(_radius, _sigma, amount, _threshold);
 }
 

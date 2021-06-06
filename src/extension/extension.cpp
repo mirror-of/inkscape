@@ -697,13 +697,13 @@ Extension::get_param_int(const gchar *name) const
 }
 
 /**
-    \return   The float value for the parameter specified
-    \brief    Gets a parameter identified by name with the float in value.
+    \return   The double value for the float parameter specified
+    \brief    Gets a float parameter identified by name with the double placed in value.
     \param    name   The name of the parameter to get
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
-float
+double
 Extension::get_param_float(const gchar *name) const
 {
     const InxParameter *param;
@@ -804,14 +804,14 @@ Extension::set_param_int(const gchar *name, const int value)
 
 /**
     \return   The passed in value
-    \brief    Sets a parameter identified by name with the float in the parameter value.
+    \brief    Sets a parameter identified by name with the double in the parameter value.
     \param    name   The name of the parameter to set
     \param    value  The value to set the parameter to
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
-float
-Extension::set_param_float(const gchar *name, const float value)
+double
+Extension::set_param_float(const gchar *name, const double value)
 {
     InxParameter *param;
     param = get_param(name);

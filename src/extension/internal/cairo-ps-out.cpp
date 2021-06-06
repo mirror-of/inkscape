@@ -62,7 +62,7 @@ bool CairoEpsOutput::check (Inkscape::Extension::Extension * /*module*/)
 
 static bool
 ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int level, bool texttopath, bool omittext,
-                          bool filtertobitmap, int resolution, const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px, bool eps = false)
+                          bool filtertobitmap, int resolution, const gchar * const exportId, bool exportDrawing, bool exportCanvas, double bleedmargin_px, bool eps = false)
 {
     doc->ensureUpToDate();
 
@@ -175,7 +175,7 @@ CairoPsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar con
 
     bool new_areaDrawing  = !new_areaPage;
 
-    float bleedmargin_px = 0.;
+    double bleedmargin_px = 0.;
     try {
         bleedmargin_px = mod->get_param_float("bleed");
     } catch(...) {}
@@ -264,7 +264,7 @@ CairoEpsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar co
 
     bool new_areaDrawing  = !new_areaPage;
 
-    float bleedmargin_px = 0.;
+    double bleedmargin_px = 0.;
     try {
         bleedmargin_px = mod->get_param_float("bleed");
     } catch(...) {}

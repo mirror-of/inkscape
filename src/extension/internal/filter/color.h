@@ -660,7 +660,7 @@ Duochrome::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream swap2;
     guint32 color1 = ext->get_param_color("color1");
     guint32 color2 = ext->get_param_color("color2");
-    float fluorescence = ext->get_param_float("fluo");
+    double fluorescence = ext->get_param_float("fluo");
     const gchar *swaptype = ext->get_param_optiongroup("swap");
 
     r1 << ((color1 >> 24) & 0xff);
@@ -1262,7 +1262,7 @@ LightnessContrast::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream contrast;
     std::ostringstream contrast5;
 
-    gfloat c5;
+    double c5;
     if (ext->get_param_float("contrast") > 0) {
         contrast << (1 + ext->get_param_float("contrast") / 10);
         c5 = (- ext->get_param_float("contrast") / 20);

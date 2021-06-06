@@ -17,7 +17,7 @@ namespace Bitmap {
 class MedianFilter : public ImageMagick
 {
 private:
-	float _radius;
+	double _radius;
 public:
 	void applyEffect(Magick::Image *image) override;
 	void refreshParameters(Inkscape::Extension::Effect *module) override;

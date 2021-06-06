@@ -125,7 +125,7 @@ int InxParameter::get_int() const
     return intpntr->get();
 }
 
-float InxParameter::get_float() const
+double InxParameter::get_float() const
 {
     ParamFloat const *floatpntr = dynamic_cast<ParamFloat const *>(this);
     if (!floatpntr) {
@@ -186,7 +186,7 @@ int InxParameter::set_int(int in)
     return intpntr->set(in);
 }
 
-float InxParameter::set_float(float in)
+double InxParameter::set_float(double in)
 {
     ParamFloat * floatpntr;
     floatpntr = dynamic_cast<ParamFloat *>(this);

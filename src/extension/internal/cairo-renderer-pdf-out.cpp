@@ -57,7 +57,7 @@ bool CairoRendererPdfOutput::check(Inkscape::Extension::Extension * /*module*/)
 static bool
 pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int level,
                             bool texttopath, bool omittext, bool filtertobitmap, int resolution,
-                            const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px)
+                            const gchar * const exportId, bool exportDrawing, bool exportCanvas, double bleedmargin_px)
 {
     doc->ensureUpToDate();
 
@@ -196,7 +196,7 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
     }
     bool new_exportDrawing  = !new_exportCanvas;
 
-    float new_bleedmargin_px = 0.;
+    double new_bleedmargin_px = 0.;
     try {
         new_bleedmargin_px = Inkscape::Util::Quantity::convert(mod->get_param_float("bleed"), "mm", "px");
     }
