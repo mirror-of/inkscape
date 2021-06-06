@@ -103,6 +103,14 @@ std::vector<std::vector<Glib::ustring>> raw_data_file =
     // clang-format on
 };
 
+std::vector<std::vector<Glib::ustring>> hint_data_file =
+{
+    // clang-format off
+    {"app.file-open",              N_("Give String input for File name")},
+    {"app.file-new",               N_("Give String input for File name")}
+    // clang-format on
+};
+
 void
 add_actions_file(InkscapeApplication* app)
 {
@@ -126,6 +134,7 @@ add_actions_file(InkscapeApplication* app)
 #endif
 
     app->get_action_extra_data().add_data(raw_data_file);
+    app->get_action_hint_data().add_data(hint_data_file);
 }
 
 

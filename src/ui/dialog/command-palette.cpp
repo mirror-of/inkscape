@@ -44,6 +44,7 @@
 #include <sigc++/functors/mem_fun.h>
 #include <string>
 
+// #include "actions/actions-hint-data.h"
 #include "actions/actions-extra-data.h"
 #include "file.h"
 #include "gc-anchored.h"
@@ -617,9 +618,22 @@ bool CommandPalette::ask_action_parameter(const ActionPtrName &action_ptr_name)
             default:
                 break;
         }
+
+        const auto app = InkscapeApplication::instance();
+         InkActionHintData &action_hint_data = app->get_action_hint_data();
+        auto action_hint = action_hint_data.get_tooltip_hint_for_action(action_ptr_name.second, false);
+
+
         // Indicate user about what to enter FIXME Dialog generation
-        _CPFilter->set_placeholder_text("Enter a " + type_string + "...");
-        _CPFilter->set_tooltip_text("Enter a " + type_string + "...");
+        if(action_hint.length()){
+            _CPFilter->set_placeholder_text(action_hint);
+            _CPFilter->set_tooltip_text(action_hint);
+        }else{
+            _CPFilter->set_placeholder_text("Enter a " + type_string + "...");
+            _CPFilter->set_tooltip_text("Enter a " + type_string + "...");
+        }
+
+
         return true;
     }
 
@@ -1454,7 +1468,7 @@ void CPHistoryXML::add_action_parameter(const std::string &full_action_name, con
         if (full_action_name == action_iter->attribute("name")) {
             // If the last parameter was the same don't do anything, inner text is also a node hence 2 times last
             // child
-            if (action_iter->lastChild()->lastChild()->content() == param) {
+            if (action_iter->lastChild()->lastChild() && action_iter->lastChild()->lastChild()->content() == param) {
                 Inkscape::GC::release(parameter_node);
                 return;
             }

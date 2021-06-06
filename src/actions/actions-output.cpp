@@ -253,6 +253,39 @@ std::vector<std::vector<Glib::ustring>> raw_data_output =
     // clang-format on
 };
 
+std::vector<std::vector<Glib::ustring>> hint_data_output =
+{
+    // clang-format off
+    {"app.export-type",               N_("Give String input for Type")                                           },
+    {"app.export-filename",           N_("Give String input for File Name")                                      },
+    {"app.export-overwrite",          N_("Give input 0/1 for No/Yes to Export Overwrite")             },
+
+    {"app.export-area",               N_("Give String input for Area")                          },
+    {"app.export-area-drawing",       N_("Give input 0/1 for No/Yes to Export Area Drawing")    },
+    {"app.export-area-page",          N_("Give input 0/1 for No/Yes to Export Area Page")       },
+    {"app.export-margin",             N_("Give Integer input for Margin")                       },
+    {"app.export-area-snap",          N_("Give input 0/1 for No/Yes to Export Area Snap")       },
+    {"app.export-width",              N_("Give Integer input for Width")                        },
+    {"app.export-height",             N_("Give Integer input for Height")                       },
+
+    {"app.export-id",                 N_("Give String input for Export  ID")                    },
+    {"app.export-id-only",            N_("Give input 0/1 for No/Yes to Export ID Only")         },
+
+    {"app.export-plain-svg",          N_("Give input 0/1 for No/Yes to Export Plain SVG")       },
+    {"app.export-dpi",                N_("Give input 0/1 for No/Yes to Export DPI")             },
+    {"app.export-ignore-filters",     N_("Give input 0/1 for No/Yes to Export Ignore Filters")  },
+    {"app.export-text-to-path",       N_("Give input 0/1 for No/Yes to Export Text to Path")    },
+    {"app.export-ps-level",           N_("Give Integer input for PS Level")                     },
+    {"app.export-pdf-version",        N_("Give String input for PDF Version")                   },
+    {"app.export-latex",              N_("Give input 0/1 for No/Yes to Export LaTeX")           },
+    {"app.export-use-hints",          N_("Give input 0/1 for No/Yes to Export Use Hints")       },
+    {"app.export-background",         N_("Give String input Background")                        },
+    {"app.export-background-opacity", N_("Give input 0/1 for No/Yes to Background Opacity")     },
+    {"app.export-png-color-mode",     N_("Give String input PNG Color Mode")                    }
+    // clang-format on
+};
+
+
 void
 add_actions_output(InkscapeApplication* app)
 {
@@ -303,6 +336,7 @@ add_actions_output(InkscapeApplication* app)
 #endif
 
     app->get_action_extra_data().add_data(raw_data_output);
+    app->get_action_hint_data().add_data(hint_data_output);
 }
 
 

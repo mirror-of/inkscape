@@ -94,6 +94,15 @@ std::vector<std::vector<Glib::ustring>> raw_data_transform =
     // clang-format on
 };
 
+std::vector<std::vector<Glib::ustring>> hint_data_transform =
+{
+    // clang-format off
+    {"app.transform-translate",     N_("Give two String input for translation")  },
+    {"app.transform-rotate",        N_("Give Double input for angle of Rotation")              },
+    {"app.transform-scale",         N_("Give Double input for Scale")                        }
+    // clang-format on
+};
+
 void
 add_actions_transform(InkscapeApplication* app)
 {
@@ -117,6 +126,7 @@ add_actions_transform(InkscapeApplication* app)
 #endif
 
     app->get_action_extra_data().add_data(raw_data_transform);
+    app->get_action_hint_data().add_data(hint_data_transform);
 }
 
 

@@ -205,12 +205,19 @@ set(inkscape_SRC
   actions/actions-extra-data.h
   actions/actions-extra-data.cpp
 
+  actions/actions-hint-data.h
+  actions/actions-hint-data.cpp
+
   actions/actions-canvas-mode.h
   actions/actions-canvas-mode.cpp
   actions/actions-canvas-snapping.h
   actions/actions-canvas-snapping.cpp
   actions/actions-canvas-transform.h
   actions/actions-canvas-transform.cpp
+  actions/actions-hide-lock.h
+  actions/actions-hide-lock.cpp
+  actions/actions-edit.h
+  actions/actions-edit.cpp
   actions/actions-base.h
   actions/actions-dialogs.cpp
   actions/actions-dialogs.h
@@ -225,6 +232,8 @@ set(inkscape_SRC
   actions/actions-object-align.cpp
   actions/actions-output.h
   actions/actions-output.cpp
+  actions/actions-selection-object.h
+  actions/actions-selection-object.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
   actions/actions-tools.h

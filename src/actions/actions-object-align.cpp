@@ -360,6 +360,14 @@ std::vector<std::vector<Glib::ustring>> raw_data_object_align =
     // clang-format on
 };
 
+std::vector<std::vector<Glib::ustring>> hint_data_object_align =
+{
+    // clang-format off
+    {"app.object-align",      N_("Give String input for  Relativity  <space>   Alignment")},
+    {"app.object-distribute", N_("Give String input for  Distribution (hgap, left, hcenter, right, vgap, top, vcenter, bottom)")}
+    // clang-format on
+};
+
 void
 add_actions_object_align(InkscapeApplication* app)
 {
@@ -378,6 +386,7 @@ add_actions_object_align(InkscapeApplication* app)
 #endif
 
     app->get_action_extra_data().add_data(raw_data_object_align);
+    app->get_action_hint_data().add_data(hint_data_object_align);
 }
 
 

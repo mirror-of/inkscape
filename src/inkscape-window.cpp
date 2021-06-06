@@ -25,6 +25,8 @@
 #include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-transform.h"
 #include "actions/actions-dialogs.h"
+#include "actions/actions-hide-lock.h"
+#include "actions/actions-edit.h"
 #include "actions/actions-tools.h"
 #include "actions/actions-canvas-snapping.h"
 
@@ -92,6 +94,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // =================== Actions ===================
     // After canvas has been constructed.. move to canvas proper.
     add_actions_canvas_transform(this);    // Actions to transform canvas view.
+    add_actions_dialogs(this);              // Actions to transform dialog.
+    add_actions_hide_lock(this);              // Actions to transform dialog.
+    add_actions_edit(this);              // Actions to transform dialog.
     add_actions_canvas_mode(this);         // Actions to change canvas display mode.
     add_actions_dialogs(this);             // Actions to open dialogs.
     add_actions_tools(this);               // Actions to switch between tools.

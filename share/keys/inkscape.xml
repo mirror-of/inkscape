@@ -188,21 +188,21 @@ override) the bindings in the main default.xml.
 
   <!-- Objects/selection -->
 
-  <bind key="h" action="ObjectFlipHorizontally" display="true" />
+  <!-- <bind key="h" action="ObjectFlipHorizontally" display="true" />
 
-  <bind key="v" action="ObjectFlipVertically" display="true" />
+  <bind key="v" action="ObjectFlipVertically" display="true" /> -->
 
-  <bind key="Home" action="SelectionToFront" display="true" />
-  <bind key="KP_Home" action="SelectionToFront" />
+  <!-- <bind key="Home" action="SelectionToFront" display="true" />
+  <bind key="KP_Home" action="SelectionToFront" /> -->
 
-  <bind key="End" action="SelectionToBack" display="true" />
-  <bind key="KP_End" action="SelectionToBack" />
+  <!-- <bind key="End" action="SelectionToBack" display="true" />
+  <bind key="KP_End" action="SelectionToBack" /> -->
 
-  <bind key="Page_Up" action="SelectionRaise" display="true" />
-  <bind key="KP_Page_Up" action="SelectionRaise" />
+  <!-- <bind key="Page_Up" action="SelectionRaise" display="true" />
+  <bind key="KP_Page_Up" action="SelectionRaise" /> -->
 
-  <bind key="Page_Down" action="SelectionLower" display="true" />
-  <bind key="KP_Page_Down" action="SelectionLower" />
+  <!-- <bind key="Page_Down" action="SelectionLower" display="true" />
+  <bind key="KP_Page_Down" action="SelectionLower" /> -->
 
   <bind key="comma" action="SelectionShrink" display="true" />
   <bind key="less" action="SelectionShrink" />
@@ -222,30 +222,30 @@ override) the bindings in the main default.xml.
   <bind key="period" modifiers="Primary" action="SelectionGrowDouble" />
   <bind key="greater" modifiers="Primary" action="SelectionGrowDouble" />
 
-  <bind key="g" modifiers="Primary" action="SelectionGroup" display="true" />
-  <bind key="u" modifiers="Primary,Shift" action="SelectionGroup" />
+  <!-- <bind key="g" modifiers="Primary" action="SelectionGroup" display="true" />
+  <bind key="u" modifiers="Primary,Shift" action="SelectionGroup" /> -->
 
-  <bind key="g" modifiers="Primary,Shift" action="SelectionUnGroup" display="true" />
-  <bind key="u" modifiers="Primary" action="SelectionUnGroup" />
+  <!-- <bind key="g" modifiers="Primary,Shift" action="SelectionUnGroup" display="true" />
+  <bind key="u" modifiers="Primary" action="SelectionUnGroup" /> -->
 
   <bind key="b" modifiers="Alt" action="SelectionCreateBitmap" display="true" />
 
   <bind key="b" modifiers="Alt,Shift" action="SelectionTrace" display="true" />
 
-  <bind key="i" modifiers="Alt" action="ObjectsToPattern" display="true" />
+  <!-- <bind key="i" modifiers="Alt" action="ObjectsToPattern" display="true" /> -->
 
-  <bind key="i" modifiers="Alt,Shift" action="ObjectsFromPattern" display="true" />
+  <!-- <bind key="i" modifiers="Alt,Shift" action="ObjectsFromPattern" display="true" /> -->
 
-  <bind key="g" modifiers="Shift" action="ObjectsToGuides" display="true" />
+  <!-- <bind key="g" modifiers="Shift" action="ObjectsToGuides" display="true" /> -->
 
-  <bind action="ObjectSetMask" />
+  <!-- <bind action="ObjectSetMask" />
   <bind action="ObjectUnSetMask" />
 
   <bind action="ObjectSetClipPath" />
-  <bind action="ObjectUnSetClipPath" />
+  <bind action="ObjectUnSetClipPath" /> -->
 
-  <bind key="bracketright" modifiers="Ctrl" action="ObjectRotate90" display="true"/>
-  <bind key="bracketleft" modifiers="Ctrl" action="ObjectRotate90CCW" display="true"/>
+  <!-- <bind key="bracketright" modifiers="Ctrl" action="ObjectRotate90" display="true"/>
+  <bind key="bracketleft" modifiers="Ctrl" action="ObjectRotate90CCW" display="true"/> -->
 
   <bind key="t" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
   <bind key="T" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
@@ -387,7 +387,7 @@ override) the bindings in the main default.xml.
 
   <bind key="d" modifiers="Primary,Shift" action="DialogDocumentProperties" display="true" />
 
-  <bind key="a" modifiers="Primary,Shift" action="DialogAlignDistribute" display="true" />
+  <!-- <bind key="a" modifiers="Primary,Shift" action="DialogAlignDistribute" display="true" /> -->
 
   <bind key="t" modifiers="Primary,Shift" action="DialogText" display="true" />
 
@@ -395,19 +395,19 @@ override) the bindings in the main default.xml.
   <!-- MacOs standard Prefs key -->
   <bind key="comma" modifiers="Meta" action="DialogPreferences" />
 
-  <bind key="f" modifiers="Primary,Shift" action="DialogFillStroke" display="true" />
+  <!-- <bind key="f" modifiers="Primary,Shift" action="DialogFillStroke" display="true" /> -->
 
   <bind key="f" modifiers="Primary" action="DialogFind" display="true" />
 
-  <bind key="m" modifiers="Primary,Shift" action="DialogTransform" display="true" />
+  <!-- <bind key="m" modifiers="Primary,Shift" action="DialogTransform" display="true" /> -->
 
-  <bind key="o" modifiers="Primary,Shift" action="DialogObjectProperties" display="true" />
+  <!-- <bind key="o" modifiers="Primary,Shift" action="DialogObjectProperties" display="true" /> -->
 
   <bind action="DialogObjectAttributes" />
 
   <bind key="w" modifiers="Primary,Shift" action="DialogSwatches" display="true" />
 
-  <bind key="y" modifiers="Primary,Shift" action="DialogSymbols" display="true" />
+  <!-- <bind key="y" modifiers="Primary,Shift" action="DialogSymbols" display="true" /> -->
 
   <bind key="ampersand" modifiers="Primary" action="DialogLivePathEffect" display="true" />
   <bind key="7" modifiers="Primary,Shift" action="DialogLivePathEffect" />
@@ -530,4 +530,34 @@ override) the bindings in the main default.xml.
   <bind gaction="win.canvas-color-mode"            keys="&lt;alt&gt;5,       &lt;alt&gt;KP_5"/>
   <bind gaction="win.canvas-split-mode(1)"         keys="&lt;primary&gt;6,   &lt;primary&gt;KP_6"/>
   <bind gaction="win.canvas-split-mode(2)"         keys="&lt;alt&gt;6,       &lt;alt&gt;KP_6"/>
+
+  <!-- Dialog -->
+  
+  <bind gaction="win.dialog-open('Objects')"                 keys="&lt;shift&gt;&lt;primary&gt;f"  />
+  <bind gaction="win.dialog-open('FillStroke')"              keys="&lt;shift&gt;&lt;primary&gt;o"  />
+  <bind gaction="win.dialog-open('ObjectProperties')"        keys="&lt;shift&gt;&lt;primary&gt;y"  />
+  <bind gaction="win.dialog-open('PaintServers')"            keys="&lt;shift&gt;&lt;primary&gt;q"  />
+  <bind gaction="win.dialog-open('Objects')"                 keys="&lt;shift&gt;&lt;primary&gt;m"  />
+  <bind gaction="win.dialog-open('Transform')"               keys="&lt;shift&gt;&lt;primary&gt;y"  />
+  <bind gaction="win.dialog-open('AlignDistribute')"         keys="&lt;shift&gt;&lt;primary&gt;a"/>               
+
+  <!-- Object -->
+  <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
+  <bind gaction="app.select-object-ungroup"               keys="&lt;shift&gt;&lt;primary&gt;g , &lt;primary&gt;u" />
+
+  <bind gaction="win.object-to-pattern"                   keys="&lt;alt&gt;i" />  
+  <bind gaction="win.pattern-to-object"                   keys="&lt;alt&gt;&lt;shift&gt;i" />
+  <bind gaction="win.object-to-guides"                    keys="&lt;shift&gt;g" />
+
+  <bind gaction="app.selection-top"                       keys="Home,  KP_Home" />
+  <bind gaction="app.selection-raise"                     keys="Page_Up, KP_Page_Up" />
+  <bind gaction="app.selection-lower"                     keys="Page_Down, KP_Page_Down" />
+  <bind gaction="app.selection-bottom"                    keys="End,  KP_End" />
+
+
+  <bind gaction="app.object-rotate-90-cw"                 keys="&lt;primary&gt;bracketright" />
+  <bind gaction="app.object-rotate-90-ccw"                keys="&lt;primary&gt;bracketleft" />
+  <bind gaction="app.object-flip-horizontal"              keys="h" />
+  <bind gaction="app.object-flip-vertical"                keys="v" />
+
 </keys>

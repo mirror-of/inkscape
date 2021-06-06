@@ -454,25 +454,31 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                 Gtk::MenuItem* menuitem = Gtk::manage(new Gtk::MenuItem(_(name), true));
                 menuitem->set_name(name);
 
-                // TEMP
-                if (strcmp(name, "_View") == 0) {
-                    // Add from menu-view.ui first.
+                std::string filename = "";
+                std::string menuname = "";
+                auto refBuilder = Gtk::Builder::create();
 
-                    auto refBuilder = Gtk::Builder::create();
+                if (strcmp(name, "_View") == 0) {
+                    filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-view.ui");
+                    menuname = "view-menu";
+                }
+                else if (strcmp(name, "_Object") == 0) {
+                    filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-object.ui");
+                    menuname = "object-menu";
+                }
+                
+                if(filename!=""){
                     try
                     {
-                        std::string filename =
-                            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-view.ui");
                         refBuilder->add_from_file(filename);
                     }
                     catch (const Glib::Error& err)
                     {
                         std::cerr << "build_menu: failed to load View menu from: "
-                                  << "menu-view.ui: "
+                                  << filename <<": "
                                   << err.what() << std::endl;
                     }
-
-                    auto object = refBuilder->get_object("view-menu");
+                    auto object = refBuilder->get_object(menuname);
                     auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
                     if (!gmenu) {
                         std::cerr << "build_menu: failed to build View menu!" << std::endl;
@@ -484,10 +490,9 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                         // Rest of View menu from menus.xml
                         build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
                     }
-
                     continue;
-
-                } else {
+                }
+                else {
 
                     Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
                     build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
