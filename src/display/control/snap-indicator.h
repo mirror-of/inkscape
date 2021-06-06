@@ -18,6 +18,7 @@
  */
 
 #include "snapped-point.h"
+#include <glib.h>
 
 class SPDesktop;
 
@@ -54,6 +55,8 @@ protected:
 private:
     SnapIndicator(const SnapIndicator&) = delete;
     SnapIndicator& operator=(const SnapIndicator&) = delete;
+
+    guint32 get_guide_color(SnapTargetType t);
 };
 
 } //namespace Display

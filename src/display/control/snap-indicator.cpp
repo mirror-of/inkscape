@@ -263,23 +263,22 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         Inkscape::CanvasItemCtrl *ctrl;
         Inkscape::CanvasItemCtrl *ctrl2;
         Inkscape::CanvasItemCtrl *ctrl3;
+
         if (is_alignment) {
-            // using floor() or ceil() sometimes causes incomplete lines.
+            auto color = pre_snap ? 0x7f7f7fff : get_guide_color(p.getTarget());
             auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), p.getAlignmentTarget());
-            line->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
-            line->set_fill(0x00000000);
+            line->set_stroke(color);
             _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
 
             if (p.getTarget() == SNAPTARGET_ALIGNMENT_INTERSECTION) {
                 auto line2 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), p.getAlignmentTarget2());
-                line2->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
-                line2->set_fill(0x00000000);
+                line2->set_stroke(color);
                 _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
 
                 ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
                 ctrl->set_size(7);
-                ctrl->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
-                ctrl->set_fill(0x00000000);
+                ctrl->set_stroke(color);
+                ctrl->set_fill(color);
                 ctrl->set_position(p.getAlignmentTarget2());
                 _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl, 0));
                 ctrl->set_pickable(false);
@@ -287,8 +286,8 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
 
             ctrl2 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
             ctrl2->set_size(7);
-            ctrl2->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
-            ctrl2->set_fill(0x00000000);
+            ctrl2->set_stroke(color);
+            ctrl2->set_fill(color);
             ctrl2->set_position(p.getPoint());
 
             // The snap indicator will be deleted after some time-out, and sp_canvas_item_dispose
@@ -307,8 +306,8 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
 
             ctrl3 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
             ctrl3->set_size(7);
-            ctrl3->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
-            ctrl3->set_fill(0x00000000);
+            ctrl3->set_stroke(color);
+            ctrl3->set_fill(color);
             ctrl3->set_position(p.getAlignmentTarget());
             ctrl3->set_pickable(false);
             _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl3, 0));
@@ -446,6 +445,25 @@ SnapIndicator::remove_debugging_points()
     _debugging_points.clear();
 }
 
+guint32 SnapIndicator::get_guide_color(SnapTargetType t)
+{
+    switch(t) {
+        case SNAPTARGET_ALIGNMENT_BBOX_CORNER:
+        case SNAPTARGET_ALIGNMENT_BBOX_MIDPOINT:
+        case SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT:
+            return 0xff0000ff;
+        case SNAPTARGET_ALIGNMENT_PAGE_CENTER:
+        case SNAPTARGET_ALIGNMENT_PAGE_CORNER:
+            return 0x00ff00ff;
+        case SNAPTARGET_ALIGNMENT_HANDLE:
+            return 0x0000ffff;
+        case SNAPTARGET_ALIGNMENT_INTERSECTION:
+            return 0xd13bd1ff;
+        default:
+            g_warning("Alignment guide color not handled %i", t);
+            return 0x000000ff;
+    }
+}
 
 } //namespace Display
 } /* namespace Inkscape */

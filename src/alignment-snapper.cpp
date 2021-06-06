@@ -197,11 +197,11 @@ void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) con
     if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_CORNER)) {
         Geom::Coord w = (_snapmanager->getDocument())->getWidth().value("px");
         Geom::Coord h = (_snapmanager->getDocument())->getHeight().value("px");
-        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(0,0), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
-        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(0,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
-        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
-        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w,0), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
-        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w/2.0f,h/2.0f), SNAPSOURCE_UNDEFINED, SNAPTARGET_ALIGNMENT_PAGE_CENTER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(0,0), SNAPSOURCE_ALIGNMENT_PAGE_CORNER, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(0,h), SNAPSOURCE_ALIGNMENT_PAGE_CORNER, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w,h), SNAPSOURCE_ALIGNMENT_PAGE_CORNER, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w,0), SNAPSOURCE_ALIGNMENT_PAGE_CORNER, SNAPTARGET_ALIGNMENT_PAGE_CORNER));
+        _points_to_snap_to->push_back(SnapCandidatePoint(Geom::Point(w/2.0f,h/2.0f), SNAPSOURCE_ALIGNMENT_PAGE_CENTER, SNAPTARGET_ALIGNMENT_PAGE_CENTER));
     }
 
     // collect bounding boxes of other objects
