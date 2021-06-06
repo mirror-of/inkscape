@@ -201,10 +201,17 @@ bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::Snapp
             aligned = *i;
             aligned_success = alignment;
         } else if (alignment) {
-            if (!aligned_success || (*i).getSnapDistance() < aligned.getSnapDistance()) {
-                aligned = *i;
-                aligned_success = true; 
-            }
+            if (!aligned_success || (*i).getSnapDistance() <= aligned.getSnapDistance()) {
+                if ((*i).getSnapDistance() == aligned.getSnapDistance()) {
+                    if ((*i).getDistanceToAignTarget() < aligned.getDistanceToAignTarget()) {
+                        aligned = *i;
+                        aligned_success = true; 
+                    }
+                } else {
+                        aligned = *i;
+                        aligned_success = true; 
+                }
+           }
         } else if (!success || (*i).getSnapDistance() < result.getSnapDistance()){
             result = *i;
             success = true;
