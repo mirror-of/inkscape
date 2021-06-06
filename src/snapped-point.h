@@ -15,7 +15,9 @@
 
 #include <2geom/geom.h>
 #include <list>
+#include <optional>
 #include <vector>
+#include <glib.h>
 
 #include "snap-candidate.h"
 
@@ -64,8 +66,28 @@ public:
     Geom::Point getPoint() const {return _point;}
     void setPoint(Geom::Point const &p) {_point = p;}
     Geom::Point getTangent() const {return _tangent;}
-    Geom::Point getAlignmentTarget() const {return _alignment_target;}
-    Geom::Point getAlignmentTarget2() const {return _alignment_target2;}
+    Geom::Point getAlignmentTarget() const
+    {
+        if (_alignment_target.has_value())
+            return _alignment_target.value();
+        else
+            g_warning("alignment target does not exit");
+        return Geom::Point();
+    }
+
+    Geom::Point getAlignmentTarget2() const
+    {
+        if (_alignment_target2.has_value())
+            return _alignment_target2.value();
+        else
+            g_warning("alignment target does not exit");
+        return Geom::Point();
+    }
+
+    Geom::Coord getDistanceToAignTarget() const
+    {
+        return _alignment_target.has_value() ? Geom::L2(_point - _alignment_target.value()) : Geom::infinity();
+    }
 
     bool getAtIntersection() const {return _at_intersection;}
     bool getFullyConstrained() const {return _fully_constrained;}
@@ -101,8 +123,8 @@ public:
 protected:
     Geom::Point _point; // Location of the snapped point
     Geom::Point _tangent; // Tangent of the curve we snapped to, at the snapped point
-    Geom::Point _alignment_target; // Target point for alignment snapping
-    Geom::Point _alignment_target2; // Target point when alignment guides intersect
+    std::optional<Geom::Point> _alignment_target; // Target point for alignment snapping
+    std::optional<Geom::Point> _alignment_target2; // Target point when alignment guides intersect
     SnapSourceType _source; // Describes what snapped
     long _source_num; // Sequence number of the source point that snapped, if that point is part of a set of points. (starting at zero if we might have a set of points; -1 if we only have a single point)
     SnapTargetType _target; // Describes to what we've snapped to

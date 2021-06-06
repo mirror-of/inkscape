@@ -275,7 +275,7 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
             }
 
             bool is_target_node = k.getTargetType() & SNAPTARGET_NODE_CATEGORY;
-            if (consider_x && distX < getSnapperTolerance()) {
+            if (consider_x && distX < getSnapperTolerance() && Geom::L2(target_pt - point_on_x) < sx.getDistanceToAignTarget()) {
                 sx = SnappedPoint(point_on_x,
                                  k.getPoint(),
                                  source2alignment(p.getSourceType()),
@@ -290,7 +290,7 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
                 success_x = true;
             }
 
-            if (consider_y && distY < getSnapperTolerance()) {
+            if (consider_y && distY < getSnapperTolerance() && Geom::L2(target_pt - point_on_y) < sy.getDistanceToAignTarget()) {
                 sy = SnappedPoint(point_on_y,
                                  k.getPoint(),
                                  source2alignment(p.getSourceType()),
