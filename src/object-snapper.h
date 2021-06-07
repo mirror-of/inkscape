@@ -60,24 +60,8 @@ public:
                   std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
 private:
-    //store some lists of candidates, points and paths, so we don't have to rebuild them for each point we want to snap
-    std::vector<SnapCandidateItem> *_candidates;
     std::vector<SnapCandidatePoint> *_points_to_snap_to;
     std::vector<SnapCandidatePath > *_paths_to_snap_to;
-
-    /**
-     * Find all items within snapping range.
-     * @param parent Pointer to the document's root, or to a clipped path or mask object.
-     * @param it List of items to ignore.
-     * @param bbox_to_snap Bounding box hulling the whole bunch of points, all from the same selection and having the same transformation.
-     * @param clip_or_mask The parent object being passed is either a clip or mask.
-     */
-    void _findCandidates(SPObject* parent,
-                       std::vector<SPItem const *> const *it,
-                       bool const &first_point,
-                       Geom::Rect const &bbox_to_snap,
-                       bool const _clip_or_mask,
-                       Geom::Affine const additional_affine) const;
 
     void _snapNodes(IntermSnapResults &isr,
                       Inkscape::SnapCandidatePoint const &p, // in desktop coordinates

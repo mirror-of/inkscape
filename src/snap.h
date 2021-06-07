@@ -89,6 +89,7 @@ public:
      * @param v 'Owning' SPNamedView.
      */
     SnapManager(SPNamedView const *v);
+    ~SnapManager();
 
     typedef std::list<const Inkscape::Snapper*> SnapperList;
 
@@ -429,6 +430,25 @@ private:
     bool _snapindicator; ///< When true, an indicator will be drawn at the position that was being snapped to
     std::vector<Inkscape::SnapCandidatePoint> *_unselected_nodes; ///< Nodes of the path that is currently being edited and which have not been selected and which will therefore be stationary. Only these nodes will be considered for snapping to. Of each unselected node both the position (Geom::Point) and the type (Inkscape::SnapTargetType) will be stored
 
+    /**
+     * Find all items within snapping range.
+     * @param parent Pointer to the document's root, or to a clipped path or mask object.
+     * @param it List of items to ignore.
+     * @param bbox_to_snap Bounding box hulling the whole bunch of points, all from the same selection and having the same transformation.
+     * @param clip_or_mask The parent object being passed is either a clip or mask.
+     */
+    void _findCandidates(SPObject* parent,
+                       std::vector<SPItem const *> const *it,
+                       bool const &first_point,
+                       Geom::Rect const &bbox_to_snap,
+                       bool const _clip_or_mask,
+                       Geom::Affine const additional_affine) const;
+
+    std::vector<Inkscape::SnapCandidateItem> *obj_snapper_candidates;
+    std::vector<Inkscape::SnapCandidateItem> *align_snapper_candidates;
+
+    friend class Inkscape::ObjectSnapper;
+    friend class Inkscape::AlignmentSnapper;
 };
 
 #endif // !SEEN_SNAP_H

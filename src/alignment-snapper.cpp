@@ -41,144 +41,14 @@
 Inkscape::AlignmentSnapper::AlignmentSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)
 {
-    _candidates = new std::vector<SnapCandidateItem>;
     _points_to_snap_to = new std::vector<Inkscape::SnapCandidatePoint>;
 }
 
 Inkscape::AlignmentSnapper::~AlignmentSnapper()
 {
-    _candidates->clear();
-    delete _candidates;
-
     _points_to_snap_to->clear();
     delete _points_to_snap_to;
 }
-
-void Inkscape::AlignmentSnapper::_findCandidates(SPObject* parent,
-                      std::vector<SPItem const*> const *it,
-                      bool const &first_point,
-                      bool const clip_or_mask,
-                      Geom::Affine const additional_affine) const
-{
-    SPDesktop const *dt = _snapmanager->getDesktop();
-    if (dt == nullptr) {
-        g_warning("desktop == NULL, so we cannot snap; please inform the developers of this bug");
-        // Apparently the setup() method from the SnapManager class hasn't been called before trying to snap.
-    }
-
-    if (first_point) {
-        _candidates->clear();
-    }
-
-    for (auto& o: parent->children) {
-        g_assert(dt != nullptr);
-        SPItem *item = dynamic_cast<SPItem *>(&o);
-        if (item && !(dt->itemIsHidden(item) && !clip_or_mask)) {
-            // Fix LPE boolops selfsnaping
-            bool stop = false;
-            if (item->style) {
-                SPFilter *filt = item->style->getFilter();
-                if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
-                    stop = true;
-                }
-                SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-                if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
-                    stop = true;
-                }
-            }
-            if (stop) {
-                stop = false;
-                for (auto skipitem : *it) {
-                    if (skipitem && skipitem->style) {
-                        SPItem *toskip = const_cast<SPItem *>(skipitem);
-                        if (toskip) {
-                            SPFilter *filt = toskip->style->getFilter();
-                            if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
-                                stop = true;
-                                break;
-                            }
-
-                            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(toskip);
-                            if (!stop && lpeitem &&
-                                lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
-                                stop = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (stop) {
-                    continue;
-                }
-            }
-            // Snapping to items in a locked layer is allowed
-            // Don't snap to hidden objects, unless they're a clipped path or a mask
-            /* See if this item is on the ignore list */
-            std::vector<SPItem const *>::const_iterator i;
-            if (it != nullptr) {
-                i = it->begin();
-                while (i != it->end() && *i != &o) {
-                    ++i;
-                }
-            }
-
-            if (it == nullptr || i == it->end()) {
-                if (item) {
-                    if (!clip_or_mask) { // cannot clip or mask more than once
-                        // The current item is not a clipping path or a mask, but might
-                        // still be the subject of clipping or masking itself ; if so, then
-                        // we should also consider that path or mask for snapping to
-                        SPObject *obj = item->getClipObject();
-                        if (obj && _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PATH_CLIP)) {
-                            _findCandidates(obj, it, false, true, item->i2doc_affine());
-                        }
-                        obj = item->getMaskObject();
-                        if (obj && _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PATH_MASK)) {
-                            _findCandidates(obj, it, false, true, item->i2doc_affine());
-                        }
-                    }
-
-                    if (dynamic_cast<SPGroup *>(item)) {
-                        _findCandidates(&o, it, false, clip_or_mask, additional_affine);
-                    } else {
-                        Geom::OptRect bbox_of_item;
-                        Preferences *prefs = Preferences::get();
-                        int prefs_bbox = prefs->getBool("/tools/bounding_box", false);
-                        // We'll only need to obtain the visual bounding box if the user preferences tell
-                        // us to, AND if we are snapping to the bounding box itself. If we're snapping to
-                        // paths only, then we can just as well use the geometric bounding box (which is faster)
-                        SPItem::BBoxType bbox_type = (!prefs_bbox && _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CATEGORY)) ?
-                            SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
-                        if (clip_or_mask) {
-                            // Oh oh, this will get ugly. We cannot use sp_item_i2d_affine directly because we need to
-                            // insert an additional transformation in document coordinates (code copied from sp_item_i2d_affine)
-                            bbox_of_item = item->bounds(bbox_type, item->i2doc_affine() * additional_affine * dt->doc2dt());
-                        } else {
-                            bbox_of_item = item->desktopBounds(bbox_type);
-                        }
-                        if (bbox_of_item) {
-                            if (_snapmanager->getDesktop()->get_display_area().contains(bbox_of_item->midpoint()))
-                            // Finally add the object to _candidates.
-                            _candidates->push_back(SnapCandidateItem(item, clip_or_mask, additional_affine));
-                            // For debugging: print the id of the candidate to the console
-                            // SPObject *obj = (SPObject*)item;
-                            // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
-                            if (_candidates->size() > 200) { // This makes Inkscape crawl already
-                                static Glib::Timer timer;
-                                if (timer.elapsed() > 1.0) {
-                                    timer.reset();
-                                    std::cout << "Warning: limit of 200 snap target paths reached, some will be ignored" << std::endl;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) const
 {
@@ -205,7 +75,7 @@ void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) con
     }
 
     // collect bounding boxes of other objects
-    for (const auto & candidate : *_candidates) {
+    for (const auto & candidate : *(_snapmanager->align_snapper_candidates)) {
         SPItem *root_item = candidate.item; 
 
         // get the root item in case we have a duplicate at hand
@@ -362,11 +232,6 @@ void Inkscape::AlignmentSnapper::freeSnap(IntermSnapResults &isr,
     if (!(p_is_bbox || (n > 0 && p_is_node) || (p.considerForAlignment() && p_is_node)))
         return;
 
-    if (p.getSourceNum() <= 0){
-        _candidates->clear();
-        _findCandidates(_snapmanager->getDocument()->getRoot(), it, true, false);
-    }
-
     _snapBBoxPoints(isr, p, unselected_nodes);
 }
 
@@ -392,11 +257,6 @@ void Inkscape::AlignmentSnapper::constrainedSnap(IntermSnapResults &isr,
     // n > 0 : node tool is active
     if (!(p_is_bbox || (n > 0 && p_is_node) || (p.considerForAlignment() && p_is_node)))
         return;
-
-    if (p.getSourceNum() <= 0){
-        _candidates->clear();
-        _findCandidates(_snapmanager->getDocument()->getRoot(), it, true, false);
-    }
 
     _snapBBoxPoints(isr, p, unselected_nodes, c, pp);
 }
