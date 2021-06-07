@@ -18,14 +18,13 @@
 #include <gtkmm/grid.h>
 
 #include "inkscape.h"
-#include "verbs.h"
+#include "style.h"
+
+#include "actions/actions-tools.h"  // Open tool preferences.
 
 #include "object/sp-linear-gradient.h"
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
-#include "style.h"
-
-#include "helper/action.h"
 
 #include "ui/widget/color-preview.h"
 #include "util/units.h"
@@ -109,7 +108,6 @@ void StyleSwatch::ToolObserver::notify(Inkscape::Preferences::Entry const &val)
 StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
       _desktop(nullptr),
-      _verb_t(0),
       _css(nullptr),
       _tool_obs(nullptr),
       _style_obs(nullptr),
@@ -170,8 +168,8 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     }
 }
 
-void StyleSwatch::setClickVerb(sp_verb_t verb_t) {
-    _verb_t = verb_t;
+void StyleSwatch::setToolName(const Glib::ustring& tool_name) {
+    _tool_name = tool_name;
 }
 
 void StyleSwatch::setDesktop(SPDesktop *desktop) {
@@ -181,10 +179,9 @@ void StyleSwatch::setDesktop(SPDesktop *desktop) {
 bool
 StyleSwatch::on_click(GdkEventButton */*event*/)
 {
-    if (this->_desktop && this->_verb_t != SP_VERB_NONE) {
-        Inkscape::Verb *verb = Inkscape::Verb::get(this->_verb_t);
-        SPAction *action = verb->get_action(Inkscape::ActionContext((Inkscape::UI::View::View *) this->_desktop));
-        sp_action_perform (action, nullptr);
+    if (_desktop && !_tool_name.empty()) {
+        auto win = _desktop->getInkscapeWindow();
+        open_tool_preferences(win, _tool_name);
         return true;
     }
     return false;

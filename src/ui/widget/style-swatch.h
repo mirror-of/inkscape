@@ -52,8 +52,7 @@ public:
     SPCSSAttr *getStyle();
 
     void setWatchedTool (const char *path, bool synthesize);
-
-    void setClickVerb(sp_verb_t verb_t);
+    void setToolName(const Glib::ustring& tool_name);
     void setDesktop(SPDesktop *desktop);
     bool on_click(GdkEventButton *event);
 
@@ -62,7 +61,7 @@ private:
     class StyleObserver;
 
     SPDesktop *_desktop;
-    sp_verb_t _verb_t;
+    Glib::ustring _tool_name;
     SPCSSAttr *_css;
     ToolObserver *_tool_obs;
     StyleObserver *_style_obs;

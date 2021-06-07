@@ -128,6 +128,7 @@ get_active_tool_enum(InkscapeWindow *win)
 }
 
 void tool_switch(Glib::ustring const &tool, InkscapeWindow *win);
+void tool_preferences(Glib::ustring const &tool, InkscapeWindow *win);
 
 void
 set_active_tool(InkscapeWindow *win, Glib::ustring const &tool)
@@ -135,6 +136,12 @@ set_active_tool(InkscapeWindow *win, Glib::ustring const &tool)
     // Seems silly to have a function to just flip argument order... but it's consistent with other
     // external functions.
     tool_switch(tool, win);
+}
+
+void
+open_tool_preferences(InkscapeWindow *win, Glib::ustring const &tool)
+{
+    tool_preferences(tool, win);
 }
 
 /**
@@ -230,21 +237,7 @@ tool_switch(Glib::ustring const &tool, InkscapeWindow *win)
         Glib::PropertyProxy<int> double_click_time = settings->property_gtk_double_click_time(); // In ms. Default: 400ms.
         if (elapsed_seconds.count() * 1000 < double_click_time.get_value()) {
             // User double clicked!
-            auto prefs = Inkscape::Preferences::get();
-            prefs->setInt("/dialogs/preferences/page", tool_it->second.pref);
-            Inkscape::UI::Dialog::DialogContainer* container = dt->getContainer();
-
-            // Create dialog if it doesn't exist (also sets page if dialog not already in opened tab).
-            container->new_floating_dialog("Preferences");
-
-            // Find dialog and explicitly set page (in case not set in previous line).
-            auto dialog = Inkscape::UI::Dialog::DialogManager::singleton().find_floating_dialog("Preferences");
-            if (dialog) {
-                auto pref_dialog = dynamic_cast<Inkscape::UI::Dialog::InkscapePreferences *>(dialog);
-                if (pref_dialog) {
-                    pref_dialog->showPage(); // Switch to page indicated in preferences file (set above).
-                }
-            }
+            tool_preferences(tool, win);
         }
 
         old_time = current_time; // So if tool is already open, double clicking will still work.
@@ -265,6 +258,43 @@ tool_switch(Glib::ustring const &tool, InkscapeWindow *win)
 
     dt->setEventContext(tool_data[tool].pref_path);
     INKSCAPE.eventcontext_set(dt->getEventContext());
+}
+
+/**
+ * Open preferences page for tool. Could be turned into actions if need be.
+ */
+void
+tool_preferences(Glib::ustring const &tool, InkscapeWindow *win)
+{
+    // Valid tool?
+    auto tool_it = tool_data.find(tool);
+    if (tool_it == tool_data.end()) {
+        std::cerr << "tool-preferences: invalid tool name: " << tool << std::endl;
+        return;
+    }
+
+    // Have desktop?
+    SPDesktop* dt = win->get_desktop();
+    if (!dt) {
+        std::cerr << "tool-preferences: no desktop!" << std::endl;
+        return;
+    }
+
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setInt("/dialogs/preferences/page", tool_it->second.pref);
+    Inkscape::UI::Dialog::DialogContainer* container = dt->getContainer();
+
+    // Create dialog if it doesn't exist (also sets page if dialog not already in opened tab).
+    container->new_floating_dialog("Preferences");
+
+    // Find dialog and explicitly set page (in case not set in previous line).
+    auto dialog = Inkscape::UI::Dialog::DialogManager::singleton().find_floating_dialog("Preferences");
+    if (dialog) {
+        auto pref_dialog = dynamic_cast<Inkscape::UI::Dialog::InkscapePreferences *>(dialog);
+        if (pref_dialog) {
+            pref_dialog->showPage(); // Switch to page indicated in preferences file (set above).
+        }
+    }
 }
 
 /**
