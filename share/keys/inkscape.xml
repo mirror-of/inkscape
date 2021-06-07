@@ -512,8 +512,6 @@ override) the bindings in the main default.xml.
   <bind gaction="win.tool-switch('Zoom')"          keys="z,   F3"/>
   <bind gaction="win.tool-switch('Measure')"       keys="m"/>
 
-  <bind gaction="win.tool-toggle"                  keys="space"/>
-
   <!-- Canvas Transform -->
   <bind gaction="win.canvas-zoom-in"               keys="plus,  equal,       KP_Add"      />
   <bind gaction="win.canvas-zoom-out"              keys="minus, underscore,  KP_Subtract" />
