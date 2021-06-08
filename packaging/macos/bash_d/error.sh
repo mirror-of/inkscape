@@ -5,8 +5,8 @@ include_guard
 
 ### includes ###################################################################
 
-include_file ansi_.sh
-include_file echo_.sh
+include_file ansi.sh
+include_file echo.sh
 
 ### variables ##################################################################
 

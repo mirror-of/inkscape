@@ -1,17 +1,19 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-
-### settings ###################################################################
-
-# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### description ################################################################
 
 # This file contains everything related to setup Meson build system.
 
+### settings ###################################################################
+
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
+
 ### variables ##################################################################
 
 # https://mesonbuild.com
-MESON_PIP=meson==0.55.1
+MESON_PIP=meson==0.57.1
 
 ### functions ##################################################################
 

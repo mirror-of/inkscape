@@ -1,22 +1,26 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
+
+### description ################################################################
+
+# This file contains everything related to the toolset.
 
 ### settings ###################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
 # shellcheck disable=SC2034 # no exports desired
 
-### description ################################################################
-
-# This file contains everything related to the toolset.
-
 ### variables ##################################################################
 
 TOOLSET_VER=$VERSION
 
+TOOLSET_VOLNAME=mibap_v$TOOLSET_VER
+
 # A disk image containing a built version of the whole toolset.
 # https://github.com/dehesselle/mibap
 TOOLSET_URL=https://github.com/dehesselle/mibap/releases/download/\
-v$TOOLSET_VER/mibap_v${TOOLSET_VER}.dmg
+v$TOOLSET_VER/$TOOLSET_VOLNAME.dmg
 
 TOOLSET_REPO_DIR=$WRK_DIR/repo   # persistent storage for downloaded dmg
 
@@ -25,8 +29,6 @@ if [ -z "$TOOLSET_OVERLAY_FILE" ]; then
 fi
 
 TOOLSET_OVERLAY_SIZE=3   # writable overlay, unit in GiB
-
-TOOLSET_VOLNAME=mibap$VERSION
 
 ### functions ##################################################################
 
@@ -58,10 +60,9 @@ function toolset_install
   # Prepare a script for mass-creating directories. We have to do this before
   # untion-mounting as macOS' 'find' won't see the directories anymore after.
   # (GNU's 'find' does)
-  find "$VER_DIR" -type d ! -path "$VAR_DIR/*" ! -path "$SRC_DIR/*" \
+  find "$VER_DIR" -type d ! -path "$BLD_DIR/*" ! -path "$SRC_DIR/*" \
       -exec echo "mkdir {}" \; > "$WRK_DIR"/create_dirs.sh
-  echo "mkdir $BLD_DIR" >> "$WRK_DIR"/create_dirs.sh
-  sed -i "" "1d" "$WRK_DIR"/create_dirs.sh   # remove first line ("file exists")
+    sed -i "" "1d" "$WRK_DIR"/create_dirs.sh   # remove first line ("file exists")
   chmod 755 "$WRK_DIR"/create_dirs.sh
 
   # create writable overlay
@@ -152,6 +153,17 @@ function toolset_unmount
 
 function toolset_create_dmg
 {
+  local target_dir=$1
+
+  if [ -z "$target_dir" ]; then
+    target_dir=$ARTIFACT_DIR
+  fi
+
+  if [ "$target_dir" = "$VER_DIR" ]; then
+    echo_e "not allowed: target_dir = VER_DIR"
+    exit 1
+  fi
+
   # remove files to reduce size
   rm -rf "${BLD_DIR:?}"/*
   find "$SRC_DIR" -mindepth 1 -maxdepth 1 -type d \
@@ -161,17 +173,15 @@ function toolset_create_dmg
     -exec rm -rf {} \;
 
   # create dmg and sha256, print sha256
-  # shellcheck disable=SC2164 # we trap errors to catch bad 'cd'
-  cd "$WRK_DIR"
-  # TODO: use TOOLSET_VOLNAME isntead mibab_v$VERSION
-  #       -> requires URL change!
+  cd "$WRK_DIR" || exit 1
+
   hdiutil create -fs HFS+ -ov -format UDBZ \
     -srcfolder "$VERSION" \
     -volname "$TOOLSET_VOLNAME" \
-    "$ARTIFACT_DIR"/mibap_v"${VERSION}".dmg
-  shasum -a 256 "$(echo "$ARTIFACT_DIR"/mibap*.dmg)" > \
-                "$(echo "$ARTIFACT_DIR"/mibap*.dmg)".sha256
-  cat "$(echo "$ARTIFACT_DIR"/mibap*.sha256)"
+    "$target_dir/$TOOLSET_VOLNAME".dmg
+  shasum -a 256 "$target_dir/$TOOLSET_VOLNAME.dmg" > \
+                "$target_dir/$TOOLSET_VOLNAME.dmg".sha256
+  cat "$target_dir/$TOOLSET_VOLNAME.dmg.sha256"
 }
 
 function toolset_copy

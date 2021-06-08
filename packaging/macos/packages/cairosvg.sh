@@ -1,12 +1,14 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-
-### settings ###################################################################
-
-# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### description ################################################################
 
 # Convert svg to png with cairosvg.
+
+### settings ###################################################################
+
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### variables ##################################################################
 
@@ -15,8 +17,8 @@
 # https://cairosvg.org
 # https://github.com/Kozea/CairoSVG
 CAIROSVG_PIP="\
-  cairocffi==1.1.0\
-  cairosvg==2.4.2\
+  cairocffi==1.2.0\
+  cairosvg==2.5.2\
 "
 
 ### functions ##################################################################

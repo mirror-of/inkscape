@@ -1,7 +1,9 @@
-# What is this
+# `bash_d`
 
-The development repository for building/packaging Inkscape on macOS,
-[mibap](https://github.com/dehesselle/mibap), has begun to source out
-functions into a common function library, [bash_d](https://github.com/dehesselle/bash_d), for better reusability across different projects.
+Conceived as part of my (unpublished) dotfiles on macOS, this collection of functions outgrew its originally limited scope and I began developing this into the spiritual successor of [bashlib](https://github.com/dehesselle/bashlib).
 
-The files in here have been copied from that repository as we only need a few of them and to not include a foreign submodule here.
+This is far from finished and comes with no support and without documentation at this point, but I need to put this online now so I can start using this in other projects.
+
+## License
+
+[GPL](LICENSE)

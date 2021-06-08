@@ -126,7 +126,7 @@ inkscape:mac:
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
     - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
   variables:
-    SDKROOT: /opt/sdks/MacOSX10.11.sdk
+    SDKROOT: /opt/sdks/MacOSX10.13.sdk
   before_script:
     # workaround: after_script doesn't run for cancelled/timed out jobs
     #             https://gitlab.com/gitlab-org/gitlab/-/issues/15603

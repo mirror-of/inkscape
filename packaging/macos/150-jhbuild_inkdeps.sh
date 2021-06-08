@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+#
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-# This file is part of the build pipeline for Inkscape on macOS.
 
 ### description ################################################################
 
@@ -19,8 +21,10 @@ done
 
 ### main #######################################################################
 
+#------------------------------------------------------- build time dependencies
+
 jhbuild build \
-  bdw-gc \
+  bdwgc \
   doubleconversion \
   googletest \
   gsl \
@@ -33,3 +37,19 @@ jhbuild build \
   openmp \
   poppler \
   potrace
+
+#------------------------------------------------- run time dependencies: Python
+
+# Download custom Python runtime.
+
+ink_download_python
+
+# Build Python wheels and save them to our package cache.
+
+ink_build_wheels
+
+# To provide backward compatibility, wheels are also built externally on a
+# machine running the minimum supported OS version. Download those to our
+# package cache as well. (This does not overwrite the above ones.)
+
+ink_download_wheels

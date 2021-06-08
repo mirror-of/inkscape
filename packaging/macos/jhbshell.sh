@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+#
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-# This file is part of the build pipeline for Inkscape on macOS.
 
 ### description ################################################################
 
@@ -19,5 +21,8 @@ done
 # Nothing here.
 
 ### main #######################################################################
+
+jhbuild_configure   # Reconfigure settings to match current system instead
+                    # of the system the toolset was built with.
 
 jhbuild shell

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+#
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-# This file is part of the build pipeline for Inkscape on macOS.
 
 ### description ################################################################
 
@@ -23,9 +25,9 @@ error_trace_enable
 ### main #######################################################################
 
 # Create background for development snapshots. This is not meant for
-# official releases, those will be re-packaged manually (they also need
+# official releases, those will be repackaged eventually (they also need
 # to be signed and notarized).
-convert -size 560x400 xc:transparent \
+LD_LIBRARY_PATH=$LIB_DIR convert -size 560x400 xc:transparent \
   -font Andale-Mono -pointsize 64 -fill black \
   -draw "text 20,60 'Inkscape'" \
   -draw "text 20,120 '$(ink_get_version)'" \

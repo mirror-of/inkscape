@@ -1,20 +1,20 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-# This file is part of the build pipeline for Inkscape on macOS.
 
 ### description ################################################################
 
 # This is the main initialization file to setup the environment. Its purpose is
-#   - to provide some basic configuration in its variables section
-#     which do not fit into any package (see files in packages directory)
-#     and/or all the other files depend upon
+#   - to provide some basic configuration variables which all other files
+#     depend upon
 #   - source all other scripts
 #   - run a few essential checks to see if we're good
 #
 # It's meant to be sourced by all other scripts and supposed to be a "passive"
 # file, i.e. it defines variables and functions but does not do anything on its
 # own. However, this is only 99% true at the moment as the above mentioned
-# checks are capable of calling it quits if a few very fundamental things appear
-# to be broken.
+# checks are capable of calling it quits (search for 'exit') if a few very
+# fundamental things appear to be broken.
 
 ### includes ###################################################################
 
@@ -29,12 +29,17 @@
 
 #--------------------------------------------------------------- toolset version
 
-VERSION=0.48
+VERSION=0.49
 
 #-------------------------------------------------------------- target OS by SDK
 
+# If SDKROOT is set, use that. If it is not set, try to select the 10.13 SDK
+# (which is our minimum system requirement/target) and fallback to whatever
+# SDK is available as the default one.
+
 if [ -z "$SDKROOT" ]; then
-  SDKROOT=$(xcodebuild -version -sdk macosx Path)
+  SDKROOT=$(xcodebuild -version -sdk macosx10.13 Path 2>/dev/null ||
+            xcodebuild -version -sdk macosx Path)
 fi
 export SDKROOT
 
@@ -42,24 +47,19 @@ export SDKROOT
 
 if [ -z "$CI" ]; then   # Both GitHub and GitLab set this.
   CI=false
+  CI_GITHUB=false
+  CI_GITLAB=false
 else
-  CI=true   # probably redundant, but for completeness sake
+  CI=true
 
-  if [ "$CI_PROJECT_NAME" = "inkscape" ]; then
-    CI_GITHUB=false
-    CI_GITLAB=true
-  else
+  if [ -z "$CI_PROJECT_NAME" ]; then  # This is a GitLab variable.
     CI_GITHUB=true
     CI_GITLAB=false
+  else
+    CI_GITHUB=false
+    CI_GITLAB=true
   fi
 fi
-
-#------------------------------------------------------------- directories: self
-
-# The fully qualified directory name in canonicalized form.
-# We neither have 'readlink -f' nor 'realpath' on macOS, so we use Python.
-SELF_DIR=$(dirname \
-  "$(python3 -c "import os; print(os.path.realpath('${BASH_SOURCE[0]}'))")")
 
 #------------------------------------------------------------- directories: work
 
@@ -78,19 +78,20 @@ BIN_DIR=$VER_DIR/bin
 ETC_DIR=$VER_DIR/etc
 INC_DIR=$VER_DIR/include
 LIB_DIR=$VER_DIR/lib
+OPT_DIR=$VER_DIR/opt
 VAR_DIR=$VER_DIR/var
 BLD_DIR=$VAR_DIR/build
 PKG_DIR=$VAR_DIR/cache/pkgs
 SRC_DIR=$VER_DIR/usr/src
 TMP_DIR=$VER_DIR/tmp
 
-export HOME=$VER_DIR/home   # yes, we redirect the user's home!
+export HOME=$VER_DIR/home   # Yes, we redirect the user's home.
 
 #---------------------------------------------- directories: temporary locations
 
 export TMP=$TMP_DIR
 export TEMP=$TMP_DIR
-export TMPDIR=$TMP_DIR   # TMPDIR is the common macOS default
+export TMPDIR=$TMP_DIR   # TMPDIR is the common macOS default.
 
 #-------------------------------------------------------------- directories: XDG
 
@@ -104,6 +105,10 @@ export PIPENV_CACHE_DIR=$XDG_CACHE_HOME/pipenv # instead ~/Library/Caches/pipenv
 
 #--------------------------------------------------------- directories: artifact
 
+# In CI mode, the artifacts are placed into the respective project repositories
+# so they can be picked up from there. In non-CI mode the artifacts are
+# placed in VER_DIR.
+
 if   $CI_GITHUB; then
   ARTIFACT_DIR=$GITHUB_WORKSPACE
 elif $CI_GITLAB; then
@@ -112,20 +117,33 @@ else
   ARTIFACT_DIR=$VER_DIR
 fi
 
-#---------------------------------------------------------------------- set path
+#------------------------------------------------------ directories: set up path
 
 export PATH=$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin
 
+#------------------------------------------------------------- directories: self
+
+# We want a fully qualified path to our directory in canonicalized form. Since
+# we neither have 'readlink -f' nor 'realpath' on macOS, we use Python.
+# There is a fallback that solely relies on BASH_SOURCE for systems that
+# do not provide python3 (we will provide our own via 110-sysprep.sh).
+
+SELF_DIR=$(dirname \
+  "$(python3 -c "import os; print(os.path.realpath('${BASH_SOURCE[0]}'))" \
+    2>/dev/null || echo "${BASH_SOURCE[0]}")")
+
 #------------------------------------------ source functions from bash_d library
 
+# Things I do not want to re-invent and/or am sharing between other projects
+# of mine come from bash_d.
 # https://github.com/dehesselle/bash_d
 
 INCLUDE_DIR=$SELF_DIR/bash_d
-# shellcheck source=bash_d/1_include_.sh
-source "$INCLUDE_DIR"/1_include_.sh
-include_file echo_.sh
-include_file error_.sh
-include_file lib_.sh
+# shellcheck source=bash_d/1_include.sh
+source "$INCLUDE_DIR"/1_include.sh
+include_file echo.sh
+include_file error.sh
+include_file lib.sh
 include_file sed.sh
 
 #----------------------------------------------------------- source our packages
@@ -158,4 +176,4 @@ fi
 
 #---------------------------------------------------- check recommended versions
 
-sys_ver_check
+sys_check_versions

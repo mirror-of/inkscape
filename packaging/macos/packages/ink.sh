@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ### description ################################################################
@@ -36,45 +38,58 @@ fi
 
 INK_BLD_DIR=$BLD_DIR/$(basename "$INK_DIR")  # we build out-of-tree
 
-#----------------------------------- Python runtime to be  bundled with Inkscape
+#------------------------------------ Python runtime to be bundled with Inkscape
 
 # Inkscape will be bundled with its own (customized) Python 3 runtime to make
 # the core extensions work out-of-the-box. This is independent from whatever
 # Python is running JHBuild or getting built as a dependency.
+#
+# We are only pinning major and minor versions here, not the patch level.
+# Patch level is determined by whatever is current in the python_macos
+# project.
 
 INK_PYTHON_VER_MAJOR=3
 INK_PYTHON_VER_MINOR=8
-INK_PYTHON_VER_PATCH=5
-INK_PYTHON_VER_BUILD=2  # custom build version
+INK_PYTHON_VER=$INK_PYTHON_VER_MAJOR.$INK_PYTHON_VER_MINOR
+INK_PYTHON_URL="https://gitlab.com/dehesselle/python_macos/-/jobs/\
+artifacts/master/raw/python_${INK_PYTHON_VER//.}_$(uname -p).tar.xz?\
+job=python${INK_PYTHON_VER//.}:inkscape:$(uname -p)"
 
-INK_PYTHON_VER=$INK_PYTHON_VER_MAJOR.$INK_PYTHON_VER_MINOR  # convenience handle
+# Python packages are built externally (on a system running El Capitan for
+# better backward compatiblity) and included here.
 
-# https://github.com/dehesselle/py3framework
-INK_PYTHON_URL=https://github.com/dehesselle/py3framework/releases/download/\
-py${INK_PYTHON_VER/./}$INK_PYTHON_VER_PATCH.$INK_PYTHON_VER_BUILD/\
-py${INK_PYTHON_VER/./}${INK_PYTHON_VER_PATCH}_framework_${INK_PYTHON_VER_BUILD}i.tar.xz
+INK_PYTHON_WHEELS_VER=0.49
+INK_PYTHON_WHEELS_URL=https://github.com/dehesselle/mibap_wheels/releases/\
+download/v$INK_PYTHON_WHEELS_VER/wheels.tar.xz
 
 #----------------------------------- Python packages to be bundled with Inkscape
 
-# https://lxml.de
-# https://github.com/lxml/lxml
-# https://github.com/dehesselle/py3framework
-# TODO: check and document why we're using our own build here
-INK_PYTHON_LXML=$(dirname $INK_PYTHON_URL)/lxml-4.5.2-\
-cp${INK_PYTHON_VER/./}-cp${INK_PYTHON_VER/./}-macosx_10_9_x86_64.whl
+# https://pypi.org/project/cssselect/
+INK_PYTHON_CSSSELECT=cssselect==1.1.0
 
-# https://github.com/numpy/numpy
-INK_PYTHON_NUMPY=numpy==1.19.1
+# https://pypi.org/project/lxml/
+INK_PYTHON_LXML=lxml==4.6.3
 
-# https://pygobject.readthedocs.io/en/latest/
-INK_PYTHON_PYGOBJECT=PyGObject==3.36.1
+# https://pypi.org/project/numpy/
+INK_PYTHON_NUMPY=numpy==1.20.3
 
-# https://github.com/scour-project/scour
-INK_PYTHON_SCOUR=scour==0.37
+# https://pypi.org/project/PyGObject/
+INK_PYTHON_PYGOBJECT="\
+  PyGObject==3.40.1\
+  pycairo==1.20.0\
+"
 
-# https://pyserial.readthedocs.io/en/latest/
-# https://github.com/pyserial/pyserial
+# https://pypi.org/project/pyserial/
 INK_PYTHON_PYSERIAL=pyserial==3.5
+
+# https://pypi.org/project/scour/
+INK_PYTHON_SCOUR="\
+  scour==0.38.2\
+  six==1.16.0\
+"
+
+# https://pypi.org/project/urllib3
+INK_PYTHON_URLLIB3=urllib3==1.26.5
 
 #------------------------------------------- application bundle directory layout
 
@@ -119,8 +134,19 @@ function ink_get_repo_shorthash
 
 function ink_pipinstall
 {
-  local package=$1
-  local options=$2   # optional
+  local packages=$1
+  local wheels_dir=$2   # optional
+  local options=$3      # optional
+
+  if [ -z "$wheels_dir" ]; then
+    wheels_dir=$PKG_DIR
+  fi
+
+  # turn package names into filenames of our wheels
+  local wheels
+  for package in $packages; do
+    wheels="$wheels $(eval echo "$wheels_dir"/"${package%==*}"*.whl)"
+  done
 
   local PATH_ORIGINAL=$PATH
   export PATH=$INK_APP_FRA_DIR/Python.framework/Versions/Current/bin:$PATH
@@ -130,12 +156,132 @@ function ink_pipinstall
     --prefix "$INK_APP_RES_DIR" \
     --ignore-installed \
     $options \
-    $package
+    $wheels
 
   export PATH=$PATH_ORIGINAL
 }
 
-function ink_python_download
+function ink_pipinstall_cssselect
 {
-  curl -o "$PKG_DIR"/"$(basename "$INK_PYTHON_URL")" -L "$INK_PYTHON_URL"
+  local wheels_dir=$1
+  local options=$2
+
+  ink_pipinstall "$INK_PYTHON_CSSSELECT" "$wheels_dir" "$options"
+}
+
+function ink_pipinstall_lxml
+{
+  local wheels_dir=$1
+  local options=$2
+
+  ink_pipinstall "$INK_PYTHON_LXML" "$wheels_dir" "$options"
+
+  lib_change_paths \
+    @loader_path/../../.. \
+    "$INK_APP_LIB_DIR" \
+    "$INK_APP_SITEPKG_DIR"/lxml/etree.cpython-"${INK_PYTHON_VER/./}"-darwin.so \
+    "$INK_APP_SITEPKG_DIR"/lxml/objectify.cpython-"${INK_PYTHON_VER/./}"-darwin.so
+}
+
+function ink_pipinstall_numpy
+{
+  local wheels_dir=$1
+  local options=$2
+
+  ink_pipinstall "$INK_PYTHON_NUMPY" "$wheels_dir" "$options"
+
+  sed -i '' '1s/.*/#!\/usr\/bin\/env python'"$INK_PYTHON_VER_MAJOR"'/' \
+    "$INK_APP_BIN_DIR"/f2py
+  sed -i '' '1s/.*/#!\/usr\/bin\/env python'"$INK_PYTHON_VER_MAJOR"'/' \
+    "$INK_APP_BIN_DIR"/f2py$INK_PYTHON_VER_MAJOR
+  sed -i '' '1s/.*/#!\/usr\/bin\/env python'"$INK_PYTHON_VER_MAJOR"'/' \
+    "$INK_APP_BIN_DIR"/f2py$INK_PYTHON_VER
+}
+
+function ink_pipinstall_pygobject
+{
+  local wheels_dir=$1
+  local options=$2
+
+  ink_pipinstall "$INK_PYTHON_PYGOBJECT" "$wheels_dir" "$options"
+
+  lib_change_paths \
+    @loader_path/../../.. \
+    "$INK_APP_LIB_DIR" \
+    "$INK_APP_SITEPKG_DIR"/gi/_gi.cpython-"${INK_PYTHON_VER/./}"-darwin.so \
+    "$INK_APP_SITEPKG_DIR"/gi/_gi_cairo.cpython-"${INK_PYTHON_VER/./}"-darwin.so \
+    "$INK_APP_SITEPKG_DIR"/cairo/_cairo.cpython-"${INK_PYTHON_VER/./}"-darwin.so
+}
+
+function ink_pipinstall_pyserial
+{
+  local wheels_dir=$1
+  local options=$2
+
+  ink_pipinstall "$INK_PYTHON_PYSERIAL" "$wheels_dir" "$options"
+
+  find "$INK_APP_SITEPKG_DIR"/serial -type f -name "*.pyc" -exec rm {} \;
+  sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' "$INK_APP_BIN_DIR"/pyserial-miniterm
+  sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' "$INK_APP_BIN_DIR"/pyserial-ports
+}
+
+function ink_pipinstall_scour
+{
+  local wheels_dir=$1
+  local options=$2
+
+  ink_pipinstall "$INK_PYTHON_SCOUR" "$wheels_dir" "$options"
+
+  sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' "$INK_APP_BIN_DIR"/scour
+}
+
+function ink_pipinstall_urllib3
+{
+  local wheels_dir=$1
+  local options=$2
+
+  ink_pipinstall "$INK_PYTHON_URLLIB3" "$wheels_dir" "$options"
+}
+
+function ink_download_python
+{
+  curl -o "$PKG_DIR"/"$(basename "${INK_PYTHON_URL%\?*}")" -L "$INK_PYTHON_URL"
+}
+
+function ink_install_python
+{
+  mkdir "$INK_APP_FRA_DIR"
+  tar -C "$INK_APP_FRA_DIR" -xf "$PKG_DIR"/"$(basename "${INK_PYTHON_URL%\?*}")"
+
+  # link it to INK_APP_BIN_DIR so it'll be in PATH for the app
+  mkdir -p "$INK_APP_BIN_DIR"
+  # shellcheck disable=SC2086 # it's an integer
+  ln -sf ../../Frameworks/Python.framework/Versions/Current/bin/\
+python$INK_PYTHON_VER_MAJOR "$INK_APP_BIN_DIR"
+
+  # create '.pth' file inside Framework to include our site-packages directory
+  # shellcheck disable=SC2086 # it's an integer
+  echo "../../../../../../../Resources/lib/python$INK_PYTHON_VER/site-packages"\
+    > "$INK_APP_FRA_DIR"/Python.framework/Versions/Current/lib/\
+python$INK_PYTHON_VER/site-packages/inkscape.pth
+}
+
+# shellcheck disable=SC2086 # we need word splitting here
+function ink_build_wheels
+{
+  jhbuild run pip3 install wheel
+  jhbuild run pip3 wheel $INK_PYTHON_CSSSELECT -w "$PKG_DIR"
+  jhbuild run pip3 wheel $INK_PYTHON_LXML      -w "$PKG_DIR"
+  jhbuild run pip3 wheel $INK_PYTHON_NUMPY     -w "$PKG_DIR"
+  jhbuild run pip3 wheel $INK_PYTHON_PYGOBJECT -w "$PKG_DIR"
+  jhbuild run pip3 wheel $INK_PYTHON_PYSERIAL  -w "$PKG_DIR"
+  jhbuild run pip3 wheel $INK_PYTHON_SCOUR     -w "$PKG_DIR"
+  jhbuild run pip3 wheel $INK_PYTHON_URLLIB3   -w "$PKG_DIR"
+}
+
+function ink_download_wheels
+{
+  curl \
+    -o "$PKG_DIR"/"$(basename "${INK_PYTHON_WHEELS_URL%\?*}")" \
+    -L "$INK_PYTHON_WHEELS_URL"
 }

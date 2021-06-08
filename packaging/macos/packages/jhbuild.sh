@@ -1,12 +1,14 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-
-### settings ###################################################################
-
-# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### description ################################################################
 
 # This file contains everything related to setup JHBuild.
+
+### settings ###################################################################
+
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### variables ##################################################################
 
@@ -22,10 +24,33 @@ JHBUILD_VER=a896cbf404461cab979fa3cd1c83ddf158efe83b
 JHBUILD_URL=https://gitlab.gnome.org/GNOME/jhbuild/-/archive/$JHBUILD_VER/\
 jhbuild-$JHBUILD_VER.tar.bz2
 
+# This Python runtime powers JHBuild on system that do not provide Python 3.
+JHBUILD_PYTHON_VER_MAJOR=3
+JHBUILD_PYTHON_VER_MINOR=8
+JHBUILD_PYTHON_VER=$JHBUILD_PYTHON_VER_MAJOR.$JHBUILD_PYTHON_VER_MINOR
+JHBUILD_PYTHON_URL="https://gitlab.com/dehesselle/python_macos/-/jobs/\
+artifacts/master/raw/python_${JHBUILD_PYTHON_VER//.}_$(uname -p).tar.xz?\
+job=python${JHBUILD_PYTHON_VER//.}:$(uname -p)"
+
 ### functions ##################################################################
+
+function jhbuild_install_python
+{
+  mkdir -p "$OPT_DIR"
+  curl -L "$JHBUILD_PYTHON_URL" | tar -C "$OPT_DIR" -x
+
+  local python_bin_dir
+  python_bin_dir=$OPT_DIR/Python.framework/Versions/Current/bin
+  ln -s "$python_bin_dir"/python$JHBUILD_PYTHON_VER_MAJOR "$BIN_DIR"
+  ln -s "$python_bin_dir"/python$JHBUILD_PYTHON_VER "$BIN_DIR"
+  ln -s "$python_bin_dir"/pip$JHBUILD_PYTHON_VER_MAJOR "$BIN_DIR"
+}
 
 function jhbuild_install
 {
+  # The safest way is to use our custom Python, even if the system provides one.
+  jhbuild_install_python
+
   # Without this, JHBuild won't be able to access https links later because
   # Apple's Python won't be able to validate certificates.
   certifi_install
@@ -37,15 +62,17 @@ function jhbuild_install
   tar -C "$SRC_DIR" -xf "$archive"
   JHBUILD_DIR=$SRC_DIR/jhbuild-$JHBUILD_VER
 
+  # Determine the real path to the Python interpreter so we can hardcode it into
+  # the file. This way we can pick up the desired interpreter via environment
+  # lookup once - i.e. right now - and stick to it.
+  local python_interpreter
+  python_interpreter=$(python3 -c \
+    "import os, sys; print(os.path.realpath(sys.executable))")
+
   # Create 'jhbuild' executable. This code has been adapted from
   # https://gitlab.gnome.org/GNOME/gtk-osx/-/blob/master/gtk-osx-setup.sh
-  #
-  # This file will use '/usr/bin/python3' instead of the environment lookup
-  # '/usr/bin/env python3' because we want to stick with a version for
-  # JHBuild regardless of what Python we install later (which would
-  # replace that because of PATH within JHBuild environment).
   cat <<EOF > "$BIN_DIR/jhbuild"
-#!/usr/bin/python3
+#!$python_interpreter
 # -*- coding: utf-8 -*-
 
 import sys
@@ -86,13 +113,13 @@ function jhbuild_configure
   {
     # set moduleset directory
     echo "modulesets_dir = '$SELF_DIR/jhbuild'"
-    echo "modulesets_dir = '$SELF_DIR/jhbuild'"
 
     # basic directory layout
     echo "buildroot = '$BLD_DIR'"
     echo "checkoutroot = '$SRC_DIR'"
     echo "prefix = '$VER_DIR'"
     echo "tarballdir = '$PKG_DIR'"
+    echo "top_builddir = '$VAR_DIR/jhbuild'"
 
     # set macOS SDK
     echo "setup_sdk(sdkdir=\"$SDKROOT\")"
@@ -107,9 +134,9 @@ function jhbuild_configure
 
     # certificates for https
     echo "os.environ[\"SSL_CERT_FILE\"] = \
-    \"$LIB_DIR/python$SYS_PYTHON_VER/site-packages/certifi/cacert.pem\""
+      \"$LIB_DIR/python$JHBUILD_PYTHON_VER/site-packages/certifi/cacert.pem\""
     echo "os.environ[\"REQUESTS_CA_BUNDLE\"] = \
-    \"$LIB_DIR/python$SYS_PYTHON_VER/site-packages/certifi/cacert.pem\""
+      \"$LIB_DIR/python$JHBUILD_PYTHON_VER/site-packages/certifi/cacert.pem\""
 
     # user home directory
     echo "os.environ[\"HOME\"] = \"$HOME\""

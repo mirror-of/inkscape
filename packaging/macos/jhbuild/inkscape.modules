@@ -2,7 +2,8 @@
 <!DOCTYPE moduleset SYSTEM "moduleset.dtd">
 <?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
 <moduleset>
-  <repository name="bintray"      type="tarball" href="https://dl.bintray.com/"/>
+
+  <repository name="boost"        type="tarball" href="https://boostorg.jfrog.io/artifactory/main/release/"/>
   <repository name="freedesktop"  type="tarball" href="https://gitlab.freedesktop.org/"/>
   <repository name="github"       type="tarball" href="https://github.com/"/>
   <repository name="gnome_ftp"    type="tarball" href="https://ftp.fau.de/gnome/sources/"/>
@@ -15,9 +16,24 @@
   <include href="gtk-osx.modules"/>
 
   <!--
-          - Dependencies marked with TODO have not been investigated yet.
-            Maybe there are no dependencies or maybe they need to be added.
+       - Dependencies marked with TODO have not been investigated yet.
+         Maybe there are no dependencies or maybe they need to be added.
+
+       - Indentation may look strange for an XML file, but this is to make
+         my life easier as this is a manually maintained file.
   -->
+
+  <!-- Boehm-Demers-Weiser Garbage Collector https://github.com/ivmai/bdwgc -->
+  <autotools
+    id="bdwgc"
+    autogen-sh="configure">
+    <branch
+      module="ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz"
+      version="8.0.4"
+      hash="sha256:436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d"
+      repo="github">
+    </branch>
+  </autotools>
 
   <!-- boost C++ libraries https://www.boost.org
 
@@ -34,10 +50,10 @@
     skip-install="yes"
     supports-non-srcdir-builds="no">
     <branch
-      module="boostorg/release/1.74.0/source/boost_1_74_0.tar.bz2"
-      version="1.74.0"
-      hash="sha256:83bfc1507731a0906e387fc28b7ef5417d591429e51e788417fe9ff025e116b1"
-      repo="bintray">
+      module="1.76.0/source/boost_1_76_0.tar.bz2"
+      version="1.76.0"
+      hash="sha256:f0397ba6e982c4450f27bf32a2a83292aba035b827a5623a14636ea583318c41"
+      repo="boost">
     </branch>
   </autotools>
 
@@ -83,22 +99,6 @@
     </dependencies>
   </autotools>
 
-  <!-- Enchant https://abiword.github.io/enchant/ -->
-  <autotools
-    id="enchant2"
-    autogen-sh="configure"
-    autogenargs="--with-applespell --enable-relocatable">
-    <branch
-      module="AbiWord/enchant/releases/download/v2.2.13/enchant-2.2.13.tar.gz"
-      version="2.2.13"
-      hash="sha256:eab9f90d79039133660029616e2a684644bd524be5dc43340d4cfc3fb3c68a20"
-      repo="github">
-    </branch>
-    <dependencies>
-      <dep package="glib"/>
-    </dependencies>
-  </autotools>
-
 <!-- GNU Find Utilities https://www.gnu.org/software/findutils/ -->
   <autotools
     id="findutils"
@@ -135,7 +135,8 @@
   -->
   <autotools
     id="gsl"
-    autogen-sh='configure CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration"'>
+    autogen-sh='configure CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration"'
+    autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --infodir=%(prefix)s/share/info %(autogenargs)s">
     <branch
       module="gsl/gsl-1.9.tar.gz"
       version="1.9"
@@ -158,7 +159,7 @@
         strip="1"/>
     </branch>
     <dependencies>
-      <dep package="enchant2"/>
+      <dep package="enchant"/>
       <dep package="glib"/>
       <dep package="gtk+-3.0"/>
       <dep package="iso-codes"/>
@@ -190,6 +191,9 @@
       <patch
         file="gtk-mac-bundler_configure.patch"
         strip="1"/>
+      <patch
+        file="gtk-mac-bundler_encoding_arg.patch"
+        strip="1"/>
     </branch>
   </autotools>
 
@@ -198,12 +202,12 @@
     id="imagemagick"
     autogen-sh="configure">
     <branch
-      module="ImageMagick/ImageMagick6/archive/6.9.11-22.tar.gz"
-      version="6.9.11-22"
-      hash="sha256:1dd6efedc624738bc38a27611b509c299fc958dc6138370abd34864c0af8cfa0"
+      module="ImageMagick/ImageMagick6/archive/6.9.12-7.tar.gz"
+      version="6.9.12-7"
+      hash="sha256:6abbd6afe7130edba7652a49c03a699657d6a71cf631a3c82014a31c8f93996d"
       repo="github"
-      checkoutdir="imagemagick-6.9.11-22"
-      rename-tarball="imagemagick-6.9.11-22.tar.gz">
+      checkoutdir="imagemagick-6.9.12-7"
+      rename-tarball="imagemagick-6.9.12-7.tar.gz">
       <patch
         file="imagemagick_configure_pango.patch"
         strip="1"/>
@@ -213,16 +217,27 @@
     </dependencies>
   </autotools>
 
+  <!-- Little cms color engine https://sourceforge.net/projects/lcms/ -->
+  <autotools
+    id="lcms"
+    autogen-sh="configure">
+    <branch
+      module="lcms/lcms/2.12/lcms2-2.12.tar.gz"
+      version="2.12"
+      hash="sha256:18663985e864100455ac3e507625c438c3710354d85e5cbb7cd4043e11fe10f5"
+      repo="sourceforge"/>
+  </autotools>
+
   <!-- Reading/Writing CorelDRAW files https://github.com/LibreOffice/libcdr -->
   <autotools
     id="libcdr"
     autogen-sh="autoreconf">
     <branch
-      module="LibreOffice/libcdr/archive/libcdr-0.1.6.tar.gz"
-      version="0.1.6"
-      hash="sha256:1a3bbed08cea213eadddf5b54333cc1defcf1acc81b8c9efa431f6491ed646f4"
+      module="LibreOffice/libcdr/archive/libcdr-0.1.7.tar.gz"
+      version="0.1.7"
+      hash="sha256:0cfd3304b6ecaaa37fc2fb7213f5e69ab05153152f49e8e91776cd4fc7c09e23"
       repo="github"
-      checkoutdir="libcdr-0.1.6">
+      checkoutdir="libcdr-0.1.7">
     </branch>
     <dependencies>
       <dep package="boost"/>
@@ -272,12 +287,12 @@
   <cmake
     id="openjpeg">
     <branch
-      module="uclouvain/openjpeg/archive/v2.3.1.tar.gz"
-      version="2.3.1"
-      hash="sha256:63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9"
+      module="uclouvain/openjpeg/archive/v2.4.0.tar.gz"
+      version="2.4.0"
+      hash="sha256:8702ba68b442657f11aaeb2b338443ca8d5fb95b0d845757968a7be31ef7f16d"
       repo="github"
-      checkoutdir="openjpeg-2.3.1"
-      rename-tarball="openjpeg-2.3.1.tar.gz">
+      checkoutdir="openjpeg-2.4.0"
+      rename-tarball="openjpeg-2.4.0.tar.gz">
     </branch>
     <dependencies>
       <!-- TODO
@@ -303,21 +318,30 @@
     </dependencies>
   </cmake>
 
-  <!-- Poppler https://poppler.freedesktop.org -->
+  <!-- Poppler https://poppler.freedesktop.org
+
+       To be able to build on El Capitan:
+       - disable GObject Introspection
+       - version <= 21.03.0
+
+       This in turn requires glib <= 2.66.8 on Catalina
+       https://gitlab.freedesktop.org/poppler/poppler/-/issues/1060
+  -->
   <cmake
     id="poppler"
-    cmakeargs="-DENABLE_UNSTABLE_API_ABI_HEADERS=ON">
+    cmakeargs="-DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GOBJECT_INTROSPECTION=OFF">
     <branch
-      module="poppler-20.12.1.tar.xz"
-      version="20.12.1"
-      hash="sha256:d0aa2586c0a4296c775f0d2045f28bb95a694113fc995f95350faa12930f7b35"
+      module="poppler-21.03.0.tar.xz"
+      version="21.03.0"
+      hash="sha256:fd51ead4aac1d2f4684fa6e7b0ec06f0233ed21667e720a4e817e4455dd63d27"
       repo="poppler">
     </branch>
     <dependencies>
-      <!-- TODO
-      <dep package="package-name"/>
-      -->
-    </dependencies>
+      <dep package="cmake"/>
+      <dep package="glib"/>
+      <dep package="gtk+-3.0"/>
+      <dep package="gdk-pixbuf"/>
+     </dependencies>
   </cmake>
 
   <!-- Potrace http://potrace.sourceforge.net -->
@@ -337,5 +361,28 @@
       -->
     </dependencies>
   </autotools>
+
+  <!-- Rust https://www.rust-lang.org
+
+       Rust has a custom setup routine (rustup) which is wrapped into
+       a cmake file introduced by that patch below.
+  -->
+  <cmake
+    id="rust"
+    cmakeargs="-DVERSION=1.48.0"
+    supports-non-srcdir-builds="no"
+    use-ninja="no">
+    <branch
+      module="rust-lang/rustup/archive/1.22.1.tar.gz"
+      version="1.22.1"
+      hash="sha256:ad46cc624f318a9493aa62fc9612a450564fe20ba93c689e0ad856bff3c64c5b"
+      repo="github"
+      checkoutdir="rustup-1.22.1"
+      rename-tarball="rustup-1.22.1.tar.gz">
+      <patch
+        file="rust_cmake_install.patch"
+        strip="1"/>
+    </branch>
+  </cmake>
 
 </moduleset>

@@ -1,13 +1,15 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-
-### settings ###################################################################
-
-# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### description ################################################################
 
 # This file contains everything related to setup dmgbuild, a tool to create
 # disk images.
+
+### settings ###################################################################
+
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### variables ##################################################################
 
@@ -15,13 +17,12 @@
 # https://github.com/al45tair/dmgbuild
 # including dependencies:
 # - biplist: binary plist parser/generator
-# - pyobjc-*: framework wrappers; pinned to 6.2.2 as 7.0 includes fixes for
-#   Big Sur (dyld cache) that break on Catalina
+# - pyobjc-*: framework wrappers
 DMGBUILD_PIP="\
   biplist==1.0.3\
-  pyobjc-core==6.2.2\
-  pyobjc-framework-Cocoa==6.2.2\
-  pyobjc-framework-Quartz==6.2.2\
+  pyobjc-core==7.2\
+  pyobjc-framework-Cocoa==7.2\
+  pyobjc-framework-Quartz==7.2\
   dmgbuild==1.4.2\
 "
 
