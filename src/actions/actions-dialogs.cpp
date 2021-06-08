@@ -74,8 +74,11 @@ std::vector<std::vector<Glib::ustring>> raw_data_dialogs =
  * Open dialog.
  */
 void
-dialog_open(Glib::ustring const &dialog, InkscapeWindow *win)
+dialog_open(const Glib::VariantBase& value, InkscapeWindow *win)
 {
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    auto dialog = s.get();
+
     auto dialog_it = dialog_data.find(dialog);
     if (dialog_it == dialog_data.end()) {
         std::cerr << "dialog_open: invalid dialog name: " << dialog << std::endl;
@@ -126,9 +129,11 @@ dialog_toggle(InkscapeWindow *win)
 void
 add_actions_dialogs(InkscapeWindow* win)
 {
+    Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
+
     // clang-format off
-    win->add_action_radio_string ( "dialog-open",        sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&dialog_open),   win), "Find");
-    win->add_action(               "dialog-toggle",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&dialog_toggle), win)        );
+    win->add_action_with_parameter( "dialog-open",  String, sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&dialog_open),   win));
+    win->add_action(                "dialog-toggle",        sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&dialog_toggle), win));
     // clang-format on
 
     auto app = InkscapeApplication::instance();
