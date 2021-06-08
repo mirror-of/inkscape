@@ -22,6 +22,7 @@ set(inkscape_SRC
   desktop-style.cpp
   desktop.cpp
   device-manager.cpp
+  distribution-snapper.cpp
   document-subset.cpp
   document-undo.cpp
   document.cpp
@@ -113,6 +114,7 @@ set(inkscape_SRC
   desktop-style.h
   desktop.h
   device-manager.h
+  distribution-snapper.h
   document-subset.h
   document-undo.h
   document.h

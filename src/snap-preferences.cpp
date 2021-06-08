@@ -22,6 +22,7 @@ Inkscape::SnapPreferences::SnapPreferences() :
 {
     // Check for powers of two; see the comments in snap-enums.h
     g_assert((SNAPTARGET_BBOX_CATEGORY != 0) && !(SNAPTARGET_BBOX_CATEGORY & (SNAPTARGET_BBOX_CATEGORY - 1)));
+    g_assert((SNAPTARGET_DISTRIBUTION_CATEGORY != 0) && !(SNAPTARGET_DISTRIBUTION_CATEGORY & (SNAPTARGET_DISTRIBUTION_CATEGORY - 1)));
     g_assert((SNAPTARGET_ALIGNMENT_CATEGORY != 0) && !(SNAPTARGET_ALIGNMENT_CATEGORY & (SNAPTARGET_ALIGNMENT_CATEGORY - 1)));
     g_assert((SNAPTARGET_NODE_CATEGORY != 0) && !(SNAPTARGET_NODE_CATEGORY & (SNAPTARGET_NODE_CATEGORY - 1)));
     g_assert((SNAPTARGET_DATUMS_CATEGORY != 0) && !(SNAPTARGET_DATUMS_CATEGORY & (SNAPTARGET_DATUMS_CATEGORY - 1)));
@@ -48,7 +49,8 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
             target == SNAPTARGET_NODE_CATEGORY ||
             target == SNAPTARGET_OTHERS_CATEGORY ||
             target == SNAPTARGET_DATUMS_CATEGORY ||
-            target == SNAPTARGET_ALIGNMENT_CATEGORY) {
+            target == SNAPTARGET_ALIGNMENT_CATEGORY ||
+            target == SNAPTARGET_DISTRIBUTION_CATEGORY) {
         // These main targets should be handled separately, because otherwise we might call isTargetSnappable()
         // for them (to check whether the corresponding group is on) which would lead to an infinite recursive loop
         always_on = (target == SNAPTARGET_DATUMS_CATEGORY);
@@ -120,8 +122,13 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
         return;
     }
 
-    if (target & Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY) {
+    if (target & SNAPTARGET_ALIGNMENT_CATEGORY) {
         group_on = isTargetSnappable(SNAPTARGET_ALIGNMENT_CATEGORY);
+        return;
+    }
+
+    if (target & SNAPTARGET_DISTRIBUTION_CATEGORY) {
+        group_on = isTargetSnappable(SNAPTARGET_DISTRIBUTION_CATEGORY);
         return;
     }
 

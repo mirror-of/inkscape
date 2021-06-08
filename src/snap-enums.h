@@ -118,6 +118,17 @@ enum SnapTargetType {
     SNAPTARGET_ALIGNMENT_PAGE_CORNER,
     SNAPTARGET_ALIGNMENT_HANDLE,
     SNAPTARGET_ALIGNMENT_INTERSECTION,
+
+    //-------------------------------------------------------------------
+    // Distribution snapping
+    SNAPTARGET_DISTRIBUTION_CATEGORY = 512, // will be used as a flag and must therefore be a power of two
+    SNAPTARGET_DISTRIBUTION_X,
+    SNAPTARGET_DISTRIBUTION_Y,
+    SNAPTARGET_DISTRIBUTION_RIGHT,
+    SNAPTARGET_DISTRIBUTION_LEFT,
+    SNAPTARGET_DISTRIBUTION_UP,
+    SNAPTARGET_DISTRIBUTION_DOWN,
+
     //-------------------------------------------------------------------
     SNAPTARGET_MAX_ENUM_VALUE
 };

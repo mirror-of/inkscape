@@ -185,7 +185,11 @@ void Inkscape::SnappedPoint::getPointIfSnapped(Geom::Point &p) const
 
 // search for the closest snapped point
 // This function give preference to the snapped points that are not in SNAPTARGET_ALIGNMENT_CATEGORY
-// ie. for example, a longer Corner to Corner snap will be given prefrence over a Corner to alignment snap with lesser snapDistance.
+// ie. for example, a longer Corner to Corner snap will be given prefrence over 
+// a Corner to alignment snap with lesser snapDistance.
+//
+// Incase there is an alignment snap along with a distribution snap possible, this
+// function returns a new SnappedPoint that is are mix of the both
 bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::SnappedPoint &result)
 {
     bool success = false;
@@ -221,6 +225,29 @@ bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::Snapp
 
     if (!success && aligned_success)
         result = aligned;
+
+    // the following code merges an alignment snap and a distribution snap
+    if (success && aligned_success) {
+        auto type = result.getTarget();
+        if (type & Inkscape::SNAPTARGET_DISTRIBUTION_CATEGORY) {
+            switch (type) {
+                case Inkscape::SNAPTARGET_DISTRIBUTION_X:
+                case Inkscape::SNAPTARGET_DISTRIBUTION_RIGHT:
+                case Inkscape::SNAPTARGET_DISTRIBUTION_LEFT:
+                   result.setPoint({result.getPoint().x(), aligned.getPoint().y()});
+                   break;
+                case Inkscape::SNAPTARGET_DISTRIBUTION_Y:
+                case Inkscape::SNAPTARGET_DISTRIBUTION_UP:
+                case Inkscape::SNAPTARGET_DISTRIBUTION_DOWN:
+                   result.setPoint({aligned.getPoint().x() ,result.getPoint().y()});
+                   break;
+                default:
+                    g_warning("getClosestSP(): unknown distribution snap target %i", result.getTarget());
+                   break;
+            }
+            return true;
+        }
+    }
 
     return success ? success : aligned_success;
 }

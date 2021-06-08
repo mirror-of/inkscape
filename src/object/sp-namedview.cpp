@@ -201,6 +201,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::GUIDETOLERANCE);
     this->readAttr(SPAttr::OBJECTTOLERANCE);
     this->readAttr(SPAttr::ALIGNMENTTOLERANCE);
+    this->readAttr(SPAttr::DISTRIBUTIONTOLERANCE);
     this->readAttr(SPAttr::GUIDECOLOR);
     this->readAttr(SPAttr::GUIDEOPACITY);
     this->readAttr(SPAttr::GUIDEHICOLOR);
@@ -249,6 +250,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::INKSCAPE_SNAP_PAGE_BORDER);
     this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT);
     this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_DISTRIBUTION);
     this->readAttr(SPAttr::INKSCAPE_CURRENT_LAYER);
     this->readAttr(SPAttr::INKSCAPE_CONNECTOR_SPACING);
     this->readAttr(SPAttr::INKSCAPE_LOCKGUIDES);
@@ -318,6 +320,10 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             break;
     case SPAttr::ALIGNMENTTOLERANCE:
             this->snap_manager.snapprefs.setAlignementTolerance(value ? g_ascii_strtod(value, nullptr) : 5);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SPAttr::DISTRIBUTIONTOLERANCE:
+            this->snap_manager.snapprefs.setDistributionTolerance(value ? g_ascii_strtod(value, nullptr) : 5);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::GUIDECOLOR:
@@ -545,6 +551,10 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             break;
     case SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_HANDLE, value ? sp_str_to_bool(value) : FALSE);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SPAttr::INKSCAPE_SNAP_DISTRIBUTION:
+            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_DISTRIBUTION_CATEGORY, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_CURRENT_LAYER:

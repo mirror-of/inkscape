@@ -238,6 +238,23 @@
       </object>
     </child>
 
+    <!-- Alignment -->
+
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkToggleToolButton">
+        <property name="visible">True</property>
+        <property name="action_name">doc.snap-distribution</property>
+        <property name="icon_name">snap</property>
+        <property name="label" translatable="true">Distribution</property>
+      </object>
+    </child>
+
   </object>
 
 </interface>

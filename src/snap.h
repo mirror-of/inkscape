@@ -24,6 +24,7 @@
 #include "object-snapper.h"
 #include "alignment-snapper.h"
 #include "snap-preferences.h"
+#include "distribution-snapper.h"
 
 
 // Guides
@@ -339,6 +340,7 @@ public:
     Inkscape::GuideSnapper guide;      ///< guide snapper
     Inkscape::ObjectSnapper object;    ///< snapper to other objects
     Inkscape::AlignmentSnapper alignment; ///< snapper to align with other objects
+    Inkscape::DistributionSnapper distribution;
     Inkscape::SnapPreferences snapprefs;
 
     /**
@@ -449,6 +451,7 @@ private:
 
     friend class Inkscape::ObjectSnapper;
     friend class Inkscape::AlignmentSnapper;
+    friend class Inkscape::DistributionSnapper;
 };
 
 #endif // !SEEN_SNAP_H

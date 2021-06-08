@@ -54,6 +54,7 @@ SnapManager::SnapManager(SPNamedView const *v) :
     guide(this, 0),
     object(this, 0),
     alignment(this, 0),
+    distribution(this, 0),
     snapprefs(),
     _named_view(v),
     _rotation_center_source_items(std::vector<SPItem*>()),
@@ -81,6 +82,7 @@ SnapManager::SnapperList SnapManager::getSnappers() const
     s.push_back(&guide);
     s.push_back(&object);
     s.push_back(&alignment);
+    s.push_back(&distribution);
 
     SnapManager::SnapperList gs = getGridSnappers();
     s.splice(s.begin(), gs);
@@ -928,7 +930,8 @@ void SnapManager::_findCandidates(SPObject* parent,
                         if (bbox_of_item) {
                             bool overflow = false;
                             // See if the item is within range
-                            if (getDesktop()->get_display_area().contains(bbox_of_item->midpoint())) {
+                            auto display_area = getDesktop()->get_display_area();
+                            if (display_area.contains(bbox_of_item->min()) || display_area.contains(bbox_of_item->max())) {
                                 // Finally add the object to _candidates.
                                 align_snapper_candidates->push_back(Inkscape::SnapCandidateItem(item, clip_or_mask, additional_affine));
                                 // For debugging: print the id of the candidate to the console

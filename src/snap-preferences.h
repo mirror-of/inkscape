@@ -54,11 +54,13 @@ public:
     double getGuideTolerance() const {return _guide_tolerance;}
     double getObjectTolerance() const {return _object_tolerance;}
     double getAlignmentTolerance() const {return _alignment_tolerance;}
+    double getDistributionTolerance() const {return _distribution_tolerance;}
 
     void setGridTolerance(double val) {_grid_tolerance = val;}
     void setGuideTolerance(double val) {_guide_tolerance = val;}
     void setObjectTolerance(double val) {_object_tolerance = val;}
     void setAlignementTolerance(double val) {_alignment_tolerance = val;}
+    void setDistributionTolerance(double val) {_distribution_tolerance = val;}
 
 private:
 
@@ -98,6 +100,7 @@ private:
     double _guide_tolerance;
     double _object_tolerance;
     double _alignment_tolerance;
+    double _distribution_tolerance;
 };
 
 }
