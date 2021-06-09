@@ -1027,7 +1027,7 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE:
             dt->selection->cloneOriginalPathLPE();
             break;
-        case SP_VERB_EDIT_SELECTION_2_MARKER:
+        /* case SP_VERB_EDIT_SELECTION_2_MARKER:
             dt->selection->toMarker();
             break;
         case SP_VERB_EDIT_SELECTION_2_GUIDES:
@@ -1038,7 +1038,7 @@ void EditVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_EDIT_UNTILE:
             dt->selection->untile();
-            break;
+            break; */
         case SP_VERB_EDIT_SYMBOL:
             dt->selection->toSymbol();
             break;
@@ -1185,7 +1185,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->scaleTimes(0.5);
             break;
         }
-        case SP_VERB_SELECTION_TO_FRONT:
+        /* case SP_VERB_SELECTION_TO_FRONT:
             selection->raiseToTop();
             break;
         case SP_VERB_SELECTION_TO_BACK:
@@ -1196,14 +1196,14 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_SELECTION_LOWER:
             selection->lower();
-            break;
+            break; */
         case SP_VERB_SELECTION_STACK_UP:
             selection->stackUp();
             break;
         case SP_VERB_SELECTION_STACK_DOWN:
             selection->stackDown();
             break;
-        case SP_VERB_SELECTION_GROUP:
+        /* case SP_VERB_SELECTION_GROUP:
             selection->group();
             break;
         case SP_VERB_SELECTION_UNGROUP:
@@ -1211,7 +1211,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_SELECTION_UNGROUP_POP_SELECTION:
             selection->popFromGroup();
-            break;
+            break; */
         case SP_VERB_SELECTION_FILL_BETWEEN_MANY:
             selection->fillBetweenMany();
             break;
@@ -1601,12 +1601,12 @@ void ObjectVerb::perform( SPAction *action, void *data)
     }
 
     switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_OBJECT_ROTATE_90_CW:
-            sel->rotate90(false);
-            break;
-        case SP_VERB_OBJECT_ROTATE_90_CCW:
-            sel->rotate90(true);
-            break;
+        // case SP_VERB_OBJECT_ROTATE_90_CW:
+        //     sel->rotate90(false);
+        //     break;
+        // case SP_VERB_OBJECT_ROTATE_90_CCW:
+        //     sel->rotate90(true);
+        //     break;
         case SP_VERB_OBJECT_FLATTEN:
             sel->removeTransform();
             break;
@@ -1622,7 +1622,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_FLOWTEXT_TO_TEXT:
             flowtext_to_text();
             break;
-        case SP_VERB_OBJECT_FLIP_HORIZONTAL:
+        /* case SP_VERB_OBJECT_FLIP_HORIZONTAL:
             sel->setScaleRelative(center, Geom::Scale(-1.0, 1.0));
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_HORIZONTAL,
                                _("Flip horizontally"));
@@ -1632,18 +1632,18 @@ void ObjectVerb::perform( SPAction *action, void *data)
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_VERTICAL,
                                _("Flip vertically"));
             break;
-        case SP_VERB_OBJECT_SET_MASK:
+         case SP_VERB_OBJECT_SET_MASK:
             sel->setMask(false, false);
-            break;
+            break; 
         case SP_VERB_OBJECT_SET_INVERSE_MASK:
             sel->setMask(false, false);
             Inkscape::LivePathEffect::sp_inverse_powermask(sp_action_get_selection(action));
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_SET_INVERSE_MASK, _("_Set Inverse (LPE)"));
-            break;
+            break; */
         case SP_VERB_OBJECT_EDIT_MASK:
             sel->editMask(false);
             break;
-        case SP_VERB_OBJECT_UNSET_MASK:
+        /* case SP_VERB_OBJECT_UNSET_MASK:
             Inkscape::LivePathEffect::sp_remove_powermask(sp_action_get_selection(action));
             sel->unsetMask(false);
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_UNSET_MASK, _("Release mask"));
@@ -1655,19 +1655,19 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->setMask(true, false);
             Inkscape::LivePathEffect::sp_inverse_powerclip(sp_action_get_selection(action));
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, _("_Set Inverse (LPE)"));
-            break;
+            break; */
         case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
             sel->setClipGroup();
             break;
         case SP_VERB_OBJECT_EDIT_CLIPPATH:
             sel->editMask(true);
             break;
-        case SP_VERB_OBJECT_UNSET_CLIPPATH:
+        /* case SP_VERB_OBJECT_UNSET_CLIPPATH:
             Inkscape::LivePathEffect::sp_remove_powerclip(sp_action_get_selection(action));
             sel->unsetMask(true);
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
 
-            break;
+            break; */
         default:
             break;
     }
@@ -1897,16 +1897,16 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_PROTOTYPE:
 #endif
         case SP_VERB_DIALOG_DOCPROPERTIES:
-        case SP_VERB_DIALOG_FILL_STROKE:
+        // case SP_VERB_DIALOG_FILL_STROKE:
         case SP_VERB_DIALOG_GLYPHS:
         case SP_VERB_DIALOG_SWATCHES:
-        case SP_VERB_DIALOG_SYMBOLS:
+        /* case SP_VERB_DIALOG_SYMBOLS:
         case SP_VERB_DIALOG_PAINT:
         case SP_VERB_DIALOG_TRANSFORM:
-        case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
+        case SP_VERB_DIALOG_ALIGN_DISTRIBUTE: */
         case SP_VERB_DIALOG_TEXT:
         case SP_VERB_DIALOG_XML_EDITOR:
-        case SP_VERB_DIALOG_SELECTORS:
+        // case SP_VERB_DIALOG_SELECTORS:
         case SP_VERB_DIALOG_FIND:
 #if WITH_GSPELL
         case SP_VERB_DIALOG_SPELLCHECK:
@@ -1915,11 +1915,11 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_UNDO_HISTORY:
         case SP_VERB_DIALOG_CLONETILER:
         case SP_VERB_DIALOG_ATTR:
-        case SP_VERB_DIALOG_ITEM:
+        // case SP_VERB_DIALOG_ITEM:
         case SP_VERB_DIALOG_INPUT:
         case SP_VERB_DIALOG_EXPORT:
         case SP_VERB_DIALOG_LAYERS:
-        case SP_VERB_DIALOG_OBJECTS:
+        // case SP_VERB_DIALOG_OBJECTS:
         case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
         case SP_VERB_DIALOG_FILTER_EFFECTS:
         case SP_VERB_DIALOG_SVG_FONTS:
@@ -2228,18 +2228,18 @@ void LockAndHideVerb::perform(SPAction *action, void *data)
     if (!doc) return;
 
     switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_UNLOCK_ALL:
+        /* case SP_VERB_UNLOCK_ALL:
             unlock_all(dt);
             DocumentUndo::done(doc, SP_VERB_UNLOCK_ALL, _("Unlock all objects in the current layer"));
-            break;
+            break; */
         case SP_VERB_UNLOCK_ALL_IN_ALL_LAYERS:
             unlock_all_in_all_layers(dt);
             DocumentUndo::done(doc, SP_VERB_UNLOCK_ALL_IN_ALL_LAYERS, _("Unlock all objects in all layers"));
             break;
-        case SP_VERB_UNHIDE_ALL:
+        /* case SP_VERB_UNHIDE_ALL:
             unhide_all(dt);
             DocumentUndo::done(doc, SP_VERB_UNHIDE_ALL, _("Unhide all objects in the current layer"));
-            break;
+            break; */
         case SP_VERB_UNHIDE_ALL_IN_ALL_LAYERS:
             unhide_all_in_all_layers(dt);
             DocumentUndo::done(doc, SP_VERB_UNHIDE_ALL_IN_ALL_LAYERS, _("Unhide all objects in all layers"));
@@ -2351,14 +2351,14 @@ Verb *Verb::_base_verbs[] = {
     new EditVerb(SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, "EditCloneOriginalPathLPE", N_("Clone original path (LPE)"),
                  N_("Creates a new path, applies the Clone original LPE, and refers it to the selected path"),
                  INKSCAPE_ICON("edit-clone-link-lpe")),
-    new EditVerb(SP_VERB_EDIT_SELECTION_2_MARKER, "ObjectsToMarker", N_("Objects to _Marker"),
+    /* new EditVerb(SP_VERB_EDIT_SELECTION_2_MARKER, "ObjectsToMarker", N_("Objects to _Marker"),
                  N_("Convert selection to a line marker"), nullptr),
     new EditVerb(SP_VERB_EDIT_SELECTION_2_GUIDES, "ObjectsToGuides", N_("Objects to Gu_ides"),
                  N_("Convert selected objects to a collection of guidelines aligned with their edges"), nullptr),
     new EditVerb(SP_VERB_EDIT_TILE, "ObjectsToPattern", N_("Objects to Patter_n"),
                  N_("Convert selection to a rectangle with tiled pattern fill"), nullptr),
     new EditVerb(SP_VERB_EDIT_UNTILE, "ObjectsFromPattern", N_("Pattern to _Objects"),
-                 N_("Extract objects from a tiled pattern fill"), nullptr),
+                 N_("Extract objects from a tiled pattern fill"), nullptr), */
     new EditVerb(SP_VERB_EDIT_SYMBOL, "ObjectsToSymbol", N_("Group to Symbol"), N_("Convert group to a symbol"),
                  nullptr),
     new EditVerb(SP_VERB_EDIT_UNSYMBOL, "ObjectsFromSymbol", N_("Symbol to Group"), N_("Extract group from a symbol"),
@@ -2409,27 +2409,27 @@ Verb *Verb::_base_verbs[] = {
                  N_("Swap fill and stroke of an object"), nullptr),
 
     // Selection
-    new SelectionVerb(SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"), N_("Raise selection to top"),
+    /* new SelectionVerb(SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"), N_("Raise selection to top"),
                       INKSCAPE_ICON("selection-top")),
     new SelectionVerb(SP_VERB_SELECTION_TO_BACK, "SelectionToBack", N_("Lower to _Bottom"),
                       N_("Lower selection to bottom"), INKSCAPE_ICON("selection-bottom")),
     new SelectionVerb(SP_VERB_SELECTION_RAISE, "SelectionRaise", N_("_Raise"), N_("Raise selection one step"),
                       INKSCAPE_ICON("selection-raise")),
     new SelectionVerb(SP_VERB_SELECTION_LOWER, "SelectionLower", N_("_Lower"), N_("Lower selection one step"),
-                      INKSCAPE_ICON("selection-lower")),
+                      INKSCAPE_ICON("selection-lower")), */
 
     new SelectionVerb(SP_VERB_SELECTION_STACK_UP, "SelectionStackUp", N_("_Stack up"),
                       N_("Stack selection one step up"), INKSCAPE_ICON("layer-raise")),
     new SelectionVerb(SP_VERB_SELECTION_STACK_DOWN, "SelectionStackDown", N_("_Stack down"),
                       N_("Stack selection one step down"), INKSCAPE_ICON("layer-lower")),
 
-    new SelectionVerb(SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("_Group"), N_("Group selected objects"),
+    /* new SelectionVerb(SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("_Group"), N_("Group selected objects"),
                       INKSCAPE_ICON("object-group")),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"), N_("Ungroup selected groups"),
                       INKSCAPE_ICON("object-ungroup")),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP_POP_SELECTION, "SelectionUnGroupPopSelection",
                       N_("_Pop Selected Objects out of Group"), N_("Pop selected objects out of group"),
-                      INKSCAPE_ICON("object-ungroup-pop-selection")),
+                      INKSCAPE_ICON("object-ungroup-pop-selection")), */
 
     new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on Path"), N_("Put text on path"),
                       INKSCAPE_ICON("text-put-on-path")),
@@ -2558,14 +2558,14 @@ Verb *Verb::_base_verbs[] = {
                   N_("Toggle visibility of current layer"), nullptr),
 
     // Object
-    new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90\xc2\xb0 CW"),
-                   // This is shared between tooltips and statusbar, so they
-                   // must use UTF-8, not HTML entities for special characters.
-                   N_("Rotate selection 90\xc2\xb0 clockwise"), INKSCAPE_ICON("object-rotate-right")),
-    new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CCW, "ObjectRotate90CCW", N_("Rotate 9_0\xc2\xb0 CCW"),
-                   // This is shared between tooltips and statusbar, so they
-                   // must use UTF-8, not HTML entities for special characters.
-                   N_("Rotate selection 90\xc2\xb0 counter-clockwise"), INKSCAPE_ICON("object-rotate-left")),
+    // new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90\xc2\xb0 CW"),
+    //                // This is shared between tooltips and statusbar, so they
+    //                // must use UTF-8, not HTML entities for special characters.
+    //                N_("Rotate selection 90\xc2\xb0 clockwise"), INKSCAPE_ICON("object-rotate-right")),
+    // new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CCW, "ObjectRotate90CCW", N_("Rotate 9_0\xc2\xb0 CCW"),
+    //                // This is shared between tooltips and statusbar, so they
+    //                // must use UTF-8, not HTML entities for special characters.
+    //                N_("Rotate selection 90\xc2\xb0 counter-clockwise"), INKSCAPE_ICON("object-rotate-left")),
     new ObjectVerb(SP_VERB_OBJECT_FLATTEN, "ObjectRemoveTransform", N_("Remove _Transformations"),
                    N_("Remove transformations from object"), nullptr),
     new ObjectVerb(SP_VERB_OBJECT_TO_CURVE, "ObjectToPath", N_("_Object to Path"),
@@ -2581,28 +2581,28 @@ Verb *Verb::_base_verbs[] = {
     new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Convert to Text"),
                    N_("Convert flowed text to regular text object (preserves appearance)"),
                    INKSCAPE_ICON("text-convert-to-regular")),
-    new ObjectVerb(SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally", N_("Flip _Horizontal"),
+    /* new ObjectVerb(SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally", N_("Flip _Horizontal"),
                    N_("Flip selected objects horizontally"), INKSCAPE_ICON("object-flip-horizontal")),
     new ObjectVerb(SP_VERB_OBJECT_FLIP_VERTICAL, "ObjectFlipVertically", N_("Flip _Vertical"),
                    N_("Flip selected objects vertically"), INKSCAPE_ICON("object-flip-vertical")),
-    new ObjectVerb(SP_VERB_OBJECT_SET_MASK, "ObjectSetMask", N_("_Set"),
+     new ObjectVerb(SP_VERB_OBJECT_SET_MASK, "ObjectSetMask", N_("_Set"),
                    N_("Apply mask to selection (using the topmost object as mask)"), nullptr),
     new ObjectVerb(SP_VERB_OBJECT_SET_INVERSE_MASK, "ObjectSetInverseMask", N_("_Set Inverse (LPE)"),
-                   N_("Apply inverse mask to selection (using the topmost object as mask)"), nullptr),
+                   N_("Apply inverse mask to selection (using the topmost object as mask)"), nullptr), */
     new ObjectVerb(SP_VERB_OBJECT_EDIT_MASK, "ObjectEditMask", N_("_Edit"), N_("Edit mask"),
                    INKSCAPE_ICON("path-mask-edit")),
-    new ObjectVerb(SP_VERB_OBJECT_UNSET_MASK, "ObjectUnSetMask", N_("_Release"), N_("Remove mask from selection"),
+    /* new ObjectVerb(SP_VERB_OBJECT_UNSET_MASK, "ObjectUnSetMask", N_("_Release"), N_("Remove mask from selection"),
                    nullptr),
     new ObjectVerb(SP_VERB_OBJECT_SET_CLIPPATH, "ObjectSetClipPath", N_("_Set"),
                    N_("Apply clipping path to selection (using the topmost object as clipping path)"), nullptr),
     new ObjectVerb(SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, "ObjectSetInverseClipPath", N_("_Set Inverse (LPE)"),
-                   N_("Apply inverse clipping path to selection (using the topmost object as clipping path)"), nullptr),
+                   N_("Apply inverse clipping path to selection (using the topmost object as clipping path)"), nullptr), */
     new ObjectVerb(SP_VERB_OBJECT_CREATE_CLIP_GROUP, "ObjectCreateClipGroup", N_("Create Cl_ip Group"),
                    N_("Creates a clip group using the selected objects as a base"), nullptr),
     new ObjectVerb(SP_VERB_OBJECT_EDIT_CLIPPATH, "ObjectEditClipPath", N_("_Edit"), N_("Edit clipping path"),
+    /* new ObjectVerb(SP_VERB_OBJECT_UNSET_CLIPPATH, "ObjectUnSetClipPath", N_("_Release"),
+                   N_("Remove clipping path from selection"), nullptr), */
                    INKSCAPE_ICON("path-clip-edit")),
-    new ObjectVerb(SP_VERB_OBJECT_UNSET_CLIPPATH, "ObjectUnSetClipPath", N_("_Release"),
-                   N_("Remove clipping path from selection"), nullptr),
     // Tools
     new ContextVerb(SP_VERB_CONTEXT_SELECT, "ToolSelector", NC_("ContextVerb", "Select"),
                     N_("Select and transform objects"), INKSCAPE_ICON("tool-pointer")),
@@ -2704,9 +2704,9 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_DOCPROPERTIES, "DialogDocumentProperties", N_("_Document Properties..."),
                    N_("Edit properties of this document (to be saved with the document)"),
                    INKSCAPE_ICON("document-properties")),
-    new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
+    /* new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."),
-                   INKSCAPE_ICON("dialog-fill-and-stroke")),
+                   INKSCAPE_ICON("dialog-fill-and-stroke")), */
     // FIXME: Probably better to either use something from the icon naming spec or ship our own "select-font" icon
     // Technically what we show are unicode code points and not glyphs. The actual glyphs shown are determined by the
     // shaping engines.
@@ -2716,7 +2716,7 @@ Verb *Verb::_base_verbs[] = {
     // TRANSLATORS: "Swatches" means: color samples
     new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("S_watches..."),
                    N_("Select colors from a swatches palette"), INKSCAPE_ICON("swatches")),
-    new DialogVerb(SP_VERB_DIALOG_SYMBOLS, "DialogSymbols", N_("S_ymbols..."),
+    /* new DialogVerb(SP_VERB_DIALOG_SYMBOLS, "DialogSymbols", N_("S_ymbols..."),
                    N_("Select symbol from a symbols palette"), INKSCAPE_ICON("symbols")),
     new DialogVerb(SP_VERB_DIALOG_PAINT, "DialogPaintServers", N_("_Paint Servers..."),
                    // FIXME missing Inkscape Paint Server Icon
@@ -2724,7 +2724,7 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
                    N_("Precisely control objects' transformations"), INKSCAPE_ICON("dialog-transform")),
     new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."),
-                   N_("Align and distribute objects"), INKSCAPE_ICON("dialog-align-and-distribute")),
+                   N_("Align and distribute objects"), INKSCAPE_ICON("dialog-align-and-distribute")), */
     new DialogVerb(SP_VERB_DIALOG_UNDO_HISTORY, "DialogUndoHistory", N_("Undo _History..."), N_("Undo History"),
                    INKSCAPE_ICON("edit-undo-history")),
     new DialogVerb(SP_VERB_DIALOG_TEXT, "DialogText", N_("_Text and Font..."),
@@ -2732,8 +2732,8 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("dialog-text-and-font")),
     new DialogVerb(SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
                    N_("View and edit the XML tree of the document"), INKSCAPE_ICON("dialog-xml-editor")),
-    new DialogVerb(SP_VERB_DIALOG_SELECTORS, "DialogSelectors", N_("_Selectors and CSS..."),
-                   N_("View and edit CSS selectors and styles"), INKSCAPE_ICON("dialog-selectors")),
+    /* new DialogVerb(SP_VERB_DIALOG_SELECTORS, "DialogSelectors", N_("_Selectors and CSS..."),
+                   N_("View and edit CSS selectors and styles"), INKSCAPE_ICON("dialog-selectors")), */
     new DialogVerb(SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find/Replace..."), N_("Find objects in document"),
                    INKSCAPE_ICON("edit-find")),
 #if WITH_GSPELL
@@ -2751,9 +2751,9 @@ Verb *Verb::_base_verbs[] = {
                    N_("Edit the object attributes..."), INKSCAPE_ICON("dialog-object-properties")),
     new DialogVerb(SP_VERB_DIALOG_ATTR_XML, "DialogAttrDialog", N_("_Object attributes..."),
                    N_("Edit the object attributes..."), INKSCAPE_ICON("dialog-object-properties")),
-    new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogObjectProperties", N_("_Object Properties..."),
+    /* new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogObjectProperties", N_("_Object Properties..."),
                    N_("Edit the ID, locked and visible status, and other object properties"),
-                   INKSCAPE_ICON("dialog-object-properties")),
+                   INKSCAPE_ICON("dialog-object-properties")), */
     new DialogVerb(SP_VERB_DIALOG_INPUT, "DialogInput", N_("_Input Devices..."),
                    N_("Configure extended input devices, such as a graphics tablet"),
                    INKSCAPE_ICON("dialog-input-devices")),
@@ -2832,12 +2832,12 @@ Verb *Verb::_base_verbs[] = {
                       N_("_Resize Page to Selection"),
                       N_("Fit the page to the current selection or the drawing if there is no selection"), nullptr),
     // LockAndHide
-    new LockAndHideVerb(SP_VERB_UNLOCK_ALL, "UnlockAll", N_("Unlock All"),
-                        N_("Unlock all objects in the current layer"), nullptr),
+    /* new LockAndHideVerb(SP_VERB_UNLOCK_ALL, "UnlockAll", N_("Unlock All"),
+                        N_("Unlock all objects in the current layer"), nullptr), */
     new LockAndHideVerb(SP_VERB_UNLOCK_ALL_IN_ALL_LAYERS, "UnlockAllInAllLayers", N_("Unlock All in All Layers"),
                         N_("Unlock all objects in all layers"), nullptr),
-    new LockAndHideVerb(SP_VERB_UNHIDE_ALL, "UnhideAll", N_("Unhide All"),
-                        N_("Unhide all objects in the current layer"), nullptr),
+    /* new LockAndHideVerb(SP_VERB_UNHIDE_ALL, "UnhideAll", N_("Unhide All"),
+                        N_("Unhide all objects in the current layer"), nullptr), */
     new LockAndHideVerb(SP_VERB_UNHIDE_ALL_IN_ALL_LAYERS, "UnhideAllInAllLayers", N_("Unhide All in All Layers"),
                         N_("Unhide all objects in all layers"), nullptr),
     // Color Management

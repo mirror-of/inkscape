@@ -10,24 +10,13 @@
 #include "desktop.h"
 #include "selection-chemistry.h"
 
-enum{
-    UNLOCK_ALL,
-    UNHIDE_ALL
-    /*
-     Currently not in use but later it might be
-
-     UNLOCK_ALL_IN_ALL_LAYERS,
-     UNHIDE_ALL_IN_ALL_LAYERS
-    */
-};
-
 void 
 hide_lock_unhide_all(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
     SPDocument *doc = dt->getDocument();
     unhide_all(dt);
-    Inkscape::DocumentUndo::done(doc, UNHIDE_ALL, _("Unhide all objects in the current layer"));
+    Inkscape::DocumentUndo::done(doc, _("Unhide all objects in the current layer"), nullptr);
 }
 
 void
@@ -36,7 +25,7 @@ hide_lock_unlock_all(InkscapeWindow* win)
     SPDesktop* dt = win->get_desktop();
     SPDocument *doc = dt->getDocument();
     unlock_all(dt);
-    Inkscape::DocumentUndo::done(doc, UNLOCK_ALL, _("Unlock all objects in the current layer"));
+    Inkscape::DocumentUndo::done(doc, _("Unlock all objects in the current layer"), nullptr);
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_hide_lock =

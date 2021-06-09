@@ -23,15 +23,7 @@
 #include "path/path-simplify.h"
 #include "live_effects/lpe-powerclip.h"
 #include "live_effects/lpe-powermask.h"
-
-enum{
-    OBJECT_SET_INVERSE_CLIPPATH,
-    OBJECT_UNSET_CLIPPATH,
-    OBJECT_SET_INVERSE_MASK,
-    OBJECT_UNSET_MASK,
-    OBJECT_FLIP_HORIZONTAL,
-    OBJECT_FLIP_VERTICAL
-};
+#include "ui/icon-names.h"
 
 // No sanity checking is done... should probably add.
 void
@@ -59,7 +51,7 @@ object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionObjectSetAttribute");
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetAttribute", nullptr);
 }
 
 
@@ -92,7 +84,7 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionObjectSetProperty");
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetProperty", nullptr);
 }
 
 
@@ -121,7 +113,7 @@ object_set_inverse(InkscapeApplication *app)
     Inkscape::Selection *selection = app->get_active_selection();
     selection->setMask(true, false);
     Inkscape::LivePathEffect::sp_inverse_powerclip(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), OBJECT_SET_INVERSE_CLIPPATH, _("_Set Inverse (LPE)"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), nullptr);
 }
 
 void 
@@ -130,7 +122,7 @@ object_release(InkscapeApplication *app)
     Inkscape::Selection *selection = app->get_active_selection();
     Inkscape::LivePathEffect::sp_remove_powerclip(app->get_active_selection());
     selection->unsetMask(true);
-    Inkscape::DocumentUndo::done(app->get_active_document(),OBJECT_UNSET_CLIPPATH , _("Release clipping path"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release clipping path"), nullptr);
 }
 
 void
@@ -146,7 +138,7 @@ object_set_inverse_mask(InkscapeApplication *app)
     Inkscape::Selection *selection = app->get_active_selection();
     selection->setMask(false, false);
     Inkscape::LivePathEffect::sp_inverse_powermask(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), OBJECT_SET_INVERSE_MASK, _("_Set Inverse (LPE)"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), nullptr);
 }
 
 void 
@@ -155,7 +147,7 @@ object_release_mask(InkscapeApplication *app)
     Inkscape::Selection *selection = app->get_active_selection();
     Inkscape::LivePathEffect::sp_remove_powermask(app->get_active_selection());
     selection->unsetMask(false);
-    Inkscape::DocumentUndo::done(app->get_active_document(),OBJECT_UNSET_MASK , _("Release mask"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release mask"), nullptr);
 }
 
 void
@@ -176,7 +168,7 @@ object_flip_horizontal(InkscapeApplication *app){
     Geom::Point center;
     center = *selection->center();
     selection->setScaleRelative(center, Geom::Scale(-1.0, 1.0));
-    Inkscape::DocumentUndo::done(app->get_active_document(), OBJECT_FLIP_HORIZONTAL,_("Flip horizontally"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip horizontally"), INKSCAPE_ICON("object-flip-horizontal"));
 }
 
 void
@@ -185,7 +177,7 @@ object_flip_vertical(InkscapeApplication *app){
     Geom::Point center;
     center = *selection->center();
     selection->setScaleRelative(center, Geom::Scale(1.0, -1.0));
-    Inkscape::DocumentUndo::done(app->get_active_document(), OBJECT_FLIP_VERTICAL,_("Flip vertically"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));
 }
 
 
