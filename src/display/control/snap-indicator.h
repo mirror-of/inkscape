@@ -48,6 +48,7 @@ protected:
     TemporaryItem *_snapsource;
 
     std::list<TemporaryItem *> _alignment_snap_indicators;
+    std::list<TemporaryItem *> _distribution_snap_indicators;
     std::list<TemporaryItem *> _debugging_points;
     bool _snaptarget_is_presnap;
     SPDesktop *_desktop;
@@ -56,6 +57,7 @@ private:
     SnapIndicator(const SnapIndicator&) = delete;
     SnapIndicator& operator=(const SnapIndicator&) = delete;
 
+    void make_distribution_indicators(std::vector<Geom::Rect> const &bboxes, Geom::Rect const &source_bbox, Geom::Coord equal_dist, SnapTargetType t, double fontsize, double scale);
     guint32 get_guide_color(SnapTargetType t);
 };
 

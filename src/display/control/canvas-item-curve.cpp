@@ -85,6 +85,16 @@ void CanvasItemCurve::set_coords(Geom::Point const &p0, Geom::Point const &p1, G
 }
 
 /**
+ * Set stroke width.
+ */
+void CanvasItemCurve::set_width(int w)
+{
+    width = w;
+
+    request_update();
+}
+
+/**
  * Returns distance between point in canvas units and nearest point on curve.
  */
 double CanvasItemCurve::closest_distance_to(Geom::Point const &p)
@@ -188,7 +198,7 @@ void CanvasItemCurve::render(Inkscape::CanvasItemBuffer *buf)
 
     buf->cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
                              SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
-    buf->cr->set_line_width(1);
+    buf->cr->set_line_width(width);
     buf->cr->stroke();
 
     // Uncomment to show bounds

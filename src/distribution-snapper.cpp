@@ -36,7 +36,6 @@
 #include "snap-enums.h"
 #include "style.h"
 #include "svg/svg.h"
-#include "text-editing.h"
 
 static int sortBoxesRight(Geom::Rect const &a, Geom::Rect const &b)
 {
@@ -307,26 +306,31 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
     if (_bboxes_down->size() > 0)
        pointD = _bboxes_down->begin()->min();
 
+    Geom::Coord equal_dist;
+
     // horizontally in between
     auto x = Geom::Point((pointR + pointL)/2).x();
+    equal_dist = x - pointL.x();
     dist = abs(x - bbox_to_snap->midpoint().x());
     if (consider_x && dist < getSnapperTolerance()) {
-       auto s = SnappedPoint(Geom::Point(x, bbox_to_snap->midpoint().y()), p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_X, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, *(_bboxes_right->begin()));
+       std::vector<Geom::Rect> bboxes = {*_bboxes_left->begin(), *_bboxes_right->begin()};
+       auto s = SnappedPoint(Geom::Point(x, bbox_to_snap->midpoint().y()), bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_X, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
        //std::cout<<"X snap to"<<Geom::Point(x, bbox_to_snap->midpoint().y())<<std::endl;
        isr.points.push_back(s);
     }
 
     // vertically in between
     auto y = Geom::Point((pointU + pointD)/2).y();
+    equal_dist = y - pointU.y();
     dist = abs(y - bbox_to_snap->midpoint().y());
     if (consider_y && dist < getSnapperTolerance()) {
-       auto s = SnappedPoint(Geom::Point(bbox_to_snap->midpoint().x(), y), p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_Y, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, *(_bboxes_up->begin()));
+       std::vector<Geom::Rect> bboxes = {*_bboxes_up->begin(), *_bboxes_down->begin()};
+       auto s = SnappedPoint(Geom::Point(bbox_to_snap->midpoint().x(), y), bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_Y, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
        //std::cout<<"Y snap to"<<<<std::endl;
        isr.points.push_back(s);
     }
 
     // right snaps
-    Geom::Coord equal_dist;
     if (consider_x && _bboxes_right->size() > 1) {
        int num = findRightSnaps(_bboxes_right->begin(), _bboxes_right->end(), equal_dist);
        if (num > 0) {
@@ -334,7 +338,8 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
           Geom::Point target = bbox_to_snap->midpoint() + Geom::Point(offset, 0);
 
          if (abs(offset) < getSnapperTolerance()) {
-             auto s = SnappedPoint(target, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, *(_bboxes_right->begin()));
+             std::vector<Geom::Rect> bboxes(_bboxes_right->begin(), _bboxes_right->begin() + num + 1);
+             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log
@@ -356,7 +361,8 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
           Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(offset, 0);
 
          if (abs(offset) < getSnapperTolerance()) {
-             auto s = SnappedPoint(target, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, *(_bboxes_left->begin()));
+             std::vector<Geom::Rect> bboxes(_bboxes_left->begin(), _bboxes_left->begin() + num + 1);
+             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log
@@ -377,7 +383,8 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
           Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(0, offset);
 
          if (abs(offset) < getSnapperTolerance()) {
-             auto s = SnappedPoint(target, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, *(_bboxes_up->begin()));
+             std::vector<Geom::Rect> bboxes(_bboxes_up->begin(), _bboxes_up->begin() + num + 1);
+             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log
@@ -398,7 +405,8 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
           Geom::Point target = bbox_to_snap->midpoint() + Geom::Point(0, offset);
 
          if (abs(offset) < getSnapperTolerance()) {
-             auto s = SnappedPoint(target, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true, *(_bboxes_down->begin()));
+             std::vector<Geom::Rect> bboxes(_bboxes_down->begin(), _bboxes_down->begin() + num + 1);
+             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log

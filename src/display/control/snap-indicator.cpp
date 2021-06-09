@@ -13,6 +13,7 @@
  */
 
 #include <glibmm/i18n.h>
+#include <string>
 
 #include "snap-indicator.h"
 
@@ -68,15 +69,18 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
     }
 
     bool is_alignment = p.getTarget() & SNAPTARGET_ALIGNMENT_CATEGORY;
+    bool is_distribution = p.getTarget() & SNAPTARGET_DISTRIBUTION_CATEGORY;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
+
     bool value = prefs->getBool("/options/snapindicator/value", true);
 
     if (value) {
         Glib::ustring target_name = _("UNDEFINED");
         Glib::ustring source_name = _("UNDEFINED");
 
-        if (!is_alignment) {
+        if (!is_alignment && !is_distribution) {
             // TRANSLATORS: undefined target for snapping
             switch (p.getTarget()) {
                 case SNAPTARGET_UNDEFINED:
@@ -264,6 +268,12 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         Inkscape::CanvasItemCtrl *ctrl2;
         Inkscape::CanvasItemCtrl *ctrl3;
 
+        double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
+
+        if (is_distribution) {
+            make_distribution_indicators(p.getBBoxes(), *p.getSourceBBox(), p.getDistributionDistance(), p.getTarget(), fontsize, scale);
+        }
+
         if (is_alignment) {
             auto color = pre_snap ? 0x7f7f7fff : get_guide_color(p.getTarget());
             auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), p.getAlignmentTarget());
@@ -326,7 +336,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         _snaptarget_is_presnap = pre_snap;
 
         // Display the tooltip, which reveals the type of snap source and the type of snap target
-        if (!is_alignment) {
+        if (!is_alignment && !is_distribution) {
             Glib::ustring tooltip_str;
             if ( (p.getSource() != SNAPSOURCE_GRID_PITCH) && (p.getTarget() != SNAPTARGET_UNDEFINED) ) {
                 tooltip_str = source_name + _(" to ") + target_name;
@@ -334,7 +344,6 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
                 tooltip_str = source_name;
             }
 
-            double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
 
             if (!tooltip_str.empty()) {
                 Geom::Point tooltip_pos = p.getPoint();
@@ -395,6 +404,10 @@ SnapIndicator::remove_snaptarget(bool only_if_presnap)
     }
     _alignment_snap_indicators.clear();
 
+    for (auto *item : _distribution_snap_indicators) {
+        _desktop->remove_temporary_canvasitem(item);
+    }
+    _distribution_snap_indicators.clear();
 }
 
 void
@@ -462,6 +475,200 @@ guint32 SnapIndicator::get_guide_color(SnapTargetType t)
         default:
             g_warning("Alignment guide color not handled %i", t);
             return 0x000000ff;
+    }
+}
+
+void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &bboxes,
+                                                Geom::Rect const &source_bbox,
+                                                Geom::Coord equal_dist,
+                                                SnapTargetType t,
+                                                double fontsize,
+                                                double scale)
+{
+    guint32 color = 0xff5f1fff;
+    guint32 text_fill = 0xffffffff;
+    guint32 text_bg = 0x33337f7f;
+    Geom::Point text_pos;
+
+    switch (t) {
+        case SNAPTARGET_DISTRIBUTION_Y:
+        case SNAPTARGET_DISTRIBUTION_X: {
+            Geom::Point p1, p2, p3, p4;
+            switch (t) {
+                case SNAPTARGET_DISTRIBUTION_X: {
+                    Geom::Coord y = source_bbox.midpoint().y(); 
+                    p1 = Geom::Point(bboxes.front().max().x(), y);
+                    p2 = Geom::Point(source_bbox.min().x(), y);
+                    p3 = Geom::Point(source_bbox.max().x(), y);
+                    p4 = Geom::Point(bboxes.back().min().x(), y);
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
+                    break;
+                    }
+
+                case SNAPTARGET_DISTRIBUTION_Y: {
+                    Geom::Coord x = source_bbox.midpoint().x(); 
+                    p1 = Geom::Point(x, bboxes.front().max().y());
+                    p2 = Geom::Point(x, source_bbox.min().y());
+                    p3 = Geom::Point(x, source_bbox.max().y());
+                    p4 = Geom::Point(x, bboxes.back().min().y());
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-3*fontsize, 0));
+                    break;
+                    }
+            }
+
+            auto point1 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p1);
+            point1->set_size(7);
+            point1->set_stroke(color);
+            point1->set_fill(color);
+            point1->set_pickable(false);
+
+            auto point2 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p2);
+            point2->set_size(7);
+            point2->set_stroke(color);
+            point2->set_fill(color);
+            point2->set_pickable(false);
+
+            auto point3 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p3);
+            point3->set_size(7);
+            point3->set_stroke(color);
+            point3->set_fill(color);
+            point3->set_pickable(false);
+
+            auto point4 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p4);
+            point4->set_size(7);
+            point4->set_stroke(color);
+            point4->set_fill(color);
+            point4->set_pickable(false);
+
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point3, 0));
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point4, 0));
+
+            auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
+            line->set_stroke(color);
+            line->set_width(2);
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+
+            auto line2 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p3, p4);
+            line2->set_stroke(color);
+            line2->set_width(2);
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
+
+            Glib::ustring distance = std::to_string(int(scale * equal_dist));
+            auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+            text->set_fontsize(fontsize);
+            text->set_fill(text_fill);
+            text->set_background(text_bg);
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+            break;
+        }
+
+        case SNAPTARGET_DISTRIBUTION_RIGHT:
+        case SNAPTARGET_DISTRIBUTION_LEFT:
+        case SNAPTARGET_DISTRIBUTION_UP:
+        case SNAPTARGET_DISTRIBUTION_DOWN: {
+            Geom::Coord y = source_bbox.midpoint().y(); 
+            Geom::Coord x = source_bbox.midpoint().x(); 
+            Geom::Point p1;                                              
+            Geom::Point p2;
+            switch (t) {
+                case SNAPTARGET_DISTRIBUTION_RIGHT: 
+                    p1 = Geom::Point(source_bbox.max().x(), y);
+                    p2 = Geom::Point(bboxes.front().min().x(), y);
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
+                    break;
+
+                case SNAPTARGET_DISTRIBUTION_LEFT:
+                    p1 = Geom::Point(source_bbox.min().x(), y);
+                    p2 = Geom::Point(bboxes.front().max().x(), y);
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
+                    break;
+
+                case SNAPTARGET_DISTRIBUTION_UP:
+                    p1 = Geom::Point(x, source_bbox.min().y());
+                    p2 = Geom::Point(x, bboxes.front().max().y());
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-3*fontsize, 0));
+                    break;
+
+                case SNAPTARGET_DISTRIBUTION_DOWN:
+                    p1 = Geom::Point(x, source_bbox.max().y());
+                    p2 = Geom::Point(x, bboxes.front().min().y());
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-3*fontsize, 0));
+                    break;
+            }
+
+            auto point1 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p1);
+            point1->set_size(7);
+            point1->set_stroke(color);
+            point1->set_fill(color);
+            point1->set_pickable(false);
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
+
+            auto point2 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p2);
+            point2->set_size(7);
+            point2->set_stroke(color);
+            point2->set_fill(color);
+            point2->set_pickable(false);
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
+
+            auto line1 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
+            line1->set_stroke(color);
+            line1->set_width(2);
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
+
+            Glib::ustring distance = std::to_string(int(equal_dist * scale));
+            auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+            text->set_fontsize(fontsize);
+            text->set_fill(text_fill);
+            text->set_background(text_bg);
+            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+
+            for (auto it = bboxes.begin(); it + 1 != bboxes.end(); it++) {
+                switch (t) {
+                    case SNAPTARGET_DISTRIBUTION_RIGHT: 
+                        p1 = Geom::Point(it->max().x(), y);
+                        p2 = Geom::Point(std::next(it)->min().x(), y);
+                        break;
+
+                    case SNAPTARGET_DISTRIBUTION_LEFT:
+                        p1 = Geom::Point(it->min().x(), y);
+                        p2 = Geom::Point(std::next(it)->max().x(), y);
+                        break;
+
+                    case SNAPTARGET_DISTRIBUTION_UP:
+                        p1 = Geom::Point(x, it->min().y());
+                        p2 = Geom::Point(x, std::next(it)->max().y());
+                        break;
+
+                    case SNAPTARGET_DISTRIBUTION_DOWN:
+                        p1 = Geom::Point(x, it->max().y());
+                        p2 = Geom::Point(x, std::next(it)->min().y());
+                        break;
+                }
+
+                point1 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p1);
+                point1->set_size(7);
+                point1->set_stroke(color);
+                point1->set_fill(color);
+                point1->set_pickable(false);
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
+
+                point2 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE, p2);
+                point2->set_size(7);
+                point2->set_stroke(color);
+                point2->set_fill(color);
+                point2->set_pickable(false);
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
+
+                line1 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
+                line1->set_stroke(color);
+                line1->set_width(2);
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
+            }
+            break;
+        }
+
     }
 }
 

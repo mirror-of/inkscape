@@ -38,6 +38,7 @@ public:
     void set_coords(Geom::Point const &p0, Geom::Point const &p1);
     void set_coords(Geom::Point const &p0, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3);
     void set(Geom::BezierCurve &curve);
+    void set_width(int w);
     bool is_line() { return _curve->size() == 2; }
 
     void update(Geom::Affine const &affine) override;
@@ -58,10 +59,10 @@ public:
     int  get_corner1() { return _corner1; }
  
 protected:
-    std::unique_ptr<Geom::BezierCurve> _curve;
-
+    std::unique_ptr<Geom::BezierCurve> _curve; 
     bool _is_fill = true; // Fill or stroke, used by meshes.
 
+    int width = 1;
     int _corner0 = -1; // For meshes
     int _corner1 = -1; // For meshes
 };
