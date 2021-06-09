@@ -107,35 +107,33 @@
         </item>
       </section>
     </submenu>
+    
     <!-- marker and guide -->
-      <item>
-        <attribute name='label' translatable="yes">Objects to _Marker</attribute>
-        <attribute name='action'>win.object-to-marker</attribute>
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Objects to Gu_ides</attribute>
-        <attribute name='action'>win.object-to-guides</attribute>
-      </item>
+    <item>
+      <attribute name='label' translatable="yes">Objects to _Marker</attribute>
+      <attribute name='action'>win.object-to-marker</attribute>
+    </item>
+    <item>
+      <attribute name='label' translatable="yes">Objects to Gu_ides</attribute>
+      <attribute name='action'>win.object-to-guides</attribute>
+    </item>
 
     <!-- rise up -->
     <item>
       <attribute name='label' translatable="yes">Raise to _Top</attribute>
       <attribute name='action'>app.selection-top</attribute>
       <attribute name='icon'>selection-top</attribute>
-    </item>   
-    
+    </item>
     <item>
       <attribute name='label' translatable="yes">_Raise</attribute>
       <attribute name='action'>app.selection-raise</attribute>
       <attribute name='icon'>selection-raise</attribute>
-    </item>   
-    
+    </item>
     <item>
       <attribute name='label' translatable="yes">_Lower</attribute>
       <attribute name='action'>app.selection-lower</attribute>
       <attribute name='icon'>selection-lower</attribute>
     </item>   
-
     <item>
       <attribute name='label' translatable="yes">Lower to _Bottom</attribute>
       <attribute name='action'>app.selection-bottom</attribute>
@@ -166,12 +164,10 @@
     </item>
 
     <!-- Hide and Lock -->
-    
     <item>
       <attribute name='label' translatable="yes">Unhide All</attribute>
       <attribute name='action'>win.unhide-all</attribute>
     </item>
-    
     <item>
       <attribute name='label' translatable="yes">Unlock All</attribute>
       <attribute name='action'>win.unlock-all</attribute>
@@ -183,24 +179,17 @@
       <attribute name='action'>win.dialog-open</attribute>
       <attribute name='target'>Transform</attribute>
     </item>
-    
     <item>
       <attribute name='label' translatable="yes">_Align and Distribute...</attribute>
       <attribute name='action'>win.dialog-open</attribute>
       <attribute name='target'>AlignDistribute</attribute>
     </item>
-    
     <item>
       <attribute name='label' translatable="yes">_Arrange...</attribute>
       <attribute name='action'>win.dialog-open</attribute>
       <attribute name='target'>Arrange</attribute>
     </item>
 
-    <item>
-      <attribute name='label' translatable="yes">------object action end---------</attribute>
-    </item>
-
-  
   </menu>
 
 </interface>

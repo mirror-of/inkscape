@@ -196,7 +196,7 @@
        <verb verb-id="LayerDelete" />
    </submenu>
    <submenu name="_Object">
-       <verb verb-id="DialogObjects" />
+   <!--     <verb verb-id="DialogObjects" />
        <separator/>
        <verb verb-id="DialogFillStroke" />
        <verb verb-id="DialogObjectProperties" />
