@@ -620,15 +620,15 @@ bool CommandPalette::ask_action_parameter(const ActionPtrName &action_ptr_name)
         }
 
         const auto app = InkscapeApplication::instance();
-         InkActionHintData &action_hint_data = app->get_action_hint_data();
+        InkActionHintData &action_hint_data = app->get_action_hint_data();
         auto action_hint = action_hint_data.get_tooltip_hint_for_action(action_ptr_name.second, false);
 
 
         // Indicate user about what to enter FIXME Dialog generation
-        if(action_hint.length()){
+        if (action_hint.length()) {
             _CPFilter->set_placeholder_text(action_hint);
             _CPFilter->set_tooltip_text(action_hint);
-        }else{
+        } else {
             _CPFilter->set_placeholder_text("Enter a " + type_string + "...");
             _CPFilter->set_tooltip_text("Enter a " + type_string + "...");
         }

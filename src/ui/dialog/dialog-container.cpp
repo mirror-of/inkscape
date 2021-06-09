@@ -308,6 +308,7 @@ void DialogContainer::new_dialog(const Glib::ustring& dialog_type )
     }
 }
 
+
 DialogBase* DialogContainer::find_existing_dialog(const Glib::ustring& dialog_type) {
     DialogBase *existing_dialog = get_dialog(dialog_type);
     if (!existing_dialog) {

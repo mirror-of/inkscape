@@ -4,14 +4,13 @@
   <requires lib="gtk+" version="3.22"/>
 
   <menu id="object-menu">
-
+  <section>
     <item>
       <attribute name='label' translatable="yes">Object...</attribute>
       <attribute name='action'>win.dialog-open</attribute>
       <attribute name='target'>Objects</attribute>
     </item>
 
-    <!-- <separator/> -->
     <item>
       <attribute name='label' translatable="yes">_Fill and Stroke...</attribute>
       <attribute name='action'>win.dialog-open</attribute>
@@ -39,11 +38,12 @@
     <item>
       <attribute name='label' translatable="yes">_Selectors and CSS...</attribute>
       <attribute name='action'>win.dialog-open</attribute>
-      <attribute name='target'>Objects</attribute>
+      <attribute name='target'>Selectors</attribute>
     </item>
-    <!-- <separator/> -->
+  </section>
 
-  <!-- selection group -->
+  <!-- Selection Group -->
+  <section>
     <item>
       <attribute name='label' translatable="yes">_Group</attribute>
       <attribute name='action'>app.select-object-group</attribute>
@@ -56,7 +56,9 @@
       <attribute name='label' translatable="yes">_Pop Selected Objects out of Group</attribute>
       <attribute name='action'>app.select-object-ungroup-pop</attribute>
     </item>
-
+  </section>
+  
+  <section>
     <submenu id="object-clip">
       <attribute name='label' translatable='yes'>Cli_p</attribute>
       <section>
@@ -74,6 +76,7 @@
         </item>
       </section>
     </submenu>
+  </section>
 
     <submenu id="object-mask">
       <attribute name='label' translatable='yes'>Mas_k</attribute>
@@ -92,7 +95,7 @@
         </item>
       </section>
     </submenu>
-    
+
     <!-- Pattern -->
     <submenu id="object-mask">
       <attribute name='label' translatable='yes'>Patter_n</attribute>
@@ -107,8 +110,9 @@
         </item>
       </section>
     </submenu>
-    
-    <!-- marker and guide -->
+  
+    <!-- Marker and Guide -->
+  <section>
     <item>
       <attribute name='label' translatable="yes">Objects to _Marker</attribute>
       <attribute name='action'>win.object-to-marker</attribute>
@@ -117,8 +121,9 @@
       <attribute name='label' translatable="yes">Objects to Gu_ides</attribute>
       <attribute name='action'>win.object-to-guides</attribute>
     </item>
-
-    <!-- rise up -->
+  </section>
+    <!-- Rise Up -->
+  <section>
     <item>
       <attribute name='label' translatable="yes">Raise to _Top</attribute>
       <attribute name='action'>app.selection-top</attribute>
@@ -139,9 +144,10 @@
       <attribute name='action'>app.selection-bottom</attribute>
       <attribute name='icon'>selection-bottom</attribute>
     </item>   
-  
+  </section>
 
-    <!-- rotation -->
+    <!-- Rotation -->
+  <section>  
     <item>
       <attribute name='label' translatable="yes">Rotate 90° CW</attribute>
       <attribute name='action'>app.object-rotate-90-cw</attribute>
@@ -162,8 +168,10 @@
       <attribute name='action'>app.object-flip-vertical</attribute>
       <attribute name='icon'>object-flip-vertical</attribute>
     </item>
+  </section>
 
     <!-- Hide and Lock -->
+  <section>
     <item>
       <attribute name='label' translatable="yes">Unhide All</attribute>
       <attribute name='action'>win.unhide-all</attribute>
@@ -172,8 +180,10 @@
       <attribute name='label' translatable="yes">Unlock All</attribute>
       <attribute name='action'>win.unlock-all</attribute>
     </item>
-
-    <!-- end dialog section -->
+  </section>
+  
+    <!-- End Dialog Section -->
+  <section>
     <item>
       <attribute name='label' translatable="yes">Transfor_m...</attribute>
       <attribute name='action'>win.dialog-open</attribute>
@@ -189,7 +199,8 @@
       <attribute name='action'>win.dialog-open</attribute>
       <attribute name='target'>Arrange</attribute>
     </item>
-
+  </section>
+  
   </menu>
 
 </interface>
