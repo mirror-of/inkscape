@@ -310,22 +310,33 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
     // horizontally in between
     auto x = Geom::Point((pointR + pointL)/2).x();
-    equal_dist = x - pointL.x();
     dist = abs(x - bbox_to_snap->midpoint().x());
     if (consider_x && dist < getSnapperTolerance()) {
        std::vector<Geom::Rect> bboxes = {*_bboxes_left->begin(), *_bboxes_right->begin()};
-       auto s = SnappedPoint(Geom::Point(x, bbox_to_snap->midpoint().y()), bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_X, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+       Geom::Point target = Geom::Point(x, bbox_to_snap->midpoint().y());
+
+       // translate the source bbox to the snap position
+       Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+       Geom::Rect bbox = *bbox_to_snap * translation;
+       equal_dist = bbox.min().x() - pointL.x();
+       auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_X, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
        //std::cout<<"X snap to"<<Geom::Point(x, bbox_to_snap->midpoint().y())<<std::endl;
        isr.points.push_back(s);
     }
 
     // vertically in between
     auto y = Geom::Point((pointU + pointD)/2).y();
-    equal_dist = y - pointU.y();
+    equal_dist = bbox_to_snap->min().y() - pointU.y();
     dist = abs(y - bbox_to_snap->midpoint().y());
     if (consider_y && dist < getSnapperTolerance()) {
        std::vector<Geom::Rect> bboxes = {*_bboxes_up->begin(), *_bboxes_down->begin()};
-       auto s = SnappedPoint(Geom::Point(bbox_to_snap->midpoint().x(), y), bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_Y, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+       Geom::Point target = Geom::Point(bbox_to_snap->midpoint().x(), y);
+
+       // translate the source bbox to the snap position
+       Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+       Geom::Rect bbox = *bbox_to_snap * translation;
+       equal_dist = bbox.min().y() - pointU.y();
+       auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_Y, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
        //std::cout<<"Y snap to"<<<<std::endl;
        isr.points.push_back(s);
     }
@@ -339,7 +350,11 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
          if (abs(offset) < getSnapperTolerance()) {
              std::vector<Geom::Rect> bboxes(_bboxes_right->begin(), _bboxes_right->begin() + num + 1);
-             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+
+             // translate the source bbox to the snap position
+             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+             Geom::Rect bbox = *bbox_to_snap * translation;
+             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log
@@ -362,7 +377,11 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
          if (abs(offset) < getSnapperTolerance()) {
              std::vector<Geom::Rect> bboxes(_bboxes_left->begin(), _bboxes_left->begin() + num + 1);
-             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+            
+             // translate the source bbox to the snap position
+             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+             Geom::Rect bbox = *bbox_to_snap * translation;
+             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log
@@ -384,7 +403,11 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
          if (abs(offset) < getSnapperTolerance()) {
              std::vector<Geom::Rect> bboxes(_bboxes_up->begin(), _bboxes_up->begin() + num + 1);
-             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+
+             // translate the source bbox to the snap position
+             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+             Geom::Rect bbox = *bbox_to_snap * translation;
+             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log
@@ -406,7 +429,11 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
          if (abs(offset) < getSnapperTolerance()) {
              std::vector<Geom::Rect> bboxes(_bboxes_down->begin(), _bboxes_down->begin() + num + 1);
-             auto s = SnappedPoint(target, bboxes, *bbox_to_snap, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+ 
+             // translate the source bbox to the snap position
+             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+             Geom::Rect bbox = *bbox_to_snap * translation;
+             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
              isr.points.push_back(s);
 
              // Debug log
@@ -467,7 +494,7 @@ bool Inkscape::DistributionSnapper::ThisSnapperMightSnap() const
 
 bool Inkscape::DistributionSnapper::getSnapperAlwaysSnap() const
 {
-    return _snapmanager->snapprefs.getAlignmentTolerance() == 10000; //TODO: Replace this threshold of 10000 by a constant; see also tolerance-slider.cpp
+    return _snapmanager->snapprefs.getDistributionTolerance() == 10000; //TODO: Replace this threshold of 10000 by a constant; see also tolerance-slider.cpp
 }
 
 Geom::Coord Inkscape::DistributionSnapper::getSnapperTolerance() const

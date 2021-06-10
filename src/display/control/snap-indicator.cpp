@@ -482,7 +482,7 @@ Geom::Coord get_y(Geom::Rect const &source, Geom::Rect const &target)
 {
     Geom::Coord y;
 
-    if (source.midpoint().y() == target.midpoint().y())
+    if (abs(source.midpoint().y() - target.midpoint().y()) < 1e-5)
         y = target.midpoint().y();
     else if (source.midpoint().y() > target.midpoint().y())
         y = target.max().y();
@@ -496,7 +496,7 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
 {
     Geom::Coord x;
 
-    if (source.midpoint().x() == target.midpoint().x())
+    if (abs(source.midpoint().x() - target.midpoint().x()) < 1e-5)
         x = target.midpoint().x();
     else if (source.midpoint().x() > target.midpoint().x())
         x = target.max().x();
@@ -624,7 +624,7 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
 
                     p1 = Geom::Point(x, source_bbox.min().y());
                     p2 = Geom::Point(x, bboxes.front().max().y());
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-3*fontsize, 0));
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
                     break;
 
                 case SNAPTARGET_DISTRIBUTION_DOWN:
@@ -632,7 +632,7 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
 
                     p1 = Geom::Point(x, source_bbox.max().y());
                     p2 = Geom::Point(x, bboxes.front().min().y());
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-3*fontsize, 0));
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
                     break;
             }
 
@@ -655,7 +655,7 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             line1->set_width(2);
             _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
 
-            Glib::ustring distance = std::to_string(round(equal_dist * scale));
+            Glib::ustring distance = std::to_string(int(equal_dist * scale));
             auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
             text->set_fontsize(fontsize);
             text->set_fill(text_fill);
