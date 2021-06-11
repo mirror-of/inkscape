@@ -68,7 +68,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         return;
     }
 
-    bool is_alignment = p.getTarget() & SNAPTARGET_ALIGNMENT_CATEGORY;
+    bool is_alignment = p.getAlignmentTarget().has_value();
     bool is_distribution = p.getTarget() & SNAPTARGET_DISTRIBUTION_CATEGORY;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -275,13 +275,13 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         }
 
         if (is_alignment) {
-            auto color = pre_snap ? 0x7f7f7fff : get_guide_color(p.getTarget());
-            auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), p.getAlignmentTarget());
+            auto color = pre_snap ? 0x7f7f7fff : get_guide_color(p.getAlignmentTargetType());
+            auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), *p.getAlignmentTarget());
             line->set_stroke(color);
             _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
 
-            if (p.getTarget() == SNAPTARGET_ALIGNMENT_INTERSECTION) {
-                auto line2 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), p.getAlignmentTarget2());
+            if (p.getAlignmentTargetType() == SNAPTARGET_ALIGNMENT_INTERSECTION) {
+                auto line2 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), *p.getAlignmentTarget2());
                 line2->set_stroke(color);
                 _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
 
@@ -289,7 +289,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
                 ctrl->set_size(7);
                 ctrl->set_stroke(color);
                 ctrl->set_fill(color);
-                ctrl->set_position(p.getAlignmentTarget2());
+                ctrl->set_position(*p.getAlignmentTarget2());
                 _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl, 0));
                 ctrl->set_pickable(false);
             }
@@ -318,7 +318,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             ctrl3->set_size(7);
             ctrl3->set_stroke(color);
             ctrl3->set_fill(color);
-            ctrl3->set_position(p.getAlignmentTarget());
+            ctrl3->set_position(*p.getAlignmentTarget());
             ctrl3->set_pickable(false);
             _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl3, 0));
 

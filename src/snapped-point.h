@@ -68,23 +68,29 @@ public:
      */
     Geom::Point getPoint() const {return _point;}
     void setPoint(Geom::Point const &p) {_point = p;}
+    void setAlignmentTarget(std::optional<Geom::Point> const &p) {
+        if (p.has_value())
+            _alignment_target = p;
+    }
+    void setAlignmentTarget2(std::optional<Geom::Point> const &p) {
+        if (p.has_value())
+            _alignment_target2 = p;
+    }
     Geom::Point getTangent() const {return _tangent;}
-    Geom::Point getAlignmentTarget() const
+    std::optional<Geom::Point> getAlignmentTarget() const
     {
         if (_alignment_target.has_value())
             return _alignment_target.value();
         else
-            g_warning("alignment target does not exit");
-        return Geom::Point();
+            return {};
     }
 
-    Geom::Point getAlignmentTarget2() const
+    std::optional<Geom::Point> getAlignmentTarget2() const
     {
         if (_alignment_target2.has_value())
             return _alignment_target2.value();
         else
-            g_warning("alignment target does not exit");
-        return Geom::Point();
+            return  {};
     }
 
     Geom::Coord getDistanceToAignTarget() const
@@ -97,7 +103,12 @@ public:
     bool getConstrainedSnap() const {return _constrained_snap;}
     bool getSnapped() const {return _distance < Geom::infinity();}
     void setTarget(SnapTargetType const target) {_target = target;}
+    void setAlignmentTargetType(SnapTargetType const target) {_alignment_target_type = target;}
     SnapTargetType getTarget() const {return _target;}
+    SnapTargetType getAlignmentTargetType() const
+    {
+        return _alignment_target_type.has_value() ? _alignment_target_type.value() : SNAPTARGET_UNDEFINED;
+    }
     void setTargetBBox(Geom::OptRect const target) {_target_bbox = target;}
     Geom::OptRect const getTargetBBox() const {return _target_bbox;}
     Geom::OptRect const getSourceBBox() const {return _source_bbox;}
@@ -134,6 +145,7 @@ protected:
     SnapSourceType _source; // Describes what snapped
     long _source_num; // Sequence number of the source point that snapped, if that point is part of a set of points. (starting at zero if we might have a set of points; -1 if we only have a single point)
     SnapTargetType _target; // Describes to what we've snapped to
+    std::optional<SnapTargetType> _alignment_target_type; // TODO: this is only used in case of both alignment and distribution snap
     bool _at_intersection; // If true, the snapped point is at an intersection
     bool _constrained_snap; // If true, then the snapped point was found when looking for a constrained snap
     bool _fully_constrained; // When snapping for example to a node, then the snap will be "fully constrained".

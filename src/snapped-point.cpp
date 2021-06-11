@@ -42,6 +42,7 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, Geom::Point const &ap
     _point(p),
     _alignment_target(ap),
     //_alignment_target2(Geom::Point(0,0)),
+    _alignment_target_type(target),
     _equal_distance(Geom::infinity()),
     _tangent(Geom::Point(0,0)),
     _source(source),
@@ -65,6 +66,7 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, Geom::Point const &ap
     _point(p),
     _alignment_target(ap),
     _alignment_target2(ap2),
+    _alignment_target_type(target),
     _equal_distance(Geom::infinity()),
     _tangent(Geom::Point(0,0)),
     _source(source),
@@ -277,6 +279,9 @@ bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::Snapp
                     g_warning("getClosestSP(): unknown distribution snap target %i", result.getTarget());
                    break;
             }
+            result.setAlignmentTargetType(aligned.getAlignmentTargetType());
+            result.setAlignmentTarget(aligned.getAlignmentTarget());
+            result.setAlignmentTarget2(aligned.getAlignmentTarget2());
             return true;
         }
     }
