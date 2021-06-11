@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<interface>
+  <requires lib="gtk+" version="3.22"/>
+
+  <menu id="edit-menu">
+
+    <section>
+        <item>
+        <attribute name='label' translatable="yes">_Undo</attribute>
+        <attribute name='action'>win.undo</attribute>
+        <attribute name='icon'>edit-undo</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">_Redo</attribute>
+        <attribute name='action'>win.redo</attribute>
+        <attribute name='icon'>edit-redo</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Undo _History...</attribute>
+        <attribute name='action'>win.dialog-open</attribute>
+        <attribute name='target'>UndoHistory</attribute>
+        <attribute name='icon'>edit-undo-history</attribute>
+        </item>
+    </section>
+
+        <item>
+        <attribute name='label' translatable="yes">Cu_t</attribute>
+        <attribute name='action'>win.cut</attribute>
+        <attribute name='icon'>edit-cut</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">_Copy</attribute>
+        <attribute name='action'>win.copy</attribute>
+        <attribute name='icon'>edit-copy</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">_Paste</attribute>
+        <attribute name='action'>win.paste</attribute>
+        <attribute name='icon'>edit-paste</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Paste _In Place</attribute>
+        <attribute name='action'>win.paste-in-place</attribute>
+        <attribute name='icon'>edit-paste-in-place</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Paste _Style</attribute>
+        <attribute name='action'>win.paste-style</attribute>
+        <attribute name='icon'>edit-paste-style</attribute>
+        </item>
+
+        <submenu id="paste-size">
+        <attribute name='label' translatable='yes'>Paste Si_ze</attribute>
+        <section>
+        <item>
+        <attribute name='label' translatable="yes">Paste Si_ze</attribute>
+        <attribute name='action'>win.paste-size</attribute>
+        <attribute name='icon'>edit-paste-size</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Paste _Width</attribute>
+        <attribute name='action'>win.paste-width</attribute>
+        <attribute name='icon'>edit-paste-width</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Paste _Height</attribute>
+        <attribute name='action'>win.paste-height</attribute>
+        <attribute name='icon'>edit-paste-height</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Paste Size Separately</attribute>
+        <attribute name='action'>win.paste-size-separately</attribute>
+        <attribute name='icon'>edit-paste-size-separately</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Paste Width Separately</attribute>
+        <attribute name='action'>win.paste-width-separately</attribute>
+        <attribute name='icon'>edit-paste-width-separately</attribute>
+        </item>
+        <item>
+        <attribute name='label' translatable="yes">Paste Height Separately</attribute>
+        <attribute name='action'>win.paste-height-separately</attribute>
+        <attribute name='icon'>edit-paste-height-separately</attribute>
+        </item>
+        </section>
+        </submenu>
+
+
+        <item>
+        <attribute name='label' translatable="yes">_Find/Replace...</attribute>
+        <attribute name='action'>win.dialog-open</attribute>
+        <attribute name='target'>Find</attribute>
+        <attribute name='icon'>edit-find</attribute>
+        </item>
+
+        <item>
+        <attribute name='label' translatable="yes">Duplic_ate</attribute>
+        <attribute name='action'>win.duplicate</attribute>
+        <attribute name='icon'>edit-duplicate</attribute>
+        </item>
+
+    <item>
+      <attribute name='label' translatable="yes">------- action end -------</attribute>
+    </item>
+
+  </menu>
+
+</interface>
