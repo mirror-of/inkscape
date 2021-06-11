@@ -1782,7 +1782,7 @@ void InkscapePreferences::initPageUI()
                              _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.xml' file determines whether to display icons in menus."), false);
     }
 
-    this->AddPage(_page_theme, _("Themeing"), iter_ui, PREFS_PAGE_UI_THEME);
+    this->AddPage(_page_theme, _("Theming"), iter_ui, PREFS_PAGE_UI_THEME);
     symbolicThemeCheck();
     // Windows
     _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, nullptr);
