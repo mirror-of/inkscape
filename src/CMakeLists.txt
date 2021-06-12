@@ -234,6 +234,13 @@ set(inkscape_SRC
   actions/actions-output.cpp
   actions/actions-selection-object.h
   actions/actions-selection-object.cpp
+  
+  actions/actions-selection-desktop.h
+  actions/actions-selection-desktop.cpp
+
+  actions/actions-fit-canvas.h
+  actions/actions-fit-canvas.cpp
+
   actions/actions-selection.h
   actions/actions-selection.cpp
   actions/actions-tools.h

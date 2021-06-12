@@ -38,7 +38,7 @@
     <item>
       <attribute name='label' translatable="yes">_Selectors and CSS...</attribute>
       <attribute name='action'>win.dialog-open</attribute>
-      <attribute name='target'>Selectors</attribute>
+      <attribute name='target'>Preferences</attribute>
     </item>
   </section>
 
