@@ -76,10 +76,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_dialogs =
 void
 dialog_open(const Glib::VariantBase& value, InkscapeWindow *win)
 {
-    for(auto x:dialog_data){
-        std::cout<<'|'<<x.first<<"|\n";
-    }
-
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     auto dialog = s.get();
 

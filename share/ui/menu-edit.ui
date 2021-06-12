@@ -9,7 +9,6 @@
         <item>
         <attribute name='label' translatable="yes">_Undo</attribute>
         <attribute name='action'>win.undo</attribute>
-        <attribute name="sensitive">False</attribute>
         <attribute name='icon'>edit-undo</attribute>
         </item>
         <item>
@@ -232,10 +231,12 @@
         <attribute name='label' translatable="yes">Create _Guides Around the Page</attribute>
         <attribute name='action'>win.create-guides-around-page</attribute>
         </item>
+  
         <item>
-        <attribute name='label' translatable="yes">Lock All Guides</attribute>
+        <attribute name='label' translatable="yes"  >Lock All Guides</attribute>
         <attribute name='action'>win.lock-all-guides</attribute>
         </item>
+
         <item>
         <attribute name='label' translatable="yes">Delete All Guides</attribute>
         <attribute name='action'>win.delete-all-guides</attribute>
