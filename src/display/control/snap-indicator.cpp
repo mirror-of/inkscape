@@ -322,7 +322,12 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             ctrl3->set_pickable(false);
             _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl3, 0));
 
-        } else {
+        } 
+
+        _snaptarget_is_presnap = pre_snap;
+
+        if (!is_alignment && !is_distribution) {
+            // Display snap indicator at snap target
             ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
             ctrl->set_size(11);
             ctrl->set_stroke( pre_snap ? 0x7f7f7fff : 0xff0000ff);
@@ -330,13 +335,8 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
 
             _snaptarget = _desktop->add_temporary_canvasitem(ctrl, timeout_val*1000.0);
             ctrl->set_pickable(false);
-        }
 
-
-        _snaptarget_is_presnap = pre_snap;
-
-        // Display the tooltip, which reveals the type of snap source and the type of snap target
-        if (!is_alignment && !is_distribution) {
+            // Display the tooltip, which reveals the type of snap source and the type of snap target
             Glib::ustring tooltip_str;
             if ( (p.getSource() != SNAPSOURCE_GRID_PITCH) && (p.getTarget() != SNAPTARGET_UNDEFINED) ) {
                 tooltip_str = source_name + _(" to ") + target_name;
@@ -712,6 +712,12 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
         }
 
     }
+    auto box = new Inkscape::CanvasItemRect(_desktop->getCanvasTemp(), source_bbox);
+    box->set_stroke(color);
+    box->set_dashed(true);
+    box->set_pickable(false); // Is false by default.
+    box->set_z_position(0);
+    _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(box, 0));
 }
 
 } //namespace Display

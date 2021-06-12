@@ -76,12 +76,31 @@ private:
      */
     void _collectBBoxes(Geom::OptRect const &bbox_to_snap, bool const &first_point) const;
 
+    /** Finds and snaps to points that is equidistant from surrounding bboxes
+     * @param interm snap results
+     * @param source point to snap 
+     * @param bounding box of the selecton to snap
+     * @param unselected nodes in case editing nodes (never used here, remove?)
+     * @param active snap constraint
+     * @param projection of the source point on the constraint (never used, remove?)
+     */
     void _snapEquidistantPoints(IntermSnapResults &isr,
                          SnapCandidatePoint const &p,
                          Geom::OptRect const &bbox_to_snap,
                          std::vector<SnapCandidatePoint> *unselected_nodes,
                          SnapConstraint const &c =  SnapConstraint(),
                          Geom::Point const &p_proj_on_constraint = Geom::Point()) const;
+
+    /** When the selection has more than one objects in it, the bounding box of
+     * the object that the selection is grabbed from (closest to the pointer) is
+     * snapped to the center of the overall bounding box of the selection. This
+     * function corrects the target point to be a point where the bounding box of
+     * that particular object must be snapped to.
+     * @param snap target point that need to be snapped to
+     * @param source point to snap (this bbox midpoint of the object closest to the mouse pointer)
+     * @param bounding box of the active selection to snap
+     */
+    void _correctSelectionBBox(Geom::Point &target, Geom::Point const &p, Geom::Rect const &bbox_to_snap) const;
 }; // end of AlignmentSnapper class
 
 } // end of namespace Inkscape
