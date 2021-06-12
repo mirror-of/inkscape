@@ -62,49 +62,14 @@ unsigned int sp_svg_number_read_d(gchar const *str, double *val)
     return 1;
 }
 
-// TODO must add a buffer length parameter for safety:
-// rewrite using std::string?
-static unsigned int sp_svg_number_write_ui(gchar *buf, unsigned int val)
+static std::string sp_svg_number_write_d( double val, unsigned int tprec, unsigned int fprec)
 {
-    unsigned int i = 0;
-    char c[16u];
-    do {
-        c[16u - (++i)] = '0' + (val % 10u);
-        val /= 10u;
-    } while (val > 0u);
 
-    memcpy(buf, &c[16u - i], i);
-    buf[i] = 0;
-
-    return i;
-}
-
-// TODO unsafe code ignoring bufLen
-// rewrite using std::string?
-static unsigned int sp_svg_number_write_i(gchar *buf, int bufLen, int val)
-{
-    int p = 0;
-    unsigned int uval;
-    if (val < 0) {
-        buf[p++] = '-';
-        uval = (unsigned int)-val;
-    } else {
-        uval = (unsigned int)val;
-    }
-
-    p += sp_svg_number_write_ui(buf+p, uval);
-
-    return p;
-}
-
-// TODO unsafe code ignoring bufLen
-// rewrite using std::string?
-static unsigned sp_svg_number_write_d(gchar *buf, int bufLen, double val, unsigned int tprec, unsigned int fprec)
-{
+    std::string buf;
     /* Process sign */
     int i = 0;
     if (val < 0.0) {
-        buf[i++] = '-';
+        buf.append("-");
         val = fabs(val);
     }
 
@@ -123,38 +88,40 @@ static unsigned sp_svg_number_write_d(gchar *buf, int bufLen, double val, unsign
     double fval = val - dival;
     /* Write integra */
     if (idigits > (int)tprec) {
-        i += sp_svg_number_write_ui(buf + i, (unsigned int)floor(dival/pow(10.0, idigits-tprec) + .5));
+        buf.append(std::to_string((unsigned int)floor(dival/pow(10.0, idigits-tprec) + .5)));
         for(unsigned int j=0; j<(unsigned int)idigits-tprec; j++) {
-            buf[i+j] = '0';
+            buf.append("0");
         }
         i += idigits-tprec;
     } else {
-        i += sp_svg_number_write_ui(buf + i, (unsigned int)dival);
+       buf.append(std::to_string((unsigned int)dival));
     }
-    int end_i = i;
+
     if (fprec > 0 && fval > 0.0) {
-        buf[i++] = '.';
+        std::string s(".");
         do {
             fval *= 10.0;
             dival = floor(fval);
             fval -= dival;
             int const int_dival = (int) dival;
-            buf[i++] = '0' + int_dival;
-            if (int_dival != 0) {
-                end_i = i;
+            s.append(std::to_string(int_dival));
+            if(int_dival != 0){
+                buf.append(s);
+                s="";
             }
             fprec -= 1;
         } while(fprec > 0 && fval > 0.0);
     }
-    buf[end_i] = 0;
-    return end_i;
+    return buf;
 }
 
-unsigned int sp_svg_number_write_de(gchar *buf, int bufLen, double val, unsigned int tprec, int min_exp)
+std::string sp_svg_number_write_de(double val, unsigned int tprec, int min_exp)
 {
+    std::string buf;
     int eval = (int)floor(log10(fabs(val)));
     if (val == 0.0 || eval < min_exp) {
-        return sp_svg_number_write_ui(buf, 0);
+        buf.append("0");
+        return buf;
     }
     unsigned int maxnumdigitsWithoutExp = // This doesn't include the sign because it is included in either representation
         eval<0?tprec+(unsigned int)-eval+1:
@@ -162,14 +129,15 @@ unsigned int sp_svg_number_write_de(gchar *buf, int bufLen, double val, unsigned
         (unsigned int)eval+1;
     unsigned int maxnumdigitsWithExp = tprec + ( eval<0 ? 4 : 3 ); // It's not necessary to take larger exponents into account, because then maxnumdigitsWithoutExp is DEFINITELY larger
     if (maxnumdigitsWithoutExp <= maxnumdigitsWithExp) {
-        return sp_svg_number_write_d(buf, bufLen, val, tprec, 0);
+        buf.append(sp_svg_number_write_d(val, tprec, 0));
     } else {
         val = eval < 0 ? val * pow(10.0, -eval) : val / pow(10.0, eval);
-        int p = sp_svg_number_write_d(buf, bufLen, val, tprec, 0);
-        buf[p++] = 'e';
-        p += sp_svg_number_write_i(buf + p, bufLen - p, eval);
-        return p;
+        buf.append(sp_svg_number_write_d(val, tprec, 0));
+        buf.append("e");
+        buf.append(std::to_string(eval));
     }
+    return buf;
+
 }
 
 SVGLength::SVGLength()
