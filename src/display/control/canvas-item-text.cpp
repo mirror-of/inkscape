@@ -190,7 +190,6 @@ void CanvasItemText::render(Inkscape::CanvasItemBuffer *buf)
 
     // Text
     buf->cr->move_to(p.x(), p.y());
-    buf->cr->select_font_face("sans-serif", Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL);    
     buf->cr->set_font_size(_fontsize);
     buf->cr->text_path(_text);
     buf->cr->set_source_rgba(SP_RGBA32_R_F(_fill), SP_RGBA32_G_F(_fill),
