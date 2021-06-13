@@ -376,7 +376,7 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                         &DistributionSnapper::distUp)) {
 
          Geom::Coord offset = first_dist - equal_dist;
-         Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(offset, 0);
+         Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(0, offset);
 
          // translate the source bbox to the snap position
          Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
