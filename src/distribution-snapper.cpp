@@ -65,112 +65,61 @@ static int sortBoxesDown(Geom::Rect const &a, Geom::Rect const &b)
    return 0;
 }
 
-static int findRightSnaps(std::vector<Geom::Rect>::iterator it, std::vector<Geom::Rect>::iterator end, Geom::Coord &dist, int level = 0)
+Geom::Coord Inkscape::DistributionSnapper::distRight(Geom::Rect const &a, Geom::Rect const &b)
 {
-   if (level > 5)   
-      return 5;
-
-   //if (it == end)
-      //return level;
-
-   if (std::next(it) == end)
-      return level;
-
-   if (it->intersects(*std::next(it)))
-      return level;
-
-   if (level == 0) {
-      dist = - it->max().x() + std::next(it)->min().x();
-      return findRightSnaps(++it, end, dist, ++level);
-   }
-
-   // 1e-5 for accuracy if we use equality (==), it never satisfies.
-   if (-dist - it->max().x() + std::next(it)->min().x() < 1e-5) {
-      return findRightSnaps(++it, end, dist, ++level);
-   } else { 
-      return level;
-   }
+   return -a.max().x() + b.min().x();
 }
 
-static int findLeftSnaps(std::vector<Geom::Rect>::iterator it, std::vector<Geom::Rect>::iterator end, Geom::Coord &dist, int level = 0)
+Geom::Coord Inkscape::DistributionSnapper::distLeft(Geom::Rect const &a, Geom::Rect const &b)
 {
-   if (level > 5)   
-      return 5;
-
-   //if (it == end)
-      //return level;
-
-   if (std::next(it) == end)
-      return level;
-
-   if ((it)->intersects(*std::next(it)))
-      return level;
-
-   if (level == 0) {
-      dist = it->min().x() - std::next(it)->max().x();
-      return findLeftSnaps(++it, end, dist, ++level);
-   }
-
-   // 1e-5 for accuracy if we use equality (==), it never satisfies.
-   if (-dist + it->min().x() - std::next(it)->max().x() < 1e-5) {
-      return findLeftSnaps(++it, end, dist, ++level);
-   } else { 
-      return level;
-   }
+   return a.min().x() - b.max().x();
 }
 
-static int findUpSnaps(std::vector<Geom::Rect>::iterator it, std::vector<Geom::Rect>::iterator end, Geom::Coord &dist, int level = 0)
+Geom::Coord Inkscape::DistributionSnapper::distUp(Geom::Rect const &a, Geom::Rect const &b)
 {
-   if (level > 5)   
-      return 5;
-
-   //if (it == end)
-      //return level;
-
-   if (std::next(it) == end)
-      return level;
-
-   if ((std::next(it))->intersects(*it))
-      return level;
-
-   if (level == 0) {
-      dist = it->min().y() - std::next(it)->max().y();
-      return findUpSnaps(++it, end, dist, ++level);
-   }
-
-   // 1e-5 for accuracy if we use equality (==), it never satisfies.
-   if (dist - it->min().y() + std::next(it)->max().y() < 1e-5) {
-      return findUpSnaps(++it, end, dist, ++level);
-   } else { 
-      return level;
-   }
+   return a.min().y() - b.max().y();
 }
 
-static int findDownSnaps(std::vector<Geom::Rect>::iterator it, std::vector<Geom::Rect>::iterator end, Geom::Coord &dist, int level = 0)
+Geom::Coord Inkscape::DistributionSnapper::distDown(Geom::Rect const &a, Geom::Rect const &b)
 {
-   if (level > 5)   
-      return 5;
+   return -a.max().y() + b.min().y();
+}
 
-   //if (it == end)
-      //return level;
+bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
+                          std::vector<Geom::Rect>::iterator it,
+                          std::vector<Geom::Rect>::iterator end,
+                          std::vector<Geom::Rect> &vec,
+                          Geom::Coord &dist,
+                          Geom::Coord tol,
+                          Geom::Coord(*distance_func)(Geom::Rect const&, Geom::Rect const&),
+                          int level) const
+{
+   Geom::Rect curr_bbox = *it;
 
-   if (std::next(it) == end)
-      return level;
+   if (it == end)
+      return level != 0;
 
-   if ((std::next(it))->intersects(*it))
-      return level;
+   // TODO: check if rect1.instersects(rect2) gives the same result at rect2.intersects(rect1)
+   while (it->intersects(*std::next(it)) || std::next(it)->intersects(*it)) {
+      curr_bbox.unionWith(Geom::OptRect(*++it));
+   }
 
    if (level == 0) {
-      dist = - it->max().y() + std::next(it)->min().y();
-      return findDownSnaps(++it, end, dist, ++level);
+      vec.clear();
+      dist = distance_func(*it, *std::next(it));
+      if (abs(first_dist - dist) > tol) {
+         return false;
+      }
+      vec.push_back(curr_bbox);
+      return findSidewaysSnaps(first_dist, ++it, end, vec, dist, tol, distance_func, ++level);
    }
 
-   // 1e-5 for accuracy if we use equality (==), it never satisfies.
-   if (dist + it->max().y() - std::next(it)->min().y() < 1e-5) {
-      return findDownSnaps(++it, end, dist, ++level);
-   } else { 
-      return level;
+   vec.push_back(curr_bbox);
+   if (abs(distance_func(*it, *std::next(it)) - dist) < 1e-5) {
+      return findSidewaysSnaps(first_dist, ++it, end, vec, dist, tol, distance_func, ++level);
    }
+
+   return true;
 }
 
 Inkscape::DistributionSnapper::DistributionSnapper(SnapManager *sm, Geom::Coord const d)
@@ -347,114 +296,137 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
    // right snaps
    if (consider_x && _bboxes_right->size() > 1) {
-      int num = findRightSnaps(_bboxes_right->begin(), _bboxes_right->end(), equal_dist);
-      if (num > 0) {
-         Geom::Coord offset = - bbox_to_snap->max().x() + _bboxes_right->begin()->min().x() - equal_dist;
+      std::vector<Geom::Rect> vec;
+      auto first_dist = distRight(*bbox_to_snap, _bboxes_right->front());
+
+      if (findSidewaysSnaps(first_dist,
+                        _bboxes_right->begin(),
+                        _bboxes_right->end(),
+                        vec,
+                        equal_dist,
+                        getSnapperTolerance(),
+                        &DistributionSnapper::distRight)) {
+
+         Geom::Coord offset = first_dist - equal_dist;
          Geom::Point target = bbox_to_snap->midpoint() + Geom::Point(offset, 0);
 
-         if (abs(offset) < getSnapperTolerance()) {
-             std::vector<Geom::Rect> bboxes(_bboxes_right->begin(), _bboxes_right->begin() + num + 1);
-             // translate the source bbox to the snap position
-             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
-             Geom::Rect bbox = *bbox_to_snap * translation;
-               
-             _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
+         Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+         Geom::Rect bbox = *bbox_to_snap * translation;
+           
+         _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-             isr.points.push_back(s);
+         auto s = SnappedPoint(target, vec, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         isr.points.push_back(s);
 
-             // Debug log
-             //std::cout<<"------"<<std::endl;
-             //std::cout<<"Level: "<<num<<std::endl;
-             //std::cout<<"R snap to"<<target<<std::endl;
-             //std::cout<<"offset "<<abs(offset)<<std::endl;
-             //std::cout<<"equal_dist "<<equal_dist<<std::endl;
-             //std::cout<<"target"<<target<<std::endl;
-         }
+         // Debug log
+         //std::cout<<"------"<<std::endl;
+         //std::cout<<"Level: "<<num<<std::endl;
+         //std::cout<<"R snap to"<<target<<std::endl;
+         //std::cout<<"offset "<<abs(offset)<<std::endl;
+         //std::cout<<"equal_dist "<<equal_dist<<std::endl;
+         //std::cout<<"target"<<target<<std::endl;
       }
    }
 
    // left snaps
    if (consider_x && _bboxes_left->size() > 1 ) {
-      int num = findLeftSnaps(_bboxes_left->begin(), _bboxes_left->end(), equal_dist);
-      if (num > 0) {
-         Geom::Coord offset = bbox_to_snap->min().x() - _bboxes_left->begin()->max().x() - equal_dist;
+      std::vector<Geom::Rect> vec;
+      auto first_dist = distLeft(*bbox_to_snap, _bboxes_left->front());
+
+      if (findSidewaysSnaps(first_dist,
+                        _bboxes_left->begin(),
+                        _bboxes_left->end(),
+                        vec,
+                        equal_dist,
+                        getSnapperTolerance(),
+                        &DistributionSnapper::distLeft)) {
+
+         Geom::Coord offset = first_dist - equal_dist;
          Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(offset, 0);
 
-         if (abs(offset) < getSnapperTolerance()) {
-             std::vector<Geom::Rect> bboxes(_bboxes_left->begin(), _bboxes_left->begin() + num + 1);
-             // translate the source bbox to the snap position
-             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
-             Geom::Rect bbox = *bbox_to_snap * translation;
+         // translate the source bbox to the snap position
+         Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+         Geom::Rect bbox = *bbox_to_snap * translation;
 
-             _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
+         _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-             isr.points.push_back(s);
+         auto s = SnappedPoint(target, vec, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         isr.points.push_back(s);
 
-             // Debug log
-             //std::cout<<"------"<<std::endl;
-             //std::cout<<"Level: "<<num<<std::endl;
-             //std::cout<<"L snap to "<<target<<std::endl;
-             //std::cout<<"offset "<<abs(offset)<<std::endl;
-             //std::cout<<"equal_dist "<<equal_dist<<std::endl;
-         }
+         // Debug log
+         //std::cout<<"------"<<std::endl;
+         //std::cout<<"Level: "<<num<<std::endl;
+         //std::cout<<"L snap to "<<target<<std::endl;
+         //std::cout<<"offset "<<abs(offset)<<std::endl;
+         //std::cout<<"equal_dist "<<equal_dist<<std::endl;
       }
    }
 
    // up snaps
    if (consider_y && _bboxes_up->size() > 1 ) {
-      int num = findUpSnaps(_bboxes_up->begin(), _bboxes_up->end(), equal_dist);
-      if (num > 0) {
-         Geom::Coord offset = bbox_to_snap->min().y() - _bboxes_up->begin()->max().y() - equal_dist;
-         Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(0, offset);
+      std::vector<Geom::Rect> vec;
+      auto first_dist = distUp(*bbox_to_snap, _bboxes_up->front());
 
-         if (abs(offset) < getSnapperTolerance()) {
-             std::vector<Geom::Rect> bboxes(_bboxes_up->begin(), _bboxes_up->begin() + num + 1);
-             // translate the source bbox to the snap position
-             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
-             Geom::Rect bbox = *bbox_to_snap * translation;
+      if (findSidewaysSnaps(first_dist,
+                        _bboxes_up->begin(),
+                        _bboxes_up->end(),
+                        vec,
+                        equal_dist,
+                        getSnapperTolerance(),
+                        &DistributionSnapper::distUp)) {
 
-             _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
+         Geom::Coord offset = first_dist - equal_dist;
+         Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(offset, 0);
 
-             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-             isr.points.push_back(s);
+         // translate the source bbox to the snap position
+         Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+         Geom::Rect bbox = *bbox_to_snap * translation;
 
-             // Debug log
-             //std::cout<<"------"<<std::endl;
-             //std::cout<<"Level: "<<num<<std::endl;
-             //std::cout<<"U snap to "<<target<<std::endl;
-             //std::cout<<"offset "<<abs(offset)<<std::endl;
-             //std::cout<<"equal_dist "<<equal_dist<<std::endl;
-         }
+         _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
+
+         auto s = SnappedPoint(target, vec, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         isr.points.push_back(s);
+
+         // Debug log
+         //std::cout<<"------"<<std::endl;
+         //std::cout<<"Level: "<<num<<std::endl;
+         //std::cout<<"L snap to "<<target<<std::endl;
+         //std::cout<<"offset "<<abs(offset)<<std::endl;
+         //std::cout<<"equal_dist "<<equal_dist<<std::endl;
       }
    }
 
    // down snaps
    if (consider_y && _bboxes_down->size() > 1 ) {
-      int num = findDownSnaps(_bboxes_down->begin(), _bboxes_down->end(), equal_dist);
-      if (num > 0) {
-         Geom::Coord offset = - bbox_to_snap->max().y() + _bboxes_down->begin()->min().y() - equal_dist;
+      std::vector<Geom::Rect> vec;
+      auto first_dist = distDown(*bbox_to_snap, _bboxes_down->front());
+
+      if (findSidewaysSnaps(first_dist,
+                        _bboxes_down->begin(),
+                        _bboxes_down->end(),
+                        vec,
+                        equal_dist,
+                        getSnapperTolerance(),
+                        &DistributionSnapper::distDown)) {
+
+         Geom::Coord offset = first_dist - equal_dist;
          Geom::Point target = bbox_to_snap->midpoint() + Geom::Point(0, offset);
 
-         if (abs(offset) < getSnapperTolerance()) {
-             std::vector<Geom::Rect> bboxes(_bboxes_down->begin(), _bboxes_down->begin() + num + 1);
-             // translate the source bbox to the snap position
-             Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
-             Geom::Rect bbox = *bbox_to_snap * translation;
+         // translate the source bbox to the snap position
+         Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+         Geom::Rect bbox = *bbox_to_snap * translation;
 
-             _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
+         _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-             auto s = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-             isr.points.push_back(s);
+         auto s = SnappedPoint(target, vec, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, abs(offset), getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         isr.points.push_back(s);
 
-             // Debug log
-             //std::cout<<"------"<<std::endl;
-             //std::cout<<"Level: "<<num<<std::endl;
-             //std::cout<<"D snap to "<<target<<std::endl;
-             //std::cout<<"offset "<<abs(offset)<<std::endl;
-             //std::cout<<"equal_dist "<<equal_dist<<std::endl;
-         }
+         // Debug log
+         //std::cout<<"------"<<std::endl;
+         //std::cout<<"Level: "<<num<<std::endl;
+         //std::cout<<"D snap to "<<target<<std::endl;
+         //std::cout<<"offset "<<abs(offset)<<std::endl;
+         //std::cout<<"equal_dist "<<equal_dist<<std::endl;
       }
    }
 }

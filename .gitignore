@@ -17,6 +17,7 @@ inkscape_devel_source.tar.bz2
 *.kdev4
 .uuid
 .clangd/
+.cache
 compile_commands.json
 
 # Snap packaging specific rules

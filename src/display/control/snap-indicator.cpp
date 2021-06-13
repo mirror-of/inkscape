@@ -712,12 +712,6 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
         }
 
     }
-    auto box = new Inkscape::CanvasItemRect(_desktop->getCanvasTemp(), source_bbox);
-    box->set_stroke(color);
-    box->set_dashed(true);
-    box->set_pickable(false); // Is false by default.
-    box->set_z_position(0);
-    _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(box, 0));
 }
 
 } //namespace Display

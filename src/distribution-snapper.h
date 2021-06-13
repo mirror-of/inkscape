@@ -101,6 +101,32 @@ private:
      * @param bounding box of the active selection to snap
      */
     void _correctSelectionBBox(Geom::Point &target, Geom::Point const &p, Geom::Rect const &bbox_to_snap) const;
+
+    /** Finds and stores the bounding boxes that are at equal distance from each other
+     * @param the distance between the object that needs to be snapped and the first
+     * object in the sideways vectors.
+     * @param first iterator of the sideways vector
+     * @param end of the sideways vector
+     * @param vector where the snapped bboxes will be stored
+     * @param equal distance between consecutive vectors
+     * @param snapped tolerance 
+     * @param a function pointer to the distance function
+     * @param level of recursion - do not pass this while calling the function
+     */
+    bool findSidewaysSnaps(Geom::Coord first_dist,
+                             std::vector<Geom::Rect>::iterator it,
+                             std::vector<Geom::Rect>::iterator end,
+                             std::vector<Geom::Rect> &vec,
+                             Geom::Coord &dist,
+                             Geom::Coord tol,
+                             Geom::Coord(*distance_func)(Geom::Rect const&, Geom::Rect const&),
+                             int level = 0) const;
+
+    // distance functions for different orientations
+    static Geom::Coord distRight(Geom::Rect const &a, Geom::Rect const &b);
+    static Geom::Coord distLeft(Geom::Rect const &a, Geom::Rect const &b);
+    static Geom::Coord distUp(Geom::Rect const &a, Geom::Rect const &b);
+    static Geom::Coord distDown(Geom::Rect const &a, Geom::Rect const &b);
 }; // end of AlignmentSnapper class
 
 } // end of namespace Inkscape
