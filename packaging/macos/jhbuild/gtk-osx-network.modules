@@ -76,11 +76,10 @@
     </dependencies>
   </autotools>
 
-  <!-- version needs to be in-line with glib, so pinning to 2.66.0 -->
   <meson id="glib-networking" mesonargs="-Dopenssl=enabled">
-         <branch module="glib-networking/2.66/glib-networking-2.66.0.tar.xz"
-                 version="2.66.0"
-                 hash="sha256:c5d7be2437fdd196eebfb70c4517b96d3ba7ec13bd496318b8f02dea383e0099"/>
+         <branch module="glib-networking/2.68/glib-networking-2.68.0.tar.xz"
+                 version="2.68.0"
+                 hash="sha256:0b235e85ad26b3c0d12255d0963c460e5a639c4722f78e2a03e969e224b29f6e"/>
     <dependencies>
       <dep package="gnutls"/>
       <dep package="glib"/>
@@ -93,11 +92,7 @@
             hash="sha256:ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c"/>
   </autotools>
 
-  <!-- Building the introspection part fails to build on El Capitan with gcc
-       error - likely the compiler is too old. Building on e.g. Catalina using
-       10.11 SDK works fine. Disabling introspection until we need it.
-  -->
-  <meson id="libsoup" mesonargs="-Dvapi=disabled -Dintrospection=disabled">
+  <meson id="libsoup" mesonargs="-Dvapi=disabled">
     <branch module="libsoup/2.72/libsoup-2.72.0.tar.xz" version="2.72.0"
             hash="sha256:170c3f8446b0f65f8e4b93603349172b1085fb8917c181d10962f02bb85f5387">
     </branch>
