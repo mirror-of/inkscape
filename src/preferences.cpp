@@ -13,6 +13,7 @@
 
 #include <cstring>
 #include <ctime>
+#include <iomanip>
 #include <sstream>
 #include <utility>
 #include <glibmm/fileutils.h>
@@ -415,7 +416,8 @@ void Preferences::setUInt(Glib::ustring const &pref_path, unsigned int value)
  */
 void Preferences::setDouble(Glib::ustring const &pref_path, double value)
 {
-    _setRawValue(pref_path, Glib::ustring::compose("%1",value));
+    static constexpr auto digits10 = std::numeric_limits<double>::digits10; // number of decimal digits that are ensured to be precise
+    _setRawValue(pref_path, Glib::ustring::format(std::setprecision(digits10), value));
 }
 
 /**
@@ -427,7 +429,8 @@ void Preferences::setDouble(Glib::ustring const &pref_path, double value)
  */
 void Preferences::setDoubleUnit(Glib::ustring const &pref_path, double value, Glib::ustring const &unit_abbr)
 {
-    Glib::ustring str = Glib::ustring::compose("%1%2",value,unit_abbr);
+    static constexpr auto digits10 = std::numeric_limits<double>::digits10; // number of decimal digits that are ensured to be precise
+    Glib::ustring str = Glib::ustring::compose("%1%2", Glib::ustring::format(std::setprecision(digits10), value), unit_abbr);
     _setRawValue(pref_path, str);
 }
 
