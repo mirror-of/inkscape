@@ -27,7 +27,7 @@
        <verb verb-id="FileQuit" />
    </submenu>
    <submenu name="_Edit">
-       <verb verb-id="EditUndo" />
+       <!-- <verb verb-id="EditUndo" />
        <verb verb-id="EditRedo" />
        <verb verb-id="DialogUndoHistory" />
        <separator/>
@@ -82,7 +82,7 @@
        <verb verb-id="DialogXMLEditor" />
        <separator/>
        <verb verb-id="DialogInput" />
-       <verb verb-id="DialogPreferences" show-icons="true" />
+       <verb verb-id="DialogPreferences" show-icons="true" /> -->
    </submenu>
 
    <submenu name="_View">

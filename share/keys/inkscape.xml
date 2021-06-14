@@ -112,8 +112,8 @@ override) the bindings in the main default.xml.
 
 <!-- Edit -->
 
-  <bind key="z" modifiers="Primary" action="EditUndo" display="true" />
-  <!--Do not put in Primary,Shift+Y, already used-->
+  <!-- <bind key="z" modifiers="Primary" action="EditUndo" display="true" /> 
+      Do not put in Primary,Shift+Y, already used
 
   <bind key="z" modifiers="Primary,Shift" action="EditRedo" display="true" />
   <bind key="y" modifiers="Primary" action="EditRedo" />
@@ -131,7 +131,7 @@ override) the bindings in the main default.xml.
 
   <bind key="v" modifiers="Primary,Shift" action="EditPasteStyle" display="true" />
 
-  <bind key="v" modifiers="Primary,Alt" action="EditPasteInPlace" display="true" />
+  <bind key="v" modifiers="Primary,Alt" action="EditPasteInPlace" display="true" /> -->
 
   <bind action="EditPasteSize" />
   <bind action="EditPasteWidth" />
@@ -140,9 +140,9 @@ override) the bindings in the main default.xml.
   <bind action="EditPasteWidthSeparately" />
   <bind action="EditPasteHeightSeparately" />
 
-  <bind key="Delete" action="EditDelete" display="true" />
+  <!-- <bind key="Delete" action="EditDelete" display="true" />
   <bind key="KP_Delete" action="EditDelete" />
-  <bind key="BackSpace" action="EditDelete" />
+  <bind key="BackSpace" action="EditDelete" /> 
 
   <bind key="d" modifiers="Primary" action="EditDuplicate" display="true" />
 
@@ -156,21 +156,21 @@ override) the bindings in the main default.xml.
 
   <bind action="EditCloneOriginalPathLPE" />
 
-  <bind key="a" modifiers="Primary" action="EditSelectAll" display="true" />
+  <bind key="a" modifiers="Primary" action="EditSelectAll" display="true" />  -->
 
   <bind action="EditClearAll" />
 
-  <bind key="a" modifiers="Primary,Alt" action="EditSelectAllInAllLayers" display="true" />
+  <!-- <bind key="a" modifiers="Primary,Alt" action="EditSelectAllInAllLayers" display="true" />
 
   <bind action="EditSelectSameFillStroke" />
-  <bind action="EditSelectSameFillColor" />
+  <bind action="EditSelectSameFillColor" /> -->
   <bind action="EditSelectSameStrokeColor" />
-  <bind action="EditSelectSameStrokeStyle" />
+  <!-- <bind action="EditSelectSameStrokeStyle" />
 
   <bind key="a" modifiers="Shift,Alt" action="EditSelectSameObjectType" display="true" />
 
   <bind key="exclam" action="EditInvert" display="true" />
-  <bind key="exclam" modifiers="Shift" action="EditInvert" />
+  <bind key="exclam" modifiers="Shift" action="EditInvert" /> -->
 
   <bind key="exclam" modifiers="Alt" action="EditInvertInAllLayers" display="true" />
   <bind key="exclam" modifiers="Alt,Shift" action="EditInvertInAllLayers" />
@@ -178,13 +178,13 @@ override) the bindings in the main default.xml.
   <bind key="Tab" action="EditSelectNext" display="true" />
   <bind key="ISO_Left_Tab" action="EditSelectPrev" display="true" />
 
-  <bind key="Escape" action="EditDeselect" display="true"/>
+  <!-- <bind key="Escape" action="EditDeselect" display="true"/> -->
 
   <bind key="7" action="EditNextPathEffectParameter" display="true" />
 
   <bind action="EditSwapFillStroke" display="true" />
 
-  <bind key="r" modifiers="Primary,Shift" action="FitCanvasToSelectionOrDrawing" display="true" />
+  <!-- <bind key="r" modifiers="Primary,Shift" action="FitCanvasToSelectionOrDrawing" display="true" /> -->
 
   <!-- Objects/selection -->
 
@@ -206,7 +206,7 @@ override) the bindings in the main default.xml.
   <bind key="period" modifiers="Primary" action="SelectionGrowDouble" />
   <bind key="greater" modifiers="Primary" action="SelectionGrowDouble" />
 
-  <bind key="b" modifiers="Alt" action="SelectionCreateBitmap" display="true" />
+  <!-- <bind key="b" modifiers="Alt" action="SelectionCreateBitmap" display="true" /> -->
 
   <bind key="b" modifiers="Alt,Shift" action="SelectionTrace" display="true" />
 
@@ -344,19 +344,19 @@ override) the bindings in the main default.xml.
 
 <!-- Dialogs -->
 
-  <bind key="x" modifiers="Primary,Shift" action="DialogXMLEditor" display="true" />
+  <!-- <bind key="x" modifiers="Primary,Shift" action="DialogXMLEditor" display="true" />
 
-  <!-- <bind key="q" modifiers="Primary,Shift" action="DialogSelectors" display="true" /> -->
+  <bind key="q" modifiers="Primary,Shift" action="DialogSelectors" display="true" /> -->
 
   <bind key="d" modifiers="Primary,Shift" action="DialogDocumentProperties" display="true" />
 
   <bind key="t" modifiers="Primary,Shift" action="DialogText" display="true" />
 
-  <bind key="p" modifiers="Primary,Shift" action="DialogPreferences" display="true" />
-  <!-- MacOs standard Prefs key -->
+  <!-- <bind key="p" modifiers="Primary,Shift" action="DialogPreferences" display="true" />
+  MacOs standard Prefs key
   <bind key="comma" modifiers="Meta" action="DialogPreferences" />
 
-  <bind key="f" modifiers="Primary" action="DialogFind" display="true" />
+  <bind key="f" modifiers="Primary" action="DialogFind" display="true" /> -->
 
   <bind action="DialogObjectAttributes" />
 
@@ -373,7 +373,7 @@ override) the bindings in the main default.xml.
   <bind action="DialogClonetiler" />
   <!-- <bind action="DialogArrange" /> -->
   <bind action="DialogDebug" />
-  <bind action="DialogInput" />
+  <!-- <bind action="DialogInput" /> -->
 
   <bind key="F12" action="DialogsToggle" display="true" />
 
@@ -492,6 +492,12 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('Selectors')"               keys="&lt;shift&gt;&lt;primary&gt;q"  />
   <bind gaction="win.dialog-open('Transform')"               keys="&lt;shift&gt;&lt;primary&gt;m"  />
   <bind gaction="win.dialog-open('AlignDistribute')"         keys="&lt;shift&gt;&lt;primary&gt;a"/>               
+  <bind gaction="win.dialog-open('UndoHistory')"             keys="&lt;primary&gt;&lt;shift&gt;h" />
+  <bind gaction="win.dialog-open('Find')"              keys="&lt;primary&gt;f" />
+  <bind gaction="win.dialog-open('Clonetiler')"/>
+  <bind gaction="win.dialog-open('XMLEditor')"               keys="&lt;primary&gt;&lt;shift&gt;x" />
+  <bind gaction="win.dialog-open('Input')"/>  
+  <bind gaction="win.dialog-open('Preferences')"             keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
 
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
@@ -511,5 +517,38 @@ override) the bindings in the main default.xml.
   <bind gaction="app.object-rotate-90-ccw"                keys="&lt;primary&gt;bracketleft" />
   <bind gaction="app.object-flip-horizontal"              keys="h" />
   <bind gaction="app.object-flip-vertical"                keys="v" />
+
+  <!-- Edit -->
+
+  <bind gaction="win.undo"                                keys="&lt;primary&gt;z" />
+  <bind gaction="win.redo"                                keys="&lt;primary&gt;&lt;shift&gt;z,  &lt;primary&gt;y" />
+  <bind gaction="win.cut"                                 keys="&lt;primary&gt;x,               &lt;shift&gt;Delete" />
+  <bind gaction="win.copy"                                keys="&lt;primary&gt;c,               &lt;primary&gt;Insert"/>
+  <bind gaction="win.paste"                               keys="&lt;primary&gt;v,               &lt;shift&gt;Insert"/>
+  <bind gaction="win.paste-style"                         keys="&lt;primary&gt;&lt;shift&gt;v" />
+  <bind gaction="win.paste-in-place"                      keys="&lt;primary&gt;&lt;alt&gt;v"/>
+  <bind gaction="win.paste-size" />
+  <bind gaction="win.paste-width" />
+  <bind gaction="win.paste-height" />
+  <bind gaction="win.paste-size-separately" />
+  <bind gaction="win.paste-width-separately" />
+  <bind gaction="win.paste-height-separately" />
+  <bind gaction="win.duplicate"                           keys="&lt;primary&gt;d"/>
+  <bind gaction="win.clone"                               keys="&lt;alt&gt;d" />
+  <bind gaction="win.clone-unlink"                        keys="&lt;alt&gt;&lt;shift&gt;d" />
+  <bind gaction="win.clone-link" />
+  <bind gaction="win.select-original"                     keys="&lt;shift&gt;d" />
+  <bind gaction="win.clone-link-lpe" />
+  <bind gaction="win.select-all"                          keys="&lt;primary&gt;a" />
+  <bind gaction="win.select-all-layers"                   keys="&lt;primary&gt;&lt;alt&gt;a" />
+  <bind gaction="win.select-same-fill-and-stroke" />
+  <bind gaction="win.select-same-fill" />
+  <bind gaction="win.select-same-stroke-style" />
+  <bind gaction="win.select-same-object-type"             keys="&lt;shift&gt;&lt;alt&gt;a" />
+  <bind gaction="win.select-invert"                       keys="exclam ,&lt;shift&gt;exclam"/>
+  <bind gaction="win.select-none"                         keys="Escape"/>
+  <bind gaction="win.fit-canvas-to-selection-or-drawing"  keys="&lt;primary&gt;&lt;shift&gt;r" />
+  <bind gaction="win.selection-make-bitmap-copy"          keys="&lt;alt&gt;b" />
+  <bind gaction="win.delete"                              keys="Delete, KP_Delete, BackSpace" />
 
 </keys>

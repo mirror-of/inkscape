@@ -35,25 +35,24 @@ canvas_to_selection_or_drawing(InkscapeWindow* win)
 std::vector<std::vector<Glib::ustring>> raw_fit_canvas_data =
 {
     // clang-format off
-    {"win.fit-canvas-to-selection",                       N_("Fit Page to Selection"),     "Selection Desktop",  N_("Fit the page to the current selection")                                    },
-    {"win.fit-canvas-to-drawing",                       N_("Fit Page to Drawing"),     "Selection Desktop",  N_("Fit the page to the drawing")                                    },
-    {"win.fit-canvas-to-selection-or-drawing",                       N_("_Resize Page to Selection"),     "Selection Desktop",  N_("Fit the page to the current selection or the drawing if there is no selection")                                    }
+    {"win.fit-canvas-to-selection",                     N_("Fit Page to Selection"),        "Selection Desktop",  N_("Fit the page to the current selection")},
+    {"win.fit-canvas-to-drawing",                       N_("Fit Page to Drawing"),          "Selection Desktop",  N_("Fit the page to the drawing")},
+    {"win.fit-canvas-to-selection-or-drawing",          N_("_Resize Page to Selection"),    "Selection Desktop",  N_("Fit the page to the current selection or the drawing if there is no selection")}
     // clang-format on
 };
 
 void
 add_actions_fit_canvas(InkscapeWindow* win)
 {
-    std::cout<<"add_actions_fit_canvas\n";
     // clang-format off
-    win->add_action( "fit-canvas-to-selection",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_to_selection), win));
-    win->add_action( "fit-canvas-to-drawing",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_drawing), win));
-    win->add_action( "fit-canvas-to-selection-or-drawing",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_to_selection_or_drawing), win));
+    win->add_action( "fit-canvas-to-selection",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_to_selection), win));
+    win->add_action( "fit-canvas-to-drawing",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_drawing), win));
+    win->add_action( "fit-canvas-to-selection-or-drawing",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_to_selection_or_drawing), win));
     // clang-format on
 
     auto app = InkscapeApplication::instance();
     if (!app) {
-        std::cerr << "add_actions_edit: no app!" << std::endl;
+        std::cerr << "add_actions_fit_canvas: no app!" << std::endl;
         return;
     }
     app->get_action_extra_data().add_data(raw_fit_canvas_data);
