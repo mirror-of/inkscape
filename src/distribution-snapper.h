@@ -16,7 +16,6 @@
 #include "snap-enums.h"
 #include "snapper.h"
 #include "snap-candidate.h"
-#include "boost/graph/adjacency_list.hpp"
 
 class SPDesktop;
 class SPNamedView;

@@ -276,52 +276,10 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
 
         if (is_alignment) {
             auto color = pre_snap ? 0x7f7f7fff : get_guide_color(p.getAlignmentTargetType());
-            auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), *p.getAlignmentTarget());
-            line->set_stroke(color);
-            _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
-
+            make_alignment_indicator(p.getPoint(), *p.getAlignmentTarget(), color, fontsize, scale);
             if (p.getAlignmentTargetType() == SNAPTARGET_ALIGNMENT_INTERSECTION) {
-                auto line2 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p.getPoint(), *p.getAlignmentTarget2());
-                line2->set_stroke(color);
-                _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
-
-                ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-                ctrl->set_size(7);
-                ctrl->set_stroke(color);
-                ctrl->set_fill(color);
-                ctrl->set_position(*p.getAlignmentTarget2());
-                _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl, 0));
-                ctrl->set_pickable(false);
+                make_alignment_indicator(p.getPoint(), *p.getAlignmentTarget2(), color, fontsize, scale);
             }
-
-            ctrl2 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-            ctrl2->set_size(7);
-            ctrl2->set_stroke(color);
-            ctrl2->set_fill(color);
-            ctrl2->set_position(p.getPoint());
-
-            // The snap indicator will be deleted after some time-out, and sp_canvas_item_dispose
-            // will be called. This will set canvas->current_item to NULL if the snap indicator was
-            // the current item, after which any events will go to the root handler instead of any
-            // item handler. Dragging an object which has just snapped might therefore not be possible
-            // without selecting / repicking it again. To avoid this, we make sure here that the
-            // snap indicator will never be picked, and will therefore never be the current item.
-            // Reported bugs:
-            //   - scrolling when hovering above a pre-snap indicator won't work (for example)
-            //     (https://bugs.launchpad.net/inkscape/+bug/522335/comments/8)
-            //   - dragging doesn't work without repicking
-            //     (https://bugs.launchpad.net/inkscape/+bug/1420301/comments/15)
-            ctrl2->set_pickable(false);
-            _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl2, 0));
-
-            ctrl3 = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-            ctrl3->set_size(7);
-            ctrl3->set_stroke(color);
-            ctrl3->set_fill(color);
-            ctrl3->set_position(*p.getAlignmentTarget());
-            ctrl3->set_pickable(false);
-            _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl3, 0));
-
         } 
 
         _snaptarget_is_presnap = pre_snap;
@@ -334,6 +292,17 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             ctrl->set_position(p.getPoint());
 
             _snaptarget = _desktop->add_temporary_canvasitem(ctrl, timeout_val*1000.0);
+            // The snap indicator will be deleted after some time-out, and sp_canvas_item_dispose
+            // will be called. This will set canvas->current_item to NULL if the snap indicator was
+            // the current item, after which any events will go to the root handler instead of any
+            // item handler. Dragging an object which has just snapped might therefore not be possible
+            // without selecting / repicking it again. To avoid this, we make sure here that the
+            // snap indicator will never be picked, and will therefore never be the current item.
+            // Reported bugs:
+            //   - scrolling when hovering above a pre-snap indicator won't work (for example)
+            //     (https://bugs.launchpad.net/inkscape/+bug/522335/comments/8)
+            //   - dragging doesn't work without repicking
+            //     (https://bugs.launchpad.net/inkscape/+bug/1420301/comments/15)
             ctrl->set_pickable(false);
 
             // Display the tooltip, which reveals the type of snap source and the type of snap target
@@ -504,6 +473,48 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
         x = target.min().x();
 
     return x;
+}
+
+void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point const &p2, guint32 color, double fontsize, double scale)
+{
+    auto dist = Geom::L2(p2 - p1);
+    double offset = 15/_desktop->current_zoom();
+    auto direction = Geom::unit_vector(p1 - p2);
+    auto text_pos = (p1 + p2)/2;
+    Glib::ustring distance = std::to_string(int(scale * dist));
+    auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+    text->set_fontsize(fontsize);
+    text->set_fill(color);
+    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+    text->set_background(0xffffff00);
+
+    Inkscape::CanvasItemCurve *line;
+
+    auto temp_point = text_pos + offset*direction;
+    line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, temp_point);
+    line->set_stroke(color);
+    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+
+    temp_point = text_pos - offset*direction;
+    line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), temp_point, p2);
+    line->set_stroke(color);
+    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+
+    auto ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+    ctrl->set_size(7);
+    ctrl->set_stroke(color);
+    ctrl->set_fill(color);
+    ctrl->set_position(p1);
+    ctrl->set_pickable(false);
+    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl, 0));
+
+    ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+    ctrl->set_size(7);
+    ctrl->set_stroke(color);
+    ctrl->set_fill(color);
+    ctrl->set_position(p2);
+    ctrl->set_pickable(false);
+    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl, 0));
 }
 
 Inkscape::CanvasItemCurve* SnapIndicator::make_stub_line_v(Geom::Point const & p) 
