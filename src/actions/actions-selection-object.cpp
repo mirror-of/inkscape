@@ -65,15 +65,14 @@ selection_bottom(InkscapeApplication* app)
 // SHOULD REALLY BE DOC ACTIONS
 std::vector<std::vector<Glib::ustring>> raw_data_selection_object =
 {
-    /* Group */
-    {"app.select-object-group",            N_("Group"),                                 "Select",   N_("Group selected objects")       },
-    {"app.select-object-ungroup",          N_("Ungroup"),                               "Select",   N_("Ungroup selected objects")       },
-    {"app.select-object-ungroup-pop",      N_("Pop Selected Objects out of Group"),     "Select",   N_("Pop selected objects out of group")       },
-    /* Rise and Lower */
-    {"app.selection-top",                  N_("Raise to Top"),                          "Select",   N_("Raise selection to top")       },
-    {"app.selection-raise",                N_("Raise"),                                 "Select",   N_("Raise selection one step")       },
-    {"app.selection-lower",                N_("Lower"),                                 "Select",   N_("Lower selection one step")       },
-    {"app.selection-bottom",               N_("Lower to Bottom"),                       "Select",   N_("Lower selection to bottom")       }
+    // clang-format off
+    { "app.select-object-group",            N_("Group"),                                 "Select",   N_("Group selected objects")},
+    { "app.select-object-ungroup",          N_("Ungroup"),                               "Select",   N_("Ungroup selected objects")},
+    { "app.select-object-ungroup-pop",      N_("Pop Selected Objects out of Group"),     "Select",   N_("Pop selected objects out of group")},
+    { "app.selection-top",                  N_("Raise to Top"),                          "Select",   N_("Raise selection to top")},
+    { "app.selection-raise",                N_("Raise"),                                 "Select",   N_("Raise selection one step")},
+    { "app.selection-lower",                N_("Lower"),                                 "Select",   N_("Lower selection one step")},
+    { "app.selection-bottom",               N_("Lower to Bottom"),                       "Select",   N_("Lower selection to bottom")}
     // clang-format on
 };
 
@@ -83,15 +82,13 @@ add_actions_selection_object(InkscapeApplication* app)
     auto *gapp = app->gio_app();
 
     // clang-format off
-    /* Group */
-    gapp->add_action(               "select-object-group",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_group),           app)        );
-    gapp->add_action(               "select-object-ungroup",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup),         app)        );
-    gapp->add_action(               "select-object-ungroup-pop",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup_pop),     app)        );
-    /* Rise and Lower */
-    gapp->add_action(               "selection-top",                sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_top),                 app)        );
-    gapp->add_action(               "selection-raise",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_raise),               app)        );
-    gapp->add_action(               "selection-lower",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_lower),               app)        );
-    gapp->add_action(               "selection-bottom",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_bottom),              app)        );
+    gapp->add_action( "select-object-group",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_group),           app));
+    gapp->add_action( "select-object-ungroup",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup),         app));
+    gapp->add_action( "select-object-ungroup-pop",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup_pop),     app));
+    gapp->add_action( "selection-top",                sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_top),                 app));
+    gapp->add_action( "selection-raise",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_raise),               app));
+    gapp->add_action( "selection-lower",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_lower),               app));
+    gapp->add_action( "selection-bottom",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_bottom),              app));
     // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_selection_object);

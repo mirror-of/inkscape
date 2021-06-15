@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
 	<requires lib="gtk+" version="3.22" />
-	<menu id="edit-menu"><section>
+	<menu id="edit-menu">
+
+		<section>
 			<item>
 				<attribute name='label' translatable="yes">_Undo</attribute>
 				<attribute name='action'>win.undo</attribute>
@@ -19,6 +21,7 @@
 				<attribute name='icon'>edit-undo-history</attribute>
 			</item>
 		</section>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">Cu_t</attribute>
@@ -46,8 +49,9 @@
 				<attribute name='icon'>edit-paste-style</attribute>
 			</item>
 		</section>
+
 		<submenu id="paste-size">
-      <attribute name='label' translatable="yes">Paste Si_ze</attribute>
+      		<attribute name='label' translatable="yes">Paste Si_ze</attribute>
 			<section>
 				<item>
 					<attribute name='label' translatable="yes">Paste Si_ze</attribute>
@@ -81,6 +85,7 @@
 				</item>
 			</section>
 		</submenu>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">_Find/Replace...</attribute>
@@ -96,8 +101,9 @@
 				<attribute name='icon'>edit-duplicate</attribute>
 			</item>
 		</section>
+
 		<submenu id="paste-size">
-      <attribute name='label' translatable="yes">Clo_ne</attribute>
+      		<attribute name='label' translatable="yes">Clo_ne</attribute>
 			<section>
 				<item>
 					<attribute name='label' translatable="yes">Create Clo_ne</attribute>
@@ -137,6 +143,7 @@
 				</item>
 			</section>
 		</submenu>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">Make a _Bitmap Copy</attribute>
@@ -144,6 +151,7 @@
 				<attribute name='icon'>selection-make-bitmap-copy</attribute>
 			</item>
 		</section>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">_Delete</attribute>
@@ -151,6 +159,7 @@
 				<attribute name='icon'>edit-delete</attribute>
 			</item>
 		</section>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">Select Al_l</attribute>
@@ -163,8 +172,9 @@
 				<attribute name='icon'>edit-select-all-layers</attribute>
 			</item>
 		</section>
+
 		<submenu id="select-size">
-      <attribute name='label' translatable="yes">Select Sa_me</attribute>
+      		<attribute name='label' translatable="yes">Select Sa_me</attribute>
 			<section>
 				<item>
 					<attribute name='label' translatable="yes">Fill _and Stroke</attribute>
@@ -193,6 +203,7 @@
 				</item>
 			</section>
 		</submenu>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">In_vert Selection</attribute>
@@ -205,12 +216,14 @@
 				<attribute name='icon'>edit-select-none</attribute>
 			</item>
 		</section>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">_Resize Page to Selection</attribute>
 				<attribute name='action'>win.fit-canvas-to-selection-or-drawing</attribute>
 			</item>
 		</section>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">Create _Guides Around the Page</attribute>
@@ -225,6 +238,7 @@
 				<attribute name='action'>win.delete-all-guides</attribute>
 			</item>
 		</section>
+		
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">_XML Editor...</attribute>
@@ -233,6 +247,7 @@
 				<attribute name='icon'>dialog-xml-editor</attribute>
 			</item>
 		</section>
+
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">_Input Devices...</attribute>
@@ -247,5 +262,6 @@
 				<attribute name='icon'>preferences-system</attribute>
 			</item>
 		</section>
+	
 	</menu>
 </interface>

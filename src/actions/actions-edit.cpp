@@ -286,6 +286,20 @@ delete_all_guides(InkscapeWindow* win)
     sp_guide_delete_all_guides(dt);
 }
 
+void
+paste_path_effect(InkscapeWindow* win)
+{
+    SPDesktop* dt = win->get_desktop();
+    dt->selection->pastePathEffect();
+}
+
+void
+remove_path_effect(InkscapeWindow* win)
+{
+    SPDesktop* dt = win->get_desktop();
+    dt->selection->removeLPE();
+}
+
 std::vector<std::vector<Glib::ustring>> raw_data_edit =
 {
     // clang-format off
@@ -293,39 +307,41 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit =
     {"win.pattern-to-object",           N_("Pattern to Objects"),               "Edit",  N_("Extract objects from a tiled pattern fill")},
     {"win.object-to-marker",            N_("Objects to Marker"),                "Edit",  N_("Convert selection to a line marker")},
     {"win.object-to-guides",            N_("Objects to Guides"),                "Edit",  N_("Convert selected objects to a collection of guidelines aligned with their edges")},
-    {"win.undo",                        N_("_Undo"),                            "Edit",  N_("Undo last action")},
-    {"win.redo",                        N_("_Redo"),                            "Edit",  N_("Do again the last undone action")},
-    {"win.cut",                         N_("Cu_t"),                             "Edit",  N_("Cut selection to clipboard")},
-    {"win.copy",                        N_("_Copy"),                            "Edit",  N_("Copy selection to clipboard")},
-    {"win.paste",                       N_("_Paste"),                           "Edit",  N_("Paste objects from clipboard to mouse point, or paste text")},
-    {"win.paste-in-place",              N_("Paste _In Place"),                  "Edit",  N_("Paste objects from clipboard to mouse point, or paste text")},
-    {"win.paste-style",                 N_("Paste _Style"),                     "Edit",  N_("Apply the style of the copied object to selection")},
-    {"win.paste-size",                  N_("Paste Si_ze"),                      "Edit",  N_("Scale selection to match the size of the copied object")},
-    {"win.paste-width",                 N_("Paste _Width"),                     "Edit",  N_("Scale selection horizontally to match the width of the copied object")},
-    {"win.paste-height",                N_("Paste _Height"),                    "Edit",  N_("Scale selection vertically to match the height of the copied object")},
+    {"win.undo",                        N_("Undo"),                             "Edit",  N_("Undo last action")},
+    {"win.redo",                        N_("Redo"),                             "Edit",  N_("Do again the last undone action")},
+    {"win.cut",                         N_("Cut"),                              "Edit",  N_("Cut selection to clipboard")},
+    {"win.copy",                        N_("Copy"),                             "Edit",  N_("Copy selection to clipboard")},
+    {"win.paste",                       N_("Paste"),                            "Edit",  N_("Paste objects from clipboard to mouse point, or paste text")},
+    {"win.paste-in-place",              N_("Paste In Place"),                   "Edit",  N_("Paste objects from clipboard to mouse point, or paste text")},
+    {"win.paste-style",                 N_("Paste Style"),                      "Edit",  N_("Apply the style of the copied object to selection")},
+    {"win.paste-size",                  N_("Paste Size"),                       "Edit",  N_("Scale selection to match the size of the copied object")},
+    {"win.paste-width",                 N_("Paste Width"),                      "Edit",  N_("Scale selection horizontally to match the width of the copied object")},
+    {"win.paste-height",                N_("Paste Height"),                     "Edit",  N_("Scale selection vertically to match the height of the copied object")},
     {"win.paste-size-separately",       N_("Paste Size Separately"),            "Edit",  N_("Scale each selected object to match the size of the copied object")},
     {"win.paste-width-separately",      N_("Paste Width Separately"),           "Edit",  N_("Scale each selected object horizontally to match the width of the copied object")},
     {"win.paste-height-separately",     N_("Paste Height Separately"),          "Edit",  N_("Scale each selected object vertically to match the height of the copied object")},
-    {"win.duplicate",                   N_("Duplic_ate"),                       "Edit",  N_("Duplicate Selected Objects")},
-    {"win.clone",                       N_("Create Clo_ne"),                    "Edit",  N_("Create a clone (a copy linked to the original) of selected object")},
-    {"win.clone-unlink",                N_("Unlin_k Clone"),                    "Edit",  N_("Cut the selected clones' links to the originals, turning them into standalone objects")},
-    {"win.clone-unlink-recursively",    N_("Unlink Clones _recursively"),       "Edit",  N_("Unlink all clones in the selection, even if they are in groups.")},
+    {"win.duplicate",                   N_("Duplicate"),                        "Edit",  N_("Duplicate Selected Objects")},
+    {"win.clone",                       N_("Create Clone"),                     "Edit",  N_("Create a clone (a copy linked to the original) of selected object")},
+    {"win.clone-unlink",                N_("Unlink Clone"),                     "Edit",  N_("Cut the selected clones' links to the originals, turning them into standalone objects")},
+    {"win.clone-unlink-recursively",    N_("Unlink Clones recursively"),        "Edit",  N_("Unlink all clones in the selection, even if they are in groups.")},
     {"win.clone-link",                  N_("Relink to Copied"),                 "Edit",  N_("Relink the selected clones to the object currently on the clipboard")},
-    {"win.select-original",             N_("Select _Original"),                 "Edit",  N_("Select the object to which the selected clone is linked")},
+    {"win.select-original",             N_("Select Original"),                  "Edit",  N_("Select the object to which the selected clone is linked")},
     {"win.clone-link-lpe",              N_("Clone original path (LPE)"),        "Edit",  N_("Creates a new path, applies the Clone original LPE, and refers it to the selected path")},
-    {"win.delete",                      N_("_Delete"),                          "Edit",  N_("Delete selection")},
-    {"win.select-all",                  N_("Select Al_l"),                      "Edit",  N_("Select all objects or all nodes")},
-    {"win.select-all-layers",           N_("Select All in All La_yers"),        "Edit",  N_("Select all objects in all visible and unlocked layers")},
-    {"win.select-same-fill-and-stroke", N_("Fill _and Stroke"),                 "Edit",  N_("Select all objects with the same fill and stroke as the selected objects")},
-    {"win.select-same-fill",            N_("_Fill Color"),                      "Edit",  N_("Select all objects with the same fill as the selected objects")},
-    {"win.select-same-stroke-color",    N_("_Stroke Color"),                    "Edit",  N_("Select all objects with the same stroke as the selected objects")},
-    {"win.select-same-stroke-style",    N_("Stroke St_yle"),                    "Edit",  N_("Select all objects with the same stroke style (width, dash, markers) as the selected objects")},
-    {"win.select-same-object-type",     N_("_Object Type"),                     "Edit",  N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
-    {"win.select-invert",               N_("In_vert Selection"),                "Edit",  N_("Invert selection (unselect what is selected and select everything else)")},
-    {"win.select-none",                 N_("D_eselect"),                        "Edit",  N_("Deselect any selected objects or nodes")},
-    {"win.create-guides-around-page",   N_("Create _Guides Around the Page"),   "Edit",  N_("Create four guides aligned with the page borders")},
+    {"win.delete",                      N_("Delete"),                           "Edit",  N_("Delete selection")},
+    {"win.select-all",                  N_("Select All"),                       "Edit",  N_("Select all objects or all nodes")},
+    {"win.select-all-layers",           N_("Select All in All Layers"),         "Edit",  N_("Select all objects in all visible and unlocked layers")},
+    {"win.select-same-fill-and-stroke", N_("Fill and Stroke"),                  "Edit",  N_("Select all objects with the same fill and stroke as the selected objects")},
+    {"win.select-same-fill",            N_("Fill Color"),                       "Edit",  N_("Select all objects with the same fill as the selected objects")},
+    {"win.select-same-stroke-color",    N_("Stroke Color"),                     "Edit",  N_("Select all objects with the same stroke as the selected objects")},
+    {"win.select-same-stroke-style",    N_("Stroke Style"),                     "Edit",  N_("Select all objects with the same stroke style (width, dash, markers) as the selected objects")},
+    {"win.select-same-object-type",     N_("Object Type"),                      "Edit",  N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
+    {"win.select-invert",               N_("Invert Selection"),                 "Edit",  N_("Invert selection (unselect what is selected and select everything else)")},
+    {"win.select-none",                 N_("Deselect"),                         "Edit",  N_("Deselect any selected objects or nodes")},
+    {"win.create-guides-around-page",   N_("Create Guides Around the Page"),    "Edit",  N_("Create four guides aligned with the page borders")},
     {"win.lock-all-guides",             N_("Lock All Guides"),                  "Edit",  N_("Toggle lock of all guides in the document")},
-    {"win.delete-all-guides",           N_("Delete All Guides"),                "Edit",  N_("Delete all the guides in the document")}
+    {"win.delete-all-guides",           N_("Delete All Guides"),                "Edit",  N_("Delete all the guides in the document")},
+    {"win.paste-path-effect",           N_("Paste Path Effect"),                "Edit",  N_("Apply the path effect of the copied object to selection")},
+    {"win.remove-path-effect",          N_("Remove Path Effect"),               "Edit",  N_("Remove any path effects from selected objects")}
     // clang-format on
 };
 
@@ -372,6 +388,8 @@ add_actions_edit(InkscapeWindow* win)
     win->add_action( "create-guides-around-page",       sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&create_guides_around_page), win));
     win->add_action_bool( "lock-all-guides",            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&lock_all_guides),   win));
     win->add_action( "delete-all-guides",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&delete_all_guides), win));
+    win->add_action( "paste-path-effect",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&paste_path_effect), win));
+    win->add_action( "remove-path-effect",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&remove_path_effect), win));
     // clang-format on
 
     auto app = InkscapeApplication::instance();

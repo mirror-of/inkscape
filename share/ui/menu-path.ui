@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<requires lib="gtk+" version="3.22" />
+	<menu id="path-menu">
+    
+        <section>
+            <item>
+                <attribute name='label' translatable="yes">_Object to Path</attribute>
+                <attribute name='action'>app.object-to-path</attribute>
+                <attribute name='icon'>object-to-path</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">_Stroke to Path</attribute>
+                <attribute name='action'>app.object-stroke-to-path</attribute>
+                <attribute name='icon'>stroke-to-path</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">_Trace Bitmap...</attribute>
+                <attribute name='action'>win.object-bitmap-trace</attribute>
+                <attribute name='icon'>bitmap-trace</attribute>
+            </item>
+        </section>
+
+        <section>
+            <item>
+                <attribute name='label' translatable="yes">_Union</attribute>
+                <attribute name='action'>app.select-path-union</attribute>
+                <attribute name='icon'>path-union</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">_Difference</attribute>
+                <attribute name='action'>app.select-path-difference</attribute>
+                <attribute name='icon'>path-difference</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">_Intersection</attribute>
+                <attribute name='action'>app.select-path-intersection</attribute>
+                <attribute name='icon'>path-intersection</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">E_xclusion</attribute>
+                <attribute name='action'>app.select-path-exclusion</attribute>
+                <attribute name='icon'>path-exclusion</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">Di_vision</attribute>
+                <attribute name='action'>app.select-path-division</attribute>
+                <attribute name='icon'>path-division</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">Cut _Path</attribute>
+                <attribute name='action'>app.select-path-cut</attribute>
+                <attribute name='icon'>path-cut</attribute>
+            </item>
+        </section>
+
+        <section>
+            <item>
+                <attribute name='label' translatable="yes">_Combine</attribute>
+                <attribute name='action'>app.select-path-combine</attribute>
+                <attribute name='icon'>path-combine</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">Break _Apart</attribute>
+                <attribute name='action'>app.select-path-break-apart</attribute>
+                <attribute name='icon'>path-break-apart</attribute>
+            </item>
+        </section>
+
+        <section>
+            <item>
+                <attribute name='label' translatable="yes">I_nset</attribute>
+                <attribute name='action'>win.select-path-inset</attribute>
+                <attribute name='icon'>path-inset</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">Outs_et</attribute>
+                <attribute name='action'>win.select-path-outset</attribute>
+                <attribute name='icon'>path-outset</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">D_ynamic Offset</attribute>
+                <attribute name='action'>win.select-path-offset-dynamic</attribute>
+                <attribute name='icon'>path-offset-dynamic</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">_Linked Offset</attribute>
+                <attribute name='action'>win.select-path-offset-linked</attribute>
+                <attribute name='icon'>path-offset-linked</attribute>
+            </item>
+        </section>
+
+        <section>
+            <item>
+                <attribute name='label' translatable="yes">Fill between paths</attribute>
+                <attribute name='action'>app.select-fill-between-paths</attribute>
+            </item>
+        </section>
+
+        <section>
+            <item>
+                <attribute name='label' translatable="yes">Si_mplify</attribute>
+                <attribute name='action'>app.select-path-simplify</attribute>
+                <attribute name='icon'>path-simplify</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">_Reverse</attribute>
+                <attribute name='action'>win.select-path-reverse</attribute>
+                <attribute name='icon'>path-reverse</attribute>
+            </item>
+        </section>
+
+        <section>
+            <item>
+                <attribute name='label' translatable="yes">Path E_ffects...</attribute>
+                <attribute name='action'>win.dialog-open</attribute>
+                <attribute name='target'>LivePathEffect</attribute>
+                <attribute name='icon'>dialog-path-effects</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">Paste Path _Effect</attribute>
+                <attribute name='action'>win.paste-path-effect</attribute>
+            </item>
+            <item>
+                <attribute name='label' translatable="yes">Remove Path _Effect</attribute>
+                <attribute name='action'>win.remove-path-effect</attribute>
+            </item>
+        </section>
+
+        <item>
+            <attribute name='label' translatable="yes">--- action end ---</attribute>
+        </item>
+	</menu>
+</interface>

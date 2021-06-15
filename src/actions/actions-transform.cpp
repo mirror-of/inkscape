@@ -87,19 +87,19 @@ transform_remove(InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_transform =
 {
     // clang-format off
-    {"app.transform-translate",   N_("Translate"),          "Transform",  N_("Translate selected objects (dx,dy)")                 },
-    {"app.transform-rotate",      N_("Rotate"),             "Transform",  N_("Rotate selected objects by degrees")                 },
-    {"app.transform-scale",       N_("Scale"),              "Transform",  N_("Scale selected objects by scale factor")             },
-    {"app.transform-remove",      N_("Remove Transforms"),  "Transform",  N_("Remove any transforms from selected objects")        }
+    {"app.transform-translate",   N_("Translate"),          "Transform",  N_("Translate selected objects (dx,dy)")},
+    {"app.transform-rotate",      N_("Rotate"),             "Transform",  N_("Rotate selected objects by degrees")},
+    {"app.transform-scale",       N_("Scale"),              "Transform",  N_("Scale selected objects by scale factor")},
+    {"app.transform-remove",      N_("Remove Transforms"),  "Transform",  N_("Remove any transforms from selected objects")}
     // clang-format on
 };
 
 std::vector<std::vector<Glib::ustring>> hint_data_transform =
 {
     // clang-format off
-    {"app.transform-translate",     N_("Give two String input for translation")  },
-    {"app.transform-rotate",        N_("Give Double input for angle of Rotation")              },
-    {"app.transform-scale",         N_("Give Double input for Scale")                        }
+    {"app.transform-translate",     N_("Give two String input for translation")},
+    {"app.transform-rotate",        N_("Give Double input for angle of Rotation")},
+    {"app.transform-scale",         N_("Give Double input for Scale")}
     // clang-format on
 };
 
