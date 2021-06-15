@@ -262,12 +262,6 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             // Besides, negatives values would ....?
         }
 
-        // Display the snap indicator (i.e. the cross)
-
-        Inkscape::CanvasItemCtrl *ctrl;
-        Inkscape::CanvasItemCtrl *ctrl2;
-        Inkscape::CanvasItemCtrl *ctrl3;
-
         double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
 
         if (is_distribution) {
@@ -283,6 +277,9 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         } 
 
         _snaptarget_is_presnap = pre_snap;
+ 
+        // Display the snap indicator (i.e. the cross)
+        Inkscape::CanvasItemCtrl *ctrl;
 
         if (!is_alignment && !is_distribution) {
             // Display snap indicator at snap target
