@@ -477,28 +477,38 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
 
 void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point const &p2, guint32 color, double fontsize, double scale)
 {
-    auto dist = Geom::L2(p2 - p1);
-    double offset = 15/_desktop->current_zoom();
-    auto direction = Geom::unit_vector(p1 - p2);
-    auto text_pos = (p1 + p2)/2;
-    Glib::ustring distance = std::to_string(int(scale * dist));
-    auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
-    text->set_fontsize(fontsize);
-    text->set_fill(color);
-    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
-    text->set_background(0xffffff00);
+    Preferences *prefs = Preferences::get();
+    bool show_distance = prefs->getBool("/options/snapindicatordistance/value", false);
 
     Inkscape::CanvasItemCurve *line;
 
-    auto temp_point = text_pos + offset*direction;
-    line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, temp_point);
-    line->set_stroke(color);
-    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+    if (show_distance) {
+        auto dist = Geom::L2(p2 - p1);
+        double offset = 15/_desktop->current_zoom();
+        auto direction = Geom::unit_vector(p1 - p2);
+        auto text_pos = (p1 + p2)/2;
+        Glib::ustring distance = std::to_string(int(scale * dist));
+        
+        auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+        text->set_fontsize(fontsize);
+        text->set_fill(color);
+        _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+        text->set_background(0xffffff00);
 
-    temp_point = text_pos - offset*direction;
-    line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), temp_point, p2);
-    line->set_stroke(color);
-    _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+        auto temp_point = text_pos + offset*direction;
+        line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, temp_point);
+        line->set_stroke(color);
+        _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+
+        temp_point = text_pos - offset*direction;
+        line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), temp_point, p2);
+        line->set_stroke(color);
+        _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+    } else {
+        line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
+        line->set_stroke(color);
+        _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
+    }
 
     auto ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
     ctrl->set_size(7);
@@ -540,6 +550,9 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
                                                 double fontsize,
                                                 double scale)
 {
+    Preferences *prefs = Preferences::get();
+    bool show_distance = prefs->getBool("/options/snapindicatordistance/value", false);
+
     guint32 color = 0xff5f1fff;
     guint32 text_fill = 0xffffffff;
     guint32 text_bg = 0xff5f1fff; //0x33337f7f
@@ -599,12 +612,14 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             line2->set_width(2);
             _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
 
-            Glib::ustring distance = std::to_string(int(scale * equal_dist));
-            auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
-            text->set_fontsize(fontsize);
-            text->set_fill(text_fill);
-            text->set_background(text_bg);
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+            if (show_distance) {
+                Glib::ustring distance = std::to_string(int(scale * equal_dist));
+                auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+                text->set_fontsize(fontsize);
+                text->set_fill(text_fill);
+                text->set_background(text_bg);
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+            }
             break;
         }
 
@@ -669,12 +684,14 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             line1->set_width(2);
             _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
 
-            Glib::ustring distance = std::to_string(int(equal_dist * scale));
-            auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
-            text->set_fontsize(fontsize);
-            text->set_fill(text_fill);
-            text->set_background(text_bg);
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+            if (show_distance) {
+                Glib::ustring distance = std::to_string(int(equal_dist * scale));
+                auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+                text->set_fontsize(fontsize);
+                text->set_fill(text_fill);
+                text->set_background(text_bg);
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+            }
 
             for (auto it = bboxes.begin(); it + 1 != bboxes.end(); it++) {
                 switch (t) {

@@ -216,6 +216,7 @@ protected:
     UI::Widget::PrefCheckButton _snap_indicator;
     UI::Widget::PrefCheckButton _snap_closest_only;
     UI::Widget::PrefCheckButton _snap_mouse_pointer;
+    UI::Widget::PrefCheckButton _snap_indicator_distance;
 
     UI::Widget::PrefCombo       _steps_rot_snap;
     UI::Widget::PrefCheckButton _steps_rot_relative;

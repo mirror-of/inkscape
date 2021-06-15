@@ -2388,6 +2388,12 @@ void InkscapePreferences::initPageBehavior()
     _page_snapping.add_line( true, _("Delay (in seconds):"), _snap_delay, "",
                              _("Postpone snapping as long as the mouse is moving, and then wait an additional fraction of a second. This additional delay is specified here. When set to zero or to a very small number, snapping will be immediate."), true);
 
+    _page_snapping.add_group_header( _("Intelligent Snapping"));
+
+    _snap_indicator_distance.init( _("Show snap distance in case of alignment or distribution snap"), "/options/snapindicatordistance/value", true);
+    _page_snapping.add_line( true, "", _snap_indicator_distance, "",
+                             _("Show snap distance in case of alignment or distribution snap"));
+
     this->AddPage(_page_snapping, _("Snapping"), iter_behavior, PREFS_PAGE_BEHAVIOR_SNAPPING);
 
     // Steps options
