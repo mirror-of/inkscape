@@ -451,9 +451,7 @@ Geom::Coord get_y(Geom::Rect const &source, Geom::Rect const &target)
 {
     Geom::Coord y;
 
-    if (abs(source.midpoint().y() - target.midpoint().y()) < 1e-5)
-        y = target.midpoint().y();
-    else if (source.midpoint().y() > target.midpoint().y())
+    if (source.midpoint().y() > target.midpoint().y())
         y = target.max().y();
     else
         y = target.min().y();
@@ -465,9 +463,7 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
 {
     Geom::Coord x;
 
-    if (abs(source.midpoint().x() - target.midpoint().x()) < 1e-5)
-        x = target.midpoint().x();
-    else if (source.midpoint().x() > target.midpoint().x())
+    if (source.midpoint().x() > target.midpoint().x())
         x = target.max().x();
     else
         x = target.min().x();
@@ -587,7 +583,7 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
                     p2 = Geom::Point(x, source_bbox.min().y());
                     p3 = Geom::Point(x, source_bbox.max().y());
                     p4 = Geom::Point(x, bboxes.back().min().y());
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-3*fontsize, 0));
+                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
 
                     point1 = make_stub_line_h(p1);
                     point2 = make_stub_line_h(p2);
