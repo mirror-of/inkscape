@@ -208,7 +208,7 @@ override) the bindings in the main default.xml.
 
   <!-- <bind key="b" modifiers="Alt" action="SelectionCreateBitmap" display="true" /> -->
 
-  <bind key="b" modifiers="Alt,Shift" action="SelectionTrace" display="true" />
+  <!-- <bind key="b" modifiers="Alt,Shift" action="SelectionTrace" display="true" /> -->
 
   <bind key="t" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
   <bind key="T" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
@@ -219,7 +219,7 @@ override) the bindings in the main default.xml.
 
 <!-- Path -->
 
-  <bind key="c" modifiers="Primary,Shift" action="ObjectToPath" display="true" />
+  <!-- <bind key="c" modifiers="Primary,Shift" action="ObjectToPath" display="true" />
 
   <bind key="c" modifiers="Primary,Alt" action="StrokeToPath" display="true" />
 
@@ -241,7 +241,7 @@ override) the bindings in the main default.xml.
   <bind key="KP_Subtract" modifiers="Primary" action="SelectionDiff" />
   <bind key="minus" modifiers="Primary,Shift" action="SelectionDiff" />
 
-  <bind key="asciicircum" modifiers="Primary" action="SelectionSymDiff" display="true" /> <!-- ^ -->
+  <bind key="asciicircum" modifiers="Primary" action="SelectionSymDiff" display="true" /> 
   <bind key="asciicircum" modifiers="Primary,Shift" action="SelectionSymDiff" />
 
   <bind key="slash" modifiers="Primary,Alt" action="SelectionCutPath" display="true" />
@@ -254,7 +254,7 @@ override) the bindings in the main default.xml.
   <bind key="parenright" modifiers="Primary" action="SelectionOffset" display="true" />
   <bind key="parenright" modifiers="Primary,Shift" action="SelectionOffset" />
   <bind key="0" modifiers="Primary,Shift" action="SelectionOffset" />
-  <bind key="0" modifiers="Primary" action="SelectionOffset" />
+  <bind key="0" modifiers="Primary" action="SelectionOffset" /> -->
 
   <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true" />
   <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
@@ -262,10 +262,10 @@ override) the bindings in the main default.xml.
   <bind key="parenright" modifiers="Alt,Shift" action="SelectionOffsetScreen10" display="true" />
   <bind key="0" modifiers="Alt,Shift" action="SelectionOffsetScreen10" />
 
-  <bind key="parenleft" modifiers="Primary" action="SelectionInset" display="true" />
+  <!-- <bind key="parenleft" modifiers="Primary" action="SelectionInset" display="true" />
   <bind key="parenleft" modifiers="Primary,Shift" action="SelectionInset" />
   <bind key="9" modifiers="Primary,Shift" action="SelectionInset" />
-  <bind key="9" modifiers="Primary" action="SelectionInset" />
+  <bind key="9" modifiers="Primary" action="SelectionInset" /> -->
 
   <bind key="parenleft" modifiers="Alt" action="SelectionInsetScreen" display="true" />
   <bind key="9" modifiers="Alt" action="SelectionInsetScreen" />
@@ -277,9 +277,9 @@ override) the bindings in the main default.xml.
 
   <bind key="j" modifiers="Primary,Alt" action="SelectionLinkedOffset" display="true" />
 
-  <bind key="l" modifiers="Primary" action="SelectionSimplify" display="true" />
+  <!-- <bind key="l" modifiers="Primary" action="SelectionSimplify" display="true" />
 
-  <bind action="SelectionReverse" />
+  <bind action="SelectionReverse" /> -->
 
 <!-- Text -->
 
@@ -362,13 +362,13 @@ override) the bindings in the main default.xml.
 
   <bind key="w" modifiers="Primary,Shift" action="DialogSwatches" display="true" />
 
-  <bind key="ampersand" modifiers="Primary" action="DialogLivePathEffect" display="true" />
+  <!-- <bind key="ampersand" modifiers="Primary" action="DialogLivePathEffect" display="true" />
   <bind key="7" modifiers="Primary,Shift" action="DialogLivePathEffect" />
 
   <bind key="ampersand" action="PasteLivePathEffect" display="true" />
   <bind key="7" modifiers="Primary" action="PasteLivePathEffect" />
 
-  <bind action="RemoveLivePathEffect" />
+  <bind action="RemoveLivePathEffect" /> -->
 
   <bind action="DialogClonetiler" />
   <!-- <bind action="DialogArrange" /> -->
@@ -485,7 +485,6 @@ override) the bindings in the main default.xml.
   <bind gaction="win.canvas-split-mode(2)"         keys="&lt;alt&gt;6,       &lt;alt&gt;KP_6"/>
 
   <!-- Dialog -->
-  
   <bind gaction="win.dialog-open('FillStroke')"              keys="&lt;shift&gt;&lt;primary&gt;f"  />
   <bind gaction="win.dialog-open('ObjectProperties')"        keys="&lt;shift&gt;&lt;primary&gt;o"  />
   <bind gaction="win.dialog-open('Symbols')"                 keys="&lt;shift&gt;&lt;primary&gt;y"/>               
@@ -493,33 +492,29 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('Transform')"               keys="&lt;shift&gt;&lt;primary&gt;m"  />
   <bind gaction="win.dialog-open('AlignDistribute')"         keys="&lt;shift&gt;&lt;primary&gt;a"/>               
   <bind gaction="win.dialog-open('UndoHistory')"             keys="&lt;primary&gt;&lt;shift&gt;h" />
-  <bind gaction="win.dialog-open('Find')"              keys="&lt;primary&gt;f" />
+  <bind gaction="win.dialog-open('Find')"                    keys="&lt;primary&gt;f" />
   <bind gaction="win.dialog-open('Clonetiler')"/>
   <bind gaction="win.dialog-open('XMLEditor')"               keys="&lt;primary&gt;&lt;shift&gt;x" />
   <bind gaction="win.dialog-open('Input')"/>  
   <bind gaction="win.dialog-open('Preferences')"             keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
+  <bind gaction="win.dialog-open('LivePathEffect')"          keys="&lt;primary&gt;ampersand, &lt;primary&gt;&lt;shift&gt;7" />
 
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
   <bind gaction="app.select-object-ungroup"               keys="&lt;shift&gt;&lt;primary&gt;g , &lt;primary&gt;u" />
-
   <bind gaction="win.object-to-pattern"                   keys="&lt;alt&gt;i" />  
   <bind gaction="win.pattern-to-object"                   keys="&lt;alt&gt;&lt;shift&gt;i" />
   <bind gaction="win.object-to-guides"                    keys="&lt;shift&gt;g" />
-
   <bind gaction="app.selection-top"                       keys="Home,  KP_Home" />
   <bind gaction="app.selection-raise"                     keys="Page_Up, KP_Page_Up" />
   <bind gaction="app.selection-lower"                     keys="Page_Down, KP_Page_Down" />
   <bind gaction="app.selection-bottom"                    keys="End,  KP_End" />
-
-
   <bind gaction="app.object-rotate-90-cw"                 keys="&lt;primary&gt;bracketright" />
   <bind gaction="app.object-rotate-90-ccw"                keys="&lt;primary&gt;bracketleft" />
   <bind gaction="app.object-flip-horizontal"              keys="h" />
   <bind gaction="app.object-flip-vertical"                keys="v" />
 
   <!-- Edit -->
-
   <bind gaction="win.undo"                                keys="&lt;primary&gt;z" />
   <bind gaction="win.redo"                                keys="&lt;primary&gt;&lt;shift&gt;z,  &lt;primary&gt;y" />
   <bind gaction="win.cut"                                 keys="&lt;primary&gt;x,               &lt;shift&gt;Delete" />
@@ -550,5 +545,24 @@ override) the bindings in the main default.xml.
   <bind gaction="win.fit-canvas-to-selection-or-drawing"  keys="&lt;primary&gt;&lt;shift&gt;r" />
   <bind gaction="win.selection-make-bitmap-copy"          keys="&lt;alt&gt;b" />
   <bind gaction="win.delete"                              keys="Delete, KP_Delete, BackSpace" />
+
+  <!-- Path -->
+  <bind gaction="app.object-to-path"                      keys="&lt;primary&gt;&lt;shift&gt;c"/>
+  <bind gaction="app.object-stroke-to-path"               keys="&lt;primary&gt;&lt;alt&gt;c"/>
+  <bind gaction="win.object-bitmap-trace"                 keys="&lt;alt&gt;&lt;shift&gt;b"/>
+  <bind gaction="app.select-path-union"                   keys="&lt;primary&gt;plus,  &lt;primary&gt;KP_Add,  &lt;primary&gt;&lt;shift&gt;plus"/>
+  <bind gaction="app.select-path-difference"              keys="&lt;primary&gt;minus, &lt;primary&gt;underscore,   &lt;primary&gt;&lt;shift&gt;underscore,    &lt;primary&gt;KP_Subtract, &lt;primary&gt;&lt;shift&gt;minus"/>
+  <bind gaction="app.select-path-intersection"            keys="&lt;primary&gt;asterisk,  &lt;primary&gt;KP_Multiply,   &lt;primary&gt;&lt;shift&gt;asterisk"/>
+  <bind gaction="app.select-path-exclusion"               keys="&lt;primary&gt;asciicircum,   &lt;primary&gt;&lt;shift&gt;asciicircum"/>
+  <bind gaction="app.select-path-division"                keys="&lt;primary&gt;slash, &lt;primary&gt;KP_Divide,    &lt;primary&gt;&lt;shift&gt;slash"/>
+  <bind gaction="app.select-path-cut"                     keys="&lt;primary&gt;&lt;alt&gt;slash, &lt;primary&gt;&lt;alt&gt;&lt;shift&gt;slash"/>
+  <bind gaction="app.select-path-combine"                 keys="&lt;primary&gt;k"/>
+  <bind gaction="app.select-path-break-apart"             keys="&lt;primary&gt;&lt;shift&gt;k"/>
+  <bind gaction="win.select-path-inset"                   keys="&lt;primary&gt;parenleft, &lt;primary&gt;&lt;shift&gt;parenleft,  &lt;primary&gt;&lt;shift&gt;9, &lt;primary&gt;9"/>
+  <bind gaction="win.select-path-outset"                  keys="&lt;primary&gt;parenright, &lt;primary&gt;&lt;shift&gt;parenright, &lt;primary&gt;&lt;shift&gt;0,   &lt;primary&gt;0"/>
+  <bind gaction="app.select-path-simplify"                keys="l"/>
+  <bind gaction="win.paste-path-effect"                   keys="ampersand, &lt;primary&gt;7"/>
+  <bind gaction="win.select-path-reverse"/>
+  <bind gaction="win.remove-path-effect"/>
 
 </keys>

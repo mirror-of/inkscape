@@ -2,7 +2,7 @@
 <interface>
 	<requires lib="gtk+" version="3.22" />
 	<menu id="path-menu">
-    
+
         <section>
             <item>
                 <attribute name='label' translatable="yes">_Object to Path</attribute>
@@ -127,8 +127,5 @@
             </item>
         </section>
 
-        <item>
-            <attribute name='label' translatable="yes">--- action end ---</attribute>
-        </item>
 	</menu>
 </interface>
