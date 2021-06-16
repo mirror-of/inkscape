@@ -91,7 +91,7 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
                           std::vector<Geom::Rect> &vec,
                           Geom::Coord &dist,
                           Geom::Coord tol,
-                          Geom::Coord(*distance_func)(Geom::Rect const&, Geom::Rect const&),
+                          std::function<Geom::Coord(Geom::Rect const&, Geom::Rect const&)> const & distance_func,
                           int level) const
 {
    Geom::Rect curr_bbox = *it;

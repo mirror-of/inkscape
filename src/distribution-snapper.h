@@ -118,7 +118,7 @@ private:
                              std::vector<Geom::Rect> &vec,
                              Geom::Coord &dist,
                              Geom::Coord tol,
-                             Geom::Coord(*distance_func)(Geom::Rect const&, Geom::Rect const&),
+                             std::function<Geom::Coord(Geom::Rect const&, Geom::Rect const&)> const & distance_func,
                              int level = 0) const;
 
     // distance functions for different orientations
