@@ -471,7 +471,7 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
 void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point const &p2, guint32 color, double fontsize, double scale)
 {
     Preferences *prefs = Preferences::get();
-    bool show_distance = prefs->getBool("/options/snapindicatordistance/value", false);
+    bool show_distance = prefs->getBool("/options/snapindicatordistance/value", true);
 
     Inkscape::CanvasItemCurve *line;
 
