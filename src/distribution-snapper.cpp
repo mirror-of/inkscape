@@ -100,20 +100,20 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
       return level != 0;
 
    // TODO: check if rect1.instersects(rect2) gives the same result at rect2.intersects(rect1)
-   while (it->intersects(*std::next(it)) || std::next(it)->intersects(*it)) {
+   while (std::next(it) != end && (it->intersects(*std::next(it)) || std::next(it)->intersects(*it))) {
       curr_bbox.unionWith(Geom::OptRect(*++it));
    }
 
+   vec.push_back(curr_bbox);
+
    if (level == 0) {
-      vec.clear();
-
-      // just add the first point to the vector and return if there are no more
+      // just add the first bbox to the vector and return if there are no more
       // objects this is used later to find in-between snaps
-      vec.push_back(curr_bbox);
-      if (std::next(it) == end)
+      if (it + 1 == end) {
          return false;
+      }
 
-      dist = distance_func(*it, *std::next(it));
+      dist = distance_func(curr_bbox, *std::next(it));
       if (abs(first_dist - dist) > tol) {
          return false;
       }
@@ -121,10 +121,9 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
       return findSidewaysSnaps(first_dist, ++it, end, vec, dist, tol, distance_func, ++level);
    }
 
-   vec.push_back(curr_bbox);
    // TODO: investige how does this tollerance affect the number of equidistant
    // objects that are found?
-   if (abs(distance_func(*it, *std::next(it)) - dist) < 1e-5) {
+   if (abs(distance_func(curr_bbox, *std::next(it)) - dist) < 1e-5) {
       return findSidewaysSnaps(first_dist, ++it, end, vec, dist, tol, distance_func, ++level);
    }
 
@@ -157,8 +156,8 @@ Inkscape::DistributionSnapper::~DistributionSnapper()
 
 void Inkscape::DistributionSnapper::_collectBBoxes(Geom::OptRect const &bbox_to_snap, bool const &first_point) const
 {
-   if (!first_point)
-      return;
+   //if (!first_point)
+      //return;
 
     _bboxes_right->clear();
     _bboxes_left->clear();
