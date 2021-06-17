@@ -300,6 +300,14 @@ remove_path_effect(InkscapeWindow* win)
     dt->selection->removeLPE();
 }
 
+/* Node toolbar : deactivate when no effect is done ( how to deactivate from c++ ) */
+void
+path_effect_parameter_next(InkscapeWindow* win)
+{
+    SPDesktop* dt = win->get_desktop(); 
+    sp_selection_next_patheffect_param(dt);
+}
+
 std::vector<std::vector<Glib::ustring>> raw_data_edit =
 {
     // clang-format off
@@ -341,7 +349,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit =
     {"win.lock-all-guides",             N_("Lock All Guides"),                  "Edit",  N_("Toggle lock of all guides in the document")},
     {"win.delete-all-guides",           N_("Delete All Guides"),                "Edit",  N_("Delete all the guides in the document")},
     {"win.paste-path-effect",           N_("Paste Path Effect"),                "Edit",  N_("Apply the path effect of the copied object to selection")},
-    {"win.remove-path-effect",          N_("Remove Path Effect"),               "Edit",  N_("Remove any path effects from selected objects")}
+    {"win.remove-path-effect",          N_("Remove Path Effect"),               "Edit",  N_("Remove any path effects from selected objects")},
+    {"win.path-effect-parameter-next",          N_("Remove Path Effect"),               "Edit",  N_("Remove any path effects from selected objects")}
     // clang-format on
 };
 
@@ -390,6 +399,7 @@ add_actions_edit(InkscapeWindow* win)
     win->add_action( "delete-all-guides",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&delete_all_guides), win));
     win->add_action( "paste-path-effect",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&paste_path_effect), win));
     win->add_action( "remove-path-effect",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&remove_path_effect), win));
+    win->add_action( "path-effect-parameter-next",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&path_effect_parameter_next), win));
     // clang-format on
 
     auto app = InkscapeApplication::instance();

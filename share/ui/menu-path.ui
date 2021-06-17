@@ -11,7 +11,7 @@
             </item>
             <item>
                 <attribute name='label' translatable="yes">_Stroke to Path</attribute>
-                <attribute name='action'>app.object-stroke-to-path</attribute>
+                <attribute name='action'>app.stroke-to-path</attribute>
                 <attribute name='icon'>stroke-to-path</attribute>
             </item>
             <item>

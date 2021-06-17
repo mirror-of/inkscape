@@ -139,124 +139,24 @@
       </object>
     </child>
 
-    <!-- <child>
-      <object class="GtkSpinButton" id="spin_button">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-      </object>
-    </child> -->
-
+<!-- Just for demo of Spin button in addtion in ui , But as GtkToolItem is depercated in Gtk4
+     So need to create a sperate builder of it -->
+     
     <child>
-      <object class="GtkLabel" >
+      <object class="GtkToolItem">
         <property name="visible">True</property>
-        <property name="label" translatable="true">X </property>
+          <child>
+            <object class="GtkBox">
+              <property name="visible">True</property>
+                <child>
+                  <object class="GtkSpinButton">
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+            </object>
+          </child>
       </object>
     </child>
-
-    <child>
-      <object class="gtkmm__CustomObject_MyButton" id="spin_button">
-        <property name="text" >X</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="digits">3</property>
-        <property name="numeric">True</property>
-        <property name="numeric">True</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">40</property>
-      </packing>
-    </child>
-
-    <child>
-      <object class="GtkLabel" >
-        <property name="visible">True</property>
-        <property name="label" translatable="true">Y </property>
-      </object>
-    </child>
-
-    <child>
-      <object class="GtkSpinButton" id="spin_button1">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="digits">2</property>
-        <property name="numeric">True</property>
-        <property name="numeric">True</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">50</property>
-      </packing>
-    </child>
-
-    <child>
-      <object class="GtkLabel" >
-        <property name="visible">True</property>
-        <property name="label" translatable="true">W </property>
-      </object>
-    </child>
-
-    <child>
-      <object class="GtkSpinButton" >
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="digits">1</property>
-        <property name="numeric">True</property>
-        <property name="numeric">True</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">60</property>
-      </packing>
-    </child>
-
-    <child>
-      <object class="GtkToolButton">
-        <property name="visible">True</property>
-        <property name="action_name">app.selection-top</property>
-        <property name="icon_name">object-unlocked</property>
-        <property name="label" translatable="true">Raise to _Top</property>
-      </object>
-    </child>
-
-    <child>
-      <object class="GtkLabel" >
-        <property name="visible">True</property>
-        <property name="label" translatable="true">H </property>
-      </object>
-    </child>
-
-    <child>
-      <object class="GtkSpinButton" >
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="digits">1</property>
-        <property name="numeric">True</property>
-        <property name="numeric">True</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">60</property>
-      </packing>
-    </child>
-
-    <child>
-      <object class="GtkComboBoxText">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="active">0</property>
-        <items>
-          <item id="0" translatable="yes">mm</item>
-          <item id="1" translatable="yes">px</item>
-          <item id="2" translatable="yes">lm</item>
-        </items>
-      </object>
-    </child>
-
 
   </object>
 

@@ -548,7 +548,7 @@ override) the bindings in the main default.xml.
 
   <!-- Path -->
   <bind gaction="app.object-to-path"                      keys="&lt;primary&gt;&lt;shift&gt;c"/>
-  <bind gaction="app.object-stroke-to-path"               keys="&lt;primary&gt;&lt;alt&gt;c"/>
+  <bind gaction="app.stroke-to-path"                      keys="&lt;primary&gt;&lt;alt&gt;c"/>
   <bind gaction="win.object-bitmap-trace"                 keys="&lt;alt&gt;&lt;shift&gt;b"/>
   <bind gaction="app.select-path-union"                   keys="&lt;primary&gt;plus,  &lt;primary&gt;KP_Add,  &lt;primary&gt;&lt;shift&gt;plus"/>
   <bind gaction="app.select-path-difference"              keys="&lt;primary&gt;minus, &lt;primary&gt;underscore,   &lt;primary&gt;&lt;shift&gt;underscore,    &lt;primary&gt;KP_Subtract, &lt;primary&gt;&lt;shift&gt;minus"/>

@@ -225,7 +225,9 @@ set(inkscape_SRC
   actions/actions-file.h
   actions/actions-file.cpp
   actions/actions-helper.h
-  actions/actions-helper.cpp
+  actions/actions-helper.cpp  
+  actions/actions-node.h
+  actions/actions-node.cpp
   actions/actions-object.h
   actions/actions-object.cpp
   actions/actions-object-align.h
