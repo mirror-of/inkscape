@@ -5,7 +5,6 @@
 
   <!-- Select Toolbar -->
 
-
   <object class="GtkToolbar" id="select-toolbar">
     <property name="visible">True</property>
 

@@ -1,13 +1,23 @@
-#include <iostream>
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ *
+ * Actions related to selection wich require desktop
+ * 
+ * Authors:
+ *   Sushant A A <sushant.co19@gmail.com>
+ *
+ * Copyright (C) 2021 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
-#include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <giomm.h>
 #include <glibmm/i18n.h>
 
 #include "actions-selection-desktop.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "desktop.h"
-#include "document-undo.h"
 #include "ui/dialog/dialog-container.h"
 #include "path/path-offset.h"
 #include "actions/actions-tools.h"

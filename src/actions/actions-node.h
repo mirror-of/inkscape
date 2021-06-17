@@ -1,11 +1,19 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ *
+ * Authors:
+ *   Sushant A A <sushant.co19@gmail.com>
+ *
+ * Copyright (C) 2021 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
 #ifndef INK_ACTIONS_NODE_H
 #define INK_ACTIONS_NODE_H
 
-#include "ui/tools/node-tool.h"
-#include "inkscape.h"
+class InkscapeApplication;
 
-class InkscapeWindow;
-
-void add_actions_node(InkscapeWindow* win);
+void add_actions_node(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_NODE_H

@@ -1,4 +1,15 @@
-#include <iostream>
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ *
+ * Actions related to fit canvas
+ * 
+ * Authors:
+ *   Sushant A A <sushant.co19@gmail.com>
+ *
+ * Copyright (C) 2021 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
 #include <glibmm/i18n.h>

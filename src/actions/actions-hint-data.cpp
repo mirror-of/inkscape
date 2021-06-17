@@ -1,3 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ *
+ * Command Palette input placehoder hint data
+ * 
+ * Authors:
+ *   Sushant A A <sushant.co19@gmail.com>
+ *
+ * Copyright (C) 2021 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
 #include "actions-hint-data.h"
 #include <glibmm/i18n.h>
 

@@ -1,17 +1,24 @@
-#include <iostream>
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ *
+ * Actions related to selection of objects which don't require desktop
+ * 
+ * Authors:
+ *   Sushant A A <sushant.co19@gmail.com>
+ *
+ * Copyright (C) 2021 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
-#include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <giomm.h>
 #include <glibmm/i18n.h>
 
 #include "actions-selection-object.h"
 #include "actions-helper.h"
 #include "inkscape-application.h"
-
-#include "inkscape.h"             // Inkscape::Application
-#include "selection.h"            // Selection
-
-#include "object/sp-root.h"       // select_all: document->getRoot();
-#include "object/sp-item-group.h" // select_all
+#include "inkscape.h"             
+#include "selection.h"            
 
 void
 select_object_group(InkscapeApplication* app)

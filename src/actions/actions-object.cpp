@@ -288,22 +288,22 @@ add_actions_object(InkscapeApplication* app)
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
     // clang-format off
-    gapp->add_action_with_parameter( "object-set-attribute",            String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),      app));
-    gapp->add_action_with_parameter( "object-set-property",             String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),       app));
-    gapp->add_action(                "object-unlink-clones",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),      app));
-    gapp->add_action(                "object-to-path",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),            app));
-    gapp->add_action(                "stroke-to-path",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),     app));
-    gapp->add_action(                "object-simplify-path",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_simplify_path),      app));
-    gapp->add_action(                "object-set",                       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_clip),             app));
-    gapp->add_action(                "object-set-inverse",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse),             app));
-    gapp->add_action(                "object-release",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release),             app));
-    gapp->add_action(                "object-set-mask",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_mask),             app));
-    gapp->add_action(                "object-set-inverse-mask",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse_mask),             app));
-    gapp->add_action(                "object-release-mask",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release_mask),             app));
-    gapp->add_action(                "object-rotate-90-cw",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),             app));
-    gapp->add_action(                "object-rotate-90-ccw",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),             app));
-    gapp->add_action(                "object-flip-horizontal",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_horizontal),             app));
-    gapp->add_action(                "object-flip-vertical",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_vertical),             app));
+    gapp->add_action_with_parameter( "object-set-attribute",            String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),  app));
+    gapp->add_action_with_parameter( "object-set-property",             String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),   app));
+    gapp->add_action(                "object-unlink-clones",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),          app));
+    gapp->add_action(                "object-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),                app));
+    gapp->add_action(                "stroke-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),         app));
+    gapp->add_action(                "object-simplify-path",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_simplify_path),          app));
+    gapp->add_action(                "object-set",                      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_clip),                      app));
+    gapp->add_action(                "object-set-inverse",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse),            app));
+    gapp->add_action(                "object-release",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release),                app));
+    gapp->add_action(                "object-set-mask",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_mask),                      app));
+    gapp->add_action(                "object-set-inverse-mask",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse_mask),       app));
+    gapp->add_action(                "object-release-mask",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release_mask),           app));
+    gapp->add_action(                "object-rotate-90-cw",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),           app));
+    gapp->add_action(                "object-rotate-90-ccw",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),           app));
+    gapp->add_action(                "object-flip-horizontal",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_horizontal),        app));
+    gapp->add_action(                "object-flip-vertical",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_vertical),          app));
     // clang-format on
 
 #endif

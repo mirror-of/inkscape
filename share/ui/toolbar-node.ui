@@ -11,7 +11,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-edit-add</property>
+        <property name="action_name">app.node-edit-add</property>
         <property name="icon_name">node-add</property>
         <property name='label' translatable="yes">Insert node</property>
       </object>
@@ -19,7 +19,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-node-delete</property>
+        <property name="action_name">app.node-node-delete</property>
         <property name="icon_name">node-delete</property>
         <property name='label' translatable="yes">Delete node</property>
       </object>
@@ -34,7 +34,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-join</property>
+        <property name="action_name">app.node-join</property>
         <property name="icon_name">node-join</property>
         <property name='label' translatable="yes">Join nodes</property>
       </object>
@@ -42,7 +42,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-break</property>
+        <property name="action_name">app.node-break</property>
         <property name="icon_name">node-break</property>
         <property name='label' translatable="yes">Break nodes</property>
       </object>
@@ -57,7 +57,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-join-segment</property>
+        <property name="action_name">app.node-join-segment</property>
         <property name="icon_name">node-join-segment</property>
         <property name='label' translatable="yes">Join with segment</property>
       </object>
@@ -65,7 +65,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-delete-segment</property>
+        <property name="action_name">app.node-delete-segment</property>
         <property name="icon_name">node-delete-segment</property>
         <property name='label' translatable="yes">Delete segment</property>
       </object>
@@ -80,7 +80,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-type-cusp</property>
+        <property name="action_name">app.node-type-cusp</property>
         <property name="icon_name">node-type-cusp</property>
         <property name='label' translatable="yes">Node Cusp</property>
       </object>
@@ -88,7 +88,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-type-smooth</property>
+        <property name="action_name">app.node-type-smooth</property>
         <property name="icon_name">node-type-smooth</property>
         <property name='label' translatable="yes">Node Smooth</property>
       </object>
@@ -96,7 +96,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-type-symmetric</property>
+        <property name="action_name">app.node-type-symmetric</property>
         <property name="icon_name">node-type-symmetric</property>
         <property name='label' translatable="yes">Node Smooth</property>
       </object>
@@ -104,7 +104,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-type-auto-smooth</property>
+        <property name="action_name">app.node-type-auto-smooth</property>
         <property name="icon_name">node-type-auto-smooth</property>
         <property name='label' translatable="yes">Node Auto</property>
       </object>
@@ -119,7 +119,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-segment-line</property>
+        <property name="action_name">app.node-segment-line</property>
         <property name="icon_name">node-segment-line</property>
         <property name='label' translatable="yes">Node Line</property>
       </object>
@@ -127,7 +127,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-segment-curve</property>
+        <property name="action_name">app.node-segment-curve</property>
         <property name="icon_name">node-segment-curve</property>
         <property name='label' translatable="yes">Node Curve</property>
       </object>
@@ -165,7 +165,7 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-path-clip-edit</property>
+        <property name="action_name">app.node-path-clip-edit</property>
         <property name="icon_name">path-clip-edit</property>
         <property name='label' translatable="yes">Edit clipping paths</property>
       </object>
@@ -173,14 +173,15 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-path-mask-edit</property>
+        <property name="action_name">app.node-path-mask-edit</property>
         <property name="icon_name">path-mask-edit</property>
         <property name='label' translatable="yes">Edit masks</property>
       </object>
     </child>
     <child>
-      <object class="GtkToolButton">
+      <object class="GtkToolButton" id="path-effect-parameter-next" >
         <property name="visible">True</property>
+        <!-- <property name="sensitive">True</property>  Need to add a togler for this  --> 
         <property name="action_name">win.path-effect-parameter-next</property>
         <property name="icon_name">path-effect-parameter-next</property>
         <property name='label' translatable="yes">Stroke to Path</property>
@@ -196,7 +197,7 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.node-transform</property>
+        <property name="action_name">app.node-transform</property>
         <property name="icon_name">node-transform</property>
         <property name='label' translatable="yes">Show Transform Handles</property>
       </object>
@@ -204,7 +205,7 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.show-node-handles</property>
+        <property name="action_name">app.show-node-handles</property>
         <property name="icon_name">show-node-handles</property>
         <property name='label' translatable="yes">Show Handles</property>
       </object>
@@ -212,7 +213,7 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.show-path-outline</property>
+        <property name="action_name">app.show-path-outline</property>
         <property name="icon_name">show-path-outline</property>
         <property name='label' translatable="yes">Show Outline</property>
       </object>
