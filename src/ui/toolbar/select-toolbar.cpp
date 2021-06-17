@@ -42,6 +42,10 @@
 #include "ui/widget/unit-tracker.h"
 
 #include "widgets/widget-sizes.h"
+#include "io/resource.h"
+
+using Inkscape::IO::Resource::UIS;
+
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;
@@ -251,6 +255,29 @@ void SelectToolbar::on_unrealize()
 GtkWidget *
 SelectToolbar::create(SPDesktop *desktop)
 {
+    // Select TOOLBAR : SpinButton Addition Left
+
+    /* Glib::ustring select_toolbar_builder_file = get_filename(UIS, "toolbar-select.ui");
+    auto builder = Gtk::Builder::create();
+    try
+    {
+        builder->add_from_file(select_toolbar_builder_file);
+    }
+    catch (const Glib::Error& ex)
+    {
+        std::cerr << "SelectToolbar: " << select_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
+    }
+
+    Gtk::Toolbar* toolbar = nullptr;
+    builder->get_widget("select-toolbar", toolbar);
+    if (!toolbar) {
+        std::cerr << "InkscapeWindow: Failed to load select toolbar!" << std::endl;
+        return nullptr;
+    }
+
+    toolbar->reference(); 
+    return GTK_WIDGET(toolbar->gobj()); */
+
     auto toolbar = new SelectToolbar(desktop);
     return GTK_WIDGET(toolbar->gobj());
 }
