@@ -792,12 +792,6 @@ public:
         add_widget(lbl, "");
     }
 
-    void add_notimplemented()
-    {
-        Gtk::Label* lbl = Gtk::manage(new Gtk::Label(_("This SVG filter effect is not yet implemented in Inkscape.")));
-        add_widget(lbl, "");
-    }
-
     // LightSource
     LightSourceControl* add_lightsource();
 
