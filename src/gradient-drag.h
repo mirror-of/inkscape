@@ -229,7 +229,7 @@ private:
     void addDraggersMesh(  SPMeshGradient   *mg, SPItem *item, Inkscape::PaintTarget fill_or_stroke);
     void refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTarget fill_or_stroke);
 
-    bool styleSet( const SPCSSAttr *css );
+    bool styleSet( const SPCSSAttr *css, bool switch_style);
 
     Glib::ustring makeStopSafeColor( gchar const *str, bool &isNull );
 

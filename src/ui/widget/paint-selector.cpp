@@ -47,6 +47,9 @@
 
 #include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
+#include "ui/widget/gradient-selector.h"
+#include "ui/widget/gradient-editor.h"
+#include "ui/widget/swatch-selector.h"
 #include "ui/widget/scrollprotected.h"
 
 #include "widgets/widget-sizes.h"
@@ -128,7 +131,7 @@ static bool isPaintModeGradient(PaintSelector::Mode mode)
     return isGrad;
 }
 
-GradientSelector *PaintSelector::getGradientFromData() const
+GradientSelectorInterface *PaintSelector::getGradientFromData() const
 {
     if (_mode == PaintSelector::MODE_SWATCH && _selector_swatch) {
         return _selector_swatch->getGradientSelector();
@@ -267,7 +270,8 @@ StyleToggleButton *PaintSelector::style_button_add(gchar const *pixmap, PaintSel
 void PaintSelector::style_button_toggled(StyleToggleButton *tb)
 {
     if (!_update && tb->get_active()) {
-        setMode(tb->get_style());
+        // button toggled: explicit user action where fill/stroke style change is initiated/requested
+        set_mode_ex(tb->get_style(), true);
     }
 }
 
@@ -279,10 +283,14 @@ void PaintSelector::fillrule_toggled(FillRuleRadioButton *tb)
     }
 }
 
-void PaintSelector::setMode(Mode mode)
-{
+void PaintSelector::setMode(Mode mode) {
+    set_mode_ex(mode, false);
+}
+
+void PaintSelector::set_mode_ex(Mode mode, bool switch_style) {
     if (_mode != mode) {
         _update = true;
+        _label->show();
 #ifdef SP_PS_VERBOSE
         g_print("Mode change %d -> %d   %s -> %s\n", _mode, mode, modeStrings[_mode], modeStrings[mode]);
 #endif
@@ -325,7 +333,7 @@ void PaintSelector::setMode(Mode mode)
                 break;
         }
         _mode = mode;
-        _signal_mode_changed.emit(_mode);
+        _signal_mode_changed.emit(_mode, switch_style);
         _update = false;
     }
 }
@@ -379,7 +387,7 @@ void PaintSelector::setSwatch(SPGradient *vector)
     }
 }
 
-void PaintSelector::setGradientLinear(SPGradient *vector)
+void PaintSelector::setGradientLinear(SPGradient *vector, SPLinearGradient* gradient, SPStop* selected)
 {
 #ifdef SP_PS_VERBOSE
     g_print("PaintSelector set GRADIENT LINEAR\n");
@@ -389,10 +397,12 @@ void PaintSelector::setGradientLinear(SPGradient *vector)
     auto gsel = getGradientFromData();
 
     gsel->setMode(GradientSelector::MODE_LINEAR);
+    gsel->setGradient(gradient);
     gsel->setVector((vector) ? vector->document : nullptr, vector);
+    gsel->selectStop(selected);
 }
 
-void PaintSelector::setGradientRadial(SPGradient *vector)
+void PaintSelector::setGradientRadial(SPGradient *vector, SPRadialGradient* gradient, SPStop* selected)
 {
 #ifdef SP_PS_VERBOSE
     g_print("PaintSelector set GRADIENT RADIAL\n");
@@ -402,8 +412,9 @@ void PaintSelector::setGradientRadial(SPGradient *vector)
     auto gsel = getGradientFromData();
 
     gsel->setMode(GradientSelector::MODE_RADIAL);
-
+    gsel->setGradient(gradient);
     gsel->setVector((vector) ? vector->document : nullptr, vector);
+    gsel->selectStop(selected);
 }
 
 #ifdef WITH_MESH
@@ -556,8 +567,7 @@ void PaintSelector::set_mode_color(PaintSelector::Mode /*mode*/)
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
-    if ((_mode == PaintSelector::MODE_SWATCH) || (_mode == PaintSelector::MODE_GRADIENT_LINEAR) ||
-        (_mode == PaintSelector::MODE_GRADIENT_RADIAL)) {
+    if (_mode == PaintSelector::MODE_SWATCH) {
         auto gsel = getGradientFromData();
         if (gsel) {
             SPGradient *gradient = gsel->getVector();
@@ -629,14 +639,21 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
         clear_frame();
         if (!_selector_gradient) {
             /* Create new gradient selector */
-            _selector_gradient = Gtk::manage(new GradientSelector());
-            _selector_gradient->show();
-            _selector_gradient->signal_grabbed().connect(sigc::mem_fun(this, &PaintSelector::gradient_grabbed));
-            _selector_gradient->signal_dragged().connect(sigc::mem_fun(this, &PaintSelector::gradient_dragged));
-            _selector_gradient->signal_released().connect(sigc::mem_fun(this, &PaintSelector::gradient_released));
-            _selector_gradient->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::gradient_changed));
-            /* Pack everything to frame */
-            _frame->add(*_selector_gradient);
+            try {
+                _selector_gradient = Gtk::manage(new GradientEditor("/gradient-edit"));
+                _selector_gradient->show();
+                _selector_gradient->signal_grabbed().connect(sigc::mem_fun(this, &PaintSelector::gradient_grabbed));
+                _selector_gradient->signal_dragged().connect(sigc::mem_fun(this, &PaintSelector::gradient_dragged));
+                _selector_gradient->signal_released().connect(sigc::mem_fun(this, &PaintSelector::gradient_released));
+                _selector_gradient->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::gradient_changed));
+                _selector_gradient->signal_stop_selected().connect([=](SPStop* stop) { _signal_stop_selected.emit(stop); });
+                /* Pack everything to frame */
+                _frame->add(*_selector_gradient);
+            }
+            catch (std::exception& ex) {
+                g_error("Creation of GradientEditor widget failed: %s.", ex.what());
+                throw;
+            }
         } else {
             // Necessary when creating new gradients via the Fill and Stroke dialog
             _selector_gradient->setVector(nullptr, nullptr);
@@ -648,10 +665,12 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
     if (mode == PaintSelector::MODE_GRADIENT_LINEAR) {
         _selector_gradient->setMode(GradientSelector::MODE_LINEAR);
         // sp_gradient_selector_set_mode(SP_GRADIENT_SELECTOR(gsel), SP_GRADIENT_SELECTOR_MODE_LINEAR);
-        _label->set_markup(_("<b>Linear gradient</b>"));
+      //   _label->set_markup(_("<b>Linear gradient</b>"));
+        _label->hide();
     } else if (mode == PaintSelector::MODE_GRADIENT_RADIAL) {
         _selector_gradient->setMode(GradientSelector::MODE_RADIAL);
-        _label->set_markup(_("<b>Radial gradient</b>"));
+        // _label->set_markup(_("<b>Radial gradient</b>"));
+        _label->hide();
     }
 
 #ifdef SP_PS_VERBOSE
@@ -1394,7 +1413,7 @@ PaintSelector::Mode PaintSelector::getModeForStyle(SPStyle const &style, FillOrS
     if (!target.set) {
         mode = MODE_UNSET;
     } else if (target.isPaintserver()) {
-        SPPaintServer const *server = (kind == FILL) ? style.getFillPaintServer() : style.getStrokePaintServer();
+        SPPaintServer const *server = kind == FILL ? style.getFillPaintServer() : style.getStrokePaintServer();
 
 #ifdef SP_PS_VERBOSE
         g_message("PaintSelector::getModeForStyle(%p, %d)", &style, kind);

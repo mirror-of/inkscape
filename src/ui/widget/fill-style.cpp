@@ -36,6 +36,7 @@
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-text.h"
+#include "object/sp-stop.h"
 #include "style.h"
 
 #include "ui/widget/canvas.h"  // Forced redraws
@@ -65,6 +66,9 @@ FillNStroke::FillNStroke(FillOrStroke k)
     _psel->signal_mode_changed().connect(sigc::mem_fun(*this, &FillNStroke::paintModeChangeCB));
     _psel->signal_dragged().connect(sigc::mem_fun(*this, &FillNStroke::dragFromPaint));
     _psel->signal_changed().connect(sigc::mem_fun(*this, &FillNStroke::paintChangedCB));
+    _psel->signal_stop_selected().connect([=](SPStop* stop) {
+       if (_desktop) { _desktop->emitToolSubselectionChangedEx(nullptr, stop); }
+    });
 
     if (kind == FILL) {
         _psel->signal_fillrule_changed().connect(sigc::mem_fun(*this, &FillNStroke::setFillrule));
@@ -139,7 +143,6 @@ void FillNStroke::eventContextCB(SPDesktop * /*desktop*/, Inkscape::UI::Tools::T
     performUpdate();
 }
 
-
 /**
  * Gets the active fill or stroke style property, then sets the appropriate
  * color, alpha, gradient, pattern, etc. for the paint-selector.
@@ -166,9 +169,17 @@ void FillNStroke::performUpdate()
 
     // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if
     // any, or selection
-    int result = sp_desktop_query_style(_desktop, &query,
-                                        (kind == FILL) ? QUERY_STYLE_PROPERTY_FILL : QUERY_STYLE_PROPERTY_STROKE);
-
+    const int property = kind == FILL ? QUERY_STYLE_PROPERTY_FILL : QUERY_STYLE_PROPERTY_STROKE;
+    int result = sp_desktop_query_style(_desktop, &query, property);
+    SPIPaint& paint = *query.getFillOrStroke(kind == FILL);
+    auto stop = dynamic_cast<SPStop*>(paint.getTag());
+    if (stop) {
+       // there's a stop selected, which is part of subselection, now query selection only to find selected gradient
+       if (_desktop->selection != nullptr) {
+          std::vector<SPItem*> vec(_desktop->selection->items().begin(), _desktop->selection->items().end());
+          result = sp_desktop_query_style_from_list(vec, &query, property);
+       }
+    }
     SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
     SPIScale24 &targOpacity = *(kind == FILL ? query.fill_opacity.upcast() : query.stroke_opacity.upcast());
 
@@ -195,8 +206,7 @@ void FillNStroke::performUpdate()
             if (targPaint.set && targPaint.isColor()) {
                 _psel->setColorAlpha(targPaint.value.color, SP_SCALE24_TO_FLOAT(targOpacity.value));
             } else if (targPaint.set && targPaint.isPaintserver()) {
-
-                SPPaintServer *server = (kind == FILL) ? query.getFillPaintServer() : query.getStrokePaintServer();
+                SPPaintServer* server = (kind == FILL) ? query.getFillPaintServer() : query.getStrokePaintServer();
 
                 if (server) {
                     if (SP_IS_GRADIENT(server) && SP_GRADIENT(server)->getVector()->isSwatch()) {
@@ -204,15 +214,15 @@ void FillNStroke::performUpdate()
                         _psel->setSwatch(vector);
                     } else if (SP_IS_LINEARGRADIENT(server)) {
                         SPGradient *vector = SP_GRADIENT(server)->getVector();
-                        _psel->setGradientLinear(vector);
-
                         SPLinearGradient *lg = SP_LINEARGRADIENT(server);
+                        _psel->setGradientLinear(vector, lg, stop);
+
                         _psel->setGradientProperties(lg->getUnits(), lg->getSpread());
                     } else if (SP_IS_RADIALGRADIENT(server)) {
                         SPGradient *vector = SP_GRADIENT(server)->getVector();
-                        _psel->setGradientRadial(vector);
-
                         SPRadialGradient *rg = SP_RADIALGRADIENT(server);
+                        _psel->setGradientRadial(vector, rg, stop);
+
                         _psel->setGradientProperties(rg->getUnits(), rg->getSpread());
 #ifdef WITH_MESH
                     } else if (SP_IS_MESHGRADIENT(server)) {
@@ -241,13 +251,13 @@ void FillNStroke::performUpdate()
 /**
  * When the mode is changed, invoke a regular changed handler.
  */
-void FillNStroke::paintModeChangeCB(UI::Widget::PaintSelector::Mode /*mode*/)
+void FillNStroke::paintModeChangeCB(UI::Widget::PaintSelector::Mode /*mode*/, bool switch_style)
 {
 #ifdef SP_FS_VERBOSE
     g_message("paintModeChangeCB()");
 #endif
     if (!_update) {
-        updateFromPaint();
+        updateFromPaint(switch_style);
     }
 }
 
@@ -365,7 +375,7 @@ void FillNStroke::paintChangedCB()
     }
 }
 
-void FillNStroke::updateFromPaint()
+void FillNStroke::updateFromPaint(bool switch_style)
 {
     if (!_desktop) {
         return;
@@ -391,7 +401,7 @@ void FillNStroke::updateFromPaint()
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_set_property(css, (kind == FILL) ? "fill" : "stroke", "none");
 
-            sp_desktop_set_style(_desktop, css);
+            sp_desktop_set_style(_desktop, css, true, true, switch_style);
 
             sp_repr_css_attr_unref(css);
             css = nullptr;

@@ -48,7 +48,7 @@ namespace Tools {
 static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint state, guint32 etime);
 
 const std::string& GradientTool::getPrefsPath() {
-	return GradientTool::prefsPath;
+   return GradientTool::prefsPath;
 }
 
 const std::string GradientTool::prefsPath = "/tools/gradient";
@@ -155,14 +155,17 @@ void GradientTool::setup() {
     Inkscape::Selection *selection = this->desktop->getSelection();
 
     this->selcon = new sigc::connection(selection->connectChanged(
-    	sigc::mem_fun(this, &GradientTool::selection_changed)
+       sigc::mem_fun(this, &GradientTool::selection_changed)
     ));
 
-    this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChanged(
-    	sigc::hide(sigc::bind(
-    		sigc::mem_fun(this, &GradientTool::selection_changed),
-    		(Inkscape::Selection*)nullptr
-    	))
+    this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChangedEx(
+       [=](gpointer ptr, SPObject* obj) {
+          selection_changed(nullptr);
+          if (auto stop = dynamic_cast<SPStop*>(obj)) {
+             // sync stop selection:
+            _grdrag->selectByStop(stop, false, true);
+          }
+       }
     ));
 
     this->selection_changed(selection);
@@ -471,7 +474,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
                 // always resets selection to the single object under cursor
                 sp_gradient_context_add_stop_near_point(this, selection->items().front(), mousepoint_doc, event->button.time);
             } else {
-            	auto items= selection->items();
+               auto items= selection->items();
                 for (auto i = items.begin();i!=items.end();++i) {
                     SPItem *item = *i;
                     SPGradientType new_type = (SPGradientType) prefs->getInt("/tools/gradient/newgradient", SP_GRADIENT_TYPE_LINEAR);
@@ -750,7 +753,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
     }
 
     if (!ret) {
-    	ret = ToolBase::root_handler(event);
+       ret = ToolBase::root_handler(event);
     }
 
     return ret;
@@ -775,7 +778,7 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
         } else {
             // Starting from empty space:
             // Sort items so that the topmost comes last
-        	std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+           std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
             sort(items.begin(),items.end(),sp_item_repr_compare_position_bool);
             // take topmost
             vector = sp_gradient_vector_for_object(document, desktop, items.back(), fill_or_stroke);

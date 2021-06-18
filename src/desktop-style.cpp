@@ -185,13 +185,13 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
  * Apply style on selection on desktop.
  */
 
-void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current)
+void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current, bool switch_style)
 {
-    return sp_desktop_set_style(desktop->getSelection(), desktop, css, change, write_current);
+    return sp_desktop_set_style(desktop->getSelection(), desktop, css, change, write_current, switch_style);
 }
 
 void
-sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current)
+sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current, bool switch_style)
 {
     if (write_current) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -220,7 +220,7 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
         return;
 
 // 2. Emit signal... See desktop->connectSetStyle in text-tool, tweak-tool, and gradient-drag.
-    bool intercepted = desktop->_set_style_signal.emit(css);
+    bool intercepted = desktop->_set_style_signal.emit(css, switch_style);
 
 /** \todo
  * FIXME: in set_style, compensate pattern and gradient fills, stroke width,

@@ -223,7 +223,7 @@ GradientVectorSelector::rebuild_gui_full()
     } else {
         for (auto gr:gl) {
             unsigned long hhssll = sp_gradient_to_hhssll(gr);
-            GdkPixbuf *pixb = sp_gradient_to_pixbuf (gr, 64, 18);
+            GdkPixbuf *pixb = sp_gradient_to_pixbuf (gr, _pix_width, _pix_height);
             Glib::ustring label = gr_prepare_label(gr);
 
             Gtk::TreeModel::Row row = *(_store->append());
@@ -243,6 +243,11 @@ GradientVectorSelector::setSwatched()
 {
     _swatched = true;
     rebuild_gui_full();
+}
+
+void GradientVectorSelector::set_pixmap_size(int width, int height) {
+    _pix_width = width;
+    _pix_height = height;
 }
 
 } // namespace Widget

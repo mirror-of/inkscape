@@ -66,12 +66,20 @@ SPGradient *sp_gradient_get_forked_vector_if_necessary(SPGradient *gradient, boo
 
 SPStop* sp_last_stop(SPGradient *gradient);
 SPStop* sp_get_stop_i(SPGradient *gradient, unsigned int i);
+// return n-th stop counting from 0; make no assumptions about offsets 
+SPStop* sp_get_nth_stop(SPGradient* gradient, unsigned int index);
+std::pair<SPStop*, SPStop*> sp_get_before_after_stops(SPStop* stop);
 unsigned int sp_number_of_stops(SPGradient const *gradient);
-unsigned int sp_number_of_stops_before_stop(SPGradient const *gradient, SPStop *target);
+unsigned int sp_number_of_stops_before_stop(SPGradient* gradient, SPStop *target);
 
 guint32 average_color(guint32 c1, guint32 c2, double p = 0.5);
 
 SPStop *sp_vector_add_stop(SPGradient *vector, SPStop* prev_stop, SPStop* next_stop, gfloat offset);
+
+void sp_gradient_delete_stop(SPGradient* gradient, SPStop* stop);
+SPStop* sp_gradient_add_stop(SPGradient* gradient, SPStop* current);
+SPStop* sp_gradient_add_stop_at(SPGradient* gradient, double offset);
+void sp_set_gradient_stop_color(SPDocument* document, SPStop* stop, SPColor color, double opacity);
 
 void sp_gradient_transform_multiply(SPGradient *gradient, Geom::Affine postmul, bool set);
 
@@ -80,6 +88,8 @@ void sp_gradient_reverse_selected_gradients(SPDesktop *desktop);
 void sp_gradient_invert_selected_gradients(SPDesktop *desktop, Inkscape::PaintTarget fill_or_stroke);
 
 void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id);
+
+void sp_gradient_reverse_vector(SPGradient* gradient);
 
 /**
  * Fetches either the fill or the stroke gradient from the given item.
@@ -100,6 +110,8 @@ Geom::Point getGradientCoords(SPItem *item, GrPointType point_type, unsigned int
 
 SPGradient *sp_item_gradient_get_vector(SPItem *item, Inkscape::PaintTarget fill_or_stroke);
 SPGradientSpread sp_item_gradient_get_spread(SPItem *item, Inkscape::PaintTarget fill_or_stroke);
+
+SPStop* sp_item_gradient_get_stop(SPItem *item, GrPointType point_type, guint point_i, Inkscape::PaintTarget fill_or_stroke);
 
 void sp_item_gradient_stop_set_style(SPItem *item, GrPointType point_type, unsigned int point_i, Inkscape::PaintTarget fill_or_stroke, SPCSSAttr *stop);
 guint32 sp_item_gradient_stop_query_style(SPItem *item, GrPointType point_type, unsigned int point_i, Inkscape::PaintTarget fill_or_stroke);

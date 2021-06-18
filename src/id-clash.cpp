@@ -18,6 +18,7 @@
 #include <map>
 #include <string>
 #include <utility>
+#include <glibmm/regex.h>
 
 #include "extract-uri.h"
 #include "id-clash.h"
@@ -388,6 +389,56 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
     }
 }
 
+const char valid_id_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
+
+/**
+ * Modify 'base_name' to create a new ID that is not used in the 'document'
+*/
+Glib::ustring generate_unique_id(SPDocument* document, const Glib::ustring& base_name) {
+    const auto NPOS = Glib::ustring::npos;
+    // replace illegal chars in base_name
+    auto id = base_name;
+    if (id.empty()) {
+        id = "id-0";
+    }
+    else {
+        for (auto pos = id.find_first_not_of(valid_id_chars);
+                  pos != NPOS;
+                  pos = id.find_first_not_of(valid_id_chars, pos)) {
+            id.replace(pos, 1, "_");
+        }
+        if (!isalnum(id[0])) {
+            id.insert(0, "x");
+        }
+    }
+
+    if (!document) {
+        g_warning("No document provided in %s, ID will not be unique.", __func__);
+    }
+
+    if (document && document->getObjectById(id.c_str())) {
+        // conflict; check if id ends with "-<number>", so we can increase it;
+        // only accept numbers with up to 9 digits and ignore other/larger digit strings
+        Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("(.*)-(\\d{1,9})");
+        Glib::MatchInfo info;
+        regex->match(id, info);
+        unsigned long counter = 0;
+        auto base = id;
+        if (info.matches()) {
+            base = info.fetch(1);
+            counter = std::stoul(info.fetch(2));
+        }
+        base += '-';
+        for (;;) {
+            counter++;
+            id = base + std::to_string(counter);
+            if (document->getObjectById(id.c_str()) == nullptr) break;
+        }
+    }
+
+    return id;
+}
+
 /*
  * Change the id of a SPObject to new_name
  * If there is an id clash then rename to something similar
@@ -399,7 +450,7 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
         return;
     }
     gchar *id = g_strdup(new_name.c_str()); //id is not empty here as new_name is check to be not empty
-    g_strcanon (id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
+    g_strcanon (id, valid_id_chars, '_');
     Glib::ustring new_name2 = id; //will not fail as id can not be NULL, see length check on new_name
     if (!isalnum (new_name2[0])) {
         g_message("Invalid Id, will not change.");

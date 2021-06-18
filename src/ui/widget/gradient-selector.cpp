@@ -136,6 +136,7 @@ GradientSelector::GradientSelector()
     _edit->set_sensitive(false);
     _edit->set_relief(Gtk::RELIEF_NONE);
     _edit->set_tooltip_text(_("Edit gradient"));
+    _edit->set_no_show_all();
 
     _del = Gtk::manage(new Gtk::Button());
     style_button(_del, INKSCAPE_ICON("list-remove"));
@@ -495,8 +496,8 @@ void GradientSelector::add_vector_clicked()
     if (gr) {
         repr = gr->getRepr()->duplicate(xml_doc);
         // Rename the new gradients id to be similar to the cloned gradients
-        Glib::ustring old_id = gr->getId();
-        rename_id(gr, old_id);
+        auto new_id = generate_unique_id(doc, gr->getId());
+        gr->setAttribute("id", new_id.c_str());
         doc->getDefs()->getRepr()->addChild(repr, nullptr);
     } else {
         repr = xml_doc->createElement("svg:linearGradient");
@@ -518,7 +519,23 @@ void GradientSelector::add_vector_clicked()
 
     selectGradientInTree(gr);
 
+    // assign gradient to selection
+    vector_set(gr);
+
     Inkscape::GC::release(repr);
+}
+
+void GradientSelector::show_edit_button(bool show) {
+    if (show) _edit->show(); else _edit->hide();
+}
+
+void GradientSelector::set_name_col_size(int min_width) {
+    auto name_column = _treeview->get_column(1);
+    name_column->set_min_width(min_width);
+}
+
+void GradientSelector::set_gradient_size(int width, int height) {
+    _vectors->set_pixmap_size(width, height);
 }
 
 } // namespace Widget

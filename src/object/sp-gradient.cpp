@@ -481,7 +481,7 @@ void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
         if ( this->getStopCount() > 0 ) {
             gchar const * attr = this->getAttribute("inkscape:swatch");
             if ( attr && strcmp(attr, "gradient") ) {
-            	this->setAttribute( "inkscape:swatch", "gradient" );
+               this->setAttribute( "inkscape:swatch", "gradient" );
             }
         }
     }
@@ -595,9 +595,11 @@ SPStop* SPGradient::getFirstStop()
 int SPGradient::getStopCount() const
 {
     int count = 0;
-
-    for (SPStop *stop = const_cast<SPGradient*>(this)->getFirstStop(); stop && stop->getNextStop(); stop = stop->getNextStop()) {
-        count++;
+    // fixed off-by one count
+    SPStop *stop = const_cast<SPGradient*>(this)->getFirstStop();
+    while (stop) {
+       count++;
+       stop = stop->getNextStop();
     }
 
     return count;

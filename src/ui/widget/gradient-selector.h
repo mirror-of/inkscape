@@ -23,6 +23,7 @@
 #include "object/sp-gradient-spread.h"
 #include "object/sp-gradient-units.h"
 #include <vector>
+#include "gradient-selector-interface.h"
 
 class SPDocument;
 class SPGradient;
@@ -41,9 +42,9 @@ namespace UI {
 namespace Widget {
 class GradientVectorSelector;
 
-class GradientSelector : public Gtk::Box {
+class GradientSelector : public Gtk::Box, public GradientSelectorInterface {
   public:
-    enum SelectorMode { MODE_LINEAR, MODE_RADIAL, MODE_SWATCH };
+   //  enum SelectorMode { MODE_LINEAR, MODE_RADIAL, MODE_SWATCH };
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
       public:
@@ -118,18 +119,23 @@ class GradientSelector : public Gtk::Box {
   public:
     GradientSelector();
 
+    void show_edit_button(bool show);
+    void set_name_col_size(int min_width);
+    void set_gradient_size(int width, int height);
+
     inline decltype(_signal_changed) signal_changed() const { return _signal_changed; }
     inline decltype(_signal_grabbed) signal_grabbed() const { return _signal_grabbed; }
     inline decltype(_signal_dragged) signal_dragged() const { return _signal_dragged; }
     inline decltype(_signal_released) signal_released() const { return _signal_released; }
 
-    SPGradient *getVector();
-    void setVector(SPDocument *doc, SPGradient *vector);
-    void setMode(SelectorMode mode);
-    void setUnits(SPGradientUnits units);
-    SPGradientUnits getUnits();
-    void setSpread(SPGradientSpread spread);
-    SPGradientSpread getSpread();
+    void setGradient(SPGradient* gradient) override { /* no op */ }
+    SPGradient *getVector() override;
+    void setVector(SPDocument *doc, SPGradient *vector) override;
+    void setMode(SelectorMode mode) override;
+    void setUnits(SPGradientUnits units) override;
+    SPGradientUnits getUnits() override;
+    void setSpread(SPGradientSpread spread) override;
+    SPGradientSpread getSpread() override;
 };
 
 } // namespace Widget

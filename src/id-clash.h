@@ -15,6 +15,7 @@
 void prevent_id_clashes(SPDocument *imported_doc, SPDocument *current_doc);
 void rename_id(SPObject *elem, Glib::ustring const &newname);
 void change_def_references(SPObject *replace_obj, SPObject *with_obj);
+Glib::ustring generate_unique_id(SPDocument* document, const Glib::ustring& base_name);
 
 #endif /* !SEEN_ID_CLASH_H */
 

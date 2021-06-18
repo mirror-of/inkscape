@@ -47,7 +47,7 @@ class FillNStroke : public Gtk::Box {
     sigc::connection selectModifiedConn;
     sigc::connection eventContextConn;
 
-    void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode);
+    void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode, bool switch_style);
     void paintChangedCB();
     static gboolean dragDelayCB(gpointer data);
 
@@ -55,7 +55,7 @@ class FillNStroke : public Gtk::Box {
     void eventContextCB(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext);
 
     void dragFromPaint();
-    void updateFromPaint();
+    void updateFromPaint(bool switch_style = false);
 
     void performUpdate();
 

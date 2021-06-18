@@ -213,7 +213,7 @@ public:
     sigc::signal<void, sp_verb_t>      _tool_changed;
     sigc::signal<void, unsigned int, bool> _menu_update;
     sigc::signal<void, SPObject *>     _layer_changed_signal;
-    sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
+    sigc::signal<bool, const SPCSSAttr *, bool>::accumulated<StopOnTrue> _set_style_signal;
     sigc::signal<int, SPStyle *, int>::accumulated<StopOnNonZero> _query_style_signal;
 
     /// Emitted when the zoom factor changes (not emitted when scrolling).
@@ -236,17 +236,23 @@ public:
     }
     sigc::connection connectSetStyle (const sigc::slot<bool, const SPCSSAttr *> & slot)
     {
-        return _set_style_signal.connect (slot);
+        return _set_style_signal.connect([=](const SPCSSAttr* css, bool) { return slot(css); });
+    }
+    sigc::connection connectSetStyleEx(const sigc::slot<bool, const SPCSSAttr *, bool> & slot)
+    {
+        return _set_style_signal.connect(slot);
     }
     sigc::connection connectQueryStyle (const sigc::slot<int, SPStyle *, int> & slot)
     {
         return _query_style_signal.connect (slot);
     }
      // subselection is some sort of selection which is specific to the tool, such as a handle in gradient tool, or a text selection
-    sigc::connection connectToolSubselectionChanged(const sigc::slot<void, gpointer> & slot) {
-        return _tool_subselection_changed.connect(slot);
-    }
+    sigc::connection connectToolSubselectionChanged(const sigc::slot<void, gpointer> & slot);
+    sigc::connection connectToolSubselectionChangedEx(const sigc::slot<void, gpointer, SPObject*>& slot);
+
     void emitToolSubselectionChanged(gpointer data);
+    void emitToolSubselectionChangedEx(gpointer data, SPObject* object);
+
     sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
         return _layer_changed_signal.connect(slot);
     }
@@ -604,7 +610,7 @@ private:
     sigc::signal<void>                 _activate_signal;
     sigc::signal<void>                 _deactivate_signal;
     sigc::signal<void,SPDesktop*,Inkscape::UI::Tools::ToolBase*> _event_context_changed_signal;
-    sigc::signal<void, gpointer>       _tool_subselection_changed;
+    sigc::signal<void, gpointer, SPObject*> _tool_subselection_changed;
 
     sigc::connection _activate_connection;
     sigc::connection _deactivate_connection;

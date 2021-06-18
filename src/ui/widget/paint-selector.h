@@ -19,12 +19,14 @@
 
 #include "object/sp-gradient-spread.h"
 #include "object/sp-gradient-units.h"
-
+#include "gradient-selector-interface.h"
 #include "ui/selected-color.h"
 #include "ui/widget/gradient-selector.h"
 #include "ui/widget/swatch-selector.h"
 
 class SPGradient;
+class SPLinearGradient;
+class SPRadialGradient;
 #ifdef WITH_MESH
 class SPMeshGradient;
 #endif
@@ -45,6 +47,7 @@ namespace Widget {
 class FillRuleRadioButton;
 class StyleToggleButton;
 class GradientSelector;
+class GradientEditor;
 
 /**
  * Generic paint selector widget.
@@ -93,7 +96,7 @@ class PaintSelector : public Gtk::Box {
     Gtk::Box *_frame;
 
     Gtk::Box         *_selector_solid_color = nullptr;
-    GradientSelector *_selector_gradient = nullptr;
+    GradientEditor   *_selector_gradient = nullptr;
     Gtk::Box         *_selector_mesh = nullptr;
     Gtk::Box         *_selector_pattern = nullptr;
     SwatchSelector   *_selector_swatch = nullptr;
@@ -116,10 +119,11 @@ class PaintSelector : public Gtk::Box {
   private:
     sigc::signal<void, FillRule> _signal_fillrule_changed;
     sigc::signal<void> _signal_dragged;
-    sigc::signal<void, Mode> _signal_mode_changed;
+    sigc::signal<void, Mode, bool> _signal_mode_changed;
     sigc::signal<void> _signal_grabbed;
     sigc::signal<void> _signal_released;
     sigc::signal<void> _signal_changed;
+    sigc::signal<void (SPStop*)> _signal_stop_selected;
 
     StyleToggleButton *style_button_add(gchar const *px, PaintSelector::Mode mode, gchar const *tip);
     void style_button_toggled(StyleToggleButton *tb);
@@ -132,7 +136,7 @@ class PaintSelector : public Gtk::Box {
     void set_style_buttons(Gtk::ToggleButton *active);
     void set_mode_multiple();
     void set_mode_none();
-    GradientSelector *getGradientFromData() const;
+    GradientSelectorInterface *getGradientFromData() const;
     void clear_frame();
     void set_mode_unset();
     void set_mode_color(PaintSelector::Mode mode);
@@ -143,6 +147,7 @@ class PaintSelector : public Gtk::Box {
     void set_mode_pattern(PaintSelector::Mode mode);
     void set_mode_hatch(PaintSelector::Mode mode);
     void set_mode_swatch(PaintSelector::Mode mode);
+    void set_mode_ex(Mode mode, bool switch_style);
 
     void gradient_grabbed();
     void gradient_dragged();
@@ -165,14 +170,15 @@ class PaintSelector : public Gtk::Box {
     inline decltype(_signal_grabbed) signal_grabbed() const { return _signal_grabbed; }
     inline decltype(_signal_released) signal_released() const { return _signal_released; }
     inline decltype(_signal_changed) signal_changed() const { return _signal_changed; }
+    inline decltype(_signal_stop_selected) signal_stop_selected() const { return _signal_stop_selected; }
 
     void setMode(Mode mode);
     static Mode getModeForStyle(SPStyle const &style, FillOrStroke kind);
     void setFillrule(FillRule fillrule);
     void setColorAlpha(SPColor const &color, float alpha);
     void setSwatch(SPGradient *vector);
-    void setGradientLinear(SPGradient *vector);
-    void setGradientRadial(SPGradient *vector);
+    void setGradientLinear(SPGradient *vector, SPLinearGradient* gradient, SPStop* selected);
+    void setGradientRadial(SPGradient *vector, SPRadialGradient* gradient, SPStop* selected);
 #ifdef WITH_MESH
     void setGradientMesh(SPMeshGradient *array);
 #endif

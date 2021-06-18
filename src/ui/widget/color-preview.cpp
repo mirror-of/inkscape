@@ -132,7 +132,8 @@ ColorPreview::toPixbuf (int width, int height)
 
     cairo_pattern_t *checkers = ink_cairo_pattern_create_checkerboard();
 
-    cairo_rectangle(ct, carea.x, carea.y, carea.width, carea.height);
+   //  cairo_rectangle(ct, carea.x, carea.y, carea.width, carea.height);
+    cairo_arc(ct, carea.x + carea.width / 2, carea.y + carea.height / 2, carea.width / 2, 0, 2 * M_PI);
     cairo_set_source(ct, checkers);
     cairo_fill_preserve(ct);
     ink_cairo_set_source_rgba32(ct, _rgba);
