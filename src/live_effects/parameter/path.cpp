@@ -100,8 +100,8 @@ PathParam::~PathParam()
     if (desktop) {
         if (dynamic_cast<Inkscape::UI::Tools::NodeTool* >(desktop->event_context)) {
             // Why is this switching tools twice? Probably to reinitialize Node Tool.
-            set_active_tool(desktop, "select");
-            set_active_tool(desktop, "node");
+            set_active_tool(desktop, "Select");
+            set_active_tool(desktop, "Node");
         }
     }
     g_free(defvalue);
@@ -266,7 +266,7 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
 
     Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     if (!nt) {
-        set_active_tool(dt, "node");
+        set_active_tool(dt, "Node");
         nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     }
 
