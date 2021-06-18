@@ -24,6 +24,8 @@ void
 select_object_group(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Group
     selection->group();
 }
 
@@ -31,6 +33,8 @@ void
 select_object_ungroup(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Ungroup
     selection->ungroup();
 }
 
@@ -38,6 +42,8 @@ void
 select_object_ungroup_pop(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Pop Selected Objects out of Group
     selection->popFromGroup();
 }
 
@@ -45,6 +51,8 @@ void
 selection_top(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Raise to Top
     selection->raiseToTop();
 }
 
@@ -52,6 +60,8 @@ void
 selection_raise(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Raise
     selection->raise();
 }
 
@@ -59,6 +69,8 @@ void
 selection_lower(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Lower
     selection->lower();
 }
 
@@ -66,6 +78,8 @@ void
 selection_bottom(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Lower to Bottom
     selection->lowerToBottom();
 }
 

@@ -50,7 +50,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_hide_lock =
 void
 add_actions_hide_lock(InkscapeWindow* win)
 {
-
     // clang-format off
     win->add_action( "unhide-all",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&hide_lock_unhide_all), win));
     win->add_action( "unlock-all",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&hide_lock_unlock_all), win));

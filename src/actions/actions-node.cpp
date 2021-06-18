@@ -39,7 +39,8 @@ void
 node_edit_add(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
- 
+    
+    // Adding a Node
     if (nt) {
         nt->_multipath->insertNodes();
     }
@@ -50,6 +51,8 @@ void
 node_node_delete(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
+    
+    // Deleting a Node
     if (nt) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         nt->_multipath->deleteNodes(prefs->getBool("/tools/nodes/delete_preserves_shape", true));
@@ -60,7 +63,8 @@ void
 node_join(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
- 
+
+    // Join Nodes
     if (nt) {
         nt->_multipath->joinNodes();
     }
@@ -71,6 +75,7 @@ node_break(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Break nodes
     if (nt) {
         nt->_multipath->breakNodes();
     }
@@ -81,6 +86,7 @@ node_join_segment(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Join with Line (segment)
     if (nt) {
         nt->_multipath->breakNodes();
     }
@@ -91,6 +97,7 @@ node_delete_segment(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Delete segment
     if (nt) {
         nt->_multipath->breakNodes();
     }
@@ -101,6 +108,7 @@ node_type_cusp(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Selected Nodes to Corner
     if (nt) {
         nt->_multipath->breakNodes();
     }
@@ -111,6 +119,7 @@ node_type_smooth(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Node Smooth
     if (nt) {
         nt->_multipath->setNodeType(Inkscape::UI::NODE_SMOOTH);
     }
@@ -121,6 +130,7 @@ node_type_symmetric(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Makes selected nodes symmetric
     if (nt) {
         nt->_multipath->setNodeType(Inkscape::UI::NODE_SYMMETRIC);
     }
@@ -130,7 +140,8 @@ void
 node_type_auto_smooth(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
- 
+
+    // Node Smooth Auto
     if (nt) {
         nt->_multipath->setNodeType(Inkscape::UI::NODE_AUTO);
     }
@@ -141,6 +152,7 @@ node_segment_line(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Node selected segments line
     if (nt) {
         nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_STRAIGHT);
     }
@@ -151,6 +163,7 @@ node_segment_curve(InkscapeApplication* app)
 {
     NodeTool *nt = get_node_tool();
  
+    // Node selected segments curves
     if (nt) {
         nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_CUBIC_BEZIER);
     }
@@ -159,6 +172,7 @@ node_segment_curve(InkscapeApplication* app)
 void 
 node_path_clip_edit(InkscapeApplication* app){
 
+    // Retrieve Action
     auto action = app->gio_app()->lookup_action("node-path-clip-edit");
     if (!action) {
         std::cerr << "node_path_clip_edit: action missing!" << std::endl;
@@ -171,11 +185,13 @@ node_path_clip_edit(InkscapeApplication* app){
         return;
     }
 
+    // Toggle State
     bool state = true;
     saction->get_state(state);
     state = !state;
     saction->change_state(state);
 
+    // Set State
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/nodes/edit_clipping_paths", state);
 }
@@ -183,6 +199,7 @@ node_path_clip_edit(InkscapeApplication* app){
 void
 node_path_mask_edit(InkscapeApplication* app){
 
+    // Retrieve Action
     auto action = app->gio_app()->lookup_action("node-path-mask-edit");
     if (!action) {
         std::cerr << "node_path_mask_edit: action missing!" << std::endl;
@@ -195,11 +212,13 @@ node_path_mask_edit(InkscapeApplication* app){
         return;
     }
 
+    // Toggle State
     bool state = true;
     saction->get_state(state);
     state = !state;
     saction->change_state(state);
 
+    // Set State
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/nodes/edit_masks", state);
 }
@@ -208,6 +227,7 @@ node_path_mask_edit(InkscapeApplication* app){
 void
 node_transform(InkscapeApplication* app){
 
+    // Retrieve Action
     auto action = app->gio_app()->lookup_action("node-transform");
     if (!action) {
         std::cerr << "node_transform: action missing!" << std::endl;
@@ -220,11 +240,13 @@ node_transform(InkscapeApplication* app){
         return;
     }
 
+    // Toggle State
     bool state = true;
     saction->get_state(state);
     state = !state;
     saction->change_state(state);
 
+    // Set State
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/nodes/show_transform_handles", state);
 }
@@ -232,6 +254,7 @@ node_transform(InkscapeApplication* app){
 void
 show_node_handles(InkscapeApplication* app){
 
+    // Retrieve Action
     auto action = app->gio_app()->lookup_action("show-node-handles");
     if (!action) {
         std::cerr << "show_node_handles: action missing!" << std::endl;
@@ -244,11 +267,13 @@ show_node_handles(InkscapeApplication* app){
         return;
     }
 
+    // Toggle State
     bool state = true;
     saction->get_state(state);
     state = !state;
     saction->change_state(state);
 
+    // Set State
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/nodes/show_handles", state);
 }
@@ -256,6 +281,7 @@ show_node_handles(InkscapeApplication* app){
 void
 show_path_outline(InkscapeApplication* app){
 
+    // Retrieve Action
     auto action = app->gio_app()->lookup_action("show-path-outline");
     if (!action) {
         std::cerr << "show_path_outline: action missing!" << std::endl;
@@ -268,11 +294,13 @@ show_path_outline(InkscapeApplication* app){
         return;
     }
 
+    // Toggle State
     bool state = true;
     saction->get_state(state);
     state = !state;
     saction->change_state(state);
 
+    // Set State
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/nodes/show_outline", state);
 }

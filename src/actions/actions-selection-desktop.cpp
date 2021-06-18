@@ -27,6 +27,8 @@ void
 selection_make_bitmap_copy(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
+
+    // Make a Bitmap Copy
     dt->selection->createBitmapCopy();
 }
 
@@ -34,6 +36,8 @@ void
 object_bitmap_trace(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
+
+    // Trace Bitmap
     Inkscape::UI::Dialog::DialogContainer *container = dt->getContainer();
     container->new_dialog("Trace");
 }
@@ -42,6 +46,8 @@ void
 select_path_inset(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
+
+    // Inset selected paths
     dt->selection->removeLPESRecursive(true);
     dt->selection->unlinkRecursive(true);
     sp_selected_path_inset(dt);
@@ -51,6 +57,8 @@ void
 select_path_outset(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
+
+    // Outset selected paths
     dt->selection->removeLPESRecursive(true);
     dt->selection->unlinkRecursive(true);
     sp_selected_path_offset(dt);
@@ -60,6 +68,8 @@ void
 select_path_offset_dynamic(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
+
+    // Dynamic Offset
     dt->selection->removeLPESRecursive(true);
     dt->selection->unlinkRecursive(true);
     sp_selected_path_create_offset_object_zero(dt);
@@ -70,6 +80,8 @@ void
 select_path_offset_linked(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
+
+    // Linked Offset
     dt->selection->removeLPESRecursive(true);
     dt->selection->unlinkRecursive(true);
     sp_selected_path_create_updating_offset_object_zero(dt);
@@ -80,6 +92,8 @@ void
 select_path_reverse(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
+
+    // Reverse
     Inkscape::SelectionHelper::reverse(dt);
 }
 

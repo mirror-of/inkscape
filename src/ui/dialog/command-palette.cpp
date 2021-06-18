@@ -44,7 +44,6 @@
 #include <sigc++/functors/mem_fun.h>
 #include <string>
 
-// #include "actions/actions-hint-data.h"
 #include "actions/actions-extra-data.h"
 #include "file.h"
 #include "gc-anchored.h"

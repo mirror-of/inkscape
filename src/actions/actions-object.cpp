@@ -104,6 +104,8 @@ void
 set_clip(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Clip Set
     selection->setMask(true, false);
 }
 
@@ -111,6 +113,8 @@ void
 object_set_inverse(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Clip Set Inverse
     selection->setMask(true, false);
     Inkscape::LivePathEffect::sp_inverse_powerclip(app->get_active_selection());
     Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), nullptr);
@@ -120,6 +124,8 @@ void
 object_release(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Clip Release
     Inkscape::LivePathEffect::sp_remove_powerclip(app->get_active_selection());
     selection->unsetMask(true);
     Inkscape::DocumentUndo::done(app->get_active_document(), _("Release clipping path"), nullptr);
@@ -129,6 +135,8 @@ void
 set_mask(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Mask Set
     selection->setMask(false, false);
 }
 
@@ -136,6 +144,8 @@ void
 object_set_inverse_mask(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Mask Set Inverse
     selection->setMask(false, false);
     Inkscape::LivePathEffect::sp_inverse_powermask(app->get_active_selection());
     Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), nullptr);
@@ -145,25 +155,34 @@ void
 object_release_mask(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Mask Release
     Inkscape::LivePathEffect::sp_remove_powermask(app->get_active_selection());
     selection->unsetMask(false);
     Inkscape::DocumentUndo::done(app->get_active_document(), _("Release mask"), nullptr);
 }
 
 void
-object_rotate_90_cw(InkscapeApplication *app){
+object_rotate_90_cw(InkscapeApplication *app)
+{
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Rotate 90
     selection->rotate90(false);
 }
 
 void
-object_rotate_90_ccw(InkscapeApplication *app){
+object_rotate_90_ccw(InkscapeApplication *app)
+{
     Inkscape::Selection *selection = app->get_active_selection();
+
+    // Object Rotate 90 CCW
     selection->rotate90(true);
 }
 
 void
-object_flip_horizontal(InkscapeApplication *app){
+object_flip_horizontal(InkscapeApplication *app)
+{
     Inkscape::Selection *selection = app->get_active_selection();
 
     Geom::OptRect bbox = selection->visualBounds();
@@ -171,20 +190,22 @@ object_flip_horizontal(InkscapeApplication *app){
         return;
     }
 
-    Geom::Point center;
-    
+    // Get center
+    Geom::Point center;    
     if (selection->center()) {
         center = *selection->center();
     } else {
         center = bbox->midpoint();
     }
 
+    // Object Flip Horizontal
     selection->setScaleRelative(center, Geom::Scale(-1.0, 1.0));
     Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip horizontally"), INKSCAPE_ICON("object-flip-horizontal"));
 }
 
 void
-object_flip_vertical(InkscapeApplication *app){
+object_flip_vertical(InkscapeApplication *app)
+{
     Inkscape::Selection *selection = app->get_active_selection();
 
     Geom::OptRect bbox = selection->visualBounds();
@@ -192,15 +213,15 @@ object_flip_vertical(InkscapeApplication *app){
         return;
     }
 
+    // Get center
     Geom::Point center;
-    
     if (selection->center()) {
         center = *selection->center();
     } else {
         center = bbox->midpoint();
     }
-
-    center = *selection->center();
+    
+    // Object Flip Vertical
     selection->setScaleRelative(center, Geom::Scale(1.0, -1.0));
     Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));
 }
