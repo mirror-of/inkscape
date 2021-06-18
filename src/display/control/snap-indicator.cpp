@@ -20,6 +20,7 @@
 #include "desktop.h"
 #include "enums.h"
 #include "preferences.h"
+#include "util/units.h"
 
 
 #include "canvas-item-ctrl.h"
@@ -28,6 +29,8 @@
 #include "canvas-item-curve.h"
 
 #include "ui/tools/measure-tool.h"
+
+#define ALIGNMENT_GUIDE_MEASURE_OFFSET 15
 
 namespace Inkscape {
 namespace Display {
@@ -477,10 +480,18 @@ void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point 
 
     if (show_distance) {
         auto dist = Geom::L2(p2 - p1);
-        double offset = 15/_desktop->current_zoom();
+        double offset = ALIGNMENT_GUIDE_MEASURE_OFFSET/_desktop->current_zoom();
         auto direction = Geom::unit_vector(p1 - p2);
         auto text_pos = (p1 + p2)/2;
-        Glib::ustring distance = std::to_string(int(scale * dist));
+
+        Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
+        if (!unit_name.compare("")) {
+            unit_name = DEFAULT_UNIT_NAME;
+        }
+
+        dist = Inkscape::Util::Quantity::convert(dist, "px", unit_name);
+
+        Glib::ustring distance = std::to_string(int(scale*dist));
         
         auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
         text->set_fontsize(fontsize);
@@ -606,6 +617,11 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
 
             if (show_distance) {
+                Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
+                if (!unit_name.compare("")) {
+                    unit_name = DEFAULT_UNIT_NAME;
+                }
+                equal_dist = Inkscape::Util::Quantity::convert(equal_dist, "px", unit_name);
                 Glib::ustring distance = std::to_string(int(scale * equal_dist));
                 auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
                 text->set_fontsize(fontsize);
@@ -678,7 +694,12 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
 
             if (show_distance) {
-                Glib::ustring distance = std::to_string(int(equal_dist * scale));
+                Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
+                if (!unit_name.compare("")) {
+                    unit_name = DEFAULT_UNIT_NAME;
+                }
+                equal_dist = Inkscape::Util::Quantity::convert(equal_dist, "px", unit_name);
+                Glib::ustring distance = std::to_string(int(scale * equal_dist));
                 auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
                 text->set_fontsize(fontsize);
                 text->set_fill(text_fill);
