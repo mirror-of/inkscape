@@ -237,6 +237,8 @@ bool getStateFromPref(SPDesktop *dt, Glib::ustring item)
 }
 
 // I wonder if this can be done without hard coding names.
+
+// check and remove it after all toggle done in Gio::Actions
 static void
 checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
 {
@@ -316,67 +318,6 @@ build_menu_check_item_from_verb(SPAction* action)
 
     return menuitem;
 }
-
-
-// ================= Tasks Submenu ==============
-static void
-task_activated(SPDesktop* dt, int number)
-{
-    Inkscape::UI::UXManager::getInstance()->setTask(dt, number);
-
-#ifdef GDK_WINDOWING_QUARTZ
-    // call later, crashes during startup if called directly
-    g_idle_add(sync_menubar, nullptr);
-#endif
-}
-
-// Sets tip
-static void
-select_task(SPDesktop* dt, Glib::ustring tip)
-{
-    dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, tip.c_str());
-}
-
-// Clears tip
-static void
-deselect_task(SPDesktop* dt)
-{
-    dt->tipsMessageContext()->clear();
-}
-
-static void
-add_tasks(Gtk::MenuShell* menu, SPDesktop* dt)
-{
-    const Glib::ustring data[2][2] = {
-        { C_("Interface setup", "Default"), _("Default interface setup")   },
-        // { C_("Interface setup", "Custom"),  _("Setup for custom task")     },
-        { C_("Interface setup", "Wide"),    _("Setup for widescreen work") }
-    };
-
-    int active = Inkscape::UI::UXManager::getInstance()->getDefaultTask(dt);
-
-    Gtk::RadioMenuItem::Group group;
-
-    for (unsigned int i = 0; i < 2; ++i) {
-
-        Gtk::RadioMenuItem* menuitem = Gtk::manage(new Gtk::RadioMenuItem(group, data[i][0]));
-        if (menuitem) {
-            if (active == i) {
-                menuitem->set_active(true);
-            }
-
-            menuitem->signal_toggled().connect(
-                sigc::bind<SPDesktop*, int>(sigc::ptr_fun(&task_activated), dt, i));
-            menuitem->signal_select().connect(
-                sigc::bind<SPDesktop*, Glib::ustring>(sigc::ptr_fun(&select_task),  dt, data[i][1]));
-            menuitem->signal_deselect().connect(
-                sigc::bind<SPDesktop*>(sigc::ptr_fun(&deselect_task),dt));
-
-            menu->append(*menuitem);
-        }
-    }
-}
-
 
 static void
 sp_recent_open(Gtk::RecentChooser* recentchooser)
@@ -586,13 +527,6 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                         std::cerr << "build_menu: no verb with id: " << verb_name << std::endl;
                     }
                 }
-                continue;
-            }
-
-            // This is used only for wide-screen vs non-wide-screen displays.
-            // The code should be rewritten to use actions like everything else here.
-            if (name == "task-checkboxes") {
-                add_tasks(menu, static_cast<SPDesktop*>(view));
                 continue;
             }
 

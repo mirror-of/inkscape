@@ -1832,22 +1832,22 @@ void ZoomVerb::perform(SPAction *action, void *data)
             dt->toggleScrollbars();
             break;
         case SP_VERB_TOGGLE_COMMANDS_TOOLBAR:
-            dt->toggleToolbar("commands", SP_VERB_TOGGLE_COMMANDS_TOOLBAR);
+            dt->toggleToolbar("commands");
             break;
         case SP_VERB_TOGGLE_SNAP_TOOLBAR:
-            dt->toggleToolbar("snaptoolbox", SP_VERB_TOGGLE_SNAP_TOOLBAR);
+            dt->toggleToolbar("snaptoolbox");
             break;
         case SP_VERB_TOGGLE_TOOL_TOOLBAR:
-            dt->toggleToolbar("toppanel", SP_VERB_TOGGLE_TOOL_TOOLBAR);
+            dt->toggleToolbar("toppanel");
             break;
         case SP_VERB_TOGGLE_TOOLBOX:
-            dt->toggleToolbar("toolbox", SP_VERB_TOGGLE_TOOLBOX);
+            dt->toggleToolbar("toolbox");
             break;
         case SP_VERB_TOGGLE_PALETTE:
-            dt->toggleToolbar("panels", SP_VERB_TOGGLE_PALETTE);
+            dt->toggleToolbar("panels");
             break;
         case SP_VERB_TOGGLE_STATUSBAR:
-            dt->toggleToolbar("statusbar", SP_VERB_TOGGLE_STATUSBAR);
+            dt->toggleToolbar("statusbar");
             break;
         case SP_VERB_TOGGLE_GUIDES:
             sp_namedview_toggle_guides(doc, dt->namedview);

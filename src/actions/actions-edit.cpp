@@ -12,7 +12,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <giomm.h>
 #include <glibmm/i18n.h>
 
 #include "actions-edit.h"
@@ -26,7 +26,7 @@ void
 object_to_pattern(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Objects to Pattern
     dt->selection->tile();
 }
@@ -35,7 +35,7 @@ void
 pattern_to_object(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Pattern to Objects
     dt->selection->untile();
 }
@@ -44,7 +44,7 @@ void
 object_to_marker(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Objects to Marker
     dt->selection->toMarker();
 }
@@ -53,7 +53,7 @@ void
 object_to_guides(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Objects to Guides
     dt->selection->toGuides();
 }
@@ -62,7 +62,7 @@ void
 undo(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Undo
     sp_undo(dt, dt->getDocument());
 }
@@ -71,7 +71,7 @@ void
 redo(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Redo
     sp_redo(dt, dt->getDocument());
 }
@@ -80,7 +80,7 @@ void
 cut(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Cut
     dt->selection->cut();
 }
@@ -89,7 +89,7 @@ void
 copy(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Copy
     dt->selection->copy();
 }
@@ -98,7 +98,7 @@ void
 paste(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Paste
     sp_selection_paste(dt, false);
 }
@@ -107,7 +107,7 @@ void
 paste_in_place(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Paste In Place
     sp_selection_paste(dt, true);
 }
@@ -116,7 +116,7 @@ void
 paste_style(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Style
     dt->selection->pasteStyle();
 }
@@ -125,7 +125,7 @@ void
 paste_size(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Size
     dt->selection->pasteSize(true,true);
 }
@@ -134,7 +134,7 @@ void
 paste_width(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Width
     dt->selection->pasteSize(true, false);
 }
@@ -143,7 +143,7 @@ void
 paste_height(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Height
     dt->selection->pasteSize(false, true);
 }
@@ -152,7 +152,7 @@ void
 paste_size_separately(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Size Separately
     dt->selection->pasteSizeSeparately(true, true);
 }
@@ -161,7 +161,7 @@ void
 paste_width_separately(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Width Separately
     dt->selection->pasteSizeSeparately(true, false);
 }
@@ -170,7 +170,7 @@ void
 paste_height_separately(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Height Separately
     dt->selection->pasteSizeSeparately(false, true);
 }
@@ -179,7 +179,7 @@ void
 duplicate(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Duplicate
     dt->selection->duplicate();
 }
@@ -188,7 +188,7 @@ void
 clone(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Create Clone
     dt->selection->clone();
 }
@@ -197,7 +197,7 @@ void
 clone_unlink(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Unlink Clone
     dt->selection->unlink();
 }
@@ -206,7 +206,7 @@ void
 clone_unlink_recursively(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Unlink Clones recursively
     dt->selection->unlinkRecursive(false, true);
 }
@@ -215,7 +215,7 @@ void
 clone_link(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Relink to Copied
     dt->selection->relink();
 }
@@ -224,7 +224,7 @@ void
 select_original(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Select Original
     dt->selection->cloneOriginal();
 }
@@ -233,7 +233,7 @@ void
 clone_link_lpe(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Clone original path (LPE)
     dt->selection->cloneOriginalPathLPE();
 }
@@ -242,7 +242,7 @@ void
 edit_delete(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Delete
     dt->selection->deleteItems();
 }
@@ -251,7 +251,7 @@ void
 select_all(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Select All
     Inkscape::SelectionHelper::selectAll(dt);
 }
@@ -260,7 +260,7 @@ void
 select_all_layers(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Select All in All Layers
     Inkscape::SelectionHelper::selectAllInAll(dt);
 }
@@ -269,7 +269,7 @@ void
 select_same_fill_and_stroke(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Fill and Stroke
     Inkscape::SelectionHelper::selectSameFillStroke(dt);
 }
@@ -278,7 +278,7 @@ void
 select_same_fill(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Fill Color
     Inkscape::SelectionHelper::selectSameFillColor(dt);
 }
@@ -287,7 +287,7 @@ void
 select_same_stroke_color(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Stroke Color
     Inkscape::SelectionHelper::selectSameStrokeColor(dt);
 }
@@ -296,7 +296,7 @@ void
 select_same_stroke_style(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Stroke Style
     Inkscape::SelectionHelper::selectSameStrokeStyle(dt);
 }
@@ -305,7 +305,7 @@ void
 select_same_object_type(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Object Type
     Inkscape::SelectionHelper::selectSameObjectType(dt);
 }
@@ -314,7 +314,7 @@ void
 select_invert(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Invert Selection
     Inkscape::SelectionHelper::invert(dt);
 }
@@ -323,7 +323,7 @@ void
 select_none(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Deselect
     Inkscape::SelectionHelper::selectNone(dt);
 }
@@ -332,7 +332,7 @@ void
 create_guides_around_page(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Create Guides Around the Page
     sp_guide_create_guides_around_page(dt);
 }
@@ -360,7 +360,7 @@ lock_all_guides(InkscapeWindow *win)
     saction->change_state(state);
 
     SPDesktop* dt = win->get_desktop();
-    
+
     // Lock All Guides
     dt->toggleGuidesLock();
 }
@@ -369,7 +369,7 @@ void
 delete_all_guides(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Delete All Guides
     sp_guide_delete_all_guides(dt);
 }
@@ -378,7 +378,7 @@ void
 paste_path_effect(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Paste Path Effect
     dt->selection->pastePathEffect();
 }
@@ -387,7 +387,7 @@ void
 remove_path_effect(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     //  Remove Path Effect
     dt->selection->removeLPE();
 }
@@ -397,7 +397,7 @@ void
 path_effect_parameter_next(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     // Next path effect parameter
     sp_selection_next_patheffect_param(dt);
 }

@@ -191,6 +191,133 @@
       <attribute name='label' translatable="yes">Color Management</attribute>
       <attribute name='action'>win.canvas-color-manage</attribute>
     </item>
+    <item>
+      <attribute name='label' translatable="yes">Page _Grid</attribute>
+      <attribute name='action'>win.canvas-show-grid</attribute>
+    </item>
+    <item>
+      <attribute name='label' translatable="yes">G_uides</attribute>
+      <attribute name='action'>win.canvas-show-guides</attribute>
+    </item>
+
+    <submenu id="display-show-hide">
+      <attribute name='label' translatable='yes'>Sh_ow/Hide</attribute>
+
+      <section>
+        <item>
+          <attribute name='label' translatable="yes">_Commands Bar</attribute>
+          <attribute name='action'>win.canvas-commands-bar</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Sn_ap Controls Bar</attribute>
+          <attribute name='action'>win.canvas-snap-controls-bar</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">T_ool Controls Bar</attribute>
+          <attribute name='action'>win.canvas-tool-control-bar</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">_Toolbox</attribute>
+          <attribute name='action'>win.canvas-toolbox</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">_Rulers</attribute>
+          <attribute name='action'>win.canvas-rulers</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Scroll_bars</attribute>
+          <attribute name='action'>win.canvas-scroll-bars</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">_Palette</attribute>
+          <attribute name='action'>win.canvas-palette</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">_Statusbar</attribute>
+          <attribute name='action'>win.canvas-statusbar</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <section>
+      <item>
+        <attribute name='label' translatable="yes">Show/Hide D_ialogs</attribute>
+        <attribute name='action'>win.dialog-toggle</attribute>
+        <attribute name='icon'>show-dialogs</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">_Command Palette</attribute>
+        <attribute name='action'>win.canvas-command-palette</attribute>
+      </item>
+    </section>
+
+    <section>
+    	<item>
+				<attribute name='label' translatable="yes">S_watches...</attribute>
+				<attribute name='action'>win.dialog-open</attribute>
+				<attribute name='target'>Swatches</attribute>
+				<attribute name='icon'>swatches</attribute>
+			</item>
+      <item>
+				<attribute name='label' translatable="yes">_Messages...</attribute>
+				<attribute name='action'>win.dialog-open</attribute>
+				<attribute name='target'>Messages</attribute>
+				<attribute name='icon'>dialog-messages</attribute>
+			</item>
+    </section>
+
+    <section>
+      <item>
+        <attribute name='label' translatable="yes">P_revious Window</attribute>
+        <attribute name='action'>doc.window-previous</attribute>
+        <attribute name='icon'>window-previous</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">N_ext Window</attribute>
+        <attribute name='action'>doc.window-next</attribute>
+        <attribute name='icon'>window-next</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+				<attribute name='label' translatable="yes">Icon Preview</attribute>
+				<attribute name='action'>win.dialog-open</attribute>
+				<attribute name='target'>IconPreview</attribute>
+				<attribute name='icon'>dialog-icon-preview</attribute>
+			</item>
+      <item>
+        <attribute name='label' translatable="yes">Duplic_ate Window</attribute>
+        <attribute name='action'>win.window-new</attribute>
+        <attribute name='icon'>window-new</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+        <attribute name='label' translatable="yes">_Fullscreen</attribute>
+        <attribute name='action'>win.view-fullscreen</attribute>
+        <attribute name='icon'>view-fullscreen</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+        <attribute name='label' translatable="yes">Default</attribute>
+        <attribute name='action'>win.canvas-interface-mode</attribute>
+        <attribute name='target' type='i'>0</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">Custom</attribute>
+        <attribute name='action'>win.canvas-interface-mode</attribute>
+        <attribute name='target' type='i'>1</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">Wide</attribute>
+        <attribute name='action'>win.canvas-interface-mode</attribute>
+        <attribute name='target' type='i'>2</attribute>
+      </item>
+    </section>
 
   </menu>
 

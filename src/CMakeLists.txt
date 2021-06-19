@@ -214,6 +214,8 @@ set(inkscape_SRC
   actions/actions-canvas-snapping.cpp
   actions/actions-canvas-transform.h
   actions/actions-canvas-transform.cpp
+  actions/actions-doc-file.h
+  actions/actions-doc-file.cpp
   actions/actions-hide-lock.h
   actions/actions-hide-lock.cpp
   actions/actions-edit.h

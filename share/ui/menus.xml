@@ -140,7 +140,7 @@
        <!-- <verb verb-id="ViewSplitModeToggle" check="yes" /> -->
        <!-- <verb verb-id="ViewXRayToggle" check="yes" /> -->
        <!-- <separator/> -->
-
+<!-- 
        <verb verb-id="ToggleGrid" check="yes" />
        <verb verb-id="ToggleGuides" check="yes" />
        <submenu name="Sh_ow/Hide">
@@ -166,8 +166,8 @@
        <verb verb-id="ViewNew" />
        <separator/>
        <verb verb-id="FullScreen" />
-       <separator/>
-       <task-checkboxes/>
+       <separator/> -->
+       <!-- <task-checkboxes/> -->
        <!-- Not quite ready to be in the menus.
          <verb verb-id="FocusToggle" /-->
    </submenu>

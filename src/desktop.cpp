@@ -1299,33 +1299,22 @@ void
 SPDesktop::toggleRulers()
 {
     _widget->toggle_rulers();
-    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS);
-    if (verb) {
-        _menu_update.emit(verb->get_code(), getStateFromPref(this, "rulers"));
-    }
 }
 
 void
 SPDesktop::toggleScrollbars()
 {
     _widget->toggle_scrollbars();
-    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS);
-    if (verb) {
-        _menu_update.emit(verb->get_code(), getStateFromPref(this, "scrollbars"));
-    }
 }
 
-
-void SPDesktop::toggleToolbar(gchar const *toolbar_name, unsigned int verbenum)
+void SPDesktop::toggleToolbar(gchar const *toolbar_name)
 {
     Glib::ustring pref_path = getLayoutPrefPath(this) + toolbar_name + "/state";
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean visible = prefs->getBool(pref_path, true);
     prefs->setBool(pref_path, !visible);
-    Inkscape::Verb *verb = Inkscape::Verb::get(verbenum);
-    if (verb) {
-        _menu_update.emit(verb->get_code(), getStateFromPref(this, toolbar_name));
-    }
+    
     layoutWidget();
 }
 
@@ -1467,10 +1456,6 @@ void SPDesktop::toggleColorProfAdjust()
 void SPDesktop::toggleGuidesLock()
 {
     sp_namedview_guides_toggle_lock(this->getDocument(), namedview);
-    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_EDIT_GUIDES_TOGGLE_LOCK);
-    if (verb) {
-        _menu_update.emit(verb->get_code(), namedview->lockguides);
-    }
 }
 
 bool SPDesktop::colorProfAdjustEnabled()
@@ -1486,10 +1471,6 @@ void SPDesktop::toggleGrids()
         //there is no grid present at the moment. add a rectangular grid and make it visible
         namedview->writeNewGrid(this->getDocument(), Inkscape::GRID_RECTANGULAR);
         showGrids(true);
-    }
-    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GRID);
-    if (verb) {
-        _menu_update.emit(verb->get_code(), gridsEnabled());
     }
 }
 
