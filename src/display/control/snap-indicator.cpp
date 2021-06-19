@@ -453,10 +453,12 @@ Geom::Coord get_y(Geom::Rect const &source, Geom::Rect const &target)
 {
     Geom::Coord y;
 
-    if (source.midpoint().y() > target.midpoint().y())
+    if (source.max().y() < target.midpoint().y())
+        y = target.min().y();
+    else if(source.min().y() > target.midpoint().y())
         y = target.max().y();
     else
-        y = target.min().y();
+        y = target.midpoint().y();
 
     return y;
 }
@@ -465,10 +467,12 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
 {
     Geom::Coord x;
 
-    if (source.midpoint().x() > target.midpoint().x())
+    if (source.max().x() < target.midpoint().x())
+        x = target.min().x();
+    else if(source.min().x() > target.midpoint().x())
         x = target.max().x();
     else
-        x = target.min().x();
+        x = target.midpoint().x();
 
     return x;
 }
@@ -564,6 +568,13 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
     guint32 text_bg = 0xff5f1fff; //0x33337f7f
     Geom::Point text_pos;
 
+    Glib::ustring unit_name = _desktop->doc()->getDisplayUnit()->abbr.c_str();
+    if (!unit_name.compare("")) {
+        unit_name = DEFAULT_UNIT_NAME;
+    }
+    equal_dist = Inkscape::Util::Quantity::convert(equal_dist, "px", unit_name);
+    Glib::ustring distance = Glib::ustring::format(std::fixed, std::setprecision(1), std::noshowpoint, scale*equal_dist);
+
     switch (t) {
         case SNAPTARGET_DISTRIBUTION_Y:
         case SNAPTARGET_DISTRIBUTION_X: {
@@ -619,12 +630,6 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
 
             if (show_distance) {
-                Glib::ustring unit_name = _desktop->doc()->getDisplayUnit()->abbr.c_str();
-                if (!unit_name.compare("")) {
-                    unit_name = DEFAULT_UNIT_NAME;
-                }
-                equal_dist = Inkscape::Util::Quantity::convert(equal_dist, "px", unit_name);
-                Glib::ustring distance = Glib::ustring::format(std::fixed, std::setprecision(1), std::noshowpoint, scale*equal_dist);
                 auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
                 text->set_fontsize(fontsize);
                 text->set_fill(text_fill);
@@ -641,103 +646,27 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             Geom::Coord x, y; 
             Geom::Point p1, p2;
             Inkscape::CanvasItemCurve *point1, *point2;
-            switch (t) {
-                case SNAPTARGET_DISTRIBUTION_RIGHT: 
-                    y = get_y(source_bbox, bboxes.front());
-
-                    p1 = Geom::Point(source_bbox.max().x(), y);
-                    p2 = Geom::Point(bboxes.front().min().x(), y);
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
-
-                    point1 = make_stub_line_v(p1);
-                    point2 = make_stub_line_v(p2);
-                    break;
-
-                case SNAPTARGET_DISTRIBUTION_LEFT:
-                    y = get_y(source_bbox, bboxes.front());
-
-                    p1 = Geom::Point(source_bbox.min().x(), y);
-                    p2 = Geom::Point(bboxes.front().max().x(), y);
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
-
-                    point1 = make_stub_line_v(p1);
-                    point2 = make_stub_line_v(p2);
-                    break;
-
-                case SNAPTARGET_DISTRIBUTION_UP:
-                    x = get_x(source_bbox, bboxes.front()); 
-
-                    p1 = Geom::Point(x, source_bbox.min().y());
-                    p2 = Geom::Point(x, bboxes.front().max().y());
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
-
-                    point1 = make_stub_line_h(p1);
-                    point2 = make_stub_line_h(p2);
-                    break;
-
-                case SNAPTARGET_DISTRIBUTION_DOWN:
-                    x = get_x(source_bbox, bboxes.front()); 
-
-                    p1 = Geom::Point(x, source_bbox.max().y());
-                    p2 = Geom::Point(x, bboxes.front().min().y());
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
-
-                    point1 = make_stub_line_h(p1);
-                    point2 = make_stub_line_h(p2);
-                    break;
-            }
-
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
-
-            auto line1 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
-            line1->set_stroke(color);
-            line1->set_width(2);
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
-
-            if (show_distance) {
-                Glib::ustring unit_name = _desktop->doc()->getDisplayUnit()->abbr.c_str();
-                if (!unit_name.compare("")) {
-                    unit_name = DEFAULT_UNIT_NAME;
-                }
-                equal_dist = Inkscape::Util::Quantity::convert(equal_dist, "px", unit_name);
-                Glib::ustring distance = Glib::ustring::format(std::fixed, std::setprecision(1), std::noshowpoint, scale*equal_dist);
-                auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
-                text->set_fontsize(fontsize);
-                text->set_fill(text_fill);
-                text->set_background(text_bg);
-                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
-            }
 
             for (auto it = bboxes.begin(); it + 1 != bboxes.end(); it++) {
                 switch (t) {
                     case SNAPTARGET_DISTRIBUTION_RIGHT: 
+                    case SNAPTARGET_DISTRIBUTION_LEFT:
+                        y = get_y(*it,*std::next(it));
                         p1 = Geom::Point(it->max().x(), y);
                         p2 = Geom::Point(std::next(it)->min().x(), y);
+                        text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
 
                         point1 = make_stub_line_v(p1);
                         point2 = make_stub_line_v(p2);
-                        break;
 
-                    case SNAPTARGET_DISTRIBUTION_LEFT:
-                        p1 = Geom::Point(it->min().x(), y);
-                        p2 = Geom::Point(std::next(it)->max().x(), y);
-
-                        point1 = make_stub_line_v(p1);
-                        point2 = make_stub_line_v(p2);
-                        break;
-
-                    case SNAPTARGET_DISTRIBUTION_UP:
-                        p1 = Geom::Point(x, it->min().y());
-                        p2 = Geom::Point(x, std::next(it)->max().y());
-
-                        point1 = make_stub_line_h(p1);
-                        point2 = make_stub_line_h(p2);
                         break;
 
                     case SNAPTARGET_DISTRIBUTION_DOWN:
+                    case SNAPTARGET_DISTRIBUTION_UP:
+                        x = get_x(*it,*std::next(it));
                         p1 = Geom::Point(x, it->max().y());
                         p2 = Geom::Point(x, std::next(it)->min().y());
+                        text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
 
                         point1 = make_stub_line_h(p1);
                         point2 = make_stub_line_h(p2);
@@ -747,14 +676,21 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
                 _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
                 _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
 
-                line1 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
+                auto line1 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
                 line1->set_stroke(color);
                 line1->set_width(2);
                 _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
+
+                if (show_distance) {
+                    auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+                    text->set_fontsize(fontsize);
+                    text->set_fill(text_fill);
+                    text->set_background(text_bg);
+                    _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+                }
             }
             break;
-        }
-
+        } 
     }
 }
 
