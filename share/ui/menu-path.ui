@@ -16,7 +16,8 @@
             </item>
             <item>
                 <attribute name='label' translatable="yes">_Trace Bitmap...</attribute>
-                <attribute name='action'>win.object-bitmap-trace</attribute>
+                <attribute name='action'>win.dialog-open</attribute>
+				<attribute name='target'>Trace</attribute>
                 <attribute name='icon'>bitmap-trace</attribute>
             </item>
         </section>

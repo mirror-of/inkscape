@@ -22,6 +22,9 @@
 #include "inkscape.h"
 #include "object/sp-namedview.h"
 
+#include "file.h"
+#include "ui/dialog/new-from-template.h"
+
 void
 window_previous(SPDocument* document)
 {
@@ -34,21 +37,36 @@ window_next(SPDocument* document)
     INKSCAPE.switch_desktops_next();
 }
 
+void
+document_new(SPDocument* document)
+{
+    sp_file_new_default();
+}
+
+void
+document_dialog_templates(SPDocument* document)
+{
+    Inkscape::UI::NewFromTemplate::load_new_from_template();
+}
+
 std::vector<std::vector<Glib::ustring>> raw_data_doc_file =
 {
-    {"doc.window-previous",     N_("P_revious Window"),     "File",     N_("Switch to the previous document window")},
-    {"doc.window-next",         N_("N_ext Window"),         "File",     N_("Switch to the next document window")}
+    {"doc.window-previous",             N_("P_revious Window"),         "File",     N_("Switch to the previous document window")},
+    {"doc.window-next",                 N_("N_ext Window"),             "File",     N_("Switch to the next document window")},
+    {"doc.document-new",                N_("_New"),                     "File",     N_("Create new document from the default template")},
+    {"doc.document-dialog-templates",   N_("New from _Template..."),    "File",     N_("Create new project from template")}
 };
 
 void
 add_actions_doc_file(SPDocument* document)
 {
-    std::cout<<"add_actions_doc_file\n";
 
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
-    map->add_action( "window-previous",     sigc::bind<SPDocument*>(sigc::ptr_fun(&window_previous),  document));
-    map->add_action( "window-next",         sigc::bind<SPDocument*>(sigc::ptr_fun(&window_next),  document));
+    map->add_action( "window-previous",             sigc::bind<SPDocument*>(sigc::ptr_fun(&window_previous),  document));
+    map->add_action( "window-next",                 sigc::bind<SPDocument*>(sigc::ptr_fun(&window_next),  document));
+    map->add_action( "document-new",                sigc::bind<SPDocument*>(sigc::ptr_fun(&document_new),  document));
+    map->add_action( "document-dialog-templates",   sigc::bind<SPDocument*>(sigc::ptr_fun(&document_dialog_templates),  document));
 
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();

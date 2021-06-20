@@ -2166,7 +2166,7 @@ void FitCanvasVerb::perform(SPAction *action, void *data)
             dt->selection->fitCanvas(true);
             break;
         case SP_VERB_FIT_CANVAS_TO_DRAWING:
-            verb_fit_canvas_to_drawing(dt);
+            fit_canvas_to_drawing(dt);
             break;
         case SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING:
             fit_canvas_to_selection_or_drawing(dt);

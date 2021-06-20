@@ -415,6 +415,10 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-path.ui");
                     menuname = "path-menu";
                 }
+                else if (strcmp(name, "_File") == 0) {
+                    filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-file.ui");
+                    menuname = "file-menu";
+                }
                 
                 if(filename!=""){
                     try

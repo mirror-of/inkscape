@@ -26,7 +26,6 @@
 #include "document-undo.h"
 #include "helper-fns.h"
 #include "inkscape.h"
-#include "verbs.h"
 
 #include "sp-guide.h"
 #include "sp-namedview.h"
@@ -285,7 +284,7 @@ void sp_guide_create_guides_around_page(SPDesktop *dt)
 
     sp_guide_pt_pairs_to_guides(doc, pts);
 
-    DocumentUndo::done(doc, SP_VERB_NONE, _("Create Guides Around the Page"));
+    DocumentUndo::done(doc, _("Create Guides Around the Page"), nullptr);
 }
 
 void sp_guide_delete_all_guides(SPDesktop *dt)
@@ -298,7 +297,7 @@ void sp_guide_delete_all_guides(SPDesktop *dt)
         current = doc->getResourceList("guide");
     }
 
-    DocumentUndo::done(doc, SP_VERB_NONE, _("Delete All Guides"));
+    DocumentUndo::done(doc, _("Delete All Guides"), nullptr);
 }
 
 // Actually, create a new guide.

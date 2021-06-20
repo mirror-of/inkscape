@@ -29,7 +29,6 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "text-editing.h"
-#include "verbs.h"
 
 #include "display/curve.h"
 
@@ -41,6 +40,7 @@
 #include "style.h"
 
 #include "ui/widget/canvas.h"  // Disable drawing during ops
+#include "ui/icon-names.h"
 
 #include "svg/svg.h"
 
@@ -173,8 +173,7 @@ ObjectSet::combine(bool skip_undo)
         parent->addChildAtPos(repr, position > 0 ? position : 0);
 
         if ( !skip_undo ) {
-            DocumentUndo::done(doc, SP_VERB_SELECTION_COMBINE, 
-                               _("Combine"));
+            DocumentUndo::done(doc, _("Combine"), INKSCAPE_ICON("path-combine"));
         }
         set(repr);
 
@@ -276,8 +275,7 @@ ObjectSet::breakApart(bool skip_undo)
 
     if (did) {
         if ( !skip_undo ) {
-            DocumentUndo::done(document(), SP_VERB_SELECTION_BREAK_APART, 
-                               _("Break apart"));
+            DocumentUndo::done(document(), _("Break apart"), INKSCAPE_ICON("path-break-apart"));
         }
     } else {
         if(desktop())
@@ -314,9 +312,8 @@ void ObjectSet::toCurves(bool skip_undo)
     if (desktop()) {
         desktop()->clearWaitingCursor();
     }
-    if (did && !skip_undo) {
-        DocumentUndo::done(document(), SP_VERB_OBJECT_TO_CURVE, 
-                               _("Object to path"));
+    if (did&& !skip_undo) {
+        DocumentUndo::done(document(), _("Object to path"), INKSCAPE_ICON("object-to-path"));
     } else {
         if(desktop())
             desktop()->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No objects</b> to convert to path in the selection."));
@@ -612,8 +609,7 @@ ObjectSet::pathReverse()
         desktop()->clearWaitingCursor();
 
     if (did) {
-        DocumentUndo::done(document(), SP_VERB_SELECTION_REVERSE,
-                           _("Reverse path"));
+        DocumentUndo::done(document(), _("Reverse path"), INKSCAPE_ICON("path-reverse"));
     } else {
         if(desktop())
             desktop()->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to reverse in the selection."));

@@ -35,6 +35,8 @@
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 
+#include "ui/icon-names.h"
+
 #include "style.h"
 
 #define MIN_OFFSET 0.01
@@ -183,11 +185,11 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     {
         // pas vraiment de points sur le resultat
         // donc il ne reste rien
-        DocumentUndo::done(desktop->getDocument(), 
-                           (updating ? SP_VERB_SELECTION_LINKED_OFFSET 
-                            : SP_VERB_SELECTION_DYNAMIC_OFFSET),
+        DocumentUndo::done(desktop->getDocument(),
                            (updating ? _("Create linked offset")
-                            : _("Create dynamic offset")));
+                            : _("Create dynamic offset")), 
+                           (updating ? INKSCAPE_ICON("path-offset-linked") 
+                            : INKSCAPE_ICON("path-offset-dynamic")));
         selection->clear();
 
         delete res;
@@ -252,11 +254,11 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         selection->set(nitem);
     }
 
-    DocumentUndo::done(desktop->getDocument(), 
-                       (updating ? SP_VERB_SELECTION_LINKED_OFFSET 
-                        : SP_VERB_SELECTION_DYNAMIC_OFFSET),
+    DocumentUndo::done(desktop->getDocument(),
                        (updating ? _("Create linked offset")
-                        : _("Create dynamic offset")));
+                        : _("Create dynamic offset")), 
+                       (updating ? INKSCAPE_ICON("path-offset-linked") 
+                        : INKSCAPE_ICON("path-offset-dynamic")));
 
     delete res;
     delete orig;
@@ -452,9 +454,9 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     }
 
     if (did) {
-        DocumentUndo::done(desktop->getDocument(), 
-                           (expand ? SP_VERB_SELECTION_OFFSET : SP_VERB_SELECTION_INSET),
-                           (expand ? _("Outset path") : _("Inset path")));
+        DocumentUndo::done(desktop->getDocument(),
+                           (expand ? _("Outset path") : _("Inset path")), 
+                           (expand ? INKSCAPE_ICON("path-outset") : INKSCAPE_ICON("path-inset")));
     } else {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to inset/outset in the selection."));
         return;

@@ -498,6 +498,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('Input')"/>  
   <bind gaction="win.dialog-open('Preferences')"             keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
   <bind gaction="win.dialog-open('LivePathEffect')"          keys="&lt;primary&gt;ampersand, &lt;primary&gt;&lt;shift&gt;7" />
+  <bind gaction="win.dialog-open('Trace')"                   keys="&lt;alt&gt;&lt;shift&gt;b"/>
 
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
@@ -549,7 +550,6 @@ override) the bindings in the main default.xml.
   <!-- Path -->
   <bind gaction="app.object-to-path"                      keys="&lt;primary&gt;&lt;shift&gt;c"/>
   <bind gaction="app.stroke-to-path"                      keys="&lt;primary&gt;&lt;alt&gt;c"/>
-  <bind gaction="win.object-bitmap-trace"                 keys="&lt;alt&gt;&lt;shift&gt;b"/>
   <bind gaction="app.select-path-union"                   keys="&lt;primary&gt;plus,  &lt;primary&gt;KP_Add,  &lt;primary&gt;&lt;shift&gt;plus"/>
   <bind gaction="app.select-path-difference"              keys="&lt;primary&gt;minus, &lt;primary&gt;underscore,   &lt;primary&gt;&lt;shift&gt;underscore,    &lt;primary&gt;KP_Subtract, &lt;primary&gt;&lt;shift&gt;minus"/>
   <bind gaction="app.select-path-intersection"            keys="&lt;primary&gt;asterisk,  &lt;primary&gt;KP_Multiply,   &lt;primary&gt;&lt;shift&gt;asterisk"/>

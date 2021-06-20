@@ -21,12 +21,12 @@
 #include "document-undo.h"
 #include "message-stack.h"
 #include "node.h"
-#include "verbs.h"
 
 #include "live_effects/lpeobject.h"
 
 #include "object/sp-path.h"
 
+#include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
@@ -844,9 +844,9 @@ void MultiPathManipulator::_commit(CommitEvent cps)
     _selection.signal_update.emit();
     invokeForAll(&PathManipulator::writeXML);
     if (key) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), key, SP_VERB_CONTEXT_NODE, reason);
+        DocumentUndo::maybeDone(_desktop->getDocument(), key, reason, INKSCAPE_ICON("tool-node-editor"));
     } else {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_NODE, reason);
+        DocumentUndo::done(_desktop->getDocument(), reason, INKSCAPE_ICON("tool-node-editor"));
     }
     signal_coords_changed.emit();
 }
@@ -855,7 +855,7 @@ void MultiPathManipulator::_commit(CommitEvent cps)
 void MultiPathManipulator::_done(gchar const *reason, bool alert_LPE) {
     invokeForAll(&PathManipulator::update, alert_LPE);
     invokeForAll(&PathManipulator::writeXML);
-    DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_NODE, reason);
+    DocumentUndo::done(_desktop->getDocument(), reason, INKSCAPE_ICON("tool-node-editor"));
     signal_coords_changed.emit();
 }
 
