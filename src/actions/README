@@ -1,4 +1,3 @@
-
 This directory contains Gio::Actions.
 
 "A GAction (Gio::Action) is a representation of a single
@@ -15,7 +14,7 @@ Actions provide two operations:
 * state change (if the action supports a state).
 
 While actions are defined independent of the GUI (unlike GtkAction),
-the can be used by "actionable widgets" (menus, buttons, etc.) by
+they can be used by "actionable widgets" (menus, buttons, etc.) by
 simply referring to them by name. They can also be remotely activated
 by D-Bus and GNotifications.
 
