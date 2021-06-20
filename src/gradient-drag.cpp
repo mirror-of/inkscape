@@ -1210,17 +1210,15 @@ void GrDragger::fireDraggables(bool write_repr, bool scale_radial, bool merging_
 void GrDragger::updateControlSizesOverload(SPKnot * knot)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int sizes[] = {3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25}; // Must be odd!
-    std::vector<int> sizeTable = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     int size = prefs->getIntLimited("/options/grabsize/value", 3, 1, 15);
-    int knot_size = sizeTable[size - 1];
+
+    // shadow what's done in CanvasItemCtrl::set_size_via_index;
+    // TODO: code should likely be merged
+    int knot_size = size * 2 + 3;
     if(knot->shape == Inkscape::CANVAS_ITEM_CTRL_SHAPE_TRIANGLE) {
-        knot_size *= 2.2;
-        knot_size = floor(knot_size);
-        if ( knot_size % 2 == 0 ){
-            knot_size += 1;
-        }
+        knot_size = size * 2 + 1;
     }
+
     knot->setSize(knot_size);
 }
 
