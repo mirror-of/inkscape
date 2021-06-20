@@ -577,68 +577,7 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
 
     switch (t) {
         case SNAPTARGET_DISTRIBUTION_Y:
-        case SNAPTARGET_DISTRIBUTION_X: {
-            Geom::Point p1, p2, p3, p4;
-            Inkscape::CanvasItemCurve *point1, *point2, *point3, *point4;
-            switch (t) {
-                case SNAPTARGET_DISTRIBUTION_X: {
-                    Geom::Coord y = get_y(source_bbox, bboxes.front());
-
-                    p1 = Geom::Point(bboxes.front().max().x(), y);
-                    p2 = Geom::Point(source_bbox.min().x(), y);
-                    p3 = Geom::Point(source_bbox.max().x(), y);
-                    p4 = Geom::Point(bboxes.back().min().x(), y);
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
-
-                    point1 = make_stub_line_v(p1);
-                    point2 = make_stub_line_v(p2);
-                    point3 = make_stub_line_v(p3);
-                    point4 = make_stub_line_v(p4);
-                    break;
-                    }
-
-                case SNAPTARGET_DISTRIBUTION_Y: {
-                    Geom::Coord x = get_x(source_bbox, bboxes.front()); 
-
-                    p1 = Geom::Point(x, bboxes.front().max().y());
-                    p2 = Geom::Point(x, source_bbox.min().y());
-                    p3 = Geom::Point(x, source_bbox.max().y());
-                    p4 = Geom::Point(x, bboxes.back().min().y());
-                    text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
-
-                    point1 = make_stub_line_h(p1);
-                    point2 = make_stub_line_h(p2);
-                    point3 = make_stub_line_h(p3);
-                    point4 = make_stub_line_h(p4);
-                    break;
-                    }
-            }
-
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point3, 0));
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point4, 0));
-
-            auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
-            line->set_stroke(color);
-            line->set_width(2);
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line, 0));
-
-            auto line2 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p3, p4);
-            line2->set_stroke(color);
-            line2->set_width(2);
-            _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line2, 0));
-
-            if (show_distance) {
-                auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
-                text->set_fontsize(fontsize);
-                text->set_fill(text_fill);
-                text->set_background(text_bg);
-                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
-            }
-            break;
-        }
-
+        case SNAPTARGET_DISTRIBUTION_X:
         case SNAPTARGET_DISTRIBUTION_RIGHT:
         case SNAPTARGET_DISTRIBUTION_LEFT:
         case SNAPTARGET_DISTRIBUTION_UP:
@@ -651,6 +590,7 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
                 switch (t) {
                     case SNAPTARGET_DISTRIBUTION_RIGHT: 
                     case SNAPTARGET_DISTRIBUTION_LEFT:
+                    case SNAPTARGET_DISTRIBUTION_X:
                         y = get_y(*it,*std::next(it));
                         p1 = Geom::Point(it->max().x(), y);
                         p2 = Geom::Point(std::next(it)->min().x(), y);
@@ -663,6 +603,7 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
 
                     case SNAPTARGET_DISTRIBUTION_DOWN:
                     case SNAPTARGET_DISTRIBUTION_UP:
+                    case SNAPTARGET_DISTRIBUTION_Y:
                         x = get_x(*it,*std::next(it));
                         p1 = Geom::Point(x, it->max().y());
                         p2 = Geom::Point(x, std::next(it)->min().y());

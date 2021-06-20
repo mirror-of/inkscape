@@ -243,11 +243,14 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
    Geom::Coord equal_dist;
 
    SnappedPoint sr, sl, sx, su, sd, sy;
-   Geom::Coord dist_r, dist_l, dist_u, dist_d;
-   bool snap_r = false, snap_l = false, snap_u = false, snap_d = false, snap_x = false, snap_y = false;
+   Geom::Coord dist_x, dist_y;
+   bool snap_x = false, snap_y = false;
 
-   // right snaps
+   // 1. look right
+   // if there is a snap then add right bboxes and look left, if there is a snap to the left then
+   // add those bboxes too
    std::vector<Geom::Rect> vecRight;
+   std::vector<Geom::Rect> vecLeft;
    if (consider_x && _bboxes_right->size() > 0) {
       auto first_dist = distRight(*bbox_to_snap, _bboxes_right->front());
 
@@ -265,20 +268,44 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
          Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
          Geom::Rect bbox = *bbox_to_snap * translation;
          vecRight.insert(vecRight.begin(), bbox);
-           
+
          _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-         dist_r = abs(offset);
-         sr = SnappedPoint(target, vecRight, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, dist_r, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-         snap_r = true;
+         if (_bboxes_left->size() > 0) {
+            first_dist = distLeft(bbox, _bboxes_left->front());
+            Geom::Coord left_dist;
+            vecLeft.clear();
+            if (findSidewaysSnaps(first_dist,
+                                _bboxes_left->begin(),
+                                _bboxes_left->end(),
+                                vecLeft,
+                                left_dist,
+                                getSnapperTolerance(),
+                                &DistributionSnapper::distLeft)) {
+
+                if (abs(left_dist - equal_dist) < 1e-5){
+                    std::reverse(vecLeft.begin(), vecLeft.end());
+                    vecRight.insert(vecRight.begin(), vecLeft.begin(), vecLeft.end());
+                }
+
+            } else if (abs(first_dist - equal_dist) < 1e-5) {
+                vecRight.insert(vecRight.begin(), vecLeft.front());
+            }
+         }
+
+         dist_x = abs(offset);
+         sx = SnappedPoint(target, vecRight, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_RIGHT, dist_x, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         snap_x = true;
       }
    }
 
-   // left snaps
-   std::vector<Geom::Rect> vecLeft;
-   if (consider_x && _bboxes_left->size() > 0) {
+   // 2. if no snap to right, look left
+   // if there is a snap then add left bboxes and right left, if there is a snap to the right then
+   // add those bboxes too
+   if (consider_x && !snap_x && _bboxes_left->size() > 0) {
       auto first_dist = distLeft(*bbox_to_snap, _bboxes_left->front());
 
+      vecLeft.clear();
       if (findSidewaysSnaps(first_dist,
                         _bboxes_left->begin(),
                         _bboxes_left->end(),
@@ -298,14 +325,57 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
          _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-         dist_l = abs(offset);
-         sl = SnappedPoint(target, vecLeft, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, dist_l, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-         snap_l = true;
+         if (_bboxes_right->size() > 0) {
+            first_dist = distRight(bbox, _bboxes_right->front());
+            Geom::Coord right_dist;
+            vecRight.clear();
+            if (findSidewaysSnaps(first_dist,
+                                _bboxes_right->begin(),
+                                _bboxes_right->end(),
+                                vecRight,
+                                right_dist,
+                                getSnapperTolerance(),
+                                &DistributionSnapper::distRight)) {
+
+                if (abs(right_dist - equal_dist) < 1e-5){
+                    vecLeft.insert(vecLeft.end(), vecRight.begin(), vecRight.end());
+                }
+
+            } else if (abs(first_dist - equal_dist) < 1e-5) {
+                vecLeft.push_back(vecRight.front());
+            }
+         }
+
+         dist_x = abs(offset);
+         sx = SnappedPoint(target, vecLeft, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_LEFT, dist_x, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         snap_x = true;
       }
    }
 
-   // up snaps
+   // 3. if no snap to right or left just add the center snap
+   if (consider_x && !snap_x && vecRight.size() > 0 && vecLeft.size() > 0) {
+      auto x = Geom::Point((vecRight.front().min() + vecLeft.front().max())/2).x();
+      offset = abs(x - bbox_to_snap->midpoint().x());
+      if (offset < getSnapperTolerance()) {
+          Geom::Point target = Geom::Point(x, bbox_to_snap->midpoint().y());
+          // translate the source bbox to the snap position
+          Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+          Geom::Rect bbox = *bbox_to_snap * translation;
+          std::vector<Geom::Rect> bboxes = {vecLeft.front(), bbox, vecRight.front()};
+
+          _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
+
+          equal_dist = bbox.min().x() - vecLeft.front().max().x();
+          sx = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_X, offset, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+          snap_x = true;
+      }
+   }
+
+   // 1. look Up
+   // if there is a snap then add top bboxes and look down, if there is a snap at the bottom then
+   // add those bboxes too
    std::vector<Geom::Rect> vecUp;
+   std::vector<Geom::Rect> vecDown;
    if (consider_y && _bboxes_up->size() > 0) {
       auto first_dist = distUp(*bbox_to_snap, _bboxes_up->front());
 
@@ -328,17 +398,40 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
          _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-         dist_u = abs(offset);
-         su = SnappedPoint(target, vecUp, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, dist_u, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-         snap_u = true;
+         if (_bboxes_down->size() > 0) {
+            first_dist = distDown(bbox, _bboxes_down->front());
+            Geom::Coord down_dist;
+            vecDown.clear();
+            if (findSidewaysSnaps(first_dist,
+                                _bboxes_down->begin(),
+                                _bboxes_down->end(),
+                                vecDown,
+                                down_dist,
+                                getSnapperTolerance(),
+                                &DistributionSnapper::distDown)) {
+
+                if (abs(down_dist - equal_dist) < 1e-4){
+                    vecUp.insert(vecUp.end(), vecDown.begin(), vecDown.end());
+                }
+
+            } else if (abs(first_dist - equal_dist) < 1e-4) {
+                vecUp.insert(vecUp.end(), vecDown.front());
+            }
+         }
+
+         dist_y = abs(offset);
+         sy = SnappedPoint(target, vecUp, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_UP, dist_y, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         snap_y = true;
       }
    }
 
-   // down snaps
-   std::vector<Geom::Rect> vecDown;
-   if (consider_y && _bboxes_down->size() > 0) {
+   // 2. if no snaps on top, look Down 
+   // if there is a snap then add bottom bboxes and look Up, if there is a snap above then
+   // add those bboxes too
+   if (consider_y && !snap_y && _bboxes_down->size() > 0) {
       auto first_dist = distDown(*bbox_to_snap, _bboxes_down->front());
 
+      vecDown.clear();
       if (findSidewaysSnaps(first_dist,
                         _bboxes_down->begin(),
                         _bboxes_down->end(),
@@ -357,90 +450,61 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
 
          _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-         dist_d = abs(offset);
-         sd = SnappedPoint(target, vecDown, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, dist_d, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-         snap_d = true;
+         if (_bboxes_up->size() > 0) {
+            first_dist = distUp(bbox, _bboxes_up->front());
+            Geom::Coord up_dist;
+            vecUp.clear();
+
+            if (findSidewaysSnaps(first_dist,
+                                _bboxes_up->begin(),
+                                _bboxes_up->end(),
+                                vecUp,
+                                up_dist,
+                                getSnapperTolerance(),
+                                &DistributionSnapper::distUp)) {
+
+               if (abs(up_dist - equal_dist) < 1e-5){
+                  std::reverse(vecUp.begin(), vecUp.end());
+                  vecDown.insert(vecDown.begin(), vecUp.begin(), vecUp.end());
+               }
+            } else if (abs(first_dist - equal_dist) < 1e-5) {
+               vecDown.insert(vecDown.begin(), vecUp.front());
+            }
+         }
+
+         dist_y = abs(offset);
+         sy = SnappedPoint(target, vecDown, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_DOWN, dist_y, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         snap_y = true;
       }
    }
+   
+   // 3. if no snap to right or left just add the center snap
+   if (consider_y &&  !snap_y && vecUp.size() > 0 && vecDown.size() > 0) {
+      auto y = Geom::Point((vecUp.front().max() + vecDown.front().min())/2).y();
+      offset = abs(y - bbox_to_snap->midpoint().y());
+      if (consider_y && offset < getSnapperTolerance()) {
+         Geom::Point target = Geom::Point(bbox_to_snap->midpoint().x(), y);
+         // translate the source bbox to the snap position
+         Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
+         Geom::Rect bbox = *bbox_to_snap * translation;
+         std::vector<Geom::Rect> bboxes = {vecUp.front(), bbox, vecDown.front()};
 
-   // in between snap
-   Geom::Point pointR = Geom::Point(Geom::infinity(), Geom::infinity());
-   if (vecRight.size() > 0)
-      pointR = vecRight.front().min();
+         _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
 
-   Geom::Point pointL = Geom::Point(Geom::infinity(), Geom::infinity());
-   if (vecLeft.size() > 0)
-      pointL = vecLeft.front().max();
-
-   Geom::Point pointU = Geom::Point(Geom::infinity(), Geom::infinity());
-   if (vecUp.size() > 0)
-      pointU = vecUp.front().max();
-
-   Geom::Point pointD = Geom::Point(Geom::infinity(), Geom::infinity());
-   if (vecDown.size() > 0)
-      pointD = vecDown.front().min();
-
-
-   // horizontally in between
-   auto x = Geom::Point((pointR + pointL)/2).x();
-   offset = abs(x - bbox_to_snap->midpoint().x());
-   if (consider_x && offset < getSnapperTolerance()) {
-      std::vector<Geom::Rect> bboxes = {vecLeft.front(), vecRight.front()};
-      Geom::Point target = Geom::Point(x, bbox_to_snap->midpoint().y());
-      // translate the source bbox to the snap position
-      Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
-      Geom::Rect bbox = *bbox_to_snap * translation;
-
-      _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
-
-      equal_dist = bbox.min().x() - pointL.x();
-      sx = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_X, offset, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-      snap_x = true;
-   }
-
-   // vertically in between
-   auto y = Geom::Point((pointU + pointD)/2).y();
-   equal_dist = bbox_to_snap->min().y() - pointU.y();
-   offset = abs(y - bbox_to_snap->midpoint().y());
-   if (consider_y && offset < getSnapperTolerance()) {
-      std::vector<Geom::Rect> bboxes = {vecUp.front(), vecDown.front()};
-      Geom::Point target = Geom::Point(bbox_to_snap->midpoint().x(), y);
-      // translate the source bbox to the snap position
-      Geom::Affine translation = Geom::Translate(target - bbox_to_snap->midpoint());
-      Geom::Rect bbox = *bbox_to_snap * translation;
-
-      _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
-
-      equal_dist = bbox.min().y() - pointU.y();
-      sy = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_Y, offset, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
-      snap_y = true;
+         equal_dist = bbox.min().y() - vecUp.front().max().y();
+         sy = SnappedPoint(target, bboxes, bbox, equal_dist, p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_Y, offset, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
+         snap_y = true;
+      }
    }
 
    if (snap_x) {
       isr.points.push_back(sx);
-      std::cout<<"center"<<std::endl;
-      return;
    }
 
    if (snap_y) {
       isr.points.push_back(sy);
    }
 
-   if (snap_r) {
-      isr.points.push_back(sr);
-   }
-
-   if (snap_l) {
-      isr.points.push_back(sl);
-   }
-
-   if (snap_u) {
-      isr.points.push_back(su);
-   }
-
-   if (snap_d) {
-      isr.points.push_back(sd);
-   }
 }
 
 void Inkscape::DistributionSnapper::_correctSelectionBBox(Geom::Point &target, Geom::Point const &p, Geom::Rect const &bbox_to_snap) const
