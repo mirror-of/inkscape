@@ -829,7 +829,8 @@ void SnapManager::_findCandidates(SPObject* parent,
 {
     SPDesktop const *dt = getDesktop();
     if (dt == nullptr) {
-        g_warning("desktop == NULL, so we cannot snap; please inform the developers of this bug");
+        g_error("desktop == NULL, so we cannot snap; please inform the developers of this bug");
+        return;
         // Apparently the setup() method from the SnapManager class hasn't been called before trying to snap.
     }
 
@@ -842,7 +843,6 @@ void SnapManager::_findCandidates(SPObject* parent,
     bbox_to_snap_incl.expandBy(object.getSnapperTolerance()); // see?
 
     for (auto& o: parent->children) {
-        g_assert(dt != nullptr);
         SPItem *item = dynamic_cast<SPItem *>(&o);
         if (item && !(dt->itemIsHidden(item) && !clip_or_mask)) {
             // Fix LPE boolops selfsnaping
