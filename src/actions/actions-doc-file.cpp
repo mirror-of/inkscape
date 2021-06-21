@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  *
- * Actions Related to Files
+ * Actions Related to Files which require document
  * 
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
@@ -49,12 +49,28 @@ document_dialog_templates(SPDocument* document)
     Inkscape::UI::NewFromTemplate::load_new_from_template();
 }
 
+void
+document_revert(SPDocument* document)
+{
+    sp_file_revert_dialog();
+}
+
+
+void
+document_cleanup(SPDocument* document)
+{
+    sp_file_vacuum(document);
+}
+
 std::vector<std::vector<Glib::ustring>> raw_data_doc_file =
 {
-    {"doc.window-previous",             N_("P_revious Window"),         "File",     N_("Switch to the previous document window")},
-    {"doc.window-next",                 N_("N_ext Window"),             "File",     N_("Switch to the next document window")},
-    {"doc.document-new",                N_("_New"),                     "File",     N_("Create new document from the default template")},
-    {"doc.document-dialog-templates",   N_("New from _Template..."),    "File",     N_("Create new project from template")}
+    {"doc.window-previous",             N_("Previous Window"),          "File",     N_("Switch to the previous document window")},
+    {"doc.window-next",                 N_("Next Window"),              "File",     N_("Switch to the next document window")},
+    {"doc.document-new",                N_("New"),                      "File",     N_("Create new document from the default template")},
+    {"doc.document-dialog-templates",   N_("New from  Template"),       "File",     N_("Create new project from template")},
+    {"doc.document-revert",             N_("Revert"),                   "File",     N_("Revert to the last saved version of document (changes will be lost)")},
+    {"doc.document-cleanup",            N_("Clean Up Document"),        "File",     N_("Remove unused definitions (such as gradients or clipping paths) from the <defs> of the document")}    
+    // clang-format on
 };
 
 void
@@ -67,6 +83,8 @@ add_actions_doc_file(SPDocument* document)
     map->add_action( "window-next",                 sigc::bind<SPDocument*>(sigc::ptr_fun(&window_next),  document));
     map->add_action( "document-new",                sigc::bind<SPDocument*>(sigc::ptr_fun(&document_new),  document));
     map->add_action( "document-dialog-templates",   sigc::bind<SPDocument*>(sigc::ptr_fun(&document_dialog_templates),  document));
+    map->add_action( "document-revert",             sigc::bind<SPDocument*>(sigc::ptr_fun(&document_revert),  document));
+    map->add_action( "document-cleanup",            sigc::bind<SPDocument*>(sigc::ptr_fun(&document_cleanup), document));
 
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();

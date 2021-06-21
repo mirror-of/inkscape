@@ -47,7 +47,6 @@
 #include "path-prefix.h"
 #include "print.h"
 #include "rdf.h"
-#include "verbs.h"
 
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -66,6 +65,7 @@
 #include "style.h"
 
 #include "ui/dialog/filedialog.h"
+#include "ui/icon-names.h"
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"
 #include "widgets/desktop-widget.h"
@@ -434,8 +434,7 @@ void sp_file_vacuum(SPDocument *doc)
 {
     unsigned int diff = doc->vacuumDocument();
 
-    DocumentUndo::done(doc, SP_VERB_FILE_VACUUM,
-                       _("Clean up document"));
+    DocumentUndo::done(doc, _("Clean up document"), INKSCAPE_ICON("document-cleanup"));
 
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
     if (dt != nullptr) {
@@ -1147,8 +1146,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             }
         }
 
-        DocumentUndo::done(in_doc, SP_VERB_FILE_IMPORT,
-                           _("Import"));
+        DocumentUndo::done(in_doc, _("Import"), INKSCAPE_ICON("document-import"));
         return new_obj;
     } else if (!cancelled) {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri.c_str());

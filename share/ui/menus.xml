@@ -4,11 +4,11 @@
   show-icons="false">
 
    <submenu name="_File">
-       <verb verb-id="FileNew" />
+       <!-- <verb verb-id="FileNew" />
        <verb verb-id="FileTemplates" />
-       <verb verb-id="FileOpen" />
+       <verb verb-id="FileOpen" /> -->
        <recent-file-list/>
-       <verb verb-id="FileRevert" />
+       <!-- <verb verb-id="FileRevert" />
        <verb verb-id="FileSave" />
        <verb verb-id="FileSaveAs" />
        <verb verb-id="FileSaveACopy" />
@@ -24,7 +24,7 @@
        <verb verb-id="DialogDocumentProperties" />
        <separator/>
        <verb verb-id="FileClose" />
-       <verb verb-id="FileQuit" />
+       <verb verb-id="FileQuit" /> -->
    </submenu>
    <submenu name="_Edit">
        <!-- <verb verb-id="EditUndo" />

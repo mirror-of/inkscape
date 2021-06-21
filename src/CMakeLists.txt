@@ -224,6 +224,8 @@ set(inkscape_SRC
   actions/actions-dialogs.cpp
   actions/actions-dialogs.h
   actions/actions-base.cpp
+  actions/actions-file-window.h
+  actions/actions-file-window.cpp
   actions/actions-file.h
   actions/actions-file.cpp
   actions/actions-helper.h
