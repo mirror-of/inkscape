@@ -88,8 +88,6 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, Geom::Point const &ap
 
 Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, std::vector<Geom::Rect> const &bboxes, Geom::Rect const &source_bbox, Geom::Coord equal_dist, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained) :
     _point(p),
-    //_alignment_target(Geom::Point(0,0)),
-    //_alignment_target2(Geom::Point(0,0)),
     _equal_distance(equal_dist),
     _distribution_bboxes(std::move(bboxes)), 
     _source_bbox(source_bbox),
@@ -111,10 +109,33 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, std::vector<Geom::Rec
 {
 }
 
+Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, std::vector<Geom::Rect> const &bboxes, std::vector<Geom::Rect> const &bboxes2, Geom::Rect const &source_bbox, Geom::Coord equal_dist, Geom::Coord equal_dist2, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained) :
+    _point(p),
+    _equal_distance(equal_dist),
+    _equal_distance2(equal_dist2),
+    _distribution_bboxes(std::move(bboxes)), 
+    _distribution_bboxes2(std::move(bboxes2)), 
+    _source_bbox(source_bbox),
+    _tangent(Geom::Point(0,0)),
+    _source(source),
+    _source_num(source_num),
+    _target(target),
+    _at_intersection (false),
+    _constrained_snap (constrained_snap),
+    _fully_constrained (fully_constrained),
+    _distance(d),
+    _tolerance(std::max(t,1.0)),// tolerance should never be smaller than 1 px, as it is used for normalization in isOtherSnapBetter. We don't want a division by zero.
+    _always_snap(a),
+    _second_distance (Geom::infinity()),
+    _second_tolerance (1),
+    _second_always_snap (false),
+    //_target_bbox(std::move(target_bbox)),
+    _pointer_distance (Geom::infinity())
+{
+}
+
 Inkscape::SnappedPoint::SnappedPoint(Inkscape::SnapCandidatePoint const &p, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained) :
     _point (p.getPoint()),
-    //_alignment_target(Geom::Point(0,0)),
-    //_alignment_target2(Geom::Point(0,0)),
     _equal_distance(Geom::infinity()),
     _tangent (Geom::Point(0,0)),
     _source (p.getSourceType()),
@@ -136,8 +157,6 @@ Inkscape::SnappedPoint::SnappedPoint(Inkscape::SnapCandidatePoint const &p, Snap
 
 Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &at_intersection, bool const &constrained_snap, bool const &fully_constrained, Geom::Coord const &d2, Geom::Coord const &t2, bool const &a2) :
     _point(p),
-    //_alignment_target(Geom::Point(0,0)),
-    //_alignment_target2(Geom::Point(0,0)),
     _equal_distance(Geom::infinity()),
     _tangent (Geom::Point(0,0)),
     _source(source),
@@ -161,8 +180,6 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const 
 
 Inkscape::SnappedPoint::SnappedPoint():
     _point (Geom::Point(0,0)),
-    //_alignment_target(Geom::Point(0,0)),
-    //_alignment_target2(Geom::Point(0,0)),
     _equal_distance(Geom::infinity()),
     _tangent (Geom::Point(0,0)),
     _source (SNAPSOURCE_UNDEFINED),
@@ -184,8 +201,6 @@ Inkscape::SnappedPoint::SnappedPoint():
 
 Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p):
     _point (p),
-    //_alignment_target(Geom::Point(0,0)),
-    //_alignment_target2(Geom::Point(0,0)),
     _equal_distance(Geom::infinity()),
     _tangent (Geom::Point(0,0)),
     _source (SNAPSOURCE_UNDEFINED),
@@ -241,7 +256,7 @@ bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::Snapp
         } else if (alignment) {
             if (!aligned_success || (*i).getSnapDistance() <= aligned.getSnapDistance()) {
                 if ((*i).getSnapDistance() == aligned.getSnapDistance()) {
-                    if ((*i).getDistanceToAignTarget() < aligned.getDistanceToAignTarget()) {
+                    if ((*i).getDistanceToAlignTarget() < aligned.getDistanceToAlignTarget()) {
                         aligned = *i;
                         aligned_success = true; 
                     }

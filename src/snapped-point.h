@@ -36,6 +36,7 @@ public:
     SnappedPoint(Geom::Point const &p, Geom::Point const &ap, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained, Geom::OptRect target_bbox); 
     SnappedPoint(Geom::Point const &p, Geom::Point const &ap, Geom::Point const &ap2, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained, Geom::OptRect target_bbox); 
     SnappedPoint(Geom::Point const &p, std::vector<Geom::Rect> const &bboxes, Geom::Rect const &source_bbox, Geom::Coord equal_dist, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained); 
+    SnappedPoint(Geom::Point const &p, std::vector<Geom::Rect> const &bboxes,std::vector<Geom::Rect> const &bboxes2, Geom::Rect const &source_bbox, Geom::Coord equal_dist, Geom::Coord equal_dist2, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained); 
     SnappedPoint(SnapCandidatePoint const &p, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained);
     ~SnappedPoint();
 
@@ -51,6 +52,7 @@ public:
     void setPointerDistance(Geom::Coord const d) {_pointer_distance = d;}
 
     std::vector<Geom::Rect> const &getBBoxes() const {return _distribution_bboxes;}
+    std::vector<Geom::Rect> const &getBBoxes2() const {return _distribution_bboxes2;}
 
     /* This is the preferred method to find out which point we have snapped
      * to, because it only returns a point if snapping has actually occurred
@@ -93,7 +95,7 @@ public:
             return  {};
     }
 
-    Geom::Coord getDistanceToAignTarget() const
+    Geom::Coord getDistanceToAlignTarget() const
     {
         return _alignment_target.has_value() ? Geom::L2(_point - _alignment_target.value()) : Geom::infinity();
     }
@@ -113,6 +115,7 @@ public:
     Geom::OptRect const getTargetBBox() const {return _target_bbox;}
     Geom::OptRect const getSourceBBox() const {return _source_bbox;}
     Geom::Coord getDistributionDistance() const {return _equal_distance;}
+    Geom::Coord getDistributionDistance2() const {return _equal_distance2;}
     void setSource(SnapSourceType const source) {_source = source;}
     SnapSourceType getSource() const {return _source;}
     long getSourceNum() const {return _source_num;}
@@ -142,6 +145,7 @@ protected:
     std::optional<Geom::Point> _alignment_target; // Target point for alignment snapping
     std::optional<Geom::Point> _alignment_target2; // Target point when alignment guides intersect
     std::vector<Geom::Rect> _distribution_bboxes; // A list of bounding boxes in case of distribution snapping
+    std::vector<Geom::Rect> _distribution_bboxes2; // Target point when there is a bidirectional distribution snap 
     SnapSourceType _source; // Describes what snapped
     long _source_num; // Sequence number of the source point that snapped, if that point is part of a set of points. (starting at zero if we might have a set of points; -1 if we only have a single point)
     SnapTargetType _target; // Describes to what we've snapped to
@@ -167,6 +171,8 @@ protected:
     Geom::Coord _second_tolerance;
     /* The equal distance between objects in screen pixels (depends on zoom) in case of distribution snapping*/
     Geom::Coord _equal_distance;
+    /* The equal distance between objects in screen pixels (depends on zoom) in case of bidirectional distribution snapping*/
+    Geom::Coord _equal_distance2;
     /* If true then "Always snap" is on */
     bool _second_always_snap;
     /* The bounding box we've snapped to (when applicable); will be used by the snapindicator */

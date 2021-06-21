@@ -126,14 +126,14 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
     //bool strict_snapping = _snapmanager->snapprefs.getStrictSnapping();
 
     for (const auto & k : *_points_to_snap_to) {
-        // TODO:  add strict snpping checks from ObjectSnapper::_allowSourceToSnapToTarget(...)
+        // TODO:  add strict snapping checks from ObjectSnapper::_allowSourceToSnapToTarget(...)
         if (true) {
             Geom::Point target_pt = k.getPoint();
-            // (unconstrained) distace from HORIZONTAL guide 
+            // (unconstrained) distance from HORIZONTAL guide 
             Geom::Point point_on_x(p.getPoint().x(), target_pt.y());
             Geom::Coord distX = Geom::L2(point_on_x - p.getPoint()); 
 
-            // (unconstrained) distace from VERTICAL guide 
+            // (unconstrained) distance from VERTICAL guide 
             Geom::Point point_on_y(target_pt.x(), p.getPoint().y());
             Geom::Coord distY = Geom::L2(point_on_y - p.getPoint()); 
 
@@ -145,7 +145,7 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
             }
 
             bool is_target_node = k.getTargetType() & SNAPTARGET_NODE_CATEGORY;
-            if (consider_x && distX < getSnapperTolerance() && Geom::L2(target_pt - point_on_x) < sx.getDistanceToAignTarget()) {
+            if (consider_x && distX < getSnapperTolerance() && Geom::L2(target_pt - point_on_x) < sx.getDistanceToAlignTarget()) {
                 sx = SnappedPoint(point_on_x,
                                  k.getPoint(),
                                  source2alignment(p.getSourceType()),
@@ -160,7 +160,7 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
                 success_x = true;
             }
 
-            if (consider_y && distY < getSnapperTolerance() && Geom::L2(target_pt - point_on_y) < sy.getDistanceToAignTarget()) {
+            if (consider_y && distY < getSnapperTolerance() && Geom::L2(target_pt - point_on_y) < sy.getDistanceToAlignTarget()) {
                 sy = SnappedPoint(point_on_y,
                                  k.getPoint(),
                                  source2alignment(p.getSourceType()),

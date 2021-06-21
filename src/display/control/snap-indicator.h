@@ -59,7 +59,7 @@ private:
     SnapIndicator(const SnapIndicator&) = delete;
     SnapIndicator& operator=(const SnapIndicator&) = delete;
 
-    void make_distribution_indicators(std::vector<Geom::Rect> const &bboxes, Geom::Rect const &source_bbox, Geom::Coord equal_dist, SnapTargetType t, double fontsize, double scale);
+    void make_distribution_indicators(SnappedPoint const &p, double fontsize, double scale);
     void make_alignment_indicator(Geom::Point const &p1, Geom::Point const &p2, guint32 color, double fontsize, double scale);
     guint32 get_guide_color(SnapTargetType t);
     Inkscape::CanvasItemCurve* make_stub_line_h(Geom::Point const &p);

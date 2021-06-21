@@ -128,6 +128,7 @@ enum SnapTargetType {
     SNAPTARGET_DISTRIBUTION_LEFT,
     SNAPTARGET_DISTRIBUTION_UP,
     SNAPTARGET_DISTRIBUTION_DOWN,
+    SNAPTARGET_DISTRIBUTION_XY,
 
     //-------------------------------------------------------------------
     SNAPTARGET_MAX_ENUM_VALUE

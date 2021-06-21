@@ -270,7 +270,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
 
         if (is_distribution) {
-            make_distribution_indicators(p.getBBoxes(), *p.getSourceBBox(), p.getDistributionDistance(), p.getTarget(), fontsize, scale);
+            make_distribution_indicators(p, fontsize, scale);
         }
 
         if (is_alignment) {
@@ -553,10 +553,7 @@ Inkscape::CanvasItemCurve* SnapIndicator::make_stub_line_h(Geom::Point const & p
     return line;
 }
 
-void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &bboxes,
-                                                Geom::Rect const &source_bbox,
-                                                Geom::Coord equal_dist,
-                                                SnapTargetType t,
+void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                                                 double fontsize,
                                                 double scale)
 {
@@ -572,10 +569,10 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
     if (!unit_name.compare("")) {
         unit_name = DEFAULT_UNIT_NAME;
     }
-    equal_dist = Inkscape::Util::Quantity::convert(equal_dist, "px", unit_name);
+    auto equal_dist = Inkscape::Util::Quantity::convert(p.getDistributionDistance(), "px", unit_name);
     Glib::ustring distance = Glib::ustring::format(std::fixed, std::setprecision(1), std::noshowpoint, scale*equal_dist);
 
-    switch (t) {
+    switch (p.getTarget()) {
         case SNAPTARGET_DISTRIBUTION_Y:
         case SNAPTARGET_DISTRIBUTION_X:
         case SNAPTARGET_DISTRIBUTION_RIGHT:
@@ -586,8 +583,8 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
             Geom::Point p1, p2;
             Inkscape::CanvasItemCurve *point1, *point2;
 
-            for (auto it = bboxes.begin(); it + 1 != bboxes.end(); it++) {
-                switch (t) {
+            for (auto it = p.getBBoxes().begin(); it + 1 != p.getBBoxes().end(); it++) {
+                switch (p.getTarget()) {
                     case SNAPTARGET_DISTRIBUTION_RIGHT: 
                     case SNAPTARGET_DISTRIBUTION_LEFT:
                     case SNAPTARGET_DISTRIBUTION_X:
@@ -598,7 +595,6 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
 
                         point1 = make_stub_line_v(p1);
                         point2 = make_stub_line_v(p2);
-
                         break;
 
                     case SNAPTARGET_DISTRIBUTION_DOWN:
@@ -630,8 +626,70 @@ void SnapIndicator::make_distribution_indicators(std::vector<Geom::Rect> const &
                     _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
                 }
             }
+        break;
+        }
+        case SNAPTARGET_DISTRIBUTION_XY: {
+            Geom::Coord x, y; 
+            Geom::Point p1, p2;
+            Inkscape::CanvasItemCurve *point1, *point2;
+
+            auto equal_dist2 = Inkscape::Util::Quantity::convert(p.getDistributionDistance2(), "px", unit_name);
+            Glib::ustring distance2 = Glib::ustring::format(std::fixed, std::setprecision(1), std::noshowpoint, scale*equal_dist2);
+
+            for (auto it = p.getBBoxes().begin(); it + 1 != p.getBBoxes().end(); it++) {
+                y = get_y(*it,*std::next(it));
+                p1 = Geom::Point(it->max().x(), y);
+                p2 = Geom::Point(std::next(it)->min().x(), y);
+                text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
+
+                point1 = make_stub_line_v(p1);
+                point2 = make_stub_line_v(p2);
+
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
+
+                auto line1 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
+                line1->set_stroke(color);
+                line1->set_width(2);
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
+
+                if (show_distance) {
+                    auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
+                    text->set_fontsize(fontsize);
+                    text->set_fill(text_fill);
+                    text->set_background(text_bg);
+                    _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+                }
+            }
+
+            for (auto it = p.getBBoxes2().begin(); it + 1 != p.getBBoxes2().end(); it++) {
+                x = get_x(*it,*std::next(it));
+                p1 = Geom::Point(x, it->max().y());
+                p2 = Geom::Point(x, std::next(it)->min().y());
+                text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
+
+                point1 = make_stub_line_h(p1);
+                point2 = make_stub_line_h(p2);
+
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point2, 0));
+
+                auto line1 = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, p2);
+                line1->set_stroke(color);
+                line1->set_width(2);
+                _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(line1, 0));
+
+                if (show_distance) {
+                    auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance2);
+                    text->set_fontsize(fontsize);
+                    text->set_fill(text_fill);
+                    text->set_background(text_bg);
+                    _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
+                }
+            }
+
             break;
-        } 
+        }
     }
 }
 
