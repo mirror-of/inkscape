@@ -22,7 +22,6 @@
 
 #include "message-stack.h"
 #include "path-chemistry.h"     // copy_object_properties()
-#include "verbs.h"
 
 #include "helper/geom.h"        // pathv_to_linear_and_cubic_beziers()
 
@@ -35,6 +34,7 @@
 
 #include "display/curve.h"
 
+#include "ui/icon-names.h"
 #include "ui/widget/canvas.h"  // Disable drawing during op
 
 #include "svg/svg.h"
@@ -56,42 +56,42 @@ Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who)
 
 
 bool Inkscape::ObjectSet::pathUnion(const bool skip_undo) {
-    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, false, SP_VERB_SELECTION_UNION, _("Union"));
+    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, false, INKSCAPE_ICON("path-union"), _("Union"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathIntersect(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, false, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
+    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, false, INKSCAPE_ICON("path-intersection"), _("Intersection"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathDiff(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, false, SP_VERB_SELECTION_DIFF, _("Difference"));
+    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, false, INKSCAPE_ICON("path-difference"), _("Difference"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathSymDiff(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, false, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
+    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, false, INKSCAPE_ICON("path-exclusion"), _("Exclusion"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathCut(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, false, SP_VERB_SELECTION_CUT, _("Division"));
+    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, false, INKSCAPE_ICON("path-division"), _("Division"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathSlice(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, false, SP_VERB_SELECTION_SLICE, _("Cut path"));
+    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, false, INKSCAPE_ICON("path-cut"), _("Cut path"));
     return DONE == result;
 }
 
@@ -333,13 +333,13 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
 
 // boolean operations on the desktop
 // take the source paths from the file, do the operation, delete the originals and add the results
-BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const bool checked, const unsigned int verb, const Glib::ustring description)
+BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const bool checked, const Glib::ustring icon_name, const Glib::ustring description)
 {
     if (nullptr != desktop() && !checked) {
         SPDocument *doc = desktop()->getDocument();
         // don't redraw the canvas during the operation as that can remarkably slow down the progress
         desktop()->getCanvas()->set_drawing_disabled(true);
-        BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true, true);
+        BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true, true,icon_name);
         desktop()->getCanvas()->set_drawing_disabled(false);
 
         switch(returnCode) {
@@ -357,12 +357,12 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             break;
         case DONE_NO_PATH:
             if (!skip_undo) { 
-                DocumentUndo::done(doc, SP_VERB_NONE, description);
+                DocumentUndo::done(doc, description, nullptr);
             }
             break;
         case DONE:
             if (!skip_undo) { 
-                DocumentUndo::done(doc, verb, description);
+                DocumentUndo::done(doc, description, icon_name);
             }
             break;
         case DONE_NO_ACTION:

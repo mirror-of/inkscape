@@ -502,7 +502,7 @@ protected:
     std::unordered_map<SPObject*, sigc::connection> _releaseConnections;
 
 private:
-    BoolOpErrors pathBoolOp(bool_op bop, const bool skip_undo, const bool checked = false, const unsigned int verb = SP_VERB_NONE, const Glib::ustring description = "");
+    BoolOpErrors pathBoolOp(bool_op bop, const bool skip_undo, const bool checked = false, const Glib::ustring icon_name = nullptr, const Glib::ustring description = "");
     void _disconnect(SPObject* object);
 
 };
