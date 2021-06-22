@@ -40,70 +40,14 @@ on Unix). The bindings in that personal file are added to (or, if there's a conf
 override) the bindings in the main default.xml.
 -->
 
-
-<!-- File -->
-<!-- 
-  <bind key="n" modifiers="Primary" action="FileNew" display="true" />
-
-  <bind key="n" modifiers="Primary,Alt" action="FileTemplates" display="true" />
-
-  <bind key="o" modifiers="Primary" action="FileOpen" display="true" />
-
-  <bind action="FileRevert" />
-
-  <bind key="s" modifiers="Primary" action="FileSave" display="true" />
-
-  <bind key="s" modifiers="Primary,Shift" action="FileSaveAs" display="true" />
-
-  <bind key="s" modifiers="Primary,Shift,Alt" action="FileSaveACopy" display="true" />
-
-  <bind key="p" modifiers="Primary" action="FilePrint" display="true" />
-
-  <bind key="i" modifiers="Primary" action="FileImport" display="true" />
-
-  <bind key="e" modifiers="Primary,Shift" action="DialogExport" display="true" />
-
-  <bind action="FileVacuum" />
-
-  <bind key="w" modifiers="Primary" action="FileClose" display="true" />
-
-  <bind key="q" modifiers="Primary" action="FileQuit" display="true" /> -->
-
 <!-- Tools: See actions below -->
 
 <!-- Zoom: See actions below -->
 
 <!-- View -->
-<!-- 
-  <bind key="F11" action="FullScreen" display="true" />
-  <bind key="f" modifiers="Ctrl,Meta" action="FullScreen" /> macOS -->
+
   <bind key="F11" action="FocusToggle" modifiers="Shift" display="true" />
   <bind key="F11" action="FullScreenFocus" modifiers="Primary" display="true" />
-
-  <!-- <bind key="Tab" modifiers="Ctrl" action="NextWindow" display="true" />
-  <bind key="ISO_Left_Tab" modifiers="Ctrl" action="PrevWindow" display="true" />
-  <bind key="grave" modifiers="Meta" action="NextWindow" /> macOS standard -->
-<!-- 
-  <bind key="numbersign" modifiers="Shift" action="ToggleGrid" /> 
-  <bind key="numbersign" action="ToggleGrid" display="true" /> -->
-<!-- 
-  <bind key="bar" modifiers="Shift" action="ToggleGuides" /> 
-  <bind key="bar" action="ToggleGuides" display="true" /> -->
-<!-- 
-  <bind action="ToggleCommandsToolbar" />
-  <bind action="ToggleSnapToolbar" />
-  <bind action="ToggleToolToolbar" />
-  <bind action="ToggleToolbox" /> -->
-<!-- 
-  <bind key="question" action="ToggleCommandPalette" display="true"/>
-
-  <bind key="r" modifiers="Primary" action="ToggleRulers" display="true" />
-
-  <bind key="b" modifiers="Primary" action="ToggleScrollbars" display="true" />
-
-  <bind key="p" modifiers="Shift,Alt" action="TogglePalette" display="true" />
-
-  <bind action="ToggleStatusbar" /> -->
 
   <bind action="ViewNew" />
   <bind action="ViewIconPreview" />
@@ -112,27 +56,6 @@ override) the bindings in the main default.xml.
 
 <!-- Edit -->
 
-  <!-- <bind key="z" modifiers="Primary" action="EditUndo" display="true" /> 
-      Do not put in Primary,Shift+Y, already used
-
-  <bind key="z" modifiers="Primary,Shift" action="EditRedo" display="true" />
-  <bind key="y" modifiers="Primary" action="EditRedo" />
-
-  <bind key="h" modifiers="Primary,Shift" action="DialogUndoHistory" display="true" />
-
-  <bind key="x" modifiers="Primary" action="EditCut" display="true" />
-  <bind key="Delete" modifiers="Shift" action="EditCut"/>
-
-  <bind key="c" modifiers="Primary" action="EditCopy" display="true" />
-  <bind key="Insert" modifiers="Primary" action="EditCopy"/>
-
-  <bind key="v" modifiers="Primary" action="EditPaste" display="true" />
-  <bind key="Insert" modifiers="Shift" action="EditPaste"/>
-
-  <bind key="v" modifiers="Primary,Shift" action="EditPasteStyle" display="true" />
-
-  <bind key="v" modifiers="Primary,Alt" action="EditPasteInPlace" display="true" /> -->
-
   <bind action="EditPasteSize" />
   <bind action="EditPasteWidth" />
   <bind action="EditPasteHeight" />
@@ -140,37 +63,8 @@ override) the bindings in the main default.xml.
   <bind action="EditPasteWidthSeparately" />
   <bind action="EditPasteHeightSeparately" />
 
-  <!-- <bind key="Delete" action="EditDelete" display="true" />
-  <bind key="KP_Delete" action="EditDelete" />
-  <bind key="BackSpace" action="EditDelete" /> 
-
-  <bind key="d" modifiers="Primary" action="EditDuplicate" display="true" />
-
-  <bind key="d" modifiers="Alt" action="EditClone" display="true" />
-
-  <bind key="d" modifiers="Alt,Shift" action="EditUnlinkClone" display="true" />
-
-  <bind action="EditRelinkClone" />
-
-  <bind key="d" modifiers="Shift" action="EditCloneSelectOriginal" display="true" />
-
-  <bind action="EditCloneOriginalPathLPE" />
-
-  <bind key="a" modifiers="Primary" action="EditSelectAll" display="true" />  -->
-
   <bind action="EditClearAll" />
-
-  <!-- <bind key="a" modifiers="Primary,Alt" action="EditSelectAllInAllLayers" display="true" />
-
-  <bind action="EditSelectSameFillStroke" />
-  <bind action="EditSelectSameFillColor" /> -->
   <bind action="EditSelectSameStrokeColor" />
-  <!-- <bind action="EditSelectSameStrokeStyle" />
-
-  <bind key="a" modifiers="Shift,Alt" action="EditSelectSameObjectType" display="true" />
-
-  <bind key="exclam" action="EditInvert" display="true" />
-  <bind key="exclam" modifiers="Shift" action="EditInvert" /> -->
 
   <bind key="exclam" modifiers="Alt" action="EditInvertInAllLayers" display="true" />
   <bind key="exclam" modifiers="Alt,Shift" action="EditInvertInAllLayers" />
@@ -178,15 +72,9 @@ override) the bindings in the main default.xml.
   <bind key="Tab" action="EditSelectNext" display="true" />
   <bind key="ISO_Left_Tab" action="EditSelectPrev" display="true" />
 
-  <!-- <bind key="Escape" action="EditDeselect" display="true"/> -->
-
   <bind key="7" action="EditNextPathEffectParameter" display="true" />
 
   <bind action="EditSwapFillStroke" display="true" />
-
-  <!-- <bind key="r" modifiers="Primary,Shift" action="FitCanvasToSelectionOrDrawing" display="true" /> -->
-
-  <!-- Objects/selection -->
 
   <bind key="comma" action="SelectionShrink" display="true" />
   <bind key="less" action="SelectionShrink" />
@@ -206,10 +94,6 @@ override) the bindings in the main default.xml.
   <bind key="period" modifiers="Primary" action="SelectionGrowDouble" />
   <bind key="greater" modifiers="Primary" action="SelectionGrowDouble" />
 
-  <!-- <bind key="b" modifiers="Alt" action="SelectionCreateBitmap" display="true" /> -->
-
-  <!-- <bind key="b" modifiers="Alt,Shift" action="SelectionTrace" display="true" /> -->
-
   <bind key="t" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
   <bind key="T" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
 
@@ -219,53 +103,11 @@ override) the bindings in the main default.xml.
 
 <!-- Path -->
 
-  <!-- <bind key="c" modifiers="Primary,Shift" action="ObjectToPath" display="true" />
-
-  <bind key="c" modifiers="Primary,Alt" action="StrokeToPath" display="true" />
-
-  <bind key="k" modifiers="Primary" action="SelectionCombine" display="true" />
-
-  <bind key="k" modifiers="Primary,Shift" action="SelectionBreakApart" display="true" />
-
-  <bind key="plus" modifiers="Primary" action="SelectionUnion" display="true" />
-  <bind key="KP_Add" modifiers="Primary" action="SelectionUnion" />
-  <bind key="plus" modifiers="Primary,Shift" action="SelectionUnion" />
-
-  <bind key="asterisk" modifiers="Primary" action="SelectionIntersect" display="true" />
-  <bind key="KP_Multiply" modifiers="Primary" action="SelectionIntersect" />
-  <bind key="asterisk" modifiers="Primary,Shift" action="SelectionIntersect" />
-
-  <bind key="minus" modifiers="Primary" action="SelectionDiff" display="true" />
-  <bind key="underscore" modifiers="Primary" action="SelectionDiff" />
-  <bind key="underscore" modifiers="Primary,Shift" action="SelectionDiff" />
-  <bind key="KP_Subtract" modifiers="Primary" action="SelectionDiff" />
-  <bind key="minus" modifiers="Primary,Shift" action="SelectionDiff" />
-
-  <bind key="asciicircum" modifiers="Primary" action="SelectionSymDiff" display="true" /> 
-  <bind key="asciicircum" modifiers="Primary,Shift" action="SelectionSymDiff" />
-
-  <bind key="slash" modifiers="Primary,Alt" action="SelectionCutPath" display="true" />
-  <bind key="slash" modifiers="Primary,Alt,Shift" action="SelectionCutPath" />
-
-  <bind key="slash" modifiers="Primary" action="SelectionDivide" display="true" />
-  <bind key="KP_Divide" modifiers="Primary" action="SelectionDivide" />
-  <bind key="slash" modifiers="Primary,Shift" action="SelectionDivide" />
-
-  <bind key="parenright" modifiers="Primary" action="SelectionOffset" display="true" />
-  <bind key="parenright" modifiers="Primary,Shift" action="SelectionOffset" />
-  <bind key="0" modifiers="Primary,Shift" action="SelectionOffset" />
-  <bind key="0" modifiers="Primary" action="SelectionOffset" /> -->
-
   <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true" />
   <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
 
   <bind key="parenright" modifiers="Alt,Shift" action="SelectionOffsetScreen10" display="true" />
   <bind key="0" modifiers="Alt,Shift" action="SelectionOffsetScreen10" />
-
-  <!-- <bind key="parenleft" modifiers="Primary" action="SelectionInset" display="true" />
-  <bind key="parenleft" modifiers="Primary,Shift" action="SelectionInset" />
-  <bind key="9" modifiers="Primary,Shift" action="SelectionInset" />
-  <bind key="9" modifiers="Primary" action="SelectionInset" /> -->
 
   <bind key="parenleft" modifiers="Alt" action="SelectionInsetScreen" display="true" />
   <bind key="9" modifiers="Alt" action="SelectionInsetScreen" />
@@ -276,10 +118,6 @@ override) the bindings in the main default.xml.
   <bind key="j" modifiers="Primary" action="SelectionDynOffset" display="true" />
 
   <bind key="j" modifiers="Primary,Alt" action="SelectionLinkedOffset" display="true" />
-
-  <!-- <bind key="l" modifiers="Primary" action="SelectionSimplify" display="true" />
-
-  <bind action="SelectionReverse" /> -->
 
 <!-- Text -->
 
@@ -344,19 +182,7 @@ override) the bindings in the main default.xml.
 
 <!-- Dialogs -->
 
-  <!-- <bind key="x" modifiers="Primary,Shift" action="DialogXMLEditor" display="true" />
-
-  <bind key="q" modifiers="Primary,Shift" action="DialogSelectors" display="true" /> -->
-
-  <!-- <bind key="d" modifiers="Primary,Shift" action="DialogDocumentProperties" display="true" /> -->
-
   <bind key="t" modifiers="Primary,Shift" action="DialogText" display="true" />
-
-  <!-- <bind key="p" modifiers="Primary,Shift" action="DialogPreferences" display="true" />
-  MacOs standard Prefs key
-  <bind key="comma" modifiers="Meta" action="DialogPreferences" />
-
-  <bind key="f" modifiers="Primary" action="DialogFind" display="true" /> -->
 
   <bind action="DialogObjectAttributes" />
 
