@@ -37,7 +37,7 @@
 #include "style.h"
 #include "svg/svg.h"
 
-#define DISTRIBUTION_SNAPPING_EPSILON 0.00005f 
+#define DISTRIBUTION_SNAPPING_EPSILON 0.5e-4f 
 
 static bool compare_double(double x, double y, double epsilon = DISTRIBUTION_SNAPPING_EPSILON){
    if(abs(x - y) < epsilon)
@@ -122,7 +122,7 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
       }
 
       dist = distance_func(curr_bbox, *std::next(it));
-      if (compare_double(first_dist, dist)) {
+      if (abs(first_dist - dist) > tol) {
          return false;
       }
 
@@ -131,7 +131,7 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
 
    // TODO: investige how does this tollerance affect the number of equidistant
    // objects that are found? also does multiplying with level help (error propagation)
-   if (compare_double(distance_func(curr_bbox, *std::next(it)), dist), DISTRIBUTION_SNAPPING_EPSILON) {
+   if (compare_double(distance_func(curr_bbox, *std::next(it)), dist, level * DISTRIBUTION_SNAPPING_EPSILON)) {
       return findSidewaysSnaps(first_dist, ++it, end, vec, dist, tol, distance_func, ++level);
    }
 
