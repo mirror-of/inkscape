@@ -9,11 +9,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef INK_ACTIONS_DOC_FILE_H
-#define INK_ACTIONS_DOC_FILE_H
+#ifndef INK_ACTIONS_FILE_DOCUMENT_H
+#define INK_ACTIONS_FILE_DOCUMENT_H
 
 class SPDocument;
 
-void add_actions_doc_file(SPDocument* document);
+void add_actions_file_document(SPDocument* document);
 
-#endif // INK_ACTIONS_DOC_FILE_H
+#endif // INK_ACTIONS_FILE_DOCUMENT_H

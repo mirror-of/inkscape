@@ -14,7 +14,7 @@
 #include <giomm.h>
 #include <glibmm/i18n.h>
 
-#include "actions-doc-file.h"
+#include "actions-file-document.h"
 #include "actions/actions-extra-data.h"
 #include "inkscape-application.h"
 
@@ -74,7 +74,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_doc_file =
 };
 
 void
-add_actions_doc_file(SPDocument* document)
+add_actions_file_document(SPDocument* document)
 {
 
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
@@ -89,7 +89,7 @@ add_actions_doc_file(SPDocument* document)
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();
     if (!app) {
-        std::cerr << "add_actions_doc_file: no app!" << std::endl;
+        std::cerr << "add_actions_file_document: no app!" << std::endl;
         return;
     }
     app->get_action_extra_data().add_data(raw_data_doc_file);

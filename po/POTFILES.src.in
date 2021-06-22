@@ -10,6 +10,8 @@
 ../src/actions/actions-dialogs.cpp
 ../src/actions/actions-edit.cpp
 ../src/actions/actions-extra-data.cpp
+../src/actions/actions-file-document.cpp
+../src/actions/actions-file-window.cpp
 ../src/actions/actions-file.cpp
 ../src/actions/actions-fit-canvas.cpp
 ../src/actions/actions-hide-lock.cpp

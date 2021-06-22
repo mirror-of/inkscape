@@ -11,6 +11,7 @@
 ../share/ui/inkscape-start.glade
 ../share/ui/marker-popup.glade
 ../share/ui/menu-edit.ui
+../share/ui/menu-file.ui
 ../share/ui/menu-object.ui
 ../share/ui/menu-path.ui
 ../share/ui/menu-view.ui
