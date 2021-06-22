@@ -42,7 +42,7 @@ override) the bindings in the main default.xml.
 
 
 <!-- File -->
-
+<!-- 
   <bind key="n" modifiers="Primary" action="FileNew" display="true" />
 
   <bind key="n" modifiers="Primary,Alt" action="FileTemplates" display="true" />
@@ -67,34 +67,34 @@ override) the bindings in the main default.xml.
 
   <bind key="w" modifiers="Primary" action="FileClose" display="true" />
 
-  <bind key="q" modifiers="Primary" action="FileQuit" display="true" />
+  <bind key="q" modifiers="Primary" action="FileQuit" display="true" /> -->
 
 <!-- Tools: See actions below -->
 
 <!-- Zoom: See actions below -->
 
 <!-- View -->
-
+<!-- 
   <bind key="F11" action="FullScreen" display="true" />
-  <bind key="f" modifiers="Ctrl,Meta" action="FullScreen" /> <!-- macOS -->
+  <bind key="f" modifiers="Ctrl,Meta" action="FullScreen" /> macOS -->
   <bind key="F11" action="FocusToggle" modifiers="Shift" display="true" />
   <bind key="F11" action="FullScreenFocus" modifiers="Primary" display="true" />
 
-  <bind key="Tab" modifiers="Ctrl" action="NextWindow" display="true" />
+  <!-- <bind key="Tab" modifiers="Ctrl" action="NextWindow" display="true" />
   <bind key="ISO_Left_Tab" modifiers="Ctrl" action="PrevWindow" display="true" />
-  <bind key="grave" modifiers="Meta" action="NextWindow" /> <!-- macOS standard -->
-
-  <bind key="numbersign" modifiers="Shift" action="ToggleGrid" /> <!-- # -->
-  <bind key="numbersign" action="ToggleGrid" display="true" />
-
-  <bind key="bar" modifiers="Shift" action="ToggleGuides" /> <!-- | -->
-  <bind key="bar" action="ToggleGuides" display="true" />
-
+  <bind key="grave" modifiers="Meta" action="NextWindow" /> macOS standard -->
+<!-- 
+  <bind key="numbersign" modifiers="Shift" action="ToggleGrid" /> 
+  <bind key="numbersign" action="ToggleGrid" display="true" /> -->
+<!-- 
+  <bind key="bar" modifiers="Shift" action="ToggleGuides" /> 
+  <bind key="bar" action="ToggleGuides" display="true" /> -->
+<!-- 
   <bind action="ToggleCommandsToolbar" />
   <bind action="ToggleSnapToolbar" />
   <bind action="ToggleToolToolbar" />
-  <bind action="ToggleToolbox" />
-
+  <bind action="ToggleToolbox" /> -->
+<!-- 
   <bind key="question" action="ToggleCommandPalette" display="true"/>
 
   <bind key="r" modifiers="Primary" action="ToggleRulers" display="true" />
@@ -103,7 +103,7 @@ override) the bindings in the main default.xml.
 
   <bind key="p" modifiers="Shift,Alt" action="TogglePalette" display="true" />
 
-  <bind action="ToggleStatusbar" />
+  <bind action="ToggleStatusbar" /> -->
 
   <bind action="ViewNew" />
   <bind action="ViewIconPreview" />
@@ -348,7 +348,7 @@ override) the bindings in the main default.xml.
 
   <bind key="q" modifiers="Primary,Shift" action="DialogSelectors" display="true" /> -->
 
-  <bind key="d" modifiers="Primary,Shift" action="DialogDocumentProperties" display="true" />
+  <!-- <bind key="d" modifiers="Primary,Shift" action="DialogDocumentProperties" display="true" /> -->
 
   <bind key="t" modifiers="Primary,Shift" action="DialogText" display="true" />
 
@@ -360,7 +360,7 @@ override) the bindings in the main default.xml.
 
   <bind action="DialogObjectAttributes" />
 
-  <bind key="w" modifiers="Primary,Shift" action="DialogSwatches" display="true" />
+  <!-- <bind key="w" modifiers="Primary,Shift" action="DialogSwatches" display="true" /> -->
 
   <!-- <bind key="ampersand" modifiers="Primary" action="DialogLivePathEffect" display="true" />
   <bind key="7" modifiers="Primary,Shift" action="DialogLivePathEffect" />
@@ -375,7 +375,7 @@ override) the bindings in the main default.xml.
   <bind action="DialogDebug" />
   <!-- <bind action="DialogInput" /> -->
 
-  <bind key="F12" action="DialogsToggle" display="true" />
+  <!-- <bind key="F12" action="DialogsToggle" display="true" /> -->
 
   <bind key="h" modifiers="Primary,Alt" action="AlignHorizontalCenter" display="true" />
 
@@ -499,6 +499,9 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('Preferences')"             keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
   <bind gaction="win.dialog-open('LivePathEffect')"          keys="&lt;primary&gt;ampersand, &lt;primary&gt;&lt;shift&gt;7" />
   <bind gaction="win.dialog-open('Trace')"                   keys="&lt;alt&gt;&lt;shift&gt;b"/>
+  <bind gaction="win.dialog-open('DocumentProperties')"      keys="&lt;primary&gt;&lt;shift&gt;d" />
+  <bind gaction="win.dialog-open('Swatches')"                keys="&lt;primary&gt;&lt;shift&gt;w" />
+  <bind gaction="win.dialog-open('Messages')" />
 
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
@@ -564,5 +567,39 @@ override) the bindings in the main default.xml.
   <bind gaction="win.paste-path-effect"                   keys="ampersand, &lt;primary&gt;7"/>
   <bind gaction="win.select-path-reverse"/>
   <bind gaction="win.remove-path-effect"/>
+
+  <!-- View -->
+  <bind gaction="win.canvas-show-grid"                    keys="&lt;shift&gt;numbersign" />
+  <bind gaction="win.canvas-show-grid"                    keys="numbersign" />
+  <bind gaction="win.canvas-show-guides"                  keys="&lt;shift&gt;bar, bar" />
+  <bind gaction="win.canvas-command-palette"              keys="question" />
+  <bind gaction="win.canvas-rulers"                       keys="&lt;primary&gt;r" />
+  <bind gaction="win.canvas-scroll-bars"                  keys="&lt;primary&gt;b" />
+  <bind gaction="win.canvas-palette"                      keys="&lt;shift&gt;&lt;alt&gt;p" />
+  <bind gaction="doc.window-next"                         keys="&lt;ctrl&gt;Tab, &lt;meta&gt;grave" />
+  <bind gaction="doc.window-previous"                     keys="&lt;ctrl&gt;ISO_Left_Tab" />
+  <bind gaction="win.view-fullscreen"                     keys="F11, &lt;ctrl&gt;&lt;meta&gt;f" />
+  <bind gaction="win.canvas-commands-bar" />
+  <bind gaction="win.canvas-snap-controls-bar" />
+  <bind gaction="win.canvas-tool-control-bar" />
+  <bind gaction="win.canvas-toolbox" />
+  <bind gaction="win.canvas-scroll-bars" />
+  <bind gaction="win.window-new" />
+  <bind gaction="doc.window-previous" />
+
+  <!-- File -->
+  <bind gaction="doc.document-new"                        keys="&lt;primary&gt;n" />
+  <bind gaction="doc.document-dialog-templates"           keys="&lt;primary&gt;&lt;alt&gt;n" />
+  <bind gaction="win.file-open"                           keys="&lt;primary&gt;o" />
+  <bind gaction="doc.document-revert" />
+  <bind gaction="win.document-save"                       keys="&lt;primary&gt;s" />
+  <bind gaction="win.document-save-as"                    keys="&lt;primary&gt;&lt;shift&gt;s" />
+  <bind gaction="win.document-save-copy"                  keys="&lt;primary&gt;&lt;shift&gt;&lt;alt&gt;s" />
+  <bind gaction="win.document-import"                     keys="&lt;primary&gt;i" />
+  <bind gaction="win.document-print"                      keys="&lt;primary&gt;p" />
+  <bind gaction="win.dialog-open('Export')"               keys="&lt;primary&gt;&lt;shift&gt;e" />
+  <bind gaction="doc.document-cleanup" />
+  <bind gaction="app.file-close"                          keys="&lt;primary&gt;w" />
+  <bind gaction="app.quit-inkscape"                       keys="&lt;primary&gt;q" />
 
 </keys>
