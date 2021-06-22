@@ -212,7 +212,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit_window =
     {"win.select-none",                         N_("Deselect"),                         "Edit",     N_("Deselect any selected objects or nodes")},
     {"win.create-guides-around-page",           N_("Create Guides Around the Page"),    "Edit",     N_("Create four guides aligned with the page borders")},
     {"win.lock-all-guides",                     N_("Lock All Guides"),                  "Edit",     N_("Toggle lock of all guides in the document")},
-    {"win.deleteall-guides",                   N_("Delete All Guides"),                "Edit",     N_("Delete all the guides in the document")},
+    {"win.deleteall-guides",                    N_("Delete All Guides"),                "Edit",     N_("Delete all the guides in the document")},
     {"win.path-effect-parameter-next",          N_("Next path effect parameter"),       "Edit",     N_("Show next editable path effect parameter")}
     // clang-format on
 };
@@ -220,8 +220,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit_window =
 void
 add_actions_edit_window(InkscapeWindow* win)
 {
-
-    /* Should be done in separate function or switch cases ? */
 
     // clang-format off
     win->add_action(        "undo",                            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&undo), win));

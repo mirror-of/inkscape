@@ -17,11 +17,9 @@
 #include "actions-file-document.h"
 #include "actions/actions-extra-data.h"
 #include "inkscape-application.h"
-
 #include "document.h"
 #include "inkscape.h"
 #include "object/sp-namedview.h"
-
 #include "file.h"
 #include "ui/dialog/new-from-template.h"
 

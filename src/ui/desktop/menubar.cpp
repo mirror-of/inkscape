@@ -395,6 +395,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                 Gtk::MenuItem* menuitem = Gtk::manage(new Gtk::MenuItem(_(name), true));
                 menuitem->set_name(name);
 
+                // At the end remove all and build the entire menu from one file.
                 std::string filename = "";
                 std::string menuname = "";
                 auto refBuilder = Gtk::Builder::create();

@@ -19,7 +19,6 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "desktop.h"
-
 #include "file.h"
 #include "ui/dialog/save-template-dialog.h"
 

@@ -17,7 +17,6 @@
 #include "actions-edit.h"
 #include "actions-helper.h"
 #include "inkscape-application.h"
-
 #include "selection-chemistry.h"
 #include "object/sp-guide.h"
 
