@@ -290,6 +290,8 @@ bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::Snapp
                 case Inkscape::SNAPTARGET_DISTRIBUTION_DOWN:
                    result.setPoint({aligned.getPoint().x() ,result.getPoint().y()});
                    break;
+                case Inkscape::SNAPTARGET_DISTRIBUTION_XY:
+                   break;
                 default:
                     g_warning("getClosestSP(): unknown distribution snap target %i", result.getTarget());
                    break;

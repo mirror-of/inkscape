@@ -37,6 +37,14 @@
 #include "style.h"
 #include "svg/svg.h"
 
+#define DISTRIBUTION_SNAPPING_EPSILON 0.00005f 
+
+static bool compare_double(double x, double y, double epsilon = DISTRIBUTION_SNAPPING_EPSILON){
+   if(abs(x - y) < epsilon)
+      return true;
+   return false;
+}
+
 static int sortBoxesRight(Geom::Rect const &a, Geom::Rect const &b)
 {
    if (a.midpoint().x() < b.midpoint().x()) 
@@ -114,7 +122,7 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
       }
 
       dist = distance_func(curr_bbox, *std::next(it));
-      if (abs(first_dist - dist) > tol) {
+      if (compare_double(first_dist, dist)) {
          return false;
       }
 
@@ -123,7 +131,7 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(Geom::Coord first_dist,
 
    // TODO: investige how does this tollerance affect the number of equidistant
    // objects that are found? also does multiplying with level help (error propagation)
-   if (abs(distance_func(curr_bbox, *std::next(it)) - dist) < level*1e-5) {
+   if (compare_double(distance_func(curr_bbox, *std::next(it)), dist), DISTRIBUTION_SNAPPING_EPSILON) {
       return findSidewaysSnaps(first_dist, ++it, end, vec, dist, tol, distance_func, ++level);
    }
 
@@ -283,12 +291,12 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                                 getSnapperTolerance(),
                                 &DistributionSnapper::distLeft)) {
 
-                if (abs(left_dist - equal_dist) < 1e-5){
+	      if (compare_double(left_dist, equal_dist)){
                     std::reverse(vecLeft.begin(), vecLeft.end());
                     vecRight.insert(vecRight.begin(), vecLeft.begin(), vecLeft.end());
                 }
 
-            } else if (abs(first_dist - equal_dist) < 1e-5) {
+            } else if (compare_double(first_dist, equal_dist)) {
                 vecRight.insert(vecRight.begin(), vecLeft.front());
             }
          }
@@ -337,11 +345,11 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                                 getSnapperTolerance(),
                                 &DistributionSnapper::distRight)) {
 
-                if (abs(right_dist - equal_dist) < 1e-5){
+	      if (compare_double(right_dist, equal_dist)){
                     vecLeft.insert(vecLeft.end(), vecRight.begin(), vecRight.end());
                 }
 
-            } else if (abs(first_dist - equal_dist) < 1e-5) {
+            } else if (compare_double(first_dist, equal_dist)) {
                 vecLeft.push_back(vecRight.front());
             }
          }
@@ -463,11 +471,11 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                                 getSnapperTolerance(),
                                 &DistributionSnapper::distUp)) {
 
-               if (abs(up_dist - equal_dist) < 1e-5){
+	      if (compare_double(up_dist, equal_dist)){
                   std::reverse(vecUp.begin(), vecUp.end());
                   vecDown.insert(vecDown.begin(), vecUp.begin(), vecUp.end());
                }
-            } else if (abs(first_dist - equal_dist) < 1e-5) {
+            } else if (compare_double(first_dist, equal_dist)) {
                vecDown.insert(vecDown.begin(), vecUp.front());
             }
          }
