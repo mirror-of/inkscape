@@ -138,7 +138,7 @@
       </object>
     </child>
 
-<!-- Just for demo of Spin button in addtion in ui , But as GtkToolItem is depercated in Gtk4
+<!-- Just for demo of Spin button in addtion in ui , But as GtkToolItem is deprecated in Gtk4
      So need to create a sperate builder of it -->
      
     <child>

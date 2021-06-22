@@ -248,7 +248,6 @@ select_path_difference(InkscapeApplication *app)
     selection->removeLPESRecursive(true);
     selection->unlinkRecursive(true);
     selection->pathDiff();
-
 }
 
 void

@@ -506,9 +506,9 @@ override) the bindings in the main default.xml.
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
   <bind gaction="app.select-object-ungroup"               keys="&lt;shift&gt;&lt;primary&gt;g , &lt;primary&gt;u" />
-  <bind gaction="win.object-to-pattern"                   keys="&lt;alt&gt;i" />  
-  <bind gaction="win.pattern-to-object"                   keys="&lt;alt&gt;&lt;shift&gt;i" />
-  <bind gaction="win.object-to-guides"                    keys="&lt;shift&gt;g" />
+  <bind gaction="app.object-to-pattern"                   keys="&lt;alt&gt;i" />  
+  <bind gaction="app.pattern-to-object"                   keys="&lt;alt&gt;&lt;shift&gt;i" />
+  <bind gaction="app.object-to-guides"                    keys="&lt;shift&gt;g" />
   <bind gaction="app.selection-top"                       keys="Home,  KP_Home" />
   <bind gaction="app.selection-raise"                     keys="Page_Up, KP_Page_Up" />
   <bind gaction="app.selection-lower"                     keys="Page_Down, KP_Page_Down" />
@@ -521,23 +521,23 @@ override) the bindings in the main default.xml.
   <!-- Edit -->
   <bind gaction="win.undo"                                keys="&lt;primary&gt;z" />
   <bind gaction="win.redo"                                keys="&lt;primary&gt;&lt;shift&gt;z,  &lt;primary&gt;y" />
-  <bind gaction="win.cut"                                 keys="&lt;primary&gt;x,               &lt;shift&gt;Delete" />
-  <bind gaction="win.copy"                                keys="&lt;primary&gt;c,               &lt;primary&gt;Insert"/>
+  <bind gaction="app.cut"                                 keys="&lt;primary&gt;x,               &lt;shift&gt;Delete" />
+  <bind gaction="app.copy"                                keys="&lt;primary&gt;c,               &lt;primary&gt;Insert"/>
   <bind gaction="win.paste"                               keys="&lt;primary&gt;v,               &lt;shift&gt;Insert"/>
-  <bind gaction="win.paste-style"                         keys="&lt;primary&gt;&lt;shift&gt;v" />
+  <bind gaction="app.paste-style"                         keys="&lt;primary&gt;&lt;shift&gt;v" />
   <bind gaction="win.paste-in-place"                      keys="&lt;primary&gt;&lt;alt&gt;v"/>
-  <bind gaction="win.paste-size" />
-  <bind gaction="win.paste-width" />
-  <bind gaction="win.paste-height" />
-  <bind gaction="win.paste-size-separately" />
-  <bind gaction="win.paste-width-separately" />
-  <bind gaction="win.paste-height-separately" />
-  <bind gaction="win.duplicate"                           keys="&lt;primary&gt;d"/>
-  <bind gaction="win.clone"                               keys="&lt;alt&gt;d" />
-  <bind gaction="win.clone-unlink"                        keys="&lt;alt&gt;&lt;shift&gt;d" />
-  <bind gaction="win.clone-link" />
-  <bind gaction="win.select-original"                     keys="&lt;shift&gt;d" />
-  <bind gaction="win.clone-link-lpe" />
+  <bind gaction="app.paste-size" />
+  <bind gaction="app.paste-width" />
+  <bind gaction="app.paste-height" />
+  <bind gaction="app.paste-size-separately" />
+  <bind gaction="app.paste-width-separately" />
+  <bind gaction="app.paste-height-separately" />
+  <bind gaction="app.duplicate"                           keys="&lt;primary&gt;d"/>
+  <bind gaction="app.clone"                               keys="&lt;alt&gt;d" />
+  <bind gaction="app.clone-unlink"                        keys="&lt;alt&gt;&lt;shift&gt;d" />
+  <bind gaction="app.clone-link" />
+  <bind gaction="app.select-original"                     keys="&lt;shift&gt;d" />
+  <bind gaction="app.clone-link-lpe" />
   <bind gaction="win.select-all"                          keys="&lt;primary&gt;a" />
   <bind gaction="win.select-all-layers"                   keys="&lt;primary&gt;&lt;alt&gt;a" />
   <bind gaction="win.select-same-fill-and-stroke" />
@@ -548,7 +548,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.select-none"                         keys="Escape"/>
   <bind gaction="win.fit-canvas-to-selection-or-drawing"  keys="&lt;primary&gt;&lt;shift&gt;r" />
   <bind gaction="win.selection-make-bitmap-copy"          keys="&lt;alt&gt;b" />
-  <bind gaction="win.delete"                              keys="Delete, KP_Delete, BackSpace" />
+  <bind gaction="app.delete"                              keys="Delete, KP_Delete, BackSpace" />
 
   <!-- Path -->
   <bind gaction="app.object-to-path"                      keys="&lt;primary&gt;&lt;shift&gt;c"/>
@@ -564,9 +564,9 @@ override) the bindings in the main default.xml.
   <bind gaction="win.select-path-inset"                   keys="&lt;primary&gt;parenleft, &lt;primary&gt;&lt;shift&gt;parenleft,  &lt;primary&gt;&lt;shift&gt;9, &lt;primary&gt;9"/>
   <bind gaction="win.select-path-outset"                  keys="&lt;primary&gt;parenright, &lt;primary&gt;&lt;shift&gt;parenright, &lt;primary&gt;&lt;shift&gt;0,   &lt;primary&gt;0"/>
   <bind gaction="app.select-path-simplify"                keys="l"/>
-  <bind gaction="win.paste-path-effect"                   keys="ampersand, &lt;primary&gt;7"/>
+  <bind gaction="app.paste-path-effect"                   keys="ampersand, &lt;primary&gt;7"/>
   <bind gaction="win.select-path-reverse"/>
-  <bind gaction="win.remove-path-effect"/>
+  <bind gaction="app.remove-path-effect"/>
 
   <!-- View -->
   <bind gaction="win.canvas-show-grid"                    keys="&lt;shift&gt;numbersign" />

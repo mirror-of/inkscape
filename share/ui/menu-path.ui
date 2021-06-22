@@ -120,11 +120,11 @@
             </item>
             <item>
                 <attribute name='label' translatable="yes">Paste Path _Effect</attribute>
-                <attribute name='action'>win.paste-path-effect</attribute>
+                <attribute name='action'>app.paste-path-effect</attribute>
             </item>
             <item>
                 <attribute name='label' translatable="yes">Remove Path _Effect</attribute>
-                <attribute name='action'>win.remove-path-effect</attribute>
+                <attribute name='action'>app.remove-path-effect</attribute>
             </item>
         </section>
 

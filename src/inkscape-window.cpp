@@ -25,7 +25,7 @@
 #include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-transform.h"
 #include "actions/actions-dialogs.h"
-#include "actions/actions-edit.h"
+#include "actions/actions-edit-window.h"
 #include "actions/actions-file-window.h"
 #include "actions/actions-fit-canvas.h"
 #include "actions/actions-hide-lock.h"
@@ -99,7 +99,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add_actions_canvas_transform(this);     // Actions to transform canvas view.
     add_actions_canvas_mode(this);          // Actions to change canvas display mode.
     add_actions_dialogs(this);              // Actions to open dialogs.
-    add_actions_edit(this);                 // Actions to transform dialog.
+    add_actions_edit_window(this);          // Actions to edit.
     add_actions_file_window(this);          // Actions for file actions which are desktop dependent.
     add_actions_fit_canvas(this);           // Actions to fit canvas
     add_actions_hide_lock(this);            // Actions to transform dialog.

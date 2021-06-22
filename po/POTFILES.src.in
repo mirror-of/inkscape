@@ -8,6 +8,7 @@
 ../src/actions/actions-canvas-snapping.cpp
 ../src/actions/actions-canvas-transform.cpp
 ../src/actions/actions-dialogs.cpp
+../src/actions/actions-edit-window.cpp
 ../src/actions/actions-edit.cpp
 ../src/actions/actions-extra-data.cpp
 ../src/actions/actions-file-document.cpp

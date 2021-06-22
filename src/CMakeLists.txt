@@ -204,32 +204,35 @@ set(inkscape_SRC
   inkscape-application.cpp
   actions/actions-extra-data.h
   actions/actions-extra-data.cpp
-
   actions/actions-hint-data.h
   actions/actions-hint-data.cpp
 
+  actions/actions-base.h
+  actions/actions-base.cpp
   actions/actions-canvas-mode.h
   actions/actions-canvas-mode.cpp
   actions/actions-canvas-snapping.h
   actions/actions-canvas-snapping.cpp
   actions/actions-canvas-transform.h
   actions/actions-canvas-transform.cpp
-  actions/actions-hide-lock.h
-  actions/actions-hide-lock.cpp
-  actions/actions-edit.h
-  actions/actions-edit.cpp
-  actions/actions-base.h
   actions/actions-dialogs.cpp
   actions/actions-dialogs.h
-  actions/actions-base.cpp
+  actions/actions-edit-window.h
+  actions/actions-edit-window.cpp
+  actions/actions-edit.h
+  actions/actions-edit.cpp
   actions/actions-file-document.h
   actions/actions-file-document.cpp
   actions/actions-file-window.h
   actions/actions-file-window.cpp
   actions/actions-file.h
   actions/actions-file.cpp
+  actions/actions-fit-canvas.h
+  actions/actions-fit-canvas.cpp
   actions/actions-helper.h
-  actions/actions-helper.cpp  
+  actions/actions-helper.cpp
+  actions/actions-hide-lock.h
+  actions/actions-hide-lock.cpp
   actions/actions-node.h
   actions/actions-node.cpp
   actions/actions-object.h
@@ -242,8 +245,6 @@ set(inkscape_SRC
   actions/actions-selection-object.cpp
   actions/actions-selection-desktop.h
   actions/actions-selection-desktop.cpp
-  actions/actions-fit-canvas.h
-  actions/actions-fit-canvas.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
   actions/actions-tools.h

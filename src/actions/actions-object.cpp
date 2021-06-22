@@ -21,6 +21,7 @@
 #include "inkscape.h"             // Inkscape::Application
 #include "selection.h"            // Selection
 #include "path/path-simplify.h"
+
 #include "live_effects/lpe-powerclip.h"
 #include "live_effects/lpe-powermask.h"
 #include "ui/icon-names.h"
@@ -264,6 +265,7 @@ object_simplify_path(InkscapeApplication *app)
 
     selection->simplifyPaths();
 }
+
 
 std::vector<std::vector<Glib::ustring>> raw_data_object =
 {

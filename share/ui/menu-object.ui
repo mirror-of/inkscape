@@ -94,11 +94,11 @@
       <section>
         <item>
           <attribute name='label' translatable="yes">Objects to Patter_n</attribute>
-          <attribute name='action'>win.object-to-pattern</attribute>
+          <attribute name='action'>app.object-to-pattern</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">Pattern to _Objects</attribute>
-          <attribute name='action'>win.pattern-to-object</attribute>
+          <attribute name='action'>app.pattern-to-object</attribute>
         </item>
       </section>
     </submenu>
@@ -106,11 +106,11 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">Objects to _Marker</attribute>
-        <attribute name='action'>win.object-to-marker</attribute>
+        <attribute name='action'>app.object-to-marker</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Objects to Gu_ides</attribute>
-        <attribute name='action'>win.object-to-guides</attribute>
+        <attribute name='action'>app.object-to-guides</attribute>
       </item>
     </section>
 

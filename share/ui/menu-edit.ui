@@ -25,12 +25,12 @@
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">Cu_t</attribute>
-				<attribute name='action'>win.cut</attribute>
+				<attribute name='action'>app.cut</attribute>
 				<attribute name='icon'>edit-cut</attribute>
 			</item>
 			<item>
 				<attribute name='label' translatable="yes">_Copy</attribute>
-				<attribute name='action'>win.copy</attribute>
+				<attribute name='action'>app.copy</attribute>
 				<attribute name='icon'>edit-copy</attribute>
 			</item>
 			<item>
@@ -45,7 +45,7 @@
 			</item>
 			<item>
 				<attribute name='label' translatable="yes">Paste _Style</attribute>
-				<attribute name='action'>win.paste-style</attribute>
+				<attribute name='action'>app.paste-style</attribute>
 				<attribute name='icon'>edit-paste-style</attribute>
 			</item>
 		</section>
@@ -55,32 +55,32 @@
 			<section>
 				<item>
 					<attribute name='label' translatable="yes">Paste Si_ze</attribute>
-					<attribute name='action'>win.paste-size</attribute>
+					<attribute name='action'>app.paste-size</attribute>
 					<attribute name='icon'>edit-paste-size</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Paste _Width</attribute>
-					<attribute name='action'>win.paste-width</attribute>
+					<attribute name='action'>app.paste-width</attribute>
 					<attribute name='icon'>edit-paste-width</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Paste _Height</attribute>
-					<attribute name='action'>win.paste-height</attribute>
+					<attribute name='action'>app.paste-height</attribute>
 					<attribute name='icon'>edit-paste-height</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Paste Size Separately</attribute>
-					<attribute name='action'>win.paste-size-separately</attribute>
+					<attribute name='action'>app.paste-size-separately</attribute>
 					<attribute name='icon'>edit-paste-size-separately</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Paste Width Separately</attribute>
-					<attribute name='action'>win.paste-width-separately</attribute>
+					<attribute name='action'>app.paste-width-separately</attribute>
 					<attribute name='icon'>edit-paste-width-separately</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Paste Height Separately</attribute>
-					<attribute name='action'>win.paste-height-separately</attribute>
+					<attribute name='action'>app.paste-height-separately</attribute>
 					<attribute name='icon'>edit-paste-height-separately</attribute>
 				</item>
 			</section>
@@ -97,7 +97,7 @@
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">Duplic_ate</attribute>
-				<attribute name='action'>win.duplicate</attribute>
+				<attribute name='action'>app.duplicate</attribute>
 				<attribute name='icon'>edit-duplicate</attribute>
 			</item>
 		</section>
@@ -107,7 +107,7 @@
 			<section>
 				<item>
 					<attribute name='label' translatable="yes">Create Clo_ne</attribute>
-					<attribute name='action'>win.clone</attribute>
+					<attribute name='action'>app.clone</attribute>
 					<attribute name='icon'>edit-clone</attribute>
 				</item>
 				<item>
@@ -118,27 +118,27 @@
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Unlin_k Clone</attribute>
-					<attribute name='action'>win.clone-unlink</attribute>
+					<attribute name='action'>app.clone-unlink</attribute>
 					<attribute name='icon'>edit-clone-unlink</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Unlink Clones _recursively</attribute>
-					<attribute name='action'>win.clone-unlink-recursively</attribute>
+					<attribute name='action'>app.clone-unlink-recursively</attribute>
 					<attribute name='icon'>edit-clone-unlink</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Relink to Copied</attribute>
-					<attribute name='action'>win.clone-link</attribute>
+					<attribute name='action'>app.clone-link</attribute>
 					<attribute name='icon'>edit-clone-link</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Select _Original</attribute>
-					<attribute name='action'>win.select-original</attribute>
+					<attribute name='action'>app.select-original</attribute>
 					<attribute name='icon'>edit-select-original</attribute>
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Clone original path (LPE)</attribute>
-					<attribute name='action'>win.clone-link-lpe</attribute>
+					<attribute name='action'>app.clone-link-lpe</attribute>
 					<attribute name='icon'>edit-clone-link-lpe</attribute>
 				</item>
 			</section>
@@ -155,7 +155,7 @@
 		<section>
 			<item>
 				<attribute name='label' translatable="yes">_Delete</attribute>
-				<attribute name='action'>win.delete</attribute>
+				<attribute name='action'>app.delete</attribute>
 				<attribute name='icon'>edit-delete</attribute>
 			</item>
 		</section>
@@ -183,7 +183,7 @@
 				</item>
 				<item>
 					<attribute name='label' translatable="yes">Paste _Width</attribute>
-					<attribute name='action'>win.paste-width</attribute>
+					<attribute name='action'>app.paste-width</attribute>
 					<attribute name='icon'>edit-paste-width</attribute>
 				</item>
 				<item>
@@ -235,7 +235,7 @@
 			</item>
 			<item>
 				<attribute name='label' translatable="yes">Delete All Guides</attribute>
-				<attribute name='action'>win.delete-all-guides</attribute>
+				<attribute name='action'>win.deleteall-guides</attribute>
 			</item>
 		</section>
 		

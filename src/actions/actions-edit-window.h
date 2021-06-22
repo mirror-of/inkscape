@@ -9,11 +9,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef INK_ACTIONS_EDIT_H
-#define INK_ACTIONS_EDIT_H
+#ifndef INK_ACTIONS_EDIT_WINDOW_H
+#define INK_ACTIONS_EDIT_WINDOW_H
 
-class InkscapeApplication;
+class InkscapeWindow;
 
-void add_actions_edit(InkscapeApplication* app);
+void add_actions_edit_window(InkscapeWindow* win);
 
-#endif // INK_ACTIONS_EDIT_H
+#endif // INK_ACTIONS_EDIT_WINDOW_H
