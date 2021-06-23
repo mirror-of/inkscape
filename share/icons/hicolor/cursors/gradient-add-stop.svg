@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -54,34 +55,14 @@
        id="grid1537"
        type="xygrid" />
   </sodipodi:namedview>
+
+  <style>@import './cursors.css';</style>
+
   <defs
      id="defs957">
-    <!-- Shadow -->
-    <filter
-       height="2"
-       width="2.5"
-       y="-0.5"
-       x="-0.5"
-       id="shadow">
-      <feOffset
-         id="feOffset950"
-         dy="1"
-         dx="1"
-         in="SourceAlpha"
-         result="offOut" />
-      <feGaussianBlur
-         id="feGaussianBlur952"
-         stdDeviation="1"
-         result="blurOut" />
-      <feBlend
-         id="feBlend954"
-         mode="normal"
-         in2="blurOut"
-         in="SourceGraphic" />
-    </filter>
   </defs>
   <g
-     style="filter:url(#shadow)"
+    class="drop-shadow"
      id="cursor">
     <!-- Arrow -->
     <path

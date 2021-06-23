@@ -7,17 +7,13 @@
      inkscape:hotspot_y="13"
      style="fill:gray;stroke:black">
 
+  <style>@import './cursors.css';</style>
+
   <defs>
-    <!-- Shadow -->
-    <filter id="shadow" x="-0.5" y="-0.5" width="2.5" height="2">
-      <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1" />
-      <feGaussianBlur result="blurOut" stdDeviation="1" />
-      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-    </filter>
   </defs>
 
   <!-- 'I'  -->
-  <g id="cursor" style="filter:url(#shadow)">
+  <g id="cursor" class="drop-shadow" style="">
     <!-- Outline -->
     <path d="m 2.5,23.5 l 3,-3 l 3,3 m -3,-18 v 15 m -3,-18 l 3,3 l 3,-3"
           style="fill:none;stroke:white;stroke-width:3px;stroke-linecap:round"/>

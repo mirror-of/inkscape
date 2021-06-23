@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    width="32"
    height="32"
    inkscape:hotspot_x="4"
@@ -16,6 +17,9 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+  <style>@import './cursors.css';</style>
+
   <metadata
      id="metadata972">
     <rdf:RDF>
@@ -56,33 +60,10 @@
   </sodipodi:namedview>
   <defs
      id="defs957">
-    <!-- Shadow -->
-    <filter
-       id="shadow"
-       x="-0.066749824"
-       y="-0.063651296"
-       width="1.2288565"
-       height="1.218233">
-      <feOffset
-         result="offOut"
-         in="SourceAlpha"
-         dx="1"
-         dy="1"
-         id="feOffset950" />
-      <feGaussianBlur
-         result="blurOut"
-         stdDeviation="1"
-         id="feGaussianBlur952" />
-      <feBlend
-         in="SourceGraphic"
-         in2="blurOut"
-         mode="normal"
-         id="feBlend954" />
-    </filter>
   </defs>
   <g
      id="cursor"
-     style="filter:url(#shadow)">
+     class="drop-shadow">
     <!-- Arrow -->
     <path
        d="M 4.5,4.5 12,12 H 8 l 3,7 -1,0.5 -3,-7 -2.5,2.5 z"

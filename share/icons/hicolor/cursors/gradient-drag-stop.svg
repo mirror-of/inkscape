@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -16,6 +17,9 @@
    inkscape:hotspot_x="4"
    height="32"
    width="32">
+
+  <style>@import './cursors.css';</style>
+
   <metadata
      id="metadata972">
     <rdf:RDF>
@@ -56,54 +60,9 @@
   </sodipodi:namedview>
   <defs
      id="defs957">
-    <!-- Shadow -->
-    <filter
-       height="2"
-       width="2.5"
-       y="-0.5"
-       x="-0.5"
-       id="shadow">
-      <feOffset
-         id="feOffset950"
-         dy="1"
-         dx="1"
-         in="SourceAlpha"
-         result="offOut" />
-      <feGaussianBlur
-         id="feGaussianBlur952"
-         stdDeviation="1"
-         result="blurOut" />
-      <feBlend
-         id="feBlend954"
-         mode="normal"
-         in2="blurOut"
-         in="SourceGraphic" />
-    </filter>
-    <filter
-       height="2"
-       width="2.5"
-       y="-0.5"
-       x="-0.5"
-       id="shadow-0">
-      <feOffset
-         id="feOffset950-8"
-         dy="1"
-         dx="1"
-         in="SourceAlpha"
-         result="offOut" />
-      <feGaussianBlur
-         id="feGaussianBlur952-1"
-         stdDeviation="1"
-         result="blurOut" />
-      <feBlend
-         id="feBlend954-1"
-         mode="normal"
-         in2="blurOut"
-         in="SourceGraphic" />
-    </filter>
   </defs>
   <g
-     style="filter:url(#shadow)"
+    class="drop-shadow"
      id="cursor">
     <!-- Arrow -->
     <path
@@ -127,15 +86,4 @@
        style="fill:#ffffff;stroke:#ffffff;stroke-width:1px;stroke-opacity:1"
        id="path965" />
   </g>
-  <g
-     transform="translate(19.248044,-16.309248)"
-     style="opacity:0.716157;fill:#ff0101;fill-opacity:1;stroke:#081cf7;stroke-opacity:1;filter:url(#shadow-0)"
-     id="cursor-6">
-    <!-- Arrow -->
-    <!-- Outline (cross) -->
-    <!-- Cross -->
-  </g>
-  <g
-     transform="matrix(-1,0,0,1,59.366699,-19.101396)"
-     id="g916" />
 </svg>

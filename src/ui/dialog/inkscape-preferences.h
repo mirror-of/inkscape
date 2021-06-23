@@ -413,6 +413,7 @@ protected:
     UI::Widget::PrefCheckButton _ui_yaxisdown;
     UI::Widget::PrefCheckButton _ui_rotationlock;
     UI::Widget::PrefCheckButton _ui_cursorscaling;
+    UI::Widget::PrefCheckButton _ui_cursor_shadow;
 
     //Spellcheck
     UI::Widget::PrefCombo       _spell_language;

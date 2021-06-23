@@ -7,13 +7,9 @@
      inkscape:hotspot_y="4"
      style="fill:gray;stroke:black">
 
+  <style>@import './cursors.css';</style>
+
   <defs>
-    <!-- Shadow -->
-    <filter id="shadow" x="-0.5" y="-0.5" width="2" height="2">
-      <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1" />
-      <feGaussianBlur result="blurOut" stdDeviation="1" />
-      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-    </filter>
 
     <g id="objects">
       <path d="m 4,13.5 c 4,0 8,-4 12,-4 c 4,0 8,4 12,4 l 0,5 c -4,0 -8,-4 -12,-4 c -4,0 -8,4 -12,4 z" style="fill:lightgray;stroke:none"/>
@@ -22,8 +18,8 @@
   </defs>
 
   <!-- Cross (centered on hotspot) -->
-  <path d="M 1.5,4.5 7.5,4.5 M 4.5,1.5 4.5,7.5" style="fill:none;stroke:white;stroke-width:3px;stroke-linecap:square"/>
-  <path d="M 1.5,4.5 7.5,4.5 M 4.5,1.5 4.5,7.5" style="fill:none;stroke:black;stroke-width:1px;stroke-linecap:square"/>
+  <use xlink:href="-common.svg#def-cross"/>
+
 
   <g id="cursor" style="fill:none">
     <use xlink:href="#objects" style="stroke:white;stroke-width:3px"/>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+     xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -16,8 +17,9 @@
    id="svg20"
    sodipodi:docname="node-mouseover.svg"
    inkscape:version="1.0.1 (3bc2e81, 2020-09-07)">
-  <style
-     id="style849"></style>
+
+  <style>@import './cursors.css';</style>
+
   <metadata
      id="metadata24">
     <rdf:RDF>
@@ -51,55 +53,11 @@
      inkscape:current-layer="cursor" />
   <defs
      id="defs9">
-    <!-- Shadow -->
-    <filter
-       id="shadow"
-       x="-0.5"
-       y="-0.5"
-       width="2"
-       height="2">
-      <feOffset
-         result="offOut"
-         in="SourceAlpha"
-         dx="1"
-         dy="1"
-         id="feOffset2" />
-      <feGaussianBlur
-         result="blurOut"
-         stdDeviation="1"
-         id="feGaussianBlur4" />
-      <feBlend
-         in="SourceGraphic"
-         in2="blurOut"
-         mode="normal"
-         id="feBlend6" />
-    </filter>
-    <filter
-       id="shadow-8"
-       x="-0.5"
-       y="-0.5"
-       width="2"
-       height="2">
-      <feOffset
-         result="offOut"
-         in="SourceAlpha"
-         dx="1"
-         dy="1"
-         id="feOffset2-4" />
-      <feGaussianBlur
-         result="blurOut"
-         stdDeviation="1"
-         id="feGaussianBlur4-1" />
-      <feBlend
-         in="SourceGraphic"
-         in2="blurOut"
-         mode="normal"
-         id="feBlend6-3" />
-    </filter>
   </defs>
   <g
      id="cursor"
-     style="stroke-linejoin:miter;stroke-miterlimit:10;filter:url(#shadow)">
+     class="drop-shadow"
+     style="stroke-linejoin:miter;stroke-miterlimit:10">
     <!-- Triangle -->
     <!-- Outline -->
     <path

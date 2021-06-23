@@ -114,11 +114,11 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
     SPCSSAttr *css = sp_repr_css_attr(root->getRepr(), "style");
 
     std::stringstream fill_stream;
-    fill_stream << "#" 
+    fill_stream << "#"
                 << std::setfill ('0') << std::setw(6)
                 << std::hex << (fill >> 8);
     std::stringstream stroke_stream;
-    stroke_stream << "#" 
+    stroke_stream << "#"
                   << std::setfill ('0') << std::setw(6)
                   << std::hex << (stroke >> 8);
 
@@ -143,6 +143,23 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
         scale = window->get_scale_factor(); // Adjust for HiDPI screens.
     }
 #endif
+
+    auto enable_drop_shadow = prefs->getBool("/options/cursor-drop-shadow", true);
+    if (!enable_drop_shadow) {
+        // turn off drop shadow, if any
+        Glib::ustring shadow("drop-shadow");
+        auto objects = document->getObjectsByClass(shadow);
+        for (auto&& el : objects) {
+            if (auto val = el->getAttribute("class")) {
+                Glib::ustring cls = val;
+                auto pos = cls.find(shadow);
+                if (pos != Glib::ustring::npos) {
+                    cls.erase(pos, shadow.length());
+                }
+                el->setAttribute("class", cls);
+            }
+        }
+    }
 
     // Check for maximum size
     // int mwidth = 0;

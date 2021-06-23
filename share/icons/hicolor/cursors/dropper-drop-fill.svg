@@ -7,13 +7,9 @@
      inkscape:hotspot_y="4"
      style="fill:gray;stroke:black">
 
+  <style>@import './cursors.css';</style>
+
   <defs>
-    <!-- Shadow -->
-    <filter id="shadow" x="-0.5" y="-0.5" width="2" height="2">
-      <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1" />
-      <feGaussianBlur result="blurOut" stdDeviation="1" />
-      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-    </filter>
 
     <!-- Gradient -->
     <linearGradient id="gradient" gradientUnits="userSpaceOnUse" x1="15.5" y1="12.5" x2="19.5" y2="16.5">
@@ -23,11 +19,11 @@
   </defs>
 
   <!-- Cross (centered on hotspot) -->
-  <path d="M 1.5,4.5 7.5,4.5 M 4.5,1.5 4.5,7.5" style="fill:none;stroke:white;stroke-width:3px;stroke-linecap:square"/>
-  <path d="M 1.5,4.5 7.5,4.5 M 4.5,1.5 4.5,7.5" style="fill:none;stroke:black;stroke-width:1px;stroke-linecap:square"/>
+  <use xlink:href="-common.svg#def-cross"/>
+
 
   <!-- Dropper  -->
-  <g id="cursor" style="filter:url(#shadow)">
+  <g id="cursor" class="drop-shadow" style="">
     <!-- Outline -->
     <g style="fill:white;stroke:white;stroke-width:3px">
       <path d="m 8.5,23.5 v -2 l 8,-8 2,2 -8,8 z"/>
