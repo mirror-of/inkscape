@@ -1082,13 +1082,13 @@ void EditVerb::perform(SPAction *action, void *data)
             SelectionHelper::selectNone(dt);
             break;
         case SP_VERB_EDIT_DELETE_ALL_GUIDES:
-            sp_guide_delete_all_guides(dt);
+            sp_guide_delete_all_guides(dt->getDocument());
             break;
         case SP_VERB_EDIT_GUIDES_TOGGLE_LOCK:
             dt->toggleGuidesLock();
             break;
         case SP_VERB_EDIT_GUIDES_AROUND_PAGE:
-            sp_guide_create_guides_around_page(dt);
+            sp_guide_create_guides_around_page(dt->getDocument());
             break;
         case SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER:
             sp_selection_next_patheffect_param(dt);

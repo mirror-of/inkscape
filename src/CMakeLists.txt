@@ -217,6 +217,8 @@ set(inkscape_SRC
   actions/actions-canvas-transform.cpp
   actions/actions-dialogs.cpp
   actions/actions-dialogs.h
+  actions/actions-edit-document.h
+  actions/actions-edit-document.cpp
   actions/actions-edit-window.h
   actions/actions-edit-window.cpp
   actions/actions-edit.h
@@ -251,6 +253,8 @@ set(inkscape_SRC
   actions/actions-tools.cpp
   actions/actions-transform.h
   actions/actions-transform.cpp
+  actions/actions-view-mode.h
+  actions/actions-view-mode.cpp
   actions/actions-window.h
   actions/actions-window.cpp
 

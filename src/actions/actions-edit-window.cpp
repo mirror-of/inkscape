@@ -138,15 +138,6 @@ select_none(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectNone(dt);
 }
 
-void 
-create_guides_around_page(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Create Guides Around the Page
-    sp_guide_create_guides_around_page(dt);
-}
-
 void
 lock_all_guides(InkscapeWindow *win)
 {
@@ -175,15 +166,6 @@ lock_all_guides(InkscapeWindow *win)
     dt->toggleGuidesLock();
 }
 
-void
-delete_all_guides(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Delete All Guides
-    sp_guide_delete_all_guides(dt);
-}
-
 /* Node toolbar : deactivate button when no effect is done ( Currently not added this feature ) */
 void
 path_effect_parameter_next(InkscapeWindow* win)
@@ -210,9 +192,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit_window =
     {"win.select-same-object-type",             N_("Object Type"),                      "Edit",     N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
     {"win.select-invert",                       N_("Invert Selection"),                 "Edit",     N_("Invert selection (unselect what is selected and select everything else)")},
     {"win.select-none",                         N_("Deselect"),                         "Edit",     N_("Deselect any selected objects or nodes")},
-    {"win.create-guides-around-page",           N_("Create Guides Around the Page"),    "Edit",     N_("Create four guides aligned with the page borders")},
     {"win.lock-all-guides",                     N_("Lock All Guides"),                  "Edit",     N_("Toggle lock of all guides in the document")},
-    {"win.deleteall-guides",                    N_("Delete All Guides"),                "Edit",     N_("Delete all the guides in the document")},
     {"win.path-effect-parameter-next",          N_("Next path effect parameter"),       "Edit",     N_("Show next editable path effect parameter")}
     // clang-format on
 };
@@ -235,9 +215,7 @@ add_actions_edit_window(InkscapeWindow* win)
     win->add_action(        "select-same-object-type",         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_same_object_type), win));
     win->add_action(        "select-invert",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_invert), win));
     win->add_action(        "select-none",                     sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_none), win));
-    win->add_action(        "create-guides-around-page",       sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&create_guides_around_page), win));
     win->add_action_bool(   "lock-all-guides",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&lock_all_guides),   win));
-    win->add_action(        "delete-all-guides",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&delete_all_guides), win));
     win->add_action(        "path-effect-parameter-next",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&path_effect_parameter_next), win));
     // clang-format on
 

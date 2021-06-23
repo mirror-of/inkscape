@@ -410,7 +410,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.canvas-tool-control-bar" />
   <bind gaction="win.canvas-toolbox" />
   <bind gaction="win.canvas-scroll-bars" />
-  <bind gaction="win.window-new" />
+  <bind gaction="doc.window-new" />
   <bind gaction="doc.window-previous" />
 
   <!-- File -->

@@ -95,8 +95,8 @@ protected:
 
 // These functions rightfully belong to SPDesktop. What gives?!
 void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts);
-void sp_guide_create_guides_around_page(SPDesktop *dt);
-void sp_guide_delete_all_guides(SPDesktop *dt);
+void sp_guide_create_guides_around_page(SPDocument *doc);
+void sp_guide_delete_all_guides(SPDocument *doc);
 
 void sp_guide_remove(SPGuide *guide);
 

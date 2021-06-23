@@ -267,9 +267,8 @@ void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Poin
     }
 }
 
-void sp_guide_create_guides_around_page(SPDesktop *dt)
+void sp_guide_create_guides_around_page(SPDocument *doc)
 {
-    SPDocument *doc=dt->getDocument();
     std::list<std::pair<Geom::Point, Geom::Point> > pts;
 
     Geom::Point A(0, 0);
@@ -283,13 +282,11 @@ void sp_guide_create_guides_around_page(SPDesktop *dt)
     pts.emplace_back(D, A);
 
     sp_guide_pt_pairs_to_guides(doc, pts);
-
-    DocumentUndo::done(doc, _("Create Guides Around the Page"), nullptr);
+    DocumentUndo::done(doc, _("Create Guides Around the Page"),"");
 }
 
-void sp_guide_delete_all_guides(SPDesktop *dt)
+void sp_guide_delete_all_guides(SPDocument *doc)
 {
-    SPDocument *doc=dt->getDocument();
     std::vector<SPObject *> current = doc->getResourceList("guide");
     while (!current.empty()){
         SPGuide* guide = SP_GUIDE(*(current.begin()));
@@ -297,7 +294,7 @@ void sp_guide_delete_all_guides(SPDesktop *dt)
         current = doc->getResourceList("guide");
     }
 
-    DocumentUndo::done(doc, _("Delete All Guides"), nullptr);
+    DocumentUndo::done(doc, _("Delete All Guides"),"");
 }
 
 // Actually, create a new guide.

@@ -288,7 +288,7 @@
 			</item>
       <item>
         <attribute name='label' translatable="yes">Duplic_ate Window</attribute>
-        <attribute name='action'>win.window-new</attribute>
+        <attribute name='action'>doc.window-new</attribute>
         <attribute name='icon'>window-new</attribute>
       </item>
     </section>
