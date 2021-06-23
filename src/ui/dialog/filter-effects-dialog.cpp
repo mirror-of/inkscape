@@ -695,7 +695,7 @@ private:
                      *_dialog.getDesktop()->getToplevel(),
                      open_path,
                      Inkscape::UI::Dialog::SVG_TYPES,/*TODO: any image, not just svg*/
-                     (char const *)_("Select an image to be used as feImage input"));
+                     (char const *)_("Select an image to be used as input."));
         }
 
         //# Show the dialog
@@ -2886,67 +2886,67 @@ void FilterEffectsDialog::update_primitive_infobox()
     switch(_add_primitive_type.get_active_data()->id){
         case(NR_FILTER_BLEND):
             _infobox_icon.set_from_icon_name("feBlend-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feBlend</b> filter primitive provides different image blending modes, such as screen, multiply, darken and lighten."));
+            _infobox_desc.set_markup(_("Provides image blending modes, such as screen, multiply, darken and lighten."));
             break;
         case(NR_FILTER_COLORMATRIX):
             _infobox_icon.set_from_icon_name("feColorMatrix-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feColorMatrix</b> filter primitive applies a matrix transformation to color of each rendered pixel. This allows for effects like turning object to grayscale, modifying color saturation and changing color hue."));
+            _infobox_desc.set_markup(_("Modifies pixel colors based on a transformation matrix. Useful for adjusting color hue and saturation."));
             break;
         case(NR_FILTER_COMPONENTTRANSFER):
             _infobox_icon.set_from_icon_name("feComponentTransfer-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feComponentTransfer</b> filter primitive manipulates the input's color components (red, green, blue, and alpha) according to particular transfer functions, allowing operations like brightness and contrast adjustment, color balance, and thresholding."));
+            _infobox_desc.set_markup(_("Manipulates color components according to particular transfer functions. Useful for brightness and contrast adjustment, color balance, and thresholding."));
             break;
         case(NR_FILTER_COMPOSITE):
             _infobox_icon.set_from_icon_name("feComposite-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feComposite</b> filter primitive composites two images using one of the Porter-Duff blending modes or the arithmetic mode described in SVG standard. Porter-Duff blending modes are essentially logical operations between the corresponding pixel values of the images."));
+            _infobox_desc.set_markup(_("Composites two images using one of the Porter-Duff blending modes or the arithmetic mode described in SVG standard."));
             break;
         case(NR_FILTER_CONVOLVEMATRIX):
             _infobox_icon.set_from_icon_name("feConvolveMatrix-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feConvolveMatrix</b> lets you specify a Convolution to be applied on the image. Common effects created using convolution matrices are blur, sharpening, embossing and edge detection. Note that while gaussian blur can be created using this filter primitive, the special gaussian blur primitive is faster and resolution-independent."));
+            _infobox_desc.set_markup(_("Performs a convolution on the input image enabling effects like blur, sharpening, embossing and edge detection."));
             break;
         case(NR_FILTER_DIFFUSELIGHTING):
             _infobox_icon.set_from_icon_name("feDiffuseLighting-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feDiffuseLighting</b> and feSpecularLighting filter primitives create \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
+            _infobox_desc.set_markup(_("Creates \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
             break;
         case(NR_FILTER_DISPLACEMENTMAP):
             _infobox_icon.set_from_icon_name("feDisplacementMap-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feDisplacementMap</b> filter primitive displaces the pixels in the first input using the second input as a displacement map, that shows from how far the pixel should come from. Classical examples are whirl and pinch effects."));
+            _infobox_desc.set_markup(_("Displaces pixels from the first input using the second as a map of displacement intensity. Classical examples are whirl and pinch effects."));
             break;
         case(NR_FILTER_FLOOD):
             _infobox_icon.set_from_icon_name("feFlood-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feFlood</b> filter primitive fills the region with a given color and opacity.  It is usually used as an input to other filters to apply color to a graphic."));
+            _infobox_desc.set_markup(_("Fills the region with a given color and opacity. Often used as input to other filters to apply color to a graphic."));
             break;
         case(NR_FILTER_GAUSSIANBLUR):
             _infobox_icon.set_from_icon_name("feGaussianBlur-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feGaussianBlur</b> filter primitive uniformly blurs its input.  It is commonly used together with feOffset to create a drop shadow effect."));
+            _infobox_desc.set_markup(_("Uniformly blurs its input. Commonly used together with Offset to create a drop shadow effect."));
             break;
         case(NR_FILTER_IMAGE):
             _infobox_icon.set_from_icon_name("feImage-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feImage</b> filter primitive fills the region with an external image or another part of the document."));
+            _infobox_desc.set_markup(_("Fills the region with graphics from an external file or from another portion of the document."));
             break;
         case(NR_FILTER_MERGE):
             _infobox_icon.set_from_icon_name("feMerge-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feMerge</b> filter primitive composites several temporary images inside the filter primitive to a single image. It uses normal alpha compositing for this. This is equivalent to using several feBlend primitives in 'normal' mode or several feComposite primitives in 'over' mode."));
+            _infobox_desc.set_markup(_("Merges multiple inputs using normal alpha compositing. Equivalent to using several Blend primitives in 'normal' mode or several Composite primitives in 'over' mode."));
             break;
         case(NR_FILTER_MORPHOLOGY):
             _infobox_icon.set_from_icon_name("feMorphology-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feMorphology</b> filter primitive provides erode and dilate effects. For single-color objects erode makes the object thinner and dilate makes it thicker."));
+            _infobox_desc.set_markup(_("Provides erode and dilate effects. For single-color objects erode makes the object thinner and dilate makes it thicker."));
             break;
         case(NR_FILTER_OFFSET):
             _infobox_icon.set_from_icon_name("feOffset-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feOffset</b> filter primitive offsets the image by an user-defined amount. For example, this is useful for drop shadows, where the shadow is in a slightly different position than the actual object."));
+            _infobox_desc.set_markup(_("Offsets the input by an user-defined amount. Commonly used for drop shadow effects."));
             break;
         case(NR_FILTER_SPECULARLIGHTING):
             _infobox_icon.set_from_icon_name("feSpecularLighting-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feDiffuseLighting</b> and <b>feSpecularLighting</b> filter primitives create \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
+            _infobox_desc.set_markup(_("Creates \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
             break;
         case(NR_FILTER_TILE):
             _infobox_icon.set_from_icon_name("feTile-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feTile</b> filter primitive tiles a region with an input graphic. The source tile is defined by the filter primitive subregion of the input."));
+            _infobox_desc.set_markup(_("Tiles a region with an input graphic. The source tile is defined by the filter primitive subregion of the input."));
             break;
         case(NR_FILTER_TURBULENCE):
             _infobox_icon.set_from_icon_name("feTurbulence-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feTurbulence</b> filter primitive renders Perlin noise. This kind of noise is useful in simulating several nature phenomena like clouds, fire and smoke and in generating complex textures like marble or granite."));
+            _infobox_desc.set_markup(_("Renders Perlin noise, which is useful to generate textures such as clouds, fire, smoke, marble or granite."));
             break;
         default:
             g_assert(false);
