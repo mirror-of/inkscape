@@ -1580,24 +1580,6 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line(false, "", _show_filters_info_box, "",
                         _("Show icons and descriptions for the filter primitives available at the filter effects dialog"));
 
-    {
-        Glib::ustring dockbarstyleLabels[] = {_("Icons only"), _("Text only"), _("Icons and text")};
-        int dockbarstyleValues[] = {0, 1, 2};
-
-        /* dockbar style */
-        _dockbar_style.init( "/options/dock/dockbarstyle", dockbarstyleLabels, dockbarstyleValues, G_N_ELEMENTS(dockbarstyleLabels), 0);
-        _page_ui.add_line(false, _("Dockbar style (requires restart):"),  _dockbar_style, "",
-                        _("Selects whether the vertical bars on the dockbar will show text labels, icons, or both"), false);
-
-        Glib::ustring switcherstyleLabels[] = {_("Text only"), _("Icons only"), _("Icons and text")}; /* see bug #1098437   */
-        int switcherstyleValues[] = {0, 1, 2};
-
-        /* switcher style */
-        _switcher_style.init( "/options/dock/switcherstyle", switcherstyleLabels, switcherstyleValues, G_N_ELEMENTS(switcherstyleLabels), 0);
-        _page_ui.add_line(false, _("Switcher style (requires restart):"),  _switcher_style, "",
-                        _("Selects whether the dockbar switcher will show text labels, icons, or both"), false);
-    }
-
     _ui_yaxisdown.init( _("Origin at upper left with y-axis pointing down (requires restart)"), "/options/yaxisdown", true);
     _page_ui.add_line( false, "", _ui_yaxisdown, "",
                        _("When off, origin is at lower left corner and y-axis points up"), true);

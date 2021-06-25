@@ -323,8 +323,6 @@ protected:
     UI::Widget::PrefRadioButton _filter_quality_worse;
     UI::Widget::PrefRadioButton _filter_quality_worst;
     UI::Widget::PrefCheckButton _show_filters_info_box;
-    UI::Widget::PrefCombo       _dockbar_style;
-    UI::Widget::PrefCombo       _switcher_style;
     UI::Widget::PrefCheckButton _rendering_image_outline;
     UI::Widget::PrefSpinButton  _rendering_cache_size;
     UI::Widget::PrefSpinButton  _rendering_tile_multiplier;

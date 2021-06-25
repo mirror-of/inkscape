@@ -290,10 +290,6 @@ static char const preferences_skeleton[] =
     <group id="svgeditor" value="inkscape"/>
     <group id="bitmapautoreload" value="1"/>
     <group id="dialogtype" value="1"/>
-    <group id="dock"
-           cancenterdock="1"
-           dockbarstyle="2"
-           switcherstyle="2"/>
     <group id="dialogsskiptaskbar" value="1"/>
     <group id="defaultwindowsize" value="2" />
     <group id="arenatilescachesize" value="8192"/>
