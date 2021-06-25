@@ -29,7 +29,7 @@
                 <property name="label" translatable="no">text</property>
                 <property name="justify">center</property>
                 <property name="ellipsize">end</property>
-                <property name="single_line_mode">True</property>
+                <property name="single_line_mode">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -67,7 +67,7 @@
                 <property name="label" translatable="no">text</property>
                 <property name="justify">center</property>
                 <property name="ellipsize">end</property>
-                <property name="single_line_mode">True</property>
+                <property name="single_line_mode">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
