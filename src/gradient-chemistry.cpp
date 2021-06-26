@@ -42,6 +42,7 @@
 #include "object/sp-stop.h"
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
+#include "object/sp-root.h"
 #include "style.h"
 
 #include "svg/svg.h"
@@ -1888,6 +1889,66 @@ void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id)
         }
     }
 }
+
+/*
+ * Return a SPItem's gradient
+ */
+SPGradient* sp_item_get_gradient(SPItem *item, bool fillorstroke)
+{
+    SPIPaint *item_paint = item->style->getFillOrStroke(fillorstroke);
+    if (item_paint->isPaintserver()) {
+
+        SPPaintServer *item_server = fillorstroke ? item->style->getFillPaintServer() : item->style->getStrokePaintServer();
+
+        if (SP_IS_LINEARGRADIENT(item_server) || SP_IS_RADIALGRADIENT(item_server) ||
+                (SP_IS_GRADIENT(item_server) && SP_GRADIENT(item_server)->getVector()->isSwatch()))  {
+
+            return SP_GRADIENT(item_server)->getVector();
+        }
+    }
+
+    return nullptr;
+}
+
+static void get_all_doc_items(std::vector<SPItem*> &list, SPObject *from)
+{
+    for (auto& child: from->children) {
+        if (SP_IS_ITEM(&child)) {
+            list.push_back(SP_ITEM(&child));
+        }
+        get_all_doc_items(list, &child);
+    }
+}
+
+std::vector<SPItem*> sp_get_all_document_items(SPDocument* document) {
+    std::vector<SPItem*> items;
+    if (document) {
+        get_all_doc_items(items, document->getRoot());
+    }
+    return items;
+}
+
+int sp_get_gradient_refcount(SPDocument* document, SPGradient* gradient) {
+    if (!document || !gradient) return 0;
+
+    int count = 0;
+    for (auto item : sp_get_all_document_items(document)) {
+        if (!item->getId()) {
+            continue;
+        }
+        SPGradient* fill = sp_item_get_gradient(item, true); // fill
+        if (fill == gradient) {
+            ++count;
+        }
+        SPGradient* stroke = sp_item_get_gradient(item, false); // stroke
+        if (stroke == gradient) {
+            ++count;
+        }
+    }
+
+    return count;
+}
+
 /*
   Local Variables:
   mode:c++

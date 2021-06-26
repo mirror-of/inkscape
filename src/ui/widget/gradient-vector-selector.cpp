@@ -305,27 +305,6 @@ static void get_all_doc_items(std::vector<SPItem*> &list, SPObject *from)
 }
 
 /*
- * Return a SPItem's gradient
- */
-static SPGradient * gr_item_get_gradient(SPItem *item, gboolean fillorstroke)
-{
-    SPIPaint *item_paint = item->style->getFillOrStroke(fillorstroke);
-    if (item_paint->isPaintserver()) {
-
-        SPPaintServer *item_server = (fillorstroke) ?
-                item->style->getFillPaintServer() : item->style->getStrokePaintServer();
-
-        if (SP_IS_LINEARGRADIENT(item_server) || SP_IS_RADIALGRADIENT(item_server) ||
-                (SP_IS_GRADIENT(item_server) && SP_GRADIENT(item_server)->getVector()->isSwatch()))  {
-
-            return SP_GRADIENT(item_server)->getVector();
-        }
-    }
-
-    return nullptr;
-}
-
-/*
  * Map each gradient to its usage count for both fill and stroke styles
  */
 void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsageCount )
@@ -333,18 +312,15 @@ void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsage
     if (!doc)
         return;
 
-    std::vector<SPItem *> all_list;
-    get_all_doc_items(all_list, doc->getRoot());
-
-    for (auto item:all_list) {
+    for (auto item : sp_get_all_document_items(doc)) {
         if (!item->getId())
             continue;
         SPGradient *gr = nullptr;
-        gr = gr_item_get_gradient(item, true); // fill
+        gr = sp_item_get_gradient(item, true); // fill
         if (gr) {
             mapUsageCount->count(gr) > 0 ? (*mapUsageCount)[gr] += 1 : (*mapUsageCount)[gr] = 1;
         }
-        gr = gr_item_get_gradient(item, false); // stroke
+        gr = sp_item_get_gradient(item, false); // stroke
         if (gr) {
             mapUsageCount->count(gr) > 0 ? (*mapUsageCount)[gr] += 1 : (*mapUsageCount)[gr] = 1;
         }

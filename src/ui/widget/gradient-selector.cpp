@@ -127,6 +127,16 @@ GradientSelector::GradientSelector()
     _add->set_relief(Gtk::RELIEF_NONE);
     _add->set_tooltip_text(_("Create a duplicate gradient"));
 
+    _del2 = Gtk::manage(new Gtk::Button());
+    style_button(_del2, INKSCAPE_ICON("list-remove"));
+
+    _nonsolid.push_back(_del2);
+    hb->pack_start(*_del2, false, false, 0);
+    _del2->signal_clicked().connect(sigc::mem_fun(this, &GradientSelector::delete_vector_clicked_2));
+    _del2->set_sensitive(false);
+    _del2->set_relief(Gtk::RELIEF_NONE);
+    _del2->set_tooltip_text(_("Delete unused gradient"));
+
     _edit = Gtk::manage(new Gtk::Button());
     style_button(_edit, INKSCAPE_ICON("edit"));
 
@@ -349,6 +359,26 @@ void GradientSelector::onTreeSelection()
     if (obj) {
         vector_set(obj);
     }
+
+    check_del_button();
+}
+
+void GradientSelector::check_del_button() {
+    const auto sel = _treeview->get_selection();
+    if (!sel) {
+        return;
+    }
+
+    SPGradient *obj = nullptr;
+    /* Single selection */
+    auto iter = sel->get_selected();
+    if (iter) {
+        Gtk::TreeModel::Row row = *iter;
+        obj = row[_columns->data];
+    }
+    if (_del2) {
+        _del2->set_sensitive(obj && sp_get_gradient_refcount(obj->document, obj) < 2 && _store->children().size() > 1);
+    }
 }
 
 bool GradientSelector::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter &iter, SPGradient *vector)
@@ -417,6 +447,7 @@ void GradientSelector::setVector(SPDocument *doc, SPGradient *vector)
         if (_del) {
             _del->set_sensitive(true);
         }
+        check_del_button();
     } else {
         if (_edit) {
             _edit->set_sensitive(false);
@@ -426,6 +457,9 @@ void GradientSelector::setVector(SPDocument *doc, SPGradient *vector)
         }
         if (_del) {
             _del->set_sensitive(false);
+        }
+        if (_del2) {
+            _del2->set_sensitive(false);
         }
     }
 }
@@ -447,6 +481,37 @@ void GradientSelector::vector_set(SPGradient *gr)
     }
 }
 
+void GradientSelector::delete_vector_clicked_2() {
+    const auto selection = _treeview->get_selection();
+    if (!selection) {
+        return;
+    }
+
+    SPGradient *obj = nullptr;
+    /* Single selection */
+    Gtk::TreeModel::iterator iter = selection->get_selected();
+    if (iter) {
+        Gtk::TreeModel::Row row = *iter;
+        obj = row[_columns->data];
+    }
+
+    if (obj) {
+        if (auto repr = obj->getRepr()) {
+            repr->setAttribute("inkscape:collect", "always");
+
+            auto move = iter;
+            --move;
+            if (!move) {
+                move = iter;
+                ++move;
+            }
+            if (move) {
+                selection->select(move);
+                _treeview->scroll_to_row(_store->get_path(move), 0.5);
+            }
+        }
+    }
+}
 
 void GradientSelector::delete_vector_clicked()
 {
@@ -494,6 +559,7 @@ void GradientSelector::add_vector_clicked()
     Inkscape::XML::Node *repr = nullptr;
 
     if (gr) {
+        gr->getRepr()->removeAttribute("inkscape:collect");
         repr = gr->getRepr()->duplicate(xml_doc);
         // Rename the new gradients id to be similar to the cloned gradients
         auto new_id = generate_unique_id(doc, gr->getId());

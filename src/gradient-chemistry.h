@@ -89,6 +89,12 @@ void sp_gradient_invert_selected_gradients(SPDesktop *desktop, Inkscape::PaintTa
 
 void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id);
 
+SPGradient* sp_item_get_gradient(SPItem *item, bool fillorstroke);
+
+std::vector<SPItem*> sp_get_all_document_items(SPDocument* document);
+
+int sp_get_gradient_refcount(SPDocument* document, SPGradient* gradient);
+
 void sp_gradient_reverse_vector(SPGradient* gradient);
 
 /**

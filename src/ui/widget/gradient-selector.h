@@ -99,6 +99,7 @@ class GradientSelector : public Gtk::Box, public GradientSelectorInterface {
     Gtk::Button *_edit;
     Gtk::Button *_add;
     Gtk::Button *_del;
+    Gtk::Button *_del2;
 
     bool _blocked;
 
@@ -109,11 +110,13 @@ class GradientSelector : public Gtk::Box, public GradientSelectorInterface {
     void moveSelection(int amount, bool down = true, bool toEnd = false);
 
     void style_button(Gtk::Button *btn, char const *iconName);
+    void check_del_button();
 
     // Signal handlers
     void add_vector_clicked();
     void edit_vector_clicked();
     void delete_vector_clicked();
+    void delete_vector_clicked_2();
     void vector_set(SPGradient *gr);
 
   public:
