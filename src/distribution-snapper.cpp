@@ -33,7 +33,6 @@
 #include "object/sp-use.h"
 #include "path/path-util.h" // curve_for_item
 #include "preferences.h"
-#include "snap-enums.h"
 #include "style.h"
 #include "svg/svg.h"
 
@@ -94,7 +93,7 @@ Geom::Coord Inkscape::DistributionSnapper::distDown(Geom::Rect const &a, Geom::R
     return -a.max().y() + b.min().y();
 }
 
-bool Inkscape::DistributionSnapper::findSidewaysSnaps(
+bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
                                     Geom::Rect const &source_bbox,
                                     std::vector<Geom::Rect>::iterator it,
                                     std::vector<Geom::Rect>::iterator end,
@@ -104,40 +103,74 @@ bool Inkscape::DistributionSnapper::findSidewaysSnaps(
                                     std::function<Geom::Coord(Geom::Rect const &, Geom::Rect const &)> const &distance_func,
                                     int level) const
 {
-    Geom::Rect curr_bbox = *it;
-
-    if (it == end)
-        return level != 0;
-
-    // TODO: check if rect1.instersects(rect2) gives the same result at rect2.intersects(rect1)
-    while (std::next(it) != end && it->intersects(*std::next(it))) {
-        curr_bbox.unionWith(Geom::OptRect(*++it));
-    }
-
-    vec.push_back(curr_bbox);
+    std::vector<Geom::Rect>::iterator next_bbox = it;
+    std::vector<Geom::Rect>::iterator _next_bbox = it;
 
     if (level == 0) {
-        // just add the first bbox to the vector and return if there are no more
-        // objects this is used later to find in-between snaps
-        if (it + 1 == end) {
-            return false;
+        int max_length = 0;
+
+        // check each consecutive box for a snap
+        while (std::next(next_bbox) != end) {
+            auto first_dist = distance_func(source_bbox, *next_bbox);
+            level = 0;
+
+            // temporary result for this particular item
+            auto result = new std::vector<Geom::Rect>;
+            if (_findSidewaysSnaps(*next_bbox, ++it, end, *result, first_dist, tol, distance_func, ++level)) {
+                if (result->size() > max_length) {
+                    // if this item has the most number of items equidistant form each other
+                    // then make this the final result
+                    max_length = result->size();
+                    vec = *result;
+                    dist = first_dist;
+                } else {
+                    // delete the result
+                    result->clear();
+                    delete result;
+                }
+            } else {
+                // delete the result
+                result->clear();
+                delete result;
+            }
+
+            ++next_bbox;
         }
 
-        dist = distance_func(curr_bbox, *std::next(it));
-        if (abs(distance_func(source_bbox, curr_bbox) - dist) > tol) {
+        // if there is no snap, just add the first item and return false
+        // this is useful to find in-between snaps (see _snapEquidistantPoints())
+        if (max_length == 0) {
+            vec.push_back(*_next_bbox);
             return false;
         }
-
-        return findSidewaysSnaps(source_bbox, ++it, end, vec, dist, tol, distance_func, ++level);
+        return true;
     }
 
-    // TODO: investige how does this tollerance affect the number of equidistant
-    // objects that are found? also does multiplying with level help (error propagation)
-    if (compare_double(distance_func(curr_bbox, *std::next(it)), dist, level * DISTRIBUTION_SNAPPING_EPSILON)) {
-        return findSidewaysSnaps(source_bbox, ++it, end, vec, dist, tol, distance_func, ++level);
+    // if not the zeroth level
+    if (level != 1)
+        vec.push_back(source_bbox); 
+
+    if (it == end)
+        return true;
+
+    while (next_bbox != end) {
+        Geom::Coord next_dist = distance_func(source_bbox, *next_bbox);
+
+        if (level == 1 && compare_double(dist, next_dist, tol)){
+            // if this is the first level, check if the snap is within tolerance
+            // we cancel here if the possible snap in not whithing tolerance, saves us some time!
+            dist = next_dist;
+            vec.push_back(source_bbox);
+            return _findSidewaysSnaps(*next_bbox, ++it, end, vec, dist, tol, distance_func, ++level);
+        } else if (compare_double(dist, next_dist)) {
+            return _findSidewaysSnaps(*next_bbox, ++it, end, vec, dist, tol, distance_func, ++level);
+        }
+
+        ++next_bbox;
     }
 
-    return true;
+    // once reach the end, return false if level == 1, as there is just one(or more in case of overlap) item to that side.
+    return level != 1;
 }
 
 Inkscape::DistributionSnapper::DistributionSnapper(SnapManager *sm, Geom::Coord const d)
@@ -166,8 +199,8 @@ Inkscape::DistributionSnapper::~DistributionSnapper()
 
 void Inkscape::DistributionSnapper::_collectBBoxes(Geom::OptRect const &bbox_to_snap, bool const &first_point) const
 {
-    // if (!first_point)
-    // return;
+    if (!first_point)
+        return;
 
     _bboxes_right->clear();
     _bboxes_left->clear();
@@ -224,6 +257,110 @@ void Inkscape::DistributionSnapper::_collectBBoxes(Geom::OptRect const &bbox_to_
     std::stable_sort(_bboxes_left->begin(), _bboxes_left->end(), sortBoxesLeft);
     std::stable_sort(_bboxes_up->begin(), _bboxes_up->end(), sortBoxesUp);
     std::stable_sort(_bboxes_down->begin(), _bboxes_down->end(), sortBoxesDown);
+
+    _addBBoxForIntersectingBoxes();
+}
+
+void Inkscape::DistributionSnapper::_addBBoxForIntersectingBoxes() const {
+    if (_bboxes_right->size() > 0) {
+        for (auto it = _bboxes_right->begin(); std::next(it) != _bboxes_right->end(); it++) {
+            Geom::Rect comb(*it);
+            int num = 0;
+            auto start = it;
+            auto insertPos = it;
+
+            while (std::next(it) != _bboxes_right->end() && it->intersects(*std::next(it))) {
+                comb.unionWith(*std::next(it));
+                if (comb.midpoint().x() > it->midpoint().x()) {
+                    insertPos = std::next(it);
+                } else {
+                    ++num;
+                }
+                ++it;
+            }
+
+            if (it != start) {
+                it = _bboxes_right->insert(insertPos, comb);
+            }
+
+            it += num;
+        }
+    }
+
+    if (_bboxes_left->size() > 0) {
+        for (auto it = _bboxes_left->begin(); std::next(it) != _bboxes_left->end(); it++) {
+            Geom::Rect comb(*it);
+            int num = 0;
+            auto start = it;
+            auto insertPos = it;
+
+            while (std::next(it) != _bboxes_left->end() && it->intersects(*std::next(it))) {
+                comb.unionWith(*std::next(it));
+                if (comb.midpoint().x() < it->midpoint().x()) {
+                    insertPos = std::next(it);
+                } else {
+                    ++num;
+                }
+                ++it;
+            }
+
+            if (it != start) {
+                it = _bboxes_left->insert(insertPos, comb);
+            }
+
+            it += num;
+        }
+    }
+
+    if (_bboxes_up->size() > 0) {
+        for (auto it = _bboxes_up->begin(); std::next(it) != _bboxes_up->end(); it++) {
+            Geom::Rect comb(*it);
+            int num = 0;
+            auto start = it;
+            auto insertPos = it;
+
+            while (std::next(it) != _bboxes_up->end() && it->intersects(*std::next(it))) {
+                comb.unionWith(*std::next(it));
+                if (comb.midpoint().y() > it->midpoint().y()) {
+                    insertPos = std::next(it);
+                } else {
+                    ++num;
+                }
+                ++it;
+            }
+
+            if (it != start) {
+                it = _bboxes_up->insert(insertPos, comb);
+            }
+
+            it += num;
+        }
+    }
+
+    if (_bboxes_down->size() > 0) {
+        for (auto it = _bboxes_down->begin(); std::next(it) != _bboxes_down->end(); it++) {
+            Geom::Rect comb(*it);
+            int num = 0;
+            auto start = it;
+            auto insertPos = it;
+
+            while (std::next(it) != _bboxes_down->end() && it->intersects(*std::next(it))) {
+                comb.unionWith(*std::next(it));
+                if (comb.midpoint().y() < it->midpoint().y()) {
+                    insertPos = std::next(it);
+                } else {
+                    ++num;
+                }
+                ++it;
+            }
+
+            if (it != start) {
+                it = _bboxes_down->insert(insertPos, comb);
+            }
+
+            it += num;
+        }
+    }
 }
 
 void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &isr,
@@ -261,9 +398,8 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
     std::vector<Geom::Rect> vecRight;
     std::vector<Geom::Rect> vecLeft;
     if (consider_x && _bboxes_right->size() > 0) {
-        auto first_dist = distRight(*bbox_to_snap, _bboxes_right->front());
-
-        if (findSidewaysSnaps(*bbox_to_snap, _bboxes_right->begin(), _bboxes_right->end(), vecRight, equal_dist, getSnapperTolerance(), &DistributionSnapper::distRight)) {
+        if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_right->begin(), _bboxes_right->end(), vecRight, equal_dist, getSnapperTolerance(), &DistributionSnapper::distRight)) {
+            auto first_dist = distRight(*bbox_to_snap, vecRight.front());
             Geom::Coord offset = first_dist - equal_dist;
             Geom::Point target = bbox_to_snap->midpoint() + Geom::Point(offset, 0);
 
@@ -277,7 +413,7 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                 first_dist = distLeft(bbox, _bboxes_left->front());
                 Geom::Coord left_dist;
                 vecLeft.clear();
-                if (findSidewaysSnaps(*bbox_to_snap, _bboxes_left->begin(), _bboxes_left->end(), vecLeft, left_dist, getSnapperTolerance(), &DistributionSnapper::distLeft)) {
+                if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_left->begin(), _bboxes_left->end(), vecLeft, left_dist, getSnapperTolerance(), &DistributionSnapper::distLeft)) {
                     if (compare_double(left_dist, equal_dist)) {
                         std::reverse(vecLeft.begin(), vecLeft.end());
                         vecRight.insert(vecRight.begin(), vecLeft.begin(), vecLeft.end());
@@ -298,10 +434,9 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
     // if there is a snap then add left bboxes and right left, if there is a snap to the right then
     // add those bboxes too
     if (consider_x && !snap_x && _bboxes_left->size() > 0) {
-        auto first_dist = distLeft(*bbox_to_snap, _bboxes_left->front());
-
         vecLeft.clear();
-        if (findSidewaysSnaps(*bbox_to_snap, _bboxes_left->begin(), _bboxes_left->end(), vecLeft, equal_dist, getSnapperTolerance(), &DistributionSnapper::distLeft)) {
+        if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_left->begin(), _bboxes_left->end(), vecLeft, equal_dist, getSnapperTolerance(), &DistributionSnapper::distLeft)) {
+            auto first_dist = distLeft(*bbox_to_snap, vecLeft.front());
             Geom::Coord offset = first_dist - equal_dist;
             Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(offset, 0);
 
@@ -317,7 +452,7 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                 first_dist = distRight(bbox, _bboxes_right->front());
                 Geom::Coord right_dist;
                 vecRight.clear();
-                if (findSidewaysSnaps(*bbox_to_snap, _bboxes_right->begin(), _bboxes_right->end(), vecRight, right_dist, getSnapperTolerance(), &DistributionSnapper::distRight)) {
+                if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_right->begin(), _bboxes_right->end(), vecRight, right_dist, getSnapperTolerance(), &DistributionSnapper::distRight)) {
                     if (compare_double(right_dist, equal_dist)) {
                         vecLeft.insert(vecLeft.end(), vecRight.begin(), vecRight.end());
                     }
@@ -358,9 +493,8 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
     std::vector<Geom::Rect> vecUp;
     std::vector<Geom::Rect> vecDown;
     if (consider_y && _bboxes_up->size() > 0) {
-        auto first_dist = distUp(*bbox_to_snap, _bboxes_up->front());
-
-        if (findSidewaysSnaps(*bbox_to_snap, _bboxes_up->begin(), _bboxes_up->end(), vecUp, equal_dist, getSnapperTolerance(), &DistributionSnapper::distUp)) {
+        if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_up->begin(), _bboxes_up->end(), vecUp, equal_dist, getSnapperTolerance(), &DistributionSnapper::distUp)) {
+            auto first_dist = distUp(*bbox_to_snap, vecUp.front());
             Geom::Coord offset = first_dist - equal_dist;
             Geom::Point target = bbox_to_snap->midpoint() - Geom::Point(0, offset);
 
@@ -376,7 +510,7 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                 first_dist = distDown(bbox, _bboxes_down->front());
                 Geom::Coord down_dist;
                 vecDown.clear();
-                if (findSidewaysSnaps(*bbox_to_snap, _bboxes_down->begin(), _bboxes_down->end(), vecDown, down_dist,
+                if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_down->begin(), _bboxes_down->end(), vecDown, down_dist,
                                       getSnapperTolerance(), &DistributionSnapper::distDown)) {
                     if (abs(down_dist - equal_dist) < 1e-4) {
                         vecUp.insert(vecUp.end(), vecDown.begin(), vecDown.end());
@@ -397,10 +531,9 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
     // if there is a snap then add bottom bboxes and look Up, if there is a snap above then
     // add those bboxes too
     if (consider_y && !snap_y && _bboxes_down->size() > 0) {
-        auto first_dist = distDown(*bbox_to_snap, _bboxes_down->front());
-
         vecDown.clear();
-        if (findSidewaysSnaps(*bbox_to_snap, _bboxes_down->begin(), _bboxes_down->end(), vecDown, equal_dist, getSnapperTolerance(), &DistributionSnapper::distDown)) {
+        if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_down->begin(), _bboxes_down->end(), vecDown, equal_dist, getSnapperTolerance(), &DistributionSnapper::distDown)) {
+            auto first_dist = distDown(*bbox_to_snap, vecDown.front());
             Geom::Coord offset = first_dist - equal_dist;
             Geom::Point target = bbox_to_snap->midpoint() + Geom::Point(0, offset);
 
@@ -416,7 +549,7 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
                 Geom::Coord up_dist;
                 vecUp.clear();
 
-                if (findSidewaysSnaps(*bbox_to_snap, _bboxes_up->begin(), _bboxes_up->end(), vecUp, up_dist, getSnapperTolerance(), &DistributionSnapper::distUp)) {
+                if (_findSidewaysSnaps(*bbox_to_snap, _bboxes_up->begin(), _bboxes_up->end(), vecUp, up_dist, getSnapperTolerance(), &DistributionSnapper::distUp)) {
                     if (compare_double(up_dist, equal_dist)) {
                         std::reverse(vecUp.begin(), vecUp.end());
                         vecDown.insert(vecDown.begin(), vecUp.begin(), vecUp.end());
