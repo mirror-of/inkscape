@@ -10,18 +10,8 @@ spinbutton {
     outline-style: none;
 }
 
-spinbutton entry {
-    padding-left: 2px;
-    padding-right: 0;
-}
-
 spinbutton undershoot {
     outline-style: none;
-}
-
-spinbutton entry {
-    padding-left: 2px;
-    padding-right: 0;
 }
 
 spinbutton undershoot {

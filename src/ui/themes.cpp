@@ -217,6 +217,24 @@ show_parsing_error(const Glib::RefPtr<const Gtk::CssSection>& section, const Gli
 #endif
 }
 
+// callback for a "narrow spinbutton" preference change
+struct NarrowSpinbuttonObserver : Preferences::Observer {
+    NarrowSpinbuttonObserver(const char* path, Glib::RefPtr<Gtk::CssProvider> provider):
+        Preferences::Observer(path), _provider(provider) {}
+
+    void notify(Preferences::Entry const& new_val) override {
+        auto screen = Gdk::Screen::get_default();
+        if (new_val.getBool()) {
+            Gtk::StyleContext::add_provider_for_screen(screen, _provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
+        else {
+            Gtk::StyleContext::remove_provider_for_screen(screen, _provider);
+        }
+    }
+
+    Glib::RefPtr<Gtk::CssProvider> _provider;
+};
+
 /**
  * \brief Add our CSS style sheets
  * @param only_providers: Apply only the providers part, from inkscape preferences::theme change, no need to reaply
@@ -389,6 +407,27 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
     Gtk::StyleContext::add_provider_for_screen(screen, _colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+    // load small CSS snippet to style spinbuttons by removing excessive padding
+    if (!_spinbuttonprovider) {
+        _spinbuttonprovider = Gtk::CssProvider::create();
+        Glib::ustring style = get_filename(UIS, "spinbutton.css");
+        if (!style.empty()) {
+            try {
+                _spinbuttonprovider->load_from_path(style);
+            } catch (const Gtk::CssProviderError &ex) {
+                g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(), ex.what().c_str());
+            }
+        }
+    }
+    _spinbutton_observer = std::make_unique<NarrowSpinbuttonObserver>("/theme/narrowSpinButton", _spinbuttonprovider);
+    // note: ideally we should remove the callback during destruction, but ThemeContext is never deleted
+    prefs->addObserver(*_spinbutton_observer);
+    // establish default value, so both this setting here and checkbox in preferences are in sync
+    if (!prefs->getEntry(_spinbutton_observer->observed_path).isValid()) {
+        prefs->setBool(_spinbutton_observer->observed_path, true);
+    }
+    _spinbutton_observer->notify(prefs->getEntry(_spinbutton_observer->observed_path));
 }
 
 /**

@@ -21,6 +21,7 @@
 #include <utility>
 #include <vector>
 #include <sigc++/signal.h>
+#include "preferences.h"
 
 namespace Inkscape {
 namespace UI {
@@ -60,6 +61,8 @@ private:
     Glib::RefPtr<Gtk::CssProvider> _themeprovider;
     Glib::RefPtr<Gtk::CssProvider> _contrastthemeprovider;
     Glib::RefPtr<Gtk::CssProvider> _colorizeprovider;
+    Glib::RefPtr<Gtk::CssProvider> _spinbuttonprovider;
+    std::unique_ptr<Preferences::Observer> _spinbutton_observer;
 };
 
 }
