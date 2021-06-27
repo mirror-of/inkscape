@@ -110,6 +110,7 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
         int max_length = 0;
 
         // check each consecutive box for a snap
+        Geom::Rect optimum_start;
         while (std::next(next_bbox) != end) {
             auto first_dist = distance_func(source_bbox, *next_bbox);
             level = 0;
@@ -120,19 +121,15 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
                 if (result->size() > max_length) {
                     // if this item has the most number of items equidistant form each other
                     // then make this the final result
+                    optimum_start = *next_bbox;
                     max_length = result->size();
                     vec = *result;
                     dist = first_dist;
-                } else {
-                    // delete the result
-                    result->clear();
-                    delete result;
                 }
-            } else {
-                // delete the result
-                result->clear();
-                delete result;
             }
+
+            result->clear();
+            delete result;
 
             ++next_bbox;
         }
@@ -142,8 +139,11 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
         if (max_length == 0) {
             vec.push_back(*_next_bbox);
             return false;
+        } else {
+            // insert the first item to the list, this does not happen automatically if level==1 (see below)
+            vec.insert(vec.begin(), optimum_start);
+            return true;
         }
-        return true;
     }
 
     // if not the zeroth level
@@ -153,24 +153,46 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
     if (it == end)
         return true;
 
+    int og_level = level;
+    std::vector<Geom::Rect> best_result;
+    int max_length = 0;
     while (next_bbox != end) {
+        level = og_level;
+        Geom::Coord this_dist;
         Geom::Coord next_dist = distance_func(source_bbox, *next_bbox);
+        auto result = new std::vector<Geom::Rect>;
 
         if (level == 1 && compare_double(dist, next_dist, tol)){
             // if this is the first level, check if the snap is within tolerance
             // we cancel here if the possible snap in not whithing tolerance, saves us some time!
-            dist = next_dist;
-            vec.push_back(source_bbox);
-            return _findSidewaysSnaps(*next_bbox, ++it, end, vec, dist, tol, distance_func, ++level);
-        } else if (compare_double(dist, next_dist)) {
-            return _findSidewaysSnaps(*next_bbox, ++it, end, vec, dist, tol, distance_func, ++level);
+            this_dist = next_dist;
+            if (_findSidewaysSnaps(*next_bbox, ++it, end, *result, this_dist, tol, distance_func, ++level)) {
+                if (result->size() > max_length) {
+                    max_length = result->size();
+                    dist = this_dist;
+                    best_result = *result;
+                }
+            }
+            result->clear();
+            delete result;
+
+        } else if (compare_double(dist, next_dist, level * DISTRIBUTION_SNAPPING_EPSILON)) {
+
+            if (_findSidewaysSnaps(*next_bbox, ++it, end, *result, dist, tol, distance_func, ++level)) {
+                if (result->size() > max_length) {
+                    max_length = result->size();
+                    best_result = *result;
+                }
+            }
+            result->clear();
+            delete result;
         }
 
         ++next_bbox;
     }
 
-    // once reach the end, return false if level == 1, as there is just one(or more in case of overlap) item to that side.
-    return level != 1;
+    vec.insert(vec.end(), best_result.begin(), best_result.end());
+    return true;
 }
 
 Inkscape::DistributionSnapper::DistributionSnapper(SnapManager *sm, Geom::Coord const d)
