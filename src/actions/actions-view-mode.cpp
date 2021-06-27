@@ -364,25 +364,24 @@ canvas_interface_mode(int value, InkscapeWindow *win)
 std::vector<std::vector<Glib::ustring>> raw_data_view_mode =
 {
     // clang-format off 
-    {"win.canvas-show-grid",                N_("Page Grid"),                  "Canvas Display",   N_("Show or hide the page grid")     },
+    {"win.canvas-show-grid",                N_("Page Grid"),                "Canvas Display",   N_("Show or hide the page grid")},
     
-    {"win.canvas-show-guides",              N_("Guides"),                     "Canvas Display",   N_("Show or hide guides (drag from a ruler to create a guide)")     },
-    {"win.canvas-commands-bar",             N_("Commands Bar"),               "Canvas Display",   N_("Show or hide the Commands bar (under the menu)")     },
-    {"win.canvas-snap-controls-bar",        N_("Snap Controls Bar"),          "Canvas Display",   N_("Show or hide the snapping controls")},
-    {"win.canvas-tool-control-bar",         N_("Tool Controls Bar"),          "Canvas Display",   N_("Show or hide the Tool Controls bar")},
-    {"win.canvas-toolbox",                  N_("Toolbox"),                    "Canvas Display",   N_("Show or hide the main toolbox (on the left)")},
-    {"win.canvas-rulers",                   N_("Rulers"),                     "Canvas Display",   N_("Show or hide the canvas rulers")},
-    {"win.canvas-scroll-bars",              N_("Scroll bars"),                "Canvas Display",   N_("Show or hide the canvas scrollbars")},
-    {"win.canvas-palette",                  N_("Palette"),                    "Canvas Display",   N_("Show or hide the color palette")},
-    {"win.canvas-statusbar",                N_("Statusbar"),                  "Canvas Display",   N_("Show or hide the statusbar (at the bottom of the window)")},
+    {"win.canvas-show-guides",              N_("Guides"),                   "Canvas Display",   N_("Show or hide guides (drag from a ruler to create a guide)")},
+    {"win.canvas-commands-bar",             N_("Commands Bar"),             "Canvas Display",   N_("Show or hide the Commands bar (under the menu)")},
+    {"win.canvas-snap-controls-bar",        N_("Snap Controls Bar"),        "Canvas Display",   N_("Show or hide the snapping controls")},
+    {"win.canvas-tool-control-bar",         N_("Tool Controls Bar"),        "Canvas Display",   N_("Show or hide the Tool Controls bar")},
+    {"win.canvas-toolbox",                  N_("Toolbox"),                  "Canvas Display",   N_("Show or hide the main toolbox (on the left)")},
+    {"win.canvas-rulers",                   N_("Rulers"),                   "Canvas Display",   N_("Show or hide the canvas rulers")},
+    {"win.canvas-scroll-bars",              N_("Scroll bars"),              "Canvas Display",   N_("Show or hide the canvas scrollbars")},
+    {"win.canvas-palette",                  N_("Palette"),                  "Canvas Display",   N_("Show or hide the color palette")},
+    {"win.canvas-statusbar",                N_("Statusbar"),                "Canvas Display",   N_("Show or hide the statusbar (at the bottom of the window)")},
     
-    {"win.canvas-command-palette",          N_("Command Palette"),            "Canvas Display",   N_("Show or hide the on-canvas command palette")},
-    {"win.view-fullscreen",                 N_("Fullscreen"),                 "Canvas Display",   N_("Stretch this document window to full screen")},
+    {"win.canvas-command-palette",          N_("Command Palette"),          "Canvas Display",   N_("Show or hide the on-canvas command palette")},
+    {"win.view-fullscreen",                 N_("Fullscreen"),               "Canvas Display",   N_("Stretch this document window to full screen")},
     
-    {"win.canvas-interface-mode(0)",        N_("Default"),       "Canvas Display",   N_("Default interface setup")                         },
-    {"win.canvas-interface-mode(1)",        N_("Custom"),      "Canvas Display",   N_("Setup for custom task")                         },
-    {"win.canvas-interface-mode(2)",        N_("Wide"),   "Canvas Display",   N_("Setup for widescreen work")                 }
-    
+    {"win.canvas-interface-mode(0)",        N_("Default"),                  "Canvas Display",   N_("Default interface setup")},
+    {"win.canvas-interface-mode(1)",        N_("Custom"),                   "Canvas Display",   N_("Setup for custom task")},
+    {"win.canvas-interface-mode(2)",        N_("Wide"),                     "Canvas Display",   N_("Setup for widescreen work")}
     // clang-format on
 };
 
@@ -396,6 +395,8 @@ add_actions_view_mode(InkscapeWindow* win)
         std::cerr << "add_actions_view_mode: no desktop!" << std::endl;
     }
 
+    // clang-format off
+    
     // Initial States of Actions
     bool commands_toggle    = prefs->getBool("/window/commands/state", true);
     bool snaptoolbox_toggle = prefs->getBool("/window/snaptoolbox/state", true);
@@ -406,9 +407,8 @@ add_actions_view_mode(InkscapeWindow* win)
     bool scrollbars_toggle  = prefs->getBool("/window/scrollbars/state", true);
     bool rulers_toggle      = prefs->getBool("/window/rulers/state", true);
     bool guides_toggle      = win->get_desktop()->namedview->getRepr()->getAttributeBoolean("showguides", true);    // Should set it true or retrive the state (every time it set to true on restart)
-    int interface_mode      = Inkscape::UI::UXManager::getInstance()->getDefaultTask(dt);
+    int  interface_mode     = Inkscape::UI::UXManager::getInstance()->getDefaultTask(dt);
 
-    // clang-format off
     win->add_action_bool(          "canvas-show-grid",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_show_grid_toggle),            win));
     win->add_action_bool(          "canvas-show-guides",            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_show_guides_toggle),          win), guides_toggle);
     win->add_action_bool(          "canvas-commands-bar",           sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_commands_bar_toggle),         win), commands_toggle);
