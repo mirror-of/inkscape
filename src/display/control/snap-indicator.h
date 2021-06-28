@@ -68,65 +68,8 @@ private:
     Inkscape::CanvasItemCurve* make_stub_line_h(Geom::Point const &p);
     Inkscape::CanvasItemCurve* make_stub_line_v(Geom::Point const &p);
     
-    std::unordered_map<SnapSourceType, Glib::ustring> source2string = {
-        {SNAPSOURCE_UNDEFINED, _("UNDEFINED")},
-        {SNAPSOURCE_BBOX_CORNER, _("Bounding box corner")},
-        {SNAPSOURCE_BBOX_MIDPOINT, _("Bounding box midpoint")},
-        {SNAPSOURCE_BBOX_EDGE_MIDPOINT, _("Bounding box side midpoint")},
-        {SNAPSOURCE_NODE_SMOOTH, _("Smooth node")},
-        {SNAPSOURCE_NODE_CUSP, _("Cusp node")},
-        {SNAPSOURCE_LINE_MIDPOINT, _("Line midpoint")},
-        {SNAPSOURCE_PATH_INTERSECTION, _("Path intersection")},
-        {SNAPSOURCE_RECT_CORNER, _("Corner")},
-        {SNAPSOURCE_CONVEX_HULL_CORNER, _("Convex hull corner")},
-        {SNAPSOURCE_ELLIPSE_QUADRANT_POINT, _("Quadrant point")},
-        {SNAPSOURCE_NODE_HANDLE, _("Handle")},
-        {SNAPSOURCE_GUIDE, _("Guide")},
-        {SNAPSOURCE_GUIDE_ORIGIN, _("Guide origin")},
-        {SNAPSOURCE_ROTATION_CENTER, _("Object rotation center")},
-        {SNAPSOURCE_OBJECT_MIDPOINT, _("Object midpoint")},
-        {SNAPSOURCE_IMG_CORNER, _("Corner")},
-        {SNAPSOURCE_TEXT_ANCHOR, _("Text anchor")},
-        {SNAPSOURCE_OTHER_HANDLE, _("Handle")},
-        {SNAPSOURCE_GRID_PITCH, _("Multiple of grid spacing")},
-    };
-
-    std::unordered_map<SnapTargetType, Glib::ustring> target2string = {
-        {SNAPTARGET_UNDEFINED, _("UNDEFINED")},
-        {SNAPTARGET_BBOX_CORNER, _("bounding box corner")},
-        {SNAPTARGET_BBOX_EDGE, _("bounding box side")},
-        {SNAPTARGET_BBOX_EDGE_MIDPOINT, _("bounding box side midpoint")},
-        {SNAPTARGET_BBOX_MIDPOINT, _("bounding box midpoint")},
-        {SNAPTARGET_NODE_SMOOTH, _("smooth node")},
-        {SNAPTARGET_NODE_CUSP, _("cusp node")},
-        {SNAPTARGET_LINE_MIDPOINT, _("line midpoint")},
-        {SNAPTARGET_PATH, _("path")},
-        {SNAPTARGET_PATH_PERPENDICULAR, _("path (perpendicular)")},
-        {SNAPTARGET_PATH_TANGENTIAL, _("path (tangential)")},
-        {SNAPTARGET_PATH_INTERSECTION, _("path intersection")},
-        {SNAPTARGET_PATH_GUIDE_INTERSECTION, _("guide-path intersection")},
-        {SNAPTARGET_PATH_CLIP, _("clip-path")},
-        {SNAPTARGET_PATH_MASK, _("mask-path")},
-        {SNAPTARGET_ELLIPSE_QUADRANT_POINT, _("quadrant point")},
-        {SNAPTARGET_RECT_CORNER, _("corner")},
-        {SNAPTARGET_GRID, _("grid line")},
-        {SNAPTARGET_GRID_INTERSECTION, _("grid intersection")},
-        {SNAPTARGET_GRID_PERPENDICULAR, _("grid line (perpendicular)")},
-        {SNAPTARGET_GUIDE, _("guide")},
-        {SNAPTARGET_GUIDE_INTERSECTION, _("guide intersection")},
-        {SNAPTARGET_GUIDE_ORIGIN, _("guide origin")},
-        {SNAPTARGET_GUIDE_PERPENDICULAR, _("guide (perpendicular)")},
-        {SNAPTARGET_GRID_GUIDE_INTERSECTION, _("grid-guide intersection")},
-        {SNAPTARGET_PAGE_BORDER, _("page border")},
-        {SNAPTARGET_PAGE_CORNER, _("page corner")},
-        {SNAPTARGET_OBJECT_MIDPOINT, _("object midpoint")},
-        {SNAPTARGET_IMG_CORNER, _("corner")},
-        {SNAPTARGET_ROTATION_CENTER, _("object rotation center")},
-        {SNAPTARGET_TEXT_ANCHOR, _("text anchor")},
-        {SNAPTARGET_TEXT_BASELINE, _("text baseline")},
-        {SNAPTARGET_CONSTRAINED_ANGLE, _("constrained angle")},
-        {SNAPTARGET_CONSTRAINT, _("constraint")},
-    };
+    static std::unordered_map<SnapSourceType, Glib::ustring> source2string;
+    static std::unordered_map<SnapTargetType, Glib::ustring> target2string;
 };
 
 } //namespace Display
