@@ -71,7 +71,7 @@ private:
     std::optional<Gtk::TreeRow> current_stop();
     SPStop* get_nth_stop(size_t index);
     SPStop* get_current_stop();
-    void select_stop(size_t index);
+    bool select_stop(size_t index);
     void set_stop_offset(size_t index, double offset);
     SPGradient* get_gradient_vector();
     void fire_stop_selected(SPStop* stop);

@@ -405,8 +405,12 @@ void GradientEditor::insert_stop_at(double offset) {
         if (vector->hasStops()) {
             SPStop* stop = sp_gradient_add_stop_at(vector, offset);
             // just select next stop; newly added stop will be in a list view after selection refresh (on idle)
-            select_stop(sp_number_of_stops_before_stop(vector, stop));
+            auto pos = sp_number_of_stops_before_stop(vector, stop);
+            auto selected = select_stop(pos);
             fire_stop_selected(stop);
+            if (!selected) {
+                select_stop(pos);
+            }
         }
     }
 }
@@ -606,9 +610,10 @@ void GradientEditor::set_stop_offset(size_t index, double offset) {
 }
 
 // select requested stop in a list view
-void GradientEditor::select_stop(size_t index) {
-    if (!_gradient) return;
+bool GradientEditor::select_stop(size_t index) {
+    if (!_gradient) return false;
 
+    bool selected = false;
     const auto& items = _stop_tree.get_model()->children();
     if (index < items.size()) {
         auto it = items.begin();
@@ -616,7 +621,10 @@ void GradientEditor::select_stop(size_t index) {
         auto path = _stop_tree.get_model()->get_path(it);
         _stop_tree.get_selection()->select(it);
         _stop_tree.scroll_to_cell(path, *_stop_tree.get_column(0));
+        selected = true;
     }
+
+    return selected;
 }
 
 SPStop* GradientEditor::get_current_stop() {
