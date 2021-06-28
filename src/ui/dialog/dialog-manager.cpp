@@ -4,6 +4,7 @@
 
 #include <gdkmm/monitor.h>
 #include <limits>
+#include <filesystem>
 
 #include "io/resource.h"
 #include "inkscape-application.h"
@@ -234,7 +235,7 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
     try {
         auto keyfile = std::make_unique<Glib::KeyFile>();
         std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), dialogs_state);
-        if (keyfile->load_from_file(filename)) {
+        if (std::filesystem::exists(filename) && keyfile->load_from_file(filename)) {
             // restore visible dialogs first; that state is up-to-date
             docking_container->load_container_state(keyfile.get(), include_floating);
 
