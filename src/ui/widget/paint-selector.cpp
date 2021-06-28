@@ -236,6 +236,11 @@ PaintSelector::PaintSelector(FillOrStroke kind)
         _fillrulebox->show_all();
     else
         _fillrulebox->hide();
+
+    show_all();
+
+    // don't let docking manager uncover hidden widgets
+    set_no_show_all();
 }
 
 PaintSelector::~PaintSelector()
