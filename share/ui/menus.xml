@@ -292,16 +292,59 @@
    <submenu name="Filter_s">
        <filters-list/>
        <separator/>
-       <verb verb-id="DialogFilterEffects" />
-       <verb verb-id="RemoveFilter" />
+       <verb verb-id="DialogFilterEffects" />   <!-- Remove in common ui file for menu -->
+       <verb verb-id="RemoveFilter" />          <!-- Remove in common ui file for menu -->
+    
+    <!-- 
+        uncomment in common ui file for menu
+    <section>
+      <item>
+      <attribute name='label' translatable="yes">_Remove Filters</attribute>
+      <attribute name='action'>win.dialog-open</attribute>
+      <attribute name='target'>FilterEffects</attribute>
+      <attribute name='icon'>dialog-filters</attribute>
+      </item>  	
+      <item>
+      <attribute name='label' translatable="yes">_Remove Filters</attribute>
+      <attribute name='action'>app.edit-remove-filter</attribute>
+      </item>
+    </section>
+    -->
+
    </submenu>
    <submenu name="Exte_nsions">
-       <verb verb-id="EffectLast" />
-       <verb verb-id="EffectLastPref" />
+       <verb verb-id="EffectLast" />        <!-- Remove in common ui file for menu -->
+       <verb verb-id="EffectLastPref" />    <!-- Remove in common ui file for menu -->
+
+        <!-- 
+        uncomment in common ui file for menu
+        <section>
+          <item>
+          <attribute name='label' translatable="yes">Previous Exte_nsion</attribute>
+          <attribute name='action'>app.last-effect</attribute>
+          </item> 
+          <item>
+          <attribute name='label' translatable="yes">_Previous Extension Settings...</attribute>
+          <attribute name='action'>app.last-effect-pref</attribute>
+          </item>
+        </section>
+        -->
+
        <separator/>
        <effects-list/>
        <separator/>
-       <verb verb-id="org.inkscape.extensions.manager" />
+       <verb verb-id="org.inkscape.extensions.manager" />   <!-- Remove in common ui file for menu -->
+
+        <!--
+        uncomment in common ui file for menu  
+        <section>
+          <item>
+          <attribute name='label' translatable="yes">Manage Extensions...</attribute>
+          <attribute name='action'>app.org.inkscape.extensions.manager</attribute>
+          </item>
+        </section> 
+        -->
+
    </submenu>
    <submenu name="_Help">
        <verb verb-id="HelpUrlManual" />

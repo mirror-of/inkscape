@@ -164,7 +164,32 @@ set_name(Glib::ustring const &name, Gtk::MenuItem* menuitem)
     }
 }
 
+void
+menu_item_action ( Glib::ustring action_name) {
+    // Action Perform
+    static auto gapp = InkscapeApplication::instance()->gtk_app();
+    Glib::RefPtr<Gio::Action> app_action_ptr = gapp->lookup_action(action_name);
+    app_action_ptr->activate();
+}
+
 // ================= MenuItem ====================
+
+Gtk::MenuItem*
+build_menu_item_from_action(Glib::ustring name, Glib::ustring action_name)
+{
+    // Make Menu Item
+    Gtk::MenuItem* menuitem = nullptr;
+    menuitem = Gtk::manage(new Gtk::MenuItem());
+    Gtk::AccelLabel* label = Gtk::manage(new Gtk::AccelLabel(name, true));
+    label->set_xalign(0.0);
+    label->set_accel_widget(*menuitem);
+    menuitem->add(*label);
+
+    // On Click function
+    menuitem->signal_activate().connect(sigc::bind<Glib::ustring>(sigc::ptr_fun(&menu_item_action),action_name));
+
+    return menuitem;
+}
 
 Gtk::MenuItem*
 build_menu_item_from_verb(SPAction* action,
@@ -533,6 +558,17 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     }
                 }
                 continue;
+            }
+
+            if(name=="action"){
+                    // Get Action Data 
+                    Glib::ustring name = menu_ptr->attribute("name");
+                    Glib::ustring action_name = menu_ptr->attribute("action_name");
+
+                    // Add MenuItem to menubar
+                    Gtk::MenuItem* menuitem = build_menu_item_from_action(name, action_name);        
+                    menu->append(*menuitem);
+                    continue;
             }
 
             if (name == "recent-file-list") {

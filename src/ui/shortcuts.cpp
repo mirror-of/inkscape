@@ -328,7 +328,8 @@ Shortcuts::_read(XML::Node const &keysnode, bool user_set)
 
         gchar const *verb_name = iter->attribute("action");
         if (!verb_name) {
-            std::cerr << "Shortcut::read: Missing verb name!" << std::endl;
+            // Remove after converting verb to actions
+            // std::cerr << "Shortcut::read: Missing verb name!" << std::endl;
             continue;
         }
 

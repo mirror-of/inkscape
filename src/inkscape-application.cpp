@@ -48,17 +48,18 @@
 
 #include "util/units.h"           // Redimension window
 
-#include "actions/actions-base.h"               // Actions
-#include "actions/actions-file.h"               // Actions
-#include "actions/actions-node.h"               // Actions
-#include "actions/actions-edit.h"               // Actions
-#include "actions/actions-object.h"             // Actions
-#include "actions/actions-object-align.h"       // Actions
-#include "actions/actions-output.h"             // Actions
-#include "actions/actions-selection-object.h"   // Actions
-#include "actions/actions-selection.h"          // Actions
-#include "actions/actions-transform.h"          // Actions
-#include "actions/actions-window.h"             // Actions
+#include "actions/actions-base.h"                   // Actions
+#include "actions/actions-file.h"                   // Actions
+#include "actions/actions-node.h"                   // Actions
+#include "actions/actions-edit.h"                   // Actions
+#include "actions/actions-effect.h"                 // Actions
+#include "actions/actions-object.h"                 // Actions
+#include "actions/actions-object-align.h"           // Actions
+#include "actions/actions-output.h"                 // Actions
+#include "actions/actions-selection-object.h"       // Actions
+#include "actions/actions-selection.h"              // Actions
+#include "actions/actions-transform.h"              // Actions
+#include "actions/actions-window.h"                 // Actions
 
 #include "widgets/desktop-widget.h" // Access dialog container.
 
@@ -595,6 +596,7 @@ InkscapeApplication::InkscapeApplication()
     // ======================== Actions =========================
     add_actions_base(this);                 // actions that are GUI independent
     add_actions_edit(this);                 // actions for editing
+    add_actions_effect(this);               // actions for Filters and Extensions
     add_actions_file(this);                 // actions for file handling
     add_actions_node(this);                 // actions for node 
     add_actions_object(this);               // actions for object manipulation

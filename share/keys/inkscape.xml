@@ -222,8 +222,8 @@ override) the bindings in the main default.xml.
 
 <!-- Effects -->
 
-  <bind key="q" modifiers="Alt" action="EffectLast" display="true" />
-  <bind key="q" modifiers="Shift,Alt" action="EffectLastPref" display="true" />
+  <!-- <bind key="q" modifiers="Alt" action="EffectLast" display="true" />
+  <bind key="q" modifiers="Shift,Alt" action="EffectLastPref" display="true" /> -->
 
   <!-- You can also assign keys to individual effects. The action should be set to he
   effect id from the .inx file, for example "org.inkscape.filter.add_nodes" for the Add
@@ -427,5 +427,10 @@ override) the bindings in the main default.xml.
   <bind gaction="doc.document-cleanup" />
   <bind gaction="app.file-close"                          keys="&lt;primary&gt;w" />
   <bind gaction="app.quit-inkscape"                       keys="&lt;primary&gt;q" />
+
+  <!-- Effects -->
+  <bind gaction="EffectLast"                              keys="&lt;alt&gt;q"  />
+  <bind gaction="EffectLastPref"                          keys="&lt;shift&gt;&lt;alt&gt;q"  />
+
 
 </keys>

@@ -223,6 +223,8 @@ set(inkscape_SRC
   actions/actions-edit-window.cpp
   actions/actions-edit.h
   actions/actions-edit.cpp
+  actions/actions-effect.h
+  actions/actions-effect.cpp
   actions/actions-file-document.h
   actions/actions-file-document.cpp
   actions/actions-file-window.h

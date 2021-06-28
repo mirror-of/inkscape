@@ -60,7 +60,6 @@ print_verb_list()
     // But, since we're just exiting in this path, there is
     // no harm, and this is really a better place to put
     // everything else.
-    Inkscape::Extension::init();  // extension/init.h
     Inkscape::Verb::list();       // verbs.h
 }
 
