@@ -193,7 +193,7 @@ void CanvasItemCurve::render(Inkscape::CanvasItemBuffer *buf)
     }
 
     buf->cr->set_source_rgba(1.0, 1.0, 1.0, 0.5);
-    buf->cr->set_line_width(2);
+    buf->cr->set_line_width(background_width);
     buf->cr->stroke_preserve();
 
     buf->cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),

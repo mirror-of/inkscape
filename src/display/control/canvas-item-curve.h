@@ -63,6 +63,7 @@ protected:
     bool _is_fill = true; // Fill or stroke, used by meshes.
 
     int width = 1;
+    int background_width = 3; // this should be an odd number so that the background appears on both the sides of the curve.
     int _corner0 = -1; // For meshes
     int _corner1 = -1; // For meshes
 };
