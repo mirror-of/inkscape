@@ -32,8 +32,6 @@
 
 #include "ui/tools/measure-tool.h"
 
-#define ALIGNMENT_GUIDE_MEASURE_OFFSET 15
-
 namespace Inkscape {
 namespace Display {
 
@@ -105,6 +103,8 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             // Besides, negatives values would ....?
         }
 
+        // TODO: should this be a constant or a separate prefrence
+        // we are using the preference of measure tool here.
         double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
 
         if (is_distribution) {
@@ -318,13 +318,13 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
 void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point const &p2, guint32 color, double fontsize, double scale)
 {
     Preferences *prefs = Preferences::get();
-    bool show_distance = prefs->getBool("/options/snapindicatordistance/value", true);
+    bool show_distance = prefs->getBool("/options/snapindicatordistance/value", false);
 
     Inkscape::CanvasItemCurve *line;
 
     if (show_distance) {
         auto dist = Geom::L2(p2 - p1);
-        double offset = ALIGNMENT_GUIDE_MEASURE_OFFSET/_desktop->current_zoom();
+        double offset = (fontsize + 5)/_desktop->current_zoom();
         auto direction = Geom::unit_vector(p1 - p2);
         auto text_pos = (p1 + p2)/2;
 
@@ -377,7 +377,7 @@ void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point 
 
 Inkscape::CanvasItemCurve* SnapIndicator::make_stub_line_v(Geom::Point const & p) 
 {
-    Geom::Coord length = 20;
+    Geom::Coord length = 10/_desktop->current_zoom();
     auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p + Geom::Point(0, length/2), p - Geom::Point(0, length/2));
     line->set_stroke(0xff5f1fff);
     return line;
@@ -385,7 +385,7 @@ Inkscape::CanvasItemCurve* SnapIndicator::make_stub_line_v(Geom::Point const & p
 
 Inkscape::CanvasItemCurve* SnapIndicator::make_stub_line_h(Geom::Point const & p) 
 {
-    Geom::Coord length = 20;
+    Geom::Coord length = 10/_desktop->current_zoom();
     auto line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p + Geom::Point(length/2, 0), p - Geom::Point(length/2, 0));
     line->set_stroke(0xff5f1fff);
     return line;
@@ -402,6 +402,8 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
     guint32 text_fill = 0xffffffff;
     guint32 text_bg = 0xff5f1fff; //0x33337f7f
     Geom::Point text_pos;
+    double text_offset = (fontsize * 2);
+    double line_offset = 5/_desktop->current_zoom();
 
     Glib::ustring unit_name = _desktop->doc()->getDisplayUnit()->abbr.c_str();
     if (!unit_name.compare("")) {
@@ -427,9 +429,9 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                     case SNAPTARGET_DISTRIBUTION_LEFT:
                     case SNAPTARGET_DISTRIBUTION_X:
                         y = get_y(*it,*std::next(it));
-                        p1 = Geom::Point(it->max().x(), y);
-                        p2 = Geom::Point(std::next(it)->min().x(), y);
-                        text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
+                        p1 = Geom::Point(it->max().x() + line_offset, y);
+                        p2 = Geom::Point(std::next(it)->min().x() - line_offset, y);
+                        text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -text_offset));
 
                         point1 = make_stub_line_v(p1);
                         point2 = make_stub_line_v(p2);
@@ -439,9 +441,9 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                     case SNAPTARGET_DISTRIBUTION_UP:
                     case SNAPTARGET_DISTRIBUTION_Y:
                         x = get_x(*it,*std::next(it));
-                        p1 = Geom::Point(x, it->max().y());
-                        p2 = Geom::Point(x, std::next(it)->min().y());
-                        text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
+                        p1 = Geom::Point(x, it->max().y() + line_offset);
+                        p2 = Geom::Point(x, std::next(it)->min().y() - line_offset);
+                        text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-text_offset, 0));
 
                         point1 = make_stub_line_h(p1);
                         point2 = make_stub_line_h(p2);
@@ -476,9 +478,9 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
 
             for (auto it = p.getBBoxes().begin(); it + 1 != p.getBBoxes().end(); it++) {
                 y = get_y(*it,*std::next(it));
-                p1 = Geom::Point(it->max().x(), y);
-                p2 = Geom::Point(std::next(it)->min().x(), y);
-                text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -2*fontsize));
+                p1 = Geom::Point(it->max().x() + line_offset, y);
+                p2 = Geom::Point(std::next(it)->min().x() - line_offset, y);
+                text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, -text_offset));
 
                 point1 = make_stub_line_v(p1);
                 point2 = make_stub_line_v(p2);
@@ -502,9 +504,9 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
 
             for (auto it = p.getBBoxes2().begin(); it + 1 != p.getBBoxes2().end(); it++) {
                 x = get_x(*it,*std::next(it));
-                p1 = Geom::Point(x, it->max().y());
-                p2 = Geom::Point(x, std::next(it)->min().y());
-                text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-2*fontsize, 0));
+                p1 = Geom::Point(x, it->max().y() + line_offset);
+                p2 = Geom::Point(x, std::next(it)->min().y() - line_offset);
+                text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(-text_offset, 0));
 
                 point1 = make_stub_line_h(p1);
                 point2 = make_stub_line_h(p2);

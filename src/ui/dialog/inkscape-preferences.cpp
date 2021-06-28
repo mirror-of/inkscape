@@ -2390,7 +2390,7 @@ void InkscapePreferences::initPageBehavior()
 
     _page_snapping.add_group_header( _("Intelligent Snapping"));
 
-    _snap_indicator_distance.init( _("Show snap distance in case of alignment or distribution snap"), "/options/snapindicatordistance/value", true);
+    _snap_indicator_distance.init( _("Show snap distance in case of alignment or distribution snap"), "/options/snapindicatordistance/value", false);
     _page_snapping.add_line( true, "", _snap_indicator_distance, "",
                              _("Show snap distance in case of alignment or distribution snap"));
 
