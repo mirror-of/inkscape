@@ -70,6 +70,7 @@ protected:
     //Inkscape::UI::Dialog::Dialog _colorSelectorDialog;
     Gtk::Dialog _colorSelectorDialog;
     SelectedColor _selected_color;
+private:
     Gtk::Widget *_color_selector;
 };
 

@@ -36,6 +36,7 @@ ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip,
     , _undo(undo)
     , _colorSelectorDialog("dialogs.colorpickerwindow")
 {
+    _color_selector = nullptr;
     setupDialog(title);
     _preview->show();
     add(*Gtk::manage(_preview));
@@ -58,11 +59,6 @@ void ColorPicker::setupDialog(const Glib::ustring &title)
     _colorSelectorDialog.hide();
     _colorSelectorDialog.set_title (title);
     _colorSelectorDialog.set_border_width (4);
-
-    _color_selector = Gtk::manage(new ColorNotebook(_selected_color));
-    _colorSelectorDialog.get_content_area()->pack_start (
-              *_color_selector, true, true, 0);
-    _color_selector->show();
 }
 
 void ColorPicker::setSensitive(bool sensitive) { set_sensitive(sensitive); }
@@ -88,12 +84,16 @@ void ColorPicker::closeWindow()
 
 void ColorPicker::on_clicked()
 {
-    if (_color_selector)
-    {
-        _updating = true;
-        _selected_color.setValue(_rgba);
-        _updating = false;
+    if (!_color_selector) {
+        _color_selector = Gtk::manage(new ColorNotebook(_selected_color));
+        _colorSelectorDialog.get_content_area()->pack_start(*_color_selector, true, true, 0);
+        _color_selector->show();
     }
+
+    _updating = true;
+    _selected_color.setValue(_rgba);
+    _updating = false;
+
     _colorSelectorDialog.show();
     Glib::RefPtr<Gdk::Window> window = _colorSelectorDialog.get_parent_window();
     if (window) {
