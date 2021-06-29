@@ -135,40 +135,6 @@ override) the bindings in the main default.xml.
 
 <!-- Layers -->
 
-  <bind key="n" modifiers="Primary,Shift" action="LayerNew" display="true" />
-
-  <bind action="LayerRename" />
-  <bind key="Page_Up" modifiers="Primary" action="LayerNext" display="true" />
-  <bind key="KP_Page_Up" modifiers="Primary" action="LayerNext" />
-  <bind key="Page_Down" modifiers="Primary" action="LayerPrev" display="true" />
-  <bind key="KP_Page_Down" modifiers="Primary" action="LayerPrev" />
-  <bind action="LayerDelete" />
-
-  <bind key="Page_Up" modifiers="Primary,Shift" action="LayerRaise" display="true" />
-  <bind key="KP_Page_Up" modifiers="Primary,Shift" action="LayerRaise" />
-
-  <bind key="Page_Down" modifiers="Primary,Shift" action="LayerLower" display="true" />
-  <bind key="KP_Page_Down" modifiers="Primary,Shift" action="LayerLower" />
-
-  <bind key="Home" modifiers="Primary,Shift" action="LayerToTop" display="true" />
-  <bind key="KP_Home" modifiers="Primary,Shift" action="LayerToTop" />
-
-  <bind key="End" modifiers="Primary,Shift" action="LayerToBottom" display="true" />
-  <bind key="KP_End" modifiers="Primary,Shift" action="LayerToBottom" />
-
-  <bind key="Page_Up" modifiers="Shift" action="LayerMoveToNext" display="true" />
-  <bind key="KP_Page_Up" modifiers="Shift" action="LayerMoveToNext" />
-
-  <bind key="Page_Down" modifiers="Shift" action="LayerMoveToPrev" display="true" />
-  <bind key="KP_Page_Down" modifiers="Shift" action="LayerMoveToPrev" />
-
-  <bind action="LayerMoveTo" />
-
-  <bind key="l" modifiers="Primary,Shift" action="DialogLayers" display="true" />
-
-  <bind action="LayerDuplicate" />
-  <bind action="LayerDelete" />
-
   <bind action="LayerHideAll" />
   <bind action="LayerSolo" />
   <bind action="LayerShowAll" />
@@ -176,9 +142,6 @@ override) the bindings in the main default.xml.
   <bind action="LayerLockAll" />
   <bind action="LayerLockOthers" />
   <bind action="LayerUnlockAll" />
-
-  <bind action="LayerToggleHide" />
-  <bind action="LayerToggleLock" />
 
 <!-- Dialogs -->
 
@@ -328,6 +291,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('DocumentProperties')"      keys="&lt;primary&gt;&lt;shift&gt;d" />
   <bind gaction="win.dialog-open('Swatches')"                keys="&lt;primary&gt;&lt;shift&gt;w" />
   <bind gaction="win.dialog-open('Messages')" />
+  <bind gaction="win.dialog-open('Layers')"                  keys="&lt;primary&gt;&lt;shift&gt;l" />
 
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
@@ -432,5 +396,21 @@ override) the bindings in the main default.xml.
   <bind gaction="app.last-effect"                         keys="&lt;alt&gt;q"  />
   <bind gaction="app.last-effect-pref"                    keys="&lt;shift&gt;&lt;alt&gt;q"  />
 
+  <!-- Layers -->
+  <bind gaction="win.layer-new"                           keys="&lt;primary&gt;&lt;shift&gt;n" />
+  <bind gaction="win.layer-previous"                      keys="&lt;primary&gt;Page_Up, &lt;primary&gt;KP_Page_Up" />
+  <bind gaction="win.layer-next"                          keys="&lt;primary&gt;Page_Down, &lt;primary&gt;KP_Page_Down" />
+  <bind gaction="win.layer-raise"                         keys="&lt;primary&gt;&lt;shift&gt;Page_Up, &lt;primary&gt;&lt;shift&gt;KP_Page_Up" />
+  <bind gaction="win.layer-lower"                         keys="&lt;primary&gt;&lt;shift&gt;Page_Down, &lt;primary&gt;&lt;shift&gt;KP_Page_Down" />
+  <bind gaction="win.layer-top"                           keys="&lt;primary&gt;&lt;shift&gt;Home, &lt;primary&gt;&lt;shift&gt;KP_Home" />
+  <bind gaction="win.layer-bottom"                        keys="&lt;primary&gt;&lt;shift&gt;End, &lt;primary&gt;&lt;shift&gt;KP_End" />
+  <bind gaction="win.selection-move-to-layer-above"       keys="&lt;shift&gt;Page_Up, &lt;shift&gt;KP_Page_Up" />
+  <bind gaction="win.selection-move-to-layer-below"       keys="&lt;shift&gt;Page_Down, &lt;shift&gt;KP_Page_Down" />
+  <bind gaction="win.layer-toggle-hide" />
+  <bind gaction="win.layer-toggle-lock" />
+  <bind gaction="win.layer-duplicate" />
+  <bind gaction="win.selection-move-to-layer-above" />
+  <bind gaction="win.layer-rename" />
+  <bind gaction="win.layer-delete" />
 
 </keys>

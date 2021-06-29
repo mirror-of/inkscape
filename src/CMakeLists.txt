@@ -237,6 +237,8 @@ set(inkscape_SRC
   actions/actions-helper.cpp
   actions/actions-hide-lock.h
   actions/actions-hide-lock.cpp
+  actions/actions-layer.h
+  actions/actions-layer.cpp
   actions/actions-node.h
   actions/actions-node.cpp
   actions/actions-object.h

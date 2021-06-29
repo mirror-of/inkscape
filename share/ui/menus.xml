@@ -172,7 +172,7 @@
          <verb verb-id="FocusToggle" /-->
    </submenu>
    <submenu name="_Layer">
-       <verb verb-id="DialogLayers" />
+       <!-- <verb verb-id="DialogLayers" />
        <separator/>
        <verb verb-id="LayerNew" />
        <verb verb-id="LayerRename" />
@@ -193,7 +193,7 @@
        <verb verb-id="LayerToBottom"   show-icons="true" />
        <separator/>
        <verb verb-id="LayerDuplicate" />
-       <verb verb-id="LayerDelete" />
+       <verb verb-id="LayerDelete" /> -->
    </submenu>
    <submenu name="_Object">
    <!--     <verb verb-id="DialogObjects" />
