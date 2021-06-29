@@ -14,6 +14,7 @@
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
 #include <2geom/path-sink.h>
+#include <memory>
 
 #include "desktop.h"
 #include "display/curve.h"
@@ -198,25 +199,18 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
 Inkscape::DistributionSnapper::DistributionSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)
 {
-    _bboxes_right = new std::vector<Geom::Rect>;
-    _bboxes_left = new std::vector<Geom::Rect>;
-    _bboxes_up = new std::vector<Geom::Rect>;
-    _bboxes_down = new std::vector<Geom::Rect>;
+    _bboxes_right = std::make_unique<std::vector<Geom::Rect>>();
+    _bboxes_left = std::make_unique<std::vector<Geom::Rect>>();
+    _bboxes_up = std::make_unique<std::vector<Geom::Rect>>();
+    _bboxes_down = std::make_unique<std::vector<Geom::Rect>>();
 }
 
 Inkscape::DistributionSnapper::~DistributionSnapper()
 {
     _bboxes_right->clear();
-    delete _bboxes_right;
-
     _bboxes_left->clear();
-    delete _bboxes_left;
-
     _bboxes_up->clear();
-    delete _bboxes_up;
-
     _bboxes_down->clear();
-    delete _bboxes_down;
 }
 
 void Inkscape::DistributionSnapper::_collectBBoxes(Geom::OptRect const &bbox_to_snap, bool const &first_point) const

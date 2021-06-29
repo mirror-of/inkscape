@@ -12,6 +12,7 @@
 #define SEEN_DISTRIBUTION_SNAPPER_H
 
 #include <2geom/affine.h>
+#include <memory>
 
 #include "snap-enums.h"
 #include "snapper.h"
@@ -63,10 +64,10 @@ public:
                   std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
 private:
-    std::vector<Geom::Rect> *_bboxes_left;
-    std::vector<Geom::Rect> *_bboxes_right;
-    std::vector<Geom::Rect> *_bboxes_down;
-    std::vector<Geom::Rect> *_bboxes_up;
+    std::unique_ptr<std::vector<Geom::Rect>> _bboxes_left;
+    std::unique_ptr<std::vector<Geom::Rect>> _bboxes_right;
+    std::unique_ptr<std::vector<Geom::Rect>> _bboxes_down;
+    std::unique_ptr<std::vector<Geom::Rect>> _bboxes_up;
 
     /** Collects and caches bounding boxes to the left, right, up, and down of the
      * selected object.

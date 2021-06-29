@@ -11,6 +11,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <memory>
 #include "snapper.h"
 #include "snap-candidate.h"
 
@@ -60,8 +61,8 @@ public:
                   std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
 private:
-    std::vector<SnapCandidatePoint> *_points_to_snap_to;
-    std::vector<SnapCandidatePath > *_paths_to_snap_to;
+    std::unique_ptr<std::vector<SnapCandidatePoint>> _points_to_snap_to;
+    std::unique_ptr<std::vector<SnapCandidatePath >> _paths_to_snap_to;
 
     void _snapNodes(IntermSnapResults &isr,
                       Inkscape::SnapCandidatePoint const &p, // in desktop coordinates

@@ -12,6 +12,7 @@
 #define SEEN_ALIGNMENT_SNAPPER_H
 
 #include <2geom/affine.h>
+#include <memory>
 
 #include "snap-enums.h"
 #include "snapper.h"
@@ -63,7 +64,7 @@ public:
                   std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
 private:
-    std::vector<SnapCandidatePoint> *_points_to_snap_to;
+    std::unique_ptr<std::vector<SnapCandidatePoint>> _points_to_snap_to;
 
     /** Collects and caches points on bounding boxes of the candidates
      * @param is the point first point in the selection?

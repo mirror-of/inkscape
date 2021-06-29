@@ -17,6 +17,7 @@
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
 #include <2geom/path-sink.h>
+#include <memory>
 
 #include "desktop.h"
 #include "display/curve.h"
@@ -44,17 +45,14 @@
 Inkscape::ObjectSnapper::ObjectSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)
 {
-    _points_to_snap_to = new std::vector<SnapCandidatePoint>;
-    _paths_to_snap_to = new std::vector<SnapCandidatePath >;
+    _points_to_snap_to = std::make_unique<std::vector<SnapCandidatePoint>>();
+    _paths_to_snap_to = std::make_unique<std::vector<SnapCandidatePath>>();
 }
 
 Inkscape::ObjectSnapper::~ObjectSnapper()
 {
     _points_to_snap_to->clear();
-    delete _points_to_snap_to;
-
     _clear_paths();
-    delete _paths_to_snap_to;
 }
 
 Geom::Coord Inkscape::ObjectSnapper::getSnapperTolerance() const
@@ -99,7 +97,7 @@ void Inkscape::ObjectSnapper::_collectNodes(SnapSourceType const &t,
 
         // Consider the page border for snapping to
         if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_CORNER)) {
-            _getBorderNodes(_points_to_snap_to);
+            _getBorderNodes(_points_to_snap_to.get());
         }
 
         for (const auto & _candidate : *_snapmanager->obj_snapper_candidates) {
@@ -168,7 +166,7 @@ void Inkscape::ObjectSnapper::_collectNodes(SnapSourceType const &t,
                 // of the item AND the bbox of the clipping path at the same time
                 if (!_candidate.clip_or_mask) {
                     Geom::OptRect b = root_item->desktopBounds(bbox_type);
-                    getBBoxPoints(b, _points_to_snap_to, true,
+                    getBBoxPoints(b, _points_to_snap_to.get(), true,
                             _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_BBOX_CORNER),
                             _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_BBOX_EDGE_MIDPOINT),
                             _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_BBOX_MIDPOINT));

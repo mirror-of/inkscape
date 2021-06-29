@@ -14,6 +14,7 @@
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
 #include <2geom/path-sink.h>
+#include <memory>
 
 #include "desktop.h"
 #include "display/curve.h"
@@ -41,13 +42,12 @@
 Inkscape::AlignmentSnapper::AlignmentSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)
 {
-    _points_to_snap_to = new std::vector<Inkscape::SnapCandidatePoint>;
+    _points_to_snap_to = std::make_unique<std::vector<Inkscape::SnapCandidatePoint>>();
 }
 
 Inkscape::AlignmentSnapper::~AlignmentSnapper()
 {
     _points_to_snap_to->clear();
-    delete _points_to_snap_to;
 }
 
 void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) const
@@ -88,7 +88,7 @@ void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) con
         // if candidate is not a clip or a mask object then extract its BBox points
         if (!candidate.clip_or_mask) {
             Geom::OptRect b = root_item->desktopBounds(bbox_type);
-            getBBoxPoints(b, _points_to_snap_to, true, true, false, true, true);
+            getBBoxPoints(b, _points_to_snap_to.get(), true, true, false, true, true);
         }
     }
 
