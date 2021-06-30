@@ -404,6 +404,17 @@ add_cli_test(export-text-to-path_eps PARAMETERS --export-text-to-path --export-t
                                      INPUT_FILENAME text.svg OUTPUT_FILENAME export-text-to-path.eps
                                      TEST_SCRIPT match_regex_fail.sh "export-text-to-path.eps" "^%%BeginResource: font")
 
+# Regression test for https://gitlab.com/inkscape/inkscape/-/issues/2602
+add_cli_test(regression-2602         PARAMETERS --export-text-to-path
+                                     INPUT_FILENAME regression-2602.svg
+                                     OUTPUT_FILENAME regression-2602_output.svg
+                                     TEST_SCRIPT testcases/regression-2602_script.py)
+
+# Regression test for https://gitlab.com/inkscape/inkscape/-/issues/2797
+add_cli_test(regression-2797         INPUT_FILENAME regression-2797.svg
+                                     OUTPUT_FILENAME regression-2797_output.svg
+                                     TEST_SCRIPT testcases/regression-2797_script.py)
+
 # --export-latex
 # PDF, PS, EPS only function by design.
 add_cli_test(export-latex PARAMETERS --export-type=pdf,ps,eps --export-latex

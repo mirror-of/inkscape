@@ -498,8 +498,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             while (dynamic_cast<SPString const *>(pos_obj) && pos_obj->parent) {
                pos_obj = pos_obj->parent;   // SPStrings don't have style
             }
-            Glib::ustring style_str = pos_obj->style->writeIfDiff(
-                pos_obj->parent ? pos_obj->parent->style : nullptr); // TODO investigate possibility
+            Glib::ustring style_str = pos_obj->style->writeIfDiff(item->style);
 
             // get path from iter to iter_next:
             auto curve = te_get_layout(item)->convertToCurves(iter, iter_next);
