@@ -607,7 +607,8 @@ void Inkscape::DistributionSnapper::_snapEquidistantPoints(IntermSnapResults &is
         std::vector<Geom::Rect> bboxes_x = sx.getBBoxes();
         std::vector<Geom::Rect> bboxes_y = sy.getBBoxes();
 
-        _correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
+        // Do not need to correct here, already did that earlier for each direction separately
+        //_correctSelectionBBox(target, p.getPoint(), *bbox_to_snap);
         auto si = SnappedPoint(target, bboxes_x, bboxes_y, bbox, sx.getDistributionDistance(), sy.getDistributionDistance(), p.getSourceType(), p.getSourceNum(), SNAPTARGET_DISTRIBUTION_XY, offset, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
         isr.points.push_back(si);
         return;
