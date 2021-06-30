@@ -383,7 +383,7 @@ void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point 
     Inkscape::CanvasItemCurve *line;
 
     auto ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-    ctrl->set_size(6);
+    ctrl->set_size(7);
     ctrl->set_mode(Inkscape::CanvasItemCtrlMode::CANVAS_ITEM_CTRL_MODE_COLOR);
     ctrl->set_stroke(0xffffffff);
     ctrl->set_fill(color);
@@ -392,7 +392,7 @@ void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point 
     _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(ctrl, 0));
 
     ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasTemp(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-    ctrl->set_size(6);
+    ctrl->set_size(7);
     ctrl->set_mode(Inkscape::CanvasItemCtrlMode::CANVAS_ITEM_CTRL_MODE_COLOR);
     ctrl->set_stroke(0xffffffff);
     ctrl->set_fill(color);
