@@ -224,7 +224,7 @@
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
         <property name="action_name">doc.snap-alignment</property>
-        <property name="icon_name">snap</property>
+        <property name="icon_name">snap-alignment</property>
         <property name="label" translatable="true">Alignment</property>
       </object>
     </child>
@@ -233,12 +233,12 @@
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
         <property name="action_name">doc.snap-alignment-self</property>
-        <property name="icon_name">snap</property>
+        <property name="icon_name">snap-alignment-self</property>
         <property name="label" translatable="true">Self Alignment</property>
       </object>
     </child>
 
-    <!-- Alignment -->
+    <!-- Distribution -->
 
     <child>
       <object class="GtkSeparatorToolItem">
@@ -250,7 +250,7 @@
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
         <property name="action_name">doc.snap-distribution</property>
-        <property name="icon_name">snap</property>
+        <property name="icon_name">snap-distribution</property>
         <property name="label" translatable="true">Distribution</property>
       </object>
     </child>

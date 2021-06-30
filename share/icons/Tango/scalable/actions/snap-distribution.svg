@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg92"
+   inkscape:version="1.2-dev (12f6d1e6fc, 2021-06-27, custom)"
+   sodipodi:docname="snap-distribution.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview94"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="20.48"
+     inkscape:cx="10.400391"
+     inkscape:cy="-0.51269532"
+     inkscape:window-width="1918"
+     inkscape:window-height="1055"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs89" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g130"
+       transform="translate(-69.537182,-133.57565)">
+      <rect
+         style="fill:#000000;stroke-width:0.177507;stroke-linecap:round;stroke-linejoin:round"
+         id="rect14579"
+         width="2.6458325"
+         height="0.52917081"
+         x="134.3694"
+         y="-70.330933"
+         transform="rotate(90)" />
+      <rect
+         style="fill:#000000;stroke-width:0.177507;stroke-linecap:round;stroke-linejoin:round"
+         id="rect14583"
+         width="2.6458325"
+         height="0.52916276"
+         x="134.3694"
+         y="-71.918427"
+         transform="rotate(90)" />
+      <rect
+         style="fill:#000000;stroke-width:0.177507;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1232"
+         width="2.6458325"
+         height="0.52917081"
+         x="134.3694"
+         y="-73.505936"
+         transform="rotate(90)" />
+      <rect
+         style="fill:#009909;fill-opacity:1;stroke-width:0.177508;stroke-linecap:round;stroke-linejoin:round"
+         id="rect14581"
+         width="0.52916664"
+         height="0.26458263"
+         x="-71.124672"
+         y="134.63397"
+         class="success"
+         transform="scale(-1,1)" />
+      <rect
+         style="fill:#009909;fill-opacity:1;stroke-width:0.177508;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1570"
+         width="0.52916664"
+         height="0.26458263"
+         x="-72.712173"
+         y="134.63397"
+         class="success"
+         transform="scale(-1,1)" />
+    </g>
+  </g>
+</svg>
