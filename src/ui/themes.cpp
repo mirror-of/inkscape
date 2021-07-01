@@ -220,7 +220,7 @@ show_parsing_error(const Glib::RefPtr<const Gtk::CssSection>& section, const Gli
 // callback for a "narrow spinbutton" preference change
 struct NarrowSpinbuttonObserver : Preferences::Observer {
     NarrowSpinbuttonObserver(const char* path, Glib::RefPtr<Gtk::CssProvider> provider):
-        Preferences::Observer(path), _provider(provider) {}
+        Preferences::Observer(path), _provider(std::move(provider)) {}
 
     void notify(Preferences::Entry const& new_val) override {
         auto screen = Gdk::Screen::get_default();
