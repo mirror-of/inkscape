@@ -18,6 +18,7 @@
 #ifndef SEEN_SNAP_H
 #define SEEN_SNAP_H
 
+#include <memory>
 #include <vector>
 
 #include "guide-snapper.h"
@@ -446,8 +447,8 @@ private:
                        bool const _clip_or_mask,
                        Geom::Affine const additional_affine) const;
 
-    std::vector<Inkscape::SnapCandidateItem> *obj_snapper_candidates;
-    std::vector<Inkscape::SnapCandidateItem> *align_snapper_candidates;
+    std::unique_ptr<std::vector<Inkscape::SnapCandidateItem>> obj_snapper_candidates;
+    std::unique_ptr<std::vector<Inkscape::SnapCandidateItem>> align_snapper_candidates;
 
     friend class Inkscape::ObjectSnapper;
     friend class Inkscape::AlignmentSnapper;

@@ -16,6 +16,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <memory>
 #include <utility>
 #include <vector>
 
@@ -63,17 +64,14 @@ SnapManager::SnapManager(SPNamedView const *v) :
     _snapindicator(true),
     _unselected_nodes(nullptr)
 {
-    obj_snapper_candidates = new std::vector<Inkscape::SnapCandidateItem>;
-    align_snapper_candidates = new std::vector<Inkscape::SnapCandidateItem>;
+    obj_snapper_candidates = std::make_unique<std::vector<Inkscape::SnapCandidateItem>>();
+    align_snapper_candidates = std::make_unique<std::vector<Inkscape::SnapCandidateItem>>();
 }
 
 SnapManager::~SnapManager()
 {
     obj_snapper_candidates->clear();
-    delete obj_snapper_candidates;
-
     align_snapper_candidates->clear();
-    delete align_snapper_candidates;
 }
 
 SnapManager::SnapperList SnapManager::getSnappers() const
