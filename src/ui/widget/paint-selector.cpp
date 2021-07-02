@@ -902,7 +902,7 @@ void PaintSelector::set_mode_mesh(PaintSelector::Mode mode)
             GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
             gtk_cell_renderer_set_padding(renderer, 2, 0);
             gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
-            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), renderer, "text", COMBO_COL_LABEL, NULL);
+            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), renderer, "text", COMBO_COL_LABEL, nullptr);
 
             ink_mesh_menu(combo);
             g_signal_connect(G_OBJECT(combo), "changed", G_CALLBACK(PaintSelector::mesh_change), this);
@@ -971,7 +971,7 @@ SPMeshGradient *PaintSelector::getMeshGradient()
 
         gchar *mesh_name;
         if (stockid) {
-            mesh_name = g_strconcat("urn:inkscape:mesh:", meshid, NULL);
+            mesh_name = g_strconcat("urn:inkscape:mesh:", meshid, nullptr);
         } else {
             mesh_name = g_strdup(meshid);
         }
