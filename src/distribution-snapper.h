@@ -122,12 +122,19 @@ private:
                              std::function<Geom::Coord(Geom::Rect const&, Geom::Rect const&)> const & distance_func,
                              int level = 0) const;
 
+    enum class Direction {
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN
+    };              
+
     /** This functions adds overlapping bounding boxes to the list of bounding boxes.
      * The new bounding boxes are added such that the final list is still sorted.
      * This extra step is needed so that the overall union of any overlapping bounding
      * boxes is also considered during distribution snapping.
      */
-    void _addBBoxForIntersectingBoxes() const;
+    void _addBBoxForIntersectingBoxes(std::vector<Geom::Rect> *vec, Direction dir) const;
 
     // distance functions for different orientations
     static Geom::Coord distRight(Geom::Rect const &a, Geom::Rect const &b);

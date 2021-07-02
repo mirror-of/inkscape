@@ -74,6 +74,23 @@ static int sortBoxesDown(Geom::Rect const &a, Geom::Rect const &b)
     return 0;
 }
 
+Inkscape::DistributionSnapper::DistributionSnapper(SnapManager *sm, Geom::Coord const d)
+    : Snapper(sm, d)
+{
+    _bboxes_right = std::make_unique<std::vector<Geom::Rect>>();
+    _bboxes_left = std::make_unique<std::vector<Geom::Rect>>();
+    _bboxes_up = std::make_unique<std::vector<Geom::Rect>>();
+    _bboxes_down = std::make_unique<std::vector<Geom::Rect>>();
+}
+
+Inkscape::DistributionSnapper::~DistributionSnapper()
+{
+    _bboxes_right->clear();
+    _bboxes_left->clear();
+    _bboxes_up->clear();
+    _bboxes_down->clear();
+}
+
 Geom::Coord Inkscape::DistributionSnapper::distRight(Geom::Rect const &a, Geom::Rect const &b)
 {
     return -a.max().x() + b.min().x();
@@ -196,23 +213,6 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
     return true;
 }
 
-Inkscape::DistributionSnapper::DistributionSnapper(SnapManager *sm, Geom::Coord const d)
-    : Snapper(sm, d)
-{
-    _bboxes_right = std::make_unique<std::vector<Geom::Rect>>();
-    _bboxes_left = std::make_unique<std::vector<Geom::Rect>>();
-    _bboxes_up = std::make_unique<std::vector<Geom::Rect>>();
-    _bboxes_down = std::make_unique<std::vector<Geom::Rect>>();
-}
-
-Inkscape::DistributionSnapper::~DistributionSnapper()
-{
-    _bboxes_right->clear();
-    _bboxes_left->clear();
-    _bboxes_up->clear();
-    _bboxes_down->clear();
-}
-
 void Inkscape::DistributionSnapper::_collectBBoxes(Geom::OptRect const &bbox_to_snap, bool const &first_point) const
 {
     if (!first_point)
@@ -274,107 +274,56 @@ void Inkscape::DistributionSnapper::_collectBBoxes(Geom::OptRect const &bbox_to_
     std::stable_sort(_bboxes_up->begin(), _bboxes_up->end(), sortBoxesUp);
     std::stable_sort(_bboxes_down->begin(), _bboxes_down->end(), sortBoxesDown);
 
-    _addBBoxForIntersectingBoxes();
+    _addBBoxForIntersectingBoxes(_bboxes_right.get(), Direction::RIGHT);
+    _addBBoxForIntersectingBoxes(_bboxes_left.get(), Direction::LEFT);
+    _addBBoxForIntersectingBoxes(_bboxes_up.get(), Direction::UP);
+    _addBBoxForIntersectingBoxes(_bboxes_down.get(), Direction::DOWN);
 }
 
-void Inkscape::DistributionSnapper::_addBBoxForIntersectingBoxes() const {
-    if (_bboxes_right->size() > 0) {
-        for (auto it = _bboxes_right->begin(); std::next(it) != _bboxes_right->end(); it++) {
-            Geom::Rect comb(*it);
-            int num = 0;
-            auto start = it;
-            auto insertPos = it;
-
-            while (std::next(it) != _bboxes_right->end() && it->intersects(*std::next(it))) {
-                comb.unionWith(*std::next(it));
-                if (comb.midpoint().x() > it->midpoint().x()) {
-                    insertPos = std::next(it);
-                } else {
-                    ++num;
-                }
-                ++it;
-            }
-
-            if (it != start) {
-                it = _bboxes_right->insert(insertPos, comb);
-            }
-
-            it += num;
-        }
+void Inkscape::DistributionSnapper::_addBBoxForIntersectingBoxes(std::vector<Geom::Rect> *vec, Direction dir) const {
+    if (vec->size() < 1) {
+        return;
     }
 
-    if (_bboxes_left->size() > 0) {
-        for (auto it = _bboxes_left->begin(); std::next(it) != _bboxes_left->end(); it++) {
-            Geom::Rect comb(*it);
-            int num = 0;
-            auto start = it;
-            auto insertPos = it;
+    int count = 0;
+    std::vector<std::pair<int, Geom::Rect>> insertPositions;
 
-            while (std::next(it) != _bboxes_left->end() && it->intersects(*std::next(it))) {
-                comb.unionWith(*std::next(it));
-                if (comb.midpoint().x() < it->midpoint().x()) {
-                    insertPos = std::next(it);
-                } else {
-                    ++num;
-                }
-                ++it;
+    for (auto it = vec->begin(); it != vec->end(); it++, count++) {
+        Geom::Rect comb(*it);
+        int num = 0;
+        int insertPos = count;
+
+        while (std::next(it) != vec->end() && it->intersects(*std::next(it))) {
+            comb.unionWith(*std::next(it));
+
+            if (dir == Direction::RIGHT && comb.midpoint().x() > it->midpoint().x()) {
+                ++insertPos;
+            } else if (dir == Direction::LEFT && comb.midpoint().x() < it->midpoint().x()){
+                ++insertPos;
+            } else if (dir == Direction::UP && comb.midpoint().y() > it->midpoint().y()){
+                ++insertPos;
+            } else if (dir == Direction::DOWN && comb.midpoint().y() < it->midpoint().y()){
+                ++insertPos;
             }
 
-            if (it != start) {
-                it = _bboxes_left->insert(insertPos, comb);
-            }
+            ++it;
+            ++num;
+            ++count;
+        }
 
-            it += num;
+        if (num > 0) {
+            insertPositions.emplace_back(insertPos, comb);
         }
     }
+    
+    if (insertPositions.size() != 0) {
+        // TODO: Does this improve performance?
+        vec->reserve(vec->size() + insertPositions.size());
 
-    if (_bboxes_up->size() > 0) {
-        for (auto it = _bboxes_up->begin(); std::next(it) != _bboxes_up->end(); it++) {
-            Geom::Rect comb(*it);
-            int num = 0;
-            auto start = it;
-            auto insertPos = it;
-
-            while (std::next(it) != _bboxes_up->end() && it->intersects(*std::next(it))) {
-                comb.unionWith(*std::next(it));
-                if (comb.midpoint().y() > it->midpoint().y()) {
-                    insertPos = std::next(it);
-                } else {
-                    ++num;
-                }
-                ++it;
-            }
-
-            if (it != start) {
-                it = _bboxes_up->insert(insertPos, comb);
-            }
-
-            it += num;
-        }
-    }
-
-    if (_bboxes_down->size() > 0) {
-        for (auto it = _bboxes_down->begin(); std::next(it) != _bboxes_down->end(); it++) {
-            Geom::Rect comb(*it);
-            int num = 0;
-            auto start = it;
-            auto insertPos = it;
-
-            while (std::next(it) != _bboxes_down->end() && it->intersects(*std::next(it))) {
-                comb.unionWith(*std::next(it));
-                if (comb.midpoint().y() < it->midpoint().y()) {
-                    insertPos = std::next(it);
-                } else {
-                    ++num;
-                }
-                ++it;
-            }
-
-            if (it != start) {
-                it = _bboxes_down->insert(insertPos, comb);
-            }
-
-            it += num;
+        count = 0;
+        for (auto pair : insertPositions) {
+            vec->insert(vec->begin() + pair.first + count, pair.second);
+            ++count;
         }
     }
 }
