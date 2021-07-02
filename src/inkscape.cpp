@@ -404,7 +404,7 @@ Application::crash_handler (int /*signum*/)
             FILE *file = nullptr;
             for(auto & location : locations) {
                 if (!location) continue; // It seems to be okay, but just in case
-                gchar * filename = g_build_filename(location, c, NULL);
+                gchar * filename = g_build_filename(location, c, nullptr);
                 Inkscape::IO::dump_fopen_call(filename, "E");
                 file = Inkscape::IO::fopen_utf8name(filename, "w");
                 if (file) {

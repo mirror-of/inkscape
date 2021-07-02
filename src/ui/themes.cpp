@@ -39,15 +39,15 @@ void
 ThemeContext::inkscape_fill_gtk(const gchar *path, gtkThemeList &themes)
 {
     const gchar *dir_entry;
-    GDir *dir = g_dir_open(path, 0, NULL);
+    GDir *dir = g_dir_open(path, 0, nullptr);
     if (!dir)
         return;
     while ((dir_entry = g_dir_read_name(dir))) {
-        gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+        gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", nullptr);
         bool has_prefer_dark = false;
   
         Glib::ustring theme = dir_entry;
-        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-3.0", "gtk-dark.css", NULL);
+        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-3.0", "gtk-dark.css", nullptr);
         if (g_file_test(filenamedark, G_FILE_TEST_IS_REGULAR))
             has_prefer_dark = true;
         if (themes.find(theme) != themes.end() && !has_prefer_dark) {
@@ -77,7 +77,7 @@ ThemeContext::get_available_themes()
     const gchar *const *dirs;
   
     /* Builtin themes */
-    builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+    builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, nullptr);
     for (i = 0; builtin_themes[i] != NULL; i++) {
         if (g_str_has_suffix(builtin_themes[i], "/")) {
             theme = builtin_themes[i];
@@ -85,7 +85,7 @@ ThemeContext::get_available_themes()
             Glib::ustring theme_path = "/org/gtk/libgtk/theme";
             theme_path += "/" + theme;
             gchar **builtin_themes_files =
-                g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+                g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, nullptr);
             bool has_prefer_dark = false;
             if (builtin_themes_files != NULL) {
                 for (j = 0; builtin_themes_files[j] != NULL; j++) {
@@ -102,17 +102,17 @@ ThemeContext::get_available_themes()
 
     g_strfreev(builtin_themes);
 
-    path = g_build_filename(g_get_user_data_dir(), "themes", NULL);
+    path = g_build_filename(g_get_user_data_dir(), "themes", nullptr);
     inkscape_fill_gtk(path, themes);
     g_free(path);
   
-    path = g_build_filename(g_get_home_dir(), ".themes", NULL);
+    path = g_build_filename(g_get_home_dir(), ".themes", nullptr);
     inkscape_fill_gtk(path, themes);
     g_free(path);
   
     dirs = g_get_system_data_dirs();
     for (i = 0; dirs[i]; i++) {
-        path = g_build_filename(dirs[i], "themes", NULL);
+        path = g_build_filename(dirs[i], "themes", nullptr);
         inkscape_fill_gtk(path, themes);
         g_free(path);
     }
@@ -251,24 +251,24 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
     gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
     if (settings && !only_providers) {
-        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
-        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
-        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, nullptr);
+        g_object_get(settings, "gtk-theme-name", &gtkThemeName, nullptr);
+        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, nullptr);
         prefs->setBool("/theme/defaultPreferDarkTheme", gtkApplicationPreferDarkTheme);
         prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName));
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
-            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
+            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), nullptr);
         }
         bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
-        g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, NULL);
+        g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, nullptr);
         themeiconname = prefs->getString("/theme/iconTheme");
         // legacy cleanup
         if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
             prefs->setString("/theme/iconTheme", "");
         } else if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), nullptr);
         }
     }
 

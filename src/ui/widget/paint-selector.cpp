@@ -1226,7 +1226,7 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
             GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
             gtk_cell_renderer_set_padding(renderer, 2, 0);
             gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(_patternmenu), renderer, TRUE);
-            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(_patternmenu), renderer, "text", COMBO_COL_LABEL, NULL);
+            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(_patternmenu), renderer, "text", COMBO_COL_LABEL, nullptr);
 
             ink_pattern_menu(_patternmenu);
             g_signal_connect(G_OBJECT(_patternmenu), "changed", G_CALLBACK(PaintSelector::pattern_change), this);
@@ -1322,7 +1322,7 @@ SPPattern *PaintSelector::getPattern()
         gchar *paturn;
 
         if (stockid) {
-            paturn = g_strconcat("urn:inkscape:pattern:", patid, NULL);
+            paturn = g_strconcat("urn:inkscape:pattern:", patid, nullptr);
         } else {
             paturn = g_strdup(patid);
         }

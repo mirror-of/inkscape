@@ -489,7 +489,7 @@ void Export::set_default_filename () {
                 extension_point = g_strrstr(filename_copy, old_extension);
                 extension_point[0] = '\0';
 
-                final_name = g_strconcat(filename_copy, ".png", NULL);
+                final_name = g_strconcat(filename_copy, ".png", nullptr);
                 filename_entry.set_text(final_name);
                 filename_entry.set_position(strlen(final_name));
 
@@ -497,7 +497,7 @@ void Export::set_default_filename () {
                 g_free(filename_copy);
             }
         } else {
-            gchar *name = g_strconcat(filename, ".png", NULL);
+            gchar *name = g_strconcat(filename, ".png", nullptr);
             filename_entry.set_text(name);
             filename_entry.set_position(strlen(name));
 
