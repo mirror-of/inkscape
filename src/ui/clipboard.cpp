@@ -1674,7 +1674,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
             if ( out != outlist.end() ) {
                 // FIXME: Temporary hack until we add support for memory output.
                 // Save to a temporary file, read it back and then set the clipboard contents
-                gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export.emf", NULL );
+                gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export.emf", nullptr );
 
                 try {
                     (*out)->save(_clipboardSPDoc.get(), filename);
