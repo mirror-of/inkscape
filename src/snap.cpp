@@ -935,19 +935,17 @@ void SnapManager::_findCandidates(SPObject* parent,
                                 // For debugging: print the id of the candidate to the console
                                 // SPObject *obj = (SPObject*)item;
                                 // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
-                                if (align_snapper_candidates->size() > 200) { // This makes Inkscape crawl already
-                                    overflow = true;
-                                }
-                            }
 
-                            if (bbox_to_snap_incl.intersects(*bbox_of_item)
-                                    || (snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER) && bbox_to_snap_incl.contains(item->getCenter()))) { // rotation center might be outside of the bounding box
-                                // This item is within snapping range, so record it as a candidate
-                                obj_snapper_candidates->push_back(Inkscape::SnapCandidateItem(item, clip_or_mask, additional_affine));
-                                // For debugging: print the id of the candidate to the console
-                                // SPObject *obj = (SPObject*)item;
-                                // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
-                                if (obj_snapper_candidates->size() > 200) { // This makes Inkscape crawl already
+                                if (bbox_to_snap_incl.intersects(*bbox_of_item)
+                                        || (snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER) && bbox_to_snap_incl.contains(item->getCenter()))) { // rotation center might be outside of the bounding box
+                                    // This item is within snapping range, so record it as a candidate
+                                    obj_snapper_candidates->push_back(Inkscape::SnapCandidateItem(item, clip_or_mask, additional_affine));
+                                    // For debugging: print the id of the candidate to the console
+                                    // SPObject *obj = (SPObject*)item;
+                                    // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
+                                }
+
+                                if (align_snapper_candidates->size() > 200) { // This makes Inkscape crawl already
                                     overflow = true;
                                 }
                             }
