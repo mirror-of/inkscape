@@ -788,6 +788,7 @@ LayersPanel::LayersPanel()
 
     _tree.set_expander_column( *_tree.get_column(nameColNum) );
     _tree.set_search_column(nameColNum + 1);
+    _tree.set_enable_search(false);
 
     _compositeSettings.setSubject(&_subject);
 
