@@ -15,6 +15,7 @@
 ../share/ui/menu-layer.ui
 ../share/ui/menu-object.ui
 ../share/ui/menu-path.ui
+../share/ui/menu-text.ui
 ../share/ui/menu-view.ui
 ../share/ui/toolbar-node.ui
 ../share/ui/toolbar-select.ui

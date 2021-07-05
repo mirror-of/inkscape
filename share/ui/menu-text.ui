@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<interface>
+  <requires lib="gtk+" version="3.22" />
+  <menu id="text-menu">
+
+    <section>
+      <item>
+        <attribute name='label' translatable="yes">_Text and Font...</attribute>
+        <attribute name='action'>win.dialog-open</attribute>
+	    <attribute name='target'>Text</attribute>
+        <attribute name='icon'>dialog-text-and-font</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">SVG Font Editor...</attribute>
+        <attribute name='action'>win.dialog-open</attribute>
+	    <attribute name='target'>SVGFonts</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">_Unicode Characters...</attribute>
+        <attribute name='action'>win.dialog-open</attribute>
+	      <attribute name='target'>Glyphs</attribute>
+        <attribute name='icon'>accessories-character-map</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+      <attribute name='label' translatable="yes">_Put on Path</attribute>
+      <attribute name='action'>doc.text-put-on-path</attribute>
+      <attribute name='icon'>text-put-on-path</attribute>
+      </item>
+      <item>
+      <attribute name='label' translatable="yes">_Remove from Path</attribute>
+      <attribute name='action'>doc.text-remove-from-path</attribute>
+      <attribute name='icon'>text-remove-from-path</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+      <attribute name='label' translatable="yes">_Flow into Frame</attribute>
+      <attribute name='action'>doc.text-flow-into-frame</attribute>
+      <attribute name='icon'>text-flow-into-frame</attribute>
+      </item>
+      <item>
+      <attribute name='label' translatable="yes">Set _Subtraction Frames</attribute>
+      <attribute name='action'>doc.text-flow-subtract-frame</attribute>
+      <attribute name='icon'>text-flow-subtract-frame</attribute>
+      </item>
+      <item>
+      <attribute name='label' translatable="yes">_Unflow</attribute>
+      <attribute name='action'>doc.text-unflow</attribute>
+      <attribute name='icon'>text-unflow</attribute>
+      </item>
+      <item>
+      <attribute name='label' translatable="yes">_Convert to Text</attribute>
+      <attribute name='action'>doc.text-convert-to-regular</attribute>
+      <attribute name='icon'>text-convert-to-regular</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+      <attribute name='label' translatable="yes">Remove Manual _Kerns</attribute>
+      <attribute name='action'>doc.text-unkern</attribute>
+      <attribute name='icon'>text-unkern</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+        <attribute name='label' translatable="yes">Check Spellin_g...</attribute>
+        <attribute name='action'>win.dialog-open</attribute>
+        <attribute name='target'>Spellcheck</attribute>
+        <attribute name='icon'>tools-check-spelling</attribute>
+      </item>
+    </section>
+    
+  </menu>
+</interface>

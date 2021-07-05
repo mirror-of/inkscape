@@ -25,7 +25,6 @@
 #include "message-stack.h"
 #include "text-chemistry.h"
 #include "text-editing.h"
-#include "verbs.h"
 
 #include "object/sp-flowdiv.h"
 #include "object/sp-flowregion.h"
@@ -34,6 +33,7 @@
 #include "object/sp-textpath.h"
 #include "object/sp-tspan.h"
 #include "style.h"
+#include "ui/icon-names.h"
 
 #include "xml/repr.h"
 
@@ -171,8 +171,7 @@ text_put_on_path()
     text->removeAttribute("x");
     text->removeAttribute("y");
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                       _("Put text on path"));
+    DocumentUndo::done(desktop->getDocument(), _("Put text on path"), INKSCAPE_ICON("draw-text"));
 }
 
 void
@@ -204,8 +203,7 @@ text_remove_from_path()
     if (!did) {
         desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
     } else {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                           _("Remove text from path"));
+        DocumentUndo::done(desktop->getDocument(), _("Remove text from path"), INKSCAPE_ICON("draw-text"));
         std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
         selection->setList(vec); // reselect to update statusbar description
     }
@@ -269,8 +267,7 @@ text_remove_all_kerns()
     if (!did) {
         desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
     } else {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                           _("Remove manual kerns"));
+        DocumentUndo::done(desktop->getDocument(), _("Remove manual kerns"), INKSCAPE_ICON("draw-text"));
     }
 }
 
@@ -300,7 +297,7 @@ text_flow_shape_subtract()
         text->style->shape_subtract.read(shapes.c_str());
         text->updateRepr();
 
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT, _("Flow text subtract shape"));
+        DocumentUndo::done(doc, _("Flow text subtract shape"), INKSCAPE_ICON("draw-text"));
     } else {
         // SVG 1.2 Flowed Text
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Subtraction not available for SVG 1.2 Flowed text."));
@@ -357,7 +354,7 @@ text_flow_into_shape()
             text->style->white_space.read("pre"); // Respect new lines.
             text->updateRepr();
 
-            DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT, _("Flow text into shape"));
+            DocumentUndo::done(doc, _("Flow text into shape"), INKSCAPE_ICON("draw-text"));
         }
     } else {
         if (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text)) {
@@ -425,7 +422,7 @@ text_flow_into_shape()
 
         text->deleteObject(true);
 
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT, _("Flow text into shape"));
+        DocumentUndo::done(doc, _("Flow text into shape"), INKSCAPE_ICON("draw-text"));
 
         desktop->getSelection()->set(SP_ITEM(root_object));
 
@@ -565,8 +562,7 @@ text_unflow ()
         }
     }
 
-    DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT,
-                       _("Unflow flowed text"));
+    DocumentUndo::done(doc, _("Unflow flowed text"), INKSCAPE_ICON("draw-text"));
 }
 
 void
@@ -617,9 +613,7 @@ flowtext_to_text()
     }
 
     if (did) {
-        DocumentUndo::done(desktop->getDocument(),
-                           SP_VERB_OBJECT_FLOWTEXT_TO_TEXT,
-                           _("Convert flowed text to text"));
+        DocumentUndo::done(desktop->getDocument(), _("Convert flowed text to text"), INKSCAPE_ICON("text-convert-to-regular"));
         selection->setReprList(reprs);
     } else if (ignored) {
         // no message for (did && ignored) because it is immediately overwritten

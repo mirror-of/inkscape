@@ -67,8 +67,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_effect =
 void
 add_actions_effect(InkscapeApplication* app)
 {
-    std::cout<<"add_actions_effect\n";
-
     auto *gapp = app->gio_app();
 
     // clang-format off

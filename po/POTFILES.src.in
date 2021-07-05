@@ -26,6 +26,7 @@
 ../src/actions/actions-selection-desktop.cpp
 ../src/actions/actions-selection-object.cpp
 ../src/actions/actions-selection.cpp
+../src/actions/actions-text.cpp
 ../src/actions/actions-tools.cpp
 ../src/actions/actions-transform.cpp
 ../src/actions/actions-window.cpp

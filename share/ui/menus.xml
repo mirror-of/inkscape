@@ -273,7 +273,7 @@
        <verb verb-id="RemoveLivePathEffect" /> -->
    </submenu>
    <submenu name="_Text">
-       <verb verb-id="DialogText" />
+       <!-- <verb verb-id="DialogText" />
        <verb verb-id="DialogSVGFonts" />
        <verb verb-id="DialogGlyphs" />
        <separator/>
@@ -287,7 +287,7 @@
        <separator/>
        <verb verb-id="SelectionTextRemoveKerns" />
        <separator/>
-       <verb verb-id="DialogSpellcheck" />  <!-- depends on WITH_GSPELL -->
+       <verb verb-id="DialogSpellcheck" />  depends on WITH_GSPELL -->
    </submenu>
    <submenu name="Filter_s">
        <filters-list/>

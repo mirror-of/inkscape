@@ -119,20 +119,6 @@ override) the bindings in the main default.xml.
 
   <bind key="j" modifiers="Primary,Alt" action="SelectionLinkedOffset" display="true" />
 
-<!-- Text -->
-
-  <bind key="w" modifiers="Alt" action="ObjectFlowText" display="true" />
-
-  <bind key="w" modifiers="Alt,Shift" action="ObjectUnFlowText" display="true" />
-
-  <bind action="SelectionTextToPath" />
-  <bind action="SelectionTextFromPath" />
-
-  <bind action="ObjectFlowtextToText" />
-  <bind action="SelectionTextRemoveKerns" />
-
-  <bind key="k" modifiers="Primary,Alt" action="DialogSpellcheck" display="true" />
-
 <!-- Layers -->
 
   <bind action="LayerHideAll" />
@@ -145,7 +131,6 @@ override) the bindings in the main default.xml.
 
 <!-- Dialogs -->
 
-  <bind key="t" modifiers="Primary,Shift" action="DialogText" display="true" />
 
   <bind action="DialogObjectAttributes" />
 
@@ -292,6 +277,8 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('Swatches')"                keys="&lt;primary&gt;&lt;shift&gt;w" />
   <bind gaction="win.dialog-open('Messages')" />
   <bind gaction="win.dialog-open('Layers')"                  keys="&lt;primary&gt;&lt;shift&gt;l" />
+  <bind gaction="win.dialog-open('Text')"                    keys="&lt;primary&gt;&lt;shift&gt;t"/>
+  <bind gaction="win.dialog-open('Spellcheck')"              keys="&lt;primary&gt;&lt;alt&gt;k"/>
 
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
@@ -412,5 +399,14 @@ override) the bindings in the main default.xml.
   <bind gaction="win.selection-move-to-layer-above" />
   <bind gaction="win.layer-rename" />
   <bind gaction="win.layer-delete" />
+
+  <!-- Text -->
+
+  <bind gaction="doc.text-flow-into-frame"                keys="&lt;alt&gt;w"/>
+  <bind gaction="doc.text-unflow"                         keys="&lt;alt&gt;&lt;shift&gt;w"/>
+  <bind gaction="doc.text-put-on-path" />
+  <bind gaction="doc.text-remove-from-path" />
+  <bind gaction="doc.text-convert-to-regular" />
+  <bind gaction="doc.text-unkern" />
 
 </keys>

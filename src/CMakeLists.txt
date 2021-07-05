@@ -253,6 +253,8 @@ set(inkscape_SRC
   actions/actions-selection-desktop.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
+  actions/actions-text.h
+  actions/actions-text.cpp
   actions/actions-tools.h
   actions/actions-tools.cpp
   actions/actions-transform.h

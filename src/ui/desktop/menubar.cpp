@@ -449,6 +449,10 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-layer.ui");
                     menuname = "layer-menu";
                 }
+                else if (strcmp(name, "_Text") == 0) {
+                    filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-text.ui");
+                    menuname = "text-menu";
+                }
                 
                 if(filename!=""){
                     try
