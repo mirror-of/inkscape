@@ -235,6 +235,8 @@ set(inkscape_SRC
   actions/actions-fit-canvas.cpp
   actions/actions-helper.h
   actions/actions-helper.cpp
+  actions/actions-help-url.h
+  actions/actions-help-url.cpp
   actions/actions-hide-lock.h
   actions/actions-hide-lock.cpp
   actions/actions-layer.h
@@ -257,6 +259,8 @@ set(inkscape_SRC
   actions/actions-text.cpp
   actions/actions-tools.h
   actions/actions-tools.cpp
+  actions/actions-tutorial.h
+  actions/actions-tutorial.cpp
   actions/actions-transform.h
   actions/actions-transform.cpp
   actions/actions-view-mode.h

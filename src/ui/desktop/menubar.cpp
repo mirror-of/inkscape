@@ -453,6 +453,10 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-text.ui");
                     menuname = "text-menu";
                 }
+                else if (strcmp(name, "_Help") == 0) {
+                    filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-help.ui");
+                    menuname = "help-menu";
+                }
                 
                 if(filename!=""){
                     try

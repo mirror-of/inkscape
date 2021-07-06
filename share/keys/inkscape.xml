@@ -161,10 +161,6 @@ override) the bindings in the main default.xml.
   <bind key="KP_6" modifiers="Primary,Alt" action="AlignHorizontalRight" display="true" />
   <bind key="KP_8" modifiers="Primary,Alt" action="AlignVerticalTop" display="true" />
 
-<!-- Help -->
-
-  <bind action="HelpAboutMemory" />
-  <bind action="HelpAbout" />
   <!-- There are also verbs for tutorials, if you really need them -->
   <!-- Other commands in Help are implemented as extensions, with ids of org.inkscape.help.* -->
 
@@ -408,5 +404,10 @@ override) the bindings in the main default.xml.
   <bind gaction="doc.text-remove-from-path" />
   <bind gaction="doc.text-convert-to-regular" />
   <bind gaction="doc.text-unkern" />
+
+  <!-- Help -->
+
+  <bind gaction="HelpAboutMemory" />
+  <bind gaction="HelpAbout" />
 
 </keys>

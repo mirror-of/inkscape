@@ -16,6 +16,7 @@
 ../src/actions/actions-file-window.cpp
 ../src/actions/actions-file.cpp
 ../src/actions/actions-fit-canvas.cpp
+../src/actions/actions-help-url.cpp
 ../src/actions/actions-hide-lock.cpp
 ../src/actions/actions-hint-data.cpp
 ../src/actions/actions-layer.cpp
@@ -28,6 +29,7 @@
 ../src/actions/actions-selection.cpp
 ../src/actions/actions-text.cpp
 ../src/actions/actions-tools.cpp
+../src/actions/actions-tutorial.cpp
 ../src/actions/actions-transform.cpp
 ../src/actions/actions-window.cpp
 ../src/auto-save.cpp

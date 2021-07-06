@@ -347,7 +347,7 @@
 
    </submenu>
    <submenu name="_Help">
-       <verb verb-id="HelpUrlManual" />
+       <!-- <verb verb-id="HelpUrlManual" />
        <verb verb-id="HelpUrlKeys" />
        <verb verb-id="HelpUrlAskQuestion" />
        <submenu name="Tutorials">
@@ -360,9 +360,9 @@
            <verb verb-id="TutorialsInterpolate" />
            <verb verb-id="TutorialsDesign" />
            <verb verb-id="TutorialsTips" />
-       </submenu>
+       </submenu> -->
        <!--verb verb-id="org.inkscape.dialogs.extensioneditor" /-->
-       <verb verb-id="HelpUrlMan" />
+       <!-- <verb verb-id="HelpUrlMan" />
        <verb verb-id="HelpUrlFAQ" />
        <verb verb-id="HelpUrlReleaseNotes" />
        <verb verb-id="HelpUrlReportBug" />
@@ -371,7 +371,7 @@
        <verb verb-id="HelpUrlSvg2Spec" />
        <separator/>
        <verb verb-id="HelpAboutMemory" />
-       <verb verb-id="HelpAbout" show-icons="true"/>
+       <verb verb-id="HelpAbout" show-icons="true"/> -->
        <!--verb verb-id="ShowLicense" /-->
    </submenu>
 
