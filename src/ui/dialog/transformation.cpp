@@ -76,12 +76,12 @@ Transformation::Transformation()
       _scalar_skew_vertical   (_("_Vertical:"),  _("Vertical skew angle (positive = clockwise), or absolute displacement, or percentage displacement"),  UNIT_TYPE_LINEAR,
                                "", "transform-skew-vertical", &_units_skew),
 
-      _scalar_transform_a     ("_A:", _("Transformation matrix element A")),
-      _scalar_transform_b     ("_B:", _("Transformation matrix element B")),
-      _scalar_transform_c     ("_C:", _("Transformation matrix element C")),
-      _scalar_transform_d     ("_D:", _("Transformation matrix element D")),
-      _scalar_transform_e     ("_E:", _("Transformation matrix element E"), UNIT_TYPE_LINEAR, "", "", &_units_transform),
-      _scalar_transform_f     ("_F:", _("Transformation matrix element F"), UNIT_TYPE_LINEAR, "", "", &_units_transform),
+      _scalar_transform_a     ("", _("Transformation matrix element A")),
+      _scalar_transform_b     ("", _("Transformation matrix element B")),
+      _scalar_transform_c     ("", _("Transformation matrix element C")),
+      _scalar_transform_d     ("", _("Transformation matrix element D")),
+      _scalar_transform_e     ("", _("Transformation matrix element E"), UNIT_TYPE_LINEAR, "", "", &_units_transform),
+      _scalar_transform_f     ("", _("Transformation matrix element F"), UNIT_TYPE_LINEAR, "", "", &_units_transform),
 
       _counterclockwise_rotate (),
       _clockwise_rotate (),
@@ -208,11 +208,13 @@ void Transformation::layoutPageMove()
     _scalar_move_horizontal.setDigits(3);
     _scalar_move_horizontal.setIncrements(0.1, 1.0);
     _scalar_move_horizontal.set_hexpand();
+    _scalar_move_horizontal.setWidthChars(7);
 
     _scalar_move_vertical.initScalar(-1e6, 1e6);
     _scalar_move_vertical.setDigits(3);
     _scalar_move_vertical.setIncrements(0.1, 1.0);
     _scalar_move_vertical.set_hexpand();
+    _scalar_move_vertical.setWidthChars(7);
 
     //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_HOR );
 
@@ -248,6 +250,7 @@ void Transformation::layoutPageScale()
     _scalar_scale_horizontal.setAbsoluteIsIncrement(true);
     _scalar_scale_horizontal.setPercentageIsIncrement(true);
     _scalar_scale_horizontal.set_hexpand();
+    _scalar_scale_horizontal.setWidthChars(7);
 
     _scalar_scale_vertical.initScalar(-1e6, 1e6);
     _scalar_scale_vertical.setValue(100.0, "%");
@@ -256,6 +259,7 @@ void Transformation::layoutPageScale()
     _scalar_scale_vertical.setAbsoluteIsIncrement(true);
     _scalar_scale_vertical.setPercentageIsIncrement(true);
     _scalar_scale_vertical.set_hexpand();
+    _scalar_scale_vertical.setWidthChars(7);
 
     _page_scale.table().attach(_scalar_scale_horizontal, 0, 0, 2, 1);
 
@@ -303,10 +307,15 @@ void Transformation::layoutPageRotate()
     Gtk::RadioButton::Group group = _counterclockwise_rotate.get_group();
     _clockwise_rotate.set_group(group);
 
-    _page_rotate.table().attach(_scalar_rotate,           0, 0, 2, 1);
-    _page_rotate.table().attach(_units_rotate,            2, 0, 1, 1);
-    _page_rotate.table().attach(_counterclockwise_rotate, 3, 0, 1, 1);
-    _page_rotate.table().attach(_clockwise_rotate,        4, 0, 1, 1);
+    auto box = Gtk::make_managed<Gtk::Box>();
+    _counterclockwise_rotate.set_halign(Gtk::ALIGN_START);
+    _clockwise_rotate.set_halign(Gtk::ALIGN_START);
+    box->pack_start(_counterclockwise_rotate);
+    box->pack_start(_clockwise_rotate);
+
+    _page_rotate.table().attach(_scalar_rotate, 0, 0, 1, 1);
+    _page_rotate.table().attach(_units_rotate,  1, 0, 1, 1);
+    _page_rotate.table().attach(*box,           1, 1, 1, 1);
 
     _scalar_rotate.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onRotateValueChanged));
@@ -327,11 +336,13 @@ void Transformation::layoutPageSkew()
     _scalar_skew_horizontal.setDigits(3);
     _scalar_skew_horizontal.setIncrements(0.1, 1.0);
     _scalar_skew_horizontal.set_hexpand();
+    _scalar_skew_horizontal.setWidthChars(7);
 
     _scalar_skew_vertical.initScalar(-1e6, 1e6);
     _scalar_skew_vertical.setDigits(3);
     _scalar_skew_vertical.setIncrements(0.1, 1.0);
     _scalar_skew_vertical.set_hexpand();
+    _scalar_skew_vertical.setWidthChars(7);
 
     _page_skew.table().attach(_scalar_skew_horizontal, 0, 0, 2, 1);
     _page_skew.table().attach(_units_skew,             2, 0, 1, 1);
@@ -346,11 +357,23 @@ void Transformation::layoutPageSkew()
 }
 
 
-
 void Transformation::layoutPageTransform()
 {
     _units_transform.setUnitType(UNIT_TYPE_LINEAR);
     _units_transform.set_tooltip_text(_("E and F units"));
+    _units_transform.set_halign(Gtk::ALIGN_END);
+    _units_transform.set_margin_top(3);
+    _units_transform.set_margin_bottom(3);
+
+    UI::Widget::Scalar* labels[] = {&_scalar_transform_a, &_scalar_transform_b, &_scalar_transform_c, &_scalar_transform_d, &_scalar_transform_e, &_scalar_transform_f};
+    for (auto label : labels) {
+        label->hide_label();
+        label->set_margin_start(2);
+        label->set_margin_end(2);
+    }
+    _page_transform.table().set_column_spacing(0);
+    _page_transform.table().set_row_spacing(1);
+    _page_transform.table().set_column_homogeneous(true);
 
     _scalar_transform_a.setWidgetSizeRequest(65, -1);
     _scalar_transform_a.setRange(-1e10, 1e10);
@@ -360,7 +383,8 @@ void Transformation::layoutPageTransform()
     _scalar_transform_a.setWidthChars(6);
     _scalar_transform_a.set_hexpand();
 
-    _page_transform.table().attach(_scalar_transform_a, 0, 0, 1, 1);
+    _page_transform.table().attach(*Gtk::make_managed<Gtk::Label>("A:"), 0, 0, 1, 1);
+    _page_transform.table().attach(_scalar_transform_a, 0, 1, 1, 1);
 
     _scalar_transform_a.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
@@ -373,7 +397,8 @@ void Transformation::layoutPageTransform()
     _scalar_transform_b.setWidthChars(6);
     _scalar_transform_b.set_hexpand();
 
-    _page_transform.table().attach(_scalar_transform_b, 0, 1, 1, 1);
+    _page_transform.table().attach(*Gtk::make_managed<Gtk::Label>("B:"), 0, 2, 1, 1);
+    _page_transform.table().attach(_scalar_transform_b, 0, 3, 1, 1);
 
     _scalar_transform_b.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
@@ -386,7 +411,8 @@ void Transformation::layoutPageTransform()
     _scalar_transform_c.setWidthChars(6);
     _scalar_transform_c.set_hexpand();
 
-    _page_transform.table().attach(_scalar_transform_c, 1, 0, 1, 1);
+    _page_transform.table().attach(*Gtk::make_managed<Gtk::Label>("C:"), 1, 0, 1, 1);
+    _page_transform.table().attach(_scalar_transform_c, 1, 1, 1, 1);
 
     _scalar_transform_c.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
@@ -400,7 +426,8 @@ void Transformation::layoutPageTransform()
     _scalar_transform_d.setWidthChars(6);
     _scalar_transform_d.set_hexpand();
 
-    _page_transform.table().attach(_scalar_transform_d, 1, 1, 1, 1);
+    _page_transform.table().attach(*Gtk::make_managed<Gtk::Label>("D:"), 1, 2, 1, 1);
+    _page_transform.table().attach(_scalar_transform_d, 1, 3, 1, 1);
 
     _scalar_transform_d.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
@@ -414,7 +441,8 @@ void Transformation::layoutPageTransform()
     _scalar_transform_e.setWidthChars(6);
     _scalar_transform_e.set_hexpand();
 
-    _page_transform.table().attach(_scalar_transform_e, 2, 0, 1, 1);
+    _page_transform.table().attach(*Gtk::make_managed<Gtk::Label>("E:"), 2, 0, 1, 1);
+    _page_transform.table().attach(_scalar_transform_e, 2, 1, 1, 1);
 
     _scalar_transform_e.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
@@ -428,14 +456,34 @@ void Transformation::layoutPageTransform()
     _scalar_transform_f.setWidthChars(6);
     _scalar_transform_f.set_hexpand();
 
-    _page_transform.table().attach(_scalar_transform_f, 2, 1, 1, 1);
-    _page_transform.table().attach(_units_transform, 2, 2, 1, 1);
+    _page_transform.table().attach(*Gtk::make_managed<Gtk::Label>("F:"), 2, 2, 1, 1);
+    _page_transform.table().attach(_scalar_transform_f, 2, 3, 1, 1);
+
+    auto img = Gtk::make_managed<Gtk::Image>();
+    img->set_from_icon_name("matrix-2d", Gtk::ICON_SIZE_BUTTON);
+    img->set_pixel_size(52);
+    _page_transform.table().attach(*img, 0, 5, 1, 1);
+
+    auto descr = Gtk::make_managed<Gtk::Label>();
+    descr->set_line_wrap();
+    descr->set_line_wrap_mode(Pango::WRAP_WORD);
+    descr->set_text(
+        "<small>"
+        "<a href=\"https://www.w3.org/TR/SVG11/coords.html#TransformMatrixDefined\">"
+        "2D transformation matrix</a> that combines translation (E,F), scaling (A,D),"
+        " rotation (A-D) and shearing (B,C)."
+        "</small>"
+    );
+    descr->set_use_markup();
+    _page_transform.table().attach(*descr, 1, 5, 2, 1);
+
+    _page_transform.table().attach(_units_transform, 2, 4, 1, 1);
 
     _scalar_transform_f.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
 
     // Edit existing matrix
-    _page_transform.table().attach(_check_replace_matrix, 0, 3, 2, 1);
+    _page_transform.table().attach(_check_replace_matrix, 0, 4, 2, 1);
 
     _check_replace_matrix.set_active(false);
     _check_replace_matrix.signal_toggled()

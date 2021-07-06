@@ -168,6 +168,9 @@ public:
      * if a callback checks it, it must reset it back to false.
      */
     bool setProgrammatically;
+
+    // permanently hide label part
+    void hide_label();
 };
 
 } // namespace Widget
