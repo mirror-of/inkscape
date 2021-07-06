@@ -546,7 +546,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_SNAP_ALIGNMENT:
-            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY, value ? sp_str_to_bool(value) : FALSE);
+            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY, value ? sp_str_to_bool(value) : TRUE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF:
@@ -554,7 +554,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_SNAP_DISTRIBUTION:
-            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_DISTRIBUTION_CATEGORY, value ? sp_str_to_bool(value) : FALSE);
+            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_DISTRIBUTION_CATEGORY, value ? sp_str_to_bool(value) : TRUE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_CURRENT_LAYER:
