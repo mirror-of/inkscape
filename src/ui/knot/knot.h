@@ -41,7 +41,7 @@ class CanvasItemCtrl;
  * Desktop-bound visual control object.
  *
  * A knot is a draggable object, with callbacks to change something by
- * dragging it, visuably represented by a canvas item (mostly square).
+ * dragging it, visually represented by a canvas item (mostly square).
  *
  * See also KnotHolderEntity.
  * See also ControlPoint (which does the same kind of things).
