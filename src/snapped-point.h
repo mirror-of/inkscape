@@ -82,7 +82,7 @@ public:
     std::optional<Geom::Point> getAlignmentTarget() const
     {
         if (_alignment_target.has_value())
-            return _alignment_target.value();
+            return *_alignment_target;
         else
             return {};
     }
@@ -90,14 +90,14 @@ public:
     std::optional<Geom::Point> getAlignmentTarget2() const
     {
         if (_alignment_target2.has_value())
-            return _alignment_target2.value();
+            return *_alignment_target2;
         else
             return  {};
     }
 
     Geom::Coord getDistanceToAlignTarget() const
     {
-        return _alignment_target.has_value() ? Geom::L2(_point - _alignment_target.value()) : Geom::infinity();
+        return _alignment_target.has_value() ? Geom::L2(_point - *_alignment_target) : Geom::infinity();
     }
 
     bool getAtIntersection() const {return _at_intersection;}
@@ -109,7 +109,7 @@ public:
     SnapTargetType getTarget() const {return _target;}
     SnapTargetType getAlignmentTargetType() const
     {
-        return _alignment_target_type.has_value() ? _alignment_target_type.value() : SNAPTARGET_UNDEFINED;
+        return _alignment_target_type.has_value() ? *_alignment_target_type : SNAPTARGET_UNDEFINED;
     }
     void setTargetBBox(Geom::OptRect const target) {_target_bbox = target;}
     Geom::OptRect const getTargetBBox() const {return _target_bbox;}
