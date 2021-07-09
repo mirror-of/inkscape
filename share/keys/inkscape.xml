@@ -275,6 +275,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('Layers')"                  keys="&lt;primary&gt;&lt;shift&gt;l" />
   <bind gaction="win.dialog-open('Text')"                    keys="&lt;primary&gt;&lt;shift&gt;t"/>
   <bind gaction="win.dialog-open('Spellcheck')"              keys="&lt;primary&gt;&lt;alt&gt;k"/>
+  <bind gaction="win.dialog-open('Memory')" />
 
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
@@ -336,7 +337,7 @@ override) the bindings in the main default.xml.
   <bind gaction="app.select-path-break-apart"             keys="&lt;primary&gt;&lt;shift&gt;k"/>
   <bind gaction="win.select-path-inset"                   keys="&lt;primary&gt;parenleft, &lt;primary&gt;&lt;shift&gt;parenleft,  &lt;primary&gt;&lt;shift&gt;9, &lt;primary&gt;9"/>
   <bind gaction="win.select-path-outset"                  keys="&lt;primary&gt;parenright, &lt;primary&gt;&lt;shift&gt;parenright, &lt;primary&gt;&lt;shift&gt;0,   &lt;primary&gt;0"/>
-  <bind gaction="app.select-path-simplify"                keys="l"/>
+  <bind gaction="app.select-path-simplify"                keys="&lt;shift&gt;l"/>
   <bind gaction="app.paste-path-effect"                   keys="ampersand, &lt;primary&gt;7"/>
   <bind gaction="win.select-path-reverse"/>
   <bind gaction="app.remove-path-effect"/>
@@ -407,7 +408,6 @@ override) the bindings in the main default.xml.
 
   <!-- Help -->
 
-  <bind gaction="HelpAboutMemory" />
-  <bind gaction="HelpAbout" />
+  <bind gaction="doc.help-about" />
 
 </keys>
