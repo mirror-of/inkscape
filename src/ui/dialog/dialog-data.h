@@ -28,7 +28,9 @@ public:
     Glib::ustring icon_name;
 };
 
-static std::map<Glib::ustring, DialogData> dialog_data =
+// short-term fix for missing dialog titles; map<ustring, T> exhibits a bug where "SVGFonts" entry cannot be found
+// static std::map<Glib::ustring, DialogData> dialog_data =
+static std::map<std::string, DialogData> dialog_data =
 {
     // clang-format off
     {"AlignDistribute",    {N_("_Align and Distribute..."), INKSCAPE_ICON("dialog-align-and-distribute")}},
@@ -54,7 +56,7 @@ static std::map<Glib::ustring, DialogData> dialog_data =
     {"Preferences",        {N_("P_references"),             INKSCAPE_ICON("preferences-system")         }},
     {"Selectors",          {N_("_Selectors and CSS..."),    INKSCAPE_ICON("dialog-selectors")           }},
     {"Style",              {N_("Style Dialog..."),          ""                                          }},
-    {"SVGFonts",           {N_("SVG Font Editor..."),       ""                                          }},
+    {"SVGFonts",           {N_("SVG Font Editor..."),       INKSCAPE_ICON("dialog-svg-font")            }},
     {"Swatches",           {N_("S_watches..."),             INKSCAPE_ICON("swatches")                   }},
     {"Symbols",            {N_("S_ymbols..."),              INKSCAPE_ICON("symbols")                    }},
     {"Text",               {N_("_Text and Font..."),        INKSCAPE_ICON("dialog-text-and-font")       }},
