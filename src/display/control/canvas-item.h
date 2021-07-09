@@ -148,7 +148,7 @@ protected:
 
 /** Type for linked list storing CanvasItem's.
  *
- * Used to speed deletion when a group containes a large number of item's (as in nodes for a
+ * Used to speed deletion when a group contains a large number of item's (as in nodes for a
  * complex path).
  */
 typedef boost::intrusive::list<

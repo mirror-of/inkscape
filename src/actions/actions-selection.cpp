@@ -156,7 +156,7 @@ get_all_items_recursive(std::vector<SPObject *> &objects, SPObject *object, Glib
  * 'groups':            All groups (including layers).
  * 'no-layers':         All top level objects in all layers (matches GUI "Select All in All Layers").
  * 'no-groups':         All objects other than groups (and layers).
- * 'all':               All objects including groups and their decendents.
+ * 'all':               All objects including groups and their descendents.
  *
  * Note: GUI "Select All" requires knowledge of selected layer, which is a desktop property.
  */

@@ -231,7 +231,7 @@ private: // variables
     // History
     CPHistoryXML _history_xml;
     /**
-     * Remember the mode we are in helps in unecessary signal disconnection and reconnection
+     * Remember the mode we are in helps in unnecessary signal disconnection and reconnection
      * Used by set_mode()
      */
     CPMode _mode = CPMode::SHELL;
@@ -239,7 +239,7 @@ private: // variables
     // set_mode() switches between mode hence checks if it already in the target mode.
     // Constructed value is sometimes SEARCH being the first Item for now
     // set_mode() never attaches the on search listener then
-    // This initialising value can be any thing ohter than the initial required mode
+    // This initialising value can be any thing other than the initial required mode
     // Example currently it's open in search mode
 
     /**

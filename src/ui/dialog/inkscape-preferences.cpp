@@ -1131,10 +1131,10 @@ void InkscapePreferences::resetIconsColors(bool themechange)
         if (INKSCAPE.themecontext->getColorizeProvider()) {
             Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themecontext->getColorizeProvider());
         }
-        // This colors are setted on style.css of inkscape
+        // This colors are set on style.css of inkscape
         Gdk::RGBA base_color = _symbolic_base_color.get_style_context()->get_color();
-        // This is a hack to fix a proble style is not updated enoght fast on
-        // chage from dark to bright themes
+        // This is a hack to fix a proble style is not updated enough fast on
+        // change from dark to bright themes
         if (themechange) {
             base_color = _symbolic_base_color.get_style_context()->get_background_color();
         }
@@ -1671,7 +1671,7 @@ void InkscapePreferences::initPageUI()
             if (std::string::npos != last_slash_idx) {
                 folder.erase(0, last_slash_idx + 1);
             }
-            // we want use Adwaita intead fallback hicolor theme
+            // we want use Adwaita instead fallback hicolor theme
             if (folder == default_icon_theme) {
                 continue;
             }

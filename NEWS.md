@@ -1,6 +1,6 @@
 Inkscape 1.0beta2
 
-Release hilights
+Release highlights
 
 Released on 2019-12-01
 

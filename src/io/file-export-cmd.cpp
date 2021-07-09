@@ -179,7 +179,7 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
         bool extension_for_fn_exists = false;
         bool exported = false;
         // if no extension is found, the entire list of extensions is walked through,
-        // so we can use the same loop to construct the list of available formats for the error messsage
+        // so we can use the same loop to construct the list of available formats for the error message
         std::list<std::string> filetypes({".svg", ".png", ".ps", ".eps", ".pdf"});
         std::list<std::string> exts_for_fn;
         for (auto oext : extension_list) {

@@ -87,7 +87,7 @@ void find_join_iterators(ControlPointSelection &sel, IterPairList &pairs)
     }
 }
 
-/** After this function, first should be at the end of path and second at the beginnning.
+/** After this function, first should be at the end of path and second at the beginning.
  * @returns True if the nodes are in the same subpath */
 bool prepare_join(IterPair &join_iters)
 {

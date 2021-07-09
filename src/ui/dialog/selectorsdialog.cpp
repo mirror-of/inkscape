@@ -408,7 +408,7 @@ SelectorsDialog::~SelectorsDialog()
 {
     g_debug("SelectorsDialog::~SelectorsDialog");
 
-    // Detatch watchers to prevent crashes.
+    // Detach watchers to prevent crashes.
     _updateWatchers(nullptr);
 }
 

@@ -67,7 +67,7 @@ InkScale::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
   // Fill widget proportional to value.
   double fraction = get_fraction();
 
-  // Get trough rectangle and clipping point for text.
+  // Get through rectangle and clipping point for text.
   Gdk::Rectangle slider_area = get_range_rect();
   double clip_text_x = slider_area.get_x() + slider_area.get_width() * fraction;
 

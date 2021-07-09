@@ -359,7 +359,7 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
 }
 
 /**
- * Set canvas backbround color (display only).
+ * Set canvas background color (display only).
  */
 void
 Canvas::set_background_color(guint32 rgba)
@@ -479,7 +479,7 @@ Canvas::get_preferred_height_vfunc (int& minimum_height, int& natural_height) co
 bool
 Canvas::on_scroll_event(GdkEventScroll *scroll_event)
 {
-    // Scroll canvas and in Select Tool, cycle selection through objets under cursor.
+    // Scroll canvas and in Select Tool, cycle selection through objects under cursor.
     return emit_event(reinterpret_cast<GdkEvent *>(scroll_event));
 }
 
@@ -1462,7 +1462,7 @@ Canvas::set_cursor() {
 
 
 // This routine reacts to events from the canvas. It's main purpose is to find the canvas item
-// closest to the cursor where the event occured and then send the event (sometimes modified) to
+// closest to the cursor where the event occurred and then send the event (sometimes modified) to
 // that item. The event then bubbles up the canvas item tree until an object handles it. If the
 // widget is redrawn, this routine may be called again for the same event.
 //
@@ -1698,7 +1698,7 @@ Canvas::emit_event(GdkEvent *event)
             item = _grabbed_canvas_item;
         }
 
-        // Propogate the event up the canvas item hierarchy until handled.
+        // Propagate the event up the canvas item hierarchy until handled.
         while (item) {
             finished = item->handle_event(event_copy);
             if (finished) break;

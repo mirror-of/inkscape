@@ -248,7 +248,7 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
         buf->cr->stroke_preserve();
     }
 
-    buf->cr->begin_new_path(); // Clear path or get wierd artifacts.
+    buf->cr->begin_new_path(); // Clear path or get weird artifacts.
 
     // Uncomment to show bounds
     // Geom::Rect bounds = _bounds;

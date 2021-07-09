@@ -428,7 +428,7 @@ void SPFilter::set_filter_region(double x, double y, double width, double height
 }
 
 /**
- * Check each filter primative for conflicts with this object.
+ * Check each filter primitive for conflicts with this object.
  */
 bool SPFilter::valid_for(SPObject const *obj) const
 {

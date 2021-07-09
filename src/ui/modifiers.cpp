@@ -26,7 +26,7 @@ namespace Modifiers {
 
 Modifier::Lookup Modifier::_modifier_lookup;
 
-// these must be in the same order as the * enum in "modifers.h"
+// these must be in the same order as the * enum in "modifiers.h"
 decltype(Modifier::_modifiers) Modifier::_modifiers {
     // Canvas modifiers
     {Type::CANVAS_PAN_Y, new Modifier("canvas-pan-y", _("Vertical pan"), _("Pan/Scroll up and down"), ALWAYS, CANVAS, SCROLL)},

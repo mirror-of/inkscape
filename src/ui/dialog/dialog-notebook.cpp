@@ -486,7 +486,7 @@ void DialogNotebook::on_close_button_click_event(Gtk::Widget *page)
 
 /**
  * Callback to toggle all tab labels to the selected state.
- * @param show: wether you want the labels to show or not
+ * @param show: whether you want the labels to show or not
  */
 void DialogNotebook::toggle_tab_labels_callback(bool show)
 {

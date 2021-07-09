@@ -63,7 +63,7 @@ public:
     guint32 green_color;
     guint32 highlight_color;
 
-    // Red - Last segement as it's drawn.
+    // Red - Last segment as it's drawn.
     Inkscape::CanvasItemBpath *red_bpath;
     std::unique_ptr<SPCurve> red_curve;
     std::optional<Geom::Point> red_curve_get_last_point();

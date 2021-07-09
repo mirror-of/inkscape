@@ -156,7 +156,7 @@ GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
  * \param[in] widget The widget to start traversal from - top of the tree
  * \param[in] eval   The callback invoked for each visited widget
  *
- * \return The widget for which 'eval' returned true, or nullptr overwise.
+ * \return The widget for which 'eval' returned true, or nullptr otherwise.
  * Note: it could be a starting widget too.
  */
 Gtk::Widget* sp_traverse_widget_tree(Gtk::Widget* widget, const std::function<bool (Gtk::Widget*)>& eval) {

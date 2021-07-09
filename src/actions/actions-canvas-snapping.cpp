@@ -45,7 +45,7 @@ canvas_snapping_toggle(SPDocument* document, const SPAttr option)
         return;
     }
 
-    // This is a bit ackward.
+    // This is a bit awkward.
     SPObject* obj = document->getObjectByRepr(repr);
     SPNamedView* nv = dynamic_cast<SPNamedView *> (obj);
     if (nv == nullptr) {
@@ -311,7 +311,7 @@ set_actions_canvas_snapping(SPDocument* document)
         return;
     }
 
-    // This is a bit ackward.
+    // This is a bit awkward.
     SPObject* obj = document->getObjectByRepr(repr);
     SPNamedView* nv = dynamic_cast<SPNamedView *> (obj);
 

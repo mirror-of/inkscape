@@ -35,7 +35,7 @@
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 
     /*
-     *    Sort items by their x co-ordinates, taking account of y (keeps rows intact)
+     *    Sort items by their x coordinates, taking account of y (keeps rows intact)
      *
      *    <0 *elem1 goes before *elem2
      *    0  *elem1 == *elem2
@@ -75,7 +75,7 @@
     }
 
     /*
-     *    Sort items by their y co-ordinates.
+     *    Sort items by their y coordinates.
      */
     static bool sp_compare_y_position(SPItem *first, SPItem *second)
     {

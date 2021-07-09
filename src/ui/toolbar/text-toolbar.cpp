@@ -2252,12 +2252,12 @@ void TextToolbar::subselection_wrap_toggle(bool start)
 /*
 * This function parse the just created line height in one or more lines of a text subselection
 * can recibe 2 kinds of input because when we store a text element we apply a fallback that change 
-* structure. This visualy is not reflected but user maybe want to change a part of this subselection
+* structure. This visually is not reflected but user maybe want to change a part of this subselection
 * once the falback is created, so we need more complex here to fill the gap.
-* Basicaly we have a line height changed in the new wraper element/s between wrap_start and wrap_end
+* Basically we have a line height changed in the new wrapper element/s between wrap_start and wrap_end
 * this variables store starting iterator of first char in line and last char in line in a subselection
 * this elements are styled well but we can have orphands text nodes before and after the subselection.
-* this normaly 3 elements are inside a container as direct child of a text element, so we need to apply
+* this normally 3 elements are inside a container as direct child of a text element, so we need to apply
 * the container style to the optional previous and last text nodes warping into a new element that get the
 * container style (this are not part to the subsselection). After wrap we unindent all child of the container and
 * remove the container
@@ -2279,7 +2279,7 @@ void TextToolbar::prepare_inner()
                 return;
             }
 
-            // We check for external files with text nodes direct children of text elemet
+            // We check for external files with text nodes direct children of text element
             // and wrap it into a tspan elements as inkscape do.
             if (text) {
                 std::vector<SPObject *> childs = spitem->childList(false);
@@ -2303,7 +2303,7 @@ void TextToolbar::prepare_inner()
             }
 
             // Here we remove temporary the shape to allow layout calculate where are the warp_end and warpo_start
-            // position if one of this are hiden because the previous line height changed
+            // position if one of this are hidden because the previous line height changed
             if (text) {
                 text->hide_shape_inside();
             }
@@ -2325,9 +2325,9 @@ void TextToolbar::prepare_inner()
             }
             SPObject *startobj = reinterpret_cast<SPObject *>(rawptr_start);
             SPObject *endobj = reinterpret_cast<SPObject *>(rawptr_end);
-            // here we try to slect the elements where we need to work
+            // here we try to select the elements where we need to work
             // looping parent while text element in start and end
-            // and geting this and the inbetween elements
+            // and getting this and the inbetween elements
             SPObject *start = startobj;
             SPObject *end   = endobj;
             while (start->parent != spobject)
@@ -2363,7 +2363,7 @@ void TextToolbar::prepare_inner()
                         // mayve we can move directly but the safer for me is duplicate
                         // inject into the new element and delete original
                         for (auto fts_child : fts_childs) {
-                            // is this check necesary?
+                            // is this check necessary?
                             if (fts_child) {
                                 Inkscape::XML::Node *fts_child_node = fts_child->getRepr()->duplicate(xml_doc);
                                 flowtspan->getRepr()->removeChild(fts_child->getRepr());
@@ -2391,9 +2391,9 @@ void TextToolbar::prepare_inner()
                             container->getRepr()->removeChild(child->getRepr());
                         }
                     } else if (spstring) {
-                        // we are on a text node, we act diferent if in a text or flowtext. 
+                        // we are on a text node, we act different if in a text or flowtext. 
                         // wrap a duplicate of the element and unindent after the prevchild
-                        // and finaly delete original
+                        // and finally delete original
                         Inkscape::XML::Node *string_node = xml_doc->createTextNode(spstring->string.c_str());
                         if (text) {
                             Inkscape::XML::Node *tspan_node = xml_doc->createElement("svg:tspan");

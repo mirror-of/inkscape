@@ -420,7 +420,7 @@ void SPOffset::set_shape() {
 
         //  if (o_width >= 1.0)
         //  {
-        //    orig->Coalesce (0.1);  // small treshhold, since we only want to get rid of small segments
+        //    orig->Coalesce (0.1);  // small threshold, since we only want to get rid of small segments
         // the curve should already be computed by the Outline() function
         //   orig->ConvertEvenLines (1.0);
         //   orig->Simplify (0.5);

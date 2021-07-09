@@ -173,7 +173,7 @@ protected:
     virtual DrawingItem *_pickItem(Geom::Point const &/*p*/, double /*delta*/, unsigned /*flags*/) { return nullptr; }
     virtual bool _canClip() { return false; }
 
-    // static functons start here
+    // static functions start here
 
     static void _applyAntialias(DrawingContext & /*dc*/, unsigned /*_antialias*/);
 

@@ -198,7 +198,7 @@ void PathVectorSatellites::updateSatelliteType(SatelliteType satellitetype, bool
 void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
 {
     // pathv && _pathvector came here:
-    // * with diferent number of nodes
+    // * with different number of nodes
     // * without empty subpats
     // * _pathvector and satellites (old data) are paired
     Satellites satellites;

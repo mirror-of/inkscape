@@ -40,7 +40,7 @@ class FileDialogBaseWin32
 protected:
     /// Abstract Constructor
     /// @param parent The parent window for the dialog
-    /// @param dir The directory to begin browing from
+    /// @param dir The directory to begin browsing from
     /// @param title The title caption for the dialog in UTF-8
     /// @param type The dialog type
     /// @param preferenceBase The preferences key
@@ -124,7 +124,7 @@ class FileOpenDialogImplWin32 : public FileOpenDialog, public FileDialogBaseWin3
 public:
     /// Constructor
     /// @param parent The parent window for the dialog
-    /// @param dir The directory to begin browing from
+    /// @param dir The directory to begin browsing from
     /// @param title The title caption for the dialog in UTF-8
     /// @param type The dialog type
     FileOpenDialogImplWin32(Gtk::Window &parent,

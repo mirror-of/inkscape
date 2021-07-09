@@ -17,7 +17,7 @@
 
  - user operations on a pool of objects of type T are:
    - T *draw() : obtain a unused slot to store an object T
-   - void drop(T *) : realease a slot
+   - void drop(T *) : release a slot
 
 -- implementation:
 
@@ -44,7 +44,7 @@
    unused slots starting at <next>)
 
  - insertions and deletions in this list are done at the root <next>.
-   if <next> points to NULL (no slots are availlable) when a draw()
+   if <next> points to NULL (no slots are available) when a draw()
    operation is performed a new block is allocated, and the unused slots
    list is filled with the allocated slots.
 

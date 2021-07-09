@@ -605,8 +605,8 @@ public:
      * searching into the tree. The key part is that since it is a template
      * you have flexibility on the container, and the comparison that is
      * being used. Typically it will be used with something like a
-     * std::list<std::string> which will compare agains the node's name
-     * but more complex searchs could be imagined.
+     * std::list<std::string> which will compare against the node's name
+     * but more complex searches could be imagined.
      */
     template <typename T>
     Node *findChildPath(T list)

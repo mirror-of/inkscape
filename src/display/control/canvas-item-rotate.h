@@ -59,7 +59,7 @@ protected:
     SPDesktop *_desktop = nullptr;
     Geom::Point _center;         // Center of screen.
     Geom::Point _cursor;         // Position of cursor relative to center (after angle snapping).
-    double _current_angle = 0.0; // Rotation in degress.
+    double _current_angle = 0.0; // Rotation in degrees.
     double _start_angle = -1000; // Initial angle, determined by cursor position.
     Cairo::RefPtr<Cairo::ImageSurface> _surface_copy;    // Copy of original surface.
 };

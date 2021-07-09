@@ -112,7 +112,7 @@ To build in Non-Linux Platforms check out `INSTALL.md` (Links to Inkscape Wiki p
 Profiling
 ---------
 
-To run with profiling, add `-DWITH_PROFILING=ON` to the above cmake script. Compiling and running will be slower and the gmon file will apear only after Inkscape quits.
+To run with profiling, add `-DWITH_PROFILING=ON` to the above cmake script. Compiling and running will be slower and the gmon file will appear only after Inkscape quits.
 
 See: https://wiki.inkscape.org/wiki/index.php/Profiling
 

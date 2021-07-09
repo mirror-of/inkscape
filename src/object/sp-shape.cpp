@@ -470,7 +470,7 @@ void SPShape::modified(unsigned int flags) {
 }
 
 Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const {
-    // If the object is clipped, the update funcation that invalidates
+    // If the object is clipped, the update function that invalidates
     // the cache doesn't get called if the object is moved, so we need
     // to compare the transformations as well.
 

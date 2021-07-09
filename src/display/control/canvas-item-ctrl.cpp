@@ -89,7 +89,7 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, Inkscape::CanvasItemCtrlS
 }
 
 /**
- * Set the postion. Point is in document coordinates.
+ * Set the position. Point is in document coordinates.
  */
 void CanvasItemCtrl::set_position(Geom::Point const &position)
 {

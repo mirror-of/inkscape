@@ -79,7 +79,7 @@ private:
     /** Finds and snaps to points that is equidistant from surrounding bboxes
      * @param interm snap results
      * @param source point to snap 
-     * @param bounding box of the selecton to snap
+     * @param bounding box of the selection to snap
      * @param unselected nodes in case editing nodes (never used here, remove?)
      * @param active snap constraint
      * @param projection of the source point on the constraint (never used, remove?)

@@ -1299,7 +1299,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
     // ================== GUI and Shell ================
 
-    // Use of most commmand line options turns off use of gui unless explicitly requested!
+    // Use of most command line options turns off use of gui unless explicitly requested!
     // Listed in order that they appear in constructor.
     if (options->contains("pipe")                  ||
 

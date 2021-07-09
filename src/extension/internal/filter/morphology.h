@@ -263,7 +263,7 @@ Outline::get_filter_text (Inkscape::Extension::Extension * ext)
 
     const gchar *position = ext->get_param_optiongroup("position");
     if((g_ascii_strcasecmp("inside", position) == 0)) {
-    // Indide
+    // Inside
         c1in << "SourceGraphic";
         c1in2 << "blur1";
         c1op << "out";

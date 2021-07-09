@@ -155,7 +155,7 @@ notebook.blink > header > tabs > tab:checked {
     color: inherit;
 }
 
-/* atribute dialog popup size */
+/* attribute dialog popup size */
 .attrpop textview {
     font-size: 13px;
 }
@@ -163,7 +163,7 @@ notebook.blink > header > tabs > tab:checked {
 /* 
 *to get system default colors
 * with Gdk::RGBA success =_symbolic_error_color.get_stseparatole_context()->get_color();
-* _symbolic_error_color has one of this calsses applied
+* _symbolic_error_color has one of this classes applied
 */
 
 .system_base_color {

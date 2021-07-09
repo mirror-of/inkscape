@@ -116,7 +116,7 @@ CommandPalette::CommandPalette()
     _CPSuggestions->set_activate_on_single_click();
     _CPSuggestions->set_selection_mode(Gtk::SELECTION_SINGLE);
 
-    // Setup operations [actions, verbs, extenstions]
+    // Setup operations [actions, verbs, extensions]
     {
         // setup actions - win doc actions loaded in open()
         load_app_actions();
@@ -153,7 +153,7 @@ CommandPalette::CommandPalette()
         }
     }
 
-    // History managment
+    // History management
     {
         const auto history = _history_xml.get_operation_history();
 
@@ -563,7 +563,7 @@ bool CommandPalette::operate_recent_file(Glib::ustring const &uri, bool const im
 /**
  * Maybe replaced by: Temporary arrangement may be replaced by snippets
  * This can help us provide parameters for multiple argument function
- * whose actions take a sring as param
+ * whose actions take a string as param
  */
 bool CommandPalette::ask_action_parameter(const ActionPtrName &action_ptr_name)
 {

@@ -171,7 +171,7 @@ public:
     void notifyAttributeChanged( Node &node, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
         /* Weird things happen on undo! we get notified about the child being removed, but after that we still get
          * notified for attributes being changed on this XML node! In that case the corresponding SPObject might already
-         * have been deleted and the pointer to might be invalid, leading to a segfault if we're not carefull.
+         * have been deleted and the pointer to might be invalid, leading to a segfault if we're not careful.
          * So after we initiated the update of the treeview using _objectsChangedWrapper() in notifyChildRemoved(), the
          * _pending_update flag is set, and we will no longer process any notifyAttributeChanged()
          * Reproducing the crash: new document -> open objects panel -> draw freehand line -> undo -> segfault (but only
@@ -1325,7 +1325,7 @@ void ObjectsPanel::_doTreeMove( )
 }
 
 /**
- * Prevents the treeview from emiting and responding to most signals; needed when it's not up to date
+ * Prevents the treeview from emitting and responding to most signals; needed when it's not up to date
  */
 void ObjectsPanel::_blockAllSignals(bool should_block = true) {
 

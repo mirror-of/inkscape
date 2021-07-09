@@ -1394,7 +1394,7 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
 // this two functions are commented because are used on clipboard
 // and because slow the text pastinbg and usage a lot
 // and couldent get it working properly we miss font size font style or never work
-// and user usualy want paste as plain text and get the position context
+// and user usually want paste as plain text and get the position context
 // style. Anyway I retain for further usage.
 
 /* static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
@@ -1843,7 +1843,7 @@ static void sp_text_context_forget_text(TextTool *tc)
      * or selection changed signal messes everything up */
     tc->text = nullptr;
 
-/* FIXME: this automatic deletion when nothing is inputted crashes the XML edittor and also crashes when duplicating an empty flowtext.
+/* FIXME: this automatic deletion when nothing is inputted crashes the XML editor and also crashes when duplicating an empty flowtext.
     So don't create an empty flowtext in the first place? Create it when first character is typed.
     */
 /*

@@ -337,7 +337,7 @@ void OrderingPoint::EnforceSymmetric(const OrderingPoint &other)
 
 void OrderingPoint::Dump()
 {
-    // COMENTED TO SUPRESS WARNING UNUSED AUTOR TAKE IT UNCOMENTED
+    // COMMENTED TO SUPPRESS WARNING UNUSED AUTHOR TAKE IT UNCOMMENTED
     // Coord dist0 = nearest[0] ? distance(point, nearest[0]->point) : -1.0;
     // Coord dist1 = nearest[1] ? distance(point, nearest[1]->point) : -1.0;
     // int idx0 = nearest[0] ? nearest[0]->infoex->idx : -1;
@@ -725,7 +725,7 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
                     // Just debug printing
                     OrderingGroupPoint *prevend = segments[permutation.back()].GetEndPoint(iSwap, iEnd);
                     for (int & it : permutation) {
-                        // COMENTED TO SUPRESS WARNING UNUSED AUTOR TAKE IT UNCOMENTED
+                        // COMMENTED TO SUPPRESS WARNING UNUSED AUTHOR TAKE IT UNCOMMENTED
                         //OrderingGroupPoint *thisbeg = segments[it].GetBeginPoint(iSwap, iEnd);
                         DebugTrace2TSP(("IMP 0F=%d %d %.6lf", thisbeg->group->index, thisbeg->indexInGroup, Geom::distance(thisbeg->point, prevend->point)));
                         DebugTrace2TSP(("IMP 0T=%d %d %.6lf", prevend->group->index, prevend->indexInGroup, Geom::distance(thisbeg->point, prevend->point)));

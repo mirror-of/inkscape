@@ -275,9 +275,9 @@ void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve)
 }
 
 // TODO: find a way to not remove wanted self intersections
-// previouly are some failed attemps
+// previously are some failed attempts
 
-/* // Taked from Knot LPE duple code
+/* // Taken from Knot LPE duple code
 static Geom::Path::size_type size_nondegenerate(Geom::Path const &path)
 {
     Geom::Path::size_type retval = path.size_default();
@@ -309,10 +309,10 @@ gint get_nearest_corner(Geom::OptRect bbox, Geom::Point point)
 
 // This way not work with good selfintersections on consecutive curves
 // and when there is nodes nearest to points
-// I try diferent methods to cleanup without luky
+// I try different methods to cleanup without luky
 // if anyone is interested there is a way to explore
 // if in original path the section into the 2 nearest point dont have
-// self intersections we can supose this is a intersection to remove
+// self intersections we can suppose this is a intersection to remove
 // it works very well but in good selfintersections work only in one offset direction
 bool consecutiveCurves(Geom::Path pathin, Geom::Point p) {
     Geom::Coord mindist = std::numeric_limits<Geom::Coord>::max();
@@ -394,7 +394,7 @@ Geom::Path removeIntersects(Geom::Path pathin, Geom::Path pathorig, size_t skipc
 Geom::Path removeIntersects(Geom::Path pathin)
 {
     // I have a pending ping to moazin for 1.2 to fix open paths offeset self intesections (Jabiertxof)
-    // For 1.1 I comment the code because simply slow a lot or crash sometimes and never work realy well
+    // For 1.1 I comment the code because simply slow a lot or crash sometimes and never work really well
     /* Geom::Path out;
     Geom::Crossings crossings = Geom::self_crossings(pathin);
     static size_t maxiter = 0;

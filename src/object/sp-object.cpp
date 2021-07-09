@@ -601,7 +601,7 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
  * until it finds a child SPObject node.
  *
  * @param obj Parent object
- * @param ref Refernece node, may be NULL
+ * @param ref Reference node, may be NULL
  * @return Child, or NULL if not found
  */
 static SPObject *get_closest_child_by_repr(SPObject &obj, Inkscape::XML::Node *ref)

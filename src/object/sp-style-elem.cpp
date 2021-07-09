@@ -485,7 +485,7 @@ static void clear_style_sheet(SPStyleElem &self)
 
 void SPStyleElem::read_content() {
     // TODO On modification (observer callbacks), clearing and re-appending to
-    // the cascade can change the positon of a stylesheet relative to other
+    // the cascade can change the position of a stylesheet relative to other
     // sheets in the document. We need a better way to update a style sheet
     // which preserves the position.
     clear_style_sheet(*this);

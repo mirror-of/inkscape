@@ -513,7 +513,7 @@ void SPCurve::append(Geom::PathVector const &pathv, bool use_lineto)
  * then the startpoint of c1 is moved to the end of this curve and the first subpath of c1 is appended to the last subpath of this curve.
  * When one of the curves is empty, this curves path becomes the non-empty path.
  *
- * @param tolerance Tolerance for enpoint fusion (applied to x and y separately)
+ * @param tolerance Tolerance for endpoint fusion (applied to x and y separately)
  * @return False if one of the curves (this curve or the argument curve) is closed, true otherwise.
  */
 bool SPCurve::append_continuous(SPCurve const &c1, double tolerance)

@@ -508,7 +508,7 @@ void on_drag_begin(GtkWidget *, GdkDragContext *, gpointer userdata)
 }
 
 /**
- * Finalize what happended in `on_row_changed` and clean up what was set up in `on_drag_begin`
+ * Finalize what happened in `on_row_changed` and clean up what was set up in `on_drag_begin`
  */
 void on_drag_end(GtkWidget *, GdkDragContext *, gpointer userdata)
 {

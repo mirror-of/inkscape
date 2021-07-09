@@ -1132,7 +1132,7 @@ Effect::setCurrentZoom(double cZ)
 }
 
 /**
- * Overrided function to apply transforms for example to powerstrole, jointtype or tapperstroke
+ * Overridden function to apply transforms for example to powerstroke, jointtype or tapperstroke
  */
 void Effect::transform_multiply(Geom::Affine const &postmul, bool /*set*/) {}
 
@@ -1304,10 +1304,10 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
     is_applied = true;
     // we can override "lpeversion" value in each LPE using doOnApply
     // this allow to handle legacy LPE and some times update to newest definitions
-    // In BBB Martin, Mc and Jabiertxof make decission 
-    // of only update this value per each LPE when changes.
+    // In BBB Martin, Mc and Jabiertxof make decision 
+    // to only update this value per each LPE when changes.
     // and use the Inkscape release version that has this new LPE change
-    // LPE without lpeversion are created in a inkscape lower than 1.0
+    // LPE without lpeversion are created in an inkscape lower than 1.0
     lpeversion.param_setValue("1", true);
     doOnApply(lpeitem);
     setReady();

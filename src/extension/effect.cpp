@@ -299,7 +299,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
     ensures that the last effect verb is sensitive.
 
     If the \c in_effect variable is \c NULL then the last effect
-    verb is made insesitive.
+    verb is made insensitive.
 */
 void
 Effect::set_last_effect (Effect * in_effect)

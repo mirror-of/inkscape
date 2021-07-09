@@ -446,7 +446,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point.param_setValue(point_c, true);
     previous_center = center_point;
-    //we bump to 1.1 because prevous 1.0.2 take no effect because a bug on 1.0.2
+    //we bump to 1.1 because previous 1.0.2 take no effect because a bug on 1.0.2
     lpeversion.param_setValue("1.1", true);
 }
 

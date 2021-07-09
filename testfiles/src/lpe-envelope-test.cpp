@@ -20,7 +20,7 @@ class LPEEnvelopeDeformationTest : public LPESPathsTest {};
 
 // INKSCAPE 0.92.5
 
-// 3) Commented ellipse test to pass, ouput visualy correct
+// 3) Commented ellipse test to pass, output visually correct
 
 TEST_F(LPEEnvelopeDeformationTest, multi_0_92_5)
 {

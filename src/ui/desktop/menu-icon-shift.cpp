@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * Shift Gtk::MenuItems with icons to allign with Toggle and Radio buttons.
+ * Shift Gtk::MenuItems with icons to align with Toggle and Radio buttons.
  */
 /*
  * Authors:

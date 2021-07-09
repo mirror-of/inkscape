@@ -251,7 +251,7 @@ Shortcuts::_read(XML::Node const &keysnode, bool user_set)
 
             Modifier *mod = Modifier::get(mod_name);
             if (mod == nullptr) {
-                std::cerr << "Shortcuts::read: Can't find modifer: " << mod_name << std::endl; 
+                std::cerr << "Shortcuts::read: Can't find modifier: " << mod_name << std::endl; 
                 continue;
             }
  
@@ -852,7 +852,7 @@ Shortcuts::accelerator_to_shortcut(const Glib::ustring& accelerator)
 /*
  * Return: keyval translated to group 0 in lower 32 bits, modifier encoded in upper 32 bits.
  *
- * Usuage of group 0 (i.e. the main, typically English layout) instead of simply event->keyval
+ * Usage of group 0 (i.e. the main, typically English layout) instead of simply event->keyval
  * ensures that shortcuts work regardless of the active keyboard layout (e.g. Cyrillic).
  *
  * The returned modifiers are the modifiers that were not "consumed" by the translation and

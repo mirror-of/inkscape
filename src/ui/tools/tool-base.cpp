@@ -900,7 +900,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 }
 
 /**
- * This function allow to handle global tool events if not _pre function is full overrided.
+ * This function allows to handle global tool events if _pre function is not fully overridden.
  */
 
 bool ToolBase::block_button(GdkEvent *event)

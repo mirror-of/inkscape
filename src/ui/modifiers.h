@@ -73,9 +73,9 @@ enum class Type {
     MOVE_SNAPPING,        // Disable snapping while moving {DRAG+SHIFT}
     TRANS_CONFINE,        // Confine resize aspect ratio {HANDLE+CTRL}
     TRANS_INCREMENT,      // Scale/Rotate/skew by fixed ratio angles {HANDLE+ALT}
-    TRANS_OFF_CENTER,     // Scale/Rotate/skew from oposite corner {HANDLE+SHIFT}
+    TRANS_OFF_CENTER,     // Scale/Rotate/skew from opposite corner {HANDLE+SHIFT}
     TRANS_SNAPPING,       // Disable snapping while transforming {HANDLE+SHIFT}
-    // TODO: Alignment ommitted because it's UX is not completed
+    // TODO: Alignment omitted because it's UX is not completed
 };
 
 
@@ -96,7 +96,7 @@ private:
     typedef std::map<std::string, Modifier *> Lookup;
     typedef std::map<Trigger, std::string> CategoryNames;
 
-    /** A table of all the created modifers and their ID lookups. */
+    /** A table of all the created modifiers and their ID lookups. */
     static Container _modifiers;
     static Lookup _modifier_lookup;
     static CategoryNames _category_names;

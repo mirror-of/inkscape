@@ -434,7 +434,7 @@ void DialogMultipaned::append(Gtk::Widget *child)
 
 void DialogMultipaned::add_empty_widget()
 {
-    const int EMPTY_WIDGET_SIZE = 60; // magic nummber
+    const int EMPTY_WIDGET_SIZE = 60; // magic number
 
     // The empty widget is a label
     auto label = Gtk::manage(new Gtk::Label(_("You can drop dockable dialogs here.")));

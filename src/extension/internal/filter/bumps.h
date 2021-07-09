@@ -295,7 +295,7 @@ Bump::get_filter_text (Inkscape::Extension::Extension * ext)
       * Lighting blend (enum, default screen) -> blend1 (mode)
       * Highlight blend (enum, default screen) -> blend2 (mode)
     Bump
-      * Trasparency type (enum [in,atop], default atop) -> composite2 (operator)
+      * Transparency type (enum [in,atop], default atop) -> composite2 (operator)
       * Color (guint, default -520083713 (RGB:225,0,38)) -> flood2 (flood-color)
       * Revert bump (boolean, default false) -> composite1 (false: operator="out", true operator="in")
 */

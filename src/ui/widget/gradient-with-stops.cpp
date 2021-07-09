@@ -329,7 +329,7 @@ bool GradientWithStops::on_button_press_event(GdkEventButton* event) {
         _focused_stop = -1;
 
         if (!has_focus()) {
-            // grab focus, so we can show selection indictor and move selected stop with left/right keys
+            // grab focus, so we can show selection indicator and move selected stop with left/right keys
             grab_focus();
         }
         update();
@@ -489,7 +489,7 @@ bool GradientWithStops::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
 
         auto pos = get_stop_position(i, layout);
 
-        // selected handle sports a 'tip' to make it easily noticable
+        // selected handle sports a 'tip' to make it easily noticeable
         if (is_selected && tip) {
             if (auto surface = Gdk::Cairo::create_surface_from_pixbuf(tip, 1)) {
                 cr->save();

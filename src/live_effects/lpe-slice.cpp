@@ -175,8 +175,8 @@ bool sp_has_path_data(SPItem *item, bool originald)
     return false;
 }
 /*
- * Allow chage original-d to d to "reset" temporary the LPE
- * when the slice dont pass trought item till sp_lpe_item is crossed
+ * Allow changing original-d to d to "reset" temporary the LPE
+ * when the slice doesn't pass through item till sp_lpe_item is crossed
  */
 void
 LPESlice::originalDtoD(SPShape const *shape, SPCurve *curve)
@@ -188,8 +188,8 @@ LPESlice::originalDtoD(SPShape const *shape, SPCurve *curve)
 }
 
 /*
- * Allow chage original-d to d to "reset" temporary the LPE
- * when the slice dont pass trought item till sp_lpe_item is crossed
+ * Allow changing original-d to d to "reset" temporary the LPE
+ * when the slice doesn't pass through item till sp_lpe_item is crossed
  */
 void
 LPESlice::originalDtoD(SPItem *item)
@@ -266,7 +266,7 @@ gboolean delayupdate(gpointer data)
 void 
 LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
 {
-    bool cleanup = is_load && SP_ACTIVE_DESKTOP; // dont crash on tests
+    bool cleanup = is_load && SP_ACTIVE_DESKTOP; // don't crash on tests
     if (is_applied) {
         cleanup = true;
         reloadOriginal(lpeitem);
@@ -372,7 +372,7 @@ LPESlice::split(SPItem* item, SPCurve *curve, std::vector<std::pair<Geom::Line, 
     if (!lpeitem) {
         return;
     }
-    //First check is to allow effects on "satellittes"
+    //First check is to allow effects on "satellites"
     if (!lpeitem->hasPathEffectOfType(SLICE) && clean_id.find("slice-") != Glib::ustring::npos) {
         clean_id = clean_id.replace(0,6,"");
         elemref_id += clean_id;

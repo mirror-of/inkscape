@@ -670,7 +670,7 @@ void StyleDialog::readStyleElement()
         css_tree->get_style_context()->add_class("style_sheet");
         Glib::RefPtr<Gtk::TreeStore> store = Gtk::TreeStore::create(_mColumns);
         css_tree->set_model(store);
-        // I comment this feature, is working but seems obscure to undertand
+        // I comment this feature, is working but seems obscure to understand
         // the user can edit selector name in current implementation
         /* css_selector_event_box->signal_button_release_event().connect(
             sigc::bind(sigc::mem_fun(*this, &StyleDialog::_selectorStartEdit), css_selector, css_edit_selector));
@@ -1223,7 +1223,7 @@ void StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenu
     }
     entry->set_completion(entry_completion);
 }
-/*Harcode values non in enum*/
+/*Hardcode values non in enum*/
 void StyleDialog::_setAutocompletion(Gtk::Entry *entry, Glib::ustring name)
 {
     g_debug("StyleDialog::_setAutocompletion");
@@ -1397,7 +1397,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
         if (write && old_name != name) {
             _writeStyleElement(store, selector);
             /*
-            I think is better comment this, is enoght update on value change
+            I think is better comment this, is enough update on value change
             if (selector != "style_properties" && selector != "attributes") {
             std::vector<SPObject *> objs = _getObjVec(selector);
             for (auto obj : objs){

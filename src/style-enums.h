@@ -313,7 +313,7 @@ enum SPColorRendering : std::uint_least8_t {
     SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY
 };
 
-/* Last two are CSS4 Image values... for the momement prefaced with -inkscape. */
+/* Last two are CSS4 Image values... for the moment prefaced with -inkscape. */
 enum SPImageRendering : std::uint_least8_t {
     SP_CSS_IMAGE_RENDERING_AUTO,
     SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED,

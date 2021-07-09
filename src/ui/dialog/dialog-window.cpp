@@ -55,7 +55,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     , _app(InkscapeApplication::instance())
     , _title(_("Dialog Window"))
 {
-    // ============ Intialization ===============
+    // ============ Initialization ===============
     // Setting the window type
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool window_above = true;

@@ -18,7 +18,7 @@ Please see [the wiki page on compiling Inkscape](http://wiki.inkscape.org/wiki/i
 most current dependencies, including links to the source tarballs. 
 For common linux-distributions (Ubuntu, Debian, Fedora) you can use 
 [a bash-script](https://gitlab.com/inkscape/inkscape-ci-docker/-/raw/master/install_dependencies.sh?inline=false) 
-for getting required libaries.
+for getting required libraries.
 
 Basic Installation
 ------------------

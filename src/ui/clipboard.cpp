@@ -440,7 +440,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
         if (_pasteText(desktop)) {
             return true;
         }
-        // If the clipboard conains text/plain, but is an svg document
+        // If the clipboard contains text/plain, but is an svg document
         // then we'll try and detect it and then paste it if possible.
     }
 

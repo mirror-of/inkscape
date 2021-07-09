@@ -278,11 +278,11 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
     int themecontrast = prefs->getInt("/theme/contrast", 10);
     if (!_contrastthemeprovider) {
         _contrastthemeprovider = Gtk::CssProvider::create();
-        // We can uncoment this line to remove warnings and errors on the theme
+        // We can uncomment this line to remove warnings and errors on the theme
         _contrastthemeprovider->signal_parsing_error().connect(sigc::ptr_fun(show_parsing_error));
     }
     static std::string cssstringcached = "";
-    // we use contast only if is setup (!= 10)
+    // we use contrast only if is setup (!= 10)
     if (themecontrast < 10) {
         Glib::ustring css_contrast = "";
         double contrast = (10 - themecontrast) / 30.0;
@@ -314,7 +314,7 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
             std::string line;    
             while (std::getline(f, line)) {
                 // here we ignore most of class to parse because is in additive mode
-                // so stiles not applyed are set on previous context style
+                // so stiles not applied are set on previous context style
                 if (line.find(";") != std::string::npos &&
                     line.find("background-image") == std::string::npos &&
                     line.find("background-color") == std::string::npos)
@@ -449,7 +449,7 @@ bool ThemeContext::isCurrentThemeDark(Gtk::Container *window)
             settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/preferDarkTheme", false);
         }
         dark = current_theme.find(":dark") != std::string::npos;
-        // if theme is dark or we use contast slider feature and have set prefearDarkTheme we force the theme dark
+        // if theme is dark or we use contrast slider feature and have set preferDarkTheme we force the theme dark
         // and avoid color check, this fix a issue with low contrast themes bad switch of dark theme toggle
         dark = dark || (prefs->getInt("/theme/contrast", 10) != 10 && prefs->getBool("/theme/preferDarkTheme", false));
         if (!dark) {

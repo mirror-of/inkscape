@@ -264,7 +264,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
 /**
  * Apply offset to selected paths
- * @param desktop Targetted desktop
+ * @param desktop Targeted desktop
  * @param expand True if offset expands, False if it shrinks paths
  * @param prefOffset Size of offset in pixels
  */

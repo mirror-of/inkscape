@@ -46,10 +46,10 @@ struct Fvector {
 const static Fvector EYE_VECTOR(0, 0, 1);
 
 /**
- * returns the euclidian norm of the vector v
+ * returns the euclidean norm of the vector v
  *
  * \param v a reference to a vector with double components
- * \return the euclidian norm of v
+ * \return the euclidean norm of v
  */
 double norm(const Fvector &v);
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * Fille/stroke conversion routines for LPEs which draw a stroke
+ * Fill/stroke conversion routines for LPEs which draw a stroke
  *
  * Authors:
  *   Liam P White

@@ -130,7 +130,7 @@ DocumentProperties::DocumentProperties()
                 _("Snapping distance, in screen pixels, for snapping to guides"), _("Always snap to guides, regardless of the distance"),
                 _("If set, objects only snap to a guide when it's within the range specified below"),
                 "guidetolerance", _wr)
-    //Options for alignement snapping
+    //Options for alignment snapping
     , _rsu_assn(_("Snap dista_nce"), _("Snap only when cl_oser than:"), _("Always snap"),
                 _("Snapping distance, in screen pixels, for alignment snapping"), _("Always snap to alignment guides, regardless of the distance"),
                 _("If set, objects only snap to as alignment guide when it's within the range specified below"),

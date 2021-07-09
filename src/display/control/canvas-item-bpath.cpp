@@ -129,7 +129,7 @@ double CanvasItemBpath::closest_distance_to(Geom::Point const &p)
 bool CanvasItemBpath::contains(Geom::Point const &p, double tolerance)
 {
     if (tolerance == 0) {
-        tolerance = 1; // Need a minium tolerance value or always returns false.
+        tolerance = 1; // Need a minimum tolerance value or always returns false.
     }
 
     return closest_distance_to(p) < tolerance;

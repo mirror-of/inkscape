@@ -184,7 +184,7 @@ public:
     virtual void     processPath(Inkscape::XML::Node * /*node*/) {}
 
     /**
-     * If detach = true, when saving to a file, don't store URIs realtive to the filename
+     * If detach = true, when saving to a file, don't store URIs relative to the filename
      */
     virtual void setDetachBase(bool detach) {}
 };

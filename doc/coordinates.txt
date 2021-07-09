@@ -23,7 +23,7 @@ If printed, 1 desktop mm should be 1mm on paper
 
 As we all know, SVG Y grows downwards. So document is
 placed at 0,HEIGHT, mirrored vertically, where HEIGHT
-is vieport height in desktop coordinates.
+is viewport height in desktop coordinates.
 Moreover SVG coordinate space is scaled by 0.8, so
 1mm in SVG space equals 1mm in desktop space.
 

@@ -206,7 +206,7 @@ InkscapeWindow::on_key_press_event(GdkEventKey* event)
     // accelerators, we wouldn't even be able to type text! We can get around this by sending key
     // events first to the focus widget.
     //
-    // See https://developer.gnome.org/gtk3/stable/chap-input-handling.html (Event Propogation)
+    // See https://developer.gnome.org/gtk3/stable/chap-input-handling.html (Event Propagation)
 
     auto focus = get_focus();
     if (focus) {

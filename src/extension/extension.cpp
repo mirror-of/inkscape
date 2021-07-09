@@ -389,7 +389,7 @@ Extension::get_name () const
     implementation, but we are guaranteed to have a benign one.
 
     \warning It is important to note that there is no 'activate' function.
-    Running this function is irreversable.
+    Running this function is irreversible.
 */
 void
 Extension::deactivate ()

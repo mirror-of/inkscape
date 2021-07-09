@@ -984,7 +984,7 @@ InputDialogImpl::ConfPanel::ConfPanel() :
     modeCombo.append(getModeToString()[Gdk::MODE_DISABLED]);
     modeCombo.append(getModeToString()[Gdk::MODE_SCREEN]);
     modeCombo.append(getModeToString()[Gdk::MODE_WINDOW]);
-    modeCombo.set_tooltip_text(_("A device can be 'Disabled', its co-ordinates mapped to the whole 'Screen', or to a single (usually focused) 'Window'"));
+    modeCombo.set_tooltip_text(_("A device can be 'Disabled', its coordinates mapped to the whole 'Screen', or to a single (usually focused) 'Window'"));
     modeCombo.signal_changed().connect(sigc::mem_fun(*this, &InputDialogImpl::ConfPanel::onModeChange));
 
     modeBox.pack_start(modeLabel, false, false);

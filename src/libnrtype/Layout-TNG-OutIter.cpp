@@ -22,7 +22,7 @@ namespace Text {
 
 // Comment 18 Sept 2019:
 // Cursor code might be simpler if Character was turned into a proper
-// class and kept track of its absolute postion and extent. This would
+// class and kept track of its absolute position and extent. This would
 // make handling multi-line text (including multi-line text using
 // 'white-space:pre') easier. This would also avoid problems where
 // 'dx','dy' moved the character a long distance from its nominal

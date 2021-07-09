@@ -168,7 +168,7 @@ public:
      * Try to snap a point to grids, guides or objects, in two degrees-of-freedom,
      * i.e. snap in any direction on the two dimensional canvas to the nearest
      * snap target. freeSnapReturnByRef() is equal in snapping behavior to
-     * freeSnap(), but the former returns the snapped point trough the referenced
+     * freeSnap(), but the former returns the snapped point through the referenced
      * parameter p. This parameter p initially contains the position of the snap
      * source and will we overwritten by the target position if snapping has occurred.
      * This makes snapping transparent to the calling code. If this is not desired
@@ -244,7 +244,7 @@ public:
      * snap target.
      *
      * constrainedSnapReturnByRef() is equal in snapping behavior to
-     * constrainedSnap(), but the former returns the snapped point trough the referenced
+     * constrainedSnap(), but the former returns the snapped point through the referenced
      * parameter p. This parameter p initially contains the position of the snap
      * source and will be overwritten by the target position if snapping has occurred.
      * This makes snapping transparent to the calling code. If this is not desired

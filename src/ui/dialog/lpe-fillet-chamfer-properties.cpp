@@ -37,7 +37,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     // Layer name widgets
     _fillet_chamfer_position_numeric.set_digits(4);
     _fillet_chamfer_position_numeric.set_increments(1,1);
-    //todo: get tha max aloable infinity freeze the widget
+    //todo: get the max allowable infinity freeze the widget
     _fillet_chamfer_position_numeric.set_range(0., SCALARPARAM_G_MAXDOUBLE);
     _fillet_chamfer_position_numeric.set_hexpand();
     _fillet_chamfer_position_label.set_label(_("Radius (pixels):"));
@@ -48,7 +48,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _layout_table.attach(_fillet_chamfer_position_numeric, 1, 0, 1, 1);
     _fillet_chamfer_chamfer_subdivisions.set_digits(0);
     _fillet_chamfer_chamfer_subdivisions.set_increments(1,1);
-    //todo: get tha max aloable infinity freeze the widget
+    //todo: get the max allowable infinity freeze the widget
     _fillet_chamfer_chamfer_subdivisions.set_range(0, SCALARPARAM_G_MAXDOUBLE);
     _fillet_chamfer_chamfer_subdivisions.set_hexpand();
     _fillet_chamfer_chamfer_subdivisions_label.set_label(_("Chamfer subdivisions:"));

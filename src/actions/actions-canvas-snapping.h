@@ -2,7 +2,7 @@
 /*
  * Gio::Actions for toggling snapping preferences. Tied to a particular document.
  *
- * As preferences are stored per document, changes should be propogated to any window with same document.
+ * As preferences are stored per document, changes should be propagated to any window with same document.
  *
  * Copyright (C) 2019 Tavmjong Bah
  *

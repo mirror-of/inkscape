@@ -174,7 +174,7 @@ PrefAdjustment::val_changed ()
 }
 
 /** \brief  A function to get the prefences for the grid
-    \param  moudule  Module which holds the params
+    \param  module  Module which holds the params
     \param  view     Unused today - may get style information in the future.
 
     Uses AutoGUI for creating the GUI.

@@ -18,14 +18,14 @@
 using namespace Inkscape;
 
 /* This class allow test LPE's. To make possible in latest release of Inkscape
- * LPE is not updated on load (if in the future any do we must take acount) so we load
- * a svg, get all "d" attribute from paths, shapes... Update all path effects with root object
- * and check equality of paths.
+ * LPE is not updated on load (if in the future any do we must take account) so we load
+ * a svg, get all "d" attribute from paths, shapes...
+ * Update all path effects with root object and check equality of paths.
  * We use some helpers inside the SVG document to test:
- * inkscape:test-threshold="0.1" can be global using in root elememt or per item
+ * inkscape:test-threshold="0.1" can be global using in root element or per item
  * inkscape:test-ignore="1" ignore this element from tests
  * Question: Maybe is better store SVG as files instead inline CPP files, there is a 
- * 1.2 started MR, I cant finish without too much wotk than a cmake advanced user
+ * 1.2 started MR, I can't finish without too much work than a cmake advanced user
  */
 
 class LPESPathsTest : public ::testing::Test {

@@ -492,7 +492,7 @@ void TextEdit::onChange()
 
 void TextEdit::onFontChange(Glib::ustring fontspec)
 {
-    // Is not necesary update open type features this done when user click on font features tab
+    // Is not necessary update open type features this done when user click on font features tab
     onChange();
 }
 

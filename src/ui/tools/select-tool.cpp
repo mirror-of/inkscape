@@ -778,7 +778,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     grabbed->ungrab();
                     grabbed = nullptr;
                 }
-                // Think is not necesary now
+                // Think is not necessary now
                 // desktop->updateNow();
             }
 

@@ -77,7 +77,7 @@ CanvasItemCtrl (a.k.a. "Node", "Knot", "Handle", "Dragger", "Ctrl", "Mouse Grab"
       overlapping knot-entities and are moved together via the knot holder.
   **** shape-editor-knotholders.cpp
        Classes derived from KnotHolder which contain classes derived from KnotHolderEntity for
-       editting shapes.
+       editing shapes.
   **** ShapeEditor contains two KnotHolders, one for shapes, one for LPE's.
 
   ** ui/tools/tool-base.h
@@ -88,7 +88,7 @@ CanvasItemCtrl (a.k.a. "Node", "Knot", "Handle", "Dragger", "Ctrl", "Mouse Grab"
 
 
   * ControlPoint, SelectorPoint, SelectableControlPoint, Handle, Node, CurveDragPoint, TransformHandle, plus
-    auxillary classes (manipulator...).
+    auxiliary classes (manipulator...).
   * drag-anchor
   * pen-tool
   * measure-tool
