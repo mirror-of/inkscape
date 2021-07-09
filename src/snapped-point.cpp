@@ -277,28 +277,63 @@ bool getClosestSP(std::list<Inkscape::SnappedPoint> const &list, Inkscape::Snapp
 
     // the following code merges an alignment snap and a distribution snap
     if (success && aligned_success) {
+        bool align_intersection = aligned.getTarget() == Inkscape::SNAPTARGET_ALIGNMENT_INTERSECTION;
         auto type = result.getTarget();
+
         if (type & Inkscape::SNAPTARGET_DISTRIBUTION_CATEGORY) {
             switch (type) {
                 case Inkscape::SNAPTARGET_DISTRIBUTION_X:
                 case Inkscape::SNAPTARGET_DISTRIBUTION_RIGHT:
                 case Inkscape::SNAPTARGET_DISTRIBUTION_LEFT:
-                   result.setPoint({result.getPoint().x(), aligned.getPoint().y()});
-                   break;
+                    if (aligned.getPoint().y() == aligned.getAlignmentTarget()->y()) {
+                        result.setPoint({result.getPoint().x(), aligned.getPoint().y()});
+                        result.setAlignmentTargetType(Inkscape::SNAPTARGET_ALIGNMENT_BBOX_CORNER);
+                        result.setAlignmentTarget(aligned.getAlignmentTarget());
+
+                        if (align_intersection && abs(result.getPoint().x() - aligned.getAlignmentTarget2()->x()) <1e-4) {
+                            result.setPoint(aligned.getPoint());
+                            result.setAlignmentTarget2(aligned.getAlignmentTarget2());
+                            result.setAlignmentTargetType(aligned.getAlignmentTargetType());
+                        }
+                    }
+                    break;
+
                 case Inkscape::SNAPTARGET_DISTRIBUTION_Y:
                 case Inkscape::SNAPTARGET_DISTRIBUTION_UP:
                 case Inkscape::SNAPTARGET_DISTRIBUTION_DOWN:
-                   result.setPoint({aligned.getPoint().x() ,result.getPoint().y()});
-                   break;
+                    if (!align_intersection) {
+                        if (aligned.getPoint().x() == aligned.getAlignmentTarget()->x()) {
+                            result.setPoint({aligned.getPoint().x(), result.getPoint().y()});
+                            result.setAlignmentTargetType(aligned.getAlignmentTargetType());
+                            result.setAlignmentTarget(aligned.getAlignmentTarget());
+                        }
+                    } else if (aligned.getPoint().x() == aligned.getAlignmentTarget2()->x()) {
+                            result.setPoint({aligned.getPoint().x(), result.getPoint().y()});
+                            result.setAlignmentTargetType(Inkscape::SNAPTARGET_ALIGNMENT_BBOX_CORNER);
+                            result.setAlignmentTarget(aligned.getAlignmentTarget2());
+
+                            if (abs(result.getPoint().y() - aligned.getAlignmentTarget()->y()) <1e-4) {
+                                result.setPoint(aligned.getPoint());
+                                result.setAlignmentTarget2(aligned.getAlignmentTarget());
+                                result.setAlignmentTargetType(aligned.getAlignmentTargetType());
+                            }
+                    }
+                    break;
+
                 case Inkscape::SNAPTARGET_DISTRIBUTION_XY:
-                   break;
+                    if (Geom::L2(result.getPoint() - aligned.getPoint()) < 1e-4) {
+                        result.setPoint(aligned.getPoint());
+                        result.setAlignmentTargetType(aligned.getAlignmentTargetType());
+                        result.setAlignmentTarget(aligned.getAlignmentTarget());
+                        result.setAlignmentTarget2(aligned.getAlignmentTarget2());
+                    }
+                    break;
+
                 default:
                     g_warning("getClosestSP(): unknown distribution snap target %i", result.getTarget());
-                   break;
+                    break;
             }
-            result.setAlignmentTargetType(aligned.getAlignmentTargetType());
-            result.setAlignmentTarget(aligned.getAlignmentTarget());
-            result.setAlignmentTarget2(aligned.getAlignmentTarget2());
+
             return true;
         }
     }

@@ -181,8 +181,8 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
 
                 if (d < sqrt(2)*getSnapperTolerance()) {
                     si = SnappedPoint(intersection_p,
-                                     *sy.getAlignmentTarget(),
                                      *sx.getAlignmentTarget(),
+                                     *sy.getAlignmentTarget(),
                                      source2alignment(p.getSourceType()),
                                      p.getSourceNum(),
                                      SNAPTARGET_ALIGNMENT_INTERSECTION,

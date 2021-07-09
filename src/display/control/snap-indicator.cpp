@@ -377,6 +377,9 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target)
 
 void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point const &p2, guint32 color, double fontsize, double scale)
 {
+    //make sure the line is straight
+    g_assert(p1.x() == p2.x() || p1.y() == p2.y());
+
     Preferences *prefs = Preferences::get();
     bool show_distance = prefs->getBool("/options/snapindicatordistance/value", false);
 
