@@ -42,6 +42,7 @@
 #include "display/drawing-item.h"
 #include "display/control/canvas-item-catchall.h"
 #include "display/control/canvas-item-drawing.h"
+#include "display/control/snap-indicator.h"
 
 #include "object/box3d.h"
 #include "style.h"
@@ -523,6 +524,10 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
         case GDK_MOTION_NOTIFY:
         {
+            if (this->grabbed && event->button.state & (GDK_SHIFT_MASK | GDK_MOD1_MASK)) {
+                desktop->snapindicator->remove_snaptarget();
+            }
+
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
             bool first_hit = Modifier::get(Modifiers::Type::SELECT_FIRST_HIT)->active(this->button_press_state);

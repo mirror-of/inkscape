@@ -37,6 +37,7 @@
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
+#include "display/control/snap-indicator.h"
 
 #include "livarot/Path.h"  // Simplify paths
 
@@ -127,6 +128,8 @@ void PencilTool::_endpointSnap(Geom::Point &p, guint const state) {
                                          //pressing CTRL
             std::optional<Geom::Point> origin = this->_npoints > 0 ? this->p[0] : std::optional<Geom::Point>();
             spdc_endpoint_snap_free(this, p, origin, state);
+        } else {
+            desktop->snapindicator->remove_snaptarget();
         }
     }
 }
