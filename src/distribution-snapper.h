@@ -130,7 +130,7 @@ private:
     };              
 
     /** This functions adds overlapping bounding boxes to the list of bounding boxes.
-     * The new bounding boxes are added such that the final list is still sorted.
+     * The new bounding boxes are added such that the unioun bounding box is placed before its constituents.
      * This extra step is needed so that the overall union of any overlapping bounding
      * boxes is also considered during distribution snapping.
      */

@@ -134,20 +134,17 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
             level = 0;
 
             // temporary result for this particular item
-            auto result = new std::vector<Geom::Rect>;
-            if (_findSidewaysSnaps(*next_bbox, ++it, end, *result, first_dist, tol, distance_func, ++level)) {
-                if (result->size() > max_length) {
+            std::vector<Geom::Rect> result;
+            if (_findSidewaysSnaps(*next_bbox, ++it, end, result, first_dist, tol, distance_func, ++level)) {
+                if (result.size() > max_length) {
                     // if this item has the most number of items equidistant form each other
                     // then make this the final result
                     optimum_start = *next_bbox;
-                    max_length = result->size();
-                    vec = *result;
+                    max_length = result.size();
+                    vec = result;
                     dist = first_dist;
                 }
             }
-
-            result->clear();
-            delete result;
 
             ++next_bbox;
         }
@@ -168,43 +165,43 @@ bool Inkscape::DistributionSnapper::_findSidewaysSnaps(
     if (level != 1)
         vec.push_back(source_bbox); 
 
-    if (it == end)
+    if (it == end || level > 10)
         return true;
 
     int og_level = level;
     std::vector<Geom::Rect> best_result;
-    int max_length = 0;
+
     while (next_bbox != end) {
         level = og_level;
         Geom::Coord this_dist;
         Geom::Coord next_dist = distance_func(source_bbox, *next_bbox);
-        auto result = new std::vector<Geom::Rect>;
+
+        std::vector<Geom::Rect> temp_result;
 
         if (level == 1 && compare_double(dist, next_dist, tol)){
             // if this is the first level, check if the snap is within tolerance
             // we cancel here if the possible snap in not whithing tolerance, saves us some time!
             this_dist = next_dist;
-            if (_findSidewaysSnaps(*next_bbox, ++it, end, *result, this_dist, tol, distance_func, ++level)) {
-                if (result->size() > max_length) {
-                    max_length = result->size();
+            if (_findSidewaysSnaps(*next_bbox, ++it, end, temp_result, this_dist, tol, distance_func, ++level)) {
+                if (temp_result.size() > 0) {
                     dist = this_dist;
-                    best_result = *result;
+                    best_result = temp_result;
+                    break;
                 }
             }
-            result->clear();
-            delete result;
 
         } else if (compare_double(dist, next_dist, level * DISTRIBUTION_SNAPPING_EPSILON)) {
 
-            if (_findSidewaysSnaps(*next_bbox, ++it, end, *result, dist, tol, distance_func, ++level)) {
-                if (result->size() > max_length) {
-                    max_length = result->size();
-                    best_result = *result;
+            if (_findSidewaysSnaps(*next_bbox, ++it, end, temp_result, dist, tol, distance_func, ++level)) {
+                if (temp_result.size() > 0) {
+                    best_result = temp_result;
+                    break;
                 }
             }
-            result->clear();
-            delete result;
         }
+
+        if (best_result.size() > 10)
+            break;
 
         ++next_bbox;
     }
@@ -295,17 +292,6 @@ void Inkscape::DistributionSnapper::_addBBoxForIntersectingBoxes(std::vector<Geo
 
         while (std::next(it) != vec->end() && it->intersects(*std::next(it))) {
             comb.unionWith(*std::next(it));
-
-            if (dir == Direction::RIGHT && comb.midpoint().x() > it->midpoint().x()) {
-                ++insertPos;
-            } else if (dir == Direction::LEFT && comb.midpoint().x() < it->midpoint().x()){
-                ++insertPos;
-            } else if (dir == Direction::UP && comb.midpoint().y() > it->midpoint().y()){
-                ++insertPos;
-            } else if (dir == Direction::DOWN && comb.midpoint().y() < it->midpoint().y()){
-                ++insertPos;
-            }
-
             ++it;
             ++num;
             ++count;
