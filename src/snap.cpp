@@ -282,6 +282,12 @@ Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::SnapCandidatePoint
         return no_snap;
     }
 
+    // this makes sure that _findCandidates populates the respective vectors for a snapper.
+    if (p.getSourceNum() <= 0){
+        Geom::Rect const local_bbox_to_snap = bbox_to_snap ? *bbox_to_snap : Geom::Rect(p.getPoint(), p.getPoint());
+        _findCandidates(getDocument()->getRoot(), &_items_to_ignore, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
+    }
+
     IntermSnapResults isr;
     SnapperList const snappers = getSnappers();
     for (auto snapper : snappers) {
@@ -832,10 +838,10 @@ void SnapManager::_findCandidates(SPObject* parent,
         // Apparently the setup() method from the SnapManager class hasn't been called before trying to snap.
     }
 
-    if (first_point) {
+    //if (first_point) {
         obj_snapper_candidates->clear();
         align_snapper_candidates->clear();
-    }
+    //}
 
     Geom::Rect bbox_to_snap_incl = bbox_to_snap; // _incl means: will include the snapper tolerance
     bbox_to_snap_incl.expandBy(object.getSnapperTolerance()); // see?
