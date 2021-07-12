@@ -49,7 +49,7 @@ public:
         _target_type(target),
         _target_bbox(Geom::OptRect()),
         _dist(),
-        _alignment(false)
+        _alignment(true)
     {
         _source_num = -1;
     }
