@@ -838,10 +838,10 @@ void SnapManager::_findCandidates(SPObject* parent,
         // Apparently the setup() method from the SnapManager class hasn't been called before trying to snap.
     }
 
-    //if (first_point) {
+    if (first_point) {
         obj_snapper_candidates->clear();
         align_snapper_candidates->clear();
-    //}
+    }
 
     Geom::Rect bbox_to_snap_incl = bbox_to_snap; // _incl means: will include the snapper tolerance
     bbox_to_snap_incl.expandBy(object.getSnapperTolerance()); // see?
