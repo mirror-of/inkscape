@@ -556,21 +556,23 @@ struct static_caster { To * operator () (From * value) const { return static_cas
 void DocumentProperties::populate_linked_profiles_box()
 {
     _LinkedProfilesListStore->clear();
-    std::vector<SPObject *> current = getDocument()->getResourceList( "iccprofile" );
-    if (! current.empty()) {
-        _emb_profiles_observer.set((*(current.begin()))->parent);
-    }
+    if (auto document = getDocument()) {
+        std::vector<SPObject *> current = document->getResourceList( "iccprofile" );
+        if (! current.empty()) {
+            _emb_profiles_observer.set((*(current.begin()))->parent);
+        }
 
-    std::set<Inkscape::ColorProfile *> _current;
-    std::transform(current.begin(),
-                   current.end(),
-                   std::inserter(_current, _current.begin()),
-                   static_caster<SPObject, Inkscape::ColorProfile>());
+        std::set<Inkscape::ColorProfile *> _current;
+        std::transform(current.begin(),
+                       current.end(),
+                       std::inserter(_current, _current.begin()),
+                       static_caster<SPObject, Inkscape::ColorProfile>());
 
-    for (auto &profile: _current) {
-        Gtk::TreeModel::Row row = *(_LinkedProfilesListStore->append());
-        row[_LinkedProfilesListColumns.nameColumn] = profile->name;
-//        row[_LinkedProfilesListColumns.previewColumn] = "Color Preview";
+        for (auto &profile: _current) {
+            Gtk::TreeModel::Row row = *(_LinkedProfilesListStore->append());
+            row[_LinkedProfilesListColumns.nameColumn] = profile->name;
+    //        row[_LinkedProfilesListColumns.previewColumn] = "Color Preview";
+        }
     }
 }
 
@@ -643,13 +645,15 @@ void DocumentProperties::removeSelectedProfile(){
             return;
         }
     }
-    std::vector<SPObject *> current = getDocument()->getResourceList( "iccprofile" );
-    for (auto obj : current) {
-        Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
-        if (!name.compare(prof->name)){
-            prof->deleteObject(true, false);
-            DocumentUndo::done(getDocument(), SP_VERB_EDIT_REMOVE_COLOR_PROFILE, _("Remove linked color profile"));
-            break; // removing the color profile likely invalidates part of the traversed list, stop traversing here.
+    if (auto document = getDocument()) {
+        std::vector<SPObject *> current = document->getResourceList( "iccprofile" );
+        for (auto obj : current) {
+            Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
+            if (!name.compare(prof->name)){
+                prof->deleteObject(true, false);
+                DocumentUndo::done(document, SP_VERB_EDIT_REMOVE_COLOR_PROFILE, _("Remove linked color profile"));
+                break; // removing the color profile likely invalidates part of the traversed list, stop traversing here.
+            }
         }
     }
 
@@ -744,12 +748,14 @@ void DocumentProperties::build_cms()
     _LinkedProfilesList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::linked_profiles_list_button_release));
     cms_create_popup_menu(_LinkedProfilesList, sigc::mem_fun(*this, &DocumentProperties::removeSelectedProfile));
 
-    std::vector<SPObject *> current = getDocument()->getResourceList( "defs" );
-    if (!current.empty()) {
-        _emb_profiles_observer.set((*(current.begin()))->parent);
+    if (auto document = getDocument()) {
+        std::vector<SPObject *> current = document->getResourceList( "defs" );
+        if (!current.empty()) {
+            _emb_profiles_observer.set((*(current.begin()))->parent);
+        }
+        _emb_profiles_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_linked_profiles_box));
+        onColorProfileSelectRow();
     }
-    _emb_profiles_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_linked_profiles_box));
-    onColorProfileSelectRow();
 }
 
 void DocumentProperties::build_scripting()
@@ -923,13 +929,15 @@ void DocumentProperties::build_scripting()
     embedded_create_popup_menu(_EmbeddedScriptsList, sigc::mem_fun(*this, &DocumentProperties::removeEmbeddedScript));
 
 //TODO: review this observers code:
-    std::vector<SPObject *> current = getDocument()->getResourceList( "script" );
-    if (! current.empty()) {
-        _scripts_observer.set((*(current.begin()))->parent);
+    if (auto document = getDocument()) {
+        std::vector<SPObject *> current = document->getResourceList( "script" );
+        if (! current.empty()) {
+            _scripts_observer.set((*(current.begin()))->parent);
+        }
+        _scripts_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_script_lists));
+        onEmbeddedScriptSelectRow();
+        onExternalScriptSelectRow();
     }
-    _scripts_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_script_lists));
-    onEmbeddedScriptSelectRow();
-    onExternalScriptSelectRow();
 }
 
 void DocumentProperties::build_metadata()
@@ -1095,7 +1103,10 @@ void DocumentProperties::removeExternalScript(){
         }
     }
 
-    std::vector<SPObject *> current = getDocument()->getResourceList( "script" );
+    auto document = getDocument();
+    if (!document)
+        return;
+    std::vector<SPObject *> current = document->getResourceList( "script" );
     for (auto obj : current) {
         if (obj) {
             SPScript* script = dynamic_cast<SPScript *>(obj);
@@ -1107,7 +1118,7 @@ void DocumentProperties::removeExternalScript(){
                     sp_repr_unparent(repr);
 
                     // inform the document, so we can undo
-                    DocumentUndo::done(getDocument(), SP_VERB_EDIT_REMOVE_EXTERNAL_SCRIPT, _("Remove external script"));
+                    DocumentUndo::done(document, SP_VERB_EDIT_REMOVE_EXTERNAL_SCRIPT, _("Remove external script"));
                 }
             }
         }
@@ -1128,15 +1139,15 @@ void DocumentProperties::removeEmbeddedScript(){
         }
     }
 
-    SPObject* obj = getDocument()->getObjectById(id);
-    if (obj) {
-        //XML Tree being used directly here while it shouldn't be.
-        Inkscape::XML::Node *repr = obj->getRepr();
-        if (repr){
-            sp_repr_unparent(repr);
+    if (auto document = getDocument()) {
+        if (auto obj = document->getObjectById(id)) {
+            //XML Tree being used directly here while it shouldn't be.
+            if (auto repr = obj->getRepr()){
+                sp_repr_unparent(repr);
 
-            // inform the document, so we can undo
-            DocumentUndo::done(getDocument(), SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, _("Remove embedded script"));
+                // inform the document, so we can undo
+                DocumentUndo::done(document, SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, _("Remove embedded script"));
+            }
         }
     }
 
@@ -1171,8 +1182,12 @@ void DocumentProperties::changeEmbeddedScript(){
         }
     }
 
+    auto document = getDocument();
+    if (!document)
+        return;
+
     bool voidscript=true;
-    std::vector<SPObject *> current = getDocument()->getResourceList( "script" );
+    std::vector<SPObject *> current = document->getResourceList( "script" );
     for (auto obj : current) {
         if (id == obj->getId()){
             int count = (int) obj->children.size();
@@ -1211,6 +1226,9 @@ void DocumentProperties::editEmbeddedScript(){
     }
 
     auto document = getDocument();
+    if (!document)
+        return;
+
     for (auto obj : document->getResourceList("script")) {
         if (id == obj->getId()) {
             //XML Tree being used directly here while it shouldn't be.
@@ -1235,6 +1253,10 @@ void DocumentProperties::editEmbeddedScript(){
 void DocumentProperties::populate_script_lists(){
     _ExternalScriptsListStore->clear();
     _EmbeddedScriptsListStore->clear();
+    auto document = getDocument();
+    if (!document)
+        return;
+
     std::vector<SPObject *> current = getDocument()->getResourceList( "script" );
     if (!current.empty()) {
         SPObject *obj = *(current.begin());
@@ -1347,7 +1369,7 @@ void DocumentProperties::update_widgets()
 {
     auto desktop = getDesktop();
     auto document = getDocument();
-    if (_wr.isUpdating() || !desktop) return;
+    if (_wr.isUpdating() || !document) return;
 
     SPNamedView *nv = desktop->getNamedView();
 
@@ -1420,12 +1442,12 @@ void DocumentProperties::update_widgets()
 
     //-----------------------------------------------------------meta pages
     /* update the RDF entities */
-    for (auto & it : _rdflist)
-        it->update (getDocument());
+    if (auto document = getDocument()) {
+        for (auto & it : _rdflist)
+            it->update(document);
 
-    _licensor.update (getDocument());
-
-
+        _licensor.update(document);
+    }
     _wr.setUpdating (false);
 }
 
@@ -1473,9 +1495,11 @@ void DocumentProperties::load_default_metadata()
 void DocumentProperties::save_default_metadata()
 {
     /* Save these RDF entities to preferences*/
-    for (auto & it : _rdflist) {
-        it->save_to_preferences (getDocument());
-   }
+    if (auto document = getDocument()) {
+        for (auto & it : _rdflist) {
+            it->save_to_preferences(document);
+        }
+    }
 }
 
 void DocumentProperties::documentReplaced()
@@ -1488,6 +1512,7 @@ void DocumentProperties::documentReplaced()
         _wr.setDesktop(desktop);
         _repr_namedview = desktop->getNamedView()->getRepr();
         _repr_namedview->addListener(&_repr_events, this);
+        populate_linked_profiles_box();
     }
 }
 
@@ -1548,11 +1573,13 @@ void DocumentProperties::onRemoveGrid()
     if( pagenum < (gint)nv->grids.size())
         found_grid = nv->grids[pagenum];
 
-    if (found_grid) {
-        // delete the grid that corresponds with the selected tab
-        // when the grid is deleted from SVG, the SPNamedview handler automatically deletes the object, so found_grid becomes an invalid pointer!
-        found_grid->repr->parent()->removeChild(found_grid->repr);
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_DOCPROPERTIES, _("Remove grid"));
+    if (auto document = getDocument()) {
+        if (found_grid) {
+            // delete the grid that corresponds with the selected tab
+            // when the grid is deleted from SVG, the SPNamedview handler automatically deletes the object, so found_grid becomes an invalid pointer!
+            found_grid->repr->parent()->removeChild(found_grid->repr);
+            DocumentUndo::done(document, SP_VERB_DIALOG_DOCPROPERTIES, _("Remove grid"));
+        }
     }
 }
 
