@@ -22,16 +22,9 @@
       </item>
     </section>
 
-  	    <!-- Left for conversion 
-    <submenu id="recent-file">
-	  <attribute name='label' translatable="yes">recent file</attribute>
-      <section>
-        <item>
-          <attribute name='label' translatable="yes">recent file</attribute>
-          <attribute name='action'>win.file-oasdfsafdpen</attribute>
-        </item>
-      </section>
-  	<submenu>    -->
+    <submenu id="recent-files">
+    <attribute name='label' translatable='yes'>Recent files</attribute>
+    </submenu>   
     
     <section>
       <item>

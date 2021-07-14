@@ -42,7 +42,7 @@ class Effect : public Extension {
     static Inkscape::XML::Node * _effects_list;
     static Inkscape::XML::Node * _filters_list;
     Inkscape::XML::Node *find_menu (Inkscape::XML::Node * menustruct, const gchar *name);
-    void merge_menu (Inkscape::XML::Node * base, Inkscape::XML::Node * start, Inkscape::XML::Node * pattern, Inkscape::XML::Node * merge);
+    void get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu);
 
     /** \brief  Menu node created for this effect */
     Inkscape::XML::Node * _menu_node;

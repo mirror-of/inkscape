@@ -202,6 +202,8 @@ set(inkscape_SRC
 
   inkscape-application.h
   inkscape-application.cpp
+  actions/actions-effect-data.h
+  actions/actions-effect-data.cpp
   actions/actions-extra-data.h
   actions/actions-extra-data.cpp
   actions/actions-hint-data.h

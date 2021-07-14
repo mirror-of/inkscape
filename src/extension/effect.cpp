@@ -43,6 +43,17 @@ action_effect(Effect* effect)
     effect->effect(InkscapeApplication::instance()->get_active_view());   
 }
 
+std::string
+action_menu_name(std::string menu){
+    transform(menu.begin(), menu.end(), menu.begin(), ::tolower);
+    for(auto &x:menu){
+        if (x==' ') {
+            x = '-';
+        }
+    }
+    return menu;
+}
+
 Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
     : Extension(in_repr, in_imp, base_directory)
     , _menu_node(nullptr), _workingDialog(true)
@@ -94,136 +105,64 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         } // children of "inkscape-extension"
     } // if we have an XML file
 
-    // \TODO this gets called from the Inkscape::Application constructor, where it initializes the menus.
-    // But in the constructor, our object isn't quite there yet!
-    if (Inkscape::Application::exists() && INKSCAPE.use_gui()) {
-        if (_effects_list == nullptr)
-            _effects_list = find_menu(INKSCAPE.get_menus(), EFFECTS_LIST);
-        if (_filters_list == nullptr)
-            _filters_list = find_menu(INKSCAPE.get_menus(), FILTERS_LIST);
-    }
+    std::string action_id = "app."+std::string(get_id());
 
-    if ((_effects_list != nullptr || _filters_list != nullptr)) {
-        Inkscape::XML::Document *xml_doc;
-        xml_doc = _effects_list->document();
-        _menu_node = xml_doc->createElement("action");
+    // cant use documnent level because it is not defined 
+    static auto app = InkscapeApplication::instance();
+    static auto gapp = InkscapeApplication::instance()->gtk_app();
+    gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
 
-        // Action element add with name and action_name 
-        _menu_node->setAttribute("name", this->get_name());
-        _menu_node->setAttribute("action_name", this->get_id());
-
-        std::string action_id = "app."+std::string(get_id());
-
-        // cant use documnent level because it is not defined 
-        static auto app = InkscapeApplication::instance();
-        static auto gapp = InkscapeApplication::instance()->gtk_app();
-        gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
-
-        if (!hidden) {
-            if (_filters_list &&
-                local_effects_menu &&
-                local_effects_menu->attribute("name") &&
-                !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
-            
-                std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",discription}};
-                app->get_action_extra_data().add_data(raw_data_filter);
-                merge_menu(_filters_list->parent(), _filters_list, local_effects_menu->firstChild(), _menu_node);
-            
-            } else if (_effects_list) {
-
-                std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",discription}};
-                app->get_action_extra_data().add_data(raw_data_effect);
-                merge_menu(_effects_list->parent(), _effects_list, local_effects_menu, _menu_node);
-            
-            }
+    if (!hidden) {
+        
+        // Submenu retrival as a string
+        std::string sub_menu;
+        get_menu(local_effects_menu,sub_menu);
+        sub_menu = action_menu_name(sub_menu);
+        
+        if (!strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
+        
+            std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",discription}};
+            app->get_action_extra_data().add_data(raw_data_filter);
+            sub_menu = sub_menu.substr(1);
+        
+        } else {
+        
+            std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",discription}};
+            app->get_action_extra_data().add_data(raw_data_effect);            
+            sub_menu="effect"+sub_menu;
         }
-    }
 
-    return;
+        // Add submenu to effect data
+        app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
+    }
 }
 
 void
-Effect::merge_menu (Inkscape::XML::Node * base,
-                    Inkscape::XML::Node * start,
-                    Inkscape::XML::Node * pattern,
-                    Inkscape::XML::Node * merge) {
+Effect::get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu) 
+{
     Glib::ustring mergename;
-    Inkscape::XML::Node * tomerge = nullptr;
-    Inkscape::XML::Node * submenu = nullptr;
 
     if (pattern == nullptr) {
-        tomerge = merge;
         mergename = get_name();
     } else {
         gchar const *menuname = pattern->attribute("name");
         if (menuname == nullptr) menuname = pattern->attribute("_name");
         if (menuname == nullptr) return;
 
-        Inkscape::XML::Document *xml_doc;
-        xml_doc = base->document();
-        tomerge = xml_doc->createElement("submenu");
         if (_translation_enabled) {
             mergename = get_translation(menuname);
         } else {
-            // Even if the extension author requested the extension not to be translated,
-            // it still seems desirable to be able to put the extension into the existing (translated) submenus.
             mergename = _(menuname);
         }
-        tomerge->setAttribute("name", mergename);
-    }
-
-    int position = -1;
-
-    if (start != nullptr) {
-        Inkscape::XML::Node * menupass;
-        for (menupass = start; menupass != nullptr && strcmp(menupass->name(), "separator"); menupass = menupass->next()) {
-            gchar const * compare_char = nullptr;
-
-            if (!strcmp(menupass->name(), "submenu")) {
-                compare_char = menupass->attribute("name");
-                if (compare_char == nullptr)
-                    compare_char = menupass->attribute("_name");
-            }
-
-            position = menupass->position() + 1;
-
-            /* This will cause us to skip tags we don't understand */
-            if (compare_char == nullptr) {
-                continue;
-            }
-
-            Glib::ustring compare(_(compare_char));
-
-            if (mergename == compare) {
-                Inkscape::GC::release(tomerge);
-                tomerge = nullptr;
-                submenu = menupass;
-                break;
-            }
-
-            if (mergename < compare) {
-                position = menupass->position();
-                break;
-            }
-        } // for menu items
-    } // start != NULL
-
-    if (tomerge != nullptr) {
-        if (position != -1) {
-            base->addChildAtPos(tomerge, position);
-        } else {
-            base->appendChild(tomerge);
-        }
-        Inkscape::GC::release(tomerge);
+        
+        // makeing sub menu string
+        sub_menu+="-";
+        sub_menu+= menuname;
     }
 
     if (pattern != nullptr) {
-        if (submenu == nullptr)
-            submenu = tomerge;
-        merge_menu(submenu, submenu->firstChild(), pattern->firstChild(), merge);
+        get_menu( pattern->firstChild(),sub_menu);
     }
-
-    return;
 }
 
 Effect::~Effect ()
@@ -322,8 +261,8 @@ Effect::find_menu (Inkscape::XML::Node * menustruct, const gchar *name)
         Inkscape::XML::Node * firstchild = child->firstChild();
         if (firstchild != nullptr) {
             Inkscape::XML::Node *found = find_menu (firstchild, name);
-            if (found)
-                return found;
+            if (found){
+                return found;}
         }
     }
     return nullptr;

@@ -7,7 +7,7 @@
        <!-- <verb verb-id="FileNew" />
        <verb verb-id="FileTemplates" />
        <verb verb-id="FileOpen" /> -->
-       <recent-file-list/>
+       <!-- <recent-file-list/> -->
        <!-- <verb verb-id="FileRevert" />
        <verb verb-id="FileSave" />
        <verb verb-id="FileSaveAs" />
@@ -290,10 +290,12 @@
        <verb verb-id="DialogSpellcheck" />  depends on WITH_GSPELL -->
    </submenu>
    <submenu name="Filter_s">
-       <filters-list/>
-       <separator/>
-       <verb verb-id="DialogFilterEffects" />   <!-- Remove in common ui file for menu -->
-       <verb verb-id="RemoveFilter" />          <!-- Remove in common ui file for menu -->
+       <!-- <filters-list/> -->
+       <!-- <separator/> -->
+       <!-- <verb verb-id="DialogFilterEffects" />  -->
+         <!-- Remove in common ui file for menu -->
+       <!-- <verb verb-id="RemoveFilter" />         -->
+         <!-- Remove in common ui file for menu -->
     
     <!-- 
         uncomment in common ui file for menu
@@ -313,12 +315,15 @@
 
    </submenu>
    <submenu name="Exte_nsions">
-       <verb verb-id="EffectLast" />        <!-- Remove in common ui file for menu -->
-       <verb verb-id="EffectLastPref" />    <!-- Remove in common ui file for menu -->
+       <!-- <verb verb-id="EffectLast" />     -->
+           <!-- Remove in common ui file for menu -->
+       <!-- <verb verb-id="EffectLastPref" /> -->
+           <!-- Remove in common ui file for menu -->
 
         <!-- 
         uncomment in common ui file for menu
-        <section>
+        <section>ion/system.cpp:587
+
           <item>
           <attribute name='label' translatable="yes">Previous Exte_nsion</attribute>
           <attribute name='action'>app.last-effect</attribute>
@@ -330,10 +335,11 @@
         </section>
         -->
 
+       <!-- <effects-list/> -->
+       <!-- <separator/>
        <separator/>
-       <effects-list/>
-       <separator/>
-       <verb verb-id="org.inkscape.extensions.manager" />   <!-- Remove in common ui file for menu -->
+       <verb verb-id="org.inkscape.extensions.manager" />   -->
+        <!-- Remove in common ui file for menu -->
 
         <!--
         uncomment in common ui file for menu  

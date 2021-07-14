@@ -26,27 +26,19 @@ void
 file_open(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
-
     Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(s.get());
     if (!file->query_exists()) {
         std::cerr << "file_open: file '" << s.get() << "' does not exist." << std::endl;
         return;
     }
-
-    SPDocument *document = app->document_open(file);
-    INKSCAPE.add_document(document);
-
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-    app->set_active_document(document);
-    app->set_active_selection(context.getSelection());
-    app->set_active_view(context.getView());
-
-    document->ensureUpToDate();
+    app->create_window(file);
 }
 
 void
 file_new(const Glib::VariantBase& value, InkscapeApplication *app)
 {
+    std::cout<<"new value = "<<value<<"\n";
+
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
 
     SPDocument *document = app->document_new(s.get());
