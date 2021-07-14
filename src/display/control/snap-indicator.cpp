@@ -351,7 +351,7 @@ Geom::Coord get_y(Geom::Rect const &source, Geom::Rect const &target, double con
 {
     Geom::Coord y;
 
-    if (source.midpoint().y() < target.midpoint().y() + 1e-3) {
+    if (source.midpoint().y() < target.midpoint().y() + 5) {
         y = source.max().y() + offset;
         sign = 1;
     } else {
@@ -366,7 +366,7 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target, double con
 {
     Geom::Coord x;
 
-    if (source.midpoint().x() < target.midpoint().x() + 1e-3) {
+    if (source.midpoint().x() < target.midpoint().x() + 5) {
         x = source.max().x() + offset;
         sign = 1;
     } else {
