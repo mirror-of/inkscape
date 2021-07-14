@@ -52,8 +52,7 @@ public:
 
     static ObjectsPanel& getInstance();
 
-    void update() override;
-    void setDocument( SPDesktop* desktop, SPDocument* document);
+    void documentReplaced() override;
 
 private:
     //Internal Classes:
@@ -69,18 +68,6 @@ private:
     //All object watchers
     std::map<SPItem*, std::pair<ObjectsPanel::ObjectWatcher*, bool> > _objectWatchers;
 
-    //Connection for when the desktop is destroyed (I.e. its deconstructor is called)
-    sigc::connection _desktopDestroyedConnection;
-
-    //Connection for when the document changes
-    sigc::connection _documentChangedConnection;
-
-    //Connection for when the active layer changes
-    sigc::connection _documentChangedCurrentLayer;
-
-    //Connection for when the active selection in the document changes
-    sigc::connection _selectionChangedConnection;
-
     //Connection for when the selection in the dialog changes
     sigc::connection _selectedConnection;
 
@@ -94,12 +81,6 @@ private:
     sigc::connection _executeUpdate_sig;
 
     //Members:
-
-    //The current desktop
-    SPDesktop* _desktop;
-
-    //The current document
-    SPDocument* _document;
 
     //Tree data model
     ModelColumns* _model;

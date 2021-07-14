@@ -158,14 +158,14 @@ void GradientTool::setup() {
        sigc::mem_fun(this, &GradientTool::selection_changed)
     ));
 
-    this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChangedEx(
-       [=](gpointer ptr, SPObject* obj) {
+    subselcon = new sigc::connection(desktop->connect_gradient_stop_selected(
+        [=](void* sender, SPStop* stop) {
           selection_changed(nullptr);
-          if (auto stop = dynamic_cast<SPStop*>(obj)) {
+          if (stop) {
              // sync stop selection:
             _grdrag->selectByStop(stop, false, true);
           }
-       }
+        }
     ));
 
     this->selection_changed(selection);

@@ -35,7 +35,9 @@ void StyleSubject::setDesktop(SPDesktop *desktop) {
         }
         _desktop = desktop;
         _afterDesktopSwitch(desktop);
-        _emitChanged();
+        if (_desktop) {
+            _emitChanged();
+        }
     }
 }
 

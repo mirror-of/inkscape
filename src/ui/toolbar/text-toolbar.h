@@ -52,6 +52,7 @@ class Selection;
 namespace UI {
 namespace Tools {
 class ToolBase;
+class TextTool;
 }
 
 namespace Widget {
@@ -131,7 +132,7 @@ private:
     void selection_changed(Inkscape::Selection *selection);
     void selection_modified(Inkscape::Selection *selection, guint flags);
     void selection_modified_select_tool(Inkscape::Selection *selection, guint flags);
-    void subselection_changed(gpointer texttool);
+    void subselection_changed(Inkscape::UI::Tools::TextTool* texttool);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
     Inkscape::XML::Node *unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before);

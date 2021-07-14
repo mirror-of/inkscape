@@ -38,6 +38,7 @@ class Selection;
 
 namespace UI {
 class SimplePrefPusher;
+class ControlPointSelection;
 
 namespace Tools {
 class ToolBase;
@@ -82,7 +83,7 @@ private:
     void value_changed(Geom::Dim2 d);
     void sel_changed(Inkscape::Selection *selection);
     void sel_modified(Inkscape::Selection *selection, guint /*flags*/);
-    void coord_changed(gpointer shape_editor);
+    void coord_changed(Inkscape::UI::ControlPointSelection* selected_nodes);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void edit_add();
     void edit_add_min_x();

@@ -688,17 +688,6 @@ void SPDesktopWidget::updateNamedview()
 }
 
 /**
- * Code to run when the document changes (usually because the desktop has changed)
- */
-void SPDesktopWidget::updateDocument()
-{
-    if (_panels) {
-        _panels->setDocumentIfClosed(desktop->doc());
-    }
-}
-
-
-/**
  * Callback to handle desktop widget event.
  */
 gint
@@ -1233,7 +1222,6 @@ void SPDesktopWidget::layoutWidgets()
         dtw->_panels->hide();
     } else {
         dtw->_panels->show_all();
-        _panels->setDocumentIfClosed(desktop->doc());
     }
 
     _canvas_grid->ShowScrollbars(prefs->getBool(pref_root + "scrollbars/state", true));

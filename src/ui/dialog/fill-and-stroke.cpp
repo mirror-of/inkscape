@@ -49,7 +49,6 @@ FillAndStroke::FillAndStroke()
                           UI::Widget::SimpleFilterModifier::BLEND |
                           UI::Widget::SimpleFilterModifier::BLUR |
                           UI::Widget::SimpleFilterModifier::OPACITY)
-    , targetDesktop(nullptr)
     , fillWdgt(nullptr)
     , strokeWdgt(nullptr)
 {
@@ -76,34 +75,26 @@ FillAndStroke::FillAndStroke()
 
 FillAndStroke::~FillAndStroke()
 {
-    setDesktop(nullptr);
+    // Disconnect signals from composite settings
+    _composite_settings.setSubject(nullptr);
+    fillWdgt->setDesktop(nullptr);
+    strokeWdgt->setDesktop(nullptr);
+    strokeStyleWdgt->setDesktop(nullptr);
+    _subject.setDesktop(nullptr);
 }
 
-void FillAndStroke::update()
+void FillAndStroke::desktopReplaced()
 {
-    if (!_app) {
-        std::cerr << "FillAndStroke::update(): _app is null" << std::endl;
-        return;
+    if (fillWdgt) {
+        fillWdgt->setDesktop(getDesktop());
     }
-
-    setDesktop(getDesktop());
-}
-
-void FillAndStroke::setDesktop(SPDesktop *desktop)
-{
-    if (targetDesktop != desktop) {
-        targetDesktop = desktop;
-        if (fillWdgt) {
-            fillWdgt->setDesktop(desktop);
-        }
-        if (strokeWdgt) {
-            strokeWdgt->setDesktop(desktop);
-        }
-        if (strokeStyleWdgt) {
-            strokeStyleWdgt->setDesktop(desktop);
-        }
-        _subject.setDesktop(desktop);
+    if (strokeWdgt) {
+        strokeWdgt->setDesktop(getDesktop());
     }
+    if (strokeStyleWdgt) {
+        strokeStyleWdgt->setDesktop(getDesktop());
+    }
+    _subject.setDesktop(getDesktop());
 }
 
 void FillAndStroke::_onSwitchPage(Gtk::Widget * /*page*/, guint pagenum)

@@ -48,8 +48,9 @@ public:
     ~IconPreviewPanel() override;
 
     static IconPreviewPanel& getInstance();
+    void selectionModified(Selection *selection, guint flags) override;
+    void documentReplaced() override;
 
-    void update() override;
     void refreshPreview();
     void modeToggled();
 
@@ -57,9 +58,6 @@ private:
     IconPreviewPanel(IconPreviewPanel const &) = delete; // no copy
     IconPreviewPanel &operator=(IconPreviewPanel const &) = delete; // no assign
 
-
-    SPDesktop *desktop;
-    SPDocument *document;
     Drawing *drawing;
     unsigned int visionkey;
     Glib::Timer *timer;
@@ -84,7 +82,6 @@ private:
     Glib::ustring** labels;
     Gtk::ToggleToolButton** buttons;
     sigc::connection docModConn;
-
 
     void setDocument( SPDocument *document );
     void on_button_clicked(int which);

@@ -88,8 +88,6 @@ UndoHistory& UndoHistory::getInstance()
 
 UndoHistory::UndoHistory()
     : DialogBase("/dialogs/undo-history", "UndoHistory"),
-      _document_replaced_connection(),
-      _document(nullptr),
       _event_log(nullptr),
       _scrolled_window(),
       _event_list_store(),
@@ -153,55 +151,35 @@ UndoHistory::UndoHistory()
 
 UndoHistory::~UndoHistory()
 {
-    // disconnect from prior
+    disconnectEventLog();
+}
+
+void UndoHistory::documentReplaced()
+{
+    disconnectEventLog();
+    if (auto document = getDocument()) {
+        g_assert (document->get_event_log() != nullptr);
+        SignalBlocker blocker(&_callback_connections[EventLog::CALLB_SELECTION_CHANGE]);
+        _event_list_view.unset_model();
+        connectEventLog();
+    }
+}
+
+void UndoHistory::disconnectEventLog()
+{
     if (_event_log) {
         _event_log->removeDialogConnection(&_event_list_view, &_callback_connections);
         _event_log->remove_destroy_notify_callback(this);
     }
 }
 
-// Required for floating dialogs.
-void UndoHistory::update()
+void UndoHistory::connectEventLog()
 {
-    if (!_app) {
-        std::cerr << "UndoHistory::update(): _app is null" << std::endl;
-        return;
-    }
-
-    if (_document != _app->get_active_document()) {
-        _connectDocument(_app->get_active_document());
-    }
-}
-
-void UndoHistory::_connectDocument(SPDocument *document)
-{
-    g_assert (document != nullptr);
-    g_assert (document->get_event_log() != nullptr);
-
-    // disconnect from prior
-    if (_event_log) {
-        _event_log->removeDialogConnection(&_event_list_view, &_callback_connections);
-        _event_log->remove_destroy_notify_callback(this);
-    }
-
-    SignalBlocker blocker(&_callback_connections[EventLog::CALLB_SELECTION_CHANGE]);
-
-    _event_list_view.unset_model();
-
-    // connect to new EventLog
-    _document = document;
-    _event_log = document->get_event_log();
-    _connectEventLog();
-}
-
-void UndoHistory::_connectEventLog()
-{
-    if (_event_log) {
+    if (auto document = getDocument()) {
+        _event_log = document->get_event_log();
         _event_log->add_destroy_notify_callback(this, &_handleEventLogDestroyCB);
         _event_list_store = _event_log->getEventListStore();
-
         _event_list_view.set_model(_event_list_store);
-
         _event_log->addDialogConnection(&_event_list_view, &_callback_connections);
         _event_list_view.scroll_to_row(_event_list_store->get_path(_event_list_selection->get_selected()));
     }
@@ -251,7 +229,7 @@ UndoHistory::_onListSelectionChange()
 
             _event_log->blockNotifications();
             for ( --last ; curr_event != last ; ++curr_event ) {
-                DocumentUndo::redo(_document);
+                DocumentUndo::redo(getDocument());
             }
             _event_log->blockNotifications(false);
 
@@ -285,7 +263,7 @@ UndoHistory::_onListSelectionChange()
 
             while ( selected != last_selected ) {
 
-                DocumentUndo::undo(_document);
+                DocumentUndo::undo(getDocument());
 
                 if ( last_selected->parent() &&
                      last_selected == last_selected->parent()->children().begin() )
@@ -310,7 +288,7 @@ UndoHistory::_onListSelectionChange()
 
             while ( selected != last_selected ) {
 
-                DocumentUndo::redo(_document);
+                DocumentUndo::redo(getDocument());
 
                 if ( !last_selected->children().empty() ) {
                     _event_log->setCurrEventParent(last_selected);
@@ -354,10 +332,10 @@ UndoHistory::_onCollapseEvent(const Gtk::TreeModel::iterator &iter, const Gtk::T
         EventLog::const_iterator last = curr_event_parent->children().end();
 
         _event_log->blockNotifications();
-        DocumentUndo::redo(_document);
+        DocumentUndo::redo(getDocument());
 
         for ( --last ; curr_event != last ; ++curr_event ) {
-            DocumentUndo::redo(_document);
+            DocumentUndo::redo(getDocument());
         }
         _event_log->blockNotifications(false);
 

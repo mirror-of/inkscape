@@ -59,6 +59,10 @@ public:
     TextEdit();
     ~TextEdit() override;
 
+    void documentReplaced() override;
+    void selectionChanged(Selection *selection) override;
+    void selectionModified(Selection *selection, guint flags) override;
+
     /**
      * Helper function which returns a new instance of the dialog.
      * getInstance is needed by the dialog manager (Inkscape::UI::Dialog::DialogManager).
@@ -76,8 +80,6 @@ protected:
      * Callback for pressing the apply button.
      */
     void onApply ();
-    void onSelectionChange ();
-    void onSelectionModified (guint flags);
 
     /**
      * Called whenever something 'changes' on canvas.
@@ -133,11 +135,6 @@ protected:
 
     void updateObjectText ( SPItem *text );
     SPCSSAttr *fillTextStyle ();
-
-    /**
-     * Can be invoked for setting the desktop. Currently not used.
-     */
-    void update() override;
 
 private:
 

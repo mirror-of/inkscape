@@ -30,6 +30,7 @@
 #include <list>
 
 #include "2geom/rect.h"
+#include "helper/auto-connection.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/frame.h"
 #include "ui/widget/scrollprotected.h"
@@ -52,6 +53,9 @@ public:
     ~AlignAndDistribute() override;
 
     static AlignAndDistribute &getInstance() { return *new AlignAndDistribute(); }
+    void desktopReplaced() override;
+    void selectionChanged(Inkscape::Selection*) override;
+    void toolChanged(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
 
     Gtk::Grid &align_table(){return _alignTable;}
     Gtk::Grid &distribute_table(){return _distributeTable;}
@@ -118,11 +122,12 @@ protected:
     Gtk::Box _anchorBoxNode;
     Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> _comboNode;
 
-    sigc::connection _toolChangeConn;
-    sigc::connection _selChangeConn;
+    Inkscape::auto_connection _tool_changed;
 private:
     AlignAndDistribute(AlignAndDistribute const &d) = delete;
     AlignAndDistribute& operator=(AlignAndDistribute const &d) = delete;
+
+    friend class Align;
 };
 
 struct BBoxSort
@@ -150,7 +155,10 @@ public :
     virtual ~Action()= default;
 
     AlignAndDistribute &_dialog;
+    void setDesktop(SPDesktop *desktop) { _desktop = desktop; }
 
+protected:
+    SPDesktop *_desktop;
 private :
     virtual void on_button_click(){}
 
@@ -186,11 +194,8 @@ private :
 
 
     void on_button_click() override {
-        //Retrieve selected objects
-        SPDesktop *desktop = _dialog.getDesktop();
-        if (!desktop) return;
-
-        do_action(desktop, _index);
+        if (!_desktop) return;
+        do_action(_desktop, _index);
     }
 
     static void do_action(SPDesktop *desktop, int index);

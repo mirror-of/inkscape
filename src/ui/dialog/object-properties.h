@@ -45,7 +45,6 @@
 #include "ui/widget/frame.h"
 
 class SPAttributeTable;
-class SPDesktop;
 class SPItem;
 
 namespace Gtk {
@@ -66,13 +65,13 @@ class ObjectProperties : public DialogBase
 {
 public:
     ObjectProperties();
-    ~ObjectProperties() override;
+    ~ObjectProperties() override {};
 
     static ObjectProperties &getInstance() { return *new ObjectProperties(); }
 
     /// Updates entries and other child widgets on selection change, object modification, etc.
     void update_entries();
-    void update() override;
+    void selectionChanged(Selection *selection) override;
 
 private:
     bool _blocked;
@@ -101,10 +100,6 @@ private:
     Gtk::SpinButton _spin_dpi; //the expander for interactivity
     Gtk::Expander _exp_interactivity; //the expander for interactivity
     SPAttributeTable *_attr_table; //the widget for showing the on... names at the bottom
-
-    SPDesktop *_desktop;
-    sigc::connection _selection_changed_connection;
-    sigc::connection _subselection_changed_connection;
 
     /// Constructor auxiliary function creating the child widgets.
     void _init();

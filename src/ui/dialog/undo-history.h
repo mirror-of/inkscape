@@ -108,13 +108,9 @@ public:
     ~UndoHistory() override;
 
     static UndoHistory &getInstance();
-    void update() override;
-
-    sigc::connection _document_replaced_connection;
+    void documentReplaced() override;
 
 protected:
-
-    SPDocument *_document;
     EventLog *_event_log;
 
     Gtk::ScrolledWindow _scrolled_window;
@@ -127,8 +123,9 @@ protected:
 
     static void *_handleEventLogDestroyCB(void *data);
 
-    void _connectDocument(SPDocument *document);
-    void _connectEventLog();
+    void disconnectEventLog();
+    void connectEventLog();
+
     void *_handleEventLogDestroy();
     void _onListSelectionChange();
     void _onExpandEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);

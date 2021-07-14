@@ -43,9 +43,7 @@ public:
     ~LayersPanel() override;
 
     static LayersPanel& getInstance();
-
-    void setDesktop( SPDesktop* desktop );
-    void update() override;
+    void desktopReplaced() override;
 
 private:
     class ModelColumns;
@@ -100,7 +98,6 @@ private:
     sigc::connection _selectedConnection;
 
     int _maxNestDepth;
-    SPDesktop* _desktop;
     ModelColumns* _model;
     InternalUIBounce* _pending;
     gboolean _dnd_into;

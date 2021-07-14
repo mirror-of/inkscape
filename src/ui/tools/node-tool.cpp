@@ -202,12 +202,9 @@ void NodeTool::setup() {
     this->_selector->signal_point.connect(sigc::mem_fun(this, &NodeTool::select_point));
     this->_selector->signal_area.connect(sigc::mem_fun(this, &NodeTool::select_area));
 
-    this->_multipath->signal_coords_changed.connect(
-        sigc::bind(
-            sigc::mem_fun(*this->desktop, &SPDesktop::emitToolSubselectionChanged),
-            (void*)nullptr
-        )
-    );
+    this->_multipath->signal_coords_changed.connect([=](){
+        desktop->emit_control_point_selected(this, _selected_nodes);
+    });
 
     this->_selected_nodes->signal_selection_changed.connect(
         // Hide both signal parameters and bind the function parameter to 0
@@ -251,7 +248,7 @@ void NodeTool::setup() {
         this->enableGrDrag();
     }
 
-    this->desktop->emitToolSubselectionChanged(nullptr); // sets the coord entry fields to inactive
+    desktop->emit_control_point_selected(this, _selected_nodes); // sets the coord entry fields to inactive
     sp_update_helperpath(desktop);
 }
 

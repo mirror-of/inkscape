@@ -1321,7 +1321,6 @@ static Gtk::Menu * create_popup_menu(Gtk::Widget& parent,
 /*** FilterModifier ***/
 FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     :    Gtk::Box(Gtk::ORIENTATION_VERTICAL),
-         _desktop(nullptr),
          _dialog(d),
          _add(_("_New"), true),
          _observer(new Inkscape::XML::SignalObserver)
@@ -1382,70 +1381,6 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
-}
-
-FilterEffectsDialog::FilterModifier::~FilterModifier()
-{
-   _selectChangedConn.disconnect();
-   _selectModifiedConn.disconnect();
-   _resource_changed.disconnect();
-   _doc_replaced.disconnect();
-}
-
-void FilterEffectsDialog::FilterModifier::setTargetDesktop(SPDesktop *desktop)
-{
-    if (_desktop != desktop) {
-        if (_desktop) {
-            _selectChangedConn.disconnect();
-            _selectModifiedConn.disconnect();
-            _doc_replaced.disconnect();
-            _resource_changed.disconnect();
-        }
-        _desktop = desktop;
-        if (desktop) {
-            if (desktop->selection) {
-                _selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &FilterModifier::on_change_selection)));
-                _selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &FilterModifier::on_modified_selection)));
-            }
-            _doc_replaced = desktop->connectDocumentReplaced( sigc::mem_fun(*this, &FilterModifier::on_document_replaced));
-            _resource_changed = desktop->getDocument()->connectResourcesChanged("filter",sigc::mem_fun(*this, &FilterModifier::update_filters));
-
-            update_filters();
-        }
-    }
-}
-
-// When the document changes, update connection to resources
-void FilterEffectsDialog::FilterModifier::on_document_replaced(SPDesktop * /*desktop*/, SPDocument *document)
-{
-    if (_resource_changed) {
-        _resource_changed.disconnect();
-    }
-    if (document)
-    {
-        _resource_changed = document->connectResourcesChanged("filter",sigc::mem_fun(*this, &FilterModifier::update_filters));
-    }
-
-    update_filters();
-}
-
-// When the selection changes, show the active filter(s) in the dialog
-void FilterEffectsDialog::FilterModifier::on_change_selection()
-{
-    if (!_desktop)
-        return;
-
-    Inkscape::Selection *selection = _desktop->getSelection();
-    update_selection(selection);
-}
-
-void FilterEffectsDialog::FilterModifier::on_modified_selection( guint flags )
-{
-    if (flags & ( SP_OBJECT_MODIFIED_FLAG |
-                   SP_OBJECT_PARENT_MODIFIED_FLAG |
-                   SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
-        on_change_selection();
-    }
 }
 
 // Update each filter's sel property based on the current object selection;
@@ -1533,8 +1468,8 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
     if(iter) {
         SPDesktop *desktop = _dialog.getDesktop();
         SPDocument *doc = desktop->getDocument();
-        SPFilter* filter = (*iter)[_columns.filter];
         Inkscape::Selection *sel = desktop->getSelection();
+        SPFilter* filter = (*iter)[_columns.filter];
 
         /* If this filter is the only one used in the selection, unset it */
         if((*iter)[_columns.sel] == 1)
@@ -1571,10 +1506,7 @@ void FilterEffectsDialog::FilterModifier::update_counts()
    Keeps the same selection if possible, otherwise selects the first element */
 void FilterEffectsDialog::FilterModifier::update_filters()
 {
-    SPDesktop* desktop = _dialog.getDesktop();
-    SPDocument* document = desktop->getDocument();
-
-    std::vector<SPObject *> filters = document->getResourceList( "filter" );
+    std::vector<SPObject *> filters = _dialog.getDocument()->getResourceList("filter");
 
     _model->clear();
 
@@ -1587,7 +1519,7 @@ void FilterEffectsDialog::FilterModifier::update_filters()
         row[_columns.label] = lbl ? lbl : (id ? id : "filter");
     }
 
-    update_selection(desktop->selection);
+    update_selection(_dialog.getSelection());
     _dialog.update_filter_general_settings_view();
 }
 
@@ -1631,7 +1563,7 @@ void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventBut
 
 void FilterEffectsDialog::FilterModifier::add_filter()
 {
-    SPDocument* doc = _dialog.getDesktop()->getDocument();
+    SPDocument* doc = _dialog.getDocument();
     SPFilter* filter = new_filter(doc);
 
     const int count = _model->children().size();
@@ -1651,11 +1583,12 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
     SPFilter *filter = get_selected_filter();
 
     if(filter) {
+        auto desktop = _dialog.getDesktop();
         SPDocument* doc = filter->document;
 
         // Delete all references to this filter
         std::vector<SPItem*> x,y;
-        std::vector<SPItem*> all = get_all_items(x, _desktop->currentRoot(), _desktop, false, false, true, y);
+        std::vector<SPItem*> all = get_all_items(x, desktop->currentRoot(), desktop, false, false, true, y);
         for(std::vector<SPItem*>::const_iterator i=all.begin(); all.end() != i; ++i) {
             if (!SP_IS_ITEM(*i)) {
                 continue;
@@ -1707,13 +1640,14 @@ void FilterEffectsDialog::FilterModifier::rename_filter()
 void FilterEffectsDialog::FilterModifier::select_filter_elements()
 {
     SPFilter *filter = get_selected_filter();
+    auto desktop = _dialog.getDesktop();
 
     if(!filter)
         return;
 
     std::vector<SPItem*> x,y;
     std::vector<SPItem*> items;
-    std::vector<SPItem*> all = get_all_items(x, _desktop->currentRoot(), _desktop, false, false, true, y);
+    std::vector<SPItem*> all = get_all_items(x, desktop->currentRoot(), desktop, false, false, true, y);
     for(SPItem *item: all) {
         if (!item->style) {
             continue;
@@ -1727,8 +1661,7 @@ void FilterEffectsDialog::FilterModifier::select_filter_elements()
             }
         }
     }
-    Inkscape::Selection *selection = _desktop->getSelection();
-    selection->setList(items);
+    desktop->getSelection()->setList(items);
 }
 
 FilterEffectsDialog::CellRendererConnection::CellRendererConnection()
@@ -1939,7 +1872,7 @@ void FilterEffectsDialog::PrimitiveList::remove_selected()
         //XML Tree being used directly here while it shouldn't be.
         sp_repr_unparent(prim->getRepr());
 
-        DocumentUndo::done(_dialog.getDesktop()->getDocument(), SP_VERB_DIALOG_FILTER_EFFECTS,
+        DocumentUndo::done(_dialog.getDocument(), SP_VERB_DIALOG_FILTER_EFFECTS,
                            _("Remove filter primitive"));
 
         update();
@@ -2725,16 +2658,29 @@ FilterEffectsDialog::~FilterEffectsDialog()
     delete _filter_general_settings;
 }
 
-void FilterEffectsDialog::update()
+void FilterEffectsDialog::documentReplaced()
 {
-    if (!_app) {
-        std::cerr << "FilterEffectsDialog::update(): _app is null" << std::endl;
-        return;
+   _resource_changed.disconnect();
+   if (auto document = getDocument()) {
+       _resource_changed = document->connectResourcesChanged("filter", sigc::mem_fun(_filter_modifier, &FilterModifier::update_filters));
+       _filter_modifier.update_filters();
+   }
+}
+
+void FilterEffectsDialog::selectionChanged(Inkscape::Selection *selection)
+{
+    if (selection) {
+        _filter_modifier.update_selection(selection);
     }
+}
 
-    SPDesktop *desktop = getDesktop();
-
-    _filter_modifier.setTargetDesktop(desktop);
+void FilterEffectsDialog::selectionModified(Inkscape::Selection *selection, guint flags)
+{
+    if (flags & ( SP_OBJECT_MODIFIED_FLAG |
+                   SP_OBJECT_PARENT_MODIFIED_FLAG |
+                   SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
+        _filter_modifier.update_selection(selection);
+    }
 }
 
 void FilterEffectsDialog::set_attrs_locked(const bool l)

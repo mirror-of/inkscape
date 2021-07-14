@@ -426,7 +426,9 @@ NodeToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec)
         // watch selection
         c_selection_changed = desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &NodeToolbar::sel_changed));
         c_selection_modified = desktop->getSelection()->connectModified(sigc::mem_fun(*this, &NodeToolbar::sel_modified));
-        c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &NodeToolbar::coord_changed));
+        c_subselection_changed = desktop->connect_control_point_selected([=](void* sender, Inkscape::UI::ControlPointSelection* selection) {
+            coord_changed(selection);
+        });
 
         sel_changed(desktop->getSelection());
     } else {
@@ -447,7 +449,7 @@ NodeToolbar::sel_modified(Inkscape::Selection *selection, guint /*flags*/)
 
 /* is called when the node selection is modified */
 void
-NodeToolbar::coord_changed(gpointer /*shape_editor*/)
+NodeToolbar::coord_changed(Inkscape::UI::ControlPointSelection* selected_nodes) // gpointer /*shape_editor*/)
 {
     // quit if run by the attr_changed listener
     if (_freeze) {
@@ -463,8 +465,7 @@ NodeToolbar::coord_changed(gpointer /*shape_editor*/)
     Unit const *unit = _tracker->getActiveUnit();
     g_return_if_fail(unit != nullptr);
 
-    NodeTool *nt = get_node_tool();
-    if (!nt || !(nt->_selected_nodes) ||nt->_selected_nodes->empty()) {
+    if (!selected_nodes || selected_nodes->empty()) {
         // no path selected
         _nodes_x_item->set_sensitive(false);
         _nodes_y_item->set_sensitive(false);
@@ -473,7 +474,7 @@ NodeToolbar::coord_changed(gpointer /*shape_editor*/)
         _nodes_y_item->set_sensitive(true);
         Geom::Coord oldx = Quantity::convert(_nodes_x_adj->get_value(), unit, "px");
         Geom::Coord oldy = Quantity::convert(_nodes_y_adj->get_value(), unit, "px");
-        Geom::Point mid = nt->_selected_nodes->pointwiseBounds()->midpoint();
+        Geom::Point mid = selected_nodes->pointwiseBounds()->midpoint();
 
         if (oldx != mid[Geom::X]) {
             _nodes_x_adj->set_value(Quantity::convert(mid[Geom::X], "px", unit));

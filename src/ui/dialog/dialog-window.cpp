@@ -152,6 +152,11 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     // window is created hidden; don't show it now, its size needs to be restored
 }
 
+void DialogWindow::set_desktop(SPDesktop *desktop)
+{
+    _container->set_desktop(desktop);
+}
+
 /**
  * Update all dialogs that are owned by the DialogWindow's _container.
  */

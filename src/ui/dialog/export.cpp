@@ -441,16 +441,6 @@ void Export::setDesktop(SPDesktop *desktop)
 
 void Export::update()
 {
-    if (!_app) {
-        std::cerr << "Export::update(): _app is null" << std::endl;
-        return;
-    }
-
-    onSelectionChanged();
-    onSelectionModified(0);
-#if 0
-    setDesktop(getDesktop());
-#endif
 }
 
 /*
@@ -1349,7 +1339,7 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
 void Export::onBrowse ()
 {
     // Create and show the dialog
-    Gtk::Window *window = _app->get_active_window();
+    Gtk::Window *window = getApp()->get_active_window();
     std::string filename = Glib::filename_from_utf8(filename_entry.get_text());
 
     if (filename.empty()) {

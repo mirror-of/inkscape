@@ -359,27 +359,9 @@ Find::Find()
     entry_find.getEntry()->grab_focus();
 }
 
-Find::~Find()
+void Find::desktopReplaced()
 {
-    selectChangedConn.disconnect();
-}
-
-void Find::update()
-{
-    if (!_app) {
-        std::cerr << "Find::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-    selectChangedConn.disconnect();
-
-    if (!desktop)
-        return;
-
-    auto selection = desktop->getSelection();
-
-    if (selection) {
+    if (auto selection = getSelection()) {
         SPItem *item = selection->singleItem();
         if (item && entry_find.getEntry()->get_text_length() == 0) {
             Glib::ustring str = sp_te_get_string_multiline(item);
@@ -387,12 +369,10 @@ void Find::update()
                 entry_find.getEntry()->set_text(str);
             }
         }
-
-        selectChangedConn = selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &Find::onSelectionChange)));
     }
 }
 
-void Find::onSelectionChange()
+void Find::selectionChanged(Selection *selection)
 {
     if (!blocked) {
         status.set_text("");
@@ -913,8 +893,7 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
         return l; // we're not interested in metadata
     }
 
-    auto desktop = dynamic_cast<SPDesktop *>(_app->get_active_view());
-
+    auto desktop = getDesktop();
     for (auto& child: r->children) {
         SPItem *item = dynamic_cast<SPItem *>(&child);
         if (item && !child.cloned && !desktop->isLayer(item)) {
@@ -929,9 +908,8 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
 
 std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
 {
-    auto desktop = dynamic_cast<SPDesktop *>(_app->get_active_view());
-
-    auto itemlist= s->items();
+    auto desktop = getDesktop();
+    auto itemlist = s->items();
     for (auto i=boost::rbegin(itemlist); boost::rend(itemlist) != i; ++i) {
         SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
@@ -980,8 +958,7 @@ void Find::onReplace()
 
 void Find::onAction()
 {
-    auto desktop = dynamic_cast<SPDesktop *>(_app->get_active_view());
-
+    auto desktop = getDesktop();
     bool hidden = check_include_hidden.get_active();
     bool locked = check_include_locked.get_active();
     bool exact = check_exact_match.get_active();

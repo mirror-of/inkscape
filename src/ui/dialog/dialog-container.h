@@ -26,8 +26,7 @@
 #include <set>
 #include <memory>
 #include "dialog-manager.h"
-
-class SPDesktop;
+#include "desktop.h"
 
 namespace Inkscape {
 namespace UI {
@@ -68,6 +67,7 @@ public:
     const std::multimap<Glib::ustring, DialogBase *> *get_dialogs() { return &dialogs; };
     void toggle_dialogs();
     void update_dialogs(); // Update all linked dialogs
+    void set_desktop(SPDesktop *desktop);
 
     // State saving functionality
     std::unique_ptr<Glib::KeyFile> save_container_state();

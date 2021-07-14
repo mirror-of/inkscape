@@ -161,8 +161,6 @@ private:
 
     sigc::connection selectChangedConn;
     sigc::connection externChangedConn;
-    sigc::connection subselChangedConn;
-    sigc::connection selectModifiedConn;
     sigc::connection color_changed_connection;
     sigc::connection unitChangedConn;
 

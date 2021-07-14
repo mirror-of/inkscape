@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "display/drawing.h"
+#include "helper/auto-connection.h"
 #include "include/gtkmm_version.h"
 #include "ui/dialog/dialog-base.h"
 
@@ -60,15 +61,14 @@ public:
     SymbolsDialog( gchar const* prefsPath = "/dialogs/symbols" );
     ~SymbolsDialog() override;
 
-    void update() override;
-
     static SymbolsDialog& getInstance();
-
 private:
     SymbolsDialog(SymbolsDialog const &) = delete; // no copy
     SymbolsDialog &operator=(SymbolsDialog const &) = delete; // no assign
 
     static SymbolColumns *getColumns();
+    void documentReplaced() override;
+    void selectionChanged(Inkscape::Selection *selection) override;
 
     Glib::ustring CURRENTDOC;
     Glib::ustring ALLDOCS;
@@ -81,8 +81,6 @@ private:
     void insertSymbol();
     void revertSymbol();
     void defsModified(SPObject *object, guint flags);
-    void selectionChanged(Inkscape::Selection *selection);
-    void documentReplaced(SPDesktop *desktop, SPDocument *document);
     SPDocument* selectedSymbols();
     Glib::ustring selectedSymbolId();
     Glib::ustring selectedSymbolDocTitle();
@@ -149,8 +147,7 @@ private:
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
     Gtk::IconSize iconsize;
-    SPDesktop*  current_desktop;
-    SPDocument* current_document;
+
     SPDocument* preview_document; /* Document to render single symbol */
 
     sigc::connection idleconn;
@@ -159,7 +156,8 @@ private:
     unsigned key;
     Inkscape::Drawing renderDrawing;
 
-    std::vector<sigc::connection> instanceConns;
+    std::vector<sigc::connection> gtk_connections;
+    Inkscape::auto_connection defs_modified;
 };
 
 } //namespace Dialogs

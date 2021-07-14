@@ -64,8 +64,6 @@ XmlTree::XmlTree()
     , blocked(0)
     , _message_stack(nullptr)
     , _message_context(nullptr)
-    , current_desktop(nullptr)
-    , current_document(nullptr)
     , selected_attr(0)
     , selected_repr(nullptr)
     , tree(nullptr)
@@ -269,18 +267,8 @@ void XmlTree::_attrtoggler()
 
 XmlTree::~XmlTree ()
 {
-    set_tree_desktop(nullptr);
+    unsetDocument();
     _message_changed_connection.disconnect();
-}
-
-void XmlTree::update()
-{
-    if (!_app) {
-        std::cerr << "XmlTree::update(): _app is null" << std::endl;
-        return;
-    }
-
-    set_tree_desktop(getDesktop());
 }
 
 /**
@@ -292,60 +280,39 @@ void XmlTree::tree_reset_context()
                           _("<b>Click</b> to select nodes, <b>drag</b> to rearrange."));
 }
 
-
-void XmlTree::set_tree_desktop(SPDesktop *desktop)
+void XmlTree::unsetDocument()
 {
-    if ( desktop == current_desktop ) {
-        return;
-    }
-
+    document_uri_set_connection.disconnect();
     if (deferred_on_tree_select_row_id != 0) {
         g_source_destroy(g_main_context_find_source_by_id(nullptr, deferred_on_tree_select_row_id));
         deferred_on_tree_select_row_id = 0;
     }
+}
 
-    if (current_desktop && current_desktop->getDocument()) {
-        sel_changed_connection.disconnect();
-        document_replaced_connection.disconnect();
-
-        // TODO: Why is this a document property?
-        current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
-    }
-    current_desktop = desktop;
-    if (desktop) {
-        sel_changed_connection = desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &XmlTree::on_desktop_selection_changed)));
-        document_replaced_connection = desktop->connectDocumentReplaced(sigc::mem_fun(this, &XmlTree::on_document_replaced));
-
-        set_tree_document(desktop->getDocument());
-    } else {
-        set_tree_document(nullptr);
-    }
-
-} // end of set_tree_desktop()
-
-
-void XmlTree::set_tree_document(SPDocument *document)
+void XmlTree::documentReplaced()
 {
-    if (document == current_document) {
-        return;
-    }
-
-    if (current_document) {
-        document_uri_set_connection.disconnect();
-    }
-    current_document = document;
-    if (current_document) {
+    unsetDocument();
+    if (auto document = getDocument()) {
+        // TODO: Why is this a document property?
+        document->setXMLDialogSelectedObject(nullptr);
 
         document_uri_set_connection =
-            current_document->connectFilenameSet(sigc::bind(sigc::ptr_fun(&on_document_uri_set), current_document));
-        on_document_uri_set(current_document->getDocumentFilename(), current_document );
-        set_tree_repr(current_document->getReprRoot());
+            document->connectFilenameSet(sigc::bind(sigc::ptr_fun(&on_document_uri_set), document));
+        on_document_uri_set(document->getDocumentFilename(), document);
+        set_tree_repr(document->getReprRoot());
     } else {
         set_tree_repr(nullptr);
     }
 }
 
-
+void XmlTree::selectionChanged(Selection *selection)
+{
+    if (!blocked++) {
+        Inkscape::XML::Node *node = get_dt_select();
+        set_tree_select(node);
+    }
+    blocked--;
+}
 
 void XmlTree::set_tree_repr(Inkscape::XML::Node *repr)
 {
@@ -392,8 +359,8 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
     }
 
     selected_repr = repr;
-    if (current_desktop) {
-        current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
+    if (auto document = getDocument()) {
+        document->setXMLDialogSelectedObject(nullptr);
     }
     if (repr) {
         GtkTreeIter node;
@@ -443,10 +410,10 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
 
 Inkscape::XML::Node *XmlTree::get_dt_select()
 {
-    if (!current_desktop) {
-        return nullptr;
+    if (auto selection = getSelection()) {
+        return selection->singleRepr();
     }
-    return current_desktop->getSelection()->singleRepr();
+    return nullptr;
 }
 
 
@@ -461,11 +428,9 @@ static bool isRealLayer(SPObject const *object)
 
 void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
 {
-    if (!current_desktop) {
+    auto document = getDocument();
+    if (!document)
         return;
-    }
-
-    Inkscape::Selection *selection = current_desktop->getSelection();
 
     SPObject *object;
     if (repr) {
@@ -475,7 +440,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
             repr = repr->parent();
         } // end of while loop
 
-        object = current_desktop->getDocument()->getObjectByRepr(repr);
+        object = document->getObjectByRepr(repr);
     } else {
         object = nullptr;
     }
@@ -485,27 +450,25 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
     if (!object || !in_dt_coordsys(*object)) {
         // object not on canvas
     } else if (isRealLayer(object)) {
-        current_desktop->setCurrentLayer(object);
+        getDesktop()->setCurrentLayer(object);
     } else {
         if (SP_IS_GROUP(object->parent)) {
-            current_desktop->setCurrentLayer(object->parent);
+            getDesktop()->setCurrentLayer(object->parent);
         }
 
-        selection->set(SP_ITEM(object));
+        getSelection()->set(SP_ITEM(object));
     }
 
-    current_desktop->getDocument()->setXMLDialogSelectedObject(object);
-
+    document->setXMLDialogSelectedObject(object);
     blocked--;
-
-} // end of set_dt_select()
+}
 
 
 void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
 {
     XmlTree *self = static_cast<XmlTree *>(data);
 
-    if (self->blocked || !self->current_desktop) {
+    if (self->blocked || !self->getDesktop()) {
         return;
     }
 
@@ -567,17 +530,10 @@ void XmlTree::after_tree_move(SPXMLViewTree * /*tree*/, gpointer value, gpointer
     guint val = GPOINTER_TO_UINT(value);
 
     if (val) {
-        DocumentUndo::done(self->current_document, SP_VERB_DIALOG_XML_EDITOR,
+        DocumentUndo::done(self->getDocument(), SP_VERB_DIALOG_XML_EDITOR,
                            Q_("Undo History / XML dialog|Drag XML subtree"));
     } else {
-        //DocumentUndo::cancel(self->current_document);
-        /*
-         * There was a problem with drag & drop,
-         * data is probably not synchronized, so reload the tree
-         */
-        SPDocument *document = self->current_document;
-        self->set_tree_document(nullptr);
-        self->set_tree_document(document);
+        DocumentUndo::cancel(self->getDocument());
     }
 }
 
@@ -717,24 +673,6 @@ void XmlTree::onCreateNameChanged()
     create_button->set_sensitive(!text.empty());
 }
 
-void XmlTree::on_desktop_selection_changed()
-{
-    if (!blocked++) {
-        Inkscape::XML::Node *node = get_dt_select();
-        set_tree_select(node);
-    }
-    blocked--;
-}
-
-void XmlTree::on_document_replaced(SPDesktop *dt, SPDocument *doc)
-{
-    if (current_desktop)
-        sel_changed_connection.disconnect();
-
-    sel_changed_connection = dt->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &XmlTree::on_desktop_selection_changed)));
-    set_tree_document(doc);
-}
-
 void XmlTree::on_document_uri_set(gchar const * /*uri*/, SPDocument * /*document*/)
 {
 /*
@@ -758,6 +696,10 @@ gboolean XmlTree::quit_on_esc (GtkWidget *w, GdkEventKey *event, GObject */*tbl*
 
 void XmlTree::cmd_new_element_node()
 {
+    auto document = getDocument();
+    if (!document)
+        return;
+
     Gtk::Dialog dialog;
     Gtk::Entry entry;
 
@@ -770,7 +712,7 @@ void XmlTree::cmd_new_element_node()
     if (result == Gtk::RESPONSE_OK) {
         Glib::ustring new_name = entry.get_text();
         if (!new_name.empty()) {
-            Inkscape::XML::Document *xml_doc = current_document->getReprDoc();
+            Inkscape::XML::Document *xml_doc = document->getReprDoc();
             Inkscape::XML::Node *new_repr;
             new_repr = xml_doc->createElement(new_name.c_str());
             Inkscape::GC::release(new_repr);
@@ -778,7 +720,7 @@ void XmlTree::cmd_new_element_node()
             set_tree_select(new_repr);
             set_dt_select(new_repr);
 
-            DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
+            DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR,
                                Q_("Undo History / XML dialog|Create new element node"));
         }
     }
@@ -787,13 +729,17 @@ void XmlTree::cmd_new_element_node()
 
 void XmlTree::cmd_new_text_node()
 {
+    auto document = getDocument();
+    if (!document)
+        return;
+
     g_assert(selected_repr != nullptr);
 
-    Inkscape::XML::Document *xml_doc = current_document->getReprDoc();
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *text = xml_doc->createTextNode("");
     selected_repr->appendChild(text);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR,
                        Q_("Undo History / XML dialog|Create new text node"));
 
     set_tree_select(text);
@@ -802,13 +748,17 @@ void XmlTree::cmd_new_text_node()
 
 void XmlTree::cmd_duplicate_node()
 {
+    auto document = getDocument();
+    if (!document)
+        return;
+
     g_assert(selected_repr != nullptr);
 
     Inkscape::XML::Node *parent = selected_repr->parent();
     Inkscape::XML::Node *dup = selected_repr->duplicate(parent->document());
     parent->addChild(dup, selected_repr);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Duplicate node"));
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Duplicate node"));
 
     GtkTreeIter node;
 
@@ -820,28 +770,35 @@ void XmlTree::cmd_duplicate_node()
 
 void XmlTree::cmd_delete_node()
 {
+    auto document = getDocument();
+    if (!document)
+        return;
+
     g_assert(selected_repr != nullptr);
 
-    current_document->setXMLDialogSelectedObject(nullptr);
+    document->setXMLDialogSelectedObject(nullptr);
 
     Inkscape::XML::Node *parent = selected_repr->parent();
 
     sp_repr_unparent(selected_repr);
 
     if (parent) {
-        auto parentobject = current_document->getObjectByRepr(parent);
+        auto parentobject = document->getObjectByRepr(parent);
         if (parentobject) {
             parentobject->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
         }
     }
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Delete node"));
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Delete node"));
 }
 
 void XmlTree::cmd_raise_node()
 {
-    g_assert(selected_repr != nullptr);
+    auto document = getDocument();
+    if (!document)
+        return;
 
+    g_assert(selected_repr != nullptr);
 
     Inkscape::XML::Node *parent = selected_repr->parent();
     g_return_if_fail(parent != nullptr);
@@ -856,7 +813,7 @@ void XmlTree::cmd_raise_node()
 
     parent->changeOrder(selected_repr, ref);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Raise node"));
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Raise node"));
 
     set_tree_select(selected_repr);
     set_dt_select(selected_repr);
@@ -866,6 +823,10 @@ void XmlTree::cmd_raise_node()
 
 void XmlTree::cmd_lower_node()
 {
+    auto document = getDocument();
+    if (!document)
+        return;
+
     g_assert(selected_repr != nullptr);
 
     g_return_if_fail(selected_repr->next() != nullptr);
@@ -873,7 +834,7 @@ void XmlTree::cmd_lower_node()
 
     parent->changeOrder(selected_repr, selected_repr->next());
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Lower node"));
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Lower node"));
 
     set_tree_select(selected_repr);
     set_dt_select(selected_repr);
@@ -881,6 +842,10 @@ void XmlTree::cmd_lower_node()
 
 void XmlTree::cmd_indent_node()
 {
+    auto document = getDocument();
+    if (!document)
+        return;
+
     Inkscape::XML::Node *repr = selected_repr;
     g_assert(repr != nullptr);
 
@@ -903,7 +868,7 @@ void XmlTree::cmd_indent_node()
     parent->removeChild(repr);
     prev->addChild(repr, ref);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Indent node"));
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Indent node"));
     set_tree_select(repr);
     set_dt_select(repr);
 
@@ -913,6 +878,10 @@ void XmlTree::cmd_indent_node()
 
 void XmlTree::cmd_unindent_node()
 {
+    auto document = getDocument();
+    if (!document)
+        return;
+
     Inkscape::XML::Node *repr = selected_repr;
     g_assert(repr != nullptr);
 
@@ -924,7 +893,7 @@ void XmlTree::cmd_unindent_node()
     parent->removeChild(repr);
     grandparent->addChild(repr, parent);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Unindent node"));
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Unindent node"));
 
     set_tree_select(repr);
     set_dt_select(repr);

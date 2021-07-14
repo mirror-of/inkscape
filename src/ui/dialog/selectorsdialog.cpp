@@ -402,18 +402,6 @@ void SelectorsDialog::_toggleDirection(Gtk::RadioButton *vertical)
 }
 
 /**
- * Class destructor
- */
-SelectorsDialog::~SelectorsDialog()
-{
-    g_debug("SelectorsDialog::~SelectorsDialog");
-
-    // Detach watchers to prevent crashes.
-    _updateWatchers(nullptr);
-}
-
-
-/**
  * @return Inkscape::XML::Node* pointing to a style element's text node.
  * Returns the style element's text node. If there is no style element, one is created.
  * Ditto for text node.
@@ -652,28 +640,6 @@ void SelectorsDialog::_writeStyleElement()
     g_debug("SelectorsDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }
 
-/**
- * Update the watchers on objects.
- */
-void SelectorsDialog::_updateWatchers(SPDesktop *desktop)
-{
-    g_debug("SelectorsDialog::_updateWatchers");
-
-    if (_textNode) {
-        _textNode->removeObserver(*m_styletextwatcher);
-        _textNode = nullptr;
-    }
-
-    if (m_root) {
-        m_root->removeSubtreeObserver(*m_nodewatcher);
-        m_root = nullptr;
-    }
-
-    if (desktop) {
-        m_root = desktop->getDocument()->getReprRoot();
-        m_root->addSubtreeObserver(*m_nodewatcher);
-    }
-}
 /*
 void sp_get_selector_active(Glib::ustring &selector)
 {
@@ -1293,40 +1259,49 @@ private:
 
 // -------------------------------------------------------------------
 
-/*
- * When a dialog is floating, it is connected to the active desktop.
- */
-void SelectorsDialog::update()
+SelectorsDialog::~SelectorsDialog()
 {
-    if (!_app) {
-        std::cerr << "SelectorsDialog::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-
-    _updateWatchers(desktop);
-
-    if (!desktop)
-        return;
-
-    _style_dialog->update();
-
-    _handleSelectionChanged();
-    _selectRow();
+    removeObservers();
+    _style_dialog->setDesktop(nullptr);
 }
 
-/*
- * Handle a change in which objects are selected in a document.
- */
-void SelectorsDialog::_handleSelectionChanged()
+void SelectorsDialog::update()
 {
-    g_debug("SelectorsDialog::_handleSelectionChanged()");
+    _style_dialog->update();
+}
+
+void SelectorsDialog::desktopReplaced()
+{
+    _style_dialog->setDesktop(getDesktop());
+}
+
+void SelectorsDialog::removeObservers()
+{
+    if (_textNode) {
+        _textNode->removeObserver(*m_styletextwatcher);
+        _textNode = nullptr;
+    }
+    if (m_root) {
+        m_root->removeSubtreeObserver(*m_nodewatcher);
+        m_root = nullptr;
+    }
+}
+
+void SelectorsDialog::documentReplaced()
+{
+    removeObservers();
+    if (auto document = getDocument()) {
+        m_root = document->getReprRoot();
+        m_root->addSubtreeObserver(*m_nodewatcher);
+    }
+}
+
+void SelectorsDialog::selectionChanged(Selection *selection)
+{
     _lastpath.clear();
     _readStyleElement();
     _selectRow();
 }
-
 
 /**
  * @param event

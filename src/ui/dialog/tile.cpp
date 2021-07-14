@@ -58,29 +58,27 @@ ArrangeDialog::ArrangeDialog()
     show_all_children();
 }
 
-void ArrangeDialog::_apply()
+ArrangeDialog::~ArrangeDialog()
 {
-	switch(_notebook->get_current_page())
-	{
-	case 0:
-		_gridArrangeTab->arrange();
-		break;
-	case 1:
-		_polarArrangeTab->arrange();
-		break;
-	}
+    _gridArrangeTab->setDesktop(nullptr);
 }
 
-void ArrangeDialog::update()
+void ArrangeDialog::_apply()
 {
-    if (!_app) {
-        std::cerr << "ArrangeDialog::update(): _app is null" << std::endl;
-        return;
+    switch(_notebook->get_current_page())
+    {
+    case 0:
+        _gridArrangeTab->arrange();
+        break;
+    case 1:
+        _polarArrangeTab->arrange();
+        break;
     }
+}
 
-    SPDesktop *desktop = getDesktop();
-
-    _gridArrangeTab->setDesktop(desktop);
+void ArrangeDialog::desktopReplaced()
+{
+    _gridArrangeTab->setDesktop(getDesktop());
 }
 
 } //namespace Dialog

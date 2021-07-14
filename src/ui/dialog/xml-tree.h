@@ -28,7 +28,6 @@
 #include "ui/dialog/attrdialog.h"
 #include "ui/dialog/dialog-base.h"
 
-class SPDesktop;
 class SPObject;
 struct SPXMLViewAttrList;
 struct SPXMLViewContent;
@@ -59,16 +58,9 @@ public:
     static XmlTree &getInstance() { return *new XmlTree(); }
 
 private:
-
-    /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     */
-    void set_tree_desktop(SPDesktop *desktop);
-
-    /**
-     * Is invoked when the document changes
-     */
-    void set_tree_document(SPDocument *document);
+    void unsetDocument();
+    void documentReplaced() override;
+    void selectionChanged(Selection *selection) override;
 
     /**
      * Select a node in the xml tree
@@ -153,10 +145,7 @@ private:
     /**
       * Callbacks for changes in desktop selection and current document
       */
-    void on_desktop_selection_changed();
-    void on_document_replaced(SPDesktop *dt, SPDocument *document);
     static void on_document_uri_set(gchar const *uri, SPDocument *document);
-
     static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
 
     /**
@@ -177,11 +166,6 @@ private:
     bool in_dt_coordsys(SPObject const &item);
 
     /**
-     * Can be invoked for setting the desktop. Currently not used.
-     */
-    void update() override;
-
-    /**
      * Flag to ensure only one operation is performed at once
      */
     gint blocked;
@@ -197,15 +181,7 @@ private:
      * Signal handlers
      */
     sigc::connection _message_changed_connection;
-    sigc::connection document_replaced_connection;
     sigc::connection document_uri_set_connection;
-    sigc::connection sel_changed_connection;
-
-    /**
-     * Current document and desktop this dialog is attached to
-     */
-    SPDesktop *current_desktop;
-    SPDocument *current_document;
 
     gint selected_attr;
     Inkscape::XML::Node *selected_repr;

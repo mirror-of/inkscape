@@ -2200,7 +2200,9 @@ TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {
         c_selection_changed =
             desktop->getSelection()->connectChangedFirst(sigc::mem_fun(*this, &TextToolbar::selection_changed));
         c_selection_modified = desktop->getSelection()->connectModifiedFirst(sigc::mem_fun(*this, &TextToolbar::selection_modified));
-        c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &TextToolbar::subselection_changed));
+        c_subselection_changed = desktop->connect_text_cursor_moved([=](void* sender, Inkscape::UI::Tools::TextTool* tool){
+            subselection_changed(tool);
+        });
         this->_sub_active_item = nullptr;
         this->_cusor_numbers = 0;
         selection_changed(desktop->getSelection());
@@ -2444,7 +2446,7 @@ Inkscape::XML::Node *TextToolbar::unindent_node(Inkscape::XML::Node *repr, Inksc
     return repr;
 }
 
-void TextToolbar::subselection_changed(gpointer texttool)
+void TextToolbar::subselection_changed(Inkscape::UI::Tools::TextTool* tc)
 {
 #ifdef DEBUG_TEXT
     std::cout << std::endl;
@@ -2456,7 +2458,6 @@ void TextToolbar::subselection_changed(gpointer texttool)
     if (_updating) {
         return;
     }
-    Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(texttool);
     if (tc) {
         Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
         if (layout) {

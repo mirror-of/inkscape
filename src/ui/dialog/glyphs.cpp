@@ -424,7 +424,6 @@ GlyphsPanel::GlyphsPanel()
     : DialogBase("/dialogs/glyphs", "Glyphs")
     , store(Gtk::ListStore::create(*getColumns()))
     , instanceConns()
-    , desktopConns()
 {
     set_orientation(Gtk::ORIENTATION_VERTICAL);
     auto table = new Gtk::Grid();
@@ -563,50 +562,36 @@ GlyphsPanel::GlyphsPanel()
 
 GlyphsPanel::~GlyphsPanel()
 {
-    setDesktop(nullptr);
     for (auto & instanceConn : instanceConns) {
         instanceConn.disconnect();
     }
     instanceConns.clear();
 }
 
-void GlyphsPanel::setDesktop(SPDesktop *desktop)
+void GlyphsPanel::selectionChanged(Selection *selection)
 {
-    if ( desktop != _desktop ) {
-        for (auto & desktopConn : desktopConns) {
-            desktopConn.disconnect();
-        }
-        desktopConns.clear();
-
-        _desktop = desktop;
-
-        if (desktop && desktop->selection) {
-            sigc::connection conn = desktop->selection->connectChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &GlyphsPanel::readSelection), true, true)));
-            desktopConns.push_back(conn);
-
-            // Text selection within selected items has changed:
-            conn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &GlyphsPanel::readSelection), true, false)));
-            desktopConns.push_back(conn);
-
-            // Must check flags, so can't call performUpdate() directly.
-            conn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &GlyphsPanel::selectionModifiedCB)));
-            desktopConns.push_back(conn);
-
-            readSelection(true, true);
-        }
-    }
+    readSelection(true, true);
 }
-
-void GlyphsPanel::update()
+void GlyphsPanel::selectionModified(Selection *selection, guint flags)
 {
-    setDesktop(getDesktop());
+    bool style = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
+                             SP_OBJECT_STYLE_MODIFIED_FLAG  )) != 0 );
+
+    bool content = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
+                               SP_TEXT_CONTENT_MODIFIED_FLAG  )) != 0 );
+
+    readSelection(style, content);
 }
 
 // Append selected glyphs to selected text
 void GlyphsPanel::insertText()
 {
+    auto selection = getSelection();
+    if (!selection)
+        return;
+
     SPItem *textItem = nullptr;
-    auto itemlist= _desktop->selection->items();
+    auto itemlist = selection->items();
         for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
             if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
             textItem = *i;
@@ -633,7 +618,7 @@ void GlyphsPanel::insertText()
             Glib::ustring combined = sp_te_get_string_multiline(textItem);
             combined += glyphs;
             sp_te_set_repr_text_multiline(textItem, combined.c_str());
-            DocumentUndo::done(_desktop->doc(), SP_VERB_CONTEXT_TEXT, _("Append text"));
+            DocumentUndo::done(getDocument(), SP_VERB_CONTEXT_TEXT, _("Append text"));
         }
     }
 }
@@ -680,21 +665,14 @@ void GlyphsPanel::glyphSelectionChanged()
     calcCanInsert();
 }
 
-void GlyphsPanel::selectionModifiedCB(guint flags)
-{
-    bool style = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
-                             SP_OBJECT_STYLE_MODIFIED_FLAG  )) != 0 );
-
-    bool content = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
-                               SP_TEXT_CONTENT_MODIFIED_FLAG  )) != 0 );
-
-    readSelection(style, content);
-}
-
 void GlyphsPanel::calcCanInsert()
 {
+    auto selection = getSelection();
+    if (!selection)
+        return;
+
     int items = 0;
-    auto itemlist = _desktop->selection->items();
+    auto itemlist = selection->items();
     for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
             ++items;

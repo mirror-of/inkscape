@@ -40,38 +40,17 @@ Prototype::Prototype()
     add(_debug_button);
 }
 
-void Prototype::update()
+void Prototype::documentReplaced()
 {
-    if (!_app) {
-        std::cerr << "Prototype::update(): _app is null" << std::endl;
-        return;
+    if (document && document->getRoot()) {
+        const gchar *root_id = document->getRoot()->getId();
+        Glib::ustring label_string("Document's SVG id: ");
+        label_string += (root_id ? root_id : "null");
+        _label->set_label(label_string);
     }
-
-    handleDocumentReplaced(_app->get_active_document());
-    handleSelectionChanged(_app->get_active_selection());
 }
 
-/*
- * When Inkscape is first opened, a default document is shown. If another document is immediately
- * opened, it will replace the default document in the same desktop. This function handles the
- * change. Bug: This is called twice for some reason.
- */
-void Prototype::handleDocumentReplaced(SPDocument * document)
-{
-    if (!document || !document->getRoot()) {
-        return;
-    }
-
-    const gchar *root_id = document->getRoot()->getId();
-    Glib::ustring label_string("Document's SVG id: ");
-    label_string += (root_id ? root_id : "null");
-    _label->set_label(label_string);
-}
-
-/*
- * Handle a change in which objects are selected in a document.
- */
-void Prototype::handleSelectionChanged(Inkscape::Selection *selection)
+void Prototype::selectionChanged(Inkscape::Selection *selection)
 {
     if (!selection) {
         return;

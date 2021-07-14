@@ -33,7 +33,6 @@
 
 #include <gtkmm/grid.h>
 
-#include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
@@ -63,7 +62,6 @@ ObjectProperties::ObjectProperties()
     , _cb_aspect_ratio(_("Preserve Ratio"), true)
     , _exp_interactivity(_("_Interactivity"), true)
     , _attr_table(Gtk::manage(new SPAttributeTable()))
-    , _desktop(nullptr)
 {
     //initialize labels for the table at the bottom of the dialog
     _int_attrs.emplace_back("onclick");
@@ -87,12 +85,6 @@ ObjectProperties::ObjectProperties()
     _int_labels.emplace_back("onload:");
 
     _init();
-}
-
-ObjectProperties::~ObjectProperties()
-{
-    _subselection_changed_connection.disconnect();
-    _selection_changed_connection.disconnect();
 }
 
 void ObjectProperties::_init()
@@ -285,10 +277,7 @@ void ObjectProperties::_init()
 
 void ObjectProperties::update_entries()
 {
-    if (_blocked || !_desktop) {
-        return;
-    }
-    if (SP_ACTIVE_DESKTOP != _desktop) {
+    if (_blocked || !getDesktop()) {
         return;
     }
 
@@ -552,35 +541,9 @@ void ObjectProperties::_hiddenToggled()
     _blocked = false;
 }
 
-void ObjectProperties::update()
+void ObjectProperties::selectionChanged(Selection *selection)
 {
-    if (!_app) {
-        std::cerr << "ObjectProperties::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
-        return;
-    }
-
-    if (this->_desktop != desktop) {
-        if (this->_desktop) {
-            _subselection_changed_connection.disconnect();
-            _selection_changed_connection.disconnect();
-        }
-        this->_desktop = desktop;
-        if (desktop && desktop->selection) {
-            _selection_changed_connection = desktop->selection->connectChanged(
-                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update_entries))
-            );
-            _subselection_changed_connection = desktop->connectToolSubselectionChanged(
-                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update_entries))
-            );
-        }
-        update_entries();
-    }
+    update_entries();
 }
 
 }

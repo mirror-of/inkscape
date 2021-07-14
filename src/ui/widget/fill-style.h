@@ -46,6 +46,7 @@ class FillNStroke : public Gtk::Box {
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
     sigc::connection eventContextConn;
+    sigc::connection stop_selected_connection;
 
     void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode, bool switch_style);
     void paintChangedCB();

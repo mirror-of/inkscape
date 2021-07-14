@@ -55,9 +55,10 @@ public:
     static DocumentProperties &getInstance();
     static void destroy();
 
-    void update() override;
+    void documentReplaced() override;
 
-    void  update_gridspage();
+    void update() override;
+    void update_gridspage();
 
 protected:
     void  build_page();
@@ -240,9 +241,6 @@ private:
 
     // nodes connected to listeners
     Inkscape::XML::Node *_repr_namedview = nullptr;
-    Inkscape::XML::Node *_repr_root = nullptr;
-
-    sigc::connection _document_replaced_connection;
 };
 
 } // namespace Dialog

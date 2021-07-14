@@ -25,7 +25,6 @@
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
 
-#include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
 #include "path-prefix.h"
@@ -99,10 +98,8 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
     , store(Gtk::ListStore::create(*getColumns()))
     , all_docs_processed(false)
     , icon_view(nullptr)
-    , current_desktop(nullptr)
-    , current_document(nullptr)
     , preview_document(nullptr)
-    , instanceConns()
+    , gtk_connections()
     , CURRENTDOC(_("Current document"))
     , ALLDOCS(_("All symbol sets"))
 {
@@ -124,9 +121,10 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
   symbol_set->append(ALLDOCS);
   symbol_set->set_active_text(CURRENTDOC);
   symbol_set->set_hexpand();
+  gtk_connections.emplace_back(
+      symbol_set->signal_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::rebuild)));
 
   table->attach(*Gtk::manage(symbol_set),1,row,1,1);
-
   ++row;
 
   /********************    Separator    *************************/
@@ -169,8 +167,10 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
   targets.emplace_back( "application/x-inkscape-paste");
 
   icon_view->enable_model_drag_source (targets, Gdk::BUTTON1_MASK, Gdk::ACTION_COPY);
-  icon_view->signal_drag_data_get().connect(
-          sigc::mem_fun(*this, &SymbolsDialog::iconDragDataGet));
+  gtk_connections.emplace_back(
+      icon_view->signal_drag_data_get().connect(sigc::mem_fun(*this, &SymbolsDialog::iconDragDataGet)));
+  gtk_connections.emplace_back(
+      icon_view->signal_selection_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::iconChanged)));
 
   scroller = new Gtk::ScrolledWindow();
   scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
@@ -337,11 +337,11 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
 
 SymbolsDialog::~SymbolsDialog()
 {
-  for (auto & instanceConn : instanceConns) {
-      instanceConn.disconnect();
+  for (auto &connection : gtk_connections) {
+      connection.disconnect();
   }
+  gtk_connections.clear();
   idleconn.disconnect();
-  instanceConns.clear();
 }
 
 SymbolsDialog& SymbolsDialog::getInstance()
@@ -478,16 +478,17 @@ void SymbolsDialog::hideOverlay() {
 
 void SymbolsDialog::insertSymbol() {
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_SYMBOL );
-    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) current_desktop) );
+    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) getDesktop()) );
     sp_action_perform (action, nullptr);
 }
 
 void SymbolsDialog::revertSymbol() {
-    SPSymbol *s = dynamic_cast<SPSymbol*> (current_document->getObjectById(selectedSymbolId()));
-    if (s) {
-        s->unSymbol();
+    if (auto document = getDocument()) {
+        if (auto symbol = dynamic_cast<SPSymbol*> (document->getObjectById(selectedSymbolId()))) {
+            symbol->unSymbol();
+        }
+        Inkscape::DocumentUndo::done(document, SP_VERB_EDIT_UNSYMBOL, _("Group from symbol"));
     }
-    Inkscape::DocumentUndo::done(current_document, SP_VERB_EDIT_UNSYMBOL, _("Group from symbol"));
 }
 
 void SymbolsDialog::iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& /*context*/, Gtk::SelectionData& data, guint /*info*/, guint /*time*/)
@@ -532,41 +533,16 @@ void SymbolsDialog::selectionChanged(Inkscape::Selection *selection) {
   }
 }
 
-void SymbolsDialog::documentReplaced(SPDesktop *desktop, SPDocument *document)
+void SymbolsDialog::documentReplaced()
 {
-  if (current_desktop) {
-      for (auto &conn : instanceConns) {
-          conn.disconnect();
-      }
-  }
-
-  current_desktop  = desktop;
-  current_document = document;
-
-  if (!current_desktop) {
-      return;
-  }
-
-  instanceConns.emplace_back(symbol_set->signal_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::rebuild)));
-
-  instanceConns.emplace_back(
-      icon_view->signal_selection_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::iconChanged)));
-
-  SPDefs *defs = current_document->getDefs();
-  instanceConns.emplace_back(defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified)));
-
-  instanceConns.emplace_back(
-      current_desktop->selection->connectChanged(sigc::mem_fun(*this, &SymbolsDialog::selectionChanged)));
-
-  instanceConns.emplace_back(
-      current_desktop->connectDocumentReplaced(sigc::mem_fun(*this, &SymbolsDialog::documentReplaced)));
-
-  if (symbol_sets[symbol_set->get_active_text()]) {
-      // Symbol set is not from Current document, no need to rebuild
-      return;
-  }
-
-  rebuild();
+    defs_modified.disconnect();
+    if (auto document = getDocument()) {
+        defs_modified = document->getDefs()->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified));
+        if (!symbol_sets[symbol_set->get_active_text()]) {
+            // Symbol set is from Current document, need to rebuild
+            rebuild();
+        }
+    }
 }
 
 SPDocument* SymbolsDialog::selectedSymbols() {
@@ -582,7 +558,7 @@ SPDocument* SymbolsDialog::selectedSymbols() {
     if( !symbol_document ) {
       // Symbol must be from Current Document (this method of
       // checking should be language independent).
-      symbol_document = current_document;
+      symbol_document = getDocument();
       add_symbol->set_sensitive( true );
       remove_symbol->set_sensitive( true );
     } else {
@@ -653,15 +629,15 @@ void SymbolsDialog::iconChanged() {
       gchar const* style = symbol->getAttribute("inkscape:symbol-style");
       if( !style ) {
         // If no default style in <symbol>, look in documents.
-        if( symbol_document == current_document ) {
-          style = styleFromUse( symbol_id.c_str(), current_document );
+        if(symbol_document == getDocument()) {
+          style = styleFromUse(symbol_id.c_str(), symbol_document);
         } else {
           style = symbol_document->getReprRoot()->attribute("style");
         }
       }
 
       ClipboardManager *cm = ClipboardManager::get();
-      cm->copySymbol(symbol->getRepr(), style, symbol_document == current_document);
+      cm->copySymbol(symbol->getRepr(), style, symbol_document == getDocument());
     }
   }
 }
@@ -1251,9 +1227,9 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
 
   // First look for default style stored in <symbol>
   gchar const* style = repr->attribute("inkscape:symbol-style");
-  if( !style ) {
+  if(!style) {
     // If no default style in <symbol>, look in documents.
-    if( symbol->document == current_document ) {
+    if(symbol->document == getDocument()) {
       gchar const *id = symbol->getRepr()->attribute("id");
       style = styleFromUse( id, symbol->document );
     } else {
@@ -1356,18 +1332,6 @@ SymbolsDialog::getOverlay(gint width, gint height)
   GdkPixbuf* pixbuf = ink_pixbuf_create_from_cairo_surface(surface);
   cairo_destroy (cr);
   return Glib::wrap(pixbuf);
-}
-
-void SymbolsDialog::update()
-{
-    if (!_app) {
-        std::cerr << "Find::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-    SPDocument *document = _app->get_active_document();
-    documentReplaced(desktop, document);
 }
 
 } //namespace Dialogs

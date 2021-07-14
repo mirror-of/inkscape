@@ -67,7 +67,7 @@ FillNStroke::FillNStroke(FillOrStroke k)
     _psel->signal_dragged().connect(sigc::mem_fun(*this, &FillNStroke::dragFromPaint));
     _psel->signal_changed().connect(sigc::mem_fun(*this, &FillNStroke::paintChangedCB));
     _psel->signal_stop_selected().connect([=](SPStop* stop) {
-       if (_desktop) { _desktop->emitToolSubselectionChangedEx(nullptr, stop); }
+       if (_desktop) { _desktop->emit_gradient_stop_selected(this, stop); }
     });
 
     if (kind == FILL) {
@@ -116,19 +116,26 @@ void FillNStroke::setDesktop(SPDesktop *desktop)
             subselChangedConn.disconnect();
             selectChangedConn.disconnect();
             eventContextConn.disconnect();
+            stop_selected_connection.disconnect();
         }
         _desktop = desktop;
         if (desktop && desktop->selection) {
             selectChangedConn =
                 desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
-            subselChangedConn =
-                desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
+            // subselChangedConn =
+                // desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
             eventContextConn = desktop->connectEventContextChanged(sigc::hide(sigc::bind(
                 sigc::mem_fun(*this, &FillNStroke::eventContextCB), (Inkscape::UI::Tools::ToolBase *)nullptr)));
 
             // Must check flags, so can't call performUpdate() directly.
             selectModifiedConn = desktop->selection->connectModified(
                 sigc::hide<0>(sigc::mem_fun(*this, &FillNStroke::selectionModifiedCB)));
+
+            stop_selected_connection = desktop->connect_gradient_stop_selected([=](void* sender, SPStop* stop){
+                if (sender != this) {
+                    performUpdate();
+                }
+            });
         }
         performUpdate();
     }

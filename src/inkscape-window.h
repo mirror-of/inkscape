@@ -44,7 +44,6 @@ public:
     SPDesktopWidget* get_desktop_widget() { return _desktop_widget; }
 
     void change_document(SPDocument* document);
-    void on_selection_changed();
 
 private:
     InkscapeApplication *_app = nullptr;

@@ -20,7 +20,6 @@
 
 #include "inkscape-application.h"
 
-class SPDesktop;
 using Gtk::Label;
 using Gtk::Widget;
 
@@ -43,6 +42,7 @@ public:
     ~DialogWindow() override;
 
     void update_dialogs();
+    void set_desktop(SPDesktop *desktop);
     void update_window_size_to_fit_children();
 
     // Getters

@@ -164,14 +164,6 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
     {
             _styledialog->_nodeRemoved(child);
     }
-    /*     void notifyContentChanged(Inkscape::XML::Node &node,
-                                          Inkscape::Util::ptr_shared old_content,
-                                          Inkscape::Util::ptr_shared new_content) override{
-            if ( _styledialog && _repr && _textNode == node) {
-                _styledialog->_stylesheetChanged( node );
-            }
-        };
-     */
     void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark qname, Util::ptr_shared /*old_value*/,
                                 Util::ptr_shared /*new_value*/) override
     {
@@ -207,12 +199,6 @@ void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
     readStyleElement();
 }
 
-/* void
-StyleDialog::_stylesheetChanged( Inkscape::XML::Node &repr ) {
-    std::cout << "Style tag modified" << std::endl;
-    readStyleElement();
-} */
-
 /**
  * Constructor
  * A treeview and a set of two buttons are added to the dialog. _addSelector
@@ -243,6 +229,11 @@ StyleDialog::StyleDialog()
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
+}
+
+StyleDialog::~StyleDialog()
+{
+    removeObservers();
 }
 
 void StyleDialog::_vscrool()
@@ -295,16 +286,6 @@ Glib::ustring StyleDialog::fixCSSSelectors(Glib::ustring selector)
         return selector;
     }
     return "";
-}
-
-/**
- * Class destructor
- */
-StyleDialog::~StyleDialog()
-{
-    g_debug("StyleDialog::~StyleDialog");
-    _document_replaced_connection.disconnect();
-    _selection_changed_connection.disconnect();
 }
 
 void StyleDialog::_reload() { readStyleElement(); }
@@ -399,12 +380,12 @@ void StyleDialog::readStyleElement()
 {
     g_debug("StyleDialog::readStyleElement");
 
-    if (_updating)
+    auto document = getDocument();
+    if (_updating || !document)
         return; // Don't read if we wrote style element.
     _updating = true;
     _scroollock = true;
     Inkscape::XML::Node *textNode = _getStyleTextNode();
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
 
     // Get content from style text node.
     std::string content = (textNode && textNode->content()) ? textNode->content() : "";
@@ -464,13 +445,13 @@ void StyleDialog::readStyleElement()
         _styleBox.remove(*child);
         delete child;
     }
-    Inkscape::Selection *selection = _desktop->getSelection();
+    Inkscape::Selection *selection = getSelection();
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
     }
     if (!obj) {
-        obj = _desktop->getDocument()->getXMLDialogSelectedObject();
+        obj = document->getXMLDialogSelectedObject();
         if (obj && !obj->getRepr()) {
             obj = nullptr; // treat detached object as no selection
         }
@@ -986,8 +967,8 @@ void StyleDialog::_onLinkObj(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> st
     if (row && row[_mColumns._colLinked]) {
         SPObject *linked = row[_mColumns._colHref];
         if (linked) {
-            Inkscape::Selection *selection = _desktop->getSelection();
-            _desktop->getDocument()->setXMLDialogSelectedObject(linked);
+            auto selection = getSelection();
+            getDocument()->setXMLDialogSelectedObject(linked);
             selection->clear();
             selection->set(linked);
         }
@@ -1061,17 +1042,16 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
                                      Glib::ustring new_selector)
 {
     g_debug("StyleDialog::_writeStyleElemen");
-    if (_updating) {
+    auto selection = getSelection();
+    if (_updating && selection)
         return;
-    }
     _scroollock = true;
-    Inkscape::Selection *selection = _desktop->getSelection();
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
     }
     if (!obj) {
-        obj = _desktop->getDocument()->getXMLDialogSelectedObject();
+        obj = getDocument()->getXMLDialogSelectedObject();
     }
     if (selection->objects().size() < 2 && !obj) {
         readStyleElement();
@@ -1166,8 +1146,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     }
     _updating = false;
     readStyleElement();
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    for (auto iter : document->getObjectsBySelector(selector)) {
+    for (auto iter : getDocument()->getObjectsBySelector(selector)) {
         iter->style->readFromObject(iter);
         iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
@@ -1557,31 +1536,6 @@ bool StyleDialog::_onValueKeyReleased(GdkEventKey *event, Gtk::Entry *entry)
 }
 
 /**
- * Update the watchers on objects.
- */
-void StyleDialog::_updateWatchers(SPDesktop *desktop)
-
-{
-    g_debug("StyleDialog::_updateWatchers");
-
-    if (_textNode) {
-        _textNode->removeObserver(*m_styletextwatcher);
-        _textNode = nullptr;
-    }
-
-    if (m_root) {
-        m_root->removeSubtreeObserver(*m_nodewatcher);
-        m_root = nullptr;
-    }
-
-    if (desktop) {
-        m_root = desktop->getDocument()->getReprRoot();
-        m_root->addSubtreeObserver(*m_nodewatcher);
-    }
-}
-
-
-/**
  * @param selector: a valid CSS selector string.
  * @return objVec: a vector of pointers to SPObject's the selector matches.
  * Return a vector of all objects that selector matches.
@@ -1592,65 +1546,43 @@ std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector)
 
     g_assert(selector.find(";") == Glib::ustring::npos);
 
-    return _desktop->getDocument()->getObjectsBySelector(selector);
+    return getDocument()->getObjectsBySelector(selector);
 }
 
 void StyleDialog::_closeDialog(Gtk::Dialog *textDialogPtr) { textDialogPtr->response(Gtk::RESPONSE_OK); }
 
 
+void StyleDialog::removeObservers()
+{
+    if (_textNode) {
+        _textNode->removeObserver(*m_styletextwatcher);
+        _textNode = nullptr;
+    }
+    if (m_root) {
+        m_root->removeSubtreeObserver(*m_nodewatcher);
+        m_root = nullptr;
+    }
+}
+
 /**
  * Handle document replaced. (Happens when a default document is immediately replaced by another
  * document in a new window.)
  */
-void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document */)
+void StyleDialog::documentReplaced()
 {
-    g_debug("StyleDialog::handleDocumentReplaced()");
-
-    _selection_changed_connection.disconnect();
-    _updateWatchers(desktop);
-
-    if (!desktop)
-        return;
-
-    _selection_changed_connection =
-        desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
-
+    removeObservers();
+    if (auto document = getDocument()) {
+        m_root = document->getReprRoot();
+        m_root->addSubtreeObserver(*m_nodewatcher);
+    }
     readStyleElement();
-}
-
-
-/*
- * When a dialog is floating, it is connected to the active desktop.
- */
-void StyleDialog::update()
-{
-    if (!_app) {
-        std::cerr << "UndoHistory::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-    if (!desktop || _desktop == desktop) {
-        return;
-    }
-
-    _desktop = desktop;
-    _document_replaced_connection.disconnect();
-
-    if (desktop) {
-        _document_replaced_connection =
-        desktop->connectDocumentReplaced(sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
-    }
-
-    _handleDocumentReplaced(desktop, nullptr);
 }
 
 /*
  * Handle a change in which objects are selected in a document.
  */
-void StyleDialog::_handleSelectionChanged()
+void StyleDialog::selectionChanged(Selection * /*selection*/)
 {
-    g_debug("StyleDialog::_handleSelectionChanged()");
     _scroolpos = 0;
     _vadj->set_value(0);
     // Sometimes the selection changes because inkscape is closing.

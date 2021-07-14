@@ -230,8 +230,6 @@ void SvgFontsDialog::on_kerning_value_changed(){
         return;
     }
 
-    SPDocument* document = this->getDesktop()->getDocument();
-
     //TODO: I am unsure whether this is the correct way of calling SPDocumentUndo::maybe_done
     Glib::ustring undokey = "svgfonts:hkern:k:";
     undokey += this->kerning_pair->u1->attribute_string();
@@ -242,7 +240,7 @@ void SvgFontsDialog::on_kerning_value_changed(){
 
     //XML Tree being directly used here while it shouldn't be.
     this->kerning_pair->setAttribute("k", Glib::Ascii::dtostr(get_selected_spfont()->horiz_adv_x - kerning_slider->get_value()));
-    DocumentUndo::maybeDone(document, undokey.c_str(), SP_VERB_DIALOG_SVG_FONTS, _("Adjust kerning value"));
+    DocumentUndo::maybeDone(getDocument(), undokey.c_str(), SP_VERB_DIALOG_SVG_FONTS, _("Adjust kerning value"));
 
     //populate_kerning_pairs_box();
     kerning_preview.redraw();
@@ -309,12 +307,10 @@ void SvgFontsDialog::update_sensitiveness(){
     }
 }
 
-/* Add all fonts in the document to the combobox. */
+/* Add all fonts in the getDocument() to the combobox. */
 void SvgFontsDialog::update_fonts()
 {
-    SPDesktop* desktop = this->getDesktop();
-    SPDocument* document = desktop->getDocument();
-    std::vector<SPObject *> fonts = document->getResourceList( "font" );
+    std::vector<SPObject *> fonts = getDocument()->getResourceList( "font" );
 
     auto children = _model->children();
     bool equal = false;
@@ -633,12 +629,11 @@ void SvgFontsDialog::update_glyphs(){
 
 void SvgFontsDialog::add_glyph(){
     const int count = _GlyphsListStore->children().size();
-    SPDocument* doc = this->getDesktop()->getDocument();
-    /* SPGlyph* glyph =*/ new_glyph(doc, get_selected_spfont(), count+1);
-
-    DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Add glyph"));
-
-    update_glyphs();
+    if (auto document = getDocument()) {
+        new_glyph(document, get_selected_spfont(), count+1);
+        DocumentUndo::done(document, SP_VERB_DIALOG_SVG_FONTS, _("Add glyph"));
+        update_glyphs();
+    }
 }
 
 Geom::PathVector
@@ -657,22 +652,18 @@ SvgFontsDialog::flip_coordinate_system(Geom::PathVector pathv){
 }
 
 void SvgFontsDialog::set_glyph_description_from_selected_path(){
-    SPDesktop* desktop = this->getDesktop();
-    if (!desktop) {
-        g_warning("SvgFontsDialog: No active desktop");
+    auto selection = getSelection();
+    if (!selection)
         return;
-    }
 
-    Inkscape::MessageStack *msgStack = desktop->getMessageStack();
-    SPDocument* doc = desktop->getDocument();
-    Inkscape::Selection* sel = desktop->getSelection();
-    if (sel->isEmpty()){
+    Inkscape::MessageStack *msgStack = getDesktop()->getMessageStack();
+    if (selection->isEmpty()){
         char *msg = _("Select a <b>path</b> to define the curves of a glyph");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         return;
     }
 
-    Inkscape::XML::Node* node = sel->xmlNodes().front();
+    Inkscape::XML::Node* node = selection->xmlNodes().front();
     if (!node) return;//TODO: should this be an assert?
     if (!node->matchAttributeName("d") || !node->attribute("d")){
         char *msg = _("The selected object does not have a <b>path</b> description.");
@@ -691,28 +682,24 @@ void SvgFontsDialog::set_glyph_description_from_selected_path(){
 
 	//XML Tree being directly used here while it shouldn't be.
     glyph->setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv)));
-    DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Set glyph curves"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Set glyph curves"));
 
     update_glyphs();
 }
 
 void SvgFontsDialog::missing_glyph_description_from_selected_path(){
-    SPDesktop* desktop = this->getDesktop();
-    if (!desktop) {
-        g_warning("SvgFontsDialog: No active desktop");
+    auto selection = getSelection();
+    if (!selection)
         return;
-    }
 
-    Inkscape::MessageStack *msgStack = desktop->getMessageStack();
-    SPDocument* doc = desktop->getDocument();
-    Inkscape::Selection* sel = desktop->getSelection();
-    if (sel->isEmpty()){
+    Inkscape::MessageStack *msgStack = getDesktop()->getMessageStack();
+    if (selection->isEmpty()){
         char *msg = _("Select a <b>path</b> to define the curves of a glyph");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         return;
     }
 
-    Inkscape::XML::Node* node = sel->xmlNodes().front();
+    Inkscape::XML::Node* node = selection->xmlNodes().front();
     if (!node) return;//TODO: should this be an assert?
     if (!node->matchAttributeName("d") || !node->attribute("d")){
         char *msg = _("The selected object does not have a <b>path</b> description.");
@@ -727,7 +714,7 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
 
             //XML Tree being directly used here while it shouldn't be.
             obj.setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv)));
-            DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Set glyph curves"));
+            DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Set glyph curves"));
         }
     }
 
@@ -735,21 +722,13 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
 }
 
 void SvgFontsDialog::reset_missing_glyph_description(){
-    SPDesktop* desktop = this->getDesktop();
-    if (!desktop) {
-        g_warning("SvgFontsDialog: No active desktop");
-        return;
-    }
-
-    SPDocument* doc = desktop->getDocument();
     for (auto& obj: get_selected_spfont()->children) {
         if (SP_IS_MISSING_GLYPH(&obj)){
             //XML Tree being directly used here while it shouldn't be.
             obj.setAttribute("d", "M0,0h1000v1024h-1000z");
-            DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Reset missing-glyph"));
+            DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Reset missing-glyph"));
         }
     }
-
     update_glyphs();
 }
 
@@ -761,9 +740,7 @@ void SvgFontsDialog::glyph_name_edit(const Glib::ustring&, const Glib::ustring& 
     //XML Tree being directly used here while it shouldn't be.
     glyph->setAttribute("glyph-name", str);
 
-    SPDocument* doc = this->getDesktop()->getDocument();
-    DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Edit glyph name"));
-
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Edit glyph name"));
     update_glyphs();
 }
 
@@ -775,8 +752,7 @@ void SvgFontsDialog::glyph_unicode_edit(const Glib::ustring&, const Glib::ustrin
     //XML Tree being directly used here while it shouldn't be.
     glyph->setAttribute("unicode", str);
 
-    SPDocument* doc = this->getDesktop()->getDocument();
-    DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Set glyph unicode"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Set glyph unicode"));
 
     update_glyphs();
 }
@@ -792,8 +768,7 @@ void SvgFontsDialog::glyph_advance_edit(const Glib::ustring&, const Glib::ustrin
     // Check if input valid
     if ((is >> value)) {
         glyph->setAttribute("horiz-adv-x", str);
-        SPDocument* doc = this->getDesktop()->getDocument();
-        DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Set glyph advance"));
+        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Set glyph advance"));
 
         update_glyphs();
     } else {
@@ -807,8 +782,7 @@ void SvgFontsDialog::remove_selected_font(){
 
     //XML Tree being directly used here while it shouldn't be.
     sp_repr_unparent(font->getRepr());
-    SPDocument* doc = this->getDesktop()->getDocument();
-    DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Remove font"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Remove font"));
 
     update_fonts();
 }
@@ -823,9 +797,7 @@ void SvgFontsDialog::remove_selected_glyph(){
 
 	//XML Tree being directly used here while it shouldn't be.
     sp_repr_unparent(glyph->getRepr());
-
-    SPDocument* doc = this->getDesktop()->getDocument();
-    DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Remove glyph"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Remove glyph"));
 
     update_glyphs();
 }
@@ -840,9 +812,7 @@ void SvgFontsDialog::remove_selected_kerning_pair(){
 
 	//XML Tree being directly used here while it shouldn't be.
     sp_repr_unparent(pair->getRepr());
-
-    SPDocument* doc = this->getDesktop()->getDocument();
-    DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Remove kerning pair"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Remove kerning pair"));
 
     update_glyphs();
 }
@@ -931,8 +901,7 @@ void SvgFontsDialog::add_kerning_pair(){
 
     if (this->kerning_pair) return; //We already have this kerning pair
 
-    SPDocument* document = this->getDesktop()->getDocument();
-    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Document *xml_doc = getDocument()->getReprDoc();
 
     // create a new hkern node
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:hkern");
@@ -946,7 +915,7 @@ void SvgFontsDialog::add_kerning_pair(){
     Inkscape::GC::release(repr);
 
     // get corresponding object
-    this->kerning_pair = SP_HKERN( document->getObjectByRepr(repr) );
+    this->kerning_pair = SP_HKERN( getDocument()->getObjectByRepr(repr) );
 
     // select newly added pair
     if (auto selection = _KerningPairsList.get_selection()) {
@@ -959,7 +928,7 @@ void SvgFontsDialog::add_kerning_pair(){
         });
     }
 
-    DocumentUndo::done(document, SP_VERB_DIALOG_SVG_FONTS, _("Add kerning pair"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Add kerning pair"));
 }
 
 Gtk::Box* SvgFontsDialog::kerning_tab(){
@@ -1136,27 +1105,14 @@ SvgFontsDialog::SvgFontsDialog()
     show_all();
 }
 
-SvgFontsDialog::~SvgFontsDialog()= default;
-
-void SvgFontsDialog::update()
+void SvgFontsDialog::documentReplaced()
 {
-    if (!_app) {
-        std::cerr << "SvgFontsDialog::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
-        return;
-    }
-
     _defs_observer_connection.disconnect();
-
-    _defs_observer.set(desktop->getDocument()->getDefs());
-    _defs_observer_connection =
-        _defs_observer.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::update_fonts));
-
+    if (auto document = getDocument()) {
+        _defs_observer.set(document->getDefs());
+        _defs_observer_connection =
+            _defs_observer.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::update_fonts));
+    }
     update_fonts();
 }
 

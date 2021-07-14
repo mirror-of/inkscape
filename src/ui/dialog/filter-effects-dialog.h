@@ -24,6 +24,7 @@
 
 #include "attributes.h"
 #include "display/nr-filter-types.h"
+#include "helper/auto-connection.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/combo-enums.h"
 #include "ui/widget/spin-scale.h"
@@ -37,17 +38,15 @@ namespace UI {
 namespace Dialog {
 
 class EntryAttr;
-//class SpinButtonAttr;
+class FileOrElementChooser;
 class DualSpinButton;
 class MultiSpinButton;
+
 class FilterEffectsDialog : public DialogBase
 {
 public:
-
     FilterEffectsDialog();
     ~FilterEffectsDialog() override;
-
-    void update() override;
 
     static FilterEffectsDialog &getInstance() { return *new FilterEffectsDialog(); }
 
@@ -56,11 +55,21 @@ protected:
     void show_all_vfunc() override;
 private:
 
+    void documentReplaced() override;
+    void selectionChanged(Inkscape::Selection *selection) override;
+    void selectionModified(Inkscape::Selection *selection, guint flags) override;
+
+    Inkscape::auto_connection _resource_changed;
+
+    friend class FileOrElementChooser;
+
     class FilterModifier : public Gtk::Box
     {
     public:
         FilterModifier(FilterEffectsDialog&);
-        ~FilterModifier() override;
+
+        void update_filters();
+        void update_selection(Selection *);
 
         SPFilter* get_selected_filter();
         void select_filter(const SPFilter*);
@@ -69,6 +78,7 @@ private:
         {
             return _signal_filter_changed;
         }
+
     private:
         class Columns : public Gtk::TreeModel::ColumnRecord
         {
@@ -87,42 +97,18 @@ private:
             Gtk::TreeModelColumn<int> count;
         };
 
-      public:
-        void setTargetDesktop(SPDesktop *desktop);
-
-      private:
-        void on_document_replaced(SPDesktop *desktop, SPDocument *document);
-        void on_change_selection();
-        void on_modified_selection( guint flags );
-
-        void update_selection(Selection *);
         void on_filter_selection_changed();
-
         void on_name_edited(const Glib::ustring&, const Glib::ustring&);
         bool on_filter_move(const Glib::RefPtr<Gdk::DragContext>& /*context*/, int x, int y, guint /*time*/);
         void on_selection_toggled(const Glib::ustring&);
 
         void update_counts();
-        void update_filters();
         void filter_list_button_release(GdkEventButton*);
         void add_filter();
         void remove_filter();
         void duplicate_filter();
         void rename_filter();
         void select_filter_elements();
-
-        /**
-         * Stores the current desktop.
-         */
-        SPDesktop *_desktop;
-
-        /**
-         * Link to callback function for a change in desktop (window).
-         */
-        sigc::connection _selectChangedConn;
-        sigc::connection _selectModifiedConn;
-        sigc::connection _doc_replaced;
-        sigc::connection _resource_changed;
 
         FilterEffectsDialog& _dialog;
         Gtk::TreeView _list;

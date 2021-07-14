@@ -94,7 +94,6 @@ public:
     bool _updating;
 
     // Helper functions
-    void update() override;
     void setRepr(Inkscape::XML::Node * repr);
     void setUndo(Glib::ustring const &event_description);
     /**

@@ -667,6 +667,11 @@ void DialogContainer::update_dialogs()
     for_each(dialogs.begin(), dialogs.end(), [&](auto dialog) { dialog.second->update(); });
 }
 
+void DialogContainer::set_desktop(SPDesktop *desktop)
+{
+    for_each(dialogs.begin(), dialogs.end(), [&](auto dialog) { dialog.second->setDesktop(desktop); });
+}
+
 bool DialogContainer::has_dialog_of_type(DialogBase *dialog)
 {
     return (dialogs.find(dialog->get_type()) != dialogs.end());

@@ -29,7 +29,10 @@ class ObjectAttributes : public DialogBase
 {
 public:
     ObjectAttributes ();
-    ~ObjectAttributes () override;
+    ~ObjectAttributes () override = default;
+
+    void selectionChanged(Selection *selection) override;
+    void selectionModified(Selection *selection, guint flags) override;
 
     /**
      * Returns a new instance of the object attributes dialog.
@@ -42,8 +45,6 @@ public:
      * Updates entries and other child widgets on selection change, object modification, etc.
      */
     void widget_setup();
-
-    void update() override;
 
 private:
     /**
@@ -64,23 +65,8 @@ private:
      * ensures object attribute modifications by the user are set.
      */
     SPAttributeTable *attrTable;
-
-    /**
-     * Link to callback function for a selection change.
-     */
-    sigc::connection selectChangedConn;
-    sigc::connection subselChangedConn;
-
-    /**
-     * Link to callback function for a modification of the selected object.
-     */
-    sigc::connection selectModifiedConn;
-
-    /**
-     * Callback function invoked by the desktop tracker in case of a modification of the selected object.
-     */
-    void selectionModifiedCB( guint flags );
 };
+
 }
 }
 }

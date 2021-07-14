@@ -1204,8 +1204,6 @@ CloneTiler::CloneTiler()
 
 CloneTiler::~CloneTiler ()
 {
-    //subselChangedConn.disconnect();
-    //selectModifiedConn.disconnect();
     selectChangedConn.disconnect();
     externChangedConn.disconnect();
     color_changed_connection.disconnect();
@@ -1957,16 +1955,13 @@ void CloneTiler::trace_finish()
 
 void CloneTiler::unclump()
 {
-    auto desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == nullptr) {
+    auto selection = getSelection();
+    if (!selection)
         return;
-    }
-
-    auto selection = desktop->getSelection();
 
     // check if something is selected
     if (selection->isEmpty() || boost::distance(selection->items()) > 1) {
-        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
+        getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
         return;
     }
 
@@ -1981,12 +1976,11 @@ void CloneTiler::unclump()
         }
     }
 
-    desktop->getDocument()->ensureUpToDate();
+    getDocument()->ensureUpToDate();
     reverse(to_unclump.begin(),to_unclump.end());
     ::unclump (to_unclump);
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,
-                       _("Unclump tiled clones"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_CLONETILER, _("Unclump tiled clones"));
 }
 
 guint CloneTiler::number_of_clones(SPObject *obj)
@@ -2006,16 +2000,13 @@ guint CloneTiler::number_of_clones(SPObject *obj)
 
 void CloneTiler::remove(bool do_undo/* = true*/)
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == nullptr) {
+    auto selection = getSelection();
+    if (!selection)
         return;
-    }
-
-    Inkscape::Selection *selection = desktop->getSelection();
 
     // check if something is selected
     if (selection->isEmpty() || boost::distance(selection->items()) > 1) {
-        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
+        getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
         return;
     }
 
@@ -2037,7 +2028,7 @@ void CloneTiler::remove(bool do_undo/* = true*/)
     change_selection (selection);
 
     if (do_undo) {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,
+        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_CLONETILER,
                            _("Delete tiled clones"));
     }
 }
@@ -2076,12 +2067,10 @@ double CloneTiler::randomize01(double val, double rand)
 
 void CloneTiler::apply()
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == nullptr) {
+    auto desktop = getDesktop();
+    auto selection = getSelection();
+    if (!selection)
         return;
-    }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Inkscape::Selection *selection = desktop->getSelection();
 
     // check if something is selected
     if (selection->isEmpty()) {
@@ -2114,9 +2103,10 @@ void CloneTiler::apply()
 
     remove(false);
 
-    Geom::Scale scale = desktop->getDocument()->getDocumentScale().inverse();
+    Geom::Scale scale = getDocument()->getDocumentScale().inverse();
     double scale_units = scale[Geom::X]; // Use just x direction....
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double shiftx_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_i", 0, -10000, 10000);
     double shifty_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_per_i", 0, -10000, 10000);
     double shiftx_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_j", 0, -10000, 10000);
@@ -2201,7 +2191,7 @@ void CloneTiler::apply()
 
     SPItem *item = dynamic_cast<SPItem *>(obj);
     if (dotrace) {
-        trace_setup(desktop->getDocument(), 1.0, item);
+        trace_setup(getDocument(), 1.0, item);
     }
 
     Geom::Point center;
@@ -2507,9 +2497,7 @@ void CloneTiler::apply()
     change_selection(selection);
 
     desktop->clearWaitingCursor();
-
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,
-                       _("Create tiled clones"));
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_CLONETILER, _("Create tiled clones"));
 }
 
 Gtk::Box * CloneTiler::new_tab(Gtk::Notebook *nb, const gchar *label)

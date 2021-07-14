@@ -42,7 +42,7 @@ public:
     ~PaintServersDialog() override;
     static PaintServersDialog &getInstance() { return *new PaintServersDialog(); }
 
-    void update() override;
+    void documentReplaced() override;
 
 private:
     // No default constructor, noncopyable, nonassignable
@@ -53,14 +53,13 @@ private:
     static PaintServersColumns *getColumns();
     void load_sources();
     void load_document(SPDocument *document);
-    void load_current_document(SPObject *, guint);
+    void load_current_document();
     Glib::RefPtr<Gdk::Pixbuf> get_pixbuf(SPDocument *, Glib::ustring, Glib::ustring *);
     void on_target_changed();
     void on_document_changed();
     void on_item_activated(const Gtk::TreeModel::Path &path);
     std::vector<SPObject *> extract_elements(SPObject *item);
 
-    SPDesktop *desktop;
     bool target_selected;
     const Glib::ustring ALLDOCS;
     const Glib::ustring CURRENTDOC;

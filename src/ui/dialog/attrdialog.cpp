@@ -377,19 +377,6 @@ void AttrDialog::popClosed()
 }
 
 /**
- * @brief AttrDialog::update
- * @param desktop
- * This function sets the 'desktop' for the CSS pane.
- */
-void AttrDialog::update()
-{
-    if (!_app) {
-        std::cerr << "AttrDialog::update(): _app is null" << std::endl;
-        return;
-    }
-}
-
-/**
  * @brief AttrDialog::setRepr
  * Set the internal xml object that I'm working on right now.
  */
@@ -417,8 +404,7 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
 
 void AttrDialog::setUndo(Glib::ustring const &event_description)
 {
-    SPDocument *document = getDesktop()->doc();
-    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, event_description);
+    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_XML_EDITOR, event_description);
 }
 
 void AttrDialog::_set_status_message(Inkscape::MessageType /*type*/, const gchar *message, GtkWidget *widget)
@@ -688,6 +674,10 @@ void AttrDialog::valueCanceledPop()
  */
 void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& value)
 {
+    auto selection = getSelection();
+    if (!selection)
+        return;
+
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if(row && this->_repr) {
         Glib::ustring name = row[_attrColumns._attributeName];
@@ -704,7 +694,6 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
             Glib::ustring renderval = prepare_rendervalue(value.c_str());
             row[_attrColumns._attributeValueRender] = renderval;
         }
-        Inkscape::Selection *selection = getDesktop()->getSelection();
         SPObject *obj = nullptr;
         if (selection->objects().size() == 1) {
             obj = selection->objects().back();

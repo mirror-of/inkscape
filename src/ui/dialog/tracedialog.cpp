@@ -53,9 +53,9 @@ namespace Dialog {
 class TraceDialogImpl2 : public TraceDialog {
   public:
     TraceDialogImpl2();
-    ~TraceDialogImpl2() override;
-    void update() override;
+    ~TraceDialogImpl2() override {};
 
+    void selectionModified(Selection *selection, guint flags) override;
 private:
     Inkscape::Trace::Tracer tracer;
     void traceProcess(bool do_i_trace);
@@ -64,11 +64,7 @@ private:
     void previewCallback();
     bool previewResize(const Cairo::RefPtr<Cairo::Context>&);
     void traceCallback();
-    void onSelectionModified(guint flags);
     void onSetDefaults();
-
-    sigc::connection selectChangedConn;
-    sigc::connection selectModifiedConn;
 
     Glib::RefPtr<Gtk::Builder> builder;
 
@@ -85,31 +81,6 @@ private:
     Glib::RefPtr<Gdk::Pixbuf> scaledPreview;
     Gtk::DrawingArea *previewArea;
 };
-
-void TraceDialogImpl2::update()
-{
-    if (!_app) {
-        std::cerr << "TraceDialogImpl2::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
-        return;
-    }
-
-    {
-        {
-            selectChangedConn.disconnect();
-            selectModifiedConn.disconnect();
-        }
-        if (desktop && desktop->selection) {
-            selectModifiedConn = desktop->selection->connectModified(
-                sigc::hide<0>(sigc::mem_fun(*this, &TraceDialogImpl2::onSelectionModified)));
-        }
-    }
-}
 
 void TraceDialogImpl2::traceProcess(bool do_i_trace)
 {
@@ -234,7 +205,7 @@ void TraceDialogImpl2::abort()
      tracer.abort();
 }
 
-void TraceDialogImpl2::onSelectionModified(guint flags)
+void TraceDialogImpl2::selectionModified(Selection *selection, guint flags)
 {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) {
         previewCallback();
@@ -352,15 +323,6 @@ TraceDialogImpl2::TraceDialogImpl2()
     B_RESET->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::onSetDefaults));
     previewArea->signal_draw().connect(sigc::mem_fun(*this, &TraceDialogImpl2::previewResize));
 }
-
-
-TraceDialogImpl2::~TraceDialogImpl2()
-{
-    selectChangedConn.disconnect();
-    selectModifiedConn.disconnect();
-}
-
-
 
 TraceDialog &TraceDialog::getInstance()
 {

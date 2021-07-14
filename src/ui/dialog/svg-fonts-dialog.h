@@ -23,6 +23,7 @@
 #include <gtkmm/treeview.h>
 
 #include "attributes.h"
+#include "helper/auto-connection.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/spinbutton.h"
 #include "xml/helper-observer.h"
@@ -65,11 +66,11 @@ class SvgFontsDialog : public DialogBase
 {
 public:
     SvgFontsDialog();
-    ~SvgFontsDialog() override;
+    ~SvgFontsDialog() override {};
 
     static SvgFontsDialog &getInstance() { return *new SvgFontsDialog(); }
 
-    void update() override;
+    void documentReplaced() override;
 
     void update_fonts();
     SvgFont* get_selected_svgfont();
@@ -151,7 +152,7 @@ private:
     Inkscape::XML::SignalObserver _defs_observer; //in order to update fonts
     Inkscape::XML::SignalObserver _glyphs_observer;
 
-    sigc::connection _defs_observer_connection;
+    Inkscape::auto_connection _defs_observer_connection;
 
     Gtk::Box* AttrCombo(gchar* lbl, const SPAttr attr);
 //    Gtk::Box* AttrSpin(gchar* lbl, const SPAttr attr);

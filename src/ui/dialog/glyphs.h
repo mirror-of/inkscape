@@ -42,8 +42,8 @@ public:
 
     static GlyphsPanel& getInstance();
 
-    void setDesktop(SPDesktop *desktop);
-    void update() override;
+    void selectionChanged(Selection *selection) override;
+    void selectionModified(Selection *selection, guint flags) override;
 
 protected:
 
@@ -57,12 +57,10 @@ private:
 
     void glyphActivated(Gtk::TreeModel::Path const & path);
     void glyphSelectionChanged();
-    void selectionModifiedCB(guint flags);
     void readSelection( bool updateStyle, bool updateContent );
     void calcCanInsert();
     void insertText();
 
-    SPDesktop* _desktop = nullptr;
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::IconView *iconView;
     Glib::RefPtr<Gtk::Entry> entry;
@@ -73,7 +71,6 @@ private:
     Inkscape::UI::Widget::FontSelector *fontSelector;
 
     std::vector<sigc::connection> instanceConns;
-    std::vector<sigc::connection> desktopConns;
 };
 
 

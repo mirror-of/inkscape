@@ -73,18 +73,8 @@ ObjectAttributes::ObjectAttributes()
     , blocked(false)
     , CurrentItem(nullptr)
     , attrTable(Gtk::manage(new SPAttributeTable()))
-    , selectChangedConn()
-    , subselChangedConn()
-    , selectModifiedConn()
 {
     attrTable->show();
-}
-
-ObjectAttributes::~ObjectAttributes ()
-{
-    selectModifiedConn.disconnect();
-    subselChangedConn.disconnect();
-    selectChangedConn.disconnect();
 }
 
 void ObjectAttributes::widget_setup ()
@@ -162,38 +152,12 @@ void ObjectAttributes::widget_setup ()
     blocked = false;
 }
 
-void ObjectAttributes::update()
+void ObjectAttributes::selectionChanged(Selection *selection)
 {
-    if (!_app) {
-        std::cerr << "ObjectAttributes::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
-        return;
-    }
-
-    {
-        {
-            selectModifiedConn.disconnect();
-            subselChangedConn.disconnect();
-            selectChangedConn.disconnect();
-        }
-
-        if (desktop && desktop->selection) {
-            selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &ObjectAttributes::widget_setup)));
-            subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &ObjectAttributes::widget_setup)));
-
-            // Must check flags, so can't call widget_setup() directly.
-            selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &ObjectAttributes::selectionModifiedCB)));
-        }
-        widget_setup();
-    }
+    widget_setup();
 }
 
-void ObjectAttributes::selectionModifiedCB( guint flags )
+void ObjectAttributes::selectionModified(Selection *selection, guint flags)
 {
     if (flags & ( SP_OBJECT_MODIFIED_FLAG |
                    SP_OBJECT_PARENT_MODIFIED_FLAG |

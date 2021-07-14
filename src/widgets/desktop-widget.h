@@ -188,9 +188,7 @@ public:
 
     Gtk::MenuBar *menubar() { return _menubar; }
 
-
     void updateNamedview();
-    void updateDocument();
     void update_guides_lock();
 
     // Canvas Grid Widget

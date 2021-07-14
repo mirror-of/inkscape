@@ -47,8 +47,10 @@ class Find : public DialogBase
 {
 public:
     Find();
-    ~Find() override;
+    ~Find() override {};
 
+    void desktopReplaced() override;
+    void selectionChanged(Selection *selection) override;
     /**
      * Helper function which returns a new instance of the dialog.
      * getInstance is needed by the dialog manager (Inkscape::UI::Dialog::DialogManager).
@@ -194,15 +196,6 @@ protected:
      * Currently not working, no known way to do this
      */
     void        squeeze_window();
-    /**
-     * Update the state of the dialog
-     */
-    void        update() override;
-
-    /**
-     * Called when desktop selection changes
-     */
-    void onSelectionChange();
 
 private:
     Find(Find const &d) = delete;

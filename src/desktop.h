@@ -53,6 +53,7 @@ class SPItem;
 class SPNamedView;
 class SPObject;
 class SPStyle;
+class SPStop;
 typedef struct _DocumentInterface DocumentInterface;//struct DocumentInterface;
 
 class InkscapeWindow;
@@ -80,12 +81,15 @@ namespace Inkscape {
     class CanvasItemRotate;
 
     namespace UI {
+        class ControlPointSelection;
+
         namespace Dialog {
             class DialogContainer;
         }
 
         namespace Tools {
             class ToolBase;
+            class TextTool;
         }
 
         namespace Widget {
@@ -210,7 +214,6 @@ public:
 
     Glib::ustring _reconstruction_old_layer_id;
 
-    sigc::signal<void, sp_verb_t>      _tool_changed;
     sigc::signal<void, unsigned int, bool> _menu_update;
     sigc::signal<void, SPObject *>     _layer_changed_signal;
     sigc::signal<bool, const SPCSSAttr *, bool>::accumulated<StopOnTrue> _set_style_signal;
@@ -256,6 +259,20 @@ public:
     sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
         return _layer_changed_signal.connect(slot);
     }
+
+    // there's an object selected and it has a gradient fill and/or stroke; one of the gradient stops has been selected
+    // callback receives sender pointer and selected stop pointer
+    sigc::connection connect_gradient_stop_selected(const sigc::slot<void, void*, SPStop*>& slot);
+    // a path is being edited and one of its control points has been (de)selected using node tool
+    // callback receives sender pointer and control spoints selection pointer
+    sigc::connection connect_control_point_selected(const sigc::slot<void, void*, Inkscape::UI::ControlPointSelection*>& slot);
+    // there's an active text frame and user moves or clicks text cursor within it using text tool
+    // callback receives sender pointer and text tool pointer
+    sigc::connection connect_text_cursor_moved(const sigc::slot<void, void*, Inkscape::UI::Tools::TextTool*>& slot);
+
+    void emit_gradient_stop_selected(void* sender, SPStop* stop);
+    void emit_control_point_selected(void* sender, Inkscape::UI::ControlPointSelection* selection);
+    void emit_text_cursor_moved(void* sender, Inkscape::UI::Tools::TextTool* tool);
 
     /**
      * Return new desktop object.
@@ -424,6 +441,7 @@ public:
     bool isToolboxButtonActive (gchar const *id);
     void updateNow();
     void updateCanvasNow();
+    void updateDialogs();
     void storeDesktopPosition();
 
     void enableInteraction();
@@ -611,10 +629,12 @@ private:
     sigc::signal<void>                 _deactivate_signal;
     sigc::signal<void,SPDesktop*,Inkscape::UI::Tools::ToolBase*> _event_context_changed_signal;
     sigc::signal<void, gpointer, SPObject*> _tool_subselection_changed;
+    sigc::signal<void, void*, SPStop*> _gradient_stop_selected;
+    sigc::signal<void, void*, Inkscape::UI::ControlPointSelection*> _control_point_selected;
+    sigc::signal<void, void*, Inkscape::UI::Tools::TextTool*> _text_cursor_moved;
 
     sigc::connection _activate_connection;
     sigc::connection _deactivate_connection;
-    sigc::connection _sel_modified_connection;
     sigc::connection _sel_changed_connection;
     sigc::connection _reconstruction_start_connection;
     sigc::connection _reconstruction_finish_connection;
@@ -629,7 +649,6 @@ private:
 
     static void _onActivate (SPDesktop* dt);
     static void _onDeactivate (SPDesktop* dt);
-    static void _onSelectionModified (Inkscape::Selection *selection, guint flags, SPDesktop *dt);
 };
 
 #endif // SEEN_SP_DESKTOP_H

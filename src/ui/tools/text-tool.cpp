@@ -308,7 +308,7 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
                 this->dragging = 0;
                 sp_event_context_discard_delayed_snap_event(this);
                 ret = TRUE;
-                desktop->emitToolSubselectionChanged((gpointer)this);
+                desktop->emit_text_cursor_moved(this, this);
             }
             break;
         case GDK_MOTION_NOTIFY:
@@ -666,7 +666,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                     }
                 }
                 this->creating = false;
-                desktop->emitToolSubselectionChanged((gpointer)this);
+                desktop->emit_text_cursor_moved(this, this);
                 return TRUE;
             }
             break;
@@ -1786,7 +1786,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         }
     }
 
-    desktop->emitToolSubselectionChanged((gpointer)tc);
+    desktop->emit_text_cursor_moved(tc, tc);
 }
 
 static void sp_text_context_update_text_selection(TextTool *tc)

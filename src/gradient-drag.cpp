@@ -1931,7 +1931,7 @@ void GrDrag::deselect_all()
 void GrDrag::deselectAll()
 {
     deselect_all();
-    this->desktop->emitToolSubselectionChanged(nullptr);
+    desktop->emit_gradient_stop_selected(this, nullptr);
 }
 
 /**
@@ -2032,7 +2032,7 @@ void GrDrag::setSelected(GrDragger *dragger, bool add_to_selection, bool overrid
         }
     }
     if (seldragger) {
-        this->desktop->emitToolSubselectionChanged((gpointer) seldragger);
+        desktop->emit_gradient_stop_selected(this, nullptr);
     }
 }
 
@@ -2046,9 +2046,8 @@ void GrDrag::setDeselected(GrDragger *dragger)
         selected.erase(dragger);
         dragger->deselect();
     }
-    this->desktop->emitToolSubselectionChanged((gpointer) (selected.empty() ? NULL :*(selected.begin())));
+    desktop->emit_gradient_stop_selected(this, nullptr);
 }
-
 
 
 /**
