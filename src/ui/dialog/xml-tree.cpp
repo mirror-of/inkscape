@@ -357,8 +357,10 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
     if (selected_repr) {
         Inkscape::GC::release(selected_repr);
     }
-
     selected_repr = repr;
+    if (selected_repr) {
+        Inkscape::GC::anchor(selected_repr);
+    }
     if (auto document = getDocument()) {
         document->setXMLDialogSelectedObject(nullptr);
     }
