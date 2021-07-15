@@ -242,14 +242,6 @@ StrokeStyle::StrokeStyle() :
 
     Gtk::RadioButtonGroup joinGrp;
 
-    joinRound = makeRadioButton(joinGrp, INKSCAPE_ICON("stroke-join-round"),
-                                hb, STROKE_STYLE_BUTTON_JOIN, "round");
-
-    // TRANSLATORS: Round join: joining lines with a rounded corner.
-    //  For an example, draw a triangle with a large stroke width and modify the
-    //  "Join" option (in the Fill and Stroke dialog).
-    joinRound->set_tooltip_text(_("Round join"));
-
     joinBevel = makeRadioButton(joinGrp, INKSCAPE_ICON("stroke-join-bevel"),
                                 hb, STROKE_STYLE_BUTTON_JOIN, "bevel");
 
@@ -257,6 +249,14 @@ StrokeStyle::StrokeStyle() :
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     joinBevel->set_tooltip_text(_("Bevel join"));
+
+    joinRound = makeRadioButton(joinGrp, INKSCAPE_ICON("stroke-join-round"),
+                                hb, STROKE_STYLE_BUTTON_JOIN, "round");
+
+    // TRANSLATORS: Round join: joining lines with a rounded corner.
+    //  For an example, draw a triangle with a large stroke width and modify the
+    //  "Join" option (in the Fill and Stroke dialog).
+    joinRound->set_tooltip_text(_("Round join"));
 
     joinMiter = makeRadioButton(joinGrp, INKSCAPE_ICON("stroke-join-miter"),
                                 hb, STROKE_STYLE_BUTTON_JOIN, "miter");
