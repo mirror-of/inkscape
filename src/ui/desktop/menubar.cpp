@@ -60,41 +60,14 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
         return;
     }
 
-    // user preference for icons in menus (1: show all, -1: hide all; 0: theme chooses per icon)
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int show_icons_pref = prefs->getInt("/theme/menuIcons", 0);
-
-    Gtk::RadioMenuItem::Group group;
-
     for (auto menu_ptr = xml; menu_ptr != nullptr; menu_ptr = menu_ptr->next()) {
 
         if (menu_ptr->name()) {
 
-            // show menu icons for current item?
-            bool show_icons_curr = show_icons;
-            if (show_icons_pref == 1) {          // show all icons per global pref
-                show_icons_curr = true;
-            } else if (show_icons_pref == -1) {  // hide all icons per global pref
-                show_icons_curr = false;
-            } else {  // set according to 'show-icons' attribute in theme's XML file; value is fully inherited
-                const char *str = menu_ptr->attribute("show-icons");
-                if (str) {
-                    Glib::ustring ustr = str;
-                    if (ustr == "true") {
-                        show_icons_curr = true;
-                    } else if (ustr == "false") {
-                        show_icons_curr = false;
-                    } else {
-                        std::cerr << "build_menu: invalid value for 'show-icons' (use 'true' or 'false')."
-                                  << ustr << std::endl;
-                    }
-                }
-            }
-
             Glib::ustring name = menu_ptr->name();
 
             if (name == "inkscape") {
-                build_menu(menu, menu_ptr->firstChild(), view, show_icons_curr);
+                build_menu(menu, menu_ptr->firstChild(), view, true);
                 continue;
             }
 
@@ -236,19 +209,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                             
                             }
                         } // Recent file end
-
-                        // Rest of View menu from menus.xml
-                        build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
                     }
-                    continue;
-                }
-                else {
-
-                    Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
-                    build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
-                    menuitem->set_submenu(*submenu);
-                    menu->append(*menuitem);
-
                     continue;
                 }
             }

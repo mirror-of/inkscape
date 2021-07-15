@@ -108,9 +108,5 @@
     </item>
   </section>
 
-  <item>
-    <attribute name='label' translatable="yes">----- action end -----</attribute>
-  </item>
-
   </menu>
 </interface>

@@ -8,6 +8,7 @@
 ../src/actions/actions-canvas-snapping.cpp
 ../src/actions/actions-canvas-transform.cpp
 ../src/actions/actions-dialogs.cpp
+../src/actions/actions-edit-document.cpp
 ../src/actions/actions-edit-window.cpp
 ../src/actions/actions-edit.cpp
 ../src/actions/actions-effect.cpp
@@ -31,6 +32,8 @@
 ../src/actions/actions-tools.cpp
 ../src/actions/actions-tutorial.cpp
 ../src/actions/actions-transform.cpp
+../src/actions/actions-tutorial.cpp
+../src/actions/actions-view-mode.cpp
 ../src/actions/actions-window.cpp
 ../src/auto-save.cpp
 ../src/context-fns.cpp
@@ -43,7 +46,6 @@
 ../src/event-log.cpp
 ../src/extension/dependency.cpp
 ../src/extension/effect.cpp
-../src/extension/effect.h
 ../src/extension/execution-env.cpp
 ../src/extension/extension.cpp
 ../src/extension/implementation/script.cpp

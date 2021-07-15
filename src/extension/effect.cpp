@@ -28,12 +28,8 @@ namespace Inkscape {
 namespace Extension {
 
 Effect * Effect::_last_effect = nullptr;
-Inkscape::XML::Node * Effect::_effects_list = nullptr;
-Inkscape::XML::Node * Effect::_filters_list = nullptr;
 
-#define  EFFECTS_LIST  "effects-list"
-#define  FILTERS_LIST  "filters-list"
-
+// Adds effect to Gio::Actions
 void 
 action_effect(Effect* effect)
 {
@@ -43,6 +39,7 @@ action_effect(Effect* effect)
     effect->effect(InkscapeApplication::instance()->get_active_view());   
 }
 
+// Modifying string to get submenu id
 std::string
 action_menu_name(std::string menu){
     transform(menu.begin(), menu.end(), menu.begin(), ::tolower);
@@ -155,9 +152,9 @@ Effect::get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu)
             mergename = _(menuname);
         }
         
-        // makeing sub menu string
-        sub_menu+="-";
-        sub_menu+= menuname;
+        // Makeing sub menu string
+        sub_menu += "-";
+        sub_menu += menuname;
     }
 
     if (pattern != nullptr) {

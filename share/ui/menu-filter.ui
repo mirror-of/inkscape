@@ -90,10 +90,6 @@
     <attribute name='action'>app.edit-remove-filter</attribute>
     </item>
   </section>
-
-  <item>
-    <attribute name='label' translatable="yes">----- action end -----</attribute>
-  </item>
-
+  
   </menu>
 </interface>

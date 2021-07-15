@@ -104,10 +104,5 @@
   	</item>
   </section>
 
-  <submenu id="object-clip">
-  <attribute name='label' translatable='yes'>hoja bsdk</attribute>
-
-  </submenu>
-
   </menu>
 </interface>
