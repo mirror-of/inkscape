@@ -1513,6 +1513,7 @@ void DocumentProperties::documentReplaced()
         _repr_namedview = desktop->getNamedView()->getRepr();
         _repr_namedview->addListener(&_repr_events, this);
         populate_linked_profiles_box();
+        update_widgets();
     }
 }
 
