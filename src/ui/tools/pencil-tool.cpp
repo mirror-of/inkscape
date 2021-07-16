@@ -268,7 +268,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     }
     bool ret = false;
 
-    if ((mevent.state & GDK_BUTTON2_MASK) || (mevent.state & GDK_BUTTON3_MASK)) {
+    if ((mevent.state & GDK_BUTTON2_MASK)) {
         // allow scrolling
         return ret;
     }
