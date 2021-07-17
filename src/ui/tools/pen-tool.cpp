@@ -476,8 +476,8 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
         }
 
         ret = true;
-    } else if (bevent.button == 3 && this->npoints != 0) {
-        // right click - finish path
+    } else if (bevent.button == 3 && this->npoints != 0 && !_button1on) {
+        // right click - finish path, but only if the left click isn't pressed.
         this->ea = nullptr; // unset end anchor if set (otherwise crashes)
         this->_finish(false);
         ret = true;
@@ -496,7 +496,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
 bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     bool ret = false;
 
-    if (mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
+    if (mevent.state & GDK_BUTTON2_MASK) {
         // allow scrolling
         return false;
     }
