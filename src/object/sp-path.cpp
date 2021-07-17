@@ -239,12 +239,14 @@ void SPPath::set(SPAttr key, const gchar* value) {
                 }
             }
             // In 2020-8-15 next line is commented and added
-            // a todo to see regressions, after this in a commit this line is uncommented
-            // again this line in a MR that near 1.1 release is finally rollbacked. 
-            // This rollback happends near release (1.1) and think is better leave 
-            // uncommented for release as all check are done this way
-            // TODO: Comment on 1.2 branching to see issues
-            sp_lpe_item_update_patheffect(this, true, true);
+            // a todo to see regressions, after this in a commit this line is uncomented
+            // again this line in a MR that near 1.1 release is finaly rollbacked. 
+            // This rollback happends near release (1.1) and think is beter leave 
+            // uncomented for release as all check are done this way
+            // Commentesd near 1.2 branching to seee isues
+            // If we find necesary and readd it agasin all plesse format the commments 
+            // abobe to nor comment again in the future
+            // sp_lpe_item_update_patheffect(this, true, true);
             break;
 
        case SPAttr::D:
