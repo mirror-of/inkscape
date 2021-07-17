@@ -28,6 +28,7 @@
 #include "display/cairo-utils.h"     // Checkerboard background.
 #include "display/drawing.h"
 #include "display/control/canvas-item-group.h"
+#include "display/control/snap-indicator.h"
 
 #include "ui/tools/tool-base.h"      // Default cursor
 
@@ -589,6 +590,8 @@ Canvas::on_leave_notify_event(GdkEventCrossing *crossing_event)
         return false;
     }
     _state = crossing_event->state;
+    // this is needed to remove alignment or distribution snap indicators
+    _desktop->snapindicator->remove_snaptarget();
     return pick_current_item(reinterpret_cast<GdkEvent *>(crossing_event));
 }
 
