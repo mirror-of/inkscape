@@ -536,6 +536,7 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                     text->set_fontsize(fontsize);
                     text->set_fill(text_fill);
                     text->set_background(text_bg);
+                    text->set_bg_radius(2);
                     _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
                 }
             }
@@ -572,6 +573,7 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                     text->set_fontsize(fontsize);
                     text->set_fill(text_fill);
                     text->set_background(text_bg);
+                    text->set_bg_radius(2);
                     _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
                 }
             }
@@ -598,6 +600,7 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                     text->set_fontsize(fontsize);
                     text->set_fill(text_fill);
                     text->set_background(text_bg);
+                    text->set_bg_radius(2);
                     _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
                 }
             }
