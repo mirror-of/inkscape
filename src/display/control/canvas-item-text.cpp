@@ -61,6 +61,16 @@ void CanvasItemText::set_coord(Geom::Point const &p)
 }
 
 /**
+ * Set a text position. Position is in document coordinates.
+ */
+void CanvasItemText::set_bg_radius(double const &rad)
+{
+    _bg_rad = rad;
+
+    request_update();
+}
+
+/**
  * Returns distance between point in canvas units and nearest point on text.
  */
 double CanvasItemText::closest_distance_to(Geom::Point const &p)
@@ -178,10 +188,35 @@ void CanvasItemText::render(Inkscape::CanvasItemBuffer *buf)
 
     // Background
     if (_use_background) {
-        buf->cr->rectangle(_bounds.min().x() - buf->rect.min().x(),
-                           _bounds.min().y() - buf->rect.min().y(),
-                           _bounds.width(),
-                           _bounds.height());
+        double x = _bounds.min().x() - buf->rect.min().x();
+        double y = _bounds.min().y() - buf->rect.min().y();
+        if (_bg_rad == 0) {
+            buf->cr->rectangle(x, y, _bounds.width(), _bounds.height());
+        } else {
+            double radius = _bg_rad * (_bounds.width()/_bounds.height());
+            buf->cr->arc(x + _bounds.width() - radius,
+                         y + radius,
+                         radius,
+                         Geom::rad_from_deg(-90),
+                         Geom::rad_from_deg(0));
+
+            buf->cr->arc(x + _bounds.width() - radius,
+                         y + _bounds.height() - radius,
+                         radius,
+                         Geom::rad_from_deg(0),
+                         Geom::rad_from_deg(90));
+
+            buf->cr->arc(x + radius, y + _bounds.height() - radius,
+                         radius,
+                         Geom::rad_from_deg(90),
+                         Geom::rad_from_deg(180));
+
+            buf->cr->arc(x + radius,
+                         y + radius,
+                         radius,
+                         Geom::rad_from_deg(180),
+                         Geom::rad_from_deg(270));
+        }
         buf->cr->set_line_width(2);
         buf->cr->set_source_rgba(SP_RGBA32_R_F(_background), SP_RGBA32_G_F(_background),
                                  SP_RGBA32_B_F(_background), SP_RGBA32_A_F(_background));

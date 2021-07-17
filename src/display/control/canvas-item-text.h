@@ -40,6 +40,7 @@ public:
 
     // Geometry
     void set_coord(Geom::Point const &p);
+    void set_bg_radius(double const &rad);
 
     void update(Geom::Affine const &affine) override;
     double closest_distance_to(Geom::Point const &p); // Maybe not needed
@@ -64,6 +65,7 @@ protected:
     Geom::Point _anchor_position_manual;
     Glib::ustring _text;
     double _fontsize = 10;
+    double _bg_rad = 0;
     guint32 _background = 0x0000007f;
     bool _use_background = false;
     const double _border = 3; // Must be a const to allow alignment with other text boxes.

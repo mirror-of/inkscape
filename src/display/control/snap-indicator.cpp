@@ -423,8 +423,9 @@ void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point 
         auto text = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), text_pos, distance);
         text->set_fontsize(fontsize);
         text->set_fill(color);
+        text->set_background(0xffffffc8);
+        text->set_bg_radius(2);
         _alignment_snap_indicators.push_back(_desktop->add_temporary_canvasitem(text, 0));
-        text->set_background(0xffffff00);
 
         auto temp_point = text_pos + offset*direction;
         line = new Inkscape::CanvasItemCurve(_desktop->getCanvasTemp(), p1, temp_point);
