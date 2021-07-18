@@ -1779,7 +1779,7 @@ void InkscapePreferences::initPageUI()
     _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", PREFS_DIALOGS_STATE_SAVE, true, nullptr);
     _win_save_dialog_pos_off.init ( _("Don't save dialogs status"), "/options/savedialogposition/value", PREFS_DIALOGS_STATE_NONE, false, &_win_save_dialog_pos_on);
 
-    _win_dockable.init ( _("Dockable"), "/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE, true, nullptr);
+    _win_dockable.init ( _("Docked"), "/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE, true, nullptr);
     _win_floating.init ( _("Floating"), "/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_FLOATING, false, &_win_dockable);
 
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, nullptr);
@@ -1827,9 +1827,9 @@ void InkscapePreferences::initPageUI()
 
 
 
-    _page_windows.add_group_header( _("Dialog behavior (requires restart)"));
+    _page_windows.add_group_header( _("Default dialog behavior (requires restart)"));
     _page_windows.add_line( true, "", _win_dockable, "",
-                            _("Dockable"));
+                            _("Docked"));
     _page_windows.add_line( true, "", _win_floating, "",
                             _("Floating"));
 #ifdef _WIN32

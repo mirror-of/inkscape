@@ -71,7 +71,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     _menu.append(*new_menu_item);
 
     // Close notebook
-    new_menu_item = Gtk::manage(new Gtk::MenuItem(_("Close Notebook")));
+    new_menu_item = Gtk::manage(new Gtk::MenuItem(_("Close Panel")));
     _conn.emplace_back(
         new_menu_item->signal_activate().connect(sigc::mem_fun(*this, &DialogNotebook::close_notebook_callback)));
     _menu.append(*new_menu_item);
