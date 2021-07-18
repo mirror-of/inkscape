@@ -67,19 +67,16 @@ Speaker Notes - A
 Scissor tool - C
 -->
 
-  <bind key="S" action="ToolSelector" display="true"/>
-  <bind key="s" action="ToolSelector" />
+  <bind gaction="win.tool-switch('Select')" keys="S, s" />
 
   <bind action="SelectPrefs" />
 <!--
-  <bind key="F2" action="ToolNode" display="true"/>
-  <bind key="n" action="ToolNode" />
-  <bind key="N" action="ToolNode" />
+  <bind gaction="win.tool-switch('Node')" keys="F2, n, N" />
 
 
-  <bind key="F2" modifiers="Shift" action="ToolTweak" display="true"/>
-  <bind key="w" action="ToolTweak" />
-  <bind key="W" action="ToolTweak" />
+  <bind gaction="win.tool-switch('Tweak')" keys="&lt;shift&gt;F2" />
+  <bind gaction="win.tool-switch('Tweak')" keys="w" />
+  <bind gaction="win.tool-switch('Tweak')" keys="W" />
 
 -->
 
@@ -87,120 +84,86 @@ Scissor tool - C
   This is actually a trick since in Canvas 11 Ctrl+Spacebar is for zooming in 
   and Ctrl+Shift+Spacebar is for zooming out
 -->
-  <bind key="space" modifiers="Ctrl" action="ToolZoom" display="true"/>
-  <bind key="space" modifiers="Ctrl,Shift" action="ToolZoom" />
+  <bind gaction="win.tool-switch('Zoom')" keys="&lt;ctrl&gt;space, &lt;ctrl&gt;&lt;shift&gt;space" />
 
-  <bind key="R" action="ToolRect" display="true"/>
-  <bind key="r" action="ToolRect" />
+  <bind gaction="win.tool-switch('Rect')" keys="R, r" />
 
 <!-- 3Dbox tool called Cube tool exists in Canvas, but has no shortcut
-  <bind key="F4" modifiers="Shift" action="Tool3DBox" display="true"/>
-  <bind key="x" action="Tool3DBox" />
-  <bind key="X" action="Tool3DBox" />
+  <bind gaction="win.tool-switch('3DBox')" keys="&lt;shift&gt;F4, x, X" />
 -->
 
 <!-- This is called Oval tool -->
-  <bind key="O" action="ToolArc" display="true"/>
-  <bind key="o" action="ToolArc" />
+  <bind gaction="win.tool-switch('Arc')" keys="O, o" />
 
-  <bind key="A" action="ToolStar" display="true"/>
-  <bind key="a" action="ToolStar" /> 	 
+  <bind gaction="win.tool-switch('Star')" keys="A, a" /> 	 
 
   <bind action="StarPrefs" />
 <!-- Spiral tools exists in Canvas, but has no shortcut
-  <bind key="F9" action="ToolSpiral" display="true"/>
-  <bind key="i" action="ToolSpiral" />
-  <bind key="I" action="ToolSpiral" />
+  <bind gaction="win.tool-switch('Spiral')" keys="F9, i, I" />
 -->
 
-  <bind key="P" action="ToolPencil" display="true"/>
-  <bind key="p" action="ToolPencil" />
-  <bind key="F" action="ToolPencil" display="true"/>
-  <bind key="f" action="ToolPencil" />
+  <bind gaction="win.tool-switch('Pencil')" keys="P, p, F, f" />
 
-  <bind key="B" action="ToolPen" display="true"/>
-  <bind key="b" action="ToolPen" />
+  <bind gaction="win.tool-switch('Pen')" keys="B, b" />
 
 <!-- It's Paintbrush, but... read the explanation above
-  <bind key="B" modifiers="Ctrl" action="ToolCalligraphic" display="true"/>
-  <bind key="b" action="ToolCalligraphic" />
+  <bind gaction="win.tool-switch('Caligraphic')" keys="&lt;ctrl&gt;B, b" />
 -->
 
 <!-- K is also used for Knife tool, but we don't have it, so using K for bucket fill -->
-  <bind key="K" modifiers="Shift" action="ToolPaintBucket" display="true"/>
-  <bind key="k" action="ToolPaintBucket" />
+  <bind gaction="win.tool-switch('PaintBucket')" keys="&lt;shift&gt;K, k" />
 
-  <bind key="T" action="ToolText" display="true"/>
-  <bind key="t" action="ToolText" />
+  <bind gaction="win.tool-switch('Text')" keys="T, t" />
 
-  <bind key="G" modifiers="Ctrl" action="ToolGradient" display="true"/>
-  <bind key="g" action="ToolGradient" />
+  <bind gaction="win.tool-switch('Gradient')" keys="&lt;ctrl&gt;G, g" />
 
 <!-- Canvas has various smart connection lines. Shortcut seems to be missing
-  <bind key="F2" modifiers="Ctrl" action="ToolConnector" display="true"/>
-  <bind key="o" action="ToolConnector" />
-  <bind key="O" action="ToolConnector" />
+  <bind gaction="win.tool-switch('Connector')" keys="&lt;ctrl&gt;F2, o, O" />
 -->
 
-  <bind key="I" action="ToolDropper" display="true"/>
-  <bind key="i" action="ToolDropper" />
+  <bind gaction="win.tool-switch('Dropper')" keys="I, i" />
 
 <!-- FILE MENU -->
 
-  <bind key="n" modifiers="Ctrl" action="FileNew" display="true"/>
-  <bind key="N" modifiers="Ctrl" action="FileNew" />
+  <bind gaction="doc.document-new" keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
 
-  <bind key="o" modifiers="Ctrl" action="FileOpen" display="true"/>
-  <bind key="O" modifiers="Ctrl" action="FileOpen" />
+  <bind gaction="win.file-open" keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
 
-  <bind key="F4" modifiers="Ctrl" action="FileClose" display="true"/>
+  <bind gaction="app.file-close" keys="&lt;ctrl&gt;F4" />
 
-  <bind key="s" modifiers="Ctrl" action="FileSave" display="true"/>
-  <bind key="S" modifiers="Ctrl" action="FileSave" />
+  <bind gaction="win.document-save" keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
 
-  <bind key="s" modifiers="Ctrl,Shift" action="FileSaveAs" display="true"/>
-  <bind key="S" modifiers="Ctrl,Shift" action="FileSaveAs" />
+  <bind gaction="win.document-save-as" keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;S" />
 
-  <bind key="p" modifiers="Ctrl" action="FilePrint" display="true"/>
-  <bind key="P" modifiers="Ctrl" action="FilePrint" />
+  <bind gaction="win.document-print" keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
 
-  <bind key="x" modifiers="Alt" action="FileQuit" display="true"/>
-  <bind key="X" modifiers="Alt" action="FileQuit" display="true"/>
+  <bind gaction="app.quit-inkscape" keys="&lt;alt&gt;x, &lt;alt&gt;X" />
 
 <!-- EDIT MENU -->
 
-  <bind key="z" modifiers="Ctrl" action="EditUndo" display="true"/>
-  <bind key="Z" modifiers="Ctrl" action="EditUndo" />
+  <bind gaction="win.undo" keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
 
-  <bind key="z" modifiers="Ctrl,Shift" action="EditRedo" display="true"/>
-  <bind key="Z" modifiers="Ctrl,Shift" action="EditRedo" />
+  <bind gaction="win.redo" keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
 
 <!-- Repeat - Alt+Enter - Inkscape doesn't have it yet -->
 
-  <bind key="x" modifiers="Ctrl" action="EditCut" display="true"/>
-  <bind key="X" modifiers="Ctrl" action="EditCut" />
+  <bind gaction="app.cut" keys="&lt;ctrl&gt;x, &lt;ctrl&gt;X" />
 
-  <bind key="c" modifiers="Ctrl" action="EditCopy" display="true"/>
-  <bind key="C" modifiers="Ctrl" action="EditCopy" />
+  <bind gaction="app.copy" keys="&lt;ctrl&gt;c, &lt;ctrl&gt;C" />
 
-  <bind key="v" modifiers="Ctrl" action="EditPaste" display="true"/>
-  <bind key="V" modifiers="Ctrl" action="EditPaste" />
+  <bind gaction="win.paste" keys="&lt;ctrl&gt;v, &lt;ctrl&gt;V" />
 
 <!-- Paste Into - Ctrl+Shift+V - needs clarification -->
 
-  <bind key="Delete" action="EditDelete" display="true"/>
-  <bind key="KP_Delete" action="EditDelete" />
+  <bind gaction="app.delete" keys="Delete, KP_Delete" />
 
 <!-- is finding 100% analog to Inkscape's? -->
 
-  <bind key="a" modifiers="Ctrl,Shift" action="DialogFind" display="true"/>
-  <bind key="A" modifiers="Ctrl,Shift" action="DialogFind" />
+  <bind gaction="win.dialog-ope('Find')" keys="&lt;ctrl&gt;&lt;shift&gt;a, &lt;ctrl&gt;&lt;shift&gt;A" />
 
-  <bind key="a" modifiers="Ctrl" action="EditSelectAll" display="true"/>
-  <bind key="A" modifiers="Ctrl" action="EditSelectAll" />
+  <bind gaction="win.select-all"    keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
 
-  <bind key="d" modifiers="Ctrl" action="EditDuplicate" display="true"/>
-  <bind key="D" modifiers="Ctrl" action="EditDuplicate" />
+  <bind gaction="app.duplicate" keys="&lt;ctrl&gt;d, &lt;ctrl&gt;D" />
 
 <!-- Duplicate With Transform - Ctrl+Shift+D - Inkscape doesn't seem to have straight analog -->
 <!-- Replicate - Ctrl+Alt+D - Inkscape doesn't seem to have straight analog -->
@@ -222,11 +185,11 @@ Small Caps - Ctrl+Shift+\
 Superscript - Ctrl+Shift+=
 Subscript - Ctrl+Shift+- -->
 
-  <bind key="braceleft" modifiers="Ctrl" action="org.inkscape.text.uppercase" display="true" />
+  <bind gaction="org.inkscape.text.uppercase.inkscape.text.uppercase"  keys="&lt;ctrl&gt;braceleft" />
 
-  <bind key="braceright" modifiers="Ctrl" action="org.inkscape.text.lowercase" display="true" />
+  <bind gaction="org.inkscape.text.lowercase.inkscape.text.lowercase"  keys="&lt;ctrl&gt;braceright" />
 
-  <bind key="colon" modifiers="Ctrl" action="org.inkscape.text.title_case" display="true"/>
+  <bind gaction="org.inkscape.text.title_case.inkscape.text.title_case" keys="&lt;ctrl&gt;colon" />
 
 <!-- we don't seem to have verbs for them: 
 Right Justification - Ctrl+Shift+R
@@ -241,8 +204,7 @@ Kerning -> Tighten Fine Kerning 0,25 - Ctrl+Alt+Shift+Left arrow
 Kerning -> Loosen Fine Kerning 0,25 - Ctrl+Alt+Shift+Right arrow
 -->
 
-  <bind key="T" modifiers="Ctrl" action="DialogText" display="true"/>
-  <bind key="t" modifiers="Ctrl" action="DialogText" />  
+  <bind gaction="win.dialog-open('Text')" keys="&lt;ctrl&gt;T, &lt;ctrl&gt;t" />  
 
 <!-- OBJECT MENU -->
 
@@ -250,33 +212,27 @@ Kerning -> Loosen Fine Kerning 0,25 - Ctrl+Alt+Shift+Right arrow
 
 <!-- "Object Specs...": -->
 
-  <bind key="I" modifiers="Ctrl" action="DialogObjectProperties" display="true"/>
-  <bind key="i" modifiers="Ctrl" action="DialogObjectProperties" />
+  <bind gaction="win.dialog-open('ObjectProperties')" keys="&lt;ctrl&gt;I, &lt;ctrl&gt;i" />
 
-  <bind key="F" modifiers="Ctrl" action="SelectionToFront" display="true"/>
-  <bind key="f" modifiers="Ctrl" action="SelectionToFront" />
+  <bind gaction="app.selection-top" keys="&lt;ctrl&gt;F, &lt;ctrl&gt;f" />
 
-  <bind key="B" modifiers="Ctrl" action="SelectionToBack" display="true"/>
-  <bind key="b" modifiers="Ctrl" action="SelectionToBack" />
+  <bind gaction="app.selection-bottom" keys="&lt;ctrl&gt;B, &lt;ctrl&gt;b" />
 
-  <bind key="bracketleft" modifiers="Ctrl" action="SelectionRaise" display="true"/>
+  <bind gaction="app.selection-raise" keys="&lt;ctrl&gt;bracketleft" />
 
-  <bind key="bracketright" modifiers="Ctrl" action="SelectionLower" display="true"/>
+  <bind gaction="app.selection-lower" keys="&lt;ctrl&gt;bracketright" />
 
-  <bind key="F6" action="DialogAlignDistribute" display="true"/>
+  <bind gaction="win.dialog-open('AlignDistribute')" keys="F6" />
 
 <!-- Move... -->
-  <bind key="m" modifiers="Ctrl" action="DialogTransform" display="true"/>
-  <bind key="M" modifiers="Ctrl" action="DialogTransform" />
+  <bind gaction="win.dialog-open('Transform')" keys="&lt;ctrl&gt;m, &lt;ctrl&gt;M" />
 
 <!-- Scale... -->
-  <bind key="F8" action="DialogTransform" display="true"/>
+  <bind gaction="win.dialog-open('Transform')" keys="F8" />
 
-  <bind key="g" modifiers="Ctrl" action="SelectionGroup" display="true"/>
-  <bind key="G" modifiers="Ctrl" action="SelectionGroup" />
+  <bind gaction="app.select-object-group" keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
 
-  <bind key="u" modifiers="Ctrl" action="SelectionUnGroup" display="true"/>
-  <bind key="U" modifiers="Ctrl" action="SelectionUnGroup" />
+  <bind gaction="app.select-object-ungroup" keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 
 <!-- we don't have individual verbs for locking and unlocking
 Lock - Ctrl+L
@@ -287,8 +243,7 @@ Unlock - Ctrl+K
 Path -> Join - Ctrl+Alt+J
 -->
 
-  <bind key="s" modifiers="Ctrl,Alt" action="SelectionSimplify" display="true"/>
-  <bind key="S" modifiers="Ctrl,Alt" action="SelectionSimplify" />
+  <bind gaction="app.select-path-simplify" keys="&lt;ctrl&gt;&lt;alt&gt;s, &lt;ctrl&gt;&lt;alt&gt;S" />
 
 <!-- Right now simplification of Bezier curves in Inkscape is destructive:
 Path -> Unsmooth - Ctrl+Alt+U
@@ -306,11 +261,11 @@ Path -> Unsmooth - Ctrl+Alt+U
 Display -> Size - Shift+F8
 -->
 
-  <bind key="F9" modifiers="Shift" action="ToggleGrid" />
+  <bind gaction="win.canvas-show-grid" keys="&lt;shift&gt;F9" />
 
-  <bind key="F11" modifiers="Shift" action="ToggleRulers" />
+  <bind gaction="win.canvas-rulers" keys="&lt;shift&gt;F11" />
 
-  <bind key="F6" modifiers="Shift" action="ToggleGuides" />
+  <bind gaction="win.canvas-show-guides" keys="&lt;shift&gt;F6" />
   
 <!-- EEK! Inkscape has no pages! 
 Display -> Page Breaks - F10
@@ -332,9 +287,7 @@ Views -> New... - Ctrl+Alt+N
   <bind gaction="win.canvas-zoom-1-1" keys="F3"/>
 
 <!-- Views -> Fit to Window - Shift+F3
-  <bind key="4" action="ZoomDrawing" display="true"/>
-  <bind key="5" action="ZoomPage" display="true"/>
-  <bind key="KP_5" action="ZoomPage" />
+  <bind gaction="win.canvas-zoom-drawing" keys="4, 5, KP_5" />
 -->
 
 <!-- Not implemented
@@ -342,27 +295,13 @@ Views -> Zoom... - Ctrl+/ (переход в статусную строку с 
 -->
 
 <!-- Sending users to Document Properties for defining measure unit used in rulers -->
-  <bind key="F11" action="DialogDocumentProperties" />
-
-<!-- Not available in Inkscape at all
-Slide Show - F12 -->
-
-<!--
-  This is a trick again, since Smart Mouse analog (snapping to objects/nodes/etc.) 
-  and snapping to grids/guides are setup in Document Properties in Inkscape
--->
-  <bind key="bracketleft" modifiers="Ctrl,Alt" action="DialogDocumentProperties" />
-
-  <bind key="F9" modifiers="Ctrl,Shift" action="DialogDocumentProperties" />
-
-  <bind key="F7" modifiers="Ctrl,Shift" action="DialogDocumentProperties" />
+  <bind gaction="win.dialog-open('DocumentProperties')" keys="F11, &lt;ctrl&gt;&lt;alt&gt;bracketleft, &lt;ctrl&gt;&lt;shift&gt;F9, &lt;ctrl&gt;&lt;shift&gt;F7" />
 
 
 <!-- EFFECTS MENU -->
 
 <!--Rotate tab in Transformation dialog is the answer -->
-  <bind key="r" modifiers="Ctrl" action="DialogTransform" display="true"/>
-  <bind key="R" modifiers="Ctrl" action="DialogTransform" />
+  <bind gaction="win.dialog-open('Transform')" keys="&lt;ctrl&gt;r, &lt;ctrl&gt;R" />
 
 <!-- 
   Not sure what to do with this one.
@@ -372,8 +311,7 @@ Slide Show - F12 -->
 -->
 
 <!-- This is not interactive Blend tool, but something close. Yay for LPE :) -->
-  <bind key="b" modifiers="Ctrl,Alt" action="org.ekips.filter.interp" display="true"/>
-  <bind key="B" modifiers="Ctrl,Alt" action="org.ekips.filter.interp" />
+  <bind gaction="org.ekips.filter.interp.ekips.filter.interp" keys="&lt;ctrl&gt;&lt;alt&gt;b, &lt;ctrl&gt;&lt;alt&gt;B" />
 
 <!-- 
   "Combine..." dialog (Ctrl+Alt+C) provides boolean ops.
@@ -381,20 +319,17 @@ Slide Show - F12 -->
 -->
 
 <!-- This is not interactive Envelope tool, but something close. Yay for LPE :) -->
-  <bind key="v" modifiers="Ctrl,Alt" action="org.ekips.filter.perspective" display="true"/>
-  <bind key="V" modifiers="Ctrl,Alt" action="org.ekips.filter.perspective" />
+  <bind gaction="org.ekips.filter.perspective.ekips.filter.perspective" keys="&lt;ctrl&gt;&lt;alt&gt;v, &lt;ctrl&gt;&lt;alt&gt;V" />
 
 <!-- This is not interactive Extrusion tool, but something close. Yay for LPE :) -->
 
-  <bind key="e" modifiers="Ctrl,Alt" action="org.ekips.filter.motion" display="true"/>
-  <bind key="E" modifiers="Ctrl,Alt" action="org.ekips.filter.motion" />
+  <bind gaction="org.ekips.filter.motion.ekips.filter.motion" keys="&lt;ctrl&gt;&lt;alt&gt;e, &lt;ctrl&gt;&lt;alt&gt;E" />
 
 <!-- IMAGE MENU -->
 
 <!-- Not implemented in Inkscape:
 Select -> Hide Edges - Ctrl+Shift+E -->
 
-  <bind key="i" modifiers="Ctrl,Alt" action="FileImport" display="true"/>
-  <bind key="I" modifiers="Ctrl,Alt" action="FileImport" />
+  <bind gaction="win.document-import" keys="&lt;ctrl&gt;&lt;alt&gt;i, &lt;ctrl&gt;&lt;alt&gt;I" />
 
 </keys>
