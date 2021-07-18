@@ -69,15 +69,16 @@ void DialogManager::store_state(DialogWindow &wnd)
 
             // find dialogs hosted in this window
             for (auto dlg : *container->get_dialogs()) {
-                floating_dialogs[dlg.first] = state;
+                _floating_dialogs[dlg.first] = state;
             }
         }
     }
 }
 
+//
 bool DialogManager::should_open_floating(const Glib::ustring& dialog_type)
 {
-    return floating_dialogs.count(dialog_type) > 0;
+    return _floating_dialogs.count(dialog_type) > 0;
 }
 
 void DialogManager::set_floating_dialog_visibility(DialogWindow* wnd, bool show) {
@@ -146,22 +147,25 @@ DialogBase *DialogManager::find_floating_dialog(const Glib::ustring& dialog_type
 
 std::shared_ptr<Glib::KeyFile> DialogManager::find_dialog_state(const Glib::ustring& dialog_type)
 {
-    auto it = floating_dialogs.find(dialog_type);
-    if (it != floating_dialogs.end()) {
+    auto it = _floating_dialogs.find(dialog_type);
+    if (it != _floating_dialogs.end()) {
         return it->second;
     }
     return nullptr;
 }
 
-const char dialogs_state[] = "dialogs-state.ini";
+const char dialogs_state[] = "dialogs-state-ex.ini";
 const char save_dialog_position[] = "/options/savedialogposition/value";
 const char transient_group[] = "transient";
+const char floating_group[] = "floating";
 
 // list of dialogs sharing the same state
 std::vector<Glib::ustring> DialogManager::count_dialogs(const Glib::KeyFile *state) const
 {
     std::vector<Glib::ustring> dialogs;
-    for (auto dlg : floating_dialogs) {
+    if (!state) return dialogs;
+
+    for (auto dlg : _floating_dialogs) {
         if (dlg.second.get() == state) {
             dialogs.push_back(dlg.first);
         }
@@ -171,32 +175,32 @@ std::vector<Glib::ustring> DialogManager::count_dialogs(const Glib::KeyFile *sta
 
 void DialogManager::save_dialogs_state(DialogContainer *docking_container)
 {
-    if (!docking_container)
-        return;
+    if (!docking_container) return;
 
     // check if we want to save the state
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int save_state = prefs->getInt(save_dialog_position, PREFS_DIALOGS_STATE_SAVE);
-    if (save_state == PREFS_DIALOGS_STATE_NONE)
-        return;
+    if (save_state == PREFS_DIALOGS_STATE_NONE) return;
 
     // save state of docked dialogs and currently open floating ones
     auto keyfile = docking_container->save_container_state();
 
     // save transient state of floating dialogs that user might have opened interacting with the app
-    std::set<Glib::KeyFile *> files;
-    for (auto dlg : floating_dialogs) {
-        files.insert(dlg.second.get());
-    }
-
     int idx = 1;
-    for (auto state : files) {
+    for (auto dlg : _floating_dialogs) {
+        auto state = dlg.second.get();
+        auto&& type = dlg.first;
         auto index = std::to_string(idx++);
-        keyfile->set_string(transient_group, "state" + index, state->to_data());
+        // state may be empty; all that means it that dialog hasn't been opened yet,
+        // but when it is, then it should be open in a floating state
+        keyfile->set_string(transient_group, "state" + index, state ? state->to_data() : "");
         auto dialogs = count_dialogs(state);
-        keyfile->set_string_list("transient", "dialogs" + index, dialogs);
+        if (!state) {
+            dialogs.push_back(type);
+        }
+        keyfile->set_string_list(transient_group, "dialogs" + index, dialogs);
     }
-    keyfile->set_integer(transient_group, "count", files.size());
+    keyfile->set_integer(transient_group, "count", _floating_dialogs.size());
 
     std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), dialogs_state);
     try {
@@ -216,9 +220,11 @@ void DialogManager::load_transient_state(Glib::KeyFile *file)
         auto state = file->get_string(transient_group, "state" + index);
 
         auto keyfile = std::make_shared<Glib::KeyFile>();
-        keyfile->load_from_data(state);
+        if (!state.empty()) {
+            keyfile->load_from_data(state);
+        }
         for (auto type : dialogs) {
-            floating_dialogs[type] = keyfile;
+            _floating_dialogs[type] = keyfile;
         }
     }
 }
@@ -226,13 +232,11 @@ void DialogManager::load_transient_state(Glib::KeyFile *file)
 // restore state of dialogs; populate docking container and open visible floating dialogs
 void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bool include_floating)
 {
-    if (!docking_container)
-        return;
+    if (!docking_container) return;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int save_state = prefs->getInt(save_dialog_position, PREFS_DIALOGS_STATE_SAVE);
-    if (save_state == PREFS_DIALOGS_STATE_NONE)
-        return;
+    if (save_state == PREFS_DIALOGS_STATE_NONE) return;
 
     try {
         auto keyfile = std::make_unique<Glib::KeyFile>();
@@ -250,16 +254,32 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
                 }
             }
         }
+        else {
+            // state not available or not valid; prepare defaults
+            dialog_defaults();
+        }
     } catch (Glib::Error &error) {
         std::cerr << G_STRFUNC << ": dialogs state not loaded - " << error.what() << std::endl;
     }
 }
 
 void DialogManager::remove_dialog_floating_state(const Glib::ustring& dialog_type) {
-    auto it = floating_dialogs.find(dialog_type);
-    if (it != floating_dialogs.end()) {
-        floating_dialogs.erase(it);
+    auto it = _floating_dialogs.find(dialog_type);
+    if (it != _floating_dialogs.end()) {
+        _floating_dialogs.erase(it);
     }
+}
+
+// apply defaults when dialog state cannot be loaded / doesn't exist:
+// here we can define which dialogs should by default be open floating rather then docked
+void DialogManager::dialog_defaults() {
+    std::shared_ptr<Glib::KeyFile> floating;
+    // strings are dialog types
+    _floating_dialogs["DocumentProperties"] = floating;
+    _floating_dialogs["FilterEffects"] = floating;
+    _floating_dialogs["Input"] = floating;
+    _floating_dialogs["Preferences"] = floating;
+    _floating_dialogs["XMLEditor"] = floating;
 }
 
 } // namespace Dialog

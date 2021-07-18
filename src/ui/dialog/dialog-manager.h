@@ -71,9 +71,11 @@ private:
 
     std::vector<Glib::ustring> count_dialogs(const Glib::KeyFile *state) const;
     void load_transient_state(Glib::KeyFile *keyfile);
+    void dialog_defaults();
 
     // transient dialog state for floating windows user closes
-    std::map<Glib::ustring, std::shared_ptr<Glib::KeyFile>> floating_dialogs;
+    std::map<std::string, std::shared_ptr<Glib::KeyFile>> _floating_dialogs;
+    // temp set used when dialogs are hidden (F12 toggle)
     std::set<DialogWindow*> _hidden_dlg_windows;
 };
 

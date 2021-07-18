@@ -406,7 +406,7 @@ void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNoteboo
 }
 
 // recreate dialogs hosted (docked) in a floating DialogWindow; window will be created
-bool recreate_dialogs_from_state(const Glib::KeyFile *keyfile)
+bool DialogContainer::recreate_dialogs_from_state(const Glib::KeyFile* keyfile)
 {
     bool restored = false;
     // Step 1: check if we want to load the state
