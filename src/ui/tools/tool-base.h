@@ -148,7 +148,9 @@ public:
     virtual bool root_handler(GdkEvent *event);
     virtual bool item_handler(SPItem *item, GdkEvent *event);
 
-    bool block_button(GdkEvent *event);
+    void set_on_buttons(GdkEvent *event);
+    bool are_buttons_1_and_3_on() const;
+    bool are_buttons_1_and_3_on(GdkEvent *event);
 
     virtual const std::string& getPrefsPath() = 0;
     void enableSelectionCue (bool enable=true);

@@ -409,7 +409,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 grabCanvasEvents(Gdk::BUTTON_RELEASE_MASK |
                                  Gdk::POINTER_MOTION_MASK );
                 ret = TRUE;
-            } else if (!block_button(event)) {
+            } else if (!are_buttons_1_and_3_on(event)) {
                 sp_event_root_menu_popup(desktop, nullptr, event);
                 ret = TRUE;
             }
@@ -903,7 +903,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
  * This function allows to handle global tool events if _pre function is not fully overridden.
  */
 
-bool ToolBase::block_button(GdkEvent *event)
+void ToolBase::set_on_buttons(GdkEvent *event)
 {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -949,10 +949,17 @@ bool ToolBase::block_button(GdkEvent *event)
                 this->_button3on = false;
             }
     }
-    if (this->_button1on && this->_button3on) {
-        return true;
-    }
-    return false;
+}
+
+bool ToolBase::are_buttons_1_and_3_on() const
+{
+    return this->_button1on && this->_button3on;
+}
+
+bool ToolBase::are_buttons_1_and_3_on(GdkEvent* event)
+{
+    set_on_buttons(event);
+    return are_buttons_1_and_3_on();
 }
 
 /**
@@ -966,7 +973,7 @@ bool ToolBase::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if (!block_button(event) && event->button.button == 3 &&
+        if (!are_buttons_1_and_3_on(event) && event->button.button == 3 &&
             !((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK))) {
             sp_event_root_menu_popup(this->desktop, item, event);
             ret = TRUE;
@@ -1154,7 +1161,7 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
     if (event_context) {
 
         // Just set the on buttons for now. later, behave as intended.
-        event_context->block_button(event);
+        event_context->set_on_buttons(event);
 
         SPDesktop* desktop = event_context->getDesktop();
 
@@ -1211,7 +1218,7 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
 
         // Just set the on buttons for now. later, behave as intended.
-        event_context->block_button(event);
+        event_context->set_on_buttons(event);
 
         // Panning has priority over tool-specific event handling
         if (event_context->is_panning()) {
