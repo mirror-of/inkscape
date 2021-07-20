@@ -15,52 +15,51 @@ See default.xml for more information.
 
 <!-- File -->
 
-  <bind key="n" modifiers="Primary,Shift" action="FileTemplates" display="true" />
+  <bind gaction="doc.document-dialog-templates"   keys="&lt;primary&gt;&lt;shift&gt;n" />
 
   <!-- Revert -->
-  <bind key="z" modifiers="Primary,Alt" action="FileRevert" display="true" />
+  <bind gaction="doc.document-revert"             keys="&lt;primary&gt;&lt;alt&gt;z" />
 
   <!-- Place -->
-  <bind key="p" modifiers="Primary,Shift" action="FileImport" display="true" />
+  <bind gaction="win.document-import"             keys="&lt;primary&gt;&lt;shift&gt;p" />
   
 <!-- Tools -->
 
   <!-- Selection (arrow) tool + Free Transform Tool -->
-  <bind key="v" action="ToolSelector" display="true" />
-  <bind key="e" action="ToolSelector" />
+  <bind gaction="win.tool-switch('Select')"       keys="v, e" />
 
   <!-- Direct Selection tool -->
-  <bind key="a" action="ToolNode" display="true" />
+  <bind gaction="win.tool-switch('Node')"         keys="a" />
   
   <!-- Warp/Pucker/Bloat/Wrinkle tool -->
-  <bind key="r" modifiers="Shift" action="ToolTweak" display="true" />
+  <bind gaction="win.tool-switch('Tweak')"        keys="&lt;shift&gt;r" />
 
   <!-- Pen tool -->
-  <bind key="p" action="ToolPen" display="true" />
+  <bind gaction="win.tool-switch('Pen')"          keys="p" />
 
   <!-- Type tool -->
-  <bind key="t" action="ToolText" display="true" />
+  <bind gaction="win.tool-switch('Text')"         keys="t" />
 
   <!-- Rectangle tool -->
-  <bind key="m" action="ToolRect" display="true" />
+  <bind gaction="win.tool-switch('Rect')"         keys="m" />
 
   <!-- Ellipse tool -->
-  <bind key="l" action="ToolArc" display="true" />
+  <bind gaction="win.tool-switch('Arc')"          keys="l" />
 
   <!-- Paintbrush tool -->
-  <bind key="b" action="ToolCalligraphic" display="true" />
+  <bind gaction="win.tool-switch('Caligraphic')"  keys="b" />
 
   <!-- Pencil tool -->
-  <bind key="n" action="ToolPencil" display="true" />
+  <bind gaction="win.tool-switch('Pencil')"       keys="n" />
 
   <!-- Eye-dropper tool -->
-  <bind key="i" action="ToolDropper" display="true" />
+  <bind gaction="win.tool-switch('Dropper')"      keys="i" />
 
   <!-- Live Paint Bucket tool -->
-  <bind key="k" action="ToolPaintBucket" display="true" />
+  <bind gaction="win.tool-switch('PaintBucket')"  keys="k" />
 
   <!-- Symbol Sprayer -->
-  <bind key="s" modifiers="Shift" action="ToolSpray" display="true" />
+  <bind gaction="win.tool-switch('Spray')"        keys="&lt;shift&gt;s" />
   
 <!-- Zoom -->
 
@@ -76,10 +75,10 @@ See default.xml for more information.
 <!-- View -->
 
   <!--Show Grid Ctrl+" -->
-  <bind key="quotedbl" modifiers="Primary" action="ToggleGrid" display="true" />
+  <bind gaction="win.canvas-show-grid"    keys="&lt;primary&gt;quotedbl" />
   
   <!-- Toggle Guides -->
-  <bind key="semicolon" modifiers="Primary" action="ToggleGuides" display="true" />
+  <bind gaction="win.canvas-show-guides"  keys="&lt;primary&gt;semicolon" />
   
   <!-- Toggle Snap -->
   <bind gaction="win.snap-global-toggle" keys="&lt;primary&gt;&lt;shift&gt;quotedbl, &lt;primary&gt;&lt;alt&gt;apostrophe"/>
@@ -89,8 +88,8 @@ See default.xml for more information.
 
 <!-- Edit -->
 
-  <bind key="b" modifiers="Primary,Shift" action="EditPasteInPlace" display="true" />
-  <bind key="a" modifiers="Primary,Shift" action="EditDeselect" display="true"/>
+  <bind gaction="win.paste-in-place"  keys="&lt;primary&gt;&lt;shift&gt;b" />
+  <bind gaction="win.select-none"     keys="&lt;primary&gt;&lt;shift&gt;a" />
 
   <!-- Swap fill and stroke -->
   <bind key="x" modifiers="Shift" action="EditSwapFillStroke" display="true" />
@@ -99,40 +98,40 @@ See default.xml for more information.
   <bind key="bracketright" modifiers="Primary,Alt" action="EditSelectNext" display="true" />
   <bind key="bracketleft" modifiers="Primary,Alt" action="EditSelectPrev" display="true" />
 
-  <bind key="bracketright" modifiers="Primary,Shift" action="SelectionToFront" display="true" />
-  <bind key="bracketleft" modifiers="Primary,Shift" action="SelectionToBack" display="true" />
+  <bind gaction="app.selection-top"     keys="&lt;primary&gt;&lt;shift&gt;bracketright" />
+  <bind gaction="app.selection-bottom"  keys="&lt;primary&gt;&lt;shift&gt;bracketleft" />
 
-  <bind key="bracketright" modifiers="Primary" action="SelectionRaise" display="true" />
-  <bind key="bracketleft" modifiers="Primary" action="SelectionLower" display="true" />
+  <bind gaction="app.selection-raise"   keys="&lt;primary&gt;bracketright" />
+  <bind gaction="app.selection-lower"   keys="&lt;primary&gt;bracketleft" />
 
   <!--Object to Guides -->
-  <bind key="5" modifiers="Primary" action="ObjectsToGuides" display="true" />
+  <bind gaction="app.object-to-guides"  keys="&lt;primary&gt;5" />
   
   <!-- Make and Release Clipping Masks -->
-  <bind key="7" modifiers="Primary" action="ObjectSetClipPath" />
-  <bind key="7" modifiers="Primary,Alt" action="ObjectUnSetClipPath" />
+  <bind gaction="app.object-set"        keys="&lt;primary&gt;7" />
+  <bind gaction="app.object-release"    keys="&lt;primary&gt;&lt;alt&gt;7" />
 
   <!-- Add new symbol -->
-  <bind key="F8" action="EditClone" display="true"/>
+  <bind gaction="app.clone"             keys="F8" />
 
 <!-- Dialog -->
 
   <!-- Preferences -->
-  <bind key="k" modifiers="Primary" action="DialogPreferences" display="true" />
+  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;primary&gt;k" />
   
   <!-- Document Setup -->
-  <bind key="p" modifiers="Primary,Alt" action="DialogDocumentProperties" display="true" />
+  <bind gaction="win.dialog-open('DocumentProperties')" keys="&lt;primary&gt;&lt;alt&gt;p" />
   
   <!-- Panel Shortcuts -->
-  <bind key="F6" action="DialogSwatches" display="true"/>
-  <bind key="F7" action="DialogLayers" display="true" />
-  <bind key="F7" modifiers="Shift" action="DialogAlignDistribute" display="true" />
-  <bind key="F8" modifiers="Shift" action="DialogTransform" display="true"/>
-  <bind key="F9" modifiers="Primary" action="DialogFillStroke"/>
-  <bind key="F10" modifiers="Primary" action="DialogFillStroke" display="true"/>
-  <bind key="F10" modifiers="Primary,Shift" action="DialogFillStroke" display="true"/>
-  <bind key="F11" modifiers="Primary" action="DialogObjectProperties" display="true" />
-  <bind key="t" modifiers="Primary" action="DialogText" display="true"/>
-  <bind key="t" modifiers="Primary,Alt" action="DialogText" />
+  <bind gaction="win.dialog-open('Swatches')"         keys="F6" />
+  <bind gaction="win.dialog-open('Layers')"           keys="F7" />
+  <bind gaction="win.dialog-open('AlignDistribute')"  keys="&lt;shift&gt;F7" />
+  <bind gaction="win.dialog-open('Transform')"        keys="&lt;shift&gt;F8" />
+  <bind gaction="win.dialog-open('FillStroke')"       keys="&lt;primary&gt;F9" />
+  <bind gaction="win.dialog-open('FillStroke')"       keys="&lt;primary&gt;F10" />
+  <bind gaction="win.dialog-open('FillStroke')"       keys="&lt;primary&gt;&lt;shift&gt;F10" />
+  <bind gaction="win.dialog-open('ObjectProperties')" keys="&lt;primary&gt;F11" />
+  <bind gaction="win.dialog-open('Text')"             keys="&lt;primary&gt;t" />
+  <bind gaction="win.dialog-open('Text')"             keys="&lt;primary&gt;&lt;alt&gt;t" />
 
 </keys>
