@@ -61,6 +61,10 @@ private:
 	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event);
 	void sp_select_context_reset_opacities();
 
+    bool _alt_on;
+    bool _force_dragging;
+
+    Glib::RefPtr<Gdk::Cursor> _default_cursor;
     Glib::RefPtr<Gdk::Cursor> _cursor_mouseover;
     Glib::RefPtr<Gdk::Cursor> _cursor_dragging;
 };
