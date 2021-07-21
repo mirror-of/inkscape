@@ -12,189 +12,126 @@ See default.xml for more information.
 
 <!-- Shaper -->
 
-  <bind key="F10" action="ToolNode" display="true"/>
+  <bind gaction="win.tool-switch('Node')"   keys="F10" />
 
 <!-- Pen -->
 
-  <bind key="F12" action="ToolPen" display="true"/>
+  <bind gaction="win.tool-switch('Pen')"    keys="F12" />
 
 <!-- Type tool -->
 
-  <bind key="F8" action="ToolText" display="true"/>
+  <bind gaction="win.tool-switch('Text')"   keys="F8" />
 
 <!-- Rectangle -->
 
-  <bind key="F6" action="ToolRect" display="true"/>
+  <bind gaction="win.tool-switch('Rect')"   keys="F6" />
 
 <!-- Ellipse -->
 
-  <bind key="F7" action="ToolArc" display="true"/>
+  <bind gaction="win.tool-switch('Arc')"    keys="F7" />
 
 <!-- Freehand -->
 
-  <bind key="F5" action="ToolPencil" display="true"/>
+  <bind gaction="win.tool-switch('Pencil')" keys="F5" />
 
 <!-- Warp/Pucker/Bloat/Wrinkle tool - not in corel
 
-  <bind key="R" modifiers="Shift" action="ToolTweak" display="true"/>
-  <bind key="r" modifiers="Shift" action="ToolTweak"/>  -->
+  <bind gaction="win.tool-switch('Tweak')"  keys="&lt;shift&gt;R, &lt;shift&gt;r" />  -->
 
 <!-- Fountain Fill - Corel's gradient tool -->
 
-  <bind key="F11" action="ToolGradient" display="true"/>
+  <bind gaction="win.tool-switch('Gradient')"   keys="F11" />
   
 <!-- Eyedropper - no default shortcut yet
 
-  <bind key="I" action="ToolDropper" display="true"/>
-  <bind key="i" action="ToolDropper" /> -->
+  <bind gaction="win.tool-switch('Dropper')"    keys="I, i" /> -->
 
 <!-- Paintbucket - no default shortcut yet
 
-  <bind key="M" action="ToolPaintBucket" display="true"/>
-  <bind key="m" action="ToolPaintBucket" />  -->
+  <bind gaction="win.tool-switch('PaintBucket')" keys="M, m" />  -->
 
 <!-- Zoom -->
 
-  <bind key="Z" action="ToolZoom" display="true"/>
-  <bind key="z" action="ToolZoom" />
+  <bind gaction="win.tool-switch('Zoom')"   keys="Z, z" />
 
 <!-- Spiral -->
 
-  <bind key="A" action="ToolSpiral" display="true"/>
-  <bind key="a" action="ToolSpiral" />
+  <bind gaction="win.tool-switch('Spiral')" keys="A, a" />
 
 <!-- File actions -->
 
-  <bind key="n" modifiers="Ctrl" action="FileNew" display="true"/>
-  <bind key="N" modifiers="Ctrl" action="FileNew" />
-
-  <bind key="o" modifiers="Ctrl" action="FileOpen" display="true"/>
-  <bind key="O" modifiers="Ctrl" action="FileOpen" />
-
-  <bind key="s" modifiers="Ctrl" action="FileSave" display="true"/>
-  <bind key="S" modifiers="Ctrl" action="FileSave" />
-
-  <bind key="s" modifiers="Ctrl,Shift" action="FileSaveAs" display="true"/>
-  <bind key="S" modifiers="Ctrl,Shift" action="FileSaveAs" />
-
-  <bind key="i" modifiers="Ctrl" action="FileImport" display="true"/>
-  <bind key="I" modifiers="Ctrl" action="FileImport" />
-
-  <bind key="e" modifiers="Ctrl" action="DialogExport" display="true"/>
-  <bind key="E" modifiers="Ctrl" action="DialogExport" />
-
-  <bind key="p" modifiers="Ctrl" action="FilePrint" display="true"/>
-  <bind key="P" modifiers="Ctrl" action="FilePrint" />
+  <bind gaction="doc.document-new"                      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
+  <bind gaction="win.file-open"                         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-save"                     keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
+  <bind gaction="win.document-save-as"                  keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;S" />
+  <bind gaction="win.document-import"                   keys="&lt;ctrl&gt;i, &lt;ctrl&gt;I" />
+  <bind gaction="win.dialog-open('Export')"             keys="&lt;ctrl&gt;e, &lt;ctrl&gt;E" />
+  <bind gaction="win.document-print"                    keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
 
 <!-- Options dialog - make sure it's correct one -->
 
-  <bind key="j" modifiers="Ctrl" action="DialogPreferences" display="true"/>
-  <bind key="J" modifiers="Ctrl" action="DialogPreferences" />
+  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
 
 <!-- Options dialog - make sure it's correct one -->
 
-  <bind key="Return" modifiers="Alt" action="DialogDocumentProperties" display="true"/>
+  <bind gaction="win.dialog-open('DocumentProperties')" keys="&lt;alt&gt;Return" />
 
 <!-- Edit actions -->
 
-  <bind key="z" modifiers="Ctrl" action="EditUndo" display="true"/>
-  <bind key="Z" modifiers="Ctrl" action="EditUndo" />
-  <bind key="BackSpace" modifiers="Alt" action="EditUndo" />
-
-  <bind key="z" modifiers="Ctrl,Shift" action="EditRedo" display="true"/>
-  <bind key="Z" modifiers="Ctrl,Shift" action="EditRedo" />
-
-  <bind key="x" modifiers="Ctrl" action="EditCut" display="true"/>
-  <bind key="X" modifiers="Ctrl" action="EditCut" />
-  <bind key="Delete" modifiers="Shift" action="EditCut" />
-
-  <bind key="c" modifiers="Ctrl" action="EditCopy" display="true"/>
-  <bind key="C" modifiers="Ctrl" action="EditCopy" />
-  <bind key="Insert" modifiers="Ctrl" action="EditCopy" />
-
-  <bind key="v" modifiers="Ctrl" action="EditPaste" display="true"/>
-  <bind key="V" modifiers="Ctrl" action="EditPaste" />
-  <bind key="Insert" modifiers="Shift" action="EditPaste" />
-
-  <bind key="Delete" action="EditDelete" display="true"/>
-
-  <bind key="d" modifiers="Ctrl" action="EditDuplicate" display="true"/>
-  <bind key="D" modifiers="Ctrl" action="EditDuplicate" />
-
-  <bind key="a" modifiers="Ctrl" action="EditSelectAllInAllLayers" display="true"/>
-  <bind key="A" modifiers="Ctrl" action="EditSelectAllInAllLayers" />
+  <bind gaction="win.undo"                              keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z, &lt;alt&gt;BackSpace" />
+  <bind gaction="win.redo"                              keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
+  <bind gaction="app.cut"                               keys="&lt;ctrl&gt;x, &lt;ctrl&gt;X, &lt;shift&gt;Delete" />
+  <bind gaction="app.copy"                              keys="&lt;ctrl&gt;c, &lt;ctrl&gt;C, &lt;ctrl&gt;Insert" />
+  <bind gaction="win.paste"                             keys="&lt;ctrl&gt;v, &lt;ctrl&gt;V, &lt;shift&gt;Insert" />
+  <bind gaction="app.delete"                            keys="Delete" />
+  <bind gaction="app.duplicate"                         keys="&lt;ctrl&gt;d, &lt;ctrl&gt;D" />
+  <bind gaction="win.select-all-layers"                 keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
 
 
 <!-- View actions -->
 
 <!--  
-  <bind gaction="win.canvas-zoom-in" keys="F2" />
+  <bind ganction="win.canvas-zoom-in" keys="F2" />
 -->
 
-  <bind gaction="win.canvas-zoom-out" keys="F3" />
-
-  <bind gaction="win.canvas-zoom-drawing" keys="F4"/>
-
-  <bind gaction="win.canvas-zoom-page" keys="&lt;shift&gt;F4"/>
-
-  <bind gaction="win.canvas-zoom-selection" keys="&lt;shift&gt;F2"/>
+  <bind ganction="win.canvas-zoom-out"          keys="F3" />
+  <bind ganction="win.canvas-zoom-drawing"      keys="F4"/>
+  <bind ganction="win.canvas-zoom-page"         keys="&lt;shift&gt;F4"/>
+  <bind ganction="win.canvas-zoom-selection"    keys="&lt;shift&gt;F2"/>
 
 <!-- Not implemented in Corel? !!!!!!!!!!!!
 
-  <bind key="r" modifiers="Ctrl" action="ToggleRulers" display="true"/>
-  <bind key="R" modifiers="Ctrl" action="ToggleRulers" />
-
-  <bind key="b" modifiers="Ctrl" action="ToggleScrollbars" display="true"/>
-  <bind key="B" modifiers="Ctrl" action="ToggleScrollbars" />
-
-  <bind key="bar" modifiers="Shift" action="ToggleGuides" />
-  <bind key="bar" action="ToggleGuides" display="true"/>
-
-  <bind key="numbersign" modifiers="Shift" action="ToggleGrid" />
-  <bind key="numbersign" action="ToggleGrid" display="true"/> -->
+  <bind gaction="win.canvas-rulers"             keys="&lt;ctrl&gt;r, &lt;ctrl&gt;R" />
+  <bind gaction="win.canvas-scroll-bars"        keys="&lt;ctrl&gt;b, &lt;ctrl&gt;B" />
+  <bind gaction="win.canvas-show-guides"        keys="&lt;shift&gt;bar, bar" />
+  <bind gaction="win.canvas-show-grid"          keys="&lt;shift&gt;numbersign, numbersign" /> -->
 
 <!-- Toggle View -->
 
-  <bind gaction="win.canvas-display-mode-cycle" keys="&lt;shift&gt;F9"/>
+  <bind ganction="win.canvas-display-mode-cycle" keys="&lt;shift&gt;F9"/>
   <bind action="ViewColorModeToggle" />
   <bind action="ViewSplitModeToggle" />
   <bind action="ViewXRayToggle" />
 
 <!-- Path actions -->
 
-  <bind key="q" modifiers="Ctrl" action="ObjectToPath" display="true"/>
-  <bind key="Q" modifiers="Ctrl" action="ObjectToPath" />
+  <bind gaction="app.object-to-path" keys="&lt;ctrl&gt;q" />
+  <bind gaction="app.object-to-path" keys="&lt;ctrl&gt;Q" />
 
-  <bind key="l" modifiers="Ctrl" action="SelectionCombine" display="true"/>
-  <bind key="L" modifiers="Ctrl" action="SelectionCombine" />
+  <bind gaction="app.select-path-combine" keys="&lt;ctrl&gt;l" />
+  <bind gaction="app.select-path-combine" keys="&lt;ctrl&gt;L" />
 
-  <bind key="k" modifiers="Ctrl" action="SelectionBreakApart" display="true"/>
-  <bind key="K" modifiers="Ctrl" action="SelectionBreakApart" />
+  <bind gaction="app.select-path-break-apart" keys="&lt;ctrl&gt;k" />
+  <bind gaction="app.select-path-break-apart" keys="&lt;ctrl&gt;K" />
 
 <!-- Not available in Corel? !!!!!!!!!!!!
 
-  <bind key="plus" modifiers="Ctrl" action="SelectionUnion" display="true"/>
-  <bind key="KP_Add" modifiers="Ctrl" action="SelectionUnion" />
-  <bind key="plus" modifiers="Ctrl,Shift" action="SelectionUnion" />
-
-  <bind key="asterisk" modifiers="Ctrl" action="SelectionIntersect" display="true"/>
-  <bind key="KP_Multiply" modifiers="Ctrl" action="SelectionIntersect" />
-  <bind key="asterisk" modifiers="Ctrl,Shift" action="SelectionIntersect" />
-
-  <bind key="minus" modifiers="Ctrl" action="SelectionDiff" display="true"/>
-  <bind key="underscore" modifiers="Ctrl" action="SelectionDiff" />
-  <bind key="underscore" modifiers="Ctrl,Shift" action="SelectionDiff" />
-  <bind key="KP_Subtract" modifiers="Ctrl" action="SelectionDiff" />
-  <bind key="minus" modifiers="Ctrl,Shift" action="SelectionDiff" />
-
-  <bind key="asciicircum" modifiers="Ctrl" action="SelectionSymDiff" display="true"/>
-  <bind key="asciicircum" modifiers="Ctrl,Shift" action="SelectionSymDiff" />
-
-  <bind key="slash" modifiers="Ctrl,Alt" action="SelectionCutPath" display="true"/>
-  <bind key="slash" modifiers="Ctrl,Alt,Shift" action="SelectionCutPath" />
-
-  <bind key="slash" modifiers="Ctrl" action="SelectionDivide" display="true"/>
-  <bind key="slash" modifiers="Ctrl,Shift" action="SelectionDivide" />
+  <bind gaction="app.select-path-union"             keys="&lt;ctrl&gt;plus, &lt;ctrl&gt;KP_Add, &lt;ctrl&gt;&lt;shift&gt;plus" />
+  <bind gaction="app.select-path-intersection"      keys="&lt;ctrl&gt;asterisk, &lt;ctrl&gt;KP_Multiply, &lt;ctrl&gt;&lt;shift&gt;asterisk" />
+  <bind gaction="app.select-path-difference"        keys="&lt;ctrl&gt;minus, &lt;ctrl&gt;underscore, &lt;ctrl&gt;&lt;shift&gt;underscore, &lt;ctrl&gt;KP_Subtract, &lt;ctrl&gt;&lt;shift&gt;minus" />
+  <bind gaction="app.select-path-exclusion"         keys="&lt;ctrl&gt;asciicircum, &lt;ctrl&gt;&lt;shift&gt;asciicircum" />
+  <bind gaction="app.select-path-cut"               keys="&lt;ctrl&gt;&lt;alt&gt;slash, &lt;ctrl&gt;&lt;alt&gt;&lt;shift&gt;slash" />
+  <bind gaction="app.select-path-division"          keys="&lt;ctrl&gt;slash, &lt;ctrl&gt;&lt;shift&gt;slash" />
 
 -->
 
@@ -202,21 +139,15 @@ See default.xml for more information.
 
 <!-- Check if it's correct !!!!!!!!!!!!
 
-  <bind key="f" modifiers="Ctrl,Shift" action="DialogFillStroke" display="true"/>
-  <bind key="F" modifiers="Ctrl,Shift" action="DialogFillStroke" />
-  
-  <bind key="w" modifiers="Ctrl,Shift" action="DialogSwatches" display="true"/>
-  <bind key="W" modifiers="Ctrl,Shift" action="DialogSwatches" />
+  <bind gaction="win.dialog-open('FillStroke')"     keys="&lt;ctrl&gt;&lt;shift&gt;f, &lt;ctrl&gt;&lt;shift&gt;F" />
+  <bind gaction="win.dialog-open('Swatches')"       keys="&lt;ctrl&gt;&lt;shift&gt;w, &lt;ctrl&gt;&lt;shift&gt;W" />
 
 Shift+F11	Color
 
 -->
 
-  <bind key="g" modifiers="Ctrl" action="SelectionGroup" display="true"/>
-  <bind key="G" modifiers="Ctrl" action="SelectionGroup" />
-
-  <bind key="u" modifiers="Ctrl" action="SelectionUnGroup" display="true"/>
-  <bind key="U" modifiers="Ctrl" action="SelectionUnGroup" />
+  <bind gaction="app.select-object-group"           keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+  <bind gaction="app.select-object-ungroup"         keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 
 <!--
 
@@ -250,23 +181,15 @@ SelectionToBack: Lower selection to bottom
 SelectionRaise: Raise selection one step
 SelectionLower: Lower selection one step
 
-  <bind key="Home" action="SelectionToFront" display="true"/>
-  <bind key="KP_Home" action="SelectionToFront" />
-
-  <bind key="End" action="SelectionToBack" display="true"/>
-  <bind key="KP_End" action="SelectionToBack" />
-
-  <bind key="Page_Up" action="SelectionRaise" display="true"/>
-  <bind key="KP_Page_Up" action="SelectionRaise" />
-
-  <bind key="Page_Down" action="SelectionLower" display="true"/>
-  <bind key="KP_Page_Down" action="SelectionLower" />
+  <bind gaction="app.selection-top"         keys="Home, KP_Home" />
+  <bind gaction="app.selection-bottom"      keys="End, KP_End" />
+  <bind gaction="app.selection-raise"       keys="Pag, KP_Page_Up" />
+  <bind gaction="app.selection-lower"       keys="Page_Down, KP_Page_Down" />
 
 -->
 
 <!-- Text actions -->
 
-  <bind key="t" modifiers="Ctrl,Shift" action="DialogText" display="true"/>
-  <bind key="T" modifiers="Ctrl,Shift" action="DialogText" />
+  <bind gaction="win.dialog-open('Text')"   keys="&lt;ctrl&gt;&lt;shift&gt;t, &lt;ctrl&gt;&lt;shift&gt;T" />
 
 </keys>
