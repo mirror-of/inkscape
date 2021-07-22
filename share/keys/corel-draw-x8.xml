@@ -6,71 +6,33 @@ in the style of Corel DRAW X8. See default.xml for more information.
 -->
 
 <!-- File -->
-<bind key="i" modifiers="Ctrl" action="FileImport" display="true"/>
-<bind key="I" modifiers="Ctrl" action="FileImport" />
-  
-<bind key="n" modifiers="Ctrl" action="FileNew" display="true"/>
-<bind key="N" modifiers="Ctrl" action="FileNew" />
-
-<bind key="o" modifiers="Ctrl" action="FileOpen" display="true"/>
-<bind key="O" modifiers="Ctrl" action="FileOpen" />
-
-<bind key="p" modifiers="Ctrl" action="FilePrint" display="true"/>
-<bind key="P" modifiers="Ctrl" action="FilePrint" />
-
-<bind key="s" modifiers="Ctrl" action="FileSave" display="true"/>
-<bind key="S" modifiers="Ctrl" action="FileSave" />
-
-<bind key="s" modifiers="Ctrl,Shift" action="FileSaveAs" display="true"/>
-<bind key="S" modifiers="Ctrl,Shift" action="FileSaveAs" />
+<bind gaction="win.document-import"                     keys="&lt;ctrl&gt;i, &lt;ctrl&gt;I" />
+<bind gaction="doc.document-new"                        keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
+<bind gaction="win.file-open"                           keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+<bind gaction="win.document-print"                      keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
+<bind gaction="win.document-save"                       keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
+<bind gaction="win.document-save-as"                    keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;S" />
 
 <!-- Edit -->
-<bind key="c" modifiers="Ctrl" action="EditCopy" display="true"/>
-<bind key="C" modifiers="Ctrl" action="EditCopy" />
-
-<bind key="x" modifiers="Ctrl" action="EditCut" display="true"/>
-<bind key="X" modifiers="Ctrl" action="EditCut" />
-
-<bind key="Delete" action="EditDelete" display="true"/>
-
-<bind key="d" modifiers="Ctrl" action="EditDuplicate" display="true"/>
-<bind key="D" modifiers="Ctrl" action="EditDuplicate" />
-
-<bind key="v" modifiers="Ctrl" action="EditPasteInPlace" display="true" />
-<bind key="V" modifiers="Ctrl" action="EditPasteInPlace" />
-
-<bind key="z" modifiers="Ctrl,Shift" action="EditRedo" display="true"/>
-<bind key="Z" modifiers="Ctrl,Shift" action="EditRedo" />
-
-<bind key="a" modifiers="Ctrl" action="EditSelectAllInAllLayers" display="true"/>
-<bind key="A" modifiers="Ctrl" action="EditSelectAllInAllLayers" />
-
-<bind key="z" modifiers="Ctrl" action="EditUndo" display="true"/>
-<bind key="Z" modifiers="Ctrl" action="EditUndo" />
+<bind gaction="app.copy"                                keys="&lt;ctrl&gt;c, &lt;ctrl&gt;C" />
+<bind gaction="app.cut"                                 keys="&lt;ctrl&gt;x, &lt;ctrl&gt;X" />
+<bind gaction="app.delete"                              keys="Delete" />
+<bind gaction="app.duplicate"                           keys="&lt;ctrl&gt;d, &lt;ctrl&gt;D" />
+<bind gaction="win.paste-in-place"                      keys="&lt;ctrl&gt;v, &lt;ctrl&gt;V" />
+<bind gaction="win.redo"                                keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
+<bind gaction="win.select-all-layers"                   keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
+<bind gaction="win.undo"                                keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
 
 <!-- Selection -->
-<bind key="k" modifiers="Ctrl" action="SelectionBreakApart" display="true"/>
-<bind key="K" modifiers="Ctrl" action="SelectionBreakApart" />
-
-<bind key="l" modifiers="Ctrl" action="SelectionCombine" display="true"/>
-<bind key="L" modifiers="Ctrl" action="SelectionCombine" />
-
-<bind key="g" modifiers="Ctrl" action="SelectionGroup" display="true"/>
-<bind key="G" modifiers="Ctrl" action="SelectionGroup" />
-
-<bind key="Page_Down" modifiers="Ctrl" action="SelectionLower" display="true" />
-
-<bind key="Page_Up" modifiers="Ctrl" action="SelectionRaise" display="true" />
-
-<bind key="End" modifiers="Ctrl" action="SelectionToBack" display="true" />
-
-<bind key="Home" modifiers="Ctrl" action="SelectionToFront" display="true" />
-
-<bind key="u" modifiers="Ctrl" action="SelectionUnGroup" display="true"/>
-<bind key="U" modifiers="Ctrl" action="SelectionUnGroup" />
-
-<bind key="q" modifiers="Ctrl,Shift" action="StrokeToPath" display="true" />
-<bind key="Q" modifiers="Ctrl,Shift" action="StrokeToPath" />
+<bind gaction="app.select-path-break-apart"             keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
+<bind gaction="app.select-path-combine"                 keys="&lt;ctrl&gt;l, &lt;ctrl&gt;L" />
+<bind gaction="app.select-object-group"                 keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+<bind gaction="app.selection-lower"                     keys="&lt;ctrl&gt;Page_Down" />
+<bind gaction="app.selection-raise"                     keys="&lt;ctrl&gt;Page_Up" />
+<bind gaction="app.selection-bottom"                    keys="&lt;ctrl&gt;End" />
+<bind gaction="app.selection-top"                       keys="&lt;ctrl&gt;Home" />
+<bind gaction="app.select-object-ungroup"               keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
+<bind gaction="app.stroke-to-path"                      keys="&lt;ctrl&gt;&lt;shift&gt;q, &lt;ctrl&gt;&lt;shift&gt;Q" />
 
 <!-- Layer -->
 
@@ -78,8 +40,7 @@ in the style of Corel DRAW X8. See default.xml for more information.
 
 <!-- Object -->
 
-<bind key="q" modifiers="Ctrl" action="ObjectToPath" display="true"/>
-<bind key="Q" modifiers="Ctrl" action="ObjectToPath" />
+<bind gaction="app.object-to-path" keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
 
 <!-- Context -->
 
@@ -101,67 +62,40 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind key="t" action="AlignVerticalTop" display="true" />
 <bind key="T" action="AlignVerticalTop" />
 
-<bind key="F7" action="ToolArc" display="true"/>
-
-<bind key="x" action="ToolEraser" display="true" />
-<bind key="X" action="ToolEraser" />
-
-<bind key="m" action="ToolMesh" display="true" />
-<bind key="M" action="ToolMesh" />
-
-<bind key="F10" action="ToolNode" display="true"/>
-
-<bind key="F12" action="ToolPen" display="true"/>
-
-<bind key="F5" action="ToolPencil" display="true"/>
-
-<bind key="F6" action="ToolRect" display="true"/>
-
-<bind key="A" action="ToolSpiral" display="true"/>
-<bind key="a" action="ToolSpiral" />
-
-<bind key="F8" action="ToolText" display="true"/>
-
-<bind key="z" action="ToolZoom" display="true" />
-<bind key="Z" action="ToolZoom" />
+<bind gaction="win.tool-switch('Arc')"                  keys="F7" />
+<bind gaction="win.tool-switch('Eraser')"               keys="x, X" />
+<bind gaction="win.tool-switch('Mesh')"                 keys="m, M" />
+<bind gaction="win.tool-switch('Node')"                 keys="F10" />
+<bind gaction="win.tool-switch('Pen')"                  keys="F12" />
+<bind gaction="win.tool-switch('Pencil')"               keys="F5" />
+<bind gaction="win.tool-switch('Rect')"                 keys="F6" />
+<bind gaction="win.tool-switch('Spiral')"               keys="A, a" />
+<bind gaction="win.tool-switch('Text')"                 keys="F8" />
+<bind gaction="win.tool-switch('Zoom')"                 keys="z, Z" />
 
 <!-- View -->
 
 <bind key="F9" action="FullScreenFocus" display="true" />
 
-<bind gaction="win.canvas-display-mode-cycle" keys="&lt;shift&gt;F9"/>
 <bind action="ViewColorModeToggle" />
 <bind action="ViewSplitModeToggle" />
 <bind action="ViewXRayToggle" />
 
-<bind gaction="win.canvas-zoom-drawing" keys="F4"/>
-
-<bind gaction="win.canvas-zoom-in" keys="F2" />
-
-<bind gaction="win.canvas-zoom-out" keys="F3" />
-
-<bind gaction="win.canvas-zoom-page" keys="&lt;shift&gt;F4"/>
-
-<bind gaction="win.canvas-zoom-selection" keys="&lt;shift&gt;F2"/>
+<bind gaction="win.canvas-display-mode-cycle"           keys="&lt;shift&gt;F9"/>
+<bind gaction="win.canvas-zoom-drawing"                 keys="F4"/>
+<bind gaction="win.canvas-zoom-in"                      keys="F2" />
+<bind gaction="win.canvas-zoom-out"                     keys="F3" />
+<bind gaction="win.canvas-zoom-page"                    keys="&lt;shift&gt;F4"/>
+<bind gaction="win.canvas-zoom-selection"               keys="&lt;shift&gt;F2"/>
 
 <!-- Dialog -->
-<bind key="Return" modifiers="Alt" action="DialogDocumentProperties" display="true"/>
-
-<bind key="e" modifiers="Ctrl" action="DialogExport" display="true" />
-<bind key="E" modifiers="Ctrl" action="DialogExport" />
-
-<bind key="F11" action="DialogFillStroke" display="true" />
-
-<bind key="f" modifiers="Ctrl" action="DialogFind" display="true" />
-<bind key="F" modifiers="Ctrl" action="DialogFind" />
-
-<bind key="j" modifiers="Ctrl" action="DialogPreferences" display="true"/>
-<bind key="J" modifiers="Ctrl" action="DialogPreferences" />
-
-<bind key="t" modifiers="Ctrl,Shift" action="DialogText" display="true"/>
-<bind key="T" modifiers="Ctrl,Shift" action="DialogText" /> 
-
-<bind key="F8" modifiers="Alt" action="DialogTransform" display="true" />
+<bind gaction="win.dialog-open('DocumentProperties')"   keys="&lt;alt&gt;Return" />
+<bind gaction="win.dialog-open('Export')"               keys="&lt;ctrl&gt;e, &lt;ctrl&gt;E" />
+<bind gaction="win.dialog-open('FillStroke')"           keys="F11" />
+<bind gaction="win.dialog-ope('Find')"                  keys="&lt;ctrl&gt;f, &lt;ctrl&gt;F" />
+<bind gaction="win.dialog-open('Preferences')"          keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
+<bind gaction="win.dialog-open('Text')"                 keys="&lt;ctrl&gt;&lt;shift&gt;t, &lt;ctrl&gt;&lt;shift&gt;T" /> 
+<bind gaction="win.dialog-open('Transform')"            keys="&lt;alt&gt;F8" />
 
 <!-- Help -->
 
@@ -169,7 +103,7 @@ in the style of Corel DRAW X8. See default.xml for more information.
 
 <!-- Extensions -->
 
-<bind key="F1" action="org.inkscape.help.manual" display="true" />
+<bind gaction="org.inkscape.help.manual"                keys="F1"/>
 
 <!-- Filters -->
 
