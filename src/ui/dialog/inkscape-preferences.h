@@ -348,6 +348,7 @@ protected:
     UI::Widget::PrefCheckButton _sel_hidden;
     UI::Widget::PrefCheckButton _sel_locked;
     UI::Widget::PrefCheckButton _sel_inlayer_same;
+    UI::Widget::PrefCheckButton _sel_touch_topmost_only;
     UI::Widget::PrefCheckButton _sel_layer_deselects;
     UI::Widget::PrefCheckButton _sel_cycle;
 

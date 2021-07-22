@@ -2265,9 +2265,13 @@ void InkscapePreferences::initPageBehavior()
     _sel_inlayer_same.init ( _("Select same behaves like select all"), "/options/selection/samelikeall", false);
 
     _sel_layer_deselects.init ( _("Deselect upon layer change"), "/options/selection/layerdeselect", true);
+    _sel_touch_topmost_only.init ( _("Select the topmost items only when in touch selection mode"), "/options/selection/touchsel_topmost_only", true);
 
     _page_select.add_line( false, "", _sel_layer_deselects, "",
                            _("Uncheck this to be able to keep the current objects selected when the current layer changes"));
+
+    _page_select.add_line( false, "", _sel_touch_topmost_only, "",
+                           _("In touch selection mode, if multiple items overlap at a point, select only the topmost item"));
 
     _page_select.add_group_header( _("Ctrl+A, Tab, Shift+Tab"));
     _page_select.add_line( true, "", _sel_all, "",

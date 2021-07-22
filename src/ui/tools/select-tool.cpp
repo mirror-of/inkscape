@@ -730,7 +730,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                             Geom::OptRect const b = r->getRectangle();
                             items = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, (*b) * desktop->dt2doc());
                         } else if (r->getMode() == RUBBERBAND_MODE_TOUCHPATH) {
-                            items = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints());
+                            bool topmost_items_only = prefs->getBool("/options/selection/touchsel_topmost_only");
+                            items = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints(), true, topmost_items_only);
                         }
 
                         _seltrans->resetState();
