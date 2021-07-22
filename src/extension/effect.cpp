@@ -31,19 +31,21 @@ Effect * Effect::_last_effect = nullptr;
 
 // Adds effect to Gio::Actions
 void 
-action_effect(Effect* effect)
+action_effect (Effect* effect)
 {
-    if(effect->_workingDialog)
-    effect->prefs(InkscapeApplication::instance()->get_active_view());
-    else
-    effect->effect(InkscapeApplication::instance()->get_active_view());   
+    if (effect->_workingDialog) {
+        effect->prefs(InkscapeApplication::instance()->get_active_view());
+    } else { 
+        effect->effect(InkscapeApplication::instance()->get_active_view());   
+    }
 }
 
 // Modifying string to get submenu id
 std::string
-action_menu_name(std::string menu){
+action_menu_name (std::string menu)
+{
     transform(menu.begin(), menu.end(), menu.begin(), ::tolower);
-    for(auto &x:menu){
+    for (auto &x:menu) {
         if (x==' ') {
             x = '-';
         }
@@ -258,8 +260,9 @@ Effect::find_menu (Inkscape::XML::Node * menustruct, const gchar *name)
         Inkscape::XML::Node * firstchild = child->firstChild();
         if (firstchild != nullptr) {
             Inkscape::XML::Node *found = find_menu (firstchild, name);
-            if (found){
-                return found;}
+            if (found) {
+                return found;
+            }
         }
     }
     return nullptr;
