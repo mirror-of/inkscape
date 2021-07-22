@@ -342,8 +342,13 @@ static void sp_selection_copy_impl(std::vector<SPItem*> const &items, std::vecto
 }
 
 // TODO check if parent parameter should be changed to SPItem, of if the code should handle non-items.
-static std::vector<Inkscape::XML::Node*> sp_selection_paste_impl(SPDocument *doc, SPObject *parent, std::vector<Inkscape::XML::Node*> &clip)
+static std::vector<Inkscape::XML::Node *> sp_selection_paste_impl(SPDocument *doc, SPObject *parent,
+                                                                  std::vector<Inkscape::XML::Node *> &clip,
+                                                                  Inkscape::XML::Node *after = nullptr)
 {
+    assert(!after || after->parent() == parent->getRepr());
+    assert(!parent->cloned);
+
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     SPItem *parentItem = dynamic_cast<SPItem *>(parent);
@@ -366,7 +371,9 @@ static std::vector<Inkscape::XML::Node*> sp_selection_paste_impl(SPDocument *doc
             copy->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(item_t));
         }
 
-        parent->appendChildRepr(copy);
+        parent->getRepr()->addChild(copy, after);
+        after = copy;
+
         copied.push_back(copy);
         Inkscape::GC::release(copy);
     }
@@ -1535,10 +1542,37 @@ void ObjectSet::toPrevLayer(bool skip_undo)
     }
 }
 
+/**
+ * Move selection to group `moveto`, after the last child of `moveto` (if it has any children).
+ *
+ * @param moveto Layer to move to
+ * @param skip_undo Don't call DocumentUndo::done
+ *
+ * @pre moveto is of type SPItem (or even SPGroup?)
+ */
 void ObjectSet::toLayer(SPObject *moveto, bool skip_undo)
 {
     if(!document())
         return;
+
+    if (!moveto || !moveto->getRepr()) {
+        g_warning("%s moveto is NULL", __func__);
+        g_assert_not_reached();
+        return;
+    }
+
+    toLayer(moveto, skip_undo, moveto->getRepr()->lastChild());
+}
+
+/**
+ * Move selection to group `moveto`, after child `after`.
+ */
+void ObjectSet::toLayer(SPObject *moveto, bool skip_undo, Inkscape::XML::Node *after)
+{
+    assert(moveto);
+    assert(!after || after->parent() == moveto->getRepr());
+    assert(document());
+
     SPDesktop *dt = desktop();
 
     // check if something is selected
@@ -1556,7 +1590,7 @@ void ObjectSet::toLayer(SPObject *moveto, bool skip_undo)
         std::vector<Inkscape::XML::Node*> temp_clip;
         sp_selection_copy_impl(items_copy, temp_clip, document()->getReprDoc()); // we're in the same doc, so no need to copy defs
         sp_selection_delete_impl(items_copy, false, false);
-        std::vector<Inkscape::XML::Node*> copied = sp_selection_paste_impl(document(), moveto, temp_clip);
+        std::vector<Inkscape::XML::Node*> copied = sp_selection_paste_impl(document(), moveto, temp_clip, after);
         setReprList(copied);
         if (!temp_clip.empty()) temp_clip.clear();
         if (moveto && dt) dt->setCurrentLayer(moveto);

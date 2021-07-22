@@ -39,6 +39,7 @@ public:
 	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
 	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
+        const char* typeName() const override;
         const char* displayName() const override;
 };
 

@@ -19,7 +19,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-class ImageToggler : public Gtk::CellRendererPixbuf {
+class ImageToggler : public Gtk::CellRenderer {
 public:
     ImageToggler( char const *on, char const *off);
     ~ImageToggler() override = default;;
@@ -29,6 +29,7 @@ public:
 
     Glib::PropertyProxy<bool> property_active() { return _property_active.get_proxy(); }
     Glib::PropertyProxy<bool> property_activatable() { return _property_activatable.get_proxy(); }
+    Glib::PropertyProxy<bool> property_gossamer() { return _property_gossamer.get_proxy(); }
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_on();
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_off();
 
@@ -56,11 +57,13 @@ protected:
 
 
 private:
+    int _size;
     Glib::ustring _pixOnName;
     Glib::ustring _pixOffName;
 
     Glib::Property<bool> _property_active;
     Glib::Property<bool> _property_activatable;
+    Glib::Property<bool> _property_gossamer;
     Glib::Property< Glib::RefPtr<Gdk::Pixbuf> > _property_pixbuf_on;
     Glib::Property< Glib::RefPtr<Gdk::Pixbuf> > _property_pixbuf_off;
 

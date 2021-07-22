@@ -32,7 +32,8 @@ public:
         virtual void updatePageAnchor();
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-    const char* displayName() const override;
+        const char* typeName() const override;
+        const char* displayName() const override;
 	char* description() const override;
 	int event(SPEvent *event) override;
 };

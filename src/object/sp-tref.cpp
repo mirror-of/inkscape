@@ -212,6 +212,10 @@ Geom::OptRect SPTRef::bbox(Geom::Affine const &transform, SPItem::BBoxType type)
     return bbox;
 }
 
+const char* SPTRef::typeName() const {
+    return "text-data";
+}
+
 const char* SPTRef::displayName() const {
     return _("Cloned Character Data");
 }

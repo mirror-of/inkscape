@@ -326,6 +326,12 @@ void SPText::hide(unsigned int key) {
     }
 }
 
+const char* SPText::typeName() const {
+    if (has_inline_size() || has_shape_inside())
+        return "text-flow";
+    return "text";
+}
+
 const char* SPText::displayName() const {
     if (has_inline_size()) {
         return _("Auto-wrapped text");

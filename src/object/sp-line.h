@@ -32,6 +32,7 @@ public:
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 	void set(SPAttr key, char const* value) override;
 
+	const char* typeName() const override;
 	const char* displayName() const override;
 	Geom::Affine set_transform(Geom::Affine const &transform) override;
 	void convert_to_guides() const override;

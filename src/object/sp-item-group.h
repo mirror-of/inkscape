@@ -17,6 +17,12 @@
 #include <map>
 #include "sp-lpe-item.h"
 
+// A list of default highlight colours to use when one isn't set.
+const unsigned int default_highlights[8] = {
+    0xad7fa8ff, 0x729fcfff, 0xbabdb6ff, 0xdb2828ff,
+    0x73b92fff, 0xedd400ff, 0xfcaf3eff, 0xbabdb6ff,
+};
+
 namespace Inkscape {
 
 class Drawing;
@@ -31,7 +37,6 @@ public:
 
     enum LayerMode { GROUP, LAYER, MASK_HELPER };
 
-    bool _expanded;
     bool _insert_bottom;
     LayerMode _layer_mode;
     std::map<unsigned int, LayerMode> _display_modes;
@@ -39,9 +44,6 @@ public:
     LayerMode layerMode() const { return _layer_mode; }
     void setLayerMode(LayerMode mode);
 
-    bool expanded() const { return _expanded; }
-    void setExpanded(bool isexpanded);
-    
     bool insertBottom() const { return _insert_bottom; }
     void setInsertBottom(bool insertbottom);
 
@@ -80,6 +82,7 @@ public:
 
     Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
     void print(SPPrintContext *ctx) override;
+    const char* typeName() const override;
     const char* displayName() const override;
     char *description() const override;
     Inkscape::DrawingItem *show (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
@@ -88,6 +91,8 @@ public:
     void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
 
     void update_patheffect(bool write) override;
+
+    guint32 highlight_color() const override;
 };
 
 

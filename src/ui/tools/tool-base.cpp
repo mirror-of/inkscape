@@ -1259,28 +1259,13 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
         item = desktop->getSelection()->items().front();
     }
 
-    ContextMenu* CM = new ContextMenu(desktop, item);
-    Gtk::Window *window = desktop->getToplevel();
-    if (window) {
-        if (window->get_style_context()->has_class("dark")) {
-            CM->get_style_context()->add_class("dark");
-        } else {
-            CM->get_style_context()->add_class("bright");
-        }
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (prefs->getBool("/theme/symbolicIcons", false)) {
-            CM->get_style_context()->add_class("symbolic");
-        } else {
-            CM->get_style_context()->add_class("regular");
-        }
-    }
-    CM->show();
-
+    ContextMenu* menu = new ContextMenu(desktop, item);
+    menu->show();
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
     case GDK_KEY_PRESS:
-        CM->popup_at_pointer(event);
+        menu->popup_at_pointer(event);
         break;
     default:
         break;

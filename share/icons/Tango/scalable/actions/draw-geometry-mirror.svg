@@ -50,21 +50,21 @@
   <g
      id="draw-geometry-mirror"
      inkscape:label="#mirror_symmetry"
-     style="font-variant-east_asian:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#5a5a5a;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">
+     style="font-variant-east-asian:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#5a5a5a;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">
     <g
-       style="fill:none;stroke-linecap:round;font-variant-east_asian:normal;vector-effect:none;fill-opacity:1;stroke:#3465a4;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;opacity:1"
+       style="fill:none;stroke-linecap:round;font-variant-east-asian:normal;vector-effect:none;fill-opacity:1;stroke:#3465a4;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;opacity:1"
        id="g178">
       <path
          d="m 2,7 c 7,0 -4,6.5 7,6.5"
-         style="stroke:#3465a4;stroke-opacity:1;font-variant-east_asian:normal;vector-effect:none;fill:none;fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0"
+         style="stroke:#3465a4;stroke-opacity:1;font-variant-east-asian:normal;vector-effect:none;fill:none;fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0"
          id="path172" />
       <path
          d="m 2,2 12,12"
-         style="stroke:#5a5a5a;font-variant-east_asian:normal;vector-effect:none;fill:none;fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;opacity:1"
+         style="stroke:#5a5a5a;font-variant-east-asian:normal;vector-effect:none;fill:none;fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;opacity:1"
          id="path174" />
       <path
          d="m 7,2 c 0,7 6.5,-4 6.5,7"
-         style="stroke:#3465a4;stroke-opacity:1;font-variant-east_asian:normal;vector-effect:none;fill:none;fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0"
+         style="stroke:#3465a4;stroke-opacity:1;font-variant-east-asian:normal;vector-effect:none;fill:none;fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0"
          id="path176" />
     </g>
   </g>

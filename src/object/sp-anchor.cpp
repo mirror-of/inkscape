@@ -137,6 +137,10 @@ Inkscape::XML::Node* SPAnchor::write(Inkscape::XML::Document *xml_doc, Inkscape:
     return repr;
 }
 
+const char* SPAnchor::typeName() const {
+    return "link";
+}
+
 const char* SPAnchor::displayName() const {
     return _("Link");
 }

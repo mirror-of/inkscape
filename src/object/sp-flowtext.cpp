@@ -278,6 +278,10 @@ void SPFlowtext::print(SPPrintContext *ctx) {
     this->layout.print(ctx, pbox, dbox, bbox, ctm);
 }
 
+const char* SPFlowtext::typeName() const {
+    return "text";
+}
+
 const char* SPFlowtext::displayName() const {
     if (has_internal_frame()) {
         return _("Flowed Text");

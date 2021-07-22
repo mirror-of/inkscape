@@ -285,6 +285,17 @@ public:
     }
     
     /**
+     * Attempt to select all the items between two child items. Must have the same parent.
+     *
+     * @param obj_a - The first item, doesn't have to appear first in the list.
+     * @param obj_b - The last item, doesn't have to appear last in the list (optional)
+     *                If selection already contains one item, will select from-to that.
+     *
+     * @returns the number of items added.
+     */
+    int setBetween(SPObject *obj_a, SPObject *obj_b = nullptr);
+
+    /**
      * Selects the objects with the same IDs as those in `list`.
      *
      * @todo How about adding `setIdList(std::vector<Glib::ustring> const &list)`
@@ -395,6 +406,7 @@ public:
     void toNextLayer(bool skip_undo = false);
     void toPrevLayer(bool skip_undo = false);
     void toLayer(SPObject *layer, bool skip_undo = false);
+    void toLayer(SPObject *layer, bool skip_undo, Inkscape::XML::Node *after);
 
     //clipboard management
     //in selection-chemistry.cpp

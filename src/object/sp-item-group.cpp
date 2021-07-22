@@ -58,7 +58,6 @@ using Inkscape::DocumentUndo;
 static void sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePathEffect::Effect *lpe, bool write);
 
 SPGroup::SPGroup() : SPLPEItem(),
-    _expanded(false),
     _insert_bottom(false),
     _layer_mode(SPGroup::GROUP)
 {
@@ -296,8 +295,27 @@ void SPGroup::print(SPPrintContext *ctx) {
     }
 }
 
+const char *SPGroup::typeName() const {
+    switch (_layer_mode) {
+        case SPGroup::LAYER:
+            return "layer";
+        case SPGroup::MASK_HELPER:
+        case SPGroup::GROUP:
+        default:
+            return "group";
+    }
+}
+
 const char *SPGroup::displayName() const {
-    return _("Group");
+    switch (_layer_mode) {
+        case SPGroup::LAYER:
+            return _("Layer");
+        case SPGroup::MASK_HELPER:
+            return _("Mask Helper");
+        case SPGroup::GROUP:
+        default:
+            return _("Group");
+    }
 }
 
 gchar *SPGroup::description() const {
@@ -627,12 +645,6 @@ SPGroup::LayerMode SPGroup::layerDisplayMode(unsigned int dkey) const {
     }
 }
 
-void SPGroup::setExpanded(bool isexpanded) {
-    if ( _expanded != isexpanded ){
-        _expanded = isexpanded;
-    }
-}
-
 void SPGroup::setInsertBottom(bool insertbottom) {
     if ( _insert_bottom != insertbottom) {
         _insert_bottom = insertbottom;
@@ -908,6 +920,21 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
         top_group->applyToClipPath(clipmaskto, lpe);
         top_group->applyToMask(clipmaskto, lpe);
     }
+}
+
+/**
+ * Generate a highlight colour if one isn't set and return it.
+ */
+guint32 SPGroup::highlight_color() const {
+    // Parent must not be a layer (root, or similar) and this group must also be a layer
+    if (!_highlightColor && !SP_IS_LAYER(parent) && this->_layer_mode == SPGroup::LAYER) {
+        char const * oid = defaultLabel();
+        if (oid) {
+            // Color based on the last few bits of the label or object id.
+            return default_highlights[oid[(strlen(oid) - 1)] & 0x07];
+        }
+    }
+    return SPItem::highlight_color();
 }
 
 /*

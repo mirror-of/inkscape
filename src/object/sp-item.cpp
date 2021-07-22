@@ -19,6 +19,7 @@
 
 #include "bad-uri-exception.h"
 #include "svg/svg.h"
+#include "svg/svg-color.h"
 #include "print.h"
 #include "display/drawing-item.h"
 #include "attributes.h"
@@ -71,8 +72,7 @@ SPItem::SPItem() : SPObject() {
     sensitive = TRUE;
     bbox_valid = FALSE;
 
-    _highlightColor = nullptr;
-
+    _highlightColor = 0;
     transform_center_x = 0;
     transform_center_y = 0;
 
@@ -186,26 +186,27 @@ bool SPItem::isHidden(unsigned display_key) const {
     return true;
 }
 
+
+void SPItem::setHighlight(guint32 color) {
+    _highlightColor = color;
+    updateRepr();
+}
+
 bool SPItem::isHighlightSet() const {
-    return _highlightColor != nullptr;
+    return _highlightColor != 0;
 }
 
 guint32 SPItem::highlight_color() const {
-    if (_highlightColor)
-    {
-        return atoi(_highlightColor) | 0x00000000;
+    if (isHighlightSet()) {
+        return _highlightColor;
     }
-    else {
-        SPItem const *item = dynamic_cast<SPItem const *>(parent);
-        if (parent && (parent != this) && item)
-        {
-            return item->highlight_color();
-        }
-        else
-        {
-            static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            return prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff);
-        }
+
+    SPItem const *item = dynamic_cast<SPItem const *>(parent);
+    if (parent && (parent != this) && item) {
+        return item->highlight_color();
+    } else {
+        static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        return prefs->getInt("/tools/nodes/highlight_color", 0xaaaaaaff);
     }
 }
 
@@ -503,11 +504,9 @@ void SPItem::set(SPAttr key, gchar const* value) {
         }
         case SPAttr::INKSCAPE_HIGHLIGHT_COLOR:
         {
-            g_free(item->_highlightColor);
+            item->_highlightColor = 0;
             if (value) {
-                item->_highlightColor = g_strdup(value);
-            } else {
-                item->_highlightColor = nullptr;
+                item->_highlightColor = sp_svg_read_color(value, 0x0) | 0xff;
             }
             break;
         }
@@ -792,8 +791,8 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             repr->setAttributeOrRemoveIfEmpty("mask", value);
         }
     }
-    if (item->_highlightColor){
-        repr->setAttribute("inkscape:highlight-color", item->_highlightColor);
+    if (item->isHighlightSet()){
+        repr->setAttribute("inkscape:highlight-color", SPColor(item->_highlightColor).toString());
     } else {
         repr->removeAttribute("inkscape:highlight-color");
     }
@@ -1056,6 +1055,20 @@ void SPItem::invoke_print(SPPrintContext *ctx)
     }
 }
 
+/**
+ * The item's type name, not node tag name. NOT translated.
+ *
+ * @return The item's type name (default: 'item')
+ */
+const char* SPItem::typeName() const {
+    return "item";
+}
+
+/**
+ * The item's type name as a translated human string.
+ *
+ * Translated string for UI display.
+ */
 const char* SPItem::displayName() const {
     return _("Object");
 }

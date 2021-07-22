@@ -50,6 +50,10 @@ gint SPPath::nodesInPath() const
     return _curve ? _curve->nodes_in_path() : 0;
 }
 
+const char* SPPath::typeName() const {
+    return "path";
+}
+
 const char* SPPath::displayName() const {
     return _("Path");
 }

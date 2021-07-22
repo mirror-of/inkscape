@@ -60,6 +60,10 @@ std::vector<SPObject*> SPSwitch::_childList(bool add_ref, SPObject::Action actio
     return x;
 }
 
+const char *SPSwitch::typeName() const {
+    return "switch";
+}
+
 const char *SPSwitch::displayName() const {
     return _("Conditional Group");
 }

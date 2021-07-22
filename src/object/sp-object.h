@@ -293,6 +293,13 @@ public:
      */
     std::vector<SPObject*> childList(bool add_ref, Action action = ActionGeneral);
 
+
+    /**
+     * Retrieves a list of ancestors of the object, as an easy to use vector
+     * @param root_to_tip - If set, orders the list from the svg root to the tip.
+     */
+    std::vector<SPObject*> ancestorList(bool root_to_tip);
+
     /**
      * Append repr as child of this object.
      * \pre this is not a cloned object

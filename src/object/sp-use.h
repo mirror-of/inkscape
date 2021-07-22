@@ -56,7 +56,8 @@ public:
 	void modified(unsigned int flags) override;
 
 	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
-    const char* displayName() const override;
+        const char* typeName() const override;
+        const char* displayName() const override;
 	char* description() const override;
 	void print(SPPrintContext *ctx) override;
 	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;

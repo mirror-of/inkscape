@@ -55,6 +55,7 @@ public:
   bool set_rect_path_attribute(Inkscape::XML::Node *repr);
 
   Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+  const char* typeName() const override;
   const char* displayName() const override;
   void update_patheffect(bool write) override;
 	void set_shape() override;

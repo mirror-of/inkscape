@@ -377,6 +377,10 @@ void SPRoot::print(SPPrintContext *ctx)
     ctx->release();
 }
 
+const char *SPRoot::typeName() const {
+    return "image";
+}
+
 const char *SPRoot::displayName() const {
     return "SVG";  // Do not translate
 }

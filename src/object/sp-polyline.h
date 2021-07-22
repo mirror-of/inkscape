@@ -21,6 +21,7 @@ public:
 	void set(SPAttr key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
+        const char* typeName() const override;
 	char* description() const override;
 };
 

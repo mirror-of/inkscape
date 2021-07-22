@@ -39,9 +39,9 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/textview.h>
 
-//#include "ui/widget/panel.h"
-#include "ui/widget/scrollprotected.h"
 #include "ui/dialog/dialog-base.h"
+#include "ui/widget/scrollprotected.h"
+#include "ui/widget/color-picker.h"
 #include "ui/widget/frame.h"
 
 class SPAttributeTable;
@@ -86,6 +86,9 @@ private:
     Gtk::Label _label_title; //the label for the object title
     Gtk::Entry _entry_title; //the entry for the object title
 
+    Gtk::Label _label_color; //the label for the object highlight
+    Inkscape::UI::Widget::ColorPicker _highlight_color; // color picker for the object highlight
+
     Gtk::Label _label_image_rendering; // the label for 'image-rendering'
     Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> _combo_image_rendering; // the combo box text for 'image-rendering'
     
@@ -106,6 +109,9 @@ private:
 
     /// Sets object properties (ID, label, title, description) on user input.
     void _labelChanged();
+
+    // Callback for highlight color
+    void _highlightChanged(guint rgba);
 
     /// Callback for 'image-rendering'.
     void _imageRenderingChanged();

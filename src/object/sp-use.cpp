@@ -229,6 +229,14 @@ void SPUse::print(SPPrintContext* ctx) {
     }
 }
 
+const char* SPUse::typeName() const {
+    if (dynamic_cast<SPSymbol *>(child)) {
+        return "symbol";
+    } else {
+        return "clone";
+    }
+}
+
 const char* SPUse::displayName() const {
     if (dynamic_cast<SPSymbol *>(child)) {
         return _("Symbol");

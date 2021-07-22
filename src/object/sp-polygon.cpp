@@ -166,8 +166,12 @@ void SPPolygon::set(SPAttr key, const gchar* value) {
     }
 }
 
+const char* SPPolygon::typeName() const {
+    return "path";
+}
+
 gchar* SPPolygon::description() const {
-	return g_strdup(_("<b>Polygon</b>"));
+    return g_strdup(_("<b>Polygon</b>"));
 }
 
 /*

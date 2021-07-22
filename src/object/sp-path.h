@@ -43,6 +43,7 @@ public:
     void update_patheffect(bool write) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
+    const char* typeName() const override;
     const char* displayName() const override;
     char* description() const override;
     Geom::Affine set_transform(Geom::Affine const &transform) override;

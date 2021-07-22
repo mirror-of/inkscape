@@ -504,6 +504,10 @@ void SPImage::print(SPPrintContext *ctx) {
     }
 }
 
+const char* SPImage::typeName() const {
+    return "image";
+}
+
 const char* SPImage::displayName() const {
     return _("Image");
 }

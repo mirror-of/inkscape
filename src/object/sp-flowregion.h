@@ -33,6 +33,7 @@ public:
 	void update(SPCtx *ctx, unsigned int flags) override;
 	void modified(guint flags) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	const char* typeName() const override;
 	const char* displayName() const override;
 };
 
@@ -50,6 +51,7 @@ public:
 	void update(SPCtx *ctx, unsigned int flags) override;
 	void modified(guint flags) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	const char* typeName() const override;
 	const char* displayName() const override;
 };
 

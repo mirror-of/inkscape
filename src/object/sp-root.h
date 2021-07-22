@@ -56,7 +56,8 @@ public:
 
 	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
 	void print(SPPrintContext *ctx) override;
-    const char* displayName() const override;
+        const char* typeName() const override;
+        const char* displayName() const override;
 private:
     void unset_x_and_y();
     void setRootDimensions();

@@ -220,6 +220,11 @@ void SPStar::update(SPCtx *ctx, guint flags) {
     SPShape::update(ctx, flags);
 }
 
+const char* SPStar::typeName() const {
+    if (this->flatsided == false)
+        return "star";
+    return "polygon";
+}
 
 const char* SPStar::displayName() const {
     if (this->flatsided == false)

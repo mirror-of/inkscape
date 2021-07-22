@@ -624,9 +624,6 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                     newObj->setDesc(desc);
                     g_free(desc);
                 }
-                if (highlight_color && newObj) {
-                    SP_ITEM(newObj)->setHighlightColor( highlight_color );
-                }
                 // move to the saved position
                 repr->setPosition(pos > 0 ? pos : 0);
                 Inkscape::GC::release(repr);

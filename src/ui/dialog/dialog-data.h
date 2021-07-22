@@ -51,7 +51,7 @@ static std::map<std::string, DialogData> dialog_data =
     {"Messages",           {N_("_Messages..."),             INKSCAPE_ICON("dialog-messages")            }},
     {"ObjectAttributes",   {N_("_Object attributes..."),    INKSCAPE_ICON("dialog-object-properties")   }},
     {"ObjectProperties",   {N_("_Object Properties..."),    INKSCAPE_ICON("dialog-object-properties")   }},
-    {"Objects",            {N_("Object_s..."),              INKSCAPE_ICON("dialog-objects")             }},
+    {"Objects",            {N_("Layers and Object_s..."),   INKSCAPE_ICON("dialog-objects")             }},
     {"PaintServers",       {N_("_Paint Servers..."),        INKSCAPE_ICON("symbols")                    }},
     {"Preferences",        {N_("P_references"),             INKSCAPE_ICON("preferences-system")         }},
     {"Selectors",          {N_("_Selectors and CSS..."),    INKSCAPE_ICON("dialog-selectors")           }},

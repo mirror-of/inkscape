@@ -283,6 +283,32 @@ void ObjectSet::set(XML::Node *repr)
     }
 }
 
+int ObjectSet::setBetween(SPObject *obj_a, SPObject *obj_b)
+{
+    auto parent = obj_a->parent;
+    if (!obj_b)
+        obj_b = singleItem();
+
+    if (!obj_a || !obj_b || parent != obj_b->parent) {
+        return 0;
+    } else if (obj_a == obj_b) {
+        set(obj_a);
+        return 1;
+    }
+    clear();
+
+    int count = 0;
+    int min = std::min(obj_a->getPosition(), obj_b->getPosition());
+    int max = std::max(obj_a->getPosition(), obj_b->getPosition());
+    for (int i = min ; i <= max ; i++) {
+        if (auto child = parent->nthChild(i)) {
+            count += add(child);
+        }    
+    }
+    return count;
+}
+
+
 void ObjectSet::setReprList(std::vector<XML::Node*> const &list) {
     if(!document())
         return;

@@ -231,6 +231,10 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
     return repr;
 }
 
+const char* SPTSpan::typeName() const {
+    return "text-data";
+}
+
 const char* SPTSpan::displayName() const {
     return _("Text Span");
 }

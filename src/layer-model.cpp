@@ -197,6 +197,9 @@ void LayerModel::toggleLayerSolo(SPObject *object) {
  */
 SPObject *LayerModel::layerForObject(SPObject *object) {
     g_return_val_if_fail(object != nullptr, NULL);
+    if (isLayer(object)) {
+        return object;
+    }
 
     SPObject *root=currentRoot();
     object = object->parent;

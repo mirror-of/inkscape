@@ -65,7 +65,8 @@ public:
 	void set(SPAttr key, char const* value) override;
 
 	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
-    const char* displayName() const override;
+        const char* typeName() const override;
+        const char* displayName() const override;
 	char* description() const override;
     void update_patheffect(bool write) override;
 	void set_shape() override;

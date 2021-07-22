@@ -413,6 +413,18 @@ std::vector<SPObject*> SPObject::childList(bool add_ref, Action) {
     return l;
 }
 
+std::vector<SPObject*> SPObject::ancestorList(bool root_to_tip)
+{
+    std::vector<SPObject *> ancestors;
+    for (SPObject::ParentIterator iter=parent ; iter ; ++iter) {
+        ancestors.push_back(iter);
+    }
+    if (root_to_tip) {
+        std::reverse(ancestors.begin(), ancestors.end());
+    }
+    return ancestors;
+}
+
 gchar const *SPObject::label() const {
     return _label;
 }

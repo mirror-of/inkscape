@@ -108,8 +108,12 @@ Inkscape::XML::Node* SPLine::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     return repr;
 }
 
+const char* SPLine::typeName() const {
+    return "path";
+}
+
 const char* SPLine::displayName() const {
-	return _("Line");
+    return _("Line");
 }
 
 void SPLine::convert_to_guides() const {

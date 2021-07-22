@@ -184,6 +184,20 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
 
     // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
     signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(shift_icons), this));
+
+    // Set the style and icon theme of the new menu based on the desktop
+    if (Gtk::Window *window = _desktop->getToplevel()) {
+        if (window->get_style_context()->has_class("dark")) {
+            get_style_context()->add_class("dark");
+        } else {
+            get_style_context()->add_class("bright");
+        }
+        if (prefs->getBool("/theme/symbolicIcons", false)) {
+            get_style_context()->add_class("symbolic");
+        } else {
+            get_style_context()->add_class("regular");
+        }
+    }
 }
 
 ContextMenu::~ContextMenu(void)

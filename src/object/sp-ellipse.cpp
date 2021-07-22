@@ -374,13 +374,24 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
     return repr;
 }
 
+const char *SPGenericEllipse::typeName() const
+{
+    switch (type) {
+        case SP_GENERIC_ELLIPSE_UNDEFINED:
+        case SP_GENERIC_ELLIPSE_ARC:
+            return "arc";
+        case SP_GENERIC_ELLIPSE_CIRCLE:
+        case SP_GENERIC_ELLIPSE_ELLIPSE:
+        default:
+            return "circle"; //
+    }
+}
+
 const char *SPGenericEllipse::displayName() const
 {
-
     switch ( type ) {
         case SP_GENERIC_ELLIPSE_UNDEFINED:
         case SP_GENERIC_ELLIPSE_ARC:
-
             if (_isSlice()) {
                 switch ( arc_type ) {
                     case SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE:
@@ -393,20 +404,14 @@ const char *SPGenericEllipse::displayName() const
                         return _("Arc");
                         break;
                 }
-            } else {
-                return _("Ellipse");
-            }
-
-        case SP_GENERIC_ELLIPSE_CIRCLE:
-            return _("Circle");
-
+            } // fallback to ellipse
         case SP_GENERIC_ELLIPSE_ELLIPSE:
             return _("Ellipse");
-
+        case SP_GENERIC_ELLIPSE_CIRCLE:
+            return _("Circle");
         default:
             return "Unknown ellipse: ERROR";
     }
-    return ("Shouldn't be here");
 }
 
 // Create path for rendering shape on screen

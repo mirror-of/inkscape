@@ -2754,7 +2754,7 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("dialog-input-devices")),
     new DialogVerb(SP_VERB_DIALOG_LAYERS, "DialogLayers", N_("Layer_s..."), N_("View Layers"),
                    INKSCAPE_ICON("dialog-layers")),
-    new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."), N_("View Objects"),
+    new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Layers and Object_s..."), N_("View Layers and Objects"),
                    INKSCAPE_ICON("dialog-objects")),
     new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."), N_("View Style Dialog"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects..."),

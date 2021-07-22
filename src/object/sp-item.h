@@ -182,12 +182,10 @@ public:
         return sensitive;
     };
 
+    void setHighlight(guint32 color);
     bool isHighlightSet() const;
-    guint32 highlight_color() const;
+    virtual guint32 highlight_color() const;
 
-    void setHighlightColor(guint32 color);
-
-    void unsetHighlightColor();
     //====================
 
     bool isEvaluated() const;
@@ -389,7 +387,7 @@ public:
      */
     Geom::Affine dt2i_affine() const;
 
-    char *_highlightColor;
+    guint32 _highlightColor;
 
 private:
     enum EvaluatedStatus
@@ -420,7 +418,8 @@ public:
 
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
 	virtual void print(SPPrintContext *ctx);
-    virtual const char* displayName() const;
+        virtual const char* typeName() const;
+        virtual const char* displayName() const;
 	virtual char* description() const;
 	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
 	virtual void hide(unsigned int key);

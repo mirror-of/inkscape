@@ -170,9 +170,13 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
     return repr;
 }
 
+const char* SPFlowregion::typeName() const {
+    return "text-flow";
+}
+
 const char* SPFlowregion::displayName() const {
-	// TRANSLATORS: "Flow region" is an area where text is allowed to flow
-	return _("Flow Region");
+    // TRANSLATORS: "Flow region" is an area where text is allowed to flow
+    return _("Flow Region");
 }
 
 SPFlowregionExclude::SPFlowregionExclude() : SPItem() {
@@ -309,6 +313,10 @@ Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc
     SPItem::write(xml_doc, repr, flags);
 
     return repr;
+}
+
+const char* SPFlowregionExclude::typeName() const {
+    return "text-flow";
 }
 
 const char* SPFlowregionExclude::displayName() const {

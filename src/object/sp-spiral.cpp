@@ -194,6 +194,10 @@ void SPSpiral::update(SPCtx *ctx, guint flags) {
     SPShape::update(ctx, flags);
 }
 
+const char* SPSpiral::typeName() const {
+    return "spiral";
+}
+
 const char* SPSpiral::displayName() const {
     return _("Spiral");
 }
