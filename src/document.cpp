@@ -1455,21 +1455,22 @@ void SPDocument::build_flat_item_list(unsigned int dkey, SPGroup *group, gboolea
 }
 
 /**
-Returns the topmost (in z-order) item from the descendants of group (recursively) which
-is at the point p, or NULL if none. Honors into_groups on whether to recurse into
-non-layer groups or not. Honors take_insensitive on whether to return insensitive
-items. If upto != NULL, then if item upto is encountered (at any level), stops searching
-upwards in z-order and returns what it has found so far (i.e. the found item is
-guaranteed to be lower than upto). Requires a list of nodes built by
-build_flat_item_list.
+Returns the items from the descendants of group (recursively) which are at the
+point p, or NULL if none. Honors into_groups on whether to recurse into non-layer
+groups or not. Honors take_insensitive on whether to return insensitive items.
+If upto != NULL, then if item upto is encountered (at any level), stops searching
+upwards in z-order and returns what it has found so far (i.e. the found items are
+guaranteed to be lower than upto). Requires a list of nodes built by build_flat_item_list.
+If items_count > 0, it'll return the topmost (in z-order) items_count items.
  */
-static SPItem *find_item_at_point(std::deque<SPItem*> *nodes, unsigned int dkey, Geom::Point const &p, SPItem* upto=nullptr)
+static std::vector<SPItem*> find_items_at_point(std::deque<SPItem*> *nodes, unsigned int dkey,
+                                                 Geom::Point const &p, int items_count=0, SPItem* upto=nullptr)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
 
-    SPItem *seen = nullptr;
     SPItem *child;
+    std::vector<SPItem*> result;
     bool seen_upto = (!upto);
     for (auto node : *nodes) {
         child = node;
@@ -1482,13 +1483,24 @@ static SPItem *find_item_at_point(std::deque<SPItem*> *nodes, unsigned int dkey,
         if (arenaitem) {
             arenaitem->drawing().update();
             if (arenaitem->pick(p, delta, 1) != nullptr) {
-                seen = child;
-                break;
+                result.push_back(child);
+                if (--items_count == 0) {
+                    break;
+                }
             }
         }
     }
 
-    return seen;
+    return result;
+}
+
+static SPItem *find_item_at_point(std::deque<SPItem*> *nodes, unsigned int dkey, Geom::Point const &p, SPItem* upto=nullptr)
+{
+    auto items = find_items_at_point(nodes, dkey, p, 1, upto);
+    if (items.empty()) {
+        return nullptr;
+    }
+    return items.back();
 }
 
 /**
@@ -1557,9 +1569,9 @@ std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom:
     return find_items_in_area(x, this->root, dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
-std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const
+std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, bool topmost_only, size_t limit) const
 {
-    std::vector<SPItem*> items;
+    std::vector<SPItem*> result;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // When picking along the path, we don't want small objects close together
@@ -1583,23 +1595,25 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     }
     size_t item_counter = 0;
     for(int i = points.size()-1;i>=0; i--) {
-        SPItem *item = find_item_at_point(&_node_cache, key, points[i]);
-        if (item && items.end()==find(items.begin(),items.end(), item))
-            if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){
-                items.push_back(item);
-                item_counter++;
-                //limit 0 = no limit
-                if(item_counter == limit){
-                    prefs->setDouble("/options/cursortolerance/value", saved_delta);
-                    return items;
+        std::vector<SPItem*> items = find_items_at_point(&_node_cache, key, points[i], topmost_only);
+        for (SPItem *item : items) {
+            if (item && result.end()==find(result.begin(), result.end(), item))
+                if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){
+                    result.push_back(item);
+                    item_counter++;
+                    //limit 0 = no limit
+                    if(item_counter == limit){
+                        prefs->setDouble("/options/cursortolerance/value", saved_delta);
+                        return result;
+                    }
                 }
-            }
+        }
     }
 
     // and now we restore it back
     prefs->setDouble("/options/cursortolerance/value", saved_delta);
 
-    return items;
+    return result;
 }
 
 SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
