@@ -16,6 +16,7 @@
 
 #include "canvas-item-text.h"
 
+#include <cmath>
 #include <utility> // std::move
 
 #include "color.h" // SP_RGBA_x_F
@@ -197,25 +198,25 @@ void CanvasItemText::render(Inkscape::CanvasItemBuffer *buf)
             buf->cr->arc(x + _bounds.width() - radius,
                          y + radius,
                          radius,
-                         Geom::rad_from_deg(-90),
-                         Geom::rad_from_deg(0));
+                         -M_PI_2,
+                         0);
 
             buf->cr->arc(x + _bounds.width() - radius,
                          y + _bounds.height() - radius,
                          radius,
-                         Geom::rad_from_deg(0),
-                         Geom::rad_from_deg(90));
+                         0,
+                         M_PI_2);
 
             buf->cr->arc(x + radius, y + _bounds.height() - radius,
                          radius,
-                         Geom::rad_from_deg(90),
-                         Geom::rad_from_deg(180));
+                         M_PI_2,
+                         M_PI);
 
             buf->cr->arc(x + radius,
                          y + radius,
                          radius,
-                         Geom::rad_from_deg(180),
-                         Geom::rad_from_deg(270));
+                         M_PI,
+                         3*M_PI_2);
         }
         buf->cr->set_line_width(2);
         buf->cr->set_source_rgba(SP_RGBA32_R_F(_background), SP_RGBA32_G_F(_background),

@@ -347,10 +347,13 @@ guint32 SnapIndicator::get_guide_color(SnapTargetType t)
     }
 }
 
-Geom::Coord get_y(Geom::Rect const &source, Geom::Rect const &target, double const offset, int &sign)
+std::pair<Geom::Coord, int> get_y_and_sign(Geom::Rect const &source, Geom::Rect const &target, double const offset)
 {
     Geom::Coord y;
+    int sign;
 
+    // We add a margin of 5px here to make sure that very small movements of mouse
+    // pointer do not cause the position of distribution indicator to change.
     if (source.midpoint().y() < target.midpoint().y() + 5) {
         y = source.max().y() + offset;
         sign = 1;
@@ -359,13 +362,16 @@ Geom::Coord get_y(Geom::Rect const &source, Geom::Rect const &target, double con
         sign = -1;
     }
 
-    return y;
+    return {y, sign};
 }
 
-Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target, double const offset, int &sign)
+std::pair<Geom::Coord, int> get_x_and_sign(Geom::Rect const &source, Geom::Rect const &target, double const offset)
 {
     Geom::Coord x;
+    int sign;
 
+    // We add a margin of 5px here to make sure that very small movements of mouse
+    // pointer do not cause the position of distribution indicator to change.
     if (source.midpoint().x() < target.midpoint().x() + 5) {
         x = source.max().x() + offset;
         sign = 1;
@@ -374,7 +380,7 @@ Geom::Coord get_x(Geom::Rect const &source, Geom::Rect const &target, double con
         sign = -1;
     }
 
-    return x;
+    return {x, sign};
 }
 
 void SnapIndicator::make_alignment_indicator(Geom::Point const &p1, Geom::Point const &p2, guint32 color, double fontsize, double scale)
@@ -491,17 +497,15 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
         case SNAPTARGET_DISTRIBUTION_LEFT:
         case SNAPTARGET_DISTRIBUTION_UP:
         case SNAPTARGET_DISTRIBUTION_DOWN: {
-            Geom::Coord x, y; 
             Geom::Point p1, p2;
             Inkscape::CanvasItemCurve *point1, *point2;
-            int sign;
 
             for (auto it = p.getBBoxes().begin(); it + 1 != p.getBBoxes().end(); it++) {
                 switch (p.getTarget()) {
                     case SNAPTARGET_DISTRIBUTION_RIGHT: 
                     case SNAPTARGET_DISTRIBUTION_LEFT:
-                    case SNAPTARGET_DISTRIBUTION_X:
-                        y = get_y(*it, *std::next(it), 5/_desktop->current_zoom(), sign);
+                    case SNAPTARGET_DISTRIBUTION_X: {
+                        auto [y, sign] = get_y_and_sign(*it, *std::next(it), 5/_desktop->current_zoom());
                         p1 = Geom::Point(it->max().x() + line_offset, y);
                         p2 = Geom::Point(std::next(it)->min().x() - line_offset, y);
                         text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, sign*text_offset));
@@ -509,11 +513,12 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                         point1 = make_stub_line_v(p1);
                         point2 = make_stub_line_v(p2);
                         break;
+                    }
 
                     case SNAPTARGET_DISTRIBUTION_DOWN:
                     case SNAPTARGET_DISTRIBUTION_UP:
-                    case SNAPTARGET_DISTRIBUTION_Y:
-                        x = get_x(*it, *std::next(it), 5/_desktop->current_zoom(), sign);
+                    case SNAPTARGET_DISTRIBUTION_Y: {
+                        auto [x, sign] = get_x_and_sign(*it, *std::next(it), 5/_desktop->current_zoom());
                         p1 = Geom::Point(x, it->max().y() + line_offset);
                         p2 = Geom::Point(x, std::next(it)->min().y() - line_offset);
                         text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(sign*text_offset, 0));
@@ -521,6 +526,7 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
                         point1 = make_stub_line_h(p1);
                         point2 = make_stub_line_h(p2);
                         break;
+                    }
                 }
 
                 _distribution_snap_indicators.push_back(_desktop->add_temporary_canvasitem(point1, 0));
@@ -543,16 +549,14 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
         break;
         }
         case SNAPTARGET_DISTRIBUTION_XY: {
-            Geom::Coord x, y; 
             Geom::Point p1, p2;
             Inkscape::CanvasItemCurve *point1, *point2;
-            int sign;
 
             auto equal_dist2 = Inkscape::Util::Quantity::convert(p.getDistributionDistance2(), "px", unit_name);
             Glib::ustring distance2 = Glib::ustring::format(std::fixed, std::setprecision(1), std::noshowpoint, scale*equal_dist2);
 
             for (auto it = p.getBBoxes().begin(); it + 1 != p.getBBoxes().end(); it++) {
-                y = get_y(*it, *std::next(it), 5/_desktop->current_zoom(), sign);
+                auto [y, sign] = get_y_and_sign(*it, *std::next(it), 5/_desktop->current_zoom());
                 p1 = Geom::Point(it->max().x() + line_offset, y);
                 p2 = Geom::Point(std::next(it)->min().x() - line_offset, y);
                 text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(0, sign*text_offset));
@@ -579,7 +583,7 @@ void SnapIndicator::make_distribution_indicators(SnappedPoint const &p,
             }
 
             for (auto it = p.getBBoxes2().begin(); it + 1 != p.getBBoxes2().end(); it++) {
-                x = get_x(*it, *std::next(it), 5/_desktop->current_zoom(), sign);
+                auto [x, sign] = get_x_and_sign(*it, *std::next(it), 5/_desktop->current_zoom());
                 p1 = Geom::Point(x, it->max().y() + line_offset);
                 p2 = Geom::Point(x, std::next(it)->min().y() - line_offset);
                 text_pos = (p1 + p2)/2 + _desktop->w2d(Geom::Point(sign*text_offset, 0));
