@@ -12,96 +12,67 @@ See default.xml for more information.
 
 <!-- Shape tool - does what our Selector does -->
 
-  <bind key="2" action="ToolSelector" display="true"/>
+  <bind gaction="win.tool-switch('Select')"             keys="2" />
 
 <!-- Nodes tool - not in Zoner?
 
-  <bind key="A" action="ToolNode" display="true"/>
-  <bind key="a" action="ToolNode" /> -->
+  <bind gaction="win.tool-switch('Node')"               keys="A, a" /> -->
 
 <!-- Pen
 
-  <bind key="F12" action="ToolPen" display="true"/> -->
+  <bind gaction="win.tool-switch('Pen')"                keys="F12" /> -->
 
 <!-- Text tool is most closer to our text tool -->
 
-  <bind key="t" modifiers="Ctrl" action="ToolText" display="true"/>
-  <bind key="T" modifiers="Ctrl" action="ToolText" />
+  <bind gaction="win.tool-switch('Text')"               keys="&lt;ctrl&gt;t, &lt;ctrl&gt;T" />
 
 <!-- Freehand - not in Zoner?
 
-  <bind key="F5" action="ToolPencil" display="true"/> -->
+  <bind gaction="win.tool-switch('Pencil')"             keys="F5" /> -->
 
 <!-- Zoom -->
 
-  <bind key="space" modifiers="Ctrl" action="ToolZoom" display="true"/>
+  <bind gaction="win.tool-switch('Zoom')"               keys="&lt;ctrl&gt;space" />
 
 
 <!-- File actions -->
 
-  <bind key="n" modifiers="Ctrl" action="FileNew" display="true"/>
-  <bind key="N" modifiers="Ctrl" action="FileNew" />
+  <bind gaction="doc.document-new"                      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
   
 <!--  New from Template... (Shift l+Ctrl+N) does not exist in Inkscape -->
 
-  <bind key="o" modifiers="Ctrl" action="FileOpen" display="true"/>
-  <bind key="O" modifiers="Ctrl" action="FileOpen" />
+  <bind gaction="win.file-open"                         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-save"                     keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
 
-  <bind key="s" modifiers="Ctrl" action="FileSave" display="true"/>
-  <bind key="S" modifiers="Ctrl" action="FileSave" />
+<!--  <bindgaction="win.document-save-as"               keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;t,S" /> -->
 
-<!--  <bind key="s" modifiers="Ctrl,Shift" action="FileSaveAs" display="true"/>
-  <bind key="S" modifiers="Ctrl,Shift" action="FileSaveAs" /> -->
+  <bind gaction="win.document-import"                   keys="&lt;ctrl&gt;&lt;shift&gt;t,i, &lt;ctrl&gt;&lt;shift&gt;t,I" />
 
-  <bind key="i" modifiers="Ctrl,Shift" action="FileImport" display="true"/>
-  <bind key="I" modifiers="Ctrl,Shift" action="FileImport" />
+<!--  <bindgaction="win.dialog-open('Export')"          keys="&lt;ctrl&gtr,e, &lt;ctrl&gt;E" /> -->
 
-<!--  <bind key="e" modifiers="Ctrl" action="DialogExport" display="true"/>
-  <bind key="E" modifiers="Ctrl" action="DialogExport" /> -->
-
-  <bind key="p" modifiers="Ctrl" action="FilePrint" display="true"/>
-  <bind key="P" modifiers="Ctrl" action="FilePrint" />
+  <bind gaction="win.document-print"                    keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
   
 <!-- Export to PDF (CTRL+SHIFT+P) - doesn't not exist in Inkscape directly -->
 
 <!-- Options dialog - make sure it's correct one -->
 
-  <bind key="m" modifiers="Ctrl" action="DialogPreferences" display="true"/>
-  <bind key="M" modifiers="Ctrl" action="DialogPreferences" />
+  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;ctrl&gt;m, &lt;ctrl&gt;M" />
 
 <!-- Options dialog - make sure it's correct one 
 
-  <bind key="Return" modifiers="Alt" action="DialogDocumentProperties" display="true"/> -->
+  <bind gaction="win.dialog-open('DocumentProperties')" keys="&lt;alt&gt;Return" /> -->
 
 <!-- Edit actions -->
 
-  <bind key="z" modifiers="Ctrl" action="EditUndo" display="true"/>
-  <bind key="Z" modifiers="Ctrl" action="EditUndo" />
-  <bind key="BackSpace" modifiers="Alt" action="EditUndo" />
-
-  <bind key="y" modifiers="Ctrl" action="EditRedo" display="true"/>
-  <bind key="Y" modifiers="Ctrl" action="EditRedo" />
-
-  <bind key="x" modifiers="Ctrl" action="EditCut" display="true"/>
-  <bind key="X" modifiers="Ctrl" action="EditCut" />
-<!--  <bind key="Delete" modifiers="Shift" action="EditCut" /> -->
-
-  <bind key="c" modifiers="Ctrl" action="EditCopy" display="true"/>
-  <bind key="C" modifiers="Ctrl" action="EditCopy" />
-  <bind key="Insert" modifiers="Ctrl" action="EditCopy" />
-
-  <bind key="v" modifiers="Ctrl" action="EditPaste" display="true"/>
-  <bind key="V" modifiers="Ctrl" action="EditPaste" />
-  <bind key="Insert" modifiers="Shift" action="EditPaste" />
-
-<!--  <bind key="Delete" action="EditDelete" display="true"/> -->
-
-  <bind key="d" modifiers="Ctrl" action="EditDuplicate" display="true"/>
-  <bind key="D" modifiers="Ctrl" action="EditDuplicate" />
-
-
-  <bind key="a" modifiers="Ctrl" action="EditSelectAll" display="true"/>
-  <bind key="A" modifiers="Ctrl" action="EditSelectAll" />
+  <bind gaction="win.undo"                              keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z, &lt;alt&gt;BackSpace" />
+  <bind gaction="win.redo"                              keys="&lt;ctrl&gt;y, &lt;ctrl&gt;Y" />
+  <bind gaction="app.cut"                               keys="&lt;ctrl&gt;x, &lt;ctrl&gt;X" />
+<!--  <bindgaction="app.cut"                            keys="&lt;shift&gt;Delete"/> -->
+  <bind gaction="app.copy"                              keys="&lt;ctrl&gt;c, &lt;ctrl&gt;C, &lt;ctrl&gt;Insert" />
+  <bind gaction="win.paste"                             keys="&lt;ctrl&gt;v, &lt;ctrl&gt;V, &lt;shift&gt;t,Insert" />
+<!--  <bindgaction="app.delete"                         keys="Delete"/> -->
+  <bind gaction="app.duplicate"                         keys="&lt;ctrl&gt;d, &lt;ctrl&gt;D" />
+  <bind gaction="win.select-all"                        keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
 
 <!-- View actions -->
 
@@ -110,20 +81,17 @@ F2	Zoom One-Shot
 Zoom1:0: Zoom to 1:1
 ZoomIn: Zoom in 
 
-  <bind gaction="win.canvas-zoom-in" keys="plus, &lt;Shift&gt;plus, equal, &lt;Shift&gt;equal, KP_Add" />
-  
-  <bind gaction=win.canvas-zoom-1-1" keys="1"/>
+  <bind ganction="win.canvas-zoom-in"                   keys="plus, &lt;Shift&gt;plus, equal, &lt;Shift&gt;equal, KP_Add" />
+  <bind ganction=win.canvas-zoom-1-1"                   keys="1"/>
 
 -->
 
-<!--  <bind key="F3" action="ZoomOut" display="true"/> -->
+<!--  <bindgaction="win.canvas-zoom-out"keys="F3"/> -->
 
 <!-- Zoom to Object - in Zoner's terminology -->
-  <bind gaction="win.canvas-zoom-drawing" keys="a" />
-  
-  <bind gaction="win.canvas-zoom-page" keys="e"/>
-
-  <bind gaction="win.canvas-zoom-selection" keys="s"/>
+  <bind ganction="win.canvas-zoom-drawing"              keys="a" />
+  <bind ganction="win.canvas-zoom-page"                 keys="e"/>
+  <bind ganction="win.canvas-zoom-selection"            keys="s"/>
 
 <!-- Implemented in Zoner Draw, but does it have hotkeys?
 
@@ -133,39 +101,27 @@ win.canvas-zoom-page-width: Zoom to fit page width in window
 
 -->
 
-  <bind key="l" action="ToggleGuides" display="true"/>
-  <bind key="L" action="ToggleGuides" />
-
-  <bind key="g" action="ToggleGrid" display="true"/>
-  <bind key="G" action="ToggleGrid" />
+  <bind gaction="win.canvas-show-guides"                keys="l, L" />
+  <bind gaction="win.canvas-show-grid"                  keys="g, G" />
   
 <!-- Not implemented in Zoner Draw? !!!!!!!!!!!!
 
-  <bind key="r" modifiers="Ctrl" action="ToggleRulers" display="true"/>
-  <bind key="R" modifiers="Ctrl" action="ToggleRulers" />
-
-  <bind key="b" modifiers="Ctrl" action="ToggleScrollbars" display="true"/>
-  <bind key="B" modifiers="Ctrl" action="ToggleScrollbars" />
+  <bind gaction="win.canvas-rulers"                     keys="&lt;ctrl&gt;r, &lt;ctrl&gt;R" />
+  <bind gaction="win.canvas-scroll-bars"                keys="&lt;ctrl&gt;b,B" />
   
 -->
   
-  <bind key="F9" action="FullScreen" display="true"/>
+  <bind gaction="win.view-fullscreen"                   keys="F9" />
 
 <!-- Path actions -->
 
-  <bind key="k" modifiers="Ctrl" action="SelectionCombine" display="true"/>
-  <bind key="K" modifiers="Ctrl" action="SelectionCombine" />
-
-  <bind key="k" modifiers="Ctrl,Shift" action="SelectionBreakApart" display="true"/>
-  <bind key="K" modifiers="Ctrl,Shift" action="SelectionBreakApart" />
+  <bind gaction="app.select-path-combine"               keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
+  <bind gaction="app.select-path-break-apart"           keys="&lt;ctrl&gt;&lt;shift&gt;t,k, &lt;ctrl&gt;&lt;shift&gt;t,K" />
 
 <!-- Object actions -->
 
-  <bind key="g" modifiers="Ctrl" action="SelectionGroup" display="true"/>
-  <bind key="G" modifiers="Ctrl" action="SelectionGroup" />
-
-  <bind key="u" modifiers="Ctrl" action="SelectionUnGroup" display="true"/>
-  <bind key="U" modifiers="Ctrl" action="SelectionUnGroup" />
+  <bind gaction="app.select-object-group"               keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+  <bind gaction="app.select-object-ungroup"             keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 
 <!-- Blend is our Interpolate extension's advanced equivalent, so using it -->
 
@@ -174,49 +130,39 @@ win.canvas-zoom-page-width: Zoom to fit page width in window
 
 <!-- 'Tools -> Rasterize...' is our Create Bitmap's advanced equivalent, so using it --> 
 
-  <bind key="r" modifiers="Ctrl,Shift" action="SelectionCreateBitmap" display="true"/>
-  <bind key="R" modifiers="Ctrl,Shift" action="SelectionCreateBitmap" />
-
-  <bind key="Page_Up" modifiers="Ctrl" action="SelectionToFront" display="true"/>
-  <bind key="KP_Page_Up" modifiers="Ctrl" action="SelectionToFront" />
-
-  <bind key="Page_Down" modifiers="Ctrl" action="SelectionToBack" display="true"/>
-  <bind key="KP_Page_Down" modifiers="Ctrl" action="SelectionToBack" />
-
-  <bind key="Page_Up" action="SelectionRaise" display="true"/>
-  <bind key="KP_Page_Up" action="SelectionRaise" />
-
-  <bind key="Page_Down" action="SelectionLower" display="true"/>
-  <bind key="KP_Page_Down" action="SelectionLower" />
+  <bind gaction="win.selection-make-bitmap-copy"        keys="&lt;ctrl&gt;&lt;shift&gt;t,r, &lt;ctrl&gt;&lt;shift&gt;t,R" />
+  <bind gaction="app.selection-top"                     keys="&lt;ctrl&gt;Page_Up, &lt;ctrl&gt;KP_Page_Up" />
+  <bind gaction="app.selection-bottom"                  keys="&lt;ctrl&gt;Page_Down, &lt;ctrl&gt;KP_Page_Down" />
+  <bind gaction="app.selection-raise"                   keys="Page_Up, KP_Page_Up" />
+  <bind gaction="app.selection-lower"                   keys="Page_Down, KP_Page_Down" />
 
 <!-- Transformations gallery -->
 
-  <bind key="6" modifiers="Ctrl" action="DialogTransform" display="true"/>
+  <bind gaction="win.dialog-open('Transform')"          keys="&lt;ctrl&gt;6" />
 
 <!-- Align Objects gallery. Distribute Objects gallery is a separate tab of same dialog there :)  -->
 
-  <bind key="7" modifiers="Ctrl" action="DialogAlignDistribute" display="true"/>
-  <bind key="8" modifiers="Ctrl" action="DialogAlignDistribute" display="true"/>
+  <bind gaction="win.dialog-open('AlignDistribute')"    keys="&lt;ctrl&gt;7, &lt;ctrl&gt;8" />
 
 <!-- Unify Objects gallery - Scale tab?! -->
 
-  <bind key="9" modifiers="Ctrl" action="DialogTransform" display="true"/>
+  <bind gaction="win.dialog-open('Transform')"          keys="&lt;ctrl&gt;9" />
 
 <!-- Colors gallery is way closer to Swatches than to Fill'n'Stroke-->
 
-  <bind key="5" modifiers="Ctrl" action="DialogSwatches" display="true"/>
+  <bind gaction="win.dialog-open('Swatches')"           keys="&lt;ctrl&gt;5" />
 
 <!-- Pen gallery - 'Stroke style' tab analog -->
 
-  <bind key="2" modifiers="Ctrl" action="DialogFillStroke" display="true"/>
+  <bind gaction="win.dialog-open('FillStroke')"         keys="&lt;ctrl&gt;2" />
 
 <!-- Fill Style gallery -->
 
-  <bind key="1" modifiers="Ctrl" action="DialogFillStroke" display="true"/>
+  <bind gaction="win.dialog-open('FillStroke')"         keys="&lt;ctrl&gt;1" />
 
 <!-- Transparency gallery -->
 
-  <bind key="3" modifiers="Ctrl" action="DialogFillStroke" display="true"/>
+  <bind gaction="win.dialog-open('FillStroke')"         keys="&lt;ctrl&gt;3" />
 
 <!-- Styles gallery (Shift+Ctrl+6) does not have an analog in Inkscape -->
 
