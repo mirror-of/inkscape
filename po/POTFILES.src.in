@@ -25,12 +25,11 @@
 ../src/actions/actions-object-align.cpp
 ../src/actions/actions-object.cpp
 ../src/actions/actions-output.cpp
-../src/actions/actions-selection-window.cpp
 ../src/actions/actions-selection-object.cpp
+../src/actions/actions-selection-window.cpp
 ../src/actions/actions-selection.cpp
 ../src/actions/actions-text.cpp
 ../src/actions/actions-tools.cpp
-../src/actions/actions-tutorial.cpp
 ../src/actions/actions-transform.cpp
 ../src/actions/actions-tutorial.cpp
 ../src/actions/actions-view-mode.cpp
