@@ -1190,7 +1190,7 @@ SPGradient::create_preview_pattern(double width)
 
 bool SPGradient::isSolid() const
 {
-    if (swatch && hasStops() && getStopCount() == 0) {
+    if (swatch && hasStops() && getStopCount() == 1) {
         return true;
     }
     return false;
