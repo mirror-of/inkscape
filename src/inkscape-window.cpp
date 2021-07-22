@@ -31,7 +31,7 @@
 #include "actions/actions-fit-canvas.h"
 #include "actions/actions-help-url.h"
 #include "actions/actions-hide-lock.h"
-#include "actions/actions-selection-desktop.h"
+#include "actions/actions-selection-window.h"
 #include "actions/actions-tools.h"
 #include "actions/actions-canvas-snapping.h"
 #include "actions/actions-view-mode.h"
@@ -108,7 +108,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add_actions_fit_canvas(this);           // Actions to fit canvas
     add_actions_help_url(this);             // Actions to help url.
     add_actions_hide_lock(this);            // Actions to transform dialog.
-    add_actions_select_desktop(this);       // Actions with desktop selection
+    add_actions_select_window(this);        // Actions with desktop selection
     add_actions_tools(this);                // Actions to switch between tools.
     add_actions_view_mode(this);            // Actions to change view of Inkscape
 

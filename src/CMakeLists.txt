@@ -253,8 +253,8 @@ set(inkscape_SRC
   actions/actions-output.cpp
   actions/actions-selection-object.h
   actions/actions-selection-object.cpp
-  actions/actions-selection-desktop.h
-  actions/actions-selection-desktop.cpp
+  actions/actions-selection-window.h
+  actions/actions-selection-window.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
   actions/actions-text.h

@@ -14,7 +14,7 @@
 #include <giomm.h>
 #include <glibmm/i18n.h>
 
-#include "actions-selection-desktop.h"
+#include "actions-selection-window.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "desktop.h"
@@ -100,7 +100,7 @@ std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
 };
 
 void
-add_actions_select_desktop(InkscapeWindow* win)
+add_actions_select_window(InkscapeWindow* win)
 {
     // clang-format off
     win->add_action( "selection-make-bitmap-copy",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&selection_make_bitmap_copy), win));

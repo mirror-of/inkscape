@@ -9,11 +9,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef INK_ACTIONS_SELECTION_DESKTOP_H
-#define INK_ACTIONS_SELECTION_DESKTOP_H
+#ifndef INK_ACTIONS_SELECTION_WINDOW_H
+#define INK_ACTIONS_SELECTION_WINDOW_H
 
 class InkscapeWindow;
 
-void add_actions_select_desktop(InkscapeWindow* win);
+void add_actions_select_window(InkscapeWindow* win);
 
-#endif // INK_ACTIONS_SELECTION_DESKTOP_H
+#endif // INK_ACTIONS_SELECTION_WINDOW_H
