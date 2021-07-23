@@ -591,7 +591,8 @@ Canvas::on_leave_notify_event(GdkEventCrossing *crossing_event)
     }
     _state = crossing_event->state;
     // this is needed to remove alignment or distribution snap indicators
-    _desktop->snapindicator->remove_snaptarget();
+    if (_desktop)
+        _desktop->snapindicator->remove_snaptarget();
     return pick_current_item(reinterpret_cast<GdkEvent *>(crossing_event));
 }
 
