@@ -414,7 +414,7 @@ void SPGradient::set(SPAttr key, gchar const *value)
 
             if (newVal) {
                 // Might need to flip solid/gradient
-                Glib::ustring paintVal = ( this->hasStops() && (this->getStopCount() == 0) ) ? "solid" : "gradient";
+                Glib::ustring paintVal = ( this->hasStops() && (this->getStopCount() <= 1) ) ? "solid" : "gradient";
 
                 if ( paintVal != value ) {
                     this->setAttribute( "inkscape:swatch", paintVal);
@@ -478,7 +478,7 @@ void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
     SPObject *ochild = this->get_child_by_repr(child);
     if ( ochild && SP_IS_STOP(ochild) ) {
         this->has_stops = TRUE;
-        if ( this->getStopCount() > 0 ) {
+        if ( this->getStopCount() > 1 ) {
             gchar const * attr = this->getAttribute("inkscape:swatch");
             if ( attr && strcmp(attr, "gradient") ) {
                this->setAttribute( "inkscape:swatch", "gradient" );
@@ -522,7 +522,7 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
         }
     }
 
-    if ( this->getStopCount() == 0 ) {
+    if ( this->getStopCount() <= 1 ) {
         gchar const * attr = this->getAttribute("inkscape:swatch");
 
         if ( attr && strcmp(attr, "solid") ) {
