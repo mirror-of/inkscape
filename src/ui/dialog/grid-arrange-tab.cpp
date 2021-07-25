@@ -332,7 +332,7 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
              }
     }
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_ARRANGE,
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
                        _("Arrange in a grid"));
 
 }
@@ -561,6 +561,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     auto _col3 = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
 
     Gtk::Box *contents = this;
+    set_valign(Gtk::ALIGN_START);
 
 #define MARGIN 2
 
@@ -713,6 +714,11 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     YPadding.set_sensitive (ManualSpacing);
 
     show_all_children();
+}
+
+
+GridArrangeTab::~GridArrangeTab() {
+    setDesktop(nullptr);
 }
 
 } //namespace Dialog

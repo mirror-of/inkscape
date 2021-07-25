@@ -515,7 +515,7 @@ Future improvements:
   <bind key="W" modifiers="Ctrl,Shift" action="DialogSwatches" />
 
   <bind action="DialogClonetiler" />
-  <bind action="DialogArrange" />
+  <!-- <bind action="DialogArrange" /> -->
   <bind action="DialogDebug" />
   <bind action="DialogInput" />
 

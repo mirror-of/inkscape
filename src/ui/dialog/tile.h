@@ -33,6 +33,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+class AlignAndDistribute;
 class ArrangeTab;
 class GridArrangeTab;
 class PolarArrangeTab;
@@ -40,19 +41,22 @@ class PolarArrangeTab;
 class ArrangeDialog : public DialogBase
 {
 private:
-    Gtk::Box        *_arrangeBox;
-    Gtk::Notebook   *_notebook;
-
-    GridArrangeTab  *_gridArrangeTab;
-    PolarArrangeTab *_polarArrangeTab;
-
+	Gtk::Box        *_arrangeBox;
+	Gtk::Notebook   *_notebook;
+    AlignAndDistribute* _align_tab;
+	GridArrangeTab  *_gridArrangeTab;
+	PolarArrangeTab *_polarArrangeTab;
     Gtk::Button     *_arrangeButton;
+
+    void selectionChanged(Inkscape::Selection*) override;
 
 public:
     ArrangeDialog();
     ~ArrangeDialog() override;
 
     void desktopReplaced() override;
+
+    void update_arrange_btn();
 
     /**
      * Callback from Apply

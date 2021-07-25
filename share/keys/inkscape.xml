@@ -418,7 +418,7 @@ override) the bindings in the main default.xml.
   <bind action="RemoveLivePathEffect" />
 
   <bind action="DialogClonetiler" />
-  <bind action="DialogArrange" />
+  <!-- <bind action="DialogArrange" /> -->
   <bind action="DialogDebug" />
   <bind action="DialogInput" />
 

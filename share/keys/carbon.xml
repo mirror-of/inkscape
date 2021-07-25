@@ -592,7 +592,7 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind action="RemoveLivePathEffect" />
 
   <bind action="DialogClonetiler" />
-  <bind action="DialogArrange" />
+  <!-- <bind action="DialogArrange" /> -->
   <bind action="DialogDebug" />
   <bind action="DialogInput" />
 

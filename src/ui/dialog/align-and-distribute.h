@@ -46,15 +46,14 @@ namespace Dialog {
 
 class Action;
 
-class AlignAndDistribute : public DialogBase
+class AlignAndDistribute : public Gtk::Box
 {
 public:
-    AlignAndDistribute();
+    AlignAndDistribute(DialogBase* dlg);
     ~AlignAndDistribute() override;
 
-    static AlignAndDistribute &getInstance() { return *new AlignAndDistribute(); }
-    void desktopReplaced() override;
-    void selectionChanged(Inkscape::Selection*) override;
+    void desktopReplaced();
+    void selectionChanged(Inkscape::Selection*);
     void toolChanged(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
 
     Gtk::Grid &align_table(){return _alignTable;}
@@ -67,7 +66,9 @@ public:
 
     Geom::OptRect randomize_bbox;
 
+    SPDesktop* getDesktop();
 protected:
+    DialogBase* _parent;
 
     void on_ref_change();
     void on_node_ref_change();

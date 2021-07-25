@@ -22,7 +22,7 @@
 
 #include "enums.h"
 #include "inkscape-application.h"
-#include "ui/dialog/align-and-distribute.h"
+// #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-data.h"
 #include "ui/dialog/dialog-multipaned.h"
@@ -69,7 +69,7 @@
 static std::map<int, Glib::ustring> verb_to_dialog_map =
 {
     {SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "AlignDistribute"   },
-    {SP_VERB_SELECTION_ARRANGE,       "Arrange"           },
+    // {SP_VERB_SELECTION_ARRANGE,       "Arrange"           },
     {SP_VERB_DIALOG_ATTR_XML,         "AttrDialog"        },
     {SP_VERB_DIALOG_CLONETILER,       "Clonetiler"        },
     {SP_VERB_DIALOG_DOCPROPERTIES,    "DocumentProperties"},
@@ -167,8 +167,8 @@ DialogBase *DialogContainer::dialog_factory(const Glib::ustring& dialog_type)
 {
 
     // clang-format off
-    if(     dialog_type == "AlignDistribute")     return &Inkscape::UI::Dialog::AlignAndDistribute::getInstance();
-    else if(dialog_type == "Arrange")             return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
+    if(     dialog_type == "AlignDistribute")     return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
+    // else if(dialog_type == "Arrange")             return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
     else if(dialog_type == "AttrDialog")          return &Inkscape::UI::Dialog::AttrDialog::getInstance();
     else if(dialog_type == "Clonetiler")          return &Inkscape::UI::Dialog::CloneTiler::getInstance();
     else if(dialog_type == "DocumentProperties")  return &Inkscape::UI::Dialog::DocumentProperties::getInstance();

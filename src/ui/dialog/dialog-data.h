@@ -34,7 +34,7 @@ static std::map<std::string, DialogData> dialog_data =
 {
     // clang-format off
     {"AlignDistribute",    {N_("_Align and Distribute..."), INKSCAPE_ICON("dialog-align-and-distribute")}},
-    {"Arrange",            {N_("_Arrange..."),              INKSCAPE_ICON("dialog-rows-and-columns")    }},
+    // {"Arrange",            {N_("_Arrange..."),              INKSCAPE_ICON("dialog-rows-and-columns")    }},
     {"AttrDialog",         {N_("_Object attributes..."),    INKSCAPE_ICON("dialog-object-properties")   }},
     {"Clonetiler",         {N_("Create Tiled Clones..."),   INKSCAPE_ICON("dialog-tile-clones")         }},
     {"DocumentProperties", {N_("_Document Properties..."),  INKSCAPE_ICON("document-properties")        }},

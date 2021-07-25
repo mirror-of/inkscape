@@ -406,7 +406,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind key="F9" modifiers="Ctrl" action="DialogSwatches" display="true"/>
 
   <bind action="DialogClonetiler" />
-  <bind action="DialogArrange" />
+  <!-- <bind action="DialogArrange" /> -->
   <bind action="DialogDebug" />
   <bind action="DialogInput" />
 

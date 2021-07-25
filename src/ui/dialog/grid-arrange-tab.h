@@ -42,7 +42,7 @@ class ArrangeDialog;
 class GridArrangeTab : public ArrangeTab {
 public:
     GridArrangeTab(ArrangeDialog *parent);
-    ~GridArrangeTab() override = default;;
+    ~GridArrangeTab() override;
 
     /**
      * Do the actual work

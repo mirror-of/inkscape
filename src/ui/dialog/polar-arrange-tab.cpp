@@ -130,6 +130,10 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	radiusY.set_sensitive(false);
 
 	set_border_width(4);
+
+    parametersTable.show_all();
+    parametersTable.set_no_show_all();
+    parametersTable.hide();
 }
 
 /**
@@ -359,7 +363,7 @@ void PolarArrangeTab::arrange()
 		}
 	}
 
-    DocumentUndo::done(parent->getDesktop()->getDocument(), SP_VERB_SELECTION_ARRANGE,
+    DocumentUndo::done(parent->getDesktop()->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
                        _("Arrange on ellipse"));
 }
 
