@@ -100,7 +100,7 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="win.tool-switch('Connector')"      keys="&lt;ctrl&gt;F2, o, O" />
   <bind gaction="win.tool-switch('Dropper')"        keys="F7, d, D" />
 
-  <binhttps://gitlab.com/inkscape/inkscaped action="SelectPrefs" />
+  <!-- <binhttps://gitlab.com/inkscape/inkscaped action="SelectPrefs" /> -->
   <bind action="NodePrefs" />
   <bind action="ZoomPrefs" />
   <bind action="RectPrefs" />

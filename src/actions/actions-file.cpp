@@ -31,8 +31,30 @@ file_open(const Glib::VariantBase& value, InkscapeApplication *app)
         std::cerr << "file_open: file '" << s.get() << "' does not exist." << std::endl;
         return;
     }
+    
+    SPDocument *document = app->document_open(file);
+    INKSCAPE.add_document(document);
+
+    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+    app->set_active_document(document);
+    app->set_active_selection(context.getSelection());
+    app->set_active_view(context.getView());
+
+    document->ensureUpToDate();
+}
+
+void
+file_open_with_window(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(s.get());
+    if (!file->query_exists()) {
+        std::cerr << "file_open: file '" << s.get() << "' does not exist." << std::endl;
+        return;
+    }
     app->create_window(file);
 }
+
 
 void
 file_new(const Glib::VariantBase& value, InkscapeApplication *app)
@@ -91,15 +113,17 @@ std::vector<std::vector<Glib::ustring>> raw_data_file =
     // clang-format off
     {"app.file-open",              N_("File Open"),                "File",       N_("Open file")                                         },
     {"app.file-new",               N_("File New"),                 "File",       N_("Open new document using template")                  },
-    {"app.file-close",             N_("File Close"),               "File",       N_("Close active document")                             }
+    {"app.file-close",             N_("File Close"),               "File",       N_("Close active document")                             },
+    {"app.file-open-window",       N_("File Open Window"),          "File",       N_("Open file window")                                  }
     // clang-format on
 };
 
 std::vector<std::vector<Glib::ustring>> hint_data_file =
 {
     // clang-format off
-    {"app.file-open",              N_("Give String input for File name")},
-    {"app.file-new",               N_("Give String input for File name")}
+    {"app.file-open",               N_("Give String input for File name")},
+    {"app.file-new",                N_("Give String input for File name")},
+    {"app.file-open-window",        N_("Give String input for File name")}
     // clang-format on
 };
 
@@ -117,9 +141,10 @@ add_actions_file(InkscapeApplication* app)
     auto *gapp = app->gio_app();
 
     // clang-format off
-    gapp->add_action_with_parameter( "file-open",                 String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open),           app));
-    gapp->add_action_with_parameter( "file-new",                  String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_new),            app));
-    gapp->add_action(                "file-close",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_close),          app));
+    gapp->add_action_with_parameter( "file-open",                 String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open),               app));
+    gapp->add_action_with_parameter( "file-new",                  String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_new),                app));
+    gapp->add_action_with_parameter( "file-open-window",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open_with_window),   app));
+    gapp->add_action(                "file-close",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_close),              app));
     // clang-format on
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;

@@ -22,40 +22,40 @@
   <submenu id="tutiorial">
     <attribute name='label' translatable='yes'>Tutorials</attribute>
     <item>
-    <attribute name='label' translatable="yes">Inkscape: _Basic</attribute>
-    <attribute name='action'>doc.tutorial-basic</attribute>
+      <attribute name='label' translatable="yes">Inkscape: _Basic</attribute>
+      <attribute name='action'>doc.tutorial-basic</attribute>
     </item>
     <item>
-    <attribute name='label' translatable="yes">Inkscape: _Shapes</attribute>
-    <attribute name='action'>doc.tutorial-shapes</attribute>
+      <attribute name='label' translatable="yes">Inkscape: _Shapes</attribute>
+      <attribute name='action'>doc.tutorial-shapes</attribute>
     </item>
     <item>
-    <attribute name='label' translatable="yes">Inkscape: _Advanced</attribute>
-    <attribute name='action'>doc.tutorial-advanced</attribute>
+      <attribute name='label' translatable="yes">Inkscape: _Advanced</attribute>
+      <attribute name='action'>doc.tutorial-advanced</attribute>
     </item>
     <item>
-    <attribute name='label' translatable="yes">Inkscape: T_racing</attribute>
-    <attribute name='action'>doc.tutorial-tracing</attribute>
+      <attribute name='label' translatable="yes">Inkscape: T_racing</attribute>
+      <attribute name='action'>doc.tutorial-tracing</attribute>
     </item>
     <item>
-    <attribute name='label' translatable="yes">Inkscape: Tracing Pixel Art</attribute> 
-    <attribute name='action'>doc.tutorial-tracing-pixelart</attribute> 
+      <attribute name='label' translatable="yes">Inkscape: Tracing Pixel Art</attribute> 
+      <attribute name='action'>doc.tutorial-tracing-pixelart</attribute> 
     </item>
     <item>
-    <attribute name='label' translatable="yes">Inkscape: _Calligraphy</attribute> 
-    <attribute name='action'>doc.tutorial-calligraphy</attribute>
+      <attribute name='label' translatable="yes">Inkscape: _Calligraphy</attribute> 
+      <attribute name='action'>doc.tutorial-calligraphy</attribute>
     </item>
     <item>
-    <attribute name='label' translatable="yes">Inkscape: _Interpolate</attribute> 
-    <attribute name='action'>doc.tutorial-interpolate</attribute> 
+      <attribute name='label' translatable="yes">Inkscape: _Interpolate</attribute> 
+      <attribute name='action'>doc.tutorial-interpolate</attribute> 
     </item>
     <item>
-    <attribute name='label' translatable="yes">_Elements of Design</attribute> 
-    <attribute name='action'>doc.tutorial-design</attribute> 
+      <attribute name='label' translatable="yes">_Elements of Design</attribute> 
+      <attribute name='action'>doc.tutorial-design</attribute> 
     </item>
     <item>
-    <attribute name='label' translatable="yes">_Tips and Tricks</attribute>  
-    <attribute name='action'>doc.tutorial-tips</attribute> 
+      <attribute name='label' translatable="yes">_Tips and Tricks</attribute>  
+      <attribute name='action'>doc.tutorial-tips</attribute> 
     </item>
   </submenu>
 

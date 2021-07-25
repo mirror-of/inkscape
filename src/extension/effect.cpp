@@ -118,7 +118,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         get_menu(local_effects_menu,sub_menu);
         sub_menu = action_menu_name(sub_menu);
         
-        if (!strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
+        if (local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
         
             std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",discription}};
             app->get_action_extra_data().add_data(raw_data_filter);

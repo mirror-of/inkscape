@@ -19,67 +19,46 @@
 #include "inkscape-application.h"
 #include "document.h"
 #include "inkscape.h"
-#include "help.h"
+#include "ui/interface.h"
+#include "ui/dialog/about.h"
+#include "io/resource.h"
 
-void
-tutorial_basic(SPDocument* document)
+using Inkscape::IO::Resource::UIS;
+
+
+void help_about()
 {
-    sp_help_open_tutorial("tutorial-basic");
+    Inkscape::UI::Dialog::AboutDialog::show_about();
+}
+
+void help_open_tutorial(Glib::ustring name)
+{
+    Glib::ustring filename = name + ".svg";
+
+    filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TUTORIALS, filename.c_str(), true);
+    if (!filename.empty()) {
+        auto *app = InkscapeApplication::instance();
+        SPDocument* doc = app->document_new(filename);
+        app->window_open(doc);
+    } else {
+        // TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
+        // the link this way: https://inkscape.org/[lang]/learn/tutorials/
+        sp_ui_error_dialog(_("The tutorial files are not installed.\nFor Linux, you may need to install "
+                             "'inkscape-tutorials'; for Windows, please re-run the setup and select 'Tutorials'.\nThe "
+                             "tutorials can also be found online at https://inkscape.org/en/learn/tutorials/"));
+    }
 }
 
 void
-tutorial_shapes(SPDocument* document)
+tutorial_basic(SPDocument* document, Glib::ustring tutorial)
 {
-    sp_help_open_tutorial("tutorial-shapes");
+    help_open_tutorial(tutorial);
 }
 
 void
-tutorial_advanced(SPDocument* document)
+help_about_inkscape(SPDocument* document)
 {
-    sp_help_open_tutorial("tutorial-advanced");
-}
-
-void
-tutorial_tracing(SPDocument* document)
-{
-    sp_help_open_tutorial("tutorial-tracing");
-}
-
-void
-tutorial_tracing_pixelart(SPDocument* document)
-{
-    sp_help_open_tutorial("tutorial-tracing-pixelart");
-}
-
-void
-tutorial_calligraphy(SPDocument* document)
-{
-    sp_help_open_tutorial("tutorial-calligraphy");
-}
-
-void
-tutorial_interpolate(SPDocument* document)
-{
-    sp_help_open_tutorial("tutorial-interpolate");
-}
-
-void
-tutorial_design(SPDocument* document)
-{
-    sp_help_open_tutorial("tutorial-elements");
-}
-
-void
-tutorial_tips(SPDocument* document)
-{
-    sp_help_open_tutorial("tutorial-tips");
-}
-
-
-void
-help_about(SPDocument* document)
-{
-    sp_help_about();
+    help_about();
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_tutorial =
@@ -104,16 +83,16 @@ add_actions_tutorial(SPDocument* document)
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
     // clang-format off
-    map->add_action( "tutorial-basic",                  sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_basic), document));
-    map->add_action( "tutorial-shapes",                 sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_shapes), document));
-    map->add_action( "tutorial-advanced",               sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_advanced), document));
-    map->add_action( "tutorial-tracing",                sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_tracing), document));
-    map->add_action( "tutorial-tracing-pixelart",       sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_tracing_pixelart), document));
-    map->add_action( "tutorial-calligraphy",            sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_calligraphy), document));
-    map->add_action( "tutorial-interpolate",            sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_interpolate), document));
-    map->add_action( "tutorial-design",                 sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_design), document));
-    map->add_action( "tutorial-tips",                   sigc::bind<SPDocument*>(sigc::ptr_fun(&tutorial_tips), document));
-    map->add_action( "help-about",                      sigc::bind<SPDocument*>(sigc::ptr_fun(&help_about), document));
+    map->add_action( "tutorial-basic",                  sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-basic"));
+    map->add_action( "tutorial-shapes",                 sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-shapes"));
+    map->add_action( "tutorial-advanced",               sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-advanced"));
+    map->add_action( "tutorial-tracing",                sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-tracing"));
+    map->add_action( "tutorial-tracing-pixelart",       sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-tracing-pixelart"));
+    map->add_action( "tutorial-calligraphy",            sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-calligraphy"));
+    map->add_action( "tutorial-interpolate",            sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-interpolate"));
+    map->add_action( "tutorial-design",                 sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-elements"));
+    map->add_action( "tutorial-tips",                   sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-tips"));
+    map->add_action( "help-about",                      sigc::bind<SPDocument*>(sigc::ptr_fun(&help_about_inkscape), document));
     // clang-format on
     
     // Check if there is already an application instance (GUI or non-GUI).

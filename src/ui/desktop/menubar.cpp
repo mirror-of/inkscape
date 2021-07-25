@@ -204,7 +204,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                                     break;
                                 }
                                 
-                                std::string action_name = "app.file-open('"+recent_file->get_uri_display()+"')";
+                                std::string action_name = "app.file-open-window('"+recent_file->get_uri_display()+"')";
                                 sub_gmenu->append(recent_file->get_short_name(),action_name);
                             
                             }

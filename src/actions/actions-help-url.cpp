@@ -18,77 +18,93 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "desktop.h"
-#include "help.h"
 #include "inkscape-version.h"
+
+/** Open an URL in the the default application
+ *
+ * See documentation of gtk_show_uri_on_window() for details
+ *
+ * @param url    URL to be opened
+ * @param window Parent window for which the URL is opened
+ */
+// TODO: Do we really need a window reference here? It's the way recommended by gtk, though.
+void help_open_url(const Glib::ustring &url, Gtk::Window *window)
+{
+    try {
+        window->show_uri(url, GDK_CURRENT_TIME);
+    } catch (const Glib::Error &e) {
+        g_warning("Unable to show '%s': %s", url.c_str(), e.what().c_str());
+    }
+}
 
 void
 help_url_ask_question(InkscapeWindow* win, const char *lang)
 {
     Glib::ustring url = Glib::ustring::compose("https://inkscape.org/%1/community/", lang);
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_man(InkscapeWindow* win, const char *lang, const Glib::ustring branch)
 {
     Glib::ustring url = Glib::ustring::compose("https://inkscape.org/%1/doc/inkscape-man-%2.html", lang, branch);
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_faq(InkscapeWindow* win, const char *lang)
 {
     Glib::ustring url = Glib::ustring::compose("https://inkscape.org/%1/learn/faq/", lang);
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_keys(InkscapeWindow* win, const char *lang, const Glib::ustring branch)
 {
     Glib::ustring url = Glib::ustring::compose("https://inkscape.org/%1/doc/keys-%2.html", lang, branch);
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_release_notes(InkscapeWindow* win, const char *lang, const char *version, const bool development_version)
 {
     Glib::ustring url = Glib::ustring::compose("https://inkscape.org/%1/release/inkscape-%2", lang, development_version ? "master" : version);
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_report_bug(InkscapeWindow* win, const char *lang)
 {
     Glib::ustring url = Glib::ustring::compose("https://inkscape.org/%1/contribute/report-bugs/", lang);
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_manual(InkscapeWindow* win)
 {
     Glib::ustring url = "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php";
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_donate(InkscapeWindow* win, const char *lang, const char *version)
 {
     Glib::ustring url = Glib::ustring::compose("https://inkscape.org/%1/donate#lang=%1&version=%2", lang, version);
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_svg11_spec(InkscapeWindow* win)
 {
     Glib::ustring url = "http://www.w3.org/TR/SVG11/";
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 void
 help_url_svg2_spec(InkscapeWindow* win)
 {
     Glib::ustring url = "http://www.w3.org/TR/SVG2/";
-    sp_help_open_url(url, win->get_desktop()->getToplevel());
+    help_open_url(url, win);
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_help_url =

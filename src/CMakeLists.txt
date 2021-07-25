@@ -39,7 +39,6 @@ set(inkscape_SRC
   gradient-drag.cpp
   graphlayout.cpp
   guide-snapper.cpp
-  help.cpp
   id-clash.cpp
   inkscape.cpp
   inkscape-version-info.cpp
@@ -133,7 +132,6 @@ set(inkscape_SRC
   gradient-drag.h
   graphlayout.h
   guide-snapper.h
-  help.h
   helper-fns.h
   id-clash.h
   inkscape-version.h
