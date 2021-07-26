@@ -424,6 +424,15 @@ void ColorItem::_regenPreview(UI::Widget::Preview * preview)
                                                          | (_isLive            ? UI::Widget::PREVIEW_LINK_OTHER:0)) );
 }
 
+Gtk::Widget* ColorItem::createWidget() {
+   auto widget = dynamic_cast<UI::Widget::Preview*>(_getPreview(Inkscape::UI::Widget::PREVIEW_STYLE_ICON,
+		Inkscape::UI::Widget::VIEW_TYPE_GRID, Inkscape::UI::Widget::PREVIEW_SIZE_TINY, 100, 0));
+
+   if (widget) widget->set_freesize(true);
+
+   return widget;
+}
+
 Gtk::Widget*
 ColorItem::getPreview(UI::Widget::PreviewStyle style,
                       UI::Widget::ViewType     view,
@@ -431,6 +440,16 @@ ColorItem::getPreview(UI::Widget::PreviewStyle style,
                       guint                    ratio,
                       guint                    border)
 {
+   auto widget = _getPreview(style, view, size, ratio, border);
+    _previews.push_back( widget );
+    return widget;
+}
+
+
+Gtk::Widget* ColorItem::_getPreview(UI::Widget::PreviewStyle style,
+		  UI::Widget::ViewType view, UI::Widget::PreviewSize size,
+		  guint ratio, guint border) {
+
     Gtk::Widget* widget = nullptr;
     if ( style == UI::Widget::PREVIEW_STYLE_BLURB) {
         Gtk::Label *lbl = new Gtk::Label(def.descr);
@@ -484,8 +503,6 @@ ColorItem::getPreview(UI::Widget::PreviewStyle style,
 
         widget = preview;
     }
-
-    _previews.push_back( widget );
 
     return widget;
 }

@@ -24,6 +24,10 @@ namespace UI {
 
 class PreviewHolder;
 
+namespace Widget {
+    class ColorPalette;
+}
+
 namespace Dialog {
 
 class ColorItem;
@@ -46,6 +50,7 @@ public:
 
     void documentReplaced() override;
     static SwatchesPanel& getInstance();
+    static std::vector<SwatchPage*> getSwatchSets();
 
     virtual int getSelectedIndex() {return _currentIndex;} // temporary
 
@@ -70,6 +75,7 @@ private:
     ColorItem* _clear;
     ColorItem* _remove;
     int _currentIndex;
+    Inkscape::UI::Widget::ColorPalette* _palette;
 
     void _regItem(Gtk::MenuItem* item, int id);
 

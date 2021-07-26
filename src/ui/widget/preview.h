@@ -108,6 +108,7 @@ private:
     unsigned int  _ratio;
     LinkType      _linked;
     unsigned int  _border;
+    bool _freesize = false;
 
     Glib::RefPtr<Gdk::Pixbuf> _previewPixbuf;
     Glib::RefPtr<Gdk::Pixbuf> _scaled;
@@ -139,6 +140,7 @@ public:
                      guint         border);
     void set_color(int r, int g, int b);
     void set_pixbuf(const Glib::RefPtr<Gdk::Pixbuf> &pixbuf);
+    void set_freesize(bool enable);
     static void set_size_mappings(guint count, GtkIconSize const* sizes);
 
     decltype(_signal_clicked) signal_clicked() {return _signal_clicked;}

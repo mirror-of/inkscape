@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 set(ui_SRC
+	builder-utils.cpp
 	clipboard.cpp
 	contextmenu.cpp
 	cursor-utils.cpp
@@ -164,6 +165,7 @@ set(ui_SRC
 	widget/color-entry.cpp
 	widget/color-icc-selector.cpp
 	widget/color-notebook.cpp
+	widget/color-palette.cpp
 	widget/color-picker.cpp
 	widget/color-preview.cpp	icon-loader.cpp
 	widget/color-scales.cpp
@@ -234,6 +236,7 @@ set(ui_SRC
 
 	# -------
 	# Headers
+	builder-utils.h
 	clipboard.h
 	contextmenu.h
 	cursor-utils.h
@@ -409,6 +412,7 @@ set(ui_SRC
 	widget/color-entry.h
 	widget/color-icc-selector.h
 	widget/color-notebook.h
+	widget/color-palette.h
 	widget/color-picker.h
 	widget/color-preview.h
 	widget/color-scales.h

@@ -117,9 +117,18 @@ Preview::set_size_mappings( guint count, GtkIconSize const* sizes )
     setupDone = TRUE;
 }
 
+void Preview::set_freesize(bool en) {
+    _freesize = en;
+}
+
 void
 Preview::size_request(GtkRequisition* req) const
 {
+    if (_freesize) {
+        req->width = req->height = 1;
+        return;
+    }
+
     int               width   = 0;
     int               height  = 0;
 
