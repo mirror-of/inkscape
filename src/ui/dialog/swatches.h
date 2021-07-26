@@ -56,7 +56,6 @@ public:
 protected:
     static void handleGradientsChange(SPDocument *document);
 
-    virtual void _updateFromSelection();
     virtual void _rebuild();
 
     virtual std::vector<SwatchPage*> _getSwatchSets() const;
@@ -67,6 +66,7 @@ private:
 
     void _build_menu();
 
+    void selectionChanged(Selection *selection) override;
     static void _rebuildDocumentSwatch(SwatchPage *docPalette, SPDocument *document);
     static void _trackDocument( SwatchesPanel *panel, SPDocument *document );
     static void handleDefsModified(SPDocument *document);

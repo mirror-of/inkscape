@@ -1004,7 +1004,7 @@ std::vector<SwatchPage*> SwatchesPanel::_getSwatchSets() const
     return tmp;
 }
 
-void SwatchesPanel::_updateFromSelection()
+void SwatchesPanel::selectionChanged(Selection *selection)
 {
     auto document = getDocument();
     if (!document)
