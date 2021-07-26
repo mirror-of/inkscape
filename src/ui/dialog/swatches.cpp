@@ -706,6 +706,8 @@ void SwatchesPanel::_trackDocument( SwatchesPanel *panel, SPDocument *document )
                     docPalettes[document] = docPalette;
                 }
             }
+            // Always update the palettes if there's a document.
+            panel->updatePalettes();
         }
     }
 }
@@ -739,7 +741,7 @@ SwatchesPanel::SwatchesPanel(gchar const *prefsPath)
     if (docPalettes.empty()) {
         SwatchPage *docPalette = new SwatchPage();
 
-        docPalette->_name = "Auto";
+        docPalette->_name = "Empty";
         docPalettes[nullptr] = docPalette;
     }
 
@@ -751,7 +753,7 @@ SwatchesPanel::SwatchesPanel(gchar const *prefsPath)
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             targetName = prefs->getString(_prefs_path + "/palette");
             if (!targetName.empty()) {
-                if (targetName == "Auto") {
+                if (targetName == "Empty") {
                     first = docPalettes[nullptr];
                 } else {
                     std::vector<SwatchPage*> pages = _getSwatchSets();
@@ -772,26 +774,6 @@ SwatchesPanel::SwatchesPanel(gchar const *prefsPath)
         } else {
             _currentIndex = index;
         }
-
-        std::vector<SwatchPage*> swatchSets = _getSwatchSets();
-        std::vector<Inkscape::UI::Widget::ColorPalette::palette_t> palettes;
-        palettes.reserve(swatchSets.size());
-        for (auto curr : swatchSets) {
-            Inkscape::UI::Widget::ColorPalette::palette_t palette;
-            palette.name = curr->_name;
-            for (const auto& color : curr->_colors) {
-                if (color.def.getType() == ege::PaintDef::RGB) {
-                    auto& c = color.def;
-                    palette.colors.push_back(
-                        Inkscape::UI::Widget::ColorPalette::rgb_t { c.getR() / 255.0, c.getG() / 255.0, c.getB() / 255.0 });
-                }
-            }
-            palettes.push_back(palette);
-        }
-
-        // pass list of available palettes
-        _palette->set_palettes(palettes);
-        _rebuild();
 
         // restore palette settings
         Inkscape::Preferences* prefs = Inkscape::Preferences::get();
@@ -840,6 +822,34 @@ SwatchesPanel::~SwatchesPanel()
     if ( _remove ) {
         delete _remove;
     }
+}
+
+/**
+ * Process the list of available palettes and update the list
+ * in the _palette widget. The widget will take care of cleaning.
+ */
+void SwatchesPanel::updatePalettes()
+{
+    std::vector<SwatchPage*> swatchSets = _getSwatchSets();
+
+    std::vector<Inkscape::UI::Widget::ColorPalette::palette_t> palettes;
+    palettes.reserve(swatchSets.size());
+    for (auto curr : swatchSets) {
+        Inkscape::UI::Widget::ColorPalette::palette_t palette;
+        palette.name = curr->_name;
+        for (const auto& color : curr->_colors) {
+            if (color.def.getType() == ege::PaintDef::RGB) {
+                auto& c = color.def;
+                palette.colors.push_back(
+                    Inkscape::UI::Widget::ColorPalette::rgb_t { c.getR() / 255.0, c.getG() / 255.0, c.getB() / 255.0 });
+            }
+        }
+        palettes.push_back(palette);
+    }
+
+    // pass list of available palettes
+    _palette->set_palettes(palettes);
+    _rebuild();
 }
 
 void SwatchesPanel::_updateSettings(int settings, int value)
@@ -921,16 +931,22 @@ void SwatchesPanel::handleGradientsChange(SPDocument *document)
 
         docPalette->_colors.swap(tmpColors);
 
-        // Figure out which SwatchesPanel instances are affected and update them.
+        _rebuildDocumentSwatch(docPalette, document);
+    }
+}
 
-        for (auto & it : docPerPanel) {
-            if (it.second == document) {
-                SwatchesPanel* swp = it.first;
-                std::vector<SwatchPage*> pages = swp->_getSwatchSets();
-                SwatchPage* curr = pages[swp->_currentIndex];
-                if (curr == docPalette) {
-                    swp->_rebuild();
-                }
+/**
+ * Figure out which SwatchesPanel instances are affected and update them.
+ */
+void SwatchesPanel::_rebuildDocumentSwatch(SwatchPage *docPalette, SPDocument *document)
+{
+    for (auto & it : docPerPanel) {
+        if (it.second == document) {
+            SwatchesPanel* swp = it.first;
+            std::vector<SwatchPage*> pages = swp->_getSwatchSets();
+            SwatchPage* curr = pages[swp->_currentIndex];
+            if (curr == docPalette) {
+                swp->_rebuild();
             }
         }
     }
@@ -970,6 +986,7 @@ void SwatchesPanel::handleDefsModified(SPDocument *document)
         for (auto & tmpPrev : tmpPrevs) {
             cairo_pattern_destroy(tmpPrev.second);
         }
+        _rebuildDocumentSwatch(docPalette, document);
     }
 }
 
@@ -982,14 +999,6 @@ std::vector<SwatchPage*> SwatchesPanel::_getSwatchSets() const
             tmp.push_back(docPalettes[document]);
         }
     }
-    tmp.insert(tmp.end(), userSwatchPages.begin(), userSwatchPages.end());
-    tmp.insert(tmp.end(), systemSwatchPages.begin(), systemSwatchPages.end());
-    return tmp;
-}
-
-std::vector<SwatchPage*> SwatchesPanel::getSwatchSets() {
-    load_palettes();
-    std::vector<SwatchPage*> tmp;
     tmp.insert(tmp.end(), userSwatchPages.begin(), userSwatchPages.end());
     tmp.insert(tmp.end(), systemSwatchPages.begin(), systemSwatchPages.end());
     return tmp;

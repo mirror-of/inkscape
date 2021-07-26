@@ -48,10 +48,9 @@ public:
     SwatchesPanel(gchar const* prefsPath = "/dialogs/swatches");
     ~SwatchesPanel() override;
 
+    void updatePalettes();
     void documentReplaced() override;
     static SwatchesPanel& getInstance();
-    static std::vector<SwatchPage*> getSwatchSets();
-
     virtual int getSelectedIndex() {return _currentIndex;} // temporary
 
 protected:
@@ -68,6 +67,7 @@ private:
 
     void _build_menu();
 
+    static void _rebuildDocumentSwatch(SwatchPage *docPalette, SPDocument *document);
     static void _trackDocument( SwatchesPanel *panel, SPDocument *document );
     static void handleDefsModified(SPDocument *document);
 

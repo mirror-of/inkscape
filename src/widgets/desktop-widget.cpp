@@ -221,48 +221,10 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_statusbar->set_name("DesktopStatusBar");
     dtw->_vbox->pack_end(*dtw->_statusbar, false, true);
 
-    this->signal_event().connect(sigc::mem_fun(*this, &SPDesktopWidget::SignalEvent));
-
-    /* Swatches panel */
-    {
-        // auto panel = Gtk::manage(new Inkscape::UI::Widget::ColorPalette());
-        // auto sets = Inkscape::UI::Dialog::SwatchesPanel::getSwatchSets();
-    /*
-		  std::vector<Widget*> vc;
-		  
-		  Inkscape::UI::Dialog::ColorItem rm(ege::PaintDef::NONE);
-		  vc.push_back(rm.createWidget());
-		  for (auto& c : sets[1]->_colors) {
-			  vc.push_back(c.createWidget());
-			//   getPreview(Inkscape::UI::Widget::PREVIEW_STYLE_ICON, Inkscape::UI::Widget::VIEW_TYPE_GRID,
-			//   Inkscape::UI::Widget::PREVIEW_SIZE_TINY, 100, 0));
-		  }
-		  panel->set_colors(vc);
-		  std::vector<Glib::ustring> names;
-		  for (auto& pal : sets) {
-			  names.push_back(pal->_name);
-		  }
-		  panel->set_palettes(names);
-		  panel->get_palette_selected_signal().connect([=](Glib::ustring name){
-				auto sets = Inkscape::UI::Dialog::SwatchesPanel::getSwatchSets();
-			  auto pal = std::find_if(sets.begin(), sets.end(), [&](auto& set){ return set->_name == name; });
-			  if (pal != sets.end()) {
-				  //
-		  std::vector<Widget*> vc;
-		  for (auto& c : (*pal)->_colors) {
-			  vc.push_back(c.getPreview(Inkscape::UI::Widget::PREVIEW_STYLE_ICON, Inkscape::UI::Widget::VIEW_TYPE_GRID,
-			  Inkscape::UI::Widget::PREVIEW_SIZE_TINY, 100, 0));
-		  }
-		  panel->set_colors(vc);
-			  }
-		  });
-      */
-      //   panel->set_vexpand(false);
-        dtw->_panels = Gtk::manage(new Inkscape::UI::Dialog::SwatchesPanel("/embedded/swatches"));
-        dtw->_panels->set_vexpand(false);
-        dtw->_vbox->pack_end(*dtw->_panels, false, true);
-        // dtw->_vbox->pack_end(*panel, false, true);
-    }
+    /* Swatch Bar */
+    dtw->_panels = Gtk::manage(new Inkscape::UI::Dialog::SwatchesPanel("/embedded/swatches"));
+    dtw->_panels->set_vexpand(false);
+    dtw->_vbox->pack_end(*dtw->_panels, false, true);
 
     /* DesktopHBox (Vertical toolboxes, canvas) */
     dtw->_hbox = Gtk::manage(new Gtk::Box());
@@ -602,6 +564,8 @@ SPDesktopWidget::on_unrealize()
         g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_rotation_status->gobj()), dtw->_rotation_status->gobj());
         dtw->_rotation_status_value_changed_connection.disconnect();
         dtw->_rotation_status_populate_popup_connection.disconnect();
+
+        dtw->_panels->setDesktop(nullptr);
 
         delete _container;
 
@@ -1394,7 +1358,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     toolboxes.push_back(dtw->commands_toolbox);
     toolboxes.push_back(dtw->snap_toolbox);
 
-    dtw->_panels->update();
+    dtw->_panels->setDesktop(dtw->desktop);
 
     UXManager::getInstance()->addTrack(dtw);
     UXManager::getInstance()->connectToDesktop( toolboxes, dtw->desktop );
