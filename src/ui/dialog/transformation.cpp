@@ -454,6 +454,8 @@ void Transformation::layoutPageTransform()
     auto img = Gtk::make_managed<Gtk::Image>();
     img->set_from_icon_name("matrix-2d", Gtk::ICON_SIZE_BUTTON);
     img->set_pixel_size(52);
+    img->set_margin_top(4);
+    img->set_margin_bottom(4);
     _page_transform.table().attach(*img, 0, 5, 1, 1);
 
     auto descr = Gtk::make_managed<Gtk::Label>();
