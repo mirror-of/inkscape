@@ -32,7 +32,7 @@ public:
     /**
      * Constructor
      */
-    TraceDialog() : DialogBase("/dialogs/trace", "SelectionTrace") {}
+    TraceDialog() : DialogBase("/dialogs/trace", "Trace") {}
 
 
     /**

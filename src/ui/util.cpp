@@ -10,6 +10,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gtkmm/window.h>
 #include "util.h"
 
 /*
@@ -42,6 +43,14 @@ void reveal_widget(Gtk::Widget *widget, bool show)
     } else if (!revealer) {
         widget->hide();
     }
+}
+
+
+bool is_widget_effectively_visible(Gtk::Widget* widget) {
+    if (!widget) return false;
+
+    // TODO: what's the right way to determine if widget is visible on the screen?
+    return widget->get_child_visible();
 }
 
 /*

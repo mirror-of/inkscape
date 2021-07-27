@@ -320,7 +320,7 @@ static IndexedMap *filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbu
         }
     gm->destroy(gm);
 
-    if (newGm && engine.traceType == TRACE_QUANT_MONO)
+    if (newGm && (engine.traceType == TRACE_QUANT_MONO || engine.traceType == TRACE_BRIGHTNESS_MULTI))
         {
         //Turn to grays
         for (int i=0 ; i<newGm->nrColors ; i++)
@@ -344,8 +344,9 @@ PotraceTracingEngine::preview(Glib::RefPtr<Gdk::Pixbuf> thePixbuf)
     GdkPixbuf *pixbuf = thePixbuf->gobj();
 
     if ( traceType == TRACE_QUANT_COLOR ||
-         traceType == TRACE_QUANT_MONO   )
-        {
+         traceType == TRACE_QUANT_MONO  ||
+         traceType == TRACE_BRIGHTNESS_MULTI) /* this is a lie: multipass doesn't use filterIndexed, but it's a better preview approx than filter() */
+    {
         IndexedMap *gm = filterIndexed(*this, pixbuf);
         if (!gm)
             return Glib::RefPtr<Gdk::Pixbuf>(nullptr);

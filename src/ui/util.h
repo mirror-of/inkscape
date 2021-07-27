@@ -19,6 +19,9 @@
 Glib::ustring ink_ellipsize_text (Glib::ustring const &src, size_t maxlen);
 void reveal_widget(Gtk::Widget *widget, bool show);
 
+// check if widget in a container is actually visible
+bool is_widget_effectively_visible(Gtk::Widget* widget);
+
 #endif
 
 /*

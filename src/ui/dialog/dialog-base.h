@@ -79,7 +79,7 @@ public:
 
     // Getters and setters
     Glib::ustring get_name() { return _name; };
-    gchar const *getPrefsPath() const { return _prefs_path.data(); }
+    const Glib::ustring& getPrefsPath() const { return _prefs_path; }
     Glib::ustring const &get_type() const { return _dialog_type; }
 
     void blink();
