@@ -178,7 +178,7 @@ msgstr "כתם"
 
 #: ../share/filters/filters.svg.h:44
 msgid "Fill object with sparse translucent specks"
-msgstr ""
+msgstr "מלא אוביקט בכתמים דלילים שקופים למחצה"
 
 #: ../share/filters/filters.svg.h:46
 #, fuzzy
@@ -222,7 +222,7 @@ msgstr "זברה"
 
 #: ../share/filters/filters.svg.h:60
 msgid "Irregular vertical dark stripes (loses object's own color)"
-msgstr ""
+msgstr "פסים כהים אנכיים לא רגילים (מאבד את צבע האוביקט)"
 
 #: ../share/filters/filters.svg.h:62
 msgid "Clouds"
@@ -281,7 +281,7 @@ msgstr "ציור שמן"
 #: ../src/extension/internal/filter/paint.h:878
 #: ../src/extension/internal/filter/paint.h:982
 msgid "Image Paint and Draw"
-msgstr ""
+msgstr "ציור וצביעת תמונה"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Simulate oil painting style"
@@ -391,7 +391,7 @@ msgstr "טפטוף"
 
 #: ../share/filters/filters.svg.h:116
 msgid "Random paint streaks downwards"
-msgstr ""
+msgstr "פסי צבע אקראיים כלפי מטה"
 
 #: ../share/filters/filters.svg.h:118
 #, fuzzy
@@ -674,7 +674,7 @@ msgstr "שמן סמיך"
 
 #: ../share/filters/filters.svg.h:228
 msgid "Fat oil with some adjustable turbulence"
-msgstr ""
+msgstr "שמן עם כמה ערבובים מותאמים"
 
 #: ../share/filters/filters.svg.h:230
 #, fuzzy
@@ -709,7 +709,7 @@ msgstr "קילוף"
 
 #: ../share/filters/filters.svg.h:240
 msgid "Peeling painting on a wall"
-msgstr ""
+msgstr "צבע קיר מתקלף"
 
 #: ../share/filters/filters.svg.h:242
 #, fuzzy
@@ -854,7 +854,7 @@ msgstr "זכוכית כהה"
 
 #: ../share/filters/filters.svg.h:304
 msgid "Illuminated glass effect with light coming from beneath"
-msgstr ""
+msgstr "אפקט זכוכית מוארת עם אור מלמטה"
 
 #: ../share/filters/filters.svg.h:306
 #, fuzzy
