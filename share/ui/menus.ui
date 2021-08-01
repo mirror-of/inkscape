@@ -331,18 +331,18 @@
     	</item>
     </section>
     <section>
-    	  <item>
-    	  	  <attribute name='label' translatable="yes">_Input Devices...</attribute>
-    	  	  <attribute name='action'>win.dialog-open</attribute>
-    	  	  <attribute name='target'>Input</attribute>
-    	  	  <attribute name='icon'>dialog-input-devices</attribute>
-    	  </item>
-    	  <item>
-    	  	  <attribute name='label' translatable="yes">P_references</attribute>
-    	  	  <attribute name='action'>win.dialog-open</attribute>
-    	  	  <attribute name='target'>Preferences</attribute>
-    	  	  <attribute name='icon'>preferences-system</attribute>
-    	  </item>
+    	<item>
+    		<attribute name='label' translatable="yes">_Input Devices...</attribute>
+    		<attribute name='action'>win.dialog-open</attribute>
+    		<attribute name='target'>Input</attribute>
+    		<attribute name='icon'>dialog-input-devices</attribute>
+    	</item>
+    	<item>
+    		<attribute name='label' translatable="yes">P_references</attribute>
+    		<attribute name='action'>win.dialog-open</attribute>
+    		<attribute name='target'>Preferences</attribute>
+    		<attribute name='icon'>preferences-system</attribute>
+    	</item>
     </section>
   </menu>
 
