@@ -27,7 +27,7 @@ hide_lock_unhide_all(InkscapeWindow* win)
     SPDesktop* dt = win->get_desktop();
     SPDocument *doc = dt->getDocument();
     unhide_all(dt);
-    Inkscape::DocumentUndo::done(doc, _("Unhide all objects in the current layer"), nullptr);
+    Inkscape::DocumentUndo::done(doc, _("Unhide all objects in the current layer"), "");
 }
 
 void
@@ -36,7 +36,7 @@ hide_lock_unlock_all(InkscapeWindow* win)
     SPDesktop* dt = win->get_desktop();
     SPDocument *doc = dt->getDocument();
     unlock_all(dt);
-    Inkscape::DocumentUndo::done(doc, _("Unlock all objects in the current layer"), nullptr);
+    Inkscape::DocumentUndo::done(doc, _("Unlock all objects in the current layer"), "");
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_hide_lock =

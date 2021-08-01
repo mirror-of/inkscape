@@ -645,7 +645,7 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
         item->deleteObject();
     }
 
-    DocumentUndo::done(doc, _("Delete all"), nullptr);
+    DocumentUndo::done(doc, _("Delete all"), "");
 }
 
 /*
@@ -1339,7 +1339,7 @@ void ObjectSet::pastePathEffect()
 {
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
     if (cm->pastePathEffect(this)) {
-        DocumentUndo::done(document(), _("Paste live path effect"), nullptr);
+        DocumentUndo::done(document(), _("Paste live path effect"), "");
     }
 }
 
@@ -1371,7 +1371,7 @@ void ObjectSet::removeLPE()
     }
 
     if (document()) {
-        DocumentUndo::done(document(), _("Remove live path effect"), nullptr);
+        DocumentUndo::done(document(), _("Remove live path effect"), "");
     }
 }
 
@@ -1396,7 +1396,7 @@ void ObjectSet::removeFilter()
         set_active_tool (d, get_active_tool(d));
     }
     if (document()) {
-        DocumentUndo::done(document(), _("Remove filter"), nullptr);
+        DocumentUndo::done(document(), _("Remove filter"), "");
     }
 }
 
@@ -1831,7 +1831,7 @@ void ObjectSet::removeTransform()
     }
 
     if (document()) {
-        DocumentUndo::done(document(), _("Remove transform"), nullptr);
+        DocumentUndo::done(document(), _("Remove transform"), "");
     }
 }
 
@@ -3142,7 +3142,7 @@ void ObjectSet::toMarker(bool apply)
 
 
 
-    DocumentUndo::done(doc, _("Objects to marker"), nullptr);
+    DocumentUndo::done(doc, _("Objects to marker"), "");
 }
 
 static void sp_selection_to_guides_recursive(SPItem *item, bool wholegroups) {
@@ -3186,7 +3186,7 @@ void ObjectSet::toGuides()
         sp_selection_delete_impl(items_);
     }
 
-    DocumentUndo::done(doc, _("Objects to guides"), nullptr);
+    DocumentUndo::done(doc, _("Objects to guides"), "");
 }
 
 /*
@@ -3352,7 +3352,7 @@ void ObjectSet::toSymbol()
     // Clean up
     Inkscape::GC::release(symbol_repr);
 
-    DocumentUndo::done(doc, _("Group to symbol"), nullptr);
+    DocumentUndo::done(doc, _("Group to symbol"), "");
 }
 
 /*
@@ -3369,7 +3369,7 @@ void ObjectSet::unSymbol()
             }
         }
     }
-    DocumentUndo::done(document(), _("unSymbol all selected symbols"), nullptr);
+    DocumentUndo::done(document(), _("unSymbol all selected symbols"), "");
 }
 
 void ObjectSet::tile(bool apply)
@@ -3469,7 +3469,7 @@ void ObjectSet::tile(bool apply)
     }
 
 
-    DocumentUndo::done(doc, _("Objects to pattern"), nullptr);
+    DocumentUndo::done(doc, _("Objects to pattern"), "");
 }
 
 void ObjectSet::untile()
@@ -3543,7 +3543,7 @@ void ObjectSet::untile()
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No pattern fills</b> in the selection."));
     } else {
-        DocumentUndo::done(document(), _("Pattern to objects"), nullptr);
+        DocumentUndo::done(document(), _("Pattern to objects"), "");
         setList(new_select);
     }
 }
@@ -3821,7 +3821,7 @@ void ObjectSet::setClipGroup()
     Inkscape::GC::release(clone);
 
     set(outer);
-    DocumentUndo::done(doc, _("Create Clip Group"), nullptr);
+    DocumentUndo::done(doc, _("Create Clip Group"), "");
 }
 
 /**
@@ -4016,9 +4016,9 @@ void ObjectSet::setClipGroup()
     addList(items_to_select);
     if (!skip_undo) {
         if (apply_clip_path) {
-            DocumentUndo::done(doc, _("Set clipping path"), nullptr);
+            DocumentUndo::done(doc, _("Set clipping path"), "");
         } else {
-            DocumentUndo::done(doc, _("Set mask"), nullptr);
+            DocumentUndo::done(doc, _("Set mask"), "");
         }
     }
 }
@@ -4149,9 +4149,9 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     addList(items_to_select);
     if (!skip_undo) {
         if (apply_clip_path) {
-            DocumentUndo::done(doc, _("Release clipping path"), nullptr);
+            DocumentUndo::done(doc, _("Release clipping path"), "");
         } else {
-            DocumentUndo::done(doc, _("Release mask"), nullptr);
+            DocumentUndo::done(doc, _("Release mask"), "");
         }
     }
 }
@@ -4174,7 +4174,7 @@ bool ObjectSet::fitCanvas(bool with_margins, bool skip_undo)
     if (bbox) {
         document()->fitToRect(*bbox, with_margins);
         if(!skip_undo)
-            DocumentUndo::done(document(), _("Fit Page to Selection"), nullptr);
+            DocumentUndo::done(document(), _("Fit Page to Selection"), "");
         return true;
     } else {
         return false;
@@ -4250,7 +4250,7 @@ void ObjectSet::swapFillStroke()
         sp_repr_css_attr_unref (css);
     }
 
-    DocumentUndo::done(document(), _("Swap fill and stroke of an object"), nullptr);
+    DocumentUndo::done(document(), _("Swap fill and stroke of an object"), "");
 }
 
 /**
@@ -4324,7 +4324,7 @@ void ObjectSet::fillBetweenMany()
     clear();
     add(fillRepr);
 
-    DocumentUndo::done(doc, _("Create linked fill object between paths"), nullptr);
+    DocumentUndo::done(doc, _("Create linked fill object between paths"), "");
 }
 
 /**
@@ -4351,7 +4351,7 @@ void
 fit_canvas_to_drawing(SPDesktop *desktop)
 {
     if (fit_canvas_to_drawing(desktop->getDocument())) {
-        DocumentUndo::done(desktop->getDocument(), _("Fit Page to Drawing"), nullptr);
+        DocumentUndo::done(desktop->getDocument(), _("Fit Page to Drawing"), "");
     }
 }
 
@@ -4371,7 +4371,7 @@ void fit_canvas_to_selection_or_drawing(SPDesktop *desktop) {
                            ? fit_canvas_to_drawing(doc, true)
                            : desktop->selection->fitCanvas(true,true));
     if (changed) {
-        DocumentUndo::done(desktop->getDocument(), _("Fit Page to Selection or Drawing"), nullptr);
+        DocumentUndo::done(desktop->getDocument(), _("Fit Page to Selection or Drawing"), "");
     }
 };
 

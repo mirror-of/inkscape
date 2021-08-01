@@ -114,7 +114,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_file =
     {"app.file-open",              N_("File Open"),                "File",       N_("Open file")                                         },
     {"app.file-new",               N_("File New"),                 "File",       N_("Open new document using template")                  },
     {"app.file-close",             N_("File Close"),               "File",       N_("Close active document")                             },
-    {"app.file-open-window",       N_("File Open Window"),          "File",       N_("Open file window")                                  }
+    {"app.file-open-window",       N_("File Open Window"),         "File",       N_("Open file window")                                  }
     // clang-format on
 };
 

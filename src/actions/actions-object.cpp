@@ -52,7 +52,7 @@ object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetAttribute", nullptr);
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetAttribute", "");
 }
 
 
@@ -85,7 +85,7 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetProperty", nullptr);
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetProperty", "");
 }
 
 
@@ -118,7 +118,7 @@ object_set_inverse(InkscapeApplication *app)
     // Object Clip Set Inverse
     selection->setMask(true, false);
     Inkscape::LivePathEffect::sp_inverse_powerclip(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), nullptr);
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), "");
 }
 
 void 
@@ -129,7 +129,7 @@ object_release(InkscapeApplication *app)
     // Object Clip Release
     Inkscape::LivePathEffect::sp_remove_powerclip(app->get_active_selection());
     selection->unsetMask(true);
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release clipping path"), nullptr);
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release clipping path"), "");
 }
 
 void
@@ -149,7 +149,7 @@ object_set_inverse_mask(InkscapeApplication *app)
     // Object Mask Set Inverse
     selection->setMask(false, false);
     Inkscape::LivePathEffect::sp_inverse_powermask(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), nullptr);
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), "");
 }
 
 void 
@@ -160,7 +160,7 @@ object_release_mask(InkscapeApplication *app)
     // Object Mask Release
     Inkscape::LivePathEffect::sp_remove_powermask(app->get_active_selection());
     selection->unsetMask(false);
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release mask"), nullptr);
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release mask"), "");
 }
 
 void

@@ -36,7 +36,7 @@ fit_canvas_drawing(InkscapeWindow* win)
 
     // Fit Page to Drawing
     if (fit_canvas_to_drawing(dt->getDocument())) {
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Fit Page to Drawing"), nullptr);
+        Inkscape::DocumentUndo::done(dt->getDocument(), _("Fit Page to Drawing"), "");
     }
 }
 
