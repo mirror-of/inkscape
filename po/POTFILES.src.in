@@ -21,7 +21,6 @@
 ../src/actions/actions-hide-lock.cpp
 ../src/actions/actions-hint-data.cpp
 ../src/actions/actions-layer.cpp
-../src/actions/actions-node.cpp
 ../src/actions/actions-object-align.cpp
 ../src/actions/actions-object.cpp
 ../src/actions/actions-output.cpp

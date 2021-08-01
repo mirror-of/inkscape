@@ -11,7 +11,6 @@
 ../share/ui/inkscape-start.glade
 ../share/ui/marker-popup.glade
 ../share/ui/menus.ui
-../share/ui/toolbar-node.ui
 ../share/ui/toolbar-select.ui
 ../share/ui/toolbar-snap.ui
 ../share/ui/toolbar-tool.ui

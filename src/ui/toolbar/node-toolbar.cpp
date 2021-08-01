@@ -57,10 +57,6 @@
 
 #include "widgets/widget-sizes.h"
 
-#include "io/resource.h"
-
-using Inkscape::IO::Resource::UIS;
-
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;
@@ -366,29 +362,6 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
 GtkWidget *
 NodeToolbar::create(SPDesktop *desktop)
 {
-    // NODE TOOLBAR : SpinButton Addition Left
-
-    /* Glib::ustring node_toolbar_builder_file = get_filename(UIS, "toolbar-node.ui");
-    auto builder = Gtk::Builder::create();
-    try
-    {
-        builder->add_from_file(node_toolbar_builder_file);
-    }
-    catch (const Glib::Error& ex)
-    {
-        std::cerr << "NodeToolbar: " << node_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
-    }
-
-    Gtk::Toolbar* toolbar = nullptr;
-    builder->get_widget("node-toolbar", toolbar);
-    if (!toolbar) {
-        std::cerr << "InkscapeWindow: Failed to load node toolbar!" << std::endl;
-        return nullptr;
-    }
-
-    toolbar->reference(); 
-    return GTK_WIDGET(toolbar->gobj()); */
-
     auto holder = new NodeToolbar(desktop);
     return GTK_WIDGET(holder->gobj());
 } // NodeToolbar::prep()

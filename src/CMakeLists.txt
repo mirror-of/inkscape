@@ -241,8 +241,6 @@ set(inkscape_SRC
   actions/actions-hide-lock.cpp
   actions/actions-layer.h
   actions/actions-layer.cpp
-  actions/actions-node.h
-  actions/actions-node.cpp
   actions/actions-object.h
   actions/actions-object.cpp
   actions/actions-object-align.h

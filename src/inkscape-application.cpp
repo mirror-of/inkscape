@@ -50,7 +50,6 @@
 
 #include "actions/actions-base.h"                   // Actions
 #include "actions/actions-file.h"                   // Actions
-#include "actions/actions-node.h"                   // Actions
 #include "actions/actions-edit.h"                   // Actions
 #include "actions/actions-effect.h"                 // Actions
 #include "actions/actions-object.h"                 // Actions
@@ -598,7 +597,6 @@ InkscapeApplication::InkscapeApplication()
     add_actions_edit(this);                 // actions for editing
     add_actions_effect(this);               // actions for Filters and Extensions
     add_actions_file(this);                 // actions for file handling
-    add_actions_node(this);                 // actions for node 
     add_actions_object(this);               // actions for object manipulation
     add_actions_object_align(this);         // actions for object alignment
     add_actions_output(this);               // actions for file export
