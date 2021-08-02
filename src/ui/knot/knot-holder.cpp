@@ -44,6 +44,8 @@
 #include "ui/tools/spiral-tool.h"
 #include "ui/tools/tweak-tool.h"
 
+#include "display/control/snap-indicator.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -251,6 +253,7 @@ void
 KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
 {
     this->dragging = false;
+    desktop->snapindicator->remove_snaptarget();
 
     if (this->released) {
         this->released(this->item);
