@@ -26,12 +26,6 @@ public:
     // Get Map
     std::map<std::string, std::pair<std::string,Glib::ustring>> give_all_data();
 
-    // For detecting filters
-    bool is_filter(std::string  submenu_name);
-
-    // For detecting Extensions
-    bool is_extensions(std::string submenu_name) ;
-
     // Add Data
     void add_data(std::string effect_id, std::string effect_submenu_name, Glib::ustring const &effect_name) ;
 

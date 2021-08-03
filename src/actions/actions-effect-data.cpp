@@ -25,18 +25,6 @@ InkActionEffectData::give_all_data()
     return data;
 }
 
-bool 
-InkActionEffectData::is_filter(std::string submenu_name)
-{
-        return submenu_name.substr(0,7)=="filters";
-}
-
-bool
-InkActionEffectData::is_extensions(std::string submenu_name) 
-{
-    return !is_filter(submenu_name);
-}
-
 void
 InkActionEffectData::add_data ( std::string effect_id, std::string effect_submenu_name, 
                                 Glib::ustring const &effect_name ) 

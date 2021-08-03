@@ -86,30 +86,15 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
         InkscapeApplication::instance()->gtk_app()->set_menubar(gmenu); 
 
-        { // Filters
+        { // Filters and Extensions
             static auto app = InkscapeApplication::instance();
             
-            for (auto [ filter_id, submenu_name ] : app->get_action_effect_data().give_all_data()) {
+            for (auto [ filter_id, submenu_name ] : app->get_action_effect_data().give_all_data()) 
+            {
                 auto [ filter_submenu,filter_name ] = submenu_name;
-                if ( app->get_action_effect_data().is_filter(filter_submenu) ) {
-                    auto sub_object = refBuilder->get_object(filter_submenu);
-                    auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
-                    sub_gmenu->append( filter_name, "app."+filter_id );        
-                }
-            }
-
-        }
-
-        { // Extensions
-            static auto app = InkscapeApplication::instance();
-            
-            for (auto [ extension_id, submenu_name ] : app->get_action_effect_data().give_all_data()) {
-                auto [ extension_submenu,extension_name ] = submenu_name;
-                if ( app->get_action_effect_data().is_extensions(extension_submenu) ) {
-                    auto sub_object = refBuilder->get_object(extension_submenu);
-                    auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
-                    sub_gmenu->append( extension_name,"app."+extension_id );        
-                }
+                auto sub_object = refBuilder->get_object(filter_submenu);
+                auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
+                sub_gmenu->append( filter_name, "app."+filter_id );        
             }
 
         }
