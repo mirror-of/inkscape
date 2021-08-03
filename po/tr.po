@@ -14363,7 +14363,7 @@ msgid "Change unit parameter"
 msgstr "Birim parametresini değiştir"
 
 #: ../src/menus-skeleton.h:24 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/menus.xml:6
+#: ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "_Dosya"
 
@@ -18843,7 +18843,7 @@ msgid "Sele_ction"
 msgstr "Seçi_m"
 
 #: ../src/ui/dialog/find.cpp:66 ../share/ui/dialog-text-edit.glade:119
-#: ../share/ui/menus.xml:275
+#: ../share/ui/menus.ui:275
 msgid "_Text"
 msgstr "_Metin"
 
@@ -21548,11 +21548,11 @@ msgstr "Menülerde simgeleri göster:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1776
 msgid ""
 "You can either enable or disable all icons in menus. By default, the setting "
-"for the 'show-icons' attribute in the 'menus.xml' file determines whether to "
+"for the 'show-icons' attribute in the 'menus.ui' file determines whether to "
 "display icons in menus."
 msgstr ""
 "Menülerdeki tüm simgeleri etkinleştirebilir veya devre dışı "
-"bırakabilirsiniz. Öntanımlı olarak, 'menus.xml' dosyasındaki 'show-icons' "
+"bırakabilirsiniz. Öntanımlı olarak, 'menus.ui' dosyasındaki 'show-icons' "
 "özniteliği ayarı simgelerin görüntülenip görüntülenmeyeceğini belirler."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1779
@@ -32208,7 +32208,7 @@ msgstr "Stil Yapıştır"
 msgid "Apply the style of the copied object to selection"
 msgstr "Kopyalanan nesnenin stilini seçime uygula"
 
-#: ../src/verbs.cpp:2390 ../share/ui/menus.xml:39
+#: ../src/verbs.cpp:2390 ../share/ui/menus.ui:39
 msgid "Paste Si_ze"
 msgstr "Boyutu Ya_pıştır"
 
@@ -33138,7 +33138,7 @@ msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 "Seçime ters maske uygulayın (en üstteki nesneyi maske olarak kullanarak)"
 
-#: ../src/verbs.cpp:2670 ../src/verbs.cpp:2680 ../share/ui/menus.xml:29
+#: ../src/verbs.cpp:2670 ../src/verbs.cpp:2680 ../share/ui/menus.ui:29
 msgid "_Edit"
 msgstr "_Düzen"
 
@@ -43761,59 +43761,59 @@ msgstr "Yeni Çizim"
 msgid "Open a New Window"
 msgstr "Yeni Bir Pencere Aç"
 
-#: ../share/ui/menus.xml:51
+#: ../share/ui/menus.ui:51
 msgid "Clo_ne"
 msgstr "Klo_n"
 
-#: ../share/ui/menus.xml:66
+#: ../share/ui/menus.ui:66
 msgid "Select Sa_me"
 msgstr "Ay_nısını Seç"
 
-#: ../share/ui/menus.xml:88
+#: ../share/ui/menus.ui:88
 msgid "_View"
 msgstr "_Görünüm"
 
-#: ../share/ui/menus.xml:146
+#: ../share/ui/menus.ui:146
 msgid "Sh_ow/Hide"
 msgstr "_Göster/Gizle"
 
-#: ../share/ui/menus.xml:174
+#: ../share/ui/menus.ui:174
 msgid "_Layer"
 msgstr "_Katman"
 
-#: ../share/ui/menus.xml:198
+#: ../share/ui/menus.ui:198
 msgid "_Object"
 msgstr "_Nesne"
 
-#: ../share/ui/menus.xml:211
+#: ../share/ui/menus.ui:211
 msgid "Cli_p"
 msgstr "Kırpm_a"
 
-#: ../share/ui/menus.xml:216
+#: ../share/ui/menus.ui:216
 msgid "Mas_k"
 msgstr "Maske"
 
-#: ../share/ui/menus.xml:221
+#: ../share/ui/menus.ui:221
 msgid "Patter_n"
 msgstr "Desen"
 
-#: ../share/ui/menus.xml:246
+#: ../share/ui/menus.ui:246
 msgid "_Path"
 msgstr "_Yol"
 
-#: ../share/ui/menus.xml:291
+#: ../share/ui/menus.ui:291
 msgid "Filter_s"
 msgstr "Süzgeçle_r"
 
-#: ../share/ui/menus.xml:297
+#: ../share/ui/menus.ui:297
 msgid "Exte_nsions"
 msgstr "Ekle_ntiler"
 
-#: ../share/ui/menus.xml:305
+#: ../share/ui/menus.ui:305
 msgid "_Help"
 msgstr "_Yardım"
 
-#: ../share/ui/menus.xml:309
+#: ../share/ui/menus.ui:309
 msgid "Tutorials"
 msgstr "Eğitim"
 

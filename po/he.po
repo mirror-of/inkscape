@@ -14043,7 +14043,7 @@ msgid "Change unit parameter"
 msgstr "שינוי משתנה היחידה"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "_קובץ"
 
@@ -18618,7 +18618,7 @@ msgid "Sele_ction"
 msgstr "ב_חירה"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.xml:266
+#: ../share/ui/menus.ui:266
 msgid "_Text"
 msgstr "_טקסט"
 
@@ -21317,7 +21317,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.xml' file. (requires restart)"
+"'menus.ui' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -31765,7 +31765,7 @@ msgstr "הדבקת _סגנון"
 msgid "Apply the style of the copied object to selection"
 msgstr "החלת הסגנון של הפריט שהועתק על הבחירה"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
 msgid "Paste Si_ze"
 msgstr "גודל הה_דבקה"
 
@@ -32726,7 +32726,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "החלת מסכה על הבחירה (על ידי שימוש בפריט העליון ביותר כמסכה)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
 msgid "_Edit"
 msgstr "_עריכה"
 
@@ -34811,7 +34811,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "כיסוי האזור אותו תרצה לבחור כקידמה"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
 msgid "_Help"
 msgstr "ע_זרה"
 
@@ -43123,74 +43123,74 @@ msgstr ""
 msgid "New Drawing"
 msgstr "ציור"
 
-#: ../share/ui/menus.xml:54
+#: ../share/ui/menus.ui:54
 msgid "Clo_ne"
 msgstr "כ_פיל"
 
-#: ../share/ui/menus.xml:69
+#: ../share/ui/menus.ui:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "בחירת עמוד:"
 
-#: ../share/ui/menus.xml:91
+#: ../share/ui/menus.ui:91
 msgid "_View"
 msgstr "_תצוגה"
 
-#: ../share/ui/menus.xml:92
+#: ../share/ui/menus.ui:92
 msgid "_Zoom"
 msgstr "ת_קריב"
 
-#: ../share/ui/menus.xml:109
+#: ../share/ui/menus.ui:109
 msgid "_Display Mode"
 msgstr "מ_צב תצוגה"
 
-#: ../share/ui/menus.xml:119
+#: ../share/ui/menus.ui:119
 msgid "_Color Display Mode"
 msgstr "מ_צב הצגת צבע"
 
-#: ../share/ui/menus.xml:127
+#: ../share/ui/menus.ui:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "_כיוון הדף:"
 
-#: ../share/ui/menus.xml:141
+#: ../share/ui/menus.ui:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "הצגה/הסתרה"
 
-#: ../share/ui/menus.xml:168
+#: ../share/ui/menus.ui:168
 msgid "_Layer"
 msgstr "_שכבה"
 
-#: ../share/ui/menus.xml:192
+#: ../share/ui/menus.ui:192
 msgid "_Object"
 msgstr "פ_ריט"
 
-#: ../share/ui/menus.xml:204
+#: ../share/ui/menus.ui:204
 msgid "Cli_p"
 msgstr "_חיתוך"
 
-#: ../share/ui/menus.xml:209
+#: ../share/ui/menus.ui:209
 msgid "Mas_k"
 msgstr "מס_כה"
 
-#: ../share/ui/menus.xml:214
+#: ../share/ui/menus.ui:214
 msgid "Patter_n"
 msgstr "_תבנית"
 
-#: ../share/ui/menus.xml:239
+#: ../share/ui/menus.ui:239
 msgid "_Path"
 msgstr "_נתיב"
 
-#: ../share/ui/menus.xml:282
+#: ../share/ui/menus.ui:282
 msgid "Filter_s"
 msgstr "מ_סננים"
 
-#: ../share/ui/menus.xml:288
+#: ../share/ui/menus.ui:288
 msgid "Exte_nsions"
 msgstr "הר_חבות"
 
-#: ../share/ui/menus.xml:298
+#: ../share/ui/menus.ui:298
 msgid "Tutorials"
 msgstr "מדריכים"
 

@@ -14394,7 +14394,7 @@ msgstr "Zmień parametry wekrora"
 msgid "Change unit parameter"
 msgstr "Zmień parametr jednostki"
 
-#: ../src/menus-skeleton.h:24 ../src/ui/dialog/debug.cpp:71 ../share/ui/menus.xml:6
+#: ../src/menus-skeleton.h:24 ../src/ui/dialog/debug.cpp:71 ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "_Plik"
 
@@ -18924,7 +18924,7 @@ msgid "Sele_ction"
 msgstr "Zaznaczenie"
 
 #: ../src/ui/dialog/find.cpp:66 ../share/ui/dialog-text-edit.glade:119
-#: ../share/ui/menus.xml:275
+#: ../share/ui/menus.ui:275
 msgid "_Text"
 msgstr "_Tekst"
 
@@ -21636,10 +21636,10 @@ msgstr "Pokaż ikony w menu:"
 #| msgid ""
 #| "You can either enable or disable all icons in menus. By default the theme "
 #| "determines which icons to display by using the 'show-icons' attribute in its "
-#| "'menus.xml' file. (requires restart)"
+#| "'menus.ui' file. (requires restart)"
 msgid ""
 "You can either enable or disable all icons in menus. By default, the setting for "
-"the 'show-icons' attribute in the 'menus.xml' file determines whether to display "
+"the 'show-icons' attribute in the 'menus.ui' file determines whether to display "
 "icons in menus."
 msgstr ""
 "Można włączyć lub wyłączyć wszystkie ikony w menu. Domyślnie motyw określa, które "
@@ -32266,7 +32266,7 @@ msgstr "Wklej _styl"
 msgid "Apply the style of the copied object to selection"
 msgstr "Przypisuje zaznaczonym obiektom styl ze skopiowanego obiektu"
 
-#: ../src/verbs.cpp:2392 ../share/ui/menus.xml:39
+#: ../src/verbs.cpp:2392 ../share/ui/menus.ui:39
 msgid "Paste Si_ze"
 msgstr "Wklej roz_miar"
 
@@ -33201,7 +33201,7 @@ msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 "Zastosuj maskę odwrotną do zaznaczenia (używając najwyższego obiektu jako maski)"
 
-#: ../src/verbs.cpp:2672 ../src/verbs.cpp:2682 ../share/ui/menus.xml:29
+#: ../src/verbs.cpp:2672 ../src/verbs.cpp:2682 ../share/ui/menus.ui:29
 msgid "_Edit"
 msgstr "_Edycja"
 
@@ -44458,59 +44458,59 @@ msgstr "Nowy Rysunek"
 msgid "Open a New Window"
 msgstr "Otwórz Nowe Okno"
 
-#: ../share/ui/menus.xml:51
+#: ../share/ui/menus.ui:51
 msgid "Clo_ne"
 msgstr "_Klonuj"
 
-#: ../share/ui/menus.xml:66
+#: ../share/ui/menus.ui:66
 msgid "Select Sa_me"
 msgstr "Zaznacz identyczne"
 
-#: ../share/ui/menus.xml:88
+#: ../share/ui/menus.ui:88
 msgid "_View"
 msgstr "_Widok"
 
-#: ../share/ui/menus.xml:146
+#: ../share/ui/menus.ui:146
 msgid "Sh_ow/Hide"
 msgstr "Wyświetl/ukryj"
 
-#: ../share/ui/menus.xml:174
+#: ../share/ui/menus.ui:174
 msgid "_Layer"
 msgstr "W_arstwa"
 
-#: ../share/ui/menus.xml:198
+#: ../share/ui/menus.ui:198
 msgid "_Object"
 msgstr "_Obiekt"
 
-#: ../share/ui/menus.xml:211
+#: ../share/ui/menus.ui:211
 msgid "Cli_p"
 msgstr "Przytni_j"
 
-#: ../share/ui/menus.xml:216
+#: ../share/ui/menus.ui:216
 msgid "Mas_k"
 msgstr "Mas_ka"
 
-#: ../share/ui/menus.xml:221
+#: ../share/ui/menus.ui:221
 msgid "Patter_n"
 msgstr "D_eseń"
 
-#: ../share/ui/menus.xml:246
+#: ../share/ui/menus.ui:246
 msgid "_Path"
 msgstr "Ś_cieżka"
 
-#: ../share/ui/menus.xml:291
+#: ../share/ui/menus.ui:291
 msgid "Filter_s"
 msgstr "_Filtry"
 
-#: ../share/ui/menus.xml:297
+#: ../share/ui/menus.ui:297
 msgid "Exte_nsions"
 msgstr "Efe_kty"
 
-#: ../share/ui/menus.xml:305
+#: ../share/ui/menus.ui:305
 msgid "_Help"
 msgstr "Pomoc"
 
-#: ../share/ui/menus.xml:309
+#: ../share/ui/menus.ui:309
 msgid "Tutorials"
 msgstr "Poradniki"
 

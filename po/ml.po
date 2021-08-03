@@ -14158,7 +14158,7 @@ msgid "Change unit parameter"
 msgstr "ഏകകഅളവ് മാറ്റുക"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "ഫയല്‍(_F)"
 
@@ -18772,7 +18772,7 @@ msgid "Sele_ction"
 msgstr "തിരഞ്ഞെടുപ്പ്"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.xml:266
+#: ../share/ui/menus.ui:266
 msgid "_Text"
 msgstr "ടെക്സ്റ്റ്(_T)"
 
@@ -21472,7 +21472,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.xml' file. (requires restart)"
+"'menus.ui' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -32026,7 +32026,7 @@ msgstr "രീതി ചേര്‍ക്കുക(_S)"
 msgid "Apply the style of the copied object to selection"
 msgstr "പകര്‍പ്പെടുത്ത വസ്തുവിന്‍റെ ശൈലി തിരഞ്ഞെടുത്തതില്‍ പ്രയോഗിക്കുക"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
 msgid "Paste Si_ze"
 msgstr " ചേര്‍ക്കുന്ന വലിപ്പം(_z)"
 
@@ -32992,7 +32992,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "തിരഞ്ഞെടുത്തതില്‍ ആവരണം പ്രയോഗിക്കുക(ഏറ്റവും മുകളിലത്തെ വസ്തു ആവരണമാക്കിക്കൊണ്ട്)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
 msgid "_Edit"
 msgstr "എഡിറ്റ്(_E)"
 
@@ -35082,7 +35082,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "മുന്നിലത്തെഗ്രൌണ്ടിനുവേണ്ടിയുള്ള സ്ഥലം തിരഞ്ഞെടുക്കുക"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
 msgid "_Help"
 msgstr "സഹായം(_H)"
 
@@ -43432,74 +43432,74 @@ msgstr ""
 msgid "New Drawing"
 msgstr "വര"
 
-#: ../share/ui/menus.xml:54
+#: ../share/ui/menus.ui:54
 msgid "Clo_ne"
 msgstr "ക്ലോണ്‍(_n)"
 
-#: ../share/ui/menus.xml:69
+#: ../share/ui/menus.ui:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "പേജ് തിരഞ്ഞെടുക്കുക:"
 
-#: ../share/ui/menus.xml:91
+#: ../share/ui/menus.ui:91
 msgid "_View"
 msgstr "ദൃശ്യം (_V)"
 
-#: ../share/ui/menus.xml:92
+#: ../share/ui/menus.ui:92
 msgid "_Zoom"
 msgstr "സൂം(_Z)"
 
-#: ../share/ui/menus.xml:109
+#: ../share/ui/menus.ui:109
 msgid "_Display Mode"
 msgstr "പ്രദര്‍ശിപ്പിക്കുന്ന രീതി(_D)"
 
-#: ../share/ui/menus.xml:119
+#: ../share/ui/menus.ui:119
 msgid "_Color Display Mode"
 msgstr "നിറം പ്രദര്‍ശിപ്പിക്കുന്ന രീതി(_C)"
 
-#: ../share/ui/menus.xml:127
+#: ../share/ui/menus.ui:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "ടെക്സ്റ്റ് ഓറിയന്‍റേഷന്‍"
 
-#: ../share/ui/menus.xml:141
+#: ../share/ui/menus.ui:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "കാണിക്കുക/മറയ്ക്കുക"
 
-#: ../share/ui/menus.xml:168
+#: ../share/ui/menus.ui:168
 msgid "_Layer"
 msgstr "പ്രതലം(_L)"
 
-#: ../share/ui/menus.xml:192
+#: ../share/ui/menus.ui:192
 msgid "_Object"
 msgstr "വസ്തു(_O)"
 
-#: ../share/ui/menus.xml:204
+#: ../share/ui/menus.ui:204
 msgid "Cli_p"
 msgstr "ക്ലിപ്പ്(_p)"
 
-#: ../share/ui/menus.xml:209
+#: ../share/ui/menus.ui:209
 msgid "Mas_k"
 msgstr "മാസ്ക്(_k)"
 
-#: ../share/ui/menus.xml:214
+#: ../share/ui/menus.ui:214
 msgid "Patter_n"
 msgstr "ക്രമമായ രൂപം(_n)"
 
-#: ../share/ui/menus.xml:239
+#: ../share/ui/menus.ui:239
 msgid "_Path"
 msgstr "വഴി(_P)"
 
-#: ../share/ui/menus.xml:282
+#: ../share/ui/menus.ui:282
 msgid "Filter_s"
 msgstr "അരിപ്പകള്‍(_s)"
 
-#: ../share/ui/menus.xml:288
+#: ../share/ui/menus.ui:288
 msgid "Exte_nsions"
 msgstr "വ്യാപിപ്പിക്കല്‍(_n)"
 
-#: ../share/ui/menus.xml:298
+#: ../share/ui/menus.ui:298
 msgid "Tutorials"
 msgstr "പഠനസഹായി"
 

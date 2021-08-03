@@ -16271,7 +16271,7 @@ msgstr "Bitimapu"
 
 # sc/source\ui\src\scfuncs.src:RID_SC_FUNCTION_DESCRIPTIONS2.SC_OPCODE_DDE.4.text
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
 #, fuzzy
 msgid "_File"
 msgstr "Idosiye"
@@ -21477,7 +21477,7 @@ msgid "Sele_ction"
 msgstr "Ihitamo"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.xml:266
+#: ../share/ui/menus.ui:266
 #, fuzzy
 msgid "_Text"
 msgstr "Umwandiko"
@@ -24554,7 +24554,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.xml' file. (requires restart)"
+"'menus.ui' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -36911,7 +36911,7 @@ msgstr ""
 msgid "Apply the style of the copied object to selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
 #, fuzzy
 msgid "Paste Si_ze"
 msgstr "Ingano y'urupapuro:"
@@ -38026,7 +38026,7 @@ msgstr ""
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
 #, fuzzy
 msgid "_Edit"
 msgstr "Kwandika"
@@ -40299,7 +40299,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr ""
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
 msgid "_Help"
 msgstr ""
 
@@ -50243,7 +50243,7 @@ msgstr "Igishushanyo"
 # basctl/source\basicide\moduldlg.src:RID_TP_MODULS.RID_PB_CLOSE.text
 # #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
 # basctl/source\basicide\moduldlg.src:RID_TP_LIBS.RID_PB_CLOSE.text
-#: ../share/ui/menus.xml:54
+#: ../share/ui/menus.ui:54
 #, fuzzy
 msgid "Clo_ne"
 msgstr "Gufunga"
@@ -50252,7 +50252,7 @@ msgstr "Gufunga"
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text
 # #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
 # basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_DEL.text
-#: ../share/ui/menus.xml:69
+#: ../share/ui/menus.ui:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "Gusiba"
@@ -50269,78 +50269,78 @@ msgstr "Gusiba"
 # offmgr/source\offapp\dialog\treeopt.src:RID_OFADLG_OPTIONS_TREE_PAGES.SID_SD_EDITOPTIONS.3.text
 # #-#-#-#-#  offmgr.pot (PACKAGE VERSION)  #-#-#-#-#
 # offmgr/source\offapp\dialog\treeopt.src:RID_OFADLG_OPTIONS_TREE_PAGES.SID_SD_GRAPHIC_OPTIONS.3.text
-#: ../share/ui/menus.xml:91
+#: ../share/ui/menus.ui:91
 #, fuzzy
 msgid "_View"
 msgstr "Igaragaza"
 
-#: ../share/ui/menus.xml:92
+#: ../share/ui/menus.ui:92
 #, fuzzy
 msgid "_Zoom"
 msgstr "Ihindurangano"
 
 # offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_VIEW.GB_APPEARANCE.text
-#: ../share/ui/menus.xml:109
+#: ../share/ui/menus.ui:109
 #, fuzzy
 msgid "_Display Mode"
 msgstr "Kugaragaza"
 
 # offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_VIEW.GB_APPEARANCE.text
-#: ../share/ui/menus.xml:119
+#: ../share/ui/menus.ui:119
 #, fuzzy
 msgid "_Color Display Mode"
 msgstr "Kugaragaza"
 
-#: ../share/ui/menus.xml:127
+#: ../share/ui/menus.ui:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "Icyerekezo:"
 
-#: ../share/ui/menus.xml:141
+#: ../share/ui/menus.ui:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "Ibiyobora"
 
-#: ../share/ui/menus.xml:168
+#: ../share/ui/menus.ui:168
 msgid "_Layer"
 msgstr ""
 
-#: ../share/ui/menus.xml:192
+#: ../share/ui/menus.ui:192
 #, fuzzy
 msgid "_Object"
 msgstr "Igikoresho"
 
-#: ../share/ui/menus.xml:204
+#: ../share/ui/menus.ui:204
 msgid "Cli_p"
 msgstr ""
 
-#: ../share/ui/menus.xml:209
+#: ../share/ui/menus.ui:209
 msgid "Mas_k"
 msgstr ""
 
 # sc/source\ui\src\autofmt.src:RID_SCDLG_AUTOFORMAT.BTN_PATTERN.text
-#: ../share/ui/menus.xml:214
+#: ../share/ui/menus.ui:214
 #, fuzzy
 msgid "Patter_n"
 msgstr "Ishusho"
 
-#: ../share/ui/menus.xml:239
+#: ../share/ui/menus.ui:239
 #, fuzzy
 msgid "_Path"
 msgstr "Inzira"
 
 # vcl/source\src\helptext.src:SV_HELPTEXT_SPLITFLOATING.text
-#: ../share/ui/menus.xml:282
+#: ../share/ui/menus.ui:282
 #, fuzzy
 msgid "Filter_s"
 msgstr "Bihindagurika"
 
-#: ../share/ui/menus.xml:288
+#: ../share/ui/menus.ui:288
 #, fuzzy
 msgid "Exte_nsions"
 msgstr "Umugereka"
 
-#: ../share/ui/menus.xml:298
+#: ../share/ui/menus.ui:298
 #, fuzzy
 msgid "Tutorials"
 msgstr "Mugenga"

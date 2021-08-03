@@ -13410,7 +13410,7 @@ msgid "Change unit parameter"
 msgstr ""
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "_Fișier"
 
@@ -17881,7 +17881,7 @@ msgid "Sele_ction"
 msgstr "Sele_cție"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.xml:266
+#: ../share/ui/menus.ui:266
 msgid "_Text"
 msgstr "_Text"
 
@@ -20552,7 +20552,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.xml' file. (requires restart)"
+"'menus.ui' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -30767,7 +30767,7 @@ msgstr "Aplică la selecție stilul obiectului copiat"
 
 # deschide meniu la dreapta în meniul Edit
 # este prezent și în meniul de la dreapta
-#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
 msgid "Paste Si_ze"
 msgstr "Lipește _dimensiunea"
 
@@ -31716,7 +31716,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "Aplică masca la selecție (folosind obiectul cel mai de sus ca mască)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
 msgid "_Edit"
 msgstr "_Editare"
 
@@ -33761,7 +33761,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "Acoperiți zona pe care doriți să o selectați ca prim-plan"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
 msgid "_Help"
 msgstr "_Ajutor"
 
@@ -42101,73 +42101,73 @@ msgstr ""
 msgid "New Drawing"
 msgstr "Desen nou"
 
-#: ../share/ui/menus.xml:54
+#: ../share/ui/menus.ui:54
 msgid "Clo_ne"
 msgstr "Clo_nează"
 
-#: ../share/ui/menus.xml:69
+#: ../share/ui/menus.ui:69
 msgid "Select Sa_me"
 msgstr "Selectează ac_eleași"
 
-#: ../share/ui/menus.xml:91
+#: ../share/ui/menus.ui:91
 msgid "_View"
 msgstr "_Vizualizare"
 
-#: ../share/ui/menus.xml:92
+#: ../share/ui/menus.ui:92
 msgid "_Zoom"
 msgstr "_Zoom"
 
-#: ../share/ui/menus.xml:109
+#: ../share/ui/menus.ui:109
 msgid "_Display Mode"
 msgstr "Mo_d de afișare"
 
-#: ../share/ui/menus.xml:119
+#: ../share/ui/menus.ui:119
 msgid "_Color Display Mode"
 msgstr "Mod de afișare a _culorilor"
 
-#: ../share/ui/menus.xml:127
+#: ../share/ui/menus.ui:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "Orientare de pagină:"
 
-#: ../share/ui/menus.xml:141
+#: ../share/ui/menus.ui:141
 msgid "Sh_ow/Hide"
 msgstr "_Arată sau ascunde"
 
-#: ../share/ui/menus.xml:168
+#: ../share/ui/menus.ui:168
 msgid "_Layer"
 msgstr "_Strat"
 
-#: ../share/ui/menus.xml:192
+#: ../share/ui/menus.ui:192
 msgid "_Object"
 msgstr "_Obiect"
 
-#: ../share/ui/menus.xml:204
+#: ../share/ui/menus.ui:204
 msgid "Cli_p"
 msgstr "Decu_pare"
 
-#: ../share/ui/menus.xml:209
+#: ../share/ui/menus.ui:209
 msgid "Mas_k"
 msgstr "_Mască"
 
-#: ../share/ui/menus.xml:214
+#: ../share/ui/menus.ui:214
 msgid "Patter_n"
 msgstr "_Model"
 
-#: ../share/ui/menus.xml:239
+#: ../share/ui/menus.ui:239
 msgid "_Path"
 msgstr "T_raseu"
 
-#: ../share/ui/menus.xml:282
+#: ../share/ui/menus.ui:282
 msgid "Filter_s"
 msgstr "F_iltre"
 
-#: ../share/ui/menus.xml:288
+#: ../share/ui/menus.ui:288
 msgid "Exte_nsions"
 msgstr "E_xtensii"
 
 # hm ? sau tutoriale ?
-#: ../share/ui/menus.xml:298
+#: ../share/ui/menus.ui:298
 msgid "Tutorials"
 msgstr "Ghiduri practice"
 

@@ -13005,7 +13005,7 @@ msgid "Change unit parameter"
 msgstr "Mainīt vienības parametru"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "_Datne"
 
@@ -17490,7 +17490,7 @@ msgid "Sele_ction"
 msgstr "At_lasītais"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.xml:263
+#: ../share/ui/menus.ui:263
 msgid "_Text"
 msgstr "_Teksts"
 
@@ -20130,11 +20130,11 @@ msgstr "Rādīt ikonas izvēlnēs:"
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.xml' file. (requires restart)"
+"'menus.ui' file. (requires restart)"
 msgstr ""
 "Ikonas izvēlnēs iespējams vai nu pilnībā ieslēgt vai izslēgt. Pēc "
 "noklusējuma tēma noteic attēlojām ikonas izmantojot 'show-icons' atribūtu "
-"tās  'menus.xml' datnē. (jāpārstartē Inkscape)"
+"tās  'menus.ui' datnē. (jāpārstartē Inkscape)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1220
 msgid "Theme"
@@ -30187,7 +30187,7 @@ msgstr "Ielīmēt stilu"
 msgid "Apply the style of the copied object to selection"
 msgstr "Pielietot atlasītajam nokopētā objekta stilu"
 
-#: ../src/verbs.cpp:2556 ../share/ui/menus.xml:40
+#: ../src/verbs.cpp:2556 ../share/ui/menus.ui:40
 msgid "Paste Si_ze"
 msgstr "Ielīmēt i_zmēru"
 
@@ -31114,7 +31114,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2828 ../src/verbs.cpp:2838 ../share/ui/menus.xml:30
+#: ../src/verbs.cpp:2828 ../src/verbs.cpp:2838 ../share/ui/menus.ui:30
 msgid "_Edit"
 msgstr "Labot"
 
@@ -33078,7 +33078,7 @@ msgstr "SIOX"
 msgid "Cover the area you want to select as the foreground"
 msgstr "Aizklājiet laukumu, kuru vēlaties atlasīt kā priekšplānu"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:291
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:291
 msgid "_Help"
 msgstr "_Palīgs"
 
@@ -40741,71 +40741,71 @@ msgstr "${INKSCAPE_ICONPATH}"
 msgid "New Drawing"
 msgstr "Jauns zīmējums"
 
-#: ../share/ui/menus.xml:52
+#: ../share/ui/menus.ui:52
 msgid "Clo_ne"
 msgstr "Klo_nēt"
 
-#: ../share/ui/menus.xml:67
+#: ../share/ui/menus.ui:67
 msgid "Select Sa_me"
 msgstr "Atlasīt līdzīgo_s"
 
-#: ../share/ui/menus.xml:88
+#: ../share/ui/menus.ui:88
 msgid "_View"
 msgstr "Skatīt"
 
-#: ../share/ui/menus.xml:89
+#: ../share/ui/menus.ui:89
 msgid "_Zoom"
 msgstr "Tālummaiņa"
 
-#: ../share/ui/menus.xml:106
+#: ../share/ui/menus.ui:106
 msgid "_Display Mode"
 msgstr ""
 
-#: ../share/ui/menus.xml:116
+#: ../share/ui/menus.ui:116
 msgid "_Color Display Mode"
 msgstr ""
 
-#: ../share/ui/menus.xml:124
+#: ../share/ui/menus.ui:124
 msgid "_Canvas Orientation"
 msgstr "_Audekla orientācija"
 
-#: ../share/ui/menus.xml:137
+#: ../share/ui/menus.ui:137
 msgid "Sh_ow/Hide"
 msgstr "Rādīt/slēpt"
 
-#: ../share/ui/menus.xml:164
+#: ../share/ui/menus.ui:164
 msgid "_Layer"
 msgstr "Slānis"
 
-#: ../share/ui/menus.xml:188
+#: ../share/ui/menus.ui:188
 msgid "_Object"
 msgstr "Objekts"
 
-#: ../share/ui/menus.xml:201
+#: ../share/ui/menus.ui:201
 msgid "Cli_p"
 msgstr "Ap_griezt"
 
-#: ../share/ui/menus.xml:206
+#: ../share/ui/menus.ui:206
 msgid "Mas_k"
 msgstr "Mas_ka"
 
-#: ../share/ui/menus.xml:211
+#: ../share/ui/menus.ui:211
 msgid "Patter_n"
 msgstr "Faktū_ra"
 
-#: ../share/ui/menus.xml:236
+#: ../share/ui/menus.ui:236
 msgid "_Path"
 msgstr "_Ceļš"
 
-#: ../share/ui/menus.xml:279
+#: ../share/ui/menus.ui:279
 msgid "Filter_s"
 msgstr " Filtri"
 
-#: ../share/ui/menus.xml:285
+#: ../share/ui/menus.ui:285
 msgid "Exte_nsions"
 msgstr "Paplaši_nājumi"
 
-#: ../share/ui/menus.xml:295
+#: ../share/ui/menus.ui:295
 msgid "Tutorials"
 msgstr "Pamācības"
 

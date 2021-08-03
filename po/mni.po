@@ -14159,7 +14159,7 @@ msgid "Change unit parameter"
 msgstr "ꯌꯨꯅꯤꯠ ꯄꯦꯔꯥꯃꯤꯇꯔ ꯍꯣꯡꯗꯣꯛꯎ"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "_ꯐꯥꯏꯜ"
 
@@ -18757,7 +18757,7 @@ msgid "Sele_ction"
 msgstr "ꯑꯈ_ꯟꯕ:"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.xml:266
+#: ../share/ui/menus.ui:266
 msgid "_Text"
 msgstr "_ꯇꯦꯛꯁ"
 
@@ -21455,7 +21455,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.xml' file. (requires restart)"
+"'menus.ui' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -32004,7 +32004,7 @@ msgstr "ꯁ꯭ꯇꯥꯏꯜ _ꯅꯞꯁꯤꯜꯂꯣ"
 msgid "Apply the style of the copied object to selection"
 msgstr "ꯑꯈꯟꯕ ꯑꯁꯤꯗ ꯁꯤꯜꯂꯕ ꯑꯣꯕꯖꯦꯛꯠꯀꯤ ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯖꯤꯟꯅꯔꯣ"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
 msgid "Paste Si_ze"
 msgstr "ꯃꯆꯥꯎ-ꯃꯔꯥꯛ ꯅꯞꯁꯤꯜꯂꯣ"
 
@@ -32961,7 +32961,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "ꯑꯈꯟꯕ ꯑꯁꯤꯗ ꯃꯥꯁꯛ ꯁꯤꯖꯤꯟꯅꯧ (ꯈ꯭ꯋꯥꯏꯗꯒꯤ ꯃꯊꯛ ꯊꯪꯕ ꯑꯣꯕꯖꯦꯛꯠ ꯃꯥꯁꯛ ꯑꯣꯏꯅ ꯁꯤꯖꯤꯟꯅꯗꯨꯅ)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
 msgid "_Edit"
 msgstr "_ꯁꯦꯝꯗꯣꯛꯄ"
 
@@ -35050,7 +35050,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "ꯑꯗꯣꯝꯅ ꯐꯣꯔꯒ꯭ꯔꯥꯎꯟꯗ ꯑꯣꯏꯅ ꯈꯟꯕ ꯄꯥꯝꯕ ꯑꯦꯔꯤꯌꯥꯗꯨ ꯀꯚꯔ ꯇꯧꯔꯣ"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
 msgid "_Help"
 msgstr "_ꯃꯇꯦꯡ"
 
@@ -43388,74 +43388,74 @@ msgstr ""
 msgid "New Drawing"
 msgstr "ꯗ꯭ꯔꯣꯌꯤꯡ"
 
-#: ../share/ui/menus.xml:54
+#: ../share/ui/menus.ui:54
 msgid "Clo_ne"
 msgstr "ꯀ꯭ꯂꯣ_ꯟ"
 
-#: ../share/ui/menus.xml:69
+#: ../share/ui/menus.ui:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "ꯂꯥꯃꯥꯌ ꯈꯜꯂꯣ:"
 
-#: ../share/ui/menus.xml:91
+#: ../share/ui/menus.ui:91
 msgid "_View"
 msgstr "_ꯃꯤꯠꯌꯦꯡ"
 
-#: ../share/ui/menus.xml:92
+#: ../share/ui/menus.ui:92
 msgid "_Zoom"
 msgstr "_ꯖꯨꯝ"
 
-#: ../share/ui/menus.xml:109
+#: ../share/ui/menus.ui:109
 msgid "_Display Mode"
 msgstr "_ꯗꯤꯁꯄ꯭ꯂꯦ ꯃꯣꯗ"
 
-#: ../share/ui/menus.xml:119
+#: ../share/ui/menus.ui:119
 msgid "_Color Display Mode"
 msgstr "_ꯃꯆꯨꯒꯤ ꯗꯤꯁꯄ꯭ꯂꯦ ꯃꯣꯗ"
 
-#: ../share/ui/menus.xml:127
+#: ../share/ui/menus.ui:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "ꯇꯦꯛꯁ ꯑꯣꯔꯤꯌꯦꯟꯇꯦꯁꯟ"
 
-#: ../share/ui/menus.xml:141
+#: ../share/ui/menus.ui:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "ꯎꯠꯂꯣ/ꯂꯣꯠꯂꯣ"
 
-#: ../share/ui/menus.xml:168
+#: ../share/ui/menus.ui:168
 msgid "_Layer"
 msgstr "_ꯂꯦꯌꯔ"
 
-#: ../share/ui/menus.xml:192
+#: ../share/ui/menus.ui:192
 msgid "_Object"
 msgstr "_ꯑꯣꯕꯖꯦꯛꯠ "
 
-#: ../share/ui/menus.xml:204
+#: ../share/ui/menus.ui:204
 msgid "Cli_p"
 msgstr "ꯀ꯭ꯂꯤ_ꯞ"
 
-#: ../share/ui/menus.xml:209
+#: ../share/ui/menus.ui:209
 msgid "Mas_k"
 msgstr "ꯃꯥ_ꯁꯛ"
 
-#: ../share/ui/menus.xml:214
+#: ../share/ui/menus.ui:214
 msgid "Patter_n"
 msgstr "ꯄꯦꯇꯔ_ꯟ"
 
-#: ../share/ui/menus.xml:239
+#: ../share/ui/menus.ui:239
 msgid "_Path"
 msgstr "_ꯄꯥꯊ"
 
-#: ../share/ui/menus.xml:282
+#: ../share/ui/menus.ui:282
 msgid "Filter_s"
 msgstr "ꯐꯤꯜꯇꯔ_ꯁ "
 
-#: ../share/ui/menus.xml:288
+#: ../share/ui/menus.ui:288
 msgid "Exte_nsions"
 msgstr "ꯑꯦꯛꯁ_ꯇꯦꯟꯁꯟ"
 
-#: ../share/ui/menus.xml:298
+#: ../share/ui/menus.ui:298
 msgid "Tutorials"
 msgstr "ꯇꯤꯎꯇꯣꯔꯤꯌꯜ"
 

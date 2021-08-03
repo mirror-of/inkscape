@@ -14031,7 +14031,7 @@ msgid "Change unit parameter"
 msgstr "গোট পেৰামিটাৰটো সলনি কৰক"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "_ফাইল"
 
@@ -18656,7 +18656,7 @@ msgid "Sele_ction"
 msgstr "নিৰ্বাচিত কৰা"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.xml:266
+#: ../share/ui/menus.ui:266
 msgid "_Text"
 msgstr "_টেক্সট"
 
@@ -21385,7 +21385,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.xml' file. (requires restart)"
+"'menus.ui' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -31973,7 +31973,7 @@ msgstr "আঠা লগাওৱা শৈলি"
 msgid "Apply the style of the copied object to selection"
 msgstr "নিৰ্বাচিতলৈ প্ৰতিলিপি কৰা বস্তুটোৰ শৈলীটো প্ৰয়োগ কৰক"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
 msgid "Paste Si_ze"
 msgstr "আঠা লগোৱা আকাৰ"
 
@@ -32948,7 +32948,7 @@ msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 "নিৰ্বাচিত হোৱালৈ মাস্ক প্ৰয়োগ কৰক (মাস্কৰ দৰে আটাইতকৈ প্ৰয়োজনীয় বস্তুটো ব্যৱহাৰ কৰক)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
 msgid "_Edit"
 msgstr "_সম্পাদনা কৰক"
 
@@ -35048,7 +35048,7 @@ msgid "Cover the area you want to select as the foreground"
 msgstr ""
 "আটাইতকৈ জিলিকি থকা অংশটোৰ দৰে নিৰ্বাচিত কৰিবলৈ আপুনি বিছৰা ক্ষেত্রটো আবৃত্ত কৰক"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
 msgid "_Help"
 msgstr "সহায়"
 
@@ -43416,74 +43416,74 @@ msgstr ""
 msgid "New Drawing"
 msgstr "ড্ৰয়িং"
 
-#: ../share/ui/menus.xml:54
+#: ../share/ui/menus.ui:54
 msgid "Clo_ne"
 msgstr "ক্লোন"
 
-#: ../share/ui/menus.xml:69
+#: ../share/ui/menus.ui:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "পৃষ্ঠাটো নিৰ্বাচিত কৰক:"
 
-#: ../share/ui/menus.xml:91
+#: ../share/ui/menus.ui:91
 msgid "_View"
 msgstr "_চোৱা"
 
-#: ../share/ui/menus.xml:92
+#: ../share/ui/menus.ui:92
 msgid "_Zoom"
 msgstr "_জুম"
 
-#: ../share/ui/menus.xml:109
+#: ../share/ui/menus.ui:109
 msgid "_Display Mode"
 msgstr "_দেখুওৱা প্ৰকাৰ"
 
-#: ../share/ui/menus.xml:119
+#: ../share/ui/menus.ui:119
 msgid "_Color Display Mode"
 msgstr "_ৰং দেখুওৱা প্ৰকাৰ"
 
-#: ../share/ui/menus.xml:127
+#: ../share/ui/menus.ui:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "টেক্সট অৰিয়েনটেশ্বন"
 
-#: ../share/ui/menus.xml:141
+#: ../share/ui/menus.ui:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "দেখুওৱা/লুকুওৱাই থওক"
 
-#: ../share/ui/menus.xml:168
+#: ../share/ui/menus.ui:168
 msgid "_Layer"
 msgstr "_খছৰা খন"
 
-#: ../share/ui/menus.xml:192
+#: ../share/ui/menus.ui:192
 msgid "_Object"
 msgstr "_বস্তুটো"
 
-#: ../share/ui/menus.xml:204
+#: ../share/ui/menus.ui:204
 msgid "Cli_p"
 msgstr "ক্লিপ"
 
-#: ../share/ui/menus.xml:209
+#: ../share/ui/menus.ui:209
 msgid "Mas_k"
 msgstr "পৃষ্ঠাৰ আৱৰণ"
 
-#: ../share/ui/menus.xml:214
+#: ../share/ui/menus.ui:214
 msgid "Patter_n"
 msgstr "নমুনা"
 
-#: ../share/ui/menus.xml:239
+#: ../share/ui/menus.ui:239
 msgid "_Path"
 msgstr "_পাথ"
 
-#: ../share/ui/menus.xml:282
+#: ../share/ui/menus.ui:282
 msgid "Filter_s"
 msgstr "ফিল্টাৰবোৰ"
 
-#: ../share/ui/menus.xml:288
+#: ../share/ui/menus.ui:288
 msgid "Exte_nsions"
 msgstr "প্ৰসাৰণবোৰ"
 
-#: ../share/ui/menus.xml:298
+#: ../share/ui/menus.ui:298
 msgid "Tutorials"
 msgstr "টিউটৰিয়েলছ"
 

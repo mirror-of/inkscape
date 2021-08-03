@@ -15057,7 +15057,7 @@ msgid "Change unit parameter"
 msgstr "単位パラメーターの変更"
 
 #: ../src/menus-skeleton.h:24 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/menus.xml:6
+#: ../share/ui/menus.ui:6
 msgid "_File"
 msgstr "ファイル(_F)"
 
@@ -19519,7 +19519,7 @@ msgid "Sele_ction"
 msgstr "選択範囲(_C)"
 
 #: ../src/ui/dialog/find.cpp:66 ../share/ui/dialog-text-edit.glade:119
-#: ../share/ui/menus.xml:275
+#: ../share/ui/menus.ui:275
 msgid "_Text"
 msgstr "テキスト(_T)"
 
@@ -22206,7 +22206,7 @@ msgstr "(Inkscape の再起動が必要)"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1771
 msgid ""
 "You can either enable or disable all icons in menus. By default, the setting "
-"for the 'show-icons' attribute in the 'menus.xml' file determines whether to "
+"for the 'show-icons' attribute in the 'menus.ui' file determines whether to "
 "display icons in menus."
 msgstr ""
 "メニューでアイコンを使用するかどうかを設定できます。デフォルトでは 'menus."
@@ -32548,7 +32548,7 @@ msgstr "スタイルを貼り付け(_S)"
 msgid "Apply the style of the copied object to selection"
 msgstr "コピーされたオブジェクトのスタイルを選択オブジェクトに適用"
 
-#: ../src/verbs.cpp:2309 ../share/ui/menus.xml:39
+#: ../src/verbs.cpp:2395 ../share/ui/menus.ui:39
 msgid "Paste Si_ze"
 msgstr "サイズを貼り付け(_Z)"
 
@@ -33478,7 +33478,11 @@ msgstr ""
 "選択オブジェクトにマスクを反転して適用します (最前面のオブジェクトをマスクと"
 "して使用します)"
 
+<<<<<<< HEAD
 #: ../src/verbs.cpp:2592 ../src/verbs.cpp:2602 ../share/ui/menus.xml:29
+=======
+#: ../src/verbs.cpp:2678 ../src/verbs.cpp:2688 ../share/ui/menus.ui:29
+>>>>>>> d057556939 (Translation Files Menus.xml to Menus.ui)
 msgid "_Edit"
 msgstr "編集(_E)"
 
@@ -44055,59 +44059,59 @@ msgstr "新しいベクター画像"
 msgid "Open a New Window"
 msgstr "新規ウィンドウを開く"
 
-#: ../share/ui/menus.xml:51
+#: ../share/ui/menus.ui:51
 msgid "Clo_ne"
 msgstr "クローン(_N)"
 
-#: ../share/ui/menus.xml:66
+#: ../share/ui/menus.ui:66
 msgid "Select Sa_me"
 msgstr "同じオブジェクトを選択(_M)"
 
-#: ../share/ui/menus.xml:88
+#: ../share/ui/menus.ui:88
 msgid "_View"
 msgstr "表示(_V)"
 
-#: ../share/ui/menus.xml:146
+#: ../share/ui/menus.ui:146
 msgid "Sh_ow/Hide"
 msgstr "表示/非表示(_O)"
 
-#: ../share/ui/menus.xml:174
+#: ../share/ui/menus.ui:174
 msgid "_Layer"
 msgstr "レイヤー(_L)"
 
-#: ../share/ui/menus.xml:198
+#: ../share/ui/menus.ui:198
 msgid "_Object"
 msgstr "オブジェクト(_O)"
 
-#: ../share/ui/menus.xml:211
+#: ../share/ui/menus.ui:211
 msgid "Cli_p"
 msgstr "クリップ(_P)"
 
-#: ../share/ui/menus.xml:216
+#: ../share/ui/menus.ui:216
 msgid "Mas_k"
 msgstr "マスク(_K)"
 
-#: ../share/ui/menus.xml:221
+#: ../share/ui/menus.ui:221
 msgid "Patter_n"
 msgstr "パターン(_N)"
 
-#: ../share/ui/menus.xml:246
+#: ../share/ui/menus.ui:246
 msgid "_Path"
 msgstr "パス(_P)"
 
-#: ../share/ui/menus.xml:292
+#: ../share/ui/menus.ui:292
 msgid "Filter_s"
 msgstr "フィルター(_S)"
 
-#: ../share/ui/menus.xml:298
+#: ../share/ui/menus.ui:298
 msgid "Exte_nsions"
 msgstr "エクステンション(_N)"
 
-#: ../share/ui/menus.xml:306
+#: ../share/ui/menus.ui:306
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: ../share/ui/menus.xml:310
+#: ../share/ui/menus.ui:310
 msgid "Tutorials"
 msgstr "チュートリアル"
 
