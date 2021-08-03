@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.22" />
   <menu id="menus">
   <submenu id="file-menu">
-    <attribute name="label">Files</attribute>
+    <attribute name='label'  translatable="yes">_File</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">_New</attribute>
@@ -100,7 +100,7 @@
   </submenu>
   
   <submenu id="edit-menu"> 
-    <attribute name="label">Edit</attribute>
+    <attribute name='label'  translatable="yes">_Edit</attribute>
     <section>
     	<item>
     	  <attribute name='label' translatable="yes">_Undo</attribute>
@@ -350,7 +350,7 @@
   </submenu>
 
   <submenu id="view-menu">
-    <attribute name="label">View</attribute>
+    <attribute name='label'  translatable="yes">_View</attribute>
     <submenu id="zoom-menu">
       <attribute name='label' translatable='yes'>_Zoom</attribute>
       <section>
@@ -645,7 +645,7 @@
   </submenu>
 
   <submenu id="layer-menu"> 
-    <attribute name="label">Edit</attribute>
+    <attribute name='label'  translatable="yes">_Layer</attribute>
     <section>
     	<item>
     	  <attribute name='label' translatable="yes">Layer_s...</attribute>
@@ -742,7 +742,7 @@
   </submenu>
 
   <submenu id="object-menu">
-    <attribute name="label">Object</attribute>
+    <attribute name='label'  translatable="yes">_Object</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">Object...</attribute>
@@ -922,7 +922,7 @@
   </submenu>
 
   <submenu id="path-menu">
-    <attribute name="label">Path</attribute>
+    <attribute name='label'  translatable="yes">_Path</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">_Object to Path</attribute>
@@ -1044,7 +1044,7 @@
   </submenu>
 
   <submenu id="text-menu">
-    <attribute name="label">Text</attribute>
+    <attribute name='label'  translatable="yes">_Text</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">_Text and Font...</attribute>
@@ -1116,7 +1116,7 @@
   </submenu>
 
   <submenu id="filter-menu"> 
-    <attribute name="label">Edit</attribute>
+    <attribute name='label'  translatable="yes">Filter_s</attribute>
     <submenu id="filters-bevels">
       <attribute name='label' translatable='yes'>Bevels</attribute>
     </submenu>
@@ -1186,7 +1186,7 @@
   </submenu>
 
   <submenu id="effect-menu"> 
-    <attribute name="label">Extension</attribute>
+    <attribute name='label'  translatable="yes">Exte_nsions</attribute>
     <submenu id="effect-arrange">
       <attribute name='label' translatable='yes'>Arrange</attribute>
     </submenu>
@@ -1275,7 +1275,7 @@
   </submenu>
 
   <submenu id="help-menu"> 
-    <attribute name="label">Help</attribute>
+    <attribute name='label'  translatable="yes">_Help</attribute>
       <section>
         <item>
           <attribute name='label' translatable="yes">Inkscape Manual</attribute>
