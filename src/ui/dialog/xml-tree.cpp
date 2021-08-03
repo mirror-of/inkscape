@@ -932,6 +932,13 @@ bool XmlTree::in_dt_coordsys(SPObject const &item)
     return false;
 }
 
+void XmlTree::desktopReplaced() {
+    // subdialog does not receive desktopReplace calls, we need to propagate desktop change
+    if (attributes) {
+        attributes->setDesktop(getDesktop());
+    }
+}
+
 }
 }
 }

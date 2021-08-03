@@ -61,6 +61,7 @@ private:
     void unsetDocument();
     void documentReplaced() override;
     void selectionChanged(Selection *selection) override;
+    void desktopReplaced() override;
 
     /**
      * Select a node in the xml tree
