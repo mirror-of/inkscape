@@ -430,6 +430,24 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _subscript_item->set_active(prefs->getBool("/tools/text/sub", false));
     }
 
+    /* Character positioning popover */
+
+    auto positioning_item = Gtk::manage(new Gtk::ToolItem);
+    add(*positioning_item);
+
+    auto positioning_button = Gtk::manage(new Gtk::MenuButton);
+    positioning_button->set_image_from_icon_name(INKSCAPE_ICON("text_horz_kern"));
+    positioning_button->set_tooltip_text(_("Kerning, word spacing, character positioning"));
+    positioning_item->add(*positioning_button);
+
+    auto positioning_popover = Gtk::manage(new Gtk::Popover(*positioning_button));
+    positioning_popover->set_modal(false); // Stay open until button clicked again.
+    positioning_button->set_popover(*positioning_popover);
+
+    auto positioning_grid = Gtk::manage(new Gtk::Grid);
+    positioning_popover->add(*positioning_grid);
+
+
     /* Letter spacing */
     {
         // Drop down menu
@@ -442,10 +460,10 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _letter_spacing_item->set_custom_numeric_menu_data(values, labels);
         _letter_spacing_item->set_focus_widget(desktop->getCanvas());
         _letter_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::letterspacing_value_changed));
-        add(*_letter_spacing_item);
-
         _letter_spacing_item->set_sensitive(true);
         _letter_spacing_item->set_icon(INKSCAPE_ICON("text_letter_spacing"));
+
+        positioning_grid->attach(*_letter_spacing_item, 0, 0);
     }
 
     /* Word spacing */
@@ -460,10 +478,10 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _word_spacing_item->set_custom_numeric_menu_data(values, labels);
         _word_spacing_item->set_focus_widget(desktop->getCanvas());
         _word_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::wordspacing_value_changed));
-
-        add(*_word_spacing_item);
         _word_spacing_item->set_sensitive(true);
         _word_spacing_item->set_icon(INKSCAPE_ICON("text_word_spacing"));
+
+        positioning_grid->attach(*_word_spacing_item, 1, 0);
     }
 
     /* Character kerning (horizontal shift) */
@@ -477,9 +495,10 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _dx_item->set_tooltip_text(_("Horizontal kerning (px)"));
         _dx_item->set_focus_widget(desktop->getCanvas());
         _dx_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dx_value_changed));
-        add(*_dx_item);
         _dx_item->set_sensitive(true);
         _dx_item->set_icon(INKSCAPE_ICON("text_horz_kern"));
+
+        positioning_grid->attach(*_dx_item, 0, 1);
     }
 
     /* Character vertical shift */
@@ -495,7 +514,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _dy_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dy_value_changed));
         _dy_item->set_sensitive(true);
         _dy_item->set_icon(INKSCAPE_ICON("text_vert_kern"));
-        add(*_dy_item);
+
+        positioning_grid->attach(*_dy_item, 1, 1);
     }
 
     /* Character rotation */
@@ -510,9 +530,11 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _rotation_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::rotation_value_changed));
         _rotation_item->set_sensitive();
         _rotation_item->set_icon(INKSCAPE_ICON("text_rotation"));
-        add(*_rotation_item);
+
+        positioning_grid->attach(*_rotation_item, 2, 1);
     }
 
+    positioning_grid->show_all();
 
     /* Writing mode (Horizontal, Vertical-LR, Vertical-RL) */
     {
