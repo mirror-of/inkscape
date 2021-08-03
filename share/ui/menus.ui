@@ -2,7 +2,9 @@
 
 <interface>
   <requires lib="gtk+" version="3.22" />
-  <menu id="file-menu">
+  <menu id="menus">
+  <submenu id="file-menu">
+    <attribute name="label">Files</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">_New</attribute>
@@ -95,9 +97,10 @@
         <attribute name='icon'>application-exit</attribute>
       </item>
     </section>
-  </menu>
+  </submenu>
   
-  <menu id="edit-menu"> 
+  <submenu id="edit-menu"> 
+    <attribute name="label">Edit</attribute>
     <section>
     	<item>
     	  <attribute name='label' translatable="yes">_Undo</attribute>
@@ -344,9 +347,10 @@
     		<attribute name='icon'>preferences-system</attribute>
     	</item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="view-menu">
+  <submenu id="view-menu">
+    <attribute name="label">View</attribute>
     <submenu id="zoom-menu">
       <attribute name='label' translatable='yes'>_Zoom</attribute>
       <section>
@@ -638,9 +642,10 @@
         <attribute name='target' type='i'>2</attribute>
       </item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="layer-menu"> 
+  <submenu id="layer-menu"> 
+    <attribute name="label">Edit</attribute>
     <section>
     	<item>
     	  <attribute name='label' translatable="yes">Layer_s...</attribute>
@@ -734,9 +739,10 @@
     	  <attribute name='icon'>layer-delete</attribute>
     	</item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="object-menu">
+  <submenu id="object-menu">
+    <attribute name="label">Object</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">Object...</attribute>
@@ -913,9 +919,10 @@
         <attribute name='target'>Arrange</attribute>
       </item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="path-menu">
+  <submenu id="path-menu">
+    <attribute name="label">Path</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">_Object to Path</attribute>
@@ -930,7 +937,7 @@
       <item>
         <attribute name='label' translatable="yes">_Trace Bitmap...</attribute>
         <attribute name='action'>win.dialog-open</attribute>
-	    <attribute name='target'>Trace</attribute>
+      <attribute name='target'>Trace</attribute>
         <attribute name='icon'>bitmap-trace</attribute>
       </item>
     </section>
@@ -1034,25 +1041,26 @@
         <attribute name='action'>app.remove-path-effect</attribute>
       </item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="text-menu">
+  <submenu id="text-menu">
+    <attribute name="label">Text</attribute>
     <section>
       <item>
         <attribute name='label' translatable="yes">_Text and Font...</attribute>
         <attribute name='action'>win.dialog-open</attribute>
-	    <attribute name='target'>Text</attribute>
+      <attribute name='target'>Text</attribute>
         <attribute name='icon'>dialog-text-and-font</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">SVG Font Editor...</attribute>
         <attribute name='action'>win.dialog-open</attribute>
-	    <attribute name='target'>SVGFonts</attribute>
+      <attribute name='target'>SVGFonts</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Unicode Characters...</attribute>
         <attribute name='action'>win.dialog-open</attribute>
-	      <attribute name='target'>Glyphs</attribute>
+        <attribute name='target'>Glyphs</attribute>
         <attribute name='icon'>accessories-character-map</attribute>
       </item>
     </section>
@@ -1105,9 +1113,10 @@
         <attribute name='icon'>tools-check-spelling</attribute>
       </item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="filter-menu"> 
+  <submenu id="filter-menu"> 
+    <attribute name="label">Edit</attribute>
     <submenu id="filters-bevels">
       <attribute name='label' translatable='yes'>Bevels</attribute>
     </submenu>
@@ -1168,15 +1177,16 @@
         <attribute name='action'>win.dialog-open</attribute>
         <attribute name='target'>FilterEffects</attribute>
         <attribute name='icon'>dialog-filters</attribute>
-      </item>  	
+      </item>
       <item>
         <attribute name='label' translatable="yes">_Remove Filters</attribute>
         <attribute name='action'>app.edit-remove-filter</attribute>
       </item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="effect-menu"> 
+  <submenu id="effect-menu"> 
+    <attribute name="label">Extension</attribute>
     <submenu id="effect-arrange">
       <attribute name='label' translatable='yes'>Arrange</attribute>
     </submenu>
@@ -1256,111 +1266,113 @@
       <item>
         <attribute name='label' translatable="yes">Previous Exte_nsion</attribute>
         <attribute name='action'>app.last-effect</attribute>
-      </item> 
+      </item>
       <item>
         <attribute name='label' translatable="yes">_Previous Extension Settings...</attribute>
         <attribute name='action'>app.last-effect-pref</attribute>
       </item>
     </section>
-  </menu>
+  </submenu>
 
-  <menu id="help-menu"> 
-    <section>
-    	<item>
-    	  <attribute name='label' translatable="yes">Inkscape Manual</attribute>
-    	  <attribute name='action'>win.help-url-manual</attribute>
-    	</item>
-    	<item>
-    	  <attribute name='label' translatable="yes">Keys and Mouse Reference</attribute>
-    	  <attribute name='action'>win.help-url-keys</attribute>
-    	</item>
-    	<item>
-    	  <attribute name='label' translatable="yes">Ask Us a Question</attribute>
-    	  <attribute name='action'>win.help-url-ask-question</attribute>
-    	</item>
-    </section>
-    <submenu id="tutiorial">
-      <attribute name='label' translatable='yes'>Tutorials</attribute>
-      <item>
-        <attribute name='label' translatable="yes">Inkscape: _Basic</attribute>
-        <attribute name='action'>doc.tutorial-basic</attribute>
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Inkscape: _Shapes</attribute>
-        <attribute name='action'>doc.tutorial-shapes</attribute>
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Inkscape: _Advanced</attribute>
-        <attribute name='action'>doc.tutorial-advanced</attribute>
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Inkscape: T_racing</attribute>
-        <attribute name='action'>doc.tutorial-tracing</attribute>
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Inkscape: Tracing Pixel Art</attribute> 
-        <attribute name='action'>doc.tutorial-tracing-pixelart</attribute> 
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Inkscape: _Calligraphy</attribute> 
-        <attribute name='action'>doc.tutorial-calligraphy</attribute>
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Inkscape: _Interpolate</attribute> 
-        <attribute name='action'>doc.tutorial-interpolate</attribute> 
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">_Elements of Design</attribute> 
-        <attribute name='action'>doc.tutorial-design</attribute> 
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">_Tips and Tricks</attribute>  
-        <attribute name='action'>doc.tutorial-tips</attribute> 
-      </item>
+  <submenu id="help-menu"> 
+    <attribute name="label">Help</attribute>
+      <section>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape Manual</attribute>
+          <attribute name='action'>win.help-url-manual</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Keys and Mouse Reference</attribute>
+          <attribute name='action'>win.help-url-keys</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Ask Us a Question</attribute>
+          <attribute name='action'>win.help-url-ask-question</attribute>
+        </item>
+      </section>
+      <submenu id="tutiorial">
+        <attribute name='label' translatable='yes'>Tutorials</attribute>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape: _Basic</attribute>
+          <attribute name='action'>doc.tutorial-basic</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape: _Shapes</attribute>
+          <attribute name='action'>doc.tutorial-shapes</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape: _Advanced</attribute>
+          <attribute name='action'>doc.tutorial-advanced</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape: T_racing</attribute>
+          <attribute name='action'>doc.tutorial-tracing</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape: Tracing Pixel Art</attribute> 
+          <attribute name='action'>doc.tutorial-tracing-pixelart</attribute> 
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape: _Calligraphy</attribute> 
+          <attribute name='action'>doc.tutorial-calligraphy</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Inkscape: _Interpolate</attribute> 
+          <attribute name='action'>doc.tutorial-interpolate</attribute> 
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">_Elements of Design</attribute> 
+          <attribute name='action'>doc.tutorial-design</attribute> 
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">_Tips and Tricks</attribute>  
+          <attribute name='action'>doc.tutorial-tips</attribute> 
+        </item>
+      </submenu>
+      <section>
+        <item>
+          <attribute name='label' translatable="yes">Command Line Options</attribute>
+          <attribute name='action'>win.help-url-man</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">FAQ</attribute>
+          <attribute name='action'>win.help-url-faq</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">New in This Version</attribute>
+          <attribute name='action'>win.help-url-release-notes</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Report a Bug</attribute>
+          <attribute name='action'>win.help-url-report-bug</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">Donate</attribute>
+          <attribute name='action'>win.help-url-donate</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">SVG 1.1 Specification</attribute>
+          <attribute name='action'>win.help-url-svg11-spec</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">SVG 2 Specification</attribute>
+          <attribute name='action'>win.help-url-svg2-spec</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name='label' translatable="yes">About _Memory</attribute>
+          <attribute name='action'>win.dialog-open</attribute>
+          <attribute name='target'>Memory</attribute>
+          <attribute name='icon'>dialog-memory</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable="yes">_About Inkscape</attribute>
+          <attribute name='action'>doc.help-about</attribute>
+          <attribute name='icon'>inkscape-logo</attribute>
+        </item>
+      </section>
     </submenu>
-    <section>
-    	<item>
-    	  <attribute name='label' translatable="yes">Command Line Options</attribute>
-    	  <attribute name='action'>win.help-url-man</attribute>
-    	</item>
-      <item>
-    	  <attribute name='label' translatable="yes">FAQ</attribute>
-    	  <attribute name='action'>win.help-url-faq</attribute>
-    	</item>
-      <item>
-    	  <attribute name='label' translatable="yes">New in This Version</attribute>
-    	  <attribute name='action'>win.help-url-release-notes</attribute>
-    	</item>
-      <item>
-    	  <attribute name='label' translatable="yes">Report a Bug</attribute>
-    	  <attribute name='action'>win.help-url-report-bug</attribute>
-    	</item>
-      <item>
-    	  <attribute name='label' translatable="yes">Donate</attribute>
-    	  <attribute name='action'>win.help-url-donate</attribute>
-    	</item>
-      <item>
-    	  <attribute name='label' translatable="yes">SVG 1.1 Specification</attribute>
-    	  <attribute name='action'>win.help-url-svg11-spec</attribute>
-    	</item>
-      <item>
-    	  <attribute name='label' translatable="yes">SVG 2 Specification</attribute>
-    	  <attribute name='action'>win.help-url-svg2-spec</attribute>
-    	</item>
-    </section>    
-    <section>
-    	<item>
-    	  <attribute name='label' translatable="yes">About _Memory</attribute>
-    	  <attribute name='action'>win.dialog-open</attribute>
-    	  <attribute name='target'>Memory</attribute>
-    	  <attribute name='icon'>dialog-memory</attribute>
-    	</item>
-    	<item>
-    	  <attribute name='label' translatable="yes">_About Inkscape</attribute>
-    	  <attribute name='action'>doc.help-about</attribute>
-    	  <attribute name='icon'>inkscape-logo</attribute>
-    	</item>
-    </section>
   </menu>
 
 </interface>

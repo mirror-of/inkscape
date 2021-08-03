@@ -37,6 +37,8 @@
 
 #include "object/sp-namedview.h"
 
+#include <gtkmm/application.h>
+
 #include "ui/icon-loader.h"
 #include "inkscape-window.h"
 #include "ui/shortcuts.h"
@@ -46,19 +48,6 @@
 #ifdef GDK_WINDOWING_QUARTZ
 #include <gtkosxapplication.h>
 #endif
-
-const std::vector< std::pair<std::string, std::string> > menu_data = {
-    { "File"  ,        "file-menu"   },
-    { "Edit"  ,        "edit-menu"   },
-    { "View"  ,        "view-menu"   },
-    { "Layer" ,        "layer-menu"  },
-    { "Object",        "object-menu" },
-    { "Path"  ,        "path-menu"   },
-    { "Text"  ,        "text-menu"   },
-    { "Filters",       "filter-menu" },
-    { "Extensions",    "effect-menu" },
-    { "Help"  ,        "help-menu"   }
-};
 
 // =================== Main Menu ================
 void
@@ -74,96 +63,88 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
         return;
     }
 
-    for (auto [menu_title, menu_name] : menu_data)
+    std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
+    auto refBuilder = Gtk::Builder::create();
+
+    try
     {
-        Gtk::MenuItem* menuitem = Gtk::manage(new Gtk::MenuItem(_(menu_title.c_str()), true));
-        menuitem->set_name(menu_name);
+        refBuilder->add_from_file(filename);
+    }
+    catch (const Glib::Error& err)
+    {
+        std::cerr << "build_menu: failed to load View menu from: "
+                    << filename <<": "
+                    << err.what() << std::endl;
+    }
+    
+    const auto object = refBuilder->get_object("menus");
+    const auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
+    
+    if (!gmenu) {
+        std::cerr << "build_menu: failed to build View menu!" << std::endl;
+    } else {
 
-        std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
-        auto refBuilder = Gtk::Builder::create();
+        InkscapeApplication::instance()->gtk_app()->set_menubar(gmenu); 
 
-        try
-        {
-            refBuilder->add_from_file(filename);
+        { // Filters
+            static auto app = InkscapeApplication::instance();
+            
+            for (auto [ filter_id, submenu_name ] : app->get_action_effect_data().give_all_data()) {
+                auto [ filter_submenu,filter_name ] = submenu_name;
+                if ( app->get_action_effect_data().is_filter(filter_submenu) ) {
+                    auto sub_object = refBuilder->get_object(filter_submenu);
+                    auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
+                    sub_gmenu->append( filter_name, "app."+filter_id );        
+                }
+            }
+
         }
-        catch (const Glib::Error& err)
-        {
-            std::cerr << "build_menu: failed to load View menu from: "
-                        << filename <<": "
-                        << err.what() << std::endl;
+
+        { // Extensions
+            static auto app = InkscapeApplication::instance();
+            
+            for (auto [ extension_id, submenu_name ] : app->get_action_effect_data().give_all_data()) {
+                auto [ extension_submenu,extension_name ] = submenu_name;
+                if ( app->get_action_effect_data().is_extensions(extension_submenu) ) {
+                    auto sub_object = refBuilder->get_object(extension_submenu);
+                    auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
+                    sub_gmenu->append( extension_name,"app."+extension_id );        
+                }
+            }
+
         }
-        auto object = refBuilder->get_object(menu_name);
-        auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
-        if (!gmenu) {
-            std::cerr << "build_menu: failed to build View menu!" << std::endl;
-        } else {
 
-            auto submenu = Gtk::manage(new Gtk::Menu(gmenu));
-            menuitem->set_submenu(*submenu);
-            menu->append(*menuitem);
+        { // Recent file
+            auto recent_manager = Gtk::RecentManager::get_default();
+            auto recent_files = recent_manager->get_items(); // all recent files not necessarily inkscape only
 
-            if (menu_name == "filter-menu") {
+            int max_files = Inkscape::Preferences::get()->getInt("/options/maxrecentdocuments/value");
 
-                static auto app = InkscapeApplication::instance();
-                
-                for (auto [ filter_id, submenu_name ] : app->get_action_effect_data().give_all_data()) {
-                    auto [ filter_submenu,filter_name ] = submenu_name;
-                    if ( app->get_action_effect_data().is_filter(filter_submenu) ) {
-                        auto sub_object = refBuilder->get_object(filter_submenu);
-                        auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
-                        sub_gmenu->append( filter_name, "app."+filter_id );        
-                    }
+            auto sub_object = refBuilder->get_object("recent-files");
+            auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
+
+            for (auto const &recent_file : recent_files) {
+                // check if given was generated by inkscape
+                bool valid_file = recent_file->has_application(g_get_prgname()) or
+                                recent_file->has_application("org.inkscape.Inkscape") or
+                                recent_file->has_application("inkscape") or
+                                recent_file->has_application("inkscape.exe");
+
+                valid_file = valid_file and recent_file->exists();
+
+                if (not valid_file) {
+                    continue;
                 }
 
-            } // Filters end
-
-            if (menu_name == "effect-menu") {
-
-                static auto app = InkscapeApplication::instance();
-                
-                for (auto [ extension_id, submenu_name ] : app->get_action_effect_data().give_all_data()) {
-                    auto [ extension_submenu,extension_name ] = submenu_name;
-                    if ( app->get_action_effect_data().is_extensions(extension_submenu) ) {
-                        auto sub_object = refBuilder->get_object(extension_submenu);
-                        auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
-                        sub_gmenu->append( extension_name,"app."+extension_id );        
-                    }
+                if (max_files-- <= 0) {
+                    break;
                 }
-
-            } // Extensions end
-
-            if(menu_name== "file-menu") {
-                auto recent_manager = Gtk::RecentManager::get_default();
-                auto recent_files = recent_manager->get_items(); // all recent files not necessarily inkscape only
-
-                int max_files = Inkscape::Preferences::get()->getInt("/options/maxrecentdocuments/value");
-
-                auto sub_object = refBuilder->get_object("recent-files");
-                auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
-
-                for (auto const &recent_file : recent_files) {
-                    // check if given was generated by inkscape
-                    bool valid_file = recent_file->has_application(g_get_prgname()) or
-                                    recent_file->has_application("org.inkscape.Inkscape") or
-                                    recent_file->has_application("inkscape") or
-                                    recent_file->has_application("inkscape.exe");
-
-                    valid_file = valid_file and recent_file->exists();
-
-                    if (not valid_file) {
-                        continue;
-                    }
-
-                    if (max_files-- <= 0) {
-                        break;
-                    }
-                    
-                    std::string action_name = "app.file-open-window('"+recent_file->get_uri_display()+"')";
-                    sub_gmenu->append(recent_file->get_short_name(),action_name);
                 
-                }
-            } // Recent file end
+                std::string action_name = "app.file-open-window('"+recent_file->get_uri_display()+"')";
+                sub_gmenu->append(recent_file->get_short_name(),action_name);
+            }
         }
+
     }
 }
 
