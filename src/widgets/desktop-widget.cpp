@@ -772,8 +772,6 @@ void SPDesktopWidget::on_realize()
             GtkWidget *menuitem = nullptr;
             if (verb == SP_VERB_NONE) {
                 menuitem = gtk_separator_menu_item_new();
-            } else if (auto item = get_menu_item_for_verb(verb, dtw->desktop)) {
-                menuitem = static_cast<Gtk::Widget *>(item)->gobj();
             } else {
                 continue;
             }
@@ -1383,10 +1381,11 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     _layer_selector->setDesktop(dtw->desktop);
 
     // TEMP
-    dtw->_menubar = build_menubar(dtw->desktop);
-    dtw->_menubar->set_name("MenuBar");
-    dtw->_menubar->show_all();
-    dtw->_vbox->pack_start(*dtw->_menubar, false, false);
+    build_menubar();
+    // dtw->_menubar = 
+    // dtw->_menubar->set_name("MenuBar");
+    // dtw->_menubar->show_all();
+    // dtw->_vbox->pack_start(*dtw->_menubar, false, false);
 
     dtw->layoutWidgets();
 

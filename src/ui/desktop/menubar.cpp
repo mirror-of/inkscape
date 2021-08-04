@@ -28,8 +28,6 @@
 
 #include "message-context.h"
 
-#include "menu-icon-shift.h"
-
 #include "helper/action.h"
 #include "helper/action-context.h"
 
@@ -51,18 +49,8 @@
 
 // =================== Main Menu ================
 void
-build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::View* view, bool show_icons = true)
+build_menu()
 {
-    if (menu == nullptr) {
-        std::cerr << "build_menu: menu is nullptr" << std::endl;
-        return;
-    }
-
-    if (xml == nullptr) {
-        std::cerr << "build_menu: xml is nullptr" << std::endl;
-        return;
-    }
-
     std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
     auto refBuilder = Gtk::Builder::create();
 
@@ -134,32 +122,15 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 }
 
 void
-reload_menu(Inkscape::UI::View::View* view, Gtk::MenuBar* menubar)
+reload_menu()
 {   
-    menubar->hide();
-    for (auto *widg : menubar->get_children()) {
-        menubar->remove(*widg);
-    }
-    build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
-
-    shift_icons_recursive(menubar); // Find all submenus and add callback to each one.
-
-    menubar->show_all();
-#ifdef GDK_WINDOWING_QUARTZ
-    sync_menubar();
-    menubar->hide();
-#endif
+    build_menu();
 }
 
-Gtk::MenuBar*
-build_menubar(Inkscape::UI::View::View* view)
+void
+build_menubar()
 {
-    Gtk::MenuBar* menubar = Gtk::manage(new Gtk::MenuBar());
-    build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
-
-    shift_icons_recursive(menubar); // Find all submenus and add callback to each one.
-
-    return menubar;
+    build_menu();
 }
 
 

@@ -3389,7 +3389,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if(window) {
           SPDesktopWidget *dtw = window->get_desktop_widget();
           if(dtw)
-            reload_menu(desktop, dtw->_menubar);
+            reload_menu();
         }
       }
     }

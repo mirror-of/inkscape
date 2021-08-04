@@ -38,7 +38,6 @@
 
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/desktop/menu-icon-shift.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/imagetoggler.h"
 
@@ -896,9 +895,6 @@ LayersPanel::LayersPanel()
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_DELETE, (int)BUTTON_DELETE ) );
 
         _popupMenu.show_all_children();
-
-        // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
-        _popupMenu.signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(shift_icons), &_popupMenu));
     }
     // -------------------------------------------------------
 

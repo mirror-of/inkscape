@@ -57,7 +57,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-#include "ui/desktop/menu-icon-shift.h"
+//#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/layer-properties.h"
 #include "ui/icon-loader.h"
@@ -153,9 +153,6 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     }
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
-
-    // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
-    signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(shift_icons), this));
 
     // Set the style and icon theme of the new menu based on the desktop
     if (Gtk::Window *window = _desktop->getToplevel()) {

@@ -52,7 +52,6 @@
 #include "ui/icon-names.h"
 #include "ui/selected-color.h"
 #include "ui/shortcuts.h"
-#include "ui/desktop/menu-icon-shift.h"
 #include "ui/tools/node-tool.h"
 
 #include "ui/contextmenu.h"
