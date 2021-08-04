@@ -10,7 +10,7 @@
 ../share/ui/inkscape-about.glade
 ../share/ui/inkscape-start.glade
 ../share/ui/marker-popup.glade
-../share/ui/menus.ui
+../share/ui/menus.xml
 ../share/ui/toolbar-snap.ui
 ../share/ui/toolbar-tool.ui
 ../share/ui/toolbar-zoom.ui
