@@ -10,6 +10,7 @@
  *   Patrick Storz      <eduard.braun2@gmx.de>
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *   Kris De Gussem     <Kris.DeGussem@gmail.com>
+ *   Sushant A.A.       <sushant.co19@gmail.com>
  *
  * Copyright (C) 2018 Authors
  *
