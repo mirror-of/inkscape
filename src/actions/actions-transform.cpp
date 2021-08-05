@@ -97,9 +97,9 @@ std::vector<std::vector<Glib::ustring>> raw_data_transform =
 std::vector<std::vector<Glib::ustring>> hint_data_transform =
 {
     // clang-format off
-    {"app.transform-translate",     N_("Give two String input for translation")},
-    {"app.transform-rotate",        N_("Give Double input for angle of Rotation")},
-    {"app.transform-scale",         N_("Give Double input for Scale")}
+    {"app.transform-translate",     N_("Give two comma separated numbers")},
+    {"app.transform-rotate",        N_("Give input for angle of Clockwise Rotation")},
+    {"app.transform-scale",         N_("Give input for Scale")}
     // clang-format on
 };
 
