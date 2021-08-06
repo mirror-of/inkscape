@@ -53,6 +53,7 @@
 #include "object/sp-item-group.h"
 #include "object/sp-root.h"
 
+#include "ui/desktop/menubar.h"
 #include "ui/themes.h"
 #include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
@@ -75,8 +76,6 @@ static void (* ill_handler)  (int) = SIG_DFL;
 #ifndef _WIN32
 static void (* bus_handler)  (int) = SIG_DFL;
 #endif
-
-#define MENUS_FILE "menus.xml"
 
 #define SP_INDENT 8
 
@@ -532,13 +531,11 @@ Application::crash_handler (int /*signum*/)
 bool Application::load_menus()
 {
     using namespace Inkscape::IO::Resource;
-    Glib::ustring filename = get_filename(UIS, MENUS_FILE);
+    Glib::ustring filename = get_filename(UIS, "menus.ui");
+    
+    build_menubar();
 
-    _menus = sp_repr_read_file(filename.c_str(), nullptr);
-    if ( !_menus ) {
-        _menus = sp_repr_read_mem(menus_skeleton, MENUS_SKELETON_SIZE, nullptr);
-    }
-    return (_menus != nullptr);
+    return (filename != nullptr);
 }
 
 

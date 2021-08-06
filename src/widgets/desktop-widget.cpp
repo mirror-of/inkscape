@@ -1382,10 +1382,6 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
 
     // TEMP
     build_menubar();
-    // dtw->_menubar = 
-    // dtw->_menubar->set_name("MenuBar");
-    // dtw->_menubar->show_all();
-    // dtw->_vbox->pack_start(*dtw->_menubar, false, false);
 
     dtw->layoutWidgets();
 
