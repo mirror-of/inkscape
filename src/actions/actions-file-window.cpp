@@ -119,6 +119,11 @@ std::vector<std::vector<Glib::ustring>> raw_data_file_window =
 void
 add_actions_file_window(InkscapeWindow* win)
 {
+    if (!win) {
+        std::cerr << "add_actions_file_window: no window!" << std::endl;
+        return;
+    }
+
     // clang-format off
     win->add_action( "file-open",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&file_open), win));
     win->add_action( "document-save",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&document_save), win));

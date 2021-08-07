@@ -83,6 +83,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_file_document =
 void
 add_actions_file_document(SPDocument* document)
 {
+    if(!document){
+        std::cerr << "add_actions_file_document: no document!" << std::endl;
+        return;
+    }
 
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
