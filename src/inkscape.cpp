@@ -532,10 +532,11 @@ bool Application::load_menus()
 {
     using namespace Inkscape::IO::Resource;
     Glib::ustring filename = get_filename(UIS, "menus.ui");
-    
+    if (filename==nullptr) {   
+        return false;
+    }
     build_menubar();
-
-    return (filename != nullptr);
+    return true;
 }
 
 
