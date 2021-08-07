@@ -59,8 +59,6 @@ file_open_with_window(const Glib::VariantBase& value, InkscapeApplication *app)
 void
 file_new(const Glib::VariantBase& value, InkscapeApplication *app)
 {
-    std::cout<<"new value = "<<value<<"\n";
-
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
 
     SPDocument *document = app->document_new(s.get());
@@ -136,22 +134,27 @@ add_actions_file(InkscapeApplication* app)
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
     Glib::VariantType BString(Glib::VARIANT_TYPE_BYTESTRING);
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
-    auto *gapp = app->gio_app();
+    if(app){
 
-    // clang-format off
-    gapp->add_action_with_parameter( "file-open",                 String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open),               app));
-    gapp->add_action_with_parameter( "file-new",                  String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_new),                app));
-    gapp->add_action_with_parameter( "file-open-window",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open_with_window),   app));
-    gapp->add_action(                "file-close",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_close),              app));
-    // clang-format on
+        // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
+        auto *gapp = app->gio_app();
+
+        if(gapp){
+            // clang-format off
+            gapp->add_action_with_parameter( "file-open",                 String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open),               app));
+            gapp->add_action_with_parameter( "file-new",                  String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_new),                app));
+            gapp->add_action_with_parameter( "file-open-window",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open_with_window),   app));
+            gapp->add_action(                "file-close",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_close),              app));
+            // clang-format on
 #else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+            std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif
 
-    app->get_action_extra_data().add_data(raw_data_file);
-    app->get_action_hint_data().add_data(hint_data_file);
+            app->get_action_extra_data().add_data(raw_data_file);
+            app->get_action_hint_data().add_data(hint_data_file);
+        }
+    }
 }
 
 
