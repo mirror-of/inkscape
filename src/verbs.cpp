@@ -282,63 +282,6 @@ public:
 }; // DialogVerb class
 
 /**
- * A class to encompass all of the verbs which deal with help operations.
- */
-class HelpVerb : public Verb {
-private:
-    static void perform(SPAction *action, void *mydata);
-protected:
-    SPAction *make_action(Inkscape::ActionContext const & context) override;
-public:
-    /** Use the Verb initializer with the same parameters. */
-    HelpVerb(unsigned int const code,
-             gchar const *id,
-             gchar const *name,
-             gchar const *tip,
-             gchar const *image) :
-        Verb(code, id, name, tip, image, _("Help"))
-    { }
-}; // HelpVerb class
-
-/**
- * A class to encompass all of the verbs which open an URL.
- */
-class HelpUrlVerb : public HelpVerb {
-private:
-    static void perform(SPAction *action, void *mydata);
-protected:
-    SPAction *make_action(Inkscape::ActionContext const & context) override;
-public:
-    /** Use the HelpVerb initializer with the same parameters. */
-    HelpUrlVerb(unsigned int const code,
-                gchar const *id,
-                gchar const *name,
-                gchar const *tip,
-                gchar const *image) :
-        HelpVerb(code, id, name, tip, image)
-    { }
-}; // HelpUrlVerb class
-
-/**
- * A class to encompass all of the verbs which deal with tutorial operations.
- */
-class TutorialVerb : public Verb {
-private:
-    static void perform(SPAction *action, void *mydata);
-protected:
-    SPAction *make_action(Inkscape::ActionContext const & context) override;
-public:
-    /** Use the Verb initializer with the same parameters. */
-    TutorialVerb(unsigned int const code,
-                 gchar const *id,
-                 gchar const *name,
-                 gchar const *tip,
-                 gchar const *image) :
-        Verb(code, id, name, tip, image, _("Help"))
-    { }
-}; // TutorialVerb class
-
-/**
  * A class to encompass all of the verbs which deal with text operations.
  */
 class TextVerb : public Verb {
@@ -525,45 +468,6 @@ SPAction *ZoomVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *DialogVerb::make_action(Inkscape::ActionContext const & context)
-{
-    return make_action_helper(context, &perform);
-}
-
-/**
- * Create an action for a \c HelpVerb.
- *
- * Calls \c make_action_helper with the \c vector.
- *
- * @param  context  Which context the action should be created for.
- * @return The built action.
- */
-SPAction *HelpVerb::make_action(Inkscape::ActionContext const & context)
-{
-    return make_action_helper(context, &perform);
-}
-
-/**
- * Create an action for a \c HelpUrlVerb.
- *
- * Calls \c make_action_helper with the \c vector.
- *
- * @param  context  Which context the action should be created for.
- * @return The built action.
- */
-SPAction *HelpUrlVerb::make_action(Inkscape::ActionContext const & context)
-{
-    return make_action_helper(context, &perform);
-}
-
-/**
- * Create an action for a \c TutorialVerb.
- *
- * Calls \c make_action_helper with the \c vector.
- *
- * @param  context  Which context the action should be created for.
- * @return The built action.
- */
-SPAction *TutorialVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -1933,105 +1837,6 @@ void DialogVerb::perform(SPAction *action, void *data)
     }
 } // end of sp_verb_action_dialog_perform()
 
-/**
- * Decode the verb code and take appropriate action.
- */
-void HelpVerb::perform(SPAction *action, void *data)
-{
-    g_return_if_fail(ensure_desktop_valid(action));
-    SPDesktop *dt = sp_action_get_desktop(action);
-    DialogContainer *container = dt->getContainer();
-
-    switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_HELP_ABOUT:
-            break;
-        case SP_VERB_HELP_MEMORY:
-            container->new_dialog(SP_VERB_HELP_MEMORY);
-            break;
-        default:
-            break;
-    }
-} // end of sp_verb_action_help_perform()
-
-/**
- * Decode the verb code and take appropriate action.
- */
-void HelpUrlVerb::perform(SPAction *action, void *data)
-{
-    // get current window
-    g_return_if_fail(ensure_desktop_valid(action));
-    SPDesktop *desktop = sp_action_get_desktop(action);
-    Gtk::Window *window = desktop->getToplevel();
-
-    // get URL
-    Glib::ustring url;
-
-    static const char *lang = _("en"); // TODO: strip /en/ for English version?
-    static const char *version = Inkscape::version_string_without_revision;
-    static const bool development_version = g_str_has_suffix(version, "-dev"); // this detection is not perfect but should be close enough
-    static const Glib::ustring branch = development_version ? "master" :
-        Glib::ustring::compose("%1.%2.x", Inkscape::version_major,  Inkscape::version_major);
-
-    switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_HELP_URL_ASK_QUESTION:
-            url = Glib::ustring::compose("https://inkscape.org/%1/community/", lang);
-            break;
-        case SP_VERB_HELP_URL_MAN:
-            url = Glib::ustring::compose("https://inkscape.org/%1/doc/inkscape-man-%2.html", lang, branch);
-            break;
-        case SP_VERB_HELP_URL_FAQ:
-            url = Glib::ustring::compose("https://inkscape.org/%1/learn/faq/", lang);
-            break;
-        case SP_VERB_HELP_URL_KEYS:
-            url = Glib::ustring::compose("https://inkscape.org/%1/doc/keys-%2.html", lang, branch);
-            break;
-        case SP_VERB_HELP_URL_RELEASE_NOTES:
-            url = Glib::ustring::compose("https://inkscape.org/%1/release/inkscape-%2", lang, development_version ? "master" : version);
-            break;
-        case SP_VERB_HELP_URL_REPORT_BUG:
-            url = Glib::ustring::compose("https://inkscape.org/%1/contribute/report-bugs/", lang);
-            break;
-        case SP_VERB_HELP_URL_MANUAL:
-            url = "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php";
-            break;
-        case SP_VERB_HELP_URL_DONATE:
-            url = Glib::ustring::compose("https://inkscape.org/%1/donate#lang=%1&version=%2", lang, version);
-            break;
-        case SP_VERB_HELP_URL_SVG11_SPEC:
-            url = "http://www.w3.org/TR/SVG11/";
-            break;
-        case SP_VERB_HELP_URL_SVG2_SPEC:
-            url = "http://www.w3.org/TR/SVG2/";
-            break;
-        default:
-            g_assert_not_reached();
-            return;
-    }
-
-    // open URL for current window
-}
-
-/**
- * Decode the verb code and take appropriate action.
- */
-void TutorialVerb::perform(SPAction *action, void *data)
-{
-    g_return_if_fail(ensure_desktop_valid(action));
-    switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_TUTORIAL_BASIC:
-        case SP_VERB_TUTORIAL_SHAPES:
-        case SP_VERB_TUTORIAL_ADVANCED:
-        case SP_VERB_TUTORIAL_TRACING:
-        case SP_VERB_TUTORIAL_TRACING_PIXELART:
-        case SP_VERB_TUTORIAL_CALLIGRAPHY:
-        case SP_VERB_TUTORIAL_INTERPOLATE:
-        case SP_VERB_TUTORIAL_DESIGN:
-        case SP_VERB_TUTORIAL_TIPS:
-        default:
-            break;
-    }
-} // end of sp_verb_action_tutorial_perform()
-
 // *********** Effect Last **********
 
 /**
@@ -2748,53 +2553,6 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_SVG_FONTS, "DialogSVGFonts", N_("SVG Font Editor..."), N_("Edit SVG fonts"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_EXPORT, "DialogExport", N_("_Export PNG Image..."),
                    N_("Export this document or a selection as a PNG image"), INKSCAPE_ICON("document-export")),
-    // Help
-    new HelpVerb(SP_VERB_HELP_MEMORY, "HelpAboutMemory", N_("About _Memory"), N_("Memory usage information"),
-                 INKSCAPE_ICON("dialog-memory")),
-    new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"), N_("Inkscape version, authors, license"),
-                 INKSCAPE_ICON("inkscape-logo")),
-    // new HelpVerb(SP_VERB_SHOW_LICENSE, "ShowLicense", N_("_License"),
-    //           N_("Distribution terms"), /*"show_license"*/"inkscape_options"),
-
-    // Help URLs
-    // TODO: Better tooltips
-    new HelpUrlVerb(SP_VERB_HELP_URL_ASK_QUESTION, "HelpUrlAskQuestion", N_("Ask Us a Question"),
-                    N_("Ask Us a Question"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_MAN, "HelpUrlMan", N_("Command Line Options"), N_("Command Line Options"),
-                    nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_FAQ, "HelpUrlFAQ", N_("FAQ"), N_("FAQ"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_KEYS, "HelpUrlKeys", N_("Keys and Mouse Reference"),
-                    N_("Keys and Mouse Reference"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_RELEASE_NOTES, "HelpUrlReleaseNotes", N_("New in This Version"),
-                    N_("New in This Version"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_REPORT_BUG, "HelpUrlReportBug", N_("Report a Bug"), N_("Report a Bug"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_MANUAL, "HelpUrlManual", N_("Inkscape Manual"), N_("Inkscape Manual"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_DONATE, "HelpUrlDonate", N_("Donate"), N_("Donate to Inkscape"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_SVG11_SPEC, "HelpUrlSvg11Spec", N_("SVG 1.1 Specification"),
-                    N_("SVG 1.1 Specification"), nullptr),
-    new HelpUrlVerb(SP_VERB_HELP_URL_SVG2_SPEC, "HelpUrlSvg2Spec", N_("SVG 2 Specification"), N_("SVG 2 Specification"),
-                    nullptr),
-
-    // Tutorials
-    new TutorialVerb(SP_VERB_TUTORIAL_BASIC, "TutorialsBasic", N_("Inkscape: _Basic"),
-                     N_("Getting started with Inkscape"), nullptr /*"tutorial_basic"*/),
-    new TutorialVerb(SP_VERB_TUTORIAL_SHAPES, "TutorialsShapes", N_("Inkscape: _Shapes"),
-                     N_("Using shape tools to create and edit shapes"), nullptr),
-    new TutorialVerb(SP_VERB_TUTORIAL_ADVANCED, "TutorialsAdvanced", N_("Inkscape: _Advanced"),
-                     N_("Advanced Inkscape topics"), nullptr /*"tutorial_advanced"*/),
-    // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-    new TutorialVerb(SP_VERB_TUTORIAL_TRACING, "TutorialsTracing", N_("Inkscape: T_racing"), N_("Using bitmap tracing"),
-                     nullptr /*"tutorial_tracing"*/),
-    new TutorialVerb(SP_VERB_TUTORIAL_TRACING_PIXELART, "TutorialsTracingPixelArt", N_("Inkscape: Tracing Pixel Art"),
-                     N_("Using Trace Pixel Art dialog"), nullptr),
-    new TutorialVerb(SP_VERB_TUTORIAL_CALLIGRAPHY, "TutorialsCalligraphy", N_("Inkscape: _Calligraphy"),
-                     N_("Using the Calligraphy pen tool"), nullptr),
-    new TutorialVerb(SP_VERB_TUTORIAL_INTERPOLATE, "TutorialsInterpolate", N_("Inkscape: _Interpolate"),
-                     N_("Using the interpolate extension"), nullptr /*"tutorial_interpolate"*/),
-    new TutorialVerb(SP_VERB_TUTORIAL_DESIGN, "TutorialsDesign", N_("_Elements of Design"),
-                     N_("Principles of design in the tutorial form"), nullptr /*"tutorial_design"*/),
-    new TutorialVerb(SP_VERB_TUTORIAL_TIPS, "TutorialsTips", N_("_Tips and Tricks"),
-                     N_("Miscellaneous tips and tricks"), nullptr /*"tutorial_tips"*/),
 
     // Effect -- renamed Extension
     new EffectLastVerb(SP_VERB_EFFECT_LAST, "EffectLast", N_("Previous Exte_nsion"),
