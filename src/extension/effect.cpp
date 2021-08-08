@@ -109,7 +109,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     // cant use documnent level because it is not defined 
     static auto app = InkscapeApplication::instance();
     
-    if(app){
+    if (app) {
         static auto gapp = InkscapeApplication::instance()->gtk_app();
         gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
         
