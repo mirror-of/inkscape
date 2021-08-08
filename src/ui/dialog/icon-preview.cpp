@@ -245,6 +245,9 @@ IconPreviewPanel::IconPreviewPanel()
 IconPreviewPanel::~IconPreviewPanel()
 {
     if (drawing) {
+        if (auto document = getDocument()) {
+            document->getRoot()->invoke_hide(visionkey);
+        }
         delete drawing;
         drawing = nullptr;
     }
