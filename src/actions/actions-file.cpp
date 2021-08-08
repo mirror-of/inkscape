@@ -134,27 +134,22 @@ add_actions_file(InkscapeApplication* app)
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
     Glib::VariantType BString(Glib::VARIANT_TYPE_BYTESTRING);
 
-    if(app){
-
-        // Debian 9 has 2.50.0
+    // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
-        auto *gapp = app->gio_app();
+    auto *gapp = app->gio_app();
 
-        if(gapp){
-            // clang-format off
-            gapp->add_action_with_parameter( "file-open",                 String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open),               app));
-            gapp->add_action_with_parameter( "file-new",                  String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_new),                app));
-            gapp->add_action_with_parameter( "file-open-window",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open_with_window),   app));
-            gapp->add_action(                "file-close",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_close),              app));
-            // clang-format on
+    // clang-format off
+    gapp->add_action_with_parameter( "file-open",                 String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open),               app));
+    gapp->add_action_with_parameter( "file-new",                  String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_new),                app));
+    gapp->add_action_with_parameter( "file-open-window",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open_with_window),   app));
+    gapp->add_action(                "file-close",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_close),              app));
+    // clang-format on
 #else
             std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif
 
-            app->get_action_extra_data().add_data(raw_data_file);
-            app->get_action_hint_data().add_data(hint_data_file);
-        }
-    }
+    app->get_action_extra_data().add_data(raw_data_file);
+    app->get_action_hint_data().add_data(hint_data_file);
 }
 
 
