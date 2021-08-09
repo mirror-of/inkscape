@@ -261,6 +261,8 @@ add_actions_edit(InkscapeApplication* app)
 {
     auto *gapp = app->gio_app();
 
+    // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     gapp->add_action( "object-to-pattern",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_pattern), app));
     gapp->add_action( "pattern-to-object",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&pattern_to_object), app));
@@ -286,6 +288,9 @@ add_actions_edit(InkscapeApplication* app)
     gapp->add_action( "paste-path-effect",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&paste_path_effect), app));
     gapp->add_action( "remove-path-effect",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&remove_path_effect), app));
     // clang-format on
+#else
+    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+#endif
 
     if (!app) {
         std::cerr << "add_actions_edit: no app!" << std::endl;

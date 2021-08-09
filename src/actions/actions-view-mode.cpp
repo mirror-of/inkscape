@@ -409,6 +409,8 @@ add_actions_view_mode(InkscapeWindow* win)
     bool guides_toggle      = win->get_desktop()->namedview->getRepr()->getAttributeBoolean("showguides", true);    // Should set it true or retrive the state (every time it set to true on restart)
     int  interface_mode     = Inkscape::UI::UXManager::getInstance()->getDefaultTask(dt);
 
+    // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
     win->add_action_bool(          "canvas-show-grid",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_show_grid_toggle),            win));
     win->add_action_bool(          "canvas-show-guides",            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_show_guides_toggle),          win), guides_toggle);
     win->add_action_bool(          "canvas-commands-bar",           sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_commands_bar_toggle),         win), commands_toggle);
@@ -423,6 +425,9 @@ add_actions_view_mode(InkscapeWindow* win)
     win->add_action(               "view-fullscreen",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&view_fullscreen),                    win));
     win->add_action_radio_integer ("canvas-interface-mode",         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_interface_mode),              win), interface_mode);
     // clang-format on
+#else
+    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+#endif
 
     auto app = InkscapeApplication::instance();
     if (!app) {

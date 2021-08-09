@@ -52,10 +52,15 @@ add_actions_edit_document(SPDocument* document)
 
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
+    // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     map->add_action( "create-guides-around-page",           sigc::bind<SPDocument*>(sigc::ptr_fun(&create_guides_around_page),  document));
     map->add_action( "delete-all-guides",                    sigc::bind<SPDocument*>(sigc::ptr_fun(&delete_all_guides),  document));
     // clang-format on
+#else
+    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+#endif
     
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();

@@ -119,6 +119,9 @@ std::vector<std::vector<Glib::ustring>> raw_data_file_window =
 void
 add_actions_file_window(InkscapeWindow* win)
 {
+
+    // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     win->add_action( "file-open",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&file_open), win));
     win->add_action( "document-save",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&document_save), win));
@@ -128,6 +131,10 @@ add_actions_file_window(InkscapeWindow* win)
     win->add_action( "document-print",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&document_print), win));
     win->add_action( "document-import",             sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&document_import), win));
     // clang-format on
+#else
+    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+#endif
+
 
     auto app = InkscapeApplication::instance();
     if (!app) {

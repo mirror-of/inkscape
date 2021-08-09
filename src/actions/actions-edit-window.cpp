@@ -200,7 +200,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit_window =
 void
 add_actions_edit_window(InkscapeWindow* win)
 {
-
+    // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     win->add_action(        "undo",                            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&undo), win));
     win->add_action(        "redo",                            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&redo), win));
@@ -218,6 +219,9 @@ add_actions_edit_window(InkscapeWindow* win)
     win->add_action_bool(   "lock-all-guides",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&lock_all_guides),   win));
     win->add_action(        "path-effect-parameter-next",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&path_effect_parameter_next), win));
     // clang-format on
+#else
+    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+#endif
 
     auto app = InkscapeApplication::instance();
     if (!app) {

@@ -102,6 +102,8 @@ add_actions_selection_object(InkscapeApplication* app)
 {
     auto *gapp = app->gio_app();
 
+    // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     gapp->add_action( "select-object-group",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_group),           app));
     gapp->add_action( "select-object-ungroup",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup),         app));
@@ -111,6 +113,9 @@ add_actions_selection_object(InkscapeApplication* app)
     gapp->add_action( "selection-lower",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_lower),               app));
     gapp->add_action( "selection-bottom",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_bottom),              app));
     // clang-format on
+#else
+    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+#endif
 
     app->get_action_extra_data().add_data(raw_data_selection_object);
 }
