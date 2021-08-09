@@ -63,6 +63,8 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     // cant use documnent level because it is not defined 
     static auto app = InkscapeApplication::instance();
     
+    return;
+
     if (!app or !in_repr or !in_imp or !base_directory) {
         // std::cout<<"App not found\n";
         return;
