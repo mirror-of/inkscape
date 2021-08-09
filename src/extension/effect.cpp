@@ -60,6 +60,14 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 {    
     Inkscape::XML::Node * local_effects_menu = nullptr;
 
+    // cant use documnent level because it is not defined 
+    static auto app = InkscapeApplication::instance();
+    
+    if (app) {
+        // std::cout<<"App not found\n";
+        return;
+    }
+
     // This is a weird hack
     if (!strcmp(this->get_id(), "org.inkscape.filter.dropshadow"))
         return;
@@ -106,36 +114,31 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
     std::string action_id = "app."+std::string(get_id());
 
-    // cant use documnent level because it is not defined 
-    static auto app = InkscapeApplication::instance();
+    static auto gapp = InkscapeApplication::instance()->gtk_app();
+    gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
     
-    if (app) {
-        static auto gapp = InkscapeApplication::instance()->gtk_app();
-        gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
+    if (!hidden) {
         
-        if (!hidden) {
-            
-            // Submenu retrival as a string
-            std::string sub_menu;
-            get_menu(local_effects_menu,sub_menu);
-            sub_menu = action_menu_name(sub_menu);
-            
-            if (local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
-            
-                std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",discription}};
-                app->get_action_extra_data().add_data(raw_data_filter);
-                sub_menu = sub_menu.substr(1);
-            
-            } else {
-            
-                std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",discription}};
-                app->get_action_extra_data().add_data(raw_data_effect);            
-                sub_menu="effect"+sub_menu;
-            }
-
-            // Add submenu to effect data
-            app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
+        // Submenu retrival as a string
+        std::string sub_menu;
+        get_menu(local_effects_menu,sub_menu);
+        sub_menu = action_menu_name(sub_menu);
+        
+        if (local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
+        
+            std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",discription}};
+            app->get_action_extra_data().add_data(raw_data_filter);
+            sub_menu = sub_menu.substr(1);
+        
+        } else {
+        
+            std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",discription}};
+            app->get_action_extra_data().add_data(raw_data_effect);            
+            sub_menu="effect"+sub_menu;
         }
+
+        // Add submenu to effect data
+        app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
     }
 }
 
