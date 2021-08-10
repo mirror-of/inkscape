@@ -50,15 +50,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_hide_lock =
 void
 add_actions_hide_lock(InkscapeWindow* win)
 {
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     win->add_action( "unhide-all",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&hide_lock_unhide_all), win));
     win->add_action( "unlock-all",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&hide_lock_unlock_all), win));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     auto app = InkscapeApplication::instance();
     if (!app) {

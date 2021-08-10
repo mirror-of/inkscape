@@ -321,8 +321,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_layer =
 void
 add_actions_layer(InkscapeWindow* win)
 {
-        // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     win->add_action("layer-new",                            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_new), win));
     win->add_action("layer-rename",                         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_rename), win));
@@ -340,9 +338,6 @@ add_actions_layer(InkscapeWindow* win)
     win->add_action("layer-duplicate",                      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_duplicate), win));
     win->add_action("layer-delete",                         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_delete), win));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     auto app = InkscapeApplication::instance();
     if (!app) {

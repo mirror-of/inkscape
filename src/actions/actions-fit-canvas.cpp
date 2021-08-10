@@ -61,16 +61,11 @@ std::vector<std::vector<Glib::ustring>> raw_fit_canvas_data =
 void
 add_actions_fit_canvas(InkscapeWindow* win)
 {
-        // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     win->add_action( "fit-canvas-to-selection",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_to_selection), win));
     win->add_action( "fit-canvas-to-drawing",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_drawing), win));
     win->add_action( "fit-canvas-to-selection-or-drawing",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_to_selection_or_drawing), win));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     auto app = InkscapeApplication::instance();
     if (!app) {

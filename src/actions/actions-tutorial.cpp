@@ -82,8 +82,6 @@ add_actions_tutorial(SPDocument* document)
 {
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     map->add_action( "tutorial-basic",                  sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-basic"));
     map->add_action( "tutorial-shapes",                 sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-shapes"));
@@ -96,9 +94,6 @@ add_actions_tutorial(SPDocument* document)
     map->add_action( "tutorial-tips",                   sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-tips"));
     map->add_action( "help-about",                      sigc::bind<SPDocument*>(sigc::ptr_fun(&help_about_inkscape), document));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
     
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();

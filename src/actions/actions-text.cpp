@@ -82,8 +82,6 @@ add_actions_text(SPDocument* document)
 
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     map->add_action( "text-put-on-path",            sigc::ptr_fun(selection_text_put_on_path));
     map->add_action( "text-remove-from-path",       sigc::ptr_fun(selection_text_remove_from_path));
@@ -93,9 +91,6 @@ add_actions_text(SPDocument* document)
     map->add_action( "text-convert-to-regular",     sigc::ptr_fun(text_convert_to_regular));
     map->add_action( "text-unkern",                 sigc::ptr_fun(text_unkern));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
     
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();

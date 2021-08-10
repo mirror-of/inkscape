@@ -102,8 +102,6 @@ std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
 void
 add_actions_select_window(InkscapeWindow* win)
 {
-        // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     win->add_action( "selection-make-bitmap-copy",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&selection_make_bitmap_copy), win));
     win->add_action( "select-path-inset",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_inset),win));
@@ -112,9 +110,6 @@ add_actions_select_window(InkscapeWindow* win)
     win->add_action( "select-path-offset-linked",       sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_linked),win));
     win->add_action( "select-path-reverse",             sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_reverse),win));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     auto app = InkscapeApplication::instance();
     if (!app) {

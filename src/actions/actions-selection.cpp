@@ -348,8 +348,6 @@ add_actions_selection(InkscapeApplication* app)
 {
     auto *gapp = app->gio_app();
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     gapp->add_action(               "select-clear",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_clear),              app)        );
     gapp->add_action_radio_string(  "select",                       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),              app), "null"); // Backwards compatible.
@@ -373,9 +371,6 @@ add_actions_selection(InkscapeApplication* app)
     gapp->add_action(               "select-fill-between-paths",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&fill_between_paths),        app));
     gapp->add_action(               "select-path-simplify",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_path_simplify),      app));
     // clangt on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     app->get_action_extra_data().add_data(raw_data_selection);
 }

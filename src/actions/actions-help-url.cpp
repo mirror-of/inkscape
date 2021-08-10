@@ -131,8 +131,6 @@ add_actions_help_url(InkscapeWindow* win)
     const bool development_version = g_str_has_suffix(version, "-dev"); // this detection is not perfect but should be close enough
     const Glib::ustring branch = development_version ? "master" : Glib::ustring::compose("%1.%2.x", Inkscape::version_major,  Inkscape::version_major);
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     win->add_action( "help-url-ask-question",   sigc::bind<InkscapeWindow*, const char*>(sigc::ptr_fun(&help_url_ask_question), win, lang));
     win->add_action( "help-url-man",            sigc::bind<InkscapeWindow*, const char*, const Glib::ustring>(sigc::ptr_fun(&help_url_man), win, lang,branch));
@@ -145,9 +143,6 @@ add_actions_help_url(InkscapeWindow* win)
     win->add_action( "help-url-svg11-spec",     sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&help_url_svg11_spec), win));
     win->add_action( "help-url-svg2-spec",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&help_url_svg2_spec), win));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     auto app = InkscapeApplication::instance();
     if (!app) {

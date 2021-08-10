@@ -85,8 +85,6 @@ add_actions_file_document(SPDocument* document)
 {
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     map->add_action( "window-new",                  sigc::bind<SPDocument*>(sigc::ptr_fun(&window_new), document));
     map->add_action( "window-previous",             sigc::bind<SPDocument*>(sigc::ptr_fun(&window_previous),  document));
@@ -96,9 +94,6 @@ add_actions_file_document(SPDocument* document)
     map->add_action( "document-revert",             sigc::bind<SPDocument*>(sigc::ptr_fun(&document_revert),  document));
     map->add_action( "document-cleanup",            sigc::bind<SPDocument*>(sigc::ptr_fun(&document_cleanup), document));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
     
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();

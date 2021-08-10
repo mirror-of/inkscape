@@ -69,16 +69,11 @@ add_actions_effect(InkscapeApplication* app)
 {
     auto *gapp = app->gio_app();
     
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
     // clang-format off
     gapp->add_action( "edit-remove-filter",     sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&edit_remove_filter), app));
     gapp->add_action( "last-effect",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&last_effect), app));
     gapp->add_action( "last-effect-pref",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&last_effect_pref), app));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     if (!app) {
         std::cerr << "add_actions_edit: no app!" << std::endl;
