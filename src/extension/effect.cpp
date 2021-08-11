@@ -68,10 +68,10 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         return;
     }
 
-    if(!INKSCAPE.use_gui())
+    if (!INKSCAPE.use_gui()) {
+        std::cerr << "effect: uses GUI!" << std::endl;
         return;
-
-// #ifdef _WIN32
+    }
 
     // This is a weird hack
     if (!strcmp(this->get_id(), "org.inkscape.filter.dropshadow"))
@@ -145,8 +145,6 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         // Add submenu to effect data
         app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
     }
-
-// #endif // ifdef _WIN32
 }
 
 void
