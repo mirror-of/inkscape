@@ -64,10 +64,9 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     static auto app = InkscapeApplication::instance();
     
     if (!app) {
-        // std::cout<<"App not found\n";
+        std::cerr << "effect: no app!" << std::endl;
         return;
     }
-
 
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
