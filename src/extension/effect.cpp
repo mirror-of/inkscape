@@ -146,8 +146,6 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
     }
 
-INKSCAPE.use_gui()
-
 // #endif // ifdef _WIN32
 }
 
