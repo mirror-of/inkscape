@@ -68,7 +68,10 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         return;
     }
 
-#ifdef _WIN32
+    if(!INKSCAPE.use_gui())
+        return;
+
+// #ifdef _WIN32
 
     // This is a weird hack
     if (!strcmp(this->get_id(), "org.inkscape.filter.dropshadow"))
@@ -143,7 +146,9 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
     }
 
-#endif // ifdef _WIN32
+INKSCAPE.use_gui()
+
+// #endif // ifdef _WIN32
 }
 
 void
