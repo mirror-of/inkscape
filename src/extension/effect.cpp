@@ -70,9 +70,6 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
 #ifdef _WIN32
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
-
     // This is a weird hack
     if (!strcmp(this->get_id(), "org.inkscape.filter.dropshadow"))
         return;
@@ -146,13 +143,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
     }
 
-#else
-            std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
-
-
 #endif // ifdef _WIN32
-
 }
 
 void
