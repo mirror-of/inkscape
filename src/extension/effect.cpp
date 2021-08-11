@@ -68,6 +68,8 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         return;
     }
 
+#ifdef _WIN32
+
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
@@ -147,6 +149,9 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 #else
             std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif
+
+
+#endif // ifdef _WIN32
 
 }
 
