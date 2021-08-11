@@ -46,7 +46,7 @@ layer_toggle_hide (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if ( dt->currentLayer() == dt->currentRoot() ) {
+    if (dt->currentLayer() == dt->currentRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
         SP_ITEM(dt->currentLayer())->setHidden(!SP_ITEM(dt->currentLayer())->isHidden());
@@ -58,7 +58,7 @@ layer_toggle_lock (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if ( dt->currentLayer() == dt->currentRoot() ) {
+    if (dt->currentLayer() == dt->currentRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
         SP_ITEM(dt->currentLayer())->setLocked(!SP_ITEM(dt->currentLayer())->isLocked());
@@ -127,7 +127,7 @@ layer_top (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-        if ( dt->currentLayer() == dt->currentRoot() ) {
+        if (dt->currentLayer() == dt->currentRoot()) {
             dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             return;
         }
@@ -137,7 +137,7 @@ layer_top (InkscapeWindow* win)
         SPObject *old_pos = layer->getNext();
         layer->raiseToTop();
 
-        if ( layer->getNext() != old_pos ) {
+        if (layer->getNext() != old_pos) {
     
             char const * message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
             Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to top"), INKSCAPE_ICON("layer-top"));
@@ -154,7 +154,7 @@ layer_raise (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if ( dt->currentLayer() == dt->currentRoot() ) {
+    if (dt->currentLayer() == dt->currentRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
         return;
     }
@@ -168,7 +168,7 @@ layer_raise (InkscapeWindow* win)
     layer->raiseOne();
 
 
-    if ( layer->getNext() != old_pos ) {
+    if (layer->getNext() != old_pos) {
     
         char const * message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Raise layer"), INKSCAPE_ICON("layer-raise"));
@@ -185,7 +185,7 @@ laye_lower (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if ( dt->currentLayer() == dt->currentRoot() ) {
+    if (dt->currentLayer() == dt->currentRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
         return;
     }
@@ -195,7 +195,7 @@ laye_lower (InkscapeWindow* win)
     SPObject *old_pos = layer->getNext();
     layer->lowerOne();
 
-    if ( layer->getNext() != old_pos ) {
+    if (layer->getNext() != old_pos) {
 
         char const * message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Lower layer"), INKSCAPE_ICON("layer-lower"));
@@ -212,7 +212,7 @@ layer_bottom (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if ( dt->currentLayer() == dt->currentRoot() ) {
+    if (dt->currentLayer() == dt->currentRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
         return;
     }
@@ -222,7 +222,7 @@ layer_bottom (InkscapeWindow* win)
     SPObject *old_pos = layer->getNext();
     layer->lowerToBottom();
 
-    if ( layer->getNext() != old_pos ) {
+    if (layer->getNext() != old_pos) {
         
         char const * message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to bottom"), INKSCAPE_ICON("layer-bottom"));
@@ -239,7 +239,7 @@ layer_duplicate (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if ( dt->currentLayer() != dt->currentRoot() ) {
+    if (dt->currentLayer() != dt->currentRoot()) {
 
         dt->selection->duplicate(true, true);
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Duplicate layer"), INKSCAPE_ICON("layer-duplicate"));
@@ -255,7 +255,7 @@ layer_delete (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if ( dt->currentLayer() != dt->currentRoot() ) {
+    if (dt->currentLayer() != dt->currentRoot()) {
 
         dt->getSelection()->clear();
         SPObject *old_layer = dt->currentLayer();

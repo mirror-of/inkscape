@@ -166,7 +166,6 @@ lock_all_guides(InkscapeWindow *win)
     dt->toggleGuidesLock();
 }
 
-/* Node toolbar : deactivate button when no effect is done ( Currently not added this feature ) */
 void
 path_effect_parameter_next(InkscapeWindow* win)
 {

@@ -18,7 +18,6 @@ std::vector<Glib::ustring>
 InkActionHintData::get_actions()
 {
     // To get all the Placeholder hints
-
     std::vector<Glib::ustring> action_names;
     for (auto hint : data) {
         action_names.emplace_back(hint.first);
@@ -30,7 +29,6 @@ Glib::ustring
 InkActionHintData::get_tooltip_hint_for_action(Glib::ustring const &action_name, bool translated) 
 {
     // Hint for a perticular Action
-
     Glib::ustring value;
     auto search = data.find(action_name);
     if (search != data.end()) {
