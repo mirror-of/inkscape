@@ -766,7 +766,6 @@ void SPDesktopWidget::on_realize()
             SP_VERB_DIALOG_INPUT,
             SP_VERB_DIALOG_PREFERENCES,
             SP_VERB_NONE,
-            SP_VERB_HELP_ABOUT,
         };
         for (auto verb : app_menu_verbs) {
             GtkWidget *menuitem = nullptr;
