@@ -117,7 +117,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         } // children of "inkscape-extension"
     } // if we have an XML file
 
-    std::string action_id = "app."+std::string(get_id());
+    std::string action_id = "app." + std::string(get_id());
 
     static auto gapp = InkscapeApplication::instance()->gtk_app();
     gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));

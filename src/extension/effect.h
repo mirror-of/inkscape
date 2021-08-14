@@ -36,11 +36,6 @@ class Effect : public Extension {
     /** \brief  This is the last effect that was used.  This is used in                
                 a menu item to rapidly recall the same effect. */
     static Effect * _last_effect;
-    /** \brief  The location of the Extensions and Filters menus on the menu structure
-                XML file.  This is saved so it only has to be discovered
-                once. */
-    static Inkscape::XML::Node * _effects_list;
-    static Inkscape::XML::Node * _filters_list;
     Inkscape::XML::Node *find_menu (Inkscape::XML::Node * menustruct, const gchar *name);
     void get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu);
 
