@@ -102,9 +102,9 @@ build_menu()
                 bool valid_file = recent_file->has_application(g_get_prgname()) or
                                 recent_file->has_application("org.inkscape.Inkscape") or
                                 recent_file->has_application("inkscape") 
-                                #ifdef _WIN32
+#ifdef _WIN32
                                 or recent_file->has_application("inkscape.exe")
-                                #endif
+#endif
                                 ;
 
                 valid_file = valid_file and recent_file->exists();
