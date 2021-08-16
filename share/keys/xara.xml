@@ -130,7 +130,7 @@ Hom/end keys-select minimum or maximum feather values
 
 <!-- View -->
 
-  <bind gaction="win.view-fullscreen"               keys="KP_8, F11" /> 
+  <bind gaction="win.view-fullscreen"               keys="KP_8, F11" />
   <bind gaction="doc.window-next"                   keys="&lt;ctrl&gt;Tab, &lt;ctrl&gt;&lt;shift&gt;ISO_Left_Tab" />
   <bind gaction="doc.window-previous"               keys="&lt;ctrl&gt;&lt;shift&gt;Tab, &lt;ctrl&gt;ISO_Left_Tab" />
   <bind gaction="win.canvas-rulers"                 keys="&lt;ctrl&gt;L, &lt;ctrl&gt;l" />
@@ -193,8 +193,8 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="app.object-set" />
   <bind gaction="app.object-release" />
   <!-- FIXME: currently these bypass the verbs, so the verbs are not bound to ctrl+[] as they should be -->
-  <bind gaction="app.object-rotate-90-cw" /> 
-  <bind gaction="app.object-rotate-90-ccw" /> 
+  <bind gaction="app.object-rotate-90-cw" />
+  <bind gaction="app.object-rotate-90-ccw" />
 
   <bind action="ObjectRemoveTransform" /> 
 

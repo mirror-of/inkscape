@@ -257,15 +257,15 @@ override) the bindings in the main default.xml.
   <!-- Dialog -->
   <bind gaction="win.dialog-open('FillStroke')"              keys="&lt;shift&gt;&lt;primary&gt;f"  />
   <bind gaction="win.dialog-open('ObjectProperties')"        keys="&lt;shift&gt;&lt;primary&gt;o"  />
-  <bind gaction="win.dialog-open('Symbols')"                 keys="&lt;shift&gt;&lt;primary&gt;y"/>               
+  <bind gaction="win.dialog-open('Symbols')"                 keys="&lt;shift&gt;&lt;primary&gt;y"  />
   <bind gaction="win.dialog-open('Selectors')"               keys="&lt;shift&gt;&lt;primary&gt;q"  />
   <bind gaction="win.dialog-open('Transform')"               keys="&lt;shift&gt;&lt;primary&gt;m"  />
-  <bind gaction="win.dialog-open('AlignDistribute')"         keys="&lt;shift&gt;&lt;primary&gt;a"/>               
-  <bind gaction="win.dialog-open('UndoHistory')"             keys="&lt;primary&gt;&lt;shift&gt;h" />
+  <bind gaction="win.dialog-open('AlignDistribute')"         keys="&lt;shift&gt;&lt;primary&gt;a"  />
+  <bind gaction="win.dialog-open('UndoHistory')"             keys="&lt;primary&gt;&lt;shift&gt;h"  />
   <bind gaction="win.dialog-open('Find')"                    keys="&lt;primary&gt;f" />
   <bind gaction="win.dialog-open('Clonetiler')"/>
   <bind gaction="win.dialog-open('XMLEditor')"               keys="&lt;primary&gt;&lt;shift&gt;x" />
-  <bind gaction="win.dialog-open('Input')"/>  
+  <bind gaction="win.dialog-open('Input')" />
   <bind gaction="win.dialog-open('Preferences')"             keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
   <bind gaction="win.dialog-open('LivePathEffect')"          keys="&lt;primary&gt;ampersand, &lt;primary&gt;&lt;shift&gt;7" />
   <bind gaction="win.dialog-open('Trace')"                   keys="&lt;alt&gt;&lt;shift&gt;b"/>
@@ -280,7 +280,7 @@ override) the bindings in the main default.xml.
   <!-- Object -->
   <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
   <bind gaction="app.select-object-ungroup"               keys="&lt;shift&gt;&lt;primary&gt;g , &lt;primary&gt;u" />
-  <bind gaction="app.object-to-pattern"                   keys="&lt;alt&gt;i" />  
+  <bind gaction="app.object-to-pattern"                   keys="&lt;alt&gt;i" />
   <bind gaction="app.pattern-to-object"                   keys="&lt;alt&gt;&lt;shift&gt;i" />
   <bind gaction="app.object-to-guides"                    keys="&lt;shift&gt;g" />
   <bind gaction="app.selection-top"                       keys="Home,  KP_Home" />

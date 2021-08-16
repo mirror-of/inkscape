@@ -98,7 +98,7 @@ and tooltips. Only one binding for each action may have this attribute.
   
 <!-- View -->
 
-  <bind gaction="win.view-fullscreen"               keys="F11" /> 
+  <bind gaction="win.view-fullscreen"               keys="F11" />
   <bind gaction="doc.window-next"                   keys="&lt;cmd&gt;grave, &lt;cmd&gt;ISO_Left_Tab" />
   <bind gaction="doc.window-previous"               keys="&lt;cmd&gt;&lt;shift&gt;Tab, &lt;cmd&gt;&lt;shift&gt;ISO_Left_Tab" />
   <bind gaction="win.canvas-show-grid"              keys="&lt;shift&gt;numbersign, numbersign" /> <!-- # -->
@@ -175,7 +175,7 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind gaction="win.select-same-object-type"             keys="&lt;shift&gt;&lt;alt&gt;a, &lt;shift&gt;&lt;alt&gt;A" />
   <bind gaction="win.select-invert"                       keys="exclam, &lt;shift&gt;exclam" />
   <bind gaction="win.fit-canvas-to-selection-or-drawing"  keys="&lt;cmd&gt;&lt;shift&gt;r, &lt;cmd&gt;&lt;shift&gt;R" />
-  <bind gaction="win.select-none"                         keys="Escape" /> 
+  <bind gaction="win.select-none"                         keys="Escape" />
   <bind gaction="app.paste-size" />
   <bind gaction="app.paste-width" />
   <bind gaction="app.paste-height" />
@@ -186,8 +186,8 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind gaction="app.clone-link-lpe" />
   <bind gaction="win.select-same-fill-and-stroke" />
   <bind gaction="app.paste-width" />
-  <bind gaction="win.select-same-fill"/> 
-  <bind gaction="win.select-same-stroke-style" /> 
+  <bind gaction="win.select-same-fill"/>
+  <bind gaction="win.select-same-stroke-style" />
 
   <bind action="EditClearAll" />
   <bind key="exclam" modifiers="Alt" action="EditInvertInAllLayers" display="true" />
@@ -278,14 +278,14 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind gaction="win.layer-bottom"                  keys="&lt;cmd&gt;&lt;shift&gt;End, &lt;cmd&gt;&lt;shift&gt;KP_End" />
   <bind gaction="win.selection-move-to-layer-above" keys="&lt;shift&gt;Page_Up, &lt;shift&gt;KP_Page_Up" />
   <bind gaction="win.selection-move-to-layer-below" keys="&lt;shift&gt;Page_Down, &lt;shift&gt;KP_Page_Down" />
-  <bind gaction="win.dialog-open('Layers')"         keys="&lt;cmd&gt;&lt;shift&gt;l, &lt;cmd&gt;&lt;shift&gt;L" />  
+  <bind gaction="win.dialog-open('Layers')"         keys="&lt;cmd&gt;&lt;shift&gt;l, &lt;cmd&gt;&lt;shift&gt;L" />
   <bind gaction="win.layer-rename" />
   <bind gaction="win.layer-delete" />
   <bind gaction="win.selection-move-to-layer" />
   <bind gaction="win.layer-duplicate" />
   <bind gaction="win.layer-delete" />
   <bind gaction="win.layer-toggle-hide" />
-  <bind gaction="win.layer-toggle-lock" /> 
+  <bind gaction="win.layer-toggle-lock" />
   <bind action="LayerHideAll" />  
   <bind action="LayerSolo" />  
   <bind action="LayerShowAll" />  
@@ -370,10 +370,8 @@ and tooltips. Only one binding for each action may have this attribute.
 
 <!-- Effects -->
 
-  <bind gaction="app.last-effect" keys="&lt;alt&gt;q" /> 
-  <bind gaction="app.last-effect" keys="&lt;alt&gt;Q" /> 
-  <bind gaction="app.last-effect-pref" keys="&lt;shift&gt;&lt;alt&gt;q" />
-  <bind gaction="app.last-effect-pref" keys="&lt;shift&gt;&lt;alt&gt;Q" />
+  <bind gaction="app.last-effect"                 keys="&lt;alt&gt;q, &lt;alt&gt;Q" />
+  <bind gaction="app.last-effect-pref"            keys="&lt;shift&gt;&lt;alt&gt;q, &lt;shift&gt;&lt;alt&gt;Q" />
   
   <!-- You can also assign keys to individual effects. The action should be set to he
   effect id from the .inx file, for example "org.inkscape.filter.add_nodes" for the Add

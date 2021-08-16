@@ -93,7 +93,7 @@ Scissor tool - C
 <!-- This is called Oval tool -->
   <bind gaction="win.tool-switch('Arc')"    keys="O, o" />
 
-  <bind gaction="win.tool-switch('Star')"   keys="A, a" /> 	 
+  <bind gaction="win.tool-switch('Star')"   keys="A, a" />
 
   <bind action="StarPrefs" />
 <!-- Spiral tools exists in Canvas, but has no shortcut
@@ -202,7 +202,7 @@ Kerning -> Tighten Fine Kerning 0,25 - Ctrl+Alt+Shift+Left arrow
 Kerning -> Loosen Fine Kerning 0,25 - Ctrl+Alt+Shift+Right arrow
 -->
 
-  <bind gaction="win.dialog-open('Text')"             keys="&lt;ctrl&gt;T, &lt;ctrl&gt;t" />  
+  <bind gaction="win.dialog-open('Text')"             keys="&lt;ctrl&gt;T, &lt;ctrl&gt;t" />
 
 <!-- OBJECT MENU -->
 

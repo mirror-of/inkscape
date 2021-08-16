@@ -116,7 +116,7 @@ Future improvements:
 
   <!-- View -->
 
-  <bind gaction="win.view-fullscreen"                       keys="F11" /> 
+  <bind gaction="win.view-fullscreen"                       keys="F11" />
   <bind gaction="doc.window-next"                           keys="&lt;ctrl&gt;Tab, &lt;ctrl&gt;&lt;shift&gt;ISO_Left_Tab" />
   <bind gaction="doc.window-previous"                       keys="&lt;ctrl&gt;&lt;shift&gt;Tab, &lt;ctrl&gt;ISO_Left_Tab" />
   <bind gaction="win.canvas-rulers"                         keys="&lt;ctrl&gt;r, &lt;ctrl&gt;R" />
@@ -190,8 +190,8 @@ Future improvements:
   <bind gaction="app.object-release-mask" />
   <bind gaction="app.object-release" />
   <!-- FIXME: currently these bypass the verbs, so the verbs are not bound to ctrl+[] as they should be -->
-  <bind gaction="app.object-rotate-90-cw" /> 
-  <bind gaction="app.object-rotate-90-ccw" /> 
+  <bind gaction="app.object-rotate-90-cw" />
+  <bind gaction="app.object-rotate-90-ccw" />
 
   <bind action="ObjectRemoveTransform" /> 
 
@@ -307,8 +307,8 @@ Future improvements:
 
 <!-- Effects -->
 
-  <bind gaction="app.last-effect" /> 
-  <bind gaction="app.last-effect-pref" /> 
+  <bind gaction="app.last-effect" />
+  <bind gaction="app.last-effect-pref" />
   <!-- You can also assign keys to individual effects. The action should be set to he
   effect id from the .inx file, for example "org.ekips.filter.addnodes" for the Add
   Nodes effect. -->
