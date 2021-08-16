@@ -63,6 +63,9 @@ InkScale::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
   // Get y location of SpinButton text (to match vertical position of SpinButton text).
   int x, y;
   _spinbutton->get_layout_offsets(x, y);
+  auto btn_alloc = _spinbutton->get_allocation();
+  auto alloc = get_allocation();
+  y += btn_alloc.get_y() - alloc.get_y();
 
   // Fill widget proportional to value.
   double fraction = get_fraction();
@@ -217,6 +220,7 @@ InkSpinScale::InkSpinScale(double value, double lower,
                                         page_size);
 
   _spinbutton = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::SpinButton>(_adjustment));
+  _spinbutton->set_valign(Gtk::ALIGN_CENTER);
   _spinbutton->set_numeric();
   _spinbutton->signal_key_release_event().connect(sigc::mem_fun(*this,&InkSpinScale::on_key_release_event),false);
 

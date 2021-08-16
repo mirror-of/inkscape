@@ -45,7 +45,8 @@ SwatchSelector::SwatchSelector() :
 
     pack_start(*_gsel);
 
-    Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(_selected_color));
+    auto color_selector = Gtk::manage(new ColorNotebook(_selected_color));
+    color_selector->set_label(_("Swatch color"));
     color_selector->show();
     pack_start(*color_selector);
 

@@ -55,6 +55,16 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
 {
     set_name("SimpleFilterModifier");
 
+    /* "More options" expander --------
+    _extras.set_visible();
+    _extras.set_label(_("More options"));
+    auto box = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
+    _extras.add(*box);
+    if (flags & (BLEND | BLUR)) {
+        add(_extras);
+    }
+    */
+
     _flags = flags;
 
     if (flags & BLEND) {
@@ -62,11 +72,12 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
         _lb_blend.set_use_underline();
         _hb_blend.set_halign(Gtk::ALIGN_END);
         _hb_blend.set_valign(Gtk::ALIGN_CENTER);
-        _hb_blend.set_margin_top(3);
-        _hb_blend.set_margin_end(5);
+        _hb_blend.set_margin_top(0);
+        _hb_blend.set_margin_bottom(1);
+        _hb_blend.set_margin_end(2);
         _lb_blend.set_mnemonic_widget(_blend);
-        _hb_blend.pack_start(_lb_blend, false, false, 5);
-        _hb_blend.pack_start(_blend, false, false, 5);
+        _hb_blend.pack_start(_lb_blend, false, false, 0);
+        _hb_blend.pack_start(_blend, false, false, 0);
         /*
         * For best fit inkscape-browsers with no GUI to isolation we need all groups, 
         * clones and symbols with isolation == isolate to not show to the user of
@@ -82,14 +93,10 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
             _isolation.set_tooltip_text("Don't blend childrens with objects behind");
             _lb_isolation.set_tooltip_text("Don't blend childrens with objects behind");
         } */
-        Gtk::Separator *separator = Gtk::manage(new Gtk::Separator());  
-        separator->set_margin_top(8);
-        separator->set_margin_bottom(8);
-        add(*separator);
     }
 
     if (flags & BLUR) {
-        add(_blur);
+       add(_blur);
     }
 
     if (flags & OPACITY) {

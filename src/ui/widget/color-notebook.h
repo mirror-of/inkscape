@@ -19,11 +19,15 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <gtkmm/grid.h>
+#include <gtkmm/stack.h>
+#include <gtkmm/stackswitcher.h>
 #include <glib.h>
 
 #include "color.h"
 #include "color-rgba.h"
+#include "preferences.h"
 #include "ui/selected-color.h"
+#include "ui/widget/icon-combobox.h"
 
 namespace Inkscape {
 namespace UI {
@@ -36,43 +40,49 @@ public:
     ColorNotebook(SelectedColor &color);
     ~ColorNotebook() override;
 
+    void set_label(const Glib::ustring& label);
+
 protected:
     struct Page {
-        Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full);
+        Page(Inkscape::UI::ColorSelectorFactory *selector_factory, const char* icon);
 
-        Inkscape::UI::ColorSelectorFactory *selector_factory;
-        bool enabled_full;
+        std::unique_ptr<Inkscape::UI::ColorSelectorFactory> selector_factory;
+        Glib::ustring icon_name;
     };
 
     virtual void _initUI();
     void _addPage(Page &page);
 
     void _pickColor(ColorRGBA *color);
-    static void _onButtonClicked(GtkWidget *widget, ColorNotebook *colorbook);
     static void _onPickerClicked(GtkWidget *widget, ColorNotebook *colorbook);
-    static void _onPageSwitched(GtkNotebook *notebook, GtkWidget *page, guint page_num, ColorNotebook *colorbook);
+    void _onPageSwitched(int page_num);
     virtual void _onSelectedColorChanged();
 
     void _updateICCButtons();
-    void _setCurrentPage(int i);
+    void _setCurrentPage(int i, bool sync_combo);
 
     Inkscape::UI::SelectedColor &_selected_color;
     gulong _entryId;
-    GtkWidget *_book;
-    GtkWidget *_buttonbox;
-    GtkWidget **_buttons;
+    Gtk::Stack* _book;
+    Gtk::StackSwitcher* _switcher;
+    Gtk::Box* _buttonbox;
+    Gtk::Label* _label;
     GtkWidget *_rgbal; /* RGBA entry */
     GtkWidget *_box_outofgamut, *_box_colormanaged, *_box_toomuchink;
     GtkWidget *_btn_picker;
     GtkWidget *_p; /* Color preview */
     boost::ptr_vector<Page> _available_pages;
     sigc::connection _onetimepick;
+    IconComboBox* _combo = nullptr;
 
 private:
     // By default, disallow copy constructor and assignment operator
     ColorNotebook(const ColorNotebook &obj) = delete;
     ColorNotebook &operator=(const ColorNotebook &obj) = delete;
+
+    PrefObserver _observer;
 };
+
 }
 }
 }

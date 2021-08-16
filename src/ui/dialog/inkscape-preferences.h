@@ -260,6 +260,7 @@ protected:
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefSlider _contrast_theme;
     UI::Widget::PrefCheckButton _narrow_spinbutton;
+    UI::Widget::PrefCheckButton _compact_colorselector;
     UI::Widget::PrefCheckButton _symbolic_icons;
     UI::Widget::PrefCheckButton _symbolic_base_colors;
     UI::Widget::PrefCheckButton _symbolic_highlight_colors;

@@ -34,8 +34,8 @@
 
 #define CSC_CHANNELS_ALL 0
 
-#define XPAD 4
-#define YPAD 1
+#define XPAD 2
+#define YPAD 2
 
 #define noDUMP_CHANGE_INFO 1
 
@@ -94,7 +94,7 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         gtk_widget_set_halign(_l[i], GTK_ALIGN_START);
         gtk_widget_show(_l[i]);
 
-        gtk_widget_set_margin_start(_l[i], XPAD);
+        gtk_widget_set_margin_start(_l[i], 2 * XPAD);
         gtk_widget_set_margin_end(_l[i], XPAD);
         gtk_widget_set_margin_top(_l[i], YPAD);
         gtk_widget_set_margin_bottom(_l[i], YPAD);

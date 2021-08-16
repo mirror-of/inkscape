@@ -46,7 +46,7 @@
 
 using Inkscape::CMSSystem;
 
-#define XPAD 4
+#define XPAD 2
 #define YPAD 1
 
 namespace Inkscape {
@@ -60,20 +60,12 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
 {
     set_name("ColorNotebook");
 
-    Page *page;
-
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSL), true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSV), true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_CMYK), true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorWheelSelectorFactory, true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorICCSelectorFactory, true);
-    _available_pages.push_back(page);
+    _available_pages.push_back(new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSL), "color-selector-hsx"));
+    _available_pages.push_back(new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSV), "color-selector-hsx"));
+    _available_pages.push_back(new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), "color-selector-rgb"));
+    _available_pages.push_back(new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_CMYK), "color-selector-cmyk"));
+    _available_pages.push_back(new Page(new ColorWheelSelectorFactory, "color-selector-wheel"));
+    _available_pages.push_back(new Page(new ColorICCSelectorFactory, "color-selector-cms"));
 
     _initUI();
 
@@ -83,63 +75,96 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
 
 ColorNotebook::~ColorNotebook()
 {
-    if (_buttons) {
-        delete[] _buttons;
-        _buttons = nullptr;
-    }
     if (_onetimepick)
         _onetimepick.disconnect();
 }
 
-ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)
-    : selector_factory(selector_factory)
-    , enabled_full(enabled_full)
+ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, const char* icon)
+    : selector_factory(selector_factory), icon_name(icon)
 {
 }
 
+void ColorNotebook::set_label(const Glib::ustring& label) {
+    _label->set_markup(label);
+}
 
 void ColorNotebook::_initUI()
 {
     guint row = 0;
 
-    Gtk::Notebook *notebook = Gtk::manage(new Gtk::Notebook);
-    notebook->show();
-    notebook->set_show_border(false);
-    notebook->set_show_tabs(false);
-    _book = GTK_WIDGET(notebook->gobj());
+    _book = Gtk::make_managed<Gtk::Stack>();
+    _book->show();
+    _book->set_transition_type(Gtk::STACK_TRANSITION_TYPE_CROSSFADE);
+    _book->set_transition_duration(130);
 
-    _buttonbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-    gtk_box_set_homogeneous(GTK_BOX(_buttonbox), TRUE);
+    // mode selection switcher widget shows all buttons for color mode selection, side by side
+    _switcher = Gtk::make_managed<Gtk::StackSwitcher>();
+    _switcher->set_stack(*_book);
+    // cannot leave it homogenous - in some themes switcher gets very wide
+    _switcher->set_homogeneous(false);
+    _switcher->set_halign(Gtk::ALIGN_CENTER);
+    _switcher->show();
+    attach(*_switcher, 0, row++, 2);
 
-    gtk_widget_show(_buttonbox);
-    _buttons = new GtkWidget *[_available_pages.size()];
+    _buttonbox = Gtk::make_managed<Gtk::Box>();
+    _buttonbox->show();
 
-    for (int i = 0; static_cast<size_t>(i) < _available_pages.size(); i++) {
-        _addPage(_available_pages[i]);
+    // combo mode selection is compact and only shows one entry (active)
+    _combo = Gtk::manage(new IconComboBox());
+    _combo->set_can_focus(false);
+    _combo->set_visible();
+    _combo->set_tooltip_text(_("Choose style of color selection"));
+
+    for (auto&& page : _available_pages) {
+        _addPage(page);
     }
 
-    gtk_widget_set_margin_start(_buttonbox, XPAD);
-    gtk_widget_set_margin_end(_buttonbox, XPAD);
-    gtk_widget_set_margin_top(_buttonbox, YPAD);
-    gtk_widget_set_margin_bottom(_buttonbox, YPAD);
-    gtk_widget_set_hexpand(_buttonbox, TRUE);
-    gtk_widget_set_valign(_buttonbox, GTK_ALIGN_CENTER);
-    attach(*Glib::wrap(_buttonbox), 0, row, 2, 1);
+    _label = Gtk::make_managed<Gtk::Label>();
+    _label->set_visible();
+    _buttonbox->pack_start(*_label, false, true);
+    _buttonbox->pack_end(*_combo, false, false);
+    _combo->signal_changed().connect([=](){ _setCurrentPage(_combo->get_active_row_id(), false); });
+
+    _buttonbox->set_margin_start(XPAD);
+    _buttonbox->set_margin_end(XPAD);
+    _buttonbox->set_margin_top(YPAD);
+    _buttonbox->set_margin_bottom(YPAD);
+    _buttonbox->set_hexpand();
+    _buttonbox->set_valign(Gtk::ALIGN_START);
+    attach(*_buttonbox, 0, row, 2);
 
     row++;
 
-    gtk_widget_set_margin_start(_book, XPAD * 2);
-    gtk_widget_set_margin_end(_book, XPAD * 2);
-    gtk_widget_set_margin_top(_book, YPAD);
-    gtk_widget_set_margin_bottom(_book, YPAD);
-    gtk_widget_set_hexpand(_book, TRUE);
-    gtk_widget_set_vexpand(_book, TRUE);
-    attach(*notebook, 0, row, 2, 1);
+    _book->set_margin_start(XPAD);
+    _book->set_margin_end(XPAD);
+    _book->set_margin_top(YPAD);
+    _book->set_margin_bottom(YPAD);
+    _book->set_hexpand();
+    _book->set_vexpand();
+    attach(*_book, 0, row, 2, 1);
 
     // restore the last active page
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _setCurrentPage(prefs->getInt("/colorselector/page", 0));
+    _setCurrentPage(prefs->getInt("/colorselector/page", 0), true);
     row++;
+
+    auto switcher_path = Glib::ustring("/colorselector/switcher");
+    auto choose_switch = [=](bool compact) {
+        if (compact) {
+            _switcher->hide();
+            _buttonbox->show();
+        }
+        else {
+            _buttonbox->hide();
+            _switcher->show();
+        }
+    };
+
+    _observer = prefs->createObserver(switcher_path, [=](const Preferences::Entry& new_value) {
+        choose_switch(new_value.getBool());
+    });
+
+    choose_switch(prefs->getBool(switcher_path));
 
     GtkWidget *rgbabox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -201,8 +226,6 @@ void ColorNotebook::_initUI()
     gtk_widget_show(_p);
     attach(*Glib::wrap(_p), 2, 3, row, row + 1, Gtk::FILL, Gtk::FILL, XPAD, YPAD);
 #endif
-
-    g_signal_connect(G_OBJECT(_book), "switch-page", G_CALLBACK(ColorNotebook::_onPageSwitched), this);
 }
 
 void ColorNotebook::_onPickerClicked(GtkWidget * /*widget*/, ColorNotebook *colorbook)
@@ -226,24 +249,11 @@ void ColorNotebook::_pickColor(ColorRGBA *color) {
     _onSelectedColorChanged();
 }
 
-void ColorNotebook::_onButtonClicked(GtkWidget *widget, ColorNotebook *nb)
-{
-    if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
-        return;
-    }
-
-    for (gint i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(nb->_book)); i++) {
-        if (nb->_buttons[i] == widget) {
-            gtk_notebook_set_current_page(GTK_NOTEBOOK(nb->_book), i);
-        }
-    }
-}
-
 void ColorNotebook::_onSelectedColorChanged() { _updateICCButtons(); }
 
-void ColorNotebook::_onPageSwitched(GtkNotebook *notebook, GtkWidget *page, guint page_num, ColorNotebook *colorbook)
+void ColorNotebook::_onPageSwitched(int page_num)
 {
-    if (colorbook->get_visible()) {
+    if (get_visible()) {
         // remember the page we switched to
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setInt("/colorselector/page", page_num);
@@ -282,10 +292,8 @@ void ColorNotebook::_updateICCButtons()
                 ink_sum += i;
             }
 
-            /* Some literature states that when the sum of paint values exceed 320%, it is considered to be a satured
-               color,
-                which means the paper can get too wet due to an excessive amount of ink. This may lead to several
-               issues
+            /* Some literature states that when the sum of paint values exceed 320%, it is considered to be a satured color,
+                which means the paper can get too wet due to an excessive amount of ink. This may lead to several issues
                 such as misalignment and poor quality of printing in general.*/
             if (ink_sum > 3.2)
                 gtk_widget_set_sensitive(_box_toomuchink, true);
@@ -296,41 +304,31 @@ void ColorNotebook::_updateICCButtons()
     }
 }
 
-void ColorNotebook::_setCurrentPage(int i)
+void ColorNotebook::_setCurrentPage(int i, bool sync_combo)
 {
-    gtk_notebook_set_current_page(GTK_NOTEBOOK(_book), i);
-
-    if (_buttons && (static_cast<size_t>(i) < _available_pages.size())) {
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(_buttons[i]), TRUE);
+    const auto pages = _book->get_children();
+    if (i >= 0 && i < pages.size()) {
+        _book->set_visible_child(*pages[i]);
+        if (sync_combo) {
+            _combo->set_active_by_id(i);
+        }
+        _onPageSwitched(i);
     }
 }
 
 void ColorNotebook::_addPage(Page &page)
 {
-    Gtk::Widget *selector_widget;
-
-    selector_widget = page.selector_factory->createWidget(_selected_color);
-    if (selector_widget) {
+    if (auto selector_widget = page.selector_factory->createWidget(_selected_color)) {
         selector_widget->show();
 
         Glib::ustring mode_name = page.selector_factory->modeName();
-        Gtk::Widget *tab_label = Gtk::manage(new Gtk::Label(mode_name));
-        tab_label->set_name("ColorModeLabel");
-        gint page_num = gtk_notebook_append_page(GTK_NOTEBOOK(_book), selector_widget->gobj(), tab_label->gobj());
+        _book->add(*selector_widget, mode_name, mode_name);
+        int page_num = _book->get_children().size() - 1;
 
-        _buttons[page_num] = gtk_radio_button_new_with_label(nullptr, mode_name.c_str());
-        gtk_widget_set_name(_buttons[page_num], "ColorModeButton");
-        gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(_buttons[page_num]), FALSE);
-        if (page_num > 0) {
-            auto g = Glib::wrap(GTK_RADIO_BUTTON(_buttons[0]))->get_group();
-            Glib::wrap(GTK_RADIO_BUTTON(_buttons[page_num]))->set_group(g);
-        }
-        gtk_widget_show(_buttons[page_num]);
-        gtk_box_pack_start(GTK_BOX(_buttonbox), _buttons[page_num], TRUE, TRUE, 0);
-
-        g_signal_connect(G_OBJECT(_buttons[page_num]), "clicked", G_CALLBACK(_onButtonClicked), this);
+        _combo->add_row(page.icon_name, mode_name, page_num);
     }
 }
+
 }
 }
 }

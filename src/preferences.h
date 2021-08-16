@@ -114,6 +114,18 @@ public:
         std::unique_ptr<_ObserverData> _data; ///< additional data used by the implementation while the observer is active
     };
 
+    /**
+     * Callback-based preferences observer
+    */
+    class PreferencesObserver : Observer {
+    public:
+        static std::unique_ptr<PreferencesObserver> create(Glib::ustring path, std::function<void (const Preferences::Entry& new_value)> callback);
+        ~PreferencesObserver() override = default;
+    private:
+        PreferencesObserver(Glib::ustring path, std::function<void (const Preferences::Entry& new_value)> callback);
+        void notify(Preferences::Entry const& new_val) override;
+        std::function<void (const Preferences::Entry&)> _callback;
+    };
 
     /**
      * Data type representing a typeless value of a preference.
@@ -550,6 +562,7 @@ public:
     void removeObserver(Observer &);
     /*@}*/
 
+    std::unique_ptr<PreferencesObserver> createObserver(Glib::ustring path, std::function<void (const Preferences::Entry& new_value)> callback);
     /**
      * @name Access and manipulate the Preferences object.
      * @{
@@ -642,6 +655,8 @@ private:
 friend class PrefNodeObserver;
 friend class Entry;
 };
+
+typedef std::unique_ptr<Preferences::PreferencesObserver> PrefObserver;
 
 /* Trivial inline Preferences::Entry functions.
  * In fact only the _extract* methods do something, the rest is delegation

@@ -184,7 +184,7 @@ static char const preferences_skeleton[] =
     </group>
   </group>
 
-  <group id="colorselector" page="0"/>
+  <group id="colorselector" page="0" switcher="1" />
 
   <group id="embedded">
     <group id="swatches"

@@ -1594,6 +1594,8 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line(true, "Handle size", _mouse_grabsize, "", _("Set the relative size of node handles"), true);
     _narrow_spinbutton.init(_("Use narrow number entry boxes"), "/theme/narrowSpinButton", false);
     _page_ui.add_line(false, "", _narrow_spinbutton, "", _("Make number editing boxes smaller by limiting padding"), false);
+    _compact_colorselector.init(_("Use compact color selector mode switch"), "/colorselector/switcher", true);
+    _page_ui.add_line(false, "", _compact_colorselector, "", _("Use compact combo box for selecting color modes"), false);
 
     _page_ui.add_group_header(_("Mouse cursors"));
     _ui_cursorscaling.init(_("Enable scaling"), "/options/cursorscaling", true);

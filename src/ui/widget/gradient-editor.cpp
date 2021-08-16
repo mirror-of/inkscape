@@ -213,7 +213,8 @@ GradientEditor::GradientEditor(const char* prefs) :
     gradBox.pack_start(_gradient_image, true, true, 0);
 
     // add color selector
-    Gtk::Widget* color_selector = Gtk::manage(new ColorNotebook(_selected_color));
+    auto color_selector = Gtk::manage(new ColorNotebook(_selected_color));
+    color_selector->set_label(_("Stop color"));
     color_selector->show();
     _colors_box.pack_start(*color_selector, true, true, 0);
 

@@ -153,7 +153,7 @@ PaintSelector::PaintSelector(FillOrStroke kind)
     _style->set_homogeneous(false);
     _style->set_name("PaintSelector");
     _style->show();
-    _style->set_border_width(4);
+    _style->set_border_width(0);
     pack_start(*_style, false, false);
 
     /* Buttons */
@@ -207,7 +207,7 @@ PaintSelector::PaintSelector(FillOrStroke kind)
 
     /* Frame */
     _label = Gtk::manage(new Gtk::Label(""));
-    auto lbbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
+    auto lbbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
     lbbox->set_homogeneous(false);
     _label->show();
     lbbox->pack_start(*_label, false, false, 4);
@@ -602,17 +602,19 @@ void PaintSelector::set_mode_color(PaintSelector::Mode /*mode*/)
             _selector_solid_color->set_homogeneous(false);
 
             /* Color selector */
-            Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*(_selected_color)));
+            auto color_selector = Gtk::manage(new ColorNotebook(*(_selected_color)));
             color_selector->show();
             _selector_solid_color->pack_start(*color_selector, true, true, 0);
             /* Pack everything to frame */
             _frame->add(*_selector_solid_color);
+            color_selector->set_label(_("<b>Flat color</b>"));
         }
 
         _selector_solid_color->show();
     }
 
-    _label->set_markup(_("<b>Flat color</b>"));
+    _label->set_markup(""); //_("<b>Flat color</b>"));
+    _label->hide();
 
 #ifdef SP_PS_VERBOSE
     g_print("Color req\n");

@@ -18,6 +18,7 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/separator.h>
+#include <gtkmm/expander.h>
 
 #include "combo-enums.h"
 #include "spin-scale.h"
@@ -62,6 +63,7 @@ private:
     int _flags;
     bool _notify;
 
+    Gtk::Expander _extras;
     Gtk::Box _hb_blend;
     Gtk::Label _lb_blend;
     Gtk::Label _lb_isolation;
