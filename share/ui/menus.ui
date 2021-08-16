@@ -265,32 +265,32 @@
     </section>
     <submenu id="select-size">
       <attribute name='label' translatable="yes">Select Sa_me</attribute>
-    	<section>
-    	  <item>
-    	  	<attribute name='label' translatable="yes">Fill _and Stroke</attribute>
-    	  	<attribute name='action'>win.select-same-fill-and-stroke</attribute>
-    	  	<attribute name='icon'>edit-select-same-fill-and-stroke</attribute>
-    	  </item>
-    	  <item>
-    	  	<attribute name='label' translatable="yes">Paste _Width</attribute>
-    	  	<attribute name='action'>app.paste-width</attribute>
-    	  	<attribute name='icon'>edit-paste-width</attribute>
-    	  </item>
-    	  <item>
-    	  	<attribute name='label' translatable="yes">_Fill Color</attribute>
-    	  	<attribute name='action'>win.select-same-fill</attribute>
-    	  	<attribute name='icon'>edit-select-same-fill</attribute>
-    	  </item>
-    	  <item>
-    	  	<attribute name='label' translatable="yes">Stroke St_yle</attribute>
-    	  	<attribute name='action'>win.select-same-stroke-style</attribute>
-    	  	<attribute name='icon'>edit-select-same-stroke-style</attribute>
-    	  </item>
-    	  <item>
-    	  	<attribute name='label' translatable="yes">_Object Type</attribute>
-    	  	<attribute name='action'>win.select-same-object-type</attribute>
-    	  	<attribute name='icon'>edit-select-same-object-type</attribute>
-    	  </item>
+      <section>
+    	<item>
+    	  <attribute name='label' translatable="yes">Fill _and Stroke</attribute>
+    	  <attribute name='action'>win.select-same-fill-and-stroke</attribute>
+    	  <attribute name='icon'>edit-select-same-fill-and-stroke</attribute>
+    	</item>
+    	<item>
+    	  <attribute name='label' translatable="yes">Paste _Width</attribute>
+    	  <attribute name='action'>app.paste-width</attribute>
+    	  <attribute name='icon'>edit-paste-width</attribute>
+    	</item>
+    	<item>
+    	  <attribute name='label' translatable="yes">_Fill Color</attribute>
+    	  <attribute name='action'>win.select-same-fill</attribute>
+    	  <attribute name='icon'>edit-select-same-fill</attribute>
+       	</item>
+    	<item>
+    	  <attribute name='label' translatable="yes">Stroke St_yle</attribute>
+    	  <attribute name='action'>win.select-same-stroke-style</attribute>
+    	  <attribute name='icon'>edit-select-same-stroke-style</attribute>
+    	</item>
+    	<item>
+    	  <attribute name='label' translatable="yes">_Object Type</attribute>
+    	  <attribute name='action'>win.select-same-object-type</attribute>
+    	  <attribute name='icon'>edit-select-same-object-type</attribute>
+    	</item>
     	</section>
     </submenu>
     <section>
@@ -581,17 +581,17 @@
     </section>
     <section>
       <item>
-	  	<attribute name='label' translatable="yes">S_watches...</attribute>
-	  	<attribute name='action'>win.dialog-open</attribute>
-	  	<attribute name='target'>Swatches</attribute>
-	  	<attribute name='icon'>swatches</attribute>
-	  </item>
+	<attribute name='label' translatable="yes">S_watches...</attribute>
+	<attribute name='action'>win.dialog-open</attribute>
+	<attribute name='target'>Swatches</attribute>
+	<attribute name='icon'>swatches</attribute>
+      </item>
       <item>
-		<attribute name='label' translatable="yes">_Messages...</attribute>
-		<attribute name='action'>win.dialog-open</attribute>
-		<attribute name='target'>Messages</attribute>
-		<attribute name='icon'>dialog-messages</attribute>
-	  </item>
+	<attribute name='label' translatable="yes">_Messages...</attribute>
+	<attribute name='action'>win.dialog-open</attribute>
+	<attribute name='target'>Messages</attribute>
+	<attribute name='icon'>dialog-messages</attribute>
+      </item>
     </section>
     <section>
       <item>
@@ -644,7 +644,7 @@
     </section>
   </submenu>
 
-  <submenu id="layer-menu"> 
+  <submenu id="layer-menu">
     <attribute name='label'  translatable="yes">_Layer</attribute>
     <section>
       <item>
@@ -863,29 +863,29 @@
         <attribute name='label' translatable="yes">_Lower</attribute>
         <attribute name='action'>app.selection-lower</attribute>
         <attribute name='icon'>selection-lower</attribute>
-      </item>   
+      </item>
       <item>
         <attribute name='label' translatable="yes">Lower to _Bottom</attribute>
         <attribute name='action'>app.selection-bottom</attribute>
         <attribute name='icon'>selection-bottom</attribute>
-      </item>   
+      </item>
     </section>
-    <section>  
+    <section>
       <item>
         <attribute name='label' translatable="yes">Rotate 90° CW</attribute>
         <attribute name='action'>app.object-rotate-90-cw</attribute>
         <attribute name='icon'>object-rotate-right</attribute>
-      </item>    
+      </item>
       <item>
         <attribute name='label' translatable="yes">Rotate 90° CCW</attribute>
         <attribute name='action'>app.object-rotate-90-ccw</attribute>
         <attribute name='icon'>object-rotate-left</attribute>
-      </item>    
+      </item>
       <item>
         <attribute name='label' translatable="yes">Flip _Horizontal</attribute>
         <attribute name='action'>app.object-flip-horizontal</attribute>
         <attribute name='icon'>object-flip-horizontal</attribute>
-      </item>    
+      </item>
       <item>
         <attribute name='label' translatable="yes">Flip _Vertical</attribute>
         <attribute name='action'>app.object-flip-vertical</attribute>
@@ -1115,7 +1115,7 @@
     </section>
   </submenu>
 
-  <submenu id="filter-menu"> 
+  <submenu id="filter-menu">
     <attribute name='label'  translatable="yes">Filter_s</attribute>
     <submenu id="filters-bevels">
       <attribute name='label' translatable='yes'>Bevels</attribute>
@@ -1185,7 +1185,7 @@
     </section>
   </submenu>
 
-  <submenu id="effect-menu"> 
+  <submenu id="effect-menu">
     <attribute name='label'  translatable="yes">Exte_nsions</attribute>
     <submenu id="effect-arrange">
       <attribute name='label' translatable='yes'>Arrange</attribute>
@@ -1274,7 +1274,7 @@
     </section>
   </submenu>
 
-  <submenu id="help-menu"> 
+  <submenu id="help-menu">
     <attribute name='label'  translatable="yes">_Help</attribute>
       <section>
         <item>
@@ -1318,15 +1318,15 @@
         </item>
         <item>
           <attribute name='label' translatable="yes">Inkscape: _Interpolate</attribute> 
-          <attribute name='action'>doc.tutorial-interpolate</attribute> 
+          <attribute name='action'>doc.tutorial-interpolate</attribute>
         </item>
         <item>
-          <attribute name='label' translatable="yes">_Elements of Design</attribute> 
-          <attribute name='action'>doc.tutorial-design</attribute> 
+          <attribute name='label' translatable="yes">_Elements of Design</attribute>
+          <attribute name='action'>doc.tutorial-design</attribute>
         </item>
         <item>
-          <attribute name='label' translatable="yes">_Tips and Tricks</attribute>  
-          <attribute name='action'>doc.tutorial-tips</attribute> 
+          <attribute name='label' translatable="yes">_Tips and Tricks</attribute>
+	  <attribute name='action'>doc.tutorial-tips</attribute>
         </item>
       </submenu>
       <section>
