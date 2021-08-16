@@ -16,15 +16,12 @@
 #include "dash-selector.h"
 
 #include <cstring>
-
 #include <glibmm/i18n.h>
-
 #include <2geom/coord.h>
+#include <numeric>
 
 #include "preferences.h"
-
 #include "display/cairo-utils.h"
-
 #include "style.h"
 
 #include "ui/dialog-events.h"
@@ -36,61 +33,44 @@ namespace Widget {
 
 gchar const *const DashSelector::_prefs_path = "/palette/dashes";
 
-static double dash_0[] = {-1.0};
-static double dash_1_1[] = {1.0, 1.0, -1.0};
-static double dash_2_1[] = {2.0, 1.0, -1.0};
-static double dash_4_1[] = {4.0, 1.0, -1.0};
-static double dash_1_2[] = {1.0, 2.0, -1.0};
-static double dash_1_4[] = {1.0, 4.0, -1.0};
-
-static size_t BD_LEN = 7;  // must correspond to the number of entries in the next line
-static double *builtin_dashes[] = {dash_0, dash_1_1, dash_2_1, dash_4_1, dash_1_2, dash_1_4, nullptr};
-
-static double **dashes = nullptr;
+static std::vector<std::vector<double>> s_dashes;
 
 DashSelector::DashSelector()
     : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4),
-      preview_width(80),
-      preview_height(16),
-      preview_lineheight(2)
+      _preview_width(100),
+      _preview_height(16),
+      _preview_lineheight(2)
 {
     // TODO: find something more sensible here!!
     init_dashes();
 
-    dash_store = Gtk::ListStore::create(dash_columns);
-    dash_combo.set_model(dash_store);
-    dash_combo.pack_start(image_renderer);
-    dash_combo.set_cell_data_func(image_renderer, sigc::mem_fun(*this, &DashSelector::prepareImageRenderer));
-    dash_combo.set_tooltip_text(_("Dash pattern"));
-    dash_combo.get_style_context()->add_class("combobright");
-    dash_combo.show();
-    dash_combo.signal_changed().connect( sigc::mem_fun(*this, &DashSelector::on_selection) );
+    _dash_store = Gtk::ListStore::create(dash_columns);
+    _dash_combo.set_model(_dash_store);
+    _dash_combo.pack_start(_image_renderer);
+    _dash_combo.set_cell_data_func(_image_renderer, sigc::mem_fun(*this, &DashSelector::prepareImageRenderer));
+    _dash_combo.set_tooltip_text(_("Dash pattern"));
+    _dash_combo.show();
+    _dash_combo.signal_changed().connect( sigc::mem_fun(*this, &DashSelector::on_selection) );
+    // show dashes in two columns to eliminate or minimize scrolling
+    _dash_combo.set_wrap_width(2);
 
-    this->pack_start(dash_combo, true, true, 0);
+    this->pack_start(_dash_combo, true, true, 0);
 
-    offset = Gtk::Adjustment::create(0.0, 0.0, 10.0, 0.1, 1.0, 0.0);
-    offset->signal_value_changed().connect(sigc::mem_fun(*this, &DashSelector::offset_value_changed));
-    auto sb = new Inkscape::UI::Widget::SpinButton(offset, 0.1, 2);
+    _offset = Gtk::Adjustment::create(0.0, 0.0, 1000.0, 0.1, 1.0, 0.0);
+    _offset->signal_value_changed().connect(sigc::mem_fun(*this, &DashSelector::offset_value_changed));
+    auto sb = new Inkscape::UI::Widget::SpinButton(_offset, 0.1, 2);
     sb->set_tooltip_text(_("Pattern offset"));
     sp_dialog_defocus_on_enter_cpp(sb);
     sb->show();
 
     this->pack_start(*sb, false, false, 0);
 
-    int np=0;
-    while (dashes[np]){ np++;}
-    for (int i = 0; i<np-1; i++) {  // all but the custom one go this way
-        // Add the dashes to the combobox
-        Gtk::TreeModel::Row row = *(dash_store->append());
-        row[dash_columns.dash] = dashes[i];
-        row[dash_columns.pixbuf] = Glib::wrap(sp_dash_to_pixbuf(dashes[i]));
+    for (std::size_t i = 0; i < s_dashes.size(); ++i) {
+        Gtk::TreeModel::Row row = *(_dash_store->append());
+        row[dash_columns.dash] = i;
     }
-    // add the custom one
-    Gtk::TreeModel::Row row = *(dash_store->append());
-    row[dash_columns.dash] = dashes[np-1];
-    row[dash_columns.pixbuf] = Glib::wrap(sp_text_to_pixbuf((char *)"Custom"));
 
-    _pattern = dashes[0];
+    _pattern = &s_dashes.front();
 }
 
 DashSelector::~DashSelector() {
@@ -99,190 +79,157 @@ DashSelector::~DashSelector() {
 }
 
 void DashSelector::prepareImageRenderer( Gtk::TreeModel::const_iterator const &row ) {
+    // dashes are rendered on the fly to adapt to current theme colors
+    std::size_t index = (*row)[dash_columns.dash];
+    Cairo::RefPtr<Cairo::Surface> surface;
+    if (index == 1) {
+        // add the custom one as a second option; it'll show up at the top of second column
+        surface = sp_text_to_pixbuf((char *)"Custom");
+    }
+    else if (index < s_dashes.size()) {
+        // add the dash to the combobox
+        surface = sp_dash_to_pixbuf(s_dashes[index]);
+    }
+    else {
+        surface = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1)));
+        g_warning("No surface in prepareImageRenderer.");
+    }
+    _image_renderer.property_surface() = surface;
+}
 
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*row)[dash_columns.pixbuf];
-    image_renderer.property_pixbuf() = pixbuf;
+static std::vector<double> map_values(const std::vector<SPILength>& values) {
+    std::vector<double> out;
+    out.reserve(values.size());
+    for (auto&& v : values) {
+        out.push_back(v.value);
+    }
+    return out;
 }
 
 void DashSelector::init_dashes() {
-
-    if (!dashes) {
+    if (s_dashes.empty()) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         std::vector<Glib::ustring> dash_prefs = prefs->getAllDirs(_prefs_path);
         
-        int pos = 0;
         if (!dash_prefs.empty()) {
             SPStyle style;
-            dashes = g_new (double *, dash_prefs.size() + 2); // +1 for custom slot, +1 for terminator slot
+            s_dashes.reserve(dash_prefs.size() + 1);
             
             for (auto & dash_pref : dash_prefs) {
                 style.readFromPrefs( dash_pref );
                 
                 if (!style.stroke_dasharray.values.empty()) {
-                    dashes[pos] = g_new (double, style.stroke_dasharray.values.size() + 1);
-                    double *d = dashes[pos];
-                    unsigned i = 0;
-                    for (; i < style.stroke_dasharray.values.size(); i++) {
-                        d[i] = style.stroke_dasharray.values[i].value;
-                    }
-                    d[i] = -1;
+                    s_dashes.emplace_back(map_values(style.stroke_dasharray.values));
                 } else {
-                    dashes[pos] = dash_0;
+                    s_dashes.emplace_back(std::vector<double>());
                 }
-                pos += 1;
             }
-        } else {  //  This code may never execute - a new preferences.xml is created for a new user.  Maybe if the user deletes dashes from preferences.xml?
-            dashes = g_new (double *, BD_LEN + 2); // +1 for custom slot, +1 for terminator slot
-            unsigned i;
-            for(i=0;i<BD_LEN;i++) {
-               dashes[i] = builtin_dashes[i];
-            }
-            pos = BD_LEN;
+        } else {
+            g_warning("Missing stock dash definitions. DashSelector::init_dashes.");
+            //  This code may never execute - a new preferences.xml is created for a new user.  Maybe if the user deletes dashes from preferences.xml?
+            s_dashes.emplace_back(std::vector<double>());
         }
-        // make a place to hold the custom dashes, up to 15 positions long (+ terminator)
-        dashes[pos] = g_new (double, 16);
-        double *d = dashes[pos];
-        int i=0;
-        for(i=0;i<15;i++){ d[i]=i; } // have to put something in there, this is a pattern hopefully nobody would choose
-        d[15]=-1.0;
-        // final terminator
-        dashes[++pos]   = nullptr;
+
+        std::vector<double> custom {1, 2, 1, 4}; // 'custom' dashes second on the list, so they are at the top of the second column in a combo box
+        s_dashes.insert(s_dashes.begin() + 1, custom);
     }
 }
 
-void DashSelector::set_dash (int ndash, double *dash, double o)
-{
+void DashSelector::set_dash(const std::vector<double>& dash, double offset) {
     int pos = -1;    // Allows custom patterns to remain unscathed by this.
-    int count = 0;   // will hold the NULL terminator at the end of the dashes list 
-    if (ndash > 0) {
-        double delta = 0.0;
-        for (int i = 0; i < ndash; i++)
-            delta += dash[i];
-        delta /= 1000.0;
 
-        for (int i = 0; dashes[i]; i++,count++) {
-            double *pattern = dashes[i];
-            int np = 0;
-            while (pattern[np] >= 0.0)
-                np += 1;
-            if (np == ndash) {
-                int j;
-                for (j = 0; j < ndash; j++) {
-                    if (!Geom::are_near(dash[j], pattern[j], delta)) {
-                        break;
-                    }
-                }
-                if (j == ndash) {
-                    pos = i;
-                    break;
-                }
-            }
+    double delta = std::accumulate(dash.begin(), dash.end(), 0.0) / (10000.0 * (dash.empty() ? 1 : dash.size()));
+
+    int index = 0;
+    for (auto&& pattern : s_dashes) {
+        if (dash.size() == pattern.size() &&
+            std::equal(dash.begin(), dash.end(), pattern.begin(),
+                       [=](double a, double b) { return Geom::are_near(a, b, delta); })) {
+            pos = index;
+            break;
         }
+        ++index;
     }
-    else  if(ndash==0) {
-       pos = 0;
-    }
-    if(pos>=0){
-       _pattern = dashes[pos];
-       this->dash_combo.set_active(pos);
-       this->offset->set_value(o);
-       if(pos == 10) {
-           this->offset->set_value(10.0);
-       }
+
+    if (pos >= 0) {
+        _pattern = &s_dashes.at(pos);
+        _dash_combo.set_active(pos);
+        _offset->set_value(offset);
     }
     else { // Hit a custom pattern in the SVG, write it into the combobox.
-       count--;  // the one slot for custom patterns
-       double *d = dashes[count];
-       int i=0;
-       for(i=0;i< (ndash > 15 ? 15 : ndash) ;i++) {
-          d[i]=dash[i];
-       } // store the custom pattern
-       d[ndash]=-1.0;  //terminate it
-       _pattern = dashes[count];
-       this->dash_combo.set_active(count);
-       this->offset->set_value(o);  // what does this do????
+        pos = 1;  // the one slot for custom patterns
+        _pattern = &s_dashes[pos];
+        _pattern->assign(dash.begin(), dash.end());
+        _dash_combo.set_active(pos);
+        _offset->set_value(offset);
     }
 }
 
-void DashSelector::get_dash(int *ndash, double **dash, double *off)
-{
-    int nd = 0;
-    while (_pattern[nd] >= 0.0)
-        nd += 1;
+const std::vector<double>& DashSelector::get_dash(double* offset) const {
+    if (offset) *offset = _offset->get_value();
+    return *_pattern;
+}
 
-    if (nd > 0) {
-        if (ndash)
-            *ndash = nd;
-        if (dash) {
-            *dash = g_new (double, nd);
-            memcpy (*dash, _pattern, nd * sizeof (double));
-        }
-        if (off)
-            *off = offset->get_value();
-    } else {
-        if (ndash)
-            *ndash = 0;
-        if (dash)
-            *dash = nullptr;
-        if (off)
-            *off = 0.0;
-    }
+double DashSelector::get_offset() {
+    return _offset ? _offset->get_value() : 0.0;
 }
 
 /**
  * Fill a pixbuf with the dash pattern using standard cairo drawing
  */
-GdkPixbuf* DashSelector::sp_dash_to_pixbuf(double *pattern)
-{
-    int n_dashes;
-    for (n_dashes = 0; pattern[n_dashes] >= 0.0; n_dashes ++) ;
+Cairo::RefPtr<Cairo::Surface> DashSelector::sp_dash_to_pixbuf(const std::vector<double>& pattern) {
+    auto device_scale = get_scale_factor();
 
-    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, preview_width, preview_height);
+    auto height = _preview_height * device_scale;
+    auto width = _preview_width * device_scale;
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_t *ct = cairo_create(s);
 
-    cairo_set_line_width (ct, preview_lineheight);
-    cairo_scale (ct, preview_lineheight, 1);
-    //cairo_set_source_rgb (ct, 0, 0, 0);
-    cairo_move_to (ct, 0, preview_height/2);
-    cairo_line_to (ct, preview_width, preview_height/2);
-    cairo_set_dash(ct, pattern, n_dashes, 0);
+    auto context = get_style_context();
+    Gdk::RGBA fg = context->get_color(get_state_flags());
+
+    cairo_set_line_width (ct, _preview_lineheight * device_scale);
+    cairo_scale (ct, _preview_lineheight * device_scale, 1);
+    cairo_move_to (ct, 0, height/2);
+    cairo_line_to (ct, width, height/2);
+    cairo_set_dash(ct, pattern.data(), pattern.size(), 0);
+    cairo_set_source_rgb(ct, fg.get_red(), fg.get_green(), fg.get_blue());
     cairo_stroke (ct);
 
     cairo_destroy(ct);
     cairo_surface_flush(s);
 
-    GdkPixbuf* pixbuf = ink_pixbuf_create_from_cairo_surface(s);
-    return pixbuf;
+    cairo_surface_set_device_scale(s, device_scale, device_scale);
+    return Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s));
 }
 
 /**
  * Fill a pixbuf with a text label using standard cairo drawing
  */
-GdkPixbuf* DashSelector::sp_text_to_pixbuf(char *text)
-{
-    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, preview_width, preview_height);
+Cairo::RefPtr<Cairo::Surface> DashSelector::sp_text_to_pixbuf(const char* text) {
+    auto device_scale = get_scale_factor();
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, _preview_width * device_scale, _preview_height * device_scale);
     cairo_t *ct = cairo_create(s);
 
     cairo_select_font_face (ct, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-    cairo_set_font_size (ct, 12.0);
-    cairo_set_source_rgb (ct, 0.0, 0.0, 0.0);
-    cairo_move_to (ct, 16.0, 13.0);
+    // todo: how to find default font face and size?
+    cairo_set_font_size (ct, 12 * device_scale);
+    auto context = get_style_context();
+    Gdk::RGBA fg = context->get_color(get_state_flags());
+    cairo_set_source_rgb(ct, fg.get_red(), fg.get_green(), fg.get_blue());
+    cairo_move_to (ct, 16.0 * device_scale, 13.0 * device_scale);
     cairo_show_text (ct, text);
-
-    cairo_stroke (ct);
 
     cairo_destroy(ct);
     cairo_surface_flush(s);
 
-    GdkPixbuf* pixbuf = ink_pixbuf_create_from_cairo_surface(s);
-    return pixbuf;
+    cairo_surface_set_device_scale(s, device_scale, device_scale);
+    return Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s));
 }
 
-void DashSelector::on_selection ()
+void DashSelector::on_selection()
 {
-    double *pattern = dash_combo.get_active()->get_value(dash_columns.dash);
-    _pattern = pattern;
-
+    _pattern = &s_dashes.at(_dash_combo.get_active()->get_value(dash_columns.dash));
     changed_signal.emit();
 }
 
@@ -290,6 +237,7 @@ void DashSelector::offset_value_changed()
 {
     changed_signal.emit();
 }
+
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape

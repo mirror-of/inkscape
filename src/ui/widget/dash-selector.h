@@ -34,10 +34,13 @@ public:
     /**
      * Get and set methods for dashes
      */
-    void set_dash(int ndash, double *dash, double offset);
-    void get_dash(int *ndash, double **dash, double *offset);
+    void set_dash(const std::vector<double>& dash, double offset);
+
+    const std::vector<double>& get_dash(double* offset) const;
 
     sigc::signal<void> changed_signal;
+
+    double get_offset();
 
 private:
 
@@ -49,12 +52,12 @@ private:
     /**
      * Fill a pixbuf with the dash pattern using standard cairo drawing
      */
-    GdkPixbuf* sp_dash_to_pixbuf(double *pattern);
+    Cairo::RefPtr<Cairo::Surface> sp_dash_to_pixbuf(const std::vector<double>& pattern);
 
     /**
      * Fill a pixbuf with text standard cairo drawing
      */
-    GdkPixbuf* sp_text_to_pixbuf(char *text);
+    Cairo::RefPtr<Cairo::Surface> sp_text_to_pixbuf(const char* text);
 
     /**
      * Callback for combobox image renderer
@@ -76,25 +79,21 @@ private:
      */
     class DashColumns : public Gtk::TreeModel::ColumnRecord {
     public:
-        Gtk::TreeModelColumn<double *> dash;
-        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > pixbuf;
-
+        Gtk::TreeModelColumn<std::size_t> dash;
         DashColumns() {
-            add(dash); add(pixbuf);
+            add(dash);
         }
     };
     DashColumns dash_columns;
-    Glib::RefPtr<Gtk::ListStore> dash_store;
-    ScrollProtected<Gtk::ComboBox> dash_combo;
-    Gtk::CellRendererPixbuf image_renderer;
-    Glib::RefPtr<Gtk::Adjustment> offset;
-
+    Glib::RefPtr<Gtk::ListStore> _dash_store;
+    ScrollProtected<Gtk::ComboBox> _dash_combo;
+    Gtk::CellRendererPixbuf _image_renderer;
+    Glib::RefPtr<Gtk::Adjustment> _offset;
     static gchar const *const _prefs_path;
-    int preview_width;
-    int preview_height;
-    int preview_lineheight;
-
-    double *_pattern = nullptr;
+    int _preview_width;
+    int _preview_height;
+    int _preview_lineheight;
+    std::vector<double>* _pattern = nullptr;
 };
 
 } // namespace Widget
