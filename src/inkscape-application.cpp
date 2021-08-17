@@ -55,9 +55,9 @@
 #include "actions/actions-object.h"                 // Actions
 #include "actions/actions-object-align.h"           // Actions
 #include "actions/actions-output.h"                 // Actions
+#include "actions/actions-paths.h"                  // Actions
 #include "actions/actions-selection-object.h"       // Actions
 #include "actions/actions-selection.h"              // Actions
-#include "actions/actions-paths.h"                  // Actions
 #include "actions/actions-transform.h"              // Actions
 #include "actions/actions-window.h"                 // Actions
 

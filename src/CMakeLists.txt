@@ -247,16 +247,14 @@ set(inkscape_SRC
   actions/actions-object-align.cpp
   actions/actions-output.h
   actions/actions-output.cpp
+  actions/actions-paths.h
+  actions/actions-paths.cpp
   actions/actions-selection-object.h
   actions/actions-selection-object.cpp
   actions/actions-selection-window.h
   actions/actions-selection-window.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
-  
-  actions/actions-paths.h
-  actions/actions-paths.cpp
-  
   actions/actions-text.h
   actions/actions-text.cpp
   actions/actions-tools.h
