@@ -2,7 +2,7 @@
 /** \file
  *
  *  Actions for Editing an object
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -20,7 +20,7 @@
 #include "selection-chemistry.h"
 #include "object/sp-guide.h"
 
-void 
+void
 object_to_pattern(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -29,7 +29,7 @@ object_to_pattern(InkscapeApplication *app)
     selection->tile();
 }
 
-void 
+void
 pattern_to_object(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -38,7 +38,7 @@ pattern_to_object(InkscapeApplication *app)
     selection->untile();
 }
 
-void 
+void
 object_to_marker(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -47,7 +47,7 @@ object_to_marker(InkscapeApplication *app)
     selection->toMarker();
 }
 
-void 
+void
 object_to_guides(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -56,7 +56,7 @@ object_to_guides(InkscapeApplication *app)
     selection->toGuides();
 }
 
-void 
+void
 cut(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -65,7 +65,7 @@ cut(InkscapeApplication *app)
     selection->cut();
 }
 
-void 
+void
 copy(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -74,7 +74,7 @@ copy(InkscapeApplication *app)
     selection->copy();
 }
 
-void 
+void
 paste_style(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -83,7 +83,7 @@ paste_style(InkscapeApplication *app)
     selection->pasteStyle();
 }
 
-void 
+void
 paste_size(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -92,7 +92,7 @@ paste_size(InkscapeApplication *app)
     selection->pasteSize(true,true);
 }
 
-void 
+void
 paste_width(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -101,7 +101,7 @@ paste_width(InkscapeApplication *app)
     selection->pasteSize(true, false);
 }
 
-void 
+void
 paste_height(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -110,7 +110,7 @@ paste_height(InkscapeApplication *app)
     selection->pasteSize(false, true);
 }
 
-void 
+void
 paste_size_separately(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -119,7 +119,7 @@ paste_size_separately(InkscapeApplication *app)
     selection->pasteSizeSeparately(true, true);
 }
 
-void 
+void
 paste_width_separately(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -128,7 +128,7 @@ paste_width_separately(InkscapeApplication *app)
     selection->pasteSizeSeparately(true, false);
 }
 
-void 
+void
 paste_height_separately(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -137,7 +137,7 @@ paste_height_separately(InkscapeApplication *app)
     selection->pasteSizeSeparately(false, true);
 }
 
-void 
+void
 duplicate(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -146,7 +146,7 @@ duplicate(InkscapeApplication *app)
     selection->duplicate();
 }
 
-void 
+void
 clone(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -155,7 +155,7 @@ clone(InkscapeApplication *app)
     selection->clone();
 }
 
-void 
+void
 clone_unlink(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -164,7 +164,7 @@ clone_unlink(InkscapeApplication *app)
     selection->unlink();
 }
 
-void 
+void
 clone_unlink_recursively(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -173,7 +173,7 @@ clone_unlink_recursively(InkscapeApplication *app)
     selection->unlinkRecursive(false, true);
 }
 
-void 
+void
 clone_link(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -182,7 +182,7 @@ clone_link(InkscapeApplication *app)
     selection->relink();
 }
 
-void 
+void
 select_original(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -191,7 +191,7 @@ select_original(InkscapeApplication *app)
     selection->cloneOriginal();
 }
 
-void 
+void
 clone_link_lpe(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -200,7 +200,7 @@ clone_link_lpe(InkscapeApplication *app)
     selection->cloneOriginalPathLPE();
 }
 
-void 
+void
 edit_delete(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -225,6 +225,15 @@ remove_path_effect(InkscapeApplication *app)
 
     //  Remove Path Effect
     selection->removeLPE();
+}
+
+void
+fit_canvas_to_selection(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+
+    // Fit Page to Selection
+    selection->fitCanvas(true);
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_edit =
@@ -253,6 +262,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit =
     {"app.delete",                              N_("Delete"),                           "Edit",     N_("Delete selection")},
     {"app.paste-path-effect",                   N_("Paste Path Effect"),                "Edit",     N_("Apply the path effect of the copied object to selection")},
     {"app.remove-path-effect",                  N_("Remove Path Effect"),               "Edit",     N_("Remove any path effects from selected objects")},
+    {"app.fit-canvas-to-selection",             N_("Fit Page to Selection"),            "Edit",     N_("Fit the page to the current selection")}
     // clang-format on
 };
 
@@ -285,6 +295,7 @@ add_actions_edit(InkscapeApplication* app)
     gapp->add_action( "delete",                          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&edit_delete), app));
     gapp->add_action( "paste-path-effect",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&paste_path_effect), app));
     gapp->add_action( "remove-path-effect",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&remove_path_effect), app));
+    gapp->add_action( "fit-canvas-to-selection",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&fit_canvas_to_selection), app));
     // clang-format on
 
     if (!app) {

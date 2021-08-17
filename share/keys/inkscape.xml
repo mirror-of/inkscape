@@ -321,7 +321,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.select-invert"                       keys="exclam ,&lt;shift&gt;exclam"/>
   <bind gaction="win.select-none"                         keys="Escape"/>
   <bind gaction="win.fit-canvas-to-selection-or-drawing"  keys="&lt;primary&gt;&lt;shift&gt;r" />
-  <bind gaction="win.selection-make-bitmap-copy"          keys="&lt;alt&gt;b" />
+  <bind gaction="app.selection-make-bitmap-copy"          keys="&lt;alt&gt;b" />
   <bind gaction="app.delete"                              keys="Delete, KP_Delete, BackSpace" />
 
   <!-- Path -->

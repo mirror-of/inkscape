@@ -240,7 +240,7 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">Make a _Bitmap Copy</attribute>
-        <attribute name='action'>win.selection-make-bitmap-copy</attribute>
+        <attribute name='action'>app.selection-make-bitmap-copy</attribute>
         <attribute name='icon'>selection-make-bitmap-copy</attribute>
       </item>
     </section>

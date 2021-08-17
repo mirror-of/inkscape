@@ -33,7 +33,7 @@ class PrefDialog;
             to make extensions effects.
 */
 class Effect : public Extension {
-    /** \brief  This is the last effect that was used.  This is used in                
+    /** \brief  This is the last effect that was used.  This is used in
                 a menu item to rapidly recall the same effect. */
     static Effect * _last_effect;
     Inkscape::XML::Node *find_menu (Inkscape::XML::Node * menustruct, const gchar *name);

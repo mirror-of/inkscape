@@ -2,7 +2,7 @@
 /** \file
  *
  * Tutorial Actions
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -94,7 +94,7 @@ add_actions_tutorial(SPDocument* document)
     map->add_action( "tutorial-tips",                   sigc::bind<SPDocument*, Glib::ustring>(sigc::ptr_fun(&tutorial_basic), document, "tutorial-tips"));
     map->add_action( "help-about",                      sigc::bind<SPDocument*>(sigc::ptr_fun(&help_about_inkscape), document));
     // clang-format on
-    
+
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();
     if (!app) {

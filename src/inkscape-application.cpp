@@ -57,6 +57,7 @@
 #include "actions/actions-output.h"                 // Actions
 #include "actions/actions-selection-object.h"       // Actions
 #include "actions/actions-selection.h"              // Actions
+#include "actions/actions-paths.h"                  // Actions
 #include "actions/actions-transform.h"              // Actions
 #include "actions/actions-window.h"                 // Actions
 
@@ -601,6 +602,7 @@ InkscapeApplication::InkscapeApplication()
     add_actions_object_align(this);         // actions for object alignment
     add_actions_output(this);               // actions for file export
     add_actions_selection(this);            // actions for object selection
+    add_actions_path(this);                 // actions for Paths
     add_actions_selection_object(this);     // actions for selected objects
     add_actions_transform(this);            // actions for transforming selected objects
     add_actions_window(this);               // actions for windows

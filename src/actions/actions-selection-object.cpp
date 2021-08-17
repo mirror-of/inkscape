@@ -2,7 +2,7 @@
 /** \file
  *
  * Actions related to selection of objects which don't require desktop
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -17,8 +17,8 @@
 #include "actions-selection-object.h"
 #include "actions-helper.h"
 #include "inkscape-application.h"
-#include "inkscape.h"             
-#include "selection.h"            
+#include "inkscape.h"
+#include "selection.h"
 
 void
 select_object_group(InkscapeApplication* app)

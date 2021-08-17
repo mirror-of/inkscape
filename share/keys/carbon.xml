@@ -212,7 +212,7 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind gaction="app.selection-lower"             keys="Page_Down, KP_Page_Down" />
   <bind gaction="app.select-object-group"         keys="&lt;cmd&gt;g, &lt;cmd&gt;G, &lt;cmd&gt;&lt;shift&gt;u, &lt;cmd&gt;&lt;shift&gt;U" />
   <bind gaction="app.select-object-ungroup"       keys="&lt;cmd&gt;&lt;shift&gt;g, &lt;cmd&gt;&lt;shift&gt;G, &lt;cmd&gt;u, &lt;cmd&gt;U" />
-  <bind gaction="win.selection-make-bitmap-copy"  keys="&lt;alt&gt;b, &lt;alt&gt;B" />
+  <bind gaction="app.selection-make-bitmap-copy"  keys="&lt;alt&gt;b, &lt;alt&gt;B" />
   <bind gaction="win.dialog-open('Trace')"        keys="&lt;alt&gt;&lt;shift&gt;b, &lt;alt&gt;&lt;shift&gt;B" />
   <bind gaction="app.object-to-pattern"           keys="&lt;alt&gt;i, &lt;alt&gt;I" />
   <bind gaction="app.pattern-to-object"           keys="&lt;alt&gt;&lt;shift&gt;i, &lt;alt&gt;&lt;shift&gt;I" />

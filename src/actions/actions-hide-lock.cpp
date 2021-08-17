@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
- * 
+ *
  * Actions related to hide and lock
  *
  * Authors:
@@ -21,7 +21,7 @@
 #include "document-undo.h"
 #include "selection-chemistry.h"
 
-void 
+void
 hide_lock_unhide_all(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();

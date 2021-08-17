@@ -600,7 +600,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
             InkscapeWindow *window = desktop->getInkscapeWindow();
             if (window) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
                 SPDesktopWidget *dtw = window->get_desktop_widget();
-                reload_menu();
+                build_menu();
             }
         }
 

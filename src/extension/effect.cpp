@@ -30,13 +30,13 @@ namespace Extension {
 Effect * Effect::_last_effect = nullptr;
 
 // Adds effect to Gio::Actions
-void 
+void
 action_effect (Effect* effect)
 {
     if (effect->_workingDialog) {
         effect->prefs(InkscapeApplication::instance()->get_active_view());
-    } else { 
-        effect->effect(InkscapeApplication::instance()->get_active_view());   
+    } else {
+        effect->effect(InkscapeApplication::instance()->get_active_view());
     }
 }
 
@@ -56,23 +56,18 @@ action_menu_name (std::string menu)
 Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
     : Extension(in_repr, in_imp, base_directory)
     , _menu_node(nullptr), _workingDialog(true)
-    , _prefDialog(nullptr) 
-{    
+    , _prefDialog(nullptr)
+{
     Inkscape::XML::Node * local_effects_menu = nullptr;
 
-    if (!Inkscape::Application::exists() or !INKSCAPE.use_gui()) {
-        std::cerr << "effect: uses GUI!" << std::endl;
-        return;
-    }
-    
-    // cant use documnent level because it is not defined 
+
+    // cant use document level because it is not defined
     static auto app = InkscapeApplication::instance();
-    
+
     if (!app) {
         std::cerr << "effect: no app!" << std::endl;
         return;
     }
-
 
     // This is a weird hack
     if (!strcmp(this->get_id(), "org.inkscape.filter.dropshadow"))
@@ -83,8 +78,8 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     no_doc = false;
     no_live_preview = false;
 
-    // Setting initial value of discription to name of action incase if there is no discription
-    Glib::ustring discription  = get_name();
+    // Setting initial value of description to name of action incase if there is no description
+    Glib::ustring description  = get_name();
 
     if (repr != nullptr) {
 
@@ -110,7 +105,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
                     if (!strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "menu-tip") ||
                             !strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "_menu-tip")) {
                         // printf("Found local effects menu in %s\n", this->get_name());
-                        discription = effect_child->firstChild()->content();
+                        description = effect_child->firstChild()->content();
                     }
                 } // children of "effect"
                 break; // there can only be one effect
@@ -122,34 +117,34 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
     static auto gapp = InkscapeApplication::instance()->gtk_app();
     gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
-    
+
     if (!hidden) {
-        
+
         // Submenu retrival as a string
         std::string sub_menu;
         get_menu(local_effects_menu,sub_menu);
         sub_menu = action_menu_name(sub_menu);
-        
+
         if (local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
-        
-            std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",discription}};
+
+            std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",description}};
             app->get_action_extra_data().add_data(raw_data_filter);
             sub_menu = sub_menu.substr(1);
-        
+
         } else {
-        
-            std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",discription}};
-            app->get_action_extra_data().add_data(raw_data_effect);            
+
+            std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",description}};
+            app->get_action_extra_data().add_data(raw_data_effect);
             sub_menu="effect"+sub_menu;
         }
-
+        
         // Add submenu to effect data
         app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
     }
 }
 
 void
-Effect::get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu) 
+Effect::get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu)
 {
     Glib::ustring mergename;
 
@@ -165,8 +160,8 @@ Effect::get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu)
         } else {
             mergename = _(menuname);
         }
-        
-        // Makeing sub menu string
+
+        // Making sub menu string
         sub_menu += "-";
         sub_menu += menuname;
     }
@@ -247,7 +242,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
 /** \brief  Sets which effect was called last
     \param in_effect  The effect that has been called
 
-    This function sets the static variable \c _last_effect 
+    This function sets the static variable \c _last_effect
 
     If the \c in_effect variable is \c NULL then the last effect
     verb is made insensitive.

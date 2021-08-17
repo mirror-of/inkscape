@@ -2,7 +2,7 @@
 /** \file
  *
  *  Actions for Filters and Extension menu items
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -24,9 +24,9 @@ void
 edit_remove_filter(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
-    
+
     // Remove Filter
-    selection->removeFilter();    
+    selection->removeFilter();
 }
 
 void
@@ -37,7 +37,7 @@ last_effect(InkscapeApplication *app)
     if (effect == nullptr) {
         return;
     }
-    
+
     // Last Effect
     effect->effect(InkscapeApplication::instance()->get_active_view());
 }
@@ -49,8 +49,8 @@ last_effect_pref(InkscapeApplication *app)
 
     if (effect == nullptr) {
         return;
-    } 
-    
+    }
+
     // Last Effect Pref
     effect->prefs(InkscapeApplication::instance()->get_active_view());
 }
@@ -68,7 +68,7 @@ void
 add_actions_effect(InkscapeApplication* app)
 {
     auto *gapp = app->gio_app();
-    
+
     // clang-format off
     gapp->add_action( "edit-remove-filter",     sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&edit_remove_filter), app));
     gapp->add_action( "last-effect",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&last_effect), app));

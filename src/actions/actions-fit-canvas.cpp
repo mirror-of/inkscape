@@ -2,7 +2,7 @@
 /** \file
  *
  * Actions related to fit canvas
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -20,27 +20,7 @@
 #include "desktop.h"
 #include "selection-chemistry.h"
 
-void 
-fit_canvas_to_selection(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Fit Page to Selection
-    dt->selection->fitCanvas(true);
-}
-
-void 
-fit_canvas_drawing(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Fit Page to Drawing
-    if (fit_canvas_to_drawing(dt->getDocument())) {
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Fit Page to Drawing"), "");
-    }
-}
-
-void 
+void
 canvas_to_selection_or_drawing(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -52,8 +32,6 @@ canvas_to_selection_or_drawing(InkscapeWindow* win)
 std::vector<std::vector<Glib::ustring>> raw_fit_canvas_data =
 {
     // clang-format off
-    {"win.fit-canvas-to-selection",                     N_("Fit Page to Selection"),        "Selection Desktop",  N_("Fit the page to the current selection")},
-    {"win.fit-canvas-to-drawing",                       N_("Fit Page to Drawing"),          "Selection Desktop",  N_("Fit the page to the drawing")},
     {"win.fit-canvas-to-selection-or-drawing",          N_("Resize Page to Selection"),     "Selection Desktop",  N_("Fit the page to the current selection or the drawing if there is no selection")}
     // clang-format on
 };
@@ -62,8 +40,6 @@ void
 add_actions_fit_canvas(InkscapeWindow* win)
 {
     // clang-format off
-    win->add_action( "fit-canvas-to-selection",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_to_selection), win));
-    win->add_action( "fit-canvas-to-drawing",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&fit_canvas_drawing), win));
     win->add_action( "fit-canvas-to-selection-or-drawing",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_to_selection_or_drawing), win));
     // clang-format on
 

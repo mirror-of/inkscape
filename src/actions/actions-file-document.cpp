@@ -2,7 +2,7 @@
 /** \file
  *
  * Actions Related to Files which require document
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -76,7 +76,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_file_document =
     {"doc.document-new",                N_("New"),                      "File",             N_("Create new document from the default template")},
     {"doc.document-dialog-templates",   N_("New from  Template"),       "File",             N_("Create new project from template")},
     {"doc.document-revert",             N_("Revert"),                   "File",             N_("Revert to the last saved version of document (changes will be lost)")},
-    {"doc.document-cleanup",            N_("Clean Up Document"),        "File",             N_("Remove unused definitions (such as gradients or clipping paths) from the <defs> of the document")}   
+    {"doc.document-cleanup",            N_("Clean Up Document"),        "File",             N_("Remove unused definitions (such as gradients or clipping paths) from the <defs> of the document")}
     // clang-format on
 };
 
@@ -94,7 +94,7 @@ add_actions_file_document(SPDocument* document)
     map->add_action( "document-revert",             sigc::bind<SPDocument*>(sigc::ptr_fun(&document_revert),  document));
     map->add_action( "document-cleanup",            sigc::bind<SPDocument*>(sigc::ptr_fun(&document_cleanup), document));
     // clang-format on
-    
+
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();
     if (!app) {

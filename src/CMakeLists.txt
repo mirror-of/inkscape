@@ -253,6 +253,10 @@ set(inkscape_SRC
   actions/actions-selection-window.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
+  
+  actions/actions-paths.h
+  actions/actions-paths.cpp
+  
   actions/actions-text.h
   actions/actions-text.cpp
   actions/actions-tools.h

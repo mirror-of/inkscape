@@ -18,8 +18,7 @@
  *
  */
 
-void build_menubar();
-void reload_menu();
+void build_menu();
 
 #endif // SEEN_DESKTOP_MENUBAR_H
 

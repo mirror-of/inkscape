@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  *
- * Effect Data to store dacreationta related to creating of
+ * Effect Data to store data related to creating of
  * Filters and Effect manubar
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -26,8 +26,8 @@ InkActionEffectData::give_all_data()
 }
 
 void
-InkActionEffectData::add_data ( std::string effect_id, std::string effect_submenu_name, 
-                                Glib::ustring const &effect_name ) 
+InkActionEffectData::add_data ( std::string effect_id, std::string effect_submenu_name,
+                                Glib::ustring const &effect_name )
 {
     data.insert({effect_id,{effect_submenu_name,effect_name}});
 }

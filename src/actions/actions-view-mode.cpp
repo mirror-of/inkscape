@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
- * 
+ *
  * Actions related to View mode
  *
  * Authors:
@@ -11,7 +11,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <giomm.h> 
+#include <giomm.h>
 #include <glibmm/i18n.h>
 
 #include "ui/interface.h"
@@ -333,22 +333,22 @@ canvas_interface_mode(int value, InkscapeWindow *win)
     // Setting Message
     Glib::ustring tip;
     if (value == 0) {
-        tip = _("Default interface setup");  
+        tip = _("Default interface setup");
     }
     else if (value == 1) {
-        tip = _("Setup for custom task");  
+        tip = _("Setup for custom task");
     }
     else if (value == 2) {
-        tip = _("Setup for widescreen work"); 
+        tip = _("Setup for widescreen work");
     }
-    
+
     // Change state
     saction->change_state(value);
 
     // Set Interface
     SPDesktop* dt = win->get_desktop();
     Inkscape::UI::UXManager::getInstance()->setTask(dt, value);
-    
+
 #ifdef GDK_WINDOWING_QUARTZ
     // TODO uncomment this or figure out what to do with it.
     //  this is just to be able to build successfuly for mac.
@@ -356,18 +356,18 @@ canvas_interface_mode(int value, InkscapeWindow *win)
     // g_idle_add(sync_menubar, nullptr);
 #endif
 
-    // Message FIXME having some error 
+    // Message FIXME having some error
     // dt->tipsMessageContext()->clear();
     // dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tip.c_str() )  );
     // similar =  dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tool_msg[tool].c_str() ) );
-    
+
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_view_mode =
 {
-    // clang-format off 
+    // clang-format off
     {"win.canvas-show-grid",                N_("Page Grid"),                "Canvas Display",   N_("Show or hide the page grid")},
-    
+
     {"win.canvas-show-guides",              N_("Guides"),                   "Canvas Display",   N_("Show or hide guides (drag from a ruler to create a guide)")},
     {"win.canvas-commands-bar",             N_("Commands Bar"),             "Canvas Display",   N_("Show or hide the Commands bar (under the menu)")},
     {"win.canvas-snap-controls-bar",        N_("Snap Controls Bar"),        "Canvas Display",   N_("Show or hide the snapping controls")},
@@ -377,10 +377,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_view_mode =
     {"win.canvas-scroll-bars",              N_("Scroll bars"),              "Canvas Display",   N_("Show or hide the canvas scrollbars")},
     {"win.canvas-palette",                  N_("Palette"),                  "Canvas Display",   N_("Show or hide the color palette")},
     {"win.canvas-statusbar",                N_("Statusbar"),                "Canvas Display",   N_("Show or hide the statusbar (at the bottom of the window)")},
-    
+
     {"win.canvas-command-palette",          N_("Command Palette"),          "Canvas Display",   N_("Show or hide the on-canvas command palette")},
     {"win.view-fullscreen",                 N_("Fullscreen"),               "Canvas Display",   N_("Stretch this document window to full screen")},
-    
+
     {"win.canvas-interface-mode(0)",        N_("Default"),                  "Canvas Display",   N_("Default interface setup")},
     {"win.canvas-interface-mode(1)",        N_("Custom"),                   "Canvas Display",   N_("Setup for custom task")},
     {"win.canvas-interface-mode(2)",        N_("Wide"),                     "Canvas Display",   N_("Setup for widescreen work")}
@@ -392,13 +392,13 @@ add_actions_view_mode(InkscapeWindow* win)
 {
     auto prefs = Inkscape::Preferences::get();
     SPDesktop* dt = win->get_desktop();
-  
+
     if (!dt) {
         std::cerr << "add_actions_view_mode: no desktop!" << std::endl;
     }
 
     // clang-format off
-    
+
     // Initial States of Actions
     bool commands_toggle    = prefs->getBool("/window/commands/state", true);
     bool snaptoolbox_toggle = prefs->getBool("/window/snaptoolbox/state", true);

@@ -2,7 +2,7 @@
 /** \file
  *
  * Actions Related to Text
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -18,7 +18,6 @@
 #include "actions/actions-extra-data.h"
 #include "inkscape-application.h"
 #include "document.h"
-#include "inkscape.h"
 #include "text-chemistry.h"
 
 void
@@ -91,7 +90,7 @@ add_actions_text(SPDocument* document)
     map->add_action( "text-convert-to-regular",     sigc::ptr_fun(text_convert_to_regular));
     map->add_action( "text-unkern",                 sigc::ptr_fun(text_unkern));
     // clang-format on
-    
+
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = InkscapeApplication::instance();
     if (!app) {

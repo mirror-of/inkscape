@@ -130,7 +130,7 @@ win.canvas-zoom-page-width: Zoom to fit page width in window
 
 <!-- 'Tools -> Rasterize...' is our Create Bitmap's advanced equivalent, so using it --> 
 
-  <bind gaction="win.selection-make-bitmap-copy"        keys="&lt;ctrl&gt;&lt;shift&gt;t,r, &lt;ctrl&gt;&lt;shift&gt;t,R" />
+  <bind gaction="app.selection-make-bitmap-copy"        keys="&lt;ctrl&gt;&lt;shift&gt;t,r, &lt;ctrl&gt;&lt;shift&gt;t,R" />
   <bind gaction="app.selection-top"                     keys="&lt;ctrl&gt;Page_Up, &lt;ctrl&gt;KP_Page_Up" />
   <bind gaction="app.selection-bottom"                  keys="&lt;ctrl&gt;Page_Down, &lt;ctrl&gt;KP_Page_Down" />
   <bind gaction="app.selection-raise"                   keys="Page_Up, KP_Page_Up" />

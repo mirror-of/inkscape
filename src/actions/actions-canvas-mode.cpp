@@ -272,7 +272,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_mode =
     {"win.canvas-split-mode(2)",        N_("Split Mode: X-Ray"),          "Canvas Display",   N_("Render a circular area in outline mode")            },
 
     {"win.canvas-color-mode",           N_("Color Mode"),                 "Canvas Display",   N_("Toggle between normal and grayscale modes")         },
-    {"win.canvas-color-manage",         N_("Color Managed Mode"),         "Canvas Display",   N_("Toggle between normal and color managed modes")     }  
+    {"win.canvas-color-manage",         N_("Color Managed Mode"),         "Canvas Display",   N_("Toggle between normal and color managed modes")     }
     // clang-format on
 };
 

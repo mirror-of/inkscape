@@ -3,7 +3,7 @@
  *
  *  Actions for Editing an object
  *  Contains many actions of Edit Verb
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -52,7 +52,7 @@ document_save_as(InkscapeWindow* win)
     Gtk::Window *parent = dt->getToplevel();
     g_assert(parent != nullptr);
 
-    sp_file_save_as(*parent, nullptr, nullptr);   
+    sp_file_save_as(*parent, nullptr, nullptr);
 }
 
 void
@@ -63,7 +63,7 @@ document_save_copy(InkscapeWindow* win)
     Gtk::Window *parent = dt->getToplevel();
     g_assert(parent != nullptr);
 
-    sp_file_save_a_copy(*parent, nullptr, nullptr);   
+    sp_file_save_a_copy(*parent, nullptr, nullptr);
 }
 
 void
@@ -74,7 +74,7 @@ document_save_template(InkscapeWindow* win)
     Gtk::Window *parent = dt->getToplevel();
     g_assert(parent != nullptr);
 
-    Inkscape::UI::Dialog::SaveTemplate::save_document_as_template(*parent);   
+    Inkscape::UI::Dialog::SaveTemplate::save_document_as_template(*parent);
 }
 
 void
@@ -85,21 +85,16 @@ document_print(InkscapeWindow* win)
     Gtk::Window *parent = dt->getToplevel();
     g_assert(parent != nullptr);
 
-    sp_file_print(*parent);   
+    sp_file_print(*parent);
 }
 
 void
 document_import(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
-
-    Gtk::Window *parent = dt->getToplevel();
-    g_assert(parent != nullptr);
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     prefs->setBool("/options/onimport",true);
-    sp_file_import(*parent);
+    sp_file_import(*win);
     prefs->setBool("/options/onimport",false);
 }
 

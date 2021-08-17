@@ -2,7 +2,7 @@
 /** \file
  *
  *  Actions for Layers
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -23,12 +23,12 @@
 #include "ui/icon-names.h"
 #include "document-undo.h"
 
-void 
+void
 layer_new(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    // New Layer 
+    // New Layer
     Inkscape::UI::Dialogs::LayerPropertiesDialog::showCreate(dt, dt->currentLayer());
 }
 
@@ -69,7 +69,7 @@ void
 layer_previous (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
     if (next) {
         dt->setCurrentLayer(next);
@@ -84,7 +84,7 @@ void
 layer_next (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    
+
     SPObject *prev=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
     if (prev) {
         dt->setCurrentLayer(prev);
@@ -118,7 +118,7 @@ selection_move_to_layer (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    // Selection move to layer 
+    // Selection move to layer
     Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(dt, dt->currentLayer());
 }
 
@@ -138,12 +138,12 @@ layer_top (InkscapeWindow* win)
         layer->raiseToTop();
 
         if (layer->getNext() != old_pos) {
-    
+
             char const * message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
             Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to top"), INKSCAPE_ICON("layer-top"));
             dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
             g_free((void *) message);
-    
+
         } else {
             dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
         }
@@ -169,12 +169,12 @@ layer_raise (InkscapeWindow* win)
 
 
     if (layer->getNext() != old_pos) {
-    
+
         char const * message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Raise layer"), INKSCAPE_ICON("layer-raise"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free((void *) message);
-    
+
     } else {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
     }
@@ -201,7 +201,7 @@ laye_lower (InkscapeWindow* win)
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Lower layer"), INKSCAPE_ICON("layer-lower"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free((void *) message);
-    
+
     } else {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
     }
@@ -223,12 +223,12 @@ layer_bottom (InkscapeWindow* win)
     layer->lowerToBottom();
 
     if (layer->getNext() != old_pos) {
-        
+
         char const * message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to bottom"), INKSCAPE_ICON("layer-bottom"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free((void *) message);
-    
+
     } else {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
     }
@@ -244,7 +244,7 @@ layer_duplicate (InkscapeWindow* win)
         dt->selection->duplicate(true, true);
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Duplicate layer"), INKSCAPE_ICON("layer-duplicate"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Duplicated layer."));
-    
+
     } else {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     }

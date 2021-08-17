@@ -2,7 +2,7 @@
 /** \file
  *
  *  Actions for Editing an object which require desktop
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -21,7 +21,7 @@
 #include "selection-chemistry.h"
 #include "object/sp-guide.h"
 
-void 
+void
 undo(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -30,7 +30,7 @@ undo(InkscapeWindow* win)
     sp_undo(dt, dt->getDocument());
 }
 
-void 
+void
 redo(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -39,7 +39,7 @@ redo(InkscapeWindow* win)
     sp_redo(dt, dt->getDocument());
 }
 
-void 
+void
 paste(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -48,7 +48,7 @@ paste(InkscapeWindow* win)
     sp_selection_paste(dt, false);
 }
 
-void 
+void
 paste_in_place(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -57,7 +57,7 @@ paste_in_place(InkscapeWindow* win)
     sp_selection_paste(dt, true);
 }
 
-void 
+void
 select_all(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -66,7 +66,7 @@ select_all(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectAll(dt);
 }
 
-void 
+void
 select_all_layers(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -75,7 +75,7 @@ select_all_layers(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectAllInAll(dt);
 }
 
-void 
+void
 select_same_fill_and_stroke(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -84,7 +84,7 @@ select_same_fill_and_stroke(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectSameFillStroke(dt);
 }
 
-void 
+void
 select_same_fill(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -93,7 +93,7 @@ select_same_fill(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectSameFillColor(dt);
 }
 
-void 
+void
 select_same_stroke_color(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -102,7 +102,7 @@ select_same_stroke_color(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectSameStrokeColor(dt);
 }
 
-void 
+void
 select_same_stroke_style(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -111,7 +111,7 @@ select_same_stroke_style(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectSameStrokeStyle(dt);
 }
 
-void 
+void
 select_same_object_type(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -120,7 +120,7 @@ select_same_object_type(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectSameObjectType(dt);
 }
 
-void 
+void
 select_invert(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -129,7 +129,7 @@ select_invert(InkscapeWindow* win)
     Inkscape::SelectionHelper::invert(dt);
 }
 
-void 
+void
 select_none(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();

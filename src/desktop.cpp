@@ -1314,7 +1314,7 @@ void SPDesktop::toggleToolbar(gchar const *toolbar_name)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean visible = prefs->getBool(pref_path, true);
     prefs->setBool(pref_path, !visible);
-    
+
     layoutWidget();
 }
 

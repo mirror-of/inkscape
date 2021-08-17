@@ -2,7 +2,7 @@
 /** \file
  *
  * Command Palette input placehoder hint data
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -26,7 +26,7 @@ InkActionHintData::get_actions()
 }
 
 Glib::ustring
-InkActionHintData::get_tooltip_hint_for_action(Glib::ustring const &action_name, bool translated) 
+InkActionHintData::get_tooltip_hint_for_action(Glib::ustring const &action_name, bool translated)
 {
     // Hint for a perticular Action
     Glib::ustring value;
@@ -42,6 +42,6 @@ InkActionHintData::add_data(std::vector<std::vector<Glib::ustring>> &hint_data)
 {
     for (auto hint : hint_data) {
         // Action Name , Hint
-        data.emplace(hint[0], hint[1]);     
+        data.emplace(hint[0], hint[1]);
     }
 }

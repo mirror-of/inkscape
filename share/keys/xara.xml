@@ -184,7 +184,7 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="app.selection-lower"               keys="&lt;ctrl&gt;&lt;shift&gt;B, &lt;ctrl&gt;&lt;shift&gt;b, Page_Down, KP_Page_Down" />
   <bind gaction="app.select-object-group"           keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
   <bind gaction="app.select-object-ungroup"         keys="&lt;ctrl&gt;&lt;shift&gt;g, &lt;ctrl&gt;&lt;shift&gt;G, &lt;ctrl&gt;u, &lt;ctrl&gt;U" />
-  <bind gaction="win.selection-make-bitmap-copy"    keys="&lt;ctrl&gt;&lt;shift&gt;C, &lt;ctrl&gt;&lt;shift&gt;c" />
+  <bind gaction="app.selection-make-bitmap-copy"    keys="&lt;ctrl&gt;&lt;shift&gt;C, &lt;ctrl&gt;&lt;shift&gt;c" />
   <bind gaction="win.dialog-open('Trace')"          keys="&lt;alt&gt;&lt;shift&gt;b, &lt;alt&gt;&lt;shift&gt;B" />
   <bind gaction="app.object-to-pattern"             keys="&lt;alt&gt;i, &lt;alt&gt;I" />
   <bind gaction="app.pattern-to-object"             keys="&lt;alt&gt;&lt;shift&gt;i, &lt;alt&gt;&lt;shift&gt;I" />

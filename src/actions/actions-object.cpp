@@ -121,7 +121,7 @@ object_set_inverse(InkscapeApplication *app)
     Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), "");
 }
 
-void 
+void
 object_release(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
@@ -152,7 +152,7 @@ object_set_inverse_mask(InkscapeApplication *app)
     Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), "");
 }
 
-void 
+void
 object_release_mask(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
@@ -192,7 +192,7 @@ object_flip_horizontal(InkscapeApplication *app)
     }
 
     // Get center
-    Geom::Point center;    
+    Geom::Point center;
     if (selection->center()) {
         center = *selection->center();
     } else {
@@ -221,7 +221,7 @@ object_flip_vertical(InkscapeApplication *app)
     } else {
         center = bbox->midpoint();
     }
-    
+
     // Object Flip Vertical
     selection->setScaleRelative(center, Geom::Scale(1.0, -1.0));
     Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));

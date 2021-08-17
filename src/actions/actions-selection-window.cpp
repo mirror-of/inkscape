@@ -2,7 +2,7 @@
 /** \file
  *
  * Actions related to selection wich require desktop
- * 
+ *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
  *
@@ -22,15 +22,6 @@
 #include "path/path-offset.h"
 #include "actions/actions-tools.h"
 #include "selection-chemistry.h"
-
-void 
-selection_make_bitmap_copy(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Make a Bitmap Copy
-    dt->selection->createBitmapCopy();
-}
 
 void
 select_path_inset(InkscapeWindow* win)
@@ -90,7 +81,6 @@ select_path_reverse(InkscapeWindow* win)
 std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
 {
     // clang-format off
-    {"win.selection-make-bitmap-copy",  N_("Make a Bitmap Copy"),  "Selection Desktop",        N_("Export selection to a bitmap and insert it into document")},
     {"win.select-path-inset",           N_("Inset"),               "Selection Desktop",        N_("Inset selected paths")},
     {"win.select-path-outset",          N_("Outset"),              "Selection Desktop",        N_("Outset selected paths")},
     {"win.select-path-offset-dynamic",  N_("Dynamic Offset"),      "Selection Desktop",        N_("Create a dynamic offset object")},
@@ -103,7 +93,6 @@ void
 add_actions_select_window(InkscapeWindow* win)
 {
     // clang-format off
-    win->add_action( "selection-make-bitmap-copy",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&selection_make_bitmap_copy), win));
     win->add_action( "select-path-inset",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_inset),win));
     win->add_action( "select-path-outset",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_outset),win));
     win->add_action( "select-path-offset-dynamic",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_dynamic),win));
