@@ -3,6 +3,7 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *   Abhishek Sharma
+ *   Sushant A.A. <sushant.co19@gmail.com>
  *
  * Copyright (C) 2002-2007 Authors
  *
@@ -60,7 +61,6 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 {
     Inkscape::XML::Node * local_effects_menu = nullptr;
 
-    return;
     if (!Inkscape::Application::exists() or !INKSCAPE.use_gui()) {
         std::cerr << "effect: uses GUI!" << std::endl;
         return;

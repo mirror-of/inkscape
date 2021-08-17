@@ -52,11 +52,6 @@
 void
 build_menu()
 {
-    if (!Inkscape::Application::exists() or !INKSCAPE.use_gui()) {
-        std::cerr << "menubar: uses GUI!" << std::endl;
-        return;
-    }
-
     std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
     auto refBuilder = Gtk::Builder::create();
 
