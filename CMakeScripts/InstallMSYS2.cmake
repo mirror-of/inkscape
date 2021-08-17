@@ -102,6 +102,7 @@ if(WIN32)
     ${MINGW_BIN}/libtermcap-[0-9]*.dll
     ${MINGW_BIN}/libthai-[0-9]*.dll
     ${MINGW_BIN}/libtiff-[0-9]*.dll
+    ${MINGW_BIN}/libtiff-5.dll
     ${MINGW_BIN}/libunistring-[0-9]*.dll
     ${MINGW_BIN}/libvisio-0.[0-9]*.dll
     ${MINGW_BIN}/libwebp-[0-9]*.dll
