@@ -542,3 +542,17 @@ stackswitcher button {
     padding-right: 1px;
     min-width: 40px;
 }
+
+/*removes dashed line (scrolling indicator) on color pallete for all themes */
+.color-palette-main-box scrolledwindow undershoot.top {
+    background-image: none;
+}
+.color-palette-main-box scrolledwindow undershoot.right {
+    background-image: none;
+}
+.color-palette-main-box scrolledwindow undershoot.bottom {
+    background-image: none;
+}
+.color-palette-main-box scrolledwindow undershoot.left {
+    background-image: none;
+}
