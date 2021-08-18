@@ -141,6 +141,8 @@ void CanvasItem::show()
     }
 
     _visible = true;
+    // update bounds when visibility changes
+    request_update();
     _canvas->redraw_area(_bounds);
     _canvas->set_need_repick();
 }
@@ -190,6 +192,8 @@ void CanvasItem::hide()
     }
 
     _visible = false;
+    // update bounds when visibility changes
+    request_update();
     _canvas->redraw_area(_bounds);
     _canvas->set_need_repick();
 }
