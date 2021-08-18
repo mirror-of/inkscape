@@ -11,6 +11,7 @@ if(WIN32)
     ${MINGW_BIN}/SSLEAY32.dll
     ${MINGW_BIN}/imagequant.dll
     ${MINGW_BIN}/libMagick*.dll
+    ${MINGW_BIN}/libaom.dll
     ${MINGW_BIN}/libaspell-[0-9]*.dll
     ${MINGW_BIN}/libatk-1.0-[0-9]*.dll
     ${MINGW_BIN}/libatkmm-1.6-[0-9]*.dll
@@ -25,6 +26,8 @@ if(WIN32)
     ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
     ${MINGW_BIN}/libdatrie-[0-9]*.dll
+    ${MINGW_BIN}/libdav1d.dll
+    ${MINGW_BIN}/libde265-[0-9]*.dll
     ${MINGW_BIN}/libdeflate.dll
     ${MINGW_BIN}/libdouble-conversion.dll
     ${MINGW_BIN}/libenchant-[0-9]*.dll
@@ -56,6 +59,7 @@ if(WIN32)
     ${MINGW_BIN}/libgtk-3-[0-9]*.dll
     ${MINGW_BIN}/libgtkmm-3.0-[0-9]*.dll
     ${MINGW_BIN}/libharfbuzz-[0-9]*.dll
+    ${MINGW_BIN}/libheif.dll
     ${MINGW_BIN}/libiconv-[0-9]*.dll
     ${MINGW_BIN}/libicudt[0-9]*.dll
     ${MINGW_BIN}/libicuin[0-9]*.dll
@@ -65,6 +69,7 @@ if(WIN32)
     ${MINGW_BIN}/libjbig-[0-9]*.dll
     ${MINGW_BIN}/libjpeg-[0-9]*.dll
     ${MINGW_BIN}/liblcms2-[0-9]*.dll
+    ${MINGW_BIN}/libLerc.dll
     ${MINGW_BIN}/liblqr-1-[0-9]*.dll
     ${MINGW_BIN}/liblzma-[0-9]*.dll
     ${MINGW_BIN}/libmpdec-[0-9]*.dll
@@ -107,13 +112,17 @@ if(WIN32)
     ${MINGW_BIN}/libwebpdemux-[0-9]*.dll
     ${MINGW_BIN}/libwebpmux-[0-9]*.dll
     ${MINGW_BIN}/libwinpthread-[0-9]*.dll
+    ${MINGW_BIN}/libwmf-0-2-[0-9]*.dll
+    ${MINGW_BIN}/libwmflite-0-2-[0-9]*.dll
     ${MINGW_BIN}/libwpd-0.[0-9]*.dll
     ${MINGW_BIN}/libwpg-0.[0-9]*.dll
     ${MINGW_BIN}/libxml2-[0-9]*.dll
     ${MINGW_BIN}/libxslt-[0-9]*.dll
+    ${MINGW_BIN}/libx265.dll
     ${MINGW_BIN}/libzstd.dll
     ${MINGW_BIN}/nss[0-9]*.dll
     ${MINGW_BIN}/nssutil[0-9]*.dll
+    ${MINGW_BIN}/rav1e.dll
     ${MINGW_BIN}/smime[0-9]*.dll
     ${MINGW_BIN}/tcl[0-9]*.dll
     ${MINGW_BIN}/tk[0-9]*.dll
