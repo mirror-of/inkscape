@@ -69,7 +69,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         return;
     }
 
-    if (!repr or !INKSCAPE.use_gui() or !Inkscape::Application::exists()) {
+    if (!INKSCAPE.use_gui() or !Inkscape::Application::exists()) {
         std::cerr << "effect: uses GUI!" << std::endl;
         return;
     }
