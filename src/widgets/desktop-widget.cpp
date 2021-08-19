@@ -293,14 +293,14 @@ SPDesktopWidget::SPDesktopWidget()
     // Selected Style (Fill/Stroke/Opacity)
     dtw->_selected_style = Gtk::manage(new Inkscape::UI::Widget::SelectedStyle(true));
     dtw->_statusbar->pack_start(*dtw->_selected_style, false, false);
-
-    // Separator
-    dtw->_statusbar->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)),
-		                false, false);
+    _selected_style->show_all();
+    _selected_style->set_no_show_all();
 
     // Layer Selector
-    dtw->layer_selector = Gtk::manage(new Inkscape::UI::Widget::LayerSelector(nullptr));
-    dtw->_statusbar->pack_start(*dtw->layer_selector, false, false, 1);
+    _layer_selector = Gtk::manage(new Inkscape::UI::Widget::LayerSelector(nullptr));
+    _layer_selector->show_all();
+    _layer_selector->set_no_show_all();
+    dtw->_statusbar->pack_start(*_layer_selector, false, false, 1);
 
     // Select Status
     dtw->_select_status = Gtk::manage(new Gtk::Label());
@@ -316,7 +316,7 @@ SPDesktopWidget::SPDesktopWidget()
 
     dtw->_statusbar->pack_start(*dtw->_select_status, true, true);
 
-
+    dtw->_zoom_status_box = Gtk::make_managed<Gtk::Box>();
     // Zoom status spinbutton ---------------
     auto zoom_adj = Gtk::Adjustment::create(100.0, log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
     dtw->_zoom_status = Gtk::manage(new Inkscape::UI::Widget::SpinButton(zoom_adj));
@@ -342,6 +342,8 @@ SPDesktopWidget::SPDesktopWidget()
     auto context_zoom = dtw->_zoom_status->get_style_context();
     context_zoom->add_provider(css_provider_spinbutton, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+    dtw->_rotation_status_box = Gtk::make_managed<Gtk::Box>();
+    dtw->_rotation_status_box->set_margin_start(10);
     // Rotate status spinbutton ---------------
     auto rotation_adj = Gtk::Adjustment::create(0, -360.0, 360.0, 1.0);
 
@@ -369,7 +371,6 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_rotation_status->set_name("RotationStatus");
     auto context_rotation = dtw->_rotation_status->get_style_context();
     context_rotation->add_provider(css_provider_spinbutton, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
 
     // Cursor coordinates
     dtw->_coord_status = Gtk::manage(new Gtk::Grid());
@@ -406,17 +407,30 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_coord_status_y->set_halign(Gtk::ALIGN_END);
     dtw->_coord_status->attach(*dtw->_coord_status_x, 2, 0, 1, 1);
     dtw->_coord_status->attach(*dtw->_coord_status_y, 2, 1, 1, 1);
+    dtw->_coord_status->show_all();
+    dtw->_coord_status->set_no_show_all();
 
-    dtw->_coord_status->attach(*label_z, 3, 0, 1, 2);
-    dtw->_coord_status->attach(*dtw->_zoom_status, 4, 0, 1, 2);
+    dtw->_zoom_status_box->pack_start(*label_z, true, true);
+    dtw->_zoom_status_box->pack_end(*dtw->_zoom_status, true, true);
+    dtw->_zoom_status_box->show_all();
 
-    dtw->_coord_status->attach(*label_r, 5, 0, 1, 2);
-    dtw->_coord_status->attach(*dtw->_rotation_status, 6, 0, 1, 2);
+    dtw->_rotation_status_box->pack_start(*label_r, true, true);
+    dtw->_rotation_status_box->pack_end(*dtw->_rotation_status, true, true);
+    dtw->_rotation_status_box->show_all();
+    dtw->_rotation_status_box->set_no_show_all();
 
+    dtw->_statusbar->pack_end(*dtw->_rotation_status_box, false, false);
+    dtw->_statusbar->pack_end(*dtw->_zoom_status_box, false, false);
     dtw->_statusbar->pack_end(*dtw->_coord_status, false, false);
 
+    update_statusbar_visibility();
+
+    _statusbar_preferences_observer = prefs->createObserver("/statusbar/visibility", [=]() {
+        update_statusbar_visibility();
+    });
+
     // --------------- Color Management ---------------- //
-    dtw->_tracker = ege_color_prof_tracker_new(GTK_WIDGET(dtw->layer_selector->gobj()));
+    dtw->_tracker = ege_color_prof_tracker_new(GTK_WIDGET(_layer_selector->gobj()));
     bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
     if ( fromDisplay ) {
         auto id = Inkscape::CMSSystem::getDisplayId(0);
@@ -430,6 +444,16 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_canvas_grid->ShowCommandPalette(false);
 
     dtw->_canvas->grab_focus();
+}
+
+void SPDesktopWidget::update_statusbar_visibility() {
+    auto prefs = Inkscape::Preferences::get();
+    Glib::ustring path("/statusbar/visibility/");
+
+    _coord_status->set_visible(prefs->getBool(path + "coordinates", true));
+    _rotation_status_box->set_visible(prefs->getBool(path + "rotation", true));
+    _layer_selector->set_visible(prefs->getBool(path + "layer", true));
+    _selected_style->set_visible(prefs->getBool(path + "style", true));
 }
 
 void
@@ -498,7 +522,7 @@ SPDesktopWidget::on_unrealize()
 
         delete _container;
 
-        dtw->layer_selector->setDesktop(nullptr);
+        _layer_selector->setDesktop(nullptr);
         INKSCAPE.remove_desktop(dtw->desktop); // clears selection and event_context
         dtw->modified_connection.disconnect();
         dtw->desktop->destroy();
@@ -1433,7 +1457,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     /* Listen on namedview modification */
     dtw->modified_connection = namedview->connectModified(sigc::mem_fun(*dtw, &SPDesktopWidget::namedviewModified));
 
-    dtw->layer_selector->setDesktop(dtw->desktop);
+    _layer_selector->setDesktop(dtw->desktop);
 
     // TEMP
     dtw->_menubar = build_menubar(dtw->desktop);

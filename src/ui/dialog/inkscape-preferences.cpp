@@ -1597,6 +1597,20 @@ void InkscapePreferences::initPageUI()
     _compact_colorselector.init(_("Use compact color selector mode switch"), "/colorselector/switcher", true);
     _page_ui.add_line(false, "", _compact_colorselector, "", _("Use compact combo box for selecting color modes"), false);
 
+    _page_ui.add_group_header(_("Status bar"));
+    auto sb_style = Gtk::make_managed<UI::Widget::PrefCheckButton>();
+    sb_style->init(_("Show current style"), "/statusbar/visibility/style", true);
+    _page_ui.add_line(false, "", *sb_style, "", _("Control visibility of current fill, stroke and opacity in status bar."), true);
+    auto sb_layer = Gtk::make_managed<UI::Widget::PrefCheckButton>();
+    sb_layer->init(_("Show layer selector"), "/statusbar/visibility/layer", true);
+    _page_ui.add_line(false, "", *sb_layer, "", _("Control visibility of layer selection menu in status bar."), true);
+    auto sb_coords = Gtk::make_managed<UI::Widget::PrefCheckButton>();
+    sb_coords->init(_("Show mouse coordinates"), "/statusbar/visibility/coordinates", true);
+    _page_ui.add_line(false, "", *sb_coords, "", _("Control visibility of mouse coordinates X & Y in status bar."), true);
+    auto sb_rotate = Gtk::make_managed<UI::Widget::PrefCheckButton>();
+    sb_rotate->init(_("Show canvas rotation"), "/statusbar/visibility/rotation", true);
+    _page_ui.add_line(false, "", *sb_rotate, "", _("Control visibility of canvas rotation in status bar."), true);
+
     _page_ui.add_group_header(_("Mouse cursors"));
     _ui_cursorscaling.init(_("Enable scaling"), "/options/cursorscaling", true);
     _page_ui.add_line(false, "", _ui_cursorscaling, "", _("When off, cursor scaling is disabled. Cursor scaling may be broken when fractional scaling is enabled."), true);
