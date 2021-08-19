@@ -387,18 +387,33 @@ ZoomCorrRuler::draw_marks(Cairo::RefPtr<Cairo::Context> cr, double dist, int maj
     const double zoomcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
     double mark = 0;
     int i = 0;
+    double step = dist * zoomcorr / _unitconv;
+    bool draw_minor = true;
+    if (step <= 0) {
+        return;
+    }
+    else if (step < 2) {
+        // marks too dense
+        draw_minor = false;
+    }
+    int last_pos = -1;
     while (mark <= _drawing_width) {
         cr->move_to(mark, _height);
         if ((i % major_interval) == 0) {
-            // major mark
-            cr->line_to(mark, 0);
-            Geom::Point textpos(mark + 3, ZoomCorrRuler::textsize + ZoomCorrRuler::textpadding);
-            draw_number(cr->cobj(), textpos, dist * i);
-        } else {
+            // don't overcrowd the marks
+            if (static_cast<int>(mark) > last_pos) {
+                // major mark
+                cr->line_to(mark, 0);
+                Geom::Point textpos(mark + 3, ZoomCorrRuler::textsize + ZoomCorrRuler::textpadding);
+                draw_number(cr->cobj(), textpos, dist * i);
+
+                last_pos = static_cast<int>(mark) + 1;
+            }
+        } else if (draw_minor) {
             // minor mark
             cr->line_to(mark, ZoomCorrRuler::textsize + 2 * ZoomCorrRuler::textpadding);
         }
-        mark += dist * zoomcorr / _unitconv;
+        mark += step;
         ++i;
     }
 }
@@ -410,7 +425,15 @@ ZoomCorrRuler::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
     int w = window->get_width();
     _drawing_width = w - _border * 2;
 
-    cr->set_source_rgb(1.0, 1.0, 1.0);
+    auto context = get_style_context();
+    Gdk::RGBA fg = context->get_color(get_state_flags());
+    Gdk::RGBA bg;
+    bg.set_grey(0.5);
+    if (auto wnd = dynamic_cast<Gtk::Window*>(this->get_toplevel())) {
+        bg = wnd->get_style_context()->get_background_color();
+    }
+
+    cr->set_source_rgb(bg.get_red(), bg.get_green(), bg.get_blue());
     cr->set_fill_rule(Cairo::FILL_RULE_WINDING);
     cr->rectangle(0, 0, w, _height + _border*2);
     cr->fill();
@@ -421,6 +444,8 @@ ZoomCorrRuler::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
     cr->translate(_border, _border); // so that we have a small white border around the ruler
     cr->move_to (0, _height);
     cr->line_to (_drawing_width, _height);
+
+    cr->set_source_rgb(fg.get_red(), fg.get_green(), fg.get_blue());
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring abbr = prefs->getString("/options/zoomcorrection/unit");
