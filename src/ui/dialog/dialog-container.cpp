@@ -388,6 +388,7 @@ void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNoteboo
             last_column = create_column();
             columns->append(last_column);
         }
+
         // Look to see if first widget in column is notebook, if not add one.
         notebook = dynamic_cast<DialogNotebook *>(last_column->get_first_widget());
         if (!notebook) {
@@ -395,8 +396,10 @@ void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNoteboo
             last_column->prepend(notebook);
         }
     }
+
     // Add dialog
     notebook->add_page(*dialog, *tab, dialog->get_name());
+
     if (auto panel = dynamic_cast<DialogMultipaned*>(notebook->get_parent())) {
         // if panel is collapsed, show it now, or else new dialog will be mysteriously missing
         panel->show();
@@ -566,6 +569,7 @@ DialogWindow *DialogContainer::create_new_floating_dialog(const Glib::ustring& d
         }
         return nullptr;
     }
+    
     // check if this dialog *was* open and floating; if so recreate its window
     if (auto state = DialogManager::singleton().find_dialog_state(dialog_type)) {
         if (recreate_dialogs_from_state(state.get())) {

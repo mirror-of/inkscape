@@ -17,7 +17,6 @@
 #include "actions-text.h"
 #include "actions/actions-extra-data.h"
 #include "inkscape-application.h"
-#include "document.h"
 #include "text-chemistry.h"
 
 void

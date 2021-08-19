@@ -25,67 +25,43 @@
 void
 file_open(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
-
-    Gtk::Window *parent = dt->getToplevel();
-    g_assert(parent != nullptr);
-
-    sp_file_open_dialog(*parent, nullptr, nullptr);
+    // Open File Dialog
+    sp_file_open_dialog(*win, nullptr, nullptr);
 }
 
 void
 document_save(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
-
-    Gtk::Window *parent = dt->getToplevel();
-    g_assert(parent != nullptr);
-
-    sp_file_save(*parent, nullptr, nullptr);
+    // Save File
+    sp_file_save(*win, nullptr, nullptr);
 }
 
 void
 document_save_as(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
-
-    Gtk::Window *parent = dt->getToplevel();
-    g_assert(parent != nullptr);
-
-    sp_file_save_as(*parent, nullptr, nullptr);
+    // Save File As
+    sp_file_save_as(*win, nullptr, nullptr);
 }
 
 void
 document_save_copy(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
-
-    Gtk::Window *parent = dt->getToplevel();
-    g_assert(parent != nullptr);
-
-    sp_file_save_a_copy(*parent, nullptr, nullptr);
+    // Save A copy
+    sp_file_save_a_copy(*win, nullptr, nullptr);
 }
 
 void
 document_save_template(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
-
-    Gtk::Window *parent = dt->getToplevel();
-    g_assert(parent != nullptr);
-
-    Inkscape::UI::Dialog::SaveTemplate::save_document_as_template(*parent);
+    // Save As Template
+    Inkscape::UI::Dialog::SaveTemplate::save_document_as_template(*win);
 }
 
 void
 document_print(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
-
-    Gtk::Window *parent = dt->getToplevel();
-    g_assert(parent != nullptr);
-
-    sp_file_print(*parent);
+    // Print FIle
+    sp_file_print(*win);
 }
 
 void
