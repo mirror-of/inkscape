@@ -118,6 +118,11 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     static auto gapp = InkscapeApplication::instance()->gtk_app();
     gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
     
+    if (!INKSCAPE.use_gui() or !Inkscape::Application::exists()) {
+        std::cerr << "effect: uses GUI!" << std::endl;
+        return;
+    }
+    
     std::vector<std::vector<Glib::ustring>>raw_data_effect;
     
     if (local_effects_menu && local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
@@ -128,10 +133,6 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         app->get_action_extra_data().add_data(raw_data_effect);
     }
 
-    if (!INKSCAPE.use_gui() or !Inkscape::Application::exists()) {
-        std::cerr << "effect: uses GUI!" << std::endl;
-        return;
-    }
 
     if (!hidden) {
         // Submenu retrival as a string
