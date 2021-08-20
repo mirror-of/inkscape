@@ -69,6 +69,11 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         return;
     }
 
+    if (!INKSCAPE.use_gui() or !Inkscape::Application::exists()) {
+        std::cerr << "effect: uses GUI!" << std::endl;
+        return;
+    }
+
     // This is a weird hack
     if (!strcmp(this->get_id(), "org.inkscape.filter.dropshadow"))
         return;
@@ -117,22 +122,6 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
     static auto gapp = InkscapeApplication::instance()->gtk_app();
     gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
-    
-    if (!INKSCAPE.use_gui() or !Inkscape::Application::exists()) {
-        std::cerr << "effect: uses GUI!" << std::endl;
-        return;
-    }
-    
-    std::vector<std::vector<Glib::ustring>>raw_data_effect;
-    
-    if (local_effects_menu && local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
-        raw_data_effect = {{ action_id, get_name(),"Filter",description}};
-        app->get_action_extra_data().add_data(raw_data_effect);
-    } else if (local_effects_menu) {
-        raw_data_effect = {{ action_id, get_name(),"Effect",description}};
-        app->get_action_extra_data().add_data(raw_data_effect);
-    }
-
 
     if (!hidden) {
         // Submenu retrival as a string
@@ -140,10 +129,18 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         get_menu(local_effects_menu,sub_menu);
         sub_menu = action_menu_name(sub_menu);
 
-        if (local_effects_menu && local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
+        if (local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
+
+            std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",description}};
+            app->get_action_extra_data().add_data(raw_data_filter);
             sub_menu = sub_menu.substr(1);
-        } else if (local_effects_menu) {
+
+        } else {
+
+            std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",description}};
+            app->get_action_extra_data().add_data(raw_data_effect);
             sub_menu="effect"+sub_menu;
+
         }
         
         // Add submenu to effect data
