@@ -50,6 +50,7 @@ set(ui_SRC
 	toolbar/calligraphy-toolbar.cpp
 	toolbar/connector-toolbar.cpp
 	toolbar/dropper-toolbar.cpp
+	toolbar/marker-toolbar.cpp
 	toolbar/eraser-toolbar.cpp
 	toolbar/gradient-toolbar.cpp
 	toolbar/lpe-toolbar.cpp
@@ -85,6 +86,7 @@ set(ui_SRC
 	tools/pencil-tool.cpp
 	tools/pen-tool.cpp
 	tools/rect-tool.cpp
+	tools/marker-tool.cpp
 	tools/select-tool.cpp
 	tools/spiral-tool.cpp
 	tools/spray-tool.cpp
@@ -358,6 +360,7 @@ set(ui_SRC
 	toolbar/calligraphy-toolbar.h
 	toolbar/connector-toolbar.h
 	toolbar/dropper-toolbar.h
+	toolbar/marker-toolbar.h
 	toolbar/eraser-toolbar.h
 	toolbar/gradient-toolbar.h
 	toolbar/lpe-toolbar.h
@@ -393,6 +396,7 @@ set(ui_SRC
 	tools/pen-tool.h
 	tools/pencil-tool.h
 	tools/rect-tool.h
+	tools/marker-tool.h
 	tools/select-tool.h
 	tools/spiral-tool.h
 	tools/spray-tool.h

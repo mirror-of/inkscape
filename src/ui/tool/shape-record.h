@@ -34,9 +34,11 @@ struct ShapeRecord :
     public boost::totally_ordered<ShapeRecord>
 {
     SPObject *object; // SP node for the edited shape could be a lpeoject invisible so we use a spobject
-    Geom::Affine edit_transform; // how to transform controls - used for clipping paths and masks
     ShapeRole role;
     Glib::ustring lpe_key; // name of LPE shape param being edited
+
+    Geom::Affine edit_transform; // how to transform controls - used for clipping paths, masks, and markers
+    double edit_rotation; // how to transform controls - used for markers
 
     inline bool operator==(ShapeRecord const &o) const {
         return object == o.object && lpe_key == o.lpe_key;

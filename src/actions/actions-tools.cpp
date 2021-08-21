@@ -31,6 +31,7 @@
 #include "object/sp-spiral.h"
 #include "object/sp-star.h"
 #include "object/sp-text.h"
+#include "object/sp-marker.h"
 
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-manager.h"
@@ -50,6 +51,7 @@ static std::map<Glib::ustring, ToolData> tool_data =
 {
     {"Select",       {TOOLS_SELECT,          PREFS_PAGE_TOOLS_SELECTOR,       "/tools/select",          }},
     {"Node",         {TOOLS_NODES,           PREFS_PAGE_TOOLS_NODE,           "/tools/nodes",           }},
+    {"Marker",       {TOOLS_MARKER,          PREFS_PAGE_TOOLS,/*No Page*/     "/tools/marker",          }},
     {"Rect",         {TOOLS_SHAPES_RECT,     PREFS_PAGE_TOOLS_SHAPES_RECT,    "/tools/shapes/rect",     }},
     {"Arc",          {TOOLS_SHAPES_ARC,      PREFS_PAGE_TOOLS_SHAPES_ELLIPSE, "/tools/shapes/arc",      }},
     {"Star",         {TOOLS_SHAPES_STAR,     PREFS_PAGE_TOOLS_SHAPES_STAR,    "/tools/shapes/star",     }},
@@ -81,6 +83,7 @@ static std::map<Glib::ustring, Glib::ustring> tool_msg =
     {"Star",        N_("<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. <b>Click</b> to select.")                                                                                                  },
     {"3DBox",       N_("<b>Drag</b> to create a 3D box. <b>Drag controls</b> to resize in perspective. <b>Click</b> to select (with <b>Ctrl+Alt</b> for single faces).")                                                      },
     {"Spiral",      N_("<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral shape. <b>Click</b> to select.")                                                                                              },
+    {"Marker",      N_("<b>Click</b> a shape to start editing its markers. <b>Drag controls</b> to change orientation, scale, and position.")                                                                                 },
     {"Pencil",      N_("<b>Drag</b> to create a freehand line. <b>Shift</b> appends to selected path, <b>Alt</b> activates sketch mode.")                                                                                     },
     {"Pen",         N_("<b>Click</b> or <b>click and drag</b> to start a path; with <b>Shift</b> to append to selected path. <b>Ctrl+click</b> to create single dots (straight line modes only).")                            },
     {"Calligraphic",N_("<b>Drag</b> to draw a calligraphic stroke; with <b>Ctrl</b> to track a guide path. <b>Arrow keys</b> adjust width (left/right) and angle (up/down).")                                                 },
@@ -160,6 +163,8 @@ set_active_tool(InkscapeWindow *win, SPItem *item, Geom::Point const p)
         tool_switch("3DBox", win);
     } else if (dynamic_cast<SPSpiral *>(item)) {
         tool_switch("Spiral", win);
+    } else if (dynamic_cast<SPMarker *>(item)) {
+        tool_switch("Marker", win);
     } else if (dynamic_cast<SPPath *>(item)) {
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
             tool_switch("Connector", win);
@@ -367,6 +372,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_tools =
     {"win.tool-switch('Star')",         N_("Tool: Star/Polygon"), "Tool Switch",   N_("Create stars and polygons.")                     },
     {"win.tool-switch('3DBox')",        N_("Tool: 3D Box"),       "Tool Switch",   N_("Create 3D Boxes.")                               },
     {"win.tool-switch('Spiral')",       N_("Tool: Spiral"),       "Tool Switch",   N_("Create spirals.")                                },
+    {"win.tool-switch('Marker')",       N_("Tool: Marker"),       "Tool Switch",   N_("Edit markers.")                                  },
 
     {"win.tool-switch('Pen')",          N_("Tool: Pen"),          "Tool Switch",   N_("Draw Bezier curves and straight lines.")         },
     {"win.tool-switch('Pencil')",       N_("Tool: Pencil"),       "Tool Switch",   N_("Draw freehand lines.")                           },

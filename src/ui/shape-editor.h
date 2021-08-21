@@ -26,7 +26,7 @@ namespace UI {
 class ShapeEditor {
 public:
 
-    ShapeEditor(SPDesktop *desktop, Geom::Affine edit_transform = Geom::identity());
+    ShapeEditor(SPDesktop *desktop, Geom::Affine edit_transform = Geom::identity(), double edit_rotation = 0.0, int edit_marker_mode = -1);
     ~ShapeEditor();
 
     void set_item(SPItem *item);
@@ -52,6 +52,8 @@ private:
     Inkscape::XML::Node *knotholder_listener_attached_for;
     Inkscape::XML::Node *lpeknotholder_listener_attached_for;
     Geom::Affine _edit_transform;
+    double _edit_rotation;
+    int _edit_marker_mode;
 };
 
 } // namespace UI

@@ -96,6 +96,7 @@ protected:
 	}
 };
 
+void validateMarker(SPMarker *sp_marker, SPDocument *doc);
 void sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size);
 Inkscape::DrawingItem *sp_marker_show_instance (SPMarker *marker, Inkscape::DrawingItem *parent,
 				      unsigned int key, unsigned int pos,

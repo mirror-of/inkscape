@@ -31,6 +31,7 @@
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-pattern.h"
+#include "object/sp-marker.h"
 
 #include "display/control/canvas-item-ctrl.h"
 

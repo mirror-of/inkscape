@@ -1705,6 +1705,9 @@ void ContextVerb::perform(SPAction *action, void *data)
         case SP_VERB_CONTEXT_NODE:
             set_active_tool(dt, "Node");
             break;
+        case SP_VERB_CONTEXT_MARKER:
+            set_active_tool(dt, "Marker");
+            break;
         case SP_VERB_CONTEXT_TWEAK:
             set_active_tool(dt, "Tweak");
             break;
@@ -2605,6 +2608,8 @@ Verb *Verb::_base_verbs[] = {
                     N_("Select and transform objects"), INKSCAPE_ICON("tool-pointer")),
     new ContextVerb(SP_VERB_CONTEXT_NODE, "ToolNode", NC_("ContextVerb", "Node Edit"), N_("Edit paths by nodes"),
                     INKSCAPE_ICON("tool-node-editor")),
+    new ContextVerb(SP_VERB_CONTEXT_MARKER, "ToolMarker", NC_("ContextVerb", "Marker"), N_("Edit markers"),
+                    INKSCAPE_ICON("tool-pointer")),
     new ContextVerb(SP_VERB_CONTEXT_TWEAK, "ToolTweak", NC_("ContextVerb", "Tweak"),
                     N_("Tweak objects by sculpting or painting"), INKSCAPE_ICON("tool-tweak")),
     new ContextVerb(SP_VERB_CONTEXT_SPRAY, "ToolSpray", NC_("ContextVerb", "Spray"),

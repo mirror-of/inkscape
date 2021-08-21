@@ -278,7 +278,7 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
 	} else {
             repr->removeAttribute("orient");
 	}
-        
+
 	/* fixme: */
 	//XML Tree being used directly here while it shouldn't be....
 	repr->setAttribute("viewBox", this->getRepr()->attribute("viewBox"));
@@ -303,6 +303,77 @@ void SPMarker::hide(unsigned int key) {
 	// CPPIFY: correct?
 	SPGroup::hide(key);
 }
+
+/* 
+- used to validate the marker item before passing it into the shape editor from the marker-tool. 
+- sets any missing properties that are needed before editing starts.
+*/
+void validateMarker(SPMarker *sp_marker, SPDocument *doc) {
+
+    doc->ensureUpToDate();
+
+    // calculate the marker bounds to set any missing viewBox information
+    std::vector<SPObject*> items = const_cast<SPMarker*>(sp_marker)->childList(false, SPObject::ActionBBox);
+
+    Geom::OptRect r;
+    for (auto *i : items) {
+        SPItem *item = dynamic_cast<SPItem*>(i);
+        r.unionWith(item->desktopVisualBounds());
+    }
+
+    Geom::Rect bounds(r->min() * doc->dt2doc(), r->max() * doc->dt2doc());
+    Geom::Point const center = bounds.dimensions() * 0.5;
+
+    if(!sp_marker->refX._set) {
+        sp_marker->setAttribute("refX", "0.0");
+    }
+
+    if(!sp_marker->refY._set) {
+        sp_marker->setAttribute("refY", "0.0");
+    }
+
+    if(!sp_marker->orient._set) {
+        sp_marker->setAttribute("orient", "0.0");
+    }
+
+    double xScale = 1;
+    double yScale = 1;
+
+    if(sp_marker->viewBox_set) {
+        // check if the X direction has any existing scale factor
+        if(sp_marker->viewBox.width() > 0) {
+            double existingXScale = sp_marker->markerWidth.computed/sp_marker->viewBox.width();
+            xScale = (existingXScale >= 0? existingXScale: 1);
+        }
+
+        // check if the Y direction has any existing scale factor
+        if(sp_marker->viewBox.height() > 0) {
+            double existingYScale = sp_marker->markerHeight.computed/sp_marker->viewBox.height();
+            yScale = (existingYScale >= 0? existingYScale: 1);
+        }
+
+        // only enforce uniform scale if the preserveAspectRatio is not set yet or if it does not equal "none"
+        if((!sp_marker->aspect_set) || (sp_marker->aspect_align != SP_ASPECT_NONE)) {
+            // set the scale to the smaller option if both xScale and yScale exist
+            if(xScale > yScale) {
+                xScale = yScale;
+            } else {
+                yScale = xScale;
+            }
+        }
+    }
+
+    sp_marker->setAttribute("viewBox", "0 0 " + std::to_string(bounds.dimensions()[Geom::X]) + " " + std::to_string(bounds.dimensions()[Geom::Y]));
+    
+    sp_marker->setAttribute("markerWidth", std::to_string(sp_marker->viewBox.width() * xScale));
+    sp_marker->setAttribute("markerHeight", std::to_string(sp_marker->viewBox.height() * yScale));
+
+    if(!sp_marker->aspect_set) {
+        // allow non uniform scaling unless the user explicitly sets "uniform" scaling through the marker UI
+        sp_marker->setAttribute("preserveAspectRatio", "none");
+    }
+}
+
 
 Geom::OptRect SPMarker::bbox(Geom::Affine const &/*transform*/, SPItem::BBoxType /*type*/) const {
 	return Geom::OptRect();

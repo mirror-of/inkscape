@@ -1023,11 +1023,11 @@ sp_shape_marker_release (SPObject *marker, SPShape *shape)
 /**
  * No-op.  Exists for handling 'modified' messages
  */
-static void
-sp_shape_marker_modified (SPObject */*marker*/, guint /*flags*/, SPItem */*item*/)
-{
-    /* I think mask does update automagically */
-    /* g_warning ("Item %s mask %s modified", item->getId(), mask->getId()); */
+static void sp_shape_marker_modified (SPObject* marker, guint flags, SPItem* item) {
+    if ((flags & SP_OBJECT_MODIFIED_FLAG) && item && marker) {
+        // changing marker can impact object's visual bounding box, so request update on this object itself
+        item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 /**

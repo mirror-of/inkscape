@@ -32,6 +32,9 @@
 #include "ui/widget/dash-selector.h"
 #include "ui/widget/marker-combo-box.h"
 #include "ui/widget/unit-menu.h"
+#include "ui/tools/marker-tool.h"
+
+#include "actions/actions-tools.h"
 
 #include "widgets/style-utils.h"
 
@@ -140,6 +143,9 @@ StrokeStyle::StrokeStyle() :
     startMarkerConn(),
     midMarkerConn(),
     endMarkerConn(),
+    editStartMarkerButton(),
+    editMidMarkerButton(),
+    editEndMarkerButton(),
     _old_unit(nullptr)
 {
     table = new Gtk::Grid();
@@ -270,6 +276,37 @@ StrokeStyle::StrokeStyle() :
 
     i++;
 
+    /* marker edit mode buttons*/
+    spw_label(table, _("Edit:"), 0, i, nullptr);
+
+    hb = spw_hbox(table, 1, 1, i);
+    i++;
+
+    editStartMarkerButton = Gtk::manage(new Gtk::Button(_("start"), true));
+    editStartMarkerButton->set_tooltip_text(_("Edit the start marker of the selected object."));
+    editStartMarkerButton->signal_clicked().connect([=]() {
+        enterEditMarkerMode(SP_MARKER_LOC_START);
+    });
+    editStartMarkerButton->show();
+    hb->pack_start(*editStartMarkerButton, true, true, 0);
+
+    editMidMarkerButton = Gtk::manage(new Gtk::Button(_("mid"), true));
+    editMidMarkerButton->set_tooltip_text(_("Edit the mid marker of the selected object."));
+    editMidMarkerButton->signal_clicked().connect([=]() {
+        enterEditMarkerMode(SP_MARKER_LOC_MID);
+    });
+    editMidMarkerButton->show();
+    hb->pack_start(*editMidMarkerButton, true, true, 0);
+
+    editEndMarkerButton = Gtk::manage(new Gtk::Button(_("end"), true));
+    editEndMarkerButton->set_tooltip_text(_("Edit the end marker of the selected object."));
+    editEndMarkerButton->signal_clicked().connect([=]() {
+        enterEditMarkerMode(SP_MARKER_LOC_END);
+    });
+    editEndMarkerButton->show();
+    hb->pack_start(*editEndMarkerButton, true, true, 0);
+
+    i++;
     /* Join type */
     // TRANSLATORS: The line join style specifies the shape to be used at the
     //  corners of paths. It can be "miter", "round" or "bevel".
@@ -467,6 +504,22 @@ StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
     return tb;
 }
 
+void StrokeStyle::enterEditMarkerMode(SPMarkerLoc _editMarkerMode)
+{
+    SPDesktop *desktop = this->desktop;
+
+    if (desktop) {
+        set_active_tool(desktop, "Marker");
+        Inkscape::UI::Tools::MarkerTool *mt = dynamic_cast<Inkscape::UI::Tools::MarkerTool*>(desktop->event_context);
+
+        if(mt) {
+            mt->editMarkerMode = _editMarkerMode;
+            mt->selection_changed(desktop->getSelection());
+        }
+    }
+}
+
+
 bool StrokeStyle::shouldMarkersBeUpdated()
 {
     return startMarkerCombo->update() || midMarkerCombo->update() ||
@@ -478,7 +531,7 @@ bool StrokeStyle::shouldMarkersBeUpdated()
  * Gets the marker uri string and applies it to all selected
  * items in the current desktop.
  */
-void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const /*which*/)
+void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const which)
 {
     if (spw->update || spw->shouldMarkersBeUpdated()) {
         return;
@@ -515,6 +568,18 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
         item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
         DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE, _("Set markers"));
+    }
+
+    /* edit marker mode - update */
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    if (desktop) {
+        Inkscape::UI::Tools::MarkerTool *mt = dynamic_cast<Inkscape::UI::Tools::MarkerTool*>(desktop->event_context);
+
+        if(mt) {
+            mt->editMarkerMode = which;
+            mt->selection_changed(desktop->getSelection());
+        }
     }
 
     sp_repr_css_attr_unref(css);

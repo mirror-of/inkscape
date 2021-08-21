@@ -25,6 +25,7 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tools/pencil-tool.h"
 #include "ui/tools/rect-tool.h"
+#include "ui/tools/marker-tool.h"
 #include "ui/tools/select-tool.h"
 #include "ui/tools/spiral-tool.h"
 #include "ui/tools/spray-tool.h"
@@ -57,6 +58,8 @@ ToolBase *ToolFactory::createObject(std::string const& id)
         tool = new GradientTool;
     else if (id == "/tools/lpetool")
         tool = new LpeTool;
+    else if (id == "/tools/marker")
+        tool = new MarkerTool;
     else if (id == "/tools/measure")
         tool = new MeasureTool;
     else if (id == "/tools/mesh")

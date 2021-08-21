@@ -35,6 +35,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-spiral.h"
 #include "object/sp-star.h"
+#include "object/sp-marker.h"
 #include "style.h"
 
 #include "ui/shape-editor.h"
@@ -168,6 +169,8 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
         object_verb = SP_VERB_CONTEXT_STAR;
     } else if (dynamic_cast<SPSpiral *>(saved_item)) {
         object_verb = SP_VERB_CONTEXT_SPIRAL;
+    } else if (dynamic_cast<SPMarker *>(saved_item)) {
+        object_verb = SP_VERB_CONTEXT_MARKER;
     } else {
         SPOffset *offset = dynamic_cast<SPOffset *>(saved_item);
         if (offset) {
@@ -311,6 +314,8 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
             object_verb = SP_VERB_CONTEXT_STAR;
         } else if (dynamic_cast<SPSpiral *>(object)) {
             object_verb = SP_VERB_CONTEXT_SPIRAL;
+        } else if (dynamic_cast<SPMarker *>(object)) {
+            object_verb = SP_VERB_CONTEXT_MARKER;
         } else {
             SPOffset *offset = dynamic_cast<SPOffset *>(object);
             if (offset) {

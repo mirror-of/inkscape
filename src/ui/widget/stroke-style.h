@@ -157,6 +157,9 @@ private:
     MarkerComboBox *startMarkerCombo;
     MarkerComboBox *midMarkerCombo;
     MarkerComboBox *endMarkerCombo;
+    Gtk::Button *editStartMarkerButton;
+    Gtk::Button *editMidMarkerButton;
+    Gtk::Button *editEndMarkerButton;
     Gtk::Grid *table;
     Glib::RefPtr<Gtk::Adjustment> *widthAdj;
     Glib::RefPtr<Gtk::Adjustment> *miterLimitAdj;
@@ -194,6 +197,7 @@ private:
     Inkscape::Util::Unit const *_old_unit;
 
     void _handleDocumentReplaced(SPDesktop *, SPDocument *);
+    void enterEditMarkerMode(SPMarkerLoc editMarkerMode);
     sigc::connection _document_replaced_connection;
 };
 
