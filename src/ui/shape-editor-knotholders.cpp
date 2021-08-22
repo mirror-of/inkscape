@@ -2349,18 +2349,25 @@ TextKnotHolderEntityShapePadding::knot_get() const
 {
     SPText *text = dynamic_cast<SPText *>(item);
     g_assert(text != nullptr);
-    Geom::Point corner;
-    if (text->has_shape_inside()) {
-        auto shape = text->get_first_shape_dependency();
-        Geom::OptRect bounds = shape->geometricBounds();
-        if (bounds) {
-            corner = (*bounds).corner(1);
-            if (text->style->shape_padding.set) {
-                auto padding = text->style->shape_padding.computed;
-                corner *= Geom::Affine(Geom::Translate(-padding, padding));
-            }
-            corner *= shape->transform;
+    Geom::Point corner {Geom::infinity(), Geom::infinity()};
+
+    if (!text->has_shape_inside()) {
+        return corner;
+    }
+
+    auto shape = text->get_first_shape_dependency();
+    if (!shape) {
+        return corner;
+    }
+
+    Geom::OptRect bounds = shape->geometricBounds();
+    if (bounds) {
+        corner = (*bounds).corner(1);
+        if (text->style->shape_padding.set) {
+            auto padding = text->style->shape_padding.computed;
+            corner *= Geom::Affine(Geom::Translate(-padding, padding));
         }
+        corner *= shape->transform;
     }
     return corner;
 }
@@ -2370,9 +2377,12 @@ TextKnotHolderEntityShapePadding::knot_set(Geom::Point const &p, Geom::Point con
 {
     // Text in a shape: rectangle
     SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+    if (!text->has_shape_inside()) {
+        return;
+    }
 
-    if (text->has_shape_inside()) {
-        auto shape = text->get_first_shape_dependency();
+    if (auto shape = text->get_first_shape_dependency()) {
         Geom::OptRect bounds = shape->geometricBounds();
         if (bounds) {
             Geom::Point const point_a = snap_knot_position(p, state);
@@ -2454,9 +2464,8 @@ TextKnotHolderEntityShapeInside::knot_get() const
     // SVG 2 'shape-inside'. We only get here if there is a rectangle shape.
     SPText *text = dynamic_cast<SPText *>(item);
     g_assert(text != nullptr);
-    // we have a crash on undo cration so remove assert
-    // g_assert(text->style->shape_inside.set);
-    Geom::Point p;
+
+    Geom::Point p {Geom::infinity(), Geom::infinity()};
     if (text->has_shape_inside()) {
         Geom::OptRect frame = text->get_frame();
         if (frame) {
@@ -2474,11 +2483,13 @@ TextKnotHolderEntityShapeInside::knot_set(Geom::Point const &p, Geom::Point cons
     // Text in a shape: rectangle
     SPText *text = dynamic_cast<SPText *>(item);
     g_assert(text != nullptr);
-    g_assert(text->style->shape_inside.set);
 
     Geom::Point const s = snap_knot_position(p, state);
 
     Inkscape::XML::Node* rectangle = text->get_first_rectangle();
+    if (!rectangle) {
+        return;
+    }
     double x = rectangle->getAttributeDouble("x", 0.0);;
     double y = rectangle->getAttributeDouble("y", 0.0);
     double width  = s[Geom::X] - x;
@@ -2495,7 +2506,7 @@ TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
     SPText *text = dynamic_cast<SPText *>(item);
     g_assert(text != nullptr);
 
-    if (text->style->shape_inside.set) {
+    if (text->has_shape_inside()) {
         // 'shape-inside'
 
         if (text->get_first_rectangle()) {
@@ -2505,10 +2516,13 @@ TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
             entity.push_back(entity_shapeinside);
         }
 
-        auto entity_shapepadding = new TextKnotHolderEntityShapePadding();
-        entity_shapepadding->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "Text:shapepadding",
-                                    _("Adjust the text <b>shape padding</b>."));
-        entity.push_back(entity_shapepadding);
+        if (text->get_first_shape_dependency()) {
+            auto entity_shapepadding = new TextKnotHolderEntityShapePadding();
+            entity_shapepadding->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "Text:shapepadding",
+                                        _("Adjust the text <b>shape padding</b>."));
+            entity.push_back(entity_shapepadding);
+        }
+
 
         // Add knots for shape subtraction margins
         if (text->style->shape_subtract.set) {

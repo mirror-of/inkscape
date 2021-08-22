@@ -59,8 +59,8 @@ public:
     static void _adjustFontsizeRecursive(SPItem *item, double ex, bool is_root = true);
     /**
     This two functions are useful because layout calculations need text visible for example
-    Calculating a invisible char position object or pasting text with paragraps that overflow
-    shape defined. I have doubts abot trransform into a toggle function*/
+    Calculating a invisible char position object or pasting text with paragraphs that overflow
+    shape defined. I have doubts about transform into a toggle function*/
     void show_shape_inside();
     void hide_shape_inside();
 
