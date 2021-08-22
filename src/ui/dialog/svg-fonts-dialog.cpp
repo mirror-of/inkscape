@@ -542,6 +542,8 @@ SvgFontsDialog::populate_glyphs_box()
 {
     if (!_GlyphsListStore) return;
 
+    _GlyphsListStore->freeze_notify();
+
     // try to keep selected glyph
     Gtk::TreeModel::Path selected_item;
     if (auto selection = _GlyphsList.get_selection()) {
@@ -568,6 +570,8 @@ SvgFontsDialog::populate_glyphs_box()
         _GlyphsList.get_selection()->select(selected_item);
         _GlyphsList.scroll_to_row(selected_item);
     }
+
+    _GlyphsListStore->thaw_notify();
 }
 
 void
@@ -628,11 +632,47 @@ void SvgFontsDialog::update_glyphs(){
 }
 
 void SvgFontsDialog::add_glyph(){
+    auto document = getDocument();
+    if (!document) return;
+
     const int count = _GlyphsListStore->children().size();
-    if (auto document = getDocument()) {
-        new_glyph(document, get_selected_spfont(), count+1);
-        DocumentUndo::done(document, SP_VERB_DIALOG_SVG_FONTS, _("Add glyph"));
-        update_glyphs();
+
+    auto glyphs = _GlyphsListStore->children();
+    // initialize "unicode" field; if there are glyphs look for the last one and take next unicode
+    gunichar unicode = ' ';
+    if (!glyphs.empty()) {
+        auto& last = *(--glyphs.end());
+        if (SPGlyph* last_glyph = last[_GlyphsListColumns.glyph_node]) {
+            const Glib::ustring& code = last_glyph->unicode;
+            if (!code.empty()) {
+                auto value = code[0];
+                // skip control chars 7f-9f
+                if (value == 0x7e) value = 0x9f;
+                // wrap around
+                if (value == 0x10ffff) value = 0x1f;
+                unicode = value + 1;
+            }
+        }
+    }
+    auto str = Glib::ustring(1, unicode);
+
+    SPGlyph* glyph = new_glyph(document, get_selected_spfont(), count+1);
+    glyph->setAttribute("unicode", str);
+
+    DocumentUndo::done(document, SP_VERB_DIALOG_SVG_FONTS, _("Add glyph"));
+
+    // update_glyphs();
+
+    // select newly added glyph
+    if (auto selection = _GlyphsList.get_selection()) {
+        _GlyphsListStore->foreach_iter([=](const Gtk::TreeModel::iterator& it) {
+            if (it->get_value(_GlyphsListColumns.glyph_node) == glyph) {
+                it->set_value(_GlyphsListColumns.unicode, str);
+                selection->select(it);
+                return true; // stop
+            }
+            return false; // continue
+        });
     }
 }
 
@@ -825,7 +865,7 @@ Gtk::Box* SvgFontsDialog::glyphs_tab(){
     missing_glyph->set_label(_("Missing glyph"));
     Gtk::Box* missing_glyph_hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     missing_glyph->add(*missing_glyph_hbox);
-    Gtk::Label* missing_glyph_label = Gtk::manage(new Gtk::Label(_("Missing glyph:")));
+
     missing_glyph_hbox->set_hexpand(false);
     missing_glyph_hbox->pack_start(missing_glyph_button, false,false);
     missing_glyph_hbox->pack_start(missing_glyph_reset_button, false,false);
@@ -956,8 +996,8 @@ Gtk::Box* SvgFontsDialog::kerning_tab(){
     _KerningPairsListScroller.add(_KerningPairsList);
     _KerningPairsListStore = Gtk::ListStore::create(_KerningPairsListColumns);
     _KerningPairsList.set_model(_KerningPairsListStore);
-    _KerningPairsList.append_column(_("First Unicode range"), _KerningPairsListColumns.first_glyph);
-    _KerningPairsList.append_column(_("Second Unicode range"), _KerningPairsListColumns.second_glyph);
+    _KerningPairsList.append_column(_("First glyph"), _KerningPairsListColumns.first_glyph);
+    _KerningPairsList.append_column(_("Second glyph"), _KerningPairsListColumns.second_glyph);
 //    _KerningPairsList.append_column_numeric_editable(_("Kerning Value"), _KerningPairsListColumns.kerning_value, "%f");
 
     kerning_vbox.pack_start((Gtk::Widget&) kerning_preview, false,false);

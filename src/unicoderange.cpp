@@ -35,7 +35,7 @@ UnicodeRange::UnicodeRange(const gchar* value){
             val += add_range(val+2);
         } else {
             this->unichars.push_back(g_utf8_get_char(&val[0]));
-            val++;
+            val = g_utf8_next_char(val);
         }
         //skip spaces or commas
         while(val[0]==' ' || val[0]==',') val++;
@@ -111,6 +111,7 @@ Glib::ustring UnicodeRange::attribute_string(){
     Glib::ustring result;
     unsigned int i;
     for(i=0; i<this->unichars.size(); i++){
+g_warning("uni: %d %x", i, unichars[i]);
         result += this->unichars[i];
         if (i!=this->unichars.size()-1) result += ",";
     }
