@@ -740,12 +740,13 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         parent->addChild(out, g_repr);
         parent->removeChild(g_repr);
     }
-    out->setAttribute("transform", item->getRepr()->attribute("transform"));
-    out->setAttribute("id",id);
-    Inkscape::GC::release(out);
 
     // We're replacing item, delete it.
     item->deleteObject(false);
+
+    out->setAttribute("transform", item->getRepr()->attribute("transform"));
+    out->setAttribute("id",id);
+    Inkscape::GC::release(out);
 
     return out;
 }
