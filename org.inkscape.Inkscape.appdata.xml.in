@@ -5,6 +5,7 @@
   <id>org.inkscape.Inkscape</id>
   <launchable type="desktop-id">org.inkscape.Inkscape.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
+  <developer_name>The Inkscape Community</developer_name>
   <project_license>GPL-2.0-or-later</project_license>
   <translation type="gettext">inkscape</translation>
   <name>Inkscape</name>
