@@ -564,7 +564,7 @@ public:
 
     /**
      * Create an observer watching preference 'path' and calling provided function when preference changes.
-     * Function will be notified of changes to all leaves in a path: /path/*
+     * Function will be notified of changes to all leaves in a path: /path/ *
      * Returned pointer should be stored for as long as notifications are expected and disposed of
      * to remove observer object.
      */
