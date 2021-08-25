@@ -2,10 +2,15 @@
 /*
  * Author:
  *
- * Copyright (C) 2012 Author
+ * Copyright (C) 2007 Nicholas Bishop <nicholasbishop@gmail.com>
+ *               2008 Felipe C. da S. Sanches <juca@members.fsf.org>
  *               2017 Tavmjong Bah
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
+/*
+ * Derived from and replaces SpinSlider
  */
 
 #include "spin-scale.h"

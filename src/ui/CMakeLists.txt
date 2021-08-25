@@ -220,7 +220,6 @@ set(ui_SRC
 	widget/shapeicon.cpp
 	widget/spin-button-tool-item.cpp
 	widget/spin-scale.cpp
-	widget/spin-slider.cpp
 	widget/spinbutton.cpp
 	widget/stroke-style.cpp
 	widget/style-subject.cpp
@@ -473,7 +472,6 @@ set(ui_SRC
 	widget/shapeicon.h
 	widget/spin-button-tool-item.h
 	widget/spin-scale.h
-	widget/spin-slider.h
 	widget/spinbutton.h
 	widget/stroke-style.h
 	widget/style-subject.h
