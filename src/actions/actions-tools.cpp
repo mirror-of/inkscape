@@ -144,6 +144,14 @@ set_active_tool(InkscapeWindow *win, Glib::ustring const &tool)
 }
 
 void
+reset_active_tool(InkscapeWindow *win)
+{
+	// Restores the tool's private context
+	Glib::ustring current_tool = get_active_tool(win);
+	tool_switch(current_tool, win);
+}
+
+void
 open_tool_preferences(InkscapeWindow *win, Glib::ustring const &tool)
 {
     tool_preferences(tool, win);
