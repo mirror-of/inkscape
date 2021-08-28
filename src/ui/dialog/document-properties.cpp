@@ -103,6 +103,7 @@ DocumentProperties::DocumentProperties()
     , _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false)
     , _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false)
     , _rcb_shad(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _wr, false)
+    , _rcb_shwd(_("_Border shadow width"), _("Width of page border when set"), "", "inkscape:pageshadow", _wr)
     , _rcp_bg(_("Back_ground color:"), _("Background color"), _("Color of the canvas background. Note: opacity is ignored except when exporting to bitmap."), "pagecolor", "inkscape:pageopacity", _wr)
     , _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr)
     , _rum_deflt(_("Display _units:"), "inkscape:document-units", _wr)
@@ -311,6 +312,7 @@ void DocumentProperties::build_page()
         nullptr,              &_rcb_canb,
         nullptr,              &_rcb_bord,
         nullptr,              &_rcb_shad,
+        nullptr,              &_rcb_shwd,
         nullptr,              &_rcp_bord,
     };
     attach_all(_rcb_doc_props_right, widget_array_right, G_N_ELEMENTS(widget_array_right));
@@ -318,8 +320,12 @@ void DocumentProperties::build_page()
     std::list<Gtk::Widget*> _slaveList;
     _slaveList.push_back(&_rcb_bord);
     _slaveList.push_back(&_rcb_shad);
+    _slaveList.push_back(&_rcb_shwd);
     _slaveList.push_back(&_rcp_bord);
     _rcb_canb.setSlaveWidgets(_slaveList);
+
+    _rcb_shwd.setRange(0, 999);
+
 }
 
 void DocumentProperties::build_guides()
@@ -1383,6 +1389,7 @@ void DocumentProperties::update_widgets()
     _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
     _rcp_bord.setRgba32 (nv->bordercolor);
     _rcb_shad.setActive (nv->showpageshadow);
+    _rcb_shwd.setValue (nv->pageshadow);
 
     SPRoot *root = document->getRoot();
     _rcb_antialias.set_xml_target(root->getRepr(), document);

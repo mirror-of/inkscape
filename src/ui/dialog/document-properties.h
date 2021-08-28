@@ -127,6 +127,7 @@ protected:
     UI::Widget::RegisteredCheckButton _rcb_canb;
     UI::Widget::RegisteredCheckButton _rcb_bord;
     UI::Widget::RegisteredCheckButton _rcb_shad;
+    UI::Widget::RegisteredSuffixedInteger _rcb_shwd;
     UI::Widget::RegisteredColorPicker _rcp_bg;
     UI::Widget::RegisteredColorPicker _rcp_bord;
     UI::Widget::RegisteredUnitMenu    _rum_deflt;
