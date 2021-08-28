@@ -55,6 +55,7 @@
 #include "helper/action.h"
 
 #include "object/box3d.h"
+#include "object/sp-use.h"
 #include "object/sp-item-transform.h"
 
 #include "svg/svg.h"
@@ -845,6 +846,7 @@ static bool fit_item(SPDesktop *desktop,
 static bool sp_spray_recursive(SPDesktop *desktop,
                                Inkscape::ObjectSet *set,
                                SPItem *item,
+                               SPItem *&single_path_output,
                                Geom::Point p,
                                Geom::Point /*vector*/,
                                gint mode,
@@ -884,11 +886,15 @@ static bool sp_spray_recursive(SPDesktop *desktop,
     bool did = false;
 
     {
+        // convert 3D boxes to ordinary groups before spraying their shapes
+        // TODO: ideally the original object is preserved.
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
-            // convert 3D boxes to ordinary groups before spraying their shapes
+            desktop->getSelection()->remove(dynamic_cast<SPObject *>(item));
+            set->remove(item);
             item = box->convert_to_group();
             set->add(item);
+            desktop->getSelection()->add(dynamic_cast<SPObject *>(item));
         }
     }
 
@@ -977,18 +983,13 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         }
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
     } else if (mode == SPRAY_MODE_SINGLE_PATH) {
-        long setSize = boost::distance(set->items());
-        SPItem *parent_item = setSize > 0 ? set->items().front() : nullptr;    // Initial object
-        SPItem *unionResult = setSize > 1 ? set->items().back() : nullptr;    // Previous union
-        SPItem *item_copied = nullptr;    // Projected object
-
-        if (parent_item) {
-            SPDocument *doc = parent_item->document;
+        if (item) {
+            SPDocument *doc = item->document;
             Inkscape::XML::Document* xml_doc = doc->getReprDoc();
-            Inkscape::XML::Node *old_repr = parent_item->getRepr();
+            Inkscape::XML::Node *old_repr = item->getRepr();
             Inkscape::XML::Node *parent = old_repr->parent();
 
-            Geom::OptRect a = parent_item->documentVisualBounds();
+            Geom::OptRect a = item->documentVisualBounds();
             if (a) {
                 if (_fid <= population) { // Rules the population of objects sprayed
                     // Duplicates the parent item
@@ -996,38 +997,41 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     gchar const * spray_origin;
                     if(!copy->attribute("inkscape:spray-origin")){
                         spray_origin = g_strdup_printf("#%s", old_repr->attribute("id"));
-                        copy->setAttribute("inkscape:spray-origin", spray_origin);
                     } else {
                         spray_origin = copy->attribute("inkscape:spray-origin");
                     }
                     parent->appendChild(copy);
                     SPObject *new_obj = doc->getObjectByRepr(copy);
-                    item_copied = dynamic_cast<SPItem *>(new_obj);
+                    SPItem *item_copied = dynamic_cast<SPItem *>(new_obj);
 
                     // Move around the cursor
                     Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
 
-                    Geom::Point center = parent_item->getCenter();
+                    Geom::Point center = item->getCenter();
                     sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
                     sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
                     sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
                     item_copied->move_rel(Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
 
-                    // Union and duplication
+                    // Union
+                    // only works if no groups in selection
                     ObjectSet object_set_tmp = *desktop->getSelection();
                     object_set_tmp.clear();
                     object_set_tmp.add(item_copied);
-                    if (unionResult) { // No need to add the very first item (initialized with NULL).
-                        object_set_tmp.add(unionResult);
+                    object_set_tmp.removeLPESRecursive(true);
+                    if (dynamic_cast<SPUse*>(object_set_tmp.objects().front())) {
+                        object_set_tmp.unlinkRecursive(true);
+                    }
+                    if (single_path_output) { // Previous result
+                        object_set_tmp.add(single_path_output);
                     }
                     object_set_tmp.pathUnion(true);
-                    set->add(parent_item);
-                    std::vector<SPItem*> tmpitems(object_set_tmp.items().begin(), object_set_tmp.items().end());
-                    for (auto item : tmpitems) {
-                        set->add(item);
+                    single_path_output = object_set_tmp.items().front();
+                    for (auto item : object_set_tmp.items()) {
+                        auto repr = item->getRepr();
+                        repr->setAttribute("inkscape:spray-origin", spray_origin);
                     }
                     object_set_tmp.clear();
-                    tmpitems.clear();
                     Inkscape::GC::release(copy);
                     did = true;
                 }
@@ -1157,6 +1161,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             if (sp_spray_recursive(desktop
                                 , set
                                 , item
+                                , tc->single_path_output
                                 , p, vector
                                 , tc->mode
                                 , radius
@@ -1264,7 +1269,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
                 object_set = *desktop->getSelection();
                 if (mode == SPRAY_MODE_SINGLE_PATH) {
-                    desktop->getSelection()->clear();
+                    this->single_path_output = nullptr;
                 }
 
                 sp_spray_dilate(this, motion_w, this->last_push, Geom::Point(0,0), MOD__SHIFT(event));
@@ -1380,7 +1385,6 @@ bool SprayTool::root_handler(GdkEvent* event) {
                                            SP_VERB_CONTEXT_SPRAY, _("Spray with clones"));
                         break;
                     case SPRAY_MODE_SINGLE_PATH:
-                        desktop->getSelection()->add(object_set.objects().begin(), object_set.objects().end());
                         DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray in single path"));
                         break;

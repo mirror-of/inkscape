@@ -128,6 +128,7 @@ public:
     ObjectSet* objectSet() {
         return &object_set;
     }
+    SPItem* single_path_output = nullptr;
 
 private:
     ObjectSet object_set;
