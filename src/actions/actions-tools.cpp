@@ -143,12 +143,40 @@ set_active_tool(InkscapeWindow *win, Glib::ustring const &tool)
     tool_switch(tool, win);
 }
 
+/**
+ * Reset active tool in the window without showing the Preferences dialog.
+ * This is needed to restore the tool's private selection context etc.
+ */
 void
 reset_active_tool(InkscapeWindow *win)
 {
-	// Restores the tool's private context
-	Glib::ustring current_tool = get_active_tool(win);
-	tool_switch(current_tool, win);
+    // Validate the InkscapeWindow *win
+    SPDesktop* dt = win->get_desktop();
+    if (!dt) {
+        std::cerr << "reset_active_tool: no desktop!" << std::endl;
+        return;
+    }
+
+    auto action = win->lookup_action("tool-switch");
+    if (!action) {
+        std::cerr << "reset_active_tool: action 'tool-switch' missing!" << std::endl;
+        return;
+    }
+
+    auto saction = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(action);
+    if (!saction) {
+        std::cerr << "reset_active_tool: action 'tool-switch' not SimpleAction!" << std::endl;
+        return;
+    }
+
+    // Update button states
+    Glib::ustring tool = get_active_tool(win);
+    saction->change_state(tool);
+
+    // Switch to new tool. TODO: Clean this up. This should be one window function. Setting tool via preference path is a bit strange.
+    dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tool_msg[tool].c_str() ) );
+    dt->setEventContext(tool_data[tool].pref_path);
+    INKSCAPE.eventcontext_set(dt->getEventContext());
 }
 
 void
