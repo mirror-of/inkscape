@@ -123,7 +123,6 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             tolerance_item->set_custom_numeric_menu_data(values, labels);
             tolerance_item->set_focus_widget(desktop->canvas);
             _tolerance_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::tolerance_value_changed));
-            // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
             add(*tolerance_item);
         }
 

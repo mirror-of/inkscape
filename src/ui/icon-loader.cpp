@@ -16,7 +16,7 @@
 #include "io/resource.h"
 #include "svg/svg-color.h"
 #include "widgets/toolbox.h"
-#include <fstream>
+
 #include <gdkmm/display.h>
 #include <gdkmm/screen.h>
 #include <gtkmm/iconinfo.h>

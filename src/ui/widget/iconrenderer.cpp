@@ -13,7 +13,6 @@
 
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "widgets/toolbox.h"
 
 namespace Inkscape {
 namespace UI {

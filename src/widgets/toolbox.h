@@ -20,26 +20,10 @@
 
 #include "preferences.h"
 
-#define TOOLBAR_SLIDER_HINT "compact"
-
 class SPDesktop;
 
 namespace Inkscape {
 namespace UI {
-namespace Tools {
-
-class ToolBase;
-
-}
-}
-}
-
-namespace Inkscape {
-namespace UI {
-
-namespace Widget {
-    class UnitTracker;
-}
 
 /**
  * Main toolbox source.

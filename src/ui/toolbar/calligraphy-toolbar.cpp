@@ -112,7 +112,6 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         width_item->set_focus_widget(desktop->canvas);
         _width_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::width_value_changed));
         _widget_map["width"] = G_OBJECT(_width_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*width_item);
         _tracker->addAdjustment(_width_adj->gobj());
         width_item->set_sensitive(true);
@@ -177,7 +176,6 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         mass_item->set_focus_widget(desktop->canvas);
         _mass_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::mass_value_changed));
         _widget_map["mass"] = G_OBJECT(_mass_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*mass_item);
         mass_item->set_sensitive(true);
     }
@@ -262,7 +260,6 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         tremor_item->set_focus_widget(desktop->canvas);
         _tremor_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::tremor_value_changed));
         _widget_map["tremor"] = G_OBJECT(_tremor_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*tremor_item);
         tremor_item->set_sensitive(true);
     }
@@ -279,7 +276,6 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         wiggle_item->set_focus_widget(desktop->canvas);
         _wiggle_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::wiggle_value_changed));
         _widget_map["wiggle"] = G_OBJECT(_wiggle_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*wiggle_item);
         wiggle_item->set_sensitive(true);
     }

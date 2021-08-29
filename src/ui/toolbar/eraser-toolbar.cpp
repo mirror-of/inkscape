@@ -106,7 +106,6 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         _width->set_custom_numeric_menu_data(values, labels);
         _width_adj->signal_value_changed().connect(sigc::mem_fun(*this, &EraserToolbar::width_value_changed));
         // TODO: Allow SpinButtonToolItem to display as a slider
-        // ege_adjustment_action_set_appearance( toolbar->_width, TOOLBAR_SLIDER_HINT );
         add(*_width);
         _width->set_sensitive(true);
     }
@@ -173,7 +172,6 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         _tremor_adj->signal_value_changed().connect(sigc::mem_fun(*this, &EraserToolbar::tremor_value_changed));
 
         // TODO: Allow slider appearance
-        //ege_adjustment_action_set_appearance( toolbar->_tremor, TOOLBAR_SLIDER_HINT );
         add(*_tremor);
         _tremor->set_sensitive(true);
     }
@@ -193,7 +191,6 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         _mass->set_focus_widget(desktop->canvas);
         _mass_adj->signal_value_changed().connect(sigc::mem_fun(*this, &EraserToolbar::mass_value_changed));
         // TODO: Allow slider appearance
-        //ege_adjustment_action_set_appearance( toolbar->_mass, TOOLBAR_SLIDER_HINT );
         add(*_mass);
         _mass->set_sensitive(true);
     }

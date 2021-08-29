@@ -40,7 +40,6 @@
 #include "ink-action.h"
 
 #include "helper/action.h"
-#include "helper/verb-action.h"
 
 #include "include/gtkmm_version.h"
 

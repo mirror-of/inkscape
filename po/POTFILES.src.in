@@ -114,7 +114,6 @@
 ../src/help.cpp
 ../src/helper/gettext.cpp
 ../src/helper/gettext.h
-../src/helper/verb-action.cpp
 ../src/inkscape-application.cpp
 ../src/inkscape.cpp
 ../src/inkview-application.cpp

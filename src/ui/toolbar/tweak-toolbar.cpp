@@ -62,7 +62,6 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         _width_item->set_custom_numeric_menu_data(values, labels);
         _width_item->set_focus_widget(desktop->canvas);
         _width_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TweakToolbar::width_value_changed));
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*_width_item);
         _width_item->set_sensitive(true);
     }
@@ -78,7 +77,6 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         _force_item->set_custom_numeric_menu_data(values, labels);
         _force_item->set_focus_widget(desktop->canvas);
         _force_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TweakToolbar::force_value_changed));
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*_force_item);
         _force_item->set_sensitive(true);
     }

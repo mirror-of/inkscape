@@ -86,7 +86,6 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
         threshold_item->set_tooltip_text(_("The maximum allowed difference between the clicked pixel and the neighboring pixels to be counted in the fill"));
         threshold_item->set_focus_widget(desktop->canvas);
         _threshold_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::threshold_changed));
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*threshold_item);
     }
 
