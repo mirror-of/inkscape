@@ -167,7 +167,7 @@ std::vector<Glib::ustring> DialogManager::count_dialogs(const Glib::KeyFile *sta
 
     for (auto dlg : _floating_dialogs) {
         if (dlg.second.get() == state) {
-            dialogs.push_back(dlg.first);
+            dialogs.emplace_back(dlg.first);
         }
     }
     return dialogs;
@@ -196,7 +196,7 @@ void DialogManager::save_dialogs_state(DialogContainer *docking_container)
         keyfile->set_string(transient_group, "state" + index, state ? state->to_data() : "");
         auto dialogs = count_dialogs(state);
         if (!state) {
-            dialogs.push_back(type);
+            dialogs.emplace_back(type);
         }
         keyfile->set_string_list(transient_group, "dialogs" + index, dialogs);
     }

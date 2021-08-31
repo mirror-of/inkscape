@@ -73,7 +73,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
     css_properties.param_hide_canvas_text();
 }
 
-void 
+void
 LPECloneOriginal::syncOriginal()
 {
     if (method != CLM_NONE) {
@@ -127,7 +127,7 @@ LPECloneOriginal::newWidget()
 }
 
 void
-LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties, bool init) 
+LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties, bool init) 
 {
     SPDocument *document = getSPDoc();
     if (!document || !origin || !dest) {
@@ -147,15 +147,15 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             Inkscape::XML::Node* dup = child->getRepr()->duplicate(xml_doc);
             dest->getRepr()->appendChild(dup);
             Inkscape::GC::release(dup);
-        }   
-        sp_lpe_item_enable_path_effects(sp_lpe_item, true);                 
+        }
+        sp_lpe_item_enable_path_effects(sp_lpe_item, true);
     }
     if (group_origin && group_dest) {
         std::vector< SPObject * > childs = group_origin->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
-            SPObject *dest_child = group_dest->nthChild(index); 
-            cloneAttrbutes(child, dest_child, attributes, css_properties, init); 
+            SPObject *dest_child = group_dest->nthChild(index);
+            cloneAttributes(child, dest_child, attributes, css_properties, init);
             index++;
         }
     }
@@ -173,12 +173,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             size_t i = 0;
             for (auto mask_data : mask_list) {
                 SPObject * mask_dest_data = mask_list_dest[i];
-                cloneAttrbutes(mask_data, mask_dest_data, attributes, css_properties, init);
+                cloneAttributes(mask_data, mask_dest_data, attributes, css_properties, init);
                 i++;
             }
         }
     }
-    
+
     SPClipPath *clippath_origin = SP_ITEM(origin)->getClipObject();
     SPClipPath *clippath_dest = SP_ITEM(dest)->getClipObject();
     if(clippath_origin && clippath_dest) {
@@ -188,24 +188,27 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             size_t i = 0;
             for (auto clippath_data : clippath_list) {
                 SPObject * clippath_dest_data = clippath_list_dest[i];
-                cloneAttrbutes(clippath_data, clippath_dest_data, attributes, css_properties, init);
+                cloneAttributes(clippath_data, clippath_dest_data, attributes, css_properties, init);
                 i++;
             }
         }
     }
+
     gchar ** attarray = g_strsplit(old_attributes.c_str(), ",", 0);
     gchar ** iter = attarray;
-    while (*iter != nullptr) {
-        const char* attribute = (*iter);
+    while (*iter) {
+        const char *attribute = g_strstrip(*iter);
         if (strlen(attribute)) {
             dest->getRepr()->removeAttribute(attribute);
         }
         iter++;
     }
+    g_strfreev(attarray);
+
     attarray = g_strsplit(attributes, ",", 0);
     iter = attarray;
-    while (*iter != nullptr) {
-        const char* attribute = (*iter);
+    while (*iter) {
+        const char *attribute = g_strstrip(*iter);
         if (strlen(attribute) && shape_dest && shape_origin) {
             if (std::strcmp(attribute, "d") == 0) {
                 std::unique_ptr<SPCurve> c;
@@ -254,7 +257,8 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     if (!allow_transforms) {
         dest->getRepr()->setAttribute("transform", origin->getRepr()->attribute("transform"));
     }
-    g_strfreev (attarray);
+    g_strfreev(attarray);
+
     SPCSSAttr *css_origin = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css_origin, origin->getRepr()->attribute("style"));
     SPCSSAttr *css_dest = sp_repr_css_attr_new();
@@ -264,17 +268,19 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     }
     gchar ** styleattarray = g_strsplit(old_css_properties.c_str(), ",", 0);
     gchar ** styleiter = styleattarray;
-    while (*styleiter != nullptr) {
-        const char* attribute = (*styleiter);
+    while (*styleiter) {
+        const char *attribute = g_strstrip(*styleiter);
         if (strlen(attribute)) {
             sp_repr_css_set_property (css_dest, attribute, nullptr);
         }
         styleiter++;
     }
+    g_strfreev(styleattarray);
+
     styleattarray = g_strsplit(css_properties, ",", 0);
     styleiter = styleattarray;
-    while (*styleiter != nullptr) {
-        const char* attribute = (*styleiter);
+    while (*styleiter) {
+        const char *attribute = g_strstrip(*styleiter);
         if (strlen(attribute)) {
             const char* origin_attribute = sp_repr_css_property(css_origin, attribute, "");
             if (!strlen(origin_attribute)) { //==0
@@ -285,7 +291,8 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         }
         styleiter++;
     }
-    g_strfreev (styleattarray);
+    g_strfreev(styleattarray);
+
     Glib::ustring css_str;
     sp_repr_css_write_string(css_dest,css_str);
     dest->getRepr()->setAttributeOrRemoveIfEmpty("style", css_str);
@@ -301,7 +308,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     if (!deleted_connection) {
         deleted_connection = sp_lpe_item->connectDelete(sigc::mem_fun(*this, &LPECloneOriginal::lpeitem_deleted));
     }
-    
+
     if (linkeditem.linksToItem()) {
         SPItem *orig = dynamic_cast<SPItem *>(linkeditem.getObject());
         if(!orig) {
@@ -335,7 +342,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             style_attr.erase (style_attr.size()-1, 1);
         }
         style_attr += css_properties_str + ",";
-        cloneAttrbutes(orig, dest, attr.c_str(), style_attr.c_str(), init);
+        cloneAttributes(orig, dest, attr.c_str(), style_attr.c_str(), init);
         old_css_properties = css_properties.param_getSVGValue();
         old_attributes = attributes.param_getSVGValue();
         sync = false;
@@ -373,7 +380,7 @@ LPECloneOriginal::~LPECloneOriginal()
     quit_listening();
 }
 
-void 
+void
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
     if (method != CLM_NONE) {

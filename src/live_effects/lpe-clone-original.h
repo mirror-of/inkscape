@@ -28,7 +28,7 @@ public:
     ~LPECloneOriginal() override;
     void doEffect (SPCurve * curve) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties, bool init);
+    void cloneAttributes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties, bool init);
     void modified(SPObject */*obj*/, guint /*flags*/);
     Gtk::Widget *newWidget() override;
     void syncOriginal();
