@@ -312,7 +312,7 @@ void ObjectSet::toCurves(bool skip_undo)
     if (desktop()) {
         desktop()->clearWaitingCursor();
     }
-    if (did&& !skip_undo) {
+    if (did && !skip_undo) {
         DocumentUndo::done(document(), _("Object to path"), INKSCAPE_ICON("object-to-path"));
     } else {
         if(desktop())
