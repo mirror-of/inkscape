@@ -529,7 +529,6 @@ add_cli_test(verb-list     PARAMETERS --verb-list   PASS_FOR_OUTPUT "FileNew:")
 # --shell
 
 
-
 ###############
 ### actions ###
 ###############
@@ -621,6 +620,12 @@ add_cli_test(actions-object-stroke-to-path INPUT_FILENAME path.svg
                                            PARAMETERS --actions=select-by-id:cross$<SEMICOLON>object-stroke-to-path$<SEMICOLON>select-by-selector:path\:nth-of-type\(2\)$<SEMICOLON>object-set-attribute:stroke,red$<SEMICOLON>export-id:cross$<SEMICOLON>export-id-only
                                            OUTPUT_FILENAME actions-object-stroke-to-path.png
                                            REFERENCE_FILENAME actions-object-stroke-to-path_expected.png)
+
+add_cli_test(action_stroke-to-path_varied
+                        INPUT_FILENAME stroke-to-path-variations.svg
+                        PARAMETERS --actions=select-all:all$<SEMICOLON>object-stroke-to-path$<SEMICOLON>export-filename:stroke-to-path-variations_out.svg$<SEMICOLON>export-do
+                        EXPECTED_FILES stroke-to-path-variations_out.svg
+                        TEST_SCRIPT match_regex_fail.sh stroke-to-path-variations_out.svg "(#mixed)|(#fillet)|(<text)|(<flow)|(<use)")
 
 # object-to-path
 add_cli_test(actions-object-to-path        INPUT_FILENAME areas.svg
@@ -741,6 +746,7 @@ add_cli_test(actions-verb-list             PARAMETERS --actions=verb-list PASS_F
 
 # window-close
 # window-open
+
 
 #############
 ### verbs ###
