@@ -31,7 +31,10 @@ function(add_cli_test name)
     set(testname  cli_${name})
 
     if(DEFINED ARG_OUTPUT_FILENAME)
-        set(ARG_PARAMETERS ${ARG_PARAMETERS} "--export-filename=${ARG_OUTPUT_FILENAME}")
+        # for actions: if an export-do is present do not append export-filename option to prevent
+        if(NOT ARG_PARAMETERS MATCHES "export-do")
+            set(ARG_PARAMETERS ${ARG_PARAMETERS} "--export-filename=${ARG_OUTPUT_FILENAME}")
+        endif()
     endif()
     if(DEFINED ARG_INPUT_FILENAME)
         set(ARG_INPUT_FILENAME "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_INPUT_FILENAME}")
@@ -527,13 +530,223 @@ add_cli_test(verb-list     PARAMETERS --verb-list   PASS_FOR_OUTPUT "FileNew:")
 
 
 
-#########################
-### actions and verbs ###
-#########################
+###############
+### actions ###
+###############
 
-# (TODO)
+# action-list: test = action-list
+add_cli_test(actions-action-list           PARAMETERS --actions=action-list PASS_FOR_OUTPUT "file-new")
 
+# convert-dpi-method
+# debug-info
+add_cli_test(actions-debug-info            PARAMETERS --actions=debug-info PASS_FOR_OUTPUT "OS version:")
 
+# export-area
+# export-area-drawing
+# export-area-page
+# export-area-snap
+# export-background
+# export-background-opacity
+# export-do
+# export-dpi
+# export-filename
+# export-height
+# export-id
+# export-id-only
+# export-ignore-filters
+# export-latex
+# export-margin
+# export-overwrite
+# export-pdf-version
+# export-plain-svg
+# export-png-color-mode
+# export-ps-level
+# export-text-to-path
+# export-type
+# export-use-hints
+# export-width
+
+# file-close
+add_cli_test(actions-file-close            PARAMETERS --actions=file-new$<SEMICOLON>file-close$<SEMICOLON>file-open:${CMAKE_CURRENT_SOURCE_DIR}/testcases/theta.svg$<SEMICOLON>export-filename:actions-file-close.svg$<SEMICOLON>export-do
+                                           TEST_SCRIPT match_regex.sh actions-file-close.svg "id=\"purple-cover\"")
+
+# file-new
+add_cli_test(actions-file-new1             PARAMETERS --actions=file-new$<SEMICOLON>export-filename:actions-file-new1.svg$<SEMICOLON>export-do
+                                           TEST_SCRIPT match_regex.sh actions-file-new1.svg "viewBox=\"-1 -1 1 1\"")
+add_cli_test(actions-file-new2             PARAMETERS --actions=file-new:${CMAKE_CURRENT_SOURCE_DIR}/testcases/theta.svg$<SEMICOLON>export-filename:actions-file-new2.svg$<SEMICOLON>export-do
+                                           TEST_SCRIPT match_regex.sh actions-file-new2.svg "id=\"purple-cover\"")
+
+# file-open
+add_cli_test(actions-file-open             PARAMETERS --actions=file-open:${CMAKE_CURRENT_SOURCE_DIR}/testcases/theta.svg$<SEMICOLON>export-filename:actions-file-open.png$<SEMICOLON>export-do
+                                           OUTPUT_FILENAME actions-file-open.png
+                                           REFERENCE_FILENAME actions-file-open_expected.png)
+
+# inkscape-version
+add_cli_test(actions-inkscape-version      PARAMETERS --actions=inkscape-version
+                                           PASS_FOR_OUTPUT "Inkscape [0-9]+\\.[0-9]+")
+
+# no-convert-baseline
+# object-align
+add_cli_test(actions-object-align          INPUT_FILENAME lambda.svg
+                                           PARAMETERS --actions=select-by-id:green$<SEMICOLON>object-align:left\ page
+                                           OUTPUT_FILENAME actions-object-align.png
+                                           REFERENCE_FILENAME actions-object-align_expected.png)
+
+# object-distribute
+add_cli_test(actions-object-distribute     INPUT_FILENAME rects.svg
+                                           PARAMETERS --actions=select-by-element:rect$<SEMICOLON>object-distribute:vgap
+                                           OUTPUT_FILENAME actions-object-distribute.png
+                                           REFERENCE_FILENAME actions-object-distribute_expected.png)
+
+# object-set-attribute
+add_cli_test(actions-object-set-attribute  INPUT_FILENAME rects.svg
+                                           PARAMETERS --actions=select-by-id:rect1$<SEMICOLON>object-set-attribute:rx,15
+                                           OUTPUT_FILENAME actions-object-set-attribute.png
+                                           REFERENCE_FILENAME actions-object-set-attribute_expected.png)
+
+# object-set-property
+add_cli_test(actions-object-set-property   INPUT_FILENAME areas.svg
+                                           PARAMETERS --actions=select-by-id:MyRect$<SEMICOLON>object-set-property:fill,gold
+                                           OUTPUT_FILENAME actions-object-set-property.svg
+                                           TEST_SCRIPT match_regex.sh actions-object-set-property.svg "style=\"fill:gold\"")
+
+# object-simplify-path
+add_cli_test(actions-object-simplify-path  INPUT_FILENAME path.svg
+                                           PARAMETERS --actions=select-by-id:gates$<SEMICOLON>object-simplify-path$<SEMICOLON>export-id:gates$<SEMICOLON>export-id-only
+                                           OUTPUT_FILENAME actions-object-simplify-path.png
+                                           REFERENCE_FILENAME actions-object-simplify-path_expected.png)
+
+# object-stroke-to-path
+add_cli_test(actions-object-stroke-to-path INPUT_FILENAME path.svg
+                                           PARAMETERS --actions=select-by-id:cross$<SEMICOLON>object-stroke-to-path$<SEMICOLON>select-by-selector:path\:nth-of-type\(2\)$<SEMICOLON>object-set-attribute:stroke,red$<SEMICOLON>export-id:cross$<SEMICOLON>export-id-only
+                                           OUTPUT_FILENAME actions-object-stroke-to-path.png
+                                           REFERENCE_FILENAME actions-object-stroke-to-path_expected.png)
+
+# object-to-path
+add_cli_test(actions-object-to-path        INPUT_FILENAME areas.svg
+                                           PARAMETERS --actions=select-by-id:MyRect$<SEMICOLON>object-to-path$<SEMICOLON>export-id:MyRect$<SEMICOLON>export-id-only
+                                           OUTPUT_FILENAME actions-object-to-path.svg
+                                           TEST_SCRIPT match_regex.sh actions-object-to-path.svg "<path")
+
+# object-unlink-clones
+add_cli_test(actions-object-unlink-clones  INPUT_FILENAME path.svg
+                                           PARAMETERS --actions=select-by-id:clone$<SEMICOLON>object-unlink-clones$<SEMICOLON>object-set-attribute:fill,red$<SEMICOLON>export-id:clone$<SEMICOLON>export-id-only
+                                           OUTPUT_FILENAME actions-object-unlink-clones.png
+                                           REFERENCE_FILENAME actions-object-unlink-clones_expected.png)
+# open-page
+add_cli_test(actions-open-page             PARAMETERS --actions=open-page:3$<SEMICOLON>file-open:${CMAKE_CURRENT_SOURCE_DIR}/testcases/pdf-pages.pdf$<SEMICOLON>export-filename:actions-open-page.png$<SEMICOLON>export-do
+                                           OUTPUT_FILENAME actions-open-page.png
+                                           REFERENCE_FILENAME actions-open-page_expected.png)
+
+# query-all: test = query-all
+add_cli_test(actions-query-all             INPUT_FILENAME rects.svg PARAMETERS --actions=select-by-id:rect2$<SEMICOLON>query-all    PASS_FOR_OUTPUT ${query_all_expected})
+
+# query-height: test = query-height
+add_cli_test(actions-query-height          INPUT_FILENAME rects.svg PARAMETERS --actions=select-by-id:rect2$<SEMICOLON>query-height PASS_FOR_OUTPUT 70)
+
+# query-width: test = query-width
+add_cli_test(actions-query-width           INPUT_FILENAME rects.svg PARAMETERS --actions=select-by-id:rect2$<SEMICOLON>query-width  PASS_FOR_OUTPUT 80)
+
+# query-x: test = query-x
+add_cli_test(actions-query-x               INPUT_FILENAME rects.svg PARAMETERS --actions=select-by-id:rect2$<SEMICOLON>query-x      PASS_FOR_OUTPUT 110)
+
+# query-y: test = query-y
+add_cli_test(actions-query-y               INPUT_FILENAME rects.svg PARAMETERS --actions=select-by-id:rect2$<SEMICOLON>query-y      PASS_FOR_OUTPUT 20)
+
+# quit-inkscape
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-quit-inkscape         PARAMETERS --actions=quit-inkscape FAIL_FOR_OUTPUT ".+")
+
+# select: it is deprecated
+# select-all
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-all            INPUT_FILENAME path.svg PARAMETERS --actions=select-all$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^heart .+\nbottom-left-corner .+\nsquare .+\ntop-right-corner .+\narc-big .+\narc-small .+\ngates .+\ncross .+\nclone .+$")
+
+# select-by-class
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-by-class       INPUT_FILENAME path.svg PARAMETERS --actions=select-by-class:corner$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^bottom-left-corner .+\ntop-right-corner .+$")
+
+# select-by-element
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-by-element     INPUT_FILENAME path.svg PARAMETERS --actions=select-by-element:use$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^clone .+$")
+
+# select-by-id
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-by-id          INPUT_FILENAME path.svg PARAMETERS --actions=select-by-id:top-right-corner$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^top-right-corner .+$")
+
+# select-by-selector = svg > path:nth-child(2n) ~ *[fill=red]:nth-of-type(even)
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-by-selector    INPUT_FILENAME path.svg PARAMETERS --actions=select-by-selector:svg\ >\ path:nth-child\(2n\)\ ~\ *\[fill\=red\]:nth-of-type\(even\)$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^arc-big .+\nclone .+$")
+
+# select-clear
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-clear          INPUT_FILENAME path.svg PARAMETERS --actions=select-by-element:path$<SEMICOLON>select-clear$<SEMICOLON>select-by-id:cross$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^cross .+$")
+
+# select-invert
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-invert         INPUT_FILENAME path.svg PARAMETERS --actions=select-by-selector:path:nth-of-type\(2n\)$<SEMICOLON>select-invert:all$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^heart .+\nsquare .+\narc-big .+\ngates .+\nclone .+$")
+
+# select-list
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-select-list           INPUT_FILENAME path.svg PARAMETERS --actions=select-by-selector:*[stroke-width]:nth-child\(3n+3\)$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^gates cloned: false ref: 1 href: 0 total href: 0\n$")
+
+# system-data-directory: test = system-data-directory
+add_cli_test(actions-system-data-directory PARAMETERS --actions=system-data-directory ENVIRONMENT unset PASS_FOR_OUTPUT "inkscape\n$")
+
+# transform-remove
+add_cli_test(actions-transform-remove      INPUT_FILENAME pyramids.svg
+                                           PARAMETERS --actions=select-by-id:quad_snapped_4$<SEMICOLON>transform-rotate:2$<SEMICOLON>transform-remove
+                                           OUTPUT_FILENAME actions-transform-remove.png
+                                           REFERENCE_FILENAME actions-transform-remove_expected.png)
+
+# transform-rotate
+add_cli_test(actions-transform-rotate      INPUT_FILENAME pyramids.svg
+                                           PARAMETERS --actions=select-by-id:rect_snapped_4$<SEMICOLON>transform-rotate:45
+                                           OUTPUT_FILENAME actions-transform-rotate.png
+                                           REFERENCE_FILENAME actions-transform-rotate_expected.png)
+
+# transform-scale
+add_cli_test(actions-transform-scale       INPUT_FILENAME pyramids.svg
+                                           PARAMETERS --actions=select-by-id:quad_snapped_1$<SEMICOLON>transform-scale:10
+                                           OUTPUT_FILENAME actions-transform-scale.png
+                                           REFERENCE_FILENAME actions-transform-scale_expected.png)
+
+# transform-translate
+add_cli_test(actions-transform-translate   INPUT_FILENAME pyramids.svg
+                                           PARAMETERS --actions=select-by-id:quad_snapped_1$<SEMICOLON>transform-translate:-5,-5
+                                           OUTPUT_FILENAME actions-transform-translate.png
+                                           REFERENCE_FILENAME actions-transform-translate_expected.png)
+
+# unselect: it is deprecated
+# unselect-by-id
+# Failed because of https://gitlab.com/inkscape/inkscape/-/issues/1565
+# add_cli_test(actions-unselect-by-id        INPUT_FILENAME path.svg PARAMETERS --actions=select-by-element:path$<SEMICOLON>unselect-by-id:heart,bottom-left-corner,square,top-right-corner,arc-big,arc-small,gates$<SEMICOLON>select-list
+#                                           PASS_FOR_OUTPUT "^cross .+$")
+
+# user-data-directory: test = user-data-directory
+add_cli_test(actions-user-data-directory   PARAMETERS --actions=user-data-directory ENVIRONMENT unset PASS_FOR_OUTPUT "inkscape\n$")
+
+# vacuum-defs
+# verb
+# verb-list: test = verb-list
+add_cli_test(actions-verb-list             PARAMETERS --actions=verb-list PASS_FOR_OUTPUT "FileNew:")
+
+# window-close
+# window-open
+
+#############
+### verbs ###
+#############
+
+# TODO
 
 ###########################
 ### file format support ###
