@@ -653,44 +653,44 @@ void sp_file_convert_dpi(SPDocument *doc)
 // https://github.com/w3c/csswg-drafts/issues/5267
 void fix_feComposite(SPObject *i){
     if (!SP_IS_FECOMPOSITE(i)) return;
-    std::string oper = i->getAttribute("operator");
-    if (oper == "clear") {
+    auto oper = i->getAttribute("operator");
+    if (!g_strcmp0(oper, "clear")) {
         i->setAttribute("operator", "arithmetic");
         i->setAttribute("k1", "0");
         i->setAttribute("k2", "0");
         i->setAttribute("k3", "0");
         i->setAttribute("k4", "0");
-    } else if (oper == "copy") {
+    } else if (!g_strcmp0(oper, "copy")) {
         i->setAttribute("operator", "arithmetic");
         i->setAttribute("k1", "0");
         i->setAttribute("k2", "1");
         i->setAttribute("k3", "0");
         i->setAttribute("k4", "0");
-    } else if (oper == "destination") {
+    } else if (!g_strcmp0(oper, "destination")) {
         i->setAttribute("operator", "arithmetic");
         i->setAttribute("k1", "0");
         i->setAttribute("k2", "0");
         i->setAttribute("k3", "1");
         i->setAttribute("k4", "0");
-    } else if (oper == "destination-over") {
+    } else if (!g_strcmp0(oper, "destination-over")) {
         auto in1 = i->getAttribute("in");
         auto in2 = i->getAttribute("in2");
         i->setAttribute("in", in2);
         i->setAttribute("in2", in1);
         i->setAttribute("operator", "over");
-    } else if (oper == "destination-in") {
+    } else if (!g_strcmp0(oper, "destination-in")) {
         auto in1 = i->getAttribute("in");
         auto in2 = i->getAttribute("in2");
         i->setAttribute("in", in2);
         i->setAttribute("in2", in1);
         i->setAttribute("operator", "in");
-    } else if (oper == "destination-out") {
+    } else if (!g_strcmp0(oper, "destination-out")) {
         auto in1 = i->getAttribute("in");
         auto in2 = i->getAttribute("in2");
         i->setAttribute("in", in2);
         i->setAttribute("in2", in1);
         i->setAttribute("operator", "out");
-    } else if (oper == "destination-atop") {
+    } else if (!g_strcmp0(oper, "destination-atop")) {
         auto in1 = i->getAttribute("in");
         auto in2 = i->getAttribute("in2");
         i->setAttribute("in", in2);
