@@ -38,7 +38,6 @@ public:
 
 protected:
 
-    SPDesktop *_desktop;
     Inkscape::LivePathEffect::FilletChamferKnotHolderEntity *
     _knotpoint;
 
@@ -66,7 +65,6 @@ protected:
         return instance;
     }
 
-    void _setDesktop(SPDesktop *desktop);
     void _setPt(const Inkscape::LivePathEffect::
                 FilletChamferKnotHolderEntity *pt);
     void _setUseDistance(bool use_knot_distance);

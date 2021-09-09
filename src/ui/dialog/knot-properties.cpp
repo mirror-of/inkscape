@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * Dialog for moving knots.
+ * Dialog for moving knots. Only used by Measure Tool.
  */
 
 /* Author:
@@ -31,8 +31,7 @@ namespace UI {
 namespace Dialogs {
 
 KnotPropertiesDialog::KnotPropertiesDialog()
-    : _desktop(nullptr),
-      _knotpoint(nullptr),
+    : _knotpoint(nullptr),
       _position_visible(false),
       _close_button(_("_Close"), true)
 {
@@ -97,14 +96,11 @@ KnotPropertiesDialog::KnotPropertiesDialog()
 }
 
 KnotPropertiesDialog::~KnotPropertiesDialog() {
-
-    _setDesktop(nullptr);
 }
 
 void KnotPropertiesDialog::showDialog(SPDesktop *desktop, const SPKnot *pt, Glib::ustring const unit_name)
 {
     KnotPropertiesDialog *dialog = new KnotPropertiesDialog();
-    dialog->_setDesktop(desktop);
     dialog->_setKnotPoint(pt->position(), unit_name);
     dialog->_setPt(pt);
 
@@ -132,7 +128,6 @@ KnotPropertiesDialog::_apply()
 void
 KnotPropertiesDialog::_close()
 {
-    _setDesktop(nullptr);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
@@ -175,16 +170,6 @@ void KnotPropertiesDialog::_setKnotPoint(Geom::Point knotpoint, Glib::ustring co
 void KnotPropertiesDialog::_setPt(const SPKnot *pt)
 {
 	_knotpoint = const_cast<SPKnot *>(pt);
-}
-
-void KnotPropertiesDialog::_setDesktop(SPDesktop *desktop) {
-    if (desktop) {
-        Inkscape::GC::anchor (desktop);
-    }
-    if (_desktop) {
-        Inkscape::GC::release (_desktop);
-    }
-    _desktop = desktop;
 }
 
 } // namespace

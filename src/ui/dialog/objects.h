@@ -22,7 +22,6 @@
 #include "xml/node-observer.h"
 
 #include "ui/dialog/dialog-base.h"
-#include "ui/widget/style-subject.h"
 
 #include "selection.h"
 #include "color-rgba.h"

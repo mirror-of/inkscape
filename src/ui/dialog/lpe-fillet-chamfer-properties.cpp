@@ -24,8 +24,7 @@ namespace UI {
 namespace Dialogs {
 
 FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
-    : _desktop(nullptr),
-      _knotpoint(nullptr),
+    : _knotpoint(nullptr),
       _position_visible(false),
       _close_button(_("_Cancel"), true)
 {
@@ -100,8 +99,6 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
 
 FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 {
-
-    _setDesktop(nullptr);
 }
 
 void FilletChamferPropertiesDialog::showDialog(
@@ -115,7 +112,6 @@ void FilletChamferPropertiesDialog::showDialog(
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
-    dialog->_setDesktop(desktop);
     dialog->_setUseDistance(_use_distance);
     dialog->_setAprox(_aprox_radius);
     dialog->_setAmount(_amount);
@@ -166,7 +162,6 @@ void FilletChamferPropertiesDialog::_apply()
 
 void FilletChamferPropertiesDialog::_close()
 {
-    _setDesktop(nullptr);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
@@ -247,17 +242,6 @@ void FilletChamferPropertiesDialog::_setUseDistance(bool use_knot_distance)
 void FilletChamferPropertiesDialog::_setAprox(bool _aprox_radius)
 {
     _aprox = _aprox_radius;
-}
-
-void FilletChamferPropertiesDialog::_setDesktop(SPDesktop *desktop)
-{
-    if (desktop) {
-        Inkscape::GC::anchor(desktop);
-    }
-    if (_desktop) {
-        Inkscape::GC::release(_desktop);
-    }
-    _desktop = desktop;
 }
 
 } // namespace

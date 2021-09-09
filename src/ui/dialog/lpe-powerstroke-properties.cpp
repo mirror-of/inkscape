@@ -30,8 +30,7 @@ namespace UI {
 namespace Dialogs {
 
 PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
-    : _desktop(nullptr),
-      _knotpoint(nullptr),
+    : _knotpoint(nullptr),
       _position_visible(false),
       _close_button(_("_Cancel"), true)
 {
@@ -95,15 +94,12 @@ PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
 }
 
 PowerstrokePropertiesDialog::~PowerstrokePropertiesDialog() {
-
-    _setDesktop(nullptr);
 }
 
 void PowerstrokePropertiesDialog::showDialog(SPDesktop *desktop, Geom::Point knotpoint, const Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity *pt)
 {
-	PowerstrokePropertiesDialog *dialog = new PowerstrokePropertiesDialog();
+    PowerstrokePropertiesDialog *dialog = new PowerstrokePropertiesDialog();
 
-    dialog->_setDesktop(desktop);
     dialog->_setKnotPoint(knotpoint);
     dialog->_setPt(pt);
 
@@ -130,7 +126,6 @@ PowerstrokePropertiesDialog::_apply()
 void
 PowerstrokePropertiesDialog::_close()
 {
-    _setDesktop(nullptr);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
@@ -170,16 +165,6 @@ void PowerstrokePropertiesDialog::_setKnotPoint(Geom::Point knotpoint)
 void PowerstrokePropertiesDialog::_setPt(const Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity *pt)
 {
 	_knotpoint = const_cast<Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity *>(pt);
-}
-
-void PowerstrokePropertiesDialog::_setDesktop(SPDesktop *desktop) {
-    if (desktop) {
-        Inkscape::GC::anchor (desktop);
-    }
-    if (_desktop) {
-        Inkscape::GC::release (_desktop);
-    }
-    _desktop = desktop;
 }
 
 } // namespace

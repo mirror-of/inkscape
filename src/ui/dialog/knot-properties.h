@@ -40,7 +40,6 @@ class KnotPropertiesDialog : public Gtk::Dialog {
 
 protected:
 
-    SPDesktop *_desktop;
     SPKnot    *_knotpoint;
 
     Gtk::Label        _knot_x_label;
@@ -61,7 +60,6 @@ protected:
         return instance;
     }
 
-    void _setDesktop(SPDesktop *desktop);
     void _setPt(const SPKnot *pt);
 
     void _apply();

@@ -34,7 +34,6 @@ class PowerstrokePropertiesDialog : public Gtk::Dialog {
 
 protected:
 
-    SPDesktop *_desktop;
     Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity *_knotpoint;
 
     Gtk::Label        _powerstroke_position_label;
@@ -54,7 +53,6 @@ protected:
         return instance;
     }
 
-    void _setDesktop(SPDesktop *desktop);
     void _setPt(const Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity *pt);
 
     void _apply();
