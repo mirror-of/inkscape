@@ -82,7 +82,7 @@ See default.xml for more information.
   <bind key="semicolon" modifiers="Primary" action="ToggleGuides" display="true" />
   
   <!-- Toggle Snap -->
-  <bind gaction="doc.snap-global-toggle" keys="&lt;primary&gt;&lt;shift&gt;quotedbl, &lt;primary&gt;&lt;alt&gt;apostrophe"/>
+  <bind gaction="win.snap-global-toggle" keys="&lt;primary&gt;&lt;shift&gt;quotedbl, &lt;primary&gt;&lt;alt&gt;apostrophe"/>
 
   <!-- Toggle View -->
   <bind gaction="win.canvas-display-mode-cycle" keys="&lt;primary&gt;y"/>

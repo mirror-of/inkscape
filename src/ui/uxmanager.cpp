@@ -155,21 +155,13 @@ void UXManagerImpl::setTask(SPDesktop* dt, gint val)
                     if (notDone) {
                         dtw->setToolboxPosition("AuxToolbar", GTK_POS_TOP);
                     }
-                    dtw->setToolboxPosition("SnapToolbar", GTK_POS_RIGHT);
                     taskNum = val; // in case it was out of range
                     break;
+
                 case 1:
-                    dtw->setToolboxPosition("ToolToolbar", GTK_POS_LEFT);
-                    dtw->setToolboxPosition("CommandsToolbar", GTK_POS_TOP);
-                    if (notDone) {
-                        dtw->setToolboxPosition("AuxToolbar", GTK_POS_TOP);
-                    }
-                    dtw->setToolboxPosition("SnapToolbar", GTK_POS_TOP);
-                    break;
                 case 2:
                     dtw->setToolboxPosition("ToolToolbar", GTK_POS_LEFT);
                     dtw->setToolboxPosition("CommandsToolbar", GTK_POS_RIGHT);
-                    dtw->setToolboxPosition("SnapToolbar", GTK_POS_RIGHT);
                     if (notDone) {
                         dtw->setToolboxPosition("AuxToolbar", GTK_POS_RIGHT);
                     }

@@ -147,7 +147,7 @@ SPDocument::SPDocument() :
 
     // Actions
     action_group = Gio::SimpleActionGroup::create();
-    add_actions_canvas_snapping(this);
+    // empty for now...
 }
 
 SPDocument::~SPDocument() {
@@ -483,7 +483,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     }
 
     // Update document level action settings
-    set_actions_canvas_snapping(document);
+    // -- none available so far --
 
     return document;
 }

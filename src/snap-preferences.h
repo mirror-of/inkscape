@@ -30,6 +30,8 @@ public:
     bool isTargetSnappable(Inkscape::SnapTargetType const target1, Inkscape::SnapTargetType const target2, Inkscape::SnapTargetType const target3, Inkscape::SnapTargetType const target4) const;
     bool isTargetSnappable(Inkscape::SnapTargetType const target1, Inkscape::SnapTargetType const target2, Inkscape::SnapTargetType const target3, Inkscape::SnapTargetType const target4, Inkscape::SnapTargetType const target5) const;
     bool isSnapButtonEnabled(Inkscape::SnapTargetType const target) const;
+    bool get_simple_snap(Inkscape::SimpleSnap option) const;
+    void set_simple_snap(Inkscape::SimpleSnap option, bool enable);
 
     SnapTargetType source2target(SnapSourceType source) const;
     bool isSourceSnappable(Inkscape::SnapSourceType const source) const;
@@ -44,11 +46,6 @@ public:
     bool getSnapPostponedGlobally() const {return _snap_postponed_globally;}
 
     bool getStrictSnapping() const {return _strict_snapping;}
-
-    bool getSnapPerp() const {return _snap_perp;}
-    bool getSnapTang() const {return _snap_tang;}
-    void setSnapPerp(bool enabled) {_snap_perp = enabled;}
-    void setSnapTang(bool enabled) {_snap_tang = enabled;}
 
     double getGridTolerance() const {return _grid_tolerance;}
     double getGuideTolerance() const {return _guide_tolerance;}
@@ -93,8 +90,7 @@ private:
     //(snapping to grids and guides is not affected by this)
     bool _strict_snapping;
 
-    bool _snap_perp;
-    bool _snap_tang;
+    bool _simple_snapping[static_cast<int>(Inkscape::SimpleSnap::_MaxEnumValue)];
 
     double _grid_tolerance;
     double _guide_tolerance;

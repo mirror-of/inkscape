@@ -105,7 +105,7 @@ protected:
 
     UI::Widget::NotebookPage   *_page_page;
     UI::Widget::NotebookPage   *_page_guides;
-    UI::Widget::NotebookPage   *_page_snap;
+    // UI::Widget::NotebookPage   *_page_snap;
     UI::Widget::NotebookPage   *_page_cms;
     UI::Widget::NotebookPage   *_page_scripting;
 
@@ -140,15 +140,15 @@ protected:
     Gtk::Button                       _create_guides_btn;
     Gtk::Button                       _delete_guides_btn;
     //---------------------------------------------------------------
-    UI::Widget::ToleranceSlider       _rsu_sno;
-    UI::Widget::ToleranceSlider       _rsu_sn;
-    UI::Widget::ToleranceSlider       _rsu_gusn;
-    UI::Widget::ToleranceSlider       _rsu_assn;
-    UI::Widget::ToleranceSlider       _rsu_dssn;
-    UI::Widget::RegisteredCheckButton _rcb_snclp;
-    UI::Widget::RegisteredCheckButton _rcb_snmsk;
-    UI::Widget::RegisteredCheckButton _rcb_perp;
-    UI::Widget::RegisteredCheckButton _rcb_tang;
+    // UI::Widget::ToleranceSlider       _rsu_sno;
+    // UI::Widget::ToleranceSlider       _rsu_sn;
+    // UI::Widget::ToleranceSlider       _rsu_gusn;
+    // UI::Widget::ToleranceSlider       _rsu_assn;
+    // UI::Widget::ToleranceSlider       _rsu_dssn;
+    // UI::Widget::RegisteredCheckButton _rcb_snclp;
+    // UI::Widget::RegisteredCheckButton _rcb_snmsk;
+    // UI::Widget::RegisteredCheckButton _rcb_perp;
+    // UI::Widget::RegisteredCheckButton _rcb_tang;
     //---------------------------------------------------------------
     Gtk::Button         _unlink_btn;
     class AvailableProfilesColumns : public Gtk::TreeModel::ColumnRecord

@@ -44,7 +44,7 @@
 #include "include/gtkmm_version.h"
 
 #include "io/resource.h"
-
+#include "actions/actions-canvas-snapping.h"
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
@@ -365,6 +365,12 @@ GtkWidget *ToolboxFactory::createCommandsToolbox()
     return toolboxNewCommon( tb, BAR_COMMANDS, GTK_POS_LEFT );
 }
 
+int show_popover(void* button) {
+    auto btn = static_cast<Gtk::MenuButton*>(button);
+    btn->get_popover()->show();
+    return false;
+}
+
 GtkWidget *ToolboxFactory::createSnapToolbox()
 {
     auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -382,6 +388,7 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
         std::cerr << "ToolboxFactor::createSnapToolbox: " << snap_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
     }
 
+    bool simple_snap = true;
     Gtk::Toolbar* toolbar = nullptr;
     builder->get_widget("snap-toolbar", toolbar);
     if (!toolbar) {
@@ -393,9 +400,54 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
         if ( prefs->getBool("/toolbox/icononly", true) ) {
             toolbar->set_toolbar_style( Gtk::TOOLBAR_ICONS );
         }
+        simple_snap = prefs->getBool("/toolbox/simplesnap", simple_snap);
 
         GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
         toolbar->set_icon_size (static_cast<Gtk::IconSize>(toolboxSize));
+    }
+
+    Gtk::ToolItem* item_simple = nullptr;
+    Gtk::ToolItem* item_advanced = nullptr;
+    Gtk::MenuButton* btn_simple = nullptr;
+    Gtk::MenuButton* btn_advanced = nullptr;
+    Gtk::LinkButton* simple = nullptr;
+    Gtk::LinkButton* advanced = nullptr;
+    builder->get_widget("simple-link", simple);
+    builder->get_widget("advanced-link", advanced);
+    builder->get_widget("tool-item-advanced", item_advanced);
+    builder->get_widget("tool-item-simple", item_simple);
+    builder->get_widget("btn-simple", btn_simple);
+    builder->get_widget("btn-advanced", btn_advanced);
+    if (simple && advanced && item_simple && item_advanced && btn_simple && btn_advanced) {
+        // keep only one popup button visible
+        if (simple_snap) {
+            item_simple->show();
+            item_advanced->hide();
+        }
+        else {
+            item_advanced->show();
+            item_simple->hide();
+        }
+
+        // switch to simple mode
+        simple->signal_activate_link().connect([=](){
+            item_advanced->hide();
+            item_simple->show();
+            g_timeout_add(250, &show_popover, btn_simple);
+            Inkscape::Preferences::get()->setBool("/toolbox/simplesnap", true);
+            // adjust snapping options when transitioning to simple scheme, since most are hidden
+            transition_to_simple_snapping();
+            return true;
+        }, false);
+
+        // switch to advanced mode
+        advanced->signal_activate_link().connect([=](){
+            item_simple->hide();
+            item_advanced->show();
+            g_timeout_add(250, &show_popover, btn_advanced);
+            Inkscape::Preferences::get()->setBool("/toolbox/simplesnap", false);
+            return true;
+        }, false);
     }
 
     return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
@@ -601,6 +653,18 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         if (aux_toolboxes[i].create_func) {
             GtkWidget *sub_toolbox = aux_toolboxes[i].create_func(desktop);
+            // center items vertically/horizontally to prevent stretching;
+            // all buttons will look uniform across toolbars if their original size is preserved
+            if (auto* tb = dynamic_cast<Gtk::Container*>(Glib::wrap(sub_toolbox))) {
+                for (auto&& item : tb->get_children()) {
+                    if (dynamic_cast<Gtk::Button*>(item) ||
+                        dynamic_cast<Gtk::SpinButton*>(item) ||
+                        dynamic_cast<Gtk::ToolButton*>(item)) {
+                        item->set_valign(Gtk::ALIGN_CENTER);
+                        item->set_halign(Gtk::ALIGN_CENTER);
+                    }
+                }
+            }
             gtk_widget_set_name( sub_toolbox, "SubToolBox" );
 
             auto holder = gtk_grid_new();

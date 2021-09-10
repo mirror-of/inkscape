@@ -216,7 +216,7 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind key="bar" modifiers="Shift" action="ToggleGuides" /> <!-- | -->
   <bind key="bar" action="ToggleGuides" display="true" />
 
-  <bind gaction="doc.snap-global-toggle" keys="percent, &lt;shift&gt;percent"/>
+  <bind gaction="win.snap-global-toggle" keys="percent, &lt;shift&gt;percent"/>
 
   <bind action="ToggleCommandsToolbar" />
   <bind action="ToggleSnapToolbar" />

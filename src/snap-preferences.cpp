@@ -16,9 +16,7 @@
 Inkscape::SnapPreferences::SnapPreferences() :
     _snap_enabled_globally(true),
     _snap_postponed_globally(false),
-    _strict_snapping(true),
-    _snap_perp(false),
-    _snap_tang(false)
+    _strict_snapping(true)
 {
     // Check for powers of two; see the comments in snap-enums.h
     g_assert((SNAPTARGET_BBOX_CATEGORY != 0) && !(SNAPTARGET_BBOX_CATEGORY & (SNAPTARGET_BBOX_CATEGORY - 1)));
@@ -31,6 +29,22 @@ Inkscape::SnapPreferences::SnapPreferences() :
     for (int & _active_snap_target : _active_snap_targets) {
         _active_snap_target = -1;
     }
+
+    for (bool& b : _simple_snapping) {
+        b = false;
+    }
+}
+
+bool Inkscape::SnapPreferences::get_simple_snap(Inkscape::SimpleSnap option) const {
+    auto index = static_cast<size_t>(option);
+    assert(index < size_t(Inkscape::SimpleSnap::_MaxEnumValue));
+    return _simple_snapping[index];
+}
+
+void Inkscape::SnapPreferences::set_simple_snap(Inkscape::SimpleSnap option, bool enable) {
+    auto index = static_cast<size_t>(option);
+    assert(index < size_t(Inkscape::SimpleSnap::_MaxEnumValue));
+    _simple_snapping[index] = enable;
 }
 
 bool Inkscape::SnapPreferences::isAnyDatumSnappable() const
@@ -75,9 +89,9 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
             case SNAPTARGET_PATH_GUIDE_INTERSECTION:
                 target = SNAPTARGET_PATH_INTERSECTION;
                 break;
-            case SNAPTARGET_PATH_PERPENDICULAR:
-            case SNAPTARGET_PATH_TANGENTIAL:
-                target = SNAPTARGET_PATH;
+            // case SNAPTARGET_PATH_PERPENDICULAR:
+            // case SNAPTARGET_PATH_TANGENTIAL:
+                // target = SNAPTARGET_PATH;
                 break;
             default:
                 break;

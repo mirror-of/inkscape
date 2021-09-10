@@ -481,7 +481,7 @@ override) the bindings in the main default.xml.
   <bind gaction="app.inkscape-version"             keys="&lt;Shift&gt;v" />
 
   <!-- Snapping -->
-  <bind gaction="doc.snap-global-toggle"           keys="percent"/>
+  <bind gaction="win.snap-global-toggle"           keys="percent"/>
 
   <!-- Tools -->
   <bind gaction="win.tool-switch('Select')"        keys="s,   F1"/>

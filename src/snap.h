@@ -90,7 +90,7 @@ public:
      *
      * @param v 'Owning' SPNamedView.
      */
-    SnapManager(SPNamedView const *v);
+    SnapManager(SPNamedView const *v, Inkscape::SnapPreferences& preferences);
     ~SnapManager();
 
     typedef std::list<const Inkscape::Snapper*> SnapperList;
@@ -342,7 +342,7 @@ public:
     Inkscape::ObjectSnapper object;    ///< snapper to other objects
     Inkscape::AlignmentSnapper alignment; ///< snapper to align with other objects
     Inkscape::DistributionSnapper distribution;
-    Inkscape::SnapPreferences snapprefs;
+    Inkscape::SnapPreferences& snapprefs;
 
     /**
      * Return a list of snappers.

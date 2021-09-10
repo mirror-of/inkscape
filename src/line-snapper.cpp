@@ -70,7 +70,7 @@ void Inkscape::LineSnapper::freeSnap(IntermSnapResults &isr,
                 // We won't try to snap tangentially; a line being tangential to another line can be achieved by snapping both its endpoints
                 // individually to the other line. There's no need to have an explicit tangential snap here, that would be redundant
 
-                if (_snapmanager->snapprefs.getSnapPerp()) { // Find the point that leads to a perpendicular snap
+                if (_snapmanager->snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_PATH_PERPENDICULAR)) { // Find the point that leads to a perpendicular snap
                     Geom::Point const origin_proj = Geom::projection(origin, Geom::Line(p1, p2));
                     Geom::Coord dist = Geom::L2(origin_proj - p.getPoint());
                     if (dist < getSnapperTolerance()) {

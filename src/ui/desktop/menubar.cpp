@@ -347,9 +347,9 @@ deselect_task(SPDesktop* dt)
 static void
 add_tasks(Gtk::MenuShell* menu, SPDesktop* dt)
 {
-    const Glib::ustring data[3][2] = {
+    const Glib::ustring data[2][2] = {
         { C_("Interface setup", "Default"), _("Default interface setup")   },
-        { C_("Interface setup", "Custom"),  _("Setup for custom task")     },
+        // { C_("Interface setup", "Custom"),  _("Setup for custom task")     },
         { C_("Interface setup", "Wide"),    _("Setup for widescreen work") }
     };
 
@@ -357,7 +357,7 @@ add_tasks(Gtk::MenuShell* menu, SPDesktop* dt)
 
     Gtk::RadioMenuItem::Group group;
 
-    for (unsigned int i = 0; i < 3; ++i) {
+    for (unsigned int i = 0; i < 2; ++i) {
 
         Gtk::RadioMenuItem* menuitem = Gtk::manage(new Gtk::RadioMenuItem(group, data[i][0]));
         if (menuitem) {

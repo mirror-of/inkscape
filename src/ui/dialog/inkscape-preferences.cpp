@@ -2412,6 +2412,7 @@ void InkscapePreferences::initPageBehavior()
     _page_snapping.add_line( true, _("Delay (in seconds):"), _snap_delay, "",
                              _("Postpone snapping as long as the mouse is moving, and then wait an additional fraction of a second. This additional delay is specified here. When set to zero or to a very small number, snapping will be immediate."), true);
 
+
     this->AddPage(_page_snapping, _("Snapping"), iter_behavior, PREFS_PAGE_BEHAVIOR_SNAPPING);
 
     // Steps options

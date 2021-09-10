@@ -134,5 +134,14 @@ enum SnapTargetType {
     SNAPTARGET_MAX_ENUM_VALUE
 };
 
+// simple snapping UI hides variety of choices behind a few categories
+enum class SimpleSnap {
+    BBox = 0,   // bounding box category
+    Nodes,      // nodes, paths
+    Alignment,  // alignment and distribution snaps
+    Rest,       // all the rest
+    _MaxEnumValue
+};
+
 }
 #endif /* SNAPENUMS_H_ */

@@ -402,8 +402,8 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
                       // continue counting
 
     bool strict_snapping = _snapmanager->snapprefs.getStrictSnapping();
-    bool snap_perp = _snapmanager->snapprefs.getSnapPerp();
-    bool snap_tang = _snapmanager->snapprefs.getSnapTang();
+    bool snap_perp = _snapmanager->snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_PATH_PERPENDICULAR);
+    bool snap_tang = _snapmanager->snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_PATH_TANGENTIAL);
 
     //dt->snapindicator->remove_debugging_points();
     for (const auto & it_p : *_paths_to_snap_to) {

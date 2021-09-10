@@ -31,7 +31,7 @@
 #include "enums.h"
 #include "ui/monitor.h"
 #include "ui/dialog/dialog-container.h"
-
+#include "actions/actions-canvas-snapping.h"
 #include "sp-guide.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
@@ -60,7 +60,7 @@ static void sp_namedview_lock_single_guide(SPGuide* guide, bool show);
 static gboolean sp_str_to_bool(const gchar *str);
 static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color);
 
-SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
+SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this, get_snapping_preferences()) {
 
     this->zoom = 0;
     this->guidecolor = 0;
@@ -224,33 +224,33 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::INKSCAPE_WINDOW_X);
     this->readAttr(SPAttr::INKSCAPE_WINDOW_Y);
     this->readAttr(SPAttr::INKSCAPE_WINDOW_MAXIMIZED);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_GLOBAL);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_NODE);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_OTHERS);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_FROM_GUIDE);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_ROTATION_CENTER);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_SMOOTH);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_LINE_MIDPOINT);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_OBJECT_MIDPOINT);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_TEXT_BASELINE);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_MIDPOINT);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_GUIDE);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_GRID);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_INTERSECTION);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_PERP);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_TANG);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_CLIP);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_MASK);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_CUSP);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_CORNER);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_PAGE_BORDER);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF);
-    this->readAttr(SPAttr::INKSCAPE_SNAP_DISTRIBUTION);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_GLOBAL);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_NODE);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_OTHERS);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_FROM_GUIDE);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_ROTATION_CENTER);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_SMOOTH);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_LINE_MIDPOINT);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_OBJECT_MIDPOINT);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_TEXT_BASELINE);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_MIDPOINT);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_GUIDE);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_GRID);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_INTERSECTION);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_PERP);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_TANG);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_CLIP);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_MASK);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_CUSP);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_CORNER);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_PAGE_BORDER);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF);
+    // this->readAttr(SPAttr::INKSCAPE_SNAP_DISTRIBUTION);
     this->readAttr(SPAttr::INKSCAPE_CURRENT_LAYER);
     this->readAttr(SPAttr::INKSCAPE_CONNECTOR_SPACING);
     this->readAttr(SPAttr::INKSCAPE_LOCKGUIDES);
@@ -453,6 +453,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->window_maximized = value ? atoi(value) : 0;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+/*
     case SPAttr::INKSCAPE_SNAP_GLOBAL:
             this->snap_manager.snapprefs.setSnapEnabledGlobally(value ? sp_str_to_bool(value) : global_snapping);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -546,7 +547,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_SNAP_ALIGNMENT:
-            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY, value ? sp_str_to_bool(value) : TRUE);
+            this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ALIGNMENT_CATEGORY, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF:
@@ -557,6 +558,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_DISTRIBUTION_CATEGORY, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+*/
     case SPAttr::INKSCAPE_CURRENT_LAYER:
             this->default_layer_id = value ? g_quark_from_string(value) : 0;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
