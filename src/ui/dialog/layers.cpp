@@ -819,7 +819,7 @@ LayersPanel::LayersPanel()
 
     pack_start(_layersPage, Gtk::PACK_EXPAND_WIDGET);
 
-    // This is wrong, because Desktop may change at any time.
+    // targetDesktop is not actually used (eventually _fire_action is called which uses current desktop value).
     SPDesktop *targetDesktop = dynamic_cast<SPDesktop *>(getApp()->get_active_view());
 
     Gtk::Button* btn = Gtk::manage( new Gtk::Button() );

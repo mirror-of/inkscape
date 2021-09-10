@@ -18,7 +18,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-StyleSubject::StyleSubject() : _desktop(nullptr) {
+StyleSubject::StyleSubject() {
 }
 
 StyleSubject::~StyleSubject() {
@@ -27,16 +27,10 @@ StyleSubject::~StyleSubject() {
 
 void StyleSubject::setDesktop(SPDesktop *desktop) {
     if (desktop != _desktop) {
-        if (desktop) {
-            GC::anchor(desktop);
-        }
-        if (_desktop) {
-            GC::release(_desktop);
-        }
         _desktop = desktop;
         _afterDesktopSwitch(desktop);
         if (_desktop) {
-            _emitChanged();
+            _emitChanged(); // This updates the widgets.
         }
     }
 }

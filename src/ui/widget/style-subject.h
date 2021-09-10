@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * Abstraction for different style widget operands.
+ * Abstraction for different style widget operands. Used by ObjectCompositeSettings in Layers and
+ * Fill and Stroke dialogs. Dialog is responsible for keeping desktop pointer valid.
+ *
+ * This class is due to the need to differentiate between layers and objects but a layer is just a
+ * a group object with an extra tag. There should be no need to differentiate between the two.
+ * To do: remove this class and intergrate the functionality into ObjectCompositeSettings.
  */
 /*
  * Copyright (C) 2007 MenTaLguY <mental@rydia.net>
@@ -67,7 +72,7 @@ protected:
 
 private:
     sigc::signal<void> _changed_signal;
-    SPDesktop *_desktop;
+    SPDesktop *_desktop = nullptr;
 };
 
 class StyleSubject::Selection : public StyleSubject {
