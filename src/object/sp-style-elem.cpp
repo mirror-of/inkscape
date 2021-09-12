@@ -327,9 +327,9 @@ end_font_face_cb(CRDocHandler *a_handler)
                   unsigned(font_face_rule->type));
     }
 
-    std::cout << "end_font_face_cb: font face rule limited support." << std::endl;
-    cr_declaration_dump (font_face_rule->kind.font_face_rule->decl_list, stdout, 2, TRUE);
-    printf ("\n");
+    g_warning("end_font_face_cb: font face rule limited support.");
+    cr_declaration_dump(font_face_rule->kind.font_face_rule->decl_list, stderr, 2, TRUE);
+    std::cerr << std::endl;
 
     // Get document
     SPDocument* document = parse_tmp.document;
@@ -367,11 +367,11 @@ end_font_face_cb(CRDocHandler *a_handler)
                     if (!ttf_file.empty()) {
                         font_factory *factory = font_factory::Default();
                         factory->AddFontFile( ttf_file.c_str() );
-                        std::cout << "end_font_face_cb: Added font: " << ttf_file << std::endl;
+                        g_info("end_font_face_cb: Added font: %s", ttf_file.c_str());
 
                         // FIX ME: Need to refresh font list.
                     } else {
-                        std::cout << "end_font_face_cb: Failed to add: " << value << std::endl;
+                        g_error("end_font_face_cb: Failed to add: %s", value.c_str());
                     }
                 }
             }
@@ -388,7 +388,7 @@ property_cb(CRDocHandler *const a_handler,
             CRString *const a_name,
             CRTerm *const a_value, gboolean const a_important)
 {
-    // std::cout << "property_cb: Entrance: " << a_name->stryng->str << ": " << cr_term_to_string(a_value) << std::endl;
+    // std::cerr << "property_cb: Entrance: " << a_name->stryng->str << ": " << cr_term_to_string(a_value) << std::endl;
     g_return_if_fail(a_handler && a_name);
     auto &parse_tmp = *ParseTmp::cast(a_handler);
 
