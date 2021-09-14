@@ -851,15 +851,9 @@ StrokeStyle::updateLine()
         // if none of the selected objects has a stroke, than quite some controls should be disabled
         // These options should also be disabled for hairlines, since they don't make sense for
         // 0-width lines.
-        // The markers might still be shown though, so these will not be disabled
-        bool enabled = (result_sw != QUERY_STYLE_NOTHING) && !targPaint.isNoneSet();
-
-        /* No objects stroked, set insensitive */
-        widthSpin->set_sensitive(enabled && 
-                (!query.stroke_extensions.hairline || result_sw == QUERY_STYLE_MULTIPLE_AVERAGED));
-        unitSelector->set_sensitive(enabled);
-
-        bool is_enabled = enabled && !query.stroke_extensions.hairline;
+        // The markers might still be shown though, so marker and stroke-width widgets stay enabled
+        bool is_enabled = (result_sw != QUERY_STYLE_NOTHING) && !targPaint.isNoneSet()
+                           && !query.stroke_extensions.hairline;
         joinMiter->set_sensitive(is_enabled);
         joinRound->set_sensitive(is_enabled);
         joinBevel->set_sensitive(is_enabled);
