@@ -126,6 +126,7 @@ public:
     ~ClipboardManagerImpl() override;
 
 private:
+    void _cleanStyle(SPCSSAttr *);
     void _copySelection(ObjectSet *);
     void _copyUsedDefs(SPItem *);
     void _copyGradient(SPGradient *);
@@ -557,6 +558,21 @@ Glib::ustring ClipboardManagerImpl::getFirstObjectID()
     return {};
 }
 
+/**
+ * Remove certain css elements which are not useful for pasteStyle
+ */
+void ClipboardManagerImpl::_cleanStyle(SPCSSAttr *style)
+{
+    if (style) {
+        /* Clean text 'position' properties */
+        sp_repr_css_unset_property(style, "text-anchor");
+        sp_repr_css_unset_property(style, "shape-inside");
+        sp_repr_css_unset_property(style, "shape-subtract");
+        sp_repr_css_unset_property(style, "shape-padding");
+        sp_repr_css_unset_property(style, "shape-margin");
+        sp_repr_css_unset_property(style, "inline-size");
+    }
+}
 
 /**
  * Implements the Paste Style action.
@@ -577,6 +593,7 @@ bool ClipboardManagerImpl::pasteStyle(ObjectSet *set)
     if ( tempdoc == nullptr ) {
         // no document, but we can try _text_style
         if (_text_style) {
+            _cleanStyle(_text_style);
             sp_desktop_set_style(set, set->desktop(), _text_style);
             return true;
         } else {
@@ -925,20 +942,15 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
         }
     }
     // copy style for Paste Style action
-    if (!sorted_items.empty()) {
-        SPObject *object = sorted_items[0];
-        SPItem *item = dynamic_cast<SPItem *>(object);
-        if (item) {
-            SPCSSAttr *style = take_style_from_item(item);
-            sp_repr_css_set(_clipnode, style, "style");
-            sp_repr_css_attr_unref(style);
-        }
+    if (auto item = selection->singleItem()) {
+        SPCSSAttr *style = take_style_from_item(item);
+        _cleanStyle(style);
+        sp_repr_css_set(_clipnode, style, "style");
+        sp_repr_css_attr_unref(style);
+
         // copy path effect from the first path
-        if (object) {
-            gchar const *effect =object->getRepr()->attribute("inkscape:path-effect");
-            if (effect) {
-                _clipnode->setAttribute("inkscape:path-effect", effect);
-            }
+        if (gchar const *effect = item->getRepr()->attribute("inkscape:path-effect")) {
+            _clipnode->setAttribute("inkscape:path-effect", effect);
         }
     }
 
