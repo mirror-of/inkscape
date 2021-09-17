@@ -25,6 +25,12 @@ default:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
   timeout: 3h
 
+# extend default set of stages by adding "prepare"
+stages:
+  - prepare
+  - build
+  - test
+  - deploy
 
 #speedup git on runners
 variables:
@@ -117,7 +123,7 @@ appimage:linux:
       - Inkscape*.AppImage*
 
 
-inkscape:mac:
+inkscape:macos:
   stage: build
   tags:
     - mac
@@ -132,6 +138,56 @@ inkscape:mac:
     # workaround: after_script doesn't run for cancelled/timed out jobs
     #             https://gitlab.com/gitlab-org/gitlab/-/issues/15603
     - packaging/macos/uninstall_toolset.sh
+    - packaging/macos/install_toolset.sh
+  script:
+    - packaging/macos/build_inkscape.sh
+  after_script:
+    - packaging/macos/uninstall_toolset.sh
+  artifacts:
+    expire_in: 1 year
+    paths:
+      - Inkscape.dmg
+
+# GitLab shared runner beta for macOS (1/2): get the SDK for 10.13
+inkscape:macos:beta:sdk:
+  stage: prepare
+  tags:
+    - shared-macos-amd64
+  image: macos-10.13-xcode-9
+  rules:
+    - *do_not_run_for_schedules
+    # Mac runner is restricted to "inkscape" and "dehesselle" namespaces; only generate pipelines for those
+    - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
+    - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
+  script:
+    - tar -C /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs -cpJf $CI_PROJECT_DIR/sdk.tar.xz MacOSX.sdk
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - sdk.tar.xz
+
+# GitLab shared runner beta for macOS (2/2): build
+inkscape:macos:beta:
+  stage: build
+  tags:
+    - shared-macos-amd64
+  image: macos-10.15-xcode-11
+  rules:
+    - *do_not_run_for_schedules
+    # Mac runner is restricted to "inkscape" and "dehesselle" namespaces; only generate pipelines for those
+    - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
+    - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
+  dependencies:
+    - inkscape:macos:beta:sdk
+  variables:
+    SDKROOT: $CI_PROJECT_DIR/MacOSX.sdk
+    CCACHE_DIR: $CI_PROJECT_DIR/ccache
+  cache:
+    key: "cache-macos"
+    paths:
+      - $CI_PROJECT_DIR/ccache
+  before_script:
+    - tar -xpf sdk.tar.xz
     - packaging/macos/install_toolset.sh
   script:
     - packaging/macos/build_inkscape.sh
