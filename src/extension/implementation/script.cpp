@@ -308,7 +308,7 @@ ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
     prefs->setBool("/options/svgoutput/disable_optimizations", true);
     Inkscape::Extension::save(
               Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
-              view->doc(), _filename.c_str(), false, false, false, Inkscape::Extension::FILE_SAVE_METHOD_TEMPORARY);
+              view->doc(), _filename.c_str(), false, false, Inkscape::Extension::FILE_SAVE_METHOD_TEMPORARY);
     prefs->setBool("/options/svgoutput/disable_optimizations", false);
     return;
 }
@@ -468,12 +468,12 @@ void Script::save(Inkscape::Extension::Output *module,
     if (helper_extension.size() == 0) {
         Inkscape::Extension::save(
                    Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
-                   doc, tempfilename_in.c_str(), false, false, false,
+                   doc, tempfilename_in.c_str(), false, false,
                    Inkscape::Extension::FILE_SAVE_METHOD_TEMPORARY);
     } else {
         Inkscape::Extension::save(
                    Inkscape::Extension::db.get(helper_extension.c_str()),
-                   doc, tempfilename_in.c_str(), false, false, false,
+                   doc, tempfilename_in.c_str(), false, false,
                    Inkscape::Extension::FILE_SAVE_METHOD_TEMPORARY);
     }
 

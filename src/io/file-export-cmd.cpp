@@ -396,7 +396,7 @@ int InkFileExportCmd::do_export_svg(SPDocument *doc, std::string const &filename
         g_assert(std::string(extension.get_extension()) == ".svg");
         try {
             Inkscape::Extension::save(dynamic_cast<Inkscape::Extension::Extension *>(&extension), doc,
-                                      filename_out.c_str(), false, false, false,
+                                      filename_out.c_str(), false, false,
                                       export_plain_svg ? Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY
                                                        : Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
         } catch (Inkscape::Extension::Output::save_failed &e) {

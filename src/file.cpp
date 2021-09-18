@@ -11,7 +11,6 @@
  *   Stephen Silver <sasilver@users.sourceforge.net>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
- *   David Xiong
  *   Tavmjong Bah
  *
  * Copyright (C) 2006 Johan Engelen <johan@shouraizou.nl>
@@ -477,7 +476,6 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
     doc->getReprRoot()->setAttribute("inkscape:version", Inkscape::version_string);
     try {
         Inkscape::Extension::save(key, doc, uri.c_str(),
-                                  false,
                                   checkoverwrite, official,
                                   save_method);
     } catch (Inkscape::Extension::Output::no_extension_found &e) {
@@ -563,19 +561,6 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
     return true;
 }
 
-
-/**
- * Check if a string ends with another string.
- * \todo Find a better code file to put this general purpose method
- */
-static bool hasEnding (Glib::ustring const &fullString, Glib::ustring const &ending)
-{
-    if (fullString.length() > ending.length()) {
-        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-    } else {
-        return false;
-    }
-}
 
 /**
  *  Display a SaveAs dialog.  Save the document if OK pressed.
@@ -680,14 +665,6 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
         else
             g_warning( "Error converting filename for saving to UTF-8." );
 
-        Inkscape::Extension::Output *omod = dynamic_cast<Inkscape::Extension::Output *>(selectionType);
-        if (omod) {
-            Glib::ustring save_extension = (omod->get_extension()) ? (omod->get_extension()) : "";
-            if ( !hasEnding(fileName, save_extension) ) {
-                fileName += save_extension;
-            }
-        }
-
         // FIXME: does the argument !is_copy really convey the correct meaning here?
         success = file_save(parentWindow, doc, fileName, selectionType, TRUE, !is_copy, save_method);
 
@@ -722,9 +699,8 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
     if (doc->isModifiedSinceSave()) {
         if ( doc->getDocumentFilename() == nullptr )
         {
-            // Hier sollte in Argument mitgegeben werden, das anzeigt, da� das Dokument das erste
-            // Mal gespeichert wird, so da� als default .svg ausgew�hlt wird und nicht die zuletzt
-            // benutzte "Save as ..."-Endung
+            // In this case, an argument should be given that indicates that the document is the first
+            // time saved, so that .svg is selected as the default and not the last one "Save as ..." extension used
             return sp_file_save_dialog(parentWindow, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
         } else {
             Glib::ustring extension = Inkscape::Extension::get_file_save_extension(Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
