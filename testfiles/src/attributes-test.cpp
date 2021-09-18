@@ -385,6 +385,8 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("id", true),
         // AttributeInfo("inkscape:bbox-nodes", true),
         // AttributeInfo("inkscape:bbox-paths", true),
+        AttributeInfo("inkscape:blackoutcolor", true),
+        AttributeInfo("inkscape:blackoutopacity", true),
         AttributeInfo("inkscape:box3dsidetype", true),
         AttributeInfo("inkscape:collect", true),
         AttributeInfo("inkscape:color", true),

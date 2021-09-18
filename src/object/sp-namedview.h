@@ -74,6 +74,7 @@ public:
     guint32 guidehicolor;
     guint32 bordercolor;
     guint32 pagecolor;
+    guint32 blackoutcolor;
     guint32 pageshadow;
 
     std::vector<SPGuide *> guides;

@@ -48,13 +48,20 @@ public:
     void set_dashed(bool dash = true);
     void set_inverted(bool inverted = false);
     void set_shadow(guint32 color, int width);
+    void set_background(guint32 background);
+    void set_background_checkerboard(guint32 rgba);
  
 protected:
+    void _set_background(Cairo::RefPtr<Cairo::Pattern> background);
+    double get_shadow_size() const;
+    double get_scale() const;
+
     Geom::Rect _rect;
     bool _dashed = false;
     bool _inverted = false;
     int _shadow_width = 0;
     guint32 _shadow_color = 0x00000000;
+    Cairo::RefPtr<Cairo::Pattern> _background; // optional background
 };
 
 

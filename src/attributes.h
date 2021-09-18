@@ -567,6 +567,10 @@ enum class SPAttr {
     /* LivePathEffect */
     PATH_EFFECT,
 
+    // canvas blackout color
+    INKSCAPE_BLACKOUTCOLOR,
+    INKSCAPE_BLACKOUTOPACITY,
+
     // sentinel
     SPAttr_SIZE
 };

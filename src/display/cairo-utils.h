@@ -178,6 +178,8 @@ int ink_cairo_surface_srgb_to_linear(cairo_surface_t *surface);
 int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface);
 
 cairo_pattern_t *ink_cairo_pattern_create_checkerboard(guint32 rgba = 0xC4C4C4FF);
+// draw drop shadow around the 'rect' with given 'size' and 'color'; shadow extends to the right and bottom of rect
+void ink_cairo_draw_drop_shadow(Cairo::RefPtr<Cairo::Context> ctx, const Geom::Rect& rect, int size, guint32 color, double color_alpha);
 
 GdkPixbuf *ink_pixbuf_create_from_cairo_surface(cairo_surface_t *s);
 void convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int rs);

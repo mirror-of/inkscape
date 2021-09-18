@@ -105,6 +105,7 @@ DocumentProperties::DocumentProperties()
     , _rcb_shad(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _wr, false)
     , _rcb_shwd(_("_Border shadow width"), _("Width of page border when set"), "", "inkscape:pageshadow", _wr)
     , _rcp_bg(_("Back_ground color:"), _("Background color"), _("Color of the canvas background. Note: opacity is ignored except when exporting to bitmap."), "pagecolor", "inkscape:pageopacity", _wr)
+    , _rcp_blkout(_("Desk blackout color:"), _("Blackout color"), _("Color of the desk background."), "inkscape:blackoutcolor", "inkscape:blackoutopacity", _wr)
     , _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr)
     , _rum_deflt(_("Display _units:"), "inkscape:document-units", _wr)
     , _page_sizer(_wr)
@@ -303,6 +304,7 @@ void DocumentProperties::build_page()
         label_bkg,            nullptr,
         nullptr,              &_rcb_checkerboard,
         nullptr,              &_rcp_bg,
+        nullptr,              &_rcp_blkout,
         label_dsp,            nullptr,
         nullptr,              &_rcb_antialias,
     };
@@ -339,6 +341,7 @@ void DocumentProperties::build_guides()
 
     _rum_deflt.set_margin_start(0);
     _rcp_bg.set_margin_start(0);
+    _rcp_blkout.set_margin_start(0);
     _rcp_bord.set_margin_start(0);
     _rcp_gui.set_margin_start(0);
     _rcp_hgui.set_margin_start(0);
@@ -1389,6 +1392,7 @@ void DocumentProperties::update_widgets()
     //-----------------------------------------------------------page page
     _rcb_checkerboard.setActive (nv->pagecheckerboard);
     _rcp_bg.setRgba32 (nv->pagecolor);
+    _rcp_blkout.setRgba32(nv->blackoutcolor);
     _rcb_canb.setActive (nv->showborder);
     _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
     _rcp_bord.setRgba32 (nv->bordercolor);
@@ -1486,6 +1490,7 @@ void DocumentProperties::on_response (int id)
     if (id == Gtk::RESPONSE_DELETE_EVENT || id == Gtk::RESPONSE_CLOSE)
     {
         _rcp_bg.closeWindow();
+        _rcp_blkout.closeWindow();
         _rcp_bord.closeWindow();
         _rcp_gui.closeWindow();
         _rcp_hgui.closeWindow();

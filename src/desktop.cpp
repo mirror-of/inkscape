@@ -234,12 +234,19 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     Geom::Rect const d(Geom::Point(0.0, 0.0),
                        Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")));
 
+    canvas_background = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
+    canvas_background->set_name("CanvasItemRect:PageBackground");
+    canvas_background->set_stroke(0x00000000);
+    canvas_background->set_background(0x00000000);
+
+    // canvas_page is used to render page border only (no fill, no background) as it can be placed on top of drawing
     canvas_page = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
     canvas_page->set_name( "CanvasItemRect:Page" );
     canvas_page->set_stroke(0x00000000);
 
     canvas_shadow = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
     canvas_shadow->set_name( "CanvasItemRect:Shadow" );
+    canvas_shadow->set_stroke(0x00000000);
     if ( namedview->pageshadow != 0 && namedview->showpageshadow ) {
         canvas_shadow->set_shadow(0x3f3f3fff, namedview->pageshadow);
     }
@@ -1661,6 +1668,7 @@ SPDesktop::onDocumentResized (gdouble width, gdouble height)
     assert(canvas->get_affine() == _current_affine.d2w());
 
     Geom::Rect const a(Geom::Point(0, 0), Geom::Point(width, height));
+    canvas_background->set_rect(a);
     canvas_page->set_rect(a);
     canvas_shadow->set_rect(a);
 }
@@ -1771,10 +1779,21 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
     SPNamedView *nv=SP_NAMEDVIEW(obj);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
+        guint32 blackout_color = 0;
+        {
+            // blend page and blackout colors by "painting" with blackout on top of opaque page:
+            const auto a = SP_RGBA32_A_F(nv->blackoutcolor);
+            const auto r = SP_RGBA32_R_F(nv->pagecolor) * (1 - a) + SP_RGBA32_R_F(nv->blackoutcolor) * a;
+            const auto g = SP_RGBA32_G_F(nv->pagecolor) * (1 - a) + SP_RGBA32_G_F(nv->blackoutcolor) * a;
+            const auto b = SP_RGBA32_B_F(nv->pagecolor) * (1 - a) + SP_RGBA32_B_F(nv->blackoutcolor) * a;
+            blackout_color = SP_RGBA32_F_COMPOSE(r, g, b, 1);
+        }
         if (nv->pagecheckerboard) {
-            desktop->getCanvas()->set_background_checkerboard(nv->pagecolor);
+            desktop->getCanvas()->set_background_checkerboard(blackout_color);
+            desktop->getCanvasPageBackground()->set_background_checkerboard(nv->pagecolor);
         } else {
-            desktop->getCanvas()->set_background_color(nv->pagecolor);
+            desktop->getCanvas()->set_background_color(blackout_color);
+            desktop->getCanvasPageBackground()->set_background(nv->pagecolor | 0xff);
         }
 
         /* Show/hide page border */

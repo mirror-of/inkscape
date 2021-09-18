@@ -170,6 +170,7 @@ public:
     Inkscape::CanvasItemGroup    *getCanvasTemp()     const { return canvas_group_temp; }
 
     Inkscape::CanvasItemCatchall *getCanvasCatchall() const { return canvas_catchall; }
+    Inkscape::CanvasItemRect     *getCanvasPageBackground() const { return canvas_background; }
     Inkscape::CanvasItemRect     *getCanvasPage()     const { return canvas_page; }
     Inkscape::CanvasItemRect     *getCanvasShadow()   const { return canvas_shadow; }
     Inkscape::CanvasItemDrawing  *getCanvasDrawing()  const { return canvas_drawing; }
@@ -186,7 +187,8 @@ private:
 
     // Individual items
     Inkscape::CanvasItemCatchall *canvas_catchall        = nullptr; ///< The bottom item for unclaimed events.
-    Inkscape::CanvasItemRect     *canvas_page            = nullptr; ///< Page background
+    Inkscape::CanvasItemRect     *canvas_background      = nullptr; ///< Page background
+    Inkscape::CanvasItemRect     *canvas_page            = nullptr; ///< Page border
     Inkscape::CanvasItemRect     *canvas_shadow          = nullptr; ///< Page shadow
     Inkscape::CanvasItemDrawing  *canvas_drawing         = nullptr; ///< The actual SVG drawing (a.k.a. arena).
     Inkscape::CanvasItemRotate   *canvas_rotate          = nullptr; ///< Quick preview of canvas rotation.
