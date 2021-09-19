@@ -979,7 +979,7 @@ document_interface_save_as (DocumentInterface *doc_interface,
 
     try {
         Inkscape::Extension::save(NULL, doc, filename,
-                 false, false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
+                 false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
     } catch (...) {
         // FIXME: catch ... is not usually a great idea, why is it needed here?
         return false;
