@@ -89,7 +89,7 @@ bool SPIBase::shall_write(guint const flags, SPStyleSrc const &style_src_req, SP
         return true;
     }
 
-    if (!set && !(base && inherits)) {
+    if (!set) {
         return false;
     }
 
