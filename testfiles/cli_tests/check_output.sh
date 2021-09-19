@@ -56,9 +56,18 @@ if [ -n "${TEST_SCRIPT}" ]; then
         exit 1
     fi
 
-    if ! sh ${script} "${arguments_array[@]}"; then
+    case ${script} in
+        *.py)
+            interpreter=python
+            ;;
+        *)
+            interpreter=sh
+            ;;
+    esac
+
+    if ! $interpreter ${script} "${arguments_array[@]}"; then
         echo "Error: Additional test script failed."
-        echo "Full call: sh ${script} $(printf "\"%s\" " "${arguments_array[@]}")"
+        echo "Full call: $interpreter ${script} $(printf "\"%s\" " "${arguments_array[@]}")"
         exit 1
     fi
 fi
