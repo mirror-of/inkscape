@@ -232,16 +232,20 @@ SpinButtonToolItem::process_tab(int increment)
  * \details Sets the adjustment to the desired value
  */
 void
-SpinButtonToolItem::on_numeric_menu_item_toggled(double value)
+SpinButtonToolItem::on_numeric_menu_item_toggled(double value, Gtk::RadioMenuItem* button)
 {
-    auto adj = _btn->get_adjustment();
-    adj->set_value(value);
+    // Called both when Radio button is deactivated and activated. Only set when activated.
+    if (button->get_active()) {
+        auto adj = _btn->get_adjustment();
+        adj->set_value(value);
+    }
 }
 
 Gtk::RadioMenuItem *
 SpinButtonToolItem::create_numeric_menu_item(Gtk::RadioButtonGroup *group,
                                              double                 value,
-                                             const Glib::ustring&   label)
+                                             const Glib::ustring&   label,
+                                             bool enable)
 {
     // Represent the value as a string
     std::ostringstream ss;
@@ -253,9 +257,12 @@ SpinButtonToolItem::create_numeric_menu_item(Gtk::RadioButtonGroup *group,
     }
 
     auto numeric_option = Gtk::manage(new Gtk::RadioMenuItem(*group, ss.str()));
+    if (enable) {
+        numeric_option->set_active(); // Do before connecting toggled_handler.
+    }
 
     // Set the adjustment value in response to changes in the selected item
-    auto toggled_handler = sigc::bind(sigc::mem_fun(*this, &SpinButtonToolItem::on_numeric_menu_item_toggled), value);
+    auto toggled_handler = sigc::bind(sigc::mem_fun(*this, &SpinButtonToolItem::on_numeric_menu_item_toggled), value, numeric_option);
     numeric_option->signal_toggled().connect(toggled_handler);
 
     return numeric_option;
@@ -307,12 +314,9 @@ SpinButtonToolItem::create_numeric_menu()
     }
 
     auto add_item = [&numeric_menu, this, &group, adj_value](ValueLabel value){
-        auto numeric_menu_item = create_numeric_menu_item(&group, value.first, value.second);
+        bool enable = (adj_value == value.first);
+        auto numeric_menu_item = create_numeric_menu_item(&group, value.first, value.second, enable);
         numeric_menu->append(*numeric_menu_item);
-
-        if (adj_value == value.first) {
-            numeric_menu_item->set_active();
-        }
     };
 
     if (_sort_decreasing) {

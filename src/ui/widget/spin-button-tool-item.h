@@ -69,13 +69,14 @@ private:
     void defocus();
     bool process_tab(int direction);
 
-    void on_numeric_menu_item_toggled(double value);
+    void on_numeric_menu_item_toggled(double value, Gtk::RadioMenuItem* button);
 
     Gtk::Menu * create_numeric_menu();
 
     Gtk::RadioMenuItem * create_numeric_menu_item(Gtk::RadioButtonGroup *group,
                                                   double                 value,
-                                                  const Glib::ustring&   label = "");
+                                                  const Glib::ustring&   label = "",
+                                                  bool                   enable = false);
 
 protected:
     bool on_create_menu_proxy() override;
