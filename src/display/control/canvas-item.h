@@ -93,6 +93,7 @@ public:
     bool is_visible() { return _visible; }
     virtual void hide();
     virtual void show();
+    void request_redraw();  // queue redraw request
 
     // Properties
     virtual void set_fill(guint32 rgba);

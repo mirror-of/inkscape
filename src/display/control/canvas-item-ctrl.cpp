@@ -136,7 +136,7 @@ void CanvasItemCtrl::update(Geom::Affine const &affine)
     }
 
     // Queue redraw of old area (erase previous content).
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     // Get new bounds
     _affine = affine;
@@ -256,7 +256,7 @@ void CanvasItemCtrl::update(Geom::Affine const &affine)
     _bounds *= Geom::Translate(iposition);
 
     // Queue redraw of new area
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     _need_update = false;
 }
@@ -379,7 +379,7 @@ void CanvasItemCtrl::set_fill(guint32 rgba)
     if (_fill != rgba) {
         _fill = rgba;
         _built = false;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 
@@ -388,7 +388,7 @@ void CanvasItemCtrl::set_stroke(guint32 rgba)
     if (_stroke != rgba) {
         _stroke = rgba;
         _built = false;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 

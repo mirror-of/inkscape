@@ -111,7 +111,7 @@ void CanvasItemRect::update(Geom::Affine const &affine)
     }
 
     // Queue redraw of old area (erase previous content).
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     // Get new bounds
     _affine = affine;
@@ -124,7 +124,7 @@ void CanvasItemRect::update(Geom::Affine const &affine)
     _bounds.expandBy(2); // Room for stroke.
 
     // Queue redraw of new area
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     _need_update = false;
 }
@@ -273,7 +273,7 @@ void CanvasItemRect::set_dashed(bool dashed)
 {
     if (_dashed != dashed) {
         _dashed = dashed;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 
@@ -281,7 +281,7 @@ void CanvasItemRect::set_inverted(bool inverted)
 {
     if (_inverted != inverted) {
         _inverted = inverted;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 
@@ -290,7 +290,7 @@ void CanvasItemRect::set_shadow(guint32 color, int width)
     if (_shadow_color != color || _shadow_width != width) {
         _shadow_color = color;
         _shadow_width = width;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 
@@ -301,7 +301,7 @@ void CanvasItemRect::set_background(guint32 background) {
 void CanvasItemRect::_set_background(Cairo::RefPtr<Cairo::Pattern> background) {
     if (_background != background) {
         _background = background;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 

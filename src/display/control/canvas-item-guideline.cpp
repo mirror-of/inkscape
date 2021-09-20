@@ -132,7 +132,7 @@ void CanvasItemGuideLine::update(Geom::Affine const &affine)
     _affine = affine;
 
     // Queue redraw of new area (and old too).
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     _need_update = false;
 }

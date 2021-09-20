@@ -64,7 +64,7 @@ bool CanvasItemRotate::contains(Geom::Point const &p, double tolerance)
 void CanvasItemRotate::update(Geom::Affine const &affine)
 {
     _affine = affine;
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 }
 
 /**

@@ -114,7 +114,7 @@ void CanvasItemQuad::update(Geom::Affine const &affine)
     }
 
     // Queue redraw of old area (erase previous content).
-    _canvas->redraw_area(_bounds); // This is actually never useful as quads are always deleted
+    request_redraw(); // This is actually never useful as quads are always deleted
     // and recreated when a node is moved! But keep it in case we
     // change that. CHECK
     // Get new bounds
@@ -130,7 +130,7 @@ void CanvasItemQuad::update(Geom::Affine const &affine)
     _bounds = bounds;
 
     // Queue redraw of new area
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     _need_update = false;
 }

@@ -100,7 +100,7 @@ void CanvasItemText::update(Geom::Affine const &affine)
     }
 
     // Queue redraw of old area (erase previous content).
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     // Get new bounds
     _affine = affine;
@@ -156,7 +156,7 @@ void CanvasItemText::update(Geom::Affine const &affine)
     _bounds = _bounds.roundOutwards(); // Pixel alignment of background. Avoid aliasing artifacts on redraw.
 
     // Queue redraw of new area
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     _need_update = false;
 }
@@ -264,7 +264,7 @@ void CanvasItemText::set_background(guint32 background)
 {
     if (_background != background) {
         _background = background;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
     _use_background = true;
 }

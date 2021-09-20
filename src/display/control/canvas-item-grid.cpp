@@ -80,6 +80,9 @@ void CanvasItemGrid::update(Geom::Affine const &affine)
     _affine = affine;
     _grid->Update(affine, 0); // TODO: Remove flag (not used).
     _need_update = false;
+
+    // Queue redraw of grid area
+    request_redraw();
 }
 
 /**

@@ -142,7 +142,7 @@ void CanvasItemCurve::update(Geom::Affine const &affine)
     }
 
     // Queue redraw of old area (erase previous content).
-    _canvas->redraw_area(_bounds); // This is actually never useful as curves are always deleted
+    request_redraw(); // This is actually never useful as curves are always deleted
     // and recreated when a node is moved! But keep it in case we
     // change that. CHECK
     // Get new bounds
@@ -154,7 +154,7 @@ void CanvasItemCurve::update(Geom::Affine const &affine)
     _bounds.expandBy(2);                     // Room for stroke.
 
     // Queue redraw of new area
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     _need_update = false;
 }

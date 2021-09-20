@@ -40,7 +40,7 @@ CanvasItem::~CanvasItem()
     }
 
     // Clear canvas of item.
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     // Clear any pointers to this object in canvas.
     _canvas->canvas_item_clear(this);
@@ -143,7 +143,7 @@ void CanvasItem::show()
     _visible = true;
     // update bounds when visibility changes
     request_update();
-    _canvas->redraw_area(_bounds);
+    request_redraw();
     _canvas->set_need_repick();
 }
 
@@ -194,7 +194,7 @@ void CanvasItem::hide()
     _visible = false;
     // update bounds when visibility changes
     request_update();
-    _canvas->redraw_area(_bounds);
+    request_redraw();
     _canvas->set_need_repick();
 }
 
@@ -202,7 +202,7 @@ void CanvasItem::set_fill(guint32 rgba)
 {
     if (_fill != rgba) {
         _fill = rgba;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 
@@ -210,6 +210,13 @@ void CanvasItem::set_stroke(guint32 rgba)
 {
     if (_stroke != rgba) {
         _stroke = rgba;
+        request_redraw();
+    }
+}
+
+void CanvasItem::request_redraw() {
+    if (_canvas) {
+        // Queue redraw request
         _canvas->redraw_area(_bounds);
     }
 }
@@ -239,7 +246,6 @@ void canvas_item_print_tree(Inkscape::CanvasItem *item)
         --level;
     }
 }
-
 
 /*
   Local Variables:

@@ -104,7 +104,7 @@ void CanvasItemBpath::set_fill(guint rgba, SPWindRule fill_rule)
     if (_fill != rgba || _fill_rule != fill_rule) {
         _fill = rgba;
         _fill_rule = fill_rule;
-        _canvas->redraw_area(_bounds);
+        request_redraw();
     }
 }
 
@@ -146,7 +146,7 @@ void CanvasItemBpath::update(Geom::Affine const &affine)
     }
 
     // Queue redraw of old area (erase previous content).
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     // Get new bounds
     _affine = affine;
@@ -165,7 +165,7 @@ void CanvasItemBpath::update(Geom::Affine const &affine)
     }
 
     // Queue redraw of new area
-    _canvas->redraw_area(_bounds);
+    request_redraw();
 
     _need_update = false;
 }
