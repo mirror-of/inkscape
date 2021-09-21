@@ -151,7 +151,6 @@ SPDocument::SPDocument() :
 
     // Actions
     action_group = Gio::SimpleActionGroup::create();
-    add_actions_canvas_snapping(this);
     add_actions_edit_document(this);
     add_actions_file_document(this);
     add_actions_text(this);
