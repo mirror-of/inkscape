@@ -475,7 +475,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     }
 
     /** Fix feComposite (pre-1.2 files) **/
-    if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 1)) {
+    if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 2)) {
         sp_file_fix_feComposite(document->getRoot());
     }
 
