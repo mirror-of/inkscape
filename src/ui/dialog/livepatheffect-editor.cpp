@@ -35,6 +35,7 @@
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
 #include "object/sp-use.h"
+#include "object/sp-symbol.h"
 #include "object/sp-text.h"
 
 #include "ui/icon-names.h"
@@ -306,14 +307,17 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
                 }
             } else {
                 SPUse *use = dynamic_cast<SPUse *>(item);
-                if ( use ) {
+                if (use) {
                     // test whether linked object is supported by the CLONE_ORIGINAL LPE
+                    SPItem *root = use->root();
                     SPItem *orig = use->get_original();
-                    if ( dynamic_cast<SPShape *>(orig) ||
-                         dynamic_cast<SPGroup *>(orig) ||
-                         dynamic_cast<SPText *>(orig) )
-                    {
-                        // Note that an SP_USE cannot have an LPE applied, so we only need to worry about the "add effect" case.
+                    if (dynamic_cast<SPSymbol *>(root)) {
+                        showText(_("Path effect cannot be applied to symbols"));
+                        set_sensitize_all(false);
+                    } else if (dynamic_cast<SPShape *>(orig) || dynamic_cast<SPGroup *>(orig) ||
+                               dynamic_cast<SPText *>(orig)) {
+                        // Note that an SP_USE cannot have an LPE applied, so we only need to worry about the "add
+                        // effect" case.
                         set_sensitize_all(true);
                         showText(_("Click add button to convert clone"));
                         button_remove.set_sensitive(false);
