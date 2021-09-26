@@ -2243,7 +2243,9 @@ TextKnotHolderEntityInlineSize::knot_get() const
                 } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
                     p *= Geom::Translate (0, -(*bbox).height());
                 }
-                p += Geom::Point((*bbox).width(), 0); // Keep on right side
+                if (mode == SP_CSS_WRITING_MODE_TB_LR) {
+                    p += Geom::Point((*bbox).width(), 0); // Keep on right side
+                }
             }
         }
     }
