@@ -1283,8 +1283,8 @@ sp_te_get_average_linespacing (SPItem *text)
 }
 
 /** Adjust the line height by 'amount'.
- *  If top_level is true then objects without 'line-height' set or withwill get a set value,
- *  otherwise objects that inherit line-height will not get onw=e.
+ *  If top_level is true then 'line-height' will be set where possible,
+ *  otherwise objects that inherit line-height will not be touched.
  */
 void
 sp_te_adjust_line_height (SPObject *object, double amount, double average, bool top_level = true) {
@@ -1388,16 +1388,7 @@ sp_te_adjust_linespacing_screen (SPItem *text, Inkscape::Text::Layout::iterator 
     Geom::Affine t(text->i2doc_affine());
     zby = zby / t.descrim();
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
-    if (mode == 0) { // Adaptive: <text> line-spacing is zero, only scale children.
-        std::vector<SPObject*> children = text->childList(false);
-        for (auto child: children) {
-            sp_te_adjust_line_height (child, zby, average_line_height, false);
-        }
-    } else {
-        sp_te_adjust_line_height (text, zby, average_line_height, true);
-    }
+    sp_te_adjust_line_height (text, zby, average_line_height, false);
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
