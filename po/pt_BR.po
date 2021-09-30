@@ -4408,7 +4408,7 @@ msgid ""
 "Determines whether the grid is displayed or not. Objects are still snapped "
 "to invisible grids."
 msgstr ""
-"Determina se a grade é exibida ou não. Os objetos podem ser auto-alinhados à "
+"Determina se a grade é exibida ou não. Os objetos podem ser auto-alinhados a "
 "grades invisíveis."
 
 #: ../src/display/canvas-grid.cpp:329
@@ -6876,7 +6876,7 @@ msgstr "Padrão de Tipografia"
 #: ../src/extension/internal/filter/color.h:1277
 #, fuzzy
 msgid "Blue offset"
-msgstr "Valor à atribuir"
+msgstr "Valor a atribuir"
 
 #: ../src/extension/internal/filter/color.h:1292
 msgid ""
@@ -8104,7 +8104,7 @@ msgstr "caixa de mídia"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:93
 msgid "crop box"
-msgstr "caixa de ajuste à imagem"
+msgstr "caixa de ajuste da imagem"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:94
 msgid "trim box"
@@ -11538,7 +11538,7 @@ msgstr "Fechar intervalos:"
 #: ../src/live_effects/lpe-knot.cpp:360
 #, fuzzy
 msgid "Use gap in both intersection elements"
-msgstr "Alinhar à interseções de caminhos"
+msgstr "Alinhar a interseções de caminhos"
 
 #: ../src/live_effects/lpe-knot.cpp:361
 msgid "_Groups: Inverse"
@@ -16138,7 +16138,7 @@ msgstr "Nós"
 #: ../src/ui/dialog/align-and-distribute.cpp:940
 #: ../src/ui/dialog/align-and-distribute.cpp:941
 msgid "Relative to: "
-msgstr "Relativo à: "
+msgstr "Relativo a: "
 
 #: ../src/ui/dialog/align-and-distribute.cpp:947 ../src/verbs.cpp:3189
 #: ../src/verbs.cpp:3190
@@ -16207,7 +16207,7 @@ msgstr "Distribuir lados esquerdos à mesma distância"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:994
 msgid "Distribute centers equidistantly horizontally"
-msgstr "Distribuir o centros à mesma distância horizontalmente"
+msgstr "Distribuir centros à mesma distância horizontalmente"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:997
 msgid "Distribute right edges equidistantly"
@@ -16223,7 +16223,7 @@ msgstr "Distribuir topos à mesma distância"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1008
 msgid "Distribute centers equidistantly vertically"
-msgstr "Distribuir o centros à mesma distância verticalmente"
+msgstr "Distribuir centros à mesma distância verticalmente"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1011
 msgid "Distribute bottom edges equidistantly"
@@ -16272,11 +16272,11 @@ msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1055
 msgid "Align selected nodes to a common horizontal line"
-msgstr "Alinhar nós selecionados à uma linha horizontal comum"
+msgstr "Alinhar nós selecionados a uma linha horizontal comum"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1058
 msgid "Align selected nodes to a common vertical line"
-msgstr "Alinhar nós selecionados à uma linha vertical comum"
+msgstr "Alinhar nós selecionados a uma linha vertical comum"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1061
 msgid "Distribute selected nodes horizontally"
@@ -17358,7 +17358,7 @@ msgid ""
 "If set, objects only snap to another object when it's within the range "
 "specified below"
 msgstr ""
-"Se habilitado, os objetos serão alinhados à outros dependendo da proximidade "
+"Se habilitado, os objetos serão alinhados a outros dependendo da proximidade "
 "especificada abaixo"
 
 #: ../src/ui/dialog/document-properties.cpp:126
@@ -17383,7 +17383,7 @@ msgid ""
 "If set, objects only snap to a grid line when it's within the range "
 "specified below"
 msgstr ""
-"Se habilitado, os objetos serão alinhados à uma grade dependendo da "
+"Se habilitado, os objetos serão alinhados a uma grade dependendo da "
 "proximidade especificada abaixo"
 
 #: ../src/ui/dialog/document-properties.cpp:131
@@ -17408,7 +17408,7 @@ msgid ""
 "If set, objects only snap to a guide when it's within the range specified "
 "below"
 msgstr ""
-"Se habilitado, os objetos serão alinhados à uma guia dependendo da "
+"Se habilitado, os objetos serão alinhados a uma guia dependendo da "
 "proximidade especificada abaixo"
 
 #: ../src/ui/dialog/document-properties.cpp:136
@@ -17501,15 +17501,15 @@ msgstr "<b>Guias</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:369
 msgid "<b>Snap to objects</b>"
-msgstr "<b>Alinhar à objetos</b>"
+msgstr "<b>Alinhar a objetos</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:371
 msgid "<b>Snap to grids</b>"
-msgstr "<b>Alinhar à grades</b>"
+msgstr "<b>Alinhar a grades</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:373
 msgid "<b>Snap to guides</b>"
-msgstr "<b>Alinhar à guias</b>"
+msgstr "<b>Alinhar a guias</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:375
 msgid "<b>Miscellaneous</b>"
@@ -22894,8 +22894,8 @@ msgid ""
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
 "counterclockwise"
 msgstr ""
-"Se habilitado, os ângulos serão exibidos como 0 ao norte, intervalo de 0 à "
-"360 no sentido horário; caso contrário como 0 a oeste, intervalo de -180 à "
+"Se habilitado, os ângulos serão exibidos como 0 ao norte, intervalo de 0 a "
+"360 no sentido horário; caso contrário como 0 a oeste, intervalo de -180 a "
 "180 no sentido anti-horário"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1891
@@ -25902,7 +25902,7 @@ msgid ""
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
 "Redimensionar caixa na direção X/Y; com <b>Shift</b> ao longo do eixo Z; com "
-"<b>Ctrl</b> para restringir às direções das bordas ou diagonais"
+"<b>Ctrl</b> para restringir as direções das bordas ou diagonais"
 
 #: ../src/ui/shape-editor-knotholders.cpp:841
 #: ../src/ui/shape-editor-knotholders.cpp:845
@@ -28173,7 +28173,7 @@ msgstr "Centro lateral de caixas delimitadores"
 #: ../src/ui/toolbar/snap-toolbar.cpp:71
 #, fuzzy
 msgid "Snap midpoints of bounding box edges"
-msgstr "Alinhar de, e à pontos centrais de bordas de caixas delimitadoras"
+msgstr "Alinhar de, e aos pontos centrais de bordas de caixas delimitadoras"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:78
 msgid "BBox Centers"
@@ -28191,7 +28191,7 @@ msgstr "Alinhar nós ou alças"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:98
 msgid "Snap to paths"
-msgstr "Alinhas à caminhos"
+msgstr "Alinhar a caminhos"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:105
 msgid "Path intersections"
@@ -28199,7 +28199,7 @@ msgstr "Interseções de caminhos"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:106
 msgid "Snap to path intersections"
-msgstr "Alinhar à interseções de caminhos"
+msgstr "Alinhar a interseções de caminhos"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:113
 msgid "To nodes"
@@ -28367,7 +28367,7 @@ msgstr "Spray com cópias"
 #: ../src/ui/toolbar/spray-toolbar.cpp:82
 #, fuzzy
 msgid "Spray copies of the initial selection"
-msgstr "Alinhar à interseções de caminhos"
+msgstr "Alinhar a interseções de caminhos"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:86 ../src/ui/tools/spray-tool.cpp:1363
 msgid "Spray with clones"
@@ -30220,7 +30220,7 @@ msgstr "<b>Nada</b> selecionado"
 msgid ""
 "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
 "selection."
-msgstr "Alinhar à interseções de caminhos"
+msgstr "Alinhar a interseções de caminhos"
 
 #: ../src/ui/tools/spray-tool.cpp:209
 #, fuzzy, c-format
@@ -30234,7 +30234,7 @@ msgstr "Criar e ladrilhar os clones da seleção"
 msgid ""
 "%s. Drag, click or click and scroll to spray in a <b>single path</b> of the "
 "initial selection."
-msgstr "Alinhar à interseções de caminhos"
+msgstr "Alinhar a interseções de caminhos"
 
 #: ../src/ui/tools/spray-tool.cpp:1283
 #, fuzzy
@@ -43091,7 +43091,7 @@ msgstr "Todos os selecionados transmitem para o último"
 
 #: ../share/extensions/web_transmit_att.inx:29
 msgid "The first selected transmits to all others"
-msgstr "O primeiro selecionado transmite à todos os outros"
+msgstr "O primeiro selecionado transmite a todos os outros"
 
 #: ../share/extensions/web_transmit_att.inx:34
 msgid ""
@@ -43099,7 +43099,7 @@ msgid ""
 "to the second when an event occurs."
 msgstr ""
 "Este efeito transmite um ou mais atributos de um primeiro elemento "
-"selecionado à um segundo ao ocorrer um evento."
+"selecionado a um segundo ao ocorrer um evento."
 
 #: ../share/extensions/web_transmit_att.inx:35
 msgid ""
@@ -46251,11 +46251,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Width for the widget when it's attached to the placeholder"
-#~ msgstr "Largura para o widget quando é anexado à placeholder"
+#~ msgstr "Largura para o widget quando é anexado a placeholder"
 
 #, fuzzy
 #~ msgid "Height for the widget when it's attached to the placeholder"
-#~ msgstr "Altura para o widget quando é anexado à placeholder"
+#~ msgstr "Altura para o widget quando é anexado a placeholder"
 
 #, fuzzy
 #~ msgid "Floating Toplevel"
@@ -48038,8 +48038,8 @@ msgstr ""
 #~ "('Snap to nodes' or 'snap to bounding box corners' must be enabled; only "
 #~ "a small part of the guide near the cursor will snap)"
 #~ msgstr ""
-#~ "Ao mover uma guia, alinhar à nós de objetos ou aos cantos de caixas "
-#~ "delimitadoras (Alinhamento à nós e caixas delimitadoras precisam estar "
+#~ "Ao mover uma guia, alinhar a nós de objetos ou aos cantos de caixas "
+#~ "delimitadoras (Alinhamento a nós e caixas delimitadoras precisam estar "
 #~ "habilitados; apenas a área próxima ao mouse será alinhada)"
 
 #~ msgid "Angle (degrees):"
