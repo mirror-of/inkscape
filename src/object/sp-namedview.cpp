@@ -1037,21 +1037,12 @@ static void sp_namedview_lock_single_guide(SPGuide* guide, bool locked)
 
 void sp_namedview_toggle_guides(SPDocument *doc, SPNamedView *namedview)
 {
-    Inkscape::XML::Node *repr = namedview->getRepr();
-    bool v = repr->getAttributeBoolean("showguides", true);
-    v = !v;
-
     bool saved = DocumentUndo::getUndoSensitive(doc);
     DocumentUndo::setUndoSensitive(doc, false);
-    repr->setAttributeBoolean("showguides", v);
+
+    namedview->toggleGuides();
+
     DocumentUndo::setUndoSensitive(doc, saved);
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GUIDES);
-        if (verb) {
-            desktop->_menu_update.emit(verb->get_code(), namedview->getGuides());
-        }
-    }
     doc->setModifiedSinceSave();
 }
 
@@ -1160,11 +1151,24 @@ SPNamedView const *sp_document_namedview(SPDocument const *document, const gchar
     return sp_document_namedview(const_cast<SPDocument *>(document), id);  // use a const_cast here to avoid duplicating code
 }
 
+void SPNamedView::toggleGuides()
+{
+    bool v = this->getGuides();
+    this->setGuides(!v);
+}
+
 void SPNamedView::setGuides(bool v)
 {
     g_assert(this->getRepr() != nullptr);
     this->getRepr()->setAttributeBoolean("showguides", v);
-    this->getRepr()->setAttributeBoolean("inkscape:guide-bbox", v);
+
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GUIDES);
+        if (verb) {
+            desktop->_menu_update.emit(verb->get_code(), this->getGuides());
+        }
+    }
 }
 
 bool SPNamedView::getGuides()

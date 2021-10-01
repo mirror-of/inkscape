@@ -95,6 +95,7 @@ public:
     void translateGrids(Geom::Translate const &translation);
     void scrollAllDesktops(double dx, double dy, bool is_scrolling);
     void writeNewGrid(SPDocument *document,int gridtype);
+    void toggleGuides();
     void setGuides(bool v);
     bool getGuides();
     void lockGuides();
