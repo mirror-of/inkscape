@@ -910,7 +910,7 @@ static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *str
     for (auto& child: root->children) {
         if (SP_IS_STRING(&child)) {
             *string += SP_STRING(&child)->string;
-        } else {
+        } else if (is_part_of_text_subtree(&child)) {
             sp_te_get_ustring_multiline(&child, string, pending_line_break);
         }
     }
@@ -2131,7 +2131,7 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 }
 
-bool is_part_of_text_subtree (SPObject *obj)
+bool is_part_of_text_subtree (SPObject const *obj)
 {
     return (SP_IS_TSPAN(obj) 
             || SP_IS_TEXT(obj) 
@@ -2143,13 +2143,13 @@ bool is_part_of_text_subtree (SPObject *obj)
             || SP_IS_FLOWREGIONBREAK(obj));
 }
 
-bool is_top_level_text_object (SPObject *obj)
+bool is_top_level_text_object (SPObject const *obj)
 {
     return (SP_IS_TEXT(obj) 
             || SP_IS_FLOWTEXT(obj));
 }
 
-bool has_visible_text(SPObject *obj)
+bool has_visible_text(SPObject const *obj)
 {
     bool hasVisible = false;
 
@@ -2157,7 +2157,7 @@ bool has_visible_text(SPObject *obj)
         hasVisible = true; // maybe we should also check that it's not all whitespace?
     } else {
         for (auto& child: obj->children) {
-            if (has_visible_text(const_cast<SPObject *>(&child))) {
+            if (is_part_of_text_subtree(&child) && has_visible_text(&child)) {
                 hasVisible = true;
                 break;
             }

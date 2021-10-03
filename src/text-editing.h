@@ -78,8 +78,8 @@ void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layou
 void sp_te_adjust_linespacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double by);
 void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPCSSAttr const *css);
 
-bool is_part_of_text_subtree (SPObject *obj);
-bool is_top_level_text_object (SPObject *obj);
-bool has_visible_text (SPObject *obj);
+bool is_part_of_text_subtree (SPObject const *obj);
+bool is_top_level_text_object (SPObject const *obj);
+bool has_visible_text (SPObject const *obj);
 
 #endif // SEEN_SP_TEXT_EDITING_H
