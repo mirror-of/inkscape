@@ -906,6 +906,7 @@ static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *str
 {
     if (*pending_line_break) {
         *string += '\n';
+        *pending_line_break = false;
     }
     for (auto& child: root->children) {
         if (SP_IS_STRING(&child)) {
