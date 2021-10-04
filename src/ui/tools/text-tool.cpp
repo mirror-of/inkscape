@@ -14,6 +14,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <cmath>
 #include <gdk/gdkkeysyms.h>
 #include <gtkmm/clipboard.h>
 #include <glibmm/i18n.h>
@@ -1684,7 +1685,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
         std::vector<SPItem const *> shapes;
         Shape *exclusion_shape = nullptr;
-        double padding;
+        double padding = 0.0;
 
         // Frame around text
         if (SP_IS_FLOWTEXT(tc->text)) {
@@ -1732,8 +1733,8 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
         if (!curve.is_empty()) {
 
-
-            if (padding) {
+            if (std::fabs(padding) > 1e-12) {
+                // Should only occur for SVG2 autoflowed text
                 // See sp-text.cpp function _buildLayoutInit()
                 Path *temp = new Path;
                 Path *padded = new Path;
