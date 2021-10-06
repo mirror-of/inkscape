@@ -180,7 +180,7 @@ Inkscape::SelTrans::~SelTrans()
     }
 
     _items.clear();
-    _items_const.clear();
+    _objects_const.clear();
     _items_affines.clear();
     _items_centers.clear();
 }
@@ -247,7 +247,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
     for (auto iter=items.begin();iter!=items.end(); ++iter) {
         SPItem *it = static_cast<SPItem*>(sp_object_ref(*iter, nullptr));
         _items.push_back(it);
-        _items_const.push_back(it);
+        _objects_const.push_back(it);
         _items_affines.push_back(it->i2dt_affine());
         _items_centers.push_back(it->getCenter()); // for content-dragging, we need to remember original centers
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(it);
@@ -447,7 +447,7 @@ void Inkscape::SelTrans::ungrab()
         }
 
         _items.clear();
-        _items_const.clear();
+        _objects_const.clear();
         _items_affines.clear();
         _items_centers.clear();
 
@@ -485,7 +485,7 @@ void Inkscape::SelTrans::ungrab()
         }
 
         _items.clear();
-        _items_const.clear();
+        _objects_const.clear();
         _items_affines.clear();
         _items_centers.clear();
         _updateHandles();
@@ -1014,7 +1014,7 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
             sn = new Inkscape::PureScale(geom_scale, _origin_for_specpoints, false);
         }
         SnapManager &m = _desktop->namedview->snap_manager;
-        m.setup(_desktop, false, _items_const);
+        m.setup(_desktop, false, _objects_const);
         m.snapTransformed(_bbox_points, _point, (*bb));
         m.snapTransformed(_snap_points, _point, (*sn));
         m.unSetup();
@@ -1101,7 +1101,7 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, Geom
         // In all other cases we should try to snap now
 
         SnapManager &m = _desktop->namedview->snap_manager;
-        m.setup(_desktop, false, _items_const);
+        m.setup(_desktop, false, _objects_const);
 
         auto confine = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->active(state);
         Inkscape::PureStretchConstrained bb = Inkscape::PureStretchConstrained(Geom::Coord(default_scale[axis]), _origin_for_bboxpoints, Geom::Dim2(axis), confine);
@@ -1257,7 +1257,7 @@ gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, Geom::P
         // Snap to objects, grids, guides
 
         SnapManager &m = _desktop->namedview->snap_manager;
-        m.setup(_desktop, false, _items_const);
+        m.setup(_desktop, false, _objects_const);
 
         // When skewing, we cannot snap the corners of the bounding box, see the comment in PureSkewConstrained for details
         Inkscape::PureSkewConstrained sn = Inkscape::PureSkewConstrained(skew[dim_a], scale[dim_a], _origin, Geom::Dim2(dim_b));
@@ -1345,7 +1345,7 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
         r2 = Geom::Rotate(radians); //q2 = Geom::Point(cos(radians), sin(radians));
     } else {
         SnapManager &m = _desktop->namedview->snap_manager;
-        m.setup(_desktop, false, _items_const);
+        m.setup(_desktop, false, _objects_const);
         // When rotating, we cannot snap the corners of the bounding box, see the comment in "constrainedSnapRotate" for details
         Inkscape::PureRotateConstrained sn = Inkscape::PureRotateConstrained(radians, _origin);
         m.snapTransformed(_snap_points, _point, sn);
@@ -1490,7 +1490,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
     }
 
     if (increments) {// Alt pressed means: move only by integer multiples of the grid spacing
-        m.setup(_desktop, true, _items_const);
+        m.setup(_desktop, true, _objects_const);
         dxy = m.multipleOfGridPitch(dxy, _point);
         m.unSetup();
     } else if (!no_snap) {
@@ -1499,7 +1499,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
         ** pick the smallest.
         */
 
-        m.setup(_desktop, false, _items_const);
+        m.setup(_desktop, false, _objects_const);
 
         /* This will be our list of possible translations */
         std::list<Inkscape::SnappedPoint> s;

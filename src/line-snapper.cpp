@@ -23,7 +23,7 @@ Inkscape::LineSnapper::LineSnapper(SnapManager *sm, Geom::Coord const d) : Snapp
 void Inkscape::LineSnapper::freeSnap(IntermSnapResults &isr,
                                                     Inkscape::SnapCandidatePoint const &p,
                                                     Geom::OptRect const &/*bbox_to_snap*/,
-                                                    std::vector<SPItem const *> const */*it*/,
+                                                    std::vector<SPObject const *> const */*it*/,
                                                     std::vector<Inkscape::SnapCandidatePoint> */*unselected_nodes*/) const
 {
     if (!(_snap_enabled && _snapmanager->snapprefs.isSourceSnappable(p.getSourceType())) ) {
@@ -86,7 +86,7 @@ void Inkscape::LineSnapper::constrainedSnap(IntermSnapResults &isr,
                                                Inkscape::SnapCandidatePoint const &p,
                                                Geom::OptRect const &/*bbox_to_snap*/,
                                                SnapConstraint const &c,
-                                               std::vector<SPItem const *> const */*it*/,
+                                               std::vector<SPObject const *> const */*it*/,
                                                std::vector<SnapCandidatePoint> */*unselected_nodes*/) const
 
 {

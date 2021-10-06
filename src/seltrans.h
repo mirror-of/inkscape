@@ -132,7 +132,7 @@ private:
     SPDesktop *_desktop;
 
     std::vector<SPItem *> _items;
-    std::vector<SPItem const *> _items_const;
+    std::vector<SPObject const *> _objects_const;
     std::vector<Geom::Affine> _items_affines;
     std::vector<Geom::Point> _items_centers;
 

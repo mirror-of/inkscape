@@ -177,7 +177,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                 // This is for snapping while dragging existing guidelines. New guidelines,
                 // which are dragged off the ruler, are being snapped in sp_dt_ruler_event
                 SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop, true, nullptr, nullptr, guide);
+                m.setup(desktop, true, guide, nullptr);
                 if (drag_type == SP_DRAG_MOVE_ORIGIN) {
                     // If we snap in guideConstrainedSnap() below, then motion_dt will
                     // be forced to be on the guide. If we don't snap however, then
@@ -258,7 +258,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                                               event->button.y);
                     Geom::Point event_dt(desktop->w2d(event_w));
                     SnapManager &m = desktop->namedview->snap_manager;
-                    m.setup(desktop, true, nullptr, nullptr, guide);
+                    m.setup(desktop, true, guide, nullptr);
                     if (drag_type == SP_DRAG_MOVE_ORIGIN) {
                         // If we snap in guideConstrainedSnap() below, then motion_dt will
                         // be forced to be on the guide. If we don't snap however, then

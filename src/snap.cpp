@@ -59,7 +59,6 @@ SnapManager::SnapManager(SPNamedView const *v, Inkscape::SnapPreferences& prefer
     distribution(this, 0),
     _named_view(v),
     _rotation_center_source_items(std::vector<SPItem*>()),
-    _guide_to_ignore(nullptr),
     _desktop(nullptr),
     _snapindicator(true),
     _unselected_nodes(nullptr)
@@ -157,11 +156,11 @@ Inkscape::SnappedPoint SnapManager::freeSnap(Inkscape::SnapCandidatePoint const 
 
     if (p.getSourceNum() <= 0){
         Geom::Rect const local_bbox_to_snap = bbox_to_snap ? *bbox_to_snap : Geom::Rect(p.getPoint(), p.getPoint());
-        _findCandidates(getDocument()->getRoot(), &_items_to_ignore, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
+        _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
     }
 
     for (auto snapper : snappers) {
-        snapper->freeSnap(isr, p, bbox_to_snap, &_items_to_ignore, _unselected_nodes);
+        snapper->freeSnap(isr, p, bbox_to_snap, &_objects_to_ignore, _unselected_nodes);
     }
 
     return findBestSnap(p, isr, false, false, to_paths_only);
@@ -285,13 +284,13 @@ Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::SnapCandidatePoint
     // this makes sure that _findCandidates populates the respective vectors for a snapper.
     if (p.getSourceNum() <= 0){
         Geom::Rect const local_bbox_to_snap = bbox_to_snap ? *bbox_to_snap : Geom::Rect(p.getPoint(), p.getPoint());
-        _findCandidates(getDocument()->getRoot(), &_items_to_ignore, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
+        _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
     }
 
     IntermSnapResults isr;
     SnapperList const snappers = getSnappers();
     for (auto snapper : snappers) {
-        snapper->constrainedSnap(isr, p, bbox_to_snap, constraint, &_items_to_ignore, _unselected_nodes);
+        snapper->constrainedSnap(isr, p, bbox_to_snap, constraint, &_objects_to_ignore, _unselected_nodes);
     }
 
     result = findBestSnap(p, isr, true);
@@ -375,7 +374,7 @@ Inkscape::SnappedPoint SnapManager::multipleConstrainedSnaps(Inkscape::SnapCandi
     } else {
         // Try to snap along the closest constraint
         for (auto snapper : snappers) {
-            snapper->constrainedSnap(isr, p, bbox_to_snap, cc, &_items_to_ignore,_unselected_nodes);
+            snapper->constrainedSnap(isr, p, bbox_to_snap, cc, &_objects_to_ignore,_unselected_nodes);
         }
         result = findBestSnap(p, isr, true);
     }
@@ -688,48 +687,43 @@ Inkscape::SnappedPoint SnapManager::findBestSnap(Inkscape::SnapCandidatePoint co
 
 void SnapManager::setup(SPDesktop const *desktop,
                         bool snapindicator,
-                        SPItem const *item_to_ignore,
-                        std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes,
-                        SPGuide *guide_to_ignore)
+                        SPObject const *item_to_ignore,
+                        std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes)
 {
     g_assert(desktop != nullptr);
     if (_desktop != nullptr) {
         g_warning("The snapmanager has been set up before, but unSetup() hasn't been called afterwards. It possibly held invalid pointers");
     }
-    _items_to_ignore.clear();
+    _objects_to_ignore.clear();
     if (item_to_ignore) {
-        _items_to_ignore.push_back(item_to_ignore);
+        _objects_to_ignore.push_back(item_to_ignore);
     }
     _desktop = desktop;
     _snapindicator = snapindicator;
     _unselected_nodes = unselected_nodes;
-    _guide_to_ignore = guide_to_ignore;
     _rotation_center_source_items.clear();
 }
 
 void SnapManager::setup(SPDesktop const *desktop,
                         bool snapindicator,
-                        std::vector<SPItem const *> &items_to_ignore,
-                        std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes,
-                        SPGuide *guide_to_ignore)
+                        std::vector<SPObject const *> &objects_to_ignore,
+                        std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes)
 {
     g_assert(desktop != nullptr);
     if (_desktop != nullptr) {
         g_warning("The snapmanager has been set up before, but unSetup() hasn't been called afterwards. It possibly held invalid pointers");
     }
-    _items_to_ignore = items_to_ignore;
+    _objects_to_ignore = objects_to_ignore;
     _desktop = desktop;
     _snapindicator = snapindicator;
     _unselected_nodes = unselected_nodes;
-    _guide_to_ignore = guide_to_ignore;
     _rotation_center_source_items.clear();
 }
 
 /// Setup, taking the list of items to ignore from the desktop's selection.
 void SnapManager::setupIgnoreSelection(SPDesktop const *desktop,
                                       bool snapindicator,
-                                      std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes,
-                                      SPGuide *guide_to_ignore)
+                                      std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes)
 {
     g_assert(desktop != nullptr);
     if (_desktop != nullptr) {
@@ -739,14 +733,13 @@ void SnapManager::setupIgnoreSelection(SPDesktop const *desktop,
     _desktop = desktop;
     _snapindicator = snapindicator;
     _unselected_nodes = unselected_nodes;
-    _guide_to_ignore = guide_to_ignore;
     _rotation_center_source_items.clear();
-    _items_to_ignore.clear();
+    _objects_to_ignore.clear();
 
     Inkscape::Selection *sel = _desktop->selection;
     auto items = sel->items();
     for (auto i=items.begin();i!=items.end();++i) {
-        _items_to_ignore.push_back(*i);
+        _objects_to_ignore.push_back(*i);
     }
 }
 
@@ -824,8 +817,18 @@ void SnapManager::displaySnapsource(Inkscape::SnapCandidatePoint const &p) const
     }
 }
 
+SPGuide const *SnapManager::getGuideToIgnore() const
+{
+    for (auto item : _objects_to_ignore) {
+        if (auto guide = dynamic_cast<SPGuide const *>(item)) {
+            return guide;
+        }
+    }
+    return nullptr;
+}
+
 void SnapManager::_findCandidates(SPObject* parent,
-                                 std::vector<SPItem const *> const *it,
+                                 std::vector<SPObject const *> const *it,
                                  bool const &first_point,
                                  Geom::Rect const &bbox_to_snap,
                                  bool const clip_or_mask,
@@ -865,7 +868,7 @@ void SnapManager::_findCandidates(SPObject* parent,
                 stop = false;
                 for (auto skipitem : *it) {
                     if (skipitem && skipitem->style) {
-                        SPItem *toskip = const_cast<SPItem *>(skipitem);
+                        SPItem *toskip = dynamic_cast<SPItem *>(const_cast<SPObject *>(skipitem));
                         if (toskip) {
                             SPFilter *filt = toskip->style->getFilter();
                             if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
@@ -889,7 +892,7 @@ void SnapManager::_findCandidates(SPObject* parent,
             // Snapping to items in a locked layer is allowed
             // Don't snap to hidden objects, unless they're a clipped path or a mask
             /* See if this item is on the ignore list */
-            std::vector<SPItem const *>::const_iterator i;
+            std::vector<SPObject const *>::const_iterator i;
             if (it != nullptr) {
                 i = it->begin();
                 while (i != it->end() && *i != &o) {

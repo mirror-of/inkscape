@@ -571,7 +571,7 @@ void Inkscape::DistributionSnapper::_correctSelectionBBox(Geom::Point &target,
 void Inkscape::DistributionSnapper::freeSnap(IntermSnapResults &isr,
                                              Inkscape::SnapCandidatePoint const &p,
                                              Geom::OptRect const &bbox_to_snap,
-                                             std::vector<SPItem const *> const *it,
+                                             std::vector<SPObject const *> const *it,
                                              std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
     if (bbox_to_snap.empty())
@@ -592,7 +592,7 @@ void Inkscape::DistributionSnapper::constrainedSnap(IntermSnapResults &isr,
                                                     Inkscape::SnapCandidatePoint const &p,
                                                     Geom::OptRect const &bbox_to_snap,
                                                     SnapConstraint const &c,
-                                                    std::vector<SPItem const *> const *it,
+                                                    std::vector<SPObject const *> const *it,
                                                     std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
     if (bbox_to_snap.empty())

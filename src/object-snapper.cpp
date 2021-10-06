@@ -562,7 +562,7 @@ void Inkscape::ObjectSnapper::_snapPathsConstrained(IntermSnapResults &isr,
 void Inkscape::ObjectSnapper::freeSnap(IntermSnapResults &isr,
                                             SnapCandidatePoint const &p,
                                             Geom::OptRect const &bbox_to_snap,
-                                            std::vector<SPItem const *> const *it,
+                                            std::vector<SPObject const *> const *it,
                                             std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
     if (_snap_enabled == false || _snapmanager->snapprefs.isSourceSnappable(p.getSourceType()) == false || ThisSnapperMightSnap() == false) {
@@ -598,7 +598,7 @@ void Inkscape::ObjectSnapper::constrainedSnap( IntermSnapResults &isr,
                                                   SnapCandidatePoint const &p,
                                                   Geom::OptRect const &bbox_to_snap,
                                                   SnapConstraint const &c,
-                                                  std::vector<SPItem const *> const *it,
+                                                  std::vector<SPObject const *> const *it,
                                                   std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
     if (_snap_enabled == false || _snapmanager->snapprefs.isSourceSnappable(p.getSourceType()) == false || ThisSnapperMightSnap() == false) {

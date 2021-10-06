@@ -216,7 +216,7 @@ void Inkscape::AlignmentSnapper::_snapBBoxPoints(IntermSnapResults &isr,
 void Inkscape::AlignmentSnapper::freeSnap(IntermSnapResults &isr,
                                           Inkscape::SnapCandidatePoint const &p,
                                           Geom::OptRect const &bbox_to_snap,
-                                          std::vector<SPItem const *> const *it,
+                                          std::vector<SPObject const *> const *it,
                                           std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
     bool p_is_bbox = p.getSourceType() & SNAPSOURCE_BBOX_CATEGORY;
@@ -239,7 +239,7 @@ void Inkscape::AlignmentSnapper::constrainedSnap(IntermSnapResults &isr,
               Inkscape::SnapCandidatePoint const &p,
               Geom::OptRect const &bbox_to_snap,
               SnapConstraint const &c,
-              std::vector<SPItem const *> const *it,
+              std::vector<SPObject const *> const *it,
               std::vector<SnapCandidatePoint> *unselected_nodes) const
 {
     bool p_is_bbox = p.getSourceType() & SNAPSOURCE_BBOX_CATEGORY;

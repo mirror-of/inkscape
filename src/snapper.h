@@ -30,7 +30,7 @@ struct IntermSnapResults {
 };
 
 class SnapManager;
-class SPItem;
+class SPObject;
 
 namespace Inkscape
 {
@@ -59,7 +59,7 @@ public:
     virtual void freeSnap(IntermSnapResults &/*isr*/,
                           Inkscape::SnapCandidatePoint const &/*p*/,
                           Geom::OptRect const &/*bbox_to_snap*/,
-                          std::vector<SPItem const *> const */*it*/,
+                          std::vector<SPObject const *> const */*it*/,
                           std::vector<SnapCandidatePoint> */*unselected_nodes*/) const {};
 
     // Class for storing the constraint for constrained snapping; can be
@@ -139,7 +139,7 @@ public:
                                  Inkscape::SnapCandidatePoint const &/*p*/,
                                  Geom::OptRect const &/*bbox_to_snap*/,
                                  SnapConstraint const &/*c*/,
-                                 std::vector<SPItem const *> const */*it*/,
+                                 std::vector<SPObject const *> const */*it*/,
                                  std::vector<SnapCandidatePoint> */*unselected_nodes*/) const {};
 
 protected:

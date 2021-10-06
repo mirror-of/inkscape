@@ -117,9 +117,8 @@ public:
      */
     void setup(SPDesktop const *desktop,
             bool snapindicator = true,
-            SPItem const *item_to_ignore = nullptr,
-            std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr,
-            SPGuide *guide_to_ignore = nullptr);
+            SPObject const *item_to_ignore = nullptr,
+            std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr);
 
     /**
      * Prepare the snap manager for the actual snapping, which includes building a list of snap targets
@@ -130,25 +129,22 @@ public:
      *
      * @param desktop Reference to the desktop to which this snap manager is attached.
      * @param snapindicator If true then a snap indicator will be displayed automatically (when enabled in the preferences).
-     * @param items_to_ignore These items will not be snapped to, e.g. the items that are currently being dragged. This avoids "self-snapping".
+     * @param objects_to_ignore These items will not be snapped to, e.g. the items that are currently being dragged. This avoids "self-snapping" this includes guides and other non-items.
      * @param unselected_nodes Stationary nodes of the path that is currently being edited in the node tool and
      * that can be snapped too. Nodes not in this list will not be snapped to, to avoid "self-snapping". Of each
      * unselected node both the position (Geom::Point) and the type (Inkscape::SnapTargetType) will be stored.
-     * @param guide_to_ignore Guide that is currently being dragged and should not be snapped to.
      */
     void setup(SPDesktop const *desktop,
                bool snapindicator,
-               std::vector<SPItem const *> &items_to_ignore,
-               std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr,
-               SPGuide *guide_to_ignore = nullptr);
+               std::vector<SPObject const *> &objects_to_ignore,
+               std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr);
 
     void setupIgnoreSelection(SPDesktop const *desktop,
                               bool snapindicator = true,
-                              std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr,
-                              SPGuide *guide_to_ignore = nullptr);
+                              std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr);
 
     void unSetup() {_rotation_center_source_items.clear();
-                    _guide_to_ignore = nullptr;
+                    _objects_to_ignore.clear();
                     _desktop = nullptr;
                     _unselected_nodes = nullptr;}
 
@@ -373,7 +369,7 @@ public:
     SPDesktop const *getDesktop() const {return _desktop;}
     SPNamedView const *getNamedView() const {return _named_view;}
     SPDocument *getDocument() const;
-    SPGuide const *getGuideToIgnore() const {return _guide_to_ignore;}
+    SPGuide const *getGuideToIgnore() const;
 
     bool getSnapIndicator() const {return _snapindicator;}
 
@@ -426,9 +422,8 @@ protected:
     SPNamedView const *_named_view;
 
 private:
-    std::vector<SPItem const *> _items_to_ignore; ///< Items that should not be snapped to, for example the items that are currently being dragged. Set using the setup() method
+    std::vector<SPObject const *> _objects_to_ignore; ///< Items that should not be snapped to, for example the items that are currently being dragged. Set using the setup() method
     std::vector<SPItem*> _rotation_center_source_items; // to avoid snapping a rotation center to itself
-    SPGuide *_guide_to_ignore; ///< A guide that should not be snapped to, e.g. the guide that is currently being dragged
     SPDesktop const *_desktop;
     bool _snapindicator; ///< When true, an indicator will be drawn at the position that was being snapped to
     std::vector<Inkscape::SnapCandidatePoint> *_unselected_nodes; ///< Nodes of the path that is currently being edited and which have not been selected and which will therefore be stationary. Only these nodes will be considered for snapping to. Of each unselected node both the position (Geom::Point) and the type (Inkscape::SnapTargetType) will be stored
@@ -441,7 +436,7 @@ private:
      * @param clip_or_mask The parent object being passed is either a clip or mask.
      */
     void _findCandidates(SPObject* parent,
-                       std::vector<SPItem const *> const *it,
+                       std::vector<SPObject const *> const *it,
                        bool const &first_point,
                        Geom::Rect const &bbox_to_snap,
                        bool const _clip_or_mask,
