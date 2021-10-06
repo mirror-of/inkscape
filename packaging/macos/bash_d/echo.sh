@@ -1,11 +1,18 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-# https://github.com/dehesselle/bash_d
 
-include_guard
+### description ################################################################
+
+# Provide colorful convenience functions for echo.
+
+### shellcheck #################################################################
+
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### includes ###################################################################
 
-include_file ansi.sh
+bash_d_include ansi
 
 ### variables ##################################################################
 
@@ -13,31 +20,32 @@ include_file ansi.sh
 
 ### functions ##################################################################
 
-function _echo_message
+function echo_message__
 {
-  local name=$1   # can be empty
-  local type=$2
-  local color=$3
-  local args=${@:4}
+  local funcname=$1   # empty if outside function
+  local filename=$2
+  local type=$3
+  local color=$4
+  local args=${*:5}
 
-  if [ ! -z $name ]; then
-    name=" $name"
+  if [ -z "$funcname" ] || [ "$funcname" = "source" ]; then
+    funcname=$(basename "$filename")
   fi
 
   if ansi_is_usable; then
-    echo -e "$color[$type]$name$ANSI_FG_RESET $args"
+    echo -e "${color}$type:$ANSI_FG_RESET $args ${ANSI_FG_BLACK_BRIGHT}[$funcname]$ANSI_FG_RESET"
   else
-    echo "[$type]$name $args"
+    echo "$type: $args [$funcname]"
   fi
 }
 
 ### aliases ####################################################################
 
-alias echo_d='>&2 _echo_message "$FUNCNAME" " debug " "$ANSI_FG_BLACK_BOLD"'
-alias echo_e='>&2 _echo_message "$FUNCNAME" " error " "$ANSI_FG_RED_BOLD"'
-alias echo_i='>&2 _echo_message "$FUNCNAME" " info  " "$ANSI_FG_BLUE_BOLD"'
-alias echo_o='>&2 _echo_message "$FUNCNAME" "  ok   " "$ANSI_FG_GREEN_BOLD"'
-alias echo_w='>&2 _echo_message "$FUNCNAME" "warning" "$ANSI_FG_YELLOW_BOLD"'
+alias echo_d='>&2 echo_message__ "$FUNCNAME" "${BASH_SOURCE[0]}" "debug" "$ANSI_FG_BLUE_BOLD"'
+alias echo_e='>&2 echo_message__ "$FUNCNAME" "${BASH_SOURCE[0]}" "error" "$ANSI_FG_RED_BRIGHT"'
+alias echo_i='>&2 echo_message__ "$FUNCNAME" "${BASH_SOURCE[0]}" "info" "$ANSI_FG_BLUE_BRIGHT"'
+alias echo_o='>&2 echo_message__ "$FUNCNAME" "${BASH_SOURCE[0]}" "ok" "$ANSI_FG_GREEN_BRIGHT"'
+alias echo_w='>&2 echo_message__ "$FUNCNAME" "${BASH_SOURCE[0]}" "warning" "$ANSI_FG_YELLOW_BRIGHT"'
 
 ### main #######################################################################
 

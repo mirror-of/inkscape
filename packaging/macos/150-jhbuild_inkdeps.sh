@@ -6,37 +6,33 @@
 
 ### description ################################################################
 
-# Install Inkscape dependencies.
+# Install remaining Inkscape dependencies, i.e. everything besides the GTK3
+# stack.
 
-### includes ###################################################################
+### shellcheck #################################################################
+
+# Nothing here.
+
+### dependencies ###############################################################
 
 # shellcheck disable=SC1090 # can't point to a single source here
 for script in "$(dirname "${BASH_SOURCE[0]}")"/0??-*.sh; do
   source "$script";
 done
 
-### settings ###################################################################
+### variables ##################################################################
+
+# Nothing here.
+
+### functions ##################################################################
 
 # Nothing here.
 
 ### main #######################################################################
 
-#------------------------------------------------------- build time dependencies
+#------------------------------------------------------ dependencies besides GTK
 
-jhbuild build \
-  bdwgc \
-  doubleconversion \
-  googletest \
-  gsl \
-  gspell \
-  imagemagick \
-  libcdr \
-  libsoup \
-  libvisio \
-  openjpeg \
-  openmp \
-  poppler \
-  potrace
+jhbuild build meta-inkscape-dependencies
 
 #------------------------------------------------- run time dependencies: Python
 
@@ -49,7 +45,5 @@ ink_download_python
 ink_build_wheels
 
 # To provide backward compatibility, wheels are also built externally on a
-# machine running the minimum supported OS version. Download those to our
-# package cache as well. (This does not overwrite the above ones.)
-
-ink_download_wheels
+# machine running the minimum supported OS version. CI takes care of
+# acquiring those and puts them as wheels.tar.xz into PKG_DIR.

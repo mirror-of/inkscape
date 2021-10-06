@@ -1,11 +1,15 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-# https://github.com/dehesselle/bash_d
-
-include_guard
 
 ### description ################################################################
 
 # This file contains ANSI control codes to control terminal output.
+
+### shellcheck #################################################################
+
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
+# shellcheck disable=SC2034 # there are a lot of unexported vars here
 
 ### includes ###################################################################
 
@@ -25,7 +29,6 @@ ANSI_CURSOR_LEFT="\033[1D"
 #       \033[1;32m
 #               |
 #               color
-
 ANSI_FG_BLACK="\033[0;30m"
 ANSI_FG_BLACK_BOLD="\033[1;30m"
 ANSI_FG_BLACK_BRIGHT="\033[0;90m"
@@ -54,7 +57,12 @@ ANSI_FG_YELLOW_BRIGHT="\033[0;93m"
 
 ### functions ##################################################################
 
-# Nothing here.
+function ansi_test_colors
+{
+  for color in ${!ANSI_FG_*}; do
+    echo -e "${!color}This is $color"
+  done
+}
 
 ### aliases ####################################################################
 

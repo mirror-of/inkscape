@@ -6,24 +6,30 @@
 
 ### description ################################################################
 
-# Create the application bundle. This also includes patching library link
-# paths and all other components that we need to make relocatable.
+# Create the application bundle and make everything relocatable.
 
-### includes ###################################################################
+### shellcheck #################################################################
+
+# Nothing here.
+
+### dependencies ###############################################################
 
 # shellcheck disable=SC1090 # can't point to a single source here
 for script in "$(dirname "${BASH_SOURCE[0]}")"/0??-*.sh; do
   source "$script";
 done
 
-### settings ###################################################################
+### variables ##################################################################
 
-# shellcheck disable=SC2034 # this is from ansi_.sh
-ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
+# Nothing here.
 
-error_trace_enable
+### functions ##################################################################
+
+# Nothing here.
 
 ### main #######################################################################
+
+error_trace_enable
 
 #----------------------------------------------------- create application bundle
 
@@ -107,17 +113,22 @@ cp "$INK_DIR"/packaging/macos/resources/*.icns "$INK_APP_RES_DIR"
 # Install externally built Python framework.
 ink_install_python
 
-# Exteract the externally built wheels.
-tar -C "$TMP_DIR" -xf "$PKG_DIR/$(basename "$INK_PYTHON_WHEELS_URL")"
+# Exteract the externally built wheels (if present).
+if [ -f "$INK_WHEELS_DIR"/wheels.tar.xz ]; then
+  tar -C "$TMP_DIR" -xf "$INK_WHEELS_DIR"/wheels.tar.xz
+  INK_WHEELS_DIR=$TMP_DIR
+else
+  echo_w "not using externally built wheels"
+fi
 
 # Install wheels.
-ink_pipinstall_cssselect  "$TMP_DIR"
-ink_pipinstall_lxml       "$TMP_DIR"
-ink_pipinstall_numpy      "$TMP_DIR"
-ink_pipinstall_pygobject  "$TMP_DIR"
-ink_pipinstall_pyserial   "$TMP_DIR"
-ink_pipinstall_scour      "$TMP_DIR"
-ink_pipinstall_urllib3    "$TMP_DIR"
+ink_pipinstall_cssselect
+ink_pipinstall_lxml
+ink_pipinstall_numpy
+ink_pipinstall_pygobject
+ink_pipinstall_pyserial
+ink_pipinstall_scour
+ink_pipinstall_urllib3
 
 #----------------------------------------------------- remove Python cache files
 

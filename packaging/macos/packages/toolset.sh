@@ -4,12 +4,16 @@
 
 ### description ################################################################
 
-# This file contains everything related to the toolset.
+# Once all of Inkscape's dependencies have been collected and built, we bundle
+# them into the "toolset".
 
-### settings ###################################################################
+### shellcheck #################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
-# shellcheck disable=SC2034 # no exports desired
+
+### dependencies ###############################################################
+
+# Nothing here.
 
 ### variables ##################################################################
 
@@ -206,3 +210,7 @@ function toolset_copy
 
   toolset_unmount /Volumes/"$TOOLSET_VOLNAME"
 }
+
+### main #######################################################################
+
+# Nothing here.

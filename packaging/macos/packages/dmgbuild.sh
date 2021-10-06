@@ -4,12 +4,16 @@
 
 ### description ################################################################
 
-# This file contains everything related to setup dmgbuild, a tool to create
-# disk images.
+# dmgbuild is a Python package that simplifies the process of creating a
+# disk image (dmg) for distribution.
 
-### settings ###################################################################
+### shellcheck #################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
+
+### dependencies ###############################################################
+
+# Nothing here.
 
 ### variables ##################################################################
 
@@ -69,3 +73,7 @@ function dmgbuild_run
   dmgbuild -s "$DMGBUILD_CONFIG" "$(basename -s .app "$INK_APP_DIR")" "$TMP_DIR"/"$(basename "$dmg_file")"
   mv "$TMP_DIR"/"$(basename "$dmg_file")" "$dmg_file"
 }
+
+### main #######################################################################
+
+# Nothing here.

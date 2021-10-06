@@ -4,11 +4,16 @@
 
 ### description ################################################################
 
-# Convert svg to icns.
+# Convert svg to icns. This is the "wrapper" that utilizes/requires caivrosvg
+# and png2icns packages.
 
-### settings ###################################################################
+### shellcheck #################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
+
+### dependencies ###############################################################
+
+# Nothing here.
 
 ### variables ##################################################################
 
@@ -39,3 +44,7 @@ function svg2icns
 
   mv "$(basename -s .png "$png_file")".icns "$icns_file"
 }
+
+### main #######################################################################
+
+# Nothing here.

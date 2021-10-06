@@ -4,11 +4,15 @@
 
 ### description ################################################################
 
-# Convert svg to png with cairosvg.
+# cairosvg is a Python package so we can convert svg to png.
 
-### settings ###################################################################
+### shellcheck #################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
+
+### dependencies ###############################################################
+
+# Nothing here.
 
 ### variables ##################################################################
 
@@ -28,3 +32,7 @@ function cairosvg_install
   # shellcheck disable=SC2086 # we need word splitting here
   jhbuild run pip3 install $CAIROSVG_PIP
 }
+
+### main #######################################################################
+
+# Nothing here.

@@ -6,24 +6,29 @@
 
 ### description ################################################################
 
-# Install GTK3 libraries (and their dependencies).
+# Install GTK3 and its C++ bindings. Dependencies get pulled in and built
+# automatically by JHBuild.
 
-### includes ###################################################################
+### shellcheck #################################################################
+
+# Nothing here.
+
+### dependencies ###############################################################
 
 # shellcheck disable=SC1090 # can't point to a single source here
 for script in "$(dirname "${BASH_SOURCE[0]}")"/0??-*.sh; do
   source "$script";
 done
 
-### settings ###################################################################
+### variables ##################################################################
+
+# Nothing here.
+
+### functions ##################################################################
 
 # Nothing here.
 
 ### main #######################################################################
-
-jhbuild build python3 # avoid https://gitlab.gnome.org/GNOME/gtk-osx/-/issues/32
-
-pygments_install  # required by gtk-doc
 
 jhbuild build \
   meta-gtk-osx-bootstrap \

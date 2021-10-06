@@ -6,10 +6,13 @@
 
 # System related things like checking versions of macOS and Xcode.
 
-### settings ###################################################################
+### shellcheck #################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
-# shellcheck disable=SC2034 # no exports desired
+
+### dependencies ###############################################################
+
+# Nothing here.
 
 ### variables ##################################################################
 
@@ -55,3 +58,27 @@ function sys_create_log
     echo "$var = $(eval echo \$$var)" >> "$VAR_DIR"/log/release.log
   done
 }
+
+function sys_check_wrkdir
+{
+  # shellcheck disable=SC2046 # result is integer
+  if  [ $(mkdir -p "$WRK_DIR" 2>/dev/null; echo $?) -eq 0 ] &&
+      [ -w "$WRK_DIR" ] ; then
+    : # WRK_DIR has been created or was already there and is writable
+  else
+    echo_e "WRK_DIR not usable: $WRK_DIR"
+    exit 1
+  fi
+}
+
+function sys_check_sdkroot
+{
+  if [ ! -d "$SDKROOT" ]; then
+    echo_e "SDK not found: $SDKROOT"
+    exit 1
+  fi
+}
+
+### main #######################################################################
+
+# Nothing here.

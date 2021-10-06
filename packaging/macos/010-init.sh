@@ -4,32 +4,37 @@
 
 ### description ################################################################
 
-# This is the main initialization file to setup the environment. Its purpose is
-#   - to provide some basic configuration variables which all other files
-#     depend upon
-#   - source all other scripts
-#   - run a few essential checks to see if we're good
+# This is the main settings file that always gets sourced first. It contains
+# some basic configuration itself and is then responsible for sourcing all
+# other necessary files.
+# After this file has been processed, the environment is fully set up
+# with lots of variables and functions so that the real work can begin.
 #
-# It's meant to be sourced by all other scripts and supposed to be a "passive"
-# file, i.e. it defines variables and functions but does not do anything on its
-# own. However, this is only 99% true at the moment as the above mentioned
-# checks are capable of calling it quits (search for 'exit') if a few very
-# fundamental things appear to be broken.
+# Besides the one 'exit' at the bottom of this script, this file is considered
+# to be "passive", i.e. it only defines variables and functions but does not
+# do any work on its own.
 
-### includes ###################################################################
-
-# Nothing here.
-
-### settings ###################################################################
+### shellcheck #################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
-# shellcheck disable=SC2034 # we only use export if we really need it
+# shellcheck disable=SC2034 # we only use exports if we really need them
 
-### main #######################################################################
+### dependencies ###############################################################
+
+# Shell code I share between projects comes from bash_d.
+# https://github.com/dehesselle/bash_d
+
+source "$(dirname "${BASH_SOURCE[0]}")"/bash_d/bash_d.sh
+bash_d_include echo
+bash_d_include error
+bash_d_include lib
+bash_d_include sed
+
+### variables ##################################################################
 
 #--------------------------------------------------------------- toolset version
 
-VERSION=0.51
+VERSION=0.53
 
 #-------------------------------------------------------------- target OS by SDK
 
@@ -45,14 +50,14 @@ export SDKROOT
 
 #--------------------------------------------------------------------- detect CI
 
-if [ -z "$CI" ]; then   # Both GitHub and GitLab set this.
+if [ -z "$CI" ]; then   # both GitHub and GitLab set this
   CI=false
   CI_GITHUB=false
   CI_GITLAB=false
 else
   CI=true
 
-  if [ -z "$CI_PROJECT_NAME" ]; then  # This is a GitLab variable.
+  if [ -z "$CI_PROJECT_NAME" ]; then  # this is a GitLab-only variable
     CI_GITHUB=true
     CI_GITLAB=false
   else
@@ -85,13 +90,13 @@ PKG_DIR=$VAR_DIR/cache/pkgs
 SRC_DIR=$VER_DIR/usr/src
 TMP_DIR=$VER_DIR/tmp
 
-export HOME=$VER_DIR/home   # Yes, we redirect the user's home.
+export HOME=$VER_DIR/home   # yes, we redirect the user's home
 
 #---------------------------------------------- directories: temporary locations
 
 export TMP=$TMP_DIR
 export TEMP=$TMP_DIR
-export TMPDIR=$TMP_DIR   # TMPDIR is the common macOS default.
+export TMPDIR=$TMP_DIR   # TMPDIR is the common macOS default
 
 #-------------------------------------------------------------- directories: XDG
 
@@ -128,52 +133,44 @@ export PATH=$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin
 # There is a fallback that solely relies on BASH_SOURCE for systems that
 # do not provide python3 (we will provide our own via 110-sysprep.sh).
 
-SELF_DIR=$(dirname \
-  "$(python3 -c "import os; print(os.path.realpath('${BASH_SOURCE[0]}'))" \
-    2>/dev/null || echo "${BASH_SOURCE[0]}")")
+# shellcheck disable=SC2164 # exit would be useless because of subshell
+SELF_DIR=$(\
+  python3 -c "import pathlib;\
+    print(pathlib.Path('${BASH_SOURCE[0]}').parent.resolve())" 2>/dev/null ||
+  echo "$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd)"\
+)
 
-#------------------------------------------ source functions from bash_d library
+#----------------------------------------------------- allow colors in GitLab CI
 
-# Things I do not want to re-invent and/or am sharing between other projects
-# of mine come from bash_d.
-# https://github.com/dehesselle/bash_d
+# Since GitLab uses colors in their CI there's no need to disable ours.
 
-INCLUDE_DIR=$SELF_DIR/bash_d
-# shellcheck source=bash_d/1_include.sh
-source "$INCLUDE_DIR"/1_include.sh
-include_file echo.sh
-include_file error.sh
-include_file lib.sh
-include_file sed.sh
+if $CI_GITLAB; then
+  # shellcheck disable=SC2034 # this is from bash_d/ansi.sh (sourced by echo)
+  ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
+fi
+
+### functions ##################################################################
+
+# Nothing here.
+
+### main #######################################################################
 
 #----------------------------------------------------------- source our packages
+
+# Packages are designed/allowed to silently depend on this file, therefore this
+# code cannot be put into the include section at the top.
 
 for package in "$SELF_DIR"/packages/*.sh; do
   # shellcheck disable=SC1090 # can't point to a single source here
   source "$package"
 done
 
-# shellcheck disable=SC2034 # this is from ansi_.sh
-ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
+#---------------------------------------------------------- perform basic checks
 
-#---------------------------------------------------- check if WRK_DIR is usable
-
-# shellcheck disable=SC2046 # result is integer
-if  [ $(mkdir -p "$WRK_DIR" 2>/dev/null; echo $?) -eq 0 ] &&
-    [ -w "$WRK_DIR" ] ; then
-  : # WRK_DIR has been created or was already there and is writable
+if sys_check_wrkdir && sys_check_sdkroot; then
+  :         # all is well
 else
-  echo_e "WRK_DIR not usable: $WRK_DIR"
-  exit 1
+  exit 1    # cannot continue
 fi
-
-#----------------------------------------------------- check for presence of SDK
-
-if [ ! -d "$SDKROOT" ]; then
-  echo_e "SDK not found: $SDKROOT"
-  exit 1
-fi
-
-#---------------------------------------------------- check recommended versions
 
 sys_check_versions
