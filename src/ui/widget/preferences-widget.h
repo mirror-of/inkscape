@@ -152,7 +152,7 @@ private:
 class PrefSlider : public Gtk::Box
 {
 public:
-    PrefSlider() : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) {}
+    PrefSlider(bool spin = true) : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) { _spin = spin; }
 
     void init(Glib::ustring const &prefs_path,
     		  double lower, double upper, double step_increment, double page_increment, double default_value, int digits);
@@ -165,9 +165,9 @@ private:
     bool on_mnemonic_activate( bool group_cycling ) override;
 
     Glib::ustring _prefs_path;
-    Inkscape::UI::Widget::SpinButton *_sb;
-
-    Gtk::Scale*     _slider;
+    Inkscape::UI::Widget::SpinButton *_sb = nullptr;
+    bool _spin;
+    Gtk::Scale*     _slider = nullptr;
 
     bool freeze; // used to block recursive updates of slider and spinbutton
 };

@@ -44,12 +44,6 @@ Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon
     return icon;
 }
 
-Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_size)
-{
-    Gtk::IconSize icon_size = Inkscape::UI::ToolboxFactory::prefToSize_mm(prefs_size);
-    return sp_get_icon_image(icon_name, icon_size);
-}
-
 GtkWidget *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size)
 {
     return gtk_image_new_from_icon_name(icon_name.c_str(), icon_size);
@@ -101,16 +95,6 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, GtkIconSiz
     gint width, height;
     gtk_icon_size_lookup(icon_size, &width, &height);
     return sp_get_icon_pixbuf(icon_name, width * scale);
-}
-
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar const *prefs_size, int scale)
-{
-    // Load icon based in preference size defined allowed values are:
-    //"/toolbox/tools/small" Toolbox icon size
-    //"/toolbox/small" Control bar icon size
-    //"/toolbox/secondary" Secondary toolbar icon size
-    GtkIconSize icon_size = Inkscape::UI::ToolboxFactory::prefToSize(prefs_size);
-    return sp_get_icon_pixbuf(icon_name, icon_size, scale);
 }
 
 /**

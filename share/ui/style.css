@@ -204,11 +204,6 @@ iconview *:hover {
     font-size: 11px;
 }
 
-/* Tool Toolbox */
-#ToolToolbox button {
-    min-height: 16px; /* By default this is 24px which adds too much space when using "Smaller" icons. */
-}
-
 #CommandPaletteBase {
     background-color: @theme_base_color; /* some themes don't seem to have a background color for list rows defined and would end up transparent otherwise */
     border: 5px solid @theme_bg_color;
@@ -549,4 +544,29 @@ stackswitcher button {
 .color-palette-main-box scrolledwindow undershoot.bottom,
 .color-palette-main-box scrolledwindow undershoot.left {
     background-image: none;
+}
+
+.tight-flowbox flowboxchild {
+    margin: 0;
+    padding: 0px;
+}
+.tight-flowbox button {
+    margin: 0;
+    padding: 4px;
+}
+
+/* add .small-marks class to Gtk::Scale to have smaller font used, since markup didn't work there */
+scale.small-marks.marks-after {
+    font-size: small;
+}
+
+/* Square toolbar buttons: request square buttons for all toolbars. */
+button.square-button {
+    padding: 3px;
+}
+
+button.square-button image {
+    padding: 0;
+    min-width: 16px;
+    min-height: 16px;
 }

@@ -69,6 +69,7 @@ enum {
     PREFS_PAGE_TOOLS_LPETOOL,
     PREFS_PAGE_UI,
     PREFS_PAGE_UI_THEME,
+    PREFS_PAGE_UI_TOOLBARS,
     PREFS_PAGE_UI_WINDOWS,
     PREFS_PAGE_UI_GRIDS,
     PREFS_PAGE_COMMAND_PALETTE,
@@ -167,6 +168,7 @@ protected:
     UI::Widget::DialogPage _page_ui;
     UI::Widget::DialogPage _page_notfound;
     UI::Widget::DialogPage _page_theme;
+    UI::Widget::DialogPage _page_toolbars;
     UI::Widget::DialogPage _page_windows;
     UI::Widget::DialogPage _page_grids;
     UI::Widget::DialogPage _page_command_palette;

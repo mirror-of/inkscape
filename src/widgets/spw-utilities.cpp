@@ -190,6 +190,20 @@ Gtk::Widget* sp_find_focusable_widget(Gtk::Widget* widget) {
     return sp_traverse_widget_tree(widget, [](Gtk::Widget* w) { return w->get_can_focus(); });
 }
 
+
+Glib::ustring sp_get_action_target(Gtk::Widget* widget) {
+    Glib::ustring target;
+
+    if (widget && GTK_IS_ACTIONABLE(widget->gobj())) {
+        auto variant = gtk_actionable_get_action_target_value(GTK_ACTIONABLE(widget->gobj()));
+        auto type = variant ? g_variant_get_type_string(variant) : nullptr;
+        if (type && strcmp(type, "s") == 0) {
+            target = g_variant_get_string(variant, nullptr);
+        }
+    }
+
+    return target;
+}
 /*
   Local Variables:
   mode:c++

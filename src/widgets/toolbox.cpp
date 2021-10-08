@@ -111,16 +111,20 @@ enum BarId {
 #define BAR_ID_KEY "BarIdValue"
 #define HANDLE_POS_MARK "x-inkscape-pos"
 
-GtkIconSize ToolboxFactory::prefToSize( Glib::ustring const &path, int base ) {
-    static GtkIconSize sizeChoices[] = {
-        GTK_ICON_SIZE_LARGE_TOOLBAR,
-        GTK_ICON_SIZE_SMALL_TOOLBAR,
-        GTK_ICON_SIZE_DND,
-        GTK_ICON_SIZE_DIALOG
-    };
+int ToolboxFactory::prefToPixelSize(Glib::ustring const& path) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int index = prefs->getIntLimited( path, base, 0, G_N_ELEMENTS(sizeChoices) );
-    return sizeChoices[index];
+    int size = prefs->getIntLimited(path, 16, 16, 48);
+    return size;
+}
+
+void ToolboxFactory::set_icon_size(GtkWidget* toolbox, int pixel_size) {
+    sp_traverse_widget_tree(Glib::wrap(toolbox), [=](Gtk::Widget* widget) {
+        if (auto ico = dynamic_cast<Gtk::Image*>(widget)) {
+            ico->set_from_icon_name(ico->get_icon_name(), static_cast<Gtk::IconSize>(Gtk::ICON_SIZE_BUTTON));
+            ico->set_pixel_size(pixel_size);
+        }
+        return false;
+    });
 }
 
 Gtk::IconSize ToolboxFactory::prefToSize_mm(Glib::ustring const &path, int base)
@@ -254,7 +258,6 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
         SP_VERB_SELECTION_UNGROUP,
     };
 
-    GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
     Glib::RefPtr<Gtk::ActionGroup> mainActions;
     if (desktop == nullptr)
     {
@@ -275,7 +278,7 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
         Inkscape::Verb* verb = Inkscape::Verb::get(i);
         if ( verb ) {
             if (!mainActions->get_action(verb->get_id())) {
-                GtkAction* act = create_action_for_verb( verb, view, toolboxSize );
+                GtkAction* act = create_action_for_verb( verb, view, GTK_ICON_SIZE_MENU);
                 mainActions->add(Glib::wrap(act));
             }
         }
@@ -323,21 +326,12 @@ GtkWidget *ToolboxFactory::createToolToolbox()
         std::cerr << "ToolboxFactor::createToolToolbox: " << tool_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
     }
 
-    Gtk::Toolbar* toolbar = nullptr;
+    Gtk::FlowBox* toolbar = nullptr;
     builder->get_widget("tool-toolbar", toolbar);
     if (!toolbar) {
         std::cerr << "InkscapeWindow: Failed to load tool toolbar!" << std::endl;
     } else {
         gtk_box_pack_start(GTK_BOX(tb), GTK_WIDGET(toolbar->gobj()), false, false, 0);
-
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if ( prefs->getBool("/toolbox/icononly", true) ) {
-            toolbar->set_toolbar_style( Gtk::TOOLBAR_ICONS );
-        }
-
-        // TODO: Change preference path!
-        GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small", 1);
-        toolbar->set_icon_size (static_cast<Gtk::IconSize>(toolboxSize));
     }
 
     return toolboxNewCommon( tb, BAR_TOOL, GTK_POS_LEFT );
@@ -401,9 +395,6 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
             toolbar->set_toolbar_style( Gtk::TOOLBAR_ICONS );
         }
         simple_snap = prefs->getBool("/toolbox/simplesnap", simple_snap);
-
-        GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-        toolbar->set_icon_size (static_cast<Gtk::IconSize>(toolboxSize));
     }
 
     Gtk::ToolItem* item_simple = nullptr;
@@ -541,8 +532,8 @@ static void setupToolboxCommon( GtkWidget *toolbox,
         gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
     }
 
-    GtkIconSize toolboxSize = ToolboxFactory::prefToSize(sizePref);
-    gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
+    int pixel_size = ToolboxFactory::prefToPixelSize(sizePref);
+    ToolboxFactory::set_icon_size(toolBar, pixel_size);
 
     GtkPositionType pos = static_cast<GtkPositionType>(GPOINTER_TO_INT(g_object_get_data( G_OBJECT(toolbox), HANDLE_POS_MARK )));
     orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
@@ -675,8 +666,8 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                 gtk_toolbar_set_style( GTK_TOOLBAR(sub_toolbox), GTK_TOOLBAR_ICONS );
             }
 
-            GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
-            gtk_toolbar_set_icon_size( GTK_TOOLBAR(sub_toolbox), static_cast<GtkIconSize>(toolboxSize) );
+            int pixel_size = ToolboxFactory::prefToPixelSize(ToolboxFactory::ctrlbars_icon_size);
+            ToolboxFactory::set_icon_size(sub_toolbox, pixel_size);
             gtk_widget_set_hexpand(sub_toolbox, TRUE);
 
             // Add a swatch widget if swatch tooltip is defined.
@@ -740,7 +731,7 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
 
 void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    setupToolboxCommon(toolbox, desktop, "toolbar-commands.ui", "/ui/CommandsToolbar", "/toolbox/small");
+    setupToolboxCommon(toolbox, desktop, "toolbar-commands.ui", "/ui/CommandsToolbar", ToolboxFactory::ctrlbars_icon_size);
 }
 
 void update_commands_toolbox(SPDesktop * /*desktop*/, ToolBase * /*eventcontext*/, GtkWidget * /*toolbox*/)

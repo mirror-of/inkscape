@@ -23,6 +23,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "verbs.h"
+#include "widgets/toolbox.h"
 
 static void sp_action_finalize (GObject *object);
 
@@ -238,7 +239,9 @@ SPAction::create_toolbutton_for_verb(unsigned int             verb_code,
 
     // Create a button with the required display properties
     auto button = Gtk::manage(new Gtk::ToolButton(verb->get_tip()));
-    auto icon_widget = sp_get_icon_image(icon_name, "/toolbox/small");
+    auto icon_widget = Gtk::make_managed<Gtk::Image>(); // sp_get_icon_image(icon_name, "/toolbox/small");
+    // Gtk::IconSize icon_size = Inkscape::UI::ToolboxFactory::prefToSize_mm("/toolbox/small");
+    icon_widget->set_from_icon_name(icon_name, Gtk::ICON_SIZE_BUTTON);
     button->set_icon_widget(*icon_widget);
     button->set_tooltip_text(verb->get_tip());
 

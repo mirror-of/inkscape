@@ -42,10 +42,17 @@ public:
 
     static Glib::ustring getToolboxName(GtkWidget* toolbox);
 
-    static GtkIconSize prefToSize(Glib::ustring const &path, int base = 0 );
+    static int prefToPixelSize(Glib::ustring const& path);
     static Gtk::IconSize prefToSize_mm(Glib::ustring const &path, int base = 0);
 
+    static void set_icon_size(GtkWidget* toolbox, int pixel_size);
     ToolboxFactory() = delete;
+
+    static constexpr const char* tools_icon_size = "/toolbox/tools/iconsize";
+    static constexpr const char* tools_visible_buttons = "/toolbox/tools/buttons/show"; 
+    static constexpr const char* ctrlbars_icon_size = "/toolbox/controlbars/iconsize";
+    static constexpr const int min_pixel_size = 16;
+    static constexpr const int max_pixel_size = 48;
 };
 
 

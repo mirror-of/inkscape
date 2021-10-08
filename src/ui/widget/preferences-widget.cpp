@@ -577,7 +577,7 @@ PrefSlider::on_slider_value_changed()
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble(_prefs_path, _slider->get_value());
-        _sb->set_value(_slider->get_value());
+        if (_sb) _sb->set_value(_slider->get_value());
         freeze = false;
     }
 }
@@ -589,15 +589,17 @@ PrefSlider::on_spinbutton_value_changed()
     {
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble(_prefs_path, _sb->get_value());
-        _slider->set_value(_sb->get_value());
+        if (_sb) {
+            prefs->setDouble(_prefs_path, _sb->get_value());
+            _slider->set_value(_sb->get_value());
+        }
         freeze = false;
     }
 }
 
 bool PrefSlider::on_mnemonic_activate ( bool group_cycling )
 {
-    return _sb->mnemonic_activate ( group_cycling );
+    return _sb ? _sb->mnemonic_activate ( group_cycling ) : false;
 }
 
 void
@@ -618,19 +620,21 @@ PrefSlider::init(Glib::ustring const &prefs_path,
     _slider->set_value (value);
     _slider->set_digits(digits);
     _slider->signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_slider_value_changed));
-    _sb = Gtk::manage(new Inkscape::UI::Widget::SpinButton());
-    _sb->signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_spinbutton_value_changed));
-    _sb->set_range (lower, upper);
-    _sb->set_increments (step_increment, 0);
-    _sb->set_value (value);
-    _sb->set_digits(digits);
-    _sb->set_halign(Gtk::ALIGN_CENTER);
-    _sb->set_valign(Gtk::ALIGN_END);
+    if (_spin) {
+        _sb = Gtk::manage(new Inkscape::UI::Widget::SpinButton());
+        _sb->signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_spinbutton_value_changed));
+        _sb->set_range (lower, upper);
+        _sb->set_increments (step_increment, 0);
+        _sb->set_value (value);
+        _sb->set_digits(digits);
+        _sb->set_halign(Gtk::ALIGN_CENTER);
+        _sb->set_valign(Gtk::ALIGN_END);
+    }
 
     auto table = Gtk::manage(new Gtk::Grid());
     _slider->set_hexpand();
     table->attach(*_slider, 0, 0, 1, 1);
-    table->attach(*_sb,     1, 0, 1, 1);
+    if (_sb) table->attach(*_sb, 1, 0, 1, 1);
 
     this->pack_start(*table, Gtk::PACK_EXPAND_WIDGET);
 }

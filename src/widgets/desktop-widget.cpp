@@ -275,6 +275,45 @@ SPDesktopWidget::SPDesktopWidget()
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
     dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
 
+    auto set_visible_buttons = [=](GtkWidget* tb) {
+        sp_traverse_widget_tree(Glib::wrap(tb), [=](Gtk::Widget* widget) {
+            if (auto flowbox = dynamic_cast<Gtk::FlowBox*>(widget)) {
+                flowbox->show();
+                flowbox->set_no_show_all();
+            }
+            else if (auto btn = dynamic_cast<Gtk::Button*>(widget)) {
+                auto name = sp_get_action_target(widget);
+                auto show = prefs->getBool(ToolboxFactory::tools_visible_buttons + name, true);
+                auto parent = btn->get_parent();
+                if (show) {
+                    parent->show();
+                }
+                else {
+                    parent->hide();
+                }
+            }
+            return false;
+        });
+    };
+    auto set_toolbar_prefs = [=]() {
+        int min = ToolboxFactory::min_pixel_size;
+        int max = ToolboxFactory::max_pixel_size;
+        int s = prefs->getIntLimited(ToolboxFactory::tools_icon_size, min, min, max);
+        ToolboxFactory::set_icon_size(tool_toolbox, s);
+        set_visible_buttons(tool_toolbox);
+
+        int size = prefs->getIntLimited(ToolboxFactory::ctrlbars_icon_size, min, min, max);
+        ToolboxFactory::set_icon_size(snap_toolbox, size);
+        ToolboxFactory::set_icon_size(commands_toolbox, size);
+        ToolboxFactory::set_icon_size(aux_toolbox, size);
+    };
+
+    // watch for changes
+    _tb_icon_sizes = prefs->createObserver("/toolbox", [=]() { set_toolbar_prefs(); });
+
+    // restore preferences
+    set_toolbar_prefs();
+
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
     dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
 

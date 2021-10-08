@@ -44,6 +44,9 @@ Gtk::Widget* sp_traverse_widget_tree(Gtk::Widget* widget, const std::function<bo
 
 Gtk::Widget* sp_find_focusable_widget(Gtk::Widget* widget);
 
+// get string action target, if available
+Glib::ustring sp_get_action_target(Gtk::Widget* widget);
+
 #endif
 
 /*
