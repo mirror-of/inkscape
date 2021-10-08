@@ -274,7 +274,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
     {"app.object-set-property",         N_("Set Property"),                     "Object",     N_("Set or update a property on selected objects; usage: object-set-property:property name, property value;")},
     {"app.object-unlink-clones",        N_("Unlink Clones"),                    "Object",     N_("Unlink clones and symbols")},
     {"app.object-to-path",              N_("Object To Path"),                   "Object",     N_("Convert shapes to paths")},
-    {"app.stroke-to-path",              N_("Stroke to Path"),                   "Object",     N_("Convert strokes to paths")},
+    {"app.object-stroke-to-path",       N_("Stroke to Path"),                   "Object",     N_("Convert strokes to paths")},
     {"app.object-simplify-path",        N_("Simplify Path"),                    "Object",     N_("Simplify paths, reducing node counts")},
     {"app.object-set",                  N_("Object Clip Set"),                  "Object",     N_("Apply clipping path to selection (using the topmost object as clipping path)")},
     {"app.object-set-inverse",          N_("Object Clip Set Inverse"),          "Object",     N_("Apply inverse clipping path to selection (using the topmost object as clipping path)")},
@@ -315,7 +315,7 @@ add_actions_object(InkscapeApplication* app)
     gapp->add_action_with_parameter( "object-set-property",             String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),   app));
     gapp->add_action(                "object-unlink-clones",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),          app));
     gapp->add_action(                "object-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),                app));
-    gapp->add_action(                "stroke-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),         app));
+    gapp->add_action(                "object-stroke-to-path",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),         app));
     gapp->add_action(                "object-simplify-path",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_simplify_path),          app));
     gapp->add_action(                "object-set",                      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_clip),                      app));
     gapp->add_action(                "object-set-inverse",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse),            app));
