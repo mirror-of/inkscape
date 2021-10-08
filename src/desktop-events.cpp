@@ -244,6 +244,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                 }
                 moved = true;
                 desktop->set_coordinate_status(motion_dt);
+                desktop->getCanvas()->grab_focus();
 
                 ret = true;
             }
@@ -347,7 +348,9 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
 
         case GDK_ENTER_NOTIFY:
         {
-            if (!guide->getLocked()) {
+            // This is a UX thing. Check if the canvas has focus, so the user knows they can
+            // use hotkeys. See issue: https://gitlab.com/inkscape/inkscape/-/issues/2439
+            if (!guide->getLocked() && desktop->getCanvas()->has_focus()) {
                 guide_item->set_stroke(guide->getHiColor());
             }
 

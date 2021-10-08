@@ -2051,6 +2051,7 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
 void
 SPDesktopWidget::ruler_snap_new_guide(SPDesktop *desktop, Geom::Point &event_dt, Geom::Point &normal)
 {
+    desktop->getCanvas()->grab_focus();
     SnapManager &m = desktop->namedview->snap_manager;
     m.setup(desktop);
     // We're dragging a brand new guide, just pulled of the rulers seconds ago. When snapping to a
