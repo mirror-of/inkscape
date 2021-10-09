@@ -233,7 +233,7 @@ and tooltips. Only one binding for each action may have this attribute.
 <!-- Path -->
 
   <bind gaction="app.object-to-path"              keys="&lt;cmd&gt;&lt;shift&gt;c, &lt;cmd&gt;&lt;shift&gt;C" />
-  <bind gaction="app.stroke-to-path"              keys="&lt;cmd&gt;&lt;alt&gt;c, &lt;cmd&gt;&lt;alt&gt;C" />
+  <bind gaction="app.object-stroke-to-path"       keys="&lt;cmd&gt;&lt;alt&gt;c, &lt;cmd&gt;&lt;alt&gt;C" />
   <bind gaction="app.select-path-combine"         keys="&lt;cmd&gt;k, &lt;cmd&gt;K" />
   <bind gaction="app.select-path-break-apart"     keys="&lt;cmd&gt;&lt;shift&gt;k, &lt;cmd&gt;&lt;shift&gt;K" />
   <bind gaction="app.select-path-union"           keys="&lt;cmd&gt;plus, &lt;cmd&gt;KP_Add, &lt;cmd&gt;&lt;shift&gt;plus" />

@@ -32,7 +32,7 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind gaction="app.selection-bottom"                    keys="&lt;ctrl&gt;End" />
 <bind gaction="app.selection-top"                       keys="&lt;ctrl&gt;Home" />
 <bind gaction="app.select-object-ungroup"               keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
-<bind gaction="app.stroke-to-path"                      keys="&lt;ctrl&gt;&lt;shift&gt;q, &lt;ctrl&gt;&lt;shift&gt;Q" />
+<bind gaction="app.object-stroke-to-path"               keys="&lt;ctrl&gt;&lt;shift&gt;q, &lt;ctrl&gt;&lt;shift&gt;Q" />
 
 <!-- Layer -->
 

@@ -201,7 +201,7 @@ Hom/end keys-select minimum or maximum feather values
 <!-- Path -->
 
   <bind gaction="app.object-to-path"                keys="&lt;ctrl&gt;&lt;shift&gt;S, &lt;ctrl&gt;&lt;shift&gt;s" />
-  <bind gaction="app.stroke-to-path"                keys="&lt;ctrl&gt;&lt;alt&gt;c, &lt;ctrl&gt;&lt;alt&gt;C" />
+  <bind gaction="app.object-stroke-to-path"         keys="&lt;ctrl&gt;&lt;alt&gt;c, &lt;ctrl&gt;&lt;alt&gt;C" />
   <bind gaction="app.select-path-break-apart"       keys="&lt;ctrl&gt;&lt;shift&gt;k, &lt;ctrl&gt;&lt;shift&gt;K" />
   <bind gaction="app.select-path-union"             keys="&lt;ctrl&gt;1, &lt;ctrl&gt;plus, &lt;ctrl&gt;&lt;shift&gt;plus" />
   <bind gaction="app.select-path-intersection"      keys="&lt;ctrl&gt;3, &lt;ctrl&gt;asterisk, &lt;ctrl&gt;KP_Multiply, &lt;ctrl&gt;&lt;shift&gt;asterisk" />
