@@ -301,7 +301,10 @@ SPDesktopWidget::SPDesktopWidget()
         int s = prefs->getIntLimited(ToolboxFactory::tools_icon_size, min, min, max);
         ToolboxFactory::set_icon_size(tool_toolbox, s);
         set_visible_buttons(tool_toolbox);
-
+    };
+    auto set_ctrlbar_prefs = [=]() {
+        int min = ToolboxFactory::min_pixel_size;
+        int max = ToolboxFactory::max_pixel_size;
         int size = prefs->getIntLimited(ToolboxFactory::ctrlbars_icon_size, min, min, max);
         ToolboxFactory::set_icon_size(snap_toolbox, size);
         ToolboxFactory::set_icon_size(commands_toolbox, size);
@@ -309,10 +312,12 @@ SPDesktopWidget::SPDesktopWidget()
     };
 
     // watch for changes
-    _tb_icon_sizes = prefs->createObserver("/toolbox", [=]() { set_toolbar_prefs(); });
+    _tb_icon_sizes1 = prefs->createObserver(ToolboxFactory::tools_icon_size,    [=]() { set_toolbar_prefs(); });
+    _tb_icon_sizes2 = prefs->createObserver(ToolboxFactory::ctrlbars_icon_size, [=]() { set_ctrlbar_prefs(); });
 
     // restore preferences
     set_toolbar_prefs();
+    set_ctrlbar_prefs();
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
     dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
