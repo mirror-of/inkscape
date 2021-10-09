@@ -1489,7 +1489,7 @@
             </child>
             <child>
               <object class="GtkButton" id="B_OK">
-                <property name="label">Apply</property>
+                <property name="label" translatable="yes">Apply</property>
                 <property name="width-request">150</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
