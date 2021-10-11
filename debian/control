@@ -86,6 +86,7 @@ Recommends:
  python3-cssselect,
  python3-gi,
  python3-gi-cairo,
+ python3-appdirs,
  gir1.2-gtk-3.0,
  adwaita-icon-theme-full
 Suggests:
