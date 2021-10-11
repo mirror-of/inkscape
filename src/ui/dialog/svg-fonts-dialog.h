@@ -24,6 +24,7 @@
 
 #include "attributes.h"
 #include "helper/auto-connection.h"
+#include "ui/operation-blocker.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/spinbutton.h"
 #include "xml/helper-observer.h"
@@ -72,7 +73,7 @@ public:
 
     void documentReplaced() override;
 
-    void update_fonts();
+    void update_fonts(bool document_replaced);
     SvgFont* get_selected_svgfont();
     SPFont* get_selected_spfont();
     SPGlyph* get_selected_glyph();
@@ -87,14 +88,13 @@ public:
     void on_setfontdata_changed();
     void add_font();
     Geom::PathVector flip_coordinate_system(Geom::PathVector pathv);
-    bool updating;
 
     // Used for font-family
     class AttrEntry
     {
     public:
         AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttr attr);
-        void set_text(char*);
+        void set_text(const char*);
         Gtk::Entry* get_entry() { return &entry; }
         Gtk::Label* get_label() { return _label; }
     private:
@@ -121,6 +121,8 @@ public:
         Gtk::Label* _label;
     };
 
+    OperationBlocker _update;
+
 private:
     void update_glyphs();
     void update_sensitiveness();
@@ -137,6 +139,7 @@ private:
     void remove_selected_glyph();
     void remove_selected_font();
     void remove_selected_kerning_pair();
+    void font_selected(SvgFont* svgfont, SPFont* spfont);
 
     void add_kerning_pair();
 

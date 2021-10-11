@@ -94,13 +94,14 @@ SvgFontsDialog::AttrEntry::AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustrin
     entry.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::AttrEntry::on_attr_changed));
 }
 
-void SvgFontsDialog::AttrEntry::set_text(char* t){
+void SvgFontsDialog::AttrEntry::set_text(const char* t){
     if (!t) return;
     entry.set_text(t);
 }
 
 // 'font-family' has a problem as it is also a presentation attribute for <text>
 void SvgFontsDialog::AttrEntry::on_attr_changed(){
+    if (dialog->_update.pending()) return;
 
     SPObject* o = nullptr;
     for (auto& node: dialog->get_selected_spfont()->children) {
@@ -152,6 +153,7 @@ void SvgFontsDialog::AttrSpin::set_value(double v){
 }
 
 void SvgFontsDialog::AttrSpin::on_attr_changed(){
+    if (dialog->_update.pending()) return;
 
     SPObject* o = nullptr;
     switch (this->attr) {
@@ -210,11 +212,13 @@ Gtk::Box* SvgFontsDialog::AttrCombo(gchar* lbl, const SPAttr /*attr*/){
 /*** SvgFontsDialog ***/
 
 GlyphComboBox::GlyphComboBox() {
-    set_wrap_width(4);
 }
 
 void GlyphComboBox::update(SPFont* spfont){
     if (!spfont) return;
+
+    // remove wrapping - it has severe performance penalty for appending items
+    set_wrap_width(0);
 
     this->remove_all();
 
@@ -223,6 +227,9 @@ void GlyphComboBox::update(SPFont* spfont){
             this->append((static_cast<SPGlyph*>(&node))->unicode);
         }
     }
+
+    // set desired wrpping now
+    set_wrap_width(4);
 }
 
 void SvgFontsDialog::on_kerning_value_changed(){
@@ -307,16 +314,23 @@ void SvgFontsDialog::update_sensitiveness(){
     }
 }
 
-/* Add all fonts in the getDocument() to the combobox. */
-void SvgFontsDialog::update_fonts()
+/** Add all fonts in the getDocument() to the combobox.
+ * This function is called when new document is selected as well as when SVG "definition" section changes.
+ * Try to detect if font(s) have actually been modified to eliminate some expensive refreshes.
+ */
+void SvgFontsDialog::update_fonts(bool document_replaced)
 {
-    std::vector<SPObject *> fonts = getDocument()->getResourceList( "font" );
+    std::vector<SPObject*> fonts;
+    if (auto document = getDocument()) {
+        fonts = document->getResourceList( "font" );
+    }
 
     auto children = _model->children();
     bool equal = false;
+    bool selected_font = false;
 
     // compare model and resources
-    if (children.size() == fonts.size()) {
+    if (!document_replaced && children.size() == fonts.size()) {
         equal = true; // assume they are the same
         auto it = fonts.begin();
         for (auto&& node : children) {
@@ -349,7 +363,10 @@ void SvgFontsDialog::update_fonts()
         if (!fonts.empty()) {
             // select a font, this dialog is disabled without a font
             auto selection = _FontsList.get_selection();
-            if (selection) selection->select(_model->get_iter("0"));
+            if (selection) {
+                selection->select(_model->get_iter("0"));
+                selected_font = true;
+            }
         }
     }
     else {
@@ -362,7 +379,13 @@ void SvgFontsDialog::update_fonts()
         }
     }
 
-    update_sensitiveness();
+    if (document_replaced && !selected_font) {
+        // replace fonts, they are stale
+        font_selected(nullptr, nullptr);
+    }
+    else {
+        update_sensitiveness();
+    }
 }
 
 void SvgFontsDialog::on_preview_text_changed(){
@@ -388,7 +411,11 @@ void SvgFontsDialog::on_kerning_pair_selection_changed(){
 
 void SvgFontsDialog::update_global_settings_tab(){
     SPFont* font = get_selected_spfont();
-    if (!font) return;
+    if (!font) {
+        //TODO: perhaps reset all values when there's no font
+        _familyname_entry->set_text("");
+        return;
+    }
 
     _horiz_adv_x_spin->set_value(font->horiz_adv_x);
     _horiz_origin_x_spin->set_value(font->horiz_origin_x);
@@ -406,18 +433,17 @@ void SvgFontsDialog::update_global_settings_tab(){
     }
 }
 
-void SvgFontsDialog::on_font_selection_changed(){
-    SPFont* spfont = this->get_selected_spfont();
-    if (!spfont) return;
+void SvgFontsDialog::font_selected(SvgFont* svgfont, SPFont* spfont) {
+    // in update
+    auto scoped(_update.block());
 
-    SvgFont* svgfont = this->get_selected_svgfont();
     first_glyph.update(spfont);
     second_glyph.update(spfont);
     kerning_preview.set_svgfont(svgfont);
     _font_da.set_svgfont(svgfont);
     _font_da.redraw();
 
-    kerning_slider->set_range(0, spfont->horiz_adv_x);
+    kerning_slider->set_range(0, spfont ? spfont->horiz_adv_x : 0);
     kerning_slider->set_draw_value(false);
     kerning_slider->set_value(0);
 
@@ -425,6 +451,12 @@ void SvgFontsDialog::on_font_selection_changed(){
     populate_glyphs_box();
     populate_kerning_pairs_box();
     update_sensitiveness();
+}
+
+void SvgFontsDialog::on_font_selection_changed(){
+    SPFont* spfont = get_selected_spfont();
+    SvgFont* svgfont = get_selected_svgfont();
+    font_selected(svgfont, spfont);
 }
 
 SPGlyphKerning* SvgFontsDialog::get_selected_kerning_pair()
@@ -553,22 +585,24 @@ SvgFontsDialog::populate_glyphs_box()
     }
     _GlyphsListStore->clear();
 
-    SPFont* spfont = this->get_selected_spfont();
+    SPFont* spfont = get_selected_spfont();
     _glyphs_observer.set(spfont);
 
-    for (auto& node: spfont->children) {
-        if (SP_IS_GLYPH(&node)){
-            Gtk::TreeModel::Row row = *(_GlyphsListStore->append());
-            row[_GlyphsListColumns.glyph_node] =  static_cast<SPGlyph*>(&node);
-            row[_GlyphsListColumns.glyph_name] = (static_cast<SPGlyph*>(&node))->glyph_name;
-            row[_GlyphsListColumns.unicode]    = (static_cast<SPGlyph*>(&node))->unicode;
-            row[_GlyphsListColumns.advance]    = (static_cast<SPGlyph*>(&node))->horiz_adv_x;
+    if (spfont) {
+        for (auto& node: spfont->children) {
+            if (SP_IS_GLYPH(&node)){
+                Gtk::TreeModel::Row row = *(_GlyphsListStore->append());
+                row[_GlyphsListColumns.glyph_node] =  static_cast<SPGlyph*>(&node);
+                row[_GlyphsListColumns.glyph_name] = (static_cast<SPGlyph*>(&node))->glyph_name;
+                row[_GlyphsListColumns.unicode]    = (static_cast<SPGlyph*>(&node))->unicode;
+                row[_GlyphsListColumns.advance]    = (static_cast<SPGlyph*>(&node))->horiz_adv_x;
+            }
         }
-    }
 
-    if (!selected_item.empty()) {
-        _GlyphsList.get_selection()->select(selected_item);
-        _GlyphsList.scroll_to_row(selected_item);
+        if (!selected_item.empty()) {
+            _GlyphsList.get_selection()->select(selected_item);
+            _GlyphsList.scroll_to_row(selected_item);
+        }
     }
 
     _GlyphsListStore->thaw_notify();
@@ -581,15 +615,15 @@ SvgFontsDialog::populate_kerning_pairs_box()
 
     _KerningPairsListStore->clear();
 
-    SPFont* spfont = this->get_selected_spfont();
-
-    for (auto& node: spfont->children) {
-        if (SP_IS_HKERN(&node)){
-            Gtk::TreeModel::Row row = *(_KerningPairsListStore->append());
-            row[_KerningPairsListColumns.first_glyph] = (static_cast<SPGlyphKerning*>(&node))->u1->attribute_string().c_str();
-            row[_KerningPairsListColumns.second_glyph] = (static_cast<SPGlyphKerning*>(&node))->u2->attribute_string().c_str();
-            row[_KerningPairsListColumns.kerning_value] = (static_cast<SPGlyphKerning*>(&node))->k;
-            row[_KerningPairsListColumns.spnode] = static_cast<SPGlyphKerning*>(&node);
+    if (SPFont* spfont = get_selected_spfont()) {
+        for (auto& node: spfont->children) {
+            if (SP_IS_HKERN(&node)){
+                Gtk::TreeModel::Row row = *(_KerningPairsListStore->append());
+                row[_KerningPairsListColumns.first_glyph] = (static_cast<SPGlyphKerning*>(&node))->u1->attribute_string().c_str();
+                row[_KerningPairsListColumns.second_glyph] = (static_cast<SPGlyphKerning*>(&node))->u2->attribute_string().c_str();
+                row[_KerningPairsListColumns.kerning_value] = (static_cast<SPGlyphKerning*>(&node))->k;
+                row[_KerningPairsListColumns.spnode] = static_cast<SPGlyphKerning*>(&node);
+            }
         }
     }
 }
@@ -623,6 +657,7 @@ SPGlyph *new_glyph(SPDocument* document, SPFont *font, const int count)
 void SvgFontsDialog::update_glyphs(){
     SPFont* font = get_selected_spfont();
     if (!font) return;
+
     populate_glyphs_box();
     populate_kerning_pairs_box();
     first_glyph.update(font);
@@ -793,7 +828,6 @@ void SvgFontsDialog::glyph_unicode_edit(const Glib::ustring&, const Glib::ustrin
     glyph->setAttribute("unicode", str);
 
     DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Set glyph unicode"));
-
     update_glyphs();
 }
 
@@ -824,7 +858,7 @@ void SvgFontsDialog::remove_selected_font(){
     sp_repr_unparent(font->getRepr());
     DocumentUndo::done(getDocument(), SP_VERB_DIALOG_SVG_FONTS, _("Remove font"));
 
-    update_fonts();
+    update_fonts(false);
 }
 
 void SvgFontsDialog::remove_selected_glyph(){
@@ -1082,7 +1116,7 @@ void SvgFontsDialog::add_font(){
         }
     }
 
-    update_fonts();
+    update_fonts(false);
 //    select_font(font);
 
     DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Add font"));
@@ -1150,10 +1184,9 @@ void SvgFontsDialog::documentReplaced()
     _defs_observer_connection.disconnect();
     if (auto document = getDocument()) {
         _defs_observer.set(document->getDefs());
-        _defs_observer_connection =
-            _defs_observer.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::update_fonts));
+        _defs_observer_connection = _defs_observer.signal_changed().connect([=](){ update_fonts(false); });
     }
-    update_fonts();
+    update_fonts(true);
 }
 
 } // namespace Dialog
