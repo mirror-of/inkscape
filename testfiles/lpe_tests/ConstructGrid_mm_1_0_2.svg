@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="250mm"
+   height="250mm"
+   viewBox="0 0 250 250"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:test-threshold="0.2">
+  <defs
+     id="defs2">
+    <inkscape:path-effect
+       effect="construct_grid"
+       id="path-effect12"
+       is_visible="true"
+       lpeversion="1"
+       nr_x="5"
+       nr_y="5" />
+    <inkscape:path-effect
+       effect="construct_grid"
+       id="path-effect16"
+       is_visible="true"
+       lpeversion="1"
+       nr_x="5"
+       nr_y="5" />
+  </defs>
+  <path
+     style="fill:#ff0000;fill-rule:evenodd;stroke:#ff8080;stroke-width:0.264583"
+     id="path02"
+     inkscape:path-effect="#path-effect12"
+     sodipodi:type="arc"
+     sodipodi:cx="186.84631"
+     sodipodi:cy="191.16818"
+     sodipodi:rx="46.695065"
+     sodipodi:ry="35.03508"
+     d="M 186.84631,226.20326 420.32164,51.027863 M 140.15125,191.16818 373.62657,15.992783 M 93.456184,156.1331 326.93151,-19.042297 M 46.76112,121.09802 280.23644,-54.077377 M 0.0660553,86.062943 233.54138,-89.112457 M -46.629009,51.027863 186.84631,-124.14754 m 0,350.3508 L -46.629009,51.027863 M 233.54138,191.16818 0.0660553,15.992783 M 280.23644,156.1331 46.76112,-19.042297 M 326.93151,121.09802 93.456184,-54.077377 M 373.62657,86.062943 140.15125,-89.112457 M 420.32164,51.027863 186.84631,-124.14754" />
+  <path
+     sodipodi:type="star"
+     style="stroke:#ff8080;stroke-width:0.264583"
+     id="path01"
+     sodipodi:sides="5"
+     sodipodi:cx="36.039883"
+     sodipodi:cy="161.52631"
+     sodipodi:r1="36.572998"
+     sodipodi:r2="12.763976"
+     sodipodi:arg1="0.78714885"
+     sodipodi:arg2="0.59272991"
+     inkscape:flatsided="false"
+     inkscape:rounded="0"
+     inkscape:randomized="0"
+     inkscape:transform-center-x="2.8191462"
+     inkscape:transform-center-y="-2.9357597"
+     transform="matrix(1.6123889,0,0,1.6423718,27.88509,-262.05498)"
+     inkscape:path-effect="#path-effect16"
+     d="m 46.626564,168.65661 76.145096,93.87972 M 19.379065,194.08397 95.524162,287.96369 M -7.8684335,219.51132 68.276664,313.39104 M -35.115932,244.93868 41.029165,338.8184 M -62.363431,270.36604 13.781666,364.24575 M -89.61093,295.79339 -13.465833,389.67311 M 46.626564,168.65661 -89.61093,295.79339 M 61.855583,187.43256 -74.38191,314.56934 M 77.084603,206.2085 -59.152891,333.34528 M 92.313622,224.98444 -43.923872,352.12122 M 107.54264,243.76039 -28.694852,370.89717 M 122.77166,262.53633 -13.465833,389.67311" />
+</svg>

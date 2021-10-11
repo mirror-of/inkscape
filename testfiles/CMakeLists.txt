@@ -51,13 +51,7 @@ if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     set(LPE_TESTS_64bit
         #0.92 or lower LPEs
         # (test not stable on 32bit Windows)
-        lpe-bendpath-test
-        lpe-bspline-test
-        lpe-envelope-test
-        lpe-patternalongpath-test
-        lpe-powerstroke-test
-        lpe-sketch-test
-        lpe-taperstroke-test
+        lpe64-test
     )
 endif()
 
@@ -91,43 +85,7 @@ set(TEST_SOURCES
     2geom-characterization-test
     xml-test
     sp-item-group-test
-    #0.92 or lower LPEs
-    lpe-attach-path-test
-    lpe-bounding-box-test
-    lpe-clone-original-test
-    lpe-constructgrid-test
-    lpe-ellipse_5pts-test
-    lpe-fill-between-many-test
-    lpe-fill-between-strokes-test
-    lpe-gears-test
-    lpe-interpolate-test
-    lpe-interpolate_points-test
-    lpe-jointype-test
-    lpe-knot-test
-    lpe-lattice2-test
-    lpe-mirror_symmetry-test
-    lpe-perspective-envelope-test
-    lpe-copy_rotate-test
-    lpe-roughen-test
-    lpe-roughhatches-test
-    lpe-ruler-test
-    lpe-showhandles-test
-    lpe-simplify-test
-    lpe-spiro-test
-    lpe-stitchsubpaths-test
-    lpe-transform_2pts-test
-    lpe-vonkoch-test
-    #1.0 LPEs
-    lpe-measure-segments-test
-    lpe-fillet-chamfer-test
-    lpe-powerclip-test
-    lpe-powermask-test
-    lpe-pts2ellipse-test
-    lpe-offset-test
-    lpe-dashed-stroke-test
-    #1.1 LPEs
-    lpe-bool-test
-    lpe-slice-test
+    lpe-test
     ${LPE_TESTS_64bit}
     )
 
@@ -149,7 +107,7 @@ endforeach()
 ### CLI and rendering tests
 add_subdirectory(cli_tests)
 add_subdirectory(rendering_tests)
-
+add_subdirectory(lpe_tests)
 
 ### Fuzz test
 if(WITH_FUZZ)

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="250mm"
+   height="250mm"
+   viewBox="0 0 250 250"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+  <defs
+     id="defs2">
+    <inkscape:path-effect
+       effect="ellipse_5pts"
+       id="path-effect26"
+       is_visible="true"
+       lpeversion="1" />
+  </defs>
+  <path
+     id="rect01"
+     style="fill:#0000ff;fill-rule:evenodd"
+     d="m 202.66249,139.65753 c -12.45277,22.43137 -56.48142,21.7773 -98.34073,-1.4609 C 62.46245,114.95842 38.623746,77.935918 51.076525,55.504549 c 12.452778,-22.431369 56.481425,-21.7773 98.340735,1.460903 41.85931,23.238204 65.69801,60.260708 53.24523,82.692078"
+     sodipodi:nodetypes="ccccccc"
+     inkscape:path-effect="#path-effect26"
+     inkscape:original-d="m 50.861622,55.90004 52.335718,-15.51685 53.60076,20.939902 36.58352,32.89488 -53.03798,58.444098 H 50.861622 Z"
+     transform="scale(0.5)" />
+</svg>

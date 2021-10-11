@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+Add files with LPE test with this pattern in file name:
+{LPENAME}{underscore}{small description to also avoid duple like px, mm multplpe or 001}{underscore}{{Underscores Inkscape file version}_.svg
+
+This folder contains LPE to test. LPE test API has some parameters can be good to know for fixing test, specialy legacy ones
+* inkscape:test-threshold="0.3" in the SVG element set a precission to all the test, if is in a sigle element add to it. if not exist use default one 0.0001
+* inkscape:test-ignore="true" skip this element from testing
