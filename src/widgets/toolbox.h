@@ -49,10 +49,11 @@ public:
     ToolboxFactory() = delete;
 
     static constexpr const char* tools_icon_size = "/toolbox/tools/iconsize";
-    static constexpr const char* tools_visible_buttons = "/toolbox/tools/buttons/show"; 
+    static constexpr const char* tools_visible_buttons = "/toolbox/tools/buttons"; 
     static constexpr const char* ctrlbars_icon_size = "/toolbox/controlbars/iconsize";
     static constexpr const int min_pixel_size = 16;
     static constexpr const int max_pixel_size = 48;
+    static Glib::ustring get_tool_visible_buttons_path(const Glib::ustring& button_action_name);
 };
 
 

@@ -1785,7 +1785,6 @@ void InkscapePreferences::initPageUI()
         toolbox->set_margin_end(MARGIN);
         toolbox->set_margin_top(MARGIN);
         toolbox->set_margin_bottom(MARGIN);
-        Glib::ustring visible_buttons_path = ToolboxFactory::tools_visible_buttons;
 
         sp_traverse_widget_tree(toolbox, [=](Gtk::Widget* widget){
             if (auto flowbox = dynamic_cast<Gtk::FlowBox*>(widget)) {
@@ -1802,7 +1801,7 @@ void InkscapePreferences::initPageUI()
                 button->set_margin_top(MARGIN / 2);
                 button->set_margin_bottom(MARGIN / 2);
                 button->set_sensitive();
-                auto path = visible_buttons_path + sp_get_action_target(button);
+                auto path = ToolboxFactory::get_tool_visible_buttons_path(sp_get_action_target(button));
                 auto visible = Inkscape::Preferences::get()->getBool(path, true);
                 button->set_active(visible);
                 button->signal_toggled().connect([=](){

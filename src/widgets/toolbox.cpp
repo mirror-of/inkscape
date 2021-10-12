@@ -774,6 +774,9 @@ void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)
 
 #define MODE_LABEL_WIDTH 70
 
+Glib::ustring ToolboxFactory::get_tool_visible_buttons_path(const Glib::ustring& button_action_name) {
+    return Glib::ustring(ToolboxFactory::tools_visible_buttons) + "/show" + button_action_name;
+}
 
 /*
   Local Variables:
