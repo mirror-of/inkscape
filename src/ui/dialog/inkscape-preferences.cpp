@@ -1812,7 +1812,7 @@ void InkscapePreferences::initPageUI()
         });
 
         dlg->add(*toolbox);
-        _page_toolbars.add_line(false, "Toolbox buttons:", *custom, "", _("Select visible tool buttons"), false);
+        _page_toolbars.add_line(false, _("Toolbox buttons:"), *custom, "", _("Select visible tool buttons"), false);
 
         struct tbar_info {const char* label; const char* prefs;} toolbars[] = {
             {_("Toolbox icon size:"),     ToolboxFactory::tools_icon_size},
