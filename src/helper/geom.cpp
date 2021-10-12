@@ -191,7 +191,36 @@ bounds_exact_transformed(Geom::PathVector const & pv, Geom::Affine const & t)
     return bbox;
 }
 
-
+bool 
+pathv_similar(Geom::PathVector apv, Geom::PathVector bpv, double precission) 
+{
+    if (apv == bpv) {
+        return true;
+    }
+    size_t totala = apv.curveCount();
+    if (totala != bpv.curveCount()) {
+        return false;
+    }
+    std::vector<Geom::Coord> pos;
+    for (size_t i = 0; i < totala; i++) {
+        Geom::Point pointa = apv.pointAt(float(i)+0.2);
+        Geom::Point pointb = bpv.pointAt(float(i)+0.2);
+        Geom::Point pointc = apv.pointAt(float(i)+0.4);
+        Geom::Point pointd = bpv.pointAt(float(i)+0.4);
+        Geom::Point pointe = apv.pointAt(float(i));
+        Geom::Point pointf = bpv.pointAt(float(i));
+        if (!Geom::are_near(pointa[Geom::X], pointb[Geom::X], precission) ||
+            !Geom::are_near(pointa[Geom::Y], pointb[Geom::Y], precission) ||
+            !Geom::are_near(pointc[Geom::X], pointd[Geom::X], precission) ||
+            !Geom::are_near(pointc[Geom::Y], pointd[Geom::Y], precission) ||
+            !Geom::are_near(pointe[Geom::X], pointf[Geom::X], precission) ||
+            !Geom::are_near(pointe[Geom::Y], pointf[Geom::Y], precission)) 
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 static void
 geom_line_wind_distance (Geom::Coord x0, Geom::Coord y0, Geom::Coord x1, Geom::Coord y1, Geom::Point const &pt, int *wind, Geom::Coord *best)

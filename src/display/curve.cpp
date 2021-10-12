@@ -19,6 +19,7 @@
 #include <2geom/sbasis-geometric.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/point.h>
+#include <helper/geom.h>
 
 #include <utility>
 
@@ -320,6 +321,18 @@ bool SPCurve::is_equal(SPCurve const *other) const
     }
     
     return false;
+}
+
+/**
+ * True if both curves are near
+ */
+bool SPCurve::is_similar(SPCurve const *other, double precission) const
+{
+    if(other == nullptr) {
+        return false;
+    } 
+
+    return pathv_similar(_pathv, other->get_pathvector(), precission);
 }
 
 /**

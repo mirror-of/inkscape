@@ -465,6 +465,53 @@ void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
     }
 }
 
+/* 
+ * Get bbox of clip/mask if is a rect to fix PDF import issues
+ */
+Geom::OptRect bbox_on_rect_clip (SPObject *object) {
+    SPShape *shape = dynamic_cast<SPShape *>(object);
+    Geom::OptRect bbox_clip = Geom::OptRect();
+    if (shape) {
+        auto curve = shape->curve();
+        if (curve) {
+            Geom::PathVector pv = curve->get_pathvector();
+            std::vector<Geom::Point> nodes = pv.nodes();
+            if (pv.size() == 1 && nodes.size() == 4) {
+                if (Geom::are_near(nodes[0][Geom::X],nodes[3][Geom::X]) &&
+                    Geom::are_near(nodes[1][Geom::X],nodes[2][Geom::X]) &&
+                    Geom::are_near(nodes[0][Geom::Y],nodes[1][Geom::Y]) &&
+                    Geom::are_near(nodes[2][Geom::Y],nodes[3][Geom::Y]))
+                {
+                    bbox_clip = shape->visualBounds();
+                    bbox_clip->expandBy(1);
+                }
+            }
+        }
+    }
+    return bbox_clip;
+}
+
+/* 
+ * Get clip and item has the same path, PDF fix
+ */
+bool equal_clip (SPItem *item, SPObject *clip) {
+    SPShape *shape = dynamic_cast<SPShape *>(item);
+    SPShape *shape_clip = dynamic_cast<SPShape *>(clip);
+    bool equal = false;
+    if (shape && shape_clip) {
+        auto filter = shape->style->getFilter();
+        auto stroke = shape->style->getFillOrStroke(false);
+        if (!filter && (!stroke || stroke->isNone())) {
+            SPCurve *curve = shape->curve();
+            SPCurve *curve_clip = shape_clip->curve();
+            if (curve && curve_clip) {
+                equal = curve->is_similar(curve_clip, 0.01);
+            }
+        }
+    }
+    return equal;
+}
+
 void
 sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_done)
 {
@@ -473,7 +520,34 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     SPDocument *doc = group->document;
     SPRoot *root = doc->getRoot();
     SPObject *defs = root->defs;
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool maskonungroup = prefs->getBool("/options/maskobject/maskonungroup", true);
+    bool topmost = prefs->getBool("/options/maskobject/topmost", true);
+    bool remove_original = prefs->getBool("/options/maskobject/remove", true);
+    int grouping = prefs->getInt("/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_NONE);
+    SPObject *clip = nullptr;
+    SPObject *mask = nullptr;
+    if (maskonungroup) {
+        Inkscape::ObjectSet tmp_clip_set(doc);
+        tmp_clip_set.add(group);
+        Inkscape::ObjectSet tmp_mask_set(doc);
+        tmp_mask_set.add(group);
+        auto *clip_obj = group->getClipObject();
+        auto *mask_obj = group->getMaskObject();
+        prefs->setBool("/options/maskobject/remove", true);
+        prefs->setBool("/options/maskobject/topmost", true);
+        prefs->setInt("/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_NONE);
+        if (clip_obj) {
+            tmp_clip_set.unsetMask(true,true);
+            tmp_clip_set.remove(group);
+            clip = tmp_clip_set.singleItem();
+        } 
+        if (mask_obj) {
+            tmp_mask_set.unsetMask(false,true);
+            tmp_mask_set.remove(group);
+            mask = tmp_mask_set.singleItem();
+        }
+    }
     Inkscape::XML::Node *grepr = group->getRepr();
 
     g_return_if_fail (!strcmp (grepr->name(), "svg:g")
@@ -572,7 +646,12 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             Inkscape::GC::release(repr);
         }
     }
-
+    Inkscape::ObjectSet result_mask_set(doc);
+    Inkscape::ObjectSet result_clip_set(doc);
+    Geom::OptRect bbox_clip = Geom::OptRect();
+    if (clip) { // if !maskonungroup is always null
+        bbox_clip = bbox_on_rect_clip(clip);
+    }
     /* Step 4 - add items */
     for (auto *repr : items) {
         // add item
@@ -591,7 +670,33 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         }
 
         Inkscape::GC::release(repr);
+        if (clip && item) { // if !maskonungroup is always null
+            Geom::OptRect bbox_item = item->visualBounds();
+            if (bbox_item && !equal_clip(item, clip)) {
+                if (!bbox_clip || !(*bbox_clip).contains(*bbox_item)) {
+                    result_clip_set.add(item);
+                }
+            }
+        }
+        if (mask && item) {
+            result_mask_set.add(item);
+        }
     }
+    if (clip) { // if !maskonungroup is always null
+        if (result_clip_set.size()) {
+            result_clip_set.add(clip);
+            result_clip_set.setMask(true,false,true);
+        } else {
+            clip->deleteObject(true, false);
+        }
+    }
+    if (mask) {
+        result_mask_set.add(mask);
+        result_mask_set.setMask(false,false,true);
+    }
+    prefs->setBool("/options/maskobject/remove", remove_original); // if !maskonungroup become unchanged
+    prefs->setBool("/options/maskobject/topmost", topmost);
+    prefs->setBool("/options/maskobject/grouping", grouping);
     if (do_done) {
         DocumentUndo::done(doc, SP_VERB_NONE, _("Ungroup"));
     }

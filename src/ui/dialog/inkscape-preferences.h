@@ -312,6 +312,7 @@ protected:
 
     UI::Widget::PrefCheckButton _mask_mask_on_top;
     UI::Widget::PrefCheckButton _mask_mask_remove;
+    UI::Widget::PrefCheckButton _mask_mask_on_ungroup;
     UI::Widget::PrefRadioButton _mask_grouping_none;
     UI::Widget::PrefRadioButton _mask_grouping_separate;
     UI::Widget::PrefRadioButton _mask_grouping_all;
