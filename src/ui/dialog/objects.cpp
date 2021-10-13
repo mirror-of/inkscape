@@ -128,13 +128,13 @@ public:
 
     /// The XML node associated with this watcher.
     Node *getRepr() const { return node; }
-    Gtk::TreeModel::Row const *getRow() const {
+    std::optional<Gtk::TreeRow> getRow() const {
         if (auto path = row_ref.get_path()) {
             if(auto iter = panel->_store->get_iter(path)) {
-                return &*iter;
+                return *iter;
             }
         }
-        return nullptr;
+        return std::nullopt;
     }
 
     std::unordered_map<Node const *, std::unique_ptr<ObjectWatcher>> child_watchers;

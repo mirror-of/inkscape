@@ -75,7 +75,7 @@ protected:
 
     Node *getRepr(Gtk::TreeModel::Row const &row) const;
     SPItem *getItem(Gtk::TreeModel::Row const &row) const;
-    Gtk::TreeModel::Row *getRow(SPItem *item) const;
+    std::optional<Gtk::TreeRow> getRow(SPItem *item) const;
 
     bool isDummy(Gtk::TreeModel::Row const &row) const { return getRepr(row) == nullptr; }
     bool hasDummyChildren(Gtk::TreeModel::Row const &row) const;
