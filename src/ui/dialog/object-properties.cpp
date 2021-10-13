@@ -278,9 +278,7 @@ void ObjectProperties::_init()
     /* Interactivity options */
     _exp_interactivity.set_vexpand(false);
     pack_start(_exp_interactivity, Gtk::PACK_SHRINK);
-
     show_all();
-    update_entries();
 }
 
 void ObjectProperties::update_entries()
@@ -565,6 +563,11 @@ void ObjectProperties::_hiddenToggled()
 }
 
 void ObjectProperties::selectionChanged(Selection *selection)
+{
+    update_entries();
+}
+
+void ObjectProperties::desktopReplaced()
 {
     update_entries();
 }

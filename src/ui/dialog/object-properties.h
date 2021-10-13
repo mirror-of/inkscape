@@ -124,6 +124,8 @@ private:
 
     /// Callback for checkbox Preserve Aspect Ratio.
     void _aspectRatioToggled();
+
+    void desktopReplaced() override;
 };
 }
 }
