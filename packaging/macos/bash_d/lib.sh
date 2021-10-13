@@ -1,9 +1,19 @@
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
 # SPDX-License-Identifier: GPL-2.0-or-later
-# https://github.com/dehesselle/bash_d
 
-### includes ###################################################################
+### description ################################################################
 
-bash_d_include echo.sh
+# Provide convenience wrappers for install_name_tool.
+
+### shellcheck #################################################################
+
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
+
+### dependencies ###############################################################
+
+assert_darwin
+bash_d_include echo
 
 ### variables ##################################################################
 
@@ -13,17 +23,16 @@ bash_d_include echo.sh
 
 function lib_change_path
 {
-  # This is a wrapper around install_name_tool to
-  #   - reduce the number of arguments as 'source' can be deducted from 'target'
-  #   - allow using regex as library name
-  #   - apply the requested changes to multiple binaries at once
+  # Compared to install_name_tool, this function
+  #   - requires less arguments as 'source' can be deducted from 'target'
+  #   - can apply the requested changes to multiple binaries at once
 
   local target=$1         # new path to dynamically linked library
   local binaries=${*:2}   # binaries to modify
 
   local source_lib=${target##*/}   # get library filename from target location
 
-  for binary in $binaries; do   # won't work with spaces in paths
+  for binary in $binaries; do   # won't work if spaces in paths
     # reset ID for libraries
     if [[ $binary == *.so ]] ||
        [[ $binary == *.dylib ]] ||
@@ -31,7 +40,7 @@ function lib_change_path
       lib_reset_id $binary
     fi
 
-    local source=$(otool -L $binary | grep -E "$source_lib " | awk '{ print $1 }')
+    local source=$(otool -L $binary | grep "$source_lib " | awk '{ print $1 }')
     if [ -z $source ]; then
       echo_w "no $source_lib in $binary"
     else
@@ -45,9 +54,9 @@ function lib_change_path
 
 function lib_change_paths
 {
-  # This is a slightly more advanced wrapper around install_name_tool.
-  # Given a directory $lib_dir that contains the libraries, all libraries
-  # linked in $binary can be changed at once to a specified $target path.
+  # This is a wrapper ontop lib_change_path: given a directory 'lib_dir' that
+  # contains the libraries, all (matching) libraries linked in 'binary' can be
+  # changed at once to a specified 'target' path.
 
   local target=$1         # new path to dynamically linked library
   local lib_dir=$2
@@ -65,17 +74,17 @@ function lib_change_paths
 
 function lib_change_siblings
 {
-  # This is a slightly more advanced wrapper around install_name_tool.
-  # All libraries inside a given $dir that are linked to libraries present
-  # in that $dir can be automatically adjusted.
+  # This is a wrapper ontop lib_change_path: all libraries inside a given
+  # 'lib_dir' that are linked to libraries located in that same 'lib_dir' can
+  # be automatically adjusted.
 
-  local dir=$1
+  local lib_dir=$1
 
-  for lib in $dir/*.dylib; do
+  for lib in $lib_dir/*.dylib; do
     lib_reset_id $lib
     for linked_lib in $(otool -L $lib | tail -n +2 | awk '{ print $1 }'); do
       if [ "$(basename $lib)" != "$(basename $linked_lib)" ] &&
-         [ -f $dir/$(basename $linked_lib) ]; then
+         [ -f $lib_dir/$(basename $linked_lib) ]; then
         lib_change_path @loader_path/$(basename $linked_lib) $lib
       fi
     done
@@ -87,6 +96,60 @@ function lib_reset_id
   local lib=$1
 
   install_name_tool -id $(basename $lib) $lib
+}
+
+function lib_add_rpath
+{
+  local rpath=$1
+  local binary=$2
+
+  install_name_tool -add_rpath "$rpath" "$binary"
+}
+
+function lib_clear_rpath
+{
+  local binary=$1
+
+  for rpath in $(otool -l $binary | grep -A2 LC_RPATH | grep -E "^[ ]+path" | awk '{ print $2 }'); do
+    install_name_tool -delete_rpath $rpath $binary
+  done
+}
+
+function lib_replace_path
+{
+  local source=$1
+  local target=$2
+  local binary=$3
+
+  for lib in $(lib_get_linked $binary); do
+    if [[ $lib =~ $source ]]; then
+      lib_change_path @rpath/$(basename $lib) $binary
+    fi
+  done
+}
+
+function lib_get_linked
+{
+  local binary=$1   # can be executable or library
+
+  #echo_d "binary: $binary"
+
+  local filter   # we need to distinguish between executable and library
+
+  local file_type
+  file_type=$(file "$binary")
+  if   [[ $file_type = *"shared library"* ]]; then
+    filter="-v $(otool -D "$binary" | tail -n 1)"  # exclude library id
+  elif [[ $file_type = *"executable"* ]]; then
+    filter="-E [.]+"                               # include everything
+  else
+    echo_w "neither shared library nor executable: $binary"
+    return 1
+  fi
+
+  # since we're not echoing this, output will be newline-separated
+  # shellcheck disable=SC2086 # need word splitting for arguments
+  otool -L "$binary" | grep " " | grep $filter | awk '{ print $1 }'
 }
 
 ### aliases ####################################################################

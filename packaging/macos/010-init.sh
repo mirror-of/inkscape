@@ -34,7 +34,7 @@ bash_d_include sed
 
 #--------------------------------------------------------------- toolset version
 
-VERSION=0.53
+VERSION=0.54
 
 #-------------------------------------------------------------- target OS by SDK
 
@@ -103,10 +103,12 @@ export TMPDIR=$TMP_DIR   # TMPDIR is the common macOS default
 export XDG_CACHE_HOME=$VAR_DIR/cache  # instead ~/.cache
 export XDG_CONFIG_HOME=$ETC_DIR       # instead ~/.config
 
-#-------------------------------------------------------------- directories: pip
+#----------------------------------------------------------- directories: Python
 
 export PIP_CACHE_DIR=$XDG_CACHE_HOME/pip       # instead ~/Library/Caches/pip
 export PIPENV_CACHE_DIR=$XDG_CACHE_HOME/pipenv # instead ~/Library/Caches/pipenv
+
+export PYTHONPYCACHEPREFIX=$TMP_DIR            # redirect __pycache__ here
 
 #--------------------------------------------------------- directories: artifact
 
@@ -167,7 +169,9 @@ done
 
 #---------------------------------------------------------- perform basic checks
 
-if sys_check_wrkdir && sys_check_sdkroot; then
+if sys_check_wrkdir &&
+   sys_check_sdkroot &&
+   sys_check_usr_local; then
   :         # all is well
 else
   exit 1    # cannot continue
