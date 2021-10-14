@@ -102,9 +102,6 @@ public:
                       unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
                       const gchar *e_notsp, const gchar *warn);
 
-    bool load_menus();
-    Inkscape::XML::Node * get_menus();
-    
     Inkscape::UI::Tools::ToolBase * active_event_context();
     SPDocument * active_document();
     SPDesktop * active_desktop();
@@ -201,7 +198,6 @@ public:
     Application& operator=(Application const&); // no assign
     Application* operator&() const; // no pointer access
 
-    Inkscape::XML::Document *_menus = nullptr;
     std::map<SPDocument *, int> _document_set;
     std::map<SPDocument *, AppSelectionModel *> _selection_models;
     std::vector<SPDesktop *> *_desktops = nullptr;

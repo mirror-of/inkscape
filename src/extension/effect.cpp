@@ -121,58 +121,65 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     std::string action_id = "app." + std::string(get_id());
 
     static auto gapp = InkscapeApplication::instance()->gtk_app();
-    gapp->add_action( this->get_id(),sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
+    gapp->add_action( this->get_id(), sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
 
     if (!hidden) {
-        // Submenu retrival as a string
-        std::string sub_menu;
-        get_menu(local_effects_menu,sub_menu);
-        sub_menu = action_menu_name(sub_menu);
+        // Submenu retrival as a list of strings (to handle nested menus).
+        std::list<Glib::ustring> sub_menu_list;
+        get_menu(local_effects_menu, sub_menu_list);
 
         if (local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
 
-            std::vector<std::vector<Glib::ustring>>raw_data_filter = {{ action_id, get_name(),"Filter",description}};
+            std::vector<std::vector<Glib::ustring>>raw_data_filter =
+                {{ action_id, get_name(), "Filter", description }};
             app->get_action_extra_data().add_data(raw_data_filter);
-            sub_menu = sub_menu.substr(1);
 
         } else {
 
-            std::vector<std::vector<Glib::ustring>>raw_data_effect = {{ action_id, get_name(),"Effect",description}};
+            std::vector<std::vector<Glib::ustring>>raw_data_effect =
+                {{ action_id, get_name(), "Effect", description }};
             app->get_action_extra_data().add_data(raw_data_effect);
-            sub_menu="effect"+sub_menu;
 
+            sub_menu_list.push_front("Effects");
         }
         
+        // std::cout << " Effect: name:  " << get_name();
+        // std::cout << "  id: " << get_id();
+        // std::cout << "  menu: ";
+        // for (auto sub_menu : sub_menu_list) {
+        //     std::cout << "|" << sub_menu.raw(); // Must use raw() as somebody has messed up encoding.
+        // }
+        // std::cout << "|" << std::endl;
+
         // Add submenu to effect data
-        app->get_action_effect_data().add_data(get_id(), sub_menu, get_name() );
+        app->get_action_effect_data().add_data(get_id(), sub_menu_list, get_name() );
     }
 }
 
 void
-Effect::get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu)
+Effect::get_menu (Inkscape::XML::Node * pattern, std::list<Glib::ustring>& sub_menu_list)
 {
-    Glib::ustring mergename;
+    Glib::ustring merge_name;
 
     if (pattern == nullptr) {
-        mergename = get_name();
+        merge_name = get_name();
     } else {
-        gchar const *menuname = pattern->attribute("name");
-        if (menuname == nullptr) menuname = pattern->attribute("_name");
-        if (menuname == nullptr) return;
+        gchar const *menu_name = pattern->attribute("name");
+        if (menu_name == nullptr) menu_name = pattern->attribute("_name");
+        if (menu_name == nullptr) return;
 
         if (_translation_enabled) {
-            mergename = get_translation(menuname);
+            merge_name = get_translation(menu_name);
         } else {
-            mergename = _(menuname);
+            merge_name = _(menu_name);
         }
 
         // Making sub menu string
-        sub_menu += "-";
-        sub_menu += menuname;
+        sub_menu_list.push_back(merge_name);
     }
 
     if (pattern != nullptr) {
-        get_menu( pattern->firstChild(),sub_menu);
+        get_menu( pattern->firstChild(), sub_menu_list);
     }
 }
 

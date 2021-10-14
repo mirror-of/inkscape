@@ -221,8 +221,6 @@ Application::Application(bool use_gui) :
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
         themecontext = new Inkscape::UI::ThemeContext();
         themecontext->add_gtk_css(false);
-        /* Load the preferences and menus */
-        load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
     }
 
@@ -289,11 +287,6 @@ Application::~Application()
     }
 
     Inkscape::Preferences::unload();
-
-    if (_menus) {
-        Inkscape::GC::release(_menus);
-        _menus = nullptr;
-    }
 
     _S_inst = nullptr; // this will probably break things
 
@@ -522,21 +515,6 @@ Application::crash_handler (int /*signum*/)
     fflush(stderr); // make sure buffers are empty before crashing (otherwise output might be suppressed)
 
     /* on exit, allow restored signal handler to take over and crash us */
-}
-
-/**
- *  Menus management
- *
- */
-bool Application::load_menus()
-{
-    using namespace Inkscape::IO::Resource;
-    Glib::ustring filename = get_filename(UIS, "menus.ui");
-    if (filename==nullptr) {
-        return false;
-    }
-    build_menu();
-    return true;
 }
 
 
@@ -977,17 +955,6 @@ Application::exit ()
 
     Inkscape::Preferences::unload();
     //gtk_main_quit ();
-}
-
-
-
-
-Inkscape::XML::Node *
-Application::get_menus()
-{
-    Inkscape::XML::Node *repr = _menus->root();
-    g_assert (!(strcmp (repr->name(), "inkscape")));
-    return repr->firstChild();
 }
 
 void

@@ -19,34 +19,15 @@
  *
  */
 
-#include <gtkmm.h>
-#include <glibmm/i18n.h>
+#include "menubar.h"
 
 #include <iostream>
+#include <map>
 
-#include "inkscape.h"
+#include <gtkmm.h>
+
 #include "inkscape-application.h" // Open recent
-
-#include "message-context.h"
-
-#include "helper/action.h"
-#include "helper/action-context.h"
-
-#include "io/resource.h"    // UI File location
-
-#include "object/sp-namedview.h"
-
-#include <gtkmm/application.h>
-
-#include "ui/icon-loader.h"
-#include "inkscape-window.h"
-#include "ui/shortcuts.h"
-#include "ui/view/view.h"
-#include "ui/uxmanager.h"   // To Do: Convert to actions
-
-#ifdef GDK_WINDOWING_QUARTZ
-#include <gtkosxapplication.h>
-#endif
+#include "io/resource.h"          // UI File location
 
 // =================== Main Menu ================
 void
@@ -73,19 +54,62 @@ build_menu()
         std::cerr << "build_menu: failed to build Main menu!" << std::endl;
     } else {
 
-        InkscapeApplication::instance()->gtk_app()->set_menubar(gmenu);
+        static auto app = InkscapeApplication::instance();
+        app->gtk_app()->set_menubar(gmenu);
 
         { // Filters and Extensions
-            static auto app = InkscapeApplication::instance();
 
-            for (auto [ filter_id, submenu_name ] : app->get_action_effect_data().give_all_data())
-            {
-                auto [ filter_submenu,filter_name ] = submenu_name;
-                auto sub_object = refBuilder->get_object(filter_submenu);
-                auto sub_gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(sub_object);
-                sub_gmenu->append( filter_name, "app."+filter_id );
+            auto effects_object = refBuilder->get_object("effect-menu-effects");
+            auto filters_object = refBuilder->get_object("filter-menu-filters");
+            auto effects_menu   = Glib::RefPtr<Gio::Menu>::cast_dynamic(effects_object);
+            auto filters_menu   = Glib::RefPtr<Gio::Menu>::cast_dynamic(filters_object);
+
+            if (!filters_menu) {
+                std::cerr << "build_menu(): Couldn't find Filters menu entry!" << std::endl;
+            }
+            if (!effects_menu) {
+                std::cerr << "build_menu(): Couldn't find Extensions menu entry!" << std::endl;
             }
 
+            std::map<Glib::ustring, Glib::RefPtr<Gio::Menu>> submenus;
+
+            for (auto [ entry_id, submenu_name_list, entry_name ] : app->get_action_effect_data().give_all_data())
+            {
+                if (submenu_name_list.size() > 0) {
+
+                    // Effect data is used for both filters menu and extensions menu... we need to
+                    // add to correct menu. 'submenu_name_list' either starts with 'Effects' or 'Filters'.
+                    // Note "Filters" is translated!
+                    Glib::ustring path; // Only used as index to map of submenus.
+                    auto top_menu = filters_menu;
+                    if (submenu_name_list.front() == "Effects") {
+                        top_menu = effects_menu;
+                        path += "Effects";
+                    } else {
+                        path += "Filters";
+                    }
+                    submenu_name_list.pop_front();
+
+                    if (top_menu) { // It's possible that the menu doesn't exist (Kid's Inkscape?)
+                        auto current_menu = top_menu;
+                        for (auto submenu_name : submenu_name_list) {
+                            path += submenu_name + "-";
+                            auto it = submenus.find(path);
+                            if (it == submenus.end()) {
+                                auto new_gsubmenu = Gio::Menu::create();
+                                submenus[path] = new_gsubmenu;
+                                current_menu->append_submenu(submenu_name, new_gsubmenu);
+                                current_menu = new_gsubmenu;
+                            } else {
+                                current_menu = it->second;
+                            }
+                        }
+                        current_menu->append(entry_name, "app." + entry_id);
+                    } else {
+                        std::cerr << "build_menu(): menu doesn't exist!" << std::endl; // Warn for now.
+                    }
+                }
+            }
         }
 
         { // Recent file

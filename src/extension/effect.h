@@ -12,6 +12,8 @@
 #ifndef INKSCAPE_EXTENSION_EFFECT_H__
 #define INKSCAPE_EXTENSION_EFFECT_H__
 
+#include <list>
+
 #include <glibmm/i18n.h>
 #include "extension.h"
 #include "inkscape-application.h"
@@ -36,14 +38,16 @@ class Effect : public Extension {
     /** \brief  This is the last effect that was used.  This is used in
                 a menu item to rapidly recall the same effect. */
     static Effect * _last_effect;
+
     Inkscape::XML::Node *find_menu (Inkscape::XML::Node * menustruct, const gchar *name);
-    void get_menu (Inkscape::XML::Node * pattern,std::string& sub_menu);
+    void get_menu (Inkscape::XML::Node * pattern, std::list<Glib::ustring>& sub_menu_list);
 
     /** \brief  Menu node created for this effect */
     Inkscape::XML::Node * _menu_node;
 
     /** \brief  The preference dialog if it is shown */
     PrefDialog * _prefDialog;
+
 public:
     Effect(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
     ~Effect  () override;

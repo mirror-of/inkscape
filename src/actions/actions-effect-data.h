@@ -12,25 +12,38 @@
 #ifndef INK_ACTIONS_EFFECT_DATA_H
 #define INK_ACTIONS_EFFECT_DATA_H
 
-#include <glibmm/ustring.h>
-#include <glibmm/varianttype.h>
-#include <map>
-#include <utility>
+#include <list>
 #include <vector>
+#include <utility>
+
+#include <glibmm/ustring.h>
 
 class InkActionEffectData
 {
 public:
     InkActionEffectData()  = default;
 
-    // Get Map
-    std::map<std::string, std::pair<std::string,Glib::ustring>> give_all_data();
+    typedef std::tuple<std::string, std::list<Glib::ustring>, Glib::ustring> datum;
+
+    // Get Vector
+    std::vector<datum> give_all_data();
 
     // Add Data
-    void add_data(std::string effect_id, std::string effect_submenu_name, Glib::ustring const &effect_name) ;
+    void add_data(std::string effect_id, std::list<Glib::ustring> effect_submenu_vector, Glib::ustring const &effect_name) ;
 
 private:
-    std::map<std::string, std::pair<std::string,Glib::ustring>> data;
+    std::vector<datum> data;
 };
 
 #endif // INK_ACTIONS_EFFECT_DATA_H
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
