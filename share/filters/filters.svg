@@ -1084,11 +1084,14 @@ sodipodi:docname="filters.svg">
 <feComposite k1="0.5" k3="1.5" k2="0.15" in="result4" in2="result5" operator="arithmetic" result="result6" />
 <feComposite operator="in" in="result6" in2="result4" />
 </filter>
-<filter id="f104" inkscape:label="Torn Edges" inkscape:menu="Distort" inkscape:menu-tooltip="Displace the outside of shapes and pictures without altering their content" height="1.4" y="-0.2" width="1.4" x="-0.2" style="color-interpolation-filters:sRGB;">
-<feTurbulence id="feTurbulence2917" baseFrequency="0.05" numOctaves="5" type="fractalNoise" result="result6" />
-<feGaussianBlur stdDeviation="0.5" result="result7" />
-<feDisplacementMap scale="25" result="result5" xChannelSelector="R" in="SourceGraphic" in2="result7" />
-<feComposite in="SourceGraphic" operator="atop" in2="result5" />
+<filter id="f104" inkscape:label="Burnt edges" inkscape:menu="Textures" inkscape:menu-tooltip="Torn edges with a dark inner blur" height="1.4" y="-0.2" width="1.4" x="-0.2">
+<feTurbulence baseFrequency="0.05" numOctaves="3" type="fractalNoise" />
+<feDisplacementMap scale="35" result="result5" xChannelSelector="R" in="SourceGraphic" yChannelSelector="G" />
+<feComposite in="SourceGraphic" operator="in" result="fbSourceGraphic" />
+<feColorMatrix result="fbSourceGraphicAlpha" in="fbSourceGraphic" values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0" />
+<feGaussianBlur result="result6" stdDeviation="8" in="fbSourceGraphic" />
+<feComposite in2="result6" operator="atop" in="fbSourceGraphic" result="result8" />
+<feComposite in="result8" in2="fbSourceGraphicAlpha" operator="atop" result="result9" />
 </filter>
 <filter id="f107" inkscape:menu="Textures" inkscape:label="Watercolor" inkscape:menu-tooltip="Cloudy watercolor effect" height="2" y="-0.5" width="1.6" x="-0.3" style="color-interpolation-filters:sRGB;">
 <feGaussianBlur stdDeviation="15" result="result8" />
