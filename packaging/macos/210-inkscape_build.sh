@@ -50,13 +50,8 @@ jhbuild_configure
 
 if ! $CI_GITLAB; then     # not running GitLab CI
 
-  if [ -d "$INK_DIR"/.git ]; then   # Already cloned?
-    # Special treatment 1/2 for local builds: Leave it up to the
-    # user if they need a fresh clone. This way we enable making changes
-    # to the code and running the build again.
-    echo_w "using existing repository in $INK_DIR"
-    echo_w "Do 'rm -rf $INK_DIR' if you want a fresh clone."
-    sleep 5
+  if [ -d "$INK_DIR" ]; then   # Sourcecode directory already there?
+    echo_i "using existing source $INK_DIR"
   else
     git clone \
       --branch "$INK_BRANCH" \
@@ -66,9 +61,9 @@ if ! $CI_GITLAB; then     # not running GitLab CI
       "$INK_URL" "$INK_DIR"
   fi
 
-  if ! $CI && [ -d "$INK_BLD_DIR" ]; then   # Running locally and build exists?
-    # Special treatment 2/2 for local builds: remove the build directory
-    # to ensure clean builds.
+  # Remove files from a previous build if they exist. This is to ensure clean
+  # builds when running locally or on non-ephemeral runners.
+  if [ -d "$INK_BLD_DIR" ]; then
     rm -rf "$INK_BLD_DIR"
   fi
 fi
@@ -92,7 +87,7 @@ ninja tests
 
 # Most libraries are linked to with their fully qualified paths, a few have been
 # linked to using '@rpath'. The Inkscape binary only provides an LC_RPATH
-# setting for its own library path (LIB_DIR/inkscape) at this point, so we need
-# to add LIB_DIR to make it work.
+# setting for its custom library path 'lib/inkscape' at this point, so we need
+# to add the common library path 'lib'.
 
-lib_add_rpath @loader_path/../lib $BIN_DIR/inkscape
+lib_add_rpath @loader_path/../lib "$BIN_DIR"/inkscape
