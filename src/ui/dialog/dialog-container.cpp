@@ -199,7 +199,7 @@ DialogBase *DialogContainer::dialog_factory(const Glib::ustring& dialog_type)
     else if(dialog_type == "UndoHistory")         return &Inkscape::UI::Dialog::UndoHistory::getInstance();
     else if(dialog_type == "XMLEditor")           return &Inkscape::UI::Dialog::XmlTree::getInstance();
 #if WITH_GSPELL
-    else if(dialog_type == "SpellCheck")          return &Inkscape::UI::Dialog::SpellCheck::getInstance();
+    else if(dialog_type == "Spellcheck")          return &Inkscape::UI::Dialog::SpellCheck::getInstance();
 #endif
 #ifdef DEBUG
     else if(dialog_type == "Prototype")           return &Inkscape::UI::Dialog::Prototype::getInstance();
