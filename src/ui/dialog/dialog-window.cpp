@@ -109,7 +109,8 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     // =============== Container ================
     _container = Gtk::manage(new DialogContainer());
     DialogMultipaned *columns = _container->get_columns();
-    columns->set_dropzone_sizes(WINDOW_DROPZONE_SIZE, WINDOW_DROPZONE_SIZE);
+    auto drop_size = Inkscape::Preferences::get()->getBool("/options/dockingzone/value", true) ? WINDOW_DROPZONE_SIZE / 2 : WINDOW_DROPZONE_SIZE;
+    columns->set_dropzone_sizes(drop_size, drop_size);
     box_outer->pack_end(*_container);
 
     // If there is no page, create an empty Dialogwindow to be populated later
@@ -121,7 +122,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
         // ============== New Notebook ==============
         DialogNotebook *dialog_notebook = Gtk::manage(new DialogNotebook(_container));
         column->append(dialog_notebook);
-        column->set_dropzone_sizes(WINDOW_DROPZONE_SIZE, WINDOW_DROPZONE_SIZE);
+        column->set_dropzone_sizes(drop_size, drop_size);
         dialog_notebook->move_page(*page);
 
         // Set window title
@@ -134,7 +135,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
         // Set window size considering what the dialog needs
         Gtk::Requisition minimum_size, natural_size;
         dialog->get_preferred_size(minimum_size, natural_size);
-        int overhead = 2 * (WINDOW_DROPZONE_SIZE + dialog->property_margin().get_value());
+        int overhead = 2 * (drop_size + dialog->property_margin().get_value());
         int width = natural_size.width + overhead;
         int height = natural_size.height + overhead + NOTEBOOK_TAB_HEIGHT;
         window_width = std::max(width, window_width);

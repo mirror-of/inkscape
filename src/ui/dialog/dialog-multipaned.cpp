@@ -49,9 +49,17 @@ namespace Dialog {
  * moved).
  */
 
+int get_drop_zone_size() {
+    return Inkscape::Preferences::get()->getBool("/options/dockingzone/value", true) ? DROPZONE_SIZE / 3 : DROPZONE_SIZE;
+}
+
+int get_handle_size() {
+    return HANDLE_SIZE;
+}
+
 /* ============ MyDropZone ============ */
 
-MyDropZone::MyDropZone(Gtk::Orientation orientation, int size = DROPZONE_SIZE)
+MyDropZone::MyDropZone(Gtk::Orientation orientation, int size = get_drop_zone_size())
     : Glib::ObjectBase("MultipanedDropZone")
     , Gtk::Orientable()
     , Gtk::EventBox()
@@ -64,11 +72,32 @@ MyDropZone::MyDropZone(Gtk::Orientation orientation, int size = DROPZONE_SIZE)
     } else {
         set_size_request(-1, size);
     }
+
+    get_style_context()->add_class("backgnd-passive");
+
+    signal_drag_motion().connect([=](const Glib::RefPtr<Gdk::DragContext>& ctx, int x, int y, guint time) {
+        if (!_active) {
+            _active = true;
+            const auto& style = get_style_context();
+            style->remove_class("backgnd-passive");
+            style->add_class("backgnd-active");
+        }
+        return true;
+    });
+
+    signal_drag_leave().connect([=](const Glib::RefPtr<Gdk::DragContext>&, guint time) {
+        if (_active) {
+            _active = false;
+            const auto& style = get_style_context();
+            style->remove_class("backgnd-active");
+            style->add_class("backgnd-passive");
+        }
+    });
 }
 
 /* ============  MyHandle  ============ */
 
-MyHandle::MyHandle(Gtk::Orientation orientation, int size = HANDLE_SIZE)
+MyHandle::MyHandle(Gtk::Orientation orientation, int size = get_handle_size())
     : Glib::ObjectBase("MultipanedHandle")
     , Gtk::Orientable()
     , Gtk::EventBox()
@@ -448,7 +477,7 @@ void DialogMultipaned::add_empty_widget()
 
     if (get_orientation() == Gtk::ORIENTATION_VERTICAL) {
         int dropzone_size = (get_height() - EMPTY_WIDGET_SIZE) / 2;
-        if (dropzone_size > DROPZONE_SIZE) {
+        if (dropzone_size > get_drop_zone_size()) {
             set_dropzone_sizes(dropzone_size, dropzone_size);
         }
     }
@@ -466,7 +495,7 @@ void DialogMultipaned::remove_empty_widget()
     }
 
     if (get_orientation() == Gtk::ORIENTATION_VERTICAL) {
-        set_dropzone_sizes(DROPZONE_SIZE, DROPZONE_SIZE);
+        set_dropzone_sizes(get_drop_zone_size(), get_drop_zone_size());
     }
 }
 
@@ -498,7 +527,7 @@ void DialogMultipaned::set_dropzone_sizes(int start, int end)
     bool orientation = get_orientation() == Gtk::ORIENTATION_HORIZONTAL;
 
     if (start == -1) {
-        start = DROPZONE_SIZE;
+        start = get_drop_zone_size();
     }
 
     MyDropZone *dropzone_s = dynamic_cast<MyDropZone *>(children[0]);
@@ -512,7 +541,7 @@ void DialogMultipaned::set_dropzone_sizes(int start, int end)
     }
 
     if (end == -1) {
-        end = DROPZONE_SIZE;
+        end = get_drop_zone_size();
     }
 
     MyDropZone *dropzone_e = dynamic_cast<MyDropZone *>(children[children.size() - 1]);

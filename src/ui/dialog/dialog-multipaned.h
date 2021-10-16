@@ -43,6 +43,8 @@ class MyDropZone
 public:
     MyDropZone(Gtk::Orientation orientation, int size);
     ~MyDropZone() override = default;
+private:
+    bool _active = false;
 };
 
 /* ============  HANDLE   ============ */

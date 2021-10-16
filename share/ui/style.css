@@ -546,6 +546,18 @@ stackswitcher button {
     background-image: none;
 }
 
+.backgnd-passive {
+    background-color: @theme_bg_color;
+    opacity: 0.5;
+    transition: background-color 300ms linear;
+}
+
+.backgnd-active {
+    background-color: @theme_selected_fg_color;
+    opacity: 0.5;
+    transition: background-color 100ms linear;
+}
+
 .tight-flowbox flowboxchild {
     margin: 0;
     padding: 0px;

@@ -85,6 +85,8 @@ namespace Dialog {
 using Inkscape::UI::Widget::DialogPage;
 using Inkscape::UI::Widget::PrefCheckButton;
 using Inkscape::UI::Widget::PrefRadioButton;
+using Inkscape::UI::Widget::PrefItem;
+using Inkscape::UI::Widget::PrefRadioButtons;
 using Inkscape::UI::Widget::PrefSpinButton;
 using Inkscape::UI::Widget::StyleSwatch;
 using Inkscape::CMSSystem;
@@ -230,6 +232,7 @@ InkscapePreferences::InkscapePreferences()
     scrolled_window->add(_page_list);
     scrolled_window->set_vexpand_set(true);
     scrolled_window->set_vexpand(true);
+    scrolled_window->set_shadow_type(Gtk::SHADOW_IN);
     _page_list_model = Gtk::TreeStore::create(_page_list_columns);
     _page_list_model_filter = Gtk::TreeModelFilter::create(_page_list_model);
     _page_list_model_sort = Gtk::TreeModelSort::create(_page_list_model_filter);
@@ -320,8 +323,8 @@ InkscapePreferences::InkscapePreferences()
     title_frame->add(_page_title);
     vbox_page->pack_start(*title_frame, false, false, 0);
     vbox_page->pack_start(_page_frame, true, true, 0);
-    _page_frame.set_shadow_type(Gtk::SHADOW_IN);
-    title_frame->set_shadow_type(Gtk::SHADOW_IN);
+    _page_frame.set_shadow_type(Gtk::SHADOW_NONE);
+    title_frame->set_shadow_type(Gtk::SHADOW_NONE);
 
     initPageTools();
     initPageUI();
@@ -1842,12 +1845,6 @@ void InkscapePreferences::initPageUI()
     _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST, false, &_win_save_geom);
     _win_save_geom_off.init ( _("Don't save window geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE, false, &_win_save_geom);
 
-    _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", PREFS_DIALOGS_STATE_SAVE, true, nullptr);
-    _win_save_dialog_pos_off.init ( _("Don't save dialogs status"), "/options/savedialogposition/value", PREFS_DIALOGS_STATE_NONE, false, &_win_save_dialog_pos_on);
-
-    _win_dockable.init ( _("Docked"), "/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE, true, nullptr);
-    _win_floating.init ( _("Floating"), "/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_FLOATING, false, &_win_dockable);
-
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, nullptr);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
@@ -1877,7 +1874,7 @@ void InkscapePreferences::initPageUI()
                            _("Set the default window size"), false);
     }
 
-    _page_windows.add_group_header( _("Saving window geometry (size and position)"));
+    _page_windows.add_group_header( _("Saving window size and position"), 4);
     _page_windows.add_line( true, "", _win_save_geom_off, "",
                             _("Let the window manager determine placement of all windows"));
     _page_windows.add_line( true, "", _win_save_geom_prefs, "",
@@ -1885,19 +1882,6 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, "", _win_save_geom, "",
                             _("Save and restore window geometry for each document (saves geometry in the document)"));
 
-    _page_windows.add_group_header( _("Saving dialogs' status"));
-    _page_windows.add_line( true, "", _win_save_dialog_pos_off, "",
-                            _("Don't save dialogs' status"));
-    _page_windows.add_line( true, "", _win_save_dialog_pos_on, "",
-                            _("Save and restore dialogs' status (the last open windows dialogs are saved when it closes)"));
-
-
-
-    _page_windows.add_group_header( _("Default dialog behavior (requires restart)"));
-    _page_windows.add_line( true, "", _win_dockable, "",
-                            _("Docked"));
-    _page_windows.add_line( true, "", _win_floating, "",
-                            _("Floating"));
 #ifdef _WIN32
     _page_windows.add_group_header( _("Desktop integration"));
     _page_windows.add_line( true, "", _win_native, "",
@@ -1906,33 +1890,57 @@ void InkscapePreferences::initPageUI()
                             _("Use GTK open and save dialogs "));
 #endif
 
-#ifndef _WIN32 // non-Win32 special code to enable transient dialogs
-    _page_windows.add_group_header( _("Dialogs on top:"));
+    auto reset_icon = []() {
+        auto image = Gtk::make_managed<Gtk::Image>();
+        image->set_from_icon_name("reset", Gtk::ICON_SIZE_BUTTON);
+        image->set_opacity(0.6);
+        image->set_tooltip_text(_("Requires restart to take effect"));
+        return image;
+    };
+    _page_windows.add_group_header(_("Dialogs settings"), 4);
 
-    _page_windows.add_line( true, "", _win_ontop_none, "",
-                            _("Dialogs are treated as regular windows"));
-    _page_windows.add_line( true, "", _win_ontop_normal, "",
-                            _("Dialogs stay on top of document windows"));
-    _page_windows.add_line( true, "", _win_ontop_agressive, "",
-                            _("Same as Normal but may work better with some window managers"));
+    std::vector<PrefItem> dock = {
+        { _("Docked"), PREFS_DIALOGS_BEHAVIOR_DOCKABLE, _("Allow dialog docking"), true },
+        { _("Floating"), PREFS_DIALOGS_BEHAVIOR_FLOATING, _("Disable dialog docking") }
+    };
+    _page_windows.add_line(true, _("Dialog behavior"), *Gtk::make_managed<PrefRadioButtons>(dock, "/options/dialogtype/value"), "", "", false, reset_icon());
+
+#ifndef _WIN32 // non-Win32 special code to enable transient dialogs
+    std::vector<PrefItem> on_top = {
+        { C_("Dialog on top", "None"), PREFS_DIALOGS_WINDOWS_NONE, _("Dialogs are treated as regular windows") },
+        { _("Normal"),    PREFS_DIALOGS_WINDOWS_NORMAL,     _("Dialogs stay on top of document windows"), true },
+        { _("Aggresive"), PREFS_DIALOGS_WINDOWS_AGGRESSIVE, _("Same as Normal but may work better with some window managers") }
+    };
+    _page_windows.add_line(true, _("Dialog on top"), *Gtk::make_managed<PrefRadioButtons>(on_top, "/options/transientpolicy/value"), "", "");
+#endif
+    std::vector<PrefItem> labels = {
+        { _("Automatic"), PREFS_NOTEBOOK_LABELS_AUTO, _("Dialog names will be displayed when there is enough space"), true },
+        { _("Off"), PREFS_NOTBOOK_LABELS_OFF, _("Only show dialog icons") }
+    };
+    _page_windows.add_line(true, _("Labels behavior"), *Gtk::make_managed<PrefRadioButtons>(labels, "/options/notebooklabels/value"), "", "", false, reset_icon());
+
+    auto save_dlg = Gtk::make_managed<PrefCheckButton>();
+    save_dlg->init(_("Save and restore dialogs' status"), "/options/savedialogposition/value", true);
+    _page_windows.add_line(true, "", *save_dlg, "", _("Save and restore dialogs' status (the last open windows dialogs are saved when it closes)")); 
+
+#ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+    _page_windows.add_line( true, "", _win_hide_task, "",
+                            _("Whether dialog windows are to be hidden in the window manager taskbar"));
 #endif
 
-    _page_windows.add_group_header( _("Dialog labels behavior (requires restart)"));
-    _page_windows.add_line( true, "", _win_dialogs_labels_auto, "", _("Dialog names will be displayed when there is enough space"));
-    _page_windows.add_line( true, "", _win_dialogs_labels_off, "", _("Only show dialog icons"));
+    auto reduce_zone = Gtk::make_managed<PrefCheckButton>();
+    reduce_zone->init(_("Reduce size of the docking zones"), "/options/dockingzone/value", true);
+    _page_windows.add_line(true, "", *reduce_zone, "", _("Reduce size of the drag and drop docking zones around docked dialogs"), false, reset_icon()); 
 
     _page_windows.add_group_header( _("Miscellaneous"));
 
     _page_windows.add_line( true, "", _win_show_boot, "",
                             _("Whether the Welcome dialog will be shown when Inkscape starts."));
-#ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
-    _page_windows.add_line( true, "", _win_hide_task, "",
-                            _("Whether dialog windows are to be hidden in the window manager taskbar"));
-#endif
     _page_windows.add_line( true, "", _win_zoom_resize, "",
                             _("Zoom drawing when document window is resized, to keep the same area visible (this is the default which can be changed in any window using the button above the right scrollbar)"));
     _page_windows.add_line( true, "", _win_save_viewport, "",
                             _("Save documents viewport (zoom and panning position). Useful to turn off when sharing version controlled files."));
+
     this->AddPage(_page_windows, _("Windows"), iter_ui, PREFS_PAGE_UI_WINDOWS);
 
     // Grids

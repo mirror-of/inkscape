@@ -132,7 +132,7 @@ void DialogPage::add_line(bool                 indent,
 
 }
 
-void DialogPage::add_group_header(Glib::ustring name)
+void DialogPage::add_group_header(Glib::ustring name, int columns)
 {
     if (name != "")
     {
@@ -142,6 +142,12 @@ void DialogPage::add_group_header(Glib::ustring name)
         label_widget->set_use_markup(true);
         label_widget->set_valign(Gtk::ALIGN_CENTER);
         add(*label_widget);
+        if (columns > 1) {
+            GValue width = G_VALUE_INIT;
+            g_value_init(&width, G_TYPE_INT);
+            g_value_set_int(&width, columns);
+            gtk_container_child_set_property(GTK_CONTAINER(gobj()), GTK_WIDGET(label_widget->gobj()), "width", &width);
+        }
     }
 }
 
@@ -241,6 +247,21 @@ void PrefRadioButton::on_toggled()
     }
     this->changed_signal.emit(this->get_active());
 }
+
+
+PrefRadioButtons::PrefRadioButtons(const std::vector<PrefItem>& buttons, const Glib::ustring& prefs_path) {
+    set_spacing(2);
+
+    PrefRadioButton* group = nullptr;
+    for (auto&& item : buttons) {
+        auto* btn = Gtk::make_managed<PrefRadioButton>();
+        btn->init(item.label, prefs_path, item.int_value, item.is_default, group);
+        btn->set_tooltip_text(item.tooltip);
+        add(*btn);
+        if (!group) group = btn;
+    }
+}
+
 
 void PrefSpinButton::init(Glib::ustring const &prefs_path,
               double lower, double upper, double step_increment, double /*page_increment*/,
