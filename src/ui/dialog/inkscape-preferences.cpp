@@ -2434,12 +2434,6 @@ void InkscapePreferences::initPageBehavior()
     this->AddPage(_page_scrolling, _("Scrolling"), iter_behavior, PREFS_PAGE_BEHAVIOR_SCROLLING);
 
     // Snapping options
-    _page_snapping.add_group_header( _("Snap defaults"));
-
-    _snap_default.init( _("Enable snapping in new documents"), "/options/snapdefault/value", true);
-    _page_snapping.add_line( true, "", _snap_default, "",
-                             _("Initial state of snapping in new documents and SVG files that are opened with Inkscape for the first time. Snap status is subsequently saved per-document."));
-
     _page_snapping.add_group_header( _("Snap indicator"));
 
     _snap_indicator.init( _("Enable snap indicator"), "/options/snapindicator/value", true);
