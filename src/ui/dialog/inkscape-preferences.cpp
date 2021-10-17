@@ -2304,7 +2304,7 @@ void InkscapePreferences::initPageIO()
     _page_autosave.add_line(false, C_("Filesystem", "Autosave _directory:"), _save_autosave_path, "", _("The directory where autosaves will be written. This should be an absolute path (starts with / on UNIX or a drive letter such as C: on Windows)."), false);
     _save_autosave_interval.init("/options/autosave/interval", 1.0, 10800.0, 1.0, 10.0, 10.0, true, false);
     _page_autosave.add_line(false, _("_Interval (in minutes):"), _save_autosave_interval, "", _("Interval (in minutes) at which document will be autosaved"), false);
-    _save_autosave_max.init("/options/autosave/max", 1.0, 100.0, 1.0, 10.0, 10.0, true, false);
+    _save_autosave_max.init("/options/autosave/max", 1.0, 10000.0, 1.0, 10.0, 10.0, true, false);
     _page_autosave.add_line(false, _("_Maximum number of autosaves:"), _save_autosave_max, "", _("Maximum number of autosaved files; use this to limit the storage space used"), false);
 
     // When changing the interval or enabling/disabling the autosave function,
