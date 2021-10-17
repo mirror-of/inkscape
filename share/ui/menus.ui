@@ -345,6 +345,7 @@
       	<attribute name='action'>win.dialog-open</attribute>
       	<attribute name='target'>Preferences</attribute>
       	<attribute name='icon'>preferences-system</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
   </submenu>
@@ -681,11 +682,13 @@
         <attribute name='label' translatable="yes">Switch to Layer Abov_e</attribute>
         <attribute name='action'>win.layer-previous</attribute>
         <attribute name='icon'>layer-previous</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Switch to Layer Belo_w</attribute>
         <attribute name='action'>win.layer-next</attribute>
         <attribute name='icon'>layer-next</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -693,16 +696,19 @@
         <attribute name='label' translatable="yes">Move Selection to Layer Abo_ve</attribute>
         <attribute name='action'>win.selection-move-to-layer-above</attribute>
         <attribute name='icon'>selection-move-to-layer-above</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Move Selection to Layer Bel_ow</attribute>
         <attribute name='action'>win.selection-move-to-layer-below</attribute>
         <attribute name='icon'>selection-move-to-layer-below</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Move Selection to Layer...</attribute>
         <attribute name='action'>win.selection-move-to-layer</attribute>
         <attribute name='icon'>selection-move-to-layer</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -710,21 +716,25 @@
         <attribute name='label' translatable="yes">Layer to _Top</attribute>
         <attribute name='action'>win.layer-top</attribute>
         <attribute name='icon'>layer-top</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Raise Layer</attribute>
         <attribute name='action'>win.layer-raise</attribute>
         <attribute name='icon'>layer-raise</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Lower Layer</attribute>
         <attribute name='action'>win.layer-lower</attribute>
         <attribute name='icon'>layer-lower</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Layer to _Bottom</attribute>
         <attribute name='action'>win.layer-bottom</attribute>
         <attribute name='icon'>layer-bottom</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -853,21 +863,25 @@
         <attribute name='label' translatable="yes">Raise to _Top</attribute>
         <attribute name='action'>app.selection-top</attribute>
         <attribute name='icon'>selection-top</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Raise</attribute>
         <attribute name='action'>app.selection-raise</attribute>
         <attribute name='icon'>selection-raise</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Lower</attribute>
         <attribute name='action'>app.selection-lower</attribute>
         <attribute name='icon'>selection-lower</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Lower to _Bottom</attribute>
         <attribute name='action'>app.selection-bottom</attribute>
         <attribute name='icon'>selection-bottom</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -875,21 +889,25 @@
         <attribute name='label' translatable="yes">Rotate 90° CW</attribute>
         <attribute name='action'>app.object-rotate-90-cw</attribute>
         <attribute name='icon'>object-rotate-right</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Rotate 90° CCW</attribute>
         <attribute name='action'>app.object-rotate-90-ccw</attribute>
         <attribute name='icon'>object-rotate-left</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Flip _Horizontal</attribute>
         <attribute name='action'>app.object-flip-horizontal</attribute>
         <attribute name='icon'>object-flip-horizontal</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Flip _Vertical</attribute>
         <attribute name='action'>app.object-flip-vertical</attribute>
         <attribute name='icon'>object-flip-vertical</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -946,31 +964,37 @@
         <attribute name='label' translatable="yes">_Union</attribute>
         <attribute name='action'>app.select-path-union</attribute>
         <attribute name='icon'>path-union</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Difference</attribute>
         <attribute name='action'>app.select-path-difference</attribute>
         <attribute name='icon'>path-difference</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Intersection</attribute>
         <attribute name='action'>app.select-path-intersection</attribute>
         <attribute name='icon'>path-intersection</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">E_xclusion</attribute>
         <attribute name='action'>app.select-path-exclusion</attribute>
         <attribute name='icon'>path-exclusion</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Di_vision</attribute>
         <attribute name='action'>app.select-path-division</attribute>
         <attribute name='icon'>path-division</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Cut _Path</attribute>
         <attribute name='action'>app.select-path-cut</attribute>
         <attribute name='icon'>path-cut</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -978,11 +1002,13 @@
         <attribute name='label' translatable="yes">_Combine</attribute>
         <attribute name='action'>app.select-path-combine</attribute>
         <attribute name='icon'>path-combine</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Break _Apart</attribute>
         <attribute name='action'>app.select-path-break-apart</attribute>
         <attribute name='icon'>path-break-apart</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -990,21 +1016,25 @@
         <attribute name='label' translatable="yes">I_nset</attribute>
         <attribute name='action'>win.select-path-inset</attribute>
         <attribute name='icon'>path-inset</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Outs_et</attribute>
         <attribute name='action'>win.select-path-outset</attribute>
         <attribute name='icon'>path-outset</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">D_ynamic Offset</attribute>
         <attribute name='action'>win.select-path-offset-dynamic</attribute>
         <attribute name='icon'>path-offset-dynamic</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Linked Offset</attribute>
         <attribute name='action'>win.select-path-offset-linked</attribute>
         <attribute name='icon'>path-offset-linked</attribute>
+        <attribute name='use-icon'>true</attribute>
       </item>
     </section>
     <section>
@@ -1117,60 +1147,7 @@
 
   <submenu id="filter-menu">
     <attribute name='label'  translatable="yes">Filter_s</attribute>
-    <submenu id="filters-bevels">
-      <attribute name='label' translatable='yes'>Bevels</attribute>
-    </submenu>
-    <submenu id="filters-blurs">
-      <attribute name='label' translatable='yes'>Blurs</attribute>
-    </submenu>
-    <submenu id="filters-bumps">
-      <attribute name='label' translatable='yes'>Bumps</attribute>
-    </submenu>
-    <submenu id="filters-color">
-      <attribute name='label' translatable='yes'>Color</attribute>
-    </submenu>
-    <submenu id="filters-distort">
-      <attribute name='label' translatable='yes'>Distort</attribute>
-    </submenu>
-    <submenu id="filters-fill-and-transparency">
-      <attribute name='label' translatable='yes'>Fill and Transparency</attribute>
-    </submenu>
-    <submenu id="filters-image-effects">
-      <attribute name='label' translatable='yes'>Image Effects</attribute>
-    </submenu>
-    <submenu id="filters-image-paint-and-draw">
-      <attribute name='label' translatable='yes'>Image Paint and Draw</attribute>
-    </submenu>
-    <submenu id="filters-materials">
-      <attribute name='label' translatable='yes'>Materials</attribute>
-    </submenu>
-    <submenu id="filters-morphology">
-      <attribute name='label' translatable='yes'>Morphology</attribute>
-    </submenu>
-    <submenu id="filters-non-realistic-3d-shaders">
-      <attribute name='label' translatable='yes'>Non-Realistic 3D Shaders</attribute>
-    </submenu>
-    <submenu id="filters-overlays">
-      <attribute name='label' translatable='yes'>Overlays</attribute>
-    </submenu>
-    <submenu id="filters-pixel-tools">
-      <attribute name='label' translatable='yes'>Pixel Tools</attribute>
-    </submenu>
-    <submenu id="filters-protrusions">
-      <attribute name='label' translatable='yes'>Protrusions</attribute>
-    </submenu>
-    <submenu id="filters-ridges">
-      <attribute name='label' translatable='yes'>Ridges</attribute>
-    </submenu>
-    <submenu id="filters-scatter">
-      <attribute name='label' translatable='yes'>Scatter</attribute>
-    </submenu>
-    <submenu id="filters-shadows-and-glows">
-      <attribute name='label' translatable='yes'>Shadows and Glows</attribute>
-    </submenu>
-    <submenu id="filters-textures">
-      <attribute name='label' translatable='yes'>Textures</attribute>
-    </submenu>
+    <section id="filter-menu-filters"/>
     <section>
       <item>
         <attribute name='label' translatable="yes">Filter _Editor...</attribute>
@@ -1187,81 +1164,7 @@
 
   <submenu id="effect-menu">
     <attribute name='label'  translatable="yes">Exte_nsions</attribute>
-    <submenu id="effect-arrange">
-      <attribute name='label' translatable='yes'>Arrange</attribute>
-    </submenu>
-    <submenu id="effect-color">
-      <attribute name='label' translatable='yes'>Color</attribute>
-    </submenu>
-    <submenu id="effect-document">
-      <attribute name='label' translatable='yes'>Document</attribute>
-    </submenu>
-    <submenu id="effect-export">
-      <attribute name='label' translatable='yes'>Export</attribute>
-    </submenu>
-    <submenu id="effect-gcodetools">
-      <attribute name='label' translatable='yes'>Gcodetools</attribute>
-    </submenu>
-    <submenu id="effect-generate-from-path">
-      <attribute name='label' translatable='yes'>Generate from Path</attribute>
-    </submenu>
-    <submenu id="effect-images">
-      <attribute name='label' translatable='yes'>Images</attribute>
-    </submenu>
-    <submenu id="effect-jessyink">
-      <attribute name='label' translatable='yes'>JessyInk</attribute>
-    </submenu>
-    <submenu id="effect-modify-path">
-      <attribute name='label' translatable='yes'>Modify Path</attribute>
-      <submenu id="effect-modify-path-mesh">
-        <attribute name='label' translatable='yes'>Mesh</attribute>
-      </submenu>
-    </submenu>
-    <submenu id="effect-raster">
-      <attribute name='label' translatable='yes'>Raster</attribute>
-    </submenu>
-    <submenu id="effect-render">
-      <attribute name='label' translatable='yes'>Render</attribute>
-      <submenu id="effect-render-grids">
-        <attribute name='label' translatable='yes'>Grids</attribute>
-      </submenu>
-      <submenu id="effect-render-gear">
-        <attribute name='label' translatable='yes'>Gear</attribute>
-      </submenu>
-      <submenu id="effect-render-layout">
-        <attribute name='label' translatable='yes'>Layout</attribute>
-      </submenu>
-      <submenu id="effect-render-mathematics">
-        <attribute name='label' translatable='yes'>Mathematics</attribute>
-      </submenu>
-      <submenu id="effect-render-barcode">
-        <attribute name='label' translatable='yes'>Barcode</attribute>
-      </submenu>
-    </submenu>
-    <submenu id="effect-stylesheet">
-      <attribute name='label' translatable='yes'>Stylesheet</attribute>
-    </submenu>
-    <submenu id="effect-text">
-      <attribute name='label' translatable='yes'>Text</attribute>
-      <submenu id="effect-text-change-case">
-        <attribute name='label' translatable='yes'>Change Case</attribute>
-      </submenu>
-    </submenu>
-    <submenu id="effect-typography">
-      <attribute name='label' translatable='yes'>Typography</attribute>
-    </submenu>
-    <submenu id="effect-visualize-path">
-      <attribute name='label' translatable='yes'>Visualize Path</attribute>
-    </submenu>
-    <submenu id="effect-web">
-      <attribute name='label' translatable='yes'>Web</attribute>
-      <submenu id="effect-web-javascript">
-        <attribute name='label' translatable='yes'>JavaScript</attribute>
-      </submenu>
-      <submenu id="effect-web-slicer">
-        <attribute name='label' translatable='yes'>Slicer</attribute>
-      </submenu>
-    </submenu>
+    <section id="effect-menu-effects"/>
     <section>
       <item>
         <attribute name='label' translatable="yes">Previous Exte_nsion</attribute>
@@ -1370,6 +1273,7 @@
           <attribute name='label' translatable="yes">_About Inkscape</attribute>
           <attribute name='action'>doc.help-about</attribute>
           <attribute name='icon'>inkscape-logo</attribute>
+          <attribute name='use-icon'>true</attribute>
         </item>
       </section>
     </submenu>
