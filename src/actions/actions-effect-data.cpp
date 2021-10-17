@@ -48,7 +48,7 @@ void
 InkActionEffectData::add_data ( std::string effect_id, std::list<Glib::ustring> effect_submenu_name,
                                 Glib::ustring const &effect_name )
 {
-    data.push_back(std::make_tuple(effect_id, effect_submenu_name, effect_name));
+    data.emplace_back(effect_id, effect_submenu_name, effect_name);
 }
 
 /*
