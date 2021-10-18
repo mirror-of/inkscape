@@ -22,11 +22,11 @@
 #include "menubar.h"
 
 #include <iostream>
+#include <iomanip>
 #include <map>
 
-#include <gtkmm.h>
-
 #include "inkscape-application.h" // Open recent
+#include "preferences.h"          // Use icons or not
 #include "io/resource.h"          // UI File location
 
 // =================== Main Menu ================
@@ -48,14 +48,17 @@ build_menu()
     }
 
     const auto object = refBuilder->get_object("menus");
+#if GTK_CHECK_VERSION(4, 0 ,0)
+    const auto gmenu = std::dynamic_pointer_cast<Gio::Menu>(object);
+#else
     const auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
+#endif
 
     if (!gmenu) {
         std::cerr << "build_menu: failed to build Main menu!" << std::endl;
     } else {
 
         static auto app = InkscapeApplication::instance();
-        app->gtk_app()->set_menubar(gmenu);
 
         { // Filters and Extensions
 
@@ -146,6 +149,112 @@ build_menu()
             }
         }
 
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
+        if (useicons != UseIcons::always) {
+            // Remove all or some icons.
+            auto gmenu_copy = Gio::Menu::create();
+            rebuild_menu (gmenu, gmenu_copy, useicons);
+            app->gtk_app()->set_menubar(gmenu_copy);
+        } else {
+            // Show all icons.
+            app->gtk_app()->set_menubar(gmenu);
+        }
+    }
+}
+
+
+/*
+ * Disable all or some menu icons.
+ *
+ * This is quite nasty:
+ *
+ * We must disable icons in the Gio::Menu as there is no way to pass
+ * the needed information to the children of Gtk::PopoverMenu and no
+ * way to set visibility via CSS.
+ *
+ * MenuItems are immutable and not copyable so you have to recreate
+ * the menu tree. The format for accessing MenuItem data is not the
+ * same as what you need to create a new MenuItem.
+ *
+ * NOTE: Input is a Gio::MenuModel, Output is a Gio::Menu!!
+ */
+#if GTK_CHECK_VERSION(4, 0, 0)
+void rebuild_menu (std::shared_ptr<Gio::MenuModel> menu, std::shared_ptr<Gio::Menu> menu_copy, UseIcons useIcons) {
+#else
+void rebuild_menu (Glib::RefPtr<Gio::MenuModel>    menu, Glib::RefPtr<Gio::Menu>    menu_copy, UseIcons useIcons) {
+#endif
+
+    for (int i = 0; i < menu->get_n_items(); ++i) {
+
+        Glib::ustring label;
+        Glib::ustring action;
+        Glib::ustring target;
+        Glib::VariantBase icon;
+        Glib::ustring use_icon;
+        std::map<Glib::ustring, Glib::VariantBase> attributes;
+
+        auto attribute_iter = menu->iterate_item_attributes(i);
+        while (attribute_iter->next()) {
+
+            // Attributes we need to create MenuItem or set icon.
+            if          (attribute_iter->get_name() == "label") {
+                label    = attribute_iter->get_value().print();
+                label.erase(0, 1);
+                label.erase(label.size()-1, 1);
+            } else if   (attribute_iter->get_name() == "action") {
+                action  = attribute_iter->get_value().print();
+                action.erase(0, 1);
+                action.erase(action.size()-1, 1);
+            } else if   (attribute_iter->get_name() == "target") {
+                target  = attribute_iter->get_value().print();
+            } else if   (attribute_iter->get_name() == "icon") {
+                icon     = attribute_iter->get_value();
+            } else if (attribute_iter->get_name() == "use-icon") {
+                use_icon =  attribute_iter->get_value().print();
+            } else {
+                // All the remaining attributes.
+                attributes[attribute_iter->get_name()] = attribute_iter->get_value();
+            }
+        }
+        Glib::ustring detailed_action = action;
+        if (target.size() > 0) {
+            detailed_action += "(" + target + ")";
+        }
+
+        // std::cout << "  label: " << std::setw(30) << label
+        //           << "  use_icon (.ui): " << std::setw(6) << use_icon
+        //           << "  icon: " << (icon ? "yes" : "no ")
+        //           << "  useIcons: " << (int)useIcons
+        //           << "  use_icon.size(): " << use_icon.size()
+        //           << std::endl;
+        auto menu_item = Gio::MenuItem::create(label, detailed_action);
+        if (icon &&
+            (useIcons == UseIcons::always ||
+             (useIcons == UseIcons::as_requested && use_icon.size() > 0))) {
+            menu_item->set_attribute_value("icon", icon);
+        }
+
+        // Add remaining attributes
+        for (auto const& [key, value] : attributes) {
+            menu_item->set_attribute_value(key, value);
+        }
+
+        // Add submenus
+        auto link_iter = menu->iterate_item_links(i);
+        while (link_iter->next()) {
+            auto submenu = Gio::Menu::create();
+            if (link_iter->get_name() == "submenu") {
+                menu_item->set_submenu(submenu);
+            } else if (link_iter->get_name() == "section") {
+                menu_item->set_section(submenu);
+            } else {
+                std::cerr << "rebuild_menu: Unknown link type: " << link_iter->get_name() << std::endl;
+            }
+            rebuild_menu (link_iter->get_value(), submenu, useIcons);
+        }
+
+        menu_copy->append_item(menu_item);
     }
 }
 
