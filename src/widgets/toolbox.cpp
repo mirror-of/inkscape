@@ -365,11 +365,20 @@ int show_popover(void* button) {
     return false;
 }
 
+class SnapBar : public Gtk::Box {
+public:
+    SnapBar() = default;
+    virtual ~SnapBar() = default;
+
+    Inkscape::PrefObserver _observer;
+};
+
 GtkWidget *ToolboxFactory::createSnapToolbox()
 {
-    auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(tb, "SnapToolbox");
-    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
+    auto tb = new SnapBar();
+    tb->set_name("SnapToolbox");
+    tb->set_orientation(Gtk::ORIENTATION_VERTICAL);
+    tb->set_homogeneous(false);
 
     Glib::ustring snap_toolbar_builder_file = get_filename(UIS, "toolbar-snap.ui");
     auto builder = Gtk::Builder::create();
@@ -388,7 +397,7 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
     if (!toolbar) {
         std::cerr << "InkscapeWindow: Failed to load snap toolbar!" << std::endl;
     } else {
-        gtk_box_pack_start(GTK_BOX(tb), GTK_WIDGET(toolbar->gobj()), false, false, 0);
+        tb->pack_start(*toolbar, false, false);
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if ( prefs->getBool("/toolbox/icononly", true) ) {
@@ -420,28 +429,37 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
             item_simple->hide();
         }
 
+        // Watch snap bar preferences;
+        Inkscape::Preferences* prefs = Inkscape::Preferences::get();
+        tb->_observer = prefs->createObserver(ToolboxFactory::snap_bar_simple, [=](const Preferences::Entry& entry) {
+            if (entry.getBool(true)) {
+                item_advanced->hide();
+                item_simple->show();
+                // adjust snapping options when transitioning to simple scheme, since most are hidden
+                transition_to_simple_snapping();
+            }
+            else {
+                item_simple->hide();
+                item_advanced->show();
+            }
+        });
+
         // switch to simple mode
         simple->signal_activate_link().connect([=](){
-            item_advanced->hide();
-            item_simple->show();
             g_timeout_add(250, &show_popover, btn_simple);
-            Inkscape::Preferences::get()->setBool("/toolbox/simplesnap", true);
-            // adjust snapping options when transitioning to simple scheme, since most are hidden
-            transition_to_simple_snapping();
+            Inkscape::Preferences::get()->setBool(ToolboxFactory::snap_bar_simple, true);
             return true;
         }, false);
 
         // switch to advanced mode
         advanced->signal_activate_link().connect([=](){
-            item_simple->hide();
-            item_advanced->show();
             g_timeout_add(250, &show_popover, btn_advanced);
-            Inkscape::Preferences::get()->setBool("/toolbox/simplesnap", false);
+            Inkscape::Preferences::get()->setBool(ToolboxFactory::snap_bar_simple, false);
             return true;
         }, false);
     }
 
-    return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
+    return toolboxNewCommon(GTK_WIDGET(tb->gobj()), BAR_SNAP, GTK_POS_LEFT);
 }
 
 void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)

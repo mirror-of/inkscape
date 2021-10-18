@@ -1836,6 +1836,12 @@ void InkscapePreferences::initPageUI()
             slider->set_margin_bottom(MARGIN);
             _page_toolbars.add_line(false, tbox.label, *slider, "", _("Adjust toolbar icon size"));
         }
+
+        std::vector<PrefItem> snap = {
+            { _("Simple"), 1, _("Present simplified snapping options that manage all advanced settings"), true },
+            { _("Advanced"), 0, _("Expose all snapping options for manual control") }
+        };
+        _page_toolbars.add_line(false, _("Snap controls bar:"), *Gtk::make_managed<PrefRadioButtons>(snap, "/toolbox/simplesnap"), "", "");
     }
 
     this->AddPage(_page_toolbars, _("Toolbars"), iter_ui, PREFS_PAGE_UI_TOOLBARS);
