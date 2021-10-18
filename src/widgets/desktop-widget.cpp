@@ -72,9 +72,6 @@
 #include "ui/widget/unit-tracker.h"
 #include "ui/themes.h"
 
-// TEMP
-#include "ui/desktop/menubar.h"
-
 #include "util/units.h"
 
 // We're in the "widgets" directory, so no need to explicitly prefix these:
@@ -1359,9 +1356,6 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     dtw->modified_connection = namedview->connectModified(sigc::mem_fun(*dtw, &SPDesktopWidget::namedviewModified));
 
     _layer_selector->setDesktop(dtw->desktop);
-
-    // TEMP
-    build_menu();
 
     dtw->layoutWidgets();
 

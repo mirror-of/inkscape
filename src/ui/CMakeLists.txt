@@ -27,6 +27,7 @@ set(ui_SRC
 
         desktop/document-check.cpp
 	desktop/menubar.cpp
+	desktop/menu-icon-shift.cpp
 
 	knot/knot.cpp
 	knot/knot-holder.cpp
@@ -266,6 +267,7 @@ set(ui_SRC
 
         desktop/document-check.h
 	desktop/menubar.h
+	desktop/menu-icon-shift.h
 
 	dialog/about.h
 	dialog/align-and-distribute.h

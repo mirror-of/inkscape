@@ -47,6 +47,7 @@
 #include "ui/monitor.h" // get_monitor_geometry_at_point()
 
 #include "ui/desktop/menubar.h"
+#include "ui/desktop/menu-icon-shift.h"
 
 #include "ui/drag-and-drop.h"
 
@@ -139,6 +140,16 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
         // This pokes the window to request the right size for the dialogs once loaded.
         Gtk::Window *win = _desktop->getToplevel();
         g_idle_add(GSourceFunc(&_resize_children), win);
+    }
+
+    // ================= Shift Icons =================
+    // Note: The menu is defined at the app level but shifting icons requires actual widgets and
+    // must be done on the window level.
+    for (auto child : get_children()) {
+        auto menubar = dynamic_cast<Gtk::MenuBar *>(child);
+        if (menubar) {
+            shift_icons_recursive(menubar);
+        }
     }
 
     // ========= Update text for Accellerators =======

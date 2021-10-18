@@ -41,6 +41,7 @@
 
 #include "ui/interface.h"                 // sp_ui_error_dialog
 #include "ui/desktop/document-check.h"    // Check for data loss on closing document window.
+#include "ui/desktop/menubar.h"
 #include "ui/dialog/dialog-manager.h"     // Save state
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
 #include "ui/dialog/startup.h"
@@ -744,6 +745,9 @@ InkscapeApplication::on_startup2()
 
     // ========================= GUI Init =========================
     Gtk::Window::set_default_icon_name("org.inkscape.Inkscape");
+
+    build_menu(); // Builds and adds menu to app. Used by all Inkscape windows. This can be done
+                  // before all actions defined.
 
     // Shortcuts
     // For verbs, shortcuts need to be setup before GUI elements are created! After verbs are gone,
