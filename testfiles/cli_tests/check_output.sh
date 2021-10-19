@@ -58,7 +58,7 @@ if [ -n "${TEST_SCRIPT}" ]; then
 
     case ${script} in
         *.py)
-            interpreter=python
+            interpreter=python3
             ;;
         *)
             interpreter=sh
