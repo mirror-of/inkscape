@@ -2554,7 +2554,7 @@ void InkscapePreferences::initPageBehavior()
                         _("Uncheck this to use the bottom selected object as the clipping path or mask"));
     _mask_mask_on_ungroup.init ( _("When ungroup, clip/mask is preserved in childrens"), "/options/maskobject/maskonungroup", true);
     _page_mask.add_line(false, "", _mask_mask_on_ungroup, "",
-                        _("Uncheck this to remove clip/mask on ugroup"));
+                        _("Uncheck this to remove clip/mask on ungroup"));
     _mask_mask_remove.init ( _("Remove clippath/mask object after applying"), "/options/maskobject/remove", true);
     _page_mask.add_line(false, "", _mask_mask_remove, "",
                         _("After applying, remove the object used as the clipping path or mask from the drawing"));
