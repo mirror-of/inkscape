@@ -79,19 +79,33 @@ double svg_renderer::get_height_px() const {
     return _document->getHeight().value("px");
 }
 
-Glib::RefPtr<Gdk::Pixbuf> svg_renderer::render(double scale) {
+Inkscape::Pixbuf* svg_renderer::do_render(double scale) {
     auto w = _document->getWidth().value("px");
     auto h = _document->getHeight().value("px");
     auto dpi = 96 * scale;
     auto area = Geom::Rect(0, 0, w, h);
 
-    Inkscape::Pixbuf* pixbuf = sp_generate_internal_bitmap(_document.get(), area, dpi);
+    return sp_generate_internal_bitmap(_document.get(), area, dpi);
+}
+
+Glib::RefPtr<Gdk::Pixbuf> svg_renderer::render(double scale) {
+    auto pixbuf = do_render(scale);
     if (!pixbuf) return Glib::RefPtr<Gdk::Pixbuf>();
 
     // ref it
     auto raw = Glib::wrap(pixbuf->getPixbufRaw(), true);
     delete pixbuf;
     return raw;
+}
+
+Cairo::RefPtr<Cairo::Surface> svg_renderer::render_surface(double scale) {
+    auto pixbuf = do_render(scale);
+    if (!pixbuf) return Cairo::RefPtr<Cairo::Surface>();
+
+    // ref it by saying that we have no reference
+    auto surface = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(pixbuf->getSurfaceRaw(), false));
+    delete pixbuf;
+    return surface;
 }
 
 } // namespace

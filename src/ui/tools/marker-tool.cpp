@@ -109,7 +109,7 @@ void MarkerTool::selection_changed(Inkscape::Selection *selection) {
                     SPMarker *sp_marker = dynamic_cast<SPMarker *>(obj);
                     g_assert(sp_marker != nullptr);
 
-                    validateMarker(sp_marker, doc);
+                    sp_validate_marker(sp_marker, doc);
 
                     ShapeRecord sr;
                     switch(editMarkerMode) {

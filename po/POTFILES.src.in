@@ -204,6 +204,7 @@
 ../src/object/sp-item.cpp
 ../src/object/sp-line.cpp
 ../src/object/sp-lpe-item.cpp
+../src/object/sp-marker.cpp
 ../src/object/sp-namedview.cpp
 ../src/object/sp-offset.cpp
 ../src/object/sp-path.cpp

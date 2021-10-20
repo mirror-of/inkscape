@@ -13,16 +13,22 @@
 #include <vector>
 
 #include <gtkmm/box.h>
-#include <gtkmm/combobox.h>
+#include <gtkmm/bin.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/flowbox.h>
+#include <gtkmm/image.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/spinbutton.h>
+#include <gtkmm/builder.h>
+#include <gio/gliststore.h>
 
 #include <sigc++/signal.h>
 
 #include "document.h"
 #include "inkscape.h"
-
-#include "display/drawing.h"
 #include "scrollprotected.h"
+#include "display/drawing.h"
+#include "ui/operation-blocker.h"
 
 class SPMarker;
 
@@ -37,38 +43,80 @@ namespace UI {
 namespace Widget {
 
 /**
- * ComboBox derived class for selecting stroke markers.
+ * ComboBox-like class for selecting stroke markers.
  */
-class MarkerComboBox : public ScrollProtected<Gtk::ComboBox> {
-    using parent_type = ScrollProtected<Gtk::ComboBox>;
+class MarkerComboBox : public Gtk::Bin {
+    using parent_type = Gtk::Bin;
 
 public:
-    MarkerComboBox(gchar const *id, int loc);
+    MarkerComboBox(Glib::ustring id, int loc);
     ~MarkerComboBox() override;
 
     void setDocument(SPDocument *);
 
     sigc::signal<void> changed_signal;
+    sigc::signal<void> edit_signal;
 
     void set_current(SPObject *marker);
-    void set_selected(const gchar *name, gboolean retry=true);
-    const gchar *get_active_marker_uri();
-    bool update() { return updating; };
-    gchar const *get_id() { return combo_id; };
-    void update_marker_image(gchar const *mname);
-    int get_loc() { return loc; };
+    std::string get_active_marker_uri();
+    bool in_update() { return _update.pending(); };
+    const char* get_id() { return _combo_id.c_str(); };
+    int get_loc() { return _loc; };
+
+    sigc::signal<void()> signal_changed() { return _signal_changed; }
 
 private:
+    struct MarkerItem : Glib::Object {
+        Cairo::RefPtr<Cairo::Surface> pix;
+        SPDocument* source = nullptr;
+        std::string id;
+        std::string label;
+        bool stock = false;
+        bool history = false;
+        bool separator = false;
+        int width = 0;
+        int height = 0;
 
+        bool operator == (const MarkerItem& item) const;
+    };
 
-    Glib::RefPtr<Gtk::ListStore> marker_store;
-    gchar const *combo_id;
-    int loc;
-    bool updating;
-    guint markerCount;
-    SPDocument *doc = nullptr;
-    SPDocument *sandbox;
-    Gtk::CellRendererPixbuf image_renderer;
+    SPMarker* get_current() const;
+    Glib::ustring _current_marker_id;
+    // SPMarker* _current_marker = nullptr;
+    sigc::signal<void()> _signal_changed;
+    Glib::RefPtr<Gtk::Builder> _builder;
+    Gtk::FlowBox& _marker_list;
+    Gtk::Label& _marker_name;
+    Glib::RefPtr<Gio::ListStore<MarkerItem>> _marker_store;
+    std::vector<Glib::RefPtr<MarkerItem>> _stock_items;
+    std::vector<Glib::RefPtr<MarkerItem>> _history_items;
+    std::map<Gtk::Widget*, Glib::RefPtr<MarkerItem>> _widgets_to_markers;
+    Gtk::Image& _preview;
+    bool _preview_no_alloc = true;
+    Gtk::Button& _link_scale;
+    Gtk::SpinButton& _angle_btn;
+    Gtk::MenuButton& _menu_btn;
+    Gtk::SpinButton& _scale_x;
+    Gtk::SpinButton& _scale_y;
+    Gtk::CheckButton& _scale_with_stroke;
+    Gtk::SpinButton& _offset_x;
+    Gtk::SpinButton& _offset_y;
+    Gtk::Widget& _input_grid;
+    Gtk::RadioButton& _orient_auto_rev;
+    Gtk::RadioButton& _orient_auto;
+    Gtk::RadioButton& _orient_angle;
+    Gtk::Button& _orient_flip_horz;
+    Gtk::Image& _current_img;
+    Gtk::Button& _edit_marker;
+    bool _scale_linked = true;
+    guint32 _background_color;
+    guint32 _foreground_color;
+    Glib::ustring _combo_id;
+    int _loc;
+    OperationBlocker _update;
+    SPDocument *_document = nullptr;
+    std::unique_ptr<SPDocument> _sandbox;
+    Gtk::CellRendererPixbuf _image_renderer;
 
     class MarkerColumns : public Gtk::TreeModel::ColumnRecord {
     public:
@@ -85,25 +133,27 @@ private:
     };
     MarkerColumns marker_columns;
 
+    void update_ui(SPMarker* marker, bool select);
+    void update_widgets_from_marker(SPMarker* marker);
+    void update_store();
+    Glib::RefPtr<MarkerItem> add_separator(bool filler);
+    void update_scale_link();
+    Glib::RefPtr<MarkerItem> get_active();
+    Glib::RefPtr<MarkerItem> find_marker_item(SPMarker* marker);
+    void on_style_updated() override;
+    void update_preview(Glib::RefPtr<MarkerItem> marker_item);
+    void update_menu_btn(Glib::RefPtr<MarkerItem> marker_item);
+    void set_active(Glib::RefPtr<MarkerItem> item);
     void init_combo();
     void set_history(Gtk::TreeModel::Row match_row);
-    void sp_marker_list_from_doc(SPDocument *source,  gboolean history);
-    std::vector <SPMarker*> get_marker_list (SPDocument *source);
+    void marker_list_from_doc(SPDocument* source, bool history);
+    std::vector<SPMarker*> get_marker_list(SPDocument* source);
     void add_markers (std::vector<SPMarker *> const& marker_list, SPDocument *source,  gboolean history);
     void remove_markers (gboolean history);
-    SPDocument *ink_markers_preview_doc ();
-    Glib::RefPtr<Gdk::Pixbuf> create_marker_image(unsigned psize, gchar const *mname,
-                       SPDocument *source, Inkscape::Drawing &drawing, unsigned /*visionkey*/);
-
-    /*
-     * Callbacks for drawing the combo box
-     */
-    static gboolean separator_cb (GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
-
-    static void handleDefsModified(MarkerComboBox *self);
-
-    void refreshHistory();
-
+    std::unique_ptr<SPDocument> ink_markers_preview_doc(const Glib::ustring& group_id);
+    Cairo::RefPtr<Cairo::Surface> create_marker_image(Geom::IntPoint pixel_size, gchar const *mname,
+        SPDocument *source, Inkscape::Drawing &drawing, unsigned /*visionkey*/, bool checkerboard, bool no_clip, double scale);
+    void refresh_after_markers_modified();
     sigc::connection modified_connection;
 };
 

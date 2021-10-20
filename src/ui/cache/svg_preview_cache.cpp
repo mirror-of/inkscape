@@ -31,33 +31,64 @@
 
 #include "ui/cache/svg_preview_cache.h"
 
-GdkPixbuf* render_pixbuf(Inkscape::Drawing &drawing, double scale_factor, Geom::Rect const &dbox, unsigned psize)
+cairo_surface_t* render_surface(Inkscape::Drawing &drawing, double scale_factor, Geom::Rect const &dbox,
+    Geom::IntPoint pixsize, double device_scale, const guint32* checkerboard_color, bool no_clip)
 {
-    drawing.root()->setTransform(Geom::Scale(scale_factor));
+    scale_factor *= device_scale;
+    pixsize.x() *= device_scale;
+    pixsize.y() *= device_scale;
 
     Geom::IntRect ibox = (dbox * Geom::Scale(scale_factor)).roundOutwards();
+
+    if (no_clip) {
+        // check if object fits in the surface
+        if (ibox.width() > pixsize.x() || ibox.height() > pixsize.y()) {
+            auto sx = static_cast<double>(ibox.width()) / pixsize.x();
+            auto sy = static_cast<double>(ibox.height()) / pixsize.y();
+            // reduce scale
+            scale_factor /= std::max(sx, sy);
+            ibox = (dbox * Geom::Scale(scale_factor)).roundOutwards();
+        }
+    }
+
+    drawing.root()->setTransform(Geom::Scale(scale_factor));
 
     drawing.update(ibox);
 
     /* Find visible area */
     int width = ibox.width();
     int height = ibox.height();
-    int dx = psize;
-    int dy = psize;
+    int dx = pixsize.x();
+    int dy = pixsize.y();
     dx = (dx - width)/2; // watch out for size, since 'unsigned'-'signed' can cause problems if the result is negative
     dy = (dy - height)/2;
 
-    Geom::IntRect area = Geom::IntRect::from_xywh(
-        ibox.min() - Geom::IntPoint(dx, dy), Geom::IntPoint(psize, psize));
+    Geom::IntRect area = Geom::IntRect::from_xywh(ibox.min() - Geom::IntPoint(dx, dy), pixsize);
 
     /* Render */
-    cairo_surface_t *s = cairo_image_surface_create(
-        CAIRO_FORMAT_ARGB32, psize, psize);
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, pixsize.x(), pixsize.y());
     Inkscape::DrawingContext dc(s, area.min());
+
+    if (checkerboard_color) {
+        guint rgba = *checkerboard_color;
+        auto pattern = ink_cairo_pattern_create_checkerboard(rgba);
+        dc.save();
+        dc.transform(Geom::Scale(device_scale));
+        dc.setOperator(CAIRO_OPERATOR_SOURCE);
+        dc.setSource(pattern);
+        dc.paint();
+        dc.restore();
+        cairo_pattern_destroy(pattern);
+    }
 
     drawing.render(dc, area, Inkscape::DrawingItem::RENDER_BYPASS_CACHE);
     cairo_surface_flush(s);
 
+    return s;
+}
+
+GdkPixbuf* render_pixbuf(Inkscape::Drawing &drawing, double scale_factor, Geom::Rect const &dbox, unsigned psize) {
+    auto s = render_surface(drawing, scale_factor, dbox, Geom::IntPoint(psize, psize), 1, nullptr, true);
     GdkPixbuf* pixbuf = ink_pixbuf_create_from_cairo_surface(s);
     return pixbuf;
 }

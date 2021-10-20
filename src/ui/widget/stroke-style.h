@@ -149,17 +149,14 @@ private:
     void miterLimitChangedCB();
     void lineDashChangedCB();
     void unitChangedCB();
-    bool shouldMarkersBeUpdated();
-    static void markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const which);
+    bool areMarkersBeingUpdated();
+    void markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const which);
     static void buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw);
 
 
     MarkerComboBox *startMarkerCombo;
     MarkerComboBox *midMarkerCombo;
     MarkerComboBox *endMarkerCombo;
-    Gtk::Button *editStartMarkerButton;
-    Gtk::Button *editMidMarkerButton;
-    Gtk::Button *editEndMarkerButton;
     Gtk::Grid *table;
     Glib::RefPtr<Gtk::Adjustment> *widthAdj;
     Glib::RefPtr<Gtk::Adjustment> *miterLimitAdj;

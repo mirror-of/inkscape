@@ -531,6 +531,17 @@ button.link:hover image {
     -gtk-icon-effect: dim;
 }
 
+.marker-item.box {
+    padding: 4px;
+}
+.marker-separator {
+    padding: 0;
+}
+
+.tight-button {
+    padding: 5px 3px;
+}
+
 /* In some themes stack switcher buttons are extra wide forcing dialogs too wide */
 stackswitcher button {
     padding-left: 1px;

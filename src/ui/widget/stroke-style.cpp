@@ -143,9 +143,6 @@ StrokeStyle::StrokeStyle() :
     startMarkerConn(),
     midMarkerConn(),
     endMarkerConn(),
-    editStartMarkerButton(),
-    editMidMarkerButton(),
-    editEndMarkerButton(),
     _old_unit(nullptr)
 {
     table = new Gtk::Grid();
@@ -249,64 +246,29 @@ StrokeStyle::StrokeStyle() :
 
     startMarkerCombo = Gtk::manage(new MarkerComboBox("marker-start", SP_MARKER_LOC_START));
     startMarkerCombo->set_tooltip_text(_("Start Markers are drawn on the first node of a path or shape"));
-    startMarkerConn = startMarkerCombo->signal_changed().connect(
-            sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
-                sigc::ptr_fun(&StrokeStyle::markerSelectCB), startMarkerCombo, this, SP_MARKER_LOC_START));
+    startMarkerConn = startMarkerCombo->signal_changed().connect([=]() { markerSelectCB(startMarkerCombo, SP_MARKER_LOC_START); });
+    startMarkerCombo->edit_signal.connect([=] { enterEditMarkerMode(SP_MARKER_LOC_START); });
     startMarkerCombo->show();
 
     hb->pack_start(*startMarkerCombo, true, true, 0);
 
     midMarkerCombo = Gtk::manage(new MarkerComboBox("marker-mid", SP_MARKER_LOC_MID));
     midMarkerCombo->set_tooltip_text(_("Mid Markers are drawn on every node of a path or shape except the first and last nodes"));
-    midMarkerConn = midMarkerCombo->signal_changed().connect(
-        sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
-            sigc::ptr_fun(&StrokeStyle::markerSelectCB), midMarkerCombo, this, SP_MARKER_LOC_MID));
+    midMarkerConn = midMarkerCombo->signal_changed().connect([=]() { markerSelectCB(midMarkerCombo, SP_MARKER_LOC_MID); });
+    midMarkerCombo->edit_signal.connect([=] { enterEditMarkerMode(SP_MARKER_LOC_MID); });
     midMarkerCombo->show();
 
     hb->pack_start(*midMarkerCombo, true, true, 0);
 
     endMarkerCombo = Gtk::manage(new MarkerComboBox("marker-end", SP_MARKER_LOC_END));
     endMarkerCombo->set_tooltip_text(_("End Markers are drawn on the last node of a path or shape"));
-    endMarkerConn = endMarkerCombo->signal_changed().connect(
-        sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
-            sigc::ptr_fun(&StrokeStyle::markerSelectCB), endMarkerCombo, this, SP_MARKER_LOC_END));
+    endMarkerConn = endMarkerCombo->signal_changed().connect([=]() { markerSelectCB(endMarkerCombo, SP_MARKER_LOC_END); });
+    endMarkerCombo->edit_signal.connect([=] { enterEditMarkerMode(SP_MARKER_LOC_END); });
     endMarkerCombo->show();
 
     hb->pack_start(*endMarkerCombo, true, true, 0);
-
     i++;
 
-    /* marker edit mode buttons*/
-    spw_label(table, _("Edit:"), 0, i, nullptr);
-
-    hb = spw_hbox(table, 1, 1, i);
-    i++;
-
-    editStartMarkerButton = Gtk::manage(new Gtk::Button(_("start"), true));
-    editStartMarkerButton->set_tooltip_text(_("Edit the start marker of the selected object."));
-    editStartMarkerButton->signal_clicked().connect([=]() {
-        enterEditMarkerMode(SP_MARKER_LOC_START);
-    });
-    editStartMarkerButton->show();
-    hb->pack_start(*editStartMarkerButton, true, true, 0);
-
-    editMidMarkerButton = Gtk::manage(new Gtk::Button(_("mid"), true));
-    editMidMarkerButton->set_tooltip_text(_("Edit the mid marker of the selected object."));
-    editMidMarkerButton->signal_clicked().connect([=]() {
-        enterEditMarkerMode(SP_MARKER_LOC_MID);
-    });
-    editMidMarkerButton->show();
-    hb->pack_start(*editMidMarkerButton, true, true, 0);
-
-    editEndMarkerButton = Gtk::manage(new Gtk::Button(_("end"), true));
-    editEndMarkerButton->set_tooltip_text(_("Edit the end marker of the selected object."));
-    editEndMarkerButton->signal_clicked().connect([=]() {
-        enterEditMarkerMode(SP_MARKER_LOC_END);
-    });
-    editEndMarkerButton->show();
-    hb->pack_start(*editEndMarkerButton, true, true, 0);
-
-    i++;
     /* Join type */
     // TRANSLATORS: The line join style specifies the shape to be used at the
     //  corners of paths. It can be "miter", "round" or "bevel".
@@ -520,10 +482,9 @@ void StrokeStyle::enterEditMarkerMode(SPMarkerLoc _editMarkerMode)
 }
 
 
-bool StrokeStyle::shouldMarkersBeUpdated()
+bool StrokeStyle::areMarkersBeingUpdated()
 {
-    return startMarkerCombo->update() || midMarkerCombo->update() ||
-                          endMarkerCombo->update();
+    return startMarkerCombo->in_update() || midMarkerCombo->in_update() || endMarkerCombo->in_update();
 }
 
 /**
@@ -531,28 +492,27 @@ bool StrokeStyle::shouldMarkersBeUpdated()
  * Gets the marker uri string and applies it to all selected
  * items in the current desktop.
  */
-void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const which)
+void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const which)
 {
-    if (spw->update || spw->shouldMarkersBeUpdated()) {
+    if (update || areMarkersBeingUpdated()) {
         return;
     }
 
-    spw->update = true;
-
-    SPDocument *document = spw->desktop->getDocument();
+    SPDocument *document = desktop->getDocument();
     if (!document) {
         return;
     }
 
-    /* Get Marker */
-    gchar const *marker = marker_combo->get_active_marker_uri();
+    // Get marker ID; could be empty (to remove marker)
+    std::string marker = marker_combo->get_active_marker_uri();
 
+    update = true;
 
     SPCSSAttr *css = sp_repr_css_attr_new();
     gchar const *combo_id = marker_combo->get_id();
-    sp_repr_css_set_property(css, combo_id, marker);
+    sp_repr_css_set_property(css, combo_id, marker.c_str());
 
-    Inkscape::Selection *selection = spw->desktop->getSelection();
+    Inkscape::Selection *selection = desktop->getSelection();
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
@@ -585,7 +545,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     sp_repr_css_attr_unref(css);
     css = nullptr;
 
-    spw->update = false;
+    update = false;
 };
 
 /**
@@ -1223,7 +1183,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
         MarkerComboBox *combo = markertype.key;
 
         // Quit if we're in update state
-        if (combo->update()) {
+        if (combo->in_update()) {
             return;
         }
 
