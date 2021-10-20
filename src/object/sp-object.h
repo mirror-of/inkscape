@@ -704,6 +704,8 @@ public:
     void setAttribute(Inkscape::Util::const_char_ptr key,
                       Inkscape::Util::const_char_ptr value);
 
+    void setAttributeDouble(Inkscape::Util::const_char_ptr key, double value);
+
     void setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key,
                                      Inkscape::Util::const_char_ptr value) {
         this->setAttribute(key.data(),

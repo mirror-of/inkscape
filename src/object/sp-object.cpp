@@ -43,6 +43,7 @@
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
 #include "debug/demangle.h"
+#include "svg/css-ostringstream.h"
 #include "util/format.h"
 #include "util/longest-common-suffix.h"
 
@@ -1447,6 +1448,11 @@ void SPObject::setAttribute(Inkscape::Util::const_char_ptr key,
     getRepr()->setAttribute(key, value);
 }
 
+void SPObject::setAttributeDouble(Inkscape::Util::const_char_ptr key, double value) {
+    Inkscape::CSSOStringStream os;
+    os << value;
+    setAttribute(key, os.str());
+}
 
 void SPObject::removeAttribute(gchar const *key)
 {

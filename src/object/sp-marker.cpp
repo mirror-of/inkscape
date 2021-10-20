@@ -29,6 +29,7 @@
 #include "document-undo.h"
 #include "preferences.h"
 #include "object/object-set.h"
+#include "svg/css-ostringstream.h"
 
 #include "sp-marker.h"
 #include "sp-defs.h"
@@ -370,10 +371,12 @@ void sp_validate_marker(SPMarker *sp_marker, SPDocument *doc) {
         }
     }
 
-    sp_marker->setAttribute("viewBox", "0 0 " + std::to_string(bounds.dimensions()[Geom::X]) + " " + std::to_string(bounds.dimensions()[Geom::Y]));
+    Inkscape::CSSOStringStream os;
+    os << "0 0 " << bounds.dimensions()[Geom::X] << " " << bounds.dimensions()[Geom::Y];
+    sp_marker->setAttribute("viewBox", os.str().c_str());
     
-    sp_marker->setAttribute("markerWidth", std::to_string(sp_marker->viewBox.width() * xScale));
-    sp_marker->setAttribute("markerHeight", std::to_string(sp_marker->viewBox.height() * yScale));
+    sp_marker->setAttributeDouble("markerWidth", sp_marker->viewBox.width() * xScale);
+    sp_marker->setAttributeDouble("markerHeight", sp_marker->viewBox.height() * yScale);
 
     if(!sp_marker->aspect_set) {
         // feedback from UX expert indicates that uniform scaling should be used by default;
@@ -585,8 +588,8 @@ void sp_marker_set_orient(SPMarker* marker, const char* value) {
 void sp_marker_set_size(SPMarker* marker, double sx, double sy) {
     if (!marker) return;
 
-    marker->setAttribute("markerWidth", std::to_string(sx).c_str());
-    marker->setAttribute("markerHeight", std::to_string(sy).c_str());
+    marker->setAttributeDouble("markerWidth", sx);
+    marker->setAttributeDouble("markerHeight", sy);
 
     if (marker->document) {
         DocumentUndo::maybeDone(marker->document, "marker", SP_VERB_DIALOG_FILL_STROKE, _("Set marker size"));
@@ -606,8 +609,8 @@ void sp_marker_scale_with_stroke(SPMarker* marker, bool scale_with_stroke) {
 void sp_marker_set_offset(SPMarker* marker, double dx, double dy) {
     if (!marker) return;
 
-    marker->setAttribute("refX", std::to_string(dx).c_str());
-    marker->setAttribute("refY", std::to_string(dy).c_str());
+    marker->setAttributeDouble("refX", dx);
+    marker->setAttributeDouble("refY", dy);
 
     if (marker->document) {
         DocumentUndo::maybeDone(marker->document, "marker", SP_VERB_DIALOG_FILL_STROKE, _("Set marker offset"));
