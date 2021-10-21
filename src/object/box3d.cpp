@@ -95,13 +95,11 @@ void SPBox3D::release() {
         delete box->persp_ref;
         box->persp_ref = nullptr;
     }
-
     if (persp) {
         persp->remove_box (box);
 
         if (persp->perspective_impl->boxes.empty()) {
             SPDocument *doc = box->document;
-            persp->deleteObject();
             doc->setCurrentPersp3D(Persp3D::document_first_persp(doc));
         }
     }
