@@ -192,7 +192,7 @@ bounds_exact_transformed(Geom::PathVector const & pv, Geom::Affine const & t)
 }
 
 bool 
-pathv_similar(Geom::PathVector apv, Geom::PathVector bpv, double precission) 
+pathv_similar(Geom::PathVector const &apv, Geom::PathVector const &bpv, double precission) 
 {
     if (apv == bpv) {
         return true;
