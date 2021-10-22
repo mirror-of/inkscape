@@ -35,16 +35,16 @@
 
 #include "io/file.h"                // File open (command line).
 #include "io/resource.h"            // TEMPLATE
-#include "io/fix-broken-links.h"  // Fix up references.
+#include "io/fix-broken-links.h"    // Fix up references.
 
 #include "object/sp-root.h"         // Inkscape version.
 
-#include "ui/interface.h"           // sp_ui_error_dialog
-#include "ui/dialog/startup.h"
+#include "ui/interface.h"                 // sp_ui_error_dialog
+#include "ui/desktop/document-check.h"    // Check for data loss on closing document window.
+#include "ui/dialog/dialog-manager.h"     // Save state
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
+#include "ui/dialog/startup.h"
 #include "ui/shortcuts.h"           // Shortcuts... init
-#include "widgets/desktop-widget.h" // Close without saving dialog
-#include "ui/dialog/dialog-manager.h" // save state
 
 #include "util/units.h"           // Redimension window
 
@@ -56,6 +56,8 @@
 #include "actions/actions-selection.h"    // Actions
 #include "actions/actions-transform.h"    // Actions
 #include "actions/actions-window.h"       // Actions
+
+#include "widgets/desktop-widget.h" // Access dialog container.
 
 #ifdef GDK_WINDOWING_QUARTZ
 #include <gtkosxapplication.h>
@@ -105,8 +107,13 @@ InkscapeApplication::document_add(SPDocument* document)
 SPDocument*
 InkscapeApplication::document_new(const std::string &Template)
 {
+    auto my_template = Template;
+    if (my_template.empty()) {
+        my_template = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TEMPLATES, "default.svg", true);
+    }
+
     // Open file
-    SPDocument *document = ink_file_new(Template);
+    SPDocument *document = ink_file_new(my_template);
     if (document) {
         document_add(document);
 
@@ -312,7 +319,7 @@ InkscapeApplication::document_window_count(SPDocument* document)
     return count;
 }
 
-/** Fix up a document if necessary (Only fixes that require GUI).
+/** Fix up a document if necessary (Only fixes that require GUI). MOVE TO ANOTHER FILE!
  */
 void
 InkscapeApplication::document_fix(InkscapeWindow* window)
@@ -342,7 +349,6 @@ InkscapeApplication::document_fix(InkscapeWindow* window)
         Inkscape::UI::Dialog::FontSubstitution::getInstance().checkFontSubstitutions(document);
     }
 }
-
 
 /** Get a list of open documents (from document map).
  */
@@ -424,7 +430,7 @@ InkscapeApplication::window_close(InkscapeWindow* window)
                     if (get_number_of_windows() == 1) {
                         // persist layout of docked and floating dialogs before deleting the last window
                         Inkscape::UI::Dialog::DialogManager::singleton().save_dialogs_state(
-                           window->get_desktop_widget()->getContainer());
+                           window->get_desktop_widget()->getDialogContainer());
                     }
                     it->second.erase(it2);
                     delete window; // Results in call to SPDesktop::destroy()
@@ -819,13 +825,11 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
         }
 
     } else {
-        std::string Template =
-            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TEMPLATES, "default.svg", true);
-        document = document_new (Template);
+        document = document_new ();
         if (document) {
             window = window_open (document);
         } else {
-            std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to open default template! " << Template << std::endl;
+            std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to open default document!" << std::endl;
         }
     }
 
@@ -844,11 +848,12 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
 #endif
 }
 
-/** Destroy a window. Aborts if document needs saving.
+/** Destroy a window and close the document it contains. Aborts if document needs saving.
+ *  Replaces document and keeps window open if last window and keep_alive is true.
  *  Returns true if window destroyed.
  */
 bool
-InkscapeApplication::destroy_window(InkscapeWindow* window)
+InkscapeApplication::destroy_window(InkscapeWindow* window, bool keep_alive)
 {
     if (!gtk_app()) {
         g_assert_not_reached();
@@ -857,29 +862,39 @@ InkscapeApplication::destroy_window(InkscapeWindow* window)
 
     SPDocument* document = window->get_document();
 
-    // Remove document if no windows left.
-    if (document) {
-        auto it = _documents.find(document);
-        if (it != _documents.end()) {
+    if (!document) {
+        std::cerr << "InkscapeApplication::destroy_window: window has no document!" << std::endl;
+        return false;
+    }
 
-            // If only one window for document:
-            if (it->second.size() == 1) {
-                // Check if document needs saving.
-                bool abort = window->get_desktop_widget()->shutdown();
-                if (abort) {
-                    return false;
-                }
+    // Remove document if no window with document is left.
+    auto it = _documents.find(document);
+    if (it != _documents.end()) {
+
+        // If only one window for document:
+        if (it->second.size() == 1) {
+            // Check if document needs saving.
+            bool abort = document_check_for_data_loss(window);
+            if (abort) {
+                return false;
             }
-
-            window_close(window);
-
-            if (it->second.size() == 0) {
-                document_close (document);
-            }
-
-        } else {
-            std::cerr << "ConcreteInkscapeApplication<Gtk::Application>::destroy_window: Could not find document!" << std::endl;
         }
+
+        if (get_number_of_windows() == 1 && keep_alive) {
+            // Last window, replace with new document.
+            auto new_document = document_new();
+            document_swap(window, new_document);
+        } else {
+            window_close(window);
+        }
+
+        if (it->second.size() == 0) {
+            // No window contains document so let's close it.
+            document_close (document);
+        }
+
+    } else {
+        std::cerr << "ConcreteInkscapeApplication<Gtk::Application>::destroy_window: Could not find document!" << std::endl;
     }
 
     // Debug
@@ -982,9 +997,7 @@ InkscapeApplication::on_activate()
     } else {
 
         // Create a blank document from template
-        std::string Template =
-            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TEMPLATES, "default.svg", true);
-        document = document_new (Template);
+        document = document_new();
     }
 
     if (!document) {

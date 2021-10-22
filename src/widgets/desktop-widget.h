@@ -70,9 +70,6 @@ void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
 /* Show/hide rulers & scrollbars */
 void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
 
-void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
-void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
-
 /// A GtkEventBox on an SPDesktop.
 class SPDesktopWidget : public SPViewWidget {
     using parent_type = SPViewWidget;
@@ -165,7 +162,6 @@ public:
 
     void setMessage(Inkscape::MessageType type, gchar const *message);
     Geom::Point window_get_pointer();
-    bool shutdown();
     void viewSetPosition (Geom::Point p);
     void letZoomGrabFocus();
     void getWindowGeometry (gint &x, gint &y, gint &w, gint &h);
@@ -188,7 +184,7 @@ public:
     void disableInteraction();
     void updateTitle(gchar const *uri);
     bool onFocusInEvent(GdkEventFocus *);
-    Inkscape::UI::Dialog::DialogContainer *getContainer();
+    Inkscape::UI::Dialog::DialogContainer *getDialogContainer();
 
     Gtk::MenuBar *menubar() { return _menubar; }
 

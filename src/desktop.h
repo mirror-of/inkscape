@@ -341,8 +341,6 @@ public:
 
     Inkscape::UI::Dialog::DialogContainer *getContainer();
 
-    void set_active (bool new_active);
-
     // Could make all callers use this->layers instead of passing calls through?
     SPObject *currentRoot() const;
     SPObject *currentLayer() const;
@@ -436,7 +434,6 @@ public:
     void toggleRulers();
     void toggleScrollbars();
     void layoutWidget();
-    void destroyWidget();
     void setToolboxFocusTo (gchar const* label);
     Gtk::Toolbar *get_toolbar_by_name(const Glib::ustring& name);
     void setToolboxAdjustmentValue (gchar const* id, double val);
@@ -489,9 +486,7 @@ public:
     double yaxisdir() const { return doc2dt()[3]; }
 
     void setDocument (SPDocument* doc) override;
-    bool shutdown() override;
 
-    virtual bool onDeleteUI (GdkEventAny*);
     virtual bool onWindowStateEvent (GdkEventWindowState* event);
 
     void applyCurrentOrToolStyle(SPObject *obj, Glib::ustring const &tool_path, bool with_text);
@@ -627,16 +622,12 @@ private:
 
     sigc::signal<void, SPDesktop*> _destroy_signal;
     sigc::signal<void,SPDesktop*,SPDocument*>     _document_replaced_signal;
-    sigc::signal<void>                 _activate_signal;
-    sigc::signal<void>                 _deactivate_signal;
     sigc::signal<void,SPDesktop*,Inkscape::UI::Tools::ToolBase*> _event_context_changed_signal;
     sigc::signal<void, gpointer, SPObject*> _tool_subselection_changed;
     sigc::signal<void, void*, SPStop*> _gradient_stop_selected;
     sigc::signal<void, void*, Inkscape::UI::ControlPointSelection*> _control_point_selected;
     sigc::signal<void, void*, Inkscape::UI::Tools::TextTool*> _text_cursor_moved;
 
-    sigc::connection _activate_connection;
-    sigc::connection _deactivate_connection;
     sigc::connection _sel_changed_connection;
     sigc::connection _reconstruction_start_connection;
     sigc::connection _reconstruction_finish_connection;
@@ -648,9 +639,6 @@ private:
     void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
     void onDocumentFilenameSet(gchar const* filename) override;
     void onDocumentResized (double, double) override;
-
-    static void _onActivate (SPDesktop* dt);
-    static void _onDeactivate (SPDesktop* dt);
 };
 
 #endif // SEEN_SP_DESKTOP_H

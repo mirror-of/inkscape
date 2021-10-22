@@ -651,7 +651,7 @@ SPDesktopWidget::updateTitle(gchar const* uri)
     }
 }
 
-DialogContainer *SPDesktopWidget::getContainer()
+DialogContainer *SPDesktopWidget::getDialogContainer()
 {
     return _container;
 }
@@ -910,158 +910,6 @@ SPDesktopWidget::cms_adjust_set_sensitive(bool enabled)
     //     }
     // }
     _canvas_grid->GetCmsAdjust()->set_sensitive(enabled);
-}
-
-void
-sp_dtw_desktop_activate (SPDesktopWidget */*dtw*/)
-{
-    /* update active desktop indicator */
-}
-
-void
-sp_dtw_desktop_deactivate (SPDesktopWidget */*dtw*/)
-{
-    /* update inactive desktop indicator */
-}
-
-/**
- *  Shuts down the desktop object for the view being closed.  It checks
- *  to see if the document has been edited, and if so prompts the user
- *  to save, discard, or cancel.  Returns TRUE if the shutdown operation
- *  is cancelled or if the save is cancelled or fails, FALSE otherwise.
- */
-bool
-SPDesktopWidget::shutdown()
-{
-    g_assert(desktop != nullptr);
-
-    if (INKSCAPE.sole_desktop_for_document(*desktop)) {
-        std::unique_ptr<SPDocument> doc(desktop->doc()->doRef());
-        if (doc->isModifiedSinceSave()) {
-            auto toplevel_window = window;
-            Glib::ustring message = g_markup_printf_escaped(
-                _("<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n"
-                  "If you close without saving, your changes will be discarded."),
-                doc->getDocumentName());
-            Gtk::MessageDialog dialog = Gtk::MessageDialog(*toplevel_window, message, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
-            dialog.property_destroy_with_parent() = true;
-
-            // fix for bug lp:168809
-            Gtk::Container *ma = dialog.get_message_area();
-            std::vector<Gtk::Widget*> ma_labels = ma->get_children();
-            ma_labels[0]->set_can_focus(false);
-
-            Gtk::Button close_button(_("Close _without saving"), true);
-            close_button.show();
-            dialog.add_action_widget(close_button, Gtk::RESPONSE_NO);
-
-            dialog.add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
-            dialog.add_button(_("_Save"), Gtk::RESPONSE_YES);
-            dialog.set_default_response(Gtk::RESPONSE_YES);
-
-            gint response = dialog.run();
-
-            switch (response) {
-            case GTK_RESPONSE_YES:
-            {
-                sp_namedview_document_from_window(desktop);
-                if (!sp_file_save_document(*window, doc.get())) {
-                    // save dialog cancelled or save failed
-                    return TRUE;
-                }
-
-                break;
-            }
-            case GTK_RESPONSE_NO:
-                break;
-            default: // cancel pressed, or dialog was closed
-                return TRUE;
-                break;
-            }
-        }
-        /* Code to check data loss */
-        bool allow_data_loss = FALSE;
-        while (doc->getReprRoot()->attribute("inkscape:dataloss") != nullptr && allow_data_loss == FALSE) {
-            auto toplevel_window = window;
-            Glib::ustring message = g_markup_printf_escaped(
-                _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format that may cause data loss!</span>\n\n"
-                  "Do you want to save this file as Inkscape SVG?"),
-                doc->getDocumentName() ? doc->getDocumentName() : "Unnamed");
-            Gtk::MessageDialog dialog = Gtk::MessageDialog(*toplevel_window, message, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
-            dialog.property_destroy_with_parent() = true;
-
-            // fix for bug lp:168809
-            Gtk::Container *ma = dialog.get_message_area();
-            std::vector<Gtk::Widget*> ma_labels = ma->get_children();
-            ma_labels[0]->set_can_focus(false);
-
-            Gtk::Button close_button(_("Close _without saving"), true);
-            close_button.show();
-            dialog.add_action_widget(close_button, Gtk::RESPONSE_NO);
-
-            dialog.add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
-
-            Gtk::Button save_button(_("_Save as Inkscape SVG"), true);
-            save_button.set_can_default(true);
-            save_button.show();
-            dialog.add_action_widget(save_button, Gtk::RESPONSE_YES);
-            dialog.set_default_response(Gtk::RESPONSE_YES);
-
-            gint response = dialog.run();
-
-            switch (response) {
-            case GTK_RESPONSE_YES:
-            {
-                if (!sp_file_save_dialog(*window, doc.get(), Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG)) {
-                    // save dialog cancelled or save failed
-                    return TRUE;
-                }
-
-                break;
-            }
-            case GTK_RESPONSE_NO:
-                allow_data_loss = TRUE;
-                break;
-            default: // cancel pressed, or dialog was closed
-                return TRUE;
-                break;
-            }
-        }
-    }
-
-    {
-        // Delete all floating DialogWindows if there is only this desktop's window
-        auto app = InkscapeApplication::instance()->gtk_app();
-        SPDesktop *next_desktop = nullptr;
-
-        std::list<SPDesktop *> desktop_list;
-        INKSCAPE.get_all_desktops(desktop_list);
-        for (auto const &d : desktop_list) {
-            if (!next_desktop && d != desktop) {
-                next_desktop = d;
-                break;
-            }
-        }
-
-        if (next_desktop) {
-            next_desktop->presentWindow();
-        }
-
-        for (auto const &window : app->get_windows()) {
-            DialogWindow *dialog_window = dynamic_cast<DialogWindow *>(window);
-            if (dialog_window && !next_desktop) {
-                dialog_window->close();
-            }
-        }
-    }
-
-    /* Save window geometry to prefs for use as a default.
-     * Use depends on setting of "options.savewindowgeometry".
-     * But we save the info here regardless of the setting.
-     */
-    storeDesktopPosition();
-
-    return FALSE;
 }
 
 /**
@@ -1502,6 +1350,8 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
 SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     : SPDesktopWidget()
 {
+    set_name("SPDesktopWidget");
+
     SPDesktopWidget *dtw = this;
 
     SPNamedView *namedview = sp_document_namedview(document, nullptr);

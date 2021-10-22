@@ -10,8 +10,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/window.h>
 #include "util.h"
+
+#include <gtkmm.h>
 
 /*
  * Ellipse text if longer than maxlen, "50% start text + ... + ~50% end text"

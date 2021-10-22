@@ -100,7 +100,6 @@ public:
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) {};
     virtual void onDocumentFilenameSet (gchar const* filename) {};
     virtual void onDocumentResized (double, double) {};
-    virtual bool shutdown() { return false; };
 
 protected:
     SPDocument *_doc;

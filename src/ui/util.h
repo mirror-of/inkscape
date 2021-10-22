@@ -13,8 +13,16 @@
 #ifndef UI_UTIL_SEEN
 #define UI_UTIL_SEEN
 
-#include <glibmm/ustring.h>
-#include <gtkmm.h>
+#include <cstddef> // size_t
+
+namespace Glib {
+class ustring;
+}
+
+namespace Gtk {
+class Widget;
+class Revealer;
+}
 
 Glib::ustring ink_ellipsize_text (Glib::ustring const &src, size_t maxlen);
 void reveal_widget(Gtk::Widget *widget, bool show);

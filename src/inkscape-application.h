@@ -52,7 +52,7 @@ public:
 
     InkscapeWindow *create_window(SPDocument *document, bool replace);
     void create_window(const Glib::RefPtr<Gio::File> &file = Glib::RefPtr<Gio::File>());
-    bool destroy_window(InkscapeWindow *window);
+    bool destroy_window(InkscapeWindow *window, bool keep_alive = false);
     void destroy_all();
     void print_action_list();
 
@@ -85,10 +85,10 @@ public:
     void                  set_active_window(InkscapeWindow* window) { _active_window = window; }
 
     /****** Document ******/
-    /* Except for document_fix(), these should not require a GUI! */
+    /* These should not require a GUI! */
     void                  document_add(SPDocument* document);
 
-    SPDocument*           document_new(const std::string &Template);
+    SPDocument*           document_new(const std::string &Template = "");
     SPDocument*           document_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled = nullptr);
     SPDocument*           document_open(const std::string& data);
     bool                  document_swap(InkscapeWindow* window, SPDocument* document);
@@ -96,7 +96,8 @@ public:
     void                  document_close(SPDocument* document);
     unsigned              document_window_count(SPDocument* document);
 
-    void                  document_fix(InkscapeWindow* window);
+    /* These require a GUI! */
+    void                  document_fix(InkscapeWindow* window); // MOVE TO ANOTHER FILE
 
     std::vector<SPDocument *> get_documents();
 

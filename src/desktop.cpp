@@ -305,19 +305,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     // ?
     // sp_active_desktop_set (desktop);
 
-    _activate_connection = _activate_signal.connect(
-        sigc::bind(
-            sigc::ptr_fun(_onActivate),
-            this
-        )
-    );
-     _deactivate_connection = _deactivate_signal.connect(
-        sigc::bind(
-            sigc::ptr_fun(_onDeactivate),
-            this
-        )
-    );
-
     _sel_changed_connection = selection->connectChanged(
         sigc::bind(
             sigc::ptr_fun(&_onSelectionChanged),
@@ -357,8 +344,6 @@ void SPDesktop::destroy()
 
     namedview->hide(this);
 
-    _activate_connection.disconnect();
-    _deactivate_connection.disconnect();
     _sel_changed_connection.disconnect();
     _modified_connection.disconnect();
     _commit_connection.disconnect();
@@ -493,22 +478,6 @@ bool SPDesktop::itemIsHidden(SPItem const *item) const {
 }
 
 /**
- * Set activate property of desktop; emit signal if changed.
- */
-void
-SPDesktop::set_active (bool new_active)
-{
-    if (new_active != _active) {
-        _active = new_active;
-        if (new_active) {
-            _activate_signal.emit();
-        } else {
-            _deactivate_signal.emit();
-        }
-    }
-}
-
-/**
  * Set activate status of current desktop's named view.
  */
 void
@@ -590,7 +559,7 @@ SPDesktop::set_coordinate_status (Geom::Point p) {
 
 Inkscape::UI::Dialog::DialogContainer *SPDesktop::getContainer()
 {
-    return _widget->getContainer();
+    return _widget->getDialogContainer();
 }
 
 /**
@@ -1366,29 +1335,6 @@ SPDesktop::layoutWidget()
     _widget->layoutWidgets();
 }
 
-void
-SPDesktop::destroyWidget()
-{
-    auto *window = _widget->window;
-    _widget->window = nullptr;
-    delete window; // may also delete _widget  Check if this is logical!
-}
-
-bool
-SPDesktop::shutdown()
-{
-    return _widget->shutdown();
-}
-
-bool SPDesktop::onDeleteUI (GdkEventAny*)
-{
-    if(shutdown())
-        return true;
-
-    destroyWidget();
-    return false;
-}
-
 /**
  *  onWindowStateEvent
  *
@@ -1671,21 +1617,6 @@ SPDesktop::onDocumentResized (gdouble width, gdouble height)
     canvas_background->set_rect(a);
     canvas_page->set_rect(a);
     canvas_shadow->set_rect(a);
-}
-
-
-void
-SPDesktop::_onActivate (SPDesktop* dt)
-{
-    if (!dt->_widget) return;
-    sp_dtw_desktop_activate(dt->_widget);
-}
-
-void
-SPDesktop::_onDeactivate (SPDesktop* dt)
-{
-    if (!dt->_widget) return;
-    sp_dtw_desktop_deactivate(dt->_widget);
 }
 
 static void

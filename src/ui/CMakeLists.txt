@@ -25,6 +25,7 @@ set(ui_SRC
 
 	cache/svg_preview_cache.cpp
 
+        desktop/document-check.cpp
 	desktop/menubar.cpp
 	desktop/menu-icon-shift.cpp
 
@@ -264,6 +265,7 @@ set(ui_SRC
 
 	cache/svg_preview_cache.h
 
+        desktop/document-check.h
 	desktop/menubar.h
 	desktop/menu-icon-shift.h
 

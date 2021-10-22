@@ -582,7 +582,7 @@ add_cli_test(actions-file-close            PARAMETERS --actions=file-new$<SEMICO
 
 # file-new
 add_cli_test(actions-file-new1             PARAMETERS --actions=file-new$<SEMICOLON>export-filename:actions-file-new1.svg$<SEMICOLON>export-do
-                                           TEST_SCRIPT match_regex.sh actions-file-new1.svg "viewBox=\"-1 -1 1 1\"")
+                                           TEST_SCRIPT match_regex.sh actions-file-new1.svg "viewBox=\"0 0 210 297\"")
 add_cli_test(actions-file-new2             PARAMETERS --actions=file-new:${CMAKE_CURRENT_SOURCE_DIR}/testcases/theta.svg$<SEMICOLON>export-filename:actions-file-new2.svg$<SEMICOLON>export-do
                                            TEST_SCRIPT match_regex.sh actions-file-new2.svg "id=\"purple-cover\"")
 

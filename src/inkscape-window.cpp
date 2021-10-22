@@ -100,20 +100,14 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // ========== Drag and Drop of Documents =========
     ink_drag_setup(_desktop_widget);
 
-    // Menu bar (must come after desktop widget creation as we need _desktop)
-    // _menubar = build_menubar(_desktop);
-    // _menubar->set_name("MenuBar");
-    // _menubar->show_all();
-
     // Pallet
 
     // Status bar
 
-    // _mainbox->pack_start(*_menubar, false, false);
+    // The main section
     _mainbox->pack_start(*Gtk::manage(_desktop_widget), true, true);
 
     // ================== Callbacks ==================
-    signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
     signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
