@@ -13213,7 +13213,7 @@ msgid "Change unit parameter"
 msgstr "Promijeni parametar mjerne jedinice"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "_Datoteka"
 
@@ -17714,7 +17714,7 @@ msgid "Sele_ction"
 msgstr "Oda_bir"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:268
+#: ../share/ui/menus.xml:268
 msgid "_Text"
 msgstr "_Tekst"
 
@@ -20376,11 +20376,11 @@ msgstr "Prikaži ikone u izbornicima:"
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 "Prikaz ikona u izborniku možeš aktivirati ili deaktivirati. Uobičajeno je, "
 "da tema određuje prikaz ikona, korištenjem svojstva „show‑icons” u vlastitoj "
-"datoteci „menus.ui”. (potebno je ponovo pokretanje programa)"
+"datoteci „menus.xml”. (potebno je ponovo pokretanje programa)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1233
 msgid "Theme"
@@ -30546,7 +30546,7 @@ msgstr "Zalijepi _stil"
 msgid "Apply the style of the copied object to selection"
 msgstr "Primijeni stil kopiranog objekta na odabir"
 
-#: ../src/verbs.cpp:2710 ../share/ui/menus.ui:40
+#: ../src/verbs.cpp:2710 ../share/ui/menus.xml:40
 msgid "Paste Si_ze"
 msgstr "_Zalijepi veličinu"
 
@@ -31464,7 +31464,7 @@ msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 "Primijeni inverznu masku na odabir (koristeći najviši objekt kao masku)"
 
-#: ../src/verbs.cpp:2982 ../src/verbs.cpp:2992 ../share/ui/menus.ui:30
+#: ../src/verbs.cpp:2982 ../src/verbs.cpp:2992 ../share/ui/menus.xml:30
 msgid "_Edit"
 msgstr "_Uredi"
 
@@ -33503,7 +33503,7 @@ msgstr "SIOX"
 msgid "Cover the area you want to select as the foreground"
 msgstr "Pokrij područje koje želiš odabrati kao prednji plan"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:296
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:296
 msgid "_Help"
 msgstr "Po_moć"
 
@@ -41419,71 +41419,71 @@ msgstr "${INKSCAPE_ICONPATH}"
 msgid "New Drawing"
 msgstr "Novi crtež"
 
-#: ../share/ui/menus.ui:52
+#: ../share/ui/menus.xml:52
 msgid "Clo_ne"
 msgstr "Klo_niraj"
 
-#: ../share/ui/menus.ui:67
+#: ../share/ui/menus.xml:67
 msgid "Select Sa_me"
 msgstr "Odaberi _isto"
 
-#: ../share/ui/menus.ui:88
+#: ../share/ui/menus.xml:88
 msgid "_View"
 msgstr "_Prikaz"
 
-#: ../share/ui/menus.ui:89
+#: ../share/ui/menus.xml:89
 msgid "_Zoom"
 msgstr "_Zumiranje"
 
-#: ../share/ui/menus.ui:106
+#: ../share/ui/menus.xml:106
 msgid "_Display Mode"
 msgstr "Način prika_za"
 
-#: ../share/ui/menus.ui:116
+#: ../share/ui/menus.xml:116
 msgid "_Color Display Mode"
 msgstr "Način prikaza _boja"
 
-#: ../share/ui/menus.ui:124
+#: ../share/ui/menus.xml:124
 msgid "_Canvas Orientation"
 msgstr "Polož_aj platna"
 
-#: ../share/ui/menus.ui:137
+#: ../share/ui/menus.xml:137
 msgid "Sh_ow/Hide"
 msgstr "Pri_kaži/Sakrij"
 
-#: ../share/ui/menus.ui:164
+#: ../share/ui/menus.xml:164
 msgid "_Layer"
 msgstr "_Sloj"
 
-#: ../share/ui/menus.ui:188
+#: ../share/ui/menus.xml:188
 msgid "_Object"
 msgstr "_Objekt"
 
-#: ../share/ui/menus.ui:206
+#: ../share/ui/menus.xml:206
 msgid "Cli_p"
 msgstr "_Isječak"
 
-#: ../share/ui/menus.ui:211
+#: ../share/ui/menus.xml:211
 msgid "Mas_k"
 msgstr "Mas_ka"
 
-#: ../share/ui/menus.ui:216
+#: ../share/ui/menus.xml:216
 msgid "Patter_n"
 msgstr "_Mustra"
 
-#: ../share/ui/menus.ui:241
+#: ../share/ui/menus.xml:241
 msgid "_Path"
 msgstr "_Staza"
 
-#: ../share/ui/menus.ui:284
+#: ../share/ui/menus.xml:284
 msgid "Filter_s"
 msgstr "_Filtri"
 
-#: ../share/ui/menus.ui:290
+#: ../share/ui/menus.xml:290
 msgid "Exte_nsions"
 msgstr "Prošire_nja"
 
-#: ../share/ui/menus.ui:300
+#: ../share/ui/menus.xml:300
 msgid "Tutorials"
 msgstr "Vježbe"
 

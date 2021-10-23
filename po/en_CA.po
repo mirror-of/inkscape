@@ -14329,7 +14329,7 @@ msgid "Change unit parameter"
 msgstr "Create spirals"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 #, fuzzy
 msgid "_File"
 msgstr "File"
@@ -19051,7 +19051,7 @@ msgid "Sele_ction"
 msgstr "Selection"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 #, fuzzy
 msgid "_Text"
 msgstr "Text"
@@ -21835,7 +21835,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -32530,7 +32530,7 @@ msgstr ""
 msgid "Apply the style of the copied object to selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 #, fuzzy
 msgid "Paste Si_ze"
 msgstr "Paper size:"
@@ -33560,7 +33560,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 #, fuzzy
 msgid "_Edit"
 msgstr "Edit"
@@ -35718,7 +35718,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr ""
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr ""
 
@@ -44470,85 +44470,85 @@ msgstr ""
 msgid "New Drawing"
 msgstr "Drawing"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 #, fuzzy
 msgid "Clo_ne"
 msgstr "Close"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "Delete node"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 #, fuzzy
 msgid "_View"
 msgstr "View"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 #, fuzzy
 msgid "_Zoom"
 msgstr "Zoom"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 #, fuzzy
 msgid "_Display Mode"
 msgstr "Display"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 #, fuzzy
 msgid "_Color Display Mode"
 msgstr "Display"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "Orientation:"
 
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "Show guides"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr ""
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 #, fuzzy
 msgid "_Object"
 msgstr "Object"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr ""
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 #, fuzzy
 msgid "Mas_k"
 msgstr "Mass:"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 #, fuzzy
 msgid "Patter_n"
 msgstr "Pattern:"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 #, fuzzy
 msgid "_Path"
 msgstr "Path"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 #, fuzzy
 msgid "Filter_s"
 msgstr "Floating"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 #, fuzzy
 msgid "Exte_nsions"
 msgstr "Extension"
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 #, fuzzy
 msgid "Tutorials"
 msgstr "Master"

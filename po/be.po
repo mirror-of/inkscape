@@ -14335,7 +14335,7 @@ msgid "Change unit parameter"
 msgstr "Зьмяніць парамэтар адзінкі"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "_Файл"
 
@@ -19013,7 +19013,7 @@ msgid "Sele_ction"
 msgstr "Вылучэньне"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr "_Тэкст"
 
@@ -21768,7 +21768,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -32477,7 +32477,7 @@ msgstr "Уставіць _стыль"
 msgid "Apply the style of the copied object to selection"
 msgstr "Ужыць стыль скапіяванага абʼекта да вылучэньня"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr "Уставіць _памер"
 
@@ -33457,7 +33457,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "Ужыць маску да вылучэньня (ужываючы найвышэйшы абʼект як маску)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "_Праца"
 
@@ -35568,7 +35568,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "Вызначы вобласьць, якая мусіць быць вылучаная як пярэдні плян"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr "_Даведка"
 
@@ -44207,75 +44207,75 @@ msgstr ""
 msgid "New Drawing"
 msgstr "Рысунак"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr "_Клон"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "Выберы старонку:"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr "_Від"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr "_Маштаб"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 msgid "_Display Mode"
 msgstr "_Рэжым паказу"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 #, fuzzy
 msgid "_Color Display Mode"
 msgstr "_Рэжым паказу"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "Арыентацыя старонкі:"
 
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "Схаваць/паказаць"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr "П_ласт"
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 msgid "_Object"
 msgstr "_Абʼект"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr "_Абразаньне"
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 msgid "Mas_k"
 msgstr "_Маска"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 msgid "Patter_n"
 msgstr "_Узор"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr "_Шлях"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 msgid "Filter_s"
 msgstr "_Фільтры"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
 msgstr "Паш_ыральнікі"
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 msgid "Tutorials"
 msgstr "Падручнікі"
 

@@ -12656,7 +12656,7 @@ msgid "Change unit parameter"
 msgstr "Alterar parâmetro da unidade"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "_Ficheiro"
 
@@ -16815,7 +16815,7 @@ msgid "Sele_ction"
 msgstr "_Seleção"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr "_Texto"
 
@@ -19296,8 +19296,8 @@ msgstr "Mostrar ícones nos menus:"
 
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1054
 #: ../src/ui/dialog/inkscape-preferences.cpp:1214
-msgid "You can either enable or disable all icons in menus. By default the theme determines which icons to display by using the 'show-icons' attribute in its 'menus.ui' file. (requires restart)"
-msgstr "Pode ativar ou desativar todos os ícones nos menus. Por padrão, o tema determina quais os ícones mostrar usando o atributo 'show-icons' no ficheiro 'menus.ui'. (requer reinicialização)"
+msgid "You can either enable or disable all icons in menus. By default the theme determines which icons to display by using the 'show-icons' attribute in its 'menus.xml' file. (requires restart)"
+msgstr "Pode ativar ou desativar todos os ícones nos menus. Por padrão, o tema determina quais os ícones mostrar usando o atributo 'show-icons' no ficheiro 'menus.xml'. (requer reinicialização)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
 msgid "Theme"
@@ -28504,7 +28504,7 @@ msgstr "Colar e_stilo"
 msgid "Apply the style of the copied object to selection"
 msgstr "Aplicar na seleção o estilo do objeto copiado"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr "Colar ta_manho"
 
@@ -29388,7 +29388,7 @@ msgstr "_Definir inverso (efeitos interativos em caminhos)"
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "Aplica máscara à seleção (usando o objeto mais acima como máscara)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "_Editar"
 
@@ -31305,7 +31305,7 @@ msgstr "SIOX"
 msgid "Cover the area you want to select as the foreground"
 msgstr "Cobre a área que deseja selecionar como sendo o primeiro plano"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr "Aj_uda"
 
@@ -38610,72 +38610,72 @@ msgstr "${INKSCAPE_ICONPATH}"
 msgid "New Drawing"
 msgstr "Novo desenho"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr "Clo_nar"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 msgid "Select Sa_me"
 msgstr "Selecionar _iguais"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr "_Ver"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr "_Aproximar/afastar"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 msgid "_Display Mode"
 msgstr "_Modo de visualização"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 msgid "_Color Display Mode"
 msgstr "Modo de visualização a _cores"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 msgid "_Canvas Orientation"
 msgstr "_Orientação da área de desenho"
 
 # Usar "Elementos da Interface" ou similar
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 msgid "Sh_ow/Hide"
 msgstr "_Elementos da interface"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr "Ca_mada"
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 msgid "_Object"
 msgstr "_Objeto"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr "_Recorte"
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 msgid "Mas_k"
 msgstr "_Máscara"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 msgid "Patter_n"
 msgstr "_Padrão"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr "_Caminho"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 msgid "Filter_s"
 msgstr "_Filtros"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
 msgstr "E_xtensões"
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 msgid "Tutorials"
 msgstr "Tutoriais"
 

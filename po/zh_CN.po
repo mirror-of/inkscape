@@ -14662,7 +14662,7 @@ msgid "Change unit parameter"
 msgstr "修改计量参数"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "文件(_F)"
 
@@ -19089,7 +19089,7 @@ msgid "Sele_ction"
 msgstr "选择范围(_C)"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr "文字(_T)"
 
@@ -21708,7 +21708,7 @@ msgstr "在菜单中显示图标："
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1774
@@ -31487,7 +31487,7 @@ msgstr "粘贴样式(_S)"
 msgid "Apply the style of the copied object to selection"
 msgstr "应用已复制对象的样式到选区"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr "粘贴尺寸(_Z)"
 
@@ -32392,7 +32392,7 @@ msgstr "应用蒙版到选区(用最顶层对象作为蒙版)"
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "编辑(_E)"
 
@@ -34217,7 +34217,7 @@ msgstr ""
 msgid "Outline Overlay"
 msgstr "叠加轮廓"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr "帮助(_H)"
 
@@ -41975,71 +41975,71 @@ msgstr ""
 msgid "New Drawing"
 msgstr "新建绘图"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr "克隆(_N)"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 msgid "Select Sa_me"
 msgstr "选取相同对象(_M)"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr "视图(_V)"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr "缩放(_Z)"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 msgid "_Display Mode"
 msgstr "显示模式(_D)"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 msgid "_Color Display Mode"
 msgstr "色彩显示模式(_C)"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 msgid "_Canvas Orientation"
 msgstr "画布方向(_C)"
 
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 msgid "Sh_ow/Hide"
 msgstr "显示/隐藏(_W)"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr "图层(_L)"
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 msgid "_Object"
 msgstr "对象(_O)"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr "剪裁(_P)"
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 msgid "Mas_k"
 msgstr "蒙版(_K)"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 msgid "Patter_n"
 msgstr "图案(_N)"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr "路径(_P)"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 msgid "Filter_s"
 msgstr "滤镜(_S)"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
 msgstr "扩展(_N)"
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 msgid "Tutorials"
 msgstr "教程"
 

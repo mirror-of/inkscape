@@ -14021,7 +14021,7 @@ msgid "Change unit parameter"
 msgstr "ផ្លាស់ប្ដូរ​ប៉ារ៉ាម៉ែត្រ​ឯកតា"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr " ឯកសារ"
 
@@ -18585,7 +18585,7 @@ msgid "Sele_ction"
 msgstr "ជម្រើស"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr " អត្ថបទ​"
 
@@ -21282,7 +21282,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -31679,7 +31679,7 @@ msgstr "បិទភ្ជាប់​រចនាប័ទ្ម​"
 msgid "Apply the style of the copied object to selection"
 msgstr "អនុវត្ត​រចនាប័ទ្ម​របស់​វត្ថុ​ដែល​បាន​ចម្លង​ទៅ​ជម្រើស"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr " បិទ​ភ្ជាប់​ទំហំ​"
 
@@ -32638,7 +32638,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "អនុវត្ត​របាំង​ទៅ​ជម្រើស (ដោយ​ប្រើ​វត្ថុ​នៅ​ខាង​លើ​​បំផុត​ជា​របាំង)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr " កែ​សម្រួល"
 
@@ -34722,7 +34722,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "គ្រប​តំបន់​ដែល​អ្នក​ចង់​ជ្រើស​ជា​ផ្ទៃ​ខាង​មុខ"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr " ​ជំនួយ"
 
@@ -43050,75 +43050,75 @@ msgstr ""
 msgid "New Drawing"
 msgstr "គំនូរ"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr " ក្លូន​"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "ជ្រើស​ទំព័រ ៖"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr " មើល"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr " ពង្រីក"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 msgid "_Display Mode"
 msgstr " បង្ហាញ​របៀប"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 #, fuzzy
 msgid "_Color Display Mode"
 msgstr " បង្ហាញ​របៀប"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "ទិស​អត្ថបទ"
 
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "បង្ហាញ/លាក់"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr " ​ស្រទាប់"
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 msgid "_Object"
 msgstr " វត្ថុ"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr " ឈុត"
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 msgid "Mas_k"
 msgstr "របាំង​"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 msgid "Patter_n"
 msgstr "លំនាំ​"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr " ផ្លូវ​"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 msgid "Filter_s"
 msgstr "តម្រង"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
 msgstr "ផ្នែក​បន្ថែម​"
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 msgid "Tutorials"
 msgstr "បង្ហាត់​បង្រៀន​"
 

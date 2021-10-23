@@ -13378,7 +13378,7 @@ msgid "Change unit parameter"
 msgstr "Canvia el paràmetre de la unitat"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "_Fitxer"
 
@@ -17928,7 +17928,7 @@ msgid "Sele_ction"
 msgstr "Sele_cció"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:265
+#: ../share/ui/menus.xml:265
 msgid "_Text"
 msgstr "_Text"
 
@@ -20615,11 +20615,11 @@ msgstr "Mostra icones als menús:"
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 "Podeu activar o desactivar totes les icones dels menús. De manera "
 "predeterminada, el tema determina quines icones es mostraran utilitzant "
-"l'atribut «show-icons» en el fitxer «menus.ui»."
+"l'atribut «show-icons» en el fitxer «menus.xml»."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1219
 msgid "Theme"
@@ -30984,7 +30984,7 @@ msgstr "Apega l'e_stil"
 msgid "Apply the style of the copied object to selection"
 msgstr "Aplica l'estil de l'objecte copiat en la selecció"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr "Apega la m_ida"
 
@@ -31931,7 +31931,7 @@ msgstr ""
 "Aplica la màscara inversa a la selecció (usa l'objecte superior com a "
 "màscara)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "_Edita"
 
@@ -33941,7 +33941,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "Cobriu l'àrea que voleu seleccionar com a primer pla"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:293
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:293
 msgid "_Help"
 msgstr "_Ajuda"
 
@@ -42019,74 +42019,74 @@ msgstr ""
 msgid "New Drawing"
 msgstr "Dibuix nou"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr "Clo_na"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 msgid "Select Sa_me"
 msgstr "_Selecciona el mateix"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr "_Visualitza"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr "_Ampliació"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 #, fuzzy
 msgid "_Display Mode"
 msgstr "Mode de _visualització"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 #, fuzzy
 msgid "_Color Display Mode"
 msgstr "Mode de visualització del _color"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "Orientació del _llenç"
 
-#: ../share/ui/menus.ui:140
+#: ../share/ui/menus.xml:140
 msgid "Sh_ow/Hide"
 msgstr "M_ostra/amaga"
 
-#: ../share/ui/menus.ui:167
+#: ../share/ui/menus.xml:167
 msgid "_Layer"
 msgstr "_Capa"
 
-#: ../share/ui/menus.ui:191
+#: ../share/ui/menus.xml:191
 msgid "_Object"
 msgstr "_Objecte"
 
-#: ../share/ui/menus.ui:203
+#: ../share/ui/menus.xml:203
 msgid "Cli_p"
 msgstr "Re_talla"
 
-#: ../share/ui/menus.ui:208
+#: ../share/ui/menus.xml:208
 msgid "Mas_k"
 msgstr "Màs_cara"
 
-#: ../share/ui/menus.ui:213
+#: ../share/ui/menus.xml:213
 msgid "Patter_n"
 msgstr "Pat_ró"
 
-#: ../share/ui/menus.ui:238
+#: ../share/ui/menus.xml:238
 msgid "_Path"
 msgstr "_Camí"
 
-#: ../share/ui/menus.ui:281
+#: ../share/ui/menus.xml:281
 msgid "Filter_s"
 msgstr "Filtre_s"
 
-#: ../share/ui/menus.ui:287
+#: ../share/ui/menus.xml:287
 msgid "Exte_nsions"
 msgstr "Exte_nsions"
 
-#: ../share/ui/menus.ui:297
+#: ../share/ui/menus.xml:297
 msgid "Tutorials"
 msgstr "Tutorials"
 

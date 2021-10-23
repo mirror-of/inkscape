@@ -14087,7 +14087,7 @@ msgid "Change unit parameter"
 msgstr "단위 매개변수 변경"
 
 #: ../src/menus-skeleton.h:24 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/menus.ui:6
+#: ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "파일(_F)"
 
@@ -18508,7 +18508,7 @@ msgid "Sele_ction"
 msgstr "선택 항목(_C)"
 
 #: ../src/ui/dialog/find.cpp:66 ../share/ui/dialog-text-edit.glade:119
-#: ../share/ui/menus.ui:275
+#: ../share/ui/menus.xml:275
 msgid "_Text"
 msgstr "텍스트(_T)"
 
@@ -21186,7 +21186,7 @@ msgstr "메뉴에 아이콘 표시:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1776
 msgid ""
 "You can either enable or disable all icons in menus. By default, the setting "
-"for the 'show-icons' attribute in the 'menus.ui' file determines whether to "
+"for the 'show-icons' attribute in the 'menus.xml' file determines whether to "
 "display icons in menus."
 msgstr ""
 "메뉴의 모든 아이콘을 활성화하거나 비활성화 할 수 있습니다. 기본적으로 'menus."
@@ -31634,7 +31634,7 @@ msgstr "스타일 붙여넣기(_S)"
 msgid "Apply the style of the copied object to selection"
 msgstr "복사된 객체의 스타일을 선택 항목에 적용"
 
-#: ../src/verbs.cpp:2390 ../share/ui/menus.ui:39
+#: ../src/verbs.cpp:2390 ../share/ui/menus.xml:39
 msgid "Paste Si_ze"
 msgstr "크기 붙여넣기(_Z)"
 
@@ -32546,7 +32546,7 @@ msgstr "선택 영역에 마스크 적용 (맨 위 객체를 마스크로 사용
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "선택 영역에 역 마스크 적용(맨 위 객체를 마스크로 사용)"
 
-#: ../src/verbs.cpp:2670 ../src/verbs.cpp:2680 ../share/ui/menus.ui:29
+#: ../src/verbs.cpp:2670 ../src/verbs.cpp:2680 ../share/ui/menus.xml:29
 msgid "_Edit"
 msgstr "편집(_E)"
 
@@ -42946,59 +42946,59 @@ msgstr "새 그림"
 msgid "Open a New Window"
 msgstr "새 창 열기"
 
-#: ../share/ui/menus.ui:51
+#: ../share/ui/menus.xml:51
 msgid "Clo_ne"
 msgstr "복제하기(_N)"
 
-#: ../share/ui/menus.ui:66
+#: ../share/ui/menus.xml:66
 msgid "Select Sa_me"
 msgstr "동일 항목 선택(_M)"
 
-#: ../share/ui/menus.ui:88
+#: ../share/ui/menus.xml:88
 msgid "_View"
 msgstr "보기(_V)"
 
-#: ../share/ui/menus.ui:146
+#: ../share/ui/menus.xml:146
 msgid "Sh_ow/Hide"
 msgstr "표시/숨김(_O)"
 
-#: ../share/ui/menus.ui:174
+#: ../share/ui/menus.xml:174
 msgid "_Layer"
 msgstr "레이어(_L)"
 
-#: ../share/ui/menus.ui:198
+#: ../share/ui/menus.xml:198
 msgid "_Object"
 msgstr "객체(_O)"
 
-#: ../share/ui/menus.ui:211
+#: ../share/ui/menus.xml:211
 msgid "Cli_p"
 msgstr "클립(_P)"
 
-#: ../share/ui/menus.ui:216
+#: ../share/ui/menus.xml:216
 msgid "Mas_k"
 msgstr "마스크(_K)"
 
-#: ../share/ui/menus.ui:221
+#: ../share/ui/menus.xml:221
 msgid "Patter_n"
 msgstr "패턴(_N)"
 
-#: ../share/ui/menus.ui:246
+#: ../share/ui/menus.xml:246
 msgid "_Path"
 msgstr "경로(_P)"
 
-#: ../share/ui/menus.ui:291
+#: ../share/ui/menus.xml:291
 msgid "Filter_s"
 msgstr "필터(_S)"
 
-#: ../share/ui/menus.ui:297
+#: ../share/ui/menus.xml:297
 msgid "Exte_nsions"
 msgstr "확장(_N)"
 
-#: ../share/ui/menus.ui:305
+#: ../share/ui/menus.xml:305
 msgid "_Help"
 msgstr "도움말(_H)"
 
-#: ../share/ui/menus.ui:309
+#: ../share/ui/menus.xml:309
 msgid "Tutorials"
 msgstr "자습서"
 

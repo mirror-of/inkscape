@@ -13986,7 +13986,7 @@ msgid "Change unit parameter"
 msgstr ""
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "_Ֆայլ"
 
@@ -18522,7 +18522,7 @@ msgid "Sele_ction"
 msgstr "Ընտրվածք"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr "_Տեքստ"
 
@@ -21244,7 +21244,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -31571,7 +31571,7 @@ msgstr ""
 msgid "Apply the style of the copied object to selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr ""
 
@@ -32531,7 +32531,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "_Խմբագրում"
 
@@ -34618,7 +34618,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr ""
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr "_Օգտնություն"
 
@@ -43398,78 +43398,78 @@ msgstr ""
 msgid "New Drawing"
 msgstr "drawing%s"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr ""
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "Ընտրվածք"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr "_Տեսք"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr ""
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 #, fuzzy
 msgid "_Display Mode"
 msgstr "_Արտածել"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 #, fuzzy
 msgid "_Color Display Mode"
 msgstr "Ցանցի գծերի գույնը"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "Քչացնել Հագեցումը (Saturation)"
 
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 #, fuzzy
 msgid "Sh_ow/Hide"
 msgstr "Ցույց տալ/Թաքցնել"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr "_Շերտ"
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 msgid "_Object"
 msgstr "_Օբյեկտ"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr "a"
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 msgid "Mas_k"
 msgstr "_Դիմակ"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 msgid "Patter_n"
 msgstr "Նմու_շ"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr "Ու_ղի"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 #, fuzzy
 msgid "Filter_s"
 msgstr "Ֆայլ"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 #, fuzzy
 msgid "Exte_nsions"
 msgstr "Հնարավոր չէ միացնել \""
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 #, fuzzy
 msgid "Tutorials"
 msgstr "Մատռից"

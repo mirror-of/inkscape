@@ -13713,7 +13713,7 @@ msgid "Change unit parameter"
 msgstr "একক প্যারামিটার পরিবর্তন করুন"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "ফাইল (_ফ)"
 
@@ -18321,7 +18321,7 @@ msgid "Sele_ction"
 msgstr "নির্বাচন (_c)"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr "টেক্সট (_ট)"
 
@@ -21030,7 +21030,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -31553,7 +31553,7 @@ msgstr "শৈলী প্রতিলেপন করুন (_S)"
 msgid "Apply the style of the copied object to selection"
 msgstr "নির্বাচনে অনুলেপন করা বস্তুর শৈলী প্রয়োগ করুন"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr "আকার প্রতিলেপন করুন (_z)"
 
@@ -32524,7 +32524,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "নির্বাচনে মাস্ক প্রয়োগ করুন (মাস্ক হিসেবে শীর্ষ অবজেক্ট ব্যবহার করে)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "সম্পাদনা (_ম)"
 
@@ -34607,7 +34607,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "আপনি পুরোভূমি হিসাবে যে এলাকা নির্বাচন করতে চান তা আচ্ছাদিত করুন"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr "সহায়িকা (_স)"
 
@@ -42856,73 +42856,73 @@ msgstr ""
 msgid "New Drawing"
 msgstr "নতুন ড্রইং"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr "ক্লোন করুন (_n)"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 #, fuzzy
 msgid "Select Sa_me"
 msgstr "পৃষ্ঠা নির্বাচন করুন:"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr "প্রদর্শন (_দ)"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr "বড়ো আকারে প্রদর্শন করুন (_Z)"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 msgid "_Display Mode"
 msgstr "প্রদর্শন মোড (_D)"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 msgid "_Color Display Mode"
 msgstr "রঙিন প্রদর্শন মোড (_C)"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "টেক্সট পরিচিত পর্ব"
 
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 msgid "Sh_ow/Hide"
 msgstr "দেখাও/লুকাও (_o)"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr "স্তর (_র)"
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 msgid "_Object"
 msgstr "অবজেক্ট (_অ)"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr "ক্লিপ করুন (_p)"
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 msgid "Mas_k"
 msgstr "মাস্ক (_k)"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 msgid "Patter_n"
 msgstr "প্যাটার্ণ (_n)"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr "পাথ (_থ)"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 msgid "Filter_s"
 msgstr "ফিল্টার (_s)"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
 msgstr "এক্সটেনসন (_n)"
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 msgid "Tutorials"
 msgstr "টিউটোরিয়াল"
 

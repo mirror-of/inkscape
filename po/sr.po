@@ -14134,7 +14134,7 @@ msgid "Change unit parameter"
 msgstr "Промена параметара јединице мере"
 
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.ui:6
+#: ../share/ui/inkscape-application.glade:7 ../share/ui/menus.xml:6
 msgid "_File"
 msgstr "_Датотека"
 
@@ -18771,7 +18771,7 @@ msgid "Sele_ction"
 msgstr "_Изабраним објектима"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
-#: ../share/ui/menus.ui:266
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr "_Текст"
 
@@ -21521,7 +21521,7 @@ msgstr ""
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
-"'menus.ui' file. (requires restart)"
+"'menus.xml' file. (requires restart)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
@@ -32210,7 +32210,7 @@ msgstr "Убаци _стил"
 msgid "Apply the style of the copied object to selection"
 msgstr "Примењује стил умноженог објекта на избор"
 
-#: ../src/verbs.cpp:2561 ../share/ui/menus.ui:42
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr "Убаци димен_зије"
 
@@ -33156,7 +33156,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr "Примењује маску на избор (користећи највиши објекат као маску)"
 
-#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.ui:32
+#: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "_Уређивање"
 
@@ -35232,7 +35232,7 @@ msgstr ""
 msgid "Cover the area you want to select as the foreground"
 msgstr "Покрива површину за коју желите да учествује у испису"
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.ui:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr "По_моћ"
 
@@ -43804,72 +43804,72 @@ msgstr ""
 msgid "New Drawing"
 msgstr "Нови цртеж"
 
-#: ../share/ui/menus.ui:54
+#: ../share/ui/menus.xml:54
 msgid "Clo_ne"
 msgstr "Клонира_ње"
 
-#: ../share/ui/menus.ui:69
+#: ../share/ui/menus.xml:69
 msgid "Select Sa_me"
 msgstr "Изабери _објекте са истом"
 
-#: ../share/ui/menus.ui:91
+#: ../share/ui/menus.xml:91
 msgid "_View"
 msgstr "_Приказ"
 
-#: ../share/ui/menus.ui:92
+#: ../share/ui/menus.xml:92
 msgid "_Zoom"
 msgstr "Уве_ћање"
 
-#: ../share/ui/menus.ui:109
+#: ../share/ui/menus.xml:109
 msgid "_Display Mode"
 msgstr "_Режим приказа"
 
-#: ../share/ui/menus.ui:119
+#: ../share/ui/menus.xml:119
 msgid "_Color Display Mode"
 msgstr "_Режим приказа боје"
 
-#: ../share/ui/menus.ui:127
+#: ../share/ui/menus.xml:127
 #, fuzzy
 msgid "_Canvas Orientation"
 msgstr "Оријентација стране:"
 
-#: ../share/ui/menus.ui:141
+#: ../share/ui/menus.xml:141
 msgid "Sh_ow/Hide"
 msgstr "_Прикажи/сакриј"
 
-#: ../share/ui/menus.ui:168
+#: ../share/ui/menus.xml:168
 msgid "_Layer"
 msgstr "_Слој"
 
-#: ../share/ui/menus.ui:192
+#: ../share/ui/menus.xml:192
 msgid "_Object"
 msgstr "_Објекат"
 
-#: ../share/ui/menus.ui:204
+#: ../share/ui/menus.xml:204
 msgid "Cli_p"
 msgstr "Исе_цање"
 
-#: ../share/ui/menus.ui:209
+#: ../share/ui/menus.xml:209
 msgid "Mas_k"
 msgstr "Мас_ка"
 
-#: ../share/ui/menus.ui:214
+#: ../share/ui/menus.xml:214
 msgid "Patter_n"
 msgstr "_Шара"
 
-#: ../share/ui/menus.ui:239
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr "_Линија"
 
-#: ../share/ui/menus.ui:282
+#: ../share/ui/menus.xml:282
 msgid "Filter_s"
 msgstr "_Филтери"
 
-#: ../share/ui/menus.ui:288
+#: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
 msgstr "Про_ширењa"
 
-#: ../share/ui/menus.ui:298
+#: ../share/ui/menus.xml:298
 msgid "Tutorials"
 msgstr "Водичи"
 
