@@ -174,3 +174,21 @@ expander arrow:dir(rtl) {
 expander arrow:checked {
     -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
 }
+
+/* Fix Tool toolbar buttons after switch to toolbar -> flowbox */ 
+
+#ToolToolbox {
+    background-image: -gtk-win32-theme-part(rebar,6,1);
+}
+
+#ToolToolbox button {
+    background-image: none;
+}
+
+#ToolToolbox button:hover {
+    background-image: -gtk-win32-theme-part(button, 1,2);
+}
+
+#ToolToolbox button:active, #ToolToolbox button:checked {
+    background-image: -gtk-win32-theme-part(button, 1, 3);
+}
