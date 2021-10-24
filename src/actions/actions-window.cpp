@@ -52,32 +52,20 @@ window_close(InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_window =
 {
     // clang-format off
-    {"app.window-open",           N_("Window Open"),     "Window",     N_("Open a window for the active document; GUI only")   },
-    {"app.window-close",          N_("Window Close"),    "Window",     N_("Close the active window")                           }
+    {"app.window-open",           N_("Window Open"),     "Window",     N_("Open a window for the active document; GUI only")       },
+    {"app.window-close",          N_("Window Close"),    "Window",     N_("Close the active window, does not check for data loss") }
     // clang-format on
 };
 
 void
 add_actions_window(InkscapeApplication* app)
 {
-    Glib::VariantType Bool(  Glib::VARIANT_TYPE_BOOL);
-    Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
-    Glib::VariantType Double(Glib::VARIANT_TYPE_DOUBLE);
-    Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
-    Glib::VariantType BString(Glib::VARIANT_TYPE_BYTESTRING);
-
     auto *gapp = app->gio_app();
-
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
 
     // clang-format off
     gapp->add_action(                "window-open",  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_open),         app));
     gapp->add_action(                "window-close", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_close),        app));
     // clang-format on
-#else
-    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
-#endif
 
     app->get_action_extra_data().add_data(raw_data_window);
 }

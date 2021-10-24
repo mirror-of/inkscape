@@ -37,31 +37,6 @@ window_next(SPDocument* document)
 }
 
 void
-document_new(SPDocument* document)
-{
-    sp_file_new_default();
-}
-
-void
-document_dialog_templates(SPDocument* document)
-{
-    Inkscape::UI::NewFromTemplate::load_new_from_template();
-}
-
-void
-document_revert(SPDocument* document)
-{
-    sp_file_revert_dialog();
-}
-
-
-void
-document_cleanup(SPDocument* document)
-{
-    sp_file_vacuum(document);
-}
-
-void
 window_new(SPDocument* document)
 {
     sp_ui_new_view();
@@ -73,10 +48,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_file_document =
     {"doc.window-new",                  N_("Duplicate Window"),         "File",             N_("Open a new window with the same document")},
     {"doc.window-previous",             N_("Previous Window"),          "File",             N_("Switch to the previous document window")},
     {"doc.window-next",                 N_("Next Window"),              "File",             N_("Switch to the next document window")},
-    {"doc.document-new",                N_("New"),                      "File",             N_("Create new document from the default template")},
-    {"doc.document-dialog-templates",   N_("New from  Template"),       "File",             N_("Create new project from template")},
-    {"doc.document-revert",             N_("Revert"),                   "File",             N_("Revert to the last saved version of document (changes will be lost)")},
-    {"doc.document-cleanup",            N_("Clean Up Document"),        "File",             N_("Remove unused definitions (such as gradients or clipping paths) from the <defs> of the document")}
     // clang-format on
 };
 
@@ -89,10 +60,6 @@ add_actions_file_document(SPDocument* document)
     map->add_action( "window-new",                  sigc::bind<SPDocument*>(sigc::ptr_fun(&window_new), document));
     map->add_action( "window-previous",             sigc::bind<SPDocument*>(sigc::ptr_fun(&window_previous),  document));
     map->add_action( "window-next",                 sigc::bind<SPDocument*>(sigc::ptr_fun(&window_next),  document));
-    map->add_action( "document-new",                sigc::bind<SPDocument*>(sigc::ptr_fun(&document_new),  document));
-    map->add_action( "document-dialog-templates",   sigc::bind<SPDocument*>(sigc::ptr_fun(&document_dialog_templates),  document));
-    map->add_action( "document-revert",             sigc::bind<SPDocument*>(sigc::ptr_fun(&document_revert),  document));
-    map->add_action( "document-cleanup",            sigc::bind<SPDocument*>(sigc::ptr_fun(&document_cleanup), document));
     // clang-format on
 
     // Check if there is already an application instance (GUI or non-GUI).
@@ -103,3 +70,14 @@ add_actions_file_document(SPDocument* document)
     }
     app->get_action_extra_data().add_data(raw_data_file_document);
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
