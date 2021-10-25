@@ -9,14 +9,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef INK_ACTIONS_FILE_DOCUMENT_H
-#define INK_ACTIONS_FILE_DOCUMENT_H
+#ifndef INK_ACTIONS_VIEW_WINDOW_H
+#define INK_ACTIONS_VIEW_WINDOW_H
 
-class SPDocument;
+class InkscapeWindow;
 
-void add_actions_file_document(SPDocument* document);
+void add_actions_view_window(InkscapeWindow *);
 
-#endif // INK_ACTIONS_FILE_DOCUMENT_H
+#endif // INK_ACTIONS_VIEW_WINDOW_H
 
 /*
   Local Variables:

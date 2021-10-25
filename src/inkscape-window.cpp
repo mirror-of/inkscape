@@ -35,6 +35,7 @@
 #include "actions/actions-tools.h"
 #include "actions/actions-canvas-snapping.h"
 #include "actions/actions-view-mode.h"
+#include "actions/actions-view-window.h"
 
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
@@ -111,7 +112,8 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add_actions_hide_lock(this);            // Actions to transform dialog.
     add_actions_select_window(this);        // Actions with desktop selection
     add_actions_tools(this);                // Actions to switch between tools.
-    add_actions_view_mode(this);            // Actions to change view of Inkscape
+    add_actions_view_mode(this);            // Actions to change how Inkscape canvas is displayed.
+    add_actions_view_window(this);          // Actions to add/change window of Inkscape
 
     // ========== Drag and Drop of Documents =========
     ink_drag_setup(_desktop_widget);
