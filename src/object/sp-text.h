@@ -72,6 +72,8 @@ public:
     /** Union all exclusion shapes. */
     Shape* getExclusionShape() const;
 
+    std::optional<Geom::Point> getBaselinePoint() const;
+
 private:
 
     /** Initializes layout from <text> (i.e. this node). */

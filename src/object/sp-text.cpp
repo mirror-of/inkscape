@@ -929,6 +929,17 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex, bool is_root)
     }
 }
 
+/**
+ * Get the position of the baseline point for this text object.
+ */
+std::optional<Geom::Point> SPText::getBaselinePoint() const
+{
+    if (layout.outputExists()) {
+        return layout.baselineAnchorPoint();
+    }
+    return std::optional<Geom::Point>();
+}
+
 void
 remove_newlines_recursive(SPObject* object, bool is_svg2)
 {

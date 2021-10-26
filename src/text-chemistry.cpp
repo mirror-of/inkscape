@@ -508,10 +508,10 @@ text_unflow ()
             Inkscape::GC::release(rtspan);
             Inkscape::GC::release(text_repr);
 
-        } else if (text){
-
+        } else if (text) {
             if (text->has_shape_inside()) {
 
+                auto old_point = text->getBaselinePoint();
                 Inkscape::XML::Node *rtext = text->getRepr();
 
                 // Position unflowed text near shape.
@@ -539,6 +539,13 @@ text_unflow ()
                         tspan->getRepr()->removeAttribute("y");
                         tspan->getRepr()->removeAttribute("sodipodi:role");
                     }
+                }
+                // Reposition the text so the baselines don't change.
+                text->rebuildLayout();
+                auto new_point = text->getBaselinePoint();
+                if (old_point && new_point) {
+                    auto move = Geom::Translate(*old_point - *new_point) * text->transform;
+                    text->doWriteTransform(move, &move, false);
                 }
             }
         }

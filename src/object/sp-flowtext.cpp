@@ -774,6 +774,17 @@ Geom::Affine SPFlowtext::set_transform (Geom::Affine const &xform)
     return Geom::Affine();
 }
 
+/**
+ * Get the position of the baseline point for this text object.
+ */
+std::optional<Geom::Point> SPFlowtext::getBaselinePoint() const
+{
+    if (layout.outputExists()) {
+        return layout.baselineAnchorPoint();
+    }
+    return std::optional<Geom::Point>();
+}
+
 /*
   Local Variables:
   mode:c++

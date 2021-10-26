@@ -230,23 +230,23 @@ void Inkscape::SelCue::_newTextBaselines()
 
     auto items = _selection->items();
     for (auto item : items) {
-
-        if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) { // visualize baseline
-            Inkscape::Text::Layout const *layout = te_get_layout(item);
-            if (layout != nullptr && layout->outputExists()) {
-                std::optional<Geom::Point> pt = layout->baselineAnchorPoint();
-                if (pt) {
-                    auto canvas_item = new Inkscape::CanvasItemCtrl(_desktop->getCanvasControls(),
-                                                                    Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE,
-                                                                    (*pt) * item->i2dt_affine());
-                    canvas_item->set_size(5);
-                    canvas_item->set_stroke(0x000000ff);
-                    canvas_item->set_fill(0x00000000);
-                    canvas_item->set_z_position(0);
-                    canvas_item->show();
-                    _text_baselines.emplace_back(canvas_item);
-                }
-            }
+        std::optional<Geom::Point> pt;
+        if (auto text = dynamic_cast<SPText *>(item)) {
+            pt = text->getBaselinePoint();
+        }
+        if (auto flow = dynamic_cast<SPFlowtext *>(item)) {
+            pt = flow->getBaselinePoint();
+        }
+        if (pt) {
+            auto canvas_item = new Inkscape::CanvasItemCtrl(_desktop->getCanvasControls(),
+                                                            Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE,
+                                                            (*pt) * item->i2dt_affine());
+            canvas_item->set_size(5);
+            canvas_item->set_stroke(0x000000ff);
+            canvas_item->set_fill(0x00000000);
+            canvas_item->set_z_position(0);
+            canvas_item->show();
+            _text_baselines.emplace_back(canvas_item);
         }
     }
 }

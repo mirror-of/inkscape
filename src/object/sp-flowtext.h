@@ -45,6 +45,8 @@ public:
 
     SPItem const *get_frame(SPItem const *after) const;
 
+    std::optional<Geom::Point> getBaselinePoint() const;
+
     bool has_internal_frame() const;
 
 //semiprivate:  (need to be accessed by the C-style functions still)
