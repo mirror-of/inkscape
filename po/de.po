@@ -19,13 +19,14 @@
 # Patrick Storz <eduard.braun2@gmx.de>, 2015-2020.
 # Michael Rack <miohna@freenet.de>, 2018.
 # Frank Beckmann, 2019.
+# ModProg <dev@modprog.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2021-05-09 14:58+0000\n"
 "PO-Revision-Date: 2021-05-18 14:52+0200\n"
-"Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
+"Last-Translator: ModProg <dev@modprog.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -31732,9 +31733,9 @@ msgid ""
 "pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to "
 "create a new pattern from selection."
 msgstr ""
-"Benutzen Sie das <b>Knotenwerkzeug</b>, um Position Winkel und Größe des "
-"Musters auf der Arbeitsfläche anzupassen. Mit <b>Objekt „ Füllmuster "
-"„ Objekte in Füllmuster umwandeln</b> lassen sich neue Füllmuster von "
+"Benutzen Sie das <b>Knotenwerkzeug</b>, um Position, Winkel und Größe des "
+"Musters auf der Arbeitsfläche anzupassen. Mit <b>Objekt &gt; Muster &gt; "
+"Objekte in Füllmuster umwandeln</b> lassen sich neue Füllmuster von "
 "ausgewählten Objekten erzeugen."
 
 #: ../src/ui/widget/paint-selector.cpp:1232
