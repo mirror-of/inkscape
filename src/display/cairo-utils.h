@@ -124,6 +124,7 @@ public:
 
   private:
     static Pixbuf *create_from_buffer(gchar *&&, gsize, double svgddpi = 0, std::string const &fn = "");
+    static GdkPixbuf *apply_embedded_orientation(GdkPixbuf *buf);
 
     void _ensurePixelsARGB32();
     void _ensurePixelsPixbuf();

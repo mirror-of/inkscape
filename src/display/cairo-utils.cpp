@@ -302,6 +302,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
             GdkPixbuf *buf = gdk_pixbuf_loader_get_pixbuf(loader);
             if (buf) {
                 g_object_ref(buf);
+                buf = Pixbuf::apply_embedded_orientation(buf);
                 pixbuf = new Pixbuf(buf);
 
                 GdkPixbufFormat *fmt = gdk_pixbuf_loader_get_format(loader);
@@ -405,6 +406,14 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn, double svgdpi)
     return pb;
 }
 
+GdkPixbuf *Pixbuf::apply_embedded_orientation(GdkPixbuf *buf)
+{
+    GdkPixbuf *old = buf;
+    buf = gdk_pixbuf_apply_embedded_orientation(buf);
+    g_object_unref(old);
+    return buf;
+}
+
 Pixbuf *Pixbuf::create_from_buffer(std::string const &buffer, double svgdpi, std::string const &fn)
 {
     auto datacopy = (gchar *)g_memdup(buffer.data(), buffer.size());
@@ -462,6 +471,7 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
                     delete pb;
                     return nullptr;
                 }
+                buf = Pixbuf::apply_embedded_orientation(buf);
                 is_svg = true;
             }
         }
@@ -489,6 +499,7 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
             if (buf) {
                 // gdk_pixbuf_loader_get_pixbuf returns a borrowed reference
                 g_object_ref(buf);
+                buf = Pixbuf::apply_embedded_orientation(buf);
                 pb = new Pixbuf(buf);
             }
         }
