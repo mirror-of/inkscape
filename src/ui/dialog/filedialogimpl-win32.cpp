@@ -1561,11 +1561,13 @@ FileSaveDialogImplWin32::FileSaveDialogImplWin32(Gtk::Window &parent,
             const char *title,
             const Glib::ustring &/*default_key*/,
             const char *docTitle,
-            const Inkscape::Extension::FileSaveMethod save_method) :
-    FileDialogBaseWin32(parent, dir, title, fileTypes,
-                        (save_method == Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY) ? "dialogs.save_copy" :  "dialogs.save_as"),
-        _title_label(NULL),
-        _title_edit(NULL)
+            const Inkscape::Extension::FileSaveMethod save_method)
+    : FileDialogBaseWin32(parent, dir, title, fileTypes,
+                          (save_method == Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY) ? "dialogs.save_copy"
+                                                                                           : "dialogs.save_as")
+    , save_method(save_method)
+    , _title_label(NULL)
+    , _title_edit(NULL)
 {
     FileSaveDialog::myDocTitle = docTitle;
 
@@ -1622,6 +1624,10 @@ void FileSaveDialogImplWin32::createFilterMenu()
     for (auto omod : extension_list) {
         // FIXME: would be nice to grey them out instead of not listing them
         if (omod->deactivated() || (omod->is_raster() != is_raster))
+            continue;
+
+        // This extension is limited to save copy only.
+        if (omod->savecopy_only() && save_method != Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY)
             continue;
 
         filter_count++;

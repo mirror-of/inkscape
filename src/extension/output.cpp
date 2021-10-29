@@ -49,6 +49,7 @@ Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     filetypename = nullptr;
     filetypetooltip = nullptr;
     dataloss = true;
+    savecopyonly = false;
     raster = false;
 
     if (repr != nullptr) {
@@ -88,10 +89,11 @@ Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
                         filetypetooltip = g_strdup(child_repr->firstChild()->content());
                     }
                     if (!strcmp(chname, "dataloss")) {
-                        if (!strcmp(child_repr->firstChild()->content(), "false")) {
-							dataloss = FALSE;
-						}
-					}
+                        dataloss = strcmp(child_repr->firstChild()->content(), "false");
+                    }
+                    if (!strcmp(chname, "savecopyonly")) {
+                        savecopyonly = !strcmp(child_repr->firstChild()->content(), "true");
+                    }
 
                     child_repr = child_repr->next();
                 }

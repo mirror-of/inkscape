@@ -26,6 +26,7 @@ class Output : public Extension {
     gchar *filetypename;         /**< A userfriendly name for the file type */
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
     bool   dataloss;             /**< The extension causes data loss on save */
+    bool   savecopyonly;         /**< Limit output option to Save a Copy */
     bool   raster;               /**< Is the extension expecting a png file */
 
 public:
@@ -57,6 +58,7 @@ public:
     const char * get_filetypename(bool translated=false);
     const char * get_filetypetooltip(bool translated=false);
     bool         causes_dataloss() { return dataloss; };
+    bool         savecopy_only() { return savecopyonly; };
     bool         is_raster() { return raster; };
 };
 

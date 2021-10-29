@@ -168,7 +168,6 @@ private:
     /// Create filter menu for this type of dialog
     void createFilterMenu();
 
-
     /// The handle of the preview pane window
     HWND _preview_wnd;
 
@@ -363,6 +362,9 @@ private:
 
     /// Create a filter menu for this type of dialog
     void createFilterMenu();
+
+    // SaveAs or SaveAsCopy
+    Inkscape::Extension::FileSaveMethod save_method;
 
     /// The controller function for the thread which calls
     /// GetSaveFileName

@@ -674,6 +674,10 @@ void FileSaveDialogImplGtk::createFilterMenu()
         if (omod->deactivated() || (omod->is_raster() != is_raster))
             continue;
 
+        // This extension is limited to save copy only.
+        if (omod->savecopy_only() && save_method != Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY)
+            continue;
+
         FileType type;
         type.name = omod->get_filetypename(true);
         type.pattern = "*";
