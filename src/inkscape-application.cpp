@@ -60,7 +60,11 @@
 #include "actions/actions-selection-object.h"       // Actions
 #include "actions/actions-selection.h"              // Actions
 #include "actions/actions-transform.h"              // Actions
+#include "actions/actions-text.h"                   // Actions
 #include "actions/actions-window.h"                 // Actions
+
+// With GUI
+#include "actions/actions-tutorial.h"               // Actions
 
 #include "widgets/desktop-widget.h" // Access dialog container.
 
@@ -605,8 +609,12 @@ InkscapeApplication::InkscapeApplication()
     add_actions_selection(this);            // actions for object selection
     add_actions_path(this);                 // actions for Paths
     add_actions_selection_object(this);     // actions for selected objects
+    add_actions_text(this);                 // actions for Text
     add_actions_transform(this);            // actions for transforming selected objects
     add_actions_window(this);               // actions for windows
+    if (_with_gui) {
+        add_actions_tutorial(this);
+    }
 
 
     // ====================== Command Line ======================

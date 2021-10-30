@@ -15,10 +15,10 @@ See default.xml for more information.
 
 <!-- File -->
 
-  <bind gaction="doc.document-dialog-templates"   keys="&lt;primary&gt;&lt;shift&gt;n" />
+  <bind gaction="win.document-dialog-templates"   keys="&lt;primary&gt;&lt;shift&gt;n" />
 
   <!-- Revert -->
-  <bind gaction="doc.document-revert"             keys="&lt;primary&gt;&lt;alt&gt;z" />
+  <bind gaction="win.document-revert"             keys="&lt;primary&gt;&lt;alt&gt;z" />
 
   <!-- Place -->
   <bind gaction="win.document-import"             keys="&lt;primary&gt;&lt;shift&gt;p" />
@@ -108,8 +108,8 @@ See default.xml for more information.
   <bind gaction="app.object-to-guides"  keys="&lt;primary&gt;5" />
   
   <!-- Make and Release Clipping Masks -->
-  <bind gaction="app.object-set"        keys="&lt;primary&gt;7" />
-  <bind gaction="app.object-release"    keys="&lt;primary&gt;&lt;alt&gt;7" />
+  <bind gaction="app.object-set-clip"        keys="&lt;primary&gt;7" />
+  <bind gaction="app.object-release-clip"    keys="&lt;primary&gt;&lt;alt&gt;7" />
 
   <!-- Add new symbol -->
   <bind gaction="app.clone"             keys="F8" />

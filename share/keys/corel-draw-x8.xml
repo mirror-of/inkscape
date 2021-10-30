@@ -7,8 +7,8 @@ in the style of Corel DRAW X8. See default.xml for more information.
 
 <!-- File -->
 <bind gaction="win.document-import"                     keys="&lt;ctrl&gt;i, &lt;ctrl&gt;I" />
-<bind gaction="doc.document-new"                        keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
-<bind gaction="win.file-open"                           keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+<bind gaction="win.document-new"                        keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
+<bind gaction="win.document-open"                           keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
 <bind gaction="win.document-print"                      keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
 <bind gaction="win.document-save"                       keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
 <bind gaction="win.document-save-as"                    keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;S" />
@@ -24,14 +24,14 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind gaction="win.undo"                                keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
 
 <!-- Selection -->
-<bind gaction="app.select-path-break-apart"             keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
-<bind gaction="app.select-path-combine"                 keys="&lt;ctrl&gt;l, &lt;ctrl&gt;L" />
-<bind gaction="app.select-object-group"                 keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+<bind gaction="app.path-break-apart"             keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
+<bind gaction="app.path-combine"                 keys="&lt;ctrl&gt;l, &lt;ctrl&gt;L" />
+<bind gaction="app.selection-group"                 keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
 <bind gaction="app.selection-lower"                     keys="&lt;ctrl&gt;Page_Down" />
 <bind gaction="app.selection-raise"                     keys="&lt;ctrl&gt;Page_Up" />
 <bind gaction="app.selection-bottom"                    keys="&lt;ctrl&gt;End" />
 <bind gaction="app.selection-top"                       keys="&lt;ctrl&gt;Home" />
-<bind gaction="app.select-object-ungroup"               keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
+<bind gaction="app.selection-ungroup"               keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 <bind gaction="app.object-stroke-to-path"               keys="&lt;ctrl&gt;&lt;shift&gt;q, &lt;ctrl&gt;&lt;shift&gt;Q" />
 
 <!-- Layer -->

@@ -254,19 +254,6 @@ object_stroke_to_path(InkscapeApplication *app)
 }
 
 
-void
-object_simplify_path(InkscapeApplication *app)
-{
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
-    selection->setDocument(document);
-
-    selection->simplifyPaths();
-}
-
-
 std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
     // clang-format off
@@ -275,10 +262,9 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
     {"app.object-unlink-clones",        N_("Unlink Clones"),                    "Object",     N_("Unlink clones and symbols")},
     {"app.object-to-path",              N_("Object To Path"),                   "Object",     N_("Convert shapes to paths")},
     {"app.object-stroke-to-path",       N_("Stroke to Path"),                   "Object",     N_("Convert strokes to paths")},
-    {"app.object-simplify-path",        N_("Simplify Path"),                    "Object",     N_("Simplify paths, reducing node counts")},
-    {"app.object-set",                  N_("Object Clip Set"),                  "Object",     N_("Apply clipping path to selection (using the topmost object as clipping path)")},
-    {"app.object-set-inverse",          N_("Object Clip Set Inverse"),          "Object",     N_("Apply inverse clipping path to selection (using the topmost object as clipping path)")},
-    {"app.object-release",              N_("Object Clip Release"),              "Object",     N_("Remove clipping path from selection")},
+    {"app.object-set-clip",             N_("Object Clip Set"),                  "Object",     N_("Apply clipping path to selection (using the topmost object as clipping path)")},
+    {"app.object-set-inverse-clip",     N_("Object Clip Set Inverse"),          "Object",     N_("Apply inverse clipping path to selection (using the topmost object as clipping path)")},
+    {"app.object-release-clip",         N_("Object Clip Release"),              "Object",     N_("Remove clipping path from selection")},
     {"app.object-set-mask",             N_("Object Mask Set"),                  "Object",     N_("Apply mask to selection (using the topmost object as mask)")},
     {"app.object-set-inverse-mask",     N_("Object Mask Set Inverse"),          "Object",     N_("Set Inverse (LPE)")},
     {"app.object-release-mask",         N_("Object Mask Release"),              "Object",     N_("Remove mask from selection")},
@@ -316,10 +302,9 @@ add_actions_object(InkscapeApplication* app)
     gapp->add_action(                "object-unlink-clones",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),          app));
     gapp->add_action(                "object-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),                app));
     gapp->add_action(                "object-stroke-to-path",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),         app));
-    gapp->add_action(                "object-simplify-path",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_simplify_path),          app));
-    gapp->add_action(                "object-set",                      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_clip),                      app));
-    gapp->add_action(                "object-set-inverse",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse),            app));
-    gapp->add_action(                "object-release",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release),                app));
+    gapp->add_action(                "object-set-clip",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_clip),                      app));
+    gapp->add_action(                "object-set-inverse-clip",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse),            app));
+    gapp->add_action(                "object-release-clip",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release),                app));
     gapp->add_action(                "object-set-mask",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_mask),                      app));
     gapp->add_action(                "object-set-inverse-mask",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse_mask),       app));
     gapp->add_action(                "object-release-mask",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release_mask),           app));

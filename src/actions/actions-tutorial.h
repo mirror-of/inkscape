@@ -12,8 +12,8 @@
 #ifndef INK_ACTIONS_TUTORIAL_H
 #define INK_ACTIONS_TUTORIAL_H
 
-class SPDocument;
+class InkscapeApplication;
 
-void add_actions_tutorial(SPDocument* document);
+void add_actions_tutorial(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_TUTORIAL_H

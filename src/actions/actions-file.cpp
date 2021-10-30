@@ -72,13 +72,14 @@ file_new(const Glib::VariantBase& value, InkscapeApplication *app)
     document->ensureUpToDate();
 }
 
-// Need to redo document_revert so that it doesn't depend on windows.
+// Need to create a document_revert that doesn't depend on windows.
 // void
 // file_revert(InkscapeApplication *app)
 // {
 //     app->document_revert(app->get_current_document());
 // }
 
+// No checks for dataloss are performed. Useful for scripts.
 void
 file_close(InkscapeApplication *app)
 {
@@ -89,22 +90,6 @@ file_close(InkscapeApplication *app)
     app->set_active_selection(nullptr);
     app->set_active_view(nullptr);
 }
-
-// TODO:
-// file_open
-// file_new
-
-// The following might be best tied to the file rather than app.
-// file_revert
-// file_save
-// file_saveas
-// file_saveacopy
-// file_print
-// file_vacuum
-// file_import
-// file_close
-// file_quit ... should just be quit
-// file_template
 
 std::vector<std::vector<Glib::ustring>> raw_data_file =
 {

@@ -37,11 +37,11 @@ See default.xml for more information.
 
 <!-- File actions -->
 
-  <bind gaction="doc.document-new"                      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
+  <bind gaction="win.document-new"                      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
   
 <!--  New from Template... (Shift l+Ctrl+N) does not exist in Inkscape -->
 
-  <bind gaction="win.file-open"                         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-open"                         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
   <bind gaction="win.document-save"                     keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
 
 <!--  <bindgaction="win.document-save-as"               keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;t,S" /> -->
@@ -115,13 +115,13 @@ win.canvas-zoom-page-width: Zoom to fit page width in window
 
 <!-- Path actions -->
 
-  <bind gaction="app.select-path-combine"               keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
-  <bind gaction="app.select-path-break-apart"           keys="&lt;ctrl&gt;&lt;shift&gt;t,k, &lt;ctrl&gt;&lt;shift&gt;t,K" />
+  <bind gaction="app.path-combine"               keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
+  <bind gaction="app.path-break-apart"           keys="&lt;ctrl&gt;&lt;shift&gt;t,k, &lt;ctrl&gt;&lt;shift&gt;t,K" />
 
 <!-- Object actions -->
 
-  <bind gaction="app.select-object-group"               keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
-  <bind gaction="app.select-object-ungroup"             keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
+  <bind gaction="app.selection-group"               keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+  <bind gaction="app.selection-ungroup"             keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 
 <!-- Blend is our Interpolate extension's advanced equivalent, so using it -->
 

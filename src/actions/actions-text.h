@@ -12,8 +12,8 @@
 #ifndef INK_ACTIONS_TEXT_H
 #define INK_ACTIONS_TEXT_H
 
-class SPDocument;
+class InkscapeApplication;
 
-void add_actions_text(SPDocument* document);
+void add_actions_text(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_TEXT_H

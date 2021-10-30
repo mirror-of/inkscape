@@ -788,15 +788,15 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Group</attribute>
-        <attribute name='action'>app.select-object-group</attribute>
+        <attribute name='action'>app.selection-group</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Ungroup</attribute>
-        <attribute name='action'>app.select-object-ungroup</attribute>
+        <attribute name='action'>app.selection-ungroup</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Pop Selected Objects out of Group</attribute>
-        <attribute name='action'>app.select-object-ungroup-pop</attribute>
+        <attribute name='action'>app.selection-ungroup-pop</attribute>
       </item>
     </section>
     <section>
@@ -805,15 +805,15 @@
         <section>
           <item>
             <attribute name='label' translatable="yes">_Set</attribute>
-            <attribute name='action'>app.object-set</attribute>
+            <attribute name='action'>app.object-set-clip</attribute>
           </item>
           <item>
             <attribute name='label' translatable="yes">_Set Inverse (LPE)</attribute>
-            <attribute name='action'>app.object-set-inverse</attribute>
+            <attribute name='action'>app.object-set-inverse-clip</attribute>
           </item>
           <item>
             <attribute name='label' translatable="yes">_Release</attribute>
-            <attribute name='action'>app.object-release</attribute>
+            <attribute name='action'>app.object-release-clip</attribute>
           </item>
         </section>
       </submenu>
@@ -962,37 +962,37 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Union</attribute>
-        <attribute name='action'>app.select-path-union</attribute>
+        <attribute name='action'>app.path-union</attribute>
         <attribute name='icon'>path-union</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Difference</attribute>
-        <attribute name='action'>app.select-path-difference</attribute>
+        <attribute name='action'>app.path-difference</attribute>
         <attribute name='icon'>path-difference</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Intersection</attribute>
-        <attribute name='action'>app.select-path-intersection</attribute>
+        <attribute name='action'>app.path-intersection</attribute>
         <attribute name='icon'>path-intersection</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">E_xclusion</attribute>
-        <attribute name='action'>app.select-path-exclusion</attribute>
+        <attribute name='action'>app.path-exclusion</attribute>
         <attribute name='icon'>path-exclusion</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Di_vision</attribute>
-        <attribute name='action'>app.select-path-division</attribute>
+        <attribute name='action'>app.path-division</attribute>
         <attribute name='icon'>path-division</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Cut _Path</attribute>
-        <attribute name='action'>app.select-path-cut</attribute>
+        <attribute name='action'>app.path-cut</attribute>
         <attribute name='icon'>path-cut</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
@@ -1000,13 +1000,13 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Combine</attribute>
-        <attribute name='action'>app.select-path-combine</attribute>
+        <attribute name='action'>app.path-combine</attribute>
         <attribute name='icon'>path-combine</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Break _Apart</attribute>
-        <attribute name='action'>app.select-path-break-apart</attribute>
+        <attribute name='action'>app.path-break-apart</attribute>
         <attribute name='icon'>path-break-apart</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
@@ -1014,25 +1014,25 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">I_nset</attribute>
-        <attribute name='action'>win.select-path-inset</attribute>
+        <attribute name='action'>win.path-inset</attribute>
         <attribute name='icon'>path-inset</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Outs_et</attribute>
-        <attribute name='action'>win.select-path-outset</attribute>
+        <attribute name='action'>win.path-outset</attribute>
         <attribute name='icon'>path-outset</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">D_ynamic Offset</attribute>
-        <attribute name='action'>win.select-path-offset-dynamic</attribute>
+        <attribute name='action'>win.path-offset-dynamic</attribute>
         <attribute name='icon'>path-offset-dynamic</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Linked Offset</attribute>
-        <attribute name='action'>win.select-path-offset-linked</attribute>
+        <attribute name='action'>win.path-offset-linked</attribute>
         <attribute name='icon'>path-offset-linked</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
@@ -1040,18 +1040,18 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">Fill between paths</attribute>
-        <attribute name='action'>app.select-fill-between-paths</attribute>
+        <attribute name='action'>app.path-fill-between-paths</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name='label' translatable="yes">Si_mplify</attribute>
-        <attribute name='action'>app.select-path-simplify</attribute>
+        <attribute name='action'>app.path-simplify</attribute>
         <attribute name='icon'>path-simplify</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Reverse</attribute>
-        <attribute name='action'>win.select-path-reverse</attribute>
+        <attribute name='action'>win.path-reverse</attribute>
         <attribute name='icon'>path-reverse</attribute>
       </item>
     </section>
@@ -1097,41 +1097,41 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Put on Path</attribute>
-        <attribute name='action'>doc.text-put-on-path</attribute>
+        <attribute name='action'>app.text-put-on-path</attribute>
         <attribute name='icon'>text-put-on-path</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Remove from Path</attribute>
-        <attribute name='action'>doc.text-remove-from-path</attribute>
+        <attribute name='action'>app.text-remove-from-path</attribute>
         <attribute name='icon'>text-remove-from-path</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name='label' translatable="yes">_Flow into Frame</attribute>
-        <attribute name='action'>doc.text-flow-into-frame</attribute>
+        <attribute name='action'>app.text-flow-into-frame</attribute>
         <attribute name='icon'>text-flow-into-frame</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Set _Subtraction Frames</attribute>
-        <attribute name='action'>doc.text-flow-subtract-frame</attribute>
+        <attribute name='action'>app.text-flow-subtract-frame</attribute>
         <attribute name='icon'>text-flow-subtract-frame</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Unflow</attribute>
-        <attribute name='action'>doc.text-unflow</attribute>
+        <attribute name='action'>app.text-unflow</attribute>
         <attribute name='icon'>text-unflow</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Convert to Text</attribute>
-        <attribute name='action'>doc.text-convert-to-regular</attribute>
+        <attribute name='action'>app.text-convert-to-regular</attribute>
         <attribute name='icon'>text-convert-to-regular</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name='label' translatable="yes">Remove Manual _Kerns</attribute>
-        <attribute name='action'>doc.text-unkern</attribute>
+        <attribute name='action'>app.text-unkern</attribute>
         <attribute name='icon'>text-unkern</attribute>
       </item>
     </section>
@@ -1197,39 +1197,39 @@
         <attribute name='label' translatable='yes'>Tutorials</attribute>
         <item>
           <attribute name='label' translatable="yes">Inkscape: _Basic</attribute>
-          <attribute name='action'>doc.tutorial-basic</attribute>
+          <attribute name='action'>app.tutorial-basic</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">Inkscape: _Shapes</attribute>
-          <attribute name='action'>doc.tutorial-shapes</attribute>
+          <attribute name='action'>app.tutorial-shapes</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">Inkscape: _Advanced</attribute>
-          <attribute name='action'>doc.tutorial-advanced</attribute>
+          <attribute name='action'>app.tutorial-advanced</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">Inkscape: T_racing</attribute>
-          <attribute name='action'>doc.tutorial-tracing</attribute>
+          <attribute name='action'>app.tutorial-tracing</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">Inkscape: Tracing Pixel Art</attribute> 
-          <attribute name='action'>doc.tutorial-tracing-pixelart</attribute> 
+          <attribute name='action'>app.tutorial-tracing-pixelart</attribute> 
         </item>
         <item>
           <attribute name='label' translatable="yes">Inkscape: _Calligraphy</attribute> 
-          <attribute name='action'>doc.tutorial-calligraphy</attribute>
+          <attribute name='action'>app.tutorial-calligraphy</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">Inkscape: _Interpolate</attribute> 
-          <attribute name='action'>doc.tutorial-interpolate</attribute>
+          <attribute name='action'>app.tutorial-interpolate</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">_Elements of Design</attribute>
-          <attribute name='action'>doc.tutorial-design</attribute>
+          <attribute name='action'>app.tutorial-design</attribute>
         </item>
         <item>
           <attribute name='label' translatable="yes">_Tips and Tricks</attribute>
-	  <attribute name='action'>doc.tutorial-tips</attribute>
+          <attribute name='action'>app.tutorial-tips</attribute>
         </item>
       </submenu>
       <section>
@@ -1271,7 +1271,7 @@
         </item>
         <item>
           <attribute name='label' translatable="yes">_About Inkscape</attribute>
-          <attribute name='action'>doc.help-about</attribute>
+          <attribute name='action'>app.help-about</attribute>
           <attribute name='icon'>inkscape-logo</attribute>
           <attribute name='use-icon'>true</attribute>
         </item>

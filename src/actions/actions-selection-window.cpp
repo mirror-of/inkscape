@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  *
- * Actions related to selection wich require desktop
+ * Actions related to selection wich require desktop.
+ *
+ * These are linked to the desktop as they operate differently
+ * depending on if the node tool is in use or not.
+ *
+ * To do: Rewrite select_same_fill_and_stroke to remove desktop dependency.
  *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
@@ -19,7 +24,6 @@
 #include "inkscape-window.h"
 #include "desktop.h"
 #include "ui/dialog/dialog-container.h"
-#include "path/path-offset.h"
 #include "actions/actions-tools.h"
 #include "selection-chemistry.h"
 
@@ -104,61 +108,6 @@ select_none(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectNone(dt);
 }
 
-void
-select_path_inset(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Inset selected paths
-    dt->selection->removeLPESRecursive(true);
-    dt->selection->unlinkRecursive(true);
-    sp_selected_path_inset(dt);
-}
-
-void
-select_path_outset(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Outset selected paths
-    dt->selection->removeLPESRecursive(true);
-    dt->selection->unlinkRecursive(true);
-    sp_selected_path_offset(dt);
-}
-
-void
-select_path_offset_dynamic(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Dynamic Offset
-    dt->selection->removeLPESRecursive(true);
-    dt->selection->unlinkRecursive(true);
-    sp_selected_path_create_offset_object_zero(dt);
-    set_active_tool(dt,"Node");
-}
-
-void
-select_path_offset_linked(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Linked Offset
-    dt->selection->removeLPESRecursive(true);
-    dt->selection->unlinkRecursive(true);
-    sp_selected_path_create_updating_offset_object_zero(dt);
-    set_active_tool(dt, "Node");
-}
-
-void
-select_path_reverse(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Reverse
-    Inkscape::SelectionHelper::reverse(dt);
-}
-
 std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
 {
     // clang-format off
@@ -171,11 +120,6 @@ std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
     {"win.select-same-object-type",             N_("Object Type"),                  "Selection",        N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
     {"win.select-invert",                       N_("Invert Selection"),             "Selection",        N_("Invert selection (unselect what is selected and select everything else)")},
     {"win.select-none",                         N_("Deselect"),                     "Selection",        N_("Deselect any selected objects or nodes")},
-    {"win.select-path-inset",                   N_("Inset"),                        "Selection",        N_("Inset selected paths")},
-    {"win.select-path-outset",                  N_("Outset"),                       "Selection",        N_("Outset selected paths")},
-    {"win.select-path-offset-dynamic",          N_("Dynamic Offset"),               "Selection",        N_("Create a dynamic offset object")},
-    {"win.select-path-offset-linked",           N_("Linked Offset"),                "Selection",        N_("Create a dynamic offset object linked to the original path")},
-    {"win.select-path-reverse",                 N_("Reverse"),                      "Selection",        N_("Reverse the direction of selected paths (useful for flipping markers)")}
     // clang-format on
 };
 
@@ -192,11 +136,6 @@ add_actions_select_window(InkscapeWindow* win)
     win->add_action( "select-same-object-type",         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_same_object_type), win));
     win->add_action( "select-invert",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_invert), win));
     win->add_action( "select-none",                     sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_none), win));
-    win->add_action( "select-path-inset",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_inset),win));
-    win->add_action( "select-path-outset",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_outset),win));
-    win->add_action( "select-path-offset-dynamic",      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_dynamic),win));
-    win->add_action( "select-path-offset-linked",       sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_linked),win));
-    win->add_action( "select-path-reverse",             sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_reverse),win));
     // clang-format on
 
     auto app = InkscapeApplication::instance();

@@ -278,8 +278,8 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('Memory')" />
 
   <!-- Object -->
-  <bind gaction="app.select-object-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
-  <bind gaction="app.select-object-ungroup"               keys="&lt;shift&gt;&lt;primary&gt;g , &lt;primary&gt;u" />
+  <bind gaction="app.selection-group"                 keys="&lt;primary&gt;g,   &lt;shift&gt;&lt;primary&gt;u" />
+  <bind gaction="app.selection-ungroup"               keys="&lt;shift&gt;&lt;primary&gt;g , &lt;primary&gt;u" />
   <bind gaction="app.object-to-pattern"                   keys="&lt;alt&gt;i" />
   <bind gaction="app.pattern-to-object"                   keys="&lt;alt&gt;&lt;shift&gt;i" />
   <bind gaction="app.object-to-guides"                    keys="&lt;shift&gt;g" />
@@ -327,19 +327,19 @@ override) the bindings in the main default.xml.
   <!-- Path -->
   <bind gaction="app.object-to-path"                      keys="&lt;primary&gt;&lt;shift&gt;c"/>
   <bind gaction="app.object-stroke-to-path"               keys="&lt;primary&gt;&lt;alt&gt;c"/>
-  <bind gaction="app.select-path-union"                   keys="&lt;primary&gt;plus,  &lt;primary&gt;KP_Add,  &lt;primary&gt;&lt;shift&gt;plus"/>
-  <bind gaction="app.select-path-difference"              keys="&lt;primary&gt;minus, &lt;primary&gt;underscore,   &lt;primary&gt;&lt;shift&gt;underscore,    &lt;primary&gt;KP_Subtract, &lt;primary&gt;&lt;shift&gt;minus"/>
-  <bind gaction="app.select-path-intersection"            keys="&lt;primary&gt;asterisk,  &lt;primary&gt;KP_Multiply,   &lt;primary&gt;&lt;shift&gt;asterisk"/>
-  <bind gaction="app.select-path-exclusion"               keys="&lt;primary&gt;asciicircum,   &lt;primary&gt;&lt;shift&gt;asciicircum"/>
-  <bind gaction="app.select-path-division"                keys="&lt;primary&gt;slash, &lt;primary&gt;KP_Divide,    &lt;primary&gt;&lt;shift&gt;slash"/>
-  <bind gaction="app.select-path-cut"                     keys="&lt;primary&gt;&lt;alt&gt;slash, &lt;primary&gt;&lt;alt&gt;&lt;shift&gt;slash"/>
-  <bind gaction="app.select-path-combine"                 keys="&lt;primary&gt;k"/>
-  <bind gaction="app.select-path-break-apart"             keys="&lt;primary&gt;&lt;shift&gt;k"/>
-  <bind gaction="win.select-path-inset"                   keys="&lt;primary&gt;parenleft, &lt;primary&gt;&lt;shift&gt;parenleft,  &lt;primary&gt;&lt;shift&gt;9, &lt;primary&gt;9"/>
-  <bind gaction="win.select-path-outset"                  keys="&lt;primary&gt;parenright, &lt;primary&gt;&lt;shift&gt;parenright, &lt;primary&gt;&lt;shift&gt;0,   &lt;primary&gt;0"/>
-  <bind gaction="app.select-path-simplify"                keys="&lt;shift&gt;l"/>
+  <bind gaction="app.path-union"                   keys="&lt;primary&gt;plus,  &lt;primary&gt;KP_Add,  &lt;primary&gt;&lt;shift&gt;plus"/>
+  <bind gaction="app.path-difference"              keys="&lt;primary&gt;minus, &lt;primary&gt;underscore,   &lt;primary&gt;&lt;shift&gt;underscore,    &lt;primary&gt;KP_Subtract, &lt;primary&gt;&lt;shift&gt;minus"/>
+  <bind gaction="app.path-intersection"            keys="&lt;primary&gt;asterisk,  &lt;primary&gt;KP_Multiply,   &lt;primary&gt;&lt;shift&gt;asterisk"/>
+  <bind gaction="app.path-exclusion"               keys="&lt;primary&gt;asciicircum,   &lt;primary&gt;&lt;shift&gt;asciicircum"/>
+  <bind gaction="app.path-division"                keys="&lt;primary&gt;slash, &lt;primary&gt;KP_Divide,    &lt;primary&gt;&lt;shift&gt;slash"/>
+  <bind gaction="app.path-cut"                     keys="&lt;primary&gt;&lt;alt&gt;slash, &lt;primary&gt;&lt;alt&gt;&lt;shift&gt;slash"/>
+  <bind gaction="app.path-combine"                 keys="&lt;primary&gt;k"/>
+  <bind gaction="app.path-break-apart"             keys="&lt;primary&gt;&lt;shift&gt;k"/>
+  <bind gaction="win.path-inset"                   keys="&lt;primary&gt;parenleft, &lt;primary&gt;&lt;shift&gt;parenleft,  &lt;primary&gt;&lt;shift&gt;9, &lt;primary&gt;9"/>
+  <bind gaction="win.path-outset"                  keys="&lt;primary&gt;parenright, &lt;primary&gt;&lt;shift&gt;parenright, &lt;primary&gt;&lt;shift&gt;0,   &lt;primary&gt;0"/>
+  <bind gaction="app.path-simplify"                keys="&lt;shift&gt;l"/>
   <bind gaction="app.paste-path-effect"                   keys="ampersand, &lt;primary&gt;7"/>
-  <bind gaction="win.select-path-reverse"/>
+  <bind gaction="win.path-reverse"/>
   <bind gaction="app.remove-path-effect"/>
 
   <!-- View -->
@@ -350,30 +350,30 @@ override) the bindings in the main default.xml.
   <bind gaction="win.canvas-rulers"                       keys="&lt;primary&gt;r" />
   <bind gaction="win.canvas-scroll-bars"                  keys="&lt;primary&gt;b" />
   <bind gaction="win.canvas-palette"                      keys="&lt;shift&gt;&lt;alt&gt;p" />
-  <bind gaction="doc.window-next"                         keys="&lt;ctrl&gt;Tab, &lt;meta&gt;grave" />
-  <bind gaction="doc.window-previous"                     keys="&lt;ctrl&gt;ISO_Left_Tab" />
+  <bind gaction="win.window-next"                         keys="&lt;ctrl&gt;Tab, &lt;meta&gt;grave" />
+  <bind gaction="win.window-previous"                     keys="&lt;ctrl&gt;ISO_Left_Tab" />
   <bind gaction="win.view-fullscreen"                     keys="F11, &lt;ctrl&gt;&lt;meta&gt;f" />
   <bind gaction="win.canvas-commands-bar" />
   <bind gaction="win.canvas-snap-controls-bar" />
   <bind gaction="win.canvas-tool-control-bar" />
   <bind gaction="win.canvas-toolbox" />
   <bind gaction="win.canvas-scroll-bars" />
-  <bind gaction="doc.window-new" />
-  <bind gaction="doc.window-previous" />
+  <bind gaction="win.window-new" />
+  <bind gaction="win.window-previous" />
 
   <!-- File -->
-  <bind gaction="doc.document-new"                        keys="&lt;primary&gt;n" />
-  <bind gaction="doc.document-dialog-templates"           keys="&lt;primary&gt;&lt;alt&gt;n" />
-  <bind gaction="win.file-open"                           keys="&lt;primary&gt;o" />
-  <bind gaction="doc.document-revert" />
+  <bind gaction="win.document-new"                        keys="&lt;primary&gt;n" />
+  <bind gaction="win.document-dialog-templates"           keys="&lt;primary&gt;&lt;alt&gt;n" />
+  <bind gaction="win.document-open"                           keys="&lt;primary&gt;o" />
+  <bind gaction="win.document-revert" />
   <bind gaction="win.document-save"                       keys="&lt;primary&gt;s" />
   <bind gaction="win.document-save-as"                    keys="&lt;primary&gt;&lt;shift&gt;s" />
   <bind gaction="win.document-save-copy"                  keys="&lt;primary&gt;&lt;shift&gt;&lt;alt&gt;s" />
   <bind gaction="win.document-import"                     keys="&lt;primary&gt;i" />
   <bind gaction="win.document-print"                      keys="&lt;primary&gt;p" />
   <bind gaction="win.dialog-open('Export')"               keys="&lt;primary&gt;&lt;shift&gt;e" />
-  <bind gaction="doc.document-cleanup" />
-  <bind gaction="app.file-close"                          keys="&lt;primary&gt;w" />
+  <bind gaction="win.document-cleanup" />
+  <bind gaction="win.document-close"                          keys="&lt;primary&gt;w" />
   <bind gaction="app.quit-inkscape"                       keys="&lt;primary&gt;q" />
 
   <!-- Effects -->
@@ -399,15 +399,15 @@ override) the bindings in the main default.xml.
 
   <!-- Text -->
 
-  <bind gaction="doc.text-flow-into-frame"                keys="&lt;alt&gt;w"/>
-  <bind gaction="doc.text-unflow"                         keys="&lt;alt&gt;&lt;shift&gt;w"/>
-  <bind gaction="doc.text-put-on-path" />
-  <bind gaction="doc.text-remove-from-path" />
-  <bind gaction="doc.text-convert-to-regular" />
-  <bind gaction="doc.text-unkern" />
+  <bind gaction="app.text-flow-into-frame"                keys="&lt;alt&gt;w"/>
+  <bind gaction="app.text-unflow"                         keys="&lt;alt&gt;&lt;shift&gt;w"/>
+  <bind gaction="app.text-put-on-path" />
+  <bind gaction="app.text-remove-from-path" />
+  <bind gaction="app.text-convert-to-regular" />
+  <bind gaction="app.text-unkern" />
 
   <!-- Help -->
 
-  <bind gaction="doc.help-about" />
+  <bind gaction="app.help-about" />
 
 </keys>

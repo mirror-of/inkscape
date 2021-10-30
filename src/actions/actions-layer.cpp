@@ -181,7 +181,7 @@ layer_raise (InkscapeWindow* win)
 }
 
 void
-laye_lower (InkscapeWindow* win)
+layer_lower (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
@@ -333,7 +333,7 @@ add_actions_layer(InkscapeWindow* win)
     win->add_action("selection-move-to-layer",              sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&selection_move_to_layer), win));
     win->add_action("layer-top",                            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_top), win));
     win->add_action("layer-raise",                          sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_raise), win));
-    win->add_action("layer-lower",                          sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&laye_lower), win));
+    win->add_action("layer-lower",                          sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_lower), win));
     win->add_action("layer-bottom",                         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_bottom), win));
     win->add_action("layer-duplicate",                      sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_duplicate), win));
     win->add_action("layer-delete",                         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&layer_delete), win));

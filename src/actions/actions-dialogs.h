@@ -12,7 +12,6 @@
 #define INK_ACTIONS_DIALOGS_H
 
 #include <glibmm.h>
-#include <2geom/point.h>
 
 enum DialogType {
     DIALOG_INVALID,

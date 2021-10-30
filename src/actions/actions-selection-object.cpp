@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  *
- * Actions related to selection of objects which don't require desktop
+ * Actions related to selection of objects which don't require desktop.
  *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
@@ -9,6 +9,11 @@
  * Copyright (C) 2021 Authors
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
+/*
+ * Note: Actions must be app level as different windows can have different selections
+ *       and selections must also work from the command line (without GUI).
  */
 
 #include <giomm.h>
@@ -83,13 +88,12 @@ selection_bottom(InkscapeApplication* app)
     selection->lowerToBottom();
 }
 
-// SHOULD REALLY BE DOC ACTIONS
 std::vector<std::vector<Glib::ustring>> raw_data_selection_object =
 {
     // clang-format off
-    { "app.select-object-group",            N_("Group"),                                 "Select",   N_("Group selected objects")},
-    { "app.select-object-ungroup",          N_("Ungroup"),                               "Select",   N_("Ungroup selected objects")},
-    { "app.select-object-ungroup-pop",      N_("Pop Selected Objects out of Group"),     "Select",   N_("Pop selected objects out of group")},
+    { "app.selection-group",                N_("Group"),                                 "Select",   N_("Group selected objects")},
+    { "app.selection-ungroup",              N_("Ungroup"),                               "Select",   N_("Ungroup selected objects")},
+    { "app.selection-ungroup-pop",          N_("Pop Selected Objects out of Group"),     "Select",   N_("Pop selected objects out of group")},
     { "app.selection-top",                  N_("Raise to Top"),                          "Select",   N_("Raise selection to top")},
     { "app.selection-raise",                N_("Raise"),                                 "Select",   N_("Raise selection one step")},
     { "app.selection-lower",                N_("Lower"),                                 "Select",   N_("Lower selection one step")},
@@ -103,9 +107,9 @@ add_actions_selection_object(InkscapeApplication* app)
     auto *gapp = app->gio_app();
 
     // clang-format off
-    gapp->add_action( "select-object-group",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_group),           app));
-    gapp->add_action( "select-object-ungroup",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup),         app));
-    gapp->add_action( "select-object-ungroup-pop",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup_pop),     app));
+    gapp->add_action( "selection-group",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_group),           app));
+    gapp->add_action( "selection-ungroup",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup),         app));
+    gapp->add_action( "selection-ungroup-pop",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup_pop),     app));
     gapp->add_action( "selection-top",                sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_top),                 app));
     gapp->add_action( "selection-raise",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_raise),               app));
     gapp->add_action( "selection-lower",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_lower),               app));

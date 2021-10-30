@@ -26,19 +26,19 @@ and tooltips. Only one binding for each action may have this attribute.
 
 <!-- File -->
 
-  <bind gaction="doc.document-new"                keys="&lt;cmd&gt;n, &lt;cmd&gt;N" />
-  <bind gaction="doc.document-dialog-templates"   keys="&lt;cmd&gt;&lt;alt&gt;n, &lt;cmd&gt;&lt;alt&gt;N" />
-  <bind gaction="win.file-open"                   keys="&lt;cmd&gt;o, &lt;cmd&gt;O" />
+  <bind gaction="win.document-new"                keys="&lt;cmd&gt;n, &lt;cmd&gt;N" />
+  <bind gaction="win.document-dialog-templates"   keys="&lt;cmd&gt;&lt;alt&gt;n, &lt;cmd&gt;&lt;alt&gt;N" />
+  <bind gaction="win.document-open"                   keys="&lt;cmd&gt;o, &lt;cmd&gt;O" />
   <bind gaction="win.document-save"               keys="&lt;cmd&gt;s, &lt;cmd&gt;S" />
   <bind gaction="win.document-save-as"            keys="&lt;cmd&gt;&lt;shift&gt;s, &lt;cmd&gt;&lt;shift&gt;S" />
   <bind gaction="win.document-save-copy"          keys="&lt;cmd&gt;&lt;shift&gt;&lt;alt&gt;s, &lt;cmd&gt;&lt;shift&gt;&lt;alt&gt;S" />
   <bind gaction="win.document-print"              keys="&lt;cmd&gt;p, &lt;cmd&gt;P" />
   <bind gaction="win.document-import"             keys="&lt;cmd&gt;i, &lt;cmd&gt;I" />
   <bind gaction="win.dialog-open('Export')"       keys="&lt;cmd&gt;&lt;shift&gt;e, &lt;cmd&gt;&lt;shift&gt;E" />
-  <bind gaction="app.file-close"                  keys="&lt;cmd&gt;w, &lt;cmd&gt;W" />
+  <bind gaction="win.document-close"                  keys="&lt;cmd&gt;w, &lt;cmd&gt;W" />
   <bind gaction="app.quit-inkscape"               keys="&lt;cmd&gt;q, &lt;cmd&gt;Q" />
-  <bind gaction="doc.document-revert" />
-  <bind gaction="doc.document-cleanup" />
+  <bind gaction="win.document-revert" />
+  <bind gaction="win.document-cleanup" />
 
 <!-- Tools -->
 
@@ -99,8 +99,8 @@ and tooltips. Only one binding for each action may have this attribute.
 <!-- View -->
 
   <bind gaction="win.view-fullscreen"               keys="F11" />
-  <bind gaction="doc.window-next"                   keys="&lt;cmd&gt;grave, &lt;cmd&gt;ISO_Left_Tab" />
-  <bind gaction="doc.window-previous"               keys="&lt;cmd&gt;&lt;shift&gt;Tab, &lt;cmd&gt;&lt;shift&gt;ISO_Left_Tab" />
+  <bind gaction="win.window-next"                   keys="&lt;cmd&gt;grave, &lt;cmd&gt;ISO_Left_Tab" />
+  <bind gaction="win.window-previous"               keys="&lt;cmd&gt;&lt;shift&gt;Tab, &lt;cmd&gt;&lt;shift&gt;ISO_Left_Tab" />
   <bind gaction="win.canvas-show-grid"              keys="&lt;shift&gt;numbersign, numbersign" /> <!-- # -->
   <bind gaction="win.canvas-show-guides"            keys="&lt;shift&gt;bar, bar" /> <!-- | -->
   <bind ganction="doc.snap-global-toggle"           keys="percent, &lt;shift&gt;percent"/>
@@ -116,7 +116,7 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind gaction="win.canvas-tool-control-bar" />
   <bind gaction="win.canvas-toolbox" />
   <bind gaction="win.canvas-statusbar" />
-  <bind gaction="doc.window-new" />
+  <bind gaction="win.window-new" />
   <bind gaction="win.dialog-open('IconPreview')" />
 
   <bind key="F11" action="FocusToggle" modifiers="Shift" display="true" /> 
@@ -210,17 +210,17 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind gaction="app.selection-bottom"            keys="End, KP_End" />
   <bind gaction="app.selection-raise"             keys="Page_Up, KP_Page_Up" />
   <bind gaction="app.selection-lower"             keys="Page_Down, KP_Page_Down" />
-  <bind gaction="app.select-object-group"         keys="&lt;cmd&gt;g, &lt;cmd&gt;G, &lt;cmd&gt;&lt;shift&gt;u, &lt;cmd&gt;&lt;shift&gt;U" />
-  <bind gaction="app.select-object-ungroup"       keys="&lt;cmd&gt;&lt;shift&gt;g, &lt;cmd&gt;&lt;shift&gt;G, &lt;cmd&gt;u, &lt;cmd&gt;U" />
+  <bind gaction="app.selection-group"         keys="&lt;cmd&gt;g, &lt;cmd&gt;G, &lt;cmd&gt;&lt;shift&gt;u, &lt;cmd&gt;&lt;shift&gt;U" />
+  <bind gaction="app.selection-ungroup"       keys="&lt;cmd&gt;&lt;shift&gt;g, &lt;cmd&gt;&lt;shift&gt;G, &lt;cmd&gt;u, &lt;cmd&gt;U" />
   <bind gaction="app.selection-make-bitmap-copy"  keys="&lt;alt&gt;b, &lt;alt&gt;B" />
   <bind gaction="win.dialog-open('Trace')"        keys="&lt;alt&gt;&lt;shift&gt;b, &lt;alt&gt;&lt;shift&gt;B" />
   <bind gaction="app.object-to-pattern"           keys="&lt;alt&gt;i, &lt;alt&gt;I" />
   <bind gaction="app.pattern-to-object"           keys="&lt;alt&gt;&lt;shift&gt;i, &lt;alt&gt;&lt;shift&gt;I" />
   <bind gaction="app.object-to-guides"            keys="&lt;shift&gt;g, &lt;shift&gt;G" />
-  <bind gaction="app.object-set-mask" />
-  <bind gaction="app.object-release-mask" />
-  <bind gaction="app.object-set" />
-  <bind gaction="app.object-release" />
+  <bind gaction="app.object-set-clip-mask" />
+  <bind gaction="app.object-release-clip-mask" />
+  <bind gaction="app.object-set-clip" />
+  <bind gaction="app.object-release-clip" />
 
   <!-- FIXME: currently these bypass the verbs, so the verbs are not bound to Cmd+[] as they should be -->
   <bind gaction="app.object-rotate-90-cw" />
@@ -234,20 +234,20 @@ and tooltips. Only one binding for each action may have this attribute.
 
   <bind gaction="app.object-to-path"              keys="&lt;cmd&gt;&lt;shift&gt;c, &lt;cmd&gt;&lt;shift&gt;C" />
   <bind gaction="app.object-stroke-to-path"       keys="&lt;cmd&gt;&lt;alt&gt;c, &lt;cmd&gt;&lt;alt&gt;C" />
-  <bind gaction="app.select-path-combine"         keys="&lt;cmd&gt;k, &lt;cmd&gt;K" />
-  <bind gaction="app.select-path-break-apart"     keys="&lt;cmd&gt;&lt;shift&gt;k, &lt;cmd&gt;&lt;shift&gt;K" />
-  <bind gaction="app.select-path-union"           keys="&lt;cmd&gt;plus, &lt;cmd&gt;KP_Add, &lt;cmd&gt;&lt;shift&gt;plus" />
-  <bind gaction="app.select-path-intersection"    keys="&lt;cmd&gt;asterisk, &lt;cmd&gt;KP_Multiply, &lt;cmd&gt;&lt;shift&gt;asterisk" />
-  <bind gaction="app.select-path-difference"      keys="&lt;cmd&gt;minus, &lt;cmd&gt;underscore, &lt;cmd&gt;&lt;shift&gt;underscore, &lt;cmd&gt;KP_Subtract, &lt;cmd&gt;&lt;shift&gt;minus" />
-  <bind gaction="app.select-path-exclusion"       keys="&lt;cmd&gt;asciicircum, &lt;cmd&gt;&lt;shift&gt;asciicircum" /> <!-- ^ -->
-  <bind gaction="app.select-path-cut"             keys="&lt;cmd&gt;&lt;alt&gt;slash, &lt;cmd&gt;&lt;alt&gt;&lt;shift&gt;slash" />
-  <bind gaction="app.select-path-division"        keys="&lt;cmd&gt;slash, &lt;cmd&gt;KP_Divide, &lt;cmd&gt;&lt;shift&gt;slash" />
-  <bind gaction="win.select-path-outset"          keys="&lt;cmd&gt;parenright, &lt;cmd&gt;&lt;shift&gt;parenright, &lt;cmd&gt;&lt;shift&gt;0, &lt;cmd&gt;0" />
-  <bind gaction="win.select-path-inset"           keys="&lt;cmd&gt;parenleft, &lt;cmd&gt;&lt;shift&gt;parenleft, &lt;cmd&gt;&lt;shift&gt;9, &lt;cmd&gt;9" />
-  <bind gaction="win.select-path-offset-dynamic"  keys="&lt;cmd&gt;j, &lt;cmd&gt;J" />
-  <bind gaction="win.select-path-offset-linked"   keys="&lt;cmd&gt;&lt;alt&gt;j, &lt;cmd&gt;&lt;alt&gt;J" />
-  <bind gaction="app.select-path-simplify"        keys="&lt;cmd&gt;l, &lt;cmd&gt;L" />
-  <bind gaction="win.select-path-reverse" />
+  <bind gaction="app.path-combine"         keys="&lt;cmd&gt;k, &lt;cmd&gt;K" />
+  <bind gaction="app.path-break-apart"     keys="&lt;cmd&gt;&lt;shift&gt;k, &lt;cmd&gt;&lt;shift&gt;K" />
+  <bind gaction="app.path-union"           keys="&lt;cmd&gt;plus, &lt;cmd&gt;KP_Add, &lt;cmd&gt;&lt;shift&gt;plus" />
+  <bind gaction="app.path-intersection"    keys="&lt;cmd&gt;asterisk, &lt;cmd&gt;KP_Multiply, &lt;cmd&gt;&lt;shift&gt;asterisk" />
+  <bind gaction="app.path-difference"      keys="&lt;cmd&gt;minus, &lt;cmd&gt;underscore, &lt;cmd&gt;&lt;shift&gt;underscore, &lt;cmd&gt;KP_Subtract, &lt;cmd&gt;&lt;shift&gt;minus" />
+  <bind gaction="app.path-exclusion"       keys="&lt;cmd&gt;asciicircum, &lt;cmd&gt;&lt;shift&gt;asciicircum" /> <!-- ^ -->
+  <bind gaction="app.path-cut"             keys="&lt;cmd&gt;&lt;alt&gt;slash, &lt;cmd&gt;&lt;alt&gt;&lt;shift&gt;slash" />
+  <bind gaction="app.path-division"        keys="&lt;cmd&gt;slash, &lt;cmd&gt;KP_Divide, &lt;cmd&gt;&lt;shift&gt;slash" />
+  <bind gaction="win.path-outset"          keys="&lt;cmd&gt;parenright, &lt;cmd&gt;&lt;shift&gt;parenright, &lt;cmd&gt;&lt;shift&gt;0, &lt;cmd&gt;0" />
+  <bind gaction="win.path-inset"           keys="&lt;cmd&gt;parenleft, &lt;cmd&gt;&lt;shift&gt;parenleft, &lt;cmd&gt;&lt;shift&gt;9, &lt;cmd&gt;9" />
+  <bind gaction="win.path-offset-dynamic"  keys="&lt;cmd&gt;j, &lt;cmd&gt;J" />
+  <bind gaction="win.path-offset-linked"   keys="&lt;cmd&gt;&lt;alt&gt;j, &lt;cmd&gt;&lt;alt&gt;J" />
+  <bind gaction="app.path-simplify"        keys="&lt;cmd&gt;l, &lt;cmd&gt;L" />
+  <bind gaction="win.path-reverse" />
   <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true" />
   <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
   <bind key="parenright" modifiers="Alt,Shift" action="SelectionOffsetScreen10" display="true" />
@@ -259,13 +259,13 @@ and tooltips. Only one binding for each action may have this attribute.
 
 <!-- Text -->
 
-  <bind gaction="doc.text-flow-into-frame"      keys="&lt;alt&gt;w, &lt;alt&gt;W" />
-  <bind gaction="doc.text-unflow"               keys="&lt;alt&gt;&lt;shift&gt;w, &lt;alt&gt;&lt;shift&gt;W" />
+  <bind gaction="app.text-flow-into-frame"      keys="&lt;alt&gt;w, &lt;alt&gt;W" />
+  <bind gaction="app.text-unflow"               keys="&lt;alt&gt;&lt;shift&gt;w, &lt;alt&gt;&lt;shift&gt;W" />
   <bind gaction="win.dialog-open('Spellcheck')" keys="&lt;cmd&gt;&lt;alt&gt;k, &lt;cmd&gt;&lt;alt&gt;K" />
-  <bind gaction="doc.text-put-on-path" />
-  <bind gaction="doc.text-remove-from-path" />
-  <bind gaction="doc.text-convert-to-regular" />
-  <bind gaction="doc.text-unkern" />
+  <bind gaction="app.text-put-on-path" />
+  <bind gaction="app.text-remove-from-path" />
+  <bind gaction="app.text-convert-to-regular" />
+  <bind gaction="app.text-unkern" />
 
 <!-- Layers -->
 
@@ -364,7 +364,7 @@ and tooltips. Only one binding for each action may have this attribute.
 
   <bind action="HelpAboutExtensions" />
   <bind gaction="win.dialog-open('Memory')" />
-  <bind gaction="doc.help-about" />
+  <bind gaction="app.help-about" />
   <!-- There are also verbs for tutorials, if you really need them -->
   <!-- Other commands in Help are implemented as extensions, with ids of org.inkscape.help.* -->
 

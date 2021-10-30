@@ -60,8 +60,8 @@ See default.xml for more information.
 
 <!-- File actions -->
 
-  <bind gaction="doc.document-new"                      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
-  <bind gaction="win.file-open"                         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-new"                      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
+  <bind gaction="win.document-open"                         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
   <bind gaction="win.document-save"                     keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
   <bind gaction="win.document-save-as"                  keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;S" />
   <bind gaction="win.document-import"                   keys="&lt;ctrl&gt;i, &lt;ctrl&gt;I" />
@@ -118,20 +118,20 @@ See default.xml for more information.
   <bind gaction="app.object-to-path" keys="&lt;ctrl&gt;q" />
   <bind gaction="app.object-to-path" keys="&lt;ctrl&gt;Q" />
 
-  <bind gaction="app.select-path-combine" keys="&lt;ctrl&gt;l" />
-  <bind gaction="app.select-path-combine" keys="&lt;ctrl&gt;L" />
+  <bind gaction="app.path-combine" keys="&lt;ctrl&gt;l" />
+  <bind gaction="app.path-combine" keys="&lt;ctrl&gt;L" />
 
-  <bind gaction="app.select-path-break-apart" keys="&lt;ctrl&gt;k" />
-  <bind gaction="app.select-path-break-apart" keys="&lt;ctrl&gt;K" />
+  <bind gaction="app.path-break-apart" keys="&lt;ctrl&gt;k" />
+  <bind gaction="app.path-break-apart" keys="&lt;ctrl&gt;K" />
 
 <!-- Not available in Corel? !!!!!!!!!!!!
 
-  <bind gaction="app.select-path-union"             keys="&lt;ctrl&gt;plus, &lt;ctrl&gt;KP_Add, &lt;ctrl&gt;&lt;shift&gt;plus" />
-  <bind gaction="app.select-path-intersection"      keys="&lt;ctrl&gt;asterisk, &lt;ctrl&gt;KP_Multiply, &lt;ctrl&gt;&lt;shift&gt;asterisk" />
-  <bind gaction="app.select-path-difference"        keys="&lt;ctrl&gt;minus, &lt;ctrl&gt;underscore, &lt;ctrl&gt;&lt;shift&gt;underscore, &lt;ctrl&gt;KP_Subtract, &lt;ctrl&gt;&lt;shift&gt;minus" />
-  <bind gaction="app.select-path-exclusion"         keys="&lt;ctrl&gt;asciicircum, &lt;ctrl&gt;&lt;shift&gt;asciicircum" />
-  <bind gaction="app.select-path-cut"               keys="&lt;ctrl&gt;&lt;alt&gt;slash, &lt;ctrl&gt;&lt;alt&gt;&lt;shift&gt;slash" />
-  <bind gaction="app.select-path-division"          keys="&lt;ctrl&gt;slash, &lt;ctrl&gt;&lt;shift&gt;slash" />
+  <bind gaction="app.path-union"             keys="&lt;ctrl&gt;plus, &lt;ctrl&gt;KP_Add, &lt;ctrl&gt;&lt;shift&gt;plus" />
+  <bind gaction="app.path-intersection"      keys="&lt;ctrl&gt;asterisk, &lt;ctrl&gt;KP_Multiply, &lt;ctrl&gt;&lt;shift&gt;asterisk" />
+  <bind gaction="app.path-difference"        keys="&lt;ctrl&gt;minus, &lt;ctrl&gt;underscore, &lt;ctrl&gt;&lt;shift&gt;underscore, &lt;ctrl&gt;KP_Subtract, &lt;ctrl&gt;&lt;shift&gt;minus" />
+  <bind gaction="app.path-exclusion"         keys="&lt;ctrl&gt;asciicircum, &lt;ctrl&gt;&lt;shift&gt;asciicircum" />
+  <bind gaction="app.path-cut"               keys="&lt;ctrl&gt;&lt;alt&gt;slash, &lt;ctrl&gt;&lt;alt&gt;&lt;shift&gt;slash" />
+  <bind gaction="app.path-division"          keys="&lt;ctrl&gt;slash, &lt;ctrl&gt;&lt;shift&gt;slash" />
 
 -->
 
@@ -146,8 +146,8 @@ Shift+F11	Color
 
 -->
 
-  <bind gaction="app.select-object-group"           keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
-  <bind gaction="app.select-object-ungroup"         keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
+  <bind gaction="app.selection-group"           keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+  <bind gaction="app.selection-ungroup"         keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 
 <!--
 

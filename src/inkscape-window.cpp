@@ -23,17 +23,18 @@
 #include "inkscape-application.h"
 
 #include "actions/actions-canvas-mode.h"
+#include "actions/actions-canvas-snapping.h"
 #include "actions/actions-canvas-transform.h"
 #include "actions/actions-dialogs.h"
 #include "actions/actions-edit-window.h"
-#include "actions/actions-layer.h"
 #include "actions/actions-file-window.h"
 #include "actions/actions-fit-canvas.h"
 #include "actions/actions-help-url.h"
 #include "actions/actions-hide-lock.h"
+#include "actions/actions-layer.h"
+#include "actions/actions-paths.h"  // TEMP
 #include "actions/actions-selection-window.h"
 #include "actions/actions-tools.h"
-#include "actions/actions-canvas-snapping.h"
 #include "actions/actions-view-mode.h"
 #include "actions/actions-view-window.h"
 
@@ -105,11 +106,12 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add_actions_canvas_mode(this);          // Actions to change canvas display mode.
     add_actions_dialogs(this);              // Actions to open dialogs.
     add_actions_edit_window(this);          // Actions to edit.
-    add_actions_layer(this);                // Actions for layer.
     add_actions_file_window(this);          // Actions for file actions which are desktop dependent.
     add_actions_fit_canvas(this);           // Actions to fit canvas
     add_actions_help_url(this);             // Actions to help url.
     add_actions_hide_lock(this);            // Actions to transform dialog.
+    add_actions_layer(this);                // Actions for layer.
+    add_actions_path(this);                 // Actions for paths. TEMP
     add_actions_select_window(this);        // Actions with desktop selection
     add_actions_tools(this);                // Actions to switch between tools.
     add_actions_view_mode(this);            // Actions to change how Inkscape canvas is displayed.

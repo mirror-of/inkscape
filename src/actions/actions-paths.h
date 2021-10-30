@@ -12,8 +12,10 @@
 #define INK_ACTIONS_PATH_H
 
 class InkscapeApplication;
+class InkscapeWindow;
 
 void add_actions_path(InkscapeApplication* app);
+void add_actions_path(InkscapeWindow* win);
 
 #endif // INK_ACTIONS_PATH_H
 

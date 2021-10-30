@@ -123,11 +123,11 @@ Scissor tool - C
 
 <!-- FILE MENU -->
 
-  <bind gaction="doc.document-new"      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
+  <bind gaction="win.document-new"      keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
 
-  <bind gaction="win.file-open"         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-open"         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
 
-  <bind gaction="app.file-close"        keys="&lt;ctrl&gt;F4" />
+  <bind gaction="win.document-close"        keys="&lt;ctrl&gt;F4" />
 
   <bind gaction="win.document-save"     keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
 
@@ -225,9 +225,9 @@ Kerning -> Loosen Fine Kerning 0,25 - Ctrl+Alt+Shift+Right arrow
 <!-- Move... -->
   <bind gaction="win.dialog-open('Transform')"  keys="&lt;ctrl&gt;m, &lt;ctrl&gt;M, F8" />
 
-  <bind gaction="app.select-object-group"       keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+  <bind gaction="app.selection-group"       keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
 
-  <bind gaction="app.select-object-ungroup"     keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
+  <bind gaction="app.selection-ungroup"     keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 
 <!-- we don't have individual verbs for locking and unlocking
 Lock - Ctrl+L
@@ -238,7 +238,7 @@ Unlock - Ctrl+K
 Path -> Join - Ctrl+Alt+J
 -->
 
-  <bind gaction="app.select-path-simplify"        keys="&lt;ctrl&gt;&lt;alt&gt;s, &lt;ctrl&gt;&lt;alt&gt;S" />
+  <bind gaction="app.path-simplify"        keys="&lt;ctrl&gt;&lt;alt&gt;s, &lt;ctrl&gt;&lt;alt&gt;S" />
 
 <!-- Right now simplification of Bezier curves in Inkscape is destructive:
 Path -> Unsmooth - Ctrl+Alt+U

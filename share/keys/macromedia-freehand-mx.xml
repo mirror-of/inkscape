@@ -65,17 +65,17 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
 
 <!-- File -->
 
-  <bind gaction="doc.document-new" keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
+  <bind gaction="win.document-new" keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
 
-  <bind gaction="win.file-open"             keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
-  <bind gaction="app.file-close"            keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
+  <bind gaction="win.document-open"             keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-close"            keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
   <bind gaction="win.document-save"         keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
   <bind gaction="win.document-save-as"      keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;S" />
   <bind gaction="win.document-print"        keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
   <bind gaction="win.document-import"       keys="&lt;ctrl&gt;r, &lt;ctrl&gt;R" />
   <bind gaction="win.dialog-open('Export')" keys="&lt;ctrl&gt;&lt;shift&gt;r, &lt;ctrl&gt;&lt;shift&gt;R" />
   <bind gaction="app.quit-inkscape"         keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
-  <bind gaction="doc.document-revert" />
+  <bind gaction="win.document-revert" />
   <!-- Alt+F4 included, do not assume the Window Manager provides it.  -->
   <bind gaction="app.quit-inkscape"         keys="&lt;alt&gt;F4" />
 
@@ -115,8 +115,8 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="win.dialog-toggle"     keys="F4, &lt;ctrl&gt;&lt;shift&gt;h, &lt;ctrl&gt;&lt;shift&gt;H" />
 
   <!-- No menu items in Freehand but these do cycle through Windows as expected -->
-  <bind gaction="doc.window-next"       keys="&lt;ctrl&gt;Tab, &lt;ctrl&gt;&lt;shift&gt;ISO_Left_Tab" />
-  <bind gaction="doc.window-previous"   keys="&lt;ctrl&gt;&lt;shift&gt;Tab, &lt;ctrl&gt;ISO_Left_Tab" />
+  <bind gaction="win.window-next"       keys="&lt;ctrl&gt;Tab, &lt;ctrl&gt;&lt;shift&gt;ISO_Left_Tab" />
+  <bind gaction="win.window-previous"   keys="&lt;ctrl&gt;&lt;shift&gt;Tab, &lt;ctrl&gt;ISO_Left_Tab" />
 
   <!-- Rulers off by default.  Looks better and cleaner that way, less busy.  -->
   <bind gaction="win.canvas-rulers"     keys="&lt;ctrl&gt;&lt;alt&gt;r, &lt;ctrl&gt;&lt;alt&gt;R" />
@@ -132,7 +132,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <!-- TODO: View, Grid, Snap to Grid Ctrl+Alt+Shift+G.  -->
 
   <!-- New View in Inkscape is equivalent to New Window in Freehand.  -->
-  <bind gaction="doc.window-new"        keys="&lt;shift&gt;&lt;alt&gt;n, &lt;shift&gt;&lt;alt&gt;N" />
+  <bind gaction="win.window-new"        keys="&lt;shift&gt;&lt;alt&gt;n, &lt;shift&gt;&lt;alt&gt;N" />
 
   <bind gaction="win.dialog-open('IconPreview')"/>
 
@@ -180,16 +180,16 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="app.selection-bottom"              keys="End, KP_End" />
   <bind gaction="app.selection-raise"               keys="Page_Up, KP_Page_Up" />
   <bind gaction="app.selection-lower"               keys="Page_Down, KP_Page_Down" />
-  <bind gaction="app.select-object-group"           keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
-  <bind gaction="app.select-object-ungroup"         keys="&lt;ctrl&gt;&lt;shift&gt;g, &lt;ctrl&gt;&lt;shift&gt;G" />
+  <bind gaction="app.selection-group"           keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+  <bind gaction="app.selection-ungroup"         keys="&lt;ctrl&gt;&lt;shift&gt;g, &lt;ctrl&gt;&lt;shift&gt;G" />
   <bind gaction="app.selection-make-bitmap-copy"    keys="&lt;alt&gt;b, &lt;alt&gt;B" />
   <bind gaction="win.dialog-open('Trace')"          keys="&lt;alt&gt;&lt;shift&gt;b, &lt;alt&gt;&lt;shift&gt;B" />
   <bind gaction="app.object-to-pattern"             keys="&lt;alt&gt;i, &lt;alt&gt;I" />
   <bind gaction="app.pattern-to-object"             keys="&lt;alt&gt;&lt;shift&gt;i, &lt;alt&gt;&lt;shift&gt;I" />
-  <bind gaction="app.object-set-mask" />
-  <bind gaction="app.object-release-mask" />
-  <bind gaction="app.object-set" />
-  <bind gaction="app.object-release" />
+  <bind gaction="app.object-set-clip-mask" />
+  <bind gaction="app.object-release-clip-mask" />
+  <bind gaction="app.object-set-clip" />
+  <bind gaction="app.object-release-clip" />
 
   <!-- FIXME: currently these bypass the verbs, so the verbs are not bound to ctrl+[] as they should be -->
   <bind gaction="app.object-rotate-90-cw" />
@@ -201,20 +201,20 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
 
   <bind gaction="app.object-to-path"                    keys="&lt;ctrl&gt;&lt;shift&gt;c, &lt;ctrl&gt;&lt;shift&gt;C" />
   <bind gaction="app.object-stroke-to-path"             keys="&lt;ctrl&gt;&lt;alt&gt;c, &lt;ctrl&gt;&lt;alt&gt;C" />
-  <bind gaction="app.select-path-combine"               keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
-  <bind gaction="app.select-path-break-apart"           keys="&lt;ctrl&gt;&lt;shift&gt;k, &lt;ctrl&gt;&lt;shift&gt;K" />
-  <bind gaction="app.select-path-union"                 keys="&lt;ctrl&gt;plus, &lt;ctrl&gt;KP_Add, &lt;ctrl&gt;&lt;shift&gt;plus" />
-  <bind gaction="app.select-path-intersection"          keys="&lt;ctrl&gt;asterisk, &lt;ctrl&gt;KP_Multiply, &lt;ctrl&gt;&lt;shift&gt;asterisk" />
-  <bind gaction="app.select-path-difference"            keys="&lt;ctrl&gt;minus, &lt;ctrl&gt;underscore, &lt;ctrl&gt;&lt;shift&gt;underscore, &lt;ctrl&gt;KP_Subtract, &lt;ctrl&gt;&lt;shift&gt;minus" />
-  <bind gaction="app.select-path-exclusion"             keys="&lt;ctrl&gt;asciicircum, &lt;ctrl&gt;&lt;shift&gt;asciicircum" /> <!-- ^ -->
-  <bind gaction="app.select-path-cut"                   keys="&lt;ctrl&gt;&lt;alt&gt;slash, &lt;ctrl&gt;&lt;alt&gt;&lt;shift&gt;slash" />
-  <bind gaction="app.select-path-division"              keys="&lt;ctrl&gt;slash, &lt;ctrl&gt;&lt;shift&gt;slash" />
-  <bind gaction="win.select-path-outset"                keys="&lt;ctrl&gt;parenright, &lt;ctrl&gt;&lt;shift&gt;parenright, &lt;ctrl&gt;&lt;shift&gt;0" />
-  <bind gaction="win.select-path-inset"                 keys="&lt;ctrl&gt;parenleft, &lt;ctrl&gt;&lt;shift&gt;parenleft, &lt;ctrl&gt;&lt;shift&gt;9" />
-  <bind gaction="win.select-path-offset-dynamic"        keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
-  <bind gaction="win.select-path-offset-linked"         keys="&lt;ctrl&gt;&lt;alt&gt;j, &lt;ctrl&gt;&lt;alt&gt;J" />
-  <bind gaction="app.select-path-simplify"              keys="&lt;ctrl&gt;l, &lt;ctrl&gt;L" />
-  <bind gaction="win.select-path-reverse" />
+  <bind gaction="app.path-combine"               keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
+  <bind gaction="app.path-break-apart"           keys="&lt;ctrl&gt;&lt;shift&gt;k, &lt;ctrl&gt;&lt;shift&gt;K" />
+  <bind gaction="app.path-union"                 keys="&lt;ctrl&gt;plus, &lt;ctrl&gt;KP_Add, &lt;ctrl&gt;&lt;shift&gt;plus" />
+  <bind gaction="app.path-intersection"          keys="&lt;ctrl&gt;asterisk, &lt;ctrl&gt;KP_Multiply, &lt;ctrl&gt;&lt;shift&gt;asterisk" />
+  <bind gaction="app.path-difference"            keys="&lt;ctrl&gt;minus, &lt;ctrl&gt;underscore, &lt;ctrl&gt;&lt;shift&gt;underscore, &lt;ctrl&gt;KP_Subtract, &lt;ctrl&gt;&lt;shift&gt;minus" />
+  <bind gaction="app.path-exclusion"             keys="&lt;ctrl&gt;asciicircum, &lt;ctrl&gt;&lt;shift&gt;asciicircum" /> <!-- ^ -->
+  <bind gaction="app.path-cut"                   keys="&lt;ctrl&gt;&lt;alt&gt;slash, &lt;ctrl&gt;&lt;alt&gt;&lt;shift&gt;slash" />
+  <bind gaction="app.path-division"              keys="&lt;ctrl&gt;slash, &lt;ctrl&gt;&lt;shift&gt;slash" />
+  <bind gaction="win.path-outset"                keys="&lt;ctrl&gt;parenright, &lt;ctrl&gt;&lt;shift&gt;parenright, &lt;ctrl&gt;&lt;shift&gt;0" />
+  <bind gaction="win.path-inset"                 keys="&lt;ctrl&gt;parenleft, &lt;ctrl&gt;&lt;shift&gt;parenleft, &lt;ctrl&gt;&lt;shift&gt;9" />
+  <bind gaction="win.path-offset-dynamic"        keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
+  <bind gaction="win.path-offset-linked"         keys="&lt;ctrl&gt;&lt;alt&gt;j, &lt;ctrl&gt;&lt;alt&gt;J" />
+  <bind gaction="app.path-simplify"              keys="&lt;ctrl&gt;l, &lt;ctrl&gt;L" />
+  <bind gaction="win.path-reverse" />
 
   <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true"/>
   <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
@@ -235,12 +235,12 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <!-- Text, Font, Size, Smaller  key="comma" modifiers="Ctrl,Shift" -->
   <!-- Text, Font, Size, Larger  key="period" modifiers="Ctrl,Shift" -->
 
-  <bind gaction="doc.text-flow-into-frame"              keys="&lt;alt&gt;w, &lt;alt&gt;W" />
-  <bind gaction="doc.text-unflow"                       keys="&lt;alt&gt;&lt;shift&gt;w, &lt;alt&gt;&lt;shift&gt;W" />
-  <bind gaction="doc.text-put-on-path" />
-  <bind gaction="doc.text-remove-from-path" />
-  <bind gaction="doc.text-convert-to-regular" />
-  <bind gaction="doc.text-unkern" />
+  <bind gaction="app.text-flow-into-frame"              keys="&lt;alt&gt;w, &lt;alt&gt;W" />
+  <bind gaction="app.text-unflow"                       keys="&lt;alt&gt;&lt;shift&gt;w, &lt;alt&gt;&lt;shift&gt;W" />
+  <bind gaction="app.text-put-on-path" />
+  <bind gaction="app.text-remove-from-path" />
+  <bind gaction="app.text-convert-to-regular" />
+  <bind gaction="app.text-unkern" />
 
 <!-- Layers -->
 

@@ -151,8 +151,6 @@ SPDocument::SPDocument() :
     // Actions
     action_group = Gio::SimpleActionGroup::create();
     add_actions_edit_document(this);
-    add_actions_text(this);
-    add_actions_tutorial(this);
 }
 
 SPDocument::~SPDocument() {
