@@ -39,13 +39,11 @@ protected:
         svg = test_info->file();;
 #ifdef INKSCAPE_TESTS_DIR
         svg = INKSCAPE_TESTS_DIR;
-        svg += G_DIR_SEPARATOR_S;
 #else
         size_t pos = svg.find("lpespaths-test.h");
         svg.erase(pos);
 #endif
-        svg += "lpe_tests";
-        svg += G_DIR_SEPARATOR_S;
+        svg += "/lpe_tests/"; // gitlab use this separator
         /* svg += test_info->test_suite_name(); */
         svg += test_info->name();
         svg += ".svg";

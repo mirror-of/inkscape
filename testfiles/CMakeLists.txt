@@ -3,7 +3,7 @@
 
 # custom "check" target with proper dependencies (builds inkscape and tests)
 file(TO_NATIVE_PATH "/" _separator)
-ADD_DEFINITIONS(-DINKSCAPE_TESTS_DIR="${CMAKE_SOURCE_DIR}${_separator}testfiles")
+ADD_DEFINITIONS(-DINKSCAPE_TESTS_DIR="${CMAKE_SOURCE_DIR}/testfiles")
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
                         DEPENDS tests
                         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
