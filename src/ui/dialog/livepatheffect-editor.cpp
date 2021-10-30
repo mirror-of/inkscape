@@ -140,6 +140,10 @@ LivePathEffectEditor::LivePathEffectEditor()
     toolbar_hbox.set_child_secondary( button_remove , true);
     toolbar_hbox.add( button_up );
     toolbar_hbox.add( button_down );
+    toolbar_hbox.set_child_non_homogeneous (button_add,true);
+    toolbar_hbox.set_child_non_homogeneous (button_remove,true);
+    toolbar_hbox.set_child_non_homogeneous (button_up,true);
+    toolbar_hbox.set_child_non_homogeneous (button_down,true);
 
     //Create the Tree model:
     effectlist_store = Gtk::ListStore::create(columns);
