@@ -72,7 +72,7 @@ DialogBase::DialogBase(gchar const *prefs_path, Glib::ustring dialog_type)
         }
     }
 
-    set_name(_name); // Essential for dialog functionality
+    set_name(_dialog_type); // Essential for dialog functionality
     property_margin().set_value(1); // Essential for dialog UI
     ensure_size();
 }

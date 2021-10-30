@@ -223,8 +223,9 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
     close->set_halign(Gtk::ALIGN_END);
     close->set_tooltip_text(_("Close Tab"));
     close->get_style_context()->add_class("close-button");
-
-    tab->set_name(label_str);
+    Glib::ustring label_str_fix = label_str;
+    label_str_fix = Glib::Regex::create("\\W")->replace_literal(label_str_fix, 0, "-", (Glib::RegexMatchFlags)0);
+    tab->set_name(label_str_fix);
     tab->pack_start(*image);
     tab->pack_end(*close);
     tab->pack_end(*label);
