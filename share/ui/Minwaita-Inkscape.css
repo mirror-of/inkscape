@@ -5,7 +5,6 @@
  * Keep as small as possible
  */
 
-<<<<<<< HEAD
 toolbar toolbutton > button:disabled, toolbar toolbutton > button:backdrop:disabled, .toolbar toolbutton > button:disabled, .toolbar toolbutton > button:backdrop:disabled {
     -gtk-icon-effect: dim;
 }
@@ -81,6 +80,7 @@ filechooser #pathbarbox button:backdrop:disabled {
 filechooser #pathbarbox button:backdrop:disabled label, filechooser #pathbarbox button:backdrop:disabled {
   color: #566164;
 }
+
 button.titlebutton {
   color:inherit;
   border-style: none;
@@ -90,6 +90,7 @@ button.titlebutton {
   text-shadow: none;
   -gtk-icon-shadow:none;
 }
+
 window.nautilus-desktop-window box.searchbar-container.vertical > searchbar, window.nautilus-desktop-window box.searchbar-container.vertical > searchbar:backdrop {
   background-color: transparent;
 }
@@ -97,6 +98,7 @@ window.nautilus-desktop-window box.searchbar-container.vertical > searchbar, win
 viewport.frame > list.tweak-categories label:backdrop {
   color: #313739;
 }
+
 .primary-toolbar button.raised {
   margin: 0px;
 }
