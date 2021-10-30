@@ -2,6 +2,8 @@
 # -----------------------------------------------------------------------------
 
 # custom "check" target with proper dependencies (builds inkscape and tests)
+file(TO_NATIVE_PATH "/" _separator)
+ADD_DEFINITIONS(-DINKSCAPE_TESTS_DIR="${CMAKE_SOURCE_DIR}${_separator}testfiles")
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
                         DEPENDS tests
                         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -104,7 +106,7 @@ foreach(test_source ${TEST_SOURCES})
 endforeach()
 
 
-### CLI and rendering tests
+### CLI rendering tests and LPE
 add_subdirectory(cli_tests)
 add_subdirectory(rendering_tests)
 add_subdirectory(lpe_tests)
