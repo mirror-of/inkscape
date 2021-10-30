@@ -66,6 +66,7 @@ public:
         // I just copied this from the initialization of the Selection in SPDesktop.
         // When and how is it actually released?
         _selection = Inkscape::GC::release(new Inkscape::Selection(&_layer_model, nullptr));
+        _selection->setDocument(doc);
     }
 
     Inkscape::Selection *getSelection() const { return _selection; }
