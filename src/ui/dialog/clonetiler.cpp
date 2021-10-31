@@ -819,6 +819,7 @@ CloneTiler::CloneTiler()
 
             {
                 auto frame = Gtk::manage(new Gtk::Frame(_("1. Pick from the drawing:")));
+                frame->set_shadow_type(Gtk::SHADOW_NONE);
                 vvb->pack_start(*frame, false, false, 0);
 
                 auto table = Gtk::manage(new Gtk::Grid());
@@ -889,6 +890,7 @@ CloneTiler::CloneTiler()
 
             {
                 auto frame = Gtk::manage(new Gtk::Frame(_("2. Tweak the picked value:")));
+                frame->set_shadow_type(Gtk::SHADOW_NONE);
                 vvb->pack_start(*frame, false, false, VB_MARGIN);
 
                 auto table = Gtk::manage(new Gtk::Grid());
@@ -932,6 +934,7 @@ CloneTiler::CloneTiler()
 
             {
                 auto frame = Gtk::manage(new Gtk::Frame(_("3. Apply the value to the clones':")));
+                frame->set_shadow_type(Gtk::SHADOW_NONE);
                 vvb->pack_start(*frame, false, false, 0);
 
                 auto table = Gtk::manage(new Gtk::Grid());
@@ -998,8 +1001,6 @@ CloneTiler::CloneTiler()
             mainbox->pack_start(*table, false, false, 0);
 
             {
-                _rowscols = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, VB_MARGIN));
-
                 {
                     auto a = Gtk::Adjustment::create(0.0, 1, 500, 1, 10, 0);
                     int value = prefs->getInt(prefs_path + "jmax", 2);
@@ -1008,7 +1009,9 @@ CloneTiler::CloneTiler()
                     auto sb = new Inkscape::UI::Widget::SpinButton(a, 1.0, 0);
                     sb->set_tooltip_text (_("How many rows in the tiling"));
                     sb->set_width_chars (7);
-                    _rowscols->pack_start(*sb, true, true, 0);
+                    sb->set_name("row");
+                    table_attach(table, sb, 0.0f, 1, 2);
+                    _rowscols.push_back(sb);
 
                     a->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &CloneTiler::xy_changed), a, "jmax"));
                 }
@@ -1016,7 +1019,8 @@ CloneTiler::CloneTiler()
                 {
                     auto l = Gtk::manage(new Gtk::Label(""));
                     l->set_markup("&#215;");
-                    _rowscols->pack_start(*l, true, true, 0);
+                    table_attach(table, l, 0.0f, 1, 3);
+                    _rowscols.push_back(l);
                 }
 
                 {
@@ -1027,17 +1031,14 @@ CloneTiler::CloneTiler()
                     auto sb = new Inkscape::UI::Widget::SpinButton(a, 1.0, 0);
                     sb->set_tooltip_text (_("How many columns in the tiling"));
                     sb->set_width_chars (7);
-                    _rowscols->pack_start(*sb, true, true, 0);
+                    table_attach(table, sb, 0.0f, 1, 4);
+                    _rowscols.push_back(sb);
 
                     a->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &CloneTiler::xy_changed), a, "imax"));
                 }
-
-                table_attach(table, _rowscols, 0.0, 1, 2);
             }
 
             {
-                _widthheight = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, VB_MARGIN));
-
                 // unitmenu
                 unit_menu = new Inkscape::UI::Widget::UnitMenu();
                 unit_menu->setUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
@@ -1057,13 +1058,15 @@ CloneTiler::CloneTiler()
                     e->set_tooltip_text (_("Width of the rectangle to be filled"));
                     e->set_width_chars (7);
                     e->set_digits (4);
-                    _widthheight->pack_start(*e, true, true, 0);
+                    table_attach(table, e, 0.0f, 2, 2);
+                    _widthheight.push_back(e);
                     fill_width->signal_value_changed().connect(sigc::mem_fun(*this, &CloneTiler::fill_width_changed));
                 }
                 {
                     auto l = Gtk::manage(new Gtk::Label(""));
                     l->set_markup("&#215;");
-                    _widthheight->pack_start(*l, true, true, 0);
+                    table_attach(table, l, 0.0f, 2, 3);
+                    _widthheight.push_back(l);
                 }
 
                 {
@@ -1079,13 +1082,13 @@ CloneTiler::CloneTiler()
                     e->set_tooltip_text (_("Height of the rectangle to be filled"));
                     e->set_width_chars (7);
                     e->set_digits (4);
-                    _widthheight->pack_start(*e, true, true, 0);
+                    table_attach(table, e, 0.0f, 2, 4);
+                    _widthheight.push_back(e);
                     fill_height->signal_value_changed().connect(sigc::mem_fun(*this, &CloneTiler::fill_height_changed));
                 }
 
-                _widthheight->pack_start(*unit_menu, true, true, 0);
-                table_attach(table, _widthheight, 0.0, 2, 2);
-
+                table_attach(table, unit_menu, 0.0f, 2, 5);
+                _widthheight.push_back(unit_menu);
             }
 
             // Switch
@@ -1094,21 +1097,23 @@ CloneTiler::CloneTiler()
                 auto radio = Gtk::manage(new Gtk::RadioButton(rb_group, _("Rows, columns: ")));
                 radio->set_tooltip_text(_("Create the specified number of rows and columns"));
                 table_attach(table, radio, 0.0, 1, 1);
-                radio->signal_toggled().connect(sigc::mem_fun(*this, &CloneTiler::switch_to_create));
 
                 if (!prefs->getBool(prefs_path + "fillrect")) {
                     radio->set_active(true);
+                    switch_to_create();
                 }
+                radio->signal_toggled().connect(sigc::mem_fun(*this, &CloneTiler::switch_to_create));
             }
             {
                 auto radio = Gtk::manage(new Gtk::RadioButton(rb_group, _("Width, height: ")));
                 radio->set_tooltip_text(_("Fill the specified width and height with the tiling"));
                 table_attach(table, radio, 0.0, 2, 1);
-                radio->signal_toggled().connect(sigc::mem_fun(*this, &CloneTiler::switch_to_fill));
 
                 if (prefs->getBool(prefs_path + "fillrect")) {
                     radio->set_active(true);
+                    switch_to_fill();
                 }
+                radio->signal_toggled().connect(sigc::mem_fun(*this, &CloneTiler::switch_to_fill));
             }
         }
 
@@ -2721,11 +2726,11 @@ void CloneTiler::pick_switched(PickType v)
 
 void CloneTiler::switch_to_create()
 {
-    if (_rowscols) {
-        _rowscols->set_sensitive(true);
+    for (auto w : _rowscols) {
+        w->set_sensitive(true);
     }
-    if (_widthheight) {
-        _widthheight->set_sensitive(false);
+    for (auto w : _widthheight) {
+        w->set_sensitive(false);
     }
 
     auto prefs = Inkscape::Preferences::get();
@@ -2735,11 +2740,11 @@ void CloneTiler::switch_to_create()
 
 void CloneTiler::switch_to_fill()
 {
-    if (_rowscols) {
-        _rowscols->set_sensitive(false);
+    for (auto w : _rowscols) {
+        w->set_sensitive(false);
     }
-    if (_widthheight) {
-        _widthheight->set_sensitive(true);
+    for (auto w : _widthheight) {
+        w->set_sensitive(true);
     }
 
     auto prefs = Inkscape::Preferences::get();

@@ -71,7 +71,7 @@ static std::map<int, Glib::ustring> verb_to_dialog_map =
     {SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "AlignDistribute"   },
     // {SP_VERB_SELECTION_ARRANGE,       "Arrange"           },
     {SP_VERB_DIALOG_ATTR_XML,         "AttrDialog"        },
-    {SP_VERB_DIALOG_CLONETILER,       "Clonetiler"        },
+    {SP_VERB_DIALOG_CLONETILER,       "CloneTiler"        },
     {SP_VERB_DIALOG_DOCPROPERTIES,    "DocumentProperties"},
     {SP_VERB_DIALOG_EXPORT,           "Export"            },
     {SP_VERB_DIALOG_FILL_STROKE,      "FillStroke"        },
@@ -170,7 +170,7 @@ DialogBase *DialogContainer::dialog_factory(const Glib::ustring& dialog_type)
     if(     dialog_type == "AlignDistribute")     return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
     // else if(dialog_type == "Arrange")             return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
     else if(dialog_type == "AttrDialog")          return &Inkscape::UI::Dialog::AttrDialog::getInstance();
-    else if(dialog_type == "Clonetiler")          return &Inkscape::UI::Dialog::CloneTiler::getInstance();
+    else if(dialog_type == "CloneTiler")          return &Inkscape::UI::Dialog::CloneTiler::getInstance();
     else if(dialog_type == "DocumentProperties")  return &Inkscape::UI::Dialog::DocumentProperties::getInstance();
     else if(dialog_type == "Export")              return &Inkscape::UI::Dialog::Export::getInstance();
     else if(dialog_type == "FillStroke")          return &Inkscape::UI::Dialog::FillAndStroke::getInstance();

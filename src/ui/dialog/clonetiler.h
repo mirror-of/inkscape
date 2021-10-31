@@ -168,8 +168,8 @@ private:
     Gtk::Box *_buttons_on_tiles;
     Gtk::Box *_dotrace;
     Gtk::Label *_status;
-    Gtk::Box *_rowscols;
-    Gtk::Box *_widthheight;
+    std::vector<Gtk::Widget*> _rowscols;
+    std::vector<Gtk::Widget*> _widthheight;
 };
 
 enum {

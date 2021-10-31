@@ -275,6 +275,7 @@ void DialogManager::remove_dialog_floating_state(const Glib::ustring& dialog_typ
 void DialogManager::dialog_defaults() {
     std::shared_ptr<Glib::KeyFile> floating;
     // strings are dialog types
+    _floating_dialogs["CloneTiler"] = floating;
     _floating_dialogs["DocumentProperties"] = floating;
     _floating_dialogs["FilterEffects"] = floating;
     _floating_dialogs["Input"] = floating;

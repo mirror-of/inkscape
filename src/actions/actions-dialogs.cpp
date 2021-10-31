@@ -31,7 +31,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_dialogs =
     {"win.dialog-open('AlignDistribute')",    N_("Open AlignDistribute"),      "Dialog",  N_("Align and distribute objects")                                                           },
     {"win.dialog-open('Arrange')",            N_("Open Arrange"),              "Dialog",  N_("Arrange selected objects in a table or circle")                                          },
     {"win.dialog-open('AttrDialog')",         N_("Open AttrDialog"),           "Dialog",  N_("Edit the object attributes...")                                                          },
-    {"win.dialog-open('Clonetiler')",         N_("Open Clonetiler"),           "Dialog",  N_("Create multiple clones of selected object, arranging them into a pattern or scattering") },
+    {"win.dialog-open('CloneTiler')",         N_("Open CloneTiler"),           "Dialog",  N_("Create multiple clones of selected object, arranging them into a pattern or scattering") },
     {"win.dialog-open('DocumentProperties')", N_("Open DocumentProperties"),   "Dialog",  N_("Edit properties of this document (to be saved with the document)")                       },
     {"win.dialog-open('Export')",             N_("Open Export"),               "Dialog",  N_("Export this document or a selection as a PNG image")                                     },
     {"win.dialog-open('FillStroke')",         N_("Open FillStroke"),           "Dialog",  N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties...")   },
