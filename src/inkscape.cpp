@@ -50,6 +50,7 @@
 
 #include "libnrtype/FontFactory.h"
 
+#include "object/sp-item-group.h"
 #include "object/sp-root.h"
 
 #include "ui/themes.h"
@@ -253,6 +254,13 @@ Application::Application(bool use_gui) :
         /* Check for global remapping of Alt key */
         mapalt(guint(prefs->getInt("/options/mapalt/value", 0)));
         trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
+
+        /* update highlight colors when theme changes */
+        themecontext->getChangeThemeSignal().connect([=](){
+            if (auto desktop = active_desktop()) {
+                set_default_highlight_colors(themecontext->getHighlightColors(desktop->getToplevel()));
+            }
+        });
     }
 
     /* Initialize the extensions */

@@ -25,6 +25,7 @@
 
 #include "selection.h"
 #include "color-rgba.h"
+#include "helper/auto-connection.h"
 
 using Inkscape::XML::Node;
 
@@ -106,6 +107,8 @@ private:
     Gtk::TreeView _tree;
     Gtk::CellRendererText *_text_renderer;
     Gtk::TreeView::Column *_name_column;
+    Gtk::TreeView::Column *_eye_column = nullptr;
+    Gtk::TreeView::Column *_lock_column = nullptr;
     Gtk::Box _buttonsRow;
     Gtk::Box _buttonsPrimary;
     Gtk::Box _buttonsSecondary;
@@ -113,6 +116,7 @@ private:
     Gtk::Menu _popupMenu;
     Gtk::Box _page;
     Gtk::ToggleButton _object_mode;
+    Inkscape::auto_connection _tree_style;
 
     ObjectsPanel(ObjectsPanel const &) = delete; // no copy
     ObjectsPanel &operator=(ObjectsPanel const &) = delete; // no assign
@@ -121,8 +125,8 @@ private:
     void _fireAction( unsigned int code );
     void _objects_toggle();
     
-    void toggleVisible(const Glib::ustring& path);
-    void toggleLocked(const Glib::ustring& path);
+    bool toggleVisible(GdkEventButton* event, Gtk::TreeModel::Row row);
+    bool toggleLocked(GdkEventButton* event, Gtk::TreeModel::Row row);
     
     bool _handleButtonEvent(GdkEventButton *event);
     bool _handleKeyEvent(GdkEventKey *event);

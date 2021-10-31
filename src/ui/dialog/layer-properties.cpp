@@ -24,6 +24,7 @@
 #include "document-undo.h"
 #include "layer-manager.h"
 #include "message-stack.h"
+#include "preferences.h"
 
 #include "verbs.h"
 #include "selection-chemistry.h"
@@ -161,6 +162,9 @@ LayerPropertiesDialog::_setup_position_controls() {
     row = _dropdown_list->append();
     row->set_value(_dropdown_columns.position, LPOS_CHILD);
     row->set_value(_dropdown_columns.name, Glib::ustring(_("As sublayer of current")));
+
+    int position = Inkscape::Preferences::get()->getIntLimited("/dialogs/layerProp/addLayerPosition", 0, 0, 2);
+    _layer_position_combo.set_active(position);
 
     _layer_position_label.set_label(_("Position:"));
     _layer_position_label.set_halign(Gtk::ALIGN_START);
@@ -353,10 +357,11 @@ void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
     SPDesktop *desktop=dialog._desktop;
 
     LayerRelativePosition position = LPOS_ABOVE;
-    
     if (dialog._position_visible) {
         Gtk::ListStore::iterator activeRow(dialog._layer_position_combo.get_active());
         position = activeRow->get_value(dialog._dropdown_columns.position);
+        int index = dialog._layer_position_combo.get_active_row_number();
+        Inkscape::Preferences::get()->setInt("/dialogs/layerProp/addLayerPosition", index);
     }
     Glib::ustring name(dialog._layer_name_entry.get_text());
     if (name.empty())

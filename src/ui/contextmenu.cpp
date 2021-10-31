@@ -58,7 +58,6 @@
 #include "object/sp-text.h"
 
 #include "ui/desktop/menu-icon-shift.h"
-//#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/layer-properties.h"
 #include "ui/icon-loader.h"
@@ -79,17 +78,26 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     _desktop = desktop;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool show_icons = prefs->getInt("/theme/menuIcons_canvas", true);
+    _show_icons = prefs->getInt("/theme/menuIcons_canvas", true);
+    auto layer = sp_item_get_layer(_object);
 
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_UNDO), show_icons);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_REDO), show_icons);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_UNDO));
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_REDO));
     AddSeparator();
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_CUT), show_icons);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_COPY), show_icons);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_PASTE), show_icons);
-    AddSeparator();
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), show_icons);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DELETE), show_icons);
+    if (!layer) {
+        // don't bother adding copy/paste/cut when clicking on a layer; it won't work unless layer is *selected*
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_CUT));
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_COPY));
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_PASTE));
+        AddSeparator();
+    }
+    // when clicking an a current layer, show layer-specific duplicate action;
+    // layer has it's own "duplicate" action which varies from "selection duplicate" for better or worse
+    auto duplicate = layer ? SP_VERB_LAYER_DUPLICATE : SP_VERB_EDIT_DUPLICATE;
+    AppendItemFromVerb(Inkscape::Verb::get(duplicate));
+    // layer-specific delete action
+    auto del = layer ? SP_VERB_LAYER_DELETE : SP_VERB_EDIT_DELETE;
+    AppendItemFromVerb(Inkscape::Verb::get(del));
 
     positionOfLastDialog = 10; // 9 in front + 1 for the separator in the next if; used to position the dialog menu entries below each other
     /* Item menu */
@@ -145,42 +153,6 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     }
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
-    /* layer menu */
-    SPGroup *group=nullptr;
-    if (item) {
-        if (SP_IS_GROUP(item)) {
-            group = SP_GROUP(item);
-        } else if ( item != _desktop->currentRoot() && SP_IS_GROUP(item->parent) ) {
-            group = SP_GROUP(item->parent);
-        }
-    }
-
-    if (( group && group != _desktop->currentLayer() ) ||
-        ( _desktop->currentLayer() != _desktop->currentRoot() && _desktop->currentLayer()->parent != _desktop->currentRoot() ) ) {
-        AddSeparator();
-    }
-
-    if ( group && group != _desktop->currentLayer() ) {
-        MIGroup.set_label (Glib::ustring::compose(_("Enter group %1"), group->defaultLabel()));
-        _MIGroup_group = group;
-        MIGroup.signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &ContextMenu::EnterGroup),&MIGroup));
-        MIGroup.show();
-        append(MIGroup);
-    }
-
-    if ( _desktop->currentLayer() != _desktop->currentRoot() ) {
-        if ( _desktop->currentLayer()->parent != _desktop->currentRoot() ) {
-            MIParent.signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LeaveGroup));
-            MIParent.show();
-            append(MIParent);
-
-            /* Pop selection out of group */
-            Gtk::MenuItem* miu = Gtk::manage(new Gtk::MenuItem(_("_Pop selection out of group"), true));
-            miu->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroupPopSelection));
-            miu->show();
-            append(*miu);
-        }
-    }
 
     // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
     signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(shift_icons), this));
@@ -289,7 +261,7 @@ context_menu_item_on_my_deselect(void */*object*/, SPAction *action)
 
 
 // TODO: Update this to allow radio items to be used
-void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon)
+void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)
 {
     SPAction *action;
     SPDesktop *view = _desktop;
@@ -313,7 +285,7 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon)
         label->set_accel_widget(*item);
 
         // If there is an image associated with the action, then we can add it as an icon for the menu item
-        if (show_icon && action->image) {
+        if (_show_icons && action->image) {
             item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
             auto const icon = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
 
@@ -347,11 +319,11 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon)
 void ContextMenu::MakeObjectMenu()
 {
     if (SP_IS_ITEM(_object)) {
-        MakeItemMenu();
+        MakeItemMenu(sp_item_get_layer(_object));
     }
 
     if (SP_IS_GROUP(_object)) {
-        MakeGroupMenu();
+        MakeGroupMenu(SP_GROUP(_object));
     }
 
     if (SP_IS_ANCHOR(_object)) {
@@ -371,7 +343,7 @@ void ContextMenu::MakeObjectMenu()
     }
 }
 
-void ContextMenu::MakeItemMenu ()
+void ContextMenu::MakeItemMenu(SPGroup* layer)
 {
     Gtk::MenuItem* mi;
 
@@ -395,50 +367,53 @@ void ContextMenu::MakeItemMenu ()
         append(*mi);
     }
 
+    // several options are not applicable to layers; adding them makes context menu unwieldy,
+    // so we need to be selective, or else it grows too much
+    if (!layer) {
+        mi = Gtk::manage(new Gtk::MenuItem(_("Select Same")));
+        mi->show();
+        Gtk::Menu *select_same_submenu = Gtk::manage(new Gtk::Menu());
+        if (_desktop->selection->isEmpty()) {
+            mi->set_sensitive(FALSE);
+        }
+        mi->set_submenu(*select_same_submenu);
+        append(*mi);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Select Same")));
-    mi->show();
-    Gtk::Menu *select_same_submenu = Gtk::manage(new Gtk::Menu());
-    if (_desktop->selection->isEmpty()) {
-        mi->set_sensitive(FALSE);
+        /* Select same fill and stroke */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Fill and Stroke"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameFillStroke));
+        mi->set_sensitive(!SP_IS_ANCHOR(_item));
+        mi->show();
+        select_same_submenu->append(*mi);
+
+        /* Select same fill color */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Fill Color"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameFillColor));
+        mi->set_sensitive(!SP_IS_ANCHOR(_item));
+        mi->show();
+        select_same_submenu->append(*mi);
+
+        /* Select same stroke color */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Stroke Color"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameStrokeColor));
+        mi->set_sensitive(!SP_IS_ANCHOR(_item));
+        mi->show();
+        select_same_submenu->append(*mi);
+
+        /* Select same stroke style */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Stroke Style"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameStrokeStyle));
+        mi->set_sensitive(!SP_IS_ANCHOR(_item));
+        mi->show();
+        select_same_submenu->append(*mi);
+
+        /* Select same stroke style */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Object Type"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameObjectType));
+        mi->set_sensitive(!SP_IS_ANCHOR(_item));
+        mi->show();
+        select_same_submenu->append(*mi);
     }
-    mi->set_submenu(*select_same_submenu);
-    append(*mi);
-
-    /* Select same fill and stroke */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Fill and Stroke"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameFillStroke));
-    mi->set_sensitive(!SP_IS_ANCHOR(_item));
-    mi->show();
-    select_same_submenu->append(*mi);
-
-    /* Select same fill color */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Fill Color"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameFillColor));
-    mi->set_sensitive(!SP_IS_ANCHOR(_item));
-    mi->show();
-    select_same_submenu->append(*mi);
-
-    /* Select same stroke color */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Stroke Color"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameStrokeColor));
-    mi->set_sensitive(!SP_IS_ANCHOR(_item));
-    mi->show();
-    select_same_submenu->append(*mi);
-
-    /* Select same stroke style */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Stroke Style"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameStrokeStyle));
-    mi->set_sensitive(!SP_IS_ANCHOR(_item));
-    mi->show();
-    select_same_submenu->append(*mi);
-
-    /* Select same stroke style */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Object Type"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameObjectType));
-    mi->set_sensitive(!SP_IS_ANCHOR(_item));
-    mi->show();
-    select_same_submenu->append(*mi);
 
     /* Move to layer */
     mi = Gtk::manage(new Gtk::MenuItem(_("_Move to Layer..."), true));
@@ -450,82 +425,84 @@ void ContextMenu::MakeItemMenu ()
     mi->show();
     append(*mi);
 
-    /* Create link */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Create _Link"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemCreateLink));
-    mi->set_sensitive(!SP_IS_ANCHOR(_item));
-    mi->show();
-    append(*mi);
+    if (!layer) {
+        /* Create link */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Create _Link"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemCreateLink));
+        mi->set_sensitive(!SP_IS_ANCHOR(_item));
+        mi->show();
+        append(*mi);
 
-    bool ClipRefOK=false;
-    bool MaskRefOK=false;
-    if (_item && _item->getClipObject()) {
-        ClipRefOK = true;
-    }
-    if (_item && _item->getMaskObject()) {
-        MaskRefOK = true;
-    }
-    /* Set mask */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Set Mask"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetMask));
-    if (ClipRefOK || MaskRefOK) {
-        mi->set_sensitive(FALSE);
-    } else {
+        bool ClipRefOK=false;
+        bool MaskRefOK=false;
+        if (_item && _item->getClipObject()) {
+            ClipRefOK = true;
+        }
+        if (_item && _item->getMaskObject()) {
+            MaskRefOK = true;
+        }
+        /* Set mask */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Set Mask"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetMask));
+        if (ClipRefOK || MaskRefOK) {
+            mi->set_sensitive(FALSE);
+        } else {
+            mi->set_sensitive(TRUE);
+        }
+        mi->show();
+        append(*mi);
+
+        /* Release mask */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Release Mask"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseMask));
+        if (MaskRefOK) {
+            mi->set_sensitive(TRUE);
+        } else {
+            mi->set_sensitive(FALSE);
+        }
+        mi->show();
+        append(*mi);
+
+        /*SSet Clip Group */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Create Clip G_roup"),true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::CreateGroupClip));
         mi->set_sensitive(TRUE);
-    }
-    mi->show();
-    append(*mi);
+        mi->show();
+        append(*mi);
 
-    /* Release mask */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Release Mask"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseMask));
-    if (MaskRefOK) {
-        mi->set_sensitive(TRUE);
-    } else {
-        mi->set_sensitive(FALSE);
-    }
-    mi->show();
-    append(*mi);
+        /* Set Clip */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Set Cl_ip"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetClip));
+        if (ClipRefOK || MaskRefOK) {
+            mi->set_sensitive(FALSE);
+        } else {
+            mi->set_sensitive(TRUE);
+        }
+        mi->show();
+        append(*mi);
 
-    /*SSet Clip Group */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Create Clip G_roup"),true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::CreateGroupClip));
-    mi->set_sensitive(TRUE);
-    mi->show();
-    append(*mi);
+        /* Release Clip */
+        mi = Gtk::manage(new Gtk::MenuItem(_("Release C_lip"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseClip));
+        if (ClipRefOK) {
+            mi->set_sensitive(TRUE);
+        } else {
+            mi->set_sensitive(FALSE);
+        }
+        mi->show();
+        append(*mi);
 
-    /* Set Clip */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Set Cl_ip"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetClip));
-    if (ClipRefOK || MaskRefOK) {
-        mi->set_sensitive(FALSE);
-    } else {
-        mi->set_sensitive(TRUE);
+        /* Group */
+        mi = Gtk::manage(new Gtk::MenuItem(_("_Group"), true));
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateGroup));
+        if (_desktop->selection->isEmpty()) {
+            mi->set_sensitive(FALSE);
+        } else {
+            mi->set_sensitive(TRUE);
+        }
+        mi->show();
+        append(*mi);
     }
-    mi->show();
-    append(*mi);
-
-    /* Release Clip */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Release C_lip"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseClip));
-    if (ClipRefOK) {
-        mi->set_sensitive(TRUE);
-    } else {
-        mi->set_sensitive(FALSE);
-    }
-    mi->show();
-    append(*mi);
-
-    /* Group */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Group"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateGroup));
-    if (_desktop->selection->isEmpty()) {
-        mi->set_sensitive(FALSE);
-    } else {
-        mi->set_sensitive(TRUE);
-    }
-    mi->show();
-    append(*mi);
 }
 
 void ContextMenu::SelectSameFillStroke()
@@ -622,13 +599,87 @@ void ContextMenu::ReleaseClip()
     _desktop->selection->unsetMask(true);
 }
 
-void ContextMenu::MakeGroupMenu()
-{
-    /* Ungroup */
-    Gtk::MenuItem* mi = Gtk::manage(new Gtk::MenuItem(_("_Ungroup"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroup));
+void sp_group_layer_transform(SPDocument* document, SPGroup* group, SPGroup::LayerMode mode) {
+    if (!group) return;
+
+    group->setLayerMode(mode);
+    group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
+    if (document) {
+        DocumentUndo::done(document, SP_VERB_DIALOG_OBJECTS, mode == SPGroup::GROUP ? _("Layer to group") : _("Group to layer"));
+    }
+}
+
+Glib::SignalProxy<void> ContextMenu::append_item(const char* label, bool mnemonic) {
+    auto mi = Gtk::make_managed<Gtk::MenuItem>(label, mnemonic);
     mi->show();
     append(*mi);
+    return mi->signal_activate();
+}
+
+void ContextMenu::fireAction(unsigned int code) {
+    if (Inkscape::Verb* verb = Inkscape::Verb::get(code)) {
+        if (SPAction* action = verb->get_action(Inkscape::ActionContext(_desktop))) {
+            sp_action_perform(action, nullptr);
+        }
+    }
+}
+
+// group and layer menu
+void ContextMenu::MakeGroupMenu(SPGroup* item)
+{
+    if (auto layer = sp_item_get_layer(item)) {
+        // layer-specific commands
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_NEW));
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_RENAME));
+        AddSeparator();
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_SOLO));
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_SHOW_ALL));
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_HIDE_ALL));
+        AddSeparator();
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_LOCK_OTHERS));
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_LOCK_ALL));
+        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_UNLOCK_ALL));
+        AddSeparator();
+
+        // transform layer into group
+        append_item(_("Layer to group"), false).connect([=]() { sp_group_layer_transform(_desktop->doc(), layer, SPGroup::GROUP); });
+    }
+    else if (auto group = sp_item_get_group(item)) {
+        /* Ungroup */
+        append_item(_("_Ungroup"), true).connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroup));
+
+        if (auto parent = sp_item_get_layer(group->parent)) {
+            // transform group into layer
+            append_item(_("Group to layer"), false).connect([=](){ sp_group_layer_transform(_desktop->doc(), group, SPGroup::LAYER); });
+        }
+
+        // enter group
+        if (group != _desktop->currentLayer()) {
+            MIGroup.set_label(Glib::ustring::compose(_("Enter group %1"), group->defaultLabel()));
+            _MIGroup_group = group;
+            MIGroup.signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &ContextMenu::EnterGroup),&MIGroup));
+            MIGroup.show();
+            append(MIGroup);
+        }
+
+        if (_desktop->currentLayer() != _desktop->currentRoot()) {
+            if (_desktop->currentLayer()->parent != _desktop->currentRoot()) {
+                MIParent.signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LeaveGroup));
+                MIParent.show();
+                append(MIParent);
+
+                /* Pop selection out of group */
+                Gtk::MenuItem* miu = Gtk::manage(new Gtk::MenuItem(_("_Pop selection out of group"), true));
+                miu->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroupPopSelection));
+                miu->show();
+                append(*miu);
+            }
+        }
+    }
+    else {
+        // not a plain group and not a layer; a mask helper?
+        // no special operations here so far
+    }
 }
 
 void ContextMenu::ActivateGroup()

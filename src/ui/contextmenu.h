@@ -22,6 +22,7 @@
 
 class SPDesktop;
 class SPItem;
+class SPGroup;
 class SPObject;
 
 namespace Gtk {
@@ -60,13 +61,16 @@ class ContextMenu : public Gtk::Menu
         SPItem *_item; // pointer to the object selected at the time the ContextMenu is created
         SPObject *_object; // pointer to the object selected at the time the ContextMenu is created
         SPDesktop *_desktop; //pointer to the desktop the user was currently working on at the time the ContextMenu is created
-        
+        bool _show_icons;
         int positionOfLastDialog;
 
         Gtk::MenuItem MIGroup; //menu entry to enter a group
         SPObject *_MIGroup_group; // Group to enter when MIGroup is activated
         Gtk::MenuItem MIParent; //menu entry to leave a group
-        
+
+        void fireAction(unsigned int code);
+        Glib::SignalProxy<void> append_item(const char* label, bool mnemonic);
+
         /**
          * auxiliary function that adds a separator line in the context menu
          */
@@ -81,7 +85,7 @@ class ContextMenu : public Gtk::Menu
          * @param show_icon True if an icon should be displayed before the menu item's label
          * 
          */
-        void AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon = false);
+        void AppendItemFromVerb(Inkscape::Verb *verb);
         
         /**
          * main function which is responsible for creating the context sensitive menu items,
@@ -91,11 +95,11 @@ class ContextMenu : public Gtk::Menu
         /**
          * creates menu entries for an SP_TYPE_ITEM object
          */
-        void MakeItemMenu   ();
+        void MakeItemMenu(SPGroup* layer);
         /**
          * creates menu entries for a grouped object
          */
-        void MakeGroupMenu  ();
+        void MakeGroupMenu  (SPGroup* group);
         /**
          * creates menu entries for an anchor object
          */

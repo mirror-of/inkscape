@@ -17,6 +17,7 @@
 
 #include "objects.h"
 
+#include <gtkmm/cellrenderer.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
@@ -59,7 +60,18 @@
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/shapeicon.h"
 
-static double const SELECTED_ALPHA[8] = {0.0, 2.5, 4.0, 2.0, 8.0, 2.5, 1.0, 1.0};
+// alpha (transparency) multipliers corresponding to item selection state combinations (SelectionState)
+// when 0 - do not color item's background
+static double const SELECTED_ALPHA[8] = {
+    0.00, //0 not selected
+    1.00, //1 selected
+    0.50, //2 layer focused
+    1.00, //3 layer focused & selected
+    0.00, //4 child of focused layer
+    1.00, //5 selected child of focused layer
+    0.50, //6 2 and 4
+    1.00  //7 1, 2 and 4
+};
 
 //#define DUMP_LAYERS 1
 
@@ -290,6 +302,8 @@ void ObjectWatcher::updateRowAncestorState(bool invisible, bool locked) {
     }
 }
 
+Gdk::RGBA selection_color;
+
 /**
  * Updates the row's background colour as indicated by it's selection.
  */
@@ -302,16 +316,13 @@ void ObjectWatcher::updateRowBg(guint32 rgba)
             row[panel->_model->_colBgColor] = Gdk::RGBA();
             return;
         }
-        if (rgba == 0.0) {
-            rgba = row[panel->_model->_colIconColor];
-        }
 
-        auto color = ColorRGBA(rgba);
+        const auto& sel = selection_color;
         auto gdk_color = Gdk::RGBA();
-        gdk_color.set_red(color[0]);
-        gdk_color.set_green(color[1]);
-        gdk_color.set_blue(color[2]);
-        gdk_color.set_alpha(color[3] / alpha);
+        gdk_color.set_red(sel.get_red());
+        gdk_color.set_green(sel.get_green());
+        gdk_color.set_blue(sel.get_blue());
+        gdk_color.set_alpha(sel.get_alpha() * alpha);
         row[panel->_model->_colBgColor] = gdk_color;
     }
 }
@@ -588,6 +599,54 @@ ObjectWatcher* ObjectsPanel::getWatcher(Node *node)
     return nullptr;
 }
 
+class ColorTagRenderer : public Gtk::CellRenderer {
+public:
+    ColorTagRenderer() :
+        Glib::ObjectBase(typeid(CellRenderer)),
+        Gtk::CellRenderer(),
+        _property_color(*this, "tagcolor", 0) {
+
+        int dummy_width;
+        // height size is not critical
+        Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, dummy_width, _height);
+    }
+
+    ~ColorTagRenderer() override = default;
+
+    Glib::PropertyProxy<unsigned int> property_color() {
+        return _property_color.get_proxy();
+    }
+
+    int get_width() const {
+        return _width;
+    }
+
+    void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr, 
+                      Gtk::Widget& widget,
+                      const Gdk::Rectangle& background_area,
+                      const Gdk::Rectangle& cell_area,
+                      Gtk::CellRendererState flags) override {
+        cr->rectangle(cell_area.get_x(), cell_area.get_y(), cell_area.get_width(), cell_area.get_height());
+        ColorRGBA color(_property_color.get_value());
+        cr->set_source_rgb(color[0], color[1], color[2]);
+        cr->fill();
+    }
+
+    void get_preferred_width_vfunc(Gtk::Widget& widget, int& min_w, int& nat_w) const override {
+        min_w = nat_w = _width;
+    }
+
+    void get_preferred_height_vfunc(Gtk::Widget& widget, int& min_h, int& nat_h) const override {
+        min_h = 1;
+        nat_h = _height;
+    }
+
+private:
+    int _width = 8;
+    int _height;
+    Glib::Property<unsigned int> _property_color;
+};
+
 /**
  * Constructor
  */
@@ -618,10 +677,20 @@ ObjectsPanel::ObjectsPanel() :
     _text_renderer = Gtk::manage(new Gtk::CellRendererText());
     _text_renderer->property_editable() = true;
     _text_renderer->property_ellipsize().set_value(Pango::ELLIPSIZE_END);
+    _text_renderer->signal_editing_started().connect([=](Gtk::CellEditable*,const Glib::ustring&){
+        _is_editing = true;
+    });
+    _text_renderer->signal_editing_canceled().connect([=](){
+        _is_editing = false;
+    });
+    _text_renderer->signal_edited().connect([=](const Glib::ustring&,const Glib::ustring&){
+        _is_editing = false;
+    });
 
+    const int icon_col_width = 24;
     auto icon_renderer = Gtk::manage(new Inkscape::UI::Widget::CellRendererItemIcon());
     icon_renderer->property_xpad() = 2;
-    icon_renderer->property_width() = 24;
+    icon_renderer->property_width() = icon_col_width;
     _tree.append_column(*_name_column);
     _name_column->set_expand(true);
     _name_column->pack_start(*icon_renderer, false);
@@ -637,24 +706,34 @@ ObjectsPanel::ObjectsPanel() :
     auto *eyeRenderer = Gtk::manage( new Inkscape::UI::Widget::ImageToggler(
             INKSCAPE_ICON("object-hidden"), INKSCAPE_ICON("object-visible")));
     int visibleColNum = _tree.append_column("vis", *eyeRenderer) - 1;
-    eyeRenderer->signal_toggled().connect(sigc::mem_fun(*this, &ObjectsPanel::toggleVisible));
     if (auto eye = _tree.get_column(visibleColNum)) {
         eye->add_attribute(eyeRenderer->property_active(), _model->_colInvisible);
         eye->add_attribute(eyeRenderer->property_cell_background_rgba(), _model->_colBgColor);
         eye->add_attribute(eyeRenderer->property_activatable(), _model->_colHover);
         eye->add_attribute(eyeRenderer->property_gossamer(), _model->_colAncestorInvisible);
+        eye->set_fixed_width(icon_col_width);
+        _eye_column = eye;
     }
 
     // Unlocked icon
     Inkscape::UI::Widget::ImageToggler * lockRenderer = Gtk::manage( new Inkscape::UI::Widget::ImageToggler(
         INKSCAPE_ICON("object-locked"), INKSCAPE_ICON("object-unlocked")));
     int lockedColNum = _tree.append_column("lock", *lockRenderer) - 1;
-    lockRenderer->signal_toggled().connect(sigc::mem_fun(*this, &ObjectsPanel::toggleLocked));
     if (auto lock = _tree.get_column(lockedColNum)) {
         lock->add_attribute(lockRenderer->property_active(), _model->_colLocked);
         lock->add_attribute(lockRenderer->property_cell_background_rgba(), _model->_colBgColor);
         lock->add_attribute(lockRenderer->property_activatable(), _model->_colHover);
         lock->add_attribute(lockRenderer->property_gossamer(), _model->_colAncestorLocked);
+        lock->set_fixed_width(icon_col_width);
+        _lock_column = lock;
+    }
+
+    // hierarchy indicator - using item's layer highlight color
+    auto tag_renderer = Gtk::manage(new ColorTagRenderer());
+    int tag_column = _tree.append_column("tag", *tag_renderer) - 1;
+    if (auto tag = _tree.get_column(tag_column)) {
+        tag->add_attribute(tag_renderer->property_color(), _model->_colIconColor);
+        tag->set_fixed_width(tag_renderer->get_width());
     }
 
     //Set the expander and search columns
@@ -669,6 +748,8 @@ ObjectsPanel::ObjectsPanel() :
     _tree.signal_button_release_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false);
     _tree.signal_key_press_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleKeyEvent), false);
     _tree.signal_motion_notify_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleMotionEvent), false);
+    // watch mouse leave too
+    _tree.signal_leave_notify_event().connect([=](GdkEventCrossing*){ return _handleMotionEvent(nullptr); }, false);
 
     // Before expanding a row, replace the dummy child with the actual children
     _tree.signal_test_expand_row().connect([this](const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &) {
@@ -689,6 +770,8 @@ ObjectsPanel::ObjectsPanel() :
     _text_renderer->signal_edited().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleEdited));
 
     //Set up the scroller window and pack the page
+    // turn off overlay scrollbars - they block access to the 'lock' icon
+    _scroller.set_overlay_scrolling(false);
     _scroller.add(_tree);
     _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     _scroller.set_shadow_type(Gtk::SHADOW_IN);
@@ -715,15 +798,26 @@ ObjectsPanel::ObjectsPanel() :
     _object_mode.set_tooltip_text(_("Switch to layers only view."));
     _object_mode.property_active() = prefs->getBool("/dialogs/objects/layers_only", false);
     _object_mode.property_active().signal_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_objects_toggle));
-    _buttonsPrimary.pack_start(_object_mode, Gtk::PACK_SHRINK);
 
+    _buttonsPrimary.pack_start(_object_mode, Gtk::PACK_SHRINK);
     _buttonsPrimary.pack_start(*_addBarButton(INKSCAPE_ICON("layer-new"), _("Add layer..."), (int)SP_VERB_LAYER_NEW), Gtk::PACK_SHRINK);
+
     _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("edit-delete"), _("Remove object"), (int)SP_VERB_EDIT_DELETE), Gtk::PACK_SHRINK);
     _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("go-down"), _("Move Down"), (int)SP_VERB_SELECTION_STACK_DOWN), Gtk::PACK_SHRINK);
     _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("go-up"), _("Move Up"), (int)SP_VERB_SELECTION_STACK_UP), Gtk::PACK_SHRINK);
 
     _buttonsRow.pack_start(_buttonsPrimary, Gtk::PACK_SHRINK);
     _buttonsRow.pack_end(_buttonsSecondary, Gtk::PACK_SHRINK);
+
+    selection_color = _tree.get_style_context()->get_background_color(Gtk::STATE_FLAG_SELECTED);
+    _tree_style = _tree.signal_style_updated().connect([&](){
+        selection_color = _tree.get_style_context()->get_background_color(Gtk::STATE_FLAG_SELECTED);
+        for (auto&& kv : root_watcher->child_watchers) {
+            if (kv.second) {
+                kv.second->updateRowHighlight();
+            }
+        }
+    });
 
     update();
     show_all_children();
@@ -854,11 +948,20 @@ Gtk::Button* ObjectsPanel::_addBarButton(char const* iconName, char const* toolt
  * Sets visibility of items in the tree
  * @param iter Current item in the tree
  */
-void ObjectsPanel::toggleVisible(const Glib::ustring& path)
+bool ObjectsPanel::toggleVisible(GdkEventButton* event, Gtk::TreeModel::Row row)
 {
-    Gtk::TreeModel::Row row = *_store->get_iter(path);
-    if (SPItem* item = getItem(row))
-        item->setHidden(!row[_model->_colInvisible]);
+    if (SPItem* item = getItem(row)) { 
+        if (event->state & GDK_SHIFT_MASK) {
+            // Toggle Visible for layers (hide all other layers)
+            if (auto desktop = getDesktop()) {
+                desktop->toggleLayerSolo(item);
+                DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
+            }
+        } else {
+            item->setHidden(!row[_model->_colInvisible]);
+        }
+    }
+    return true;
 }
 
 /**
@@ -866,11 +969,20 @@ void ObjectsPanel::toggleVisible(const Glib::ustring& path)
  * @param iter Current item in the tree
  * @param locked Whether the item should be locked
  */
-void ObjectsPanel::toggleLocked(const Glib::ustring& path)
+bool ObjectsPanel::toggleLocked(GdkEventButton* event, Gtk::TreeModel::Row row)
 {
-    Gtk::TreeModel::Row row = *_store->get_iter(path);
-    if (SPItem* item = getItem(row))
-        item->setLocked(!row[_model->_colLocked]);
+    if (SPItem* item = getItem(row)) { 
+        if (event->state & GDK_SHIFT_MASK) {
+            // Toggle lock for layers (lock all other layers)
+            if (auto desktop = getDesktop()) {
+                desktop->toggleLockOtherLayers(item);
+                DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
+            }
+        } else {
+            item->setHidden(!row[_model->_colInvisible]);
+        }
+    }
+    return true;
 }
 
 /**
@@ -892,6 +1004,11 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
                 return true;
             }
             break;
+
+        // space and return enter label editing mode; leave them for the tree to handle
+        case GDK_KEY_Return:
+        case GDK_KEY_space:
+            return false;
     }
 
     // invoke user defined shortcuts first
@@ -946,6 +1063,15 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     Gtk::TreeViewColumn* col = nullptr;
     int x, y;
     if (_tree.get_path_at_pos((int)event->x, (int)event->y, path, col, x, y)) {
+        if (auto row = *_store->get_iter(path)) {
+            if (event->type == GDK_BUTTON_RELEASE) {
+                if (col == _eye_column) {
+                    return toggleVisible(event, row);
+                } else if (col == _lock_column) {
+                    return toggleLocked(event, row);
+                }
+            }
+        }
         // Only the label reacts to clicks, nothing else, only need to test horz
         Gdk::Rectangle r;
         _tree.get_cell_area(path, *_name_column, r);
@@ -967,23 +1093,26 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         SPGroup *group = SP_GROUP(item);
 
         // Load the right click menu
-        if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
-            ContextMenu* menu = new ContextMenu(getDesktop(), item);
-            menu->show();
-            menu->popup_at_pointer(nullptr);
-            return true;
-        }
+        const bool context_menu = event->type == GDK_BUTTON_PRESS && event->button == 3;
 
-        // Select items on button release to not confuse drag
-        if (!_is_editing && event->type == GDK_BUTTON_RELEASE) {
+        // Select items on button release to not confuse drag (unless it's a right-click)
+        // Right-click selects too to set up the stage for context menu which frequently relies on current selection!
+        if (!_is_editing && (event->type == GDK_BUTTON_RELEASE || context_menu)) {
             if (event->state & GDK_SHIFT_MASK) {
                 // Select everything between this row and the already seleced item
                 selection->setBetween(item);
             } else if (event->state & GDK_CONTROL_MASK) {
                 selection->toggle(item);
             } else if (group && group->layerMode() == SPGroup::LAYER) {
+                // if right-clicking on a layer, make it current for context menu actions to work correctly
+                if (context_menu) {
+                    if (getDesktop()->currentLayer() != item) {
+                        selection->clear();
+                        getDesktop()->setCurrentLayer(item);
+                    }
+                }
                 // Clicking on layers firstly switches to that layer.
-                if(selection->includes(item)) {
+                else if (selection->includes(item)) {
                     selection->clear();
                 } else if (_layer != item) {
                     selection->clear();
@@ -993,6 +1122,12 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                 }
             } else {
                 selection->set(item);
+            }
+
+            if (context_menu) {
+                ContextMenu *menu = new ContextMenu(getDesktop(), item);
+                menu->show();
+                menu->popup_at_pointer(nullptr);
             }
             return true;
         } else {

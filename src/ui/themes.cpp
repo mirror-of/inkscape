@@ -462,12 +462,44 @@ bool ThemeContext::isCurrentThemeDark(Gtk::Container *window)
         }
     }
     return dark;
-    
 }
 
+/**
+ * Load the highlight colours from the current theme. If the theme changes
+ * you can call this function again to refresh the list.
+ */
+std::vector<guint32> ThemeContext::getHighlightColors(Gtk::Window *window)
+{
+    std::vector<guint32> colors;
+    if (!window) return colors;
 
+    Glib::ustring name = "highlight-color-";
+
+    for (int i = 1; i <= 8; ++i) {
+        auto context = Gtk::StyleContext::create();
+
+        // The highlight colors will be attached to a GtkWidget
+        // but it isn't neccessary to use this in the .css file.
+        auto path = window->get_style_context()->get_path();
+        path.path_append_type(Gtk::Widget::get_type());
+        path.iter_add_class(-1, name + Glib::ustring::format(i));
+        context->set_path(path);
+
+        // Get the color from the new context
+        auto color = context->get_color();
+        guint32 rgba =
+            gint32(0xff * color.get_red()) << 24 |
+            gint32(0xff * color.get_green()) << 16 |
+            gint32(0xff * color.get_blue()) << 8 |
+            gint32(0xff * color.get_alpha());
+        colors.push_back(rgba);
+    }
+    return colors;
 }
-}
+
+} // UI
+} // Inkscape
+
 /*
   Local Variables:
   mode:c++

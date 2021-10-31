@@ -1027,19 +1027,45 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
     }
 }
 
+
+// A list of default highlight colours to use when one isn't set.
+std::vector<guint32> default_highlights;
+
 /**
  * Generate a highlight colour if one isn't set and return it.
  */
 guint32 SPGroup::highlight_color() const {
     // Parent must not be a layer (root, or similar) and this group must also be a layer
-    if (!_highlightColor && !SP_IS_LAYER(parent) && this->_layer_mode == SPGroup::LAYER) {
+    if (!_highlightColor && !SP_IS_LAYER(parent) && this->_layer_mode == SPGroup::LAYER && !default_highlights.empty()) {
         char const * oid = defaultLabel();
-        if (oid) {
+        if (oid && *oid) {
             // Color based on the last few bits of the label or object id.
-            return default_highlights[oid[(strlen(oid) - 1)] & 0x07];
+            return default_highlights[oid[(strlen(oid) - 1)] % default_highlights.size()];
         }
     }
     return SPItem::highlight_color();
+}
+
+void set_default_highlight_colors(std::vector<guint32> colors) {
+    std::swap(default_highlights, colors);
+}
+
+SPGroup* sp_item_get_layer(SPObject* item) {
+    if (auto group = dynamic_cast<SPGroup*>(item)) {
+        if (group->layerMode() == SPGroup::LAYER) {
+            return group;
+        }
+    }
+    return nullptr;
+}
+
+SPGroup* sp_item_get_group(SPObject* item) {
+    if (auto group = dynamic_cast<SPGroup*>(item)) {
+        if (group->layerMode() == SPGroup::GROUP) {
+            return group;
+        }
+    }
+    return nullptr;
 }
 
 /*
