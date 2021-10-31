@@ -812,6 +812,7 @@ ObjectsPanel::ObjectsPanel() :
     selection_color = _tree.get_style_context()->get_background_color(Gtk::STATE_FLAG_SELECTED);
     _tree_style = _tree.signal_style_updated().connect([&](){
         selection_color = _tree.get_style_context()->get_background_color(Gtk::STATE_FLAG_SELECTED);
+        if (!root_watcher) return;
         for (auto&& kv : root_watcher->child_watchers) {
             if (kv.second) {
                 kv.second->updateRowHighlight();
