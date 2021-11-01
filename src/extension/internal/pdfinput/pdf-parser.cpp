@@ -2203,7 +2203,11 @@ void PdfParser::opSetFont(Object args[], int /*numArgs*/)
   }
   if (printCommands) {
     printf("  font: tag=%s name='%s' %g\n",
+#if POPPLER_CHECK_VERSION(21,11,0)
+	   font->getTag().c_str(),
+#else
 	   font->getTag()->getCString(),
+#endif
 	   font->getName() ? font->getName()->getCString() : "???",
 	   args[1].getNum());
     fflush(stdout);
