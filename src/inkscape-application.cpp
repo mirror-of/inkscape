@@ -610,11 +610,9 @@ InkscapeApplication::InkscapeApplication()
     add_actions_path(this);                 // actions for Paths
     add_actions_selection_object(this);     // actions for selected objects
     add_actions_text(this);                 // actions for Text
+    add_actions_tutorial(this);             // acdtons for opening tutorials (with GUI only)
     add_actions_transform(this);            // actions for transforming selected objects
     add_actions_window(this);               // actions for windows
-    if (_with_gui) {
-        add_actions_tutorial(this);
-    }
 
 
     // ====================== Command Line ======================

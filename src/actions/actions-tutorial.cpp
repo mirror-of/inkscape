@@ -73,6 +73,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_tutorial =
 void
 add_actions_tutorial(InkscapeApplication* app)
 {
+    if (!app->gtk_app()) {
+        return;
+    }
+
     auto *gapp = app->gio_app();
 
     // clang-format off

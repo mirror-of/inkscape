@@ -620,9 +620,9 @@ add_cli_test(actions-object-set-property   INPUT_FILENAME areas.svg
                                            OUTPUT_FILENAME actions-object-set-property.svg
                                            TEST_SCRIPT match_regex.sh actions-object-set-property.svg "style=\"fill:gold\"")
 
-# object-simplify-path
-add_cli_test(actions-object-simplify-path  INPUT_FILENAME path.svg
-                                           PARAMETERS --actions=select-by-id:gates$<SEMICOLON>object-simplify-path$<SEMICOLON>export-id:gates$<SEMICOLON>export-id-only
+# path-simplify
+add_cli_test(actions-path-simplify         INPUT_FILENAME path.svg
+                                           PARAMETERS --actions=select-by-id:gates$<SEMICOLON>path-simplify$<SEMICOLON>export-id:gates$<SEMICOLON>export-id-only
                                            OUTPUT_FILENAME actions-object-simplify-path.png
                                            REFERENCE_FILENAME actions-object-simplify-path_expected.png)
 
