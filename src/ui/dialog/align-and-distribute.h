@@ -107,6 +107,7 @@ protected:
     UI::Widget::Frame _alignFrame, _distributeFrame, _rearrangeFrame, _removeOverlapFrame, _nodesFrame;
     Gtk::Grid _alignTable, _distributeTable, _rearrangeTable, _removeOverlapTable, _nodesTable;
     Gtk::Box _anchorBox;
+    Gtk::Box _groupBox;
     Gtk::Box _selgrpBox;
     Gtk::Box _alignBox;
     Gtk::Box _alignBoxNode;
@@ -115,6 +116,7 @@ protected:
     Gtk::Box _rearrangeTableBox;
     Gtk::Box _removeOverlapTableBox;
     Gtk::Box _nodesTableBox;
+    Gtk::Label _groupLabel;
     Gtk::Label _anchorLabel;
     Gtk::Label _anchorLabelNode;
     Gtk::ToggleButton _selgrp;

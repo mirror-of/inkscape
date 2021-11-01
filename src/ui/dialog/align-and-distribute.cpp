@@ -471,7 +471,6 @@ public:
         dialog.removeOverlap_table().set_column_spacing(3);
 
         removeOverlapXGap.set_digits(1);
-        removeOverlapXGap.set_size_request(60, -1);
         removeOverlapXGap.set_increments(1.0, 0);
         removeOverlapXGap.set_range(-1000.0, 1000.0);
         removeOverlapXGap.set_value(0);
@@ -481,7 +480,6 @@ public:
         removeOverlapXGapLabel.set_mnemonic_widget(removeOverlapXGap);
 
         removeOverlapYGap.set_digits(1);
-        removeOverlapYGap.set_size_request(60, -1);
         removeOverlapYGap.set_increments(1.0, 0);
         removeOverlapYGap.set_range(-1000.0, 1000.0);
         removeOverlapYGap.set_value(0);
@@ -922,9 +920,11 @@ AlignAndDistribute::AlignAndDistribute(DialogBase* dlg) : Gtk::Box(Gtk::ORIENTAT
     , _rearrangeTable()
     , _removeOverlapTable()
     , _nodesTable()
+    , _groupLabel(_("Selection as group"))
     , _anchorLabel(_("Relative to: "))
     , _anchorLabelNode(_("Relative to: "))
     , _anchorBox(Gtk::ORIENTATION_HORIZONTAL)
+    , _groupBox(Gtk::ORIENTATION_HORIZONTAL)
     , _selgrpBox(Gtk::ORIENTATION_HORIZONTAL)
     , _alignBox(Gtk::ORIENTATION_VERTICAL)
     , _alignBoxNode(Gtk::ORIENTATION_VERTICAL)
@@ -1090,9 +1090,13 @@ AlignAndDistribute::AlignAndDistribute(DialogBase* dlg) : Gtk::Box(Gtk::ORIENTAT
     _selgrp.set_relief(Gtk::RELIEF_NONE);
     _selgrp.set_tooltip_text(_("Treat selection as group"));
     _selgrp.signal_toggled().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_selgrp_toggled));
-    _anchorBox.pack_end(_selgrp, false, false);
+    
+    
     _anchorBox.pack_end(_combo, false, false);
     _anchorBox.pack_end(_anchorLabel, false, false);
+    
+    _groupBox.pack_end(_groupLabel, false, false);
+    _groupBox.pack_end(_selgrp, false, false);
 
     _anchorBoxNode.pack_end(_comboNode, false, false);
     _anchorBoxNode.pack_end(_anchorLabelNode, false, false);
@@ -1115,7 +1119,9 @@ AlignAndDistribute::AlignAndDistribute(DialogBase* dlg) : Gtk::Box(Gtk::ORIENTAT
     _nodesTableBox.pack_start(_nodesTable, false, false);
 
     _anchorBox.set_halign(Gtk::ALIGN_START);
+    _groupBox.set_halign(Gtk::ALIGN_START);
     _alignBox.pack_start(_anchorBox);
+    _alignBox.pack_start(_groupBox);
     _alignBox.pack_start(_selgrpBox);
     _alignBox.pack_start(_alignTableBox);
 
@@ -1125,6 +1131,7 @@ AlignAndDistribute::AlignAndDistribute(DialogBase* dlg) : Gtk::Box(Gtk::ORIENTAT
 
 
     _alignFrame.add(_alignBox);
+    _alignFrame.set_name("align");
     _distributeFrame.add(_distributeTableBox);
     _rearrangeFrame.add(_rearrangeTableBox);
     _removeOverlapFrame.add(_removeOverlapTableBox);

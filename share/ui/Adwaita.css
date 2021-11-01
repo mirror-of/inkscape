@@ -72,3 +72,17 @@ notebook notebook header image {
     padding:0px;
     margin:0px;
 }
+
+#AlignDistribute .toggle,
+#AlignDistribute .radio,
+#AlignDistribute button{
+    padding:4px;
+}
+
+#AlignDistribute spinbutton button{
+    padding:0px;
+}
+
+#AlignDistribute #align {
+    margin-top:-15px;
+}
