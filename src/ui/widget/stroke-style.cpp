@@ -145,6 +145,7 @@ StrokeStyle::StrokeStyle() :
     endMarkerConn(),
     _old_unit(nullptr)
 {
+    set_name("StrokeSelector");
     table = new Gtk::Grid();
     table->set_border_width(4);
     table->set_row_spacing(4);
@@ -313,6 +314,7 @@ StrokeStyle::StrokeStyle() :
     miterLimitAdj = new Glib::RefPtr<Gtk::Adjustment>(Gtk::Adjustment::create(4.0, 0.0, 100000.0, 0.1, 10.0, 0.0));
     miterLimitSpin = new Inkscape::UI::Widget::SpinButton(*miterLimitAdj, 0.1, 2);
     miterLimitSpin->set_tooltip_text(_("Maximum length of the miter (in units of stroke width)"));
+    miterLimitSpin->set_width_chars(6);
     miterLimitSpin->show();
     sp_dialog_defocus_on_enter_cpp(miterLimitSpin);
 

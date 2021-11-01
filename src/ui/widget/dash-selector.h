@@ -11,6 +11,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "ui/widget/spinbutton.h"
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
@@ -89,6 +90,7 @@ private:
     ScrollProtected<Gtk::ComboBox> _dash_combo;
     Gtk::CellRendererPixbuf _image_renderer;
     Glib::RefPtr<Gtk::Adjustment> _offset;
+    Inkscape::UI::Widget::SpinButton *_sb;
     static gchar const *const _prefs_path;
     int _preview_width;
     int _preview_height;

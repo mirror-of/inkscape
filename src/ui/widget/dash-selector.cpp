@@ -25,7 +25,6 @@
 #include "style.h"
 
 #include "ui/dialog-events.h"
-#include "ui/widget/spinbutton.h"
 
 namespace Inkscape {
 namespace UI {
@@ -58,12 +57,13 @@ DashSelector::DashSelector()
 
     _offset = Gtk::Adjustment::create(0.0, 0.0, 1000.0, 0.1, 1.0, 0.0);
     _offset->signal_value_changed().connect(sigc::mem_fun(*this, &DashSelector::offset_value_changed));
-    auto sb = new Inkscape::UI::Widget::SpinButton(_offset, 0.1, 2);
-    sb->set_tooltip_text(_("Pattern offset"));
-    sp_dialog_defocus_on_enter_cpp(sb);
-    sb->show();
+    _sb = new Inkscape::UI::Widget::SpinButton(_offset, 0.1, 2);
+    _sb->set_tooltip_text(_("Pattern offset"));
+    sp_dialog_defocus_on_enter_cpp(_sb);
+    _sb->set_width_chars(4);
+    _sb->show();
 
-    this->pack_start(*sb, false, false, 0);
+    this->pack_start(*_sb, false, false, 0);
 
     for (std::size_t i = 0; i < s_dashes.size(); ++i) {
         Gtk::TreeModel::Row row = *(_dash_store->append());
@@ -235,6 +235,11 @@ void DashSelector::on_selection()
 
 void DashSelector::offset_value_changed()
 {
+    Glib::ustring offset = _("Pattern offset");
+    offset += " (";
+    offset += Glib::ustring::format(_sb->get_value());
+    offset += ")";
+    _sb->set_tooltip_text(offset.c_str());
     changed_signal.emit();
 }
 
