@@ -980,7 +980,7 @@ bool ObjectsPanel::toggleLocked(GdkEventButton* event, Gtk::TreeModel::Row row)
                 DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
             }
         } else {
-            item->setHidden(!row[_model->_colInvisible]);
+            item->setLocked(!row[_model->_colLocked]);
         }
     }
     return true;
@@ -1367,6 +1367,7 @@ void ObjectsPanel::on_drag_end(const Glib::RefPtr<Gdk::DragContext> &context)
     auto selection = _tree.get_selection();
     selection->unselect_all();
     selection->set_mode(Gtk::SELECTION_NONE);
+    current_item = nullptr;
 }
 
 } //namespace Dialogs

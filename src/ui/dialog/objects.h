@@ -90,7 +90,7 @@ private:
     void setRootWatcher();
 
     ObjectWatcher* root_watcher;
-    SPItem *current_item;
+    SPItem *current_item = nullptr;
 
     Inkscape::auto_connection layer_changed;
     SPObject *_layer;
