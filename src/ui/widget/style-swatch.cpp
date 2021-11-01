@@ -116,9 +116,14 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
       _stroke(Gtk::ORIENTATION_HORIZONTAL)
 {
     set_name("StyleSwatch");
-    
-    _label[SS_FILL].set_markup(_("Fill:"));
-    _label[SS_STROKE].set_markup(_("Stroke:"));
+    Glib::ustring fill = "<small>";
+    fill += _("Fill:");
+    fill += "</small>";
+    Glib::ustring stroke = "<small>";
+    stroke += _("Stroke:");
+    stroke += "</small>";
+    _label[SS_FILL].set_markup(fill.c_str());
+    _label[SS_STROKE].set_markup(stroke.c_str());
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
         _label[i].set_halign(Gtk::ALIGN_START);
@@ -151,8 +156,8 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     _table->attach(_label[SS_STROKE], 0, 1, 1, 1);
     _table->attach(_place[SS_FILL],   1, 0, 1, 1);
     _table->attach(_stroke,           1, 1, 1, 1);
+    _table->attach(_empty_space,      2, 0, 1, 2);
     _table->attach(_opacity_place,    2, 0, 1, 2);
-
     _swatch.add(*_table);
     pack_start(_swatch, true, true, 0);
 
@@ -310,7 +315,10 @@ void StyleSwatch::setStyle(SPStyle *query)
 // Now query stroke_width
     if (has_stroke) {
         if (query->stroke_extensions.hairline) {
-            _stroke_width.set_markup(_("Hairline"));
+            Glib::ustring swidth = "<small>";
+            swidth += _("Hairline");
+            swidth += "</small>";
+            _stroke_width.set_markup(swidth.c_str());
             auto str = Glib::ustring::compose(_("Stroke width: %1"), _("Hairline"));
             _stroke_width_place.set_tooltip_text(str);
         } else {
@@ -323,7 +331,10 @@ void StyleSwatch::setStyle(SPStyle *query)
 
             {
                 gchar *str = g_strdup_printf(" %.3g", w);
-                _stroke_width.set_markup(str);
+                Glib::ustring swidth = "<small>";
+                swidth += str;
+                swidth += "</small>";
+                _stroke_width.set_markup(swidth.c_str());
                 g_free (str);
             }
             {
@@ -345,7 +356,10 @@ void StyleSwatch::setStyle(SPStyle *query)
         {
             gchar *str;
             str = g_strdup_printf(_("O: %2.0f"), (op*100.0));
-            _opacity_value.set_markup (str);
+            Glib::ustring opacity = "<small>";
+            opacity += str;
+            opacity += "</small>";
+            _opacity_value.set_markup (opacity.c_str());
             g_free (str);
         }
         {

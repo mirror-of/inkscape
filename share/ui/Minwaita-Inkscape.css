@@ -115,3 +115,7 @@ notebook notebook header image {
     -gtk-icon-transform:scale(0.75);
     margin:-1px 0 -1px -3px;
 }
+
+#AuxToolbox {
+  min-height:38px;
+}

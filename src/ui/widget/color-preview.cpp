@@ -77,7 +77,7 @@ ColorPreview::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
     x = 0;
     y = 0;
     width = allocation.get_width()/2.0;
-    height = allocation.get_height();
+    height = allocation.get_height() - 1;
 
     double radius = height / 7.5;
     double degrees = M_PI / 180.0;

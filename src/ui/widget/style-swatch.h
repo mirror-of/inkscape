@@ -72,6 +72,7 @@ private:
     Gtk::Grid *_table;
 
     Gtk::Label _label[2];
+    Gtk::Box _empty_space;
     Gtk::EventBox _place[2];
     Gtk::EventBox _opacity_place;
     Gtk::Label _value[2];
