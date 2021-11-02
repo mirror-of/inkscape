@@ -375,6 +375,27 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         }
         Gtk::StyleContext::add_provider_for_screen(screen, _styleprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+    // load small CSS snippet to style spinbuttons by removing excessive padding
+    if (!_spinbuttonprovider) {
+        _spinbuttonprovider = Gtk::CssProvider::create();
+        Glib::ustring style = get_filename(UIS, "spinbutton.css");
+        if (!style.empty()) {
+            try {
+                _spinbuttonprovider->load_from_path(style);
+            } catch (const Gtk::CssProviderError &ex) {
+                g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(), ex.what().c_str());
+            }
+        }
+    }
+    _spinbutton_observer = std::make_unique<NarrowSpinbuttonObserver>("/theme/narrowSpinButton", _spinbuttonprovider);
+    // note: ideally we should remove the callback during destruction, but ThemeContext is never deleted
+    prefs->addObserver(*_spinbutton_observer);
+    // establish default value, so both this setting here and checkbox in preferences are in sync
+    if (!prefs->getEntry(_spinbutton_observer->observed_path).isValid()) {
+        prefs->setBool(_spinbutton_observer->observed_path, true);
+    }
+    _spinbutton_observer->notify(prefs->getEntry(_spinbutton_observer->observed_path));
+
     Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
     gtkthemename += ".css";
     style = get_filename(UIS, gtkthemename.c_str(), false, true);
@@ -407,27 +428,6 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
     Gtk::StyleContext::add_provider_for_screen(screen, _colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-    // load small CSS snippet to style spinbuttons by removing excessive padding
-    if (!_spinbuttonprovider) {
-        _spinbuttonprovider = Gtk::CssProvider::create();
-        Glib::ustring style = get_filename(UIS, "spinbutton.css");
-        if (!style.empty()) {
-            try {
-                _spinbuttonprovider->load_from_path(style);
-            } catch (const Gtk::CssProviderError &ex) {
-                g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(), ex.what().c_str());
-            }
-        }
-    }
-    _spinbutton_observer = std::make_unique<NarrowSpinbuttonObserver>("/theme/narrowSpinButton", _spinbuttonprovider);
-    // note: ideally we should remove the callback during destruction, but ThemeContext is never deleted
-    prefs->addObserver(*_spinbutton_observer);
-    // establish default value, so both this setting here and checkbox in preferences are in sync
-    if (!prefs->getEntry(_spinbutton_observer->observed_path).isValid()) {
-        prefs->setBool(_spinbutton_observer->observed_path, true);
-    }
-    _spinbutton_observer->notify(prefs->getEntry(_spinbutton_observer->observed_path));
 }
 
 /**
