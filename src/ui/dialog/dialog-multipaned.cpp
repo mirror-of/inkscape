@@ -719,7 +719,7 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
         int canvas_index = -1;
         for (auto &child : children) {
             bool visible;
-            DialogMultipaned *paned = dynamic_cast<DialogMultipaned *>(child);
+
             Inkscape::UI::Widget::CanvasGrid *canvas = dynamic_cast<Inkscape::UI::Widget::CanvasGrid *>(child);
             if (canvas) {
                 canvas_index = index;

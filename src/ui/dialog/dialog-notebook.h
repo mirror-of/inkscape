@@ -25,6 +25,12 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+enum class TabsStatus {
+    NONE,
+    SINGLE,
+    ALL
+};
+
 class DialogContainer;
 class DialogWindow;
 
@@ -55,6 +61,7 @@ private:
     // Widgets
     DialogContainer *_container;
     Gtk::Menu _menu;
+    Gtk::Menu _menutabs;
     Gtk::Notebook _notebook;
     Gtk::RadioMenuItem _labels_auto_button;
 
@@ -62,8 +69,14 @@ private:
     bool _labels_auto;
     bool _label_visible;
     bool _detaching_duplicate;
+    bool _reload_context = true;
+    gint _prev_alloc_width = 0;
+    gint _icon_width = 0;
+    TabsStatus tabstatus = TabsStatus::SINGLE;
+    TabsStatus prev_tabstatus = TabsStatus::SINGLE;
     Gtk::Widget *_selected_page;
     std::vector<sigc::connection> _conn;
+    std::vector<sigc::connection> _connmenu;
     std::multimap<Gtk::Widget *, sigc::connection> _tab_connections;
 
     // Signal handlers - notebook
@@ -78,6 +91,8 @@ private:
     void on_page_switch(Gtk::Widget *page, guint page_number);
 
     // Helpers
+    void change_page(size_t pagenum);
+    void reload_tab_menu();
     void toggle_tab_labels_callback(bool show);
     void add_close_tab_callback(Gtk::Widget *page);
     void remove_close_tab_callback(Gtk::Widget *page);

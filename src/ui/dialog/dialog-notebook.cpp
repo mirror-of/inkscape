@@ -23,6 +23,7 @@
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-window.h"
+#include "ui/icon-loader.h"
 #include "verbs.h"
 
 namespace Inkscape {
@@ -60,12 +61,12 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     // ============= Notebook menu ==============
     _menu.set_title("NotebookOptions");
     _notebook.set_group_name("InkscapeDialogGroup");
-    _notebook.set_scrollable(true);
+    _notebook.set_scrollable(false);
 
     Gtk::MenuItem *new_menu_item = nullptr;
 
     // Close tab
-    new_menu_item = Gtk::manage(new Gtk::MenuItem(_("Close Tab")));
+    new_menu_item = Gtk::manage(new Gtk::MenuItem(_("Close Current Tab")));
     _conn.emplace_back(
         new_menu_item->signal_activate().connect(sigc::mem_fun(*this, &DialogNotebook::close_tab_callback)));
     _menu.append(*new_menu_item);
@@ -100,6 +101,13 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 
     _menu.show_all_children();
 
+    Gtk::MenuButton *menutabs = Gtk::manage(new Gtk::MenuButton());
+    Gtk::Image *info = Gtk::manage(sp_get_icon_image("open-menu-symbolic", Gtk::ICON_SIZE_MENU));
+    menutabs->set_image(*info);
+    menutabs->set_popup(_menu);
+    _notebook.set_action_widget(menutabs, Gtk::PACK_END);
+    menutabs->show();
+
     // =============== Signals ==================
     _conn.emplace_back(signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::on_size_allocate_scroll)));
     _conn.emplace_back(_notebook.signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::on_size_allocate_notebook)));
@@ -109,6 +117,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     _conn.emplace_back(_notebook.signal_switch_page().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_switch)));
 
     // ============= Finish setup ===============
+    _reload_context = true;
     add(_notebook);
     show_all();
 }
@@ -123,9 +132,10 @@ DialogNotebook::~DialogNotebook()
     }
 
     for_each(_conn.begin(), _conn.end(), [&](auto c) { c.disconnect(); });
+    for_each(_connmenu.begin(), _connmenu.end(), [&](auto c) { c.disconnect(); });
     for_each(_tab_connections.begin(), _tab_connections.end(), [&](auto it) { it.second.disconnect(); });
-
     _conn.clear();
+    _connmenu.clear();
     _tab_connections.clear();
 }
 
@@ -134,6 +144,7 @@ DialogNotebook::~DialogNotebook()
  */
 void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring label)
 {
+    _reload_context = true;
     page.set_vexpand();
 
     int page_number = _notebook.append_page(page, tab);
@@ -172,6 +183,7 @@ void DialogNotebook::move_page(Gtk::Widget &page)
     _notebook.set_tab_reorderable(page);
     _notebook.set_tab_detachable(page);
     _notebook.show_all();
+    _reload_context = true;
 }
 
 // ============ Notebook callbacks ==============
@@ -188,7 +200,7 @@ void DialogNotebook::close_tab_callback()
         _selected_page = nullptr;
     }
 
-    if (auto dialog = dynamic_cast<DialogBase*>(_notebook.get_nth_page(page_number))) {
+    if (dynamic_cast<DialogBase*>(_notebook.get_nth_page(page_number))) {
         // is this a dialog in a floating window?
         if (auto window = dynamic_cast<DialogWindow*>(_container->get_toplevel())) {
             // store state of floating dialog before it gets deleted
@@ -210,6 +222,7 @@ void DialogNotebook::close_tab_callback()
     // Update tab labels by comparing the sum of their widths to the allocation
     Gtk::Allocation allocation = get_allocation();
     on_size_allocate_scroll(allocation);
+    _reload_context = true;
 }
 
 /**
@@ -403,45 +416,42 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
  */
 void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
 {
-    // magic number
-    const int ICON_SIZE = 56; //50 size + margin
-
+    
+    // we unsetset scrollable happen when FULL mode on to prevent overflow with 
+    // container at full size that make a unmaximice desctop freeze 
+    _notebook.set_scrollable(false);
     if (!_labels_auto) {
         return;
     }
 
-    // hide tab labels under a size
-    int size = 0;
-    int min_width, nat_width;
-
+    int alloc_width = a.get_width();
+    int nat_width = 0;
+    int initial_width = 0;
+    int total_width = 0;
+    _notebook.get_preferred_width(initial_width, nat_width); // get current notebook allocation
     for (auto const &page : _notebook.get_children()) {
         Gtk::EventBox *cover = dynamic_cast<Gtk::EventBox *>(_notebook.get_tab_label(*page));
         if (!cover) {
             continue;
         }
-
-        Gtk::Box *box = dynamic_cast<Gtk::Box *>(cover->get_child());
-        if (!box) {
-            continue;
+        cover->show_all();
+    }
+    _notebook.get_preferred_width(total_width, nat_width); // get full notebook allocation (all open)
+    prev_tabstatus = tabstatus;
+    if (alloc_width == _prev_alloc_width) {
+        if (tabstatus != TabsStatus::NONE) {
+            tabstatus = (alloc_width <= total_width) ? TabsStatus::SINGLE : TabsStatus::ALL;
         }
-
-        Gtk::Label *label = dynamic_cast<Gtk::Label *>(box->get_children()[1]);
-        Gtk::Button *close = dynamic_cast<Gtk::Button *>(*box->get_children().rbegin());
-
-        if (label) {
-            label->show();
-            label->get_preferred_width(min_width, nat_width);
-            size += (ICON_SIZE + min_width + (label->get_margin_start() * 2));
-        }
-
-        if (close) {
-            close->show();
-            close->get_preferred_width(min_width, nat_width);
-            size += (min_width + close->get_margin_start() * 2);
+    } else {
+        if (alloc_width == initial_width) {
+            tabstatus = TabsStatus::NONE;
+        } else {
+            tabstatus = (alloc_width <= total_width) ? TabsStatus::SINGLE : TabsStatus::ALL;
         }
     }
-
-    (a.get_width() < size) ? toggle_tab_labels_callback(false) : toggle_tab_labels_callback(true);
+    _prev_alloc_width = alloc_width;
+    bool show = tabstatus == TabsStatus::ALL;
+    toggle_tab_labels_callback(show);
 }
 
 /**
@@ -469,7 +479,8 @@ bool DialogNotebook::on_tab_click_event(GdkEventButton *event, Gtk::Widget *page
             close_tab_callback();
         } else if (event->button == 3) { // Show menu
             _selected_page = page;
-            _menu.popup_at_pointer((GdkEvent *)event);
+            reload_tab_menu();
+            _menutabs.popup_at_pointer((GdkEvent *)event);
         }
     }
 
@@ -484,6 +495,74 @@ void DialogNotebook::on_close_button_click_event(Gtk::Widget *page)
 
 // ================== Helpers ===================
 
+/**
+ * Reload tab menu
+ */
+void DialogNotebook::reload_tab_menu()
+{
+    if (_reload_context) {
+        _reload_context = false;
+        Gtk::MenuItem* menuitem = nullptr;
+        for_each(_connmenu.begin(), _connmenu.end(), [&](auto c) { c.disconnect(); });
+        _connmenu.clear();
+        for (auto widget : _menutabs.get_children()) {
+            delete widget;
+        }
+        auto prefs = Inkscape::Preferences::get();
+        bool symbolic = false;
+        if (prefs->getBool("/theme/symbolicIcons", false)) {
+            symbolic = true;
+        }
+
+        for (auto const &page : _notebook.get_children()) {
+            Gtk::EventBox *cover = dynamic_cast<Gtk::EventBox *>(_notebook.get_tab_label(*page));
+            if (!cover) {
+                continue;
+            }
+
+            Gtk::Box *box = dynamic_cast<Gtk::Box *>(cover->get_child());
+            
+            if (!box) {
+                continue;
+            }
+            auto childs = box->get_children();
+            if (childs.size() < 2) {
+                continue;
+            }
+            // Create a box to hold icon and label as Gtk::MenuItem derives from GtkBin and can
+            // only hold one child
+            Gtk::Box *boxmenu = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+            boxmenu->set_halign(Gtk::ALIGN_START);
+            menuitem = Gtk::manage(new Gtk::MenuItem());
+            menuitem->add(*boxmenu);
+
+            Gtk::Label *label = dynamic_cast<Gtk::Label *>(childs[1]);
+            Gtk::Label *labelto = Gtk::manage(new Gtk::Label(label->get_text()));
+            
+            Gtk::Image *icon = dynamic_cast<Gtk::Image *>(childs[0]);
+            if (icon) {
+                int min_width, nat_width;
+                icon->get_preferred_width(min_width, nat_width);
+                _icon_width = min_width;
+                auto name = icon->get_icon_name();
+                if (!name.empty()) {
+                    if (symbolic && name.find("-symbolic") == Glib::ustring::npos) {
+                        name += Glib::ustring("-symbolic");
+                    }
+                    Gtk::Image *iconend  = sp_get_icon_image(name, Gtk::ICON_SIZE_MENU);
+                    boxmenu->pack_start(*iconend, false, false, 0);
+                }
+            }
+            boxmenu->pack_start(*labelto, true,  true,  0);
+            size_t pagenum = _notebook.page_num(*page);
+            _connmenu.emplace_back(
+                menuitem->signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &DialogNotebook::change_page),pagenum)));
+            
+            _menutabs.append(*Gtk::manage(menuitem));
+        }
+    }
+    _menutabs.show_all();
+}
 /**
  * Callback to toggle all tab labels to the selected state.
  * @param show: whether you want the labels to show or not
@@ -504,12 +583,19 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
 
         Gtk::Label *label = dynamic_cast<Gtk::Label *>(box->get_children()[1]);
         Gtk::Button *close = dynamic_cast<Gtk::Button *>(*box->get_children().rbegin());
-
         int n = _notebook.get_current_page();
-        if (close && label && page != _notebook.get_nth_page(n)) {
-            show ? close->show() : close->hide();
-            show ? label->show() : label->hide();
+        if (close && label) {
+            if (page != _notebook.get_nth_page(n)) {
+                show ? close->show() : close->hide();
+                show ? label->show() : label->hide();
+            } else if (tabstatus == TabsStatus::NONE) {
+                close->hide();
+                label->hide();
+            }
         }
+    }
+    if (show) {
+        _notebook.set_scrollable(true);
     }
 }
 
@@ -517,12 +603,6 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 {
     if (_label_visible)
         return;
-
-    const int ICON_SIZE = 56;
-
-    int req_size = 0;
-    int min, nat;
-    auto a = _notebook.get_allocation();
 
     for (auto const &page : _notebook.get_children()) {
         Gtk::EventBox *cover = dynamic_cast<Gtk::EventBox *>(_notebook.get_tab_label(*page));
@@ -536,17 +616,20 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
             Gtk::Button *close = dynamic_cast<Gtk::Button *>(*box->get_children().rbegin());
 
             if (label) {
-                label->show();
-                label->get_preferred_width(min, nat);
-                req_size += (ICON_SIZE + min + (label->get_margin_start() * 2));
+                if (tabstatus == TabsStatus::NONE) {
+                    label->hide();
+                } else {
+                    label->show();
+                }
             }
 
             if (close) {
-                close->show();
-                close->get_preferred_width(min, nat);
-                req_size += (min + close->get_margin_start() * 2);
+                if (tabstatus == TabsStatus::NONE) {
+                    close->hide();
+                } else {
+                    close->show();
+                }
             }
-
             continue;
         }
 
@@ -558,17 +641,18 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
         Gtk::Label *label = dynamic_cast<Gtk::Label *>(box->get_children()[1]);
         Gtk::Button *close = dynamic_cast<Gtk::Button *>(*box->get_children().rbegin());
 
-        req_size += ICON_SIZE;
 
         close->hide();
         label->hide();
     }
+}
 
-    // TODO: make this dynamic
-    // the requested size needs to be incremented by some amount to get rid of
-    // the arrows
-    req_size += 40;
-    _notebook.set_size_request(req_size);
+/**
+ * Helper method that change the page
+ */
+void DialogNotebook::change_page(size_t pagenum)
+{
+    _notebook.set_current_page(pagenum);
 }
 
 /**
