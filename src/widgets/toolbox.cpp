@@ -352,11 +352,36 @@ GtkWidget *ToolboxFactory::createAuxToolbox()
 
 GtkWidget *ToolboxFactory::createCommandsToolbox()
 {
-    auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(tb, "CommandsToolbox");
-    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
+    auto tb = new Gtk::Box();
+    tb->set_name("CommandsToolbox");
+    tb->set_orientation(Gtk::ORIENTATION_VERTICAL);
+    tb->set_homogeneous(false);
 
-    return toolboxNewCommon( tb, BAR_COMMANDS, GTK_POS_LEFT );
+    Glib::ustring commands_toolbar_builder_file = get_filename(UIS, "toolbar-commands.ui");
+    auto builder = Gtk::Builder::create();
+    try
+    {
+        builder->add_from_file(commands_toolbar_builder_file);
+    }
+    catch (const Glib::Error& ex)
+    {
+        std::cerr << "ToolboxFactor::createCommandsToolbox: " << commands_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
+    }
+
+    Gtk::Toolbar* toolbar = nullptr;
+    builder->get_widget("commands-toolbar", toolbar);
+    if (!toolbar) {
+        std::cerr << "ToolboxFactory: Failed to load commands toolbar!" << std::endl;
+    } else {
+        tb->pack_start(*toolbar, false, false);
+
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if ( prefs->getBool("/toolbox/icononly", true) ) {
+            toolbar->set_toolbar_style( Gtk::TOOLBAR_ICONS );
+        }
+    }
+
+    return toolboxNewCommon(GTK_WIDGET(tb->gobj()), BAR_COMMANDS, GTK_POS_LEFT);
 }
 
 int show_popover(void* button) {
@@ -485,8 +510,8 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
             break;
 
         case BAR_COMMANDS:
-            setup_func = setup_commands_toolbox;
-            update_func = update_commands_toolbox;
+            setup_func = nullptr; // setup_commands_toolbox;
+            update_func = nullptr; // update_commands_toolbox;
             break;
 
         case BAR_SNAP:
