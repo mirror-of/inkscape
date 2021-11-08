@@ -514,11 +514,11 @@ public:
         : AttrWidget(SPAttr::VALUES),
           // TRANSLATORS: this dialog is accessible via menu Filters - Filter editor
           _matrix(SPAttr::VALUES, _("This matrix determines a linear transform on color space. Each line affects one of the color components. Each column determines how much of each color component from the input is passed to the output. The last column does not depend on input colors, so can be used to adjust a constant component value.")),
-          _saturation("", 0, 0, 1, 0.1, 0.01, 2, SPAttr::VALUES),
+          _saturation("", 1, 0, 1, 0.1, 0.01, 2, SPAttr::VALUES),
           _angle("", 0, 0, 360, 0.1, 0.01, 1, SPAttr::VALUES),
           _label(C_("Label", "None"), Gtk::ALIGN_START),
           _use_stored(false),
-          _saturation_store(0),
+          _saturation_store(1.0),
           _angle_store(0)
     {
         _matrix.signal_attr_changed().connect(signal_attr_changed().make_slot());
@@ -537,6 +537,7 @@ public:
 
     void set_from_attribute(SPObject* o) override
     {
+        std::string values_string;
         if(SP_IS_FECOLORMATRIX(o)) {
             SPFeColorMatrix* col = SP_FECOLORMATRIX(o);
             remove();
@@ -547,6 +548,7 @@ public:
                         _saturation.set_value(_saturation_store);
                     else
                         _saturation.set_from_attribute(o);
+                    values_string = Glib::Ascii::dtostr(_saturation.get_value());
                     break;
                 case COLORMATRIX_HUEROTATE:
                     add(_angle);
@@ -554,6 +556,7 @@ public:
                         _angle.set_value(_angle_store);
                     else
                         _angle.set_from_attribute(o);
+                    values_string = Glib::Ascii::dtostr(_angle.get_value());
                     break;
                 case COLORMATRIX_LUMINANCETOALPHA:
                     add(_label);
@@ -565,8 +568,23 @@ public:
                         _matrix.set_values(_matrix_store);
                     else
                         _matrix.set_from_attribute(o);
+                    for (auto v : _matrix.get_values()) {
+                        values_string += Glib::Ascii::dtostr(v) + " ";
+                    }
+                    values_string.pop_back();
                     break;
             }
+
+            // The filter effects widgets derived from AttrWidget automatically update the
+            // attribute on use. In this case, however, we must also update "values" whenever
+            // "type" is changed.
+            auto repr = o->getRepr();
+            if (values_string.empty()) {
+                repr->removeAttribute("values");
+            } else {
+                repr->setAttribute("values", values_string);
+            }
+
             _use_stored = true;
         }
     }

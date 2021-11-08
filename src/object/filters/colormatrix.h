@@ -21,12 +21,15 @@
 
 class SPFeColorMatrix : public SPFilterPrimitive {
 public:
-	SPFeColorMatrix();
-	~SPFeColorMatrix() override;
+    SPFeColorMatrix();
+    ~SPFeColorMatrix() override;
 
-    Inkscape::Filters::FilterColorMatrixType type;
-    gdouble value;
-    std::vector<gdouble> values;
+    Inkscape::Filters::FilterColorMatrixType type = Inkscape::Filters::COLORMATRIX_MATRIX;
+    double value = 0;
+    std::vector<double> values;
+
+private:
+    bool value_set = false;
 
 protected:
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;

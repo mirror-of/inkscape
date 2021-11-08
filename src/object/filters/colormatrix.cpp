@@ -26,7 +26,7 @@
 #include "display/nr-filter.h"
 
 SPFeColorMatrix::SPFeColorMatrix() 
-    : SPFilterPrimitive(), type(Inkscape::Filters::COLORMATRIX_MATRIX), value(0)
+    : SPFilterPrimitive()
 {
 }
 
@@ -88,15 +88,43 @@ void SPFeColorMatrix::set(SPAttr key, gchar const *str) {
 
             if (this->type != read_type){
                 this->type = read_type;
+
+                // Set the default value of "value" (this may happen if the attribute "Type" is changed interactively).
+                if (!value_set) {
+                    value = 0;
+                    if (type == Inkscape::Filters::COLORMATRIX_SATURATE) {
+                        value = 1;
+                    }
+                }
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
+
         case SPAttr::VALUES:
-            if (str){
+            if (str) {
                 this->values = helperfns_read_vector(str);
                 this->value = helperfns_read_number(str, HELPERFNS_NO_WARNING);
-                this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+                value_set = true;
+            } else {
+                // Set defaults
+                switch (type) {
+                    case Inkscape::Filters::COLORMATRIX_MATRIX:
+                        values = {1, 0, 0, 0, 0,  0, 1, 0, 0, 0,  0, 0, 1, 0, 0,  0, 0, 0, 1, 0 };
+                        break;
+                    case Inkscape::Filters::COLORMATRIX_SATURATE:
+                        // Default value for saturate is 1.0 ("values" not used).
+                        value = 1.0;
+                        break;
+                    case Inkscape::Filters::COLORMATRIX_HUEROTATE:
+                        value = 0.0;
+                        break;
+                    case Inkscape::Filters::COLORMATRIX_LUMINANCETOALPHA:
+                        // value, values not used.
+                        break;
+                }
+                value_set = false;
             }
+            this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
         	SPFilterPrimitive::set(key, str);
