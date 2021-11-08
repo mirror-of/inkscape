@@ -102,8 +102,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     // =================== Actions ===================
     // After canvas has been constructed.. move to canvas proper.
-    add_actions_canvas_transform(this);     // Actions to transform canvas view.
     add_actions_canvas_mode(this);          // Actions to change canvas display mode.
+    add_actions_canvas_snapping(this);      // Actions to toggle on/off snapping modes.
+    add_actions_canvas_transform(this);     // Actions to transform canvas view.
     add_actions_dialogs(this);              // Actions to open dialogs.
     add_actions_edit_window(this);          // Actions to edit.
     add_actions_file_window(this);          // Actions for file actions which are desktop dependent.
