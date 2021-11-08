@@ -368,7 +368,7 @@ int show_popover(void* button) {
 class SnapBar : public Gtk::Box {
 public:
     SnapBar() = default;
-    virtual ~SnapBar() = default;
+    ~SnapBar() override = default;
 
     Inkscape::PrefObserver _observer;
 };
