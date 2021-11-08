@@ -481,7 +481,7 @@ void Box3dTool::drag(guint /*state*/) {
         }
 
         // Create object
-        SPBox3D *box3d = SPBox3D::createBox3D((SPItem*)desktop->currentLayer());
+        SPBox3D *box3d = SPBox3D::createBox3D(currentLayer());
 
         // Set style
         desktop->applyCurrentOrToolStyle(box3d, "/tools/shapes/3dbox", false);

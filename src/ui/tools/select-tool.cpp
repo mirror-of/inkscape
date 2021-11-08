@@ -30,6 +30,7 @@
 #include "document-undo.h"
 #include "document.h"
 #include "include/macros.h"
+#include "layer-manager.h"
 #include "message-stack.h"
 #include "rubberband.h"
 #include "selection-chemistry.h"
@@ -231,8 +232,7 @@ sp_select_context_up_one_layer(SPDesktop *desktop)
      * document), we might consider further restricting the below to disallow
      * leaving a layer to go to a non-layer.
      */
-    SPObject *const current_layer = desktop->currentLayer();
-    if (current_layer) {
+    if (SPObject *const current_layer = desktop->layerManager().currentLayer()) {
         SPObject *const parent = current_layer->parent;
         SPGroup *current_group = dynamic_cast<SPGroup *>(current_layer);
         if ( parent
@@ -240,7 +240,7 @@ sp_select_context_up_one_layer(SPDesktop *desktop)
                   || !( current_group
                         && ( SPGroup::LAYER == current_group->layerMode() ) ) ) )
         {
-            desktop->setCurrentLayer(parent);
+            desktop->layerManager().setCurrentLayer(parent);
             if (current_group && (SPGroup::LAYER != current_group->layerMode())) {
                 desktop->getSelection()->set(current_layer);
             }
@@ -469,7 +469,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     SPItem *clicked_item = selection->items().front();
 
                     if (dynamic_cast<SPGroup *>(clicked_item) && !dynamic_cast<SPBox3D *>(clicked_item)) { // enter group if it's not a 3D box
-                        desktop->setCurrentLayer(clicked_item);
+                        desktop->layerManager().setCurrentLayer(clicked_item);
                         desktop->getSelection()->clear();
                         this->dragging = false;
                         sp_event_context_discard_delayed_snap_event(this);
@@ -1080,7 +1080,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                             SPItem *clicked_item = selection->singleItem();
                             SPGroup *clickedGroup = dynamic_cast<SPGroup *>(clicked_item);
                             if ( (clickedGroup && (clickedGroup->layerMode() != SPGroup::LAYER)) || dynamic_cast<SPBox3D *>(clicked_item)) { // enter group or a 3D box
-                                desktop->setCurrentLayer(clicked_item);
+                                desktop->layerManager().setCurrentLayer(clicked_item);
                                 desktop->getSelection()->clear();
                             } else {
                                 this->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selected object is not a group. Cannot enter."));

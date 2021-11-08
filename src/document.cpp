@@ -68,6 +68,7 @@
 #include "3rdparty/libcroco/cr-selector.h"
 
 #include "io/dir-util.h"
+#include "layer-manager.h"
 #include "live_effects/lpeobject.h"
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
@@ -1597,17 +1598,15 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     }
     SPObject *current_layer = nullptr;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::LayerModel *layer_model = nullptr;
     if(desktop){
-        current_layer = desktop->currentLayer();
-        layer_model = desktop->layers;
+        current_layer = desktop->layerManager().currentLayer();
     }
     size_t item_counter = 0;
     for(int i = points.size()-1;i>=0; i--) {
         std::vector<SPItem*> items = find_items_at_point(&_node_cache, key, points[i], topmost_only);
         for (SPItem *item : items) {
             if (item && result.end()==find(result.begin(), result.end(), item))
-                if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){
+                if(all_layers || (desktop && desktop->layerManager().layerForObject(item) == current_layer)){
                     result.push_back(item);
                     item_counter++;
                     //limit 0 = no limit

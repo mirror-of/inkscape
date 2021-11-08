@@ -40,7 +40,6 @@
 #include "gradient-drag.h"
 #include "inkscape.h"
 #include "inkscape-version.h"
-#include "layer-fns.h"
 #include "layer-manager.h"
 #include "message-stack.h"
 #include "path-chemistry.h"
@@ -1229,23 +1228,24 @@ void LayerVerb::perform(SPAction *action, void *data)
     SPDesktop *dt = sp_action_get_desktop(action);
     size_t verb = reinterpret_cast<std::size_t>(data);
 
-    if ( !dt->currentLayer() ) {
+    auto layer = dt->layerManager().currentLayer();
+    auto root = dt->layerManager().currentRoot();
+    if (!layer)
         return;
-    }
 
     switch (verb) {
         case SP_VERB_LAYER_NEW: {
-            Inkscape::UI::Dialogs::LayerPropertiesDialog::showCreate(dt, dt->currentLayer());
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showCreate(dt, layer);
             break;
         }
         case SP_VERB_LAYER_RENAME: {
-            Inkscape::UI::Dialogs::LayerPropertiesDialog::showRename(dt, dt->currentLayer());
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showRename(dt, layer);
             break;
         }
         case SP_VERB_LAYER_NEXT: {
-            SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
+            SPObject *next=Inkscape::next_layer(root, layer);
             if (next) {
-                dt->setCurrentLayer(next);
+                dt->layerManager().setCurrentLayer(next);
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_NEXT,
                                    _("Switch to next layer"));
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to next layer."));
@@ -1255,9 +1255,9 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_PREV: {
-            SPObject *prev=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
+            SPObject *prev=Inkscape::previous_layer(root, layer);
             if (prev) {
-                dt->setCurrentLayer(prev);
+                dt->layerManager().setCurrentLayer(prev);
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_PREV,
                                    _("Switch to previous layer"));
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to previous layer."));
@@ -1275,21 +1275,19 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_MOVE_TO: {
-            Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(dt, dt->currentLayer());
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(dt, layer);
             break;
         }
         case SP_VERB_LAYER_TO_TOP:
         case SP_VERB_LAYER_TO_BOTTOM:
         case SP_VERB_LAYER_RAISE:
         case SP_VERB_LAYER_LOWER: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if ( layer == root ) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
                 return;
             }
 
-            SPItem *layer=SP_ITEM(dt->currentLayer());
             g_return_if_fail(layer != nullptr);
-
             SPObject *old_pos = layer->getNext();
 
             switch (verb) {
@@ -1340,7 +1338,7 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_DUPLICATE: {
-            if ( dt->currentLayer() != dt->currentRoot() ) {
+            if ( layer != root ) {
 
                 dt->selection->duplicate(true, true);
 
@@ -1355,29 +1353,29 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_DELETE: {
-            if ( dt->currentLayer() != dt->currentRoot() ) {
+            if ( layer != root ) {
                 dt->getSelection()->clear();
-                SPObject *old_layer = dt->currentLayer();
+                auto old_layer = layer;
                 SPObject *old_parent = old_layer->parent;
                 SPObject *old_parent_parent = (old_parent != nullptr) ? old_parent->parent : nullptr;
 
-                SPObject *survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
+                SPObject *survivor = Inkscape::previous_layer(root, old_layer);
                 if (survivor != nullptr && survivor->parent == old_layer) {
                     while (survivor != nullptr &&
                            survivor->parent != old_parent &&
                            survivor->parent != old_parent_parent)
                     {
-                        survivor = Inkscape::previous_layer(dt->currentRoot(), survivor);
+                        survivor = Inkscape::previous_layer(root, survivor);
                     }
                 }
 
                 if (survivor == nullptr || (survivor->parent != old_parent && survivor->parent != old_layer)) {
-                    survivor = Inkscape::next_layer(dt->currentRoot(), old_layer);
+                    survivor = Inkscape::next_layer(root, old_layer);
                     while (survivor != nullptr &&
                            survivor != old_parent &&
                            survivor->parent != old_parent)
                     {
-                        survivor = Inkscape::next_layer(dt->currentRoot(), survivor);
+                        survivor = Inkscape::next_layer(root, survivor);
                     }
                 }
 
@@ -1389,7 +1387,7 @@ void LayerVerb::perform(SPAction *action, void *data)
                 old_layer->deleteObject();
 
                 if (survivor) {
-                    dt->setCurrentLayer(survivor);
+                    dt->layerManager().setCurrentLayer(survivor);
                 }
 
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_DELETE,
@@ -1403,52 +1401,52 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_SOLO: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if ( layer == root ) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
-                dt->toggleLayerSolo( dt->currentLayer() );
+                dt->layerManager().toggleLayerSolo( layer );
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
             }
             break;
         }
         case SP_VERB_LAYER_SHOW_ALL: {
-            dt->toggleHideAllLayers( false );
+            dt->layerManager().toggleHideAllLayers( false );
             DocumentUndo::maybeDone(dt->getDocument(), "layer:showall", SP_VERB_LAYER_SHOW_ALL, _("Show all layers"));
             break;
         }
         case SP_VERB_LAYER_HIDE_ALL: {
-            dt->toggleHideAllLayers( true );
+            dt->layerManager().toggleHideAllLayers( true );
             DocumentUndo::maybeDone(dt->getDocument(), "layer:hideall", SP_VERB_LAYER_HIDE_ALL, _("Hide all layers"));
             break;
         }
         case SP_VERB_LAYER_LOCK_ALL: {
-            dt->toggleLockAllLayers( true );
+            dt->layerManager().toggleLockAllLayers( true );
             DocumentUndo::maybeDone(dt->getDocument(), "layer:lockall", SP_VERB_LAYER_LOCK_ALL, _("Lock all layers"));
             break;
         }
         case SP_VERB_LAYER_LOCK_OTHERS: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if ( layer == root ) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
-                dt->toggleLockOtherLayers( dt->currentLayer() );
+                dt->layerManager().toggleLockOtherLayers( layer );
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
             }
             break;
         }
         case SP_VERB_LAYER_UNLOCK_ALL: {
-            dt->toggleLockAllLayers( false );
+            dt->layerManager().toggleLockAllLayers( false );
             DocumentUndo::maybeDone(dt->getDocument(), "layer:unlockall", SP_VERB_LAYER_UNLOCK_ALL, _("Unlock all layers"));
             break;
         }
         case SP_VERB_LAYER_TOGGLE_LOCK:
         case SP_VERB_LAYER_TOGGLE_HIDE: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if ( layer == root ) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
                 if ( verb == SP_VERB_LAYER_TOGGLE_HIDE ){
-                    SP_ITEM(dt->currentLayer())->setHidden(!SP_ITEM(dt->currentLayer())->isHidden());
+                    layer->setHidden(!layer->isHidden());
                 } else {
-                    SP_ITEM(dt->currentLayer())->setLocked(!SP_ITEM(dt->currentLayer())->isLocked());
+                    layer->setLocked(!layer->isLocked());
                 }
 
             }

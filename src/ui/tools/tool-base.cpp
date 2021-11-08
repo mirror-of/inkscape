@@ -24,6 +24,7 @@
 #include "desktop.h"
 #include "file.h"
 #include "gradient-drag.h"
+#include "layer-manager.h"
 #include "message-context.h"
 #include "rubberband.h"
 #include "selcue.h"
@@ -130,6 +131,11 @@ void ToolBase::finish() {
 void ToolBase::set(const Inkscape::Preferences::Entry& /*val*/) {
 }
 
+
+SPGroup *ToolBase::currentLayer() const
+{
+    return desktop->layerManager().currentLayer();
+}
 
 /**
  * Recreates and draws cursor on desktop related to ToolBase.

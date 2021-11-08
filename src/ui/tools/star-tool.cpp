@@ -346,10 +346,10 @@ void StarTool::drag(Geom::Point p, guint state)
         // Set style
         sp_desktop_apply_style_tool(desktop, repr, "/tools/shapes/star", false);
 
-        this->star = SP_STAR(desktop->currentLayer()->appendChildRepr(repr));
+        this->star = SP_STAR(currentLayer()->appendChildRepr(repr));
 
         Inkscape::GC::release(repr);
-        this->star->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        this->star->transform = currentLayer()->i2doc_affine().inverse();
         this->star->updateRepr();
 
         forced_redraws_start(5);

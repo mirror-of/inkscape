@@ -21,6 +21,7 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
+#include "layer-manager.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
 #include "text-editing.h"
@@ -843,7 +844,7 @@ bool Find::item_type_match (SPItem *item)
         return (all || check_texts.get_active());
 
     } else if (dynamic_cast<SPGroup *>(item) &&
-               !getDesktop()->isLayer(item)) { // never select layers!
+               !getDesktop()->layerManager().isLayer(item)) { // never select layers!
         return (all || check_groups.get_active());
 
     } else if (dynamic_cast<SPUse *>(item)) {
@@ -894,7 +895,7 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
     auto desktop = getDesktop();
     for (auto& child: r->children) {
         SPItem *item = dynamic_cast<SPItem *>(&child);
-        if (item && !child.cloned && !desktop->isLayer(item)) {
+        if (item && !child.cloned && !desktop->layerManager().isLayer(item)) {
             if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
                 l.insert(l.begin(),(SPItem*)&child);
             }
@@ -912,7 +913,7 @@ std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::ve
         SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != nullptr);
-        if (item && !item->cloned && !desktop->isLayer(item)) {
+        if (item && !item->cloned && !desktop->layerManager().isLayer(item)) {
             if (!ancestor || ancestor->isAncestorOf(item)) {
                 if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
                     l.push_back(*i);
@@ -966,13 +967,13 @@ void Find::onAction()
     std::vector<SPItem*> l;
     if (check_scope_selection.get_active()) {
         if (check_scope_layer.get_active()) {
-            l = all_selection_items (desktop->selection, l, desktop->currentLayer(), hidden, locked);
+            l = all_selection_items (desktop->selection, l, desktop->layerManager().currentLayer(), hidden, locked);
         } else {
             l = all_selection_items (desktop->selection, l, nullptr, hidden, locked);
         }
     } else {
         if (check_scope_layer.get_active()) {
-            l = all_items (desktop->currentLayer(), l, hidden, locked);
+            l = all_items (desktop->layerManager().currentLayer(), l, hidden, locked);
         } else {
             l = all_items(desktop->getDocument()->getRoot(), l, hidden, locked);
         }

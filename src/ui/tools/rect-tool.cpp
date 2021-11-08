@@ -360,10 +360,10 @@ void RectTool::drag(Geom::Point const pt, guint state) {
         // Set style
         sp_desktop_apply_style_tool (desktop, repr, "/tools/shapes/rect", false);
 
-        this->rect = SP_RECT(desktop->currentLayer()->appendChildRepr(repr));
+        this->rect = SP_RECT(currentLayer()->appendChildRepr(repr));
         Inkscape::GC::release(repr);
 
-        this->rect->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        this->rect->transform = currentLayer()->i2doc_affine().inverse();
         this->rect->updateRepr();
 
         forced_redraws_start(5);

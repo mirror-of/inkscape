@@ -28,7 +28,6 @@
 
 
 namespace Inkscape {
-class LayerModel;
 namespace XML {
 class Node;
 }
@@ -40,7 +39,7 @@ namespace Inkscape {
  * The set of selected SPObjects for a given document and layer model.
  *
  * This class represents the set of selected SPItems for a given
- * document (referenced in LayerModel).
+ * document.
  *
  * An SPObject and its parent cannot be simultaneously selected;
  * selecting an SPObjects has the side-effect of unselecting any of
@@ -67,21 +66,13 @@ public:
      * @param layers the layer model (for the SPDesktop, if GUI)
      * @param desktop the desktop associated with the layer model, or NULL if in console mode
      */
-    Selection(LayerModel *layers, SPDesktop *desktop);
+    Selection(SPDesktop *desktop);
     ~Selection() override;
 
     /** no copy. */
     Selection(Selection const &) = delete;
     /** no assign. */
     void operator=(Selection const &) = delete;
-
-    /**
-     * Returns the layer model the selection is bound to (works in console or GUI mode)
-     *
-     * @return the layer model the selection is bound to, which is the same as the desktop
-     * layer model for GUI mode
-     */
-    LayerModel *layers() { return _layers; }
 
     /**
      * Returns active layer for selection (currentLayer or its parent).
@@ -242,7 +233,6 @@ private:
     /** Releases an active layer object that is being removed. */
     void _releaseContext(SPObject *obj);
 
-    LayerModel *_layers;
     SPObject* _selection_context;
     unsigned int _flags;
     unsigned int _idle;

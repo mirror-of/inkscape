@@ -42,9 +42,7 @@ set(inkscape_SRC
   id-clash.cpp
   inkscape.cpp
   inkscape-version-info.cpp
-  layer-fns.cpp
   layer-manager.cpp
-  layer-model.cpp
   line-geometry.cpp
   line-snapper.cpp
   media.cpp
@@ -137,9 +135,7 @@ set(inkscape_SRC
   inkscape-version.h
   inkscape-version-info.h
   inkscape.h
-  layer-fns.h
   layer-manager.h
-  layer-model.h
   line-geometry.h
   line-snapper.h
   media.h

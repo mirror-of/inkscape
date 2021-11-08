@@ -24,7 +24,8 @@
 #include <gtkmm/treestore.h>
 #include <gtkmm/scrolledwindow.h>
 
-#include "layer-fns.h"
+#include "layer-manager.h"
+
 #include "ui/widget/layer-selector.h"
 
 class SPDesktop;

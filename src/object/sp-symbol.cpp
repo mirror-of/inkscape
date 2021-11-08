@@ -24,6 +24,7 @@
 #include "document.h"
 #include "inkscape.h"
 #include "desktop.h"
+#include "layer-manager.h"
 
 SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 }
@@ -78,7 +79,7 @@ void SPSymbol::unSymbol()
     //TODO: Better handle if no desktop, currently go to defs without it
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if(desktop && desktop->doc() == doc) {
-        desktop->currentLayer()->getRepr()->appendChild(group);
+        desktop->layerManager().currentLayer()->getRepr()->appendChild(group);
     } else {
         parent->getRepr()->appendChild(group);
     }

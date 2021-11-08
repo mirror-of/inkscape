@@ -43,7 +43,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "layer-manager.h"
-#include "layer-model.h"
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "rubberband.h"
@@ -644,7 +643,7 @@ void EraserTool::set_to_accumulated() {
 
             this->repr = repr;
         }
-        SPObject * top_layer = desktop->currentRoot();
+        SPObject * top_layer = desktop->layerManager().currentRoot();
         SPItem *item_repr = SP_ITEM(top_layer->appendChildRepr(this->repr));
         Inkscape::GC::release(this->repr);
         item_repr->updateRepr();

@@ -41,6 +41,7 @@
 #include "filter-effects-dialog.h"
 #include "filter-enums.h"
 #include "inkscape.h"
+#include "layer-manager.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
 
@@ -1588,7 +1589,7 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
 
         // Delete all references to this filter
         std::vector<SPItem*> x,y;
-        std::vector<SPItem*> all = get_all_items(x, desktop->currentRoot(), desktop, false, false, true, y);
+        std::vector<SPItem*> all = get_all_items(x, desktop->layerManager().currentRoot(), desktop, false, false, true, y);
         for(std::vector<SPItem*>::const_iterator i=all.begin(); all.end() != i; ++i) {
             if (!SP_IS_ITEM(*i)) {
                 continue;
@@ -1647,7 +1648,7 @@ void FilterEffectsDialog::FilterModifier::select_filter_elements()
 
     std::vector<SPItem*> x,y;
     std::vector<SPItem*> items;
-    std::vector<SPItem*> all = get_all_items(x, desktop->currentRoot(), desktop, false, false, true, y);
+    std::vector<SPItem*> all = get_all_items(x, desktop->layerManager().currentRoot(), desktop, false, false, true, y);
     for(SPItem *item: all) {
         if (!item->style) {
             continue;

@@ -1253,7 +1253,7 @@ void PenTool::_bsplineSpiroColor()
         this->red_color = 0xff000000;
         this->green_color = 0x00ff0000;
     } else if(this->bspline) {
-        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        this->highlight_color = currentLayer()->highlight_color();
         if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0xff00007f;
             this->red_color = 0xff00007f;
@@ -1262,7 +1262,7 @@ void PenTool::_bsplineSpiroColor()
             this->red_color = this->highlight_color;
         }
     } else {
-        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        this->highlight_color = currentLayer()->highlight_color();
         this->red_color = 0xff00007f;
         if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0x00ff007f;

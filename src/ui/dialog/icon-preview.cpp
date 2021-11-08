@@ -342,7 +342,7 @@ void IconPreviewPanel::refreshPreview()
                 }
             }
         } else {
-            target = getDesktop()->currentRoot();
+            target = getDesktop()->getDocument()->getRoot();
         }
         if (target) {
             renderPreview(target);

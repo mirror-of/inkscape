@@ -32,6 +32,7 @@
 
 #include "xml/repr.h"
 
+class SPGroup;
 class SPClipPath;
 class SPClipPathReference;
 class SPMask;
@@ -226,6 +227,8 @@ public:
     bool lowerOne();
     void raiseToTop();
     void lowerToBottom();
+
+    SPGroup *getParentGroup() const;
 
     /**
      * Move this SPItem into or after another SPItem in the doc.

@@ -22,7 +22,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "layer-fns.h"
 #include "layer-manager.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
@@ -186,8 +185,8 @@ bool LayersPanel::_executeAction()
     if ( _pending
          && (
              (_pending->_actionCode == BUTTON_NEW || _pending->_actionCode == DRAGNDROP)
-             || !( (desktop && desktop->currentLayer())
-                   && (desktop->currentLayer() != _pending->_target)
+             || !( (desktop && desktop->layerManager().currentLayer())
+                   && (desktop->layerManager().currentLayer() != _pending->_target)
                  )
              )
         ) {
@@ -363,8 +362,8 @@ void LayersPanel::_layersChanged()
         if (auto root = document->getRoot()) {
             _selectedConnection.block();
             auto desktop = getDesktop();
-            if (desktop->layer_manager && desktop->layer_manager->includes( root ) ) {
-                SPObject* target = desktop->currentLayer();
+            if (desktop->layerManager().includes( root ) ) {
+                SPObject* target = desktop->layerManager().currentLayer();
                 _store->clear();
 
     #if DUMP_LAYERS
@@ -380,11 +379,10 @@ void LayersPanel::_layersChanged()
 void LayersPanel::_addLayer( SPDocument* doc, SPObject* layer, Gtk::TreeModel::Row* parentRow, SPObject* target, int level )
 {
     auto desktop = getDesktop();
-    if (desktop && desktop->layer_manager && layer && (level < _maxNestDepth) ) {
-        unsigned int counter = desktop->layer_manager->childCount(layer);
+    if (desktop && layer && (level < _maxNestDepth) ) {
+        unsigned int counter = desktop->layerManager().childCount(layer);
         for ( unsigned int i = 0; i < counter; i++ ) {
-            SPObject *child = desktop->layer_manager->nthChildOf(layer, i);
-            if ( child ) {
+            if (auto child = desktop->layerManager().nthChildOf(layer, i)) {
 #if DUMP_LAYERS
                 g_message(" %3d    layer:%p  {%s}   [%s]", level, child, child->getId(), child->label() );
 #endif // DUMP_LAYERS
@@ -427,15 +425,15 @@ SPObject* LayersPanel::_selectedLayer()
 void LayersPanel::_pushTreeSelectionToCurrent()
 {
     auto desktop = getDesktop();
-    if (desktop && desktop->layer_manager && desktop->currentRoot() ) {
+    if (desktop && desktop->layerManager().currentRoot() ) {
         SPObject* inTree = _selectedLayer();
         if ( inTree ) {
-            SPObject* curr = desktop->currentLayer();
+            SPObject* curr = desktop->layerManager().currentLayer();
             if (curr != inTree) {
-                desktop->layer_manager->setCurrentLayer(inTree);
+                desktop->layerManager().setCurrentLayer(inTree);
             }
         } else {
-            desktop->layer_manager->setCurrentLayer(getDocument()->getRoot());
+            desktop->layerManager().setCurrentLayer(getDocument()->getRoot());
         }
     }
 }
@@ -579,10 +577,10 @@ bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
                     Gtk::TreeModel::Row row = *iter;
                     SPObject *obj = row[_model->_colObject];
                     if (col == _tree.get_column(COL_VISIBLE - 1)) {
-                        desktop->toggleLayerSolo( obj );
+                        desktop->layerManager().toggleLayerSolo( obj );
                         DocumentUndo::maybeDone(document, "layer:solo", SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
                     } else if (col == _tree.get_column(COL_LOCKED - 1)) {
-                        desktop->toggleLockOtherLayers(obj);
+                        desktop->layerManager().toggleLockOtherLayers(obj);
                         DocumentUndo::maybeDone(document, "layer:lockothers", SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
                     }
                 }
@@ -684,12 +682,12 @@ void LayersPanel::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
 void LayersPanel::_renameLayer(Gtk::TreeModel::Row row, const Glib::ustring& name)
 {
     auto desktop = getDesktop();
-    if (row && desktop && desktop->layer_manager) {
+    if (row && desktop) {
         SPObject* obj = row[_model->_colObject];
         if (obj) {
             gchar const* oldLabel = obj->label();
             if ( !name.empty() && (!oldLabel || name != oldLabel) ) {
-                desktop->layer_manager->renameLayer( obj, name.c_str(), FALSE );
+                desktop->layerManager().renameLayer(obj, name.c_str(), false);
                 DocumentUndo::done(getDocument(), SP_VERB_NONE, _("Rename layer"));
             }
 
@@ -954,13 +952,9 @@ void LayersPanel::desktopReplaced()
     _changedConnection.disconnect();
     _subject.setDesktop(getDesktop());
     if (auto desktop = getDesktop()) {
-        //setLabel(document->name);
-        LayerManager *mgr = desktop->layer_manager;
-        if (mgr) {
-            _layerChangedConnection = mgr->connectCurrentLayerChanged( sigc::mem_fun(*this, &LayersPanel::_selectLayer) );
-            _layerUpdatedConnection = mgr->connectLayerDetailsChanged( sigc::mem_fun(*this, &LayersPanel::_updateLayer) );
-            _changedConnection = mgr->connectChanged( sigc::mem_fun(*this, &LayersPanel::_layersChanged) );
-        }
+        _layerChangedConnection = desktop->layerManager().connectCurrentLayerChanged( sigc::mem_fun(*this, &LayersPanel::_selectLayer));
+        _layerUpdatedConnection = desktop->layerManager().connectLayerDetailsChanged( sigc::mem_fun(*this, &LayersPanel::_updateLayer));
+        _changedConnection = desktop->layerManager().connectChanged( sigc::mem_fun(*this, &LayersPanel::_layersChanged));
         _layersChanged();
     }
 }

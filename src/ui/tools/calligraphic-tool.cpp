@@ -927,9 +927,10 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
 
             this->repr = repr;
 
-            SPItem *item=SP_ITEM(desktop->currentLayer()->appendChildRepr(this->repr));
+            auto layer = currentLayer();
+            SPItem *item=SP_ITEM(layer->appendChildRepr(this->repr));
             Inkscape::GC::release(this->repr);
-            item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+            item->transform = layer->i2doc_affine().inverse();
             item->updateRepr();
         }
 

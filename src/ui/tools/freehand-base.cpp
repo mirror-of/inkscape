@@ -909,20 +909,21 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
         else
             repr->setAttribute("d", str);
 
+        auto layer = dc->currentLayer();
         if (SP_IS_PENCIL_CONTEXT(dc) && dc->tablet_enabled) {
             if (!dc->white_item) {
-                dc->white_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+                dc->white_item = SP_ITEM(layer->appendChildRepr(repr));
             }
             spdc_check_for_and_apply_waiting_LPE(dc, dc->white_item, c.get(), false);
         }
         if (!dc->white_item) {
             // Attach repr
-            SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+            SPItem *item = SP_ITEM(layer->appendChildRepr(repr));
             dc->white_item = item;
             //Bend needs the transforms applied after, Other effects best before
             spdc_check_for_and_apply_waiting_LPE(dc, item, c.get(), true);
             Inkscape::GC::release(repr);
-            item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+            item->transform = layer->i2doc_affine().inverse();
             item->updateRepr();
             item->doWriteTransform(item->transform, nullptr, true);
             spdc_check_for_and_apply_waiting_LPE(dc, item, c.get(), false);
@@ -1025,8 +1026,9 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
     repr->setAttribute("sodipodi:type", "arc");
-    SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
-    item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    auto layer = ec->currentLayer();
+    SPItem *item = SP_ITEM(layer->appendChildRepr(repr));
+    item->transform = layer->i2doc_affine().inverse();
     Inkscape::GC::release(repr);
 
     // apply the tool's current style

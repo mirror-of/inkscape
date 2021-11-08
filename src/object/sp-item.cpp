@@ -373,6 +373,14 @@ void SPItem::lowerToBottom() {
     }
 }
 
+/**
+ * Return the parent, only if it's a group object.
+ */
+SPGroup *SPItem::getParentGroup() const
+{
+    return dynamic_cast<SPGroup *>(parent);
+}
+
 void SPItem::moveTo(SPItem *target, bool intoafter) {
 
     Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : nullptr );

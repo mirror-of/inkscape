@@ -1050,24 +1050,6 @@ void set_default_highlight_colors(std::vector<guint32> colors) {
     std::swap(default_highlights, colors);
 }
 
-SPGroup* sp_item_get_layer(SPObject* item) {
-    if (auto group = dynamic_cast<SPGroup*>(item)) {
-        if (group->layerMode() == SPGroup::LAYER) {
-            return group;
-        }
-    }
-    return nullptr;
-}
-
-SPGroup* sp_item_get_group(SPObject* item) {
-    if (auto group = dynamic_cast<SPGroup*>(item)) {
-        if (group->layerMode() == SPGroup::GROUP) {
-            return group;
-        }
-    }
-    return nullptr;
-}
-
 /*
   Local Variables:
   mode:c++

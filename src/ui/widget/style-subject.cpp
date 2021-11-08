@@ -10,6 +10,7 @@
 
 #include "desktop.h"
 #include "desktop-style.h"
+#include "layer-manager.h"
 #include "selection.h"
 
 #include "xml/sp-css-attr.h"
@@ -162,8 +163,8 @@ void StyleSubject::CurrentLayer::setCSS(SPCSSAttr *css) {
 void StyleSubject::CurrentLayer::_afterDesktopSwitch(SPDesktop *desktop) {
     _layer_switched.disconnect();
     if (desktop) {
-        _layer_switched = desktop->connectCurrentLayerChanged(sigc::mem_fun(*this, &CurrentLayer::_setLayer));
-        _setLayer(desktop->currentLayer());
+        _layer_switched = desktop->layerManager().connectCurrentLayerChanged(sigc::mem_fun(*this, &CurrentLayer::_setLayer));
+        _setLayer(desktop->layerManager().currentLayer());
     } else {
         _setLayer(nullptr);
     }

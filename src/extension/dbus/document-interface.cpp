@@ -32,8 +32,7 @@
 #include "document.h" // getReprDoc()
 #include "file.h" //IO
 #include "inkscape.h" //inkscape_find_desktop_by_dkey, activate desktops
-#include "layer-fns.h" //LPOS_BELOW
-#include "layer-model.h"
+#include "layer-manager.h"
 #include "print.h" //IO
 #include "selection-chemistry.h"// lots of selection functions
 #include "selection.h" //selection struct
@@ -186,7 +185,7 @@ selection_swap(Inkscape::Selection *sel, gchar *name, GError **error)
 {
     std::vector<SPObject*> oldsel = std::vector<SPObject*>(sel->objects().begin(), sel->objects().end());
     
-    sel->set(get_object_by_name(sel->layers()->getDocument(), name, error));
+    sel->set(get_object_by_name(sel->getDocument(), name, error));
     return oldsel;
 }
 
@@ -222,8 +221,9 @@ dbus_create_node (SPDocument *doc, const gchar *type)
 gchar *finish_create_shape (DocumentInterface *doc_interface, GError ** /*error*/, Inkscape::XML::Node *newNode, gchar *desc)
 {
     SPCSSAttr *style = NULL;
-    if (doc_interface->target.getDesktop()) {
-        style = sp_desktop_get_style(doc_interface->target.getDesktop(), TRUE);
+    auto desktop = doc_interface->target.getDesktop();
+    if (desktop) {
+        style = sp_desktop_get_style(desktop, true);
     }
     if (style) {
         Glib::ustring str;
@@ -234,8 +234,10 @@ gchar *finish_create_shape (DocumentInterface *doc_interface, GError ** /*error*
         newNode->setAttribute("style", "fill:#0000ff;fill-opacity:1;stroke:#c900b9;stroke-width:0;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none");
     }
 
-    doc_interface->target.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
-    doc_interface->target.getSelection()->layers()->currentLayer()->updateRepr();
+    if (desktop) {
+        desktop->layerManager().currentLayer()->appendChildRepr(newNode);
+        desktop->layerManager().currentLayer()->updateRepr();
+    }
 
     if (doc_interface->updates) {
         Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  0, (gchar *)desc);
@@ -508,8 +510,10 @@ document_interface_image (DocumentInterface *doc_interface, int x, int y, gchar 
     newNode->setAttributeInt("y", y);
     newNode->setAttribute("xlink:href", uri);
     
-    doc_interface->target.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
-    doc_interface->target.getSelection()->layers()->currentLayer()->updateRepr();
+    if (auto desktop = doc_interface->target.getDesktop()) {
+        desktop->layerManager().currentLayer()->appendChildRepr(newNode);
+        desktop->layerManager().currentLayer()->updateRepr();
+    }
 
     if (doc_interface->updates)
         Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  0, "Imported bitmap.");
@@ -525,8 +529,10 @@ gchar *document_interface_node(DocumentInterface *doc_interface, gchar *type, GE
 
     Inkscape::XML::Node *newNode =  xml_doc->createElement(type);
 
-    doc_interface->target.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
-    doc_interface->target.getSelection()->layers()->currentLayer()->updateRepr();
+    if (auto desktop = doc_interface->target.getDesktop()) {
+        desktop->layerManager().currentLayer()->appendChildRepr(newNode);
+        desktop->layerManager().currentLayer()->updateRepr();
+    }
 
     if (doc_interface->updates) {
         Inkscape::DocumentUndo::done(doc, 0, (gchar *)"created empty node");
@@ -1279,7 +1285,9 @@ document_interface_selection_move_to_layer (DocumentInterface *doc_interface,
         
         dt->selection->cut();
 
-        doc_interface->target.getSelection()->layers()->setCurrentLayer(next);
+        if (auto desktop = doc_interface->target.getDesktop()) {
+            desktop->layerManager().setCurrentLayer(next);
+        }
 
         sp_selection_paste(dt, TRUE);
         }
@@ -1355,9 +1363,9 @@ document_interface_selection_change_level (DocumentInterface *doc_interface, gch
 
 gchar *document_interface_layer_new(DocumentInterface *doc_interface, GError ** /*error*/)
 {
-    Inkscape::LayerModel * layers = doc_interface->target.getSelection()->layers();
-    SPObject *new_layer = Inkscape::create_layer(layers->currentRoot(), layers->currentLayer(), Inkscape::LPOS_BELOW);
-    layers->setCurrentLayer(new_layer);
+    auto desktop = doc_interface->target.getSelection()->desktop();
+    SPObject *new_layer = Inkscape::create_layer(desktop->layerManager().currentRoot(), desktop->layerManager().currentLayer(), Inkscape::LPOS_BELOW);
+    desktop->layerManager().setCurrentLayer(new_layer);
     return g_strdup(get_name_from_object(new_layer));
 }
 
@@ -1370,7 +1378,7 @@ document_interface_layer_set (DocumentInterface *doc_interface,
     if (!obj)
         return FALSE;
         
-    doc_interface->target.getSelection()->layers()->setCurrentLayer (obj);
+    doc_interface->target.getDesktop()->layerManager().setCurrentLayer(obj);
     return TRUE;
 }
 

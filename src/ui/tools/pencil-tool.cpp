@@ -29,6 +29,7 @@
 #include "context-fns.h"
 #include "desktop.h"
 #include "desktop-style.h"
+#include "layer-manager.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
@@ -717,7 +718,7 @@ void PencilTool::addPowerStrokePencil()
                 curvepressure->curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
             }
         }
-        Geom::Affine transform_coordinate = SP_ITEM(desktop->currentLayer())->i2dt_affine().inverse();
+        Geom::Affine transform_coordinate = currentLayer()->i2dt_affine().inverse();
         curvepressure->transform(transform_coordinate);
         Geom::Path path = curvepressure->get_pathvector()[0];
 
@@ -729,7 +730,7 @@ void PencilTool::addPowerStrokePencil()
             pp->setAttribute("id", "power_stroke_preview");
             Inkscape::GC::release(pp);
 
-            SPShape *powerpreview = SP_SHAPE(SP_ITEM(desktop->currentLayer())->appendChildRepr(pp));
+            SPShape *powerpreview = SP_SHAPE(currentLayer()->appendChildRepr(pp));
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(powerpreview);
             if (!lpeitem) {
                 return;
@@ -1173,7 +1174,8 @@ void PencilTool::_fitAndSplit() {
 
         /// \todo fixme:
 
-        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        auto layer = desktop->layerManager().currentLayer();
+        this->highlight_color = layer->highlight_color();
         if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0x00ff007f;
         } else {

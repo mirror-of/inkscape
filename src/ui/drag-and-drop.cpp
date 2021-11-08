@@ -24,6 +24,7 @@
 #include "selection.h"
 #include "style.h"
 #include "verbs.h"
+#include "layer-manager.h"
 
 #include "extension/db.h"
 #include "extension/find_extension_by_mime.h"
@@ -311,7 +312,7 @@ ink_drag_data_received(GtkWidget *widget,
 
             // Greg's edits to add intelligent positioning of svg drops
             SPObject *new_obj = nullptr;
-            new_obj = desktop->currentLayer()->appendChildRepr(newgroup);
+            new_obj = desktop->layerManager().currentLayer()->appendChildRepr(newgroup);
 
             Inkscape::Selection *selection = desktop->getSelection();
             selection->set(SP_ITEM(new_obj));

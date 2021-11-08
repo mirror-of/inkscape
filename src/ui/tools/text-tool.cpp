@@ -350,12 +350,12 @@ static void sp_text_context_setup_text(TextTool *tc)
     Inkscape::XML::Node *rstring = xml_doc->createTextNode("");
     rtspan->addChild(rstring, nullptr);
     Inkscape::GC::release(rstring);
-    SPItem *text_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rtext));
+    SPItem *text_item = SP_ITEM(tc->currentLayer()->appendChildRepr(rtext));
     /* fixme: Is selection::changed really immediate? */
     /* yes, it's immediate .. why does it matter? */
     desktop->getSelection()->set(text_item);
     Inkscape::GC::release(rtext);
-    text_item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    text_item->transform = tc->currentLayer()->i2doc_affine().inverse();
 
     text_item->updateRepr();
     text_item->doWriteTransform(text_item->transform, nullptr, true);

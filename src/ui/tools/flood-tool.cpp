@@ -34,6 +34,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
+#include "layer-manager.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"
@@ -447,14 +448,15 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
             g_free(str);
         }
 
-        desktop->currentLayer()->addChild(pathRepr,nullptr);
+        auto layer = desktop->layerManager().currentLayer();
+        layer->addChild(pathRepr, nullptr);
 
         SPObject *reprobj = document->getObjectByRepr(pathRepr);
         if (reprobj) {
             SP_ITEM(reprobj)->doWriteTransform(transform);
             
             // premultiply the item transform by the accumulated parent transform in the paste layer
-            Geom::Affine local (SP_GROUP(desktop->currentLayer())->i2doc_affine());
+            Geom::Affine local (layer->i2doc_affine());
             if (!local.isIdentity()) {
                 gchar const *t_str = pathRepr->attribute("transform");
                 Geom::Affine item_t (Geom::identity());

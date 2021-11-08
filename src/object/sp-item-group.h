@@ -31,6 +31,8 @@ public:
 
     enum LayerMode { GROUP, LAYER, MASK_HELPER };
 
+    bool isLayer() const { return _layer_mode == LAYER; }
+
     bool _insert_bottom;
     LayerMode _layer_mode;
     std::map<unsigned int, LayerMode> _display_modes;
@@ -114,17 +116,6 @@ inline bool SP_IS_LAYER(SPObject const *obj)
     auto group = dynamic_cast<SPGroup const *>(obj);
     return group && group->layerMode() == SPGroup::LAYER;
 }
-
-/**
- * return group object if it represents a layer or null otherwise
- */
-SPGroup* sp_item_get_layer(SPObject* item);
-
-/**
- * return group object if it represents a group that is not marked as layer or mask helper
- */
-SPGroup* sp_item_get_group(SPObject* item);
-
 
 void set_default_highlight_colors(std::vector<guint32> colors);
 

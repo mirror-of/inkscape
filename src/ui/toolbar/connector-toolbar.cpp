@@ -39,6 +39,7 @@
 #include "graphlayout.h"
 #include "selection.h"
 #include "verbs.h"
+#include "layer-manager.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
@@ -326,7 +327,7 @@ ConnectorToolbar::spacing_changed()
     bool modmade = false;
 
     std::vector<SPItem *> items;
-    items = get_avoided_items(items, _desktop->currentRoot(), _desktop);
+    items = get_avoided_items(items, _desktop->layerManager().currentRoot(), _desktop);
     for (auto item : items) {
         Geom::Affine m = Geom::identity();
         avoid_item_move(&m, item);

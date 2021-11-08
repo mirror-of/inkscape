@@ -43,6 +43,7 @@
 #include "id-clash.h"
 #include "inkscape-version.h"
 #include "inkscape.h"
+#include "layer-manager.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "print.h"
@@ -900,7 +901,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
 
     SPDocument *target_document = desktop->getDocument();
     Inkscape::XML::Node *root = clipdoc->getReprRoot();
-    Inkscape::XML::Node *target_parent = desktop->currentLayer()->getRepr();
+    Inkscape::XML::Node *target_parent = desktop->layerManager().currentLayer()->getRepr();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -951,12 +952,13 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         }
     }
 
+    auto layer = desktop->layerManager().currentLayer();
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
     if(clipboard) //???? Removed dead code can cause any bug, need to reimplement undead
     for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
         if(target_document->getObjectById(obj->attribute("id"))) continue;
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        SPObject * pasted = desktop->currentLayer()->appendChildRepr(obj_copy);
+        SPObject * pasted = layer->appendChildRepr(obj_copy);
         Inkscape::GC::release(obj_copy);
         SPLPEItem * pasted_lpe_item = dynamic_cast<SPLPEItem *>(pasted);
         if (pasted_lpe_item){
@@ -966,7 +968,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     }
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects_not);
-    Geom::Affine doc2parent = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    Geom::Affine doc2parent = layer->i2doc_affine().inverse();
     selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
     selection->deleteItems();
 
@@ -1085,7 +1087,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         //        For now, we just use the root in this case.
         SPObject *place_to_insert;
         if (desktop) {
-            place_to_insert = desktop->currentLayer();
+            place_to_insert = desktop->layerManager().currentLayer();
         } else {
             place_to_insert = in_doc->getRoot();
         }

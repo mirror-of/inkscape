@@ -14,7 +14,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "layer-model.h"
 #include "selection.h"
 #include <glib-object.h>
 #include <glib.h>
@@ -56,16 +55,14 @@ void inkscape_unref(Inkscape::Application & in);
 #define SP_ACTIVE_DESKTOP (INKSCAPE.active_desktop())
 
 class AppSelectionModel {
-    Inkscape::LayerModel _layer_model;
     Inkscape::Selection *_selection;
 
 public:
     AppSelectionModel(SPDocument *doc) {
-        _layer_model.setDocument(doc);
         // TODO: is this really how we should manage the lifetime of the selection?
         // I just copied this from the initialization of the Selection in SPDesktop.
         // When and how is it actually released?
-        _selection = Inkscape::GC::release(new Inkscape::Selection(&_layer_model, nullptr));
+        _selection = Inkscape::GC::release(new Inkscape::Selection(nullptr));
         _selection->setDocument(doc);
     }
 

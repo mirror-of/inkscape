@@ -29,6 +29,7 @@
 class GrDrag;
 class SPDesktop;
 class SPItem;
+class SPGroup;
 class KnotHolder;
 namespace Inkscape {
     class MessageContext;
@@ -165,6 +166,7 @@ public:
 
     void setDesktop(SPDesktop *desktop_in) { desktop = desktop_in; }
     SPDesktop *getDesktop() { return desktop; }
+    SPGroup *currentLayer() const;
 
     // Commonly used CanvasItemCatchall grab/ungrab.
     void grabCanvasEvents(Gdk::EventMask mask =

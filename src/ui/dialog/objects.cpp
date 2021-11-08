@@ -852,7 +852,7 @@ void ObjectsPanel::desktopReplaced()
     layer_changed.disconnect();
 
     if (auto desktop = getDesktop()) {
-        layer_changed = desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &ObjectsPanel::layerChanged));
+        layer_changed = desktop->layerManager().connectCurrentLayerChanged(sigc::mem_fun(*this, &ObjectsPanel::layerChanged));
     }
 }
 
@@ -872,7 +872,7 @@ void ObjectsPanel::setRootWatcher()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool layers_only = prefs->getBool("/dialogs/objects/layers_only", true);
         root_watcher = new ObjectWatcher(this, document->getRoot(), nullptr, layers_only);
-        layerChanged(getDesktop()->currentLayer());
+        layerChanged(getDesktop()->layerManager().currentLayer());
     }
 }
 
@@ -954,7 +954,7 @@ bool ObjectsPanel::toggleVisible(GdkEventButton* event, Gtk::TreeModel::Row row)
         if (event->state & GDK_SHIFT_MASK) {
             // Toggle Visible for layers (hide all other layers)
             if (auto desktop = getDesktop()) {
-                desktop->toggleLayerSolo(item);
+                desktop->layerManager().toggleLayerSolo(item);
                 DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
             }
         } else {
@@ -975,7 +975,7 @@ bool ObjectsPanel::toggleLocked(GdkEventButton* event, Gtk::TreeModel::Row row)
         if (event->state & GDK_SHIFT_MASK) {
             // Toggle lock for layers (lock all other layers)
             if (auto desktop = getDesktop()) {
-                desktop->toggleLockOtherLayers(item);
+                desktop->layerManager().toggleLockOtherLayers(item);
                 DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
             }
         } else {
@@ -1106,17 +1106,15 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
             } else if (group && group->layerMode() == SPGroup::LAYER) {
                 // if right-clicking on a layer, make it current for context menu actions to work correctly
                 if (context_menu) {
-                    if (getDesktop()->currentLayer() != item) {
-                        selection->clear();
-                        getDesktop()->setCurrentLayer(item);
+                    if (getDesktop()->layerManager().currentLayer() != item) {
+                        getDesktop()->layerManager().setCurrentLayer(item, true);
                     }
                 }
                 // Clicking on layers firstly switches to that layer.
                 else if (selection->includes(item)) {
                     selection->clear();
                 } else if (_layer != item) {
-                    selection->clear();
-                    getDesktop()->setCurrentLayer(item);
+                    getDesktop()->layerManager().setCurrentLayer(item, true);
                 } else {
                     selection->set(item);
                 }

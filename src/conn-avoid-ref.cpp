@@ -24,6 +24,7 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
+#include "layer-manager.h"
 #include "verbs.h"
 
 #include "display/curve.h"
@@ -338,7 +339,7 @@ std::vector<SPItem *> get_avoided_items(std::vector<SPItem *> &list, SPObject *f
 {
     for (auto& child: from->children) {
         if (SP_IS_ITEM(&child) &&
-            !desktop->isLayer(SP_ITEM(&child)) &&
+            !desktop->layerManager().isLayer(SP_ITEM(&child)) &&
             !SP_ITEM(&child)->isLocked() &&
             !desktop->itemIsHidden(SP_ITEM(&child)) &&
             (!initialised || SP_ITEM(&child)->getAvoidRef().shapeRef)
@@ -347,7 +348,7 @@ std::vector<SPItem *> get_avoided_items(std::vector<SPItem *> &list, SPObject *f
             list.push_back(SP_ITEM(&child));
         }
 
-        if (SP_IS_ITEM(&child) && desktop->isLayer(SP_ITEM(&child))) {
+        if (SP_IS_ITEM(&child) && desktop->layerManager().isLayer(SP_ITEM(&child))) {
             list = get_avoided_items(list, &child, desktop, initialised);
         }
     }
@@ -378,7 +379,7 @@ void init_avoided_shape_geometry(SPDesktop *desktop)
 
     bool initialised = false;
     std::vector<SPItem *> tmp;
-    std::vector<SPItem *> items = get_avoided_items(tmp, desktop->currentRoot(), desktop,
+    std::vector<SPItem *> items = get_avoided_items(tmp, desktop->layerManager().currentRoot(), desktop,
             initialised);
 
     for (auto item : items) {

@@ -36,6 +36,7 @@
 #include "sp-item-group.h"
 #include "sp-namedview.h"
 #include "preferences.h"
+#include "layer-manager.h"
 #include "desktop.h"
 #include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "sp-root.h"
@@ -806,13 +807,13 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     // if that didn't work out, look for the topmost layer
     if (!layer) {
         for (auto& iter: document->getRoot()->children) {
-            if (desktop->isLayer(&iter)) {
+            if (desktop->layerManager().isLayer(&iter)) {
                 layer = &iter;
             }
         }
     }
     if (layer) {
-        desktop->setCurrentLayer(layer);
+        desktop->layerManager().setCurrentLayer(layer);
     }
 
     // FIXME: find a better place to do this
@@ -850,7 +851,7 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
         view->setAttributeInt("inkscape:window-maximized", desktop->is_maximized());
     }
 
-    view->setAttribute("inkscape:current-layer", desktop->currentLayer()->getId());
+    view->setAttribute("inkscape:current-layer", desktop->layerManager().currentLayer()->getId());
 
     // restore undoability
     DocumentUndo::setUndoSensitive(desktop->getDocument(), saved);

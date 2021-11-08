@@ -38,6 +38,7 @@
 #include "extension/output.h"
 #include "extension/system.h"
 #include "io/resource.h"
+#include "layer-manager.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "ui/desktop/menubar.h"
@@ -681,7 +682,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
             //If that layer exists,
             if (layer) {
                 //set the current layer
-                desktop->setCurrentLayer(layer);
+                desktop->layerManager().setCurrentLayer(layer);
             }
         }
         mydoc->release();

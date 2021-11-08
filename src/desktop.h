@@ -69,7 +69,6 @@ struct InkscapeApplication;
 
 namespace Inkscape {
     class LayerManager;
-    class LayerModel;
     class MessageContext;
     class Selection;
 
@@ -141,11 +140,9 @@ class SPDesktop : public Inkscape::UI::View::View
 {
 public:
     SPNamedView               *namedview;
-    Inkscape::LayerModel      *layers;
     /// current selection; will never generally be NULL
     Inkscape::Selection       *selection;
     Inkscape::UI::Tools::ToolBase            *event_context;
-    Inkscape::LayerManager    *layer_manager;
     DocumentInterface *dbus_document_interface;
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;
@@ -217,7 +214,6 @@ public:
     Glib::ustring _reconstruction_old_layer_id;
 
     sigc::signal<void, unsigned int, bool> _menu_update;
-    sigc::signal<void, SPObject *>     _layer_changed_signal;
     sigc::signal<bool, const SPCSSAttr *, bool>::accumulated<StopOnTrue> _set_style_signal;
     sigc::signal<int, SPStyle *, int>::accumulated<StopOnNonZero> _query_style_signal;
 
@@ -258,10 +254,6 @@ public:
     void emitToolSubselectionChanged(gpointer data);
     void emitToolSubselectionChangedEx(gpointer data, SPObject* object);
 
-    sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
-        return _layer_changed_signal.connect(slot);
-    }
-
     // there's an object selected and it has a gradient fill and/or stroke; one of the gradient stops has been selected
     // callback receives sender pointer and selected stop pointer
     sigc::connection connect_gradient_stop_selected(const sigc::slot<void, void*, SPStop*>& slot);
@@ -286,6 +278,9 @@ public:
     void init (SPNamedView* nv, Inkscape::UI::Widget::Canvas* new_canvas, SPDesktopWidget *widget);
     ~SPDesktop() override;
     void destroy();
+
+    Inkscape::LayerManager& layerManager() { return *_layer_manager; }
+    const Inkscape::LayerManager& layerManager() const { return *_layer_manager; }
 
     Inkscape::MessageContext *guidesMessageContext() const {
         return _guides_message_context.get();
@@ -340,16 +335,6 @@ public:
     Inkscape::ColorMode getColorMode() const { return _display_color_mode; }
 
     Inkscape::UI::Dialog::DialogContainer *getContainer();
-
-    // Could make all callers use this->layers instead of passing calls through?
-    SPObject *currentRoot() const;
-    SPObject *currentLayer() const;
-    void setCurrentLayer(SPObject *object);
-    void toggleLayerSolo(SPObject *object);
-    void toggleHideAllLayers(bool hide);
-    void toggleLockAllLayers(bool lock);
-    void toggleLockOtherLayers(SPObject *object);
-    bool isLayer(SPObject *object) const;
 
     bool isWithinViewport(SPItem *item) const;
     bool itemIsHidden(SPItem const *item) const;
@@ -619,6 +604,8 @@ private:
 
     bool grids_visible; /* don't set this variable directly, use the method below */
     void set_grids_visible(bool visible);
+
+    std::unique_ptr<Inkscape::LayerManager> _layer_manager;
 
     sigc::signal<void, SPDesktop*> _destroy_signal;
     sigc::signal<void,SPDesktop*,SPDocument*>     _document_replaced_signal;

@@ -28,6 +28,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "inkscape.h"
+#include "layer-manager.h"
 #include "path-chemistry.h"
 #include "rubberband.h"
 #include "text-editing.h"
@@ -199,7 +200,8 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     repr = xml_doc->createElement("svg:path");
     auto str = sp_svg_write_path(pathv);
     SPCSSAttr *css = sp_repr_css_attr_new();
-    Geom::Coord strokewidth = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse().expansionX();
+    auto layer = desktop->layerManager().currentLayer();
+    Geom::Coord strokewidth = layer->i2doc_affine().inverse().expansionX();
     std::stringstream stroke_width;
     stroke_width.imbue(std::locale::classic());
     if(measure_repr) {
@@ -239,7 +241,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
         measure_repr->addChild(repr, nullptr);
         Inkscape::GC::release(repr);
     } else {
-        SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+        SPItem *item = SP_ITEM(layer->appendChildRepr(repr));
         Inkscape::GC::release(repr);
         item->updateRepr();
         desktop->getSelection()->clear();
@@ -349,7 +351,8 @@ void createAngleDisplayCurve(SPDesktop *desktop,
             path.start(desktop->doc2dt(p1));
             path.appendNew<Geom::CubicBezier>(desktop->doc2dt(p2),desktop->doc2dt(p3),desktop->doc2dt(p4));
             pathv.push_back(path);
-            pathv *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+            auto layer = desktop->layerManager().currentLayer();
+            pathv *= layer->i2doc_affine().inverse();
             if(!pathv.empty()) {
                 setMeasureItem(pathv, true, false, 0xff00007f, measure_repr);
             }
@@ -765,7 +768,8 @@ void MeasureTool::toGuides()
     }
     setGuide(start,ray.angle(), _("Measure"));
     if(explicit_base) {
-        explicit_base = *explicit_base * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        auto layer = desktop->layerManager().currentLayer();
+        explicit_base = *explicit_base * layer->i2doc_affine().inverse();
         ray.setPoints(start, *explicit_base);
         if(ray.angle() != 0) {
             setGuide(start,ray.angle(), _("Base"));
@@ -816,7 +820,7 @@ void MeasureTool::toItem()
     Inkscape::XML::Node *rgroup = xml_doc->createElement("svg:g");
     showCanvasItems(false, true, false, rgroup);
     setLine(start_p,end_p, false, line_color_primary, rgroup);
-    SPItem *measure_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rgroup));
+    SPItem *measure_item = SP_ITEM(desktop->layerManager().currentLayer()->appendChildRepr(rgroup));
     Inkscape::GC::release(rgroup);
     measure_item->updateRepr();
     doc->ensureUpToDate();
@@ -919,7 +923,7 @@ void MeasureTool::setLine(Geom::Point start_point,Geom::Point end_point, bool ma
     path.start(desktop->doc2dt(start_point));
     path.appendNew<Geom::LineSegment>(desktop->doc2dt(end_point));
     pathv.push_back(path);
-    pathv *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    pathv *= desktop->layerManager().currentLayer()->i2doc_affine().inverse();
     if(!pathv.empty()) {
         setMeasureItem(pathv, false, markers, color, measure_repr);
     }
@@ -939,7 +943,7 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
     pathv *= scale;
     pathv *= Geom::Translate(Geom::Point() - (scale.vector() * 0.5));
     pathv *= Geom::Translate(desktop->doc2dt(origin));
-    pathv *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    pathv *= desktop->layerManager().currentLayer()->i2doc_affine().inverse();
     if (!pathv.empty()) {
         guint32 line_color_secondary = 0xff0000ff;
         setMeasureItem(pathv, false, false, line_color_secondary, measure_repr);
@@ -1004,7 +1008,8 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
     Inkscape::XML::Node *rstring = xml_doc->createTextNode(value.c_str());
     rtspan->addChild(rstring, nullptr);
     Inkscape::GC::release(rstring);
-    SPItem *text_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rtext));
+    auto layer = desktop->layerManager().currentLayer();
+    SPItem *text_item = SP_ITEM(layer->appendChildRepr(rtext));
     Inkscape::GC::release(rtext);
     text_item->updateRepr();
     Geom::OptRect bbox = text_item->geometricBounds();
@@ -1040,7 +1045,7 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
         Inkscape::GC::release(rtextitem);
         rgroup->addChild(rrect, nullptr);
         Inkscape::GC::release(rrect);
-        SPItem *text_item_box = SP_ITEM(desktop->currentLayer()->appendChildRepr(rgroup));
+        SPItem *text_item_box = SP_ITEM(layer->appendChildRepr(rgroup));
         Geom::Scale scale = Geom::Scale(desktop->current_zoom()).inverse();
         if(bbox && text_anchor == Inkscape::CANVAS_ITEM_TEXT_ANCHOR_CENTER) {
             text_item_box->transform *= Geom::Translate(bbox->midpoint() - Geom::Point(1.0,1.0)).inverse();
@@ -1048,7 +1053,7 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
         text_item_box->transform *= scale;
         text_item_box->transform *= Geom::Translate(Geom::Point() - (scale.vector() * 0.5));
         text_item_box->transform *= Geom::Translate(pos);
-        text_item_box->transform *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        text_item_box->transform *= layer->i2doc_affine().inverse();
         text_item_box->updateRepr();
         text_item_box->doWriteTransform(text_item_box->transform, nullptr, true);
         Inkscape::XML::Node *rlabel = text_item_box->getRepr();
@@ -1058,7 +1063,7 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
     } else {
         text_item->transform *= Geom::Rotate(angle);
         text_item->transform *= Geom::Translate(pos);
-        text_item->transform *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        text_item->transform *= layer->i2doc_affine().inverse();
         text_item->doWriteTransform(text_item->transform, nullptr, true);
     }
 }
@@ -1325,11 +1330,9 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     SPDocument *doc = desktop->getDocument();
     Geom::Rect rect(start_p_doc, end_p_doc);
     items = doc->getItemsPartiallyInBox(desktop->dkey, rect, false, true, false, true);
-    Inkscape::LayerModel *layer_model = nullptr;
-    SPObject *current_layer = nullptr;
+    SPGroup *current_layer = nullptr;
     if(desktop){
-        layer_model = desktop->layers;
-        current_layer = desktop->currentLayer();
+        current_layer = desktop->layerManager().currentLayer();
     }
     std::vector<double> intersection_times;
     bool only_selected = prefs->getBool("/tools/measure/only_selected", false);
@@ -1338,7 +1341,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
         if (!desktop->getSelection()->includes(i) && only_selected) {
             continue;
         }
-        if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){
+        if(all_layers || desktop->layerManager().layerForObject(item) == current_layer){
             if (auto shape = dynamic_cast<SPShape const *>(item)) {
                 calculate_intersections(desktop, item, lineseg, SPCurve::copy(shape->curve()), intersection_times);
             } else {

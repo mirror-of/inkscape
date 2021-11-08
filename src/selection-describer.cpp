@@ -21,7 +21,7 @@
 
 #include "selection-describer.h"
 
-#include "layer-model.h"
+#include "layer-manager.h"
 #include "selection.h"
 #include "desktop.h"
 
@@ -110,8 +110,8 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
     } else {
         SPItem *item = items[0];
         g_assert(item != nullptr);
-        SPObject *layer = selection->layers()->layerForObject(item);
-        SPObject *root = selection->layers()->currentRoot();
+        SPObject *layer = selection->desktop()->layerManager().layerForObject(item);
+        SPObject *root = selection->desktop()->layerManager().currentRoot();
 
         // Layer name
         gchar *layer_name;

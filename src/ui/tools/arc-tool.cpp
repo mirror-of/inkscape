@@ -326,9 +326,10 @@ void ArcTool::drag(Geom::Point pt, guint state) {
         // Set style
         sp_desktop_apply_style_tool(desktop, repr, "/tools/shapes/arc", false);
 
-        this->arc = SP_GENERICELLIPSE(desktop->currentLayer()->appendChildRepr(repr));
+        auto layer = currentLayer();
+        this->arc = SP_GENERICELLIPSE(layer->appendChildRepr(repr));
         Inkscape::GC::release(repr);
-        this->arc->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        this->arc->transform = layer->i2doc_affine().inverse();
         this->arc->updateRepr();
 
         forced_redraws_start(5);

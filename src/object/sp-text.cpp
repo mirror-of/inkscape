@@ -61,6 +61,8 @@
 #include "livarot/Shape.h"
 #include "display/curve.h"
 
+#include "layer-manager.h"
+
 /*#####################################################
 #  SPTEXT
 #####################################################*/
@@ -1198,7 +1200,10 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
     Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
     text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
 
-    SPText *text_object = dynamic_cast<SPText *>(desktop->currentLayer()->appendChildRepr(text_repr));
+    auto layer = desktop->layerManager().currentLayer();
+    g_assert(layer != nullptr);
+
+    SPText *text_object = dynamic_cast<SPText *>(layer->appendChildRepr(text_repr));
     g_assert(text_object != nullptr);
 
     // Invert coordinate system?
@@ -1206,8 +1211,8 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
     p1 *= desktop->dt2doc();
 
     // Pixels to user units
-    p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    p0 *= layer->i2doc_affine().inverse();
+    p1 *= layer->i2doc_affine().inverse();
 
     text_repr->setAttributeSvgDouble("x", p0[Geom::X]);
     text_repr->setAttributeSvgDouble("y", p0[Geom::Y]);
@@ -1220,11 +1225,7 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
     Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
     text_repr->appendChild(text_node);
 
-    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
-    g_assert(item != nullptr);
-
-    // text_object->transform = item->i2doc_affine().inverse();
-
+    //text_object->transform = layer->i2doc_affine().inverse();
     text_object->updateRepr();
 
     Inkscape::GC::release(text_repr);
@@ -1236,7 +1237,7 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
 SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
     SPDocument *doc = desktop->getDocument();
-    auto const parent = dynamic_cast<SPItem *>(desktop->currentLayer());
+    auto const parent = desktop->layerManager().currentLayer();
     assert(parent);
 
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
@@ -1244,7 +1245,7 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
     text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
     text_repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(parent->i2doc_affine().inverse()));
 
-    SPText *text_object = dynamic_cast<SPText *>(desktop->currentLayer()->appendChildRepr(text_repr));
+    SPText *text_object = dynamic_cast<SPText *>(parent->appendChildRepr(text_repr));
     g_assert(text_object != nullptr);
 
     // Invert coordinate system?
@@ -1289,9 +1290,6 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
     Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
     rtspan->appendChild(text_node);
     text_repr->appendChild(rtspan);
-
-    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
-    g_assert(item != nullptr);
 
     Inkscape::GC::release(rtspan);
     Inkscape::GC::release(text_repr);

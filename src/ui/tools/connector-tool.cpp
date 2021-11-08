@@ -887,8 +887,9 @@ void ConnectorTool::_flushWhite(SPCurve *c)
         repr->setAttribute("d", sp_svg_write_path(c->get_pathvector()));
 
         /* Attach repr */
-        this->newconn = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
-        this->newconn->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        auto layer = currentLayer();
+        this->newconn = SP_ITEM(layer->appendChildRepr(repr));
+        this->newconn->transform = layer->i2doc_affine().inverse();
 
         bool connection = false;
         this->newconn->setAttribute( "inkscape:connector-type",

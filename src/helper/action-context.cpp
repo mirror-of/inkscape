@@ -12,7 +12,6 @@
 
 #include "desktop.h"
 #include "document.h"
-#include "layer-model.h"
 #include "selection.h"
 #include "helper/action-context.h"
 
@@ -45,9 +44,7 @@ SPDocument *ActionContext::getDocument() const
     if (_selection == nullptr) {
         return nullptr;
     }
-
-    // Should be the same as the view's document, if view is non-NULL
-    return _selection->layers()->getDocument();
+    return getDesktop()->getDocument();
 }
 
 Selection *ActionContext::getSelection() const

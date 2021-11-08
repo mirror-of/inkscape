@@ -31,6 +31,8 @@
 #include "ui/util.h"
 #include "ui/widget/canvas.h" // Focus widget
 
+#include "object/sp-item-group.h"
+
 #include "xml/node-event-vector.h"
 
 namespace Inkscape {
@@ -171,33 +173,16 @@ LayerSelector::~LayerSelector() {
  *  Then it selects the current layer for the desktop.
  */
 void LayerSelector::setDesktop(SPDesktop *desktop) {
-    if ( desktop == _desktop ) {
+    if ( desktop == _desktop )
         return;
-    }
+    if (_current_layer_changed_connection)
+        _current_layer_changed_connection.disconnect();
 
-    if (_desktop) {
-//        _desktop_shutdown_connection.disconnect();
-        if (_current_layer_changed_connection)
-            _current_layer_changed_connection.disconnect();
-        if (_layers_changed_connection)
-            _layers_changed_connection.disconnect();
-//        g_signal_handlers_disconnect_by_func(_desktop, (gpointer)&detach, this);
-    }
     _desktop = desktop;
+
     if (_desktop) {
-        // TODO we need a different signal for this, really..s
-//        _desktop_shutdown_connection = _desktop->connectShutdown(
-//          sigc::bind (sigc::ptr_fun (detach), this));
-//        g_signal_connect_after(_desktop, "shutdown", GCallback(detach), this);
-
-        LayerManager *mgr = _desktop->layer_manager;
-        if ( mgr ) {
-            _current_layer_changed_connection = mgr->connectCurrentLayerChanged( sigc::mem_fun(*this, &LayerSelector::_selectLayer) );
-            //_layerUpdatedConnection = mgr->connectLayerDetailsChanged( sigc::mem_fun(*this, &LayerSelector::_updateLayer) );
-            _layers_changed_connection = mgr->connectChanged( sigc::mem_fun(*this, &LayerSelector::_layersChanged) );
-        }
-
-        _selectLayer(_desktop->currentLayer());
+        _current_layer_changed_connection = _desktop->layerManager().connectCurrentLayerChanged(sigc::mem_fun(*this, &LayerSelector::_selectLayer));
+        _selectLayer(dynamic_cast<SPObject *>(_desktop->layerManager().currentLayer()));
     }
 }
 
@@ -207,7 +192,7 @@ class is_layer {
 public:
     is_layer(SPDesktop *desktop) : _desktop(desktop) {}
     bool operator()(SPObject &object) const {
-        return _desktop->isLayer(&object);
+        return _desktop->layerManager().isLayer(&object);
     }
 private:
     SPDesktop *_desktop;
@@ -229,21 +214,10 @@ private:
 
 }
 
-void LayerSelector::_layersChanged()
-{
-    if (_desktop) {
-        /*
-         * This code fixes #166691 but causes issues #1066543 and #1080378.
-         * Comment out until solution found.
-         */
-        //_selectLayer(_desktop->currentLayer());
-    }
-}
-
 /** Selects the given layer in the dropdown selector.
  */
-void LayerSelector::_selectLayer(SPObject *layer) {
-
+void LayerSelector::_selectLayer(SPObject *layer)
+{
     _selection_changed_connection.block();
     _visibility_toggled_connection.block();
     _lock_toggled_connection.block();
@@ -254,8 +228,7 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         _layer_model->erase(first_row);
     }
 
-    SPObject *root=_desktop->currentRoot();
-
+    SPGroup *root = _desktop->layerManager().currentRoot();
     if (_layer) {
         sp_object_unref(_layer, nullptr);
         _layer = nullptr;
@@ -309,17 +282,17 @@ void LayerSelector::_selectLayer(SPObject *layer) {
 /** Sets the current desktop layer to the actively selected layer.
  */
 void LayerSelector::_setDesktopLayer() {
-    SPObject *layer=_selector.get_active()->get_value(_model_columns.object);
+    SPObject *layer = _selector.get_active()->get_value(_model_columns.object);
     if ( _desktop && layer ) {
         _current_layer_changed_connection.block();
         _layers_changed_connection.block();
 
-        _desktop->layer_manager->setCurrentLayer(layer);
+        _desktop->layerManager().setCurrentLayer(layer, true);
 
         _current_layer_changed_connection.unblock();
         _layers_changed_connection.unblock();
 
-        _selectLayer(_desktop->currentLayer());
+        _selectLayer(dynamic_cast<SPObject *>(_desktop->layerManager().currentLayer()));
     }
     if (_desktop && _desktop->canvas) {
         _desktop->canvas->grab_focus();
@@ -422,7 +395,7 @@ void update_row_for_object(SPObject *object,
 
 void rebuild_all_rows(sigc::slot<void, SPObject *> rebuild, SPDesktop *desktop)
 {
-    rebuild(desktop->currentLayer());
+    rebuild(desktop->layerManager().currentLayer());
 }
 
 }
@@ -434,13 +407,13 @@ void LayerSelector::_protectUpdate(sigc::slot<void> slot) {
     _lock_toggled_connection.block(true);
     slot();
 
-    SPObject *layer = _desktop ? _desktop->currentLayer() : nullptr;
-    if ( layer ) {
-        bool wantedValue = ( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false );
+    auto layer = _desktop ? _desktop->layerManager().currentLayer() : nullptr;
+    if (layer) {
+        bool wantedValue = layer->isLocked();
         if ( _lock_toggle.get_active() != wantedValue ) {
             _lock_toggle.set_active( wantedValue );
         }
-        wantedValue = ( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isHidden() : false );
+        wantedValue = layer->isHidden();
         if ( _visibility_toggle.get_active() != wantedValue ) {
             _visibility_toggle.set_active( wantedValue );
         }
@@ -464,7 +437,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
         )
     );
 
-    SPObject *layer=_desktop->currentLayer();
+    auto layer = _desktop->layerManager().currentLayer();
     if ( (&object == layer) || (&object == layer->parent) ) {
         callbacks->update_list = sigc::bind(
             sigc::mem_fun(*this, &LayerSelector::_protectUpdate),
@@ -542,8 +515,8 @@ void LayerSelector::_prepareLabelRenderer(
     //       "invent" an iterator with null data and try to render it;
     //       where does it come from, and how can we avoid it?
     if ( object && object->getRepr() ) {
-        SPObject *layer=( _desktop ? _desktop->currentLayer() : nullptr );
-        SPObject *root=( _desktop ? _desktop->currentRoot() : nullptr );
+        auto layer = _desktop ? _desktop->layerManager().currentLayer() : nullptr;
+        auto root = _desktop ? _desktop->layerManager().currentRoot() : nullptr;
 
         bool isancestor = !( (layer && (object->parent == layer->parent)) || ((layer == root) && (object->parent == root)));
 
