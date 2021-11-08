@@ -649,10 +649,9 @@
     <attribute name='label'  translatable="yes">_Layer</attribute>
     <section>
       <item>
-        <attribute name='label' translatable="yes">Layer_s...</attribute>
+        <attribute name='label' translatable="yes">Layers and Objects...</attribute>
         <attribute name='action'>win.dialog-open</attribute>
-        <attribute name='target'>Layers</attribute>
-        <attribute name='icon'>dialog-layers</attribute>
+        <attribute name='target'>Objects</attribute>
       </item>
     </section>
     <section>
@@ -755,7 +754,7 @@
     <attribute name='label'  translatable="yes">_Object</attribute>
     <section>
       <item>
-        <attribute name='label' translatable="yes">Object...</attribute>
+        <attribute name='label' translatable="yes">Layers and Objects...</attribute>
         <attribute name='action'>win.dialog-open</attribute>
         <attribute name='target'>Objects</attribute>
       </item>

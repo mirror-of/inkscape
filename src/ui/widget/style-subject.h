@@ -96,30 +96,6 @@ private:
     sigc::connection _sel_modified;
 };
 
-class StyleSubject::CurrentLayer : public StyleSubject {
-public:
-    CurrentLayer();
-    ~CurrentLayer() override;
-
-    Geom::OptRect getBounds(SPItem::BBoxType type) override;
-    int queryStyle(SPStyle *query, int property) override;
-    void setCSS(SPCSSAttr *css) override;
-    std::vector<SPObject*> list() override;
-
-protected:
-    void _afterDesktopSwitch(SPDesktop *desktop) override;
-
-private:
-    SPObject *_getLayer() const;
-    void _setLayer(SPObject *layer);
-    SPObject *_getLayerSList() const;
-
-    sigc::connection _layer_switched;
-    sigc::connection _layer_release;
-    sigc::connection _layer_modified;
-    mutable SPObject* _element;
-};
-
 }
 }
 }

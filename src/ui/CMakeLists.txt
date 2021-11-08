@@ -127,7 +127,6 @@ set(ui_SRC
 	dialog/input.cpp
 	dialog/knot-properties.cpp
 	dialog/layer-properties.cpp
-	dialog/layers.cpp
 	dialog/livepatheffect-add.cpp
 	dialog/livepatheffect-editor.cpp
 	dialog/lpe-fillet-chamfer-properties.cpp
@@ -302,7 +301,6 @@ set(ui_SRC
 	dialog/input.h
 	dialog/knot-properties.h
 	dialog/layer-properties.h
-	dialog/layers.h
 	dialog/livepatheffect-add.h
 	dialog/livepatheffect-editor.h
 	dialog/lpe-fillet-chamfer-properties.h

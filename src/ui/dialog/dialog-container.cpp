@@ -37,7 +37,6 @@
 #include "ui/dialog/icon-preview.h"
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/input.h"
-#include "ui/dialog/layers.h"
 #include "ui/dialog/livepatheffect-editor.h"
 #include "ui/dialog/memory.h"
 #include "ui/dialog/messages.h"
@@ -80,7 +79,6 @@ static std::map<int, Glib::ustring> verb_to_dialog_map =
     {SP_VERB_DIALOG_GLYPHS,           "Glyphs"            },
     {SP_VERB_VIEW_ICON_PREVIEW,       "IconPreview"       },
     {SP_VERB_DIALOG_INPUT,            "Input"             },
-    {SP_VERB_DIALOG_LAYERS,           "Layers"            },
     {SP_VERB_DIALOG_LIVE_PATH_EFFECT, "LivePathEffect"    },
     {SP_VERB_HELP_MEMORY,             "Memory"            },
     {SP_VERB_DIALOG_DEBUG,            "Messages"          },
@@ -179,7 +177,6 @@ DialogBase *DialogContainer::dialog_factory(const Glib::ustring& dialog_type)
     else if(dialog_type == "Glyphs")              return &Inkscape::UI::Dialog::GlyphsPanel::getInstance();
     else if(dialog_type == "IconPreview")         return &Inkscape::UI::Dialog::IconPreviewPanel::getInstance();
     else if(dialog_type == "Input")               return &Inkscape::UI::Dialog::InputDialog::getInstance();
-    else if(dialog_type == "Layers")              return &Inkscape::UI::Dialog::LayersPanel::getInstance();
     else if(dialog_type == "LivePathEffect")      return &Inkscape::UI::Dialog::LivePathEffectEditor::getInstance();
     else if(dialog_type == "Memory")              return &Inkscape::UI::Dialog::Memory::getInstance();
     else if(dialog_type == "Messages")            return &Inkscape::UI::Dialog::Messages::getInstance();
@@ -955,7 +952,7 @@ std::shared_ptr<Glib::KeyFile> DialogContainer::get_container_state(const window
  * "NotebookXDialogs" records a list of the types for the dialogs in notebook X.
  *
  * [Window0Column0]
- * Notebook0Dialogs=Layers;Text;
+ * Notebook0Dialogs=Text;
  * NotebookCount=2
  * BeforeCanvas=false
  *

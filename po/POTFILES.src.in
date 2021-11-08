@@ -281,7 +281,6 @@
 ../src/ui/dialog/input.cpp
 ../src/ui/dialog/knot-properties.cpp
 ../src/ui/dialog/layer-properties.cpp
-../src/ui/dialog/layers.cpp
 ../src/ui/dialog/livepatheffect-add.cpp
 ../src/ui/dialog/livepatheffect-editor.cpp
 ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp

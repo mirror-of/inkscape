@@ -76,7 +76,6 @@
 #include "ui/dialog/icon-preview.h"
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/layer-properties.h"
-#include "ui/dialog/layers.h"
 #include "ui/dialog/new-from-template.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/dialog/save-template-dialog.h"

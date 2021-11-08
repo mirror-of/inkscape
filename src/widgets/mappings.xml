@@ -61,7 +61,6 @@
   <remap id='layer_to_top' newid='layer-top'/>
   <remap id='layer_to_bottom' newid='layer-bottom'/>
   <remap id='delete_layer' newid='layer-delete'/>
-  <remap id='layers' newid='dialog-layers'/>
   
   <!-- object menu -->
   <remap id='fill_and_stroke' newid='dialog-fill-and-stroke'/>

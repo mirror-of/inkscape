@@ -45,7 +45,6 @@ static std::map<std::string, DialogData> dialog_data =
     {"Glyphs",             {N_("_Unicode Characters..."),   INKSCAPE_ICON("accessories-character-map")  }},
     {"IconPreview",        {N_("Icon Preview"),             INKSCAPE_ICON("dialog-icon-preview")        }},
     {"Input",              {N_("_Input Devices..."),        INKSCAPE_ICON("dialog-input-devices")       }},
-    {"Layers",             {N_("Layer_s..."),               INKSCAPE_ICON("dialog-layers")              }},
     {"LivePathEffect",     {N_("Path E_ffects..."),         INKSCAPE_ICON("dialog-path-effects")        }},
     {"Memory",             {N_("About _Memory..."),         INKSCAPE_ICON("dialog-memory")              }},
     {"Messages",           {N_("_Messages..."),             INKSCAPE_ICON("dialog-messages")            }},
