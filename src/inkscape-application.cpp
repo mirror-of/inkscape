@@ -904,6 +904,12 @@ InkscapeApplication::destroy_window(InkscapeWindow* window, bool keep_alive)
             document_swap(window, new_document);
         } else {
             window_close(window);
+            if (get_number_of_windows() == 0) {
+                // No Inkscape windows left, remove dialog windows.
+                for (auto const &window : gtk_app()->get_windows()) {
+                    window->close();
+                }
+            }
         }
 
         if (it->second.size() == 0) {
