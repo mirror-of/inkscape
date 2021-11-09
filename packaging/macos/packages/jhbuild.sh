@@ -43,7 +43,7 @@ JHBUILD_PYTHON_VER_MAJOR=3
 JHBUILD_PYTHON_VER_MINOR=8
 JHBUILD_PYTHON_VER=$JHBUILD_PYTHON_VER_MAJOR.$JHBUILD_PYTHON_VER_MINOR
 JHBUILD_PYTHON_URL="https://gitlab.com/api/v4/projects/26780227/packages/generic/\
-python_macos/1/python_${INK_PYTHON_VER/./}_$(uname -p).tar.xz"
+python_macos/2/python_${JHBUILD_PYTHON_VER/./}_$(uname -p).tar.xz"
 JHBUILD_PYTHON_DIR=$OPT_DIR/Python.framework/Versions/$JHBUILD_PYTHON_VER
 JHBUILD_PYTHON_BIN_DIR=$JHBUILD_PYTHON_DIR/bin
 
@@ -86,9 +86,27 @@ function jhbuild_install
   "$JHBUILD_PYTHON_BIN_DIR"/pip$JHBUILD_PYTHON_VER \
     install --prefix="$VER_DIR" $JHBUILD_REQUIREMENTS
 
-  # Remove expired Lets's Encrypt root certificate.
-  patch -b -d "$LIB_DIR"/python$JHBUILD_PYTHON_VER/site-packages/certifi \
-    -p1 < "$SELF_DIR"/packages/patches/certifi_remove_expired.patch
+  function pem_remove_expired
+  {
+    local pem_bundle=$1
+
+    # BSD's csplit does not support '{*}' (it's a GNU extension)
+    csplit -n 3 -k -f "$TMP_DIR"/pem- "$pem_bundle" \
+     '/END CERTIFICATE/+1' '{999}' >/dev/null || true
+
+    for pem in "$TMP_DIR"/pem-*; do
+      if ! openssl x509 -checkend 0 -noout -in "$pem"; then
+        echo_i "removing $pem: $(openssl x509 -enddate -noout -in "$pem")"
+        cat "$pem"
+        rm "$pem"
+      fi
+    done
+
+    cat "$TMP_DIR"/pem-??? > "$pem_bundle"
+  }
+
+  pem_remove_expired \
+    "$LIB_DIR"/python$JHBUILD_PYTHON_VER/site-packages/certifi/cacert.pem
 
   # Download JHBuild.
   local archive

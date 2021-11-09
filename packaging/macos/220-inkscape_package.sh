@@ -59,10 +59,14 @@ lib_add_rpath @executable_path/../Resources/lib/inkscape \
 # Libraries in INK_APP_LIB_DIR can reference each other directly.
 lib_change_siblings "$INK_APP_LIB_DIR"
 
-# Point GTK modules towards INK_APP_LIB_DIR.
+# Point GTK modules towards INK_APP_LIB_DIR using @loader_path.
 lib_change_paths @loader_path/../../.. "$INK_APP_LIB_DIR" \
   "$INK_APP_LIB_DIR"/gtk-3.0/3.0.0/immodules/*.so \
   "$INK_APP_LIB_DIR"/gtk-3.0/3.0.0/printbackends/*.so
+
+# Point enchant's applespell plugin towards INK_APP_LIB_DIR using @loader_path.
+lib_change_paths @loader_path/.. "$INK_APP_LIB_DIR" \
+  "$INK_APP_LIB_DIR"/enchant-2/enchant_applespell.so
 
 #------------------------------------------------------ use rpath in cache files
 
@@ -145,18 +149,6 @@ ink_pipinstall_numpy
 ink_pipinstall_pygobject
 ink_pipinstall_pyserial
 ink_pipinstall_scour
-
-#---------------------------------------------------------- generate Python icon
-
-curl \
-  -o "$TMP_DIR/$(basename "$INK_PYTHON_ICON_URL")" \
-  -L "$INK_PYTHON_ICON_URL"
-
-svg2icns \
-  "$TMP_DIR/$(basename "$INK_PYTHON_ICON_URL")" \
-  "$INK_APP_FRA_DIR/Python.framework/Resources/Python.app/Contents/\
-Resources/PythonInterpreter.icns" \
-  8
 
 #----------------------------------------------------- remove Python cache files
 

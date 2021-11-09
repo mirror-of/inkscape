@@ -61,7 +61,7 @@ INK_PYTHON_VER_MAJOR=3
 INK_PYTHON_VER_MINOR=8
 INK_PYTHON_VER=$INK_PYTHON_VER_MAJOR.$INK_PYTHON_VER_MINOR
 INK_PYTHON_URL="https://gitlab.com/api/v4/projects/26780227/packages/generic/\
-python_macos/1/python_${INK_PYTHON_VER/./}_$(uname -p)_inkscape.tar.xz"
+python_macos/2/python_${INK_PYTHON_VER/./}_$(uname -p)_inkscape.tar.xz"
 INK_PYTHON_ICON_URL="https://gitlab.com/inkscape/vectors/content/-/raw/\
 5f4f4cdf/branding/projects/extensions_c1.svg"
 
@@ -192,7 +192,7 @@ function ink_pipinstall
     fi
   done
 
-  local PATH_ORIGINAL=$PATH
+  local path_original=$PATH
   export PATH=$INK_APP_FRA_DIR/Python.framework/Versions/Current/bin:$PATH
 
   # shellcheck disable=SC2086 # we need word splitting here
@@ -202,7 +202,7 @@ function ink_pipinstall
     $options \
     $wheels
 
-  export PATH=$PATH_ORIGINAL
+  export PATH=$path_original
 }
 
 function ink_pipinstall_appdirs
@@ -285,6 +285,8 @@ function ink_pipinstall_scour
 function ink_download_python
 {
   curl -o "$PKG_DIR"/"$(basename "${INK_PYTHON_URL%\?*}")" -L "$INK_PYTHON_URL"
+  curl -o "$PKG_DIR"/"$(basename "$INK_PYTHON_ICON_URL")" \
+    -L "$INK_PYTHON_ICON_URL"
 }
 
 function ink_install_python
@@ -303,6 +305,13 @@ python$INK_PYTHON_VER_MAJOR "$INK_APP_BIN_DIR"
   echo "../../../../../../../Resources/lib/python$INK_PYTHON_VER/site-packages"\
     > "$INK_APP_FRA_DIR"/Python.framework/Versions/Current/lib/\
 python$INK_PYTHON_VER/site-packages/inkscape.pth
+
+  # use custom icon for Python.app
+  svg2icns \
+    "$PKG_DIR/$(basename "$INK_PYTHON_ICON_URL")" \
+    "$INK_APP_FRA_DIR/Python.framework/Resources/Python.app/Contents/\
+Resources/PythonInterpreter.icns" \
+    8
 }
 
 function ink_build_wheels

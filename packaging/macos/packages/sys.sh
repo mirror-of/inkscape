@@ -26,8 +26,7 @@ SYS_SDK_VER_RECOMMENDED=10.13
 SYS_XCODE_VER=$( (xcodebuild -version 2>/dev/null || echo "Xcode n/a") | grep Xcode | awk '{ print $2 }')
 SYS_XCODE_VER_RECOMMENDED=12.4
 
-if [ -z "$SYS_IGNORE_USR_LOCAL" ] ||
-   [ "$SYS_IGNORE_USR_LOCAL" != "true" ]; then
+if [ "$SYS_IGNORE_USR_LOCAL" != "true" ]; then
   SYS_IGNORE_USR_LOCAL=false
 fi
 
@@ -72,7 +71,7 @@ function sys_check_wrkdir
     : # WRK_DIR has been created or was already there and is writable
   else
     echo_e "WRK_DIR not usable: $WRK_DIR"
-    exit 1
+    return 1
   fi
 }
 
@@ -80,7 +79,7 @@ function sys_check_sdkroot
 {
   if [ ! -d "$SDKROOT" ]; then
     echo_e "SDK not found: $SDKROOT"
-    exit 1
+    return 1
   fi
 }
 
@@ -108,7 +107,7 @@ function sys_check_usr_local
       echo_e "    export SYS_IGNORE_USR_LOCAL=true                             "
       echo_e "                                                                 "
       echo_e "to ignore this error at your own risk.                           "
-      exit 1
+      return 1
     fi
   fi
 }
