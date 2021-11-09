@@ -28,37 +28,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbox.h"
+
 #include <gtkmm.h>
 #include <glibmm/i18n.h>
 
-#include "desktop-style.h"
-#include "desktop.h"
-#include "document-undo.h"
-#include "inkscape.h"
-#include "verbs.h"
-
-#include "ink-action.h"
-
-#include "helper/action.h"
-
-#include "include/gtkmm_version.h"
-
-#include "io/resource.h"
 #include "actions/actions-canvas-snapping.h"
-#include "object/sp-namedview.h"
-
-#include "ui/icon-names.h"
-#include "ui/uxmanager.h"
-#include "ui/widget/button.h"
-#include "ui/widget/spinbutton.h"
+#include "io/resource.h"
 #include "ui/widget/style-swatch.h"
-#include "ui/widget/unit-tracker.h"
-
-#include "widgets/spw-utilities.h"
+#include "widgets/spw-utilities.h" // sp_traverse_widget_tree()
 #include "widgets/widget-sizes.h"
-
-#include "xml/attribute-record.h"
-#include "xml/node-event-vector.h"
 
 #include "ui/toolbar/arc-toolbar.h"
 #include "ui/toolbar/box3d-toolbar.h"
@@ -76,7 +55,6 @@
 #include "ui/toolbar/paintbucket-toolbar.h"
 #include "ui/toolbar/pencil-toolbar.h"
 #include "ui/toolbar/select-toolbar.h"
-//#include "ui/toolbar/snap-toolbar.h"
 #include "ui/toolbar/spray-toolbar.h"
 #include "ui/toolbar/spiral-toolbar.h"
 #include "ui/toolbar/star-toolbar.h"
@@ -84,14 +62,10 @@
 #include "ui/toolbar/text-toolbar.h"
 #include "ui/toolbar/zoom-toolbar.h"
 
-#include "toolbox.h"
-
 #include "ui/tools/tool-base.h"
 
 //#define DEBUG_TEXT
 
-using Inkscape::UI::UXManager;
-using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::Tools::ToolBase;
 
@@ -172,121 +146,8 @@ static struct {
 };
 
 
-static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* desktop );
-
 static void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
-
-static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
-static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
-
-static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
-{
-    SPAction* targetAction = SP_ACTION(user_data);
-    if ( targetAction ) {
-        sp_action_perform( targetAction, nullptr );
-    }
-}
-
-static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::View::View* view, GtkIconSize size )
-{
-    GtkAction* act = nullptr;
-
-    SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
-    InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_name()), verb->get_tip(), verb->get_image(), size  );
-    act = GTK_ACTION(inky);
-    gtk_action_set_sensitive( act, targetAction->sensitive );
-
-    g_signal_connect( G_OBJECT(inky), "activate", G_CALLBACK(trigger_sp_action), targetAction );
-
-    // FIXME: memory leak: this is not unrefed anywhere
-    g_object_ref(G_OBJECT(targetAction));
-    g_object_set_data_full(G_OBJECT(inky), "SPAction", (void*) targetAction, (GDestroyNotify) &g_object_unref);
-    targetAction->signal_set_sensitive.connect(
-        sigc::bind<0>(
-            sigc::ptr_fun(&gtk_action_set_sensitive),
-            GTK_ACTION(inky)));
-
-    return act;
-}
-
-static std::map<SPDesktop*, Glib::RefPtr<Gtk::ActionGroup> > groups;
-
-static void desktopDestructHandler(SPDesktop *desktop)
-{
-    std::map<SPDesktop*, Glib::RefPtr<Gtk::ActionGroup> >::iterator it = groups.find(desktop);
-    if (it != groups.end())
-    {
-        groups.erase(it);
-    }
-}
-
-static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* desktop )
-{
-    Inkscape::UI::View::View *view = desktop;
-    gint verbsToUse[] = {
-        // disabled until we have icons for them:
-        //find
-        //SP_VERB_EDIT_TILE,
-        //SP_VERB_EDIT_UNTILE,
-        SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-        SP_VERB_DIALOG_PREFERENCES,
-        SP_VERB_DIALOG_FILL_STROKE,
-        SP_VERB_DIALOG_DOCPROPERTIES,
-        SP_VERB_DIALOG_TEXT,
-        SP_VERB_DIALOG_XML_EDITOR,
-        SP_VERB_DIALOG_SELECTORS,
-        SP_VERB_DIALOG_LAYERS,
-        SP_VERB_EDIT_CLONE,
-        SP_VERB_EDIT_COPY,
-        SP_VERB_EDIT_CUT,
-        SP_VERB_EDIT_DUPLICATE,
-        SP_VERB_EDIT_PASTE,
-        SP_VERB_EDIT_REDO,
-        SP_VERB_EDIT_UNDO,
-        SP_VERB_EDIT_UNLINK_CLONE,
-        //SP_VERB_FILE_EXPORT,
-        SP_VERB_DIALOG_EXPORT,
-        SP_VERB_FILE_IMPORT,
-        SP_VERB_FILE_NEW,
-        SP_VERB_FILE_OPEN,
-        SP_VERB_FILE_PRINT,
-        SP_VERB_FILE_SAVE,
-        //SP_VERB_OBJECT_TO_CURVE,
-        SP_VERB_SELECTION_GROUP,
-        //SP_VERB_SELECTION_OUTLINE,
-        SP_VERB_SELECTION_UNGROUP,
-    };
-
-    Glib::RefPtr<Gtk::ActionGroup> mainActions;
-    if (desktop == nullptr)
-    {
-        return mainActions;
-    }
-
-    if ( groups.find(desktop) != groups.end() ) {
-        mainActions = groups[desktop];
-    }
-
-    if ( !mainActions ) {
-        mainActions = Gtk::ActionGroup::create("main");
-        groups[desktop] = mainActions;
-        desktop->connectDestroy(&desktopDestructHandler);
-    }
-
-    for (int i : verbsToUse) {
-        Inkscape::Verb* verb = Inkscape::Verb::get(i);
-        if ( verb ) {
-            if (!mainActions->get_action(verb->get_id())) {
-                GtkAction* act = create_action_for_verb( verb, view, GTK_ICON_SIZE_MENU);
-                mainActions->add(Glib::wrap(act));
-            }
-        }
-    }
-
-    return mainActions;
-}
-
 
 static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType /*handlePos*/ )
 {
@@ -546,53 +407,6 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
 } // end of sp_toolbox_set_desktop()
 
 
-static void setupToolboxCommon( GtkWidget *toolbox,
-                                SPDesktop *desktop,
-                                gchar const *ui_file,
-                                gchar const* toolbarName,
-                                gchar const* sizePref )
-{
-    Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    GtkUIManager* mgr = gtk_ui_manager_new();
-    GError* err = nullptr;
-
-    GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
-
-    gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
-
-    Glib::ustring filename = get_filename(UIS, ui_file);
-    gtk_ui_manager_add_ui_from_file( mgr, filename.c_str(), &err );
-    if(err) {
-        g_warning("Failed to load %s: %s", filename.c_str(), err->message);
-        g_error_free(err);
-        return;
-    }
-
-    GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, toolbarName );
-    if ( prefs->getBool("/toolbox/icononly", true) ) {
-        gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
-    }
-
-    int pixel_size = ToolboxFactory::prefToPixelSize(sizePref);
-    ToolboxFactory::set_icon_size(toolBar, pixel_size);
-
-    GtkPositionType pos = static_cast<GtkPositionType>(GPOINTER_TO_INT(g_object_get_data( G_OBJECT(toolbox), HANDLE_POS_MARK )));
-    orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    gtk_orientable_set_orientation (GTK_ORIENTABLE(toolBar), orientation);
-    gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolBar), TRUE);
-
-    g_object_set_data(G_OBJECT(toolBar), "desktop", nullptr);
-
-    GtkWidget* child = gtk_bin_get_child(GTK_BIN(toolbox));
-    if ( child ) {
-        gtk_container_remove( GTK_CONTAINER(toolbox), child );
-    }
-
-    gtk_container_add( GTK_CONTAINER(toolbox), toolBar );
-}
-
 #define noDUMP_DETAILS 1
 
 void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientation)
@@ -772,37 +586,6 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
     gtk_widget_size_allocate(toolbox, &allocation);  
 }
 
-void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
-{
-    setupToolboxCommon(toolbox, desktop, "toolbar-commands.ui", "/ui/CommandsToolbar", ToolboxFactory::ctrlbars_icon_size);
-}
-
-void update_commands_toolbox(SPDesktop * /*desktop*/, ToolBase * /*eventcontext*/, GtkWidget * /*toolbox*/)
-{
-}
-
-Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
-{
-    Glib::ustring name;
-    BarId id = static_cast<BarId>( GPOINTER_TO_INT(g_object_get_data(G_OBJECT(toolbox), BAR_ID_KEY)) );
-    switch(id) {
-        case BAR_TOOL:
-            name = "ToolToolbar";
-            break;
-        case BAR_AUX:
-            name = "AuxToolbar";
-            break;
-        case BAR_COMMANDS:
-            name = "CommandsToolbar";
-            break;
-        case BAR_SNAP:
-            name = "SnapToolbar";
-            break;
-    }
-
-    return name;
-}
-
 void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)
 {
     gtk_widget_show(toolbox_toplevel);
@@ -814,8 +597,6 @@ void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)
     }
     gtk_widget_show(toolbox);
 }
-
-#define MODE_LABEL_WIDTH 70
 
 Glib::ustring ToolboxFactory::get_tool_visible_buttons_path(const Glib::ustring& button_action_name) {
     return Glib::ustring(ToolboxFactory::tools_visible_buttons) + "/show" + button_action_name;

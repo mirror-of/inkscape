@@ -40,8 +40,6 @@ public:
     static GtkWidget *createCommandsToolbox();
     static GtkWidget *createSnapToolbox();
 
-    static Glib::ustring getToolboxName(GtkWidget* toolbox);
-
     static int prefToPixelSize(Glib::ustring const& path);
     static Gtk::IconSize prefToSize_mm(Glib::ustring const &path, int base = 0);
 
