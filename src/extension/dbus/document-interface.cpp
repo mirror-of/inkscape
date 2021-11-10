@@ -185,7 +185,7 @@ selection_swap(Inkscape::Selection *sel, gchar *name, GError **error)
 {
     std::vector<SPObject*> oldsel = std::vector<SPObject*>(sel->objects().begin(), sel->objects().end());
     
-    sel->set(get_object_by_name(sel->getDocument(), name, error));
+    sel->set(get_object_by_name(sel->document(), name, error));
     return oldsel;
 }
 
