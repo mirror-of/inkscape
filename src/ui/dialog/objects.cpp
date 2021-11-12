@@ -850,6 +850,8 @@ ObjectsPanel::ObjectsPanel() :
             }
         }
     });
+    // Clear and update entire tree (do not use this in changed/modified signals)
+    _watch_object_mode = prefs->createObserver("/dialogs/objects/layers_only", [=]() { setRootWatcher(); });
 
     update();
     show_all_children();
@@ -875,8 +877,6 @@ void ObjectsPanel::_objects_toggle()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/dialogs/objects/layers_only", _object_mode.get_active());
-    // Clear and update entire tree (do not use this in changed/modified signals)
-    setRootWatcher();
 }
 
 void ObjectsPanel::desktopReplaced()

@@ -34,12 +34,8 @@ public:
     void renameLayer( SPObject* obj, char const *label, bool uniquify );
     Glib::ustring getNextLayerName( SPObject* obj, char const *label);
 
-    sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
+    sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPGroup *> & slot) {
         return _layer_changed_signal.connect(slot);
-    }
-
-    sigc::connection connectLayerDetailsChanged(const sigc::slot<void, SPObject *> & slot) {
-        return _details_changed_signal.connect(slot);
     }
 
     SPGroup *currentRoot() const;
@@ -58,8 +54,6 @@ public:
     bool isRoot() const { return currentLayer() == currentRoot(); }
 
 private:
-    friend class LayerWatcher;
-    class LayerWatcher;
 
     void _objectModified( SPObject* obj, unsigned int flags );
     void _setDocument(SPDesktop *, SPDocument *document);
@@ -78,11 +72,8 @@ private:
     SPDesktop *_desktop;
     SPDocument *_document;
 
-    std::vector<std::unique_ptr<LayerWatcher>> _watchers;
     std::unique_ptr<Inkscape::ObjectHierarchy> _layer_hierarchy;
-
-    sigc::signal<void, SPObject *> _layer_changed_signal;
-    sigc::signal<void, SPObject *> _details_changed_signal;
+    sigc::signal<void, SPGroup *> _layer_changed_signal;
 };
 
 enum LayerRelativePosition {

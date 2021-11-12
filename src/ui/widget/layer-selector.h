@@ -21,79 +21,39 @@
 #include <gtkmm/liststore.h>
 #include <sigc++/slot.h>
 
+#include "xml/helper-observer.h"
+
 class SPDesktop;
 class SPDocument;
-class SPObject;
-namespace Inkscape {
-namespace XML {
-class Node;
-}
-}
-
+class SPGroup;
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
-
-class DocumentTreeModel;
 
 class LayerSelector : public Gtk::Box {
 public:
     LayerSelector(SPDesktop *desktop = nullptr);
     ~LayerSelector() override;
 
-    SPDesktop *desktop() { return _desktop; }
     void setDesktop(SPDesktop *desktop);
-
 private:
-    class LayerModelColumns : public Gtk::TreeModel::ColumnRecord {
-    public:
-        Gtk::TreeModelColumn<unsigned> depth;
-        Gtk::TreeModelColumn<SPObject *> object;
-        Gtk::TreeModelColumn<Inkscape::XML::Node *> repr;
-        Gtk::TreeModelColumn<void *> callbacks;
-
-        LayerModelColumns() {
-            add(depth); add(object); add(repr); add(callbacks);
-        }
-    };
-
     SPDesktop *_desktop;
+    SPGroup *_layer;
 
-    Gtk::ComboBox _selector;
     Gtk::ToggleButton _visibility_toggle;
     Gtk::ToggleButton _lock_toggle;
+    Gtk::Button _layer_name;
 
-    LayerModelColumns _model_columns;
-    Gtk::CellRendererText _label_renderer;
-    Glib::RefPtr<Gtk::ListStore> _layer_model;
+    sigc::connection _layer_changed;
+    std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
 
-//    sigc::connection _desktop_shutdown_connection;
-    sigc::connection _layers_changed_connection;
-    sigc::connection _current_layer_changed_connection;
-    sigc::connection _selection_changed_connection;
-    sigc::connection _visibility_toggled_connection;
-    sigc::connection _lock_toggled_connection;
-
-    SPObject *_layer;
-
-    void _selectLayer(SPObject *layer);
-    void _layersChanged();
-
-    void _setDesktopLayer();
-
-    void _buildEntry(unsigned depth, SPObject &object);
-    void _buildEntries(unsigned depth,
-                       std::vector<SPObject *> hierarchy);
-    void _buildSiblingEntries(unsigned depth,
-                              SPObject &parent,
-                              std::vector<SPObject *> hierarchy);
-    void _protectUpdate(sigc::slot<void> slot);
-    void _destroyEntry(Gtk::ListStore::iterator const &row);
-    void _hideLayer(bool hide);
-    void _lockLayer(bool lock);
-
-    void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
+    void _layerChanged(SPGroup *layer);
+    void _layerModified();
+    void _selectLayer();
+    void _hideLayer();
+    void _lockLayer();
+    void _layerChoose();
 };
 
 } // namespace Widget

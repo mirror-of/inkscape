@@ -44,52 +44,6 @@
 
 namespace Inkscape {
 
-
-using Inkscape::XML::Node;
-
-class LayerManager::LayerWatcher : public Inkscape::XML::NodeObserver {
-public:
-    LayerWatcher(LayerManager* mgr, SPObject* obj) :
-        _mgr(mgr),
-        _obj(obj),
-        _lockedAttr(g_quark_from_string("sodipodi:insensitive")),
-        _labelAttr(g_quark_from_string("inkscape:label"))
-    {
-        _connection = _obj->connectModified(sigc::mem_fun(*mgr, &LayerManager::_objectModified));
-        _obj->getRepr()->addObserver(*this);
-    }
-
-    ~LayerWatcher() override
-    {
-        _connection.disconnect();
-
-        if (_obj) {
-            Node *node = _obj->getRepr();
-            if (node) {
-                node->removeObserver(*this);
-            }
-        }
-    }
-
-    void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override {}
-    void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override {}
-    void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) override {}
-    void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
-    void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
-        if ( name == _lockedAttr || name == _labelAttr ) {
-            if ( _mgr && _obj ) {
-                _mgr->_objectModified( _obj, 0 );
-            }
-        }
-    }
-
-    LayerManager* _mgr;
-    SPObject* _obj;
-    sigc::connection _connection;
-    GQuark _lockedAttr;
-    GQuark _labelAttr;
-};
-
 LayerManager::LayerManager(SPDesktop *desktop)
     : _desktop(desktop)
     , _document(nullptr)
@@ -121,11 +75,6 @@ void LayerManager::_setDocument(SPDesktop *, SPDocument *document) {
         _layer_hierarchy->setTop(document->getRoot());
     }
     _rebuild();
-}
-
-void LayerManager::_objectModified( SPObject* obj, guint /*flags*/ )
-{
-    _details_changed_signal.emit( obj );
 }
 
 void LayerManager::_layer_activated(SPObject *layer)
@@ -261,7 +210,6 @@ void LayerManager::toggleLockAllLayers(bool lock) {
 void LayerManager::_rebuild() {
 //     Debug::EventTracker<DebugLayerRebuild> tracker1();
 
-    _watchers.clear();
     _clear();
 
     if (!_document || !_desktop)
@@ -323,9 +271,8 @@ void LayerManager::_rebuild() {
             while ( higher && (higher->parent != root) ) {
                 higher = higher->parent;
             }
-            Node const* node = higher ? higher->getRepr() : nullptr;
+            Inkscape::XML::Node const* node = higher ? higher->getRepr() : nullptr;
             if ( node && node->parent() ) {
-                _watchers.emplace_back(new LayerWatcher(this, layer));
                 _addOne(layer);
             }
         }
@@ -337,11 +284,11 @@ static bool is_layer(SPObject &object) {
            SP_GROUP(&object)->layerMode() == SPGroup::LAYER;
 }
 
-// Connected to the desktop's CurrentLayerChanged signal
 void LayerManager::_selectedLayerChanged(SPObject *top, SPObject *bottom)
 {
-    // notify anyone who's listening to this instead of directly to the desktop
-    _layer_changed_signal.emit(bottom);
+    if (auto group = dynamic_cast<SPGroup *>(bottom)) {
+        _layer_changed_signal.emit(group);
+    }
 }
 
 /** Finds the next sibling layer for a \a layer

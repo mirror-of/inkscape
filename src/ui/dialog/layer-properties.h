@@ -26,8 +26,6 @@
 
 #include "layer-manager.h"
 
-#include "ui/widget/layer-selector.h"
-
 class SPDesktop;
 
 namespace Inkscape {

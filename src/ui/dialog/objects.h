@@ -87,9 +87,10 @@ protected:
     Glib::RefPtr<Gtk::TreeStore> _store;
     ModelColumns* _model;
 
-private:
     void setRootWatcher();
+private:
 
+    Inkscape::PrefObserver _watch_object_mode;
     ObjectWatcher* root_watcher;
     SPItem *current_item = nullptr;
 
