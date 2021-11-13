@@ -73,7 +73,7 @@ workflow:
 #  Building inkscape  #
 #                     #
 #######################
-# Linux, Appimage, mac. Windows is handled in .appveyor.yml
+# Linux, Appimage, macOS, Windows.
 
 
 inkscape:linux:
@@ -117,7 +117,7 @@ appimage:linux:
       - Inkscape*.AppImage*
 
 
-inkscape:mac:
+inkscape:macos:
   stage: build
   tags:
     - mac
@@ -129,18 +129,20 @@ inkscape:mac:
   variables:
     SDKROOT: /opt/sdks/MacOSX10.13.sdk
   before_script:
-    # workaround: after_script doesn't run for cancelled/timed out jobs
+    # workaround: after_script doesn't run for cancelled/timed out jobs, leaving
+    #             non-ephemeral runners in an unclean state
     #             https://gitlab.com/gitlab-org/gitlab/-/issues/15603
     - packaging/macos/uninstall_toolset.sh
     - packaging/macos/install_toolset.sh
   script:
     - packaging/macos/build_inkscape.sh
   after_script:
-    - packaging/macos/uninstall_toolset.sh
+    - packaging/macos/uninstall_toolset.sh save_overlay
   artifacts:
     expire_in: 1 year
     paths:
       - Inkscape.dmg
+      - toolset_overlay.tar.xz
 
 
 inkscape:windows:x64: &windows_job
@@ -196,7 +198,35 @@ test:linux:
       - build/testfiles
     when: on_failure
 
-
+test:macos:
+  stage: test
+  tags:
+    - mac
+  rules:
+    - *do_not_run_for_schedules
+    - *run_otherwise
+    # Mac runner is restricted to "inkscape" and "dehesselle" namespaces; only generate pipelines for those
+    - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
+    - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
+  dependencies:
+    - inkscape:macos
+  needs: ["inkscape:macos"]
+  variables:
+    SDKROOT: /opt/sdks/MacOSX10.13.sdk
+  before_script:
+    # workaround: after_script doesn't run for cancelled/timed out jobs, leaving
+    #             non-ephemeral runners in an unclean state
+    #             https://gitlab.com/gitlab-org/gitlab/-/issues/15603
+    - packaging/macos/uninstall_toolset.sh
+    - packaging/macos/install_toolset.sh restore_overlay
+  script:
+    - packaging/macos/310-inkscape_test.sh
+  after_script:
+    - packaging/macos/uninstall_toolset.sh save_testfiles
+  artifacts:
+    paths:
+      - testfiles.tar.xz
+    when: on_failure
 
 ###########################
 #                         #
