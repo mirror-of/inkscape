@@ -54,14 +54,14 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     if (prefs == nullptr) {
         return;
     }
-
-    _labels_auto =
-        prefs->getInt("/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_AUTO) == PREFS_NOTEBOOK_LABELS_AUTO;
+    gint labelstautus = prefs->getInt("/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_AUTO);
+    _labels_auto = labelstautus == PREFS_NOTEBOOK_LABELS_AUTO;
+    _labels_off = labelstautus == PREFS_NOTEBOOK_LABELS_OFF;
 
     // ============= Notebook menu ==============
     _menu.set_title("NotebookOptions");
     _notebook.set_group_name("InkscapeDialogGroup");
-    _notebook.set_scrollable(false);
+    _notebook.set_scrollable(true);
 
     Gtk::MenuItem *new_menu_item = nullptr;
 
@@ -91,13 +91,28 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     _labels_auto_button.set_label(_("Labels: automatic"));
     _menu.append(_labels_auto_button);
 
-    Gtk::RadioMenuItem *labels_off_button = Gtk::manage(new Gtk::RadioMenuItem(_("Labels: always off")));
-    _menu.append(*labels_off_button);
-    labels_off_button->join_group(_labels_auto_button);
+    _labels_active_button.set_label(_("Labels: active"));
+    _menu.append(_labels_active_button);
+    _labels_active_button.join_group(_labels_auto_button);
 
-    _labels_auto ? _labels_auto_button.set_active() : labels_off_button->set_active();
+    _labels_off_button.set_label(_("Labels: off"));
+    _menu.append(_labels_off_button);
+    _labels_off_button.join_group(_labels_auto_button);
+
+    if (_labels_auto) {
+        _labels_auto_button.set_active();
+    } else if (_labels_off) {
+        _labels_off_button.set_active();
+    } else {
+        _labels_active_button.set_active();
+    }
+    // THIS NOT WORK :(
+    //   _conn.emplace_back(
+    //  _labels_auto_button.signal_group_changed().connect(sigc::mem_fun(*this, &DialogNotebook::on_labels_changed)));
     _conn.emplace_back(
-        _labels_auto_button.signal_toggled().connect(sigc::mem_fun(*this, &DialogNotebook::on_labels_toggled)));
+        _labels_auto_button.signal_toggled().connect(sigc::mem_fun(*this, &DialogNotebook::on_labels_changed)));
+    _conn.emplace_back(
+        _labels_active_button.signal_toggled().connect(sigc::mem_fun(*this, &DialogNotebook::on_labels_changed)));
 
     _menu.show_all_children();
 
@@ -110,7 +125,6 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 
     // =============== Signals ==================
     _conn.emplace_back(signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::on_size_allocate_scroll)));
-    _conn.emplace_back(_notebook.signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::on_size_allocate_notebook)));
     _conn.emplace_back(_notebook.signal_drag_end().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_end)));
     _conn.emplace_back(_notebook.signal_page_added().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_added)));
     _conn.emplace_back(_notebook.signal_page_removed().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_removed)));
@@ -409,6 +423,8 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
     property_vscrollbar_policy().set_value(a.get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
 
     set_allocation(a);
+    Gtk::Allocation allocation = get_allocation();
+    on_size_allocate_notebook(allocation);
 }
 
 /**
@@ -420,11 +436,19 @@ void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
     // we unsetset scrollable happen when FULL mode on to prevent overflow with 
     // container at full size that make a unmaximice desctop freeze 
     _notebook.set_scrollable(false);
+    if (!_labels_set_off && !_labels_auto) {
+        toggle_tab_labels_callback(false);
+    }
     if (!_labels_auto) {
         return;
     }
 
-    int alloc_width = a.get_width();
+    int alloc_width = get_allocation().get_width();
+    // Dont update on closed dialog container, prevent console errors
+    if (alloc_width < 2) {
+        _notebook.set_scrollable(true);
+        return;
+    }
     int nat_width = 0;
     int initial_width = 0;
     int total_width = 0;
@@ -438,17 +462,42 @@ void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
     }
     _notebook.get_preferred_width(total_width, nat_width); // get full notebook allocation (all open)
     prev_tabstatus = tabstatus;
-    if (alloc_width == _prev_alloc_width) {
-        if (tabstatus != TabsStatus::NONE) {
-            tabstatus = (alloc_width <= total_width) ? TabsStatus::SINGLE : TabsStatus::ALL;
+    if (_single_tab_width != _none_tab_width && 
+        (_none_tab_width && _none_tab_width > alloc_width || 
+        (_single_tab_width > alloc_width && _single_tab_width < total_width)))
+    {
+        tabstatus = TabsStatus::NONE;
+        if (_single_tab_width != initial_width || prev_tabstatus == TabsStatus::NONE) {
+            _none_tab_width = initial_width;
         }
     } else {
-        if (alloc_width == initial_width) {
-            tabstatus = TabsStatus::NONE;
-        } else {
-            tabstatus = (alloc_width <= total_width) ? TabsStatus::SINGLE : TabsStatus::ALL;
+        tabstatus = (alloc_width <= total_width) ? TabsStatus::SINGLE : TabsStatus::ALL;
+        if (total_width != initial_width &&
+            prev_tabstatus == TabsStatus::SINGLE && 
+            tabstatus == TabsStatus::SINGLE) 
+        {
+            _single_tab_width = initial_width;
         }
     }
+    if ((_single_tab_width && !_none_tab_width) || 
+        (_single_tab_width && _single_tab_width == _none_tab_width)) 
+    {
+        _none_tab_width = _single_tab_width - 1;
+    }    
+     
+    /* 
+    std::cout << "::::::::::tabstatus::" << (int)tabstatus  << std::endl;
+    std::cout << ":::::prev_tabstatus::" << (int)prev_tabstatus << std::endl;
+    std::cout << "::::::::alloc_width::" << alloc_width << std::endl;
+    std::cout << "::_prev_alloc_width::" << _prev_alloc_width << std::endl;
+    std::cout << "::::::initial_width::" << initial_width << std::endl;
+    std::cout << "::::::::::nat_width::" << nat_width << std::endl;
+    std::cout << "::::::::total_width::" << total_width << std::endl;
+    std::cout << "::::_none_tab_width::" << _none_tab_width  << std::endl;
+    std::cout << "::_single_tab_width::" << _single_tab_width  << std::endl;
+    std::cout << ":::::::::::::::::::::" << std::endl;    
+    */
+    
     _prev_alloc_width = alloc_width;
     bool show = tabstatus == TabsStatus::ALL;
     toggle_tab_labels_callback(show);
@@ -457,15 +506,14 @@ void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
 /**
  * Signal handler to toggle the tab labels internal state.
  */
-void DialogNotebook::on_labels_toggled() {
-    bool previous = _labels_auto;
+void DialogNotebook::on_labels_changed() {
     _labels_auto = _labels_auto_button.get_active();
-
-    if (previous && !_labels_auto) {
-        toggle_tab_labels_callback(false);
-    } else if (!previous && _labels_auto) {
-        toggle_tab_labels_callback(true);
+    _labels_off = _labels_off_button.get_active();
+    _labels_set_off = false;
+    if (_labels_active_button.get_active()) {
+        tabstatus = TabsStatus::SINGLE;
     }
+    toggle_tab_labels_callback(_labels_auto);
 }
 
 /**
@@ -588,13 +636,20 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
             if (page != _notebook.get_nth_page(n)) {
                 show ? close->show() : close->hide();
                 show ? label->show() : label->hide();
-            } else if (tabstatus == TabsStatus::NONE) {
+            } else if (tabstatus == TabsStatus::NONE || _labels_off) {
                 close->hide();
                 label->hide();
+            } else {
+                close->show();
+                label->show();
             }
         }
     }
-    if (show) {
+    _labels_set_off = _labels_off;
+    if (_prev_alloc_width && prev_tabstatus != tabstatus ) {
+        _notebook.resize_children();
+    }
+    if (show && _single_tab_width) {
         _notebook.set_scrollable(true);
     }
 }
@@ -644,6 +699,9 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 
         close->hide();
         label->hide();
+    }
+    if (_prev_alloc_width) {
+        queue_allocate(); 
     }
 }
 

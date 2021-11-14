@@ -147,7 +147,8 @@ enum PrefsDialogsWindowsType {
 
 enum PrefsDialogNotebookLabelsBehavior {
     PREFS_NOTEBOOK_LABELS_AUTO = 0,
-    PREFS_NOTBOOK_LABELS_OFF = 1,
+    PREFS_NOTEBOOK_LABELS_ACTIVE = 1,
+    PREFS_NOTEBOOK_LABELS_OFF = 2,
 };
 
 /* default window size preference values (/options/defaultwindowsize/value) */

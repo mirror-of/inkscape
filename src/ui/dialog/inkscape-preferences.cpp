@@ -1863,7 +1863,8 @@ void InkscapePreferences::initPageUI()
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_AGGRESSIVE, false, &_win_ontop_none);
 
     _win_dialogs_labels_auto.init( _("Automatic"), "/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_AUTO, true, nullptr);
-    _win_dialogs_labels_off.init( _("Off"), "/options/notebooklabels/value", PREFS_NOTBOOK_LABELS_OFF, false, &_win_dialogs_labels_auto);
+    _win_dialogs_labels_active.init( _("Active"), "/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_ACTIVE, true, nullptr);
+    _win_dialogs_labels_off.init( _("Off"), "/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_OFF, false, &_win_dialogs_labels_auto);
 
     {
         Glib::ustring defaultSizeLabels[] = {C_("Window size", "Default"),
@@ -1921,7 +1922,8 @@ void InkscapePreferences::initPageUI()
 #endif
     std::vector<PrefItem> labels = {
         { _("Automatic"), PREFS_NOTEBOOK_LABELS_AUTO, _("Dialog names will be displayed when there is enough space"), true },
-        { _("Off"), PREFS_NOTBOOK_LABELS_OFF, _("Only show dialog icons") }
+        { _("Active"), PREFS_NOTEBOOK_LABELS_ACTIVE, _("Only show label on active") },
+        { _("Off"), PREFS_NOTEBOOK_LABELS_OFF, _("Only show dialog icons") }
     };
     _page_windows.add_line(true, _("Labels behavior"), *Gtk::make_managed<PrefRadioButtons>(labels, "/options/notebooklabels/value"), "", "", false, reset_icon());
 

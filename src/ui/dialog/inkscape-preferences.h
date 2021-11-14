@@ -287,6 +287,7 @@ protected:
     UI::Widget::PrefRadioButton _win_ontop_normal;
     UI::Widget::PrefRadioButton _win_ontop_agressive;
     UI::Widget::PrefRadioButton _win_dialogs_labels_auto;
+    UI::Widget::PrefRadioButton _win_dialogs_labels_active;
     UI::Widget::PrefRadioButton _win_dialogs_labels_off;
     UI::Widget::PrefRadioButton _win_save_geom_off;
     UI::Widget::PrefRadioButton _win_save_geom;

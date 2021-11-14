@@ -64,16 +64,22 @@ private:
     Gtk::Menu _menutabs;
     Gtk::Notebook _notebook;
     Gtk::RadioMenuItem _labels_auto_button;
+    Gtk::RadioMenuItem _labels_active_button;
+    Gtk::RadioMenuItem _labels_off_button;
 
     // State variables
-    bool _labels_auto;
     bool _label_visible;
+    bool _labels_auto;
+    bool _labels_off;
+    bool _labels_set_off = false;
     bool _detaching_duplicate;
     bool _reload_context = true;
     gint _prev_alloc_width = 0;
+    gint _none_tab_width = 0;
+    gint _single_tab_width = 0;
     gint _icon_width = 0;
-    TabsStatus tabstatus = TabsStatus::SINGLE;
-    TabsStatus prev_tabstatus = TabsStatus::SINGLE;
+    TabsStatus tabstatus = TabsStatus::NONE;
+    TabsStatus prev_tabstatus = TabsStatus::NONE;
     Gtk::Widget *_selected_page;
     std::vector<sigc::connection> _conn;
     std::vector<sigc::connection> _connmenu;
@@ -85,12 +91,13 @@ private:
     void on_page_removed(Gtk::Widget *page, int page_num);
     void on_size_allocate_scroll(Gtk::Allocation &allocation);
     void on_size_allocate_notebook(Gtk::Allocation &allocation);
-    void on_labels_toggled();
+    void on_labels_changed();
     bool on_tab_click_event(GdkEventButton *event, Gtk::Widget *page);
     void on_close_button_click_event(Gtk::Widget *page);
     void on_page_switch(Gtk::Widget *page, guint page_number);
 
     // Helpers
+    void preventOverflow();
     void change_page(size_t pagenum);
     void reload_tab_menu();
     void toggle_tab_labels_callback(bool show);
