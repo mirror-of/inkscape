@@ -768,8 +768,16 @@ InkscapeApplication::on_startup2()
 
 #ifdef GDK_WINDOWING_QUARTZ
     GtkosxApplication *osxapp = gtkosx_application_get();
+
+    // Install handlers for
+    //   - DnD via dock icon
+    //   - system menu "Quit"
     g_signal_connect(G_OBJECT(osxapp), "NSApplicationOpenFile", G_CALLBACK(osx_openfile_callback), this);
     g_signal_connect(G_OBJECT(osxapp), "NSApplicationBlockTermination", G_CALLBACK(osx_quit_callback), this);
+
+   // using quartz accelerators gives menu shortcuts priority over everything else,
+   // messes up text input because Inkscape has single key shortcuts (e.g. 1-6).
+   gtkosx_application_set_use_quartz_accelerators(osxapp, false);
 #endif
 }
 

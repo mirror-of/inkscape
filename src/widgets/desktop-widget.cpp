@@ -85,10 +85,6 @@
 #include "ui/dialog/color-item.h"
 #include "widgets/ege-paint-def.h"
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include <gtkosxapplication.h>
-#endif
-
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::DialogContainer;
 using Inkscape::UI::Dialog::DialogMultipaned;
@@ -744,21 +740,6 @@ void SPDesktopWidget::on_realize()
         }
         INKSCAPE.themecontext->getChangeThemeSignal().emit();
     }
-
-#ifdef GDK_WINDOWING_QUARTZ
-    // native macOS menu
-    auto osxapp = gtkosx_application_get();
-    auto menushell = static_cast<Gtk::MenuShell *>(dtw->menubar());
-    if (osxapp && menushell && window) {
-        menushell->hide();
-        gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
-        // using quartz accelerators gives menu shortcuts priority over everything else,
-        // messes up text input because Inkscape has single key shortcuts (e.g. 1-6).
-        gtkosx_application_set_use_quartz_accelerators(osxapp, false);
-        gtkosx_application_set_help_menu(osxapp, _get_help_menu(menushell->gobj()));
-        gtkosx_application_set_window_menu(osxapp, nullptr);
-    }
-#endif
 }
 
 /* This is just to provide access to common functionality from sp_desktop_widget_realize() above
