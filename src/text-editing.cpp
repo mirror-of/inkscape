@@ -1278,8 +1278,14 @@ sp_te_get_average_linespacing (SPItem *text)
         return 0;
 
     unsigned line_count = layout->lineIndex(layout->end());
-    double all_lines_height = layout->characterAnchorPoint(layout->end())[Geom::Y] - layout->characterAnchorPoint(layout->begin())[Geom::Y];
+    auto mode = text->style->writing_mode.computed;
+    bool horizontal = (mode == SP_CSS_WRITING_MODE_LR_TB || mode == SP_CSS_WRITING_MODE_RL_TB);
+    auto index = horizontal ? Geom::Y : Geom::X;
+    double all_lines_height = layout->characterAnchorPoint(layout->end())[index] - layout->characterAnchorPoint(layout->begin())[index];
     double average_line_height = all_lines_height / (line_count == 0 ? 1 : line_count);
+    if (mode == SP_CSS_WRITING_MODE_TB_RL) {
+        average_line_height = -average_line_height;
+    }
     return average_line_height;
 }
 

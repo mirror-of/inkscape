@@ -758,6 +758,12 @@ add_cli_test(actions-verb-list             PARAMETERS --actions=verb-list PASS_F
 # window-close
 # window-open
 
+# tests x/y values are not swapped in tspans.
+add_cli_test(action_test_multiline_anchoring
+                        INPUT_FILENAME multiline-anchoring.svg
+                        PARAMETERS --actions=select-by-id:grouped_text$<SEMICOLON>transform-translate:10,0$<SEMICOLON>transform-translate:-10,0$<SEMICOLON>export-filename:multiline-anchoring_out.svg$<SEMICOLON>export-plain-svg$<SEMICOLON>export-do
+                        EXPECTED_FILES multiline-anchoring_out.svg
+                        TEST_SCRIPT match_regex_fail.sh multiline-anchoring_out.svg "(x=\"[3-9][0-9]{2}\")|(x=\"[12][0-9]{3}\")|(y=\"[0-9]{2}\")|(y=\"1[0-9]{2}\")")
 
 #############
 ### verbs ###

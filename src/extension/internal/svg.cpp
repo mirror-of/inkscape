@@ -416,9 +416,6 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, const SPDocument *o
                 Geom::Point line_anchor_point = text->layout.characterAnchorPoint(it);
                 double line_x = line_anchor_point[Geom::X];
                 double line_y = line_anchor_point[Geom::Y];
-                if (!text->is_horizontal()) {
-                    std::swap(line_x, line_y); // Anchor points rotated & y inverted in vertical layout.
-                }
 
                 // std::cout << "  line_anchor_point: " << line_anchor_point << std::endl;
                 if (line_tspan->childCount() == 0) {
