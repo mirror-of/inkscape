@@ -124,11 +124,11 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     gapp->add_action( this->get_id(), sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
 
     if (!hidden) {
-        // Submenu retrival as a list of strings (to handle nested menus).
+        // Submenu retrieval as a list of strings (to handle nested menus).
         std::list<Glib::ustring> sub_menu_list;
         get_menu(local_effects_menu, sub_menu_list);
 
-        if (local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
+        if (local_effects_menu && local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
 
             std::vector<std::vector<Glib::ustring>>raw_data_filter =
                 {{ action_id, get_name(), "Filter", description }};
