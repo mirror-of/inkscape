@@ -82,6 +82,10 @@ void ColorPicker::closeWindow()
     _colorSelectorDialog.hide();
 }
 
+void ColorPicker::open() {
+    on_clicked();
+}
+
 void ColorPicker::on_clicked()
 {
     if (!_color_selector) {

@@ -47,6 +47,7 @@ public:
 
     void setRgba32 (guint32 rgba);
     void setSensitive(bool sensitive);
+    void open();
     void closeWindow();
     sigc::connection connectChanged (const sigc::slot<void,guint>& slot)
         { return _changed_signal.connect (slot); }
