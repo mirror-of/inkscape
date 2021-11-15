@@ -206,7 +206,7 @@
           <item>
             <attribute name='label' translatable="yes">Create Tiled Clones...</attribute>
             <attribute name='action'>win.dialog-open</attribute>
-            <attribute name='target'>Clonetiler</attribute>
+            <attribute name='target'>CloneTiler</attribute>
             <attribute name='icon'>dialog-tile-clones</attribute>
           </item>
           <item>
