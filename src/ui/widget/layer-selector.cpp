@@ -39,8 +39,6 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-namespace {
-
 class AlternateIcons : public Gtk::Box {
 public:
     AlternateIcons(Gtk::BuiltinIconSize size, Glib::ustring const &a, Glib::ustring const &b)
@@ -78,7 +76,6 @@ private:
     Gtk::Image *_b;
     bool _state;
 };
-}
 
 LayerSelector::LayerSelector(SPDesktop *desktop)
     : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
@@ -86,31 +83,35 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     , _observer(new Inkscape::XML::SignalObserver)
 {
     set_name("LayerSelector");
-    AlternateIcons *label;
 
-    label = Gtk::manage(new AlternateIcons(Gtk::ICON_SIZE_MENU,
+    _eye_label = Gtk::manage(new AlternateIcons(Gtk::ICON_SIZE_MENU,
         INKSCAPE_ICON("object-visible"), INKSCAPE_ICON("object-hidden")));
-    _visibility_toggle.add(*label);
-    _visibility_toggle.signal_toggled().connect(sigc::mem_fun(*this, &LayerSelector::_hideLayer));
+    _eye_toggle.add(*_eye_label);
+    _hide_layer_connection = _eye_toggle.signal_toggled().connect(sigc::mem_fun(*this, &LayerSelector::_hideLayer));
 
-    _visibility_toggle.set_relief(Gtk::RELIEF_NONE);
-    _visibility_toggle.set_tooltip_text(_("Toggle current layer visibility"));
-    pack_start(_visibility_toggle, Gtk::PACK_EXPAND_PADDING);
+    _eye_toggle.set_relief(Gtk::RELIEF_NONE);
+    _eye_toggle.set_tooltip_text(_("Toggle current layer visibility"));
+    pack_start(_eye_toggle, Gtk::PACK_EXPAND_PADDING);
 
-    label = Gtk::manage(new AlternateIcons(Gtk::ICON_SIZE_MENU,
+    _lock_label = Gtk::manage(new AlternateIcons(Gtk::ICON_SIZE_MENU,
         INKSCAPE_ICON("object-unlocked"), INKSCAPE_ICON("object-locked")));
-    _lock_toggle.add(*label);
-    _lock_toggle.signal_toggled().connect(sigc::mem_fun(*this, &LayerSelector::_lockLayer));
+    _lock_toggle.add(*_lock_label);
+    _lock_layer_connection = _lock_toggle.signal_toggled().connect(sigc::mem_fun(*this, &LayerSelector::_lockLayer));
 
     _lock_toggle.set_relief(Gtk::RELIEF_NONE);
     _lock_toggle.set_tooltip_text(_("Lock or unlock current layer"));
     pack_start(_lock_toggle, Gtk::PACK_EXPAND_PADDING);
 
-    _layer_name.signal_clicked().connect(
-        sigc::mem_fun(*this, &LayerSelector::_layerChoose));
+    _layer_name.signal_clicked().connect(sigc::mem_fun(*this, &LayerSelector::_layerChoose));
     _layer_name.set_relief(Gtk::RELIEF_NONE);
     _layer_name.set_tooltip_text(_("Current layer"));
     pack_start(_layer_name, Gtk::PACK_EXPAND_WIDGET);
+
+    _layer_name.add(_layer_label);
+    _layer_label.set_max_width_chars(16);
+    _layer_label.set_ellipsize(Pango::ELLIPSIZE_END);
+    _layer_label.set_markup("<i>Unset</i>");
+    _layer_label.set_valign(Gtk::ALIGN_CENTER);
 
     _observer->signal_changed().connect(sigc::mem_fun(*this, &LayerSelector::_layerModified));
     setDesktop(desktop);
@@ -151,24 +152,39 @@ void LayerSelector::_layerModified()
     auto root = _desktop->layerManager().currentRoot();
     bool active = _layer && _layer != root;
 
-    if (active) {
-        _layer_name.set_label(_layer->defaultLabel());
-    } else {
-        _layer_name.set_label(_layer ? "[root]" : "~nothing~");
+    if (_label_style) {
+        _layer_label.get_style_context()->remove_provider(_label_style);
     }
-    _visibility_toggle.set_sensitive(active);
+    auto color_str = std::string("white");
+
+    if (active) {
+        _layer_label.set_text(_layer->defaultLabel());
+        color_str = SPColor(_layer->highlight_color()).toString();
+    } else {
+        _layer_label.set_markup(_layer ? "<i>[root]</i>" : "<i>nothing</i>");
+    }
+
+    Glib::RefPtr<Gtk::StyleContext> style_context = _layer_label.get_style_context();
+    _label_style = Gtk::CssProvider::create();
+    _label_style->load_from_data("#LayerSelector label {border-color:" + color_str + ";}");
+    _layer_label.get_style_context()->add_provider(_label_style, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+    _hide_layer_connection.block();
+    _lock_layer_connection.block();
+    _eye_toggle.set_sensitive(active);
     _lock_toggle.set_sensitive(active);
-    _visibility_toggle.set_active(active && _layer->isHidden());
+    _eye_label->setState(active && _layer->isHidden());
+    _eye_toggle.set_active(active && _layer->isHidden());
+    _lock_label->setState(active && _layer->isLocked());
     _lock_toggle.set_active(active && _layer->isLocked());
+    _hide_layer_connection.unblock();
+    _lock_layer_connection.unblock();
 }
 
 void LayerSelector::_lockLayer()
 {
     bool lock = _lock_toggle.get_active();
     if (auto layer = _desktop->layerManager().currentLayer()) {
-        if (auto child = dynamic_cast<AlternateIcons *>(_lock_toggle.get_child())) {
-            child->setState(lock);
-        }
         layer->setLocked(lock);
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_NONE,
                            lock ? _("Lock layer") : _("Unlock layer"));
@@ -177,11 +193,8 @@ void LayerSelector::_lockLayer()
 
 void LayerSelector::_hideLayer()
 {
-    bool hide = _lock_toggle.get_active();
+    bool hide = _eye_toggle.get_active();
     if (auto layer = _desktop->layerManager().currentLayer()) {
-        if (auto child = dynamic_cast<AlternateIcons *>(_lock_toggle.get_child())) {
-            child->setState(hide);
-        }
         layer->setHidden(hide);
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_NONE,
                            hide ? _("Hide layer") : _("Unhide layer"));

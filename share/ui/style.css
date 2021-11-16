@@ -594,3 +594,10 @@ button.square-button image {
     min-width: 16px;
     min-height: 16px;
 }
+
+/* Give layer selector button label a highlight color */
+#LayerSelector label
+{
+    padding-left: 6px;
+    border-left: 3px solid white;
+}

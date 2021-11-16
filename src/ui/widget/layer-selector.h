@@ -31,6 +31,8 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
+class AlternateIcons;
+
 class LayerSelector : public Gtk::Box {
 public:
     LayerSelector(SPDesktop *desktop = nullptr);
@@ -41,11 +43,17 @@ private:
     SPDesktop *_desktop;
     SPGroup *_layer;
 
-    Gtk::ToggleButton _visibility_toggle;
+    Gtk::ToggleButton _eye_toggle;
     Gtk::ToggleButton _lock_toggle;
     Gtk::Button _layer_name;
+    Gtk::Label _layer_label;
+    Glib::RefPtr<Gtk::CssProvider> _label_style;
+    AlternateIcons * _eye_label;
+    AlternateIcons * _lock_label;
 
     sigc::connection _layer_changed;
+    sigc::connection _hide_layer_connection;
+    sigc::connection _lock_layer_connection;
     std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
 
     void _layerChanged(SPGroup *layer);
