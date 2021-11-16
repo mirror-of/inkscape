@@ -59,6 +59,8 @@ build_menu()
     } else {
 
         static auto app = InkscapeApplication::instance();
+        std::map<Glib::ustring, Glib::ustring>& label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
+        label_to_tooltip_map.clear();
 
         { // Filters and Extensions
 
@@ -151,15 +153,11 @@ build_menu()
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
-        if (useicons != UseIcons::always) {
-            // Remove all or some icons.
-            auto gmenu_copy = Gio::Menu::create();
-            rebuild_menu (gmenu, gmenu_copy, useicons);
-            app->gtk_app()->set_menubar(gmenu_copy);
-        } else {
-            // Show all icons.
-            app->gtk_app()->set_menubar(gmenu);
-        }
+
+        // Remove all or some icons. Also create label to tooltip map.
+        auto gmenu_copy = Gio::Menu::create();
+        rebuild_menu (gmenu, gmenu_copy, useicons);
+        app->gtk_app()->set_menubar(gmenu_copy);
     }
 }
 
@@ -184,6 +182,10 @@ void rebuild_menu (std::shared_ptr<Gio::MenuModel> menu, std::shared_ptr<Gio::Me
 #else
 void rebuild_menu (Glib::RefPtr<Gio::MenuModel>    menu, Glib::RefPtr<Gio::Menu>    menu_copy, UseIcons useIcons) {
 #endif
+
+    static auto app = InkscapeApplication::instance();
+    auto& extra_data = app->get_action_extra_data();
+    auto& label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
 
     for (int i = 0; i < menu->get_n_items(); ++i) {
 
@@ -222,12 +224,18 @@ void rebuild_menu (Glib::RefPtr<Gio::MenuModel>    menu, Glib::RefPtr<Gio::Menu>
             detailed_action += "(" + target + ")";
         }
 
-        // std::cout << "  label: " << std::setw(30) << label
+        auto tooltip = extra_data.get_tooltip_for_action(detailed_action);
+        label_to_tooltip_map[label] = tooltip;
+
+        // std::cout << "  " << std::setw(30) << detailed_action
+        //           << "  label: " << std::setw(30) << label.c_str()
         //           << "  use_icon (.ui): " << std::setw(6) << use_icon
         //           << "  icon: " << (icon ? "yes" : "no ")
         //           << "  useIcons: " << (int)useIcons
         //           << "  use_icon.size(): " << use_icon.size()
+        //           << "  tooltip: " << tooltip.c_str()
         //           << std::endl;
+
         auto menu_item = Gio::MenuItem::create(label, detailed_action);
         if (icon &&
             (useIcons == UseIcons::always ||

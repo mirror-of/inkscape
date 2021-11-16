@@ -20,6 +20,14 @@
 #include <iostream>
 #include <gtkmm.h>
 
+#include "inkscape-application.h"  // Action extra data
+
+// Could be used to update status bar.
+// bool on_enter_notify(GdkEventCrossing* crossing_event, Gtk::MenuItem* menuitem)
+// {
+//     return false;
+// }
+
 /*
  *  Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
  *  The CSS will apply to all menu icons but is updated as each menu is shown.
@@ -93,11 +101,36 @@ shift_icons_recursive(Gtk::MenuShell *menu)
         // Connect signal
         menu->signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(&shift_icons), menu));
 
+        static auto app = InkscapeApplication::instance();
+        auto label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
+
         // Look for descendent menus.
         auto children = menu->get_children(); // Should be Gtk::MenuItem's
         for (auto child : children) {
             auto menuitem = dynamic_cast<Gtk::MenuItem *>(child);
             if (menuitem) {
+
+                // Use label as alternative way to figure out tooltip.
+                auto label = menuitem->get_label();
+                if (label.empty()) {
+                    auto container = menuitem->get_child();
+                    auto box = dynamic_cast<Gtk::Box *>(container);
+                    if (box) {
+                        std::vector<Gtk::Widget *> children = box->get_children();
+                        if (children.size() == 2) {
+                            auto label_widget = dynamic_cast<Gtk::Label *>(children[1]);
+                            if (label_widget) {
+                                label = label_widget->get_label();
+                            }
+                        }
+                    }
+                }
+
+                auto it = label_to_tooltip_map.find(label);
+                if (it != label_to_tooltip_map.end()) {
+                    menuitem->set_tooltip_text(it->second);
+                }
+
                 auto submenu = menuitem->get_submenu();
                 if (submenu) {
                     shift_icons_recursive(submenu);

@@ -118,6 +118,10 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add_actions_view_mode(this);            // Actions to change how Inkscape canvas is displayed.
     add_actions_view_window(this);          // Actions to add/change window of Inkscape
 
+    // This is called here (rather than in InkscapeApplication) solely to add win level action
+    // tooltips to the menu label-to-tooltip map.
+    build_menu();
+
     // ========== Drag and Drop of Documents =========
     ink_drag_setup(_desktop_widget);
 

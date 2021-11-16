@@ -752,8 +752,9 @@ InkscapeApplication::on_startup2()
     // ========================= GUI Init =========================
     Gtk::Window::set_default_icon_name("org.inkscape.Inkscape");
 
-    build_menu(); // Builds and adds menu to app. Used by all Inkscape windows. This can be done
-                  // before all actions defined.
+    // build_menu(); // Builds and adds menu to app. Used by all Inkscape windows. This can be done
+                     // before all actions defined. * For the moment done by each window so we can add
+                     // window action info to menu_label_to_tooltip map.
 
     // Shortcuts
     // For verbs, shortcuts need to be setup before GUI elements are created! After verbs are gone,
