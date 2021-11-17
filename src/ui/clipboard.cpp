@@ -128,6 +128,7 @@ public:
 private:
     void _cleanStyle(SPCSSAttr *);
     void _copySelection(ObjectSet *);
+    void _copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target);
     void _copyUsedDefs(SPItem *);
     void _copyGradient(SPGradient *);
     void _copyPattern(SPPattern *);
@@ -918,14 +919,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
                 obj_copy = _copyNode(obj, _doc, _clipnode);
 
             // copy complete inherited style
-            SPCSSAttr *css = sp_repr_css_attr_inherited(obj, "style");
-            for (auto iter : item->style->properties()) {
-                if (iter->style_src == SPStyleSrc::STYLE_SHEET) {
-                    css->setAttributeOrRemoveIfEmpty(iter->name(), iter->get_value());
-                }
-            }
-            sp_repr_css_set(obj_copy, css, "style");
-            sp_repr_css_attr_unref(css);
+            _copyCompleteStyle(item, obj_copy);
 
             // 1.1 COPYPASTECLONESTAMPLPEBUG
             if (_clipboardSPDoc) {
@@ -964,6 +958,37 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     }
 }
 
+/**
+ * Copies the style from the stylesheet to preserve it.
+ *
+ * @param item - The source item (connected to it's document)
+ * @param target - The target xml node to store the style in.
+ */
+void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target)
+{
+    auto source = item->getRepr();
+    SPCSSAttr *css = sp_repr_css_attr_inherited(source, "style");
+    for (auto iter : item->style->properties()) {
+        if (iter->style_src == SPStyleSrc::STYLE_SHEET) {
+            css->setAttributeOrRemoveIfEmpty(iter->name(), iter->get_value());
+        }
+    }
+    sp_repr_css_set(target, css, "style");
+    sp_repr_css_attr_unref(css);
+
+    if (dynamic_cast<SPGroup *>(item)) {
+        // Recursivly go through chldren too
+        auto source_child = source->firstChild();
+        auto target_child = target->firstChild();
+        while (source_child && target_child) {
+            if (auto child_item = dynamic_cast<SPItem *>(item->document->getObjectByRepr(source_child))) {
+                _copyCompleteStyle(child_item, target_child);
+            }
+            source_child = source_child->next();
+            target_child = target_child->next();
+        }
+    }
+}
 
 /**
  * Recursively copy all the definitions used by a given item to the clipboard defs.
