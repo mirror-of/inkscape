@@ -5,6 +5,7 @@ license: GPL-3.0
 confinement: strict
 grade: stable
 base: core20
+compression: lzo
 
 plugs:
   dot-config-inkscape:
