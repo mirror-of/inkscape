@@ -902,7 +902,7 @@ void ObjectsPanel::setRootWatcher()
 
     if (auto document = getDocument()) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool layers_only = prefs->getBool("/dialogs/objects/layers_only", true);
+        bool layers_only = prefs->getBool("/dialogs/objects/layers_only", false);
         root_watcher = new ObjectWatcher(this, document->getRoot(), nullptr, layers_only);
         layerChanged(getDesktop()->layerManager().currentLayer());
     }
@@ -911,7 +911,7 @@ void ObjectsPanel::setRootWatcher()
 void ObjectsPanel::selectionChanged(Selection *selected)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if(!prefs->getBool("/dialogs/objects/layers_only", true)) {
+    if(!prefs->getBool("/dialogs/objects/layers_only", false)) {
         root_watcher->setSelectedBitRecursive(SELECTED_OBJECT, false);
 
         for (auto item : selected->items()) {
