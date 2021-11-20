@@ -116,14 +116,8 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
       _stroke(Gtk::ORIENTATION_HORIZONTAL)
 {
     set_name("StyleSwatch");
-    Glib::ustring fill = "<small>";
-    fill += _("Fill:");
-    fill += "</small>";
-    Glib::ustring stroke = "<small>";
-    stroke += _("Stroke:");
-    stroke += "</small>";
-    _label[SS_FILL].set_markup(fill.c_str());
-    _label[SS_STROKE].set_markup(stroke.c_str());
+    _label[SS_FILL].set_markup(_("Fill:"));
+    _label[SS_STROKE].set_markup(_("Stroke:"));
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
         _label[i].set_halign(Gtk::ALIGN_START);

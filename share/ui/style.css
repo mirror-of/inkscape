@@ -601,3 +601,7 @@ button.square-button image {
     padding-left: 6px;
     border-left: 3px solid white;
 }
+
+#StyleSwatch label {
+    font-size: small;
+}
