@@ -146,8 +146,12 @@ build_menu()
                     break;
                 }
 
-                std::string action_name = "app.file-open-window('"+recent_file->get_uri_display()+"')";
-                sub_gmenu->append(recent_file->get_short_name(),action_name);
+                auto item { Gio::MenuItem::create(recent_file->get_short_name(), Glib::ustring()) };
+                auto target { Glib::Variant<Glib::ustring>::create(recent_file->get_uri_display()) };
+                // note: setting action and target separately rather than using convenience menu method append
+                // since some filename characters can result in invalid "direct action" string
+                item->set_action_and_target(Glib::ustring("app.file-open-window"), target);
+                sub_gmenu->append_item(item);
             }
         }
 
