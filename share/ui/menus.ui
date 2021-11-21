@@ -269,14 +269,14 @@
             <attribute name='icon'>edit-select-same-fill-and-stroke</attribute>
           </item>
           <item>
-            <attribute name='label' translatable="yes">Paste _Width</attribute>
-            <attribute name='action'>app.paste-width</attribute>
-            <attribute name='icon'>edit-paste-width</attribute>
-          </item>
-          <item>
             <attribute name='label' translatable="yes">_Fill Color</attribute>
             <attribute name='action'>win.select-same-fill</attribute>
             <attribute name='icon'>edit-select-same-fill</attribute>
+          </item>
+          <item>
+            <attribute name='label' translatable="yes">_Stroke Color</attribute>
+            <attribute name='action'>win.select-same-stroke-color</attribute>
+            <attribute name='icon'>edit-select-same-stroke-color</attribute>
           </item>
           <item>
             <attribute name='label' translatable="yes">Stroke St_yle</attribute>
@@ -512,14 +512,16 @@
         </item>
       </section>
     </submenu>
-    <item>
-      <attribute name='label' translatable="yes">Gray Scale</attribute>
-      <attribute name='action'>win.canvas-color-mode</attribute>
-    </item>
-    <item>
-      <attribute name='label' translatable="yes">Color Management</attribute>
-      <attribute name='action'>win.canvas-color-manage</attribute>
-    </item>
+    <section>
+      <item>
+        <attribute name='label' translatable="yes">Gray Scale</attribute>
+        <attribute name='action'>win.canvas-color-mode</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">Color Management</attribute>
+        <attribute name='action'>win.canvas-color-manage</attribute>
+      </item>
+    </section>
     <item>
       <attribute name='label' translatable="yes">Page _Grid</attribute>
       <attribute name='action'>win.canvas-show-grid</attribute>
