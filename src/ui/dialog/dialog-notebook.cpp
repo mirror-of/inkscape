@@ -423,8 +423,10 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
     property_vscrollbar_policy().set_value(a.get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
 
     set_allocation(a);
-    Gtk::Allocation allocation = get_allocation();
-    on_size_allocate_notebook(allocation);
+    // only update notebook tabs on horizontal changes
+    if (a.get_width() != _prev_alloc_width) {
+        on_size_allocate_notebook(a);
+    }
 }
 
 /**
