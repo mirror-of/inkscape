@@ -1,8 +1,12 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
-// Use Canvas to render a mesh gradient, passing the rendering to an image via a data stream.
-// Copyright: Tavmjong Bah 2018
-// Contributor: Valentin Ionita 2019
-// Distributed under GNU General Public License version 2 or later. See <http://fsf.org/>.
+// SPDX-License-Identifier: CC0
+/** @file
+ * Use Canvas to render a mesh gradient, passing the rendering to an image via a data stream.
+ *//*
+ * Authors:
+ *  - Tavmjong Bah 2018
+ *  - Valentin Ionita (2019)
+ * License: CC0 / Public Domain
+ */
 
 (function () {
   // Name spaces -----------------------------------
