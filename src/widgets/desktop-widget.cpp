@@ -190,6 +190,21 @@ void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 
 static CMSPrefWatcher* watcher = nullptr;
 
+bool SPDesktopWidget::SignalEvent(GdkEvent* event)
+{
+    /**
+     * What we want to do here is pass the keyboard events *up* to the canvas
+     * if the mouse is hovering over the canvas. IF and only if, the canvas
+     * is not currently listening to the event stack because it's not in focus.
+     */
+    if (event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE) {
+        if (!_canvas->is_focus() && _canvas_grid->mouse_inside) {
+            return sp_desktop_root_handler(event, desktop);
+        }
+    }
+    return false;
+}
+
 SPDesktopWidget::SPDesktopWidget()
 {
     auto *const dtw = this;
@@ -205,6 +220,8 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_statusbar = Gtk::manage(new Gtk::Box());
     dtw->_statusbar->set_name("DesktopStatusBar");
     dtw->_vbox->pack_end(*dtw->_statusbar, false, true);
+
+    this->signal_event().connect(sigc::mem_fun(*this, &SPDesktopWidget::SignalEvent));
 
     /* Swatches panel */
     {

@@ -273,6 +273,13 @@ CanvasGrid::OnSizeAllocate(Gtk::Allocation& allocation)
 bool
 CanvasGrid::SignalEvent(GdkEvent *event)
 {
+    // Track if the mouse is inside the canvas box
+    if (event->type == GDK_ENTER_NOTIFY) {
+        mouse_inside = true;
+    } else if (event->type == GDK_LEAVE_NOTIFY) {
+        mouse_inside = false;
+    }
+
     if (event->type == GDK_BUTTON_PRESS) {
         _canvas->grab_focus();
         _command_palette.close();
@@ -283,19 +290,6 @@ CanvasGrid::SignalEvent(GdkEvent *event)
             _dtw->desktop->getCanvasDrawing()->set_sticky(true);
         } else {
             _dtw->desktop->getCanvasDrawing()->set_sticky(false);
-        }
-    }
-
-    {
-        // The key press/release events need to be passed to desktop handler explicitly,
-        // because otherwise the event contexts only receive key events when the mouse cursor
-        // is over the canvas. This redirection is only done for key events and only if there's no
-        // current item on the canvas, because item events and all mouse events are caught
-        // and passed on by the canvas acetate (I think). --bb
-
-        if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-            && !_canvas->get_current_canvas_item()) {
-            return sp_desktop_root_handler (event, _dtw->desktop);
         }
     }
     return false;

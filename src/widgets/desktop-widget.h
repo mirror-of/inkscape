@@ -147,6 +147,7 @@ private:
 
     unsigned int _interaction_disabled_counter = 0;
 
+    bool SignalEvent(GdkEvent* event);
 public:
     Geom::Point _ruler_origin;
     double _dt2r;
