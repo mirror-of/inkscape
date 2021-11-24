@@ -14,18 +14,13 @@
 
 #include "png-output.h"
 
-#include <clocale>
-#include <cstdio>
-#include <fstream>
-#include <ios>
+#include <cstdlib>
 #include <iostream>
 #include <string>
+#include <glibmm.h>
+#include <giomm.h>
 
 #include "clear-n_.h"
-
-// Replace with C++17, see notes in file-export-cmd.cpp
-#include <boost/filesystem.hpp>
-namespace filesystem = boost::filesystem;
 
 namespace Inkscape {
 namespace Extension {
@@ -35,10 +30,18 @@ void PngOutput::export_raster(Inkscape::Extension::Output * /*module*/,
         const SPDocument * /*doc*/, std::string const &png_file, gchar const *filename)
 {
     // We want to move the png file to the new location
-    auto input_fn = filesystem::path(png_file);
-    auto output_fn = filesystem::path(filename);
-    filesystem::copy_file(input_fn, output_fn, filesystem::copy_option::overwrite_if_exists);
-    boost::filesystem::remove(input_fn);
+    Glib::RefPtr<Gio::File> input_fn = Gio::File::create_for_path(png_file);
+    Glib::RefPtr<Gio::File> output_fn = Gio::File::create_for_path(filename);
+    try {
+        // NOTE: if the underlying filesystem doesn't support moving
+        //       GIO will fall back to a copy and remove operation.
+        input_fn->move(output_fn, Gio::FILE_COPY_OVERWRITE);
+    }
+    catch (const Gio::Error& e) {
+        std::cerr << "Moving resource " << png_file
+                  << " to "             << filename
+                  << " failed: "        << e.what() << std::endl;
+    }
 }
 
 void PngOutput::init()
