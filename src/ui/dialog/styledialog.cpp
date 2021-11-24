@@ -1150,7 +1150,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         iter->style->readFromObject(iter);
         iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
-    DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
+    DocumentUndo::done(SP_ACTIVE_DOCUMENT, _("Edited style element."), "");
 
     g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }

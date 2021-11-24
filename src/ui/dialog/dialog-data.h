@@ -28,14 +28,15 @@ public:
     Glib::ustring icon_name;
 };
 
+// Note the "AttrDialog" is now part of the "XMLDialog" and the "Style" dialog is part of the "Selectors" dialog.
+// Also note that the "AttrDialog" does not correspond to SP_VERB_DIALOG_ATTR!!!!! (That would be the "ObjectAttributes" dialog.)
+
 // short-term fix for missing dialog titles; map<ustring, T> exhibits a bug where "SVGFonts" entry cannot be found
 // static std::map<Glib::ustring, DialogData> dialog_data =
 static std::map<std::string, DialogData> dialog_data =
 {
     // clang-format off
     {"AlignDistribute",    {N_("_Align and Distribute..."), INKSCAPE_ICON("dialog-align-and-distribute")}},
-    // {"Arrange",            {N_("_Arrange..."),              INKSCAPE_ICON("dialog-rows-and-columns")    }},
-    {"AttrDialog",         {N_("_Object attributes..."),    INKSCAPE_ICON("dialog-object-properties")   }},
     {"CloneTiler",         {N_("Create Tiled Clones..."),   INKSCAPE_ICON("dialog-tile-clones")         }},
     {"DocumentProperties", {N_("_Document Properties..."),  INKSCAPE_ICON("document-properties")        }},
     {"Export",             {N_("_Export PNG Image..."),     INKSCAPE_ICON("document-export")            }},
@@ -54,7 +55,6 @@ static std::map<std::string, DialogData> dialog_data =
     {"PaintServers",       {N_("_Paint Servers..."),        INKSCAPE_ICON("symbols")                    }},
     {"Preferences",        {N_("P_references"),             INKSCAPE_ICON("preferences-system")         }},
     {"Selectors",          {N_("_Selectors and CSS..."),    INKSCAPE_ICON("dialog-selectors")           }},
-    {"Style",              {N_("Style Dialog..."),          ""                                          }},
     {"SVGFonts",           {N_("SVG Font Editor..."),       INKSCAPE_ICON("dialog-svg-font")            }},
     {"Swatches",           {N_("S_watches..."),             INKSCAPE_ICON("swatches")                   }},
     {"Symbols",            {N_("S_ymbols..."),              INKSCAPE_ICON("symbols")                    }},

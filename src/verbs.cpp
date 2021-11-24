@@ -1209,9 +1209,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_BREAK_APART:
             selection->breakApart();
             break;
-        // case SP_VERB_SELECTION_ARRANGE:
-            // container->new_dialog(SP_VERB_SELECTION_ARRANGE);
-            // break;
         default:
             break;
     }
@@ -1818,12 +1815,10 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_ITEM:
         case SP_VERB_DIALOG_INPUT:
         case SP_VERB_DIALOG_EXPORT:
-        case SP_VERB_DIALOG_LAYERS:
         case SP_VERB_DIALOG_OBJECTS:
         case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
         case SP_VERB_DIALOG_FILTER_EFFECTS:
         case SP_VERB_DIALOG_SVG_FONTS:
-        case SP_VERB_DIALOG_STYLE:
             container->new_dialog(reinterpret_cast<std::size_t>(data));
             break;
         case SP_VERB_DIALOG_TOGGLE:
@@ -2293,8 +2288,6 @@ Verb *Verb::_base_verbs[] = {
     // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
                       N_("Break selected paths into subpaths"), INKSCAPE_ICON("path-break-apart")),
-    // new SelectionVerb(SP_VERB_SELECTION_ARRANGE, "DialogArrange", N_("_Arrange..."),
-                    //   N_("Arrange selected objects in a table or circle"), INKSCAPE_ICON("dialog-rows-and-columns")),
     new SelectionVerb(SP_VERB_SELECTION_FILL_BETWEEN_MANY, "SelectionFillBetweenMany", N_("Fill between paths"),
                       N_("Create a fill object using the selected paths"), nullptr),
     // Layer
@@ -2530,19 +2523,14 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("dialog-tile-clones")),
     new DialogVerb(SP_VERB_DIALOG_ATTR, "DialogObjectAttributes", N_("_Object attributes..."),
                    N_("Edit the object attributes..."), INKSCAPE_ICON("dialog-object-properties")),
-    new DialogVerb(SP_VERB_DIALOG_ATTR_XML, "DialogAttrDialog", N_("_Object attributes..."),
-                   N_("Edit the object attributes..."), INKSCAPE_ICON("dialog-object-properties")),
     new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogObjectProperties", N_("_Object Properties..."),
                    N_("Edit the ID, locked and visible status, and other object properties"),
                    INKSCAPE_ICON("dialog-object-properties")),
     new DialogVerb(SP_VERB_DIALOG_INPUT, "DialogInput", N_("_Input Devices..."),
                    N_("Configure extended input devices, such as a graphics tablet"),
                    INKSCAPE_ICON("dialog-input-devices")),
-    new DialogVerb(SP_VERB_DIALOG_LAYERS, "DialogLayers", N_("Layer_s..."), N_("View Layers"),
-                   INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Layers and Object_s..."), N_("View Layers and Objects"),
                    INKSCAPE_ICON("dialog-objects")),
-    new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."), N_("View Style Dialog"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects..."),
                    N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),

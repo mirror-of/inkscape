@@ -25,12 +25,13 @@
 #include "ui/dialog/dialog-data.h"
 #include "ui/icon-names.h"
 
+// Note the "AttrDialog" is now part of the "XMLDialog" and the "Style" dialog is part of the "Selectors" dialog.
+// Also note that the "AttrDialog" does not correspond to SP_VERB_DIALOG_ATTR!!!!! (That would be the "ObjectAttributes" dialog.)
+
 std::vector<std::vector<Glib::ustring>> raw_data_dialogs =
 {
     // clang-format off
     {"win.dialog-open('AlignDistribute')",    N_("Open AlignDistribute"),      "Dialog",  N_("Align and distribute objects")                                                           },
-    {"win.dialog-open('Arrange')",            N_("Open Arrange"),              "Dialog",  N_("Arrange selected objects in a table or circle")                                          },
-    {"win.dialog-open('AttrDialog')",         N_("Open AttrDialog"),           "Dialog",  N_("Edit the object attributes...")                                                          },
     {"win.dialog-open('CloneTiler')",         N_("Open CloneTiler"),           "Dialog",  N_("Create multiple clones of selected object, arranging them into a pattern or scattering") },
     {"win.dialog-open('DocumentProperties')", N_("Open DocumentProperties"),   "Dialog",  N_("Edit properties of this document (to be saved with the document)")                       },
     {"win.dialog-open('Export')",             N_("Open Export"),               "Dialog",  N_("Export this document or a selection as a PNG image")                                     },
@@ -40,17 +41,15 @@ std::vector<std::vector<Glib::ustring>> raw_data_dialogs =
     {"win.dialog-open('Glyphs')",             N_("Open Glyphs"),               "Dialog",  N_("Select Unicode characters from a palette")                                               },
     {"win.dialog-open('IconPreview')",        N_("Open IconPreview"),          "Dialog",  N_("Preview Icon")                                                                           },
     {"win.dialog-open('Input')",              N_("Open Input"),                "Dialog",  N_("Configure extended input devices, such as a graphics tablet")                            },
-    {"win.dialog-open('Layers')",             N_("Open Layers"),               "Dialog",  N_("View Layers")                                                                            },
     {"win.dialog-open('LivePathEffect')",     N_("Open LivePathEffect"),       "Dialog",  N_("Manage, edit, and apply path effects")                                                   },
     {"win.dialog-open('Memory')",             N_("Open Memory"),               "Dialog",  N_("View memory use")                                                                        },
     {"win.dialog-open('Messages')",           N_("Open Messages"),             "Dialog",  N_("View debug messages")                                                                    },
-    {"win.dialog-open('ObjectAttributes')",   N_("Open ObjectAttributes"),     "Dialog",  N_("Edit the object attributes...")                                                          },
+    {"win.dialog-open('ObjectAttributes')",   N_("Open ObjectAttributes"),     "Dialog",  N_("Edit the object attributes (context dependent)...")                                      },
     {"win.dialog-open('ObjectProperties')",   N_("Open ObjectProperties"),     "Dialog",  N_("Edit the ID, locked and visible status, and other object properties")                    },
     {"win.dialog-open('Objects')",            N_("Open Objects"),              "Dialog",  N_("View Objects")                                                                           },
     {"win.dialog-open('PaintServers')",       N_("Open PaintServers"),         "Dialog",  N_("Select paint server from a collection")                                                  },
     {"win.dialog-open('Preferences')",        N_("Open Preferences"),          "Dialog",  N_("Edit global Inkscape preferences")                                                       },
     {"win.dialog-open('Selectors')",          N_("Open Selectors"),            "Dialog",  N_("View and edit CSS selectors and styles")                                                 },
-    {"win.dialog-open('Style')",              N_("Open Style"),                "Dialog",  N_("View Style Dialog")                                                                      },
     {"win.dialog-open('SVGFonts')",           N_("Open SVGFonts"),             "Dialog",  N_("Edit SVG fonts")                                                                         },
     {"win.dialog-open('Swatches')",           N_("Open Swatches"),             "Dialog",  N_("Select colors from a swatches palette") /* TRANSLATORS: "Swatches" -> color samples */   },
     {"win.dialog-open('Symbols')",            N_("Open Symbols"),              "Dialog",  N_("Select symbol from a symbols palette")                                                   },
