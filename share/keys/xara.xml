@@ -71,12 +71,12 @@ Hom/end keys-select minimum or maximum feather values
 <!-- File -->
 
   <bind gaction="win.document-new"                  keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
-  <bind gaction="win.document-open"                     keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-open"                 keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
   <bind gaction="win.document-save"                 keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
   <bind gaction="win.document-print"                keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
   <bind gaction="win.document-import"               keys="&lt;ctrl&gt;&lt;shift&gt;I, &lt;ctrl&gt;&lt;shift&gt;i" />
   <bind gaction="win.dialog-open('Export')"         keys="&lt;ctrl&gt;&lt;shift&gt;e, &lt;ctrl&gt;&lt;shift&gt;E" />
-  <bind gaction="win.document-close"                    keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
+  <bind gaction="win.document-close"                keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
   <bind gaction="app.quit-inkscape"                 keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
   <bind gaction="win.document-revert" />
   <bind gaction="win.document-save-as" />
@@ -99,21 +99,6 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="win.tool-switch('Gradient')"       keys="F5, F6, g, G" />
   <bind gaction="win.tool-switch('Connector')"      keys="&lt;ctrl&gt;F2, o, O" />
   <bind gaction="win.tool-switch('Dropper')"        keys="F7, d, D" />
-
-  <!-- <binhttps://gitlab.com/inkscape/inkscaped action="SelectPrefs" /> -->
-  <bind action="NodePrefs" />
-  <bind action="ZoomPrefs" />
-  <bind action="RectPrefs" />
-  <bind action="ArcPrefs" />
-  <bind action="StarPrefs" />
-  <bind action="SpiralPrefs" />
-  <bind action="PencilPrefs" />
-  <bind action="PenPrefs" />
-  <bind action="CalligraphicPrefs" />
-  <bind action="TextPrefs" />
-  <bind action="GradientPrefs" />
-  <bind action="ConnectorPrefs" />
-  <bind action="DropperPrefs" />
 
 <!-- Zoom -->
 
@@ -139,10 +124,7 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="win.canvas-scroll-bars" />
   <bind gaction="win.window-new"/>
   <bind gaction="win.dialog-open('IconPreview')"/>
-
-  <bind action="ViewModeNormal"/>
-  <bind action="ViewModeOutline"/>
-  <bind action="ViewModeOutlineOverlay" />
+  <bind gaction="win.dialog-toggle"                 keys="F12" />
 
 <!-- Edit -->
 
@@ -167,11 +149,7 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="app.paste-size-separately" />
   <bind gaction="app.paste-width-separately" />
   <bind gaction="app.paste-height-separately" />
-  <bind gaction="win.select-none" /> <!-- FIXME: currently deselecting is bypassing the verb, so it's not bound to Esc as it should be -->
-
-  <bind action="EditClearAll" />
-  <bind key="exclam" modifiers="Alt" action="EditInvertInAllLayers" display="true"/>
-  <bind key="exclam" modifiers="Alt,Shift" action="EditInvertInAllLayers" />
+  <bind gaction="win.select-none" />
 
 
 <!-- Objects/selection -->
@@ -182,8 +160,8 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="app.selection-bottom"              keys="&lt;ctrl&gt;B, &lt;ctrl&gt;b, End, KP_End" />
   <bind gaction="app.selection-raise"               keys="&lt;ctrl&gt;&lt;shift&gt;F, &lt;ctrl&gt;&lt;shift&gt;f, Page_Up, KP_Page_Up" />
   <bind gaction="app.selection-lower"               keys="&lt;ctrl&gt;&lt;shift&gt;B, &lt;ctrl&gt;&lt;shift&gt;b, Page_Down, KP_Page_Down" />
-  <bind gaction="app.selection-group"           keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
-  <bind gaction="app.selection-ungroup"         keys="&lt;ctrl&gt;&lt;shift&gt;g, &lt;ctrl&gt;&lt;shift&gt;G, &lt;ctrl&gt;u, &lt;ctrl&gt;U" />
+  <bind gaction="app.selection-group"               keys="&lt;ctrl&gt;g, &lt;ctrl&gt;G" />
+  <bind gaction="app.selection-ungroup"             keys="&lt;ctrl&gt;&lt;shift&gt;g, &lt;ctrl&gt;&lt;shift&gt;G, &lt;ctrl&gt;u, &lt;ctrl&gt;U" />
   <bind gaction="app.selection-make-bitmap-copy"    keys="&lt;ctrl&gt;&lt;shift&gt;C, &lt;ctrl&gt;&lt;shift&gt;c" />
   <bind gaction="win.dialog-open('Trace')"          keys="&lt;alt&gt;&lt;shift&gt;b, &lt;alt&gt;&lt;shift&gt;B" />
   <bind gaction="app.object-to-pattern"             keys="&lt;alt&gt;i, &lt;alt&gt;I" />
@@ -192,11 +170,8 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="app.object-release-clip-mask" />
   <bind gaction="app.object-set-clip" />
   <bind gaction="app.object-release-clip" />
-  <!-- FIXME: currently these bypass the verbs, so the verbs are not bound to ctrl+[] as they should be -->
-  <bind gaction="app.object-rotate-90-cw" />
-  <bind gaction="app.object-rotate-90-ccw" />
-
-  <bind action="ObjectRemoveTransform" /> 
+  <bind gaction="app.object-rotate-90-cw"           keys="&lt;primary&gt;bracketright" />
+  <bind gaction="app.object-rotate-90-ccw"          keys="&lt;primary&gt;bracketleft" />
 
 <!-- Path -->
 
@@ -274,10 +249,8 @@ Hom/end keys-select minimum or maximum feather values
 
 <!-- Help -->
 
-  <bind action="HelpAboutExtensions" />
   <bind gaction="win.dialog-open('Memory')" />
   <bind gaction="app.help-about" />
-  <!-- There are also verbs for tutorials, if you really need them -->
 
 <!-- Effects -->
 

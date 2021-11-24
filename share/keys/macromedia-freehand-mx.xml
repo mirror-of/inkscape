@@ -83,21 +83,21 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
 
   <!-- Not included in Freehand but including here anyway for sanity.  
   Fireworks does use Ctrl+= for Zoom In and Ctrl+- for Zoom Out.  -->
-  <bind ganction="win.canvas-zoom-in" keys="plus, equal, KP_Add, &lt;shift&gt;plus" />
+  <bind gaction="win.canvas-zoom-in" keys="plus, equal, KP_Add, &lt;shift&gt;plus" />
 
-  <bind ganction="win.canvas-zoom-out" keys="minus, underscore, KP_Subtract" />
+  <bind gaction="win.canvas-zoom-out" keys="minus, underscore, KP_Subtract" />
 
   <!-- Fit Selection  Ctrl+Alt+0 --> 
-  <bind ganction="win.canvas-zoom-selection" keys="&lt;primary&gt;&lt;alt&gt;0"/>
+  <bind gaction="win.canvas-zoom-selection" keys="&lt;primary&gt;&lt;alt&gt;0"/>
   <!-- Fit to Page  Ctrl+Shift+W -->
-  <bind ganction="win.canvas-zoom-page" keys="&lt;primary&gt;&lt;shift&gt;w"/>
+  <bind gaction="win.canvas-zoom-page" keys="&lt;primary&gt;&lt;shift&gt;w"/>
   <!-- Fit All  Ctrl+0 -->
-  <bind ganction="win.canvas-zoom-drawing" keys="&lt;primary&gt;0"/>
+  <bind gaction="win.canvas-zoom-drawing" keys="&lt;primary&gt;0"/>
 
   <!-- Magnification 50%  Ctrl+5-->
-  <bind ganction="win.canvas-zoom-1-2" keys="&lt;primary&gt;5"/>
+  <bind gaction="win.canvas-zoom-1-2" keys="&lt;primary&gt;5"/>
   <!-- Magnification 100%  Ctrl+1 -->
-  <bind ganction="win.canvas-zoom-1-1" keys="&lt;primary&gt;1"/>
+  <bind gaction="win.canvas-zoom-1-1" keys="&lt;primary&gt;1"/>
   <!-- Magnification 200%  Ctrl+2 -->
   <!-- Magnification 400%  Ctrl+4 -->
   <!-- Magnification 800%  Ctrl+8 -->
@@ -125,7 +125,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="win.canvas-scroll-bars" />
 
   <!-- TODO: Freehand "View, Guides, Show  Ctrl+;" -->
-  <bind gaction="win.canvas-show-guides" keys="&lt;ctrl&gt;" />
+  <!-- <bind gaction="win.canvas-show-guides" keys="&lt;ctrl&gt;;" /> -->
 
   <!-- View, Grid, Show  Ctrl+Alt+G.  -->
   <bind gaction="win.canvas-show-grid"  keys="&lt;ctrl&gt;&lt;alt&gt;g, &lt;ctrl&gt;&lt;alt&gt;G" />
@@ -135,11 +135,6 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="win.window-new"        keys="&lt;shift&gt;&lt;alt&gt;n, &lt;shift&gt;&lt;alt&gt;N" />
 
   <bind gaction="win.dialog-open('IconPreview')"/>
-
-  <bind action="ViewModeNormal"/>
-  <!-- Wireframe View (Inkscape).  Keyline View Ctrl+K  (Freehand).  -->
-  <bind key="K" modifiers="Ctrl" action="ViewModeOutline"/>
-  <bind action="ViewModeOutlineOverlay" />
 
   <!-- Freehand also has a Fast Mode  Ctrl+Shift+K  
   which can be used in combination with Keyline.  --> 

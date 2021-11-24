@@ -55,13 +55,13 @@ Future improvements:
 <!-- File -->
 
   <bind gaction="win.document-new"                          keys="&lt;ctrl&gt;n, &lt;ctrl&gt;N" />
-  <bind gaction="win.document-open"                             keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
+  <bind gaction="win.document-open"                         keys="&lt;ctrl&gt;o, &lt;ctrl&gt;O" />
   <bind gaction="win.document-save"                         keys="&lt;ctrl&gt;s, &lt;ctrl&gt;S" />
   <bind gaction="win.document-save-as"                      keys="&lt;ctrl&gt;&lt;shift&gt;s, &lt;ctrl&gt;&lt;shift&gt;S" />
   <bind gaction="win.document-print"                        keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
   <bind gaction="win.document-import"                       keys="&lt;ctrl&gt;i, &lt;ctrl&gt;I" />
   <bind gaction="win.dialog-open('Export')"                 keys="&lt;ctrl&gt;&lt;shift&gt;e, &lt;ctrl&gt;&lt;shift&gt;E" />
-  <bind gaction="win.document-close"                            keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
+  <bind gaction="win.document-close"                        keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
   <bind gaction="app.quit-inkscape"                         keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
   <bind gaction="win.document-revert" />
   <bind gaction="win.document-cleanup" />
@@ -85,21 +85,6 @@ Future improvements:
   <bind gaction="win.tool-switch('Gradient')"               keys="&lt;ctrl&gt;F1" />
   <bind gaction="win.tool-switch('Connector')"              keys="&lt;ctrl&gt;F2, o, O" />
   <bind gaction="win.tool-switch('Dropper')"                keys="F7, 3, g, G" />
-
-  <bind action="SelectPrefs" />
-  <bind action="NodePrefs" />
-  <bind action="ZoomPrefs" />
-  <bind action="RectPrefs" />
-  <bind action="ArcPrefs" />
-  <bind action="StarPrefs" />
-  <bind action="SpiralPrefs" />
-  <bind action="PencilPrefs" />
-  <bind action="PenPrefs" />
-  <bind action="CalligraphicPrefs" />
-  <bind action="TextPrefs" />
-  <bind action="GradientPrefs" />
-  <bind action="ConnectorPrefs" />
-  <bind action="DropperPrefs" />
 
 <!-- Zoom -->
 
@@ -126,7 +111,7 @@ Future improvements:
   <bind gaction="win.canvas-display-mode-cycle"             keys="&lt;primary&gt;KP_5, &lt;primary&gt;KP_Begin"/>
   <bind gaction="win.window-new"/>
   <bind gaction="win.dialog-open('IconPreview')"/>
-
+  <bind gaction="win.dialog-toggle"                         keys="F12, r"/>
   <bind action="ViewModeNormal"/>
   <bind action="ViewModeOutline"/>
   <bind action="ViewModeOutlineOverlay" />
@@ -153,7 +138,7 @@ Future improvements:
   <bind gaction="win.select-all"                            keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
   <bind gaction="win.select-all-layers"                     keys="&lt;ctrl&gt;&lt;alt&gt;a, &lt;ctrl&gt;&lt;alt&gt;A" />
   <bind gaction="win.select-invert"                         keys="exclam, &lt;shift&gt;exclam" />
-  <bind gaction="win.select-none" /> <!-- FIXME: currently deselecting is bypassing the verb, so it's not bound to Esc as it should be -->
+  <bind gaction="win.select-none" />
   <bind gaction="app.paste-size" />
   <bind gaction="app.paste-width" />
   <bind gaction="app.paste-height" />
@@ -161,11 +146,6 @@ Future improvements:
   <bind gaction="app.paste-width-separately" />
   <bind gaction="app.paste-height-separately" />
 
-  
-  <bind key="exclam" modifiers="Alt" action="EditInvertInAllLayers" display="true"/>
-  <bind key="exclam" modifiers="Alt,Shift" action="EditInvertInAllLayers" />
-
-  <bind action="EditClearAll" />
 
 <!-- Objects/selection -->
 
@@ -193,7 +173,6 @@ Future improvements:
   <bind gaction="app.object-rotate-90-cw" />
   <bind gaction="app.object-rotate-90-ccw" />
 
-  <bind action="ObjectRemoveTransform" /> 
 
 <!-- Path -->
 
@@ -256,51 +235,32 @@ Future improvements:
 
 <!-- Dialogs -->
 
-  <bind key="x" modifiers="Ctrl,Shift" action="DialogXMLEditor" display="true"/>
-  <bind key="X" modifiers="Ctrl,Shift" action="DialogXMLEditor" />
+  <bind gaction="win.dialog-open('FillStroke')"              keys="&lt;shift&gt;&lt;primary&gt;f"  />
+  <bind gaction="win.dialog-open('ObjectProperties')"        keys="&lt;shift&gt;&lt;primary&gt;o"  />
+  <bind gaction="win.dialog-open('Symbols')"                 keys="&lt;shift&gt;&lt;primary&gt;y"  />
+  <bind gaction="win.dialog-open('Selectors')"               keys="&lt;shift&gt;&lt;primary&gt;q"  />
+  <bind gaction="win.dialog-open('Transform')"               keys="&lt;shift&gt;&lt;primary&gt;m"  />
+  <bind gaction="win.dialog-open('AlignDistribute')"         keys="&lt;shift&gt;&lt;primary&gt;a"  />
+  <bind gaction="win.dialog-open('UndoHistory')"             keys="&lt;primary&gt;&lt;shift&gt;h"  />
+  <bind gaction="win.dialog-open('Find')"                    keys="&lt;primary&gt;f" />
+  <bind gaction="win.dialog-open('Clonetiler')"/>
+  <bind gaction="win.dialog-open('XMLEditor')"               keys="&lt;primary&gt;&lt;shift&gt;x" />
+  <bind gaction="win.dialog-open('Input')" />
+  <bind gaction="win.dialog-open('Preferences')"             keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
+  <bind gaction="win.dialog-open('LivePathEffect')"          keys="&lt;primary&gt;ampersand, &lt;primary&gt;&lt;shift&gt;7" />
+  <bind gaction="win.dialog-open('Trace')"                   keys="&lt;alt&gt;&lt;shift&gt;b"/>
+  <bind gaction="win.dialog-open('DocumentProperties')"      keys="&lt;primary&gt;&lt;shift&gt;d" />
+  <bind gaction="win.dialog-open('Swatches')"                keys="&lt;primary&gt;&lt;shift&gt;w" />
+  <bind gaction="win.dialog-open('Messages')" />
+  <bind gaction="win.dialog-open('Layers')"                  keys="&lt;primary&gt;&lt;shift&gt;l" />
+  <bind gaction="win.dialog-open('Text')"                    keys="&lt;primary&gt;&lt;shift&gt;t"/>
+  <bind gaction="win.dialog-open('Spellcheck')"              keys="&lt;primary&gt;&lt;alt&gt;k"/>
+  <bind gaction="win.dialog-open('Memory')" />
 
-  <bind key="q" modifiers="Ctrl,Shift" action="DialogSelectors" display="true"/>
-  <bind key="Q" modifiers="Ctrl,Shift" action="DialogSelectors" />
-
-  <bind key="d" modifiers="Ctrl,Shift" action="DialogDocumentProperties" display="true"/>
-  <bind key="D" modifiers="Ctrl,Shift" action="DialogDocumentProperties" />
-
-  <bind key="a" modifiers="Ctrl,Shift" action="DialogAlignDistribute" display="true"/>
-  <bind key="A" modifiers="Ctrl,Shift" action="DialogAlignDistribute" />
-
-  <bind key="t" modifiers="Ctrl,Shift" action="DialogText" display="true"/>
-  <bind key="T" modifiers="Ctrl,Shift" action="DialogText" />
-
-  <bind key="p" modifiers="Ctrl,Shift" action="DialogPreferences" display="true"/>
-  <bind key="P" modifiers="Ctrl,Shift" action="DialogPreferences" />
-
-  <bind key="f" modifiers="Ctrl,Shift" action="DialogFillStroke" display="true"/>
-  <bind key="F" modifiers="Ctrl,Shift" action="DialogFillStroke" />
-
-  <bind key="f" modifiers="Ctrl" action="DialogFind" display="true"/>
-  <bind key="F" modifiers="Ctrl" action="DialogFind" />
-
-  <bind key="m" modifiers="Ctrl,Shift" action="DialogTransform" display="true"/>
-  <bind key="M" modifiers="Ctrl,Shift" action="DialogTransform" />
-
-  <bind key="o" modifiers="Ctrl,Shift" action="DialogObjectProperties" display="true"/>
-  <bind key="O" modifiers="Ctrl,Shift" action="DialogObjectProperties" />
-
-  <bind key="w" modifiers="Ctrl,Shift" action="DialogSwatches" display="true"/>
-  <bind key="W" modifiers="Ctrl,Shift" action="DialogSwatches" />
-
-  <bind action="DialogClonetiler" />
-  <!-- <bind action="DialogArrange" /> -->
-  <bind action="DialogDebug" />
-  <bind action="DialogInput" />
-
-  <bind key="F12" action="DialogsToggle" display="true"/>
-  <bind key="R" action="DialogsToggle" />
-  <bind key="r" action="DialogsToggle" />
+  <bind gaction="win.dialog-toggle"                          keys="F12"/>
 
 <!-- Help -->
 
-  <bind action="HelpAboutExtensions" />
   <bind gaction="win.dialog-open('Memory')" />
   <bind gaction="app.help-about" />
   <!-- There are also verbs for tutorials, if you really need them -->

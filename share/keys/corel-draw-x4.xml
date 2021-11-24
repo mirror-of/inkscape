@@ -91,13 +91,13 @@ See default.xml for more information.
 <!-- View actions -->
 
 <!--  
-  <bind ganction="win.canvas-zoom-in" keys="F2" />
+  <bind gaction="win.canvas-zoom-in" keys="F2" />
 -->
 
-  <bind ganction="win.canvas-zoom-out"          keys="F3" />
-  <bind ganction="win.canvas-zoom-drawing"      keys="F4"/>
-  <bind ganction="win.canvas-zoom-page"         keys="&lt;shift&gt;F4"/>
-  <bind ganction="win.canvas-zoom-selection"    keys="&lt;shift&gt;F2"/>
+  <bind gaction="win.canvas-zoom-out"          keys="F3" />
+  <bind gaction="win.canvas-zoom-drawing"      keys="F4"/>
+  <bind gaction="win.canvas-zoom-page"         keys="&lt;shift&gt;F4"/>
+  <bind gaction="win.canvas-zoom-selection"    keys="&lt;shift&gt;F2"/>
 
 <!-- Not implemented in Corel? !!!!!!!!!!!!
 
@@ -108,10 +108,7 @@ See default.xml for more information.
 
 <!-- Toggle View -->
 
-  <bind ganction="win.canvas-display-mode-cycle" keys="&lt;shift&gt;F9"/>
-  <bind action="ViewColorModeToggle" />
-  <bind action="ViewSplitModeToggle" />
-  <bind action="ViewXRayToggle" />
+  <bind gaction="win.canvas-display-mode-cycle" keys="&lt;shift&gt;F9"/>
 
 <!-- Path actions -->
 

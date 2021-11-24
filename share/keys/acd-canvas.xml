@@ -69,7 +69,6 @@ Scissor tool - C
 
   <bind gaction="win.tool-switch('Select')" keys="S, s" />
 
-  <bind action="SelectPrefs" />
 <!--
   <bind gaction="win.tool-switch('Node')"   keys="F2, n, N" />
 
@@ -95,7 +94,6 @@ Scissor tool - C
 
   <bind gaction="win.tool-switch('Star')"   keys="A, a" />
 
-  <bind action="StarPrefs" />
 <!-- Spiral tools exists in Canvas, but has no shortcut
   <bind gaction="win.tool-switch('Spiral')" keys="F9, i, I" />
 -->
@@ -157,7 +155,7 @@ Scissor tool - C
 
 <!-- is finding 100% analog to Inkscape's? -->
 
-  <bind gaction="win.dialog-ope('Find')"  keys="&lt;ctrl&gt;&lt;shift&gt;a, &lt;ctrl&gt;&lt;shift&gt;A" />
+  <bind gaction="win.dialog-open('Find')" keys="&lt;ctrl&gt;&lt;shift&gt;a, &lt;ctrl&gt;&lt;shift&gt;A" />
 
   <bind gaction="win.select-all"          keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
 
@@ -246,9 +244,6 @@ Path -> Unsmooth - Ctrl+Alt+U
 
 <!-- Live Curve Editing is conceptually close to wireframe mode, thus using the verb -->
   <bind gaction="win.canvas-display-mode-cycle"   keys="&lt;ctrl&gt;&lt;alt&gt;l"/>
-  <bind action="ViewColorModeToggle" />
-  <bind action="ViewSplitModeToggle" />
-  <bind action="ViewXRayToggle" />
 
 <!-- LAYOUT MENU -->
 
