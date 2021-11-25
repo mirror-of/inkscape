@@ -1026,7 +1026,7 @@ InkscapeApplication::on_activate()
     }
 
     if (!document) {
-        std::cerr << "ConcreteInksacpeApplication::on_activate: failed to created document!" << std::endl;
+        std::cerr << "ConcreteInkscapeApplication::on_activate: failed to create document!" << std::endl;
         return;
     }
 
