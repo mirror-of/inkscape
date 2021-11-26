@@ -97,9 +97,9 @@ class ContextMenu : public Gtk::Menu
          */
         void MakeItemMenu(SPGroup* layer);
         /**
-         * creates menu entries for a grouped object
+         * creates menu entries for a grouped object AND for regular items that can be popped out of groups
          */
-        void MakeGroupMenu  (SPGroup* group);
+        void MakeGroupMenu(SPItem* item);
         /**
          * creates menu entries for an anchor object
          */

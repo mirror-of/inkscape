@@ -325,8 +325,8 @@ void ContextMenu::MakeObjectMenu()
         MakeItemMenu(Inkscape::LayerManager::asLayer(_object));
     }
 
-    if (SP_IS_GROUP(_object)) {
-        MakeGroupMenu(SP_GROUP(_object));
+    if (SP_IS_ITEM(_object)) {
+        MakeGroupMenu(SP_ITEM(_object));
     }
 
     if (SP_IS_ANCHOR(_object)) {
@@ -628,9 +628,10 @@ void ContextMenu::fireAction(unsigned int code) {
 }
 
 // group and layer menu
-void ContextMenu::MakeGroupMenu(SPGroup* item)
-{
-    if (item->isLayer()) {
+void ContextMenu::MakeGroupMenu(SPItem* item) {
+    auto group = dynamic_cast<SPGroup*>(item);
+
+    if (group && group->isLayer()) {
         // layer-specific commands
         AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_NEW));
         AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_RENAME));
@@ -645,14 +646,15 @@ void ContextMenu::MakeGroupMenu(SPGroup* item)
         AddSeparator();
 
         // transform layer into group
-        append_item(_("Layer to group"), false).connect([=]() { sp_group_layer_transform(_desktop->doc(), item, SPGroup::GROUP); });
-    } else {
+        append_item(_("Layer to group"), false).connect([=]() { sp_group_layer_transform(_desktop->doc(), group, SPGroup::GROUP); });
+    }
+    else if (group) {
         /* Ungroup */
         append_item(_("_Ungroup"), true).connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroup));
 
         if (item->getParentGroup()->isLayer()) {
             // transform group into layer
-            append_item(_("Group to layer"), false).connect([=](){ sp_group_layer_transform(_desktop->doc(), item, SPGroup::LAYER); });
+            append_item(_("Group to layer"), false).connect([=](){ sp_group_layer_transform(_desktop->doc(), group, SPGroup::LAYER); });
         }
 
         // enter group
@@ -664,20 +666,21 @@ void ContextMenu::MakeGroupMenu(SPGroup* item)
             MIGroup.show();
             append(MIGroup);
         }
+    }
 
-        auto root = _desktop->layerManager().currentRoot();
-        if (layer != root) {
-            if (layer->parent != root) {
-                MIParent.signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LeaveGroup));
-                MIParent.show();
-                append(MIParent);
+    auto layer = _desktop->layerManager().currentLayer();
+    auto root = _desktop->layerManager().currentRoot();
+    if (layer != root) {
+        if (layer->parent != root) {
+            MIParent.signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LeaveGroup));
+            MIParent.show();
+            append(MIParent);
 
-                /* Pop selection out of group */
-                Gtk::MenuItem* miu = Gtk::manage(new Gtk::MenuItem(_("_Pop selection out of group"), true));
-                miu->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroupPopSelection));
-                miu->show();
-                append(*miu);
-            }
+            /* Pop selection out of group */
+            Gtk::MenuItem* miu = Gtk::manage(new Gtk::MenuItem(_("_Pop selection out of group"), true));
+            miu->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroupPopSelection));
+            miu->show();
+            append(*miu);
         }
     }
 }
