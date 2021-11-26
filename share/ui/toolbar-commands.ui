@@ -262,9 +262,9 @@
       <object class="GtkToolButton">
         <property name="visible">True</property>
         <property name="action_name">win.dialog-open</property>
-        <property name='action-target'>'Layers'</property>
-        <property name="icon_name">dialog-layers</property>
-        <property name="label" translatable="true">Layer_s...</property>
+        <property name='action-target'>'Objects'</property>
+        <property name="icon_name">dialog-objects</property>
+        <property name="label" translatable="true">Layers and Objects...</property>
         <property name="use-underline">True</property>
       </object>
     </child>
