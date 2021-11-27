@@ -404,7 +404,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.path-offset-dynamic"                keys="&lt;primary&gt;j"/>
   <bind gaction="win.path-offset-linked"                 keys="&lt;primary&gt;&lt;alt&gt;j" />
 
-  <bind gaction="app.path-simplify"                      keys="&lt;shift&gt;l" />
+  <bind gaction="app.path-simplify"                      keys="&lt;primary&gt;l" />
   <bind gaction="win.path-reverse"/>
   <bind gaction="app.paste-path-effect"                  keys="ampersand, &lt;primary&gt;7" />
   <bind gaction="app.remove-path-effect"/>
