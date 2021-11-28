@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    width="16"
    height="16"
    version="1.1"
    sodipodi:docname="align-sel-as-group-symbolic.svg"
-   inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
-<style id="s0">
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <style
+     id="s0">
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
   </style>
-  <style id="s2"> 
+  <style
+     id="s2"> 
      @import '../../highlights.css'; 
   </style>
-     
-<metadata
+  <metadata
      id="metadata41">
     <rdf:RDF>
       <cc:Work
@@ -30,7 +31,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -39,23 +39,29 @@
      inkscape:snap-global="true"
      id="base"
      showgrid="true"
-     inkscape:zoom="31.678384"
-     inkscape:cx="14.304564"
-     inkscape:cy="9.8483496"
+     inkscape:zoom="44.8"
+     inkscape:cx="6.2388392"
+     inkscape:cy="5.4464285"
      inkscape:current-layer="align-horizontal-right-to-anchor"
      inkscape:document-rotation="0"
      inkscape:window-width="1858"
      inkscape:window-height="1177"
      inkscape:window-x="54"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        id="GridFromPre046Settings"
        type="xygrid"
        originx="0pt"
        originy="0pt"
-       spacingx="1pt"
-       spacingy="1pt"
+       spacingx="1"
+       spacingy="1"
        color="#3f3fff"
        empcolor="#3f3fff"
        opacity="0.15"
@@ -109,42 +115,42 @@
        style="opacity:0;fill:none" />
     <path
        class="success"
-       style="opacity:1;"
-       d="m 1064,595.36218 h 4 v 3.99999 h -4 z"
+       style="opacity:1;stroke-width:0.999996"
+       d="m 1063.5001,596.86219 h 2.9999 v 2.99998 h -2.9999 z"
        id="path983"
        inkscape:connector-curvature="0" />
     <path
        class="success"
-       style="opacity:1;"
-       d="m 1044,595.36218 h 4 v 4 h -4 z"
+       style="opacity:1;stroke-width:1"
+       d="m 1045.5,596.86218 h 3 v 3.00003 h -3 z"
        id="path985"
        inkscape:connector-curvature="0" />
     <path
        class="success"
-       style="opacity:1;"
-       d="m 1064,615.36218 h 4 v 3.99999 h -4 z"
+       style="opacity:1;stroke-width:0.999998"
+       d="m 1063.5,614.86219 h 3 v 2.99998 h -3 z"
        id="path987"
        inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
        id="rect22038"
-       d="m 1044,615.36217 h 4 v 4 h -4 z"
-       style="opacity:1;"
+       d="m 1045.5,614.86215 h 3 v 3.00002 h -3 z"
+       style="opacity:1;stroke-width:1"
        class="success" />
     <path
        inkscape:connector-curvature="0"
        id="rect22042"
-       d="m 1048,599.36218 h 12 v 4 h -12 z"
-       style="opacity:1;"/>
+       d="m 1048.5,599.86218 h 10.5 v 3 h -10.5 z"
+       style="opacity:1;stroke-width:0.999996" />
     <path
        inkscape:connector-curvature="0"
        id="rect22044"
-       d="m 1056,605.36218 h 8 v 4 h -8 z"
-       style="opacity:1;"/>
+       d="m 1054.5,605.86218 h 9 v 3 h -9 z"
+       style="opacity:1;stroke-width:0.999998" />
     <path
        inkscape:connector-curvature="0"
        id="rect22046"
-       d="m 1050,611.36217 h 12 v 4 h -12 z"
-       style="opacity:1;"/>
+       d="m 1050,611.86217 h 10.5 v 3 H 1050 Z"
+       style="opacity:1;stroke-width:1" />
   </g>
 </svg>

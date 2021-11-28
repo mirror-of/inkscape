@@ -6,7 +6,7 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="snap-alignment-symbolic.svg"
-   inkscape:version="1.2-dev (cc332878ba, 2021-06-29)"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -28,9 +28,7 @@
   <defs
      id="defs6230" />
   <style
-     id="s0">.success { fill:#009909; }
-.warning { fill:#FF1990; }
-.error { fill:#00AAFF; }
+     id="s0"> 
 </style>
   <style
      id="s2">
@@ -42,13 +40,13 @@
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="32.4065"
-     inkscape:cx="5.7550183"
-     inkscape:cy="5.0761421"
-     inkscape:window-width="1049"
-     inkscape:window-height="1045"
-     inkscape:window-x="5"
-     inkscape:window-y="28"
+     inkscape:zoom="64.813"
+     inkscape:cx="6.611328"
+     inkscape:cy="6.7424745"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="path-division"
      inkscape:document-rotation="0"
@@ -76,41 +74,37 @@
        id="rect11641"
        d="m 165,667.36218 h 16 v 16 h -16 z"
        style="opacity:0;fill:none" />
-    <rect
-       style="opacity:1;fill:#000000;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
+    <path
        id="rect1358"
-       width="12"
-       height="4.0000052"
-       x="167"
-       y="668.36218" />
-    <rect
-       style="opacity:1;fill:#000000;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
+       style="opacity:1;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
+       d="m 167,668.36218 h 12 v 4.00001 h -9.01643 c 0,0 0.19092,-1.54683 -0.68465,-2.31435 C 168.42335,669.28032 167,669.36795 167,669.36795 Z"
+       sodipodi:nodetypes="cccczcc" />
+    <path
        id="rect1232"
-       width="8"
-       height="4.0000052"
-       x="167"
-       y="677.36218" />
+       style="opacity:1;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
+       d="m 169.30858,679.68619 c 0.86794,-0.79146 0.69042,-2.32401 0.69042,-2.32401 H 175 v 4.00001 h -8 v -1.05508 c 0,0 1.44064,0.17054 2.30858,-0.62092 z"
+       sodipodi:nodetypes="zcccccz" />
     <circle
-       style="opacity:1;stroke-width:0.670895;stroke-linecap:round;stroke-linejoin:round"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.670895;stroke-linecap:round;stroke-linejoin:round"
        id="circle1546"
        cx="167.5"
        cy="671.86218"
        r="1.4999975"
-       class="success" />
+         />
     <circle
-       style="opacity:1;stroke-width:0.670895;stroke-linecap:round;stroke-linejoin:round"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.670895;stroke-linecap:round;stroke-linejoin:round"
        id="circle1464"
        cx="167.5"
        cy="677.86218"
        r="1.4999975"
-       class="success" />
+         />
     <rect
-       style="opacity:1;fill-opacity:1;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
        id="rect1570"
        width="1"
        height="6"
        x="167"
        y="671.36218"
-       class="success" />
+         />
   </g>
 </svg>

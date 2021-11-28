@@ -2,30 +2,31 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="svg1"
    width="16"
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="distribute-unclump-symbolic.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
-<style id="s0">
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <style
+     id="s0">
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
   </style>
-  <style id="s2"> 
+  <style
+     id="s2"> 
      @import '../../highlights.css'; 
   </style>
-     
-<metadata
+  <metadata
      id="metadata15">
     <rdf:RDF>
       <cc:Work
@@ -44,15 +45,22 @@
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="13.384122"
-     inkscape:cx="-6.3405441"
-     inkscape:cy="-1.5476591"
+     inkscape:zoom="75.712027"
+     inkscape:cx="6.5577428"
+     inkscape:cy="7.858725"
      inkscape:window-width="1858"
      inkscape:window-height="1177"
      inkscape:window-x="54"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1">
+     inkscape:current-layer="distribute-unclump"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
        id="grid" />
@@ -69,35 +77,38 @@
     <path
        inkscape:connector-curvature="0"
        id="rect19056"
-       d="m 1083,833.36218 h 6 v 4.94183 h -6 z"
-       style="opacity:1" />
+       d="m 1083.4995,833.86176 h 6 l 0,4.5 h -6 z"
+       style="opacity:1"
+       sodipodi:nodetypes="ccccc" />
     <path
        inkscape:connector-curvature="0"
        id="rect19058"
-       d="m 1098,826.36078 h 5.9987 v 4.94182 H 1098 Z"
-       style="opacity:1" />
+       d="m 1098.4994,824.86177 h 5.9987 v 4.5 h -5.9987 z"
+       style="opacity:1"
+       sodipodi:nodetypes="ccccc" />
     <path
        inkscape:connector-curvature="0"
        id="rect19061"
-       d="m 1098,840.42181 h 5.9987 v 4.94182 H 1098 Z"
-       style="opacity:1" />
+       d="m 1098.5007,841.36176 h 5.9987 v 4.5 h -5.9987 z"
+       style="opacity:1"
+       sodipodi:nodetypes="ccccc" />
     <path
        inkscape:connector-curvature="0"
        id="rect19286"
-       d="m 1101,833.36218 1,1 v 3 l -1,1 -1,-1 v -3 z"
+       d="m 1101.0396,832.86688 1,1 v 3 l -1,1 -1,-1 v -3 z"
        style="opacity:1"
        sodipodi:nodetypes="ccccccc" />
     <path
        inkscape:connector-curvature="0"
        id="rect19288"
-       d="m 1129.5055,-761.72668 0.8665,0.97636 v 4.27142 l -0.8665,0.97636 -0.8665,-0.97636 v -4.27142 z"
+       d="m 1129.4902,-762.19051 0.8665,0.97636 v 4.27142 l -0.8665,0.97636 -0.8665,-0.97636 v -4.27142 z"
        style="opacity:1"
        transform="matrix(0.3292633,0.9442382,-0.9505411,0.3105989,0,0)"
        sodipodi:nodetypes="ccccccc" />
     <path
        inkscape:connector-curvature="0"
        id="rect19292"
-       d="m -459.91212,-1312.2939 0.86647,0.9763 0,4.2714 -0.86647,0.9764 -0.86647,-0.9764 0,-4.2714 z"
+       d="m -460.53832,-1312.4216 1.08986,0.7167 1.13286,4.1408 -0.57196,1.1763 -1.08989,-0.7167 -1.13286,-4.1408 z"
        style="opacity:1"
        transform="matrix(0.3292633,-0.9442382,-0.9505411,-0.3105989,0,0)"
        sodipodi:nodetypes="ccccccc" />

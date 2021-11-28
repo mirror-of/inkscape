@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0beta0 (1b5d333, 2019-09-08)"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="distribute-graph-directed-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
-   version="1.1">
-<style id="s0">
+   version="1.1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <style
+     id="s0">
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
   </style>
-  <style id="s2"> 
+  <style
+     id="s2"> 
      @import '../../highlights.css'; 
   </style>
-     
-<metadata
+  <metadata
      id="metadata2696">
     <rdf:RDF>
       <cc:Work
@@ -44,14 +45,20 @@
      inkscape:window-x="54"
      inkscape:window-height="1177"
      inkscape:window-width="1858"
-     inkscape:cy="11.016755"
-     inkscape:cx="11.728593"
-     inkscape:zoom="38.41879"
+     inkscape:cy="13.535044"
+     inkscape:cx="-1.5877647"
+     inkscape:zoom="19.209395"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
      gridtolerance="10"
-     objecttolerance="10">
+     objecttolerance="10"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        id="grid"
        type="xygrid" />
@@ -112,10 +119,4 @@
        d="m 1198.28,826.5042 -1.176,1.2264 2.248,2.1781 -1.475,1.4485 4.123,0.005 v 0 l 0.01,-4.1231 -1.477,1.443 z"
        style="opacity:1;fill-opacity:1" />
   </g>
-  <path
-     inkscape:connector-curvature="0"
-     id="rect22390"
-     d="M 35.460611,7.6666615 V 8.666662 H 19.460603 V 7.6666615 Z"
-     style="opacity:1;fill-opacity:1;"
-     class="success" />
 </svg>

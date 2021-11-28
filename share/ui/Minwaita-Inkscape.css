@@ -120,20 +120,6 @@ notebook notebook header image {
     margin:-1px 0 -1px -3px;
 }
 
-#AlignDistribute .toggle,
-#AlignDistribute .radio,
-#AlignDistribute button{
-    padding:3px;
-}
-
-#AlignDistribute spinbutton button{
-    padding:0px;
-}
-
-#AlignDistribute #align {
-    margin-top:-15px;
-}
-
 spinbutton button{
   -gtk-icon-transform:scale(0.6) translatex(-0.6px);
   margin:0 -0.6px 0 0;

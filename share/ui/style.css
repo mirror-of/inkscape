@@ -605,3 +605,8 @@ button.square-button image {
 #StyleSwatch label {
     font-size: small;
 }
+
+/* for dialogs with "Apply" button (or equivalent) - larger hit target */
+.wide-apply-button {
+    min-width: 150px;
+}

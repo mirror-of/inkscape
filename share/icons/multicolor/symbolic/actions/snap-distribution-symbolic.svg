@@ -6,7 +6,7 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="snap-distribution-symbolic.svg"
-   inkscape:version="1.2-dev (3e8c8af2ca, 2021-06-30)"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -41,14 +41,14 @@
      gridtolerance="10"
      guidetolerance="10"
      id="namedview"
-     showgrid="false"
-     inkscape:zoom="22.914856"
-     inkscape:cx="14.968455"
-     inkscape:cy="3.3820854"
-     inkscape:window-width="1918"
-     inkscape:window-height="1055"
-     inkscape:window-x="0"
-     inkscape:window-y="23"
+     showgrid="true"
+     inkscape:zoom="45.829712"
+     inkscape:cx="7.2332988"
+     inkscape:cy="7.0914694"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="path-division"
      inkscape:document-rotation="0"
@@ -66,7 +66,9 @@
      inkscape:showpageshadow="false">
     <inkscape:grid
        type="xygrid"
-       id="grid" />
+       id="grid"
+       enabled="true"
+       dotted="false" />
   </sodipodi:namedview>
   <g
      transform="translate(-165,-667.36218)"
@@ -80,25 +82,25 @@
     <rect
        style="opacity:1;fill:#000000;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
        id="rect19679"
-       width="9.9999971"
+       width="9"
        height="2.0000157"
-       x="671.36218"
+       x="672.36218"
        y="-168"
        transform="rotate(90)" />
     <rect
        style="opacity:1;fill:#000000;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
        id="rect19681"
-       width="9.9999971"
+       width="9"
        height="1.9999852"
-       x="671.36218"
+       x="672.36218"
        y="-174"
        transform="rotate(90)" />
     <rect
        style="opacity:1;fill:#000000;stroke-width:0.670894;stroke-linecap:round;stroke-linejoin:round"
        id="rect19683"
-       width="9.9999971"
+       width="9"
        height="2.0000157"
-       x="671.36218"
+       x="672.36218"
        y="-180.00002"
        transform="rotate(90)" />
     <rect
