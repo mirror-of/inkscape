@@ -526,6 +526,11 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
         case CANVAS_ITEM_CTRL_TYPE_LPE:
         case CANVAS_ITEM_CTRL_TYPE_NODE_AUTO:
         case CANVAS_ITEM_CTRL_TYPE_NODE_CUSP:
+            size = size_index * 2 + 5;
+            break;
+
+        case CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH:
+        case CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL:
             size = size_index * 2 + 3;
             break;
 
@@ -534,8 +539,13 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
             break;
 
         case CANVAS_ITEM_CTRL_TYPE_DEFAULT:
-        default:
             size = size_index * 2 + 1;
+            break;
+
+        default:
+            g_warning("set_size_via_index: missing case for handle type: %d", static_cast<int>(_type));
+            size = size_index * 2 + 1;
+            break;
     }
 
     set_size(size);
