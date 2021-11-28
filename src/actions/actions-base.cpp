@@ -217,12 +217,6 @@ vacuum_defs(InkscapeApplication* app)
     document->vacuumDocument();
 }
 
-void
-quit_inkscape(InkscapeApplication* app)
-{
-    app->on_quit();
-}
-
 std::vector<std::vector<Glib::ustring>> raw_data_base =
 {
     // clang-format off
@@ -259,11 +253,11 @@ add_actions_base(InkscapeApplication* app)
     gapp->add_action(               "debug-info",                                          sigc::ptr_fun(&print_debug_info)                       );
     gapp->add_action(               "system-data-directory",                               sigc::ptr_fun(&print_system_data_directory)            );
     gapp->add_action(               "user-data-directory",                                 sigc::ptr_fun(&print_user_data_directory)              );
-    gapp->add_action(               "action-list",       sigc::mem_fun(app, &InkscapeApplication::print_action_list)                    );
+    gapp->add_action(               "action-list",        sigc::mem_fun(app, &InkscapeApplication::print_action_list)                             );
     gapp->add_action(               "verb-list",                                           sigc::ptr_fun(&print_verb_list)                        );
     gapp->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
     gapp->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
-    gapp->add_action(               "quit-inkscape",      &sp_file_exit);
+    gapp->add_action(               "quit-inkscape",      sigc::mem_fun(app, &InkscapeApplication::on_quit)                                       );
 
     gapp->add_action_radio_integer( "open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
     gapp->add_action_radio_string(  "convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");

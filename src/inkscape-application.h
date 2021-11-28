@@ -55,7 +55,7 @@ public:
     InkscapeWindow *create_window(SPDocument *document, bool replace);
     void create_window(const Glib::RefPtr<Gio::File> &file = Glib::RefPtr<Gio::File>());
     bool destroy_window(InkscapeWindow *window, bool keep_alive = false);
-    void destroy_all();
+    bool destroy_all();
     void print_action_list();
 
     void on_startup2();

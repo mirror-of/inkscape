@@ -73,17 +73,6 @@ sp_ui_close_view(GtkWidget */*widget*/)
 }
 
 
-unsigned int
-sp_ui_close_all()
-{
-    auto *app = InkscapeApplication::instance();
-
-    app->destroy_all();
-
-    return true;
-}
-
-
 Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
 {
     Glib::ustring prefPath;

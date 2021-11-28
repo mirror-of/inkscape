@@ -41,17 +41,6 @@ void sp_ui_new_view ();
 
 void sp_ui_import_files(gchar *buffer);
 
-/**
- *  This function is called to exit the program, and iterates through all
- *  open document view windows, attempting to close each in turn.  If the
- *  view has unsaved information, the user will be prompted to save,
- *  discard, or cancel.
- *
- *  Returns FALSE if the user cancels the close_all operation, TRUE
- *  otherwise.
- */
-unsigned int sp_ui_close_all ();
-
 Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view );
 
 /**

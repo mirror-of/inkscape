@@ -610,7 +610,7 @@ InkscapeApplication::InkscapeApplication()
     add_actions_path(this);                 // actions for Paths
     add_actions_selection_object(this);     // actions for selected objects
     add_actions_text(this);                 // actions for Text
-    add_actions_tutorial(this);             // acdtons for opening tutorials (with GUI only)
+    add_actions_tutorial(this);             // actions for opening tutorials (with GUI only)
     add_actions_transform(this);            // actions for transforming selected objects
     add_actions_window(this);               // actions for windows
 
@@ -929,21 +929,24 @@ InkscapeApplication::destroy_window(InkscapeWindow* window, bool keep_alive)
     return true;
 }
 
-void
+bool
 InkscapeApplication::destroy_all()
 {
     if (!gtk_app()) {
         g_assert_not_reached();
-        return;
+        return false;
     }
 
     while (_documents.size() != 0) {
         auto it = _documents.begin();
         if (!it->second.empty()) {
             auto it2 = it->second.begin();
-            if (!destroy_window (*it2)) return; // If destroy aborted, we need to stop exit.
+            if (!destroy_window (*it2)) {
+                return false; // If destroy aborted, we need to stop exit.
+            }
         }
     }
+    return true;
 }
 
 /** Common processing for documents
@@ -1598,9 +1601,7 @@ InkscapeApplication::on_quit()
 {
     // Ensure closing the gtk_app windows
     if (gtk_app()) {
-        for (auto window : gtk_app()->get_windows()) {
-            window->close();
-        }
+        if (!destroy_all()) return; // Quit aborted.
     }
 
     gio_app()->quit();

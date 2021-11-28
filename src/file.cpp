@@ -144,6 +144,8 @@ SPDesktop* sp_file_new_default()
 
 /**
  *  Perform document closures preceding an exit()
+ *
+ *  Only used by OLD DBus interface.
  */
 void sp_file_exit()
 {
@@ -153,8 +155,9 @@ void sp_file_exit()
         g_assert(app);
         app->quit();
     } else {
-        sp_ui_close_all();
-        // no need to call inkscape_exit here; last document being closed will take care of that
+        auto app = InkscapeApplication::instance();
+        g_assert(app);
+        app->destroy_all();
     }
 }
 
