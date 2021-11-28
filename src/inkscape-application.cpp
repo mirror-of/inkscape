@@ -1596,12 +1596,6 @@ InkscapeApplication::on_new()
 void
 InkscapeApplication::on_quit()
 {
-    // Ensure closing the gtk_app windows
-    if (gtk_app()) {
-        for (auto window : gtk_app()->get_windows()) {
-            window->close();
-        }
-    }
     gio_app()->quit();
 }
 

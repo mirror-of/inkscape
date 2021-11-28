@@ -263,7 +263,7 @@ add_actions_base(InkscapeApplication* app)
     gapp->add_action(               "verb-list",                                           sigc::ptr_fun(&print_verb_list)                        );
     gapp->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
     gapp->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
-    gapp->add_action(               "quit-inkscape",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&quit_inkscape),             app)        );
+    gapp->add_action(               "quit-inkscape",      &sp_file_exit);
 
     gapp->add_action_radio_integer( "open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
     gapp->add_action_radio_string(  "convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");
