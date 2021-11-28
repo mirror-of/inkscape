@@ -1157,6 +1157,7 @@ AlignAndDistribute::AlignAndDistribute(DialogBase* dlg) : Gtk::Box(Gtk::ORIENTAT
     pack_start(_distributeFrame, Gtk::PACK_SHRINK);
     pack_start(_rearrangeFrame, Gtk::PACK_SHRINK);
     pack_start(_removeOverlapFrame, Gtk::PACK_SHRINK);
+    _removeOverlapFrame.set_margin_bottom(4); // space between buttons and frame
     pack_start(_nodesFrame, Gtk::PACK_SHRINK);
 
     // Connect to the global selection change, to invalidate cached randomize_bbox
@@ -1229,11 +1230,11 @@ void AlignAndDistribute::setMode(bool nodeEdit)
 {
     //Act on widgets used in node mode
     void ( Gtk::Widget::*mNode) ()  = nodeEdit ?
-        &Gtk::Widget::show_all : &Gtk::Widget::hide;
+        &Gtk::Widget::show : &Gtk::Widget::hide;
 
     //Act on widgets used in selection mode
   void ( Gtk::Widget::*mSel) ()  = nodeEdit ?
-      &Gtk::Widget::hide : &Gtk::Widget::show_all;
+      &Gtk::Widget::hide : &Gtk::Widget::show;
 
     ((_alignFrame).*(mSel))();
     ((_distributeFrame).*(mSel))();
