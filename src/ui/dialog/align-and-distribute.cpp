@@ -1171,6 +1171,7 @@ void AlignAndDistribute::desktopReplaced()
     _tool_changed.disconnect();
     if (auto desktop = getDesktop()) {
         _tool_changed = desktop->connectEventContextChanged(sigc::mem_fun(*this, &AlignAndDistribute::toolChanged));
+        toolChanged(desktop, desktop->event_context);
         for (auto & it : _actionList) {
             it->setDesktop(desktop);
         }
