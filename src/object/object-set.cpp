@@ -261,7 +261,7 @@ Inkscape::XML::Node *ObjectSet::topRepr() const
         return nullptr;
     }
 
-#ifdef __APPLE__
+#ifdef _LIBCPP_VERSION
     // workaround for
     // static_assert(__is_cpp17_forward_iterator<_ForwardIterator>::value
     auto const n = std::vector<Inkscape::XML::Node *>(nodes.begin(), nodes.end());
