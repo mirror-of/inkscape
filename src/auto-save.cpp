@@ -27,6 +27,7 @@
 #include "xml/repr.h"
 
 #ifdef _WIN32
+#include <process.h>
 typedef int uid_t;
 #define getuid() 0
 #endif
