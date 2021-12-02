@@ -274,7 +274,9 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
 
     auto set_visible_buttons = [=](GtkWidget* tb) {
-        sp_traverse_widget_tree(Glib::wrap(tb), [=](Gtk::Widget* widget) {
+        int buttons_before_separator = 0;
+        Gtk::Widget* last_one = nullptr;
+        sp_traverse_widget_tree(Glib::wrap(tb), [&](Gtk::Widget* widget) {
             if (auto flowbox = dynamic_cast<Gtk::FlowBox*>(widget)) {
                 flowbox->show();
                 flowbox->set_no_show_all();
@@ -285,13 +287,30 @@ SPDesktopWidget::SPDesktopWidget()
                 auto parent = btn->get_parent();
                 if (show) {
                     parent->show();
+                    ++buttons_before_separator;
+                    last_one = nullptr;
                 }
                 else {
                     parent->hide();
                 }
             }
+            else if (auto sep = dynamic_cast<Gtk::Separator*>(widget)) {
+                auto parent = sep->get_parent();
+                if (buttons_before_separator <= 0) {
+                    parent->hide();
+                }
+                else {
+                    parent->show();
+                    buttons_before_separator = 0;
+                    last_one = parent;
+                }
+            }
             return false;
         });
+        if (last_one) {
+            // hide trailing separator
+            last_one->hide();
+        }
     };
     auto set_toolbar_prefs = [=]() {
         int min = ToolboxFactory::min_pixel_size;

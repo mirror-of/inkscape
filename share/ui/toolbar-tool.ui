@@ -175,6 +175,25 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="toolbar-separator"/>
+            </style>
+          </object>
+        </child>
+        <style>
+          <class name="toolbar-separator"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkFlowBoxChild">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <child>
           <object class="GtkToggleButton">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -280,6 +299,22 @@
             <property name="relief">none</property>
             <style>
               <class name="square-button"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkFlowBoxChild">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="toolbar-separator"/>
             </style>
           </object>
         </child>
@@ -428,6 +463,22 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="toolbar-separator"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkFlowBoxChild">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <child>
           <object class="GtkToggleButton">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -533,6 +584,22 @@
             <property name="relief">none</property>
             <style>
               <class name="square-button"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkFlowBoxChild">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="toolbar-separator"/>
             </style>
           </object>
         </child>

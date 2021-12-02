@@ -1791,7 +1791,7 @@ void InkscapePreferences::initPageUI()
 
         sp_traverse_widget_tree(toolbox, [=](Gtk::Widget* widget){
             if (auto flowbox = dynamic_cast<Gtk::FlowBox*>(widget)) {
-                flowbox->set_max_children_per_line(4);
+                flowbox->set_max_children_per_line(9);
                 flowbox->set_selection_mode();
             }
             else if (auto button = dynamic_cast<Gtk::ToggleButton*>(widget)) {
