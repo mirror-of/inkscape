@@ -24,6 +24,7 @@
 ../share/extensions/convert2dashes.inx
 ../share/extensions/dhw_input.inx
 ../share/extensions/dimension.inx
+../share/extensions/doc_ai_convert.inx
 ../share/extensions/docinfo.inx
 ../share/extensions/dpi90to96.inx
 ../share/extensions/dpi96to90.inx

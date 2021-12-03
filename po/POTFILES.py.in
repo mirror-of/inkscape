@@ -1,5 +1,4 @@
 ../share/extensions/convert2dashes.py
-../share/extensions/dxf_input.py
 ../share/extensions/funcplot.py
 ../share/extensions/generate_voronoi.py
 ../share/extensions/gimp_xcf.py
@@ -10,8 +9,10 @@
 ../share/extensions/image_embed.py
 ../share/extensions/inkex/bezier.py
 ../share/extensions/inkex/deprecated.py
+../share/extensions/inkex/elements/_selected.py
 ../share/extensions/inkex/localization.py
 ../share/extensions/inkex/utils.py
+../share/extensions/interp.py
 ../share/extensions/interp_att_g.py
 ../share/extensions/jessyink_autotexts.py
 ../share/extensions/jessyink_effects.py
@@ -28,7 +29,10 @@
 ../share/extensions/plotter.py
 ../share/extensions/print_win32_vector.py
 ../share/extensions/printing_marks.py
+../share/extensions/render_barcode_qrcode.py
 ../share/extensions/replace_font.py
+../share/extensions/setup_typography_canvas.py
+../share/extensions/text_split.py
 ../share/extensions/voronoi2svg.py
 ../share/extensions/web_set_att.py
 ../share/extensions/web_transmit_att.py
