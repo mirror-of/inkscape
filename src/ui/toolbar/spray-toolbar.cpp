@@ -34,7 +34,6 @@
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
-#include "verbs.h"
 
 #include "ui/icon-names.h"
 #include "ui/simple-pref-pusher.h"
@@ -504,7 +503,7 @@ SprayToolbar::toggle_picker()
         prefs->setBool("/dialogs/clonetiler/dotrace", false);
         SPDesktop *dt = _desktop;
         if (Inkscape::UI::Dialog::CloneTiler *ct = get_clone_tiler_panel(dt)){
-            dt->getContainer()->new_dialog(SP_VERB_DIALOG_CLONETILER);
+            dt->getContainer()->new_dialog("CloneTiler");
             ct->show_page_trace();
         }
     }

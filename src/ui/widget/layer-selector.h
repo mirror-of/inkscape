@@ -19,6 +19,7 @@
 #include <gtkmm/cellrenderertext.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/cssprovider.h>
 #include <sigc++/slot.h>
 
 #include "xml/helper-observer.h"

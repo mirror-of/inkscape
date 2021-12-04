@@ -261,25 +261,6 @@ public:
 
 
 /**
- * A class to encompass all of the verbs which deal with dialog operations.
- */
-class DialogVerb : public Verb {
-private:
-    static void perform(SPAction *action, void *mydata);
-protected:
-    SPAction *make_action(Inkscape::ActionContext const & context) override;
-public:
-    /** Use the Verb initializer with the same parameters. */
-    DialogVerb(unsigned int const code,
-               gchar const *id,
-               gchar const *name,
-               gchar const *tip,
-               gchar const *image) :
-        Verb(code, id, name, tip, image, _("Dialog"))
-    { }
-}; // DialogVerb class
-
-/**
  * A class to encompass all of the verbs which deal with text operations.
  */
 class TextVerb : public Verb {
@@ -453,19 +434,6 @@ SPAction *ContextVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *ZoomVerb::make_action(Inkscape::ActionContext const & context)
-{
-    return make_action_helper(context, &perform);
-}
-
-/**
- * Create an action for a \c DialogVerb.
- *
- * Calls \c make_action_helper with the \c vector.
- *
- * @param  context  Which context the action should be created for.
- * @return The built action.
- */
-SPAction *DialogVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -1196,7 +1164,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             SelectionHelper::reverse(dt);
             break;
         case SP_VERB_SELECTION_TRACE:
-            container->new_dialog(SP_VERB_SELECTION_TRACE);
+            container->new_dialog("Trace");
             break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
             dt->selection->createBitmapCopy();
@@ -1750,7 +1718,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
 {
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
-    DialogContainer *container = dt->getContainer();
     SPDocument *doc = dt->getDocument();
 
     switch (reinterpret_cast<std::size_t>(data)) {
@@ -1800,9 +1767,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_VIEW_NEW:
             sp_ui_new_view();
             break;
-        case SP_VERB_VIEW_ICON_PREVIEW:
-            container->new_dialog(SP_VERB_VIEW_ICON_PREVIEW);
-            break;
 
         default:
             break;
@@ -1812,57 +1776,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
 
 } // end of sp_verb_action_zoom_perform()
 
-/**
- * Decode the verb code and take appropriate action.
- */
-void DialogVerb::perform(SPAction *action, void *data)
-{
-    g_return_if_fail(ensure_desktop_valid(action));
-    SPDesktop *dt = sp_action_get_desktop(action);
-    DialogContainer *container = dt->getContainer();
-
-    switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_DIALOG_PREFERENCES:
-            container->new_floating_dialog(SP_VERB_DIALOG_PREFERENCES);
-            break;
-#ifdef DEBUG
-        case SP_VERB_DIALOG_PROTOTYPE:
-#endif
-        case SP_VERB_DIALOG_DOCPROPERTIES:
-        case SP_VERB_DIALOG_FILL_STROKE:
-        case SP_VERB_DIALOG_GLYPHS:
-        case SP_VERB_DIALOG_SWATCHES:
-        case SP_VERB_DIALOG_SYMBOLS:
-        case SP_VERB_DIALOG_PAINT:
-        case SP_VERB_DIALOG_TRANSFORM:
-        case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
-        case SP_VERB_DIALOG_TEXT:
-        case SP_VERB_DIALOG_XML_EDITOR:
-        case SP_VERB_DIALOG_SELECTORS:
-        case SP_VERB_DIALOG_FIND:
-#if WITH_GSPELL
-        case SP_VERB_DIALOG_SPELLCHECK:
-#endif
-        case SP_VERB_DIALOG_DEBUG:
-        case SP_VERB_DIALOG_UNDO_HISTORY:
-        case SP_VERB_DIALOG_CLONETILER:
-        case SP_VERB_DIALOG_ATTR:
-        case SP_VERB_DIALOG_ITEM:
-        case SP_VERB_DIALOG_INPUT:
-        case SP_VERB_DIALOG_EXPORT:
-        case SP_VERB_DIALOG_OBJECTS:
-        case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
-        case SP_VERB_DIALOG_FILTER_EFFECTS:
-        case SP_VERB_DIALOG_SVG_FONTS:
-            container->new_dialog(reinterpret_cast<std::size_t>(data));
-            break;
-        case SP_VERB_DIALOG_TOGGLE:
-            container->toggle_dialogs();
-            break;
-        default:
-            break;
-    }
-} // end of sp_verb_action_dialog_perform()
 
 // *********** Effect Last **********
 
@@ -2496,81 +2409,6 @@ Verb *Verb::_base_verbs[] = {
                  N_("Remove excess toolbars to focus on drawing"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_NEW, "ViewNew", N_("Duplic_ate Window"), N_("Open a new window with the same document"),
                  INKSCAPE_ICON("window-new")),
-
-    // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_NORMAL, "ViewColorModeNormal", N_("_Normal"),
-    //              N_("Switch to normal color display mode"), nullptr),
-    // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE, "ViewColorModeGrayscale", N_("_Grayscale"),
-    new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Icon Preview"), N_("Preview Icon"),
-                 INKSCAPE_ICON("dialog-icon-preview")),
-#ifdef DEBUG
-    new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."), N_("Prototype Dialog"),
-                   INKSCAPE_ICON("document-properties")),
-#endif
-    new DialogVerb(SP_VERB_DIALOG_PREFERENCES, "DialogPreferences", N_("P_references"), N_("Edit global Inkscape preferences"),
-                   INKSCAPE_ICON("preferences-system")),
-    new DialogVerb(SP_VERB_DIALOG_DOCPROPERTIES, "DialogDocumentProperties", N_("_Document Properties..."),
-                   N_("Edit properties of this document (to be saved with the document)"),
-                   INKSCAPE_ICON("document-properties")),
-    new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
-                   N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."),
-                   INKSCAPE_ICON("dialog-fill-and-stroke")),
-    // FIXME: Probably better to either use something from the icon naming spec or ship our own "select-font" icon
-    // Technically what we show are unicode code points and not glyphs. The actual glyphs shown are determined by the
-    // shaping engines.
-    new DialogVerb(SP_VERB_DIALOG_GLYPHS, "DialogGlyphs", N_("_Unicode Characters..."),
-                   N_("Select Unicode characters from a palette"), INKSCAPE_ICON("accessories-character-map")),
-    // FIXME: Probably better to either use something from the icon naming spec or ship our own "select-color" icon
-    // TRANSLATORS: "Swatches" means: color samples
-    new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("S_watches..."),
-                   N_("Select colors from a swatches palette"), INKSCAPE_ICON("swatches")),
-    new DialogVerb(SP_VERB_DIALOG_SYMBOLS, "DialogSymbols", N_("S_ymbols..."),
-                   N_("Select symbol from a symbols palette"), INKSCAPE_ICON("symbols")),
-    new DialogVerb(SP_VERB_DIALOG_PAINT, "DialogPaintServers", N_("_Paint Servers..."),
-                   // FIXME missing Inkscape Paint Server Icon
-                   N_("Select paint server from a collection"), INKSCAPE_ICON("symbols")),
-    new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
-                   N_("Precisely control objects' transformations"), INKSCAPE_ICON("dialog-transform")),
-    new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."),
-                   N_("Align and distribute objects"), INKSCAPE_ICON("dialog-align-and-distribute")),
-    new DialogVerb(SP_VERB_DIALOG_UNDO_HISTORY, "DialogUndoHistory", N_("Undo _History..."), N_("Undo History"),
-                   INKSCAPE_ICON("edit-undo-history")),
-    new DialogVerb(SP_VERB_DIALOG_TEXT, "DialogText", N_("_Text and Font..."),
-                   N_("View and select font family, font size and other text properties"),
-                   INKSCAPE_ICON("dialog-text-and-font")),
-    new DialogVerb(SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
-                   N_("View and edit the XML tree of the document"), INKSCAPE_ICON("dialog-xml-editor")),
-    new DialogVerb(SP_VERB_DIALOG_SELECTORS, "DialogSelectors", N_("_Selectors and CSS..."),
-                   N_("View and edit CSS selectors and styles"), INKSCAPE_ICON("dialog-selectors")),
-    new DialogVerb(SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find/Replace..."), N_("Find objects in document"),
-                   INKSCAPE_ICON("edit-find")),
-#if WITH_GSPELL
-    new DialogVerb(SP_VERB_DIALOG_SPELLCHECK, "DialogSpellcheck", N_("Check Spellin_g..."),
-                   N_("Check spelling of text in document"), INKSCAPE_ICON("tools-check-spelling")),
-#endif
-    new DialogVerb(SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."), N_("View debug messages"),
-                   INKSCAPE_ICON("dialog-messages")),
-    new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/Hide D_ialogs"),
-                   N_("Show or hide all open dialogs"), INKSCAPE_ICON("show-dialogs")),
-    new DialogVerb(SP_VERB_DIALOG_CLONETILER, "DialogClonetiler", N_("Create Tiled Clones..."),
-                   N_("Create multiple clones of selected object, arranging them into a pattern or scattering"),
-                   INKSCAPE_ICON("dialog-tile-clones")),
-    new DialogVerb(SP_VERB_DIALOG_ATTR, "DialogObjectAttributes", N_("_Object attributes..."),
-                   N_("Edit the object attributes..."), INKSCAPE_ICON("dialog-object-properties")),
-    new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogObjectProperties", N_("_Object Properties..."),
-                   N_("Edit the ID, locked and visible status, and other object properties"),
-                   INKSCAPE_ICON("dialog-object-properties")),
-    new DialogVerb(SP_VERB_DIALOG_INPUT, "DialogInput", N_("_Input Devices..."),
-                   N_("Configure extended input devices, such as a graphics tablet"),
-                   INKSCAPE_ICON("dialog-input-devices")),
-    new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Layers and Object_s..."), N_("View Layers and Objects"),
-                   INKSCAPE_ICON("dialog-objects")),
-    new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects..."),
-                   N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
-    new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),
-                   N_("Manage, edit, and apply SVG filters"), INKSCAPE_ICON("dialog-filters")),
-    new DialogVerb(SP_VERB_DIALOG_SVG_FONTS, "DialogSVGFonts", N_("SVG Font Editor..."), N_("Edit SVG fonts"), nullptr),
-    new DialogVerb(SP_VERB_DIALOG_EXPORT, "DialogExport", N_("_Export PNG Image..."),
-                   N_("Export this document or a selection as a PNG image"), INKSCAPE_ICON("document-export")),
 
     // Effect -- renamed Extension
     new EffectLastVerb(SP_VERB_EFFECT_LAST, "EffectLast", N_("Previous Exte_nsion"),

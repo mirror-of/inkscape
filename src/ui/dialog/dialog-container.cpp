@@ -62,45 +62,6 @@
 #include "ui/dialog/xml-tree.h"
 #include "ui/icon-names.h"
 #include "ui/widget/canvas-grid.h"
-#include "verbs.h"
-
-// TEMP TEMP TEMP Until dialog verbs are gone.
-static std::map<int, Glib::ustring> verb_to_dialog_map =
-{
-    {SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "AlignDistribute"   },
-    {SP_VERB_DIALOG_CLONETILER,       "CloneTiler"        },
-    {SP_VERB_DIALOG_DOCPROPERTIES,    "DocumentProperties"},
-    {SP_VERB_DIALOG_EXPORT,           "Export"            },
-    {SP_VERB_DIALOG_FILL_STROKE,      "FillStroke"        },
-    {SP_VERB_DIALOG_FILTER_EFFECTS,   "FilterEffects"     },
-    {SP_VERB_DIALOG_FIND,             "Find"              },
-    {SP_VERB_DIALOG_GLYPHS,           "Glyphs"            },
-    {SP_VERB_VIEW_ICON_PREVIEW,       "IconPreview"       },
-    {SP_VERB_DIALOG_INPUT,            "Input"             },
-    {SP_VERB_DIALOG_LIVE_PATH_EFFECT, "LivePathEffect"    },
-    {SP_VERB_HELP_MEMORY,             "Memory"            },
-    {SP_VERB_DIALOG_DEBUG,            "Messages"          },
-    {SP_VERB_DIALOG_ATTR,             "ObjectAttributes"  },
-    {SP_VERB_DIALOG_ITEM,             "ObjectProperties"  },
-    {SP_VERB_DIALOG_OBJECTS,          "Objects"           },
-    {SP_VERB_DIALOG_PAINT,            "PaintServers"      },
-    {SP_VERB_DIALOG_PREFERENCES,      "Preferences"       },
-    {SP_VERB_DIALOG_SELECTORS,        "Selectors"         },
-    {SP_VERB_DIALOG_SVG_FONTS,        "SVGFonts"          },
-    {SP_VERB_DIALOG_SWATCHES,         "Swatches"          },
-    {SP_VERB_DIALOG_SYMBOLS,          "Symbols"           },
-    {SP_VERB_DIALOG_TEXT,             "Text"              },
-    {SP_VERB_SELECTION_TRACE,         "Trace"             },
-    {SP_VERB_DIALOG_TRANSFORM,        "Transform"         },
-    {SP_VERB_DIALOG_UNDO_HISTORY,     "UndoHistory"       },
-    {SP_VERB_DIALOG_XML_EDITOR,       "XMLEditor"         },
-#if WITH_GSPELL
-    {SP_VERB_DIALOG_SPELLCHECK,       "Spellcheck"        },
-#endif
-#ifdef DEBUG
-    {SP_VERB_DIALOG_PROTOTYPE,        "Prototype"         }
-#endif
-};
 
 namespace Inkscape {
 namespace UI {
@@ -262,20 +223,6 @@ DialogMultipaned* get_dialog_parent(DialogBase* dialog) {
 }
 
 /**
- * Add new dialog to the current container or in a floating window, based on preferences. TEMP TEMP TEMP
- */
-void DialogContainer::new_dialog(unsigned int code)
-{
-    auto it = verb_to_dialog_map.find(code);
-    if (it != verb_to_dialog_map.end()) {
-        return new_dialog(it->second);
-    } else {
-        std::cerr << "DialogContainer::new_dialog: Could not find dialog for verb " << code << std::endl;
-    }
-}
-
-
-/**
  * Add new dialog to the current container or in a floating window, based on preferences.
  */
 void DialogContainer::new_dialog(const Glib::ustring& dialog_type )
@@ -353,20 +300,6 @@ void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNoteboo
         Gdk::ModifierType mods;
         Gtk::AccelGroup::parse(accels[0], key, mods);
         label = Gtk::AccelGroup::get_label(key, mods);
-    } else {
-        // TEMP TEMP TEMP
-        for (auto it : verb_to_dialog_map) {
-            if (it.second == dialog_type) {
-                auto verb = Inkscape::Verb::get(it.first);
-                if (verb) {
-                    auto key = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(verb);
-                    if (!key.is_null()) {
-                        label = Inkscape::Shortcuts::getInstance().get_label(key);
-                    }
-                }
-                break;
-            }
-        }
     }
 
     Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), image, label);
@@ -522,20 +455,6 @@ bool DialogContainer::recreate_dialogs_from_state(const Glib::KeyFile* keyfile)
     }
 
     return restored;
-}
-
-/**
- * Add a new floating dialog (or reuse existing one if it's already up)
- */
-DialogWindow *DialogContainer::new_floating_dialog(unsigned int code)
-{
-    auto it = verb_to_dialog_map.find(code);
-    if (it != verb_to_dialog_map.end()) {
-        return create_new_floating_dialog(it->second, true);
-    } else {
-        std::cerr << "DialogContainer::new_floating_dialog: Could not find dialog for verb " << code << std::endl;
-        return nullptr;
-    }
 }
 
 /**

@@ -54,10 +54,8 @@ public:
     DialogMultipaned *create_column();
 
     // Dialog-related functions
-    void new_dialog(unsigned int code);  // TEMP TEMP TEMP
     void new_dialog(const Glib::ustring& dialog_type);
 
-    DialogWindow* new_floating_dialog(unsigned int code);  // TEMP TEMP TEMP
     DialogWindow* new_floating_dialog(const Glib::ustring& dialog_type);
     bool has_dialog_of_type(DialogBase *dialog);
     DialogBase *get_dialog(const Glib::ustring& dialog_type);

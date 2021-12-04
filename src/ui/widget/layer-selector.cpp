@@ -23,7 +23,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "layer-manager.h"
-#include "verbs.h"
 
 #include "ui/widget/layer-selector.h"
 #include "ui/dialog/dialog-container.h"
@@ -203,7 +202,7 @@ void LayerSelector::_layerChoose()
 {
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/dialogs/objects/layers_only", true);
-    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_OBJECTS);
+    _desktop->getContainer()->new_dialog("Objects");
 }
 
 } // namespace Widget
