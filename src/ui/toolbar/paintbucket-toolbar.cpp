@@ -32,7 +32,6 @@
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
-#include "document-undo.h"
 
 #include "ui/icon-names.h"
 #include "ui/tools/flood-tool.h"
@@ -44,7 +43,6 @@
 #include "ui/widget/unit-tracker.h"
 
 using Inkscape::UI::Widget::UnitTracker;
-using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
 
 namespace Inkscape {

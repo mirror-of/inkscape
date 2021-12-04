@@ -30,12 +30,11 @@
 #include "message-context.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "verbs.h"
-
 
 #include "object/sp-rect.h"
 #include "object/sp-namedview.h"
 
+#include "ui/icon-names.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/rect-tool.h"
 
@@ -451,7 +450,7 @@ void RectTool::finishItem() {
         
         this->desktop->getSelection()->set(this->rect);
 
-        DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_RECT, _("Create rectangle"));
+        DocumentUndo::done(this->desktop->getDocument(), _("Create rectangle"), INKSCAPE_ICON("draw-rectangle"));
 
         this->rect = nullptr;
     }

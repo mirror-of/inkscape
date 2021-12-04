@@ -24,12 +24,11 @@
 #include "message-stack.h"
 #include "selection-chemistry.h"
 #include "transformation.h"
-#include "verbs.h"
 
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
-#include "ui/icon-loader.h"
 
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 
 
@@ -747,8 +746,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done( selection->desktop()->getDocument() , SP_VERB_DIALOG_TRANSFORM,
-                        _("Move"));
+    DocumentUndo::done( selection->desktop()->getDocument(), _("Move"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageScale(Inkscape::Selection *selection)
@@ -810,8 +808,7 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), SP_VERB_DIALOG_TRANSFORM,
-                       _("Scale"));
+    DocumentUndo::done(selection->desktop()->getDocument(), _("Scale"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageRotate(Inkscape::Selection *selection)
@@ -836,8 +833,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), SP_VERB_DIALOG_TRANSFORM,
-                       _("Rotate"));
+    DocumentUndo::done(selection->desktop()->getDocument(), _("Rotate"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageSkew(Inkscape::Selection *selection)
@@ -933,8 +929,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), SP_VERB_DIALOG_TRANSFORM,
-                       _("Skew"));
+    DocumentUndo::done(selection->desktop()->getDocument(), _("Skew"), INKSCAPE_ICON("dialog-transform"));
 }
 
 
@@ -964,8 +959,7 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
         selection->applyAffine(displayed); // post-multiply each object's transform
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), SP_VERB_DIALOG_TRANSFORM,
-                       _("Edit transformation matrix"));
+    DocumentUndo::done(selection->desktop()->getDocument(), _("Edit transformation matrix"), INKSCAPE_ICON("dialog-transform"));
 }
 
 

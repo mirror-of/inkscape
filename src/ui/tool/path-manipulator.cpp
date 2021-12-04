@@ -31,6 +31,7 @@
 #include "object/sp-path.h"
 #include "style.h"
 
+#include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/event-utils.h"
@@ -1712,15 +1713,14 @@ void PathManipulator::_commit(Glib::ustring const &annotation)
 {
     writeXML();
     if (_desktop) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_NODE, annotation.data());
+        DocumentUndo::done(_desktop->getDocument(), annotation.data(), INKSCAPE_ICON("tool-node-editor"));
     }
 }
 
 void PathManipulator::_commit(Glib::ustring const &annotation, gchar const *key)
 {
     writeXML();
-    DocumentUndo::maybeDone(_desktop->getDocument(), key, SP_VERB_CONTEXT_NODE,
-                                annotation.data());
+    DocumentUndo::maybeDone(_desktop->getDocument(), key, annotation.data(), INKSCAPE_ICON("tool-node-editor"));
 }
 
 /** Update the position of the curve drag point such that it is over the nearest

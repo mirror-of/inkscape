@@ -13,7 +13,6 @@
 #define INKSCAPE_UI_DIALOG_INPUT_H
 
 #include "ui/dialog/dialog-base.h"
-#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {

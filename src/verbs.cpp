@@ -1242,8 +1242,7 @@ void LayerVerb::perform(SPAction *action, void *data)
             SPObject *next=Inkscape::next_layer(root, layer);
             if (next) {
                 dt->layerManager().setCurrentLayer(next);
-                DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_NEXT,
-                                   _("Switch to next layer"));
+                DocumentUndo::done(dt->getDocument(), _("Switch to next layer"), INKSCAPE_ICON("layer-previous")); // Icon backwards!
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to next layer."));
             } else {
                 dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot go past last layer."));
@@ -1254,8 +1253,7 @@ void LayerVerb::perform(SPAction *action, void *data)
             SPObject *prev=Inkscape::previous_layer(root, layer);
             if (prev) {
                 dt->layerManager().setCurrentLayer(prev);
-                DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_PREV,
-                                   _("Switch to previous layer"));
+                DocumentUndo::done(dt->getDocument(), _("Switch to previous layer"), INKSCAPE_ICON("layer-next")); // Icon backwards!
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to previous layer."));
             } else {
                 dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot go before first layer."));
@@ -1274,9 +1272,81 @@ void LayerVerb::perform(SPAction *action, void *data)
             Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(dt, layer);
             break;
         }
-        case SP_VERB_LAYER_TO_TOP:
-        case SP_VERB_LAYER_TO_BOTTOM:
-        case SP_VERB_LAYER_RAISE:
+        case SP_VERB_LAYER_TO_TOP: {
+            if ( layer == root ) {
+                dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
+                return;
+            }
+
+            g_return_if_fail(layer != nullptr);
+            SPObject *old_pos = layer->getNext();
+
+            layer->raiseToTop();
+
+            if ( layer->getNext() != old_pos ) {
+                DocumentUndo::done(dt->getDocument(), _("Layer to top"), INKSCAPE_ICON("layer-top"));
+
+                char const *message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
+                if (message) {
+                    dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
+                    g_free((void *) message);
+                }
+            } else {
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
+            }
+
+            break;
+        }
+        case SP_VERB_LAYER_TO_BOTTOM: {
+            if ( layer == root ) {
+                dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
+                return;
+            }
+
+            g_return_if_fail(layer != nullptr);
+            SPObject *old_pos = layer->getNext();
+
+            layer->lowerToBottom();
+
+            if ( layer->getNext() != old_pos ) {
+                DocumentUndo::done(dt->getDocument(), _("Layer to bottom"), INKSCAPE_ICON("layer-bottom"));
+
+                char const *message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
+                if (message) {
+                    dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
+                    g_free((void *) message);
+                }
+            } else {
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
+            }
+
+            break;
+        }
+        case SP_VERB_LAYER_RAISE: {
+            if ( layer == root ) {
+                dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
+                return;
+            }
+
+            g_return_if_fail(layer != nullptr);
+            SPObject *old_pos = layer->getNext();
+
+            layer->raiseOne();
+
+            if ( layer->getNext() != old_pos ) {
+                DocumentUndo::done(dt->getDocument(), _("Raise layer"), INKSCAPE_ICON("layer-raise"));
+
+                char const *message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
+                if (message) {
+                    dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
+                    g_free((void *) message);
+                }
+            } else {
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
+            }
+
+            break;
+        }
         case SP_VERB_LAYER_LOWER: {
             if ( layer == root ) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
@@ -1286,43 +1356,12 @@ void LayerVerb::perform(SPAction *action, void *data)
             g_return_if_fail(layer != nullptr);
             SPObject *old_pos = layer->getNext();
 
-            switch (verb) {
-                case SP_VERB_LAYER_TO_TOP:
-                    layer->raiseToTop();
-                    break;
-                case SP_VERB_LAYER_TO_BOTTOM:
-                    layer->lowerToBottom();
-                    break;
-                case SP_VERB_LAYER_RAISE:
-                    layer->raiseOne();
-                    break;
-                case SP_VERB_LAYER_LOWER:
-                    layer->lowerOne();
-                    break;
-            }
+            layer->lowerOne();
 
             if ( layer->getNext() != old_pos ) {
-                char const *message = nullptr;
-                Glib::ustring description = "";
-                switch (verb) {
-                    case SP_VERB_LAYER_TO_TOP:
-                        message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
-                        description = _("Layer to top");
-                        break;
-                    case SP_VERB_LAYER_RAISE:
-                        message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
-                        description = _("Raise layer");
-                        break;
-                    case SP_VERB_LAYER_TO_BOTTOM:
-                        message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
-                        description = _("Layer to bottom");
-                        break;
-                    case SP_VERB_LAYER_LOWER:
-                        message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
-                        description = _("Lower layer");
-                        break;
-                };
-                DocumentUndo::done(dt->getDocument(), verb, description);
+                DocumentUndo::done(dt->getDocument(), _("Lower layer"), INKSCAPE_ICON("layer-lower"));
+
+                char const *message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
                 if (message) {
                     dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
                     g_free((void *) message);
@@ -1338,8 +1377,7 @@ void LayerVerb::perform(SPAction *action, void *data)
 
                 dt->selection->duplicate(true, true);
 
-                DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_DUPLICATE,
-                                   _("Duplicate layer"));
+                DocumentUndo::done(dt->getDocument(), _("Duplicate layer"), INKSCAPE_ICON("layer-duplicate"));
 
                 // TRANSLATORS: this means "The layer has been duplicated."
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Duplicated layer."));
@@ -1386,8 +1424,7 @@ void LayerVerb::perform(SPAction *action, void *data)
                     dt->layerManager().setCurrentLayer(survivor);
                 }
 
-                DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_DELETE,
-                                   _("Delete layer"));
+                DocumentUndo::done(dt->getDocument(), _("Delete layer"), INKSCAPE_ICON("layer-delete"));
 
                 // TRANSLATORS: this means "The layer has been deleted."
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Deleted layer."));
@@ -1401,23 +1438,23 @@ void LayerVerb::perform(SPAction *action, void *data)
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
                 dt->layerManager().toggleLayerSolo( layer );
-                DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
+                DocumentUndo::done(dt->getDocument(), _("Toggle layer solo"), "");
             }
             break;
         }
         case SP_VERB_LAYER_SHOW_ALL: {
             dt->layerManager().toggleHideAllLayers( false );
-            DocumentUndo::maybeDone(dt->getDocument(), "layer:showall", SP_VERB_LAYER_SHOW_ALL, _("Show all layers"));
+            DocumentUndo::maybeDone(dt->getDocument(), "layer:showall", _("Show all layers"), "");
             break;
         }
         case SP_VERB_LAYER_HIDE_ALL: {
             dt->layerManager().toggleHideAllLayers( true );
-            DocumentUndo::maybeDone(dt->getDocument(), "layer:hideall", SP_VERB_LAYER_HIDE_ALL, _("Hide all layers"));
+            DocumentUndo::maybeDone(dt->getDocument(), "layer:hideall", _("Hide all layers"), "");
             break;
         }
         case SP_VERB_LAYER_LOCK_ALL: {
             dt->layerManager().toggleLockAllLayers( true );
-            DocumentUndo::maybeDone(dt->getDocument(), "layer:lockall", SP_VERB_LAYER_LOCK_ALL, _("Lock all layers"));
+            DocumentUndo::maybeDone(dt->getDocument(), "layer:lockall", _("Lock all layers"), "");
             break;
         }
         case SP_VERB_LAYER_LOCK_OTHERS: {
@@ -1425,13 +1462,13 @@ void LayerVerb::perform(SPAction *action, void *data)
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
                 dt->layerManager().toggleLockOtherLayers( layer );
-                DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
+                DocumentUndo::done(dt->getDocument(), _("Lock other layers"), "");
             }
             break;
         }
         case SP_VERB_LAYER_UNLOCK_ALL: {
             dt->layerManager().toggleLockAllLayers( false );
-            DocumentUndo::maybeDone(dt->getDocument(), "layer:unlockall", SP_VERB_LAYER_UNLOCK_ALL, _("Unlock all layers"));
+            DocumentUndo::maybeDone(dt->getDocument(), "layer:unlockall", _("Unlock all layers"), "");
             break;
         }
         case SP_VERB_LAYER_TOGGLE_LOCK:
@@ -1521,13 +1558,11 @@ void ObjectVerb::perform( SPAction *action, void *data)
             break;
         case SP_VERB_OBJECT_FLIP_HORIZONTAL:
             sel->setScaleRelative(center, Geom::Scale(-1.0, 1.0));
-            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_HORIZONTAL,
-                               _("Flip horizontally"));
+            DocumentUndo::done(dt->getDocument(), _("Flip horizontally"), INKSCAPE_ICON("object-flip-horizontal"));
             break;
         case SP_VERB_OBJECT_FLIP_VERTICAL:
             sel->setScaleRelative(center, Geom::Scale(1.0, -1.0));
-            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_VERTICAL,
-                               _("Flip vertically"));
+            DocumentUndo::done(dt->getDocument(), _("Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));
             break;
         case SP_VERB_OBJECT_SET_MASK:
             sel->setMask(false, false);
@@ -1535,7 +1570,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_SET_INVERSE_MASK:
             sel->setMask(false, false);
             Inkscape::LivePathEffect::sp_inverse_powermask(sp_action_get_selection(action));
-            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_SET_INVERSE_MASK, _("_Set Inverse (LPE)"));
+            DocumentUndo::done(dt->getDocument(), _("_Set Inverse (LPE)"), "");
             break;
         case SP_VERB_OBJECT_EDIT_MASK:
             sel->editMask(false);
@@ -1543,7 +1578,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_UNSET_MASK:
             Inkscape::LivePathEffect::sp_remove_powermask(sp_action_get_selection(action));
             sel->unsetMask(false);
-            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_UNSET_MASK, _("Release mask"));
+            DocumentUndo::done(dt->getDocument(), _("Release mask"), "");
             break;
         case SP_VERB_OBJECT_SET_CLIPPATH:
             sel->setMask(true, false);
@@ -1551,7 +1586,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_SET_INVERSE_CLIPPATH:
             sel->setMask(true, false);
             Inkscape::LivePathEffect::sp_inverse_powerclip(sp_action_get_selection(action));
-            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, _("_Set Inverse (LPE)"));
+            DocumentUndo::done(dt->getDocument(), _("_Set Inverse (LPE)"), "");
             break;
         case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
             sel->setClipGroup();
@@ -1562,7 +1597,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_UNSET_CLIPPATH:
             Inkscape::LivePathEffect::sp_remove_powerclip(sp_action_get_selection(action));
             sel->unsetMask(true);
-            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
+            DocumentUndo::done(dt->getDocument(), _("Release clipping path"), "");
 
             break;
         default:
@@ -2006,19 +2041,19 @@ void LockAndHideVerb::perform(SPAction *action, void *data)
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_UNLOCK_ALL:
             unlock_all(dt);
-            DocumentUndo::done(doc, SP_VERB_UNLOCK_ALL, _("Unlock all objects in the current layer"));
+            DocumentUndo::done(doc, _("Unlock all objects in the current layer"), "");
             break;
         case SP_VERB_UNLOCK_ALL_IN_ALL_LAYERS:
             unlock_all_in_all_layers(dt);
-            DocumentUndo::done(doc, SP_VERB_UNLOCK_ALL_IN_ALL_LAYERS, _("Unlock all objects in all layers"));
+            DocumentUndo::done(doc, _("Unlock all objects in all layers"), "");
             break;
         case SP_VERB_UNHIDE_ALL:
             unhide_all(dt);
-            DocumentUndo::done(doc, SP_VERB_UNHIDE_ALL, _("Unhide all objects in the current layer"));
+            DocumentUndo::done(doc, _("Unhide all objects in the current layer"), "");
             break;
         case SP_VERB_UNHIDE_ALL_IN_ALL_LAYERS:
             unhide_all_in_all_layers(dt);
-            DocumentUndo::done(doc, SP_VERB_UNHIDE_ALL_IN_ALL_LAYERS, _("Unhide all objects in all layers"));
+            DocumentUndo::done(doc, _("Unhide all objects in all layers"), "");
             break;
         default:
             return;
@@ -2440,8 +2475,6 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("show-grid")),
     new ZoomVerb(SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"),
                  N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
-    new ZoomVerb(SP_VERB_TOGGLE_ROTATION_LOCK, "ToggleRotationLock", N_("Lock rotation"),
-                 N_("Lock canvas rotation"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"),
                  N_("Show or hide the Commands bar (under the menu)"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SNAP_TOOLBAR, "ToggleSnapToolbar", N_("Sn_ap Controls Bar"),
@@ -2567,17 +2600,6 @@ Verb *Verb::_base_verbs[] = {
                  N_("Link an ICC color profile"), nullptr),
     new EditVerb(SP_VERB_EDIT_REMOVE_COLOR_PROFILE, "RemoveColorProfile", N_("Remove Color Profile"),
                  N_("Remove a linked ICC color profile"), nullptr),
-    // Scripting
-    new ContextVerb(SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT, "AddExternalScript", N_("Add External Script"),
-                    N_("Add an external script"), nullptr),
-    new ContextVerb(SP_VERB_EDIT_ADD_EMBEDDED_SCRIPT, "AddEmbeddedScript", N_("Add Embedded Script"),
-                    N_("Add an embedded script"), nullptr),
-    new ContextVerb(SP_VERB_EDIT_EMBEDDED_SCRIPT, "EditEmbeddedScript", N_("Edit Embedded Script"),
-                    N_("Edit an embedded script"), nullptr),
-    new ContextVerb(SP_VERB_EDIT_REMOVE_EXTERNAL_SCRIPT, "RemoveExternalScript", N_("Remove External Script"),
-                    N_("Remove an external script"), nullptr),
-    new ContextVerb(SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, "RemoveEmbeddedScript", N_("Remove Embedded Script"),
-                    N_("Remove an embedded script"), nullptr),
     // Align
     new ContextVerb(SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR, "AlignHorizontalRightToAnchor",
                     N_("Align right edges of objects to the left edge of the anchor"),

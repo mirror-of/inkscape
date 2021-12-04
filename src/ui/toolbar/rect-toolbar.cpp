@@ -35,7 +35,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-rect.h"
@@ -247,8 +246,7 @@ RectToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
     sensitivize();
 
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_RECT,
-                           _("Change rectangle"));
+        DocumentUndo::done(_desktop->getDocument(), _("Change rectangle"), INKSCAPE_ICON("draw-rectangle"));
     }
 
     _freeze = false;

@@ -15,6 +15,7 @@
 #include <utility>
 
 #include <gtkmm/adjustment.h>
+#include <gtkmm/combobox.h>
 #include <gtkmm/spinbutton.h>
 #include <glibmm/i18n.h>
 

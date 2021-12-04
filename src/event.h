@@ -20,7 +20,6 @@
 #include <utility>
 
 #include "xml/event-fns.h"
-#include "verbs.h"
 
 namespace Inkscape {
 namespace XML {

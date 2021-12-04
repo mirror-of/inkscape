@@ -6,20 +6,25 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-widget.h"
-#include <glibmm/i18n.h>
+#include "togglebutton.h"
 
 #include <utility>
 
+#include <glibmm/i18n.h>
+
 #include "helper-fns.h"
 #include "inkscape.h"
-#include "live_effects/effect.h"
-#include "live_effects/parameter/togglebutton.h"
 #include "selection.h"
+
+#include "live_effects/effect.h"
+
 #include "svg/stringstream.h"
 #include "svg/svg.h"
+
+#include "ui/icon-names.h"
 #include "ui/icon-loader.h"
-#include "verbs.h"
+#include "ui/widget/registered-widget.h"
+
 
 namespace Inkscape {
 
@@ -133,7 +138,7 @@ ToggleButtonParam::param_newWidget()
    checkwdg->add(*Gtk::manage(box_button));
    checkwdg->setActive(value);
    checkwdg->setProgrammatically = false;
-   checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
+   checkwdg->set_undo_parameters(_("Change togglebutton parameter"), INKSCAPE_ICON("dialog-path-effects"));
 
    _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
    return checkwdg;

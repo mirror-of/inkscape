@@ -23,9 +23,10 @@
 
 #include "document.h"
 #include "document-undo.h"
-#include "verbs.h"
 
 #include "object/sp-object.h"
+
+#include "ui/icon-names.h"
 
 #include "xml/node.h"
 
@@ -364,7 +365,7 @@ bool fixBrokenLinks(SPDocument *doc)
             }
         }
         if ( changed ) {
-            DocumentUndo::done( doc, SP_VERB_DIALOG_XML_EDITOR, _("Fixup broken links") );
+            DocumentUndo::done( doc, _("Fixup broken links"), INKSCAPE_ICON("dialog-xml-editor"));
         }
         DocumentUndo::setUndoSensitive(doc, savedUndoState);
     }

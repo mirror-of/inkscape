@@ -41,6 +41,7 @@
 
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/inkscape-preferences.h" // for PREFS_PAGE_SPELLCHECK
+#include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
 
 #include <glibmm/i18n.h>
@@ -676,8 +677,7 @@ void SpellCheck::onAccept ()
             // find the end of the word anew
             _end_w = _begin_w;
             _end_w.nextEndOfWord();
-            DocumentUndo::done(getDocument(), SP_VERB_CONTEXT_TEXT,
-                               _("Fix spelling"));
+            DocumentUndo::done(getDocument(), _("Fix spelling"), INKSCAPE_ICON("draw-text"));
         }
     }
 

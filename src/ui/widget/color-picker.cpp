@@ -12,14 +12,14 @@
  */
 
 #include "color-picker.h"
+
 #include "inkscape.h"
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "ui/dialog-events.h"
 
+#include "ui/dialog-events.h"
 #include "ui/widget/color-notebook.h"
-#include "verbs.h"
 
 
 static bool _in_use = false;
@@ -126,8 +126,7 @@ void ColorPicker::_onSelectedColorChanged() {
     _preview->setRgba32(rgba);
 
     if (_undo && SP_ACTIVE_DESKTOP) {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_NONE,
-                           /* TODO: annotate */ "color-picker.cpp:130");
+        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), /* TODO: annotate */ "color-picker.cpp:129", "");
     }
 
     on_changed(rgba);

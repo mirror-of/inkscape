@@ -15,6 +15,7 @@
  */
 
 #include "layer-properties.h"
+
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 
@@ -25,9 +26,8 @@
 #include "layer-manager.h"
 #include "message-stack.h"
 #include "preferences.h"
-
-#include "verbs.h"
 #include "selection-chemistry.h"
+
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/tools/tool-base.h"
@@ -337,7 +337,7 @@ void LayerPropertiesDialog::Rename::perform(LayerPropertiesDialog &dialog) {
                                          (gchar *)name.c_str(),
                                          FALSE
     );
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_RENAME, _("Rename layer"));
+    DocumentUndo::done(desktop->getDocument(), _("Rename layer"), INKSCAPE_ICON("layer-rename"));
     // TRANSLATORS: This means "The layer has been renamed"
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Renamed layer"));
 }
@@ -375,7 +375,7 @@ void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
     }
     desktop->getSelection()->clear();
     desktop->layerManager().setCurrentLayer(new_layer);
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_NEW, _("Add layer"));
+    DocumentUndo::done(desktop->getDocument(), _("Add layer"), INKSCAPE_ICON("layer-new"));
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
 }
 

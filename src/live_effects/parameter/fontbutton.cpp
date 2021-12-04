@@ -5,16 +5,18 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm.h>
-#include "ui/widget/registered-widget.h"
-#include "live_effects/parameter/fontbutton.h"
-#include "live_effects/effect.h"
-#include "ui/widget/font-button.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "verbs.h"
+#include "fontbutton.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm.h>
+
+#include "live_effects/effect.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+#include "ui/icon-names.h"
+#include "ui/widget/font-button.h"
+#include "ui/widget/registered-widget.h"
+
 
 namespace Inkscape {
 
@@ -76,7 +78,7 @@ FontButtonParam::param_newWidget()
                                                         param_effect->getSPDoc() ) );
     Glib::ustring fontspec = param_getSVGValue();
     fontbuttonwdg->setValue( fontspec);
-    fontbuttonwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font button parameter"));
+    fontbuttonwdg->set_undo_parameters(_("Change font button parameter"), INKSCAPE_ICON("dialog-path-effects"));
     return dynamic_cast<Gtk::Widget *> (fontbuttonwdg);
 }
 

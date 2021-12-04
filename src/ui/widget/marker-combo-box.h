@@ -12,14 +12,15 @@
  */
 #include <vector>
 
-#include <gtkmm/box.h>
 #include <gtkmm/bin.h>
+#include <gtkmm/box.h>
+#include <gtkmm/builder.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/image.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/menubutton.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/builder.h>
 #include <gio/gliststore.h>
 
 #include <sigc++/signal.h>

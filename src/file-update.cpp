@@ -35,7 +35,6 @@
 #include "proj_pt.h"
 #include "selection-chemistry.h"
 #include "text-editing.h"
-#include "verbs.h"
 
 #include "display/control/canvas-grid.h"
 
@@ -644,7 +643,7 @@ void sp_file_convert_dpi(SPDocument *doc)
     } // Look for SPNamedView and SPDefs loop
 
     // desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
-    DocumentUndo::done(doc, SP_VERB_NONE, _("Update Document"));
+    DocumentUndo::done(doc, _("Update Document"), "");
 }
 
 

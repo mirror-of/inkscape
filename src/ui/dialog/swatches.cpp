@@ -10,19 +10,19 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "swatches.h"
+
 #include <map>
 #include <algorithm>
 #include <iomanip>
 #include <set>
 
-#include "swatches.h"
-#include <gtkmm/radiomenuitem.h>
-
-#include <gtkmm/menu.h>
 #include <gtkmm/checkmenuitem.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/menubutton.h>
+#include <gtkmm/radiomenuitem.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/separatormenuitem.h>
-#include <gtkmm/menubutton.h>
 
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
@@ -31,31 +31,29 @@
 #include <glibmm/miscutils.h>
 
 #include "color-item.h"
-#include "desktop.h"
-
 #include "desktop-style.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "extension/db.h"
+#include "document.h"
+#include "gradient-chemistry.h"
 #include "inkscape.h"
-#include "io/sys.h"
-#include "io/resource.h"
 #include "message-context.h"
 #include "path-prefix.h"
+#include "verbs.h"
 
-#include "ui/previewholder.h"
-#include "widgets/desktop-widget.h"
-#include "ui/widget/gradient-vector-selector.h"
 #include "display/cairo-utils.h"
-
+#include "extension/db.h"
+#include "helper/action.h"
+#include "io/resource.h"
+#include "io/sys.h"
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"
-
 #include "ui/dialog/dialog-container.h"
-#include "verbs.h"
-#include "gradient-chemistry.h"
-#include "helper/action.h"
+#include "ui/icon-names.h"
+#include "ui/previewholder.h"
 #include "ui/widget/color-palette.h"
+#include "ui/widget/gradient-vector-selector.h"
+#include "widgets/desktop-widget.h"
 #include "widgets/ege-paint-def.h"
 
 namespace Inkscape {
@@ -202,8 +200,7 @@ void SwatchesPanelHook::convertGradient( GtkMenuItem * /*menuitem*/, gpointer us
 
                 if ( targetName == grad->getId() ) {
                     grad->setSwatch();
-                    DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT,
-                                       _("Add gradient stop"));
+                    DocumentUndo::done(doc, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
                     break;
                 }
             }

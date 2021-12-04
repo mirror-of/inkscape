@@ -21,14 +21,14 @@
 #include "document.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
-#include "include/macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "snap.h"
-#include "verbs.h"
+
+#include "include/macros.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-stop.h"
@@ -37,6 +37,7 @@
 
 #include "svg/css-ostringstream.h"
 
+#include "ui/icon-names.h"
 #include "ui/tools/gradient-tool.h"
 
 using Inkscape::DocumentUndo;
@@ -347,7 +348,7 @@ sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
     }
 
     if (!these_stops.empty() && doc) {
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT, _("Add gradient stop"));
+        DocumentUndo::done(doc, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
         drag->updateDraggers();
         // so that it does not automatically update draggers in idle loop, as this would deselect
         drag->local_change = true;
@@ -424,7 +425,7 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
     }
 
     if (!todel.empty()) {
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT, _("Simplify gradient"));
+        DocumentUndo::done(doc, _("Simplify gradient"), INKSCAPE_ICON("color-gradient"));
         drag->local_change = true;
         drag->updateDraggers();
         drag->selectByCoords(coords);
@@ -443,8 +444,7 @@ sp_gradient_context_add_stop_near_point (GradientTool *rc, SPItem *item,  Geom::
 
     SPStop *newstop = rc->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
-                       _("Add gradient stop"));
+    DocumentUndo::done(desktop->getDocument(), _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
 
     rc->get_drag()->updateDraggers();
     rc->get_drag()->local_change = true;
@@ -486,8 +486,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
                     sp_gradient_reset_to_userspace(priv, item);
                 }
                 desktop->redrawDesktop();;
-                DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
-                                   _("Create default gradient"));
+                DocumentUndo::done(desktop->getDocument(), _("Create default gradient"), INKSCAPE_ICON("color-gradient"));
             }
             ret = TRUE;
         }

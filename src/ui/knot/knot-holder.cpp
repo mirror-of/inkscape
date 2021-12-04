@@ -21,7 +21,6 @@
 #include "document.h"
 #include "knot-holder-entity.h"
 #include "knot.h"
-#include "verbs.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -38,6 +37,7 @@
 #include "object/sp-marker.h"
 #include "style.h"
 
+#include "ui/icon-names.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/tools/node-tool.h"
@@ -156,28 +156,28 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
 
     this->update_knots();
 
-    unsigned int object_verb = SP_VERB_NONE;
+    Glib::ustring icon_name;
 
     // TODO extract duplicated blocks;
     if (dynamic_cast<SPRect *>(saved_item)) {
-        object_verb = SP_VERB_CONTEXT_RECT;
+        icon_name = INKSCAPE_ICON("draw-rectangle");
     } else if (dynamic_cast<SPBox3D *>(saved_item)) {
-        object_verb = SP_VERB_CONTEXT_3DBOX;
+        icon_name = INKSCAPE_ICON("draw-cuboid");
     } else if (dynamic_cast<SPGenericEllipse *>(saved_item)) {
-        object_verb = SP_VERB_CONTEXT_ARC;
+        icon_name = INKSCAPE_ICON("draw-ellipse");
     } else if (dynamic_cast<SPStar *>(saved_item)) {
-        object_verb = SP_VERB_CONTEXT_STAR;
+        icon_name = INKSCAPE_ICON("draw-polygon-star");
     } else if (dynamic_cast<SPSpiral *>(saved_item)) {
-        object_verb = SP_VERB_CONTEXT_SPIRAL;
+        icon_name = INKSCAPE_ICON("draw-spiral");
     } else if (dynamic_cast<SPMarker *>(saved_item)) {
-        object_verb = SP_VERB_CONTEXT_MARKER;
+        icon_name = INKSCAPE_ICON("tool-pointer");
     } else {
         SPOffset *offset = dynamic_cast<SPOffset *>(saved_item);
         if (offset) {
             if (offset->sourceHref) {
-                object_verb = SP_VERB_SELECTION_LINKED_OFFSET;
+                icon_name = INKSCAPE_ICON("path-offset-linked");
             } else {
-                object_verb = SP_VERB_SELECTION_DYNAMIC_OFFSET;
+                icon_name = INKSCAPE_ICON("path-offset-dynamic");
             }
         }
     }
@@ -186,11 +186,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
 
     if (saved_item) { //increasingly aggressive sanity checks
        if (saved_item->document) {
-            // enum is unsigned so can't be less than SP_VERB_INVALID
-            if (object_verb <= SP_VERB_LAST) {
-                DocumentUndo::done(saved_item->document, object_verb,
-                                   _("Change handle"));
-            }
+           DocumentUndo::done(saved_item->document, _("Change handle"), icon_name);
        }
     } // else { abort(); }
 }
@@ -301,32 +297,32 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
             filter->updateRepr();
         }
 
-        unsigned int object_verb = SP_VERB_NONE;
+        Glib::ustring icon_name;
 
-        // TODO extract duplicated blocks:
+        // TODO extract duplicated blocks;
         if (dynamic_cast<SPRect *>(object)) {
-            object_verb = SP_VERB_CONTEXT_RECT;
+            icon_name = INKSCAPE_ICON("draw-rectangle");
         } else if (dynamic_cast<SPBox3D *>(object)) {
-            object_verb = SP_VERB_CONTEXT_3DBOX;
+            icon_name = INKSCAPE_ICON("draw-cuboid");
         } else if (dynamic_cast<SPGenericEllipse *>(object)) {
-            object_verb = SP_VERB_CONTEXT_ARC;
+            icon_name = INKSCAPE_ICON("draw-ellipse");
         } else if (dynamic_cast<SPStar *>(object)) {
-            object_verb = SP_VERB_CONTEXT_STAR;
+            icon_name = INKSCAPE_ICON("draw-polygon-star");
         } else if (dynamic_cast<SPSpiral *>(object)) {
-            object_verb = SP_VERB_CONTEXT_SPIRAL;
+            icon_name = INKSCAPE_ICON("draw-spiral");
         } else if (dynamic_cast<SPMarker *>(object)) {
-            object_verb = SP_VERB_CONTEXT_MARKER;
+            icon_name = INKSCAPE_ICON("tool-pointer");
         } else {
             SPOffset *offset = dynamic_cast<SPOffset *>(object);
             if (offset) {
                 if (offset->sourceHref) {
-                    object_verb = SP_VERB_SELECTION_LINKED_OFFSET;
+                    icon_name = INKSCAPE_ICON("path-offset-linked");
                 } else {
-                    object_verb = SP_VERB_SELECTION_DYNAMIC_OFFSET;
+                    icon_name = INKSCAPE_ICON("path-offset-dynamic");
                 }
             }
         }
-        DocumentUndo::done(object->document, object_verb, _("Move handle"));
+        DocumentUndo::done(object->document, _("Move handle"), icon_name);
     }
 }
 

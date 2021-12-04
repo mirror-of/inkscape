@@ -215,7 +215,7 @@ void GradientSelector::onGradientRename(const Glib::ustring &path_string, const 
                 row[_columns->name] = gr_prepare_label(obj);
                 if (!new_text.empty() && new_text != row[_columns->name]) {
                     rename_id(obj, new_text);
-                    Inkscape::DocumentUndo::done(obj->document, SP_VERB_CONTEXT_GRADIENT, _("Rename gradient"));
+                    Inkscape::DocumentUndo::done(obj->document, _("Rename gradient"), INKSCAPE_ICON("color-gradient"));
                 }
             }
         }

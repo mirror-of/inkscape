@@ -13,6 +13,8 @@
 # include "config.h"  // only include where actually required!
 #endif
 
+#include "symbols.h"
+
 #include <iostream>
 #include <algorithm>
 #include <locale>
@@ -29,11 +31,8 @@
 #include "inkscape.h"
 #include "path-prefix.h"
 #include "selection.h"
-#include "symbols.h"
-#include "verbs.h"
 
 #include "display/cairo-utils.h"
-#include "helper/action.h"
 #include "include/gtkmm_version.h"
 #include "io/resource.h"
 #include "io/sys.h"
@@ -477,9 +476,7 @@ void SymbolsDialog::hideOverlay() {
 }
 
 void SymbolsDialog::insertSymbol() {
-    Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_SYMBOL );
-    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) getDesktop()) );
-    sp_action_perform (action, nullptr);
+    getDesktop()->selection->toSymbol();
 }
 
 void SymbolsDialog::revertSymbol() {
@@ -487,7 +484,7 @@ void SymbolsDialog::revertSymbol() {
         if (auto symbol = dynamic_cast<SPSymbol*> (document->getObjectById(selectedSymbolId()))) {
             symbol->unSymbol();
         }
-        Inkscape::DocumentUndo::done(document, SP_VERB_EDIT_UNSYMBOL, _("Group from symbol"));
+        Inkscape::DocumentUndo::done(document, _("Group from symbol"), "");
     }
 }
 

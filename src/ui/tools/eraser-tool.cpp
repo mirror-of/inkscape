@@ -25,6 +25,8 @@
 
 #define noERASER_VERBOSE
 
+#include "eraser-tool.h"
+
 #include <string>
 #include <cstring>
 #include <numeric>
@@ -48,7 +50,7 @@
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "verbs.h"
+#include "style.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -63,11 +65,11 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
-#include "style.h"
+
+#include "ui/icon-names.h"
 
 #include "svg/svg.h"
 
-#include "ui/tools/eraser-tool.h"
 
 using Inkscape::DocumentUndo;
 
@@ -842,7 +844,7 @@ void EraserTool::set_to_accumulated() {
         }
     }
     if ( workDone ) {
-        DocumentUndo::done(document, SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
+        DocumentUndo::done(document, _("Draw eraser stroke"), INKSCAPE_ICON("draw-eraser"));
     } else {
         DocumentUndo::cancel(document);
     }

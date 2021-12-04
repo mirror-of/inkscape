@@ -24,7 +24,6 @@
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-window.h"
 #include "ui/icon-loader.h"
-#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {

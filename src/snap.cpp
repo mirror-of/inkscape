@@ -20,6 +20,8 @@
 #include <utility>
 #include <vector>
 
+#include <glibmm/timer.h>
+
 #include <2geom/transforms.h>
 
 #include "snap.h"

@@ -18,8 +18,6 @@
 
 #include <gtkmm/radiobutton.h>
 
-#include "verbs.h"
-
 #include "object/sp-root.h"
 
 #include "svg/svg-color.h"
@@ -421,8 +419,7 @@ RegisteredColorPicker::on_changed (guint32 rgba)
     DocumentUndo::setUndoSensitive(local_doc, saved);
 
     local_doc->setModifiedSinceSave();
-    DocumentUndo::done(local_doc, SP_VERB_NONE,
-                       /* TODO: annotate */ "registered-widget.cpp: RegisteredColorPicker::on_changed");
+    DocumentUndo::done(local_doc, "registered-widget.cpp: RegisteredColorPicker::on_changed", ""); // TODO Fix description.
 
     _wr->setUpdating (false);
 }

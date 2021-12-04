@@ -36,12 +36,11 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "verbs.h"
 #include "style.h"
 #include "style-enums.h"
 
 #include "object/sp-image.h"
-
+#include "ui/icon-names.h"
 #include "widgets/sp-attribute-widget.h"
 
 namespace Inkscape {
@@ -422,7 +421,7 @@ void ObjectProperties::_labelChanged()
     } else {
         _label_id.set_markup_with_mnemonic(_("_ID:") + Glib::ustring(" "));
         item->setAttribute("id", id);
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM, _("Set object ID"));
+        DocumentUndo::done(getDocument(), _("Set object ID"), INKSCAPE_ICON("dialog-object-properties"));
     }
     g_free(id);
 
@@ -436,21 +435,19 @@ void ObjectProperties::_labelChanged()
     char const *currentlabel = obj->label();
     if (label.compare(currentlabel ? currentlabel : "")) {
         obj->setLabel(label.c_str());
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM,
-                _("Set object label"));
+        DocumentUndo::done(getDocument(), _("Set object label"), INKSCAPE_ICON("dialog-object-properties"));
     }
 
     /* Retrieve the title */
     if (obj->setTitle(_entry_title.get_text().c_str())) {
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM,
-                _("Set object title"));
+        DocumentUndo::done(getDocument(), _("Set object title"), INKSCAPE_ICON("dialog-object-properties"));
     }
 
     /* Retrieve the DPI */
     if (SP_IS_IMAGE(obj)) {
         Glib::ustring dpi_value = Glib::ustring::format(_spin_dpi.get_value());
         obj->setAttribute("inkscape:svg-dpi", dpi_value);
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM, _("Set image DPI"));
+        DocumentUndo::done(getDocument(), _("Set image DPI"), INKSCAPE_ICON("dialog-object-properties"));
     }
 
     /* Retrieve the description */
@@ -458,8 +455,7 @@ void ObjectProperties::_labelChanged()
     _tv_description.get_buffer()->get_bounds(start, end);
     Glib::ustring desc = _tv_description.get_buffer()->get_text(start, end, TRUE);
     if (obj->setDesc(desc.c_str())) {
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM,
-                _("Set object description"));
+        DocumentUndo::done(getDocument(), _("Set object description"), INKSCAPE_ICON("dialog-object-properties"));
     }
 
     _blocked = false;
@@ -472,7 +468,7 @@ void ObjectProperties::_highlightChanged(guint rgba)
     
     if (auto item = getSelection()->singleItem()) {
         item->setHighlight(rgba);
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM, _("Set item highlight color"));
+        DocumentUndo::done(getDocument(), _("Set item highlight color"), INKSCAPE_ICON("dialog-object-properties"));
     }
 }
 
@@ -495,8 +491,7 @@ void ObjectProperties::_imageRenderingChanged()
     Inkscape::XML::Node *image_node = item->getRepr();
     if (image_node) {
         sp_repr_css_change(image_node, css, "style");
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM,
-                _("Set image rendering option"));
+        DocumentUndo::done(getDocument(), _("Set image rendering option"), INKSCAPE_ICON("dialog-object-properties"));
     }
     sp_repr_css_attr_unref(css);
 
@@ -514,8 +509,7 @@ void ObjectProperties::_sensitivityToggled()
 
     _blocked = true;
     item->setLocked(_cb_lock.get_active());
-    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM,
-                       _cb_lock.get_active() ? _("Lock object") : _("Unlock object"));
+    DocumentUndo::done(getDocument(), _cb_lock.get_active() ? _("Lock object") : _("Unlock object"), INKSCAPE_ICON("dialog-object-properties"));
     _blocked = false;
 }
 
@@ -541,7 +535,7 @@ void ObjectProperties::_aspectRatioToggled()
     if (SP_IS_IMAGE(item)) {
         Glib::ustring dpi_value = Glib::ustring::format(_spin_dpi.get_value());
         item->setAttribute("preserveAspectRatio", active);
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM, _("Set preserve ratio"));
+        DocumentUndo::done(getDocument(), _("Set preserve ratio"), INKSCAPE_ICON("dialog-object-properties"));
     }
     _blocked = false;
 }
@@ -557,8 +551,7 @@ void ObjectProperties::_hiddenToggled()
 
     _blocked = true;
     item->setExplicitlyHidden(_cb_hide.get_active());
-    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_ITEM,
-               _cb_hide.get_active() ? _("Hide object") : _("Unhide object"));
+    DocumentUndo::done(getDocument(), _cb_hide.get_active() ? _("Hide object") : _("Unhide object"), INKSCAPE_ICON("dialog-object-properties"));
     _blocked = false;
 }
 

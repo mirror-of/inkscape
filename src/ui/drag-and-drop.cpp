@@ -23,7 +23,6 @@
 #include "file.h"
 #include "selection.h"
 #include "style.h"
-#include "verbs.h"
 #include "layer-manager.h"
 
 #include "extension/db.h"
@@ -124,7 +123,7 @@ ink_drag_data_received(GtkWidget *widget,
                 if (desktop->event_context && desktop->event_context->get_drag()) {
                     consumed = desktop->event_context->get_drag()->dropColor(item, colorspec, button_dt);
                     if (consumed) {
-                        DocumentUndo::done( doc , SP_VERB_NONE, _("Drop color on gradient") );
+                        DocumentUndo::done( doc , _("Drop color on gradient"), "" );
                         desktop->event_context->get_drag()->updateDraggers();
                     }
                 }
@@ -132,7 +131,7 @@ ink_drag_data_received(GtkWidget *widget,
                 //if (!consumed && tools_active(desktop, TOOLS_TEXT)) {
                 //    consumed = sp_text_context_drop_color(c, button_doc);
                 //    if (consumed) {
-                //        SPDocumentUndo::done( doc , SP_VERB_NONE, _("Drop color on gradient stop"));
+                //        SPDocumentUndo::done( doc , _("Drop color on gradient stop"), "");
                 //    }
                 //}
 
@@ -170,8 +169,7 @@ ink_drag_data_received(GtkWidget *widget,
                     sp_desktop_apply_css_recursive( item, css, true );
                     item->updateRepr();
 
-                    DocumentUndo::done( doc , SP_VERB_NONE,
-                                        _("Drop color") );
+                    DocumentUndo::done( doc ,  _("Drop color"), "" );
                 }
             }
         }
@@ -235,7 +233,7 @@ ink_drag_data_received(GtkWidget *widget,
                 if (desktop->event_context && desktop->event_context->get_drag()) {
                     consumed = desktop->event_context->get_drag()->dropColor(item, colorspec.c_str(), button_dt);
                     if (consumed) {
-                        DocumentUndo::done( doc , SP_VERB_NONE, _("Drop color on gradient") );
+                        DocumentUndo::done( doc, _("Drop color on gradient"), "" );
                         desktop->event_context->get_drag()->updateDraggers();
                     }
                 }
@@ -274,8 +272,7 @@ ink_drag_data_received(GtkWidget *widget,
                     sp_desktop_apply_css_recursive( item, css, true );
                     item->updateRepr();
 
-                    DocumentUndo::done( doc , SP_VERB_NONE,
-                                        _("Drop color") );
+                    DocumentUndo::done( doc, _("Drop color"), "" );
                 }
             }
         }
@@ -328,8 +325,7 @@ ink_drag_data_received(GtkWidget *widget,
             }
 
             Inkscape::GC::release(newgroup);
-            DocumentUndo::done( doc, SP_VERB_NONE,
-                                _("Drop SVG") );
+            DocumentUndo::done( doc, _("Drop SVG"), "" );
             prefs->setBool("/options/onimport", false);
             break;
         }
@@ -346,7 +342,7 @@ ink_drag_data_received(GtkWidget *widget,
         case APP_X_INK_PASTE: {
             Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
             cm->paste(desktop);
-            DocumentUndo::done( doc, SP_VERB_NONE, _("Drop Symbol") );
+            DocumentUndo::done( doc, _("Drop Symbol"), "" );
             break;
         }
 
@@ -368,8 +364,7 @@ ink_drag_data_received(GtkWidget *widget,
 
             ext->set_param_optiongroup("link", save ? "embed" : "link");
             ext->set_gui(true);
-            DocumentUndo::done( doc , SP_VERB_NONE,
-                                _("Drop bitmap image") );
+            DocumentUndo::done( doc, _("Drop bitmap image"), "" );
             break;
         }
     }

@@ -23,7 +23,6 @@
 #include "livepatheffect-add.h"
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 #include "helper/action.h"
 #include "ui/icon-loader.h"
@@ -403,8 +402,7 @@ void LivePathEffectEditor::onAdd()
                 item = selection->singleItem(); // get new item
 
                 LivePathEffect::Effect::createAndApply(data->key.c_str(), getDocument(), item);
-                DocumentUndo::done(getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                                   _("Create and apply path effect"));
+                DocumentUndo::done(getDocument(), _("Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
 
                 lpe_list_locked = false;
                 onSelectionChanged(selection);
@@ -443,8 +441,7 @@ void LivePathEffectEditor::onAdd()
 
                         /// \todo Add the LPE stack of the original path?
 
-                        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                                           _("Create and apply Clone original path effect"));
+                        DocumentUndo::done(getDocument(), _("Create and apply Clone original path effect"), INKSCAPE_ICON("dialog-path-effects"));
 
                         lpe_list_locked = false;
                         onSelectionChanged(selection);
@@ -466,7 +463,7 @@ LivePathEffectEditor::onRemove()
             sp_lpe_item_update_patheffect(lpeitem, false, false);
             lpeitem->removeCurrentPathEffect(false);
             current_lperef = nullptr;
-            DocumentUndo::done(getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Remove path effect"));
+            DocumentUndo::done(getDocument(), _("Remove path effect"), INKSCAPE_ICON("dialog-path-effects"));
             lpe_list_locked = false;
             onSelectionChanged(selection);
         }
@@ -483,7 +480,7 @@ void LivePathEffectEditor::onUp()
         if (lpeitem) {
             Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
             lpeitem->upCurrentPathEffect();
-            DocumentUndo::done(getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Move path effect up") );
+            DocumentUndo::done(getDocument(), _("Move path effect up"), INKSCAPE_ICON("dialog-path-effects"));
             effect_list_reload(lpeitem);
             if (lpe) {
                 showParams(*lpe);
@@ -503,7 +500,7 @@ void LivePathEffectEditor::onDown()
         if ( lpeitem ) {
             Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
             lpeitem->downCurrentPathEffect();
-            DocumentUndo::done(getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Move path effect down") );
+            DocumentUndo::done(getDocument(), _("Move path effect down"), INKSCAPE_ICON("dialog-path-effects"));
             effect_list_reload(lpeitem);
             if (lpe) {
                 showParams(*lpe);
@@ -571,8 +568,7 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
                 lpeobjref->lpeobject->get_lpe()->doOnVisibilityToggled(lpeitem);
             }
         }
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                            newValue ? _("Activate path effect") : _("Deactivate path effect"));
+        DocumentUndo::done(getDocument(), newValue ? _("Activate path effect") : _("Deactivate path effect"), INKSCAPE_ICON("dialog-path-effects"));
     }
 }
 

@@ -43,7 +43,6 @@
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "display/cairo-utils.h"
 #include "display/curve.h"
@@ -61,6 +60,7 @@
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 
+#include "ui/icon-names.h"
 #include "ui/toolbar/spray-toolbar.h"
 #include "ui/tools/spray-tool.h"
 
@@ -1377,16 +1377,13 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 this->has_dilated = false;
                 switch (this->mode) {
                     case SPRAY_MODE_COPY:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_SPRAY, _("Spray with copies"));
+                        DocumentUndo::done(this->desktop->getDocument(), _("Spray with copies"), INKSCAPE_ICON("tool-spray"));
                         break;
                     case SPRAY_MODE_CLONE:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_SPRAY, _("Spray with clones"));
+                        DocumentUndo::done(this->desktop->getDocument(), _("Spray with clones"), INKSCAPE_ICON("tool-spray"));
                         break;
                     case SPRAY_MODE_SINGLE_PATH:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_SPRAY, _("Spray in single path"));
+                        DocumentUndo::done(this->desktop->getDocument(), _("Spray in single path"), INKSCAPE_ICON("tool-spray"));
                         break;
                 }
             }

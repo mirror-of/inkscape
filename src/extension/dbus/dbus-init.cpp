@@ -29,7 +29,6 @@
 #include "document.h"
 #include "desktop.h"
 #include "file.h"
-#include "verbs.h"
 #include "helper/action.h"
 
 #include <algorithm>

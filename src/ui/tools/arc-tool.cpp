@@ -28,13 +28,13 @@
 #include "preferences.h"
 #include "selection.h"
 #include "snap.h"
-#include "verbs.h"
 
 #include "include/macros.h"
 
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
 
+#include "ui/icon-names.h"
 #include "ui/modifiers.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/shape-editor.h"
@@ -433,7 +433,7 @@ void ArcTool::finishItem() {
 
         desktop->getSelection()->set(this->arc);
 
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC, _("Create ellipse"));
+        DocumentUndo::done(desktop->getDocument(), _("Create ellipse"), INKSCAPE_ICON("draw-ellipse"));
 
         this->arc = nullptr;
     }

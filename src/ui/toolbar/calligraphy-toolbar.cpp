@@ -32,7 +32,7 @@
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
-#include "document-undo.h"
+
 #include "ui/dialog/calligraphic-profile-rename.h"
 #include "ui/icon-names.h"
 #include "ui/simple-pref-pusher.h"
@@ -42,7 +42,6 @@
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
-using Inkscape::DocumentUndo;
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Quantity;
 using Inkscape::Util::Unit;

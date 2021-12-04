@@ -21,6 +21,8 @@
 #include "undo-stack-observer.h"
 #include "event.h"
 
+class SPDocument;
+
 namespace Inkscape {
 
 class EventLogPrivate;

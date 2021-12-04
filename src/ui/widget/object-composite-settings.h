@@ -13,10 +13,6 @@
  */
 
 #include <gtkmm/box.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/label.h>
-#include <gtkmm/scale.h>
-#include <glibmm/ustring.h>
 
 #include "ui/widget/filter-effect-chooser.h"
 
@@ -35,13 +31,14 @@ class StyleSubject;
  */
 class ObjectCompositeSettings : public Gtk::Box {
 public:
-    ObjectCompositeSettings(unsigned int verb_code, char const *history_prefix, int flags);
+    ObjectCompositeSettings(Glib::ustring icon_name, char const *history_prefix, int flags);
     ~ObjectCompositeSettings() override;
 
     void setSubject(StyleSubject *subject);
 
 private:
-    unsigned int    _verb_code;
+    Glib::ustring   _icon_name; // Used by History dialog.
+
     Glib::ustring   _blend_tag;
     Glib::ustring   _blur_tag;
     Glib::ustring   _opacity_tag;

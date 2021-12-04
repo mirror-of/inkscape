@@ -34,7 +34,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/box3d.h"
 #include "object/persp3d.h"
@@ -205,7 +204,7 @@ Box3DToolbar::angle_value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
     persp->updateRepr();
 
     // TODO: use the correct axis here, too
-    DocumentUndo::maybeDone(document, "perspangle", SP_VERB_CONTEXT_3DBOX, _("3D Box: Change perspective (angle of infinite axis)"));
+    DocumentUndo::maybeDone(document, "perspangle", _("3D Box: Change perspective (angle of infinite axis)"), INKSCAPE_ICON("draw-cuboid"));
 
     _freeze = false;
 }

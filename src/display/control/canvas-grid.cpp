@@ -33,7 +33,6 @@
 #include "document.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "verbs.h"
 
 #include "display/cairo-utils.h"
 
@@ -46,6 +45,7 @@
 #include "svg/stringstream.h"
 #include "svg/svg-color.h"
 
+#include "ui/icon-names.h"
 #include "ui/widget/canvas.h"
 
 #include "util/units.h"
@@ -177,7 +177,7 @@ CanvasGrid::writeNewGridToRepr(Inkscape::XML::Node * repr, SPDocument * doc, Gri
     repr->appendChild(newnode);
     Inkscape::GC::release(newnode);
 
-    DocumentUndo::done(doc, SP_VERB_DIALOG_DOCPROPERTIES, _("Create new grid"));
+    DocumentUndo::done(doc, _("Create new grid"), INKSCAPE_ICON("document-properties"));
 }
 
 /*

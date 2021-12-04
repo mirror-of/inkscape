@@ -5,11 +5,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/originalpatharray.h"
-#include "live_effects/lpe-spiro.h"
-#include "live_effects/lpe-bspline.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
+#include <glibmm/i18n.h>
 
 #include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
@@ -17,29 +13,34 @@
 #include <gtkmm/separatormenuitem.h>
 #include <gtkmm/scrolledwindow.h>
 
-#include <glibmm/i18n.h>
-
-#include "inkscape.h"
-#include "ui/clipboard.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "originalpath.h"
-#include "display/curve.h"
-
 #include <2geom/coord.h>
 #include <2geom/point.h>
 
-#include "ui/icon-loader.h"
+#include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "originalpath.h"
+
+#include "display/curve.h"
+
+#include "live_effects/effect.h"
+#include "live_effects/lpe-bspline.h"
+#include "live_effects/lpe-spiro.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/parameter/originalpatharray.h"
 
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/uri.h"
 
-#include "live_effects/effect.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
 
-#include "verbs.h"
-#include "document-undo.h"
-#include "document.h"
+#include "ui/clipboard.h"
+#include "ui/icon-names.h"
+#include "ui/icon-loader.h"
+
 
 namespace Inkscape {
 
@@ -149,8 +150,7 @@ void OriginalPathArrayParam::on_reverse_toggled(const Glib::ustring& path)
     w->reversed = row[_model->_colReverse];
     
     param_write_to_repr(param_getSVGValue().c_str());
-    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Link path parameter to path"));
+    DocumentUndo::done(param_effect->getSPDoc(), _("Link path parameter to path"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void OriginalPathArrayParam::on_visible_toggled(const Glib::ustring& path)
@@ -162,8 +162,7 @@ void OriginalPathArrayParam::on_visible_toggled(const Glib::ustring& path)
     w->visibled = row[_model->_colVisible];
     
     param_write_to_repr(param_getSVGValue().c_str());
-    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Toggle path parameter visibility"));
+    DocumentUndo::done(param_effect->getSPDoc(), _("Toggle path parameter visibility"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void OriginalPathArrayParam::param_set_default()
@@ -265,8 +264,7 @@ void OriginalPathArrayParam::on_up_button_click()
         
         param_write_to_repr(param_getSVGValue().c_str());
 
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Move path up"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Move path up"), INKSCAPE_ICON("dialog-path-effects"));
         
         _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_selectIndex), &i));
     }
@@ -293,8 +291,7 @@ void OriginalPathArrayParam::on_down_button_click()
         
         param_write_to_repr(param_getSVGValue().c_str());
         
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Move path down"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Move path down"), INKSCAPE_ICON("dialog-path-effects"));
         
         _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_selectIndex), &i));
     }
@@ -309,10 +306,8 @@ void OriginalPathArrayParam::on_remove_button_click()
         
         param_write_to_repr(param_getSVGValue().c_str());
         
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Remove path"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Remove path"), INKSCAPE_ICON("dialog-path-effects"));
     }
-    
 }
 
 void
@@ -347,8 +342,7 @@ OriginalPathArrayParam::on_link_button_click()
         os << pathid.c_str() << ",0,1";
     }
     param_write_to_repr(os.str().c_str());
-    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Link patharray parameter to path"));
+    DocumentUndo::done(param_effect->getSPDoc(), _("Link patharray parameter to path"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void OriginalPathArrayParam::unlink(PathAndDirectionAndVisible* to)

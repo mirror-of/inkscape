@@ -12,6 +12,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "measure-tool.h"
+
 #include <iomanip>
 
 #include <gtkmm.h>
@@ -22,8 +24,6 @@
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
 
-#include "measure-tool.h"
-
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
@@ -32,7 +32,6 @@
 #include "path-chemistry.h"
 #include "rubberband.h"
 #include "text-editing.h"
-#include "verbs.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-curve.h"
@@ -52,6 +51,7 @@
 #include "svg/svg.h"
 
 #include "ui/dialog/knot-properties.h"
+#include "ui/icon-names.h"
 #include "ui/knot/knot.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/widget/canvas.h" // Canvas area
@@ -781,7 +781,7 @@ void MeasureTool::toGuides()
     setGuide(end,Geom::rad_from_deg(90),"");
     showCanvasItems(true);
     doc->ensureUpToDate();
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add guides from measure tool"));
+    DocumentUndo::done(desktop->getDocument(), _("Add guides from measure tool"), INKSCAPE_ICON("tool-measure"));
 }
 
 void MeasureTool::toPhantom()
@@ -804,7 +804,7 @@ void MeasureTool::toPhantom()
 
     showCanvasItems(false, false, true);
     doc->ensureUpToDate();
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Keep last measure on the canvas, for reference"));
+    DocumentUndo::done(desktop->getDocument(), _("Keep last measure on the canvas, for reference"), INKSCAPE_ICON("tool-measure"));
 }
 
 void MeasureTool::toItem()
@@ -824,7 +824,7 @@ void MeasureTool::toItem()
     Inkscape::GC::release(rgroup);
     measure_item->updateRepr();
     doc->ensureUpToDate();
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Convert measure to items"));
+    DocumentUndo::done(desktop->getDocument(), _("Convert measure to items"), INKSCAPE_ICON("tool-measure"));
     reset();
 }
 
@@ -869,7 +869,7 @@ void MeasureTool::toMarkDimension()
     setLabelText(total, middle, fontsize, textangle, color);
 
     doc->ensureUpToDate();
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global measure line"));
+    DocumentUndo::done(desktop->getDocument(), _("Add global measure line"), INKSCAPE_ICON("tool-measure"));
 }
 
 void MeasureTool::setGuide(Geom::Point origin, double angle, const char *label)

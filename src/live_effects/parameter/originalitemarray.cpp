@@ -5,7 +5,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/originalitemarray.h"
+#include "originalitemarray.h"
 
 #include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
@@ -15,21 +15,23 @@
 
 #include <glibmm/i18n.h>
 
+#include "document-undo.h"
+#include "document.h"
 #include "inkscape.h"
 #include "originalitem.h"
-#include "svg/stringstream.h"
-#include "svg/svg.h"
-#include "ui/clipboard.h"
-#include "ui/icon-loader.h"
-
-#include "object/uri.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
 
-#include "verbs.h"
-#include "document-undo.h"
-#include "document.h"
+#include "object/uri.h"
+
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+
+#include "ui/clipboard.h"
+#include "ui/icon-names.h"
+#include "ui/icon-loader.h"
+
 
 namespace Inkscape {
 
@@ -128,8 +130,7 @@ void OriginalItemArrayParam::on_active_toggled(const Glib::ustring& item)
     
     auto full = param_getSVGValue();
     param_write_to_repr(full.c_str());
-    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Link item parameter to item"));
+    DocumentUndo::done(param_effect->getSPDoc(), _("Link item parameter to item"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void OriginalItemArrayParam::param_set_default()
@@ -231,8 +232,7 @@ void OriginalItemArrayParam::on_up_button_click()
         auto full = param_getSVGValue();
         param_write_to_repr(full.c_str());
         
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Move item up"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Move item up"), INKSCAPE_ICON("dialog-path-effects"));
         
         _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_selectIndex), &i));
     }
@@ -260,8 +260,7 @@ void OriginalItemArrayParam::on_down_button_click()
         auto full = param_getSVGValue();
         param_write_to_repr(full.c_str());
         
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Move item down"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Move item down"), INKSCAPE_ICON("dialog-path-effects"));
         
         _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalItemArrayParam::_selectIndex), &i));
     }
@@ -277,8 +276,7 @@ void OriginalItemArrayParam::on_remove_button_click()
         auto full = param_getSVGValue();
         param_write_to_repr(full.c_str());
         
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Remove item"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Remove item"), INKSCAPE_ICON("dialog-path-effects"));
     }
     
 }
@@ -316,8 +314,7 @@ OriginalItemArrayParam::on_link_button_click()
         os << itemid.c_str() << ",1";
     }
     param_write_to_repr(os.str().c_str());
-    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Link itemarray parameter to item"));
+    DocumentUndo::done(param_effect->getSPDoc(), _("Link itemarray parameter to item"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void OriginalItemArrayParam::unlink(ItemAndActive* to)

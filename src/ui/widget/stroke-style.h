@@ -33,7 +33,6 @@
 #include "preferences.h"
 #include "selection.h"
 #include "style.h"
-#include "verbs.h"
 
 #include "display/drawing.h"
 
@@ -50,7 +49,6 @@
 
 #include "widgets/spw-utilities.h"
 
-#include "xml/repr.h"
 
 namespace Gtk {
 class Widget;

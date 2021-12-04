@@ -5,19 +5,24 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "colorpicker.h"
+
 #include <gtkmm.h>
-#include "ui/widget/registered-widget.h"
-#include "live_effects/parameter/colorpicker.h"
-#include "live_effects/effect.h"
-#include "ui/widget/color-picker.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
+
 #include "color.h"
-#include "inkscape.h"
-#include "svg/stringstream.h"
-#include "verbs.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+
+#include "live_effects/effect.h"
+#include "live_effects/parameter/colorpicker.h"
+
+#include "svg/stringstream.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+
+#include "ui/icon-names.h"
+#include "ui/widget/registered-widget.h"
 
 #include <glibmm/i18n.h>
 
@@ -120,7 +125,7 @@ ColorPickerParam::param_newWidget()
     DocumentUndo::setUndoSensitive(document, false);
     colorpickerwdg->setRgba32(value);
     DocumentUndo::setUndoSensitive(document, saved);
-    colorpickerwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change color button parameter"));
+    colorpickerwdg->set_undo_parameters(_("Change color button parameter"), INKSCAPE_ICON("dialog-path-effects"));
     hbox->pack_start(*dynamic_cast<Gtk::Widget *> (colorpickerwdg), true, true);
     return dynamic_cast<Gtk::Widget *> (hbox);
 }

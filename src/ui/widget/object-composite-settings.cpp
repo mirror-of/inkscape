@@ -13,19 +13,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/object-composite-settings.h"
+#include "object-composite-settings.h"
+
+#include <utility>
 
 #include "desktop.h"
-
 #include "desktop-style.h"
 #include "document.h"
 #include "document-undo.h"
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "style.h"
-#include "svg/css-ostringstream.h"
-#include "verbs.h"
+
 #include "object/filters/blend.h"
+#include "svg/css-ostringstream.h"
 #include "ui/widget/style-subject.h"
 
 constexpr double BLUR_MULTIPLIER = 4.0;
@@ -34,9 +35,9 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char const *history_prefix, int flags)
+ObjectCompositeSettings::ObjectCompositeSettings(Glib::ustring icon_name, char const *history_prefix, int flags)
 : Gtk::Box(Gtk::ORIENTATION_VERTICAL),
-  _verb_code(verb_code),
+  _icon_name(std::move(icon_name)),
   _blend_tag(Glib::ustring(history_prefix) + ":blend"),
   _blur_tag(Glib::ustring(history_prefix) + ":blur"),
   _opacity_tag(Glib::ustring(history_prefix) + ":opacity"),
@@ -139,8 +140,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         }
     }
 
-    DocumentUndo::maybeDone(document, _blur_tag.c_str(), _verb_code,
-                            _("Change blur/blend filter"));
+    DocumentUndo::maybeDone(document, _blur_tag.c_str(), _("Change blur/blend filter"), _icon_name);
 
     _blocked = false;
 }
@@ -171,8 +171,7 @@ ObjectCompositeSettings::_opacityValueChanged()
 
     sp_repr_css_attr_unref (css);
 
-    DocumentUndo::maybeDone(desktop->getDocument(), _opacity_tag.c_str(), _verb_code,
-                            _("Change opacity"));
+    DocumentUndo::maybeDone(desktop->getDocument(), _opacity_tag.c_str(), _("Change opacity"), _icon_name);
 
     _blocked = false;
 }
@@ -202,7 +201,7 @@ void ObjectCompositeSettings::_isolationValueChanged()
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 
-    DocumentUndo::maybeDone(desktop->getDocument(), _isolation_tag.c_str(), _verb_code, _("Change isolation"));
+    DocumentUndo::maybeDone(desktop->getDocument(), _isolation_tag.c_str(), _("Change isolation"), _icon_name);
 
     _blocked = false;
 }

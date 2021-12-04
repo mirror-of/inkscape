@@ -15,13 +15,13 @@
 #include "document-undo.h"
 #include "document.h"
 #include "gradient-chemistry.h"
-#include "verbs.h"
 
 #include "object/sp-stop.h"
 
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
 
+#include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/gradient-selector.h"
 
@@ -98,8 +98,7 @@ void SwatchSelector::_changedCb()
             os << "stop-color:" << c << ";stop-opacity:" << static_cast<gdouble>(alpha) <<";";
             stop->setAttribute("style", os.str());
 
-            DocumentUndo::done(ngr->document, SP_VERB_CONTEXT_GRADIENT,
-                               _("Change swatch color"));
+            DocumentUndo::done(ngr->document, _("Change swatch color"), INKSCAPE_ICON("color-gradient"));
         }
     }
 }

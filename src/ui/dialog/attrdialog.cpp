@@ -12,13 +12,14 @@
 
 #include "attrdialog.h"
 
-#include "verbs.h"
 #include "selection.h"
 #include "document-undo.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "style.h"
+
 #include "ui/icon-loader.h"
+#include "ui/icon-names.h"
 #include "ui/widget/iconrenderer.h"
 
 #include "xml/node-event-vector.h"
@@ -404,7 +405,7 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
 
 void AttrDialog::setUndo(Glib::ustring const &event_description)
 {
-    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_XML_EDITOR, event_description);
+    DocumentUndo::done(getDocument(), event_description, INKSCAPE_ICON("dialog-xml-editor"));
 }
 
 void AttrDialog::_set_status_message(Inkscape::MessageType /*type*/, const gchar *message, GtkWidget *widget)

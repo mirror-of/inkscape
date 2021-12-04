@@ -14,6 +14,14 @@
  */
 
 #include "styledialog.h"
+
+#include <map>
+#include <regex>
+#include <utility>
+
+#include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
+
 #include "attribute-rel-svg.h"
 #include "attributes.h"
 #include "document-undo.h"
@@ -22,20 +30,13 @@
 #include "selection.h"
 #include "style-internal.h"
 #include "style.h"
+
 #include "svg/svg-color.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
-#include "verbs.h"
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
 #include "xml/sp-css-attr.h"
-
-#include <map>
-#include <regex>
-#include <utility>
-
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
 
 // G_MESSAGES_DEBUG=DEBUG_STYLEDIALOG  gdb ./inkscape
 // #define DEBUG_STYLEDIALOG

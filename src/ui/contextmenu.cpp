@@ -63,6 +63,7 @@
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/layer-properties.h"
 #include "ui/icon-loader.h"
+#include "ui/icon-names.h"
 #include "ui/shortcuts.h"
 
 using Inkscape::DocumentUndo;
@@ -568,7 +569,7 @@ void ContextMenu::ItemCreateLink()
     Inkscape::GC::release(repr);
     Inkscape::GC::release(child);
 
-    Inkscape::DocumentUndo::done(object->document, SP_VERB_NONE, _("Create link"));
+    Inkscape::DocumentUndo::done(object->document, _("Create link"), "");
 
     _desktop->selection->set(SP_ITEM(object));
     _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_ATTR);
@@ -608,7 +609,7 @@ void sp_group_layer_transform(SPDocument* document, SPGroup* group, SPGroup::Lay
     group->setLayerMode(mode);
     group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     if (document) {
-        DocumentUndo::done(document, SP_VERB_DIALOG_OBJECTS, mode == SPGroup::GROUP ? _("Layer to group") : _("Group to layer"));
+        DocumentUndo::done(document, mode == SPGroup::GROUP ? _("Layer to group") : _("Group to layer"), INKSCAPE_ICON("dialog-objects"));
     }
 }
 
@@ -752,7 +753,7 @@ void ContextMenu::AnchorLinkRemove()
 {
 	std::vector<SPItem*> children;
     sp_item_group_ungroup(static_cast<SPAnchor*>(_item), children, false);
-    Inkscape::DocumentUndo::done(_desktop->doc(), SP_VERB_NONE, _("Remove link"));
+    Inkscape::DocumentUndo::done(_desktop->doc(), _("Remove link"), "");
 }
 
 void ContextMenu::MakeImageMenu ()

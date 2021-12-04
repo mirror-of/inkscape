@@ -26,7 +26,6 @@
 #include "gradient-drag.h"
 #include "gradient-toolbar.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-linear-gradient.h"
@@ -598,8 +597,7 @@ GradientToolbar::gradient_changed(int active)
 
         gr_apply_gradient(selection, ev ? ev->get_drag() : nullptr, gr);
 
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
-                   _("Assign gradient to object"));
+        DocumentUndo::done(_desktop->getDocument(), _("Assign gradient to object"), INKSCAPE_ICON("color-gradient"));
     }
 
     blocked = false;
@@ -644,8 +642,7 @@ GradientToolbar::spread_changed(int active)
         gradient->setSpread(spread);
         gradient->updateRepr();
 
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
-                   _("Set gradient repeat"));
+        DocumentUndo::done(_desktop->getDocument(), _("Set gradient repeat"), INKSCAPE_ICON("color-gradient"));
     }
 
     blocked = false;
@@ -774,9 +771,7 @@ GradientToolbar::stop_offset_adjustment_changed()
         stop->offset = _offset_adj->get_value();
         stop->getRepr()->setAttributeCssDouble("offset", stop->offset);
 
-        DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", SP_VERB_CONTEXT_GRADIENT,
-                                _("Change gradient stop offset"));
-
+        DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", _("Change gradient stop offset"), INKSCAPE_ICON("color-gradient"));
     }
 
     blocked = false;

@@ -5,14 +5,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/point.h"
-#include "live_effects/effect.h"
+#include "point.h"
 
 #include "inkscape.h"
-#include "verbs.h"
 
+#include "live_effects/effect.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
+#include "ui/icon-names.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-holder-entity.h"
 #include "ui/widget/point.h"
@@ -160,7 +160,7 @@ PointParam::param_newWidget()
     pointwdg->setTransform(transf);
     pointwdg->setValue( *this );
     pointwdg->clearProgrammatically();
-    pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change point parameter"));
+    pointwdg->set_undo_parameters(_("Change point parameter"), INKSCAPE_ICON("dialog-path-effects"));
     pointwdg->signal_button_release_event().connect(sigc::mem_fun (*this, &PointParam::on_button_release));
 
     Gtk::Box * hbox = Gtk::manage( new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) );

@@ -22,13 +22,13 @@
 #include "document-undo.h"
 #include "perspective-line.h"
 #include "snap.h"
-#include "verbs.h"
 
 #include "display/control/canvas-item-curve.h"
 
 #include "object/sp-namedview.h"
 #include "object/box3d.h"
 
+#include "ui/icon-names.h"
 #include "ui/knot/knot.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
@@ -122,7 +122,7 @@ static void vp_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
             }
             // FIXME: Do we need to create a new dragger as well?
             dragger->updateZOrders();
-            DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX, _("Split vanishing points"));
+            DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), _("Split vanishing points"), INKSCAPE_ICON("draw-cuboid"));
             return;
         }
     }
@@ -168,8 +168,7 @@ static void vp_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 //       deleted according to changes in the svg representation, not based on any user input
                 //       as is currently the case.
 
-                DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
-                                   _("Merge vanishing points"));
+                DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), _("Merge vanishing points"), INKSCAPE_ICON("draw-cuboid"));
 
                 return;
             }
@@ -236,7 +235,7 @@ static void vp_knot_ungrabbed_handler(SPKnot *knot, guint /*state*/, gpointer da
     // TODO: Undo machinery!!
     g_return_if_fail(dragger->parent);
     g_return_if_fail(dragger->parent->document);
-    DocumentUndo::done(dragger->parent->document, SP_VERB_CONTEXT_3DBOX, _("3D box: Move vanishing point"));
+    DocumentUndo::done(dragger->parent->document, _("3D box: Move vanishing point"), INKSCAPE_ICON("draw-cuboid"));
 }
 
 unsigned int VanishingPoint::global_counter = 0;

@@ -13,22 +13,24 @@
  */
 
 #include "persp3d.h"
-#include "perspective-line.h"
-#include "sp-root.h"
-#include "sp-defs.h"
-#include "box3d.h"
-
-#include "attributes.h"
-#include "document-undo.h"
-#include "vanishing-point.h"
-#include "ui/tools/box3d-tool.h"
-#include "svg/stringstream.h"
-#include "xml/node-event-vector.h"
-#include "desktop.h"
 
 #include <glibmm/i18n.h>
-#include "verbs.h"
+
+
+#include "attributes.h"
+#include "box3d.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "perspective-line.h"
+#include "sp-defs.h"
+#include "sp-root.h"
+#include "vanishing-point.h"
+
+#include "svg/stringstream.h"
+#include "ui/icon-names.h"
+#include "ui/tools/box3d-tool.h"
 #include "util/units.h"
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 
@@ -346,8 +348,7 @@ Persp3D::toggle_VP (Proj::Axis axis, bool set_undo) {
     this->update_box_reprs();
     this->updateRepr(SP_OBJECT_WRITE_EXT);
     if (set_undo) {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
-                           _("Toggle vanishing point"));
+        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), _("Toggle vanishing point"), INKSCAPE_ICON("draw-cuboid"));
     }
 }
 
@@ -357,8 +358,7 @@ Persp3D::toggle_VPs (std::list<Persp3D *> list, Proj::Axis axis) {
     for (Persp3D *persp : list) {
         persp->toggle_VP(axis, false);
     }
-    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
-                       _("Toggle multiple vanishing points"));
+    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), _("Toggle multiple vanishing points"), INKSCAPE_ICON("draw-cuboid"));
 }
 
 void

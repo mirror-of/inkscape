@@ -28,6 +28,9 @@
 #define SP_IS_MESH_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::MeshTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
 namespace Inkscape {
+
+class Selection;
+
 namespace UI {
 namespace Tools {
 

@@ -46,7 +46,6 @@
 #include "inkscape.h"
 #include "style.h"
 #include "text-editing.h"
-#include "verbs.h"
 
 #include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
@@ -443,8 +442,7 @@ void TextEdit::onApply()
     }
 
     // complete the transaction
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                       _("Set text style"));
+    DocumentUndo::done(desktop->getDocument(), _("Set text style"), INKSCAPE_ICON("draw-text"));
     apply_button->set_sensitive ( false );
 
     sp_repr_css_attr_unref (css);

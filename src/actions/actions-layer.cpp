@@ -75,7 +75,7 @@ layer_previous (InkscapeWindow* win)
     SPObject *next = Inkscape::next_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
     if (next) {
         dt->layerManager().setCurrentLayer(next);
-        Inkscape::DocumentUndo::done(dt->getDocument(),_("Switch to next layer"),INKSCAPE_ICON("layer-previous"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), _("Switch to next layer"), INKSCAPE_ICON("layer-previous"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to next layer."));
     } else {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot go past last layer."));
@@ -90,7 +90,7 @@ layer_next (InkscapeWindow* win)
     SPObject *prev=Inkscape::previous_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
     if (prev) {
         dt->layerManager().setCurrentLayer(prev);
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Switch to previous layer"),INKSCAPE_ICON("layer-next"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), _("Switch to previous layer") ,INKSCAPE_ICON("layer-next"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to previous layer."));
     } else {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot go before first layer."));

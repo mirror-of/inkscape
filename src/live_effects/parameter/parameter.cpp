@@ -5,19 +5,18 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter.h"
 
-#include "live_effects/parameter/parameter.h"
+#include <utility>
+
 #include "live_effects/effect.h"
-#include "svg/svg.h"
-#include "xml/repr.h"
-
 #include "svg/stringstream.h"
-
-#include "verbs.h"
+#include "svg/svg.h"
+#include "ui/icon-names.h"
+#include "xml/repr.h"
 
 #include <glibmm/i18n.h>
 
-#include <utility>
 
 #define noLPEREALPARAM_DEBUG
 
@@ -175,7 +174,7 @@ Gtk::Widget *ScalarParam::param_newWidget()
             rsu->addSlider();
         }
         if (_set_undo) {
-            rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
+            rsu->set_undo_parameters(_("Change scalar parameter"), INKSCAPE_ICON("dialog-path-effects"));
         }
         return dynamic_cast<Gtk::Widget *>(rsu);
     } else {

@@ -40,7 +40,6 @@
 
 #define noTIMING_INFO 1;
 
-using Inkscape::DocumentUndo;
 using Inkscape::UI::get_widget;
 using Inkscape::UI::create_builder;
 

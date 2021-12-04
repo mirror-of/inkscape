@@ -28,7 +28,6 @@
 #include "gradient-chemistry.h"
 #include "inkscape.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-linear-gradient.h"
@@ -39,6 +38,7 @@
 #include "object/sp-stop.h"
 #include "style.h"
 
+#include "ui/icon-names.h"
 #include "ui/widget/canvas.h"  // Forced redraws
 
 // These can be deleted once we sort out the libart dependence.
@@ -280,7 +280,7 @@ void FillNStroke::setFillrule(UI::Widget::PaintSelector::FillRule mode)
         sp_repr_css_attr_unref(css);
         css = nullptr;
 
-        DocumentUndo::done(_desktop->doc(), SP_VERB_DIALOG_FILL_STROKE, _("Change fill rule"));
+        DocumentUndo::done(_desktop->doc(), _("Change fill rule"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -353,8 +353,8 @@ void FillNStroke::dragFromPaint()
                                 (kind == FILL) ? "fill" : "stroke",
                                 (kind == FILL) ? "fill-opacity" : "stroke-opacity");
             DocumentUndo::maybeDone(_desktop->doc(), (kind == FILL) ? undo_F_label : undo_S_label,
-                                    SP_VERB_DIALOG_FILL_STROKE,
-                                    (kind == FILL) ? _("Set fill color") : _("Set stroke color"));
+                                    (kind == FILL) ? _("Set fill color") : _("Set stroke color"),
+                                    INKSCAPE_ICON("dialog-fill-and-stroke"));
             break;
         }
 
@@ -413,8 +413,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
             sp_repr_css_attr_unref(css);
             css = nullptr;
 
-            DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
-                               (kind == FILL) ? _("Remove fill") : _("Remove stroke"));
+            DocumentUndo::done(document, (kind == FILL) ? _("Remove fill") : _("Remove stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             break;
         }
 
@@ -428,8 +427,8 @@ void FillNStroke::updateFromPaint(bool switch_style)
             _psel->setFlatColor(_desktop, (kind == FILL) ? "fill" : "stroke",
                                 (kind == FILL) ? "fill-opacity" : "stroke-opacity");
             DocumentUndo::maybeDone(_desktop->getDocument(), (kind == FILL) ? undo_F_label : undo_S_label,
-                                    SP_VERB_DIALOG_FILL_STROKE,
-                                    (kind == FILL) ? _("Set fill color") : _("Set stroke color"));
+                                    (kind == FILL) ? _("Set fill color") : _("Set stroke color"),
+                                    INKSCAPE_ICON("dialog-fill-and-stroke"));
 
             if (kind == FILL) {
                 // resume interruptibility
@@ -526,8 +525,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     css = nullptr;
                 }
 
-                DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
-                                   (kind == FILL) ? _("Set gradient on fill") : _("Set gradient on stroke"));
+                DocumentUndo::done(document, (kind == FILL) ? _("Set gradient on fill") : _("Set gradient on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             }
             break;
 
@@ -620,8 +618,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     css = nullptr;
                 }
 
-                DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
-                                   (kind == FILL) ? _("Set mesh on fill") : _("Set mesh on stroke"));
+                DocumentUndo::done(document, (kind == FILL) ? _("Set mesh on fill") : _("Set mesh on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             }
             break;
 #endif
@@ -681,8 +678,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
 
                 } // end if
 
-                DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
-                                   (kind == FILL) ? _("Set pattern on fill") : _("Set pattern on stroke"));
+                DocumentUndo::done(document, (kind == FILL) ? _("Set pattern on fill") : _("Set pattern on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             } // end if
 
             break;
@@ -707,8 +703,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                 sp_repr_css_attr_unref(css);
                 css = nullptr;
 
-                DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
-                                   (kind == FILL) ? _("Unset fill") : _("Unset stroke"));
+                DocumentUndo::done(document,  (kind == FILL) ? _("Unset fill") : _("Unset stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             }
             break;
 

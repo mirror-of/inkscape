@@ -17,9 +17,13 @@
 
 #define DRAW_VERBOSE
 
+#include "freehand-base.h"
+
 #include "desktop-style.h"
+#include "id-clash.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
+#include "style.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -31,18 +35,17 @@
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-powerstroke.h"
 
-#include "svg/svg-color.h"
-#include "svg/svg.h"
-
-#include "id-clash.h"
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
 #include "object/sp-use.h"
-#include "style.h"
+
+#include "svg/svg-color.h"
+#include "svg/svg.h"
 
 #include "ui/clipboard.h"
 #include "ui/draw-anchor.h"
+#include "ui/icon-names.h"
 #include "ui/tools/lpe-tool.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"
@@ -933,8 +936,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
                 dc->selection->set(repr);
             }
         }
-        DocumentUndo::done(doc, SP_IS_PEN_CONTEXT(dc)? SP_VERB_CONTEXT_PEN : SP_VERB_CONTEXT_PENCIL,
-                         _("Draw path"));
+        DocumentUndo::done(doc, _("Draw path"), SP_IS_PEN_CONTEXT(dc)? INKSCAPE_ICON("draw-path") : INKSCAPE_ICON("draw-freehand"));
 
         // When quickly drawing several subpaths with Shift, the next subpath may be finished and
         // flushed before the selection_modified signal is fired by the previous change, which
@@ -1082,7 +1084,7 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
     desktop->getSelection()->set(item);
 
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating single dot"));
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE, _("Create single dot"));
+    DocumentUndo::done(desktop->getDocument(), _("Create single dot"), "");
 }
 
 }

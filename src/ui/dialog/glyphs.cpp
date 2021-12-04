@@ -25,7 +25,6 @@
 #include "document.h" // for SPDocumentUndo::done()
 #include "selection.h"
 #include "text-editing.h"
-#include "verbs.h"
 
 #include "libnrtype/font-instance.h"
 #include "libnrtype/font-lister.h"
@@ -33,6 +32,7 @@
 #include "object/sp-flowtext.h"
 #include "object/sp-text.h"
 
+#include "ui/icon-names.h"
 #include "ui/widget/font-selector.h"
 #include "ui/widget/scrollprotected.h"
 
@@ -618,7 +618,7 @@ void GlyphsPanel::insertText()
             Glib::ustring combined = sp_te_get_string_multiline(textItem);
             combined += glyphs;
             sp_te_set_repr_text_multiline(textItem, combined.c_str());
-            DocumentUndo::done(getDocument(), SP_VERB_CONTEXT_TEXT, _("Append text"));
+            DocumentUndo::done(getDocument(), _("Append text"), INKSCAPE_ICON("draw-text"));
         }
     }
 }

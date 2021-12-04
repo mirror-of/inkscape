@@ -175,7 +175,7 @@ ExecutionEnv::undo () {
 
 void
 ExecutionEnv::commit () {
-    DocumentUndo::done(_doc->doc(), SP_VERB_NONE, _effect->get_name());
+    DocumentUndo::done(_doc->doc(), _effect->get_name(), "");
     Effect::set_last_effect(_effect);
     _effect->get_imp()->commitDocument();
     killDocCache();

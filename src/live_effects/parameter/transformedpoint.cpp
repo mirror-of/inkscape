@@ -5,19 +5,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/transformedpoint.h"
+#include "transformedpoint.h"
+
+#include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "verbs.h"
 
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
+#include "ui/icon-names.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-holder-entity.h"
 #include "ui/widget/registered-widget.h"
 
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 
@@ -117,7 +118,7 @@ TransformedPointParam::param_newWidget()
     pointwdg->setPolarCoords();
     pointwdg->setValue( vector, origin );
     pointwdg->clearProgrammatically();
-    pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change vector parameter"));
+    pointwdg->set_undo_parameters(_("Change vector parameter"), INKSCAPE_ICON("dialog-path-effects"));
     
     Gtk::Box * hbox = Gtk::manage( new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) );
     hbox->pack_start(*pointwdg, true, true);

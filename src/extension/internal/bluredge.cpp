@@ -13,10 +13,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "bluredge.h"
+
 #include <vector>
 #include "desktop.h"
 #include "document.h"
 #include "selection.h"
+#include "verbs.h"
+
 #include "helper/action.h"
 #include "helper/action-context.h"
 #include "preferences.h"
@@ -26,8 +30,6 @@
 #include "extension/effect.h"
 #include "extension/system.h"
 
-
-#include "bluredge.h"
 
 namespace Inkscape {
 namespace Extension {

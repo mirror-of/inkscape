@@ -372,8 +372,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
         }
 
         selection->applyAffine(scaler);
-        DocumentUndo::maybeDone(document, actionkey, SP_VERB_CONTEXT_SELECT,
-                                _("Transform by toolbar"));
+        DocumentUndo::maybeDone(document, actionkey, _("Transform by toolbar"), INKSCAPE_ICON("tool-pointer"));
 
         // resume interruptibility
         desktop->getCanvas()->forced_redraws_stop();

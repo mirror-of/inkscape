@@ -26,11 +26,12 @@
 #include "document.h"
 #include "document-undo.h"
 #include "inkscape.h" // for SP_ACTIVE_DESKTOP
+#include "message-context.h"
+
 #include "io/resource.h"
 #include "io/sys.h"
-#include "message-context.h"
 #include "svg/svg-color.h"
-#include "verbs.h"
+#include "ui/icon-names.h"
 #include "ui/widget/gradient-vector-selector.h"
 
 
@@ -549,7 +550,7 @@ void ColorItem::buttonClicked(bool secondary)
         sp_desktop_set_style(desktop, css);
         sp_repr_css_attr_unref(css);
 
-        DocumentUndo::done( desktop->getDocument(), SP_VERB_DIALOG_SWATCHES, descr.c_str() );
+        DocumentUndo::done( desktop->getDocument(), descr.c_str(), INKSCAPE_ICON("swatches"));
     }
 }
 

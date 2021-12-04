@@ -5,15 +5,19 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-widget.h"
-#include "live_effects/parameter/bool.h"
-#include "live_effects/effect.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "inkscape.h"
-#include "verbs.h"
-#include "helper-fns.h"
+#include "bool.h"
+
 #include <glibmm/i18n.h>
+
+#include "helper-fns.h"
+#include "inkscape.h"
+
+#include "live_effects/effect.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+#include "ui/icon-names.h"
+#include "ui/widget/registered-widget.h"
+
 
 namespace Inkscape {
 
@@ -81,7 +85,7 @@ BoolParam::param_newWidget()
 
         checkwdg->setActive(value);
         checkwdg->setProgrammatically = false;
-        checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change bool parameter"));
+        checkwdg->set_undo_parameters(_("Change bool parameter"), INKSCAPE_ICON("dialog-path-effects"));
         return dynamic_cast<Gtk::Widget *> (checkwdg);
     } else {
         return nullptr;

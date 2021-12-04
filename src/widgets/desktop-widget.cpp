@@ -39,7 +39,6 @@
 #include "file.h"
 #include "inkscape-application.h"
 #include "inkscape-version.h"
-#include "verbs.h"
 
 #include "display/control/canvas-axonomgrid.h"
 #include "display/control/canvas-item-drawing.h"
@@ -897,13 +896,6 @@ SPDesktopWidget::cms_adjust_toggled()
 void
 SPDesktopWidget::cms_adjust_set_sensitive(bool enabled)
 {
-    // Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
-    // if ( verb ) {
-    //     SPAction *act = verb->get_action(Inkscape::ActionContext(getView()));
-    //     if ( act ) {
-    //         sp_action_set_sensitive( act, enabled );
-    //     }
-    // }
     _canvas_grid->GetCmsAdjust()->set_sensitive(enabled);
 }
 
@@ -1937,8 +1929,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::W
             repr->setAttributePoint("orientation", _normal);
             desktop->namedview->appendChild(repr);
             Inkscape::GC::release(repr);
-            DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
-                    _("Create guide"));
+            DocumentUndo::done(desktop->getDocument(), _("Create guide"), "");
         }
         desktop->set_coordinate_status(event_dt);
 

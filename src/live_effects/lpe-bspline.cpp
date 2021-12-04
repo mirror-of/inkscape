@@ -3,16 +3,19 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <gtkmm.h>
-#include "live_effects/lpe-bspline.h"
-#include "ui/widget/scalar.h"
+
+#include "document-undo.h"
+#include "preferences.h"
+
 #include "display/curve.h"
 #include "helper/geom-curves.h"
+#include "live_effects/lpe-bspline.h"
 #include "object/sp-path.h"
 #include "svg/svg.h"
+#include "ui/icon-names.h"
+#include "ui/widget/scalar.h"
 #include "xml/repr.h"
-#include "preferences.h"
-#include "document-undo.h"
-#include "verbs.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -148,19 +151,19 @@ Gtk::Widget *LPEBSpline::newWidget()
 void LPEBSpline::toDefaultWeight()
 {
     changeWeight(DEFAULT_START_POWER * 100);
-    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change to default weight"));
+    DocumentUndo::done(getSPDoc(), _("Change to default weight"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void LPEBSpline::toMakeCusp()
 {
     changeWeight(NO_POWER);
-    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change to 0 weight"));
+    DocumentUndo::done(getSPDoc(), _("Change to 0 weight"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void LPEBSpline::toWeight()
 {
     changeWeight(weight);
-    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
+    DocumentUndo::done(getSPDoc(), _("Change scalar parameter"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void LPEBSpline::changeWeight(double weight_ammount)

@@ -67,6 +67,8 @@
  *
  */
 
+#include "connector-tool.h"
+
 #include <string>
 #include <cstring>
 
@@ -84,7 +86,6 @@
 #include "message-stack.h"
 #include "selection.h"
 #include "snap.h"
-#include "verbs.h"
 
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-ctrl.h"
@@ -100,12 +101,11 @@
 #include "object/sp-use.h"
 #include "object/sp-symbol.h"
 
+#include "ui/icon-names.h"
 #include "ui/knot/knot.h"
 #include "ui/widget/canvas.h"  // Enter events
 
 #include "svg/svg.h"
-
-#include "ui/tools/connector-tool.h"
 
 #include "xml/node-event-vector.h"
 
@@ -784,7 +784,7 @@ void ConnectorTool::_reroutingFinish(Geom::Point *const p)
     this->clickeditem->setHidden(false);
     sp_conn_reroute_path_immediate(SP_PATH(this->clickeditem));
     this->clickeditem->updateRepr();
-    DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR, _("Reroute connector"));
+    DocumentUndo::done(doc, _("Reroute connector"), INKSCAPE_ICON("draw-connector"));
     this->cc_set_active_conn(this->clickeditem);
 }
 
@@ -931,7 +931,7 @@ void ConnectorTool::_flushWhite(SPCurve *c)
         Inkscape::GC::release(repr);
     }
 
-    DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR, _("Create connector"));
+    DocumentUndo::done(doc, _("Create connector"), INKSCAPE_ICON("draw-connector"));
 }
 
 
@@ -1329,7 +1329,7 @@ void cc_selection_set_avoid(SPDesktop *desktop, bool const set_avoid)
     char *event_desc = (set_avoid) ?
             _("Make connectors avoid selected objects") :
             _("Make connectors ignore selected objects");
-    DocumentUndo::done(document, SP_VERB_CONTEXT_CONNECTOR, event_desc);
+    DocumentUndo::done(document, event_desc, INKSCAPE_ICON("draw-connector"));
 }
 
 void ConnectorTool::_selectionChanged(Inkscape::Selection *selection)

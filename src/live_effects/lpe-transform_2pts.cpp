@@ -11,15 +11,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "lpe-transform_2pts.h"
+
 #include <gtkmm.h>
 
 #include "display/curve.h"
 #include "helper/geom.h"
-#include "live_effects/lpe-transform_2pts.h"
 #include "object/sp-path.h"
 #include "svg/svg.h"
 #include "ui/icon-names.h"
-#include "verbs.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -209,7 +209,7 @@ LPETransform2Pts::updateIndex()
         start.param_set_default();
         end.param_set_default();
     }
-    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change index of knot"));
+    DocumentUndo::done(getSPDoc(), _("Change index of knot"), INKSCAPE_ICON("dialog-path-effects"));
 }
 //todo migrate to PathVector class?
 size_t

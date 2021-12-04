@@ -25,7 +25,6 @@
 #include "document.h"
 #include "inkscape.h"
 #include "layer-manager.h"
-#include "verbs.h"
 
 #include "display/curve.h"
 

@@ -35,7 +35,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/sp-star.h"
 
@@ -257,8 +256,7 @@ StarToolbar::side_mode_changed(int mode)
     }
 
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_STAR,
-                           flat ? _("Make polygon") : _("Make star"));
+        DocumentUndo::done(_desktop->getDocument(), flat ? _("Make polygon") : _("Make star"), INKSCAPE_ICON("draw-polygon-star"));
     }
 
     _freeze = false;
@@ -299,8 +297,7 @@ StarToolbar::magnitude_value_changed()
         }
     }
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_STAR,
-                           _("Star: Change number of corners"));
+        DocumentUndo::done(_desktop->getDocument(), _("Star: Change number of corners"), INKSCAPE_ICON("draw-polygon-star"));
     }
 
     _freeze = false;
@@ -348,8 +345,7 @@ StarToolbar::proportion_value_changed()
     }
 
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_STAR,
-                           _("Star: Change spoke ratio"));
+        DocumentUndo::done(_desktop->getDocument(), _("Star: Change spoke ratio"), INKSCAPE_ICON("draw-polygon-star"));
     }
 
     _freeze = false;
@@ -385,8 +381,7 @@ StarToolbar::rounded_value_changed()
         }
     }
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_STAR,
-                           _("Star: Change rounding"));
+        DocumentUndo::done(_desktop->getDocument(), _("Star: Change rounding"), INKSCAPE_ICON("draw-polygon-star"));
     }
 
     _freeze = false;
@@ -423,8 +418,7 @@ StarToolbar::randomized_value_changed()
         }
     }
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_STAR,
-                           _("Star: Change randomization"));
+        DocumentUndo::done(_desktop->getDocument(), _("Star: Change randomization"), INKSCAPE_ICON("draw-polygon-star"));
     }
 
     _freeze = false;

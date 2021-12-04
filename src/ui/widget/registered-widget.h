@@ -8,6 +8,10 @@
  * Copyright (C) 2005-2008 Authors
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ *
+ *
+ * Used by Live Path Effects (see src/live_effects/parameter/) and Document Properties dialog.
+ *
  */
 
 #ifndef INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
@@ -51,9 +55,9 @@ class Registry;
 template <class W>
 class RegisteredWidget : public W {
 public:
-    void set_undo_parameters(const unsigned int _event_type, Glib::ustring _event_description)
+    void set_undo_parameters(Glib::ustring _event_description, Glib::ustring _icon_name)
     {
-        event_type = _event_type;
+        icon_name = _icon_name;
         event_description = _event_description;
         write_undo = true;
     }
@@ -66,23 +70,23 @@ public:
     bool is_updating() {if (_wr) return _wr->isUpdating(); else return false;}
 
 protected:
-    RegisteredWidget() : W() { construct(); }
+    RegisteredWidget() : W() {}
     template< typename A >
-    explicit RegisteredWidget( A& a ): W( a ) { construct(); }
+    explicit RegisteredWidget( A& a ): W( a ) {}
     template< typename A, typename B >
-    RegisteredWidget( A& a, B& b ): W( a, b ) { construct(); }
+    RegisteredWidget( A& a, B& b ): W( a, b ) {}
     template< typename A, typename B, typename C >
-    RegisteredWidget( A& a, B& b, C* c ): W( a, b, c ) { construct(); }
+    RegisteredWidget( A& a, B& b, C* c ): W( a, b, c ) {}
     template< typename A, typename B, typename C >
-    RegisteredWidget( A& a, B& b, C& c ): W( a, b, c ) { construct(); }
+    RegisteredWidget( A& a, B& b, C& c ): W( a, b, c ) {}
     template< typename A, typename B, typename C, typename D >
-    RegisteredWidget( A& a, B& b, C c, D d ): W( a, b, c, d ) { construct(); }
+    RegisteredWidget( A& a, B& b, C c, D d ): W( a, b, c, d ) {}
     template< typename A, typename B, typename C, typename D, typename E >
-    RegisteredWidget( A& a, B& b, C& c, D d, E e ): W( a, b, c, d, e ) { construct(); }
+    RegisteredWidget( A& a, B& b, C& c, D d, E e ): W( a, b, c, d, e ) {}
     template< typename A, typename B, typename C, typename D, typename E , typename F>
-    RegisteredWidget( A& a, B& b, C c, D& d, E& e, F* f): W( a, b, c, d, e, f) { construct(); }
+    RegisteredWidget( A& a, B& b, C c, D& d, E& e, F* f): W( a, b, c, d, e, f) {}
     template< typename A, typename B, typename C, typename D, typename E , typename F, typename G>
-    RegisteredWidget( A& a, B& b, C& c, D& d, E& e, F f, G& g): W( a, b, c, d, e, f, g) { construct(); }
+    RegisteredWidget( A& a, B& b, C& c, D& d, E& e, F f, G& g): W( a, b, c, d, e, f, g) {}
 
     ~RegisteredWidget() override = default;;
 
@@ -124,26 +128,17 @@ protected:
 
         if (write_undo) {
             local_repr->setAttribute(_key, svgstr);
-            DocumentUndo::done(local_doc, event_type, event_description);
+            DocumentUndo::done(local_doc, event_description, icon_name);
         }
     }
 
-    Registry * _wr;
+    Registry * _wr = nullptr;
     Glib::ustring _key;
-    Inkscape::XML::Node * repr;
-    SPDocument * doc;
-    unsigned int event_type;
+    Inkscape::XML::Node * repr = nullptr;
+    SPDocument * doc = nullptr;
     Glib::ustring event_description;
-    bool write_undo;
-
-private:
-    void construct() {
-        _wr = nullptr;
-        repr = nullptr;
-        doc = nullptr;
-        write_undo = false;
-        event_type = 0; //SP_VERB_INVALID
-    }
+    Glib::ustring icon_name; // Used by History dialog.
+    bool write_undo = false;
 };
 
 //#######################################################

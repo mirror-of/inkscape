@@ -763,7 +763,7 @@ ObjectsPanel::ObjectsPanel() :
     _color_picker.connectChanged([=](guint rgba) {
         if (auto item = getItem(_clicked_item_row)) {
             item->setHighlight(rgba);
-            DocumentUndo::maybeDone(getDocument(), "highligh-color", SP_VERB_DIALOG_ITEM, _("Set item highlight color"));
+            DocumentUndo::maybeDone(getDocument(), "highligh-color", _("Set item highlight color"), INKSCAPE_ICON("dialog-object-properties"));
         }
     });
 
@@ -988,7 +988,7 @@ bool ObjectsPanel::toggleVisible(GdkEventButton* event, Gtk::TreeModel::Row row)
             if (auto desktop = getDesktop()) {
                 if (desktop->layerManager().isLayer(item)) {
                     desktop->layerManager().toggleLayerSolo(item);
-                    DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
+                    DocumentUndo::done(desktop->getDocument(), _("Toggle layer solo"), "");
                 }
             }
         } else {
@@ -1011,7 +1011,7 @@ bool ObjectsPanel::toggleLocked(GdkEventButton* event, Gtk::TreeModel::Row row)
             if (auto desktop = getDesktop()) {
                 if (desktop->layerManager().isLayer(item)) {
                     desktop->layerManager().toggleLockOtherLayers(item);
-                    DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
+                    DocumentUndo::done(desktop->getDocument(), _("Lock other layers"), "");
                 }
             }
         } else {
@@ -1199,7 +1199,7 @@ void ObjectsPanel::_handleEdited(const Glib::ustring& path, const Glib::ustring&
         if (auto item = getItem(row)) {
             if (!new_text.empty() && (!item->label() || new_text != item->label())) {
                 item->setLabel(new_text.c_str());
-                DocumentUndo::done(getDocument(), SP_VERB_NONE, _("Rename object"));
+                DocumentUndo::done(getDocument(), _("Rename object"), "");
             }
         }
     }

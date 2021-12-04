@@ -37,7 +37,6 @@
 #include "document.h"
 #include "inkscape.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 #include "libnrtype/font-lister.h"
 
@@ -749,8 +748,7 @@ TextToolbar::fontfamily_value_changed()
         } else {
             // If there is a selection, update
             sp_desktop_set_style (desktop, css, true, true); // Results in selection change called twice.
-            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                               _("Text: Change font family"));
+            DocumentUndo::done(desktop->getDocument(), _("Text: Change font family"), INKSCAPE_ICON("draw-text"));
         }
         sp_repr_css_attr_unref (css);
     }
@@ -831,8 +829,7 @@ TextToolbar::fontsize_value_changed()
     } else {
         // Save for undo
         sp_desktop_set_style (_desktop, css, true, true);
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:size", SP_VERB_NONE,
-                             _("Text: Change font size"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:size", _("Text: Change font size"), INKSCAPE_ICON("draw-text"));
     }
 
     sp_repr_css_attr_unref(css);
@@ -874,8 +871,7 @@ TextToolbar::fontstyle_value_changed()
             prefs->mergeStyle("/tools/text/style", css);
         } else {
             // Save for undo
-            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                               _("Text: Change font style"));
+            DocumentUndo::done(desktop->getDocument(), _("Text: Change font style"), INKSCAPE_ICON("draw-text"));
         }
 
         sp_repr_css_attr_unref (css);
@@ -958,8 +954,7 @@ TextToolbar::script_changed(Gtk::ToggleToolButton *btn)
 
     // Save for undo
     if(result_baseline != QUERY_STYLE_NOTHING) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:script", SP_VERB_NONE,
-                             _("Text: Change superscript or subscript"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:script", _("Text: Change superscript or subscript"), INKSCAPE_ICON("draw-text"));
     }
     _freeze = false;
 }
@@ -1102,8 +1097,7 @@ TextToolbar::align_mode_changed(int mode)
     sp_desktop_set_style (desktop, css, true, true);
     if (result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                       _("Text: Change alignment"));
+        DocumentUndo::done(_desktop->getDocument(), _("Text: Change alignment"), INKSCAPE_ICON("draw-text"));
     }
     sp_repr_css_attr_unref (css);
 
@@ -1157,8 +1151,7 @@ TextToolbar::writing_mode_changed(int mode)
     sp_desktop_set_style (_desktop, css, true, true);
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                       _("Text: Change writing mode"));
+        DocumentUndo::done(_desktop->getDocument(), _("Text: Change writing mode"), INKSCAPE_ICON("draw-text"));
     }
     sp_repr_css_attr_unref (css);
 
@@ -1212,8 +1205,7 @@ TextToolbar::orientation_changed(int mode)
     sp_desktop_set_style (_desktop, css, true, true);
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                       _("Text: Change orientation"));
+        DocumentUndo::done(_desktop->getDocument(), _("Text: Change orientation"), INKSCAPE_ICON("draw-text"));
     }
     sp_repr_css_attr_unref (css);
     _desktop->canvas->grab_focus();
@@ -1260,8 +1252,7 @@ TextToolbar::direction_changed(int mode)
     sp_desktop_set_style (_desktop, css, true, true);
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                       _("Text: Change direction"));
+        DocumentUndo::done(_desktop->getDocument(), _("Text: Change direction"), INKSCAPE_ICON("draw-text"));
     }
     sp_repr_css_attr_unref (css);
 
@@ -1362,7 +1353,7 @@ TextToolbar::lineheight_value_changed()
         if (!_outer) {
             prepare_inner();
         }
-        DocumentUndo::maybeDone(desktop->getDocument(), "ttb:line-height", SP_VERB_NONE, _("Text: Change line-height"));
+        DocumentUndo::maybeDone(desktop->getDocument(), "ttb:line-height", _("Text: Change line-height"), INKSCAPE_ICON("draw-text"));
     }
 
     // If no selected objects, set default.
@@ -1583,8 +1574,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         if (_outer) {
             prepare_inner();
         }
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:line-height", SP_VERB_NONE,
-                             _("Text: Change line-height unit"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:line-height", _("Text: Change line-height unit"), INKSCAPE_ICON("draw-text"));
     }
 
     // If no selected objects, set default.
@@ -1645,8 +1635,7 @@ TextToolbar::wordspacing_value_changed()
         prefs->mergeStyle("/tools/text/style", css);
     } else {
         // Save for undo
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:word-spacing", SP_VERB_NONE,
-                             _("Text: Change word-spacing"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:word-spacing", _("Text: Change word-spacing"), INKSCAPE_ICON("draw-text"));
     }
 
     sp_repr_css_attr_unref (css);
@@ -1683,8 +1672,7 @@ TextToolbar::letterspacing_value_changed()
     else
     {
         // Save for undo
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:letter-spacing", SP_VERB_NONE,
-                             _("Text: Change letter-spacing"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:letter-spacing", _("Text: Change letter-spacing"), INKSCAPE_ICON("draw-text"));
     }
 
     sp_repr_css_attr_unref (css);
@@ -1721,8 +1709,7 @@ TextToolbar::dx_value_changed()
 
     if(modmade) {
         // Save for undo
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dx", SP_VERB_NONE,
-                             _("Text: Change dx (kern)"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dx", _("Text: Change dx (kern)"), INKSCAPE_ICON("draw-text"));
     }
     _freeze = false;
 }
@@ -1756,8 +1743,7 @@ TextToolbar::dy_value_changed()
 
     if(modmade) {
         // Save for undo
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dy", SP_VERB_NONE,
-                            _("Text: Change dy"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dy", _("Text: Change dy"), INKSCAPE_ICON("draw-text"));
     }
 
     _freeze = false;
@@ -1792,8 +1778,7 @@ TextToolbar::rotation_value_changed()
 
     // Save for undo
     if(modmade) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:rotate", SP_VERB_NONE,
-                            _("Text: Change rotate"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:rotate", _("Text: Change rotate"), INKSCAPE_ICON("draw-text"));
     }
 
     _freeze = false;

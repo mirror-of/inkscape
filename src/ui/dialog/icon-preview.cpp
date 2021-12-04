@@ -26,7 +26,6 @@
 #include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
-#include "verbs.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing.h"

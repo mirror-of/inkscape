@@ -212,8 +212,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     }
 
     if (changed) {
-        DocumentUndo::done( desktop->getDocument() , SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                            _("Align"));
+        DocumentUndo::done( desktop->getDocument(), _("Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 }
 
@@ -401,8 +400,7 @@ private :
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
         if (changed) {
-            DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                                _("Distribute"));
+            DocumentUndo::done(_desktop->getDocument(), _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
         }
     }
     AlignAndDistribute &_dialog;
@@ -515,8 +513,7 @@ private :
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                           _("Remove overlaps"));
+        DocumentUndo::done(_desktop->getDocument(), _("Remove overlaps"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 };
 
@@ -548,8 +545,7 @@ private :
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                           _("Arrange connector network"));
+        DocumentUndo::done(_desktop->getDocument(), _("Arrange connector network"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 };
 
@@ -636,8 +632,7 @@ private :
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                           _("Exchange Positions"));
+        DocumentUndo::done(_desktop->getDocument(), _("Exchange Positions"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 };
 
@@ -672,8 +667,7 @@ private :
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                           _("Unclump"));
+        DocumentUndo::done(_desktop->getDocument(), _("Unclump"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 };
 
@@ -739,8 +733,7 @@ private :
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                           _("Randomize positions"));
+        DocumentUndo::done(_desktop->getDocument(), _("Randomize positions"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 };
 
@@ -831,8 +824,7 @@ private :
             }
 
             if (changed) {
-                DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                                    _("Distribute text baselines"));
+                DocumentUndo::done(_desktop->getDocument(), _("Distribute text baselines"), INKSCAPE_ICON("dialog-align-and-distribute"));
             }
 
         } else { //align
@@ -896,8 +888,7 @@ private :
             }
 
             if (changed) {
-                DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                                   _("Align text baselines"));
+                DocumentUndo::done(_desktop->getDocument(), _("Align text baselines"), INKSCAPE_ICON("dialog-align-and-distribute"));
             }
         }
     }

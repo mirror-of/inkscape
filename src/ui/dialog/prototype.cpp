@@ -16,7 +16,6 @@
 
 #include "document.h"
 #include "inkscape-application.h"
-#include "verbs.h"
 
 // Only for use in demonstration widget.
 #include "object/sp-root.h"

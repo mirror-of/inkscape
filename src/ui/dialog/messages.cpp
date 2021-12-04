@@ -13,7 +13,6 @@
  */
 
 #include "messages.h"
-#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {

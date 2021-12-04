@@ -12,6 +12,9 @@
 #ifndef INKSCAPE_DIALOG_COMMAND_PALETTE_H
 #define INKSCAPE_DIALOG_COMMAND_PALETTE_H
 
+#include <utility>
+#include <vector>
+
 #include <giomm/action.h>
 #include <giomm/application.h>
 #include <glibmm/refptr.h>
@@ -28,12 +31,9 @@
 #include <gtkmm/searchbar.h>
 #include <gtkmm/searchentry.h>
 #include <gtkmm/viewport.h>
-#include <utility>
-#include <vector>
 
 #include "inkscape.h"
 #include "ui/dialog/align-and-distribute.h"
-#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {

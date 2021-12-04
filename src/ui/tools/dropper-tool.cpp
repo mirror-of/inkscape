@@ -26,7 +26,6 @@
 #include "preferences.h"
 #include "selection.h"
 #include "style.h"
-#include "verbs.h"
 
 #include "display/curve.h"
 #include "display/drawing.h"
@@ -40,6 +39,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/cursor-utils.h"
+#include "ui/icon-names.h"
 #include "ui/tools/dropper-tool.h"
 #include "ui/widget/canvas.h"
 
@@ -332,8 +332,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
                 // REJON: set aux. toolbar input to hex color!
                 if (!(desktop->getSelection()->isEmpty())) {
-                    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_DROPPER,
-                                       _("Set picked color"));
+                    DocumentUndo::done(desktop->getDocument(), _("Set picked color"), INKSCAPE_ICON("color-picker"));
                 }
                 if(this->dropping) {
                     selection->setList(old_selection);

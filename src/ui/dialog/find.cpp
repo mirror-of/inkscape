@@ -25,7 +25,6 @@
 #include "message-stack.h"
 #include "selection-chemistry.h"
 #include "text-editing.h"
-#include "verbs.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-ellipse.h"
@@ -45,6 +44,7 @@
 #include "object/sp-tspan.h"
 #include "object/sp-use.h"
 
+#include "ui/icon-names.h"
 #include "ui/dialog-events.h"
 
 #include "xml/attribute-record.h"
@@ -1010,7 +1010,7 @@ void Find::onAction()
         scroll_to_show_item(desktop, item);
 
         if (_action_replace) {
-            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, _("Replace text or property"));
+            DocumentUndo::done(desktop->getDocument(), _("Replace text or property"), INKSCAPE_ICON("draw-text"));
         }
 
     } else {

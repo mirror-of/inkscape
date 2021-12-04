@@ -35,7 +35,6 @@
 #include "layer-manager.h"
 #include "include/macros.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 #include "io/resource.h"
 
@@ -56,7 +55,6 @@
 
 #include "xml/repr.h"
 
-using Inkscape::DocumentUndo;
 using Inkscape::UI::SelectedColor;
 
 void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsageCount );

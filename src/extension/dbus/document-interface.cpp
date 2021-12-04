@@ -240,7 +240,7 @@ gchar *finish_create_shape (DocumentInterface *doc_interface, GError ** /*error*
     }
 
     if (doc_interface->updates) {
-        Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  0, (gchar *)desc);
+        Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), desc, "");
     }
 
     return strdup(newNode->attribute("id"));
@@ -267,7 +267,7 @@ dbus_call_verb (DocumentInterface *doc_interface, int verbid, GError **error)
         if ( action ) {
             sp_action_perform( action, NULL );
             if (doc_interface->updates)
-                Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), verb->get_code(), verb->get_tip());
+                Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), verb->get_tip(), "");
             return TRUE;
         }
     }
@@ -356,7 +356,7 @@ document_interface_call_verb (DocumentInterface *doc_interface, gchar *verbid, G
         if ( action ) {
             sp_action_perform( action, NULL );
             if (doc_interface->updates) {
-                Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), verb->get_code(), verb->get_tip());
+                Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), verb->get_tip(), "");
             }
             return TRUE;
         }
@@ -516,7 +516,7 @@ document_interface_image (DocumentInterface *doc_interface, int x, int y, gchar 
     }
 
     if (doc_interface->updates)
-        Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  0, "Imported bitmap.");
+        Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), "Imported bitmap.", "");
 
     //g_free(uri);
     return strdup(newNode->attribute("id"));
@@ -535,7 +535,7 @@ gchar *document_interface_node(DocumentInterface *doc_interface, gchar *type, GE
     }
 
     if (doc_interface->updates) {
-        Inkscape::DocumentUndo::done(doc, 0, (gchar *)"created empty node");
+        Inkscape::DocumentUndo::done(doc, "created empty node", "");
     }
 
     return strdup(newNode->attribute("id"));
@@ -951,7 +951,7 @@ gboolean document_interface_load(DocumentInterface *doc_interface,
     app->create_window(file);
 
     if (doc_interface->updates) {
-        Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  SP_VERB_FILE_OPEN, "Opened File");
+        Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), "Opened File", "");
     }
     return TRUE;
 }
@@ -1064,8 +1064,7 @@ void document_interface_resume_updates(DocumentInterface *doc_interface, GError 
     g_return_if_fail(ensure_desktop_valid(desk, error));
     doc_interface->updates = TRUE;
     desk->getCanvas()->set_drawing_disabled(false);
-    //FIXME: use better verb than rect.
-    Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  SP_VERB_CONTEXT_RECT, "Multiple actions");
+    Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), "Multiple actions", "");
 }
 
 void document_interface_update(DocumentInterface *doc_interface, GError ** error)
@@ -1080,7 +1079,7 @@ void document_interface_update(DocumentInterface *doc_interface, GError ** error
     desk->disableInteraction();
     doc->getRoot()->uflags = FALSE;
     doc->getRoot()->mflags = FALSE;
-    //Inkscape::DocumentUndo::done(doc, SP_VERB_CONTEXT_RECT, "Multiple actions");
+    //Inkscape::DocumentUndo::done(doc, "Multiple actions", "");
 }
 
 /****************************************************************************

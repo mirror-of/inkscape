@@ -24,14 +24,14 @@
 
 #include <2geom/transforms.h>
 
-#include "verbs.h"
 #include "preferences.h"
 #include "inkscape.h"
 
 #include "document.h"
 #include "document-undo.h"
 #include "desktop.h"
-//#include "sp-item-transform.h" FIXME
+
+#include "ui/icon-names.h"
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 
     /*
@@ -332,8 +332,7 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
              }
     }
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                       _("Arrange in a grid"));
+    DocumentUndo::done(desktop->getDocument(), _("Arrange in a grid"), INKSCAPE_ICON("dialog-align-and-distribute"));
 
 }
 

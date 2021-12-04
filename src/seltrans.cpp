@@ -36,7 +36,6 @@
 #include "filter-chemistry.h"
 #include "selection.h"
 #include "seltrans-handles.h"
-#include "verbs.h"
 
 #include "display/control/snap-indicator.h"
 #include "display/control/canvas-item-ctrl.h"
@@ -49,6 +48,7 @@
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 
+#include "ui/icon-names.h"
 #include "ui/modifiers.h"
 #include "ui/knot/knot.h"
 #include "ui/tools/select-tool.h"
@@ -455,17 +455,13 @@ void Inkscape::SelTrans::ungrab()
             // when trying to stretch a perfectly vertical line in horizontal direction, which will not be allowed
             // by the handles; this would be identified as a (zero) translation by isTranslation()
             if (_current_relative_affine.isTranslation()) {
-                DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
-                                   _("Move"));
+                DocumentUndo::done(_desktop->getDocument(), _("Move"), INKSCAPE_ICON("tool-pointer"));
             } else if (_current_relative_affine.withoutTranslation().isScale()) {
-                DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
-                                   _("Scale"));
+                DocumentUndo::done(_desktop->getDocument(), _("Scale"), INKSCAPE_ICON("tool-pointer"));
             } else if (_current_relative_affine.withoutTranslation().isRotation()) {
-                DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
-                                   _("Rotate"));
+                DocumentUndo::done(_desktop->getDocument(), _("Rotate"), INKSCAPE_ICON("tool-pointer"));
             } else {
-                DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
-                                   _("Skew"));
+                DocumentUndo::done(_desktop->getDocument(), _("Skew"), INKSCAPE_ICON("tool-pointer"));
             }
         } else {
             _updateHandles();
@@ -480,8 +476,7 @@ void Inkscape::SelTrans::ungrab()
                 SPItem *it = *iter;
                 it->updateRepr();
             }
-            DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
-                               _("Set center"));
+            DocumentUndo::done(_desktop->getDocument(), _("Set center"), INKSCAPE_ICON("tool-pointer"));
         }
 
         _items.clear();
@@ -563,8 +558,7 @@ void Inkscape::SelTrans::stamp()
                 sp_lpe_item_update_patheffect(lpeitem, true, true);
             }
         }
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
-                           _("Stamp"));
+        DocumentUndo::done(_desktop->getDocument(), _("Stamp"), INKSCAPE_ICON("tool-pointer"));
     }
 
     if ( fixup && !_stamp_cache.empty() ) {
@@ -788,8 +782,7 @@ void Inkscape::SelTrans::handleClick(SPKnot *knot, guint state, SPSelTransHandle
                     _center_is_set = false;  // center has changed
                     _updateHandles();
                 }
-                DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
-                                   _("Reset center"));
+                DocumentUndo::done(_desktop->getDocument(), _("Reset center"), INKSCAPE_ICON("tool-pointer"));
             }
             // no break, continue.
         case HANDLE_STRETCH:

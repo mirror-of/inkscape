@@ -10,11 +10,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-enums.h"
 #include <glibmm/ustring.h>
+
 #include "live_effects/effect.h"
 #include "live_effects/parameter/parameter.h"
-#include "verbs.h"
+
+#include "ui/icon-names.h"
+#include "ui/widget/registered-enums.h"
 
 namespace Inkscape {
 
@@ -50,7 +52,7 @@ public:
         regenum->set_active_by_id(value);
         regenum->combobox()->setProgrammatically = false;
         regenum->combobox()->signal_changed().connect(sigc::mem_fun (*this, &EnumParam::_on_change_combo));
-        regenum->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change enumeration parameter"));
+        regenum->set_undo_parameters(_("Change enumeration parameter"), INKSCAPE_ICON("dialog-path-effects"));
         
         return dynamic_cast<Gtk::Widget *> (regenum);
     };

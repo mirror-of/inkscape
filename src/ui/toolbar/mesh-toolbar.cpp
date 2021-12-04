@@ -30,7 +30,6 @@
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 #include "inkscape.h"
-#include "verbs.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-mesh-gradient.h"
@@ -561,7 +560,7 @@ MeshToolbar::type_changed(int mode)
         meshe->updateRepr();
     }
     if (!meshes.empty() ) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_MESH,_("Set mesh type"));
+        DocumentUndo::done(_desktop->getDocument(), _("Set mesh type"), INKSCAPE_ICON("mesh-gradient"));
     }
 }
 

@@ -15,19 +15,19 @@
 
 #include "trace/potrace/inkscape-potrace.h"
 
-#include "inkscape.h"
-#include "desktop.h"
+#include <limits>
 
-#include "document.h"
-#include "document-undo.h"
-#include "message-stack.h"
 #include <glibmm/i18n.h>
 #include <gtkmm/main.h>
-#include "selection.h"
-#include "xml/repr.h"
-#include "xml/attribute-record.h"
+
 #include <2geom/transforms.h>
-#include "verbs.h"
+
+#include "desktop.h"
+#include "document.h"
+#include "document-undo.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "selection.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing.h"
@@ -37,9 +37,12 @@
 #include "object/sp-shape.h"
 #include "object/sp-image.h"
 
-#include "siox.h"
+#include "ui/icon-names.h"
 
-#include <limits>
+#include "xml/repr.h"
+#include "xml/attribute-record.h"
+
+#include "siox.h"
 
 namespace Inkscape {
 namespace Trace {
@@ -526,7 +529,7 @@ void Tracer::traceThread()
         }
 
     //## inform the document, so we can undo
-    DocumentUndo::done(doc, SP_VERB_SELECTION_TRACE, _("Trace bitmap"));
+    DocumentUndo::done(doc, _("Trace bitmap"), INKSCAPE_ICON("bitmap-trace"));
 
     engine = nullptr;
 

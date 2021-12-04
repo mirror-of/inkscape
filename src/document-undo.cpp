@@ -45,14 +45,17 @@
  * (Lauris Kaplinski)
  */
 
-#include <string>
-#include "xml/repr.h"
-#include "inkscape.h"
 #include "document-undo.h"
+
+#include <string>
+
+#include "event.h"
+#include "inkscape.h"
+
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
 #include "debug/timestamp.h"
-#include "event.h"
+#include "xml/repr.h"
 
 
 /*
@@ -84,14 +87,6 @@ bool Inkscape::DocumentUndo::getUndoSensitive(SPDocument const *document) {
 	return document->sensitive;
 }
 
-// TEMP TEMP Until verbs are removed. event_type is verb number.
-void Inkscape::DocumentUndo::done(SPDocument *doc, const unsigned int event_type, Glib::ustring const &event_description)
-{
-    if (doc->sensitive) {
-        maybeDone(doc, nullptr, event_type, event_description);
-    }
-}
-
 void Inkscape::DocumentUndo::done(SPDocument *doc,
                                   Glib::ustring const &event_description,
                                   Glib::ustring const &icon_name)
@@ -111,7 +106,6 @@ namespace {
 using Inkscape::Debug::Event;
 using Inkscape::Debug::SimpleEvent;
 using Inkscape::Debug::timestamp;
-using Inkscape::Verb;
 
 typedef SimpleEvent<Event::INTERACTION> InteractionEvent;
 
@@ -138,19 +132,6 @@ public:
     }
 };
 
-}
-
-// TEMP TEMP Until verbs are removed.
-void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const unsigned int event_type,
-                                       Glib::ustring const &event_description)
-{
-    Glib::ustring icon;
-
-    Verb *verb = Verb::get(event_type);
-    if (verb && verb->get_image()) {
-        icon = verb->get_image();
-    }
-    maybeDone(doc, key, event_description, icon);
 }
 
 // 'key' is used to coalesce changes of the same type.

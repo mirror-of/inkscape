@@ -9,22 +9,23 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "text.h"
+
 #include <glibmm/i18n.h>
 #include <gtkmm/alignment.h>
 
 #include <2geom/sbasis-geometric.h>
 
 #include "inkscape.h"
-#include "verbs.h"
 
 #include "display/control/canvas-item-text.h"
 
 #include "live_effects/effect.h"
-#include "live_effects/parameter/text.h"
 
 #include "svg/stringstream.h"
 #include "svg/svg.h"
 
+#include "ui/icon-names.h"
 #include "ui/widget/registered-widget.h"
 
 
@@ -143,7 +144,7 @@ TextParam::param_newWidget()
         param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc()));
     rsu->setText(value);
     rsu->setProgrammatically = false;
-    rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change text parameter"));
+    rsu->set_undo_parameters(_("Change text parameter"), INKSCAPE_ICON("dialog-path-effects"));
     Gtk::Box *text_container = Gtk::manage(new Gtk::Box());
     Gtk::Button *set =  Gtk::manage(new Gtk::Button(Glib::ustring("✔")));
     set->signal_clicked()

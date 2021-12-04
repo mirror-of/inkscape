@@ -26,39 +26,49 @@
 
 #include "ui/tools/calligraphic-tool.h"
 
-#include <2geom/bezier-utils.h>
-#include <2geom/circle.h>
-#include <2geom/pathvector.h>
 #include <cstring>
+#include <numeric>
+#include <string>
+
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 #include <gtk/gtk.h>
-#include <numeric>
-#include <string>
+
+#include <2geom/bezier-utils.h>
+#include <2geom/circle.h>
+#include <2geom/pathvector.h>
 
 #include "context-fns.h"
 #include "desktop-events.h"
 #include "desktop-style.h"
 #include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "message-context.h"
+#include "selection.h"
+
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-drawing.h" // ctx
 #include "display/curve.h"
 #include "display/drawing.h"
-#include "document-undo.h"
-#include "document.h"
+
 #include "include/macros.h"
-#include "inkscape.h"
+
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
-#include "message-context.h"
+
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
+
 #include "path/path-util.h"
-#include "selection.h"
+
 #include "svg/svg.h"
+
+#include "ui/icon-names.h"
 #include "ui/tools/freehand-base.h"
+
 #include "util/units.h"
-#include "verbs.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::Quantity;
@@ -970,8 +980,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
         this->repr = nullptr;
     }
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_CALLIGRAPHIC,
-                       _("Draw calligraphic stroke"));
+    DocumentUndo::done(desktop->getDocument(), _("Draw calligraphic stroke"), INKSCAPE_ICON("draw-calligraphic"));
 }
 
 static void

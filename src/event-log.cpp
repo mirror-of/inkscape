@@ -9,14 +9,17 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "util/signal-blocker.h"
-
 #include "event-log.h"
+
+
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "inkscape.h"
 #include "document.h"
+#include "inkscape.h"
+#include "verbs.h"
+
+#include "util/signal-blocker.h"
 
 namespace
 {

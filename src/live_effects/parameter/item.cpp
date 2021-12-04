@@ -6,7 +6,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/item.h"
+#include "item.h"
 
 #include <glibmm/i18n.h>
 
@@ -14,25 +14,25 @@
 #include <gtkmm/label.h>
 
 #include "bad-uri-exception.h"
-#include "ui/widget/point.h"
-
-#include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpe-clone-original.h"
-#include "svg/svg.h"
-
 #include "desktop.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
-#include "ui/icon-loader.h"
-#include "xml/repr.h"
-// clipboard support
-#include "ui/clipboard.h"
-// required for linking to other paths
-#include "object/uri.h"
 
+#include "live_effects/effect.h"
+#include "live_effects/lpe-clone-original.h"
+#include "live_effects/lpeobject.h"
+
+#include "object/uri.h" // required for linking to other paths
+
+#include "svg/svg.h"
+
+#include "ui/clipboard.h" // clipboard support
 #include "ui/icon-names.h"
+#include "ui/icon-loader.h"
+#include "ui/widget/point.h"
+
+#include "xml/repr.h"
 
 namespace Inkscape {
 
@@ -285,8 +285,7 @@ ItemParam::linkitem(Glib::ustring itemid)
         // check if linking to object to which LPE is applied (maybe delegated to PathReference
 
         param_write_to_repr(itemid.c_str());
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                           _("Link item parameter to path"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Link item parameter to path"), INKSCAPE_ICON("dialog-path-effects"));
     }
 }
 

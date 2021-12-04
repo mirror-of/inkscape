@@ -16,6 +16,7 @@
 
 #include <string>
 #include <unordered_map>
+
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
@@ -27,14 +28,16 @@
 #include <boost/range/any_range.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/utility/enable_if.hpp>
+
 #include <sigc++/connection.h>
+
 #include <inkgc/gc-soft-ptr.h>
+
 #include "sp-object.h"
 #include "sp-item.h"
 #include "sp-item-group.h"
 #include "desktop.h"
 #include "document.h"
-#include "verbs.h"
 
 enum BoolOpErrors {
     DONE,

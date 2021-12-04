@@ -340,7 +340,7 @@ PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool 
             Geom::Translate const vert_offset(Geom::Point(0, (old_height.value("px") - h.value("px"))));
             doc->getRoot()->translateChildItems(vert_offset);
         }
-        DocumentUndo::done(doc, SP_VERB_NONE, _("Set page size"));
+        DocumentUndo::done(doc, _("Set page size"), "");
     }
 
     if ( w != h ) {
@@ -681,7 +681,7 @@ PageSizer::on_scale_changed()
             doc->setDocumentScale( 1.0/scaleX_inv );
             updateScaleUI();
             _lockScaleUpdate = false;
-            DocumentUndo::done(doc, SP_VERB_NONE, _("Set page scale"));
+            DocumentUndo::done(doc, _("Set page scale"), "");
         }
     }
 }
@@ -707,7 +707,7 @@ PageSizer::on_viewbox_changed()
             doc->setViewBox( Geom::Rect::from_xywh( viewboxX, viewboxY, viewboxW, viewboxH ) );
             updateScaleUI();
             _lockViewboxUpdate = false;
-            DocumentUndo::done(doc, SP_VERB_NONE, _("Set 'viewBox'"));
+            DocumentUndo::done(doc, _("Set 'viewBox'"), "");
         }
     } else {
         std::cerr

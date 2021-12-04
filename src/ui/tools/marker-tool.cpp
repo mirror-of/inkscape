@@ -29,7 +29,6 @@
 #include "ui/tools/marker-tool.h"
 
 
-using Inkscape::DocumentUndo;
 namespace Inkscape {
 namespace UI {
 namespace Tools {

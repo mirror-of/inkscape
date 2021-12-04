@@ -27,7 +27,6 @@
 #include "preferences.h"
 #include "selcue.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 #include "include/gtkmm_version.h"
 

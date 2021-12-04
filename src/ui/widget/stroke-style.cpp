@@ -529,7 +529,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const
         item->requestModified(SP_OBJECT_MODIFIED_FLAG);
         item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
-        DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE, _("Set markers"));
+        DocumentUndo::done(document, _("Set markers"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 
     /* edit marker mode - update */
@@ -989,8 +989,7 @@ StrokeStyle::scaleLine()
     sp_repr_css_attr_unref(css);
     css = nullptr;
 
-    DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
-                       _("Set stroke style"));
+    DocumentUndo::done(document, _("Set stroke style"), INKSCAPE_ICON("dialog-fill-and-stroke"));
 
     update = false;
 }
@@ -1089,7 +1088,7 @@ void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw)
         sp_repr_css_attr_unref(css);
         css = nullptr;
 
-        DocumentUndo::done(spw->desktop->getDocument(), SP_VERB_DIALOG_FILL_STROKE, _("Set stroke style"));
+        DocumentUndo::done(spw->desktop->getDocument(), _("Set stroke style"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 

@@ -18,13 +18,12 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/radiobutton.h>
 
-#include "ui/widget/entity-entry.h"
-#include "ui/widget/registry.h"
 #include "rdf.h"
 #include "inkscape.h"
 #include "document-undo.h"
-#include "verbs.h"
 
+#include "ui/widget/entity-entry.h"
+#include "ui/widget/registry.h"
 
 namespace Inkscape {
 namespace UI {
@@ -66,7 +65,7 @@ void LicenseItem::on_toggled()
     SPDocument *doc = _wr.desktop()->getDocument();
     rdf_set_license (doc, _lic->details ? _lic : nullptr);
     if (doc->isSensitive()) {
-        DocumentUndo::done(doc, SP_VERB_NONE, _("Document license updated"));
+        DocumentUndo::done(doc, _("Document license updated"), "");
     }
     _wr.setUpdating (false);
     static_cast<Gtk::Entry*>(_eep->_packable)->set_text (_lic->uri);

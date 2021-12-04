@@ -36,6 +36,7 @@
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
 
+#include "ui/icon-names.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-holder-entity.h"
 
@@ -713,8 +714,7 @@ KnotHolderEntityCrossingSwitcher::knot_click(guint state)
             //std::cout<<"crossing set to"<<lpe->crossing_points[s].sign<<".\n";
         }
         lpe->crossing_points_vector.param_set_and_write_new_value(lpe->crossing_points.to_vector());
-        DocumentUndo::done(lpe->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, /// @todo Is this the right verb?
-                           _("Change knot crossing"));
+        DocumentUndo::done(lpe->getSPDoc(), _("Change knot crossing"), INKSCAPE_ICON("dialog-path-effects"));
 
         // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
 //        sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);

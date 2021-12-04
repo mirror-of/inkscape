@@ -12,6 +12,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "tweak-tool.h"
+
 #include <numeric>
 
 #include <gtk/gtk.h>
@@ -34,7 +36,6 @@
 #include "path-chemistry.h"
 #include "selection.h"
 #include "style.h"
-#include "verbs.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -57,9 +58,9 @@
 
 #include "svg/svg.h"
 
+#include "ui/icon-names.h"
 #include "ui/toolbar/tweak-toolbar.h"
 
-#include "ui/tools/tweak-tool.h"
 
 using Inkscape::DocumentUndo;
 
@@ -1219,60 +1220,49 @@ bool TweakTool::root_handler(GdkEvent* event) {
                 }
                 this->is_dilating = false;
                 this->has_dilated = false;
+                Glib::ustring text;
                 switch (this->mode) {
                     case TWEAK_MODE_MOVE:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Move tweak"));
+                        text = _("Move tweak");
                         break;
                     case TWEAK_MODE_MOVE_IN_OUT:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Move in/out tweak"));
+                        text = _("Move in/out tweak");
                         break;
                     case TWEAK_MODE_MOVE_JITTER:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Move jitter tweak"));
+                        text = _("Move jitter tweak");
                         break;
                     case TWEAK_MODE_SCALE:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Scale tweak"));
+                        text = _("Scale tweak");
                         break;
                     case TWEAK_MODE_ROTATE:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Rotate tweak"));
+                        text = _("Rotate tweak");
                         break;
                     case TWEAK_MODE_MORELESS:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Duplicate/delete tweak"));
+                        text = _("Duplicate/delete tweak");
                         break;
                     case TWEAK_MODE_PUSH:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Push path tweak"));
+                        text = _("Push path tweak");
                         break;
                     case TWEAK_MODE_SHRINK_GROW:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Shrink/grow path tweak"));
+                        text = _("Shrink/grow path tweak");
                         break;
                     case TWEAK_MODE_ATTRACT_REPEL:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Attract/repel path tweak"));
+                        text = _("Attract/repel path tweak");
                         break;
                     case TWEAK_MODE_ROUGHEN:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Roughen path tweak"));
+                        text = _("Roughen path tweak");
                         break;
                     case TWEAK_MODE_COLORPAINT:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Color paint tweak"));
+                        text = _("Color paint tweak");
                         break;
                     case TWEAK_MODE_COLORJITTER:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Color jitter tweak"));
+                        text = _("Color jitter tweak");
                         break;
                     case TWEAK_MODE_BLUR:
-                        DocumentUndo::done(this->desktop->getDocument(),
-                                           SP_VERB_CONTEXT_TWEAK, _("Blur tweak"));
+                        text = _("Blur tweak");
                         break;
                 }
+                DocumentUndo::done(this->desktop->getDocument(), text.c_str(), INKSCAPE_ICON("tool-tweak"));
             }
             break;
         }

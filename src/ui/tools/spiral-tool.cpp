@@ -30,13 +30,13 @@
 #include "document.h"
 #include "message-context.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "include/macros.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-spiral.h"
 
+#include "ui/icon-names.h"
 #include "ui/shape-editor.h"
 
 #include "xml/node-event-vector.h"
@@ -391,7 +391,7 @@ void SpiralTool::finishItem() {
 
         this->desktop->getSelection()->set(this->spiral);
         
-        DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_SPIRAL, _("Create spiral"));
+        DocumentUndo::done(this->desktop->getDocument(), _("Create spiral"), INKSCAPE_ICON("draw-spiral"));
 
         this->spiral = nullptr;
     }

@@ -5,16 +5,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-widget.h"
-#include "live_effects/parameter/random.h"
-#include "live_effects/effect.h"
+#include "random.h"
+
 #include <glibmm/i18n.h>
-#include "svg/svg.h"
-#include "ui/widget/random.h"
 
+#include "live_effects/effect.h"
 #include "svg/stringstream.h"
-
-#include "verbs.h"
+#include "svg/svg.h"
+#include "ui/icon-names.h"
+#include "ui/widget/random.h"
+#include "ui/widget/registered-widget.h"
 
 #define noLPERANDOMPARAM_DEBUG
 
@@ -154,7 +154,7 @@ RandomParam::param_newWidget()
     regrandom->setProgrammatically = false;
     regrandom->signal_button_release_event().connect(sigc::mem_fun (*this, &RandomParam::on_button_release));
 
-    regrandom->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change random parameter"));
+    regrandom->set_undo_parameters(_("Change random parameter"), INKSCAPE_ICON("dialog-path-effects"));
 
     return dynamic_cast<Gtk::Widget *> (regrandom);
 }

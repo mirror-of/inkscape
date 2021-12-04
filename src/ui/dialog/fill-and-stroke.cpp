@@ -44,7 +44,8 @@ FillAndStroke::FillAndStroke()
     , _page_fill(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_stroke_paint(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
-    , _composite_settings(SP_VERB_DIALOG_FILL_STROKE, "fillstroke",
+    , _composite_settings(INKSCAPE_ICON("dialog-fill-and-stroke"),
+                          "fillstroke",
                           UI::Widget::SimpleFilterModifier::ISOLATION |
                           UI::Widget::SimpleFilterModifier::BLEND |
                           UI::Widget::SimpleFilterModifier::BLUR |

@@ -22,7 +22,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "message-context.h"
-#include "verbs.h"
 
 #include "include/gtkmm_version.h"
 
@@ -91,8 +90,7 @@ void GuidelinePropertiesDialog::_modeChanged()
 void GuidelinePropertiesDialog::_onOK()
 {
     this->_onOKimpl();
-    DocumentUndo::done(_guide->document, SP_VERB_NONE,
-                       _("Set guide properties"));
+    DocumentUndo::done(_guide->document, _("Set guide properties"), "");
 
 }
 
@@ -145,15 +143,14 @@ void GuidelinePropertiesDialog::_onDelete()
 {
     SPDocument *doc = _guide->document;
     sp_guide_remove(_guide);
-    DocumentUndo::done(doc, SP_VERB_NONE, 
-                       _("Delete guide"));
+    DocumentUndo::done(doc, _("Delete guide"), "");
 }
 
 void GuidelinePropertiesDialog::_onDuplicate()
 {
     _guide = _guide->duplicate();
     this->_onOKimpl();
-    DocumentUndo::done(_guide->document, SP_VERB_NONE, _("Duplicate guide"));
+    DocumentUndo::done(_guide->document, _("Duplicate guide"), "");
 }
 
 void GuidelinePropertiesDialog::_response(gint response)

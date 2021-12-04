@@ -37,9 +37,8 @@
 #include "document-undo.h"
 #include "enums.h"
 #include "graphlayout.h"
-#include "selection.h"
-#include "verbs.h"
 #include "layer-manager.h"
+#include "selection.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
@@ -242,8 +241,7 @@ ConnectorToolbar::orthogonal_toggled()
         prefs->setBool("/tools/connector/orthogonal", is_orthog);
     } else {
 
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
-                       is_orthog ? _("Set connector type: orthogonal"): _("Set connector type: polyline"));
+        DocumentUndo::done(doc, is_orthog ? _("Set connector type: orthogonal"): _("Set connector type: polyline"), INKSCAPE_ICON("draw-connector"));
     }
 
     _freeze = false;
@@ -288,8 +286,7 @@ ConnectorToolbar::curvature_changed()
         prefs->setDouble(Glib::ustring("/tools/connector/curvature"), newValue);
     }
     else {
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
-                       _("Change connector curvature"));
+        DocumentUndo::done(doc, _("Change connector curvature"), INKSCAPE_ICON("draw-connector"));
     }
 
     _freeze = false;
@@ -335,8 +332,7 @@ ConnectorToolbar::spacing_changed()
     }
 
     if(modmade) {
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
-                       _("Change connector spacing"));
+        DocumentUndo::done(doc, _("Change connector spacing"), INKSCAPE_ICON("draw-connector"));
     }
     _freeze = false;
 }
@@ -360,7 +356,7 @@ ConnectorToolbar::graph_layout()
 
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-    DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE, _("Arrange connector network"));
+    DocumentUndo::done(_desktop->getDocument(), _("Arrange connector network"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 void

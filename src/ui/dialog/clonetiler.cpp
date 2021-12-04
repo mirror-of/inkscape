@@ -37,7 +37,6 @@
 #include "inkscape.h"
 #include "message-stack.h"
 #include "unclump.h"
-#include "verbs.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
@@ -1985,7 +1984,7 @@ void CloneTiler::unclump()
     reverse(to_unclump.begin(),to_unclump.end());
     ::unclump (to_unclump);
 
-    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_CLONETILER, _("Unclump tiled clones"));
+    DocumentUndo::done(getDocument(), _("Unclump tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
 }
 
 guint CloneTiler::number_of_clones(SPObject *obj)
@@ -2033,8 +2032,7 @@ void CloneTiler::remove(bool do_undo/* = true*/)
     change_selection (selection);
 
     if (do_undo) {
-        DocumentUndo::done(getDocument(), SP_VERB_DIALOG_CLONETILER,
-                           _("Delete tiled clones"));
+        DocumentUndo::done(getDocument(), _("Delete tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
     }
 }
 
@@ -2502,7 +2500,7 @@ void CloneTiler::apply()
     change_selection(selection);
 
     desktop->clearWaitingCursor();
-    DocumentUndo::done(getDocument(), SP_VERB_DIALOG_CLONETILER, _("Create tiled clones"));
+    DocumentUndo::done(getDocument(), _("Create tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
 }
 
 Gtk::Box * CloneTiler::new_tab(Gtk::Notebook *nb, const gchar *label)

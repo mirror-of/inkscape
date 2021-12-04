@@ -23,7 +23,6 @@
 #include "inkscape.h"
 #include "preferences.h"
 #include "rdf.h"
-#include "verbs.h"
 
 #include "object/sp-root.h"
 
@@ -124,7 +123,7 @@ EntityLineEntry::on_changed()
     Glib::ustring text = static_cast<Gtk::Entry*>(_packable)->get_text();
     if (rdf_set_work_entity (doc, _entity, text.c_str())) {
         if (doc->isSensitive()) {
-            DocumentUndo::done(doc, SP_VERB_NONE, "Document metadata updated");
+            DocumentUndo::done(doc, "Document metadata updated", "");
         }
     }
     _wr->setUpdating (false);
@@ -188,7 +187,7 @@ EntityMultiLineEntry::on_changed()
     Gtk::TextView *tv = static_cast<Gtk::TextView*>(s->get_child());
     Glib::ustring text = tv->get_buffer()->get_text();
     if (rdf_set_work_entity (doc, _entity, text.c_str())) {
-        DocumentUndo::done(doc, SP_VERB_NONE, "Document metadata updated");
+        DocumentUndo::done(doc, "Document metadata updated", "");
     }
     _wr->setUpdating (false);
 }

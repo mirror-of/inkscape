@@ -18,6 +18,7 @@
  */
 
 #include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
 
 #include <2geom/bezier-utils.h>
 #include <2geom/circle.h>
@@ -59,7 +60,6 @@
 
 #include "xml/node.h"
 #include "xml/sp-css-attr.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {

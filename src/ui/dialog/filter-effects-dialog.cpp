@@ -43,7 +43,7 @@
 #include "inkscape.h"
 #include "layer-manager.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
+#include "style.h"
 
 #include "include/gtkmm_version.h"
 
@@ -57,11 +57,11 @@
 #include "object/filters/mergenode.h"
 #include "object/filters/pointlight.h"
 #include "object/filters/spotlight.h"
-#include "style.h"
 
 #include "svg/svg-color.h"
 
 #include "ui/dialog/filedialog.h"
+#include "ui/icon-names.h"
 #include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/spinbutton.h"
 
@@ -1137,7 +1137,7 @@ private:
             SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
             filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
-            DocumentUndo::done(prim->document, SP_VERB_DIALOG_FILTER_EFFECTS, _("New transfer function type"));
+            DocumentUndo::done(prim->document, _("New transfer function type"), INKSCAPE_ICON("dialog-filters"));
             update();
         }
     }
@@ -1271,7 +1271,7 @@ private:
                     Inkscape::GC::release(repr);
                 }
 
-                DocumentUndo::done(prim->document, SP_VERB_DIALOG_FILTER_EFFECTS, _("New light source"));
+                DocumentUndo::done(prim->document, _("New light source"), INKSCAPE_ICON("dialog-filters"));
                 update();
             }
 
@@ -1458,7 +1458,7 @@ void FilterEffectsDialog::FilterModifier::on_name_edited(const Glib::ustring& pa
     if(iter) {
         SPFilter* filter = (*iter)[_columns.filter];
         filter->setLabel(text.c_str());
-        DocumentUndo::done(filter->document, SP_VERB_DIALOG_FILTER_EFFECTS, _("Rename filter"));
+        DocumentUndo::done(filter->document, _("Rename filter"), INKSCAPE_ICON("dialog-filters"));
         if(iter)
             (*iter)[_columns.label] = text;
     }
@@ -1508,7 +1508,7 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
         }
 
         update_selection(sel);
-        DocumentUndo::done(doc, SP_VERB_DIALOG_FILTER_EFFECTS,  _("Apply filter"));
+        DocumentUndo::done(doc, _("Apply filter"), INKSCAPE_ICON("dialog-filters"));
     }
 }
 
@@ -1594,7 +1594,7 @@ void FilterEffectsDialog::FilterModifier::add_filter()
 
     select_filter(filter);
 
-    DocumentUndo::done(doc, SP_VERB_DIALOG_FILTER_EFFECTS, _("Add filter"));
+    DocumentUndo::done(doc, _("Add filter"), INKSCAPE_ICON("dialog-filters"));
 }
 
 void FilterEffectsDialog::FilterModifier::remove_filter()
@@ -1629,7 +1629,7 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
         //XML Tree being used directly here while it shouldn't be.
         sp_repr_unparent(filter->getRepr());
 
-        DocumentUndo::done(doc, SP_VERB_DIALOG_FILTER_EFFECTS, _("Remove filter"));
+        DocumentUndo::done(doc, _("Remove filter"), INKSCAPE_ICON("dialog-filters"));
 
         update_filters();
     }
@@ -1645,7 +1645,7 @@ void FilterEffectsDialog::FilterModifier::duplicate_filter()
         repr = repr->duplicate(repr->document());
         parent->appendChild(repr);
 
-        DocumentUndo::done(filter->document, SP_VERB_DIALOG_FILTER_EFFECTS, _("Duplicate filter"));
+        DocumentUndo::done(filter->document, _("Duplicate filter"), INKSCAPE_ICON("dialog-filters"));
 
         update_filters();
     }
@@ -1891,8 +1891,7 @@ void FilterEffectsDialog::PrimitiveList::remove_selected()
         //XML Tree being used directly here while it shouldn't be.
         sp_repr_unparent(prim->getRepr());
 
-        DocumentUndo::done(_dialog.getDocument(), SP_VERB_DIALOG_FILTER_EFFECTS,
-                           _("Remove filter primitive"));
+        DocumentUndo::done(_dialog.getDocument(), _("Remove filter primitive"), INKSCAPE_ICON("dialog-filters"));
 
         update();
     }
@@ -2399,8 +2398,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
 
                             //XML Tree being used directly here while it shouldn't be.
                             sp_repr_unparent(o.getRepr());
-                            DocumentUndo::done(prim->document, SP_VERB_DIALOG_FILTER_EFFECTS,
-                                               _("Remove merge node"));
+                            DocumentUndo::done(prim->document, _("Remove merge node"), INKSCAPE_ICON("dialog-filters"));
                             (*get_selection()->get_selected())[_columns.primitive] = prim;
                         } else {
                             _dialog.set_attr(&o, SPAttr::IN_, in_val);
@@ -2523,7 +2521,7 @@ void FilterEffectsDialog::PrimitiveList::on_drag_end(const Glib::RefPtr<Gdk::Dra
 
     filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
-    DocumentUndo::done(filter->document, SP_VERB_DIALOG_FILTER_EFFECTS, _("Reorder filter primitive"));
+    DocumentUndo::done(filter->document, _("Reorder filter primitive"), INKSCAPE_ICON("dialog-filters"));
 }
 
 // If a connection is dragged towards the top or bottom of the list, the list should scroll to follow.
@@ -2836,7 +2834,7 @@ void FilterEffectsDialog::add_primitive()
 
         _primitive_list.select(prim);
 
-        DocumentUndo::done(filter->document, SP_VERB_DIALOG_FILTER_EFFECTS, _("Add filter primitive"));
+        DocumentUndo::done(filter->document, _("Add filter primitive"), INKSCAPE_ICON("dialog-filters"));
     }
 }
 
@@ -2931,7 +2929,7 @@ void FilterEffectsDialog::duplicate_primitive()
         repr = origprim->getRepr()->duplicate(origprim->getRepr()->document());
         filter->getRepr()->appendChild(repr);
 
-        DocumentUndo::done(filter->document, SP_VERB_DIALOG_FILTER_EFFECTS, _("Duplicate filter primitive"));
+        DocumentUndo::done(filter->document, _("Duplicate filter primitive"), INKSCAPE_ICON("dialog-filters"));
 
         _primitive_list.update();
     }
@@ -3010,8 +3008,7 @@ void FilterEffectsDialog::set_attr(SPObject* o, const SPAttr attr, const gchar* 
 
             Glib::ustring undokey = "filtereffects:";
             undokey += name;
-            DocumentUndo::maybeDone(filter->document, undokey.c_str(), SP_VERB_DIALOG_FILTER_EFFECTS,
-                                    _("Set filter primitive attribute"));
+            DocumentUndo::maybeDone(filter->document, undokey.c_str(), _("Set filter primitive attribute"), INKSCAPE_ICON("dialog-filters"));
         }
 
         _attr_lock = false;

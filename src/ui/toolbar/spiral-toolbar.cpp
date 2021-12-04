@@ -35,7 +35,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/sp-spiral.h"
 
@@ -192,8 +191,7 @@ SpiralToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
     g_free(namespaced_name);
 
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SPIRAL,
-                           _("Change spiral"));
+        DocumentUndo::done(_desktop->getDocument(), _("Change spiral"), INKSCAPE_ICON("draw-spiral"));
     }
 
     _freeze = false;

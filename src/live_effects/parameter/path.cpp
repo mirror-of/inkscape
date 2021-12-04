@@ -29,7 +29,6 @@
 #include "message-stack.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 #include "actions/actions-tools.h"
 #include "display/curve.h"
@@ -39,6 +38,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "svg/svg.h"
+
 #include "ui/clipboard.h" // clipboard support
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
@@ -47,6 +47,7 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/shape-record.h"
 #include "ui/widget/point.h"
+
 #include "xml/repr.h"
 
 namespace Inkscape {
@@ -533,8 +534,7 @@ PathParam::on_paste_button_click()
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
     Glib::ustring svgd = cm->getPathParameter(SP_ACTIVE_DESKTOP);
     paste_param_path(svgd.data());
-    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Paste path parameter"));
+    DocumentUndo::done(param_effect->getSPDoc(), _("Paste path parameter"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void
@@ -562,8 +562,7 @@ PathParam::linkitem(Glib::ustring pathid)
         // check if linking to object to which LPE is applied (maybe delegated to PathReference
 
         param_write_to_repr(pathid.c_str());
-        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                           _("Link path parameter to path"));
+        DocumentUndo::done(param_effect->getSPDoc(), _("Link path parameter to path"), INKSCAPE_ICON("dialog-path-effects"));
     }
 }
 

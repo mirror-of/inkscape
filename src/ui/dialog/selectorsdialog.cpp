@@ -14,26 +14,28 @@
  */
 
 #include "selectorsdialog.h"
+
+#include <map>
+#include <regex>
+#include <utility>
+
+#include <glibmm/i18n.h>
+#include <glibmm/regex.h>
+
 #include "attribute-rel-svg.h"
 #include "document-undo.h"
 #include "inkscape.h"
 #include "selection.h"
 #include "style.h"
+
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/widget/iconrenderer.h"
-#include "verbs.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
 #include "xml/sp-css-attr.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/regex.h>
-
-#include <map>
-#include <regex>
-#include <utility>
 
 // G_MESSAGES_DEBUG=DEBUG_SELECTORSDIALOG  gdb ./inkscape
 // #define DEBUG_SELECTORSDIALOG
@@ -632,7 +634,7 @@ void SelectorsDialog::_writeStyleElement()
         textNode->setContent(styleContent.c_str());
     }
     textNode->setContent(styleContent.c_str());
-    DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_SELECTORS, _("Edited style element."));
+    DocumentUndo::done(SP_ACTIVE_DOCUMENT, _("Edited style element."), INKSCAPE_ICON("dialog-selectors"));
 
     _updating = false;
     _scroollock = false;

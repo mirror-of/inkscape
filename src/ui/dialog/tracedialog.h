@@ -14,7 +14,6 @@
 #define __TRACEDIALOG_H__
 
 #include "ui/dialog/dialog-base.h"
-#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {

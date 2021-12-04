@@ -31,7 +31,6 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "snap.h"
-#include "verbs.h"
 
 #include "display/control/canvas-item-group.h"
 #include "display/control/canvas-item-ctrl.h"
@@ -47,6 +46,7 @@
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 
+#include "ui/icon-names.h"
 #include "ui/knot/knot.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h" // Forced redraws
@@ -553,8 +553,7 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
             mg->array.built = false;
             mg->ensureArray();
             // How do we do this?
-            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
-                               _("Added patch row or column"));
+            DocumentUndo::done(desktop->getDocument(), _("Added patch row or column"), INKSCAPE_ICON("mesh-gradient"));
 
         } // Mesh
     }
@@ -785,7 +784,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 d_new->updateKnotShape ();
                 d_new->updateTip ();
                 d_new->updateDependencies(true);
-                DocumentUndo::done(d_new->parent->desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT, _("Merge gradient handles"));
+                DocumentUndo::done(d_new->parent->desktop->getDocument(), _("Merge gradient handles"), INKSCAPE_ICON("color-gradient"));
                 return;
             }
         }
@@ -1100,7 +1099,7 @@ static void gr_knot_ungrabbed_handler(SPKnot *knot, unsigned int state, gpointer
     dragger->updateDependencies(true);
 
     // we did an undoable action
-    DocumentUndo::done(dragger->parent->desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT, _("Move gradient handle"));
+    DocumentUndo::done(dragger->parent->desktop->getDocument(), _("Move gradient handle"), INKSCAPE_ICON("color-gradient"));
 }
 
 /**
@@ -1158,8 +1157,7 @@ static void gr_knot_clicked_handler(SPKnot */*knot*/, guint state, gpointer data
             }
 
             gradient->getRepr()->removeChild(stop->getRepr());
-            DocumentUndo::done(gradient->document, SP_VERB_CONTEXT_GRADIENT,
-                               _("Delete gradient stop"));
+            DocumentUndo::done(gradient->document, _("Delete gradient stop"), INKSCAPE_ICON("color-gradient"));
         }
     } else {
     // select the dragger
@@ -2732,8 +2730,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
     if (write_repr && did) {
         // we did an undoable action
-        DocumentUndo::maybeDone(desktop->getDocument(), "grmoveh", SP_VERB_CONTEXT_GRADIENT,
-                                _("Move gradient handle(s)"));
+        DocumentUndo::maybeDone(desktop->getDocument(), "grmoveh", _("Move gradient handle(s)"), INKSCAPE_ICON("color-gradient"));
         return;
     }
 
@@ -2765,8 +2762,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
         if (write_repr && did) {
             // we did an undoable action
-            DocumentUndo::maybeDone(desktop->getDocument(), "grmovem", SP_VERB_CONTEXT_GRADIENT,
-                                    _("Move gradient mid stop(s)"));
+            DocumentUndo::maybeDone(desktop->getDocument(), "grmovem", _("Move gradient mid stop(s)"), INKSCAPE_ICON("color-gradient"));
         }
     }
 }
@@ -3119,7 +3115,7 @@ void GrDrag::deleteSelected(bool just_one)
     }
 
     if (document) {
-        DocumentUndo::done( document, SP_VERB_CONTEXT_GRADIENT, _("Delete gradient stop(s)") );
+        DocumentUndo::done( document, _("Delete gradient stop(s)"), INKSCAPE_ICON("color-gradient"));
     }
 }
 

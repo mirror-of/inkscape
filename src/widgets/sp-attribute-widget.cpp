@@ -22,7 +22,6 @@
 #include "include/macros.h"
 #include "document.h"
 #include "document-undo.h"
-#include "verbs.h"
 
 #include "include/gtkmm_version.h"
 
@@ -272,8 +271,7 @@ static void sp_attribute_table_entry_changed ( Gtk::Entry *editable,
                 Glib::ustring text = e->get_text ();
                 if (spat->_object) {
                     spat->_object->getRepr()->setAttribute(attributes[i], text);
-                    DocumentUndo::done(spat->_object->document, SP_VERB_NONE,
-                                       _("Set attribute"));
+                    DocumentUndo::done(spat->_object->document, _("Set attribute"), "");
                 }
                 spat->blocked = false;
                 return;

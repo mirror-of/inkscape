@@ -23,7 +23,6 @@
 #include "document.h"
 #include "document-undo.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 #include "display/drawing-group.h"
 #include "display/curve.h"
@@ -698,7 +697,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     prefs->setBool("/options/maskobject/topmost", topmost);
     prefs->setBool("/options/maskobject/grouping", grouping);
     if (do_done) {
-        DocumentUndo::done(doc, SP_VERB_NONE, _("Ungroup"));
+        DocumentUndo::done(doc, _("Ungroup"), "");
     }
 }
 

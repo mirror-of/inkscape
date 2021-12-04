@@ -5,12 +5,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-widget.h"
+#include "unit.h"
+
 #include <glibmm/i18n.h>
 
-#include "live_effects/parameter/unit.h"
 #include "live_effects/effect.h"
-#include "verbs.h"
+#include "ui/icon-names.h"
+#include "ui/widget/registered-widget.h"
 #include "util/units.h"
 
 using Inkscape::Util::unit_table;
@@ -90,7 +91,7 @@ UnitParam::param_newWidget()
                                                      param_effect->getSPDoc()));
 
     unit_menu->setUnit(unit->abbr);
-    unit_menu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change unit parameter"));
+    unit_menu->set_undo_parameters(_("Change unit parameter"), INKSCAPE_ICON("dialog-path-effects"));
     
     return dynamic_cast<Gtk::Widget *> (unit_menu);
 }

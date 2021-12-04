@@ -46,7 +46,7 @@ transform_translate(const Glib::VariantBase& value, InkscapeApplication *app)
     selection->move(dx, dy);
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformTranslate");
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformTranslate", "");
 }
 
 void
@@ -59,7 +59,7 @@ transform_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
     selection->rotate(d.get());
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformRotate");
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformRotate", "");
 }
 
 void
@@ -70,7 +70,7 @@ transform_scale(const Glib::VariantBase& value, InkscapeApplication *app)
     selection->scale(d.get());
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformScale");
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformScale", "");
 }
 
 void
@@ -80,7 +80,7 @@ transform_remove(InkscapeApplication *app)
     selection->removeTransform();
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformRemoveTransform");
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformRemoveTransform", "");
 }
 
 // SHOULD REALLY BE DOC LEVEL ACTIONS

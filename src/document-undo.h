@@ -37,10 +37,9 @@ public:
 
     static void clearRedo(SPDocument *document);
 
-    static void done(SPDocument *document, unsigned int event_type, Glib::ustring const &event_description);
+    /* undo_icon is only used in History dialog. */
     static void done(SPDocument *document, Glib::ustring const &event_description, Glib::ustring const &undo_icon);
 
-    static void maybeDone(SPDocument *document, const gchar *keyconst, unsigned int event_type,   Glib::ustring const &event_description);
     static void maybeDone(SPDocument *document, const gchar *keyconst, Glib::ustring const &event_description, Glib::ustring const &undo_icon);
 
 private:

@@ -15,32 +15,37 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "sp-namedview.h"
+
 #include <cstring>
 #include <string>
-#include "event-log.h"
+
 #include <2geom/transforms.h>
 
-#include "display/control/canvas-grid.h"
-#include "util/units.h"
-#include "svg/svg-color.h"
-#include "xml/repr.h"
+#include <gtkmm/window.h>
+
 #include "attributes.h"
-#include "document.h"
-#include "document-undo.h"
+#include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "desktop-events.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "enums.h"
-#include "ui/monitor.h"
-#include "ui/dialog/dialog-container.h"
-#include "actions/actions-canvas-snapping.h"
+#include "event-log.h"
+#include "layer-manager.h"
+#include "preferences.h"
 #include "sp-guide.h"
 #include "sp-item-group.h"
-#include "sp-namedview.h"
-#include "preferences.h"
-#include "layer-manager.h"
-#include "desktop.h"
-#include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "sp-root.h"
-#include <gtkmm/window.h>
+#include "verbs.h"
+
+#include "actions/actions-canvas-snapping.h"
+#include "display/control/canvas-grid.h"
+#include "svg/svg-color.h"
+#include "ui/dialog/dialog-container.h"
+#include "ui/monitor.h"
+#include "util/units.h"
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -188,7 +193,7 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
         repr->removeAttribute("gridempopacity");
         repr->removeAttribute("gridempspacing");
 
-//        SPDocumentUndo::done(doc, SP_VERB_DIALOG_DOCPROPERTIES, _("Create new grid from pre0.46 grid settings"));
+//        SPDocumentUndo::done(doc, _("Create new grid from pre0.46 grid settings"), INKSCAPE_ICON("document-properties"));
     }
 }
 

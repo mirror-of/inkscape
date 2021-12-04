@@ -34,7 +34,6 @@
 #include "message-context.h"
 #include "preferences.h"
 #include "snap.h"
-#include "verbs.h"
 
 #include "actions/actions-tools.h"
 
@@ -325,8 +324,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                                 assert(false);
                                 break;
                         }
-                        DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
-                                           _("Move guide"));
+                        DocumentUndo::done(desktop->getDocument(), _("Move guide"), "");
                     } else {
                         /* Undo movement of any attached shapes. */
                         guide->moveto(guide->getPoint(), false);
@@ -334,8 +332,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                         sp_guide_remove(guide);
                         desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
 
-                        DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
-                                           _("Delete guide"));
+                        DocumentUndo::done(desktop->getDocument(), _("Delete guide"), "");
                     }
                     moved = false;
                     desktop->set_coordinate_status(event_dt);
@@ -394,7 +391,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                     SPDocument *doc = guide->document;
                     if (!guide->getLocked()) {
                         sp_guide_remove(guide);
-                        DocumentUndo::done(doc, SP_VERB_NONE, _("Delete guide"));
+                        DocumentUndo::done(doc, _("Delete guide"), "");
                         ret = true;
                         sp_event_context_discard_delayed_snap_event(desktop->event_context);
                         desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);

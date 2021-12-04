@@ -10,6 +10,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "gradient-editor.h"
+
 #include <gtkmm/builder.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/togglebutton.h>
@@ -20,21 +22,25 @@
 #include <glibmm/i18n.h>
 #include <cairo.h>
 
-#include "display/cairo-utils.h"
-#include "gradient-editor.h"
-#include "gradient-selector.h"
-#include "io/resource.h"
-#include "color-notebook.h"
-#include "ui/icon-names.h"
-#include "ui/icon-loader.h"
-#include "color-preview.h"
-#include "gradient-chemistry.h"
 #include "document-undo.h"
-#include "verbs.h"
-#include "object/sp-linear-gradient.h"
-#include "object/sp-gradient-vector.h"
-#include "svg/css-ostringstream.h"
+#include "gradient-chemistry.h"
+#include "gradient-selector.h"
 #include "preferences.h"
+
+#include "display/cairo-utils.h"
+
+#include "io/resource.h"
+
+#include "object/sp-gradient-vector.h"
+#include "object/sp-linear-gradient.h"
+
+#include "svg/css-ostringstream.h"
+
+#include "ui/icon-loader.h"
+#include "ui/icon-names.h"
+#include "ui/widget/color-notebook.h"
+#include "ui/widget/color-preview.h"
+
 
 namespace Inkscape {
 namespace UI {
@@ -459,7 +465,7 @@ void GradientEditor::reverse_gradient() {
 
         if (vector) {
             sp_gradient_reverse_vector(vector);
-            DocumentUndo::done(_document, SP_VERB_CONTEXT_GRADIENT, _("Reverse gradient"));
+            DocumentUndo::done(_document, _("Reverse gradient"), INKSCAPE_ICON("color-gradient"));
         }
     }
 }
@@ -474,7 +480,7 @@ void GradientEditor::set_repeat_mode(SPGradientSpread mode) {
         _gradient->setSpread(mode);
         _gradient->updateRepr();
 
-        DocumentUndo::done(_document, SP_VERB_CONTEXT_GRADIENT, _("Set gradient repeat"));
+        DocumentUndo::done(_document, _("Set gradient repeat"), INKSCAPE_ICON("color-gradient"));
 
         set_repeat_icon(mode);
     }
@@ -605,8 +611,7 @@ void GradientEditor::set_stop_offset(size_t index, double offset) {
             repr->setAttributeCssDouble("offset", stop->offset);
         }
 
-        DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", SP_VERB_CONTEXT_GRADIENT,
-            _("Change gradient stop offset"));
+        DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", _("Change gradient stop offset"), INKSCAPE_ICON("color-gradient"));
     }
 }
 

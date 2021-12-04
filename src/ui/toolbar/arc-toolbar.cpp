@@ -36,7 +36,6 @@
 #include "document-undo.h"
 #include "mod360.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
@@ -284,8 +283,7 @@ ArcToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
     }
 
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_ARC,
-                           _("Ellipse: Change radius"));
+        DocumentUndo::done(_desktop->getDocument(), _("Ellipse: Change radius"), INKSCAPE_ICON("draw-ellipse"));
     }
 
     _freeze = false;
@@ -338,8 +336,7 @@ ArcToolbar::startend_value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
     sensitivize( adj->get_value(), other_adj->get_value() );
 
     if (modmade) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), value_name, SP_VERB_CONTEXT_ARC,
-                                _("Arc: Change start/end"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), value_name, _("Arc: Change start/end"), INKSCAPE_ICON("draw-ellipse"));
     }
 
     _freeze = false;
@@ -394,8 +391,7 @@ ArcToolbar::type_changed( int type )
     }
 
     if (modmade) {
-        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_ARC,
-                           _("Arc: Changed arc type"));
+        DocumentUndo::done(_desktop->getDocument(), _("Arc: Changed arc type"), INKSCAPE_ICON("draw-ellipse"));
     }
 
     _freeze = false;

@@ -17,6 +17,7 @@
 
 //#define DEBUG_MESH
 
+#include "mesh-tool.h"
 
 // Libraries
 #include <gdk/gdkkeysyms.h>
@@ -34,7 +35,6 @@
 #include "rubberband.h"
 #include "selection.h"
 #include "snap.h"
-#include "verbs.h"
 
 #include "display/control/canvas-item-curve.h"
 #include "display/curve.h"
@@ -45,8 +45,7 @@
 #include "object/sp-text.h"
 #include "style.h"
 
-#include "ui/tools/mesh-tool.h"
-
+#include "ui/icon-names.h"
 
 using Inkscape::DocumentUndo;
 
@@ -273,8 +272,7 @@ static void sp_mesh_context_split_near_point(MeshTool *rc, SPItem *item,  Geom::
 
     rc->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
-                       _("Split mesh row/column"));
+    DocumentUndo::done(desktop->getDocument(), _("Split mesh row/column"), INKSCAPE_ICON("mesh-gradient"));
 
     rc->get_drag()->updateDraggers();
 }
@@ -364,32 +362,32 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
                 switch (operation) {
 
                     case MG_CORNER_SIDE_TOGGLE:
-                        DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Toggled mesh path type."));
+                        DocumentUndo::done(doc, _("Toggled mesh path type."), INKSCAPE_ICON("mesh-gradient"));
                         drag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_SIDE_ARC:
-                        DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Approximated arc for mesh side."));
+                        DocumentUndo::done(doc, _("Approximated arc for mesh side."), INKSCAPE_ICON("mesh-gradient"));
                         drag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_TENSOR_TOGGLE:
-                        DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Toggled mesh tensors."));
+                        DocumentUndo::done(doc, _("Toggled mesh tensors."), INKSCAPE_ICON("mesh-gradient"));
                         drag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_COLOR_SMOOTH:
-                        DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Smoothed mesh corner color."));
+                        DocumentUndo::done(doc, _("Smoothed mesh corner color."), INKSCAPE_ICON("mesh-gradient"));
                         drag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_COLOR_PICK:
-                        DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Picked mesh corner color."));
+                        DocumentUndo::done(doc, _("Picked mesh corner color."), INKSCAPE_ICON("mesh-gradient"));
                         drag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_INSERT:
-                        DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Inserted new row or column."));
+                        DocumentUndo::done(doc, _("Inserted new row or column."), INKSCAPE_ICON("mesh-gradient"));
                         break;
 
                     default:
@@ -459,8 +457,7 @@ sp_mesh_context_fit_mesh_in_bbox (MeshTool *rc)
         }
     }
     if (changed) {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
-                           _("Fit mesh inside bounding box"));
+        DocumentUndo::done(desktop->getDocument(), _("Fit mesh inside bounding box"), INKSCAPE_ICON("mesh-gradient"));
     }
 }
 
@@ -998,7 +995,7 @@ static void sp_mesh_new_default(MeshTool &rc) {
             css = nullptr;
         }
 
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH, _("Create mesh"));
+        DocumentUndo::done(desktop->getDocument(), _("Create mesh"), INKSCAPE_ICON("mesh-gradient"));
 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag

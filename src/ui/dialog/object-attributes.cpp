@@ -15,7 +15,6 @@
 
 #include "desktop.h"
 #include "inkscape.h"
-#include "verbs.h"
 
 #include "object/sp-anchor.h"
 #include "object/sp-image.h"
