@@ -1061,14 +1061,6 @@ void SPNamedView::setGuides(bool v)
 {
     g_assert(this->getRepr() != nullptr);
     this->getRepr()->setAttributeBoolean("showguides", v);
-
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GUIDES);
-        if (verb) {
-            desktop->_menu_update.emit(verb->get_code(), this->getGuides());
-        }
-    }
 }
 
 bool SPNamedView::getGuides()

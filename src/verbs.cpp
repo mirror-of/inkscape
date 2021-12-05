@@ -241,26 +241,6 @@ public:
 }; // ContextVerb class
 
 /**
- * A class to encompass all of the verbs which deal with zoom operations.
- */
-class ZoomVerb : public Verb {
-private:
-    static void perform(SPAction *action, void *mydata);
-protected:
-    SPAction *make_action(Inkscape::ActionContext const & context) override;
-public:
-    /** Use the Verb initializer with the same parameters. */
-    ZoomVerb(unsigned int const code,
-             gchar const *id,
-             gchar const *name,
-             gchar const *tip,
-             gchar const *image) :
-        Verb(code, id, name, tip, image, _("View"))
-    { }
-}; // ZoomVerb class
-
-
-/**
  * A class to encompass all of the verbs which deal with text operations.
  */
 class TextVerb : public Verb {
@@ -421,19 +401,6 @@ SPAction *ObjectVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *ContextVerb::make_action(Inkscape::ActionContext const & context)
-{
-    return make_action_helper(context, &perform);
-}
-
-/**
- * Create an action for a \c ZoomVerb.
- *
- * Calls \c make_action_helper with the \c vector.
- *
- * @param  context  Which context the action should be created for.
- * @return The built action.
- */
-SPAction *ZoomVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -1711,71 +1678,6 @@ void TextVerb::perform(SPAction *action, void */*data*/)
     (void)repr;
 }
 
-/**
- * Decode the verb code and take appropriate action.
- */
-void ZoomVerb::perform(SPAction *action, void *data)
-{
-    g_return_if_fail(ensure_desktop_valid(action));
-    SPDesktop *dt = sp_action_get_desktop(action);
-    SPDocument *doc = dt->getDocument();
-
-    switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_TOGGLE_COMMAND_PALETTE:
-            dt->toggleCommandPalette();
-            break;
-        case SP_VERB_TOGGLE_RULERS:
-            dt->toggleRulers();
-            break;
-        case SP_VERB_TOGGLE_SCROLLBARS:
-            dt->toggleScrollbars();
-            break;
-        case SP_VERB_TOGGLE_COMMANDS_TOOLBAR:
-            dt->toggleToolbar("commands");
-            break;
-        case SP_VERB_TOGGLE_SNAP_TOOLBAR:
-            dt->toggleToolbar("snaptoolbox");
-            break;
-        case SP_VERB_TOGGLE_TOOL_TOOLBAR:
-            dt->toggleToolbar("toppanel");
-            break;
-        case SP_VERB_TOGGLE_TOOLBOX:
-            dt->toggleToolbar("toolbox");
-            break;
-        case SP_VERB_TOGGLE_PALETTE:
-            dt->toggleToolbar("panels");
-            break;
-        case SP_VERB_TOGGLE_STATUSBAR:
-            dt->toggleToolbar("statusbar");
-            break;
-        case SP_VERB_TOGGLE_GUIDES:
-            sp_namedview_toggle_guides(doc, dt->namedview);
-            break;
-        case SP_VERB_TOGGLE_GRID:
-            dt->toggleGrids();
-            break;
-        case SP_VERB_FULLSCREEN:
-            dt->fullscreen();
-            break;
-        case SP_VERB_FULLSCREENFOCUS:
-            dt->fullscreen();
-            dt->focusMode(!dt->is_fullscreen());
-            break;
-        case SP_VERB_FOCUSTOGGLE:
-            dt->focusMode(!dt->is_focusMode());
-            break;
-        case SP_VERB_VIEW_NEW:
-            sp_ui_new_view();
-            break;
-
-        default:
-            break;
-    }
-    // this is not needed canvas is updated correctly in all
-    // dt->updateNow();
-
-} // end of sp_verb_action_zoom_perform()
-
 
 // *********** Effect Last **********
 
@@ -2374,41 +2276,6 @@ Verb *Verb::_base_verbs[] = {
                     INKSCAPE_ICON("draw-eraser")),
     new ContextVerb(SP_VERB_CONTEXT_LPETOOL, "ToolLPETool", NC_("ContextVerb", "LPE Tool"),
                     N_("Do geometric constructions"), "draw-geometry"),
-
-    // Zoom
-
-    // WHY ARE THE FOLLOWING ZoomVerbs???
-
-    // View
-    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("_Command Palette"), N_("Show or hide the on-canvas command palette"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"),
-                 N_("Show or hide the canvas scrollbars"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Page _Grid"), N_("Show or hide the page grid"),
-                 INKSCAPE_ICON("show-grid")),
-    new ZoomVerb(SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"),
-                 N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
-    new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"),
-                 N_("Show or hide the Commands bar (under the menu)"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_SNAP_TOOLBAR, "ToggleSnapToolbar", N_("Sn_ap Controls Bar"),
-                 N_("Show or hide the snapping controls"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_TOOL_TOOLBAR, "ToggleToolToolbar", N_("T_ool Controls Bar"),
-                 N_("Show or hide the Tool Controls bar"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_TOOLBOX, "ToggleToolbox", N_("_Toolbox"),
-                 N_("Show or hide the main toolbox (on the left)"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_PALETTE, "TogglePalette", N_("_Palette"), N_("Show or hide the color palette"),
-                 nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_STATUSBAR, "ToggleStatusbar", N_("_Statusbar"),
-                 N_("Show or hide the statusbar (at the bottom of the window)"), nullptr),
-
-    new ZoomVerb(SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Stretch this document window to full screen"),
-                 INKSCAPE_ICON("view-fullscreen")),
-    new ZoomVerb(SP_VERB_FULLSCREENFOCUS, "FullScreenFocus", N_("Fullscreen & Focus Mode"),
-                 N_("Stretch this document window to full screen"), INKSCAPE_ICON("view-fullscreen")),
-    new ZoomVerb(SP_VERB_FOCUSTOGGLE, "FocusToggle", N_("Toggle _Focus Mode"),
-                 N_("Remove excess toolbars to focus on drawing"), nullptr),
-    new ZoomVerb(SP_VERB_VIEW_NEW, "ViewNew", N_("Duplic_ate Window"), N_("Open a new window with the same document"),
-                 INKSCAPE_ICON("window-new")),
 
     // Effect -- renamed Extension
     new EffectLastVerb(SP_VERB_EFFECT_LAST, "EffectLast", N_("Previous Exte_nsion"),
