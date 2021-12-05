@@ -1555,87 +1555,7 @@ void ContextVerb::perform(SPAction *action, void *data)
 
     verb = (sp_verb_t)GPOINTER_TO_INT((gpointer)data);
 
-    /** \todo !!! hopefully this can go away soon and actions can look after
-     * themselves
-     */
-    for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_LPETOOL; vidx++)
-    {
-        SPAction *tool_action= get((sp_verb_t)vidx)->get_action(action->context);
-        if (tool_action) {
-            sp_action_set_active(tool_action, vidx == (int)verb);
-        }
-    }
-
     switch (verb) {
-        case SP_VERB_CONTEXT_SELECT:
-            break;
-        case SP_VERB_CONTEXT_NODE:
-            set_active_tool(dt, "Node");
-            break;
-        case SP_VERB_CONTEXT_MARKER:
-            set_active_tool(dt, "Marker");
-            break;
-        case SP_VERB_CONTEXT_TWEAK:
-            set_active_tool(dt, "Tweak");
-            break;
-        case SP_VERB_CONTEXT_SPRAY:
-            set_active_tool(dt, "Spray");
-            break;
-        case SP_VERB_CONTEXT_RECT:
-            set_active_tool(dt, "Rect");
-            break;
-        case SP_VERB_CONTEXT_3DBOX:
-            set_active_tool(dt, "3DBox");
-            break;
-        case SP_VERB_CONTEXT_ARC:
-            set_active_tool(dt, "Arc");
-            break;
-        case SP_VERB_CONTEXT_STAR:
-            set_active_tool(dt, "Star");
-            break;
-        case SP_VERB_CONTEXT_SPIRAL:
-            set_active_tool(dt, "Spiral");
-            break;
-        case SP_VERB_CONTEXT_PENCIL:
-            set_active_tool(dt, "Pencil");
-            break;
-        case SP_VERB_CONTEXT_PEN:
-            set_active_tool(dt, "Pen");
-            break;
-        case SP_VERB_CONTEXT_CALLIGRAPHIC:
-            set_active_tool(dt, "Calligraphic");
-            break;
-        case SP_VERB_CONTEXT_TEXT:
-            set_active_tool(dt, "Text");
-            break;
-        case SP_VERB_CONTEXT_GRADIENT:
-            set_active_tool(dt, "Gradient");
-            break;
-        case SP_VERB_CONTEXT_MESH:
-            set_active_tool(dt, "Mesh");
-            break;
-        case SP_VERB_CONTEXT_ZOOM:
-            set_active_tool(dt, "Zoom");
-            break;
-        case SP_VERB_CONTEXT_MEASURE:
-            set_active_tool(dt, "Measure");
-            break;
-        case SP_VERB_CONTEXT_DROPPER:
-            Inkscape::UI::Tools::sp_toggle_dropper(dt); // Functionality defined in event-context.cpp
-            break;
-        case SP_VERB_CONTEXT_CONNECTOR:
-            set_active_tool(dt, "Connector");
-            break;
-        case SP_VERB_CONTEXT_PAINTBUCKET:
-            set_active_tool(dt, "PaintBucket");
-            break;
-        case SP_VERB_CONTEXT_ERASER:
-            set_active_tool(dt, "Eraser");
-            break;
-        case SP_VERB_CONTEXT_LPETOOL:
-            set_active_tool(dt, "LpeTool");
-            break;
-
         case SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR:
         case SP_VERB_ALIGN_HORIZONTAL_LEFT:
         case SP_VERB_ALIGN_HORIZONTAL_CENTER:
@@ -2227,55 +2147,6 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("path-clip-edit")),
     new ObjectVerb(SP_VERB_OBJECT_UNSET_CLIPPATH, "ObjectUnSetClipPath", N_("_Release"),
                    N_("Remove clipping path from selection"), nullptr),
-    // Tools
-    new ContextVerb(SP_VERB_CONTEXT_SELECT, "ToolSelector", NC_("ContextVerb", "Select"),
-                    N_("Select and transform objects"), INKSCAPE_ICON("tool-pointer")),
-    new ContextVerb(SP_VERB_CONTEXT_NODE, "ToolNode", NC_("ContextVerb", "Node Edit"), N_("Edit paths by nodes"),
-                    INKSCAPE_ICON("tool-node-editor")),
-    new ContextVerb(SP_VERB_CONTEXT_MARKER, "ToolMarker", NC_("ContextVerb", "Marker"), N_("Edit markers"),
-                    INKSCAPE_ICON("tool-pointer")),
-    new ContextVerb(SP_VERB_CONTEXT_TWEAK, "ToolTweak", NC_("ContextVerb", "Tweak"),
-                    N_("Tweak objects by sculpting or painting"), INKSCAPE_ICON("tool-tweak")),
-    new ContextVerb(SP_VERB_CONTEXT_SPRAY, "ToolSpray", NC_("ContextVerb", "Spray"),
-                    N_("Spray objects by sculpting or painting"), INKSCAPE_ICON("tool-spray")),
-    new ContextVerb(SP_VERB_CONTEXT_RECT, "ToolRect", NC_("ContextVerb", "Rectangle"),
-                    N_("Create rectangles and squares"), INKSCAPE_ICON("draw-rectangle")),
-    new ContextVerb(SP_VERB_CONTEXT_3DBOX, "Tool3DBox", NC_("ContextVerb", "3D Box"), N_("Create 3D boxes"),
-                    INKSCAPE_ICON("draw-cuboid")),
-    new ContextVerb(SP_VERB_CONTEXT_ARC, "ToolArc", NC_("ContextVerb", "Ellipse"),
-                    N_("Create circles, ellipses, and arcs"), INKSCAPE_ICON("draw-ellipse")),
-    new ContextVerb(SP_VERB_CONTEXT_STAR, "ToolStar", NC_("ContextVerb", "Star"), N_("Create stars and polygons"),
-                    INKSCAPE_ICON("draw-polygon-star")),
-    new ContextVerb(SP_VERB_CONTEXT_SPIRAL, "ToolSpiral", NC_("ContextVerb", "Spiral"), N_("Create spirals"),
-                    INKSCAPE_ICON("draw-spiral")),
-    new ContextVerb(SP_VERB_CONTEXT_PENCIL, "ToolPencil", NC_("ContextVerb", "Pencil"), N_("Draw freehand lines"),
-                    INKSCAPE_ICON("draw-freehand")),
-    new ContextVerb(SP_VERB_CONTEXT_PEN, "ToolPen", NC_("ContextVerb", "Pen"),
-                    N_("Draw Bezier curves and straight lines"), INKSCAPE_ICON("draw-path")),
-    new ContextVerb(SP_VERB_CONTEXT_CALLIGRAPHIC, "ToolCalligraphic", NC_("ContextVerb", "Calligraphy"),
-                    N_("Draw calligraphic or brush strokes"), INKSCAPE_ICON("draw-calligraphic")),
-    new ContextVerb(SP_VERB_CONTEXT_TEXT, "ToolText", NC_("ContextVerb", "Text"), N_("Create and edit text objects"),
-                    INKSCAPE_ICON("draw-text")),
-    new ContextVerb(SP_VERB_CONTEXT_GRADIENT, "ToolGradient", NC_("ContextVerb", "Gradient"),
-                    N_("Create and edit gradients"), INKSCAPE_ICON("color-gradient")),
-    new ContextVerb(SP_VERB_CONTEXT_MESH, "ToolMesh", NC_("ContextVerb", "Mesh"), N_("Create and edit meshes"),
-                    INKSCAPE_ICON("mesh-gradient")),
-    new ContextVerb(SP_VERB_CONTEXT_ZOOM, "ToolZoom", NC_("ContextVerb", "Zoom"), N_("Zoom in or out"),
-                    INKSCAPE_ICON("zoom")),
-    new ContextVerb(SP_VERB_CONTEXT_MEASURE, "ToolMeasure", NC_("ContextVerb", "Measure"), N_("Measurement tool"),
-                    INKSCAPE_ICON("tool-measure")),
-    new ContextVerb(SP_VERB_CONTEXT_DROPPER, "ToolDropper", NC_("ContextVerb", "Dropper"), N_("Pick colors from image"),
-                    INKSCAPE_ICON("color-picker")),
-    new ContextVerb(SP_VERB_CONTEXT_CONNECTOR, "ToolConnector", NC_("ContextVerb", "Connector"),
-                    N_("Create diagram connectors"), INKSCAPE_ICON("draw-connector")),
-    new ContextVerb(SP_VERB_CONTEXT_PAINTBUCKET, "ToolPaintBucket", NC_("ContextVerb", "Paint Bucket"),
-                    N_("Fill bounded areas"), INKSCAPE_ICON("color-fill")),
-    new ContextVerb(SP_VERB_CONTEXT_LPE, "ToolLPE", NC_("ContextVerb", "LPE Edit"), N_("Edit Path Effect parameters"),
-                    nullptr),
-    new ContextVerb(SP_VERB_CONTEXT_ERASER, "ToolEraser", NC_("ContextVerb", "Eraser"), N_("Erase existing paths"),
-                    INKSCAPE_ICON("draw-eraser")),
-    new ContextVerb(SP_VERB_CONTEXT_LPETOOL, "ToolLPETool", NC_("ContextVerb", "LPE Tool"),
-                    N_("Do geometric constructions"), "draw-geometry"),
 
     // Effect -- renamed Extension
     new EffectLastVerb(SP_VERB_EFFECT_LAST, "EffectLast", N_("Previous Exte_nsion"),

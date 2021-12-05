@@ -39,8 +39,8 @@
 #include "inkscape.h"
 #include "message-context.h"
 #include "path-prefix.h"
-#include "verbs.h"
 
+#include "actions/actions-tools.h" // Invoke gradient tool
 #include "display/cairo-utils.h"
 #include "extension/db.h"
 #include "helper/action.h"
@@ -152,15 +152,9 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
             }
         }
 
-        if (!shown) {
+        if (!shown) { // WHEN DOES THIS HAPPEN?
             // Invoke the gradient tool
-            auto verb = Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT);
-            if (verb) {
-                auto action = verb->get_action(Inkscape::ActionContext(desktop));
-                if (action) {
-                    sp_action_perform(action, nullptr);
-                }
-            }
+            set_active_tool(desktop, "Gradient");
         }
     }
 }

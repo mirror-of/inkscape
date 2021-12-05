@@ -46,7 +46,6 @@ namespace Widget {
 
 class FillRuleRadioButton;
 class StyleToggleButton;
-class GradientSelector;
 class GradientEditor;
 
 /**
