@@ -538,6 +538,10 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
             size = 1;
             break;
 
+        case CANVAS_ITEM_CTRL_TYPE_ANCHOR: // vanishing point for 3D box and anchor for pencil
+            size = size_index * 2 + 1;
+            break;
+
         case CANVAS_ITEM_CTRL_TYPE_DEFAULT:
             size = size_index * 2 + 1;
             break;
