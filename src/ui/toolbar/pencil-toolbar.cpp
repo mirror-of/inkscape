@@ -60,18 +60,15 @@ namespace Toolbar {
 PencilToolbar::PencilToolbar(SPDesktop *desktop,
                              bool       pencil_mode)
     : Toolbar(desktop),
-    _repr(nullptr),
-    _freeze(false),
-    _flatten_simplify(nullptr),
-    _simplify(nullptr)
+    _tool_is_pencil(pencil_mode)
 {
     auto prefs = Inkscape::Preferences::get();
 
-    add_freehand_mode_toggle(pencil_mode);
+    add_freehand_mode_toggle();
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    if (pencil_mode) {
+    if (_tool_is_pencil) {
         /* Use pressure */
         {
             _pressure_item = add_toggle_button(_("Use pressure input"), _("Use pressure input"));
@@ -106,7 +103,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         }
 
         /* powerstoke */
-        add_powerstroke_cap(pencil_mode);
+        add_powerstroke_cap();
 
         add(*Gtk::manage(new Gtk::SeparatorToolItem()));
 
@@ -147,18 +144,18 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
     }
 
     /* advanced shape options */
-    add_advanced_shape_options(pencil_mode);
+    add_advanced_shape_options();
 
     show_all();
 
     // Elements must be hidden after show_all() is called
-    guint freehandMode = prefs->getInt(( pencil_mode ?
+    guint freehandMode = prefs->getInt(( _tool_is_pencil ?
                                          "/tools/freehand/pencil/freehand-mode" :
                                          "/tools/freehand/pen/freehand-mode" ), 0);
     if (freehandMode != 1 && freehandMode != 2) {
         _flatten_spiro_bspline->set_visible(false);
     }
-    if (pencil_mode) {
+    if (_tool_is_pencil) {
         use_pencil_pressure();
     }
 }
@@ -211,12 +208,11 @@ PencilToolbar::mode_changed(int mode)
 Glib::ustring const
 PencilToolbar::freehand_tool_name()
 {
-    auto *pt = dynamic_cast<Inkscape::UI::Tools::PencilTool *>(_desktop->event_context);
-    return ( pt ? "/tools/freehand/pencil" : "/tools/freehand/pen");
+    return _tool_is_pencil ? "/tools/freehand/pencil" : "/tools/freehand/pen";
 }
 
 void
-PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
+PencilToolbar::add_freehand_mode_toggle()
 {
     auto label = Gtk::manage(new UI::Widget::LabelToolItem(_("Mode:")));
     label->set_tooltip_text(_("Mode of new lines drawn by this tool"));
@@ -238,7 +234,7 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
     bspline_mode_btn->set_icon_name(INKSCAPE_ICON("path-mode-bspline"));
     _mode_buttons.push_back(bspline_mode_btn);
 
-    if (!tool_is_pencil) {
+    if (!_tool_is_pencil) {
         auto zigzag_mode_btn = Gtk::manage(new Gtk::RadioToolButton(mode_group, _("Zigzag")));
         zigzag_mode_btn->set_tooltip_text(_("Create a sequence of straight line segments"));
         zigzag_mode_btn->set_icon_name(INKSCAPE_ICON("path-mode-polyline"));
@@ -268,7 +264,7 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
     _flatten_spiro_bspline->signal_clicked().connect(sigc::mem_fun(*this, &PencilToolbar::flatten_spiro_bspline));
     add(*_flatten_spiro_bspline);
 
-    guint freehandMode = prefs->getInt(( tool_is_pencil ?
+    guint freehandMode = prefs->getInt(( _tool_is_pencil ?
                                          "/tools/freehand/pencil/freehand-mode" :
                                          "/tools/freehand/pen/freehand-mode" ), 0);
     // freehandMode range is (0,5] for the pen tool, (0,3] for the pencil tool
@@ -279,6 +275,7 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
 void
 PencilToolbar::minpressure_value_changed()
 {
+    assert(_tool_is_pencil);
     // quit if run by the attr_changed listener
     if (_freeze) {
         return;
@@ -291,6 +288,7 @@ PencilToolbar::minpressure_value_changed()
 void
 PencilToolbar::maxpressure_value_changed()
 {
+    assert(_tool_is_pencil);
     // quit if run by the attr_changed listener
     if (_freeze) {
         return;
@@ -364,7 +362,7 @@ PencilToolbar::shapewidth_value_changed()
 
 void
 PencilToolbar::use_pencil_pressure() {
-    // assumes called by pencil toolbar (and all these widgets exist)
+    assert(_tool_is_pencil);
     bool pressure = _pressure_item->get_active();
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/freehand/pencil/pressure", pressure);
@@ -401,7 +399,7 @@ PencilToolbar::use_pencil_pressure() {
 }
 
 void
-PencilToolbar::add_advanced_shape_options(bool tool_is_pencil)
+PencilToolbar::add_advanced_shape_options()
 {
     /*advanced shape options */
     UI::Widget::ComboToolItemColumns columns;
@@ -428,7 +426,7 @@ PencilToolbar::add_advanced_shape_options(bool tool_is_pencil)
     _shape_item->use_group_label(true);
 
     auto prefs = Inkscape::Preferences::get();
-    int shape = prefs->getInt((tool_is_pencil ?
+    int shape = prefs->getInt((_tool_is_pencil ?
                                "/tools/freehand/pencil/shape" :
                                "/tools/freehand/pen/shape" ), 0);
     _shape_item->set_active(shape);
@@ -484,7 +482,7 @@ PencilToolbar::update_width_value(int shape) {
     _shapescale_adj->set_value(width);
 }
 
-void PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
+void PencilToolbar::add_powerstroke_cap()
 {
     /* Powerstroke cap */
     UI::Widget::ComboToolItemColumns columns;
@@ -622,6 +620,7 @@ PencilToolbar::create_pen(SPDesktop *desktop)
 void
 PencilToolbar::tolerance_value_changed()
 {
+    assert(_tool_is_pencil);
     // quit if run by the attr_changed listener
     if (_freeze) {
         return;
