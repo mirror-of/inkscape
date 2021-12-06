@@ -200,8 +200,6 @@ void LayerSelector::_hideLayer()
 
 void LayerSelector::_layerChoose()
 {
-    auto prefs = Inkscape::Preferences::get();
-    prefs->setBool("/dialogs/objects/layers_only", true);
     _desktop->getContainer()->new_dialog("Objects");
 }
 
