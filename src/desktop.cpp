@@ -441,7 +441,6 @@ SPDesktop::change_document (SPDocument *theDocument)
     }
 
     _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
-    _document_replaced_signal.emit (this, theDocument);
 }
 
 /**
