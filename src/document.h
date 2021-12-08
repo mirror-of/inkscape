@@ -166,7 +166,7 @@ private:
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
     SPObject *_activexmltree;
 
-  public:
+public:
     void importDefs(SPDocument *source);
 
     unsigned int vacuumDocument();
@@ -252,6 +252,7 @@ private:
     std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element) const;
     std::vector<SPObject *> getObjectsBySelector(Glib::ustring const &selector) const;
 
+    void set_reference_document(SPDocument* document);
 
     // Find items by geometry --------------------
     void build_flat_item_list(unsigned int dkey, SPGroup *group, gboolean into_groups) const;
@@ -413,6 +414,8 @@ private:
     sigc::signal<void> destroySignal;
 
     mutable Geom::Affine _doc2dt;
+
+    SPDocument* _ref_document = nullptr;
 
 public:
     /// Document to desktop coordinate transformation.

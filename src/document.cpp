@@ -1038,6 +1038,9 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
         return (rv->second);
     } else if (_parent_document) {
         return _parent_document->getObjectById(id);
+    }
+    else if (_ref_document) {
+        return _ref_document->getObjectById(id);
     } else {
         return nullptr;
     }
@@ -2105,6 +2108,9 @@ void SPDocument::emitResizedSignal(gdouble width, gdouble height)
     this->resized_signal.emit(width, height);
 }
 
+void SPDocument::set_reference_document(SPDocument* document) {
+    _ref_document = document;
+}
 
 /*
   Local Variables:

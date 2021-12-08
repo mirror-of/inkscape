@@ -750,6 +750,12 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
         return g_bad_marker;
     }
 
+    _sandbox->set_reference_document(nullptr);
+    SPObject *oldmarker = _sandbox->getObjectById("sample");
+    if (oldmarker) {
+        oldmarker->deleteObject(false);
+    }
+    _sandbox->set_reference_document(marker->document);
     // Create a copy repr of the marker with id="sample"
     Inkscape::XML::Document *xml_doc = _sandbox->getReprDoc();
     Inkscape::XML::Node *mrepr = marker->getRepr()->duplicate(xml_doc);
@@ -757,10 +763,6 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
 
     // Replace the old sample in the sandbox by the new one
     Inkscape::XML::Node *defsrepr = _sandbox->getObjectById("defs")->getRepr();
-    SPObject *oldmarker = _sandbox->getObjectById("sample");
-    if (oldmarker) {
-        oldmarker->deleteObject(false);
-    }
 
     // TODO - This causes a SIGTRAP on windows
     defsrepr->appendChild(mrepr);
@@ -847,12 +849,16 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
 
     if (!dbox) {
         g_warning("no dbox");
+        _sandbox->set_reference_document(nullptr);
         return g_bad_marker;
     }
 
     /* Update to renderable state */
     const double device_scale = get_scale_factor();
     auto surface = render_surface(drawing, scale, *dbox, pixel_size, device_scale, checkerboard ? &_background_color : nullptr, no_clip);
+
+    _sandbox->set_reference_document(nullptr);
+
     cairo_surface_set_device_scale(surface, device_scale, device_scale);
     return Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(surface, false));
 }
