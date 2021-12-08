@@ -294,10 +294,10 @@ ink_drag_data_received(GtkWidget *widget,
             Inkscape::XML::Node *repr = rnewdoc->root();
             gchar const *style = repr->attribute("style");
 
-            Inkscape::XML::Node *newgroup = rnewdoc->createElement("svg:g");
-            newgroup->setAttribute("style", style);
 
             Inkscape::XML::Document * xml_doc =  doc->getReprDoc();
+            Inkscape::XML::Node *newgroup = xml_doc->createElement("svg:g");
+            newgroup->setAttribute("style", style);
             for (Inkscape::XML::Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
                 Inkscape::XML::Node *newchild = child->duplicate(xml_doc);
                 newgroup->appendChild(newchild);
