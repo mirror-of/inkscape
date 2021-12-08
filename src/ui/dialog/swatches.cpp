@@ -752,11 +752,11 @@ SwatchesPanel::SwatchesPanel(gchar const *prefsPath)
                 } else {
                     std::vector<SwatchPage*> pages = _getSwatchSets();
                     for (auto & page : pages) {
+                        index++;
                         if ( page->_name == targetName ) {
                             first = page;
                             break;
                         }
-                        index++;
                     }
                 }
             }
