@@ -55,30 +55,31 @@ class ComboToolItem;
 namespace Toolbar {
 class PencilToolbar : public Toolbar {
 private:
+    bool const _tool_is_pencil;
     std::vector<Gtk::RadioToolButton *> _mode_buttons;
 
-    Gtk::ToggleToolButton *_pressure_item;
-    UI::Widget::SpinButtonToolItem *_minpressure;
-    UI::Widget::SpinButtonToolItem *_maxpressure;
-    UI::Widget::SpinButtonToolItem *_shapescale;
+    Gtk::ToggleToolButton *_pressure_item = nullptr;
+    UI::Widget::SpinButtonToolItem *_minpressure = nullptr;
+    UI::Widget::SpinButtonToolItem *_maxpressure = nullptr;
+    UI::Widget::SpinButtonToolItem *_shapescale = nullptr;
 
-    XML::Node *_repr;
-    Gtk::ToolButton *_flatten_spiro_bspline;
-    Gtk::ToolButton *_flatten_simplify;
+    XML::Node *_repr = nullptr;
+    Gtk::ToolButton *_flatten_spiro_bspline = nullptr;
+    Gtk::ToolButton *_flatten_simplify = nullptr;
 
-    UI::Widget::ComboToolItem *_shape_item;
-    UI::Widget::ComboToolItem *_cap_item;
+    UI::Widget::ComboToolItem *_shape_item = nullptr;
+    UI::Widget::ComboToolItem *_cap_item = nullptr;
 
-    Gtk::ToggleToolButton *_simplify;
+    Gtk::ToggleToolButton *_simplify = nullptr;
 
-    bool _freeze;
+    bool _freeze = false;
 
     Glib::RefPtr<Gtk::Adjustment> _minpressure_adj;
     Glib::RefPtr<Gtk::Adjustment> _maxpressure_adj;
     Glib::RefPtr<Gtk::Adjustment> _tolerance_adj;
     Glib::RefPtr<Gtk::Adjustment> _shapescale_adj;
 
-    void add_freehand_mode_toggle(bool tool_is_pencil);
+    void add_freehand_mode_toggle();
     void mode_changed(int mode);
     Glib::ustring const freehand_tool_name();
     void minpressure_value_changed();
@@ -86,8 +87,8 @@ private:
     void shapewidth_value_changed();
     void use_pencil_pressure();
     void tolerance_value_changed();
-    void add_advanced_shape_options(bool tool_is_pencil);
-    void add_powerstroke_cap(bool tool_is_pencil);
+    void add_advanced_shape_options();
+    void add_powerstroke_cap();
     void change_shape(int shape);
     void update_width_value(int shape);
     void change_cap(int cap);
