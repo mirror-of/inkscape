@@ -41,9 +41,10 @@ class MyDropZone
     , public Gtk::EventBox
 {
 public:
-    MyDropZone(Gtk::Orientation orientation, int size);
+    MyDropZone(Gtk::Orientation orientation);
     ~MyDropZone() override = default;
 private:
+    void set_size(int size);
     bool _active = false;
 };
 

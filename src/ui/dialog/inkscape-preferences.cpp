@@ -1936,10 +1936,6 @@ void InkscapePreferences::initPageUI()
                             _("Whether dialog windows are to be hidden in the window manager taskbar"));
 #endif
 
-    auto reduce_zone = Gtk::make_managed<PrefCheckButton>();
-    reduce_zone->init(_("Reduce size of the docking zones"), "/options/dockingzone/value", true);
-    _page_windows.add_line(true, "", *reduce_zone, "", _("Reduce size of the drag and drop docking zones around docked dialogs"), false, reset_icon()); 
-
     _page_windows.add_group_header( _("Miscellaneous"));
 
     _page_windows.add_line( true, "", _win_show_boot, "",
