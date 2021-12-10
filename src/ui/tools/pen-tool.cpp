@@ -1199,7 +1199,10 @@ void PenTool::_resetColors() {
     }
     this->sa = nullptr;
     this->ea = nullptr;
-    this->sa_overwrited->reset();
+
+    if (this->sa_overwrited) {
+        this->sa_overwrited->reset();
+    }
 
     this->npoints = 0;
     this->red_curve_is_valid = false;
