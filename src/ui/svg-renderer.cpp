@@ -16,6 +16,7 @@
 #include "object/sp-root.h"
 #include "display/cairo-utils.h"
 #include "helper/pixbuf-ops.h"
+#include "util/units.h"
 
 namespace Inkscape {
 

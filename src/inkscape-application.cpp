@@ -191,7 +191,6 @@ InkscapeApplication::document_swap(InkscapeWindow* window, SPDocument* document)
     SPDesktop* desktop = window->get_desktop();
     SPDocument* old_document = window->get_document();
     desktop->change_document(document);
-    document->emitResizedSignal(document->getWidth().value("px"), document->getHeight().value("px"));
 
     // We need to move window from the old document to the new document.
 
@@ -614,7 +613,6 @@ InkscapeApplication::InkscapeApplication()
     add_actions_transform(this);            // actions for transforming selected objects
     add_actions_window(this);               // actions for windows
 
-
     // ====================== Command Line ======================
 
     // Will automatically handle character conversions.
@@ -794,9 +792,6 @@ InkscapeApplication::create_window(SPDocument *document, bool replace)
                 document_close (old_document);
             }
         }
-
-        document->emitResizedSignal(document->getWidth().value("px"), document->getHeight().value("px"));
-
     } else {
         window = window_open (document);
     }

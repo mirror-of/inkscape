@@ -25,6 +25,11 @@ enum SnapSourceType { // When adding source types here, then also update Inkscap
     SNAPSOURCE_BBOX_CORNER,
     SNAPSOURCE_BBOX_MIDPOINT,
     SNAPSOURCE_BBOX_EDGE_MIDPOINT,
+
+    // Allow PAGES to be moved as BBOX (enabled alignment snapping)
+    SNAPSOURCE_PAGE_CENTER,
+    SNAPSOURCE_PAGE_CORNER,
+
     //-------------------------------------------------------------------
     // For the same reason, nodes will not snap to bbox points
     SNAPSOURCE_NODE_CATEGORY = 32, // will be used as a flag and must therefore be a power of two
@@ -97,6 +102,7 @@ enum SnapTargetType {
     SNAPTARGET_GUIDE_PERPENDICULAR,
     SNAPTARGET_GRID_GUIDE_INTERSECTION,
     SNAPTARGET_PAGE_BORDER,
+    SNAPTARGET_PAGE_CENTER,
     SNAPTARGET_PAGE_CORNER,
     //-------------------------------------------------------------------
     SNAPTARGET_OTHERS_CATEGORY = 128, // will be used as a flag and must therefore be a power of two

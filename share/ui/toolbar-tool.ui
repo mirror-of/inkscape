@@ -112,6 +112,11 @@
     <property name="can-focus">False</property>
     <property name="icon-name">draw-freehand</property>
   </object>
+  <object class="GtkImage" id="image-pages">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">tool-pages</property>
+  </object>
   <object class="GtkFlowBox" id="tool-toolbar">
     <property name="name">tool-toolbar</property>
     <property name="visible">True</property>
@@ -689,6 +694,29 @@
             <property name="action-name">win.tool-switch</property>
             <property name="action-target">'Measure'</property>
             <property name="image">image22</property>
+            <property name="relief">none</property>
+            <style>
+              <class name="square-button"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkFlowBoxChild">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <child>
+          <object class="GtkToggleButton">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="tooltip-text" translatable="yes">Edit and Create Pages</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="action-name">win.tool-switch</property>
+            <property name="action-target">'Pages'</property>
+            <property name="image">image-pages</property>
             <property name="relief">none</property>
             <style>
               <class name="square-button"/>

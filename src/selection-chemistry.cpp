@@ -4358,8 +4358,7 @@ fit_canvas_to_drawing(SPDesktop *desktop)
 
 /**
  * Fits canvas to selection or drawing with margins from <sodipodi:namedview>
- * "fit-margin-..." attributes.  See SPDocument::fitToRect and
- * ui/dialog/page-sizer.
+ * "fit-margin-..." attributes.  See SPDocument::fitToRect
  */
 void fit_canvas_to_selection_or_drawing(SPDesktop *desktop) {
     g_return_if_fail(desktop != nullptr);

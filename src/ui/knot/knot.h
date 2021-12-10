@@ -18,6 +18,8 @@
 #include <2geom/point.h>
 #include <sigc++/sigc++.h>
 #include <glibmm/ustring.h>
+#include <glibmm/refptr.h>
+#include <gdkmm/cursor.h>
 
 #include "knot-enums.h"
 #include "display/control/canvas-item-enums.h"
@@ -26,7 +28,6 @@
 class SPDesktop;
 class SPItem;
 
-typedef struct _GdkCursor GdkCursor;
 typedef union _GdkEvent GdkEvent;
 typedef unsigned int guint32;
 
@@ -85,12 +86,9 @@ public:
     guint32 fill[SP_KNOT_VISIBLE_STATES];
     guint32 stroke[SP_KNOT_VISIBLE_STATES];
     unsigned char *image[SP_KNOT_VISIBLE_STATES];
+    Glib::RefPtr<Gdk::Cursor> _cursors[SP_KNOT_VISIBLE_STATES];
 
-    GdkCursor *cursor[SP_KNOT_VISIBLE_STATES];
-
-    GdkCursor *saved_cursor = nullptr;
     void* pixbuf            = nullptr;
-
     char *tip               = nullptr;
 
     sigc::connection _event_connection;
@@ -122,7 +120,7 @@ public:
     void setStroke(guint32 normal, guint32 mouseover, guint32 dragging, guint32 selected);
     void setImage(unsigned char* normal, unsigned char* mouseover, unsigned char* dragging, unsigned char* selected);
 
-    void setCursor(GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragging, GdkCursor* selected);
+    void setCursor(SPKnotStateType type, Glib::RefPtr<Gdk::Cursor> cursor);
 
     /**
      * Show knot on its canvas.

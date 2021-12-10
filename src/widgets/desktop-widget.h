@@ -53,6 +53,7 @@ namespace Widget {
   class Canvas;
   class CanvasGrid;
   class LayerSelector;
+  class PageSelector;
   class SelectedStyle;
   class SpinButton;
   class Ruler;
@@ -122,18 +123,19 @@ private:
 
     Gtk::Grid *_coord_status;
 
+    Gtk::Label *_select_status;
     Gtk::Label *_coord_status_x;
     Gtk::Label *_coord_status_y;
+
     Gtk::Box* _zoom_status_box;
     Inkscape::UI::Widget::SpinButton *_zoom_status;
     sigc::connection _zoom_status_input_connection;
     sigc::connection _zoom_status_output_connection;
     sigc::connection _zoom_status_value_changed_connection;
     sigc::connection _zoom_status_populate_popup_connection;
-    Gtk::Label *_select_status;
+
     Gtk::Box* _rotation_status_box;
     Inkscape::UI::Widget::SpinButton *_rotation_status = nullptr;
-
     sigc::connection _rotation_status_input_connection;
     sigc::connection _rotation_status_output_connection;
     sigc::connection _rotation_status_value_changed_connection;
@@ -157,6 +159,8 @@ private:
     std::vector<sigc::connection> _connections;
     Inkscape::PrefObserver _statusbar_preferences_observer;
     Inkscape::UI::Widget::LayerSelector* _layer_selector;
+    Inkscape::UI::Widget::PageSelector* _page_selector;
+
 
 public:
     EgeColorProfTracker* _tracker;

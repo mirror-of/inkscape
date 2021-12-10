@@ -47,7 +47,8 @@
 #include "sp-use.h"
 
 #include "style.h"
-
+#include "snap-preferences.h"
+#include "snap-candidate.h"
 
 #include "util/find-last-if.h"
 

@@ -19,9 +19,12 @@
 #include "snap.h"
 #include "document.h"
 #include "util/units.h"
+#include "svg/svg-bool.h"
 #include <vector>
 
 namespace Inkscape {
+    class CanvasPage;
+    class PageManager;
     class CanvasGrid;
     namespace Util {
         class Unit;
@@ -42,12 +45,13 @@ public:
     ~SPNamedView() override;
 
     unsigned int editable : 1;
-    unsigned int showguides : 1;
-    unsigned int lockguides : 1;
-    unsigned int pagecheckerboard : 1;
-    unsigned int showborder : 1;
-    unsigned int showpageshadow : 1;
-    unsigned int borderlayer : 2;
+
+    SVGBool showguides;
+    SVGBool lockguides;
+    SVGBool grids_visible;
+
+    guint32 desk_color;
+    SVGBool desk_checkerboard;
 
     double zoom;
     double rotation; // Document rotation in degrees (positive is clockwise)
@@ -61,7 +65,6 @@ public:
 
     SnapManager snap_manager;
     std::vector<Inkscape::CanvasGrid *> grids;
-    bool grids_visible;
 
     Inkscape::Util::Unit const *display_units;   // Units used for the UI (*not* the same as units of SVG coordinates)
     Inkscape::Util::Unit const *page_size_units; // Only used in "Custom size" part of Document Properties dialog 
@@ -72,10 +75,6 @@ public:
 
     guint32 guidecolor;
     guint32 guidehicolor;
-    guint32 bordercolor;
-    guint32 pagecolor;
-    guint32 blackoutcolor;
-    guint32 pageshadow;
 
     std::vector<SPGuide *> guides;
     std::vector<SPDesktop *> views;
@@ -99,20 +98,30 @@ public:
     void setGuides(bool v);
     bool getGuides();
     void lockGuides();
+    void updateViewPort();
+
+    Inkscape::PageManager *getPageManager() const { return _page_manager; }
 
 private:
     double getMarginLength(gchar const * const key,Inkscape::Util::Unit const * const margin_units,Inkscape::Util::Unit const * const return_units,double const width,double const height,bool const use_width);
     friend class SPDocument;
 
+    Inkscape::PageManager *_page_manager = nullptr;
+    Inkscape::CanvasPage *_viewport = nullptr;
+
 protected:
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
 	void release() override;
-	void set(SPAttr key, char const* value) override;
+    void modified(unsigned int flags) override;
+    void update(SPCtx *ctx, unsigned int flags) override;
+    void set(SPAttr key, char const* value) override;
 
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 	void remove_child(Inkscape::XML::Node* child) override;
+    void order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_repr,
+                       Inkscape::XML::Node *new_repr) override;
 
-	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 

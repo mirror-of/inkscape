@@ -116,6 +116,7 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _is_texttopath(FALSE),
     _is_omittext(FALSE),
     _is_filtertobitmap(FALSE),
+    _is_show_page(false),
     _bitmapresolution(72),
     _stream(nullptr),
     _is_valid(FALSE),
@@ -933,12 +934,60 @@ CairoRenderContext::_setSurfaceMetadata(cairo_surface_t *surface)
     }
 }
 
+/**
+ * Each page that's made should call finishPage to complete it.
+ */
+bool
+CairoRenderContext::finishPage()
+{
+    g_assert(_is_valid);
+    if (!_vector_based_target)
+        return false;
+
+    // Protect against finish() showing one too many pages.
+    if (!_is_show_page) {
+        cairo_show_page(_cr);
+        _is_show_page = true;
+    }
+
+    auto status = cairo_status(_cr);
+    if (status != CAIRO_STATUS_SUCCESS) {
+        g_critical("error while rendering page: %s", cairo_status_to_string(status));
+        return false;
+    }
+    return true;
+}
+
+/**
+ * When writing multiple pages, resize the next page.
+ */
+bool
+CairoRenderContext::nextPage(double width, double height)
+{
+    g_assert(_is_valid);
+    if (!_vector_based_target)
+        return false;
+
+    _width = width;
+    _height = height;
+    _is_show_page = false;
+    cairo_pdf_surface_set_size(_surface, width, height);
+
+    auto status = cairo_surface_status(_surface);
+    if (status != CAIRO_STATUS_SUCCESS) {
+        g_critical("error while sizing page: %s", cairo_status_to_string(status));
+        return false;
+    }
+    return true;
+}
+
+
 bool
 CairoRenderContext::finish(bool finish_surface)
 {
     g_assert( _is_valid );
 
-    if (_vector_based_target && finish_surface)
+    if (_vector_based_target && !_is_show_page && finish_surface)
         cairo_show_page(_cr);
 
     cairo_status_t status = cairo_status(_cr);

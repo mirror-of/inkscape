@@ -31,6 +31,7 @@
 #include "ui/tool/path-manipulator.h"
 #include "ui/tool/control-point-selection.h"
 #include "layer-manager.h"
+#include "page-manager.h"
 #include "object/sp-path.h"
 #include "object/sp-defs.h"
 #include "object/sp-shape.h"
@@ -89,6 +90,15 @@ gboolean Selection::_emit_modified(Selection *selection)
 void Selection::_emitModified(guint flags) {
     INKSCAPE.selection_modified(this, flags);
     _modified_signal.emit(this, flags);
+
+    if (_desktop) {
+        if (auto item = singleItem()) {
+            // If the selected items have been moved to a new page...
+            if (auto page_manager = _desktop->getNamedView()->getPageManager()) {
+                page_manager->selectPage(item, false);
+            }
+        }
+    }
 }
 
 void Selection::_emitChanged(bool persist_selection_context/* = false */) {
@@ -110,6 +120,10 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
             auto layer = _desktop->layerManager().layerForObject(item);
             if (layer && layer != _selection_context) {
                 _desktop->layerManager().setCurrentLayer(layer);
+            }
+            if (auto page_manager = _desktop->getNamedView()->getPageManager()) {
+                // This could be more complex if we want to be smarter.
+                page_manager->selectPage(item, false);
             }
         }
     }

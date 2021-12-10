@@ -58,6 +58,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.cpp
 	toolbar/mesh-toolbar.cpp
 	toolbar/node-toolbar.cpp
+	toolbar/page-toolbar.cpp
 	toolbar/paintbucket-toolbar.cpp
 	toolbar/pencil-toolbar.cpp
 	toolbar/rect-toolbar.cpp
@@ -84,6 +85,7 @@ set(ui_SRC
 	tools/measure-tool.cpp
 	tools/mesh-tool.cpp
 	tools/node-tool.cpp
+	tools/pages-tool.cpp
 	tools/pencil-tool.cpp
 	tools/pen-tool.cpp
 	tools/rect-tool.cpp
@@ -203,7 +205,7 @@ set(ui_SRC
 	widget/marker-combo-box.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
-	widget/page-sizer.cpp
+	widget/page-selector.cpp
 	widget/paint-selector.cpp
 	widget/point.cpp
 	widget/preferences-widget.cpp
@@ -366,6 +368,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.h
 	toolbar/mesh-toolbar.h
 	toolbar/node-toolbar.h
+	toolbar/page-toolbar.h
 	toolbar/paintbucket-toolbar.h
 	toolbar/pencil-toolbar.h
 	toolbar/rect-toolbar.h
@@ -392,6 +395,7 @@ set(ui_SRC
 	tools/measure-tool.h
 	tools/mesh-tool.h
 	tools/node-tool.h
+	tools/pages-tool.h
 	tools/pen-tool.h
 	tools/pencil-tool.h
 	tools/rect-tool.h
@@ -452,8 +456,7 @@ set(ui_SRC
 	widget/marker-combo-box.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h
-	widget/page-sizer.h
-	widget/pages-skeleton.h
+	widget/page-selector.h
 	widget/paint-selector.h
 	widget/point.h
 	widget/preferences-widget.h

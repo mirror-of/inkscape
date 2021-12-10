@@ -801,14 +801,13 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
         px_to_ctx_units = Inkscape::Util::Quantity::convert(1, "px", "pt");
     }
 
-    ctx->_width = d.width() * px_to_ctx_units;
-    ctx->_height = d.height() * px_to_ctx_units;
-
-    TRACE(("setupDocument: %f x %f\n", ctx->_width, ctx->_height));
+    auto width = d.width() * px_to_ctx_units;
+    auto height = d.height() * px_to_ctx_units;
 
     setMetadata(ctx, doc);
 
-    bool ret = ctx->setupSurface(ctx->_width, ctx->_height);
+    TRACE(("setupDocument: %f x %f\n", width, height));
+    bool ret = ctx->setupSurface(width, height);
 
     if (ret) {
         if (pageBoundingBox) {

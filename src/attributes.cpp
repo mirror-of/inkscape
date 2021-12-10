@@ -87,7 +87,6 @@ static SPStyleProp const props[] = {
     {SPAttr::FIT_MARGIN_LEFT, "fit-margin-left"},
     {SPAttr::FIT_MARGIN_RIGHT, "fit-margin-right"},
     {SPAttr::FIT_MARGIN_BOTTOM, "fit-margin-bottom"},
-    {SPAttr::INKSCAPE_PAGECHECKERBOARD, "inkscape:pagecheckerboard"},
     {SPAttr::INKSCAPE_PAGEOPACITY, "inkscape:pageopacity"},
     {SPAttr::INKSCAPE_PAGESHADOW, "inkscape:pageshadow"},
     {SPAttr::INKSCAPE_ZOOM, "inkscape:zoom"},
@@ -566,8 +565,9 @@ static SPStyleProp const props[] = {
     {SPAttr::PATH_EFFECT, "effect"},
 
     // canvas blackout color
-    {SPAttr::INKSCAPE_BLACKOUTCOLOR, "inkscape:blackoutcolor"},
-    {SPAttr::INKSCAPE_BLACKOUTOPACITY, "inkscape:blackoutopacity"},
+    {SPAttr::INKSCAPE_DESK_COLOR, "inkscape:deskcolor"},
+    {SPAttr::INKSCAPE_DESK_OPACITY, "inkscape:deskopacity"},
+    {SPAttr::INKSCAPE_DESK_CHECKERBOARD, "inkscape:pagecheckerboard"}, // old attr
 
 };
 

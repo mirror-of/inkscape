@@ -18,6 +18,9 @@
 #include "inkscape-window.h"
 #include "desktop.h"
 
+#include "object/sp-namedview.h"
+#include "page-manager.h"
+
 #include "ui/tools/freehand-base.h" // SP_DRAW_CONTEXT
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"
@@ -113,15 +116,15 @@ canvas_transform(InkscapeWindow *win, const int& option)
             break;
 
         case INK_CANVAS_ZOOM_PAGE:
-            dt->zoom_page();
+            dt->getNamedView()->getPageManager()->zoomToSelectedPage(dt, false);
             break;
 
         case INK_CANVAS_ZOOM_PAGE_WIDTH:
-            dt->zoom_page_width();
+            dt->getNamedView()->getPageManager()->zoomToSelectedPage(dt, true);
             break;
 
         case INK_CANVAS_ZOOM_CENTER_PAGE:
-            dt->zoom_center_page();
+            dt->getNamedView()->getPageManager()->centerToSelectedPage(dt);
             break;
 
         case INK_CANVAS_ZOOM_PREV:

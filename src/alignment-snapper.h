@@ -77,6 +77,9 @@ private:
                          Geom::Point const &p_proj_on_constraint = Geom::Point()) const;
 
     SnapSourceType source2alignment(SnapSourceType s) const;
+
+    bool _allowSourceToSnapToTarget(SnapSourceType source, SnapTargetType target, bool strict_snapping) const;
+
 }; // end of AlignmentSnapper class
 
 } // end of namespace Inkscape

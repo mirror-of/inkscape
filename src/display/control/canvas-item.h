@@ -86,6 +86,7 @@ public:
     // Selection
     virtual bool contains(Geom::Point const &p, double tolerance = 0) { return _bounds.interiorContains(p); }
     int grab(Gdk::EventMask event_mask, GdkCursor *cursor = nullptr);
+    int grab(Gdk::EventMask event_mask, Glib::RefPtr<Gdk::Cursor> cursor);
     void ungrab();
 
     // Display

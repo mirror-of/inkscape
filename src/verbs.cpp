@@ -42,6 +42,7 @@
 #include "inkscape-version.h"
 #include "layer-manager.h"
 #include "message-stack.h"
+#include "page-manager.h"
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
 #include "seltrans.h"
@@ -2155,13 +2156,13 @@ Verb *Verb::_base_verbs[] = {
                        N_("Repeat the last extension with new settings"), nullptr),
 
     // Fit Page
-    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_SELECTION, "FitCanvasToSelection", N_("Fit Page to Selection"),
-                      N_("Fit the page to the current selection"), nullptr),
-    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_DRAWING, "FitCanvasToDrawing", N_("Fit Page to Drawing"),
-                      N_("Fit the page to the drawing"), nullptr),
+    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_SELECTION, "FitCanvasToSelection", N_("Fit Preview to Selection"),
+                      N_("Fit the preview box to the current selection"), nullptr),
+    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_DRAWING, "FitCanvasToDrawing", N_("Fit Preview to Drawing"),
+                      N_("Fit the preview box to the drawing"), nullptr),
     new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING, "FitCanvasToSelectionOrDrawing",
-                      N_("_Resize Page to Selection"),
-                      N_("Fit the page to the current selection or the drawing if there is no selection"), nullptr),
+                      N_("_Resize Preview to Selection"),
+                      N_("Fit the preview box to the current selection or the drawing if there is no selection"), nullptr),
     // LockAndHide
     new LockAndHideVerb(SP_VERB_UNLOCK_ALL, "UnlockAll", N_("Unlock All"),
                         N_("Unlock all objects in the current layer"), nullptr),

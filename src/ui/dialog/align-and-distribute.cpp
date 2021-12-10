@@ -30,6 +30,7 @@
 #include "document.h"
 #include "graphlayout.h"
 #include "inkscape.h"
+#include "page-manager.h"
 #include "preferences.h"
 #include "removeoverlap.h"
 #include "text-editing.h"
@@ -40,6 +41,8 @@
 #include "live_effects/effect-enum.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-transform.h"
+#include "object/sp-namedview.h"
+#include "object/sp-page.h"
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "ui/icon-loader.h"
@@ -153,7 +156,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
         focus = selection->smallestItem(horiz);
         break;
     case PAGE:
-        b = desktop->getDocument()->preferredBounds();
+        b = desktop->getDocument()->pageBounds();
         break;
     case DRAWING:
         b = desktop->getDocument()->getRoot()->desktopPreferredBounds();
@@ -849,7 +852,7 @@ private :
                     focus = selection->smallestItem(Selection::AREA);
                     break;
                 case PAGE:
-                    b = _desktop->getDocument()->preferredBounds();
+                    b = _desktop->getDocument()->pageBounds();
                     break;
                 case DRAWING:
                     b = _desktop->getDocument()->getRoot()->desktopPreferredBounds();

@@ -34,7 +34,8 @@ using Inkscape::IO::Resource::ICONS;
 namespace Inkscape {
 
 /**
- * Loads and sets an SVG cursor from the specified file name.
+ * Loads an SVG cursor from the specified file name.
+ *
  * Returns pointer to cursor (or null cursor if we could not load a cursor).
  */
 Glib::RefPtr<Gdk::Cursor>
@@ -182,7 +183,6 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
             if (surface && surface->cobj()) {
                 cairo_surface_set_device_scale(surface->cobj(), scale, scale);
                 cursor = Gdk::Cursor::create(display, surface, hotspot_x, hotspot_y);
-                window->set_cursor(cursor);
             }
             else {
                 std::cerr << "load_svg_cursor: failed to get surface for: " << full_file_path << std::endl;
@@ -194,7 +194,6 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
 
             if (pixbuf) {
                 cursor = Gdk::Cursor::create(display, pixbuf, hotspot_x, hotspot_y);
-                window->set_cursor(cursor);
             }
         }
     } else {

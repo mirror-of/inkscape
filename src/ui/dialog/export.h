@@ -26,6 +26,7 @@
 #include "ui/widget/scrollprotected.h"
 
 namespace Inkscape {
+    class PageManager;
 namespace UI {
 namespace Dialog {
 
@@ -341,7 +342,9 @@ private:
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
     sigc::connection unitChangedConn;
+    sigc::connection _page_selected_connection;
 
+    PageManager *_page_manager = nullptr;
 };
 
 }

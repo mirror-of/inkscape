@@ -38,7 +38,8 @@ enum tools_enum {
   TOOLS_CONNECTOR,
   TOOLS_PAINTBUCKET,
   TOOLS_ERASER,
-  TOOLS_LPETOOL
+  TOOLS_LPETOOL,
+  TOOLS_PAGES
 };
 
 class InkscapeWindow;

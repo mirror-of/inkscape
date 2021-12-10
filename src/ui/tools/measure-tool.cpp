@@ -1172,7 +1172,7 @@ void MeasureTool::showItemInfoText(Geom::Point pos, Glib::ustring const &measure
     canvas_tooltip->set_fontsize(fontsize);
     canvas_tooltip->set_fill(0xffffffff);
     canvas_tooltip->set_background(0x00000099);
-    canvas_tooltip->set_anchor(Inkscape::CANVAS_ITEM_TEXT_ANCHOR_LEFT);
+    canvas_tooltip->set_anchor(Geom::Point(0, 0));
     canvas_tooltip->show();
     measure_item.push_back(canvas_tooltip);
 }

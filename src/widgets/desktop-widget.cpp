@@ -67,6 +67,7 @@
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/ink-ruler.h"
 #include "ui/widget/layer-selector.h"
+#include "ui/widget/page-selector.h"
 #include "ui/widget/selected-style.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
@@ -1350,6 +1351,10 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
 
     _layer_selector->setDesktop(dtw->desktop);
 
+    // We never want a page widget if there's no desktop.
+    _page_selector = Gtk::manage(new Inkscape::UI::Widget::PageSelector(desktop));
+    _statusbar->pack_end(*_page_selector, false, false);
+
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
@@ -1558,8 +1563,10 @@ SPDesktopWidget::zoom_populate_popup(Gtk::Menu *menu)
     auto sep = Gtk::manage(new Gtk::SeparatorMenuItem());
     menu->append(*sep);
 
+    auto pm = desktop->getNamedView()->getPageManager();
+
     auto item_page = Gtk::manage(new Gtk::MenuItem(_("Page")));
-    item_page->signal_activate().connect(sigc::mem_fun(desktop, &SPDesktop::zoom_page));
+    item_page->signal_activate().connect([=]() { pm->zoomToSelectedPage(desktop); });
     menu->append(*item_page);
 
     auto item_drawing = Gtk::manage(new Gtk::MenuItem(_("Drawing")));
@@ -1571,7 +1578,7 @@ SPDesktopWidget::zoom_populate_popup(Gtk::Menu *menu)
     menu->append(*item_selection);
 
     auto item_center_page = Gtk::manage(new Gtk::MenuItem(_("Centre Page")));
-    item_center_page->signal_activate().connect(sigc::mem_fun(desktop, &SPDesktop::zoom_center_page));
+    item_center_page->signal_activate().connect([=]() { pm->centerToSelectedPage(desktop); });
     menu->append(*item_center_page);
 
     menu->show_all();
@@ -1749,14 +1756,21 @@ SPDesktopWidget::update_scrollbars(double scale)
 
     /* The desktop region we always show unconditionally */
     SPDocument *doc = desktop->doc();
-    Geom::Rect darea ( Geom::Point(-doc->getWidth().value("px"), -doc->getHeight().value("px")),
-                     Geom::Point(2 * doc->getWidth().value("px"), 2 * doc->getHeight().value("px"))  );
 
-    Geom::OptRect deskarea;
-    if (Inkscape::Preferences::get()->getInt("/tools/bounding_box") == 0) {
-        deskarea = darea | doc->getRoot()->desktopVisualBounds();
+    auto deskarea = doc->preferredBounds();
+    deskarea->expandBy(doc->getDimensions()); // Double size
+
+    /* The total size of pages should be added unconditionally */
+    if (auto manager = doc->getNamedView()->getPageManager()) {
+        deskarea->unionWith(manager->getDesktopRect());
     } else {
-        deskarea = darea | doc->getRoot()->desktopGeometricBounds();
+        g_warning("No page manager available!");
+    }
+
+    if (Inkscape::Preferences::get()->getInt("/tools/bounding_box") == 0) {
+        deskarea->unionWith(doc->getRoot()->desktopVisualBounds());
+    } else {
+        deskarea->unionWith(doc->getRoot()->desktopGeometricBounds());
     }
 
     /* Canvas region we always show unconditionally */

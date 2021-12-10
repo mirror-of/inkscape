@@ -71,7 +71,8 @@ static std::map<Glib::ustring, ToolData> tool_data =
     {"Connector",    {TOOLS_CONNECTOR,       PREFS_PAGE_TOOLS_CONNECTOR,      "/tools/connector",       }},
     {"PaintBucket",  {TOOLS_PAINTBUCKET,     PREFS_PAGE_TOOLS_PAINTBUCKET,    "/tools/paintbucket",     }},
     {"Eraser",       {TOOLS_ERASER,          PREFS_PAGE_TOOLS_ERASER,         "/tools/eraser",          }},
-    {"LPETool",      {TOOLS_LPETOOL,         PREFS_PAGE_TOOLS, /* No Page */  "/tools/lpetool",         }}
+    {"LPETool",      {TOOLS_LPETOOL,         PREFS_PAGE_TOOLS, /* No Page */  "/tools/lpetool",         }},
+    {"Pages",        {TOOLS_PAGES,           PREFS_PAGE_TOOLS,                "/tools/pages",           }}
 };
 
 static std::map<Glib::ustring, Glib::ustring> tool_msg =
@@ -98,7 +99,8 @@ static std::map<Glib::ustring, Glib::ustring> tool_msg =
     {"Connector",   N_("<b>Click and drag</b> between shapes to create a connector.")                                                                                                                                         },
     {"PaintBucket", N_("<b>Click</b> to paint a bounded area, <b>Shift+click</b> to union the new fill with the current selection, <b>Ctrl+click</b> to change the clicked object's fill and stroke to the current setting.") },
     {"Eraser",      N_("<b>Drag</b> to erase.")                                                                                                                                                                               },
-    {"LPETool",     N_("Choose a subtool from the toolbar")                                                                                                                                                                   } 
+    {"LPETool",     N_("Choose a subtool from the toolbar")                                                                                                                                                                   },
+    {"Pages",       N_("Create and manage pages.")}
 };
 // clang-format on
 
@@ -392,6 +394,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_tools =
 
     {"win.tool-switch('Zoom')",         N_("Tool: Zoom"),         "Tool Switch",   N_("Zoom in or out.")                                },
     {"win.tool-switch('Measure')",      N_("Tool: Measure"),      "Tool Switch",   N_("Measure objects.")                               },
+    {"win.tool-switch('Page')",         N_("Tool: Pages"),        "Tool Switch",   N_("Create and edit multiple pages")                 },
 
     {"win.tool-toggle",                 N_("Tool Toggle"),        "Tool Switch",   N_("Toggle between Select tool and last used tool.") },
     // clang-format on

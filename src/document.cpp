@@ -58,6 +58,7 @@
 #include "actions/actions-edit-document.h"
 #include "actions/actions-tutorial.h"
 #include "actions/actions-text.h"
+#include "actions/actions-pages.h"
 
 #include "display/drawing.h"
 
@@ -73,8 +74,10 @@
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
 #include "object/sp-factory.h"
+#include "object/sp-namedview.h"
 #include "object/sp-root.h"
 #include "object/sp-symbol.h"
+#include "object/sp-page.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -152,6 +155,7 @@ SPDocument::SPDocument() :
     // Actions
     action_group = Gio::SimpleActionGroup::create();
     add_actions_edit_document(this);
+    add_actions_pages(this);
 }
 
 SPDocument::~SPDocument() {
@@ -693,7 +697,7 @@ Geom::Scale SPDocument::getDocumentScale() const
 }
 
 // Avoid calling root->updateRepr() twice by combining setting width and height.
-// (As done on every delete as clipboard calls this via fitToRect(). Also called in page-sizer.cpp)
+// (As done on every delete as clipboard calls this via fitToRect())
 void SPDocument::setWidthAndHeight(const Inkscape::Util::Quantity &width, const Inkscape::Util::Quantity &height, bool changeSize)
 {
     Inkscape::Util::Unit const *old_width_units = unit_table.getUnit("px");
@@ -855,6 +859,17 @@ Geom::OptRect SPDocument::preferredBounds() const
 }
 
 /**
+ * Returns the position of the selected page or the preferredBounds()
+ */
+Geom::OptRect SPDocument::pageBounds()
+{
+    if (auto page = getNamedView()->getPageManager()->getSelected()) {
+        return page->getDesktopRect();
+    }
+    return preferredBounds();
+}
+
+/**
  * Given a Geom::Rect that may, for example, correspond to the bbox of an object,
  * this function fits the canvas to that rect by resizing the canvas
  * and translating the document root into position.
@@ -914,6 +929,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
         Geom::Translate tr2(-rect_with_margins_dt_old.min());
         nv->translateGuides(tr2);
         nv->translateGrids(tr2);
+        nv->getPageManager()->movePages(tr2);
 
         // update the viewport so the drawing appears to stay where it was
         nv->scrollAllDesktops(-tr2[0], -tr2[1] * y_dir, false);
@@ -1674,7 +1690,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
         [this check should be more generally presend on emit() calls since
         the backtrace is unusable with crashed from this cause]
         */
-        if(object->getId() || dynamic_cast<SPGroup*>(object) )
+        if(object->getId() || dynamic_cast<SPGroup*>(object) || dynamic_cast<SPPage*>(object) )
             resources_changed_signals[q].emit();
 
         result = true;
@@ -2036,11 +2052,6 @@ sigc::connection SPDocument::connectFilenameSet(SPDocument::FilenameSetSignal::s
     return filename_set_signal.connect(slot);
 }
 
-sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
-{
-    return resized_signal.connect(slot);
-}
-
 sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
 {
     return commit_signal.connect(slot);
@@ -2099,12 +2110,6 @@ SPDocument::emitReconstructionFinish()
     initialize_current_persp3d();
 **/
 }
-
-void SPDocument::emitResizedSignal(gdouble width, gdouble height)
-{
-    this->resized_signal.emit(width, height);
-}
-
 
 /*
   Local Variables:

@@ -568,12 +568,10 @@ bool GradientTool::root_handler(GdkEvent* event) {
             SPItem *item = sp_gradient_context_is_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
             if (this->cursor_addnode && !item) {
-                cursor_filename = "gradient.svg";
-                this->sp_event_context_update_cursor();
+                this->set_cursor("gradient.svg");
                 this->cursor_addnode = false;
             } else if (!this->cursor_addnode && item) {
-                cursor_filename = "gradient-add.svg";
-                this->sp_event_context_update_cursor();
+                this->set_cursor("gradient-add.svg");
                 this->cursor_addnode = true;
             }
         }

@@ -56,6 +56,8 @@ std::unordered_map<SnapSourceType, Glib::ustring> SnapIndicator::source2string =
     {SNAPSOURCE_TEXT_ANCHOR, _("Text anchor")},
     {SNAPSOURCE_OTHER_HANDLE, _("Handle")},
     {SNAPSOURCE_GRID_PITCH, _("Multiple of grid spacing")},
+    {SNAPSOURCE_PAGE_CORNER, _("Page corner")},
+    {SNAPSOURCE_PAGE_CENTER, _("Page center")},
 };
 
 std::unordered_map<SnapTargetType, Glib::ustring> SnapIndicator::target2string = {
@@ -86,6 +88,7 @@ std::unordered_map<SnapTargetType, Glib::ustring> SnapIndicator::target2string =
     {SNAPTARGET_GRID_GUIDE_INTERSECTION, _("grid-guide intersection")},
     {SNAPTARGET_PAGE_BORDER, _("page border")},
     {SNAPTARGET_PAGE_CORNER, _("page corner")},
+    {SNAPTARGET_PAGE_CENTER, _("page center")},
     {SNAPTARGET_OBJECT_MIDPOINT, _("object midpoint")},
     {SNAPTARGET_IMG_CORNER, _("corner")},
     {SNAPTARGET_ROTATION_CENTER, _("object rotation center")},

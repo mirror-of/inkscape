@@ -1431,7 +1431,7 @@ Canvas::set_cursor() {
     switch (_hover_direction) {
 
         case Inkscape::SplitDirection::NONE:
-            get_window()->set_cursor(_desktop->event_context->cursor);
+            _desktop->event_context->use_tool_cursor();
             break;
 
         case Inkscape::SplitDirection::NORTH:

@@ -781,12 +781,10 @@ void NodeTool::mouseover_changed(Inkscape::UI::ControlPoint *p) {
     CurveDragPoint *cdp = dynamic_cast<CurveDragPoint*>(p);
 
     if (cdp && !this->cursor_drag) {
-        cursor_filename = "node-mouseover.svg";
-        this->sp_event_context_update_cursor();
+        this->set_cursor("node-mouseover.svg");
         this->cursor_drag = true;
     } else if (!cdp && this->cursor_drag) {
-        cursor_filename = "node.svg";
-        this->sp_event_context_update_cursor();
+        this->set_cursor("node.svg");
         this->cursor_drag = false;
     }
 }

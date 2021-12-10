@@ -28,6 +28,7 @@
 #include "message-context.h"
 
 #include "display/control/canvas-item-ctrl.h"
+#include "ui/tools/tool-base.h"
 #include "ui/tools/node-tool.h"
 
 using Inkscape::DocumentUndo;
@@ -76,11 +77,6 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip, Inkscape::CanvasItemCtrlTyp
     image[SP_KNOT_STATE_DRAGGING] = nullptr;
     image[SP_KNOT_STATE_SELECTED] = nullptr;
 
-    cursor[SP_KNOT_STATE_NORMAL] = nullptr;
-    cursor[SP_KNOT_STATE_MOUSEOVER] = nullptr;
-    cursor[SP_KNOT_STATE_DRAGGING] = nullptr;
-    cursor[SP_KNOT_STATE_SELECTED] = nullptr;
-
     ctrl = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), type); // Shape, mode set
     Glib::ustring ctrl_name = "CanvasItemCtrl:Knot: " + name;
     ctrl->set_name(ctrl_name);
@@ -108,13 +104,6 @@ SPKnot::~SPKnot() {
         delete ctrl;
     }
 
-    for (auto & i : this->cursor) {
-        if (i) {
-            g_object_unref(i);
-            i = nullptr;
-        }
-    }
-
     if (this->tip) {
         g_free(this->tip);
         this->tip = nullptr;
@@ -135,7 +124,7 @@ void SPKnot::startDragging(Geom::Point const &p, gint x, gint y, guint32 etime) 
     this->drag_origin = this->pos;
 
     if (!nograb && ctrl) {
-        ctrl->grab(KNOT_EVENT_MASK, cursor[SP_KNOT_STATE_DRAGGING]);
+        ctrl->grab(KNOT_EVENT_MASK, _cursors[SP_KNOT_STATE_DRAGGING]);
     }
     this->setFlag(SP_KNOT_GRABBED, true);
 
@@ -287,6 +276,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
         if (tip && desktop && desktop->event_context) {
             desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, tip);
         }
+        desktop->event_context->use_cursor(_cursors[SP_KNOT_STATE_MOUSEOVER]);
 
         grabbed = false;
         moved = false;
@@ -299,6 +289,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
         if (tip && desktop && desktop->event_context) {
             desktop->event_context->defaultMessageContext()->clear();
         }
+        desktop->event_context->use_cursor(_cursors[SP_KNOT_STATE_NORMAL]);
 
         grabbed = false;
         moved = false;
@@ -516,46 +507,9 @@ void SPKnot::setImage(guchar* normal, guchar* mouseover, guchar* dragging, gucha
     image[SP_KNOT_STATE_SELECTED] = selected;
 }
 
-void SPKnot::setCursor(GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragging, GdkCursor* selected) {
-    if (cursor[SP_KNOT_STATE_NORMAL]) {
-        g_object_unref(cursor[SP_KNOT_STATE_NORMAL]);
-    }
-
-    cursor[SP_KNOT_STATE_NORMAL] = normal;
-
-    if (normal) {
-        g_object_ref(normal);
-    }
-
-    if (cursor[SP_KNOT_STATE_MOUSEOVER]) {
-        g_object_unref(cursor[SP_KNOT_STATE_MOUSEOVER]);
-    }
-
-    cursor[SP_KNOT_STATE_MOUSEOVER] = mouseover;
-
-    if (mouseover) {
-        g_object_ref(mouseover);
-    }
-
-    if (cursor[SP_KNOT_STATE_DRAGGING]) {
-        g_object_unref(cursor[SP_KNOT_STATE_DRAGGING]);
-    }
-
-    cursor[SP_KNOT_STATE_DRAGGING] = dragging;
-
-    if (dragging) {
-        g_object_ref(dragging);
-    }
-    
-    if (cursor[SP_KNOT_STATE_SELECTED]) {
-        g_object_unref(cursor[SP_KNOT_STATE_SELECTED]);
-    }
-
-    cursor[SP_KNOT_STATE_SELECTED] = selected;
-
-    if (selected) {
-        g_object_ref(selected);
-    }
+void SPKnot::setCursor(SPKnotStateType type, Glib::RefPtr<Gdk::Cursor> cursor)
+{
+    _cursors[type] = cursor;
 }
 
 /*

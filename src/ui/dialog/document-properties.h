@@ -29,7 +29,6 @@
 
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/licensor.h"
-#include "ui/widget/page-sizer.h"
 #include "ui/widget/registered-widget.h"
 #include "ui/widget/registry.h"
 #include "ui/widget/tolerance-slider.h"
@@ -132,7 +131,6 @@ protected:
     UI::Widget::RegisteredColorPicker _rcp_blkout;
     UI::Widget::RegisteredColorPicker _rcp_bord;
     UI::Widget::RegisteredUnitMenu    _rum_deflt;
-    UI::Widget::PageSizer             _page_sizer;
     //---------------------------------------------------------------
     UI::Widget::RegisteredCheckButton _rcb_sgui;
     UI::Widget::RegisteredCheckButton _rcb_lgui;

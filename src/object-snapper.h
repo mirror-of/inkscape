@@ -105,12 +105,15 @@ private:
     void _clear_paths() const;
     Geom::PathVector* _getBorderPathv() const;
     Geom::PathVector* _getPathvFromRect(Geom::Rect const rect) const;
-    void _getBorderNodes(std::vector<SnapCandidatePoint> *points) const;
     bool _allowSourceToSnapToTarget(SnapSourceType source, SnapTargetType target, bool strict_snapping) const;
 
 }; // end of ObjectSnapper class
 
-void getBBoxPoints(Geom::OptRect const bbox, std::vector<SnapCandidatePoint> *points, bool const isTarget, bool const includeCorners, bool const includeLineMidpoints, bool const includeObjectMidpoints, bool const isAlignment = false);
+void getBBoxPoints(Geom::OptRect const bbox, std::vector<SnapCandidatePoint> *points, bool const isTarget, bool const corners, bool const edges, bool const midpoint);
+void getBBoxPoints(Geom::OptRect const bbox, std::vector<SnapCandidatePoint> *points, bool const isTarget,
+                   Inkscape::SnapSourceType corners, Inkscape::SnapTargetType cornert,
+                   Inkscape::SnapSourceType edges, Inkscape::SnapTargetType edget,
+                   Inkscape::SnapSourceType midpoints, Inkscape::SnapTargetType midpointt);
 
 } // end of namespace Inkscape
 

@@ -51,6 +51,7 @@ set(object_SRC
   sp-object.cpp
   sp-offset.cpp
   sp-paint-server.cpp
+  sp-page.cpp
   sp-path.cpp
   sp-pattern.cpp
   sp-polygon.cpp
@@ -140,6 +141,7 @@ set(object_SRC
   sp-offset.h
   sp-paint-server-reference.h
   sp-paint-server.h
+  sp-page.h
   sp-path.h
   sp-pattern.h
   sp-polygon.h

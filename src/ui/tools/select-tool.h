@@ -64,9 +64,7 @@ private:
     bool _alt_on;
     bool _force_dragging;
 
-    Glib::RefPtr<Gdk::Cursor> _default_cursor;
-    Glib::RefPtr<Gdk::Cursor> _cursor_mouseover;
-    Glib::RefPtr<Gdk::Cursor> _cursor_dragging;
+    std::string _default_cursor;
 };
 
 }

@@ -126,16 +126,8 @@ void SelectTool::setup() {
     auto select_scroll = Modifier::get(Modifiers::Type::SELECT_CYCLE)->get_label();
 
     // cursors in select context
-    _default_cursor = this->cursor;
-    Gtk::Widget *w = desktop->getCanvas();
-    if (w->get_window()) {
-        // Window may not be open when tool is setup for the first time!
-        _cursor_mouseover = load_svg_cursor(w->get_display(), w->get_window(), "select-mouseover.svg");
-        _cursor_dragging  = load_svg_cursor(w->get_display(), w->get_window(), "select-dragging.svg");
-        // Need to reload select.svg.
-        load_svg_cursor(w->get_display(), w->get_window(), "select.svg");
-    }
-    
+    _default_cursor = "select.svg";
+
     no_selection_msg = g_strdup_printf(
         _("No objects selected. Click, %s+click, %s+scroll mouse on top of objects, or drag around objects to select."),
         select_click.c_str(), select_scroll.c_str());
@@ -283,8 +275,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                     this->dragging = TRUE;
                     this->moved = FALSE;
 
-                    auto window = desktop->getCanvas()->get_window();
-                    window->set_cursor(_cursor_dragging);
+                    this->set_cursor("select-dragging.svg");
 
                     // remember the clicked item in this->item:
                     if (this->item) {
@@ -320,15 +311,13 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
         case GDK_ENTER_NOTIFY: {
             if (!dragging && !_alt_on && !desktop->isWaitingCursor()) {
-                auto window = desktop->getCanvas()->get_window();
-                window->set_cursor(_cursor_mouseover);
+                this->set_cursor("select-mouseover.svg");
             }
             break;
         }
         case GDK_LEAVE_NOTIFY:
             if (!dragging && !_force_dragging && !desktop->isWaitingCursor()) {
-                auto window = desktop->getCanvas()->get_window();
-                window->set_cursor(this->cursor);
+                this->set_cursor("select.svg");
             }
             break;
 
@@ -355,7 +344,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
         case GDK_BUTTON_RELEASE:
         case GDK_KEY_RELEASE:
             if (_alt_on) {
-                _default_cursor = _cursor_mouseover;
+                _default_cursor = "select-mouseover.svg";
             }
             break;
 
@@ -561,9 +550,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     // if it's not click and ctrl or alt was pressed (the latter with some selection
                     // but not with shift) we want to drag rather than rubberband
                     this->dragging = TRUE;
-
-                    auto window = desktop->getCanvas()->get_window();
-                    window->set_cursor(_cursor_dragging);
+                    this->set_cursor("select-dragging.svg");
                 }
 
                 if (this->dragging) {
@@ -702,10 +689,10 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     if (!_alt_on) {
                         if (_force_dragging) {
-                            window->set_cursor(_default_cursor);
+                            this->set_cursor(_default_cursor);
                             _force_dragging = false;
                         } else {
-                            window->set_cursor(_cursor_mouseover);
+                            this->set_cursor("select-mouseover.svg");
                         }
                     }
 
@@ -906,10 +893,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     // if Alt and nonempty selection, show moving cursor ("move selected"):
                     if (alt && !selection->isEmpty() && !desktop->isWaitingCursor()) {
-                        auto window = desktop->getCanvas()->get_window();
-                        window->set_cursor(_cursor_dragging);
+                        this->set_cursor("select-dragging.svg");
                         _force_dragging = true;
-                        _default_cursor = this->cursor;
+                        _default_cursor = "select.svg";
                     }
                     //*/
                     break;
@@ -1155,8 +1141,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
             // set cursor to default.
             if (alt && !(this->grabbed || _seltrans->isGrabbed()) && !selection->isEmpty() && !desktop->isWaitingCursor()) {
-                auto window = desktop->getCanvas()->get_window();
-                window->set_cursor(_default_cursor);
+                this->set_cursor(_default_cursor);
                 _force_dragging = false;
             }
             break;

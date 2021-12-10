@@ -11,7 +11,7 @@
  */
 
 #include "inkscape.h"
-#include "snap-enums.h"
+#include "snap-preferences.h"
 
 Inkscape::SnapPreferences::SnapPreferences() :
     _snap_enabled_globally(true),
@@ -29,6 +29,7 @@ Inkscape::SnapPreferences::SnapPreferences() :
     for (int & _active_snap_target : _active_snap_targets) {
         _active_snap_target = -1;
     }
+    clearTargetMask();
 
     for (bool& b : _simple_snapping) {
         b = false;
@@ -115,6 +116,7 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
                 target = SNAPTARGET_GUIDE;
                 break;
             case SNAPTARGET_PAGE_CORNER:
+            case SNAPTARGET_PAGE_CENTER:
                 target = SNAPTARGET_PAGE_BORDER;
                 break;
 
@@ -207,6 +209,41 @@ void Inkscape::SnapPreferences::setTargetSnappable(Inkscape::SnapTargetType cons
     }
 }
 
+/**
+ * Set a target mask, which will turn off all other targets except the masked ones.
+ *
+ * target - The Snap Target to change the mask for.
+ * enabled - The mask setting to set.
+ *    -1 means use user settings (turn off mask)
+ *     0 means mask with disabled,
+ *     1 means mask with enabled,
+ */
+void Inkscape::SnapPreferences::setTargetMask(Inkscape::SnapTargetType const target, int enabled)
+{
+    bool always_on = false;
+    bool group_on = false; // Only needed as a dummy
+    Inkscape::SnapTargetType index = target;
+
+    _mapTargetToArrayIndex(index, always_on, group_on);
+
+    _active_mask_targets[index] = enabled;
+}
+
+/**
+ * Clear the target mask, this should be done in a four step process.
+ *
+ * snap_manager->snaprepfs->clearTargetMask(0); // Default all options to disabled
+ * snap_manager->snaprepfs->setTargetMask(SOME_TARGET, 1);
+ * snap_manager->freeSnap(...);
+ * snap_manager->snaprepfs->clearTargetMask(); // Turns off masking
+ */
+void Inkscape::SnapPreferences::clearTargetMask(int enabled)
+{
+    for (int & _active_mask_targets : _active_mask_targets) {
+        _active_mask_targets = enabled;
+    }
+}
+
 bool Inkscape::SnapPreferences::isTargetSnappable(Inkscape::SnapTargetType const target) const
 {
     bool always_on = false;
@@ -214,6 +251,11 @@ bool Inkscape::SnapPreferences::isTargetSnappable(Inkscape::SnapTargetType const
     Inkscape::SnapTargetType index = target;
 
     _mapTargetToArrayIndex(index, always_on, group_on);
+
+    // Check masking first, it over-rides even group_on
+    if (_active_mask_targets[index] != -1) {
+        return _active_mask_targets[index];
+    }
 
     if (group_on) { // If true, then this snap target is in a snap group that has been enabled (e.g. bbox group, nodes/paths group, or "others" group
         if (always_on) { // If true, then this snap target is always active and cannot be toggled
@@ -325,6 +367,10 @@ Inkscape::SnapTargetType Inkscape::SnapPreferences::source2target(Inkscape::Snap
         case SNAPSOURCE_GRID_PITCH:
             return SNAPTARGET_GRID;
 
+        case SNAPSOURCE_PAGE_CORNER:
+            return SNAPTARGET_PAGE_CORNER;
+        case SNAPSOURCE_PAGE_CENTER:
+            return SNAPTARGET_PAGE_CENTER;
 
         case SNAPSOURCE_ALIGNMENT_CATEGORY:
             return SNAPTARGET_ALIGNMENT_CATEGORY;
@@ -342,7 +388,7 @@ Inkscape::SnapTargetType Inkscape::SnapPreferences::source2target(Inkscape::Snap
             return SNAPTARGET_ALIGNMENT_HANDLE;
 
         default:
-            g_warning("Mapping of snap source to snap target undefined");
+            g_warning("Mapping of snap source to snap target undefined (#%i)", source);
             return SNAPTARGET_UNDEFINED;
     }
 }

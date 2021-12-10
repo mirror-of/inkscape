@@ -147,8 +147,13 @@ void CanvasItem::show()
     _canvas->set_need_repick();
 }
 
-// Grab all events! TODO: Return boolean
 int CanvasItem::grab(Gdk::EventMask event_mask, GdkCursor *cursor)
+{
+    return grab(event_mask, Glib::wrap(cursor));
+}
+
+// Grab all events! TODO: Return boolean
+int CanvasItem::grab(Gdk::EventMask event_mask, Glib::RefPtr<Gdk::Cursor> cursor)
 {
 #ifdef CANVAS_ITEM_DEBUG
     std::cout << "CanvasItem::grab: " << _name << std::endl;
@@ -161,8 +166,7 @@ int CanvasItem::grab(Gdk::EventMask event_mask, GdkCursor *cursor)
     auto const display = Gdk::Display::get_default();
     auto const seat    = display->get_default_seat();
     auto const window  = _canvas->get_window();
-    auto cursor2 = Glib::wrap(cursor);
-    seat->grab(window, Gdk::SEAT_CAPABILITY_ALL_POINTING, false, cursor2, nullptr);
+    seat->grab(window, Gdk::SEAT_CAPABILITY_ALL_POINTING, false, cursor, nullptr);
 
     _canvas->set_grabbed_canvas_item(this, event_mask);
     _canvas->set_current_canvas_item(this); // So that all events go to grabbed item.

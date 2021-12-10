@@ -57,10 +57,12 @@ public:
     void set_background(guint32 background);
     void set_anchor(CanvasItemTextAnchor anchor);
     void set_anchor(Geom::Point const &anchor_pt);
+    void set_adjust(Geom::Point const &adjust_pt);
 
 protected:
     Geom::Point _p;  // Position of text (not box around text).
     CanvasItemTextAnchor _anchor = CANVAS_ITEM_TEXT_ANCHOR_CENTER;
+    Geom::Point _adjust_offset;
     Geom::Point _anchor_offset;
     Geom::Point _anchor_position_manual;
     Glib::ustring _text;

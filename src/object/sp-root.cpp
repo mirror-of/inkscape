@@ -22,6 +22,7 @@
 #include "document.h"
 #include "inkscape-version.h"
 #include "sp-defs.h"
+#include "sp-namedview.h"
 #include "sp-root.h"
 #include "display/drawing-group.h"
 #include "svg/stringstream.h"
@@ -295,9 +296,9 @@ void SPRoot::modified(unsigned int flags)
 {
     SPGroup::modified(flags);
 
-    /* fixme: (Lauris) */
     if (!this->parent && (flags & SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        this->document->emitResizedSignal(this->width.computed, this->height.computed);
+        // Size of viewport has changed.
+        document->getNamedView()->updateViewPort();
     }
 }
 

@@ -22,6 +22,8 @@
 #include "sp-guide.h"
 #include "preferences.h"
 #include "svg/svg.h"
+#include "snap-candidate.h"
+#include "snap-preferences.h"
 #include <glibmm/i18n.h>
 
 #define noRECT_VERBOSE

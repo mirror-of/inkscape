@@ -143,6 +143,8 @@ void CanvasItemText::update(Geom::Affine const &affine)
         default:
             break;
     }
+    offset_x += _adjust_offset.x();
+    offset_y += _adjust_offset.y();
     _anchor_offset = Geom::Point(offset_x, offset_y);
 
     // See note at bottom.
@@ -286,6 +288,13 @@ void CanvasItemText::set_anchor(Geom::Point const &anchor_pt)
     }
 }
 
+void CanvasItemText::set_adjust(Geom::Point const &adjust_pt)
+{
+    if (_adjust_offset != adjust_pt) {
+        _adjust_offset = adjust_pt;
+        _canvas->request_update();
+    }
+}
 } // namespace Inkscape
 
 /* FROM: http://lists.cairographics.org/archives/cairo-bugs/2009-March/003014.html

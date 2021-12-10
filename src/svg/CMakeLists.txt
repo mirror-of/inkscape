@@ -11,6 +11,7 @@ set(svg_SRC
 	svg-color.cpp
 	svg-angle.cpp
 	svg-length.cpp
+	svg-bool.cpp
 	svg-path.cpp
 
 
@@ -24,6 +25,7 @@ set(svg_SRC
 	svg-icc-color.h
 	svg-angle.h
 	svg-length.h
+	svg-bool.h
 	svg.h
 
 )

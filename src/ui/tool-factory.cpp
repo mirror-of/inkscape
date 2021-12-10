@@ -23,6 +23,7 @@
 #include "ui/tools/measure-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "ui/tools/node-tool.h"
+#include "ui/tools/pages-tool.h"
 #include "ui/tools/pencil-tool.h"
 #include "ui/tools/rect-tool.h"
 #include "ui/tools/marker-tool.h"
@@ -66,6 +67,8 @@ ToolBase *ToolFactory::createObject(std::string const& id)
         tool = new MeshTool;
     else if (id == "/tools/nodes")
         tool = new NodeTool;
+    else if (id == "/tools/pages")
+        tool = new PagesTool;
     else if (id == "/tools/freehand/pencil")
         tool = new PencilTool;
     else if (id == "/tools/freehand/pen")

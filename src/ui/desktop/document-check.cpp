@@ -21,6 +21,7 @@
 #include <gtkmm.h>
 
 #include "inkscape-window.h"
+#include "object/sp-namedview.h"
 
 #include "file.h"
 #include "extension/system.h" // Inkscape::Extension::FILE...

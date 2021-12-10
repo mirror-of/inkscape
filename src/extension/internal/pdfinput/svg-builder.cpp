@@ -24,6 +24,7 @@
 #include "pdf-parser.h"
 
 #include "document.h"
+#include "object/sp-namedview.h"
 #include "png.h"
 
 #include "xml/document.h"
@@ -136,11 +137,41 @@ void SvgBuilder::_init() {
     _ttm_is_set = false;
 }
 
+/**
+ * We're creating a multi-page document, push page number.
+ */
+void SvgBuilder::pushPage() {
+    // Move page over by the last page width
+    if (_page && this->_width) {
+        int gap = 20;
+        _page_left += this->_width + gap;
+        // TODO: A more interesting page layout could be implemented here.
+    }
+    _page_num += 1;
+    _page_offset = true;
+
+    if (_page) {
+        Inkscape::GC::release(_page);
+    }
+    _page = _xml_doc->createElement("inkscape:page");
+    _page->setAttributeSvgDouble("x", _page_left);
+    _page->setAttributeSvgDouble("y", _page_top);
+    auto _nv = _doc->getNamedView()->getRepr();
+    _nv->appendChild(_page);
+}
+
 void SvgBuilder::setDocumentSize(double width, double height) {
-    _root->setAttributeSvgDouble("width", width);
-    _root->setAttributeSvgDouble("height", height);
     this->_width = width;
     this->_height = height;
+
+    if (_page_num < 2) {
+        _root->setAttributeSvgDouble("width", width);
+        _root->setAttributeSvgDouble("height", height);
+    }
+    if (_page) {
+        _page->setAttributeSvgDouble("width", width);
+        _page->setAttributeSvgDouble("height", height);
+    }
 }
 
 /**
@@ -204,12 +235,18 @@ Inkscape::XML::Node *SvgBuilder::pushGroup() {
     // Set as a layer if this is a top-level group
     if ( _container->parent() == _root && _is_top_level ) {
         static int layer_count = 1;
-        if ( layer_count > 1 ) {
+        if (_page_num) {
+            gchar *layer_name = g_strdup_printf("Page %d", _page_num);
+            setAsLayer(layer_name);
+            g_free(layer_name);
+        } else if ( layer_count > 1 ) {
             gchar *layer_name = g_strdup_printf("%s%d", _docname, layer_count);
             setAsLayer(layer_name);
             g_free(layer_name);
+            layer_count++;
         } else {
             setAsLayer(_docname);
+            layer_count++;
         }
     }
     if (_container->parent()->attribute("inkscape:groupmode") != nullptr) {
@@ -251,9 +288,7 @@ static gchar *svgConvertGfxRGB(GfxRGB *color) {
     return svgConvertRGBToText(r, g, b);
 }
 
-static void svgSetTransform(Inkscape::XML::Node *node, double c0, double c1,
-                            double c2, double c3, double c4, double c5) {
-    Geom::Affine matrix(c0, c1, c2, c3, c4, c5);
+static void svgSetTransform(Inkscape::XML::Node *node, Geom::Affine matrix) {
     node->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(matrix));
 }
 
@@ -580,6 +615,18 @@ bool SvgBuilder::getTransform(double *transform) {
  */
 void SvgBuilder::setTransform(double c0, double c1, double c2, double c3,
                               double c4, double c5) {
+
+    auto matrix = Geom::Affine(c0, c1, c2, c3, c4, c5);
+
+    // Add page transformation only once (see scaledCTM in pdf-parser.cpp)
+    if ( _container->parent() == _root && _is_top_level && _page_offset) {
+        // Page position is in pixels from pushPage, translate in pt
+        auto _left = Inkscape::Util::Quantity::convert(_page_left, "px", "pt");
+        auto _top = Inkscape::Util::Quantity::convert(_page_top, "px", "pt");
+        matrix = Geom::Translate(_left, _top) * matrix;
+        _page_offset = false;
+    }
+
     // do not remember the group which is a layer
     if ((_container->attribute("inkscape:groupmode") == nullptr) && !_ttm_is_set) {
         _ttm[0] = c0;
@@ -596,7 +643,7 @@ void SvgBuilder::setTransform(double c0, double c1, double c2, double c3,
         pushGroup();
     }
     TRACE(("setTransform: %f %f %f %f %f %f\n", c0, c1, c2, c3, c4, c5));
-    svgSetTransform(_container, c0, c1, c2, c3, c4, c5);
+    svgSetTransform(_container, matrix);
 }
 
 void SvgBuilder::setTransform(double const *transform) {
@@ -1679,8 +1726,7 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     image_node->setAttribute("preserveAspectRatio", "none");
 
     // Set transformation
-
-        svgSetTransform(image_node, 1.0, 0.0, 0.0, -1.0, 0.0, 1.0);
+    svgSetTransform(image_node, Geom::Affine(1.0, 0.0, 0.0, -1.0, 0.0, 1.0));
 
     // Create href
     if (embed_image) {
@@ -1755,7 +1801,7 @@ void SvgBuilder::addImageMask(GfxState *state, Stream *str, int width, int heigh
     rect->setAttributeSvgDouble("y", 0.0);
     rect->setAttributeSvgDouble("width", 1.0);
     rect->setAttributeSvgDouble("height", 1.0);
-    svgSetTransform(rect, 1.0, 0.0, 0.0, -1.0, 0.0, 1.0);
+    svgSetTransform(rect, Geom::Affine(1.0, 0.0, 0.0, -1.0, 0.0, 1.0));
     // Get current fill style and set it on the rectangle
     SPCSSAttr *css = sp_repr_css_attr_new();
     _setFillStyle(css, state, false);

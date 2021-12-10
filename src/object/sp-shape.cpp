@@ -39,6 +39,8 @@
 
 #include "svg/svg.h"
 #include "svg/path-string.h"
+#include "snap-candidate.h"
+#include "snap-preferences.h"
 #include "live_effects/lpeobject.h"
 
 #include "helper/mathfns.h" // for triangle_area()
