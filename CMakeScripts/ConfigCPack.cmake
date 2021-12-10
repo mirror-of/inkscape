@@ -22,10 +22,13 @@ set(CPACK_PACKAGE_CHECKSUM "SHA256")
 
 set(CPACK_PACKAGE_EXECUTABLES "inkscape;Inkscape;inkview;Inkview")
 set(CPACK_CREATE_DESKTOP_LINKS "inkscape")
+
 if(WIN32)
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "Inkscape")
+    set(CPACK_STRIP_FILES FALSE)
 else()
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "inkscape")
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "inkscape")
+    set(CPACK_STRIP_FILES TRUE)
 endif()
 
 # This creates a screen in the windows installers asking users to "Agree" to the GPL which is incorrect.
@@ -33,7 +36,6 @@ endif()
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 # set( CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/README.md") # TODO: can we use this?
 
-set(CPACK_STRIP_FILES TRUE)
 set(CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION TRUE)
 
 # specific config for source packaging (note this is used by the 'dist' target)
