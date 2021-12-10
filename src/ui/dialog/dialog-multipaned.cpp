@@ -25,7 +25,7 @@
 #include "ui/widget/canvas-grid.h"
 #include "dialog-window.h"
 
-#define DROPZONE_SIZE 5 
+#define DROPZONE_SIZE 5
 #define HANDLE_SIZE 12
 #define HANDLE_CROSS_SIZE 25
 

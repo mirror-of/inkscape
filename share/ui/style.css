@@ -565,7 +565,7 @@ stackswitcher button {
 }
 
 .backgnd-active {
-    background-color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color;
     opacity: 0.5;
     transition: background-color 100ms linear;
 }
