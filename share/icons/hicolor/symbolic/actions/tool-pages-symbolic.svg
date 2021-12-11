@@ -14,66 +14,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs8">
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="round"
-       line_width="2"
-       linecap_type="round"
-       is_visible="true"
-       id="path-effect892"
-       effect="join_type"
-       lpeversion="1" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="round"
-       line_width="3.77953"
-       linecap_type="round"
-       is_visible="true"
-       id="path-effect872"
-       effect="join_type"
-       lpeversion="1" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect847"
-       is_visible="true"
-       lpeversion="1"
-       linecap_type="butt"
-       line_width="1.5"
-       linejoin_type="round"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect949"
-       is_visible="true"
-       linecap_type="round"
-       line_width="3"
-       linejoin_type="round"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="round"
-       line_width="1"
-       linecap_type="round"
-       is_visible="true"
-       id="path-effect1916"
-       effect="join_type"
-       lpeversion="1" />
-  </defs>
+     id="defs8" />
   <sodipodi:namedview
      objecttolerance="10"
      gridtolerance="10"
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="40.389939"
-     inkscape:cx="9.3216283"
-     inkscape:cy="9.7796631"
+     inkscape:zoom="57.12"
+     inkscape:cx="10.941877"
+     inkscape:cy="7.4754902"
      inkscape:window-width="1920"
      inkscape:window-height="1163"
      inkscape:window-x="1200"
@@ -86,7 +36,7 @@
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:snap-grids="false"
+     inkscape:snap-grids="true"
      inkscape:snap-to-guides="false">
     <inkscape:grid
        type="xygrid"
@@ -98,9 +48,9 @@
      id="snap-page">
     <path
        id="rect47"
-       style="color:#000000;fill:#000000;stroke-width:0.999996;-inkscape-stroke:none"
-       d="M 5.5 1 L 5.5 3.5 L 6.8339844 3.5 L 6.8339844 2.3359375 L 9.9980469 2.3359375 L 9.9960938 3.5 L 10 3.5 L 10 4.5 L 12.164062 4.5 L 12.164062 11.664062 L 10 11.664062 L 10 13 L 13.5 13 L 13.5 5.3046875 L 13.5 3.9882812 L 13.5 3.96875 L 13.480469 3.96875 L 10.527344 1.0195312 L 10.527344 1 L 10.509766 1 L 9.2207031 1 L 5.5 1 z "
-       transform="translate(979,527.3622)" />
+       d="m 5,2.3359375 h 6 V 4 h 1.664062 v 7.664062 H 12 V 13 h 2 V 3.9882812 3 L 12,1 H 5 Z"
+       transform="translate(979,527.3622)"
+       sodipodi:nodetypes="ccccccccccccc" />
     <path
        inkscape:connector-curvature="0"
        id="rect16572"
@@ -109,8 +59,7 @@
        transform="translate(0,512.3622)" />
     <path
        id="path3254"
-       style="color:#000000;fill:#000000;stroke-width:0.999996;-inkscape-stroke:none"
-       d="m 981.5,530.3622 v 12 h 8 v -7.69605 -1.31541 -0.0205 h -0.0205 l -2.95129,-2.94944 v -0.0186 h -0.0186 -1.28933 z m 1.33405,1.33591 h 3.16459 l -0.004,2.16409 h 2.16983 v 7.1641 h -5.33004 z"
+       d="m 981,530.3622 v 12 h 9 v -7.69605 -1.31541 -0.0205 h -0.0205 l -2.95129,-2.94944 v -0.0186 h -0.0186 -1.28933 z m 1.33405,1.33591 3.66995,-0.0149 -0.004,2.67894 2.66447,0.0149 v 6.64925 h -6.33004 z"
        sodipodi:nodetypes="ccccccccccccccccccc" />
   </g>
   <style
@@ -121,28 +70,6 @@
   </style>
   <style
      id="s2"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-6">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-0"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-7">
-   .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-   .dark    {  }
-  </style>
-  <style
-     id="s2-9"> 
      @import '../../highlights.css'; 
   </style>
 </svg>
