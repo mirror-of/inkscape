@@ -12,8 +12,8 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/originalpatharray.h"
 #include "live_effects/parameter/hidden.h"
+#include "live_effects/parameter/patharray.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -31,7 +31,7 @@ public:
     ~LPEFillBetweenMany() override;
     void doEffect (SPCurve * curve) override;
 private:
-    OriginalPathArrayParam linked_paths;
+    PathArrayParam linked_paths;
     EnumParam<Filllpemethod> method;
     BoolParam join;
     BoolParam close;

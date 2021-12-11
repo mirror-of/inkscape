@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINALITEMARRAY_H
-#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINALITEMARRAY_H
+#ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINALPATHARRAY_H
+#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINALPATHARRAY_H
 
 /*
  * Inkscape::LivePathEffectParameters
@@ -18,11 +18,11 @@
 #include <gtkmm/scrolledwindow.h>
 
 #include "live_effects/parameter/parameter.h"
-#include "live_effects/parameter/item-reference.h"
+#include "live_effects/parameter/path-reference.h"
 
 #include "svg/svg.h"
 #include "svg/stringstream.h"
-#include "item-reference.h"
+#include "path-reference.h"
 
 class SPObject;
 
@@ -30,36 +30,38 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-class ItemAndActive {
+class PathAndDirectionAndVisible {
 public:
-    ItemAndActive(SPObject *owner)
+    PathAndDirectionAndVisible(SPObject *owner)
     : href(nullptr),
     ref(owner),
-    actived(true)
+    _pathvector(Geom::PathVector()),
+    reversed(false),
+    visibled(true)
     {
         
     }
     gchar *href;
     URIReference ref;
-    bool actived;
+    Geom::PathVector _pathvector;
+    bool reversed;
+    bool visibled;
     
     sigc::connection linked_changed_connection;
     sigc::connection linked_delete_connection;
     sigc::connection linked_modified_connection;
     sigc::connection linked_transformed_connection;
 };
-    
-class OriginalItemArrayParam : public Parameter {
+
+class PathArrayParam : public Parameter
+{
 public:
     class ModelColumns;
-    
-    OriginalItemArrayParam( const Glib::ustring& label,
-                const Glib::ustring& tip,
-                const Glib::ustring& key,
-                Inkscape::UI::Widget::Registry* wr,
-                Effect* effect);
 
-    ~OriginalItemArrayParam() override;
+    PathArrayParam(const Glib::ustring &label, const Glib::ustring &tip, const Glib::ustring &key,
+                   Inkscape::UI::Widget::Registry *wr, Effect *effect);
+
+    ~PathArrayParam() override;
 
     Gtk::Widget * param_newWidget() override;
     bool param_readSVGValue(const gchar * strvalue) override;
@@ -71,40 +73,41 @@ public:
     void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) override {};
     /** Disable the canvas indicators of parent class by overriding this method */
     void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) override {};
+    void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; update();};
+    void allowOnlyBsplineSpiro(bool allow_only_bspline_spiro){ _allow_only_bspline_spiro = allow_only_bspline_spiro; update();};
 
-    std::vector<ItemAndActive*> _vector;
-    
+    std::vector<PathAndDirectionAndVisible*> _vector;
+
 protected:
-    bool _updateLink(const Gtk::TreeIter& iter, ItemAndActive* pd);
+    bool _updateLink(const Gtk::TreeIter& iter, PathAndDirectionAndVisible* pd);
     bool _selectIndex(const Gtk::TreeIter& iter, int* i);
-    void unlink(ItemAndActive* to);
-    void remove_link(ItemAndActive* to);
-    void setItem(SPObject *linked_obj, guint flags, ItemAndActive* to);
+    void unlink(PathAndDirectionAndVisible* to);
+    void setPathVector(SPObject *linked_obj, guint flags, PathAndDirectionAndVisible* to);
     
-    void linked_changed(SPObject *old_obj, SPObject *new_obj, ItemAndActive* to);
-    void linked_modified(SPObject *linked_obj, guint flags, ItemAndActive* to);
-    void linked_transformed(Geom::Affine const *, SPItem *, ItemAndActive*) {}
-    void linked_delete(SPObject *deleted, ItemAndActive* to);
+    void linked_changed(SPObject *old_obj, SPObject *new_obj, PathAndDirectionAndVisible* to);
+    void linked_modified(SPObject *linked_obj, guint flags, PathAndDirectionAndVisible* to);
+    void linked_transformed(Geom::Affine const *, SPItem *, PathAndDirectionAndVisible*) {}
+    void linked_delete(SPObject *deleted, PathAndDirectionAndVisible* to);
     
     ModelColumns *_model;
     Glib::RefPtr<Gtk::TreeStore> _store;
     Gtk::TreeView *_tree;
     Gtk::ScrolledWindow *_scroller;
-    Gtk::CellRendererText *_text_renderer;
-    Gtk::CellRendererToggle *_toggle_active;
-    Gtk::TreeView::Column *_name_column;
     
     void on_link_button_click();
     void on_remove_button_click();
     void on_up_button_click();
     void on_down_button_click();
-    void on_active_toggled(const Glib::ustring& item);
+    void on_reverse_toggled(const Glib::ustring& path);
+    void on_visible_toggled(const Glib::ustring& path);
     
 private:
+    bool _from_original_d;
+    bool _allow_only_bspline_spiro;
     void update();
-    void initui(); 
-    OriginalItemArrayParam(const OriginalItemArrayParam&);
-    OriginalItemArrayParam& operator=(const OriginalItemArrayParam&);
+    void initui();
+    PathArrayParam(const PathArrayParam &) = delete;
+    PathArrayParam &operator=(const PathArrayParam &) = delete;
 };
 
 } //namespace LivePathEffect

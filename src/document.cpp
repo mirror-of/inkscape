@@ -486,12 +486,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         sp_file_convert_dpi(document);
     }
 
-    // Update LPE's   See: Related bug:#1769679 #18
-    SPDefs * defs = document->getDefs();
-    if (defs) {
-        defs->emitModified(SP_OBJECT_MODIFIED_CASCADE);
-    }
-
     // Update document level action settings
     // -- none available so far --
 
@@ -1068,6 +1062,25 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
     return getObjectById(Glib::ustring(id));
 }
 
+SPObject *SPDocument::getObjectByHref(Glib::ustring const &href) const
+{
+    if (iddef.empty()) {
+        return nullptr;
+    }
+    Glib::ustring id = href;
+    id = id.erase(0, 1);
+    return getObjectById(id);
+}
+
+SPObject *SPDocument::getObjectByHref(gchar const *href) const
+{
+    if (href == nullptr) {
+        return nullptr;
+    }
+
+    return getObjectByHref(Glib::ustring(href));
+}
+
 void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
 {
     if (parent) {
@@ -1104,28 +1117,29 @@ std::vector<SPObject *> SPDocument::getObjectsByClass(Glib::ustring const &klass
     return objects;
 }
 
-void _getObjectsByElementRecursive(Glib::ustring const &element, SPObject *parent,
-                                   std::vector<SPObject *> &objects)
+void _getObjectsByElementRecursive(Glib::ustring const &element, SPObject *parent, std::vector<SPObject *> &objects,
+                                   bool custom)
 {
     if (parent) {
-        Glib::ustring prefixed = "svg:" + element;
+        Glib::ustring prefixed = custom ? "inkscape:" : "svg:";
+        prefixed += element;
         if (parent->getRepr()->name() == prefixed) {
             objects.push_back(parent);
         }
 
         // Check children
         for (auto& child : parent->children) {
-            _getObjectsByElementRecursive(element, &child, objects);
+            _getObjectsByElementRecursive(element, &child, objects, custom);
         }
     }
 }
 
-std::vector<SPObject *> SPDocument::getObjectsByElement(Glib::ustring const &element) const
+std::vector<SPObject *> SPDocument::getObjectsByElement(Glib::ustring const &element, bool custom) const
 {
     std::vector<SPObject *> objects;
     g_return_val_if_fail(!element.empty(), objects);
 
-    _getObjectsByElementRecursive(element, root, objects);
+    _getObjectsByElementRecursive(element, root, objects, custom);
     return objects;
 }
 
@@ -1350,6 +1364,8 @@ SPDocument::idle_handler()
     if (!status) {
         modified_connection.disconnect();
     }
+    // this hack prevent update LPE items on load documents with stylesheet
+    stylesheetchg = false;
     return status;
 }
 
@@ -2055,6 +2071,11 @@ sigc::connection SPDocument::connectFilenameSet(SPDocument::FilenameSetSignal::s
 sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
 {
     return commit_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectBeforeCommit(SPDocument::BeforeCommitSignal::slot_type slot)
+{
+    return before_commit_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectIdChanged(gchar const *id,

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * \brief Satellite a per node holder of data.
+ * \brief NodeSatellite a per node holder of data.
  *//*
  * Authors:
  * see git history
@@ -10,12 +10,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <helper/geom-satellite.h>
 #include <2geom/curve.h>
 #include <2geom/nearest-time.h>
 #include <2geom/path-intersection.h>
-#include <2geom/sbasis-to-bezier.h>
 #include <2geom/ray.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <helper/geom-nodesatellite.h>
 #include <optional>
 // log cache
 #ifdef _WIN32
@@ -25,22 +25,21 @@
 #include <ctime>
 #endif
 
-///@brief Satellite a per node holder of data.
-Satellite::Satellite() = default;
+///@brief NodeSatellite a per node holder of data.
+NodeSatellite::NodeSatellite() = default;
 
-
-Satellite::Satellite(SatelliteType satellite_type)
-    : satellite_type(satellite_type),
-      is_time(false),
-      selected(false),
-      has_mirror(false),
-      hidden(true),
-      amount(0.0),
-      angle(0.0),
-      steps(0)
+NodeSatellite::NodeSatellite(NodeSatelliteType nodesatellite_type)
+    : nodesatellite_type(nodesatellite_type)
+    , is_time(false)
+    , selected(false)
+    , has_mirror(false)
+    , hidden(true)
+    , amount(0.0)
+    , angle(0.0)
+    , steps(0)
 {}
 
-Satellite::~Satellite() = default;
+NodeSatellite::~NodeSatellite() = default;
 
 ///Calculate the time in curve_in with a size of A
 //TODO: find a better place to it
@@ -86,10 +85,9 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in)
     return s;
 }
 
-///Convert a arc radius of a fillet/chamfer to his satellite length -point position where fillet/chamfer knot be on original curve
-double Satellite::radToLen(
-    double const A, Geom::Curve const &curve_in,
-    Geom::Curve const &curve_out) const
+/// Convert a arc radius of a fillet/chamfer to his nodesatellite length -point position where fillet/chamfer knot be on
+/// original curve
+double NodeSatellite::radToLen(double const A, Geom::Curve const &curve_in, Geom::Curve const &curve_out) const
 {
     double len = 0;
     Geom::D2<Geom::SBasis> d2_in = curve_in.toSBasis();
@@ -119,13 +117,12 @@ double Satellite::radToLen(
     return len;
 }
 
-///Convert a satellite length -point position where fillet/chamfer knot be on original curve- to a arc radius of fillet/chamfer
-double Satellite::lenToRad(
-    double const A, Geom::Curve const &curve_in,
-    Geom::Curve const &curve_out,
-    Satellite const previousSatellite) const
+/// Convert a nodesatellite length -point position where fillet/chamfer knot be on original curve- to a arc radius of
+/// fillet/chamfer
+double NodeSatellite::lenToRad(double const A, Geom::Curve const &curve_in, Geom::Curve const &curve_out,
+                               NodeSatellite const previousNodeSatellite) const
 {
-    double time_in = (previousSatellite).time(A, true, curve_in);
+    double time_in = (previousNodeSatellite).time(A, true, curve_in);
     double time_out = timeAtArcLength(A, curve_out);
     Geom::Point start_arc_point = curve_in.pointAt(time_in);
     Geom::Point end_arc_point = curve_out.pointAt(time_out);
@@ -153,8 +150,8 @@ double Satellite::lenToRad(
     return 0;
 }
 
-///Get the time position of the satellite in curve_in
-double Satellite::time(Geom::Curve const &curve_in, bool inverse) const
+/// Get the time position of the nodesatellite in curve_in
+double NodeSatellite::time(Geom::Curve const &curve_in, bool inverse) const
 {
     double t = amount;
     if (!is_time) {
@@ -169,8 +166,7 @@ double Satellite::time(Geom::Curve const &curve_in, bool inverse) const
 }
 
 ///Get the time from a length A in other curve, a boolean inverse given to reverse time
-double Satellite::time(double A, bool inverse,
-                       Geom::Curve const &curve_in) const
+double NodeSatellite::time(double A, bool inverse, Geom::Curve const &curve_in) const
 {
     if (A == 0 && inverse) {
         return 1;
@@ -186,8 +182,8 @@ double Satellite::time(double A, bool inverse,
     return timeAtArcLength(A, curve_in);
 }
 
-///Get the length of the satellite in curve_in
-double Satellite::arcDistance(Geom::Curve const &curve_in) const
+/// Get the length of the nodesatellite in curve_in
+double NodeSatellite::arcDistance(Geom::Curve const &curve_in) const
 {
     double s = amount;
     if (is_time) {
@@ -196,15 +192,15 @@ double Satellite::arcDistance(Geom::Curve const &curve_in) const
     return s;
 }
 
-///Get the point position of the satellite
-Geom::Point Satellite::getPosition(Geom::Curve const &curve_in, bool inverse) const
+/// Get the point position of the nodesatellite
+Geom::Point NodeSatellite::getPosition(Geom::Curve const &curve_in, bool inverse) const
 {
     double t = time(curve_in, inverse);
     return curve_in.pointAt(t);
 }
 
-///Set the position of the satellite from a given point P
-void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool inverse)
+/// Set the position of the nodesatellite from a given point P
+void NodeSatellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool inverse)
 {
     Geom::Curve * curve = const_cast<Geom::Curve *>(&curve_in);
     if (inverse) {
@@ -217,24 +213,23 @@ void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bo
     amount = A;
 }
 
-
-///Map a satellite type with gchar
-void Satellite::setSatelliteType(gchar const *A)
+/// Map a nodesatellite type with gchar
+void NodeSatellite::setNodeSatellitesType(gchar const *A)
 {
-    std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
-        boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
-    std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(A));
-    if (it != gchar_map_to_satellite_type.end()) {
-        satellite_type = it->second;
+    std::map<std::string, NodeSatelliteType> gchar_map_to_nodesatellite_type = boost::assign::map_list_of("F", FILLET)(
+        "IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
+    std::map<std::string, NodeSatelliteType>::iterator it = gchar_map_to_nodesatellite_type.find(std::string(A));
+    if (it != gchar_map_to_nodesatellite_type.end()) {
+        nodesatellite_type = it->second;
     }
 }
 
-///Map a gchar with satelliteType
-gchar const *Satellite::getSatelliteTypeGchar() const
+/// Map a gchar with nodesatelliteType
+gchar const *NodeSatellite::getNodeSatellitesTypeGchar() const
 {
-    std::map<SatelliteType, gchar const *> satellite_type_to_gchar_map =
-        boost::assign::map_list_of(FILLET, "F")(INVERSE_FILLET, "IF")(CHAMFER, "C")(INVERSE_CHAMFER, "IC")(INVALID_SATELLITE, "KO");
-    return satellite_type_to_gchar_map.at(satellite_type);
+    std::map<NodeSatelliteType, gchar const *> nodesatellite_type_to_gchar_map = boost::assign::map_list_of(
+        FILLET, "F")(INVERSE_FILLET, "IF")(CHAMFER, "C")(INVERSE_CHAMFER, "IC")(INVALID_SATELLITE, "KO");
+    return nodesatellite_type_to_gchar_map.at(nodesatellite_type);
 }
 
 /*

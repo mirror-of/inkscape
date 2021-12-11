@@ -15,8 +15,8 @@ set(helper_SRC
 	geom.cpp
 	geom-nodetype.cpp
 	geom-pathstroke.cpp
-	geom-pathvectorsatellites.cpp
-	geom-satellite.cpp
+	geom-pathvector_nodesatellites.cpp
+	geom-nodesatellite.cpp
 	gettext.cpp
 	pixbuf-ops.cpp
 	png-write.cpp
@@ -34,8 +34,8 @@ set(helper_SRC
 	geom-curves.h
 	geom-nodetype.h
 	geom-pathstroke.h
-	geom-pathvectorsatellites.h
-	geom-satellite.h
+	geom-pathvector_nodesatellites.h
+	geom-nodesatellite.h
 	geom.h
 	gettext.h
 	mathfns.h

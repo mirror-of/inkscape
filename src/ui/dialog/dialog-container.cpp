@@ -75,7 +75,7 @@ DialogContainer::~DialogContainer() {
 
 DialogContainer::DialogContainer()
 {
-    set_name("DialogContainer");
+    get_style_context()->add_class("DialogContainer");
 
     // Setup main column
     columns = Gtk::manage(new DialogMultipaned(Gtk::ORIENTATION_HORIZONTAL));
@@ -177,7 +177,7 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
     close->get_style_context()->add_class("close-button");
     Glib::ustring label_str_fix = label_str;
     label_str_fix = Glib::Regex::create("\\W")->replace_literal(label_str_fix, 0, "-", (Glib::RegexMatchFlags)0);
-    tab->set_name(label_str_fix);
+    tab->get_style_context()->add_class(label_str_fix);
     tab->pack_start(*image);
     tab->pack_end(*close);
     tab->pack_end(*label);

@@ -790,13 +790,41 @@ void EditVerb::perform(SPAction *action, void *data)
 
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
-
+    Glib::ustring switch_selector_to = get_active_tool(dt);
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EDIT_UNDO:
+            // this fix crashes on undo with knots forcing regenerate knots on undo
+            if (switch_selector_to == "Node") {
+                dt->selection->setBackup();
+            }
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, "Select");
+            }
             sp_undo(dt, dt->getDocument());
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, switch_selector_to);
+            }
+            if (switch_selector_to == "Node") {
+                dt->selection->restoreBackup();
+                dt->selection->emptyBackup();
+            }
             break;
         case SP_VERB_EDIT_REDO:
+            // this fix crashes on redo with knots forcing regenerate knots on undo
+            if (switch_selector_to == "Node") {
+                dt->selection->setBackup();
+            }
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, "Select");
+            }
             sp_redo(dt, dt->getDocument());
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, switch_selector_to);
+            }
+            if (switch_selector_to == "Node") {
+                dt->selection->restoreBackup();
+                dt->selection->emptyBackup();
+            }
             break;
         case SP_VERB_EDIT_CUT:
             dt->selection->cut();

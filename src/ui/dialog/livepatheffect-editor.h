@@ -67,6 +67,7 @@ private:
     void onRemove();
     void onUp();
     void onDown();
+    void onOriginal();
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
@@ -80,7 +81,7 @@ private:
         ~ModelColumns() override = default;
 
         Gtk::TreeModelColumn<Glib::ustring> col_name;
-        Gtk::TreeModelColumn<LivePathEffect::LPEObjectReference *> lperef;
+        Gtk::TreeModelColumn<std::shared_ptr<LivePathEffect::LPEObjectReference>> lperef;
         Gtk::TreeModelColumn<bool> col_visible;
     };
 
@@ -106,12 +107,13 @@ private:
     Gtk::ButtonBox toolbar_hbox;
     Gtk::Button button_add;
     Gtk::Button button_remove;
+    Gtk::Button button_original;
     Gtk::Button button_up;
     Gtk::Button button_down;
 
     SPLPEItem * current_lpeitem;
 
-    LivePathEffect::LPEObjectReference * current_lperef;
+    std::shared_ptr<LivePathEffect::LPEObjectReference> current_lperef;
 
     friend void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data);
     friend void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data);

@@ -1334,7 +1334,8 @@ void PenTool::_bsplineSpiroStartAnchor(bool shift)
     LivePathEffect::LPEBSpline *lpe_bsp = nullptr;
 
     if (SP_IS_LPE_ITEM(this->white_item) && SP_LPE_ITEM(this->white_item)->hasPathEffect()){
-        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(this->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        Inkscape::LivePathEffect::Effect *thisEffect =
+            SP_LPE_ITEM(this->white_item)->getFirstPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
         if(thisEffect){
             lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
         }
@@ -1347,7 +1348,8 @@ void PenTool::_bsplineSpiroStartAnchor(bool shift)
     LivePathEffect::LPESpiro *lpe_spi = nullptr;
 
     if (SP_IS_LPE_ITEM(this->white_item) && SP_LPE_ITEM(this->white_item)->hasPathEffect()){
-        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(this->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::SPIRO);
+        Inkscape::LivePathEffect::Effect *thisEffect =
+            SP_LPE_ITEM(this->white_item)->getFirstPathEffectOfType(Inkscape::LivePathEffect::SPIRO);
         if(thisEffect){
             lpe_spi = dynamic_cast<LivePathEffect::LPESpiro*>(thisEffect->getLPEObj()->get_lpe());
         }

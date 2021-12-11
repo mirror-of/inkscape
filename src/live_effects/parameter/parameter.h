@@ -10,10 +10,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-widget.h"
 #include <2geom/forward.h>
 #include <2geom/pathvector.h>
 #include <glibmm/ustring.h>
+
+#include "live_effects/lpeobject.h"
+#include "ui/widget/registered-widget.h"
 
 // In gtk2, this wasn't an issue; we could toss around
 // G_MAXDOUBLE and not worry about size allocations. But
@@ -33,7 +35,9 @@ class Widget;
 }
 
 namespace Inkscape {
-
+namespace Display {
+class TemporaryItem;
+}
 namespace NodePath {
 class Path;
 }
@@ -45,15 +49,13 @@ class Registry;
 } // namespace UI
 
 namespace LivePathEffect {
-
 class Effect;
 
 class Parameter {
   public:
     Parameter(Glib::ustring label, Glib::ustring tip, Glib::ustring key, Inkscape::UI::Widget::Registry *wr,
               Effect *effect);
-    virtual ~Parameter() = default;
-    ;
+    virtual ~Parameter();
 
     Parameter(const Parameter &) = delete;
     Parameter &operator=(const Parameter &) = delete;
@@ -64,12 +66,12 @@ class Parameter {
     virtual void param_widget_is_visible(bool is_visible) { widget_is_visible = is_visible; }
     virtual void param_widget_is_enabled(bool is_enabled) { widget_is_enabled = is_enabled; }
     void write_to_SVG();
+    void read_from_SVG();
 
     virtual void param_set_default() = 0;
     virtual void param_update_default(const gchar *default_value) = 0;
     // This creates a new widget (newed with Gtk::manage(new ...);)
     virtual Gtk::Widget *param_newWidget() = 0;
-
     virtual Glib::ustring *param_getTooltip() { return &param_tooltip; };
 
     // overload these for your particular parameter to make it provide knotholder handles or canvas helperpaths
@@ -81,7 +83,11 @@ class Parameter {
     virtual void param_setup_nodepath(Inkscape::NodePath::Path * /*np*/){};
 
     virtual void param_transform_multiply(Geom::Affine const & /*postmul*/, bool set){};
-
+    virtual std::vector<SPObject *> param_get_satellites();
+    void param_higlight(bool highlight, bool select);
+    sigc::connection *selection_changed_connection = nullptr;
+    void change_selection(Inkscape::Selection *selection);
+    void update_satellites(bool updatelpe = false);
     Glib::ustring param_key;
     Glib::ustring param_tooltip;
     Inkscape::UI::Widget::Registry *param_wr;
@@ -92,9 +98,10 @@ class Parameter {
     bool widget_is_enabled;
 
   protected:
-    Effect *param_effect;
-
-    void param_write_to_repr(const char *svgd);
+      Inkscape::Display::TemporaryItem *ownerlocator = nullptr;
+      Effect *param_effect;
+      /* friend class LPECopyRotate; */
+      void param_write_to_repr(const char *svgd);
 };
 
 

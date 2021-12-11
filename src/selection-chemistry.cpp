@@ -22,44 +22,33 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "selection-chemistry.h"
+
 #include <boost/range/adaptor/reversed.hpp>
 #include <cstring>
+#include <glibmm/i18n.h>
+#include <gtkmm/clipboard.h>
 #include <map>
 #include <string>
 
-#include <glibmm/i18n.h>
-#include <gtkmm/clipboard.h>
-
-#include "selection-chemistry.h"
-
-#include "file.h"
-
+#include "actions/actions-tools.h" // Switching tools
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"
-#include "document-undo.h"
-#include "gradient-drag.h"
-#include "layer-manager.h"
-#include "message-stack.h"
-#include "path-chemistry.h"
-#include "selection.h"
-#include "text-editing.h"
-#include "text-chemistry.h"
-
-#include "actions/actions-tools.h" // Switching tools
-
 #include "display/cairo-utils.h"
-#include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
-
-#include "helper/pixbuf-ops.h"
-
-#include "io/resource.h"
-
-#include "live_effects/effect.h"
-#include "live_effects/parameter/originalpath.h"
-
+#include "display/curve.h"
+#include "document-undo.h"
+#include "file.h"
 #include "filter-chemistry.h"
+#include "gradient-drag.h"
+#include "helper/pixbuf-ops.h"
+#include "io/resource.h"
+#include "layer-manager.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/parameter/originalpath.h"
+#include "message-stack.h"
 #include "object/box3d.h"
 #include "object/object-set.h"
 #include "object/persp3d.h"
@@ -92,12 +81,15 @@
 #include "object/sp-tref.h"
 #include "object/sp-tspan.h"
 #include "object/sp-use.h"
+#include "path-chemistry.h"
+#include "selection.h"
 #include "style.h"
-
 #include "svg/svg-color.h"
 #include "svg/svg.h"
-
+#include "text-chemistry.h"
+#include "text-editing.h"
 #include "ui/clipboard.h"
+#include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tools/connector-tool.h"
@@ -105,11 +97,9 @@
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/text-tool.h"
-#include "ui/widget/canvas.h"  // is_dragging()
-
+#include "ui/widget/canvas.h" // is_dragging()
 #include "xml/rebase-hrefs.h"
 #include "xml/simple-document.h"
-#include "ui/icon-names.h"
 
 // TODO FIXME: This should be moved into preference repr
 SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
@@ -942,7 +932,21 @@ void ObjectSet::ungroup(bool skip_undo)
     }
 
     ungroup_impl(this);
-
+    std::vector<SPItem*> selection(items().begin(), items().end());
+    for (auto item : selection) {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem) {
+            for (auto *lpe : lpeitem->getPathEffects()) {
+                if (lpe) {
+                    //lpe->doOnOpen(lpeitem);
+                    for (auto & p : lpe->param_vector) {
+                        p->read_from_SVG();
+                        p->update_satellites(true);
+                    }
+                }
+            }
+        }
+    }
     if(document() && !skip_undo)
         DocumentUndo::done(document(), _("Ungroup"), INKSCAPE_ICON("object-ungroup"));
 }
@@ -1663,9 +1667,17 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
         }
     }
     auto items_copy = items();
+    std::vector<SPItem *> ordered_items;
     for (auto l=items_copy.begin();l!=items_copy.end() ;++l) {
         SPItem *item = *l;
-
+        SPLPEItem *clonelpe = dynamic_cast<SPLPEItem *>(item);
+        if (clonelpe && clonelpe->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
+            ordered_items.insert(ordered_items.begin(), item);
+        } else {
+            ordered_items.push_back(item);
+        }
+    }
+    for (auto item : ordered_items) {
         if( dynamic_cast<SPRoot *>(item) ) {
             // An SVG element cannot have a transform. We could change 'x' and 'y' in response
             // to a translation... but leave that for another day.

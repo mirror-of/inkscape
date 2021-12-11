@@ -40,7 +40,7 @@ public:
     LivePathEffectObject *lpeobject;
 
     sigc::connection _modified_connection;
-    sigc::connection _delete_connection;
+    sigc::connection _release_connection;
     sigc::connection _changed_connection;
 
     void            link(const char* to);

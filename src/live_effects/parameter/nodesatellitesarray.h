@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef INKSCAPE_LIVEPATHEFFECT_SATELLITES_ARRAY_H
-#define INKSCAPE_LIVEPATHEFFECT_SATELLITES_ARRAY_H
+#ifndef INKSCAPE_LIVEPATHEFFECT_NODESATELLITES_ARRAY_H
+#define INKSCAPE_LIVEPATHEFFECT_NODESATELLITES_ARRAY_H
 
 /*
  * Inkscape::LivePathEffectParameters
@@ -13,7 +13,7 @@
  * that saved me a lot of hours
  *
  *
- * This parameter acts as a bridge from pathVectorSatellites class to serialize it as a LPE
+ * This parameter acts as a bridge from pathVectorNodeSatellites class to serialize it as a LPE
  * parameter
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
@@ -21,9 +21,9 @@
 
 #include <glib.h>
 
-#include "live_effects/parameter/array.h"
+#include "helper/geom-pathvector_nodesatellites.h"
 #include "live_effects/effect-enum.h"
-#include "helper/geom-pathvectorsatellites.h"
+#include "live_effects/parameter/array.h"
 #include "ui/knot/knot-holder-entity.h"
 
 namespace Inkscape {
@@ -32,11 +32,11 @@ namespace LivePathEffect {
 
 class FilletChamferKnotHolderEntity;
 
-class SatellitesArrayParam : public ArrayParam<std::vector<Satellite> > {
+class NodeSatelliteArrayParam : public ArrayParam<std::vector<NodeSatellite>>
+{
 public:
-    SatellitesArrayParam(const Glib::ustring &label, const Glib::ustring &tip,
-                        const Glib::ustring &key,
-                        Inkscape::UI::Widget::Registry *wr, Effect *effect);
+    NodeSatelliteArrayParam(const Glib::ustring &label, const Glib::ustring &tip, const Glib::ustring &key,
+                            Inkscape::UI::Widget::Registry *wr, Effect *effect);
 
     Gtk::Widget *param_newWidget() override
     {
@@ -57,8 +57,8 @@ public:
     void setGlobalKnotHide(bool global_knot_hide);
     void setEffectType(EffectType et);
     void reloadKnots();
-    void updateAmmount(double amount); 
-    void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites, bool write = true);
+    void updateAmmount(double amount);
+    void setPathVectorNodeSatellites(PathVectorNodeSatellites *pathVectorNodeSatellites, bool write = true);
 
     void set_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape,
                             Inkscape::CanvasItemCtrlMode mode,
@@ -72,8 +72,8 @@ protected:
     KnotHolder *_knoth;
 
 private:
-    SatellitesArrayParam(const SatellitesArrayParam &) = delete;
-    SatellitesArrayParam &operator=(const SatellitesArrayParam &) = delete;
+    NodeSatelliteArrayParam(const NodeSatelliteArrayParam &) = delete;
+    NodeSatelliteArrayParam &operator=(const NodeSatelliteArrayParam &) = delete;
 
     Inkscape::CanvasItemCtrlShape _knot_shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
     Inkscape::CanvasItemCtrlMode  _knot_mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
@@ -83,13 +83,12 @@ private:
     bool _global_knot_hide = false;
     double _current_zoom = 0;
     EffectType _effectType = FILLET_CHAMFER;
-    PathVectorSatellites *_last_pathvector_satellites = nullptr;
-
+    PathVectorNodeSatellites *_last_pathvector_nodesatellites = nullptr;
 };
 
 class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
-    FilletChamferKnotHolderEntity(SatellitesArrayParam *p, size_t index);
+    FilletChamferKnotHolderEntity(NodeSatelliteArrayParam *p, size_t index);
     ~FilletChamferKnotHolderEntity() override
     {
         _pparam->_knoth = nullptr;
@@ -99,7 +98,7 @@ public:
     Geom::Point knot_get() const override;
     void knot_click(guint state) override;
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-    void knot_set_offset(Satellite);
+    void knot_set_offset(NodeSatellite);
     /** Checks whether the index falls within the size of the parameter's vector
      */
     bool valid_index(size_t index, size_t subindex) const
@@ -108,7 +107,7 @@ public:
     };
 
 private:
-    SatellitesArrayParam *_pparam;
+    NodeSatelliteArrayParam *_pparam;
     size_t _index;
 };
 

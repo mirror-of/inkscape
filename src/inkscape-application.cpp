@@ -270,6 +270,8 @@ InkscapeApplication::document_revert(SPDocument* document)
 
             if (reverted) {
                 desktop->zoom_absolute(c, zoom, false);
+                /** Update LPE and Fix legacy LPE system **/
+                sp_file_fix_lpe(desktop->getDocument());
             } else {
                 std::cerr << "InkscapeApplication::revert_document: Revert failed!" << std::endl;
             }
@@ -352,6 +354,8 @@ InkscapeApplication::document_fix(InkscapeWindow* window)
         if ( sp_version_inside_range( document->getRoot()->version.inkscape, 0, 1, 0, 92 ) ) {
             sp_file_convert_dpi(document);
         }
+        /** Update LPE and Fix legacy LPE system **/
+        sp_file_fix_lpe(document);
 
         // Check for font substitutions, requires text to have been rendered.
         Inkscape::UI::Dialog::FontSubstitution::getInstance().checkFontSubstitutions(document);
@@ -828,7 +832,7 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
             bool replace = old_document && old_document->getVirgin();
 
             window = create_window (document, replace);
-
+            document_fix(window);
         } else if (!cancelled) {
             std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to load: "
                       << file->get_parse_name() << std::endl;
@@ -979,7 +983,9 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
     if (_use_shell) {
         shell();
     }
-
+    if (_with_gui && _active_window) {
+        document_fix(_active_window);
+    }
     // Only if --export-filename, --export-type --export-overwrite, or --export-use-hints are used.
     if (_auto_export) {
         // Save... can't use action yet.

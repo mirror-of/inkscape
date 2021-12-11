@@ -5,48 +5,42 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/i18n.h>
-
-#include <gtkmm/widget.h>
-#include <gtkmm/icontheme.h>
-#include <gtkmm/imagemenuitem.h>
-#include <gtkmm/separatormenuitem.h>
-#include <gtkmm/scrolledwindow.h>
+#include "live_effects/parameter/patharray.h"
 
 #include <2geom/coord.h>
 #include <2geom/point.h>
+#include <glibmm/i18n.h>
+#include <gtkmm/icontheme.h>
+#include <gtkmm/imagemenuitem.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/separatormenuitem.h>
+#include <gtkmm/widget.h>
 
+#include "display/curve.h"
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "originalpath.h"
-
-#include "display/curve.h"
-
 #include "live_effects/effect.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
-#include "live_effects/parameter/originalpatharray.h"
-
+#include "live_effects/parameter/patharray.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/uri.h"
-
+#include "originalpath.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
-
 #include "ui/clipboard.h"
-#include "ui/icon-names.h"
 #include "ui/icon-loader.h"
-
+#include "ui/icon-names.h"
 
 namespace Inkscape {
 
 namespace LivePathEffect {
 
-class OriginalPathArrayParam::ModelColumns : public Gtk::TreeModel::ColumnRecord
+class PathArrayParam::ModelColumns : public Gtk::TreeModel::ColumnRecord
 {
 public:
 
@@ -65,13 +59,10 @@ public:
     Gtk::TreeModelColumn<bool> _colVisible;
 };
 
-OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
-        const Glib::ustring& tip,
-        const Glib::ustring& key,
-        Inkscape::UI::Widget::Registry* wr,
-        Effect* effect )
-: Parameter(label, tip, key, wr, effect), 
-        _vector()
+PathArrayParam::PathArrayParam(const Glib::ustring &label, const Glib::ustring &tip, const Glib::ustring &key,
+                               Inkscape::UI::Widget::Registry *wr, Effect *effect)
+    : Parameter(label, tip, key, wr, effect)
+    , _vector()
 {   
     _tree = nullptr;
     _scroller = nullptr;
@@ -82,7 +73,7 @@ OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
     _allow_only_bspline_spiro = false;
 }
 
-OriginalPathArrayParam::~OriginalPathArrayParam()
+PathArrayParam::~PathArrayParam()
 {
     while (!_vector.empty()) {
         PathAndDirectionAndVisible *w = _vector.back();
@@ -93,8 +84,8 @@ OriginalPathArrayParam::~OriginalPathArrayParam()
     delete _model;
 }
 
-void
-OriginalPathArrayParam::initui() {
+void PathArrayParam::initui()
+{
     SPDesktop * desktop = SP_ACTIVE_DESKTOP;
     if (!desktop) {
         return;
@@ -112,7 +103,7 @@ OriginalPathArrayParam::initui() {
         int reverseColNum = _tree->append_column(_("Reverse"), *toggle_reverse) - 1;
         Gtk::TreeViewColumn* col_reverse = _tree->get_column(reverseColNum);
         toggle_reverse->set_activatable(true);
-        toggle_reverse->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_reverse_toggled));
+        toggle_reverse->signal_toggled().connect(sigc::mem_fun(*this, &PathArrayParam::on_reverse_toggled));
         col_reverse->add_attribute(toggle_reverse->property_active(), _model->_colReverse);
         
 
@@ -120,7 +111,7 @@ OriginalPathArrayParam::initui() {
         int visibleColNum = _tree->append_column(_("Visible"), *toggle_visible) - 1;
         Gtk::TreeViewColumn* col_visible = _tree->get_column(visibleColNum);
         toggle_visible->set_activatable(true);
-        toggle_visible->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_visible_toggled));
+        toggle_visible->signal_toggled().connect(sigc::mem_fun(*this, &PathArrayParam::on_visible_toggled));
         col_visible->add_attribute(toggle_visible->property_active(), _model->_colVisible);
         
         Gtk::CellRendererText *text_renderer = manage(new Gtk::CellRendererText());
@@ -141,7 +132,7 @@ OriginalPathArrayParam::initui() {
     param_readSVGValue(param_getSVGValue().c_str());
 }
 
-void OriginalPathArrayParam::on_reverse_toggled(const Glib::ustring& path)
+void PathArrayParam::on_reverse_toggled(const Glib::ustring &path)
 {
     Gtk::TreeModel::iterator iter = _store->get_iter(path);
     Gtk::TreeModel::Row row = *iter;
@@ -153,7 +144,7 @@ void OriginalPathArrayParam::on_reverse_toggled(const Glib::ustring& path)
     DocumentUndo::done(param_effect->getSPDoc(), _("Link path parameter to path"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
-void OriginalPathArrayParam::on_visible_toggled(const Glib::ustring& path)
+void PathArrayParam::on_visible_toggled(const Glib::ustring &path)
 {
     Gtk::TreeModel::iterator iter = _store->get_iter(path);
     Gtk::TreeModel::Row row = *iter;
@@ -165,12 +156,9 @@ void OriginalPathArrayParam::on_visible_toggled(const Glib::ustring& path)
     DocumentUndo::done(param_effect->getSPDoc(), _("Toggle path parameter visibility"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
-void OriginalPathArrayParam::param_set_default()
-{
-    
-}
+void PathArrayParam::param_set_default() {}
 
-Gtk::Widget* OriginalPathArrayParam::param_newWidget()
+Gtk::Widget *PathArrayParam::param_newWidget()
 {
     
     Gtk::Box* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
@@ -189,7 +177,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
         pIcon->show();
         pButton->add(*pIcon);
         pButton->show();
-        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_link_button_click));
+        pButton->signal_clicked().connect(sigc::mem_fun(*this, &PathArrayParam::on_link_button_click));
         hbox->pack_start(*pButton, Gtk::PACK_SHRINK);
         pButton->set_tooltip_text(_("Link to path in clipboard"));
     }
@@ -201,7 +189,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
         pIcon->show();
         pButton->add(*pIcon);
         pButton->show();
-        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_remove_button_click));
+        pButton->signal_clicked().connect(sigc::mem_fun(*this, &PathArrayParam::on_remove_button_click));
         hbox->pack_start(*pButton, Gtk::PACK_SHRINK);
         pButton->set_tooltip_text(_("Remove Path"));
     }
@@ -213,7 +201,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
         pIcon->show();
         pButton->add(*pIcon);
         pButton->show();
-        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_down_button_click));
+        pButton->signal_clicked().connect(sigc::mem_fun(*this, &PathArrayParam::on_down_button_click));
         hbox->pack_end(*pButton, Gtk::PACK_SHRINK);
         pButton->set_tooltip_text(_("Move Down"));
     }
@@ -225,7 +213,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
         pIcon->show();
         pButton->add(*pIcon);
         pButton->show();
-        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_up_button_click));
+        pButton->signal_clicked().connect(sigc::mem_fun(*this, &PathArrayParam::on_up_button_click));
         hbox->pack_end(*pButton, Gtk::PACK_SHRINK);
         pButton->set_tooltip_text(_("Move Up"));
     }
@@ -237,7 +225,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
     return vbox;
 }
 
-bool OriginalPathArrayParam::_selectIndex(const Gtk::TreeIter& iter, int* i)
+bool PathArrayParam::_selectIndex(const Gtk::TreeIter &iter, int *i)
 {
     if ((*i)-- <= 0) {
         _tree->get_selection()->select(iter);
@@ -246,7 +234,7 @@ bool OriginalPathArrayParam::_selectIndex(const Gtk::TreeIter& iter, int* i)
     return false;
 }
 
-void OriginalPathArrayParam::on_up_button_click()
+void PathArrayParam::on_up_button_click()
 {
     Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
@@ -265,12 +253,12 @@ void OriginalPathArrayParam::on_up_button_click()
         param_write_to_repr(param_getSVGValue().c_str());
 
         DocumentUndo::done(param_effect->getSPDoc(), _("Move path up"), INKSCAPE_ICON("dialog-path-effects"));
-        
-        _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_selectIndex), &i));
+
+        _store->foreach_iter(sigc::bind<int *>(sigc::mem_fun(*this, &PathArrayParam::_selectIndex), &i));
     }
 }
 
-void OriginalPathArrayParam::on_down_button_click()
+void PathArrayParam::on_down_button_click()
 {
     Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
@@ -292,26 +280,25 @@ void OriginalPathArrayParam::on_down_button_click()
         param_write_to_repr(param_getSVGValue().c_str());
         
         DocumentUndo::done(param_effect->getSPDoc(), _("Move path down"), INKSCAPE_ICON("dialog-path-effects"));
-        
-        _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_selectIndex), &i));
+
+        _store->foreach_iter(sigc::bind<int *>(sigc::mem_fun(*this, &PathArrayParam::_selectIndex), &i));
     }
 }
 
-void OriginalPathArrayParam::on_remove_button_click()
+void PathArrayParam::on_remove_button_click()
 {
     Gtk::TreeModel::iterator iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
-        remove_link(row[_model->_colObject]);
-        
+        unlink(row[_model->_colObject]);
+
         param_write_to_repr(param_getSVGValue().c_str());
         
         DocumentUndo::done(param_effect->getSPDoc(), _("Remove path"), INKSCAPE_ICON("dialog-path-effects"));
     }
 }
 
-void
-OriginalPathArrayParam::on_link_button_click()
+void PathArrayParam::on_link_button_click()
 {
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
     std::vector<Glib::ustring> pathsid = cm->getElementsOfType(SP_ACTIVE_DESKTOP, "svg:path");
@@ -345,7 +332,7 @@ OriginalPathArrayParam::on_link_button_click()
     DocumentUndo::done(param_effect->getSPDoc(), _("Link patharray parameter to path"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
-void OriginalPathArrayParam::unlink(PathAndDirectionAndVisible* to)
+void PathArrayParam::unlink(PathAndDirectionAndVisible *to)
 {
     to->linked_modified_connection.disconnect();
     to->linked_delete_connection.disconnect();
@@ -355,11 +342,6 @@ void OriginalPathArrayParam::unlink(PathAndDirectionAndVisible* to)
         g_free(to->href);
         to->href = nullptr;
     }
-}
-
-void OriginalPathArrayParam::remove_link(PathAndDirectionAndVisible* to)
-{
-    unlink(to);
     for (std::vector<PathAndDirectionAndVisible*>::iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
         if (*iter == to) {
             PathAndDirectionAndVisible *w = *iter;
@@ -370,14 +352,14 @@ void OriginalPathArrayParam::remove_link(PathAndDirectionAndVisible* to)
     }
 }
 
-void OriginalPathArrayParam::linked_delete(SPObject */*deleted*/, PathAndDirectionAndVisible* /*to*/)
+void PathArrayParam::linked_delete(SPObject * /*deleted*/, PathAndDirectionAndVisible * /*to*/)
 {
-    //remove_link(to);
+    // unlink(to);
 
     param_write_to_repr(param_getSVGValue().c_str());
 }
 
-bool OriginalPathArrayParam::_updateLink(const Gtk::TreeIter& iter, PathAndDirectionAndVisible* pd)
+bool PathArrayParam::_updateLink(const Gtk::TreeIter &iter, PathAndDirectionAndVisible *pd)
 {
     Gtk::TreeModel::Row row = *iter;
     if (row[_model->_colObject] == pd) {
@@ -388,28 +370,32 @@ bool OriginalPathArrayParam::_updateLink(const Gtk::TreeIter& iter, PathAndDirec
     return false;
 }
 
-void OriginalPathArrayParam::linked_changed(SPObject */*old_obj*/, SPObject *new_obj, PathAndDirectionAndVisible* to)
+void PathArrayParam::linked_changed(SPObject * /*old_obj*/, SPObject *new_obj, PathAndDirectionAndVisible *to)
 {
     to->linked_delete_connection.disconnect();
     to->linked_modified_connection.disconnect();
     to->linked_transformed_connection.disconnect();
     
     if (new_obj && SP_IS_ITEM(new_obj)) {
-        to->linked_delete_connection = new_obj->connectDelete(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_delete), to));
-        to->linked_modified_connection = new_obj->connectModified(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_modified), to));
-        to->linked_transformed_connection = SP_ITEM(new_obj)->connectTransformed(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_transformed), to));
+        to->linked_delete_connection = new_obj->connectDelete(
+            sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::linked_delete), to));
+        to->linked_modified_connection = new_obj->connectModified(
+            sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::linked_modified), to));
+        to->linked_transformed_connection = SP_ITEM(new_obj)->connectTransformed(
+            sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::linked_transformed), to));
 
         linked_modified(new_obj, SP_OBJECT_MODIFIED_FLAG, to);
     } else {
         to->_pathvector = Geom::PathVector();
         param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
         if (_store.get()) {
-            _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
+            _store->foreach_iter(
+                sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::_updateLink), to));
         }
     }
 }
 
-void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAndDirectionAndVisible* to)
+void PathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAndDirectionAndVisible *to)
 {
     if (!to) {
         return;
@@ -466,7 +452,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
     
 }
 
-void OriginalPathArrayParam::linked_modified(SPObject *linked_obj, guint flags, PathAndDirectionAndVisible* to)
+void PathArrayParam::linked_modified(SPObject *linked_obj, guint flags, PathAndDirectionAndVisible *to)
 {
     if (!to) {
         return;
@@ -474,11 +460,12 @@ void OriginalPathArrayParam::linked_modified(SPObject *linked_obj, guint flags, 
     setPathVector(linked_obj, flags, to);
     param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     if (_store.get()) {
-        _store->foreach_iter(sigc::bind<PathAndDirectionAndVisible*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
+        _store->foreach_iter(
+            sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::_updateLink), to));
     }
 }
 
-bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
+bool PathArrayParam::param_readSVGValue(const gchar *strvalue)
 {
     if (strvalue) {
         while (!_vector.empty()) {
@@ -501,7 +488,8 @@ bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
                 w->reversed = *(substrarray+1) != nullptr && (*(substrarray+1))[0] == '1';
                 //Like this to make backwards compatible, new value added in 0.93
                 w->visibled = *(substrarray+2) == nullptr || (*(substrarray+2))[0] == '1';
-                w->linked_changed_connection = w->ref.changedSignal().connect(sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_changed), w));
+                w->linked_changed_connection = w->ref.changedSignal().connect(
+                    sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::linked_changed), w));
                 w->ref.attach(URI(w->href));
 
                 _vector.push_back(w);
@@ -524,8 +512,7 @@ bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
     return false;
 }
 
-Glib::ustring
-OriginalPathArrayParam::param_getSVGValue() const
+Glib::ustring PathArrayParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     bool foundOne = false;
@@ -540,13 +527,12 @@ OriginalPathArrayParam::param_getSVGValue() const
     return os.str();
 }
 
-Glib::ustring
-OriginalPathArrayParam::param_getDefaultSVGValue() const
+Glib::ustring PathArrayParam::param_getDefaultSVGValue() const
 {
     return "";
 }
 
-void OriginalPathArrayParam::update()
+void PathArrayParam::update()
 {
     for (auto & iter : _vector) {
         SPObject *linked_obj = iter->ref.getObject();

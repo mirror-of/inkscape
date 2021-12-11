@@ -34,14 +34,13 @@ void LPEBoundingBox::doEffect (SPCurve * curve)
         if ( linked_path.linksToPath() && linked_path.getObject() ) {
             SPItem * item = linked_path.getObject();
             Geom::OptRect bbox = visual_bounds.get_value() ? item->visualBounds() : item->geometricBounds();
-            Geom::Path p(Geom::Point(bbox->left(), bbox->top()));
-            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
-            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
-            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
-            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
-            p.close();
+            Geom::Path p;
             Geom::PathVector out;
-            out.push_back(p);
+            if (bbox) {
+                p = Geom::Path(*bbox);
+                out.push_back(p);
+            }
+
             curve->set_pathvector(out);
         }
     }

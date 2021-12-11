@@ -5,22 +5,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/box.h>
-#include "live_effects/parameter/originalitem.h"
+#include "live_effects/parameter/originalsatellite.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 
-#include "display/curve.h"
-#include "live_effects/effect.h"
-
-#include "inkscape.h"
 #include "desktop.h"
-#include "selection.h"
-
+#include "display/curve.h"
+#include "inkscape.h"
+#include "live_effects/effect.h"
+#include "live_effects/parameter/satellite-reference.h"
 #include "object/uri.h"
-
+#include "selection.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 
@@ -28,18 +26,16 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-OriginalItemParam::OriginalItemParam( const Glib::ustring& label, const Glib::ustring& tip,
-                      const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect)
-    : ItemParam(label, tip, key, wr, effect, "")
+OriginalSatelliteParam::OriginalSatelliteParam(const Glib::ustring &label, const Glib::ustring &tip,
+                                               const Glib::ustring &key, Inkscape::UI::Widget::Registry *wr,
+                                               Effect *effect)
+    : SatelliteParam(label, tip, key, wr, effect)
 {
 }
 
-OriginalItemParam::~OriginalItemParam()
-= default;
+OriginalSatelliteParam::~OriginalSatelliteParam() = default;
 
-Gtk::Widget *
-OriginalItemParam::param_newWidget()
+Gtk::Widget *OriginalSatelliteParam::param_newWidget()
 {
     Gtk::Box *_widget = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
 
@@ -56,7 +52,7 @@ OriginalItemParam::param_newWidget()
         pIcon->show();
         pButton->add(*pIcon);
         pButton->show();
-        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalItemParam::on_link_button_click));
+        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalSatelliteParam::on_link_button_click));
         _widget->pack_start(*pButton, true, true);
         pButton->set_tooltip_text(_("Link to item"));
     }
@@ -68,7 +64,8 @@ OriginalItemParam::param_newWidget()
         pIcon->show();
         pButton->add(*pIcon);
         pButton->show();
-        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalItemParam::on_select_original_button_click));
+        pButton->signal_clicked().connect(
+            sigc::mem_fun(*this, &OriginalSatelliteParam::on_select_original_button_click));
         _widget->pack_start(*pButton, true, true);
         pButton->set_tooltip_text(_("Select original"));
     }
@@ -78,12 +75,10 @@ OriginalItemParam::param_newWidget()
     return dynamic_cast<Gtk::Widget *> (_widget);
 }
 
-
-void
-OriginalItemParam::on_select_original_button_click()
+void OriginalSatelliteParam::on_select_original_button_click()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPItem *original = ref.getObject();
+    SPItem *original = dynamic_cast<SPItem *>(lperef->getObject());
     if (desktop == nullptr || original == nullptr) {
         return;
     }

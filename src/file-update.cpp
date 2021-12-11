@@ -18,35 +18,28 @@
  * su_v
  */
 #include <clocale>
+#include <gtkmm.h>
 #include <string>
 #include <vector>
 
-#include <gtkmm.h>
-
 #include "desktop.h"
+#include "display/control/canvas-grid.h"
 #include "document-undo.h"
 #include "document.h"
-#include "file.h"
-#include "inkscape.h"
-#include "message-stack.h"
-#include "message.h"
-#include "preferences.h"
-#include "print.h"
-#include "proj_pt.h"
-#include "selection-chemistry.h"
-#include "text-editing.h"
-
-#include "display/control/canvas-grid.h"
-
-#include "extension/effect.h"
 #include "extension/db.h"
+#include "extension/effect.h"
 #include "extension/input.h"
 #include "extension/output.h"
 #include "extension/system.h"
-
+#include "file.h"
+#include "inkscape.h"
 #include "io/dir-util.h"
 #include "io/sys.h"
-
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "message-stack.h"
+#include "message.h"
+#include "object/filters/composite.h"
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
 #include "object/sp-flowdiv.h"
@@ -58,12 +51,14 @@
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
-#include "object/filters/composite.h"
+#include "preferences.h"
+#include "print.h"
+#include "proj_pt.h"
+#include "selection-chemistry.h"
 #include "style.h"
-
+#include "text-editing.h"
 #include "ui/shape-editor.h"
 
- 
 using Inkscape::DocumentUndo;
 
 int sp_file_convert_dpi_method_commandline = -1; // Unset
@@ -707,7 +702,20 @@ void sp_file_fix_feComposite(SPObject *o)
         sp_file_fix_feComposite(ci);
 }
 
-
+void sp_file_fix_lpe(SPDocument *doc)
+{
+    // need document insensitive to avoid problems on last undo
+    DocumentUndo::ScopedInsensitive _no_undo(doc);
+    for (auto &obj : doc->getObjectsByElement("path-effect", true)) {
+        LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(obj);
+        if (lpeobj) {
+            auto *lpe = lpeobj->get_lpe();
+            if (lpe) {
+                lpe->doOnOpen_impl();
+            }
+        }
+    }
+}
 
 /*
   Local Variables:

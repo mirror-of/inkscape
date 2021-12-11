@@ -77,7 +77,7 @@ protected:
     sigc::connection linked_modified_connection;
     sigc::connection linked_transformed_connection;
     void ref_changed(SPObject *old_ref, SPObject *new_ref);
-    void remove_link();
+    void unlink();
     void start_listening(SPObject * to);
     void quit_listening();
     void linked_delete(SPObject *deleted);

@@ -32,7 +32,7 @@ class Node;
 }
 namespace LivePathEffect {
 class PowerStrokePointArrayParamKnotHolderEntity;
-class SatellitesArrayParam;
+class NodeSatelliteArrayParam;
 class FilletChamferKnotHolderEntity;
 }
 }
@@ -74,7 +74,7 @@ public:
     SPItem *getItem() { return item; }
 
     friend class Inkscape::UI::ShapeEditor; // FIXME why?
-    friend class Inkscape::LivePathEffect::SatellitesArrayParam;                       // why?
+    friend class Inkscape::LivePathEffect::NodeSatelliteArrayParam;                    // why?
     friend class Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity; // why?
     friend class Inkscape::LivePathEffect::FilletChamferKnotHolderEntity; // why?
 

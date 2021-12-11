@@ -955,24 +955,23 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         }
     }
 
-    auto layer = desktop->layerManager().currentLayer();
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
-    if(clipboard) //???? Removed dead code can cause any bug, need to reimplement undead
-    for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
-        if(target_document->getObjectById(obj->attribute("id"))) continue;
-        Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        SPObject * pasted = layer->appendChildRepr(obj_copy);
-        Inkscape::GC::release(obj_copy);
-        SPLPEItem * pasted_lpe_item = dynamic_cast<SPLPEItem *>(pasted);
-        if (pasted_lpe_item){
-            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+    auto layer = desktop->layerManager().currentLayer();
+    Geom::Affine doc2parent = layer->i2doc_affine().inverse();
+
+    if (clipboard) {
+        for (Inkscape::XML::Node *obj = clipboard->firstChild(); obj; obj = obj->next()) {
+            if (target_document->getObjectById(obj->attribute("id")))
+                continue;
+            Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
+            layer->appendChildRepr(obj_copy);
+            Inkscape::GC::release(obj_copy);
+            pasted_objects_not.push_back(obj_copy);
         }
-        pasted_objects_not.push_back(obj_copy);
     }
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects_not);
-    Geom::Affine doc2parent = layer->i2doc_affine().inverse();
-    selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
+
     selection->deleteItems();
 
     // Change the selection to the freshly pasted objects
@@ -980,7 +979,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     for (auto item : selection->items()) {
         SPLPEItem *pasted_lpe_item = dynamic_cast<SPLPEItem *>(item);
         if (pasted_lpe_item) {
-            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+            sp_lpe_item_enable_path_effects(pasted_lpe_item, false);
         }
     }
     // Apply inverse of parent transform
@@ -1017,6 +1016,12 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         }
 
         selection->moveRelative(offset);
+        for (auto po : pasted_objects) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(target_document->getObjectByRepr(po));
+            if (lpeitem) {
+                sp_lpe_item_enable_path_effects(lpeitem, true);
+            }
+        }
     }
     target_document->emitReconstructionFinish();
 }
@@ -1051,9 +1056,8 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
     if (doc != nullptr) {
         Inkscape::XML::rebase_hrefs(doc, in_doc->getDocumentBase(), false);
         Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
-
-        prevent_id_clashes(doc, in_doc);
-
+        prevent_id_clashes(doc, in_doc, true);
+        sp_file_fix_lpe(doc);
         SPCSSAttr *style = sp_css_attr_from_object(doc->getRoot());
 
         // Count the number of top-level items in the imported document.
@@ -1075,6 +1079,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             did_ungroup=true;
         }
 
+
         // Create a new group if necessary.
         Inkscape::XML::Node *newgroup = nullptr;
         const auto & al = style->attributeList();
@@ -1094,9 +1099,9 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         } else {
             place_to_insert = in_doc->getRoot();
         }
-
+        
         in_doc->importDefs(doc);
-
+        
         // Construct a new object representing the imported image,
         // and insert it into the current document.
         SPObject *new_obj = nullptr;
@@ -1150,7 +1155,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                 }
             }
         }
-
+        
         DocumentUndo::done(in_doc, _("Import"), INKSCAPE_ICON("document-import"));
         return new_obj;
     } else if (!cancelled) {

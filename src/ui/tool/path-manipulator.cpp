@@ -1283,7 +1283,8 @@ int PathManipulator::_bsplineGetSteps() const {
     SPLPEItem * path = dynamic_cast<SPLPEItem *>(_path);
     if (path){
         if(path->hasPathEffect()){
-            Inkscape::LivePathEffect::Effect const *this_effect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+            Inkscape::LivePathEffect::Effect const *this_effect =
+                path->getFirstPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
             if(this_effect){
                 lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline const*>(this_effect->getLPEObj()->get_lpe());
             }
@@ -1300,7 +1301,8 @@ int PathManipulator::_bsplineGetSteps() const {
 void PathManipulator::_recalculateIsBSpline(){
     SPPath *path = dynamic_cast<SPPath *>(_path);
     if (path && path->hasPathEffect()) {
-        Inkscape::LivePathEffect::Effect const *this_effect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        Inkscape::LivePathEffect::Effect const *this_effect =
+            path->getFirstPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
         if(this_effect){
             _is_bspline = true;
             return;
@@ -1423,7 +1425,8 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
         SPPath *path = dynamic_cast<SPPath *>(_path);
         if (path && path->hasPathEffect()) {
-            Inkscape::LivePathEffect::Effect* this_effect = path->getPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
+            Inkscape::LivePathEffect::Effect *this_effect =
+                path->getFirstPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
             if(this_effect){
                 LivePathEffect::LPEPowerStroke *lpe_pwr = dynamic_cast<LivePathEffect::LPEPowerStroke*>(this_effect->getLPEObj()->get_lpe());
                 if (lpe_pwr) {
@@ -1555,16 +1558,13 @@ void PathManipulator::_setGeometry()
         // Maybe the path become empty and we want to update to empty
         if (empty()) return;
         if (path->curveBeforeLPE()) {
-            if (!_spcurve->is_equal(path->curveBeforeLPE())) {
-                path->setCurveBeforeLPE(_spcurve.get());
-                // this fix the issue inkscape#1990
-                if (!path->hasPathEffectOfTypeRecursive(Inkscape::LivePathEffect::SLICE)) {
-                    sp_lpe_item_update_patheffect(path, true, false);
-                } else {
-                    path->setCurve(_spcurve.get());
-                }
+            path->setCurveBeforeLPE(_spcurve.get());
+            if (!path->hasPathEffectOfTypeRecursive(Inkscape::LivePathEffect::SLICE)) {
+                sp_lpe_item_update_patheffect(path, false, false);
+            } else {
+                path->setCurve(_spcurve.get());
             }
-        } else if (!_spcurve->is_equal(path->curve())) {
+        } else {
             path->setCurve(_spcurve.get());
         }
     }

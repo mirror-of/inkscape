@@ -73,7 +73,7 @@ static const Util::EnumDataConverter<fill_typ> FillTypeConverter(FillTypeData, s
 
 LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
-    , operand_path(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this)
+    , operand_item(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this)
     , bool_operation(_("Operation:"), _("Boolean Operation"), "operation", BoolOpConverter, &wr, this, bool_op_ex_union)
     , swap_operands(_("Swap operands"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this)
     , rmv_inner(
@@ -86,7 +86,7 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
                         FillTypeConverter, &wr, this, fill_justDont)
     , filter("Filter", "Previous filter", "filter", &wr, this, "", true)
 {
-    registerParameter(&operand_path);
+    registerParameter(&operand_item);
     registerParameter(&bool_operation);
     registerParameter(&swap_operands);
     registerParameter(&rmv_inner);
@@ -94,17 +94,26 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     registerParameter(&filter);
     registerParameter(&fill_type_operand);
     show_orig_path = true;
-    is_load = true;
+    satellitestoclipboard = true;
     prev_affine = Geom::identity();
-    operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    operand = dynamic_cast<SPItem *>(operand_item.getObject());
     if (operand) {
         operand_id = operand->getId();
     }
 }
 
 LPEBool::~LPEBool() {
+    keep_paths = false;
     doOnRemove(nullptr);
 }
+
+bool LPEBool::doOnOpen(SPLPEItem const *lpeitem)
+{
+    operand_item.read_from_SVG();
+    operand_item.update_satellites(true);
+    return false;
+}
+
 bool cmp_cut_position(const Path::cut_position &a, const Path::cut_position &b)
 {
     return a.piece == b.piece ? a.t < b.t : a.piece < b.piece;
@@ -367,6 +376,7 @@ static fill_typ GetFillTyp(SPItem *item)
 
 void LPEBool::add_filter()
 {
+    SPItem *operand = dynamic_cast<SPItem *>(operand_item.getObject());
     if (operand) {
         Inkscape::XML::Node *repr = operand->getRepr();
         if (!repr) {
@@ -385,7 +395,7 @@ void LPEBool::add_filter()
     }
 }
 
-void LPEBool::remove_filter()
+void LPEBool::remove_filter(SPObject *operand)
 {
     if (operand) {
         Inkscape::XML::Node *repr = operand->getRepr();
@@ -460,20 +470,40 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
             }
         }
     }
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPItem *current_operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    bool active = true;
+    if (operand_item.lperef && operand_item.lperef->isAttached() && operand_item.lperef.get()->getObject() == nullptr) {
+        active = false;
+    }
+    if (!active) {
+        operand_item.unlink();
+        return;
+    }
+    SPItem *current_operand = dynamic_cast<SPItem *>(operand_item.getObject());
     operand =  dynamic_cast<SPItem *>(lpeitem->document->getObjectById(operand_id));
-    
+    if (!operand_item.linksToItem()) {
+        operand_item.read_from_SVG();
+        current_operand = dynamic_cast<SPItem *>(operand_item.getObject());
+    }
     if (!current_operand && !operand) {
         return;
     }
     if (!current_operand) {
-        operand_path.remove_link();
-        operand = nullptr;
+        operand_item.unlink();
     }
-    if (current_operand && current_operand->getId()) {
+    if (current_operand && !operand ) {
+        operand_id = current_operand->getId();
+        operand_item.update_satellites(true);
+        return;
+    }
+    if (current_operand && !operand_item.isConnected()) {
+        operand_item.start_listening(current_operand);
+        operand_item.update_satellites(true);
+        return;
+    }
+
+    if (current_operand) {
         if (!(document->getObjectById(current_operand->getId()))) {
-            operand_path.remove_link();
+            operand_item.unlink();
             operand = nullptr;
             operand_id = "";
             current_operand = nullptr;
@@ -481,21 +511,19 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
             operand_id = current_operand->getId();
         }
     }
-    SPLPEItem *operandlpe = dynamic_cast<SPLPEItem *>(operand_path.getObject());
-    if (desktop && 
-        operand && 
-        sp_lpe_item &&
-        desktop->getSelection()->includes(operand) && 
-        desktop->getSelection()->includes(sp_lpe_item)) 
-    {
-        if (operandlpe && operandlpe->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
-            sp_lpe_item_update_patheffect(operandlpe, false, false);
+    SPLPEItem *operandlpe = dynamic_cast<SPLPEItem *>(operand_item.getObject());
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Inkscape::Selection *selection = desktop->getSelection();
+        if (selection && operand && sp_lpe_item && selection->includes(operand) && selection->includes(sp_lpe_item)) {
+            if (operandlpe && operandlpe->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                sp_lpe_item_update_patheffect(operandlpe, false, false);
+            }
         }
-        desktop->getSelection()->remove(operand);
     }
     if (!current_operand) {
         if (operand) {
-            remove_filter();
+            remove_filter(operand);
         }
         operand = nullptr;
         operand_id = "";
@@ -503,22 +531,22 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
     
     if (current_operand && operand != current_operand) {
         if (operand) {
-            remove_filter();
+            remove_filter(operand);
         }
         operand = current_operand;
-        remove_filter();
+        remove_filter(operand);
         if (is_load && sp_lpe_item) {
             sp_lpe_item_update_patheffect(sp_lpe_item, true, true);
         }
     }
-    if (operand) {
+    if (current_operand) {
         if (is_visible) {
             add_filter();
-            if (operand->getPosition() - 1 != sp_lpe_item->getPosition()) {
-                sp_lpe_item->parent->reorder(operand,sp_lpe_item);
-            } 
+            if (desktop && current_operand->getPosition() - 1 != sp_lpe_item->getPosition()) {
+                sp_lpe_item->parent->reorder(current_operand, sp_lpe_item);
+            }
         } else {
-            remove_filter();
+            remove_filter(current_operand);
         }
     }
 }
@@ -526,7 +554,7 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
 void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
     operand =  dynamic_cast<SPItem *>(sp_lpe_item->document->getObjectById(operand_id));
-    if (operand && !isOnClipboard()) {
+    if (is_visible && operand && !isOnClipboard()) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop && !desktop->getSelection()->includes(operand)) {
             prev_affine = operand->transform * sp_item_transform_repr(sp_lpe_item).inverse() * postmul;
@@ -601,18 +629,19 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
 void LPEBool::doEffect(SPCurve *curve)
 {
     Geom::PathVector path_in = curve->get_pathvector();
-    if (operand == current_shape) {
+    SPItem *current_operand = dynamic_cast<SPItem *>(operand_item.getObject());
+    if (current_operand == current_shape) {
         g_warning("operand and current shape are the same");
-        operand_path.param_set_default();
+        operand_item.param_set_default();
         return;
     }
-    if (operand_path.getObject() && operand) {
+    if (current_operand) {
         bool_op_ex op = bool_operation.get_value();
         bool swap =  swap_operands.get_value();
 
         Geom::Affine current_affine = sp_lpe_item->transform;
-        Geom::Affine operand_affine = operand->transform;
-        Geom::PathVector operand_pv = get_union(operand);
+        Geom::Affine operand_affine = current_operand->transform;
+        Geom::PathVector operand_pv = get_union(current_operand);
         if (operand_pv.empty()) {
             return;
         }
@@ -624,8 +653,10 @@ void LPEBool::doEffect(SPCurve *curve)
         _hp = path_a;
         _hp.insert(_hp.end(), path_b.begin(), path_b.end());
         _hp *= current_affine.inverse();
+        auto item = dynamic_cast<SPItem *>(operand_item.getObject());
         fill_typ fill_this    = fill_type_this.get_value() != fill_justDont ? fill_type_this.get_value() : GetFillTyp(current_shape);
-        fill_typ fill_operand = fill_type_operand.get_value() != fill_justDont ? fill_type_operand.get_value() : GetFillTyp(operand_path.getObject());
+        fill_typ fill_operand =
+            fill_type_operand.get_value() != fill_justDont ? fill_type_operand.get_value() : GetFillTyp(item);
 
         fill_typ fill_a = swap ? fill_this : fill_operand;
         fill_typ fill_b = swap ? fill_operand : fill_this;
@@ -676,22 +707,13 @@ void LPEBool::addCanvasIndicators(SPLPEItem const * /*lpeitem*/, std::vector<Geo
 void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
 {
     // set "keep paths" hook on sp-lpe-item.cpp
-    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
-    if (lpeitems.size() == 1) {
-        sp_lpe_item = lpeitems[0];
-        if (!sp_lpe_item->path_effects_enabled) {
-            return;
-        }
-        SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
-        if (operand) {
-            if (keep_paths) {
-                if (is_visible) {
-                    operand->deleteObject(true);
-                }
-            } else {
-                if (is_visible) {
-                    remove_filter();
-                }
+    remove_filter(operand_item.getObject());
+    SPItem *operand = dynamic_cast<SPItem *>(operand_item.getObject());
+    if (operand) {
+        operand_item.unlink();
+        if (keep_paths) {
+            if (is_visible) {
+                operand->deleteObject(true);
             }
         }
     }
@@ -700,10 +722,10 @@ void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
 // TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
 void LPEBool::doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/)
 {
-    SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    SPItem *operand = dynamic_cast<SPItem *>(operand_item.getObject());
     if (operand) {
         if (!is_visible) {
-            remove_filter();
+            remove_filter(operand);
         }
     }
 }

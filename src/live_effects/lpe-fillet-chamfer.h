@@ -13,13 +13,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/satellitesarray.h"
+#include "helper/geom-nodesatellite.h"
+#include "helper/geom-pathvector_nodesatellites.h"
 #include "live_effects/effect.h"
-#include "live_effects/parameter/unit.h"
+#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/hidden.h"
-#include "helper/geom-pathvectorsatellites.h"
-#include "helper/geom-satellite.h"
+#include "live_effects/parameter/nodesatellitesarray.h"
+#include "live_effects/parameter/unit.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -41,14 +41,14 @@ public:
     Geom::Ray getRay(Geom::Point start, Geom::Point end, Geom::Curve *curve, bool reverse);
     void addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point, size_t steps);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
-    void updateSatelliteType(SatelliteType satellitetype);
-    void setSelected(PathVectorSatellites *_pathvector_satellites);
+    void updateNodeSatelliteType(NodeSatelliteType nodesatellitetype);
+    void setSelected(PathVectorNodeSatellites *_pathvector_nodesatellites);
     //void convertUnit();
     void updateChamferSteps();
     void updateAmount();
     void refreshKnots();
     bool helperpath;
-    SatellitesArrayParam satellites_param;
+    NodeSatelliteArrayParam nodesatellites_param;
 
 private:
     UnitParam unit;
@@ -63,7 +63,7 @@ private:
     BoolParam apply_no_radius;
     BoolParam apply_with_radius;
     bool _degenerate_hide;
-    PathVectorSatellites *_pathvector_satellites;
+    PathVectorNodeSatellites *_pathvector_nodesatellites;
     Geom::PathVector _hp;
     Glib::ustring previous_unit;
     LPEFilletChamfer(const LPEFilletChamfer &);

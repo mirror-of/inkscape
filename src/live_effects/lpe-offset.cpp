@@ -271,7 +271,6 @@ void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve)
             _knot_entity->knot_get();
         }
     }
-    is_load = false;
 }
 
 // TODO: find a way to not remove wanted self intersections

@@ -10,33 +10,27 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/item.h"
+#include "live_effects/parameter/satellite.h"
 
 namespace Inkscape {
 
 namespace LivePathEffect {
 
-class OriginalItemParam: public ItemParam {
+class OriginalSatelliteParam : public SatelliteParam
+{
 public:
-    OriginalItemParam ( const Glib::ustring& label,
-                const Glib::ustring& tip,
-                const Glib::ustring& key,
-                Inkscape::UI::Widget::Registry* wr,
-                Effect* effect);
-    ~OriginalItemParam() override;
-    bool linksToItem() const { return (href != nullptr); }
-    SPItem * getObject() const { return ref.getObject(); }
-
+    OriginalSatelliteParam(const Glib::ustring &label, const Glib::ustring &tip, const Glib::ustring &key,
+                           Inkscape::UI::Widget::Registry *wr, Effect *effect);
+    ~OriginalSatelliteParam() override;
     Gtk::Widget * param_newWidget() override;
 
 protected:
     void on_select_original_button_click();
 
 private:
-    OriginalItemParam(const OriginalItemParam&) = delete;
-    OriginalItemParam& operator=(const OriginalItemParam&) = delete;
+    OriginalSatelliteParam(const OriginalSatelliteParam &) = delete;
+    OriginalSatelliteParam &operator=(const OriginalSatelliteParam &) = delete;
 };
-
 
 } //namespace LivePathEffect
 

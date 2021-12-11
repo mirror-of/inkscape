@@ -70,20 +70,20 @@ set(live_effects_SRC
 	parameter/bool.cpp
 	parameter/colorpicker.cpp
 	parameter/hidden.cpp
-	parameter/item-reference.cpp
-	parameter/item.cpp
+	parameter/satellite.cpp
+	parameter/satellitearray.cpp
+	parameter/satellite-reference.cpp
 	parameter/message.cpp
-	parameter/originalitemarray.cpp
-	parameter/originalitem.cpp
+	parameter/originalsatellite.cpp
 	parameter/originalpath.cpp
-	parameter/originalpatharray.cpp
+	parameter/patharray.cpp
 	parameter/parameter.cpp
 	parameter/path-reference.cpp
 	parameter/path.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
 	parameter/random.cpp
-	parameter/satellitesarray.cpp
+	parameter/nodesatellitesarray.cpp
 	parameter/text.cpp
 	parameter/fontbutton.cpp
 	parameter/togglebutton.cpp
@@ -167,20 +167,20 @@ set(live_effects_SRC
 	parameter/colorpicker.h
 	parameter/hidden.h
 	parameter/enum.h
-	parameter/item.h
+	parameter/satellite.h
+	parameter/satellitearray.h
+	parameter/satellite-reference.h
 	parameter/message.h
-	parameter/originalitemarray.cpp
-	parameter/item-reference.h
-	parameter/originalitem.h
+	parameter/originalsatellite.h
 	parameter/originalpath.h
-	parameter/originalpatharray.h
+	parameter/patharray.h
 	parameter/parameter.h
 	parameter/path-reference.h
 	parameter/path.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
 	parameter/random.h
-	parameter/satellitesarray.h
+	parameter/nodesatellitesarray.h
 	parameter/text.h
 	parameter/fontbutton.h
 	parameter/togglebutton.h

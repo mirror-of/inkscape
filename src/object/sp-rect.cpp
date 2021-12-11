@@ -207,16 +207,7 @@ const char* SPRect::displayName() const {
 #define C1 0.554
 
 void SPRect::set_shape() {
-    if (hasBrokenPathEffect()) {
-        g_warning("The rect shape has unknown LPE on it!");
-
-        if (this->getRepr()->attribute("d")) {
-            // unconditionally read the curve from d, if any, to preserve appearance
-            Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
-            setCurveInsync(std::make_unique<SPCurve>(pv));
-            setCurveBeforeLPE(curve());
-        }
-
+    if (checkBrokenPathEffect()) {
         return;
     }
     if ((this->height.computed < 1e-18) || (this->width.computed < 1e-18)) {
@@ -288,25 +279,7 @@ void SPRect::set_shape() {
 
     c->closepath();
 
-
-    /* Reset the shape's curve to the "original_curve"
-    * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-
-    auto const before = this->curveBeforeLPE();
-    if (before && before->get_pathvector() != c->get_pathvector()) {
-        setCurveBeforeLPE(std::move(c));
-        sp_lpe_item_update_patheffect(this, true, false);
-        return;
-    }
-    if (this->hasPathEffectOnClipOrMaskRecursive(this)) {
-        setCurveBeforeLPE(std::move(c));
-
-        Inkscape::XML::Node *rectrepr = this->getRepr();
-        if (strcmp(rectrepr->name(), "svg:rect") == 0) {
-            sp_lpe_item_update_patheffect(this, true, false);
-            this->write(rectrepr->document(), rectrepr, SP_OBJECT_MODIFIED_FLAG);
-        }
-
+    if (prepareShapeForLPE(c.get(), true)) {
         return;
     }
 

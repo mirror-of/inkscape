@@ -787,7 +787,7 @@ void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem, SPCurve *curve)
     if (pathvector_before_effect[0].size() == pathvector_after_effect[0].size()) {
         if (recusion_limit < 6) {
             Inkscape::LivePathEffect::Effect *effect =
-                sp_lpe_item->getPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
+                sp_lpe_item->getFirstPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
             if (effect) {
                 LivePathEffect::LPESimplify *simplify =
                     dynamic_cast<LivePathEffect::LPESimplify *>(effect->getLPEObj()->get_lpe());

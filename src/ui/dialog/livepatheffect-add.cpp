@@ -276,7 +276,6 @@ LivePathEffectAdd::LivePathEffectAdd()
     int height;
     window->get_size(width, height);
     _LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
-    _LPEDialogSelector->set_transient_for(*window);
     _LPESelectorFlowBox->set_focus_vadjustment(_LPEScrolled->get_vadjustment());
     _LPEDialogSelector->show_all_children();
     _lasteffect = nullptr;
@@ -951,6 +950,8 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
     dial._LPESelectorFlowBox->set_sort_func(sigc::mem_fun(dial, &LivePathEffectAdd::on_sort));
     Glib::RefPtr<Gtk::Adjustment> vadjust = dial._LPEScrolled->get_vadjustment();
     vadjust->set_value(vadjust->get_lower());
+    Gtk::Window *window = desktop->getToplevel();
+    dial._LPEDialogSelector->set_transient_for(*window);
     dial._LPEDialogSelector->show();
     int searchlen = dial._LPEFilter->get_text().length();
     if (searchlen > 0) {

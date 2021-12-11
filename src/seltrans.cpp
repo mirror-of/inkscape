@@ -41,7 +41,7 @@
 #include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-curve.h"
 #include "display/control/canvas-item-group.h"
-
+#include "live_effects/effect-enum.h"
 #include "helper/action.h"
 
 #include "object/sp-item-transform.h"
@@ -394,6 +394,22 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
     _updateHandles();
 }
 
+void sp_meassure_lpe_update(SPLPEItem *item, bool root) {
+    SPGroup *group = dynamic_cast<SPGroup *>(item);
+    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+    if (group) {
+        std::vector<SPObject*> l = group->childList(false);
+        for(auto o : l){
+            SPLPEItem *olpeitem = dynamic_cast<SPLPEItem *>(o);
+            if (olpeitem) {
+                sp_meassure_lpe_update(olpeitem, false);
+            }
+        }
+    } else if (!root && lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::MEASURE_SEGMENTS)) {
+        sp_lpe_item_update_patheffect(lpeitem, false, false);
+    }
+}
+
 void Inkscape::SelTrans::ungrab()
 {
     g_return_if_fail(_grabbed);
@@ -443,6 +459,10 @@ void Inkscape::SelTrans::ungrab()
                         currentItem->updateRepr();
                     }
                 }
+            }
+            for (unsigned i = 0; i < _items_centers.size(); i++) {
+                SPLPEItem *currentItem = dynamic_cast<SPLPEItem *>(_items[i]);
+                sp_meassure_lpe_update(currentItem, true);
             }
         }
 

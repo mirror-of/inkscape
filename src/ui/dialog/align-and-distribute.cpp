@@ -17,17 +17,17 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/i18n.h>
-
-#include <2geom/transforms.h>
-
-#include <utility>
-
 #include "align-and-distribute.h"
 
+#include <2geom/transforms.h>
+#include <glibmm/i18n.h>
+#include <utility>
+
+#include "actions/actions-tools.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
+#include "filter-chemistry.h"
 #include "graphlayout.h"
 #include "inkscape.h"
 #include "page-manager.h"
@@ -39,18 +39,24 @@
 
 #include "actions/actions-tools.h"
 #include "live_effects/effect-enum.h"
+#include "live_effects/effect.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
 #include "object/sp-page.h"
 #include "object/sp-root.h"
 #include "object/sp-text.h"
+#include "preferences.h"
+#include "removeoverlap.h"
+#include "text-editing.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/spinbutton.h"
+#include "unclump.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
@@ -126,13 +132,26 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
     // We force unselect operand in bool LPE
     auto list = selection->items();
+    std::size_t total = std::distance(list.begin(), list.end());
+    std::vector<SPItem *> selected;
+    std::vector<Inkscape::LivePathEffect::Effect *> bools;
     for (auto itemlist = list.begin(); itemlist != list.end(); ++itemlist) {
-        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*itemlist);
-        if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
-            sp_lpe_item_update_patheffect(lpeitem, false, false);
+        SPItem *item = dynamic_cast<SPItem *>(*itemlist);
+        if (total == 2) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+            for (auto lpe : lpeitem->getPathEffectsOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                if (!g_strcmp0(lpe->getRepr()->attribute("is_visible"), "true")) {
+                    lpe->getRepr()->setAttribute("is_visible", "false");
+                    bools.emplace_back(lpe);
+                    item->document->ensureUpToDate();
+                }
+            }
+        }
+        if (!(item && has_hidder_filter(item) && total > 2)) {
+            selected.emplace_back(item);
         }
     }
-    std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
+
     if (selected.empty()) return;
 
     Coeffs a = _allCoeffs[index]; // copy
@@ -203,6 +222,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     	desktop->getDocument()->ensureUpToDate();
         if (!sel_as_group)
             b = (item)->desktopPreferredBounds();
+
         if (b && (!focus || (item) != focus)) {
             Geom::Point const sp(a.sx0 * b->min()[Geom::X] + a.sx1 * b->max()[Geom::X],
                                  a.sy0 * b->min()[Geom::Y] + a.sy1 * b->max()[Geom::Y]);
@@ -213,7 +233,12 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
             }
         }
     }
-
+    for (auto lpe : bools) {
+        lpe->getRepr()->setAttribute("is_visible", "true");
+    }
+    if (bools.size()) {
+        desktop->getDocument()->ensureUpToDate();
+    }
     if (changed) {
         DocumentUndo::done( desktop->getDocument(), _("Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }

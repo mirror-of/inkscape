@@ -10,10 +10,11 @@
  */
 
 #include <gtest/gtest.h>
-#include <src/svg/svg.h>
+#include <src/file.h>
+#include <src/helper-fns.h>
 #include <src/inkscape.h>
 #include <src/object/sp-root.h>
-#include <src/helper-fns.h>
+#include <src/svg/svg.h>
 
 #include <2geom/pathvector.h>
 
@@ -146,17 +147,13 @@ protected:
                 ids.push_back(obj->getAttribute("id"));
             }
         }
-        // because we do doAfterLoad when load doc ussing iddle functions, here we ensure this
-        // method is executed, mainly used to fix legazy LPE items
-        while(gtk_events_pending()) {
-            gtk_main_iteration();
-        }
+        sp_file_fix_lpe(doc);
         doc->ensureUpToDate();
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(doc->getRoot());
-        sp_lpe_item_update_patheffect (lpeitem, false, true);
+        sp_lpe_item_update_patheffect(lpeitem, true, true);
         // we need to double update because clippaths or mask
         if (doc->getObjectsByElement("clipPath").size() || doc->getObjectsByElement("mask").size()) {
-            sp_lpe_item_update_patheffect (lpeitem, false, true);
+            sp_lpe_item_update_patheffect(lpeitem, true, true);
         }
         if (lpeitem->getAttribute("inkscape:test-threshold")) {
             precission = helperfns_read_number(lpeitem->getAttribute("inkscape:test-threshold"));

@@ -16,11 +16,12 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/lpegroupbbox.h"
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/parameter.h"
-#include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
-#include "live_effects/lpegroupbbox.h"
+#include "live_effects/parameter/satellitearray.h"
+#include "live_effects/parameter/text.h"
 // this is only to fillrule
 #include "livarot/Shape.h"
 
@@ -47,12 +48,13 @@ public:
     void split(Geom::PathVector &path_in, Geom::Path const &divider);
     void resetDefaults(SPItem const* item) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
+    bool doOnOpen(SPLPEItem const * /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
     void cloneStyle(SPObject *orig, SPObject *dest);
     Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule);
-    void toItem(Geom::Affine transform, size_t i, bool reset);
-    void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset);
+    void toItem(Geom::Affine transform, size_t i, bool reset, bool &write);
+    void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
     void resetStyles();
     //virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
@@ -61,6 +63,7 @@ protected:
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
+    SatelliteArrayParam lpesatellites;
     EnumParam<RotateMethod> method;
     PointParam origin;
     PointParam starting_point;
@@ -82,7 +85,7 @@ private:
     Geom::Path divider;
     double previous_num_copies;
     bool reset;
-    SPObject * container;
+    SPObject *container;
     LPECopyRotate(const LPECopyRotate&) = delete;
     LPECopyRotate& operator=(const LPECopyRotate&) = delete;
 };

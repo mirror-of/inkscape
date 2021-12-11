@@ -227,8 +227,6 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
 
     // TODO: Don't paste path if nothing is on the clipboard
     SPDocument *document = dc->getDesktop()->doc();
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     Effect::createAndApply(PATTERN_ALONG_PATH, document, item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
@@ -240,7 +238,6 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Inkscape::SVGOStringStream os;
     os << scale;
     lpe->getRepr()->setAttribute("prop_scale", os.str());
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 void spdc_apply_style(SPObject *obj)
@@ -306,8 +303,6 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
             return;
         }
     }
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     Effect::createAndApply(POWERSTROKE, document, item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
 
@@ -323,7 +318,6 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     lpe->getRepr()->setAttribute("miter_limit", "4");
     lpe->getRepr()->setAttribute("scale_width", "1");
     lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *item)
@@ -338,8 +332,6 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     if (!document || !desktop) {
         return;
     }
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     if(!SP_IS_LPE_ITEM(item) || !SP_LPE_ITEM(item)->hasPathEffectOfType(BEND_PATH)){
         Effect::createAndApply(BEND_PATH, document, item);
     }
@@ -357,7 +349,6 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
     lpe->getRepr()->setAttribute("vertical", "false");
     static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem *item)
@@ -367,8 +358,6 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     if (!document || !desktop) {
         return;
     }
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     using namespace Inkscape::LivePathEffect;
 
     Effect::createAndApply(SIMPLIFY, document, item);
@@ -380,7 +369,6 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     lpe->getRepr()->setAttribute("helper_size", "0");
     lpe->getRepr()->setAttribute("simplify_individual_paths", "false");
     lpe->getRepr()->setAttribute("simplify_just_coalesce", "false");
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 static shapeType previous_shape_type = NONE;

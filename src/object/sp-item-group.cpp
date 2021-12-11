@@ -15,42 +15,41 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/i18n.h>
 #include <cstring>
+#include <glibmm/i18n.h>
 #include <string>
 
 #include "attributes.h"
-#include "document.h"
-#include "document-undo.h"
-#include "selection-chemistry.h"
-
-#include "display/drawing-group.h"
-#include "display/curve.h"
-#include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "svg/svg.h"
-#include "svg/css-ostringstream.h"
-#include "xml/repr.h"
-#include "xml/sp-css-attr.h"
-
 #include "box3d.h"
+#include "display/curve.h"
+#include "display/drawing-group.h"
+#include "document-undo.h"
+#include "document.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpe-clone-original.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
 #include "persp3d.h"
-#include "sp-defs.h"
-#include "sp-item-transform.h"
-#include "sp-root.h"
-#include "sp-rect.h"
-#include "sp-offset.h"
+#include "selection-chemistry.h"
 #include "sp-clippath.h"
-#include "sp-mask.h"
-#include "sp-path.h"
-#include "sp-use.h"
-#include "sp-title.h"
+#include "sp-defs.h"
 #include "sp-desc.h"
+#include "sp-flowtext.h"
+#include "sp-item-transform.h"
+#include "sp-mask.h"
+#include "sp-offset.h"
+#include "sp-path.h"
+#include "sp-rect.h"
+#include "sp-root.h"
 #include "sp-switch.h"
 #include "sp-textpath.h"
-#include "sp-flowtext.h"
+#include "sp-title.h"
+#include "sp-use.h"
 #include "style.h"
+#include "svg/css-ostringstream.h"
+#include "svg/svg.h"
+#include "xml/repr.h"
+#include "xml/sp-css-attr.h"
 
 using Inkscape::DocumentUndo;
 
@@ -404,7 +403,9 @@ static void _ungroup_compensate_source_transform(SPItem *item, SPItem const *con
     SPText *item_text = nullptr;
     SPOffset *item_offset = nullptr;
     SPUse *item_use = nullptr;
+    SPLPEItem *lpeitemclone = dynamic_cast<SPLPEItem *>(item);
 
+    bool override = false;
     if ((item_offset = dynamic_cast<SPOffset *>(item))) {
         source = sp_offset_get_source(item_offset);
     } else if ((item_text = dynamic_cast<SPText *>(item))) {
@@ -417,9 +418,11 @@ static void _ungroup_compensate_source_transform(SPItem *item, SPItem const *con
         source = sp_textpath_get_path_item(textpath);
     } else if ((item_use = dynamic_cast<SPUse *>(item))) {
         source = item_use->get_original();
+    } else if (lpeitemclone && lpeitemclone->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
+        override = true;
     }
 
-    if (source != expected_source) {
+    if (source != expected_source && !override) {
         return;
     }
 
@@ -578,6 +581,29 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     if (!g.isIdentity()) {
         for (auto &child : group->children) {
             if (SPItem *citem = dynamic_cast<SPItem *>(&child)) {
+                SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(citem);
+                if (lpeitem) {
+                    for (auto lpe :
+                         lpeitem->getPathEffectsOfType(Inkscape::LivePathEffect::EffectType::CLONE_ORIGINAL)) {
+                        auto clonelpe = dynamic_cast<Inkscape::LivePathEffect::LPECloneOriginal *>(lpe);
+                        if (clonelpe) {
+                            SPObject *linked = clonelpe->linkeditem.getObject();
+                            if (linked) {
+                                bool breakparent = false;
+                                for (auto &child2 : group->children) {
+                                    if (dynamic_cast<SPItem *>(&child2) == linked) {
+                                        _ungroup_compensate_source_transform(citem, dynamic_cast<SPItem *>(linked), g);
+                                        breakparent = true;
+                                        break;
+                                    }
+                                }
+                                if (breakparent) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
                 sp_item_group_ungroup_handle_clones(citem, g);
             }
         }
@@ -652,6 +678,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         bbox_clip = bbox_on_rect_clip(clip);
     }
     /* Step 4 - add items */
+    std::vector<SPLPEItem *> lpeitems;
     for (auto *repr : items) {
         // add item
         prepr->addChild(repr, insert_after);
@@ -661,9 +688,16 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         SPItem *item = static_cast<SPItem *>(doc->getObjectByRepr(repr));
 
         if (item) {
-            item->doWriteTransform(item->transform, nullptr, false);
-            children.insert(children.begin(),item);
-            item->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+            if (lpeitem) {
+                lpeitems.push_back(lpeitem);
+                sp_lpe_item_enable_path_effects(lpeitem, false);
+                children.insert(children.begin(), item);
+            } else {
+                item->doWriteTransform(item->transform, nullptr, false);
+                children.insert(children.begin(), item);
+                item->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            }
         } else {
             g_assert_not_reached();
         }
@@ -696,6 +730,11 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     prefs->setBool("/options/maskobject/remove", remove_original); // if !maskonungroup become unchanged
     prefs->setBool("/options/maskobject/topmost", topmost);
     prefs->setBool("/options/maskobject/grouping", grouping);
+    for (auto lpeitem : lpeitems) {
+        sp_lpe_item_enable_path_effects(lpeitem, true);
+        lpeitem->doWriteTransform(lpeitem->transform, nullptr, false);
+        lpeitem->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    }
     if (do_done) {
         DocumentUndo::done(doc, _("Ungroup"), "");
     }
@@ -959,6 +998,9 @@ void SPGroup::update_patheffect(bool write) {
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                 if (lpe && lpe->isVisible()) {
+                    if (document->stylesheetchg) {
+                        break;
+                    }
                     lpeobj->get_lpe()->doBeforeEffect_impl(this);
                     sp_group_perform_patheffect(this, this, lpe, write);
                     lpeobj->get_lpe()->doAfterEffect_impl(this, nullptr);

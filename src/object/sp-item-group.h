@@ -91,12 +91,12 @@ public:
     guint32 highlight_color() const override;
 };
 
-
 /**
  * finds clones of a child of the group going out of the group; and inverse the group transform on its clones
  * Also called when moving objects between different layers
  * @param group current group
  * @param parent original parent
+ * @param clone_original lpe clone handle ungroup
  * @param g transform
  */
 void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g);

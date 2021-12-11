@@ -15,7 +15,7 @@
 #include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/hidden.h"
-#include "live_effects/parameter/originalitem.h"
+#include "live_effects/parameter/originalsatellite.h"
 #include "live_effects/parameter/parameter.h"
 
 namespace Inkscape {
@@ -32,9 +32,10 @@ public:
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/) override;
     void doOnRemove(SPLPEItem const * /*lpeitem*/) override;
+    bool doOnOpen(SPLPEItem const *lpeitem) override;
     void add_filter();
     Geom::PathVector get_union(SPObject *object);
-    void remove_filter();
+    void remove_filter(SPObject *object);
     enum bool_op_ex
     {
         bool_op_ex_union = bool_op_union,
@@ -59,7 +60,7 @@ private:
     LPEBool(const LPEBool &) = delete;
     LPEBool &operator=(const LPEBool &) = delete;
 
-    OriginalItemParam operand_path;
+    OriginalSatelliteParam operand_item;
     EnumParam<bool_op_ex> bool_operation;
     EnumParam<fill_typ> fill_type_this;
     EnumParam<fill_typ> fill_type_operand;
