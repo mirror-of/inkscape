@@ -38,6 +38,7 @@ enum SPGuideDragType { // used both here and in desktop-events.cpp
 
 class SPDocument;
 class SPGuide;
+class SPPage;
 class SPNamedView;
 
 namespace Inkscape {
@@ -370,6 +371,7 @@ public:
     SPNamedView const *getNamedView() const {return _named_view;}
     SPDocument *getDocument() const;
     SPGuide const *getGuideToIgnore() const;
+    SPPage const *getPageToIgnore() const;
 
     bool getSnapIndicator() const {return _snapindicator;}
 
@@ -399,9 +401,7 @@ public:
      * Method for snapping sets of points while they are being transformed.
      *
      * Method for snapping sets of points while they are being transformed, when using
-     * for example the selector tool. This method is for internal use only, and should
-     * not have to be called directly. Use freeSnapTransalation(), constrainedSnapScale(),
-     * etc. instead.
+     * for example the selector tool.
      *
      * This is what is being done in this method: transform each point, find out whether
      * a free snap or constrained snap is more appropriate, do the snapping, calculate

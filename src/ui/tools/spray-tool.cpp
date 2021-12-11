@@ -215,8 +215,6 @@ void SprayTool::update_cursor(bool /*with_shift*/) {
         default:
             break;
     }
-
-    this->sp_event_context_update_cursor();
     g_free(sel_message);
 }
 

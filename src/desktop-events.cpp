@@ -330,7 +330,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                         guide->moveto(guide->getPoint(), false);
                         guide->set_normal(guide->getNormal(), false);
                         sp_guide_remove(guide);
-                        desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
+                        desktop->event_context->use_tool_cursor();
 
                         DocumentUndo::done(desktop->getDocument(), _("Delete guide"), "");
                     }
@@ -357,14 +357,15 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
             auto display = desktop->getCanvas()->get_display();
             auto window  = desktop->getCanvas()->get_window();
 
+            Glib::RefPtr<Gdk::Cursor> cursor;
             if (guide->getLocked()) {
-                Inkscape::load_svg_cursor(display, window, "select.svg");
+                cursor = Inkscape::load_svg_cursor(display, window, "select.svg");
             } else if ((event->crossing.state & GDK_SHIFT_MASK) && (drag_type != SP_DRAG_MOVE_ORIGIN)) {
-                Inkscape::load_svg_cursor(display, window, "rotate.svg");
+                cursor = Inkscape::load_svg_cursor(display, window, "rotate.svg");
             } else {
-                auto guide_cursor = Gdk::Cursor::create(display, "grab");
-                window->set_cursor(guide_cursor);
+                cursor = Gdk::Cursor::create(display, "grab");
             }
+            window->set_cursor(cursor);
 
             char *guide_description = guide->description();
             desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("<b>Guideline</b>: %s"), guide_description);
@@ -377,7 +378,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
             guide_item->set_stroke(guide->getColor());
 
             // restore event context's cursor
-            desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
+            desktop->event_context->use_tool_cursor();
 
             desktop->guidesMessageContext()->clear();
             break;
@@ -394,7 +395,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                         DocumentUndo::done(doc, _("Delete guide"), "");
                         ret = true;
                         sp_event_context_discard_delayed_snap_event(desktop->event_context);
-                        desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
+                        desktop->event_context->use_tool_cursor();
                     }
                     break;
                 }
@@ -405,7 +406,8 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                         auto display = desktop->getCanvas()->get_display();
                         auto window  = desktop->getCanvas()->get_window();
 
-                        Inkscape::load_svg_cursor(display, window, "rotate.svg");
+                        auto cursor = Inkscape::load_svg_cursor(display, window, "rotate.svg");
+                        window->set_cursor(cursor);
                         ret = true;
                         break;
                     }

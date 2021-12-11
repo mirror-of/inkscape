@@ -23,6 +23,7 @@
 ../src/actions/actions-object-align.cpp
 ../src/actions/actions-object.cpp
 ../src/actions/actions-output.cpp
+../src/actions/actions-pages.cpp
 ../src/actions/actions-paths.cpp
 ../src/actions/actions-selection-object.cpp
 ../src/actions/actions-selection-window.cpp
@@ -331,6 +332,7 @@
 ../src/ui/toolbar/measure-toolbar.cpp
 ../src/ui/toolbar/mesh-toolbar.cpp
 ../src/ui/toolbar/node-toolbar.cpp
+../src/ui/toolbar/page-toolbar.cpp
 ../src/ui/toolbar/paintbucket-toolbar.cpp
 ../src/ui/toolbar/pencil-toolbar.cpp
 ../src/ui/toolbar/rect-toolbar.cpp
@@ -353,6 +355,7 @@
 ../src/ui/tools/measure-tool.cpp
 ../src/ui/tools/mesh-tool.cpp
 ../src/ui/tools/node-tool.cpp
+../src/ui/tools/pages-tool.cpp
 ../src/ui/tools/pen-tool.cpp
 ../src/ui/tools/pencil-tool.cpp
 ../src/ui/tools/rect-tool.cpp
@@ -384,7 +387,7 @@
 ../src/ui/widget/licensor.cpp
 ../src/ui/widget/marker-combo-box.cpp
 ../src/ui/widget/object-composite-settings.cpp
-../src/ui/widget/page-sizer.cpp
+../src/ui/widget/page-selector.cpp
 ../src/ui/widget/paint-selector.cpp
 ../src/ui/widget/preferences-widget.cpp
 ../src/ui/widget/random.cpp
@@ -396,6 +399,7 @@
 ../src/ui/widget/style-swatch.cpp
 ../src/ui/widget/swatch-selector.cpp
 ../src/util/enums.h
+../src/util/paper.cpp
 ../src/vanishing-point.cpp
 ../src/verbs.cpp
 ../src/widgets/desktop-widget.cpp

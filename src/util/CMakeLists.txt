@@ -3,6 +3,7 @@
 set(util_SRC
 	expression-evaluator.cpp
 	share.cpp
+	paper.cpp
 	units.cpp
 	ziptool.cpp
 
@@ -17,6 +18,8 @@ set(util_SRC
 	format.h
 	forward-pointer-iterator.h
 	longest-common-suffix.h
+	pages-skeleton.h
+	paper.h
 	reference.h
 	share.h
 	signal-blocker.h

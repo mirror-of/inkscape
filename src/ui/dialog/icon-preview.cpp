@@ -26,6 +26,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
+#include "page-manager.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing.h"
@@ -553,14 +554,10 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
                     CAIRO_FORMAT_ARGB32, psize, psize, stride);
                 Inkscape::DrawingContext dc(s, ua.min());
 
-                SPNamedView *nv = sp_document_namedview(doc, nullptr);
-                float bg_r = SP_RGBA32_R_F(nv->pagecolor);
-                float bg_g = SP_RGBA32_G_F(nv->pagecolor);
-                float bg_b = SP_RGBA32_B_F(nv->pagecolor);
-                float bg_a = SP_RGBA32_A_F(nv->pagecolor);
+                auto bg = doc->getNamedView()->getPageManager()->getDefaultBackgroundColor();
 
                 cairo_t *cr = cairo_create(s);
-                cairo_set_source_rgba(cr, bg_r, bg_g, bg_b, bg_a);
+                cairo_set_source_rgba(cr, bg[0], bg[1], bg[2], bg[3]);
                 cairo_rectangle(cr, 0, 0, psize, psize);
                 cairo_fill(cr);
                 cairo_save(cr);

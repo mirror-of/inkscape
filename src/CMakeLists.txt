@@ -51,6 +51,7 @@ set(inkscape_SRC
   mod360.cpp
   object-hierarchy.cpp
   object-snapper.cpp
+  page-manager.cpp
   path-chemistry.cpp
   path-prefix.cpp
   perspective-line.cpp
@@ -147,6 +148,7 @@ set(inkscape_SRC
   number-opt-number.h
   object-hierarchy.h
   object-snapper.h
+  page-manager.h
   path-chemistry.h
   path-prefix.h
   perspective-line.h
@@ -263,6 +265,8 @@ set(inkscape_SRC
   actions/actions-view-window.cpp
   actions/actions-window.h
   actions/actions-window.cpp
+  actions/actions-pages.h
+  actions/actions-pages.cpp
 
   inkview-application.h
   inkview-application.cpp

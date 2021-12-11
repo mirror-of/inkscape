@@ -59,6 +59,8 @@ public:
     void setAlignementTolerance(double val) {_alignment_tolerance = val;}
     void setDistributionTolerance(double val) {_distribution_tolerance = val;}
 
+    void setTargetMask(Inkscape::SnapTargetType const target, int enabled = 1);
+    void clearTargetMask(int enabled = -1);
 private:
 
     /**
@@ -80,6 +82,10 @@ private:
     void _mapTargetToArrayIndex(Inkscape::SnapTargetType &target, bool &always_on, bool &group_on) const;
 
     int _active_snap_targets[Inkscape::SNAPTARGET_MAX_ENUM_VALUE];
+
+    // Sometimes we want to mask the preferences for specific tools, this
+    // shadow preference allows the code to specify which targets should be used.
+    int _active_mask_targets[Inkscape::SNAPTARGET_MAX_ENUM_VALUE];
 
     bool _snap_enabled_globally; // Toggles ALL snapping
     bool _snap_postponed_globally; // Hold all snapping temporarily when the mouse is moving fast

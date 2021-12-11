@@ -58,6 +58,7 @@ set(display_SRC
         control/canvas-item-rect.cpp
         control/canvas-item-rotate.cpp
         control/canvas-item-text.cpp
+        control/canvas-page.cpp
 
 	# -------
 	# Headers
@@ -125,6 +126,7 @@ set(display_SRC
         control/canvas-item-rect.h
         control/canvas-item-rotate.h
         control/canvas-item-text.h
+        control/canvas-page.h
 )
 
 # add_inkscape_lib(display_LIB "${display_SRC}")

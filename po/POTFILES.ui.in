@@ -12,6 +12,7 @@
 ../share/ui/marker-popup.glade
 ../share/ui/menus.ui
 ../share/ui/toolbar-commands.ui
+../share/ui/toolbar-page.ui
 ../share/ui/toolbar-snap.ui
 ../share/ui/toolbar-tool.ui
 ../share/ui/toolbar-zoom.ui

@@ -44,6 +44,7 @@
 #include "sp-missing-glyph.h"
 #include "sp-namedview.h"
 #include "sp-offset.h"
+#include "sp-page.h"
 #include "sp-path.h"
 #include "sp-pattern.h"
 #include "sp-polyline.h"
@@ -155,6 +156,8 @@ SPObject *SPFactory::createObject(std::string const& id)
         ret = new SPVkern;
     else if (id == "sodipodi:guide")
         ret = new SPGuide;
+    else if (id == "inkscape:page")
+        ret = new SPPage;
     else if (id == "svg:hatch")
         ret = new SPHatch;
     else if (id == "svg:hatchpath")

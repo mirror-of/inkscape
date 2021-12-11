@@ -24,6 +24,7 @@
 #include "inkscape-window.h"
 
 #include "ui/widget/canvas.h"
+#include "object/sp-namedview.h"
 
 void
 canvas_show_grid_toggle(InkscapeWindow *win)

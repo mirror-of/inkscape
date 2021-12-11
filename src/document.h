@@ -40,7 +40,6 @@
 #include "event.h"
 #include "gc-anchored.h"
 #include "gc-finalized.h"
-#include "object/sp-namedview.h"
 
 #include "inkgc/gc-managed.h"
 
@@ -74,6 +73,7 @@ class SPItem;
 class SPObject;
 class SPGroup;
 class SPRoot;
+class SPNamedView;
 
 namespace Inkscape {
     class Selection; 
@@ -236,6 +236,7 @@ public:
     Geom::Rect getViewBox() const;
 
     Geom::OptRect preferredBounds() const;
+    Geom::OptRect pageBounds();
     void fitToRect(Geom::Rect const &rect, bool with_margins = false);
     void setupViewport(SPItemCtx *ctx);
 
@@ -399,7 +400,6 @@ private:
 
     SPDocument::ModifiedSignal modified_signal;
     SPDocument::FilenameSetSignal filename_set_signal;
-    SPDocument::ResizedSignal resized_signal;
     SPDocument::ReconstructionStart _reconstruction_start_signal;
     SPDocument::ReconstructionFinish  _reconstruction_finish_signal;
     SPDocument::CommitSignal commit_signal; // Used by friend Inkscape::DocumentUndo
@@ -437,7 +437,6 @@ public:
     sigc::connection connectDestroy(sigc::signal<void>::slot_type slot);
     sigc::connection connectModified(ModifiedSignal::slot_type slot);
     sigc::connection connectFilenameSet(FilenameSetSignal::slot_type slot);
-    sigc::connection connectResized(ResizedSignal::slot_type slot);
     sigc::connection connectCommit(CommitSignal::slot_type slot);
     sigc::connection connectIdChanged(const char *id, IDChangedSignal::slot_type slot);
     sigc::connection connectResourcesChanged(char const *key, SPDocument::ResourcesChangedSignal::slot_type slot);
@@ -451,7 +450,6 @@ public:
     void _emitModified();  // Used by SPItem
     void emitReconstructionStart();
     void emitReconstructionFinish();
-    void emitResizedSignal(double width, double height);
 };
 
 namespace std {

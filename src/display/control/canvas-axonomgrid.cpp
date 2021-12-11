@@ -465,7 +465,7 @@ CanvasAxonomGrid::Render (Inkscape::CanvasItemBuffer *buf)
 
     bool xrayactive = prefs->getBool("/desktop/xrayactive", false);
     if (xrayactive) {  //this allow good looking on xray zones
-        guint32 bg = namedview->pagecolor;
+        guint32 bg = 0xffffffff;
         _color = SP_RGBA32_F_COMPOSE(
                 CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_R_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_R_F(_color)), 0.0, 1.0),
                 CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_G_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_G_F(_color)), 0.0, 1.0),

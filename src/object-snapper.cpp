@@ -31,6 +31,7 @@
 #include "object/sp-mask.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
+#include "object/sp-page.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
@@ -41,6 +42,7 @@
 #include "style.h"
 #include "svg/svg.h"
 #include "text-editing.h"
+#include "page-manager.h"
 
 Inkscape::ObjectSnapper::ObjectSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)
@@ -97,7 +99,24 @@ void Inkscape::ObjectSnapper::_collectNodes(SnapSourceType const &t,
 
         // Consider the page border for snapping to
         if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_CORNER)) {
-            _getBorderNodes(_points_to_snap_to.get());
+            if (auto document = _snapmanager->getDocument()) {
+                auto ignore_page = _snapmanager->getPageToIgnore();
+                if (auto pm = document->getNamedView()->getPageManager()) {
+                    for (auto page : pm->getPages()) {
+                        if (ignore_page == page)
+                            continue;
+                        getBBoxPoints(page->getDesktopRect(), _points_to_snap_to.get(), true,
+                            SNAPSOURCE_PAGE_CORNER, SNAPTARGET_PAGE_CORNER,
+                            SNAPSOURCE_UNDEFINED, SNAPTARGET_UNDEFINED, // No edges
+                            SNAPSOURCE_PAGE_CENTER, SNAPTARGET_PAGE_CENTER);
+                    }
+                }
+                // Only the corners get added here.
+                getBBoxPoints(document->preferredBounds(), _points_to_snap_to.get(), false,
+                    SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER,
+                    SNAPSOURCE_UNDEFINED, SNAPTARGET_UNDEFINED,
+                    SNAPSOURCE_UNDEFINED, SNAPTARGET_UNDEFINED);
+            }
         }
 
         for (const auto & _candidate : *_snapmanager->obj_snapper_candidates) {
@@ -649,49 +668,48 @@ Geom::PathVector* Inkscape::ObjectSnapper::_getPathvFromRect(Geom::Rect const re
     }
 }
 
-void Inkscape::ObjectSnapper::_getBorderNodes(std::vector<SnapCandidatePoint> *points) const
+/**
+ * Default version of the getBBoxPoints with default corner source types.
+ */
+void Inkscape::getBBoxPoints(Geom::OptRect const bbox,
+                             std::vector<SnapCandidatePoint> *points,
+                             bool const isTarget,
+                             bool const corners,
+                             bool const edges,
+                             bool const midpoint)
 {
-    Geom::Coord w = (_snapmanager->getDocument())->getWidth().value("px");
-    Geom::Coord h = (_snapmanager->getDocument())->getHeight().value("px");
-    points->push_back(SnapCandidatePoint(Geom::Point(0,0), SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER));
-    points->push_back(SnapCandidatePoint(Geom::Point(0,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER));
-    points->push_back(SnapCandidatePoint(Geom::Point(w,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER));
-    points->push_back(SnapCandidatePoint(Geom::Point(w,0), SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER));
+    getBBoxPoints(bbox, points, isTarget,
+        corners ? SNAPSOURCE_BBOX_CORNER : SNAPSOURCE_UNDEFINED,
+        corners ? SNAPTARGET_BBOX_CORNER : SNAPTARGET_UNDEFINED,
+        edges ? SNAPSOURCE_BBOX_EDGE_MIDPOINT : SNAPSOURCE_UNDEFINED,
+        edges ? SNAPTARGET_BBOX_EDGE_MIDPOINT : SNAPTARGET_UNDEFINED,
+        midpoint ? SNAPSOURCE_BBOX_MIDPOINT : SNAPSOURCE_UNDEFINED,
+        midpoint ? SNAPTARGET_BBOX_MIDPOINT : SNAPTARGET_UNDEFINED);
 }
 
 void Inkscape::getBBoxPoints(Geom::OptRect const bbox,
                              std::vector<SnapCandidatePoint> *points,
                              bool const /*isTarget*/,
-                             bool const includeCorners,
-                             bool const includeLineMidpoints,
-                             bool const includeObjectMidpoints,
-                             bool const isAlignment)
+                             Inkscape::SnapSourceType corner_src,
+                             Inkscape::SnapTargetType corner_tgt,
+                             Inkscape::SnapSourceType edge_src,
+                             Inkscape::SnapTargetType edge_tgt,
+                             Inkscape::SnapSourceType mid_src,
+                             Inkscape::SnapTargetType mid_tgt)
 {
     if (bbox) {
         // collect the corners of the bounding box
         for ( unsigned k = 0 ; k < 4 ; k++ ) {
-            if (includeCorners) {
-                points->push_back(SnapCandidatePoint(bbox->corner(k),
-                                isAlignment ? SNAPSOURCE_ALIGNMENT_BBOX_CORNER : SNAPSOURCE_BBOX_CORNER,
-                                -1,
-                                isAlignment ? SNAPTARGET_ALIGNMENT_BBOX_CORNER : SNAPTARGET_BBOX_CORNER,
-                                *bbox));
+            if (corner_src || corner_tgt) {
+                points->push_back(SnapCandidatePoint(bbox->corner(k), corner_src, -1, corner_tgt, *bbox));
             }
             // optionally, collect the midpoints of the bounding box's edges too
-            if (includeLineMidpoints) {
-                points->push_back(SnapCandidatePoint((bbox->corner(k) + bbox->corner((k+1) % 4))/2,
-                                isAlignment ? SNAPSOURCE_ALIGNMENT_BBOX_EDGE_MIDPOINT : SNAPSOURCE_BBOX_EDGE_MIDPOINT,
-                                -1,
-                                isAlignment ? SNAPTARGET_ALIGNMENT_BBOX_EDGE_MIDPOINT : SNAPTARGET_BBOX_EDGE_MIDPOINT,
-                                *bbox));
+            if (edge_src || edge_tgt) {
+                points->push_back(SnapCandidatePoint((bbox->corner(k) + bbox->corner((k+1) % 4))/2, edge_src, -1, edge_tgt, *bbox));
             }
         }
-        if (includeObjectMidpoints) {
-            points->push_back(SnapCandidatePoint(bbox->midpoint(),
-                            isAlignment ? SNAPSOURCE_ALIGNMENT_BBOX_MIDPOINT : SNAPSOURCE_BBOX_MIDPOINT,
-                            -1,
-                            isAlignment ? SNAPTARGET_ALIGNMENT_BBOX_MIDPOINT : SNAPTARGET_BBOX_MIDPOINT,
-                            *bbox));
+        if (mid_src || mid_tgt) {
+            points->push_back(SnapCandidatePoint(bbox->midpoint(), mid_src, -1, mid_tgt, *bbox));
         }
     }
 }

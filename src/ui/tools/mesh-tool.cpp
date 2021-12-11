@@ -673,12 +673,10 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 sp_mesh_context_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
             if (this->cursor_addnode && over_curve.empty()) {
-                cursor_filename = "mesh.svg";
-                this->sp_event_context_update_cursor();
+                this->set_cursor("mesh.svg");
                 this->cursor_addnode = false;
             } else if (!this->cursor_addnode && !over_curve.empty()) {
-                cursor_filename = "mesh-add.svg";
-                this->sp_event_context_update_cursor();
+                this->set_cursor("mesh-add.svg");
                 this->cursor_addnode = true;
             }
         }

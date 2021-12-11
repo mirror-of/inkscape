@@ -15,6 +15,8 @@
 #include <src/object/sp-root.h>
 #include <src/helper-fns.h>
 
+#include <2geom/pathvector.h>
+
 using namespace Inkscape;
 
 /* This class allow test LPE's. To make possible in latest release of Inkscape

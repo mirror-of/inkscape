@@ -33,17 +33,20 @@
 #include "enums.h"
 #include "event-log.h"
 #include "layer-manager.h"
+#include "page-manager.h"
 #include "preferences.h"
 #include "sp-guide.h"
+#include "sp-page.h"
 #include "sp-item-group.h"
 #include "sp-root.h"
 #include "verbs.h"
 
 #include "actions/actions-canvas-snapping.h"
 #include "display/control/canvas-grid.h"
+#include "display/control/canvas-page.h"
 #include "svg/svg-color.h"
-#include "ui/dialog/dialog-container.h"
 #include "ui/monitor.h"
+#include "ui/widget/canvas.h"
 #include "util/units.h"
 #include "xml/repr.h"
 
@@ -55,49 +58,39 @@ using Inkscape::Util::unit_table;
 #define DEFAULTGRIDEMPSPACING 5
 #define DEFAULTGUIDECOLOR 0x0000ff7f
 #define DEFAULTGUIDEHICOLOR 0xff00007f
-#define DEFAULTBORDERCOLOR 0x000000ff
-#define DEFAULTPAGECOLOR 0xffffff00
-#define DEFAULTBLACKOUTCOLOR 0x00000000
+#define DEFAULTDESKCOLOR 0xffffff00
 
 static void sp_namedview_setup_guides(SPNamedView * nv);
 static void sp_namedview_lock_guides(SPNamedView * nv);
 static void sp_namedview_show_single_guide(SPGuide* guide, bool show);
 static void sp_namedview_lock_single_guide(SPGuide* guide, bool show);
 
-static gboolean sp_str_to_bool(const gchar *str);
-static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color);
-
-SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this, get_snapping_preferences()) {
-
+SPNamedView::SPNamedView()
+    : SPObjectGroup()
+    , snap_manager(this, get_snapping_preferences())
+    , showguides(true)
+    , lockguides(false)
+    , grids_visible(false)
+    , desk_checkerboard(false)
+{
     this->zoom = 0;
     this->guidecolor = 0;
     this->guidehicolor = 0;
     this->views.clear();
-    this->borderlayer = 0;
     this->page_size_units = nullptr;
     this->window_x = 0;
     this->cy = 0;
     this->window_y = 0;
     this->display_units = nullptr;
     this->page_size_units = nullptr;
-    this->pagecolor = 0;
     this->cx = 0;
     this->rotation = 0;
-    this->pageshadow = 0;
     this->window_width = 0;
     this->window_height = 0;
     this->window_maximized = 0;
-    this->bordercolor = 0;
-    blackoutcolor = 0;
+    this->desk_color = DEFAULTDESKCOLOR;
 
     this->editable = TRUE;
-    this->showguides = TRUE;
-    this->lockguides = false;
-    this->grids_visible = false;
-    this->showborder = TRUE;
-    this->pagecheckerboard = FALSE;
-    this->showpageshadow = TRUE;
-
     this->guides.clear();
     this->viewcount = 0;
     this->grids.clear();
@@ -105,9 +98,15 @@ SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this, get_snapping_pr
     this->default_layer_id = 0;
 
     this->connector_spacing = defaultConnSpacing;
+
+    this->_viewport = new Inkscape::CanvasPage();
+    this->_viewport->hide();
 }
 
-SPNamedView::~SPNamedView() = default;
+SPNamedView::~SPNamedView()
+{
+    delete _viewport;
+}
 
 static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *document, Inkscape::XML::Node *repr) {
     bool old_grid_settings_present = false;
@@ -193,12 +192,18 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
         repr->removeAttribute("gridempopacity");
         repr->removeAttribute("gridempspacing");
 
-//        SPDocumentUndo::done(doc, _("Create new grid from pre0.46 grid settings"), INKSCAPE_ICON("document-properties"));
+//        SPDocumentUndo::done(doc, SP_VERB_DIALOG_DOCPROPERTIES, _("Create new grid from pre0.46 grid settings"));
     }
 }
 
 void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPObjectGroup::build(document, repr);
+
+    // Do this before reading attributes.
+    if (_page_manager) {
+        delete _page_manager;
+    }
+    _page_manager = new Inkscape::PageManager(document);
 
     this->readAttr(SPAttr::INKSCAPE_DOCUMENT_UNITS);
     this->readAttr(SPAttr::UNITS);
@@ -220,10 +225,9 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::BORDERCOLOR);
     this->readAttr(SPAttr::BORDEROPACITY);
     this->readAttr(SPAttr::PAGECOLOR);
-    this->readAttr(SPAttr::INKSCAPE_BLACKOUTCOLOR);
-    this->readAttr(SPAttr::INKSCAPE_PAGECHECKERBOARD);
-    this->readAttr(SPAttr::INKSCAPE_PAGEOPACITY);
-    this->readAttr(SPAttr::INKSCAPE_BLACKOUTOPACITY);
+    this->readAttr(SPAttr::INKSCAPE_DESK_COLOR);
+    this->readAttr(SPAttr::INKSCAPE_DESK_OPACITY);
+    this->readAttr(SPAttr::INKSCAPE_DESK_CHECKERBOARD);
     this->readAttr(SPAttr::INKSCAPE_PAGESHADOW);
     this->readAttr(SPAttr::INKSCAPE_ZOOM);
     this->readAttr(SPAttr::INKSCAPE_ROTATION);
@@ -265,15 +269,17 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::INKSCAPE_CONNECTOR_SPACING);
     this->readAttr(SPAttr::INKSCAPE_LOCKGUIDES);
 
-    /* Construct guideline list */
-    for (auto& o: children) {
-        if (SP_IS_GUIDE(&o)) {
-            SPGuide * g = SP_GUIDE(&o);
-            this->guides.push_back(g);
+    /* Construct guideline and pages list */
+    for (auto &child : children) {
+        if (auto guide = dynamic_cast<SPGuide *>(&child)) {
+            this->guides.push_back(guide);
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
-            g->setColor(this->guidecolor);
-            g->setHiColor(this->guidehicolor);
-            g->readAttr(SPAttr::INKSCAPE_COLOR);
+            guide->setColor(this->guidecolor);
+            guide->setHiColor(this->guidehicolor);
+            guide->readAttr(SPAttr::INKSCAPE_COLOR);
+        }
+        if (auto page = dynamic_cast<SPPage *>(&child)) {
+            _page_manager->addPage(page);
         }
     }
 
@@ -282,40 +288,91 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 void SPNamedView::release() {
-        this->guides.clear();
+    this->guides.clear();
 
     // delete grids:
     for(auto grid : this->grids)
         delete grid;
     this->grids.clear();
+    delete this->_page_manager;
+    this->_page_manager = nullptr;
     SPObjectGroup::release();
+}
+
+void SPNamedView::modified(unsigned int flags)
+{
+    // Copy the page style for the default viewport attributes
+    if (_page_manager && flags & SP_OBJECT_MODIFIED_FLAG) {
+        _page_manager->setDefaultAttributes(_viewport);
+        updateViewPort();
+        // Pass modifications to the page manager to update the page items.
+        for (auto &page : _page_manager->getPages()) {
+            page->setDefaultAttributes();
+        }
+    }
+    // Add desk color, and chckerboard pattern to desk view
+    for (auto desktop : views) {
+        if (desk_checkerboard) {
+            desktop->getCanvas()->set_background_checkerboard(desk_color);
+        } else {
+            desktop->getCanvas()->set_background_color(desk_color);
+        }
+    }
+
+    for (auto child : this->childList(false)) {
+        if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+            child->emitModified(flags & SP_OBJECT_MODIFIED_CASCADE);
+        }
+    }
+}
+
+/**
+ * Propergate the update to the child nodes so they can be updated correctly.
+ */
+void SPNamedView::update(SPCtx *ctx, guint flags)
+{
+    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+        flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+    }
+
+    flags &= SP_OBJECT_MODIFIED_CASCADE;
+
+    for (auto child : this->childList(false)) {
+        if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+            child->updateDisplay(ctx, flags);
+        }
+    }
 }
 
 void SPNamedView::set(SPAttr key, const gchar* value) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool global_snapping = prefs->getBool("/options/snapdefault/value", true);
+
+    // Send page attributes to the page manager.
+    if (this->_page_manager && this->_page_manager->subset(key, value)) {
+        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        return;
+    }
+
     switch (key) {
     case SPAttr::VIEWONLY:
             this->editable = (!value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::SHOWGUIDES:
-            if (!value) { // show guides if not specified, for backwards compatibility
-                this->showguides = TRUE;
-            } else {
-                this->showguides = sp_str_to_bool(value);
-            }
-            sp_namedview_setup_guides(this);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->showguides.readOrUnset(value);
+        sp_namedview_setup_guides(this);
+        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        break;
+    case SPAttr::INKSCAPE_LOCKGUIDES:
+        this->lockguides.readOrUnset(value);
+        this->lockGuides();
+        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        break;
     case SPAttr::SHOWGRIDS:
-            if (!value) { // don't show grids if not specified, for backwards compatibility
-                this->grids_visible = false;
-            } else {
-                this->grids_visible = sp_str_to_bool(value);
-            }
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->grids_visible.readOrUnset(value);
+        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        break;
     case SPAttr::GRIDTOLERANCE:
             this->snap_manager.snapprefs.setGridTolerance(value ? g_ascii_strtod(value, nullptr) : 10000);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -351,12 +408,11 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::GUIDEOPACITY:
-            this->guidecolor = (this->guidecolor & 0xffffff00) | (DEFAULTGUIDECOLOR & 0xff);
-            sp_nv_read_opacity(value, &this->guidecolor);
+        sp_ink_read_opacity(value, &this->guidecolor, DEFAULTGUIDECOLOR);
 
-            for(auto guide : this->guides) {
-                guide->setColor(this->guidecolor);
-                guide->readAttr(SPAttr::INKSCAPE_COLOR);
+        for (auto guide : this->guides) {
+            guide->setColor(this->guidecolor);
+            guide->readAttr(SPAttr::INKSCAPE_COLOR);
             }
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -374,71 +430,27 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::GUIDEHIOPACITY:
-            this->guidehicolor = (this->guidehicolor & 0xffffff00) | (DEFAULTGUIDEHICOLOR & 0xff);
-            sp_nv_read_opacity(value, &this->guidehicolor);
-            for(auto guide : this->guides) {
-            	guide->setHiColor(this->guidehicolor);
-            }
-
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::SHOWBORDER:
-            this->showborder = (value) ? sp_str_to_bool (value) : TRUE;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::BORDERLAYER:
-            this->borderlayer = SP_BORDER_LAYER_BOTTOM;
-            if (value && !strcasecmp(value, "true")) this->borderlayer = SP_BORDER_LAYER_TOP;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::BORDERCOLOR:
-            this->bordercolor = (this->bordercolor & 0xff) | (DEFAULTBORDERCOLOR & 0xffffff00);
-            if (value) {
-                this->bordercolor = (this->bordercolor & 0xff) | sp_svg_read_color (value, this->bordercolor);
+        sp_ink_read_opacity(value, &this->guidehicolor, DEFAULTGUIDEHICOLOR);
+        for (auto guide : this->guides) {
+            guide->setHiColor(this->guidehicolor);
             }
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SPAttr::BORDEROPACITY:
-            this->bordercolor = (this->bordercolor & 0xffffff00) | (DEFAULTBORDERCOLOR & 0xff);
-            sp_nv_read_opacity(value, &this->bordercolor);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::PAGECOLOR:
-            this->pagecolor = (this->pagecolor & 0xff) | (DEFAULTPAGECOLOR & 0xffffff00);
-            if (value) {
-                this->pagecolor = (this->pagecolor & 0xff) | sp_svg_read_color(value, this->pagecolor);
-            }
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::INKSCAPE_BLACKOUTCOLOR:
-            blackoutcolor = (blackoutcolor & 0xff) | (DEFAULTBLACKOUTCOLOR & 0xffffff00);
-            if (value) {
-                blackoutcolor = (blackoutcolor & 0xff) | sp_svg_read_color(value, blackoutcolor);
-            }
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::INKSCAPE_PAGECHECKERBOARD:
-            this->pagecheckerboard = (value) ? sp_str_to_bool (value) : false;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::INKSCAPE_PAGEOPACITY:
-            this->pagecolor = (this->pagecolor & 0xffffff00) | (DEFAULTPAGECOLOR & 0xff);
-            sp_nv_read_opacity(value, &this->pagecolor);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::INKSCAPE_BLACKOUTOPACITY:
-            blackoutcolor = (blackoutcolor & 0xffffff00) | (DEFAULTBLACKOUTCOLOR & 0xff);
-            sp_nv_read_opacity(value, &blackoutcolor);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::INKSCAPE_PAGESHADOW:
-            this->pageshadow = value? atoi(value) : 2; // 2 is the default
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::SHOWPAGESHADOW:
-            this->showpageshadow = (value) ? sp_str_to_bool(value) : TRUE;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+    case SPAttr::INKSCAPE_DESK_COLOR:
+        desk_color = (desk_color & 0xff) | (DEFAULTDESKCOLOR & 0xffffff00);
+        if (value) {
+            desk_color = (desk_color & 0xff) | sp_svg_read_color(value, desk_color);
+        }
+        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        break;
+    case SPAttr::INKSCAPE_DESK_OPACITY:
+        sp_ink_read_opacity(value, &desk_color, DEFAULTDESKCOLOR);
+        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        break;
+    case SPAttr::INKSCAPE_DESK_CHECKERBOARD:
+        this->desk_checkerboard.readOrUnset(value);
+        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        break;
     case SPAttr::INKSCAPE_ZOOM:
             this->zoom = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -540,11 +552,6 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     }
-    case SPAttr::INKSCAPE_LOCKGUIDES:
-            this->lockguides = value ? sp_str_to_bool(value) : FALSE;
-            this->lockGuides();
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
     default:
             SPObjectGroup::set(key, value);
             break;
@@ -590,17 +597,41 @@ sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *des
     return grid;
 }
 
+/**
+ * Update the visibility of the viewport space. This can look like a page
+ * if there's no multi-pages, or invisible if it shadows the first page.
+ */
+void SPNamedView::updateViewPort()
+{
+    auto box = document->preferredBounds();
+    if (auto page = _page_manager->getPageAt(box->corner(0))) {
+        // An existing page is set as the main page, so hide th viewport canvas item.
+        _viewport->hide();
+        page->setDesktopRect(*box);
+    } else {
+        // Otherwise we are showing the viewport item.
+        _viewport->show();
+        _viewport->update(*box, nullptr, _page_manager->hasPages());
+    }
+}
+
 void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
     SPObjectGroup::child_added(child, ref);
 
+    SPObject *no = this->document->getObjectByRepr(child);
+    if (!no)
+        return;
+
     if (!strcmp(child->name(), "inkscape:grid")) {
         sp_namedview_add_grid(this, child, nullptr);
-    } else {
-        SPObject *no = this->document->getObjectByRepr(child);
-        if (!no) {
-            return;
+    } else if (!strcmp(child->name(), "inkscape:page")) {
+        if (auto page = dynamic_cast<SPPage *>(no)) {
+            this->_page_manager->addPage(page);
+            for (auto view : this->views) {
+                page->showPage(view->getCanvasPagesBg(), view->getCanvasPagesFg());
+            }
         }
-
+    } else {
         if (auto g = dynamic_cast<SPGuide *>(no)) {
             this->guides.push_back(g);
 
@@ -633,6 +664,8 @@ void SPNamedView::remove_child(Inkscape::XML::Node *child) {
                 break;
             }
         }
+    } else if (!strcmp(child->name(), "inkscape:page")) {
+        _page_manager->removePage(child);
     } else {
         for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
             if ( (*it)->getRepr() == child ) {
@@ -643,6 +676,15 @@ void SPNamedView::remove_child(Inkscape::XML::Node *child) {
     }
 
     SPObjectGroup::remove_child(child);
+}
+
+void SPNamedView::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_repr,
+                                Inkscape::XML::Node *new_repr)
+{
+    SPObjectGroup::order_changed(child, old_repr, new_repr);
+    if (!strcmp(child->name(), "inkscape:page")) {
+        _page_manager->reorderPage(child);
+    }
 }
 
 Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -661,14 +703,23 @@ Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inksca
 
 void SPNamedView::show(SPDesktop *desktop)
 {
-    for(auto guide : this->guides) {
 
+    for(auto guide : this->guides) {
         guide->showSPGuide( desktop->getCanvasGuides() );
 
         if (desktop->guides_active) {
             guide->sensitize(desktop->getCanvas(), TRUE);
         }
         sp_namedview_show_single_guide(guide, showguides);
+    }
+
+    auto box = document->preferredBounds();
+    _viewport->add(*box, desktop->getCanvasPagesBg(), desktop->getCanvasPagesFg());
+    _page_manager->setDefaultAttributes(_viewport);
+    updateViewPort();
+
+    for (auto page : _page_manager->getPages()) {
+        page->showPage(desktop->getCanvasPagesBg(), desktop->getCanvasPagesFg());
     }
 
     views.push_back(desktop);
@@ -778,7 +829,7 @@ void sp_namedview_zoom_and_view_from_document(SPDesktop *desktop)
         && nv->cy != HUGE_VAL && !std::isnan(nv->cy)) {
         desktop->zoom_absolute( Geom::Point(nv->cx, nv->cy), nv->zoom, false );
     } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
-        desktop->zoom_page();
+        nv->getPageManager()->zoomToSelectedPage(desktop);
     }
     if (nv->rotation != 0 && nv->rotation != HUGE_VAL && !std::isnan(nv->rotation)) {
         Geom::Point p;
@@ -868,6 +919,10 @@ void SPNamedView::hide(SPDesktop const *desktop)
     g_assert(std::find(views.begin(),views.end(),desktop)!=views.end());
     for(auto & guide : this->guides) {
         guide->hideSPGuide(desktop->getCanvas());
+    }
+    _viewport->remove(desktop->getCanvas());
+    for (auto &page : this->_page_manager->getPages()) {
+        page->hidePage(desktop->getCanvas());
     }
     views.erase(std::remove(views.begin(),views.end(),desktop),views.end());
 }
@@ -994,40 +1049,6 @@ std::vector<SPDesktop *> const SPNamedView::getViewList() const
     return views;
 }
 
-/* This should be moved somewhere */
-
-static gboolean sp_str_to_bool(const gchar *str)
-{
-    if (str) {
-        if (!g_ascii_strcasecmp(str, "true") ||
-            !g_ascii_strcasecmp(str, "yes") ||
-            !g_ascii_strcasecmp(str, "y") ||
-            (atoi(str) != 0)) {
-            return TRUE;
-        }
-    }
-
-    return FALSE;
-}
-
-static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color)
-{
-    if (!str) {
-        return FALSE;
-    }
-
-    gchar *u;
-    gdouble v = g_ascii_strtod(str, &u);
-    if (!u) {
-        return FALSE;
-    }
-    v = CLAMP(v, 0.0, 1.0);
-
-    *color = (*color & 0xffffff00) | (guint32) floor(v * 255.9999);
-
-    return TRUE;
-}
-
 SPNamedView *sp_document_namedview(SPDocument *document, const gchar *id)
 {
     g_return_val_if_fail(document != nullptr, NULL);
@@ -1078,8 +1099,7 @@ void SPNamedView::lockGuides()
 /**
  * Gets page fitting margin information from the namedview node in the XML.
  * \param nv_repr reference to this document's namedview
- * \param key the same key used by the RegisteredScalarUnit in
- *        ui/widget/page-sizer.cpp
+ * \param key
  * \param margin_units units for the margin
  * \param return_units units to return the result in
  * \param width width in px (for percentage margins)
@@ -1151,7 +1171,6 @@ void SPNamedView::scrollAllDesktops(double dx, double dy, bool is_scrolling) {
         view->scroll_relative_in_svg_coords(dx, dy, is_scrolling);
     }
 }
-
 
 /*
   Local Variables:

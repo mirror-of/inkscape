@@ -101,6 +101,7 @@ public:
     Inkscape::XML::Node *getPreferences() {
         return _preferences;
     }
+    void pushPage();
 
     // Handling the node stack
     Inkscape::XML::Node *pushGroup();
@@ -227,6 +228,13 @@ private:
     double _height;       // Document size in px
     double _ttm[6]; ///< temporary transform matrix
     bool _ttm_is_set;
+    
+    Inkscape::XML::Node *_nv = nullptr; // XML NameView xml
+    Inkscape::XML::Node *_page = nullptr; // XML Page definition
+    int _page_num = 0; // Are we on a page
+    double _page_left = 0 ; // Move to the left for more pages
+    double _page_top = 0 ; // Move to the top (maybe)
+    bool _page_offset = false;
 };
 
 

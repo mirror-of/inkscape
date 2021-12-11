@@ -80,7 +80,6 @@ namespace Inkscape { namespace XML { class Node; }}
 static bool _drawing_handler (GdkEvent *event, Inkscape::DrawingItem *item, SPDesktop *desktop);
 static void _reconstruction_start(SPDesktop * desktop);
 static void _reconstruction_finish(SPDesktop * desktop);
-static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop);
 
 static gdouble _pinch_begin_zoom = 1.;
 
@@ -196,18 +195,22 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     // node handler? see bug https://bugs.launchpad.net/inkscape/+bug/414142)
 
     canvas_catchall       = new Inkscape::CanvasItemCatchall(canvas_item_root); // Lowest item!
+    canvas_group_pages_bg = new Inkscape::CanvasItemGroup(canvas_item_root);
     canvas_group_drawing  = new Inkscape::CanvasItemGroup(canvas_item_root);
+    canvas_group_pages_fg = new Inkscape::CanvasItemGroup(canvas_item_root);
     canvas_group_grids    = new Inkscape::CanvasItemGroup(canvas_item_root);
     canvas_group_guides   = new Inkscape::CanvasItemGroup(canvas_item_root);
     canvas_group_sketch   = new Inkscape::CanvasItemGroup(canvas_item_root);
     canvas_group_temp     = new Inkscape::CanvasItemGroup(canvas_item_root);
     canvas_group_controls = new Inkscape::CanvasItemGroup(canvas_item_root);
 
-    canvas_group_drawing->set_name( "CanvasItemGroup:Drawing" ); // The actual SVG drawing.
-    canvas_group_grids->set_name(   "CanvasItemGroup:Grids"   ); // Grids.
-    canvas_group_guides->set_name(  "CanvasItemGroup:Guides"  ); // Guides.
-    canvas_group_sketch->set_name(  "CanvasItemGroup:Sketch"  ); // Temporary items before becoming permanent.
-    canvas_group_temp->set_name(    "CanvasItemGroup:Temp"    ); // Temporary items that disappear by themselves.
+    canvas_group_pages_bg->set_name("CanvasItemGroup:PagesBg");  // Page backgrounds
+    canvas_group_drawing->set_name("CanvasItemGroup:Drawing");   // The actual SVG drawing.
+    canvas_group_pages_fg->set_name("CanvasItemGroup:PagesFg");  // Page borders, when on top.
+    canvas_group_grids->set_name("CanvasItemGroup:Grids");       // Grids.
+    canvas_group_guides->set_name("CanvasItemGroup:Guides");     // Guides.
+    canvas_group_sketch->set_name("CanvasItemGroup:Sketch");     // Temporary items before becoming permanent.
+    canvas_group_temp->set_name("CanvasItemGroup:Temp");         // Temporary items that disappear by themselves.
     canvas_group_controls->set_name("CanvasItemGroup:Controls"); // Controls (handles, knots, rectangles, etc.).
 
     canvas_group_sketch->set_pickable(false);  // Temporary items are not pickable!
@@ -220,23 +223,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     // Drawing
     Geom::Rect const d(Geom::Point(0.0, 0.0),
                        Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")));
-
-    canvas_background = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
-    canvas_background->set_name("CanvasItemRect:PageBackground");
-    canvas_background->set_stroke(0x00000000);
-    canvas_background->set_background(0x00000000);
-
-    // canvas_page is used to render page border only (no fill, no background) as it can be placed on top of drawing
-    canvas_page = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
-    canvas_page->set_name( "CanvasItemRect:Page" );
-    canvas_page->set_stroke(0x00000000);
-
-    canvas_shadow = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
-    canvas_shadow->set_name( "CanvasItemRect:Shadow" );
-    canvas_shadow->set_stroke(0x00000000);
-    if ( namedview->pageshadow != 0 && namedview->showpageshadow ) {
-        canvas_shadow->set_shadow(0x3f3f3fff, namedview->pageshadow);
-    }
 
     canvas_drawing = new Inkscape::CanvasItemDrawing(canvas_group_drawing);
     canvas_drawing->get_drawing()->delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
@@ -260,15 +246,9 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
 
     /* --------- End Canvas Items ----------- */
 
-    /* Connect event for page resize */
-    _modified_connection =
-        namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
-
     namedview->show(this);
     /* Ugly hack */
     activate_guides (true);
-    /* Ugly hack */
-    _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
 
     // Set the select tool as the active tool.
     setEventContext("/tools/select");
@@ -317,7 +297,6 @@ void SPDesktop::destroy()
     namedview->hide(this);
 
     _sel_changed_connection.disconnect();
-    _modified_connection.disconnect();
     _commit_connection.disconnect();
     _reconstruction_start_connection.disconnect();
     _reconstruction_finish_connection.disconnect();
@@ -440,7 +419,6 @@ SPDesktop::change_document (SPDocument *theDocument)
         std::cerr << "SPDesktop::change_document: failed to get desktop widget!" << std::endl;
     }
 
-    _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
 }
 
 /**
@@ -740,39 +718,25 @@ SPDesktop::zoom_realworld(Geom::Point const &center, double ratio)
 
 
 /**
- * Set display area to origin and current document dimensions.
+ * Set display area in only the width dimention.
  */
-void
-SPDesktop::zoom_page()
+void SPDesktop::set_display_width(Geom::Rect const &rect, Geom::Coord border)
 {
-    Geom::Rect d(Geom::Point(0, 0),
-                 Geom::Point(doc()->getWidth().value("px"), doc()->getHeight().value("px")));
-
-    if (d.minExtent() < 1.0) {
+    if (rect.width() < 1.0)
         return;
-    }
-
-    set_display_area(d, 10);
+    auto const center_y = current_center().y();
+    set_display_area(Geom::Rect(
+        Geom::Point(rect.left(), center_y),
+        Geom::Point(rect.width(), center_y)), border);
 }
 
 /**
- * Set display area to current document width.
+ * Centre Rect, without zooming
  */
-void
-SPDesktop::zoom_page_width()
+void SPDesktop::set_display_center(Geom::Rect const &rect)
 {
-    if (doc()->getWidth().value("px") < 1.0) {
-        return;
-    }
-
-    auto const center_y = current_center().y();
-
-    Geom::Rect d(Geom::Point(0, center_y), //
-                 Geom::Point(doc()->getWidth().value("px"), center_y));
-
-    set_display_area(d, 10);
+    zoom_absolute(rect.midpoint(), this->current_zoom(), false);
 }
-
 
 /**
  * Zoom to whole drawing.
@@ -811,14 +775,6 @@ SPDesktop::zoom_selection()
     }
 
     set_display_area(*d, 10);
-}
-
-/**
- * Centre Page in window, without zooming
- */
-void SPDesktop::zoom_center_page()
-{
-    zoom_absolute(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom(), false);
 }
 
 Geom::Point SPDesktop::current_center() const {
@@ -1367,7 +1323,7 @@ void SPDesktop::setWaitingCursor()
 
 void SPDesktop::clearWaitingCursor() {
   if (waiting_cursor) {
-      this->event_context->sp_event_context_update_cursor();
+      this->event_context->use_tool_cursor();
   }
 }
 
@@ -1469,7 +1425,6 @@ SPDesktop::setDocument (SPDocument *doc)
     if (canvas_drawing) {
 
         namedview = sp_document_namedview (doc, nullptr);
-        _modified_connection = namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
         number = namedview->getViewCount();
 
         Inkscape::DrawingItem *drawing_item = doc->getRoot()->invoke_show(
@@ -1483,8 +1438,6 @@ SPDesktop::setDocument (SPDocument *doc)
         namedview->show(this);
         /* Ugly hack */
         activate_guides (true);
-        /* Ugly hack */
-        _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
     }
 
 
@@ -1506,20 +1459,6 @@ void
 SPDesktop::onDocumentFilenameSet (gchar const* filename)
 {
     _widget->updateTitle(filename);
-}
-
-/**
- * Resized callback.
- */
-void
-SPDesktop::onDocumentResized (gdouble width, gdouble height)
-{
-    assert(canvas->get_affine() == _current_affine.d2w());
-
-    Geom::Rect const a(Geom::Point(0, 0), Geom::Point(width, height));
-    canvas_background->set_rect(a);
-    canvas_page->set_rect(a);
-    canvas_shadow->set_rect(a);
 }
 
 /**
@@ -1565,70 +1504,6 @@ static void _reconstruction_finish(SPDesktop * desktop)
         desktop->_reconstruction_old_layer_id.clear();
     }
     g_debug("Desktop, finishing reconstruction end\n");
-}
-
-/**
- * Namedview_modified callback.
- */
-static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
-{
-    SPNamedView *nv=SP_NAMEDVIEW(obj);
-
-    if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        guint32 blackout_color = 0;
-        {
-            // blend page and blackout colors by "painting" with blackout on top of opaque page:
-            const auto a = SP_RGBA32_A_F(nv->blackoutcolor);
-            const auto r = SP_RGBA32_R_F(nv->pagecolor) * (1 - a) + SP_RGBA32_R_F(nv->blackoutcolor) * a;
-            const auto g = SP_RGBA32_G_F(nv->pagecolor) * (1 - a) + SP_RGBA32_G_F(nv->blackoutcolor) * a;
-            const auto b = SP_RGBA32_B_F(nv->pagecolor) * (1 - a) + SP_RGBA32_B_F(nv->blackoutcolor) * a;
-            blackout_color = SP_RGBA32_F_COMPOSE(r, g, b, 1);
-        }
-        if (nv->pagecheckerboard) {
-            desktop->getCanvas()->set_background_checkerboard(blackout_color);
-            desktop->getCanvasPageBackground()->set_background_checkerboard(nv->pagecolor);
-        } else {
-            desktop->getCanvas()->set_background_color(blackout_color);
-            desktop->getCanvasPageBackground()->set_background(nv->pagecolor | 0xff);
-        }
-
-        /* Show/hide page border */
-        if (nv->showborder) {
-            desktop->getCanvasPage()->set_stroke(nv->bordercolor);
-            desktop->getCanvasPage()->show();
-
-            // place in the z-order stack
-            if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
-                desktop->getCanvasPage()->set_z_position(1); // In display group, on top of shadow.
-            } else {
-                desktop->getCanvasPage()->raise_to_top(); // In display group.
-            }
-
-            /* Show/hide page shadow */
-            if (nv->showpageshadow && nv->pageshadow) {
-                desktop->getCanvasShadow()->set_shadow(nv->bordercolor, nv->pageshadow);
-                desktop->getCanvasShadow()->show();
-            } else {
-                desktop->getCanvasShadow()->hide();
-            }
-
-        } else {
-            desktop->getCanvasPage()->hide();
-            desktop->getCanvasShadow()->hide(); // No page border, no shadow!
-        }
-
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (SP_RGBA32_R_U(nv->pagecolor) +
-            SP_RGBA32_G_U(nv->pagecolor) +
-            SP_RGBA32_B_U(nv->pagecolor) >= 384) {
-            // the background color is light, use black outline
-            desktop->getCanvasDrawing()->get_drawing()->outlinecolor =
-                prefs->getInt("/options/wireframecolors/onlight", 0xff);
-        } else { // use white outline
-            desktop->getCanvasDrawing()->get_drawing()->outlinecolor =
-                prefs->getInt("/options/wireframecolors/ondark", 0xffffffff);
-        }
-    }
 }
 
 Geom::Affine SPDesktop::w2d() const

@@ -39,6 +39,7 @@
 #include "message-stack.h"
 #include "rubberband.h"
 #include "selection.h"
+#include "page-manager.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
@@ -789,8 +790,9 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
         Inkscape::DrawingContext dc(s, Geom::Point(0,0));
         // cairo_translate not necessary here - surface origin is at 0,0
 
-        SPNamedView *nv = desktop->getNamedView();
-        bgcolor = nv->pagecolor;
+        auto pm = desktop->getNamedView()->getPageManager();
+        bgcolor = pm->background_color;
+
         // bgcolor is 0xrrggbbaa, we need 0xaarrggbb
         dtc = (bgcolor >> 8) | (bgcolor << 24);
 

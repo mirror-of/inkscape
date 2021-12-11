@@ -36,6 +36,7 @@
 #include "io/sys.h"
 #include "object/sp-root.h"
 #include "object/sp-script.h"
+#include "object/color-profile.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
@@ -44,7 +45,7 @@
 #include "ui/widget/notebook-page.h"
 #include "xml/node-event-vector.h"
 
-#include "object/color-profile.h"
+#include "page-manager.h"
 
 namespace Inkscape {
 namespace UI {
@@ -99,16 +100,15 @@ DocumentProperties::DocumentProperties()
     , _page_metadata2(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     //---------------------------------------------------------------
     , _rcb_antialias(_("Use antialiasing"), _("If unset, no antialiasing will be done on the drawing"), "shape-rendering", _wr, false, nullptr, nullptr, nullptr, "crispEdges")
-    , _rcb_checkerboard(_("Checkerboard background"), _("If set, use a colored checkerboard for the canvas background"), "inkscape:pagecheckerboard", _wr, false)
     , _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false)
     , _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false)
     , _rcb_shad(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _wr, false)
     , _rcb_shwd(_("_Border shadow width"), _("Width of page border when set"), "", "inkscape:pageshadow", _wr)
-    , _rcp_bg(_("Back_ground color:"), _("Background color"), _("Color of the canvas background. Note: opacity is ignored except when exporting to bitmap."), "pagecolor", "inkscape:pageopacity", _wr)
-    , _rcp_blkout(_("Desk blackout color:"), _("Blackout color"), _("Color of the desk background."), "inkscape:blackoutcolor", "inkscape:blackoutopacity", _wr)
+    , _rcp_bg(_("Page color:"), _("Page color"), _("Default color of new pages."), "pagecolor", "inkscape:pageopacity", _wr)
+    , _rcp_blkout(_("Desk color:"), _("Desk color"), _("Color of the desk background."), "inkscape:deskcolor", "inkscape:deskopacity", _wr)
+    , _rcb_checkerboard(_("Desk Checkerboard"), _("If set, use a colored checkerboard for the desk background"), "inkscape:pagecheckerboard", _wr, false)
     , _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr)
     , _rum_deflt(_("Display _units:"), "inkscape:document-units", _wr)
-    , _page_sizer(_wr)
     //---------------------------------------------------------------
     //General guide options
     , _rcb_sgui(_("Show _guides"), _("Show or hide guides"), "showguides", _wr)
@@ -161,7 +161,7 @@ DocumentProperties::DocumentProperties()
     set_spacing (4);
     pack_start(_notebook, true, true);
 
-    _notebook.append_page(*_page_page,      _("Page"));
+    _notebook.append_page(*_page_page,      _("Display"));
     _notebook.append_page(*_page_guides,    _("Guides"));
     _notebook.append_page(_grids_vbox,      _("Grids"));
     // _notebook.append_page(*_page_snap,      _("Snap"));
@@ -227,10 +227,6 @@ void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n)
         } else {
             if (arr[i+1]) {
                 Gtk::AttachOptions yoptions = (Gtk::AttachOptions)0;
-                if (dynamic_cast<Inkscape::UI::Widget::PageSizer*>(arr[i+1])) {
-                    // only the PageSizer in Document Properties|Page should be stretched vertically
-                    yoptions = Gtk::FILL|Gtk::EXPAND;
-                }
                 arr[i+1]->set_hexpand();
 
                 if (yoptions & Gtk::EXPAND)
@@ -270,15 +266,10 @@ void DocumentProperties::build_page()
     label_for->set_markup (_("<b>Page Size</b>"));
 
     Gtk::Label* label_bkg = Gtk::manage (new Gtk::Label);
-    label_bkg->set_markup (_("<b>Background</b>"));
-
-    Gtk::Label* label_bdr = Gtk::manage (new Gtk::Label);
-    label_bdr->set_markup (_("<b>Border</b>"));
+    label_bkg->set_markup (_("<b>Desk</b>"));
 
     Gtk::Label* label_dsp = Gtk::manage (new Gtk::Label);
     label_dsp->set_markup (_("<b>Display</b>"));
-
-    _page_sizer.init();
 
     _rcb_doc_props_left.set_border_width(4);
     _rcb_doc_props_left.set_row_spacing(4);
@@ -293,7 +284,7 @@ void DocumentProperties::build_page()
         nullptr,              &_rum_deflt,
         nullptr,              nullptr,
         label_for,            nullptr,
-        nullptr,              &_page_sizer,
+        nullptr,              nullptr,
         nullptr,              nullptr,
         &_rcb_doc_props_left, &_rcb_doc_props_right,
     };
@@ -303,7 +294,6 @@ void DocumentProperties::build_page()
     {
         label_bkg,            nullptr,
         nullptr,              &_rcb_checkerboard,
-        nullptr,              &_rcp_bg,
         nullptr,              &_rcp_blkout,
         label_dsp,            nullptr,
         nullptr,              &_rcb_antialias,
@@ -312,12 +302,12 @@ void DocumentProperties::build_page()
 
     Gtk::Widget *const widget_array_right[] =
     {
-        label_bdr,            nullptr,
         nullptr,              &_rcb_canb,
         nullptr,              &_rcb_bord,
         nullptr,              &_rcb_shad,
         nullptr,              &_rcb_shwd,
         nullptr,              &_rcp_bord,
+        nullptr,              &_rcp_bg,
     };
     attach_all(_rcb_doc_props_right, widget_array_right, G_N_ELEMENTS(widget_array_right));
 
@@ -1384,20 +1374,23 @@ void DocumentProperties::update_widgets()
     auto document = getDocument();
     if (_wr.isUpdating() || !document) return;
 
-    SPNamedView *nv = desktop->getNamedView();
+    auto nv = desktop->getNamedView();
+    auto pm = nv->getPageManager();
 
     _wr.setUpdating (true);
     set_sensitive (true);
 
-    //-----------------------------------------------------------page page
-    _rcb_checkerboard.setActive (nv->pagecheckerboard);
-    _rcp_bg.setRgba32 (nv->pagecolor);
-    _rcp_blkout.setRgba32(nv->blackoutcolor);
-    _rcb_canb.setActive (nv->showborder);
-    _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
-    _rcp_bord.setRgba32 (nv->bordercolor);
-    _rcb_shad.setActive (nv->showpageshadow);
-    _rcb_shwd.setValue (nv->pageshadow);
+    // Desk settings
+    _rcb_checkerboard.setActive(nv->desk_checkerboard);
+    _rcp_blkout.setRgba32(nv->desk_color);
+
+    // Page defaults
+    _rcp_bg.setRgba32(pm->background_color);
+    _rcb_canb.setActive(pm->border_show);
+    _rcb_bord.setActive(pm->border_on_top);
+    _rcp_bord.setRgba32(pm->border_color);
+    _rcb_shad.setActive(pm->shadow_show);
+    _rcb_shwd.setValue(pm->shadow_size);
 
     SPRoot *root = document->getRoot();
     _rcb_antialias.set_xml_target(root->getRepr(), document);
@@ -1423,9 +1416,6 @@ void DocumentProperties::update_widgets()
         doc_h_unit = "px";
         doc_h = root->viewBox.height();
     }
-    _page_sizer.setDim(Inkscape::Util::Quantity(doc_w, doc_w_unit), Inkscape::Util::Quantity(doc_h, doc_h_unit));
-    _page_sizer.updateFitMarginsUI(nv->getRepr());
-    _page_sizer.updateScaleUI();
 
     //-----------------------------------------------------------guide page
 
@@ -1627,8 +1617,6 @@ void DocumentProperties::onDocUnitChange()
     Inkscape::SVGOStringStream os;
     os << doc_unit->abbr;
     repr->setAttribute("inkscape:document-units", os.str());
-
-    _page_sizer.updateScaleUI();
 
     // Disable changing of SVG Units. The intent here is to change the units in the UI, not the units in SVG.
     // This code should be moved (and fixed) once we have an "SVG Units" setting that sets what units are used in SVG data.

@@ -69,6 +69,7 @@ struct InkscapeApplication;
 
 namespace Inkscape {
     class LayerManager;
+    class PageManager;
     class MessageContext;
     class Selection;
 
@@ -76,7 +77,6 @@ namespace Inkscape {
     class CanvasItemCatchall;
     class CanvasItemDrawing;
     class CanvasItemGroup;
-    class CanvasItemRect;
     class CanvasItemRotate;
 
     namespace UI {
@@ -161,32 +161,30 @@ public:
 
      // Move these into UI::Widget::Canvas:
     Inkscape::CanvasItemGroup    *getCanvasControls() const { return canvas_group_controls; }
+    Inkscape::CanvasItemGroup    *getCanvasPagesBg()  const { return canvas_group_pages_bg; }
+    Inkscape::CanvasItemGroup    *getCanvasPagesFg()  const { return canvas_group_pages_fg; }
     Inkscape::CanvasItemGroup    *getCanvasGrids()    const { return canvas_group_grids; }
     Inkscape::CanvasItemGroup    *getCanvasGuides()   const { return canvas_group_guides; }
     Inkscape::CanvasItemGroup    *getCanvasSketch()   const { return canvas_group_sketch; }
     Inkscape::CanvasItemGroup    *getCanvasTemp()     const { return canvas_group_temp; }
 
     Inkscape::CanvasItemCatchall *getCanvasCatchall() const { return canvas_catchall; }
-    Inkscape::CanvasItemRect     *getCanvasPageBackground() const { return canvas_background; }
-    Inkscape::CanvasItemRect     *getCanvasPage()     const { return canvas_page; }
-    Inkscape::CanvasItemRect     *getCanvasShadow()   const { return canvas_shadow; }
     Inkscape::CanvasItemDrawing  *getCanvasDrawing()  const { return canvas_drawing; }
     Inkscape::CanvasItemRotate   *getCanvasRotate()   const { return canvas_rotate; }
 
 private:
     // Groups
     Inkscape::CanvasItemGroup    *canvas_group_controls  = nullptr; ///< Handles, knots, nodes, etc.
-    Inkscape::CanvasItemGroup    *canvas_group_drawing   = nullptr; ///< Drawing + border + shadow.
+    Inkscape::CanvasItemGroup    *canvas_group_drawing   = nullptr; ///< SVG Drawing
     Inkscape::CanvasItemGroup    *canvas_group_grids     = nullptr; ///< Grids.
     Inkscape::CanvasItemGroup    *canvas_group_guides    = nullptr; ///< Guide lines.
     Inkscape::CanvasItemGroup    *canvas_group_sketch    = nullptr; ///< Temporary items before becoming permanent.
     Inkscape::CanvasItemGroup    *canvas_group_temp      = nullptr; ///< Temporary items that self-destruct.
+    Inkscape::CanvasItemGroup    *canvas_group_pages_bg  = nullptr; ///< Page background
+    Inkscape::CanvasItemGroup    *canvas_group_pages_fg  = nullptr; ///< Page border + shadow.
 
     // Individual items
     Inkscape::CanvasItemCatchall *canvas_catchall        = nullptr; ///< The bottom item for unclaimed events.
-    Inkscape::CanvasItemRect     *canvas_background      = nullptr; ///< Page background
-    Inkscape::CanvasItemRect     *canvas_page            = nullptr; ///< Page border
-    Inkscape::CanvasItemRect     *canvas_shadow          = nullptr; ///< Page shadow
     Inkscape::CanvasItemDrawing  *canvas_drawing         = nullptr; ///< The actual SVG drawing (a.k.a. arena).
     Inkscape::CanvasItemRotate   *canvas_rotate          = nullptr; ///< Quick preview of canvas rotation.
 
@@ -358,16 +356,15 @@ public:
     void set_display_area (Geom::Point const &c, Geom::Point const &w, bool log = true);
     void set_display_area (Geom::Rect const &a, Geom::Coord border, bool log = true);
     Geom::Parallelogram get_display_area(bool use_integer_viewbox = false) const;
+    void set_display_width(Geom::Rect const &a, Geom::Coord border);
+    void set_display_center(Geom::Rect const &a);
 
     void zoom_absolute (Geom::Point const &c, double const zoom, bool keep_point = true);
     void zoom_relative (Geom::Point const &c, double const zoom, bool keep_point = true);
     void zoom_realworld (Geom::Point const &c, double const ratio);
 
-    void zoom_page();
-    void zoom_page_width();
     void zoom_drawing();
     void zoom_selection();
-    void zoom_center_page();
 
     double current_zoom() const { return _current_affine.getZoom(); }
     Geom::Point current_center() const;
@@ -618,13 +615,11 @@ private:
     sigc::connection _reconstruction_start_connection;
     sigc::connection _reconstruction_finish_connection;
     sigc::connection _commit_connection;
-    sigc::connection _modified_connection;
 
     void onResized (double, double) override;
     void onRedrawRequested() override;
     void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
     void onDocumentFilenameSet(gchar const* filename) override;
-    void onDocumentResized (double, double) override;
 };
 
 #endif // SEEN_SP_DESKTOP_H

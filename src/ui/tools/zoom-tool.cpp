@@ -179,8 +179,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
 
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
-                    cursor_filename = "zoom-out.svg";
-                    this->sp_event_context_update_cursor();
+                    this->set_cursor("zoom-out.svg");
                     break;
 
                 case GDK_KEY_Delete:
@@ -197,8 +196,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             switch (get_latin_keyval (&event->key)) {
             	case GDK_KEY_Shift_L:
             	case GDK_KEY_Shift_R:
-                    cursor_filename = "zoom-in.svg";
-                    this->sp_event_context_update_cursor();
+                    this->set_cursor("zoom-in.svg");
                     break;
             	default:
                     break;

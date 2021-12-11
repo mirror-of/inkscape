@@ -27,8 +27,6 @@
 #include <vector>
 
 #include "sp-object.h"
-#include "snap-preferences.h"
-#include "snap-candidate.h"
 
 #include "xml/repr.h"
 
@@ -47,6 +45,8 @@ namespace Inkscape {
 class Drawing;
 class DrawingItem;
 class URIReference;
+class SnapCandidatePoint;
+class SnapPreferences;
 
 namespace UI {
 namespace View {

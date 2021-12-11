@@ -82,6 +82,8 @@ public:
     CairoRenderContext *cloneMe() const;
     CairoRenderContext *cloneMe(double width, double height) const;
     bool finish(bool finish_surface = true);
+    bool finishPage();
+    bool nextPage(double width, double height);
 
     CairoRenderer *getRenderer() const;
     cairo_t *getCairoContext() const;
@@ -194,6 +196,7 @@ protected:
     bool _is_texttopath;
     bool _is_omittext;
     bool _is_filtertobitmap;
+    bool _is_show_page;
     int _bitmapresolution;
 
     FILE *_stream;

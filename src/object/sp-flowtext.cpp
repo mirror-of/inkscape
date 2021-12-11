@@ -23,6 +23,8 @@
 #include "desktop.h"
 #include "desktop-style.h"
 #include "svg/svg.h"
+#include "snap-candidate.h"
+#include "snap-preferences.h"
 
 #include "text-tag-attributes.h"
 #include "text-editing.h"

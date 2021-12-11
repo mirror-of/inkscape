@@ -28,6 +28,8 @@
 #include <glibmm/i18n.h>
 #include <giomm/error.h>
 
+#include "snap-candidate.h"
+#include "snap-preferences.h"
 #include "display/drawing-image.h"
 #include "display/cairo-utils.h"
 #include "display/curve.h"

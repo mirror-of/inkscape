@@ -32,6 +32,7 @@
 #include "live_effects/effect-enum.h"
 #include "object/sp-filter.h"
 #include "object/sp-object.h"
+#include "object/sp-page.h"
 #include "object/sp-clippath.h"
 #include "object/sp-root.h"
 #include "style.h"
@@ -828,6 +829,16 @@ SPGuide const *SnapManager::getGuideToIgnore() const
     }
     return nullptr;
 }
+SPPage const *SnapManager::getPageToIgnore() const
+{
+    for (auto item : _objects_to_ignore) {
+        if (auto page = dynamic_cast<SPPage const *>(item)) {
+            return page;
+        }
+    }
+    return nullptr;
+}
+
 
 void SnapManager::_findCandidates(SPObject* parent,
                                  std::vector<SPObject const *> const *it,

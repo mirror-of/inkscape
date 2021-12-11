@@ -18,15 +18,26 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "desktop.h"
+#include "object/sp-namedview.h"
+#include "object/sp-page.h"
+#include "page-manager.h"
 #include "selection-chemistry.h"
 
 void
 canvas_to_selection_or_drawing(InkscapeWindow* win)
 {
-    SPDesktop* dt = win->get_desktop();
+    auto desktop = win->get_desktop();
+    auto document = desktop->getDocument();
 
-    // Resize Page to Selection
-    fit_canvas_to_selection_or_drawing(dt);
+    if (auto manager = document->getNamedView()->getPageManager()) {
+        if (auto page = manager->getSelected()) {
+            // SPPage will decide how to resize itself if there's nothing selected.
+            page->fitToSelection(desktop->selection);
+            return;
+        }
+    }
+    // No pages in this document: Resize Viewbox to Selection
+    fit_canvas_to_selection_or_drawing(desktop);
 }
 
 std::vector<std::vector<Glib::ustring>> raw_fit_canvas_data =
