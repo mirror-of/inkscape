@@ -14,6 +14,16 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
+     <style
+     id="s0">
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+  </style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <metadata
      id="metadata1213">
     <rdf:RDF>
@@ -60,11 +70,6 @@
   <g
      id="g0"
      inkscape:label="draw-poligon-star">
-    <path
-       id="rect3503"
-       style="opacity:0.2"
-       d="m 1,4 h 7 l 2,2 v 9 H 1 Z"
-       sodipodi:nodetypes="cccccc" />
     <path
        inkscape:connector-curvature="0"
        style="opacity:0"
@@ -114,16 +119,4 @@
        id="path3788"
        sodipodi:nodetypes="cccc" />
   </g>
-  <style
-     id="s0">
-     .base { fill: #000000; }
-     .success { fill: #009909; }
-     .warning { fill: #FF1990; }
-     .error { fill: #00AAFF; }
-     .dark {  }
-</style>
-  <style
-     id="s2"> 
-     @import '../../highlights.css'; 
-  </style>
 </svg>
