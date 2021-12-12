@@ -690,13 +690,13 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
         }
 
         // ----------------------  Generate the PNG -------------------------------
-
-        // Do we really need to print this?
+#ifdef DEBUG
         std::cerr << "Background RRGGBBAA: " << std::hex << bgcolor << std::dec << std::endl;
         std::cerr << "Area "
                   << area[Geom::X][0] << ":" << area[Geom::Y][0] << ":"
                   << area[Geom::X][1] << ":" << area[Geom::Y][1] << " exported to "
                   << width << " x " << height << " pixels (" << dpi << " dpi)" << std::endl;
+#endif
 
         reverse(items.begin(),items.end()); // But there was only one item!
 
