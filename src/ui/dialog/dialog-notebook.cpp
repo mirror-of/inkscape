@@ -188,6 +188,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 
     // =============== Signals ==================
     _conn.emplace_back(signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::on_size_allocate_scroll)));
+    _conn.emplace_back(_notebook.signal_drag_begin().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_begin)));
     _conn.emplace_back(_notebook.signal_drag_end().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_end)));
     _conn.emplace_back(_notebook.signal_page_added().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_added)));
     _conn.emplace_back(_notebook.signal_page_removed().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_removed)));
@@ -364,6 +365,9 @@ DialogWindow* DialogNotebook::pop_tab_callback()
  */
 void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
 {
+    // Remove dropzone highlights
+    MyDropZone::remove_highlight_instances();
+
     bool set_floating = !context->get_dest_window();
     if (!set_floating && context->get_dest_window()->get_window_type() == Gdk::WINDOW_FOREIGN) {
         set_floating = true;
@@ -404,6 +408,11 @@ void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
     // Update tab labels by comparing the sum of their widths to the allocation
     Gtk::Allocation allocation = get_allocation();
     on_size_allocate_scroll(allocation);
+}
+
+void DialogNotebook::on_drag_begin(const Glib::RefPtr<Gdk::DragContext> context)
+{
+    MyDropZone::add_highlight_instances();
 }
 
 /**

@@ -86,6 +86,7 @@ private:
     std::multimap<Gtk::Widget *, sigc::connection> _tab_connections;
 
     // Signal handlers - notebook
+    void on_drag_begin(const Glib::RefPtr<Gdk::DragContext> context);
     void on_drag_end(const Glib::RefPtr<Gdk::DragContext> context);
     void on_page_added(Gtk::Widget *page, int page_num);
     void on_page_removed(Gtk::Widget *page, int page_num);
