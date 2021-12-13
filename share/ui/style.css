@@ -570,10 +570,24 @@ stackswitcher button {
     transition: background-color 300ms linear;
 }
 
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
 .backgnd-active {
-    background-color: @theme_selected_bg_color;
-    opacity: 0.5;
-    transition: background-color 100ms linear;
+  animation-name: pulse;
+  background-color: @theme_selected_bg_color;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
 }
 
 .tight-flowbox flowboxchild {
