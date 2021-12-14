@@ -562,11 +562,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     }
                     this->defaultMessageContext()->clear();
 
-                    item_at_point = desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), FALSE);
-
-                    if (!item_at_point) { // if no item at this point, try at the click point (bug 1012200)
-                        item_at_point = desktop->getItemAtPoint(Geom::Point(xp, yp), FALSE);
-                    }
+                    // Look for an item where the mouse was reported to be by mouse press (not mouse move).
+                    item_at_point = desktop->getItemAtPoint(Geom::Point(xp, yp), FALSE);
 
                     if (item_at_point || this->moved || force_drag) {
                         // drag only if starting from an item, or if something is already grabbed, or if alt-dragging
