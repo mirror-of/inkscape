@@ -443,7 +443,7 @@ lpeobject_ref_modified(SPObject */*href*/, guint flags, SPLPEItem *lpeitem)
     g_message("lpeobject_ref_modified");
 #endif
     if (flags != 29 && flags != 253) {
-        sp_lpe_item_update_patheffect(lpeitem, true, false);
+        sp_lpe_item_update_patheffect(lpeitem, true, true);
     }
 }
 
