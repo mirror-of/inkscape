@@ -357,7 +357,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             break;
         case DONE_NO_PATH:
             if (!skip_undo) { 
-                DocumentUndo::done(doc, description, nullptr);
+                DocumentUndo::done(doc, description, "");
             }
             break;
         case DONE:
