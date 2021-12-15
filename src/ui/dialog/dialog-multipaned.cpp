@@ -27,6 +27,7 @@
 #include "dialog-window.h"
 
 #define DROPZONE_SIZE 5
+#define DROPZONE_EXPANSION 15
 #define HANDLE_SIZE 12
 #define HANDLE_CROSS_SIZE 25
 
@@ -56,7 +57,7 @@ int get_handle_size() {
 
 /* ============ MyDropZone ============ */
 
-std::vector<MyDropZone *> MyDropZone::_instances_list;
+std::list<MyDropZone *> MyDropZone::_instances_list;
 
 MyDropZone::MyDropZone(Gtk::Orientation orientation)
     : Glib::ObjectBase("MultipanedDropZone")
@@ -73,7 +74,7 @@ MyDropZone::MyDropZone(Gtk::Orientation orientation)
         if (!_active) {
             _active = true;
             add_highlight();
-            set_size(DROPZONE_SIZE + 15);
+            set_size(DROPZONE_SIZE + DROPZONE_EXPANSION);
         }
         return true;
     });
@@ -81,7 +82,6 @@ MyDropZone::MyDropZone(Gtk::Orientation orientation)
     signal_drag_leave().connect([=](const Glib::RefPtr<Gdk::DragContext>&, guint time) {
         if (_active) {
             _active = false;
-            // remove_highlight();
             set_size(DROPZONE_SIZE);
         }
     });
@@ -89,11 +89,15 @@ MyDropZone::MyDropZone(Gtk::Orientation orientation)
     _instances_list.push_back(this);
 }
 
+MyDropZone::~MyDropZone()
+{
+    _instances_list.remove(this);
+}
+
 void MyDropZone::add_highlight_instances()
 {
     for (auto *instance : _instances_list) {
         instance->add_highlight();
-        // instance->set_size(DROPZONE_SIZE + 15);
     }
 }
 

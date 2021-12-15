@@ -34,6 +34,8 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+std::list<DialogNotebook *> DialogNotebook::_instances;
+
 /**
  * DialogNotebook constructor.
  *
@@ -198,6 +200,8 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     _reload_context = true;
     add(_notebook);
     show_all();
+
+    _instances.push_back(this);
 }
 
 DialogNotebook::~DialogNotebook()
@@ -215,6 +219,20 @@ DialogNotebook::~DialogNotebook()
     _conn.clear();
     _connmenu.clear();
     _tab_connections.clear();
+
+    _instances.remove(this);
+}
+
+void DialogNotebook::add_highlight_header()
+{
+    const auto &style = _notebook.get_style_context();
+    style->add_class("nb-highlight");
+}
+
+void DialogNotebook::remove_highlight_header()
+{
+    const auto &style = _notebook.get_style_context();
+    style->remove_class("nb-highlight");
 }
 
 /**
@@ -367,6 +385,9 @@ void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
 {
     // Remove dropzone highlights
     MyDropZone::remove_highlight_instances();
+    for (auto instance : _instances) {
+        instance->remove_highlight_header();
+    }
 
     bool set_floating = !context->get_dest_window();
     if (!set_floating && context->get_dest_window()->get_window_type() == Gdk::WINDOW_FOREIGN) {
@@ -413,6 +434,9 @@ void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
 void DialogNotebook::on_drag_begin(const Glib::RefPtr<Gdk::DragContext> context)
 {
     MyDropZone::add_highlight_instances();
+    for (auto instance : _instances) {
+        instance->add_highlight_header();
+    }
 }
 
 /**

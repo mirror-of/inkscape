@@ -590,6 +590,10 @@ stackswitcher button {
   animation-iteration-count: infinite;
 }
 
+.nb-highlight > header.top {
+  background-color: @theme_selected_bg_color;
+}
+
 .tight-flowbox flowboxchild {
     margin: 0;
     padding: 0px;

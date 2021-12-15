@@ -85,6 +85,10 @@ private:
     std::vector<sigc::connection> _connmenu;
     std::multimap<Gtk::Widget *, sigc::connection> _tab_connections;
 
+    static std::list<DialogNotebook *> _instances;
+    void add_highlight_header();
+    void remove_highlight_header();
+
     // Signal handlers - notebook
     void on_drag_begin(const Glib::RefPtr<Gdk::DragContext> context);
     void on_drag_end(const Glib::RefPtr<Gdk::DragContext> context);
