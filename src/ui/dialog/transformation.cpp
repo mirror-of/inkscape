@@ -12,19 +12,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "transformation.h"
+
 #include <gtkmm/dialog.h>
 
 #include <2geom/transforms.h>
 
-#include "align-and-distribute.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
-#include "transformation.h"
 
+#include "object/algorithms/bboxsort.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
 

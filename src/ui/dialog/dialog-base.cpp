@@ -49,8 +49,7 @@ DialogBase::DialogBase(gchar const *prefs_path, Glib::ustring dialog_type)
     , _dialog_type(dialog_type)
     , _app(InkscapeApplication::instance())
 {
-    // Derive a pretty display name for the dialog based on the verbs name.
-    // TODO: This seems fragile. Should verbs have a proper display name?
+    // Derive a pretty display name for the dialog.
     auto it = dialog_data.find(dialog_type);
     if (it != dialog_data.end()) {
 

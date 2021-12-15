@@ -13,12 +13,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <2geom/forward.h>
-#include <gdk/gdk.h>
+#include <vector>
 
-#include "enums.h"
-#include "verbs.h"
-#include "ui/modifiers.h"
+#include <gdk/gdk.h>
+#include <glibmm/ustring.h>
+
+#include "enums.h"  // SPAnchorType
 
 typedef unsigned int guint32;
 
@@ -41,42 +41,47 @@ enum SPSelTransType {
     HANDLE_CENTER_ALIGN
 };
 
-// Which handle does what in the alignment (clicking)
-const int AlignVerb[18] = {
-    // Left Click
-    SP_VERB_ALIGN_VERTICAL_TOP,
-    SP_VERB_ALIGN_HORIZONTAL_RIGHT,
-    SP_VERB_ALIGN_VERTICAL_BOTTOM,
-    SP_VERB_ALIGN_HORIZONTAL_LEFT,
-    SP_VERB_ALIGN_VERTICAL_CENTER,
-    SP_VERB_ALIGN_BOTH_TOP_LEFT,
-    SP_VERB_ALIGN_BOTH_TOP_RIGHT,
-    SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT,
-    SP_VERB_ALIGN_BOTH_BOTTOM_LEFT,
-    // Shift Click
-    SP_VERB_ALIGN_VERTICAL_BOTTOM_TO_ANCHOR,
-    SP_VERB_ALIGN_HORIZONTAL_LEFT_TO_ANCHOR,
-    SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR,
-    SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR,
-    SP_VERB_ALIGN_HORIZONTAL_CENTER,
-    SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR,
-    SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR,
-    SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR,
-    SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR,
-};
-// Ofset from the index in the handle list to the index in the verb list.
-const int AlignHandleToVerb = -13;
 // Offset for moving from Left click to Shift Click
-const int AlignShiftVerb = 9;
+const int ALIGN_SHIFT_OFFSET = 9;
+
+// Offset for handle number (handles used by alignment don't start at zero, see seltrans-handles.cpp).
+const int ALIGN_OFFSET = -13;
+
+// Which handle does what in the alignment (clicking)
+// clang-format off
+const std::vector<Glib::ustring> AlignArguments = {
+    // Left Click
+    "selection top",
+    "selection right",
+    "selection bottom",
+    "selection left",
+    "selection vcenter",
+    "selection top left",
+    "selection top right",
+    "selection bottom right",
+    "selection bottom left",
+
+    // Shift click
+    "selection anchor bottom",
+    "selection anchor left",
+    "selection anchor top",
+    "selection anchor right",
+    "selection hcenter",
+    "selection anchor bottom right",
+    "selection anchor bottom left",
+    "selection anchor top left",
+    "selection anchor top right"
+};
+// clang-format on
 
 struct SPSelTransHandle;
 
 struct SPSelTransHandle {
-        SPSelTransType type;
-	SPAnchorType anchor;
-	GdkCursorType cursor;
-	unsigned int control;
-	gdouble x, y;
+    SPSelTransType type;
+    SPAnchorType anchor;
+    GdkCursorType cursor;
+    unsigned int control;
+    gdouble x, y;
 };
 // These are 4 * each handle type + 1 for center
 int const NUMHANDS = 26;

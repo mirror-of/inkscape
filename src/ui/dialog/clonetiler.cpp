@@ -36,13 +36,14 @@
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "message-stack.h"
-#include "unclump.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing.h"
 
 #include "ui/icon-loader.h"
+
+#include "object/algorithms/unclump.h"
 
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"

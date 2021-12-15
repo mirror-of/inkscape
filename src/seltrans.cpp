@@ -288,7 +288,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         /* Snapping a huge number of nodes will take way too long, so limit the number of snappable nodes
         A typical user would rarely ever try to snap such a large number of nodes anyway, because
         (s)he would hardly be able to discern which node would be snapping */
-        std::cout << "Warning: limit of 200 snap sources reached, some will be ignored" << std::endl;
+        std::cerr << "Warning: limit of 200 snap sources reached, some will be ignored" << std::endl;
         _snap_points.resize(200);
         // Unfortunately, by now we will have lost the font-baseline snappoints :-(
     }
@@ -1432,28 +1432,16 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
 
 void Inkscape::SelTrans::align(guint state, SPSelTransHandle const &handle)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
-    int align_to = prefs->getInt("/dialogs/align/align-to", 6);
-
-    int verb_id = -1;
-    if (state & GDK_SHIFT_MASK) {
-        verb_id = AlignVerb[handle.control + AlignHandleToVerb + AlignShiftVerb];
-    } else {
-        verb_id = AlignVerb[handle.control + AlignHandleToVerb];
-    }
-    if(verb_id >= 0) {
-        prefs->setBool("/dialogs/align/sel-as-groups", (state & GDK_CONTROL_MASK) != 0);
-        prefs->setInt("/dialogs/align/align-to", 6);
-        Inkscape::Verb *verb = Inkscape::Verb::get( verb_id );
-        g_assert( verb != NULL );
-        SPAction *action = verb->get_action((Inkscape::UI::View::View *) this->_desktop);
-        sp_action_perform (action, NULL);
+    Glib::ustring argument;
+    int index = handle.control + ALIGN_OFFSET + (state & GDK_SHIFT_MASK) ? ALIGN_SHIFT_OFFSET : 0;
+    if (index < 0 || index >= AlignArguments.size()) {
+        std::cerr << "Inkscape::Seltrans::align: index out of bounds! " << index << std::endl;
+        index = 0;
     }
 
-    // Set the special align point and settings back to nothing so we don't interfere
-    prefs->setBool("/dialogs/align/sel-as-groups", sel_as_group);
-    prefs->setInt("/dialogs/align/align-to", align_to);
+    auto variant = Glib::Variant<Glib::ustring>::create(AlignArguments[index]);
+    auto app = Gio::Application::get_default();
+    app->activate_action("object-align", variant);
 }
 
 /*

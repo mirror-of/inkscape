@@ -117,11 +117,7 @@ void ArrangeDialog::_apply()
 void ArrangeDialog::desktopReplaced()
 {
     _gridArrangeTab->setDesktop(getDesktop());
-    _align_tab->desktopReplaced();
-}
-
-void ArrangeDialog::selectionChanged(Inkscape::Selection* sel) {
-    _align_tab->selectionChanged(sel);
+    _align_tab->desktop_changed(getDesktop());
 }
 
 } //namespace Dialog

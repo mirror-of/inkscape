@@ -44,6 +44,13 @@ in the style of Corel DRAW X8. See default.xml for more information.
 
 <!-- Context -->
 
+<bind gaction="app.object-align('hcenter')"            keys="c, C" />
+<bind gaction="app.object-align('vcenter')"            keys="e, E" />
+<bind gaction="app.object-align('bottom')"             keys="b, B" />
+<bind gaction="app.object-align('left')"               keys="l, L" />
+<bind gaction="app.object-align('right')"              keys="r, R" />
+<bind gaction="app.object-align('top')"                keys="t, T" />
+
 <bind key="c" action="AlignHorizontalCenter" display="true" />
 <bind key="C" action="AlignHorizontalCenter" />
 

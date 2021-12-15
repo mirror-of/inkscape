@@ -37,7 +37,6 @@ set(inkscape_SRC
   gc-finalized.cpp
   gradient-chemistry.cpp
   gradient-drag.cpp
-  graphlayout.cpp
   guide-snapper.cpp
   id-clash.cpp
   inkscape.cpp
@@ -61,7 +60,6 @@ set(inkscape_SRC
   proj_pt.cpp
   pure-transform.cpp
   rdf.cpp
-  removeoverlap.cpp
   rubberband.cpp
   selcue.cpp
   selection-chemistry.cpp
@@ -80,7 +78,6 @@ set(inkscape_SRC
   text-chemistry.cpp
   text-editing.cpp
   transf_mat_3x4.cpp
-  unclump.cpp
   unicoderange.cpp
   vanishing-point.cpp
   verbs.cpp
@@ -129,7 +126,6 @@ set(inkscape_SRC
   gc-finalized.h
   gradient-chemistry.h
   gradient-drag.h
-  graphlayout.h
   guide-snapper.h
   helper-fns.h
   id-clash.h
@@ -159,7 +155,6 @@ set(inkscape_SRC
   proj_pt.h
   pure-transform.h
   rdf.h
-  removeoverlap.h
   rubberband.h
   selcue.h
   selection-chemistry.h
@@ -185,7 +180,6 @@ set(inkscape_SRC
   text-editing.h
   text-tag-attributes.h
   transf_mat_3x4.h
-  unclump.h
   undo-stack-observer.h
   unicoderange.h
   vanishing-point.h
@@ -237,6 +231,8 @@ set(inkscape_SRC
   actions/actions-hide-lock.cpp
   actions/actions-layer.h
   actions/actions-layer.cpp
+  actions/actions-node-align.h
+  actions/actions-node-align.cpp
   actions/actions-object.h
   actions/actions-object.cpp
   actions/actions-object-align.h
