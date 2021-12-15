@@ -85,6 +85,7 @@ private:
     Geom::Path divider;
     double previous_num_copies;
     bool reset;
+    bool legacytest_livarotonly = false;
     SPObject *container;
     LPECopyRotate(const LPECopyRotate&) = delete;
     LPECopyRotate& operator=(const LPECopyRotate&) = delete;

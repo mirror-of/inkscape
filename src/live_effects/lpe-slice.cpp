@@ -595,29 +595,6 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
     }
 }
 
-static void
-sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
-{
-    Path *orig = new Path;
-    orig->LoadPathVector(pathvector);
-    Shape *theShape = new Shape;
-    Shape *theRes = new Shape;
-    orig->ConvertWithBackData (1.0);
-    orig->Fill (theShape, 0);
-    theRes->ConvertToShape (theShape, FillRule(fillkind));
-    Path *originaux[1];
-    originaux[0] = orig;
-    Path *res = new Path;
-    theRes->ConvertToForme (res, 1, originaux, true);
-
-    delete theShape;
-    delete theRes;
-    char *res_d = res->svg_dump_path ();
-    delete res;
-    delete orig;
-    pathvector  = sp_svg_read_pathv(res_d);
-}
-
 static fill_typ GetFillTyp(SPItem *item)
 {
     SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");

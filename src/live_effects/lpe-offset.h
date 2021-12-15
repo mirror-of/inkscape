@@ -43,6 +43,8 @@ public:
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    bool doOnOpen(SPLPEItem const *lpeitem) override;
+    void doOnApply(SPLPEItem const* lpeitem) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
@@ -69,6 +71,7 @@ private:
     Inkscape::UI::Widget::Scalar *offset_widget;
     FillRuleFlatten fillrule;
     bool liveknot;
+    bool legacytest_livarotonly = false;
     void modified(SPObject */*obj*/, guint flags);
     sigc::connection modified_connection;
     LPEOffset(const LPEOffset&);

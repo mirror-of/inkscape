@@ -33,9 +33,7 @@
 #include "svg/path-string.h"
 #include "svg/svg.h"
 #include "xml/sp-css-attr.h"
-// this is only to flatten nonzero fillrule
-#include "livarot/Path.h"
-#include "livarot/Shape.h"
+#include "path/path-boolop.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -532,29 +530,6 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     //we bump to 1.1 because previous 1.0.2 take no effect because a bug on 1.0.2
     lpeversion.param_setValue("1.2", true);
     lpesatellites.update_satellites();
-}
-
-static void
-sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
-{
-    Path *orig = new Path;
-    orig->LoadPathVector(pathvector);
-    Shape *theShape = new Shape;
-    Shape *theRes = new Shape;
-    orig->ConvertWithBackData (1.0);
-    orig->Fill (theShape, 0);
-    theRes->ConvertToShape (theShape, FillRule(fillkind));
-    Path *originaux[1];
-    originaux[0] = orig;
-    Path *res = new Path;
-    theRes->ConvertToForme (res, 1, originaux, true);
-
-    delete theShape;
-    delete theRes;
-    char *res_d = res->svg_dump_path ();
-    delete res;
-    delete orig;
-    pathvector  = sp_svg_read_pathv(res_d);
 }
 
 Geom::PathVector

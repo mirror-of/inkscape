@@ -542,9 +542,6 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
     if (current_operand) {
         if (is_visible) {
             add_filter();
-            if (desktop && current_operand->getPosition() - 1 != sp_lpe_item->getPosition()) {
-                sp_lpe_item->parent->reorder(current_operand, sp_lpe_item);
-            }
         } else {
             remove_filter(current_operand);
         }
@@ -666,10 +663,12 @@ void LPEBool::doEffect(SPCurve *curve)
         }
 
         Geom::PathVector path_out;
+
         if (op == bool_op_ex_cut) {
-            Geom::PathVector path_tmp = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
+            int error = 0;
+            Geom::PathVector path_tmp = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b, false, true, error);
             for (auto pathit : path_tmp) {
-                if (pathit.size() != 2) {
+                if (pathit.size() != 2 || !error) {
                     path_out.push_back(pathit);
                 }
             }
