@@ -438,22 +438,6 @@
     </marker>
     <marker
        style="overflow:visible"
-       id="Line"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="X"
-       markerWidth="2.7071068"
-       markerHeight="2.7071068"
-       viewBox="0 0 2.70710678 2.70710678"
-       preserveAspectRatio="xMidYMid">
-      <path
-         style="fill:none;stroke:context-stroke;stroke-width:1"
-         d="M 0,4 V -4"
-         id="path151622" />
-    </marker>
-    <marker
-       style="overflow:visible"
        id="SemiCircleIn"
        refX="0"
        refY="0"
