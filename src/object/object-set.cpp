@@ -76,6 +76,10 @@ bool ObjectSet::remove(SPObject* object) {
     return false;
 }
 
+void ObjectSet::_emitChanged(bool persist_selection_context /*= false*/) {
+    _sibling_state.clear();
+}
+
 bool ObjectSet::includes(SPObject *object) {
     g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);

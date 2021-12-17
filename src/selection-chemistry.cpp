@@ -1690,21 +1690,6 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
         if (set_i2d && item->isCenterSet())
             old_center = item->getCenter();
 
-        // we're moving both a clone and its original or any ancestor in clone chain?
-        bool transform_clone_with_original = object_set_contains_original(item, this);
-
-        // ...both a text-on-path and its path?
-        bool transform_textpath_with_path = ((dynamic_cast<SPText *>(item) && item->firstChild() && dynamic_cast<SPTextPath *>(item->firstChild()))
-                                             && includes( sp_textpath_get_path_item(dynamic_cast<SPTextPath *>(item->firstChild())) ));
-
-        // ...both a flowtext and its frame?
-        auto flowtext = dynamic_cast<SPFlowtext *>(item);
-        bool transform_flowtext_with_frame = flowtext && includes(flowtext->get_frame(nullptr)); // (only the first frame is checked so far)
-
-        // ...both an offset and its source?
-        auto offset = dynamic_cast<SPOffset *>(item);
-        bool transform_offset_with_source = offset && offset->sourceHref && includes(sp_offset_get_source(offset));
-
         // If we're moving a connector, we want to detach it
         // from shapes that aren't part of the selection, but
         // leave it attached if they are
@@ -1729,6 +1714,8 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
         bool prefs_unmoved = (compensation == SP_CLONE_COMPENSATION_UNMOVED);
         bool prefs_parallel = (compensation == SP_CLONE_COMPENSATION_PARALLEL);
 
+        SiblingState sibling_state = getSiblingState(item);
+
         /* If this is a clone and it's selected along with its original, do not move it;
          * it will feel the transform of its original and respond to it itself.
          * Without this, a clone is doubly transformed, very unintuitive.
@@ -1736,10 +1723,10 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
          * Same for textpath if we are also doing ANY transform to its path: do not touch textpath,
          * letters cannot be squeezed or rotated anyway, they only refill the changed path.
          * Same for linked offset if we are also moving its source: do not move it. */
-        if (transform_textpath_with_path) {
+        if (sibling_state == SiblingState::SIBLING_TEXT_PATH) {
             // Restore item->transform field from the repr, in case it was changed by seltrans.
             item->readAttr(SPAttr::TRANSFORM);
-        } else if (transform_flowtext_with_frame) {
+        } else if (sibling_state == SiblingState::SIBLING_TEXT_FLOW_FRAME) {
             // apply the inverse of the region's transform to the <use> so that the flow remains
             // the same (even though the output itself gets transformed)
             for (auto& region: item->children) {
@@ -1752,7 +1739,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                     }
                 }
             }
-        } else if (transform_clone_with_original || transform_offset_with_source) {
+        } else if (sibling_state == SiblingState::SIBLING_CLONE_ORIGINAL || sibling_state == SiblingState::SIBLING_OFFSET_SOURCE) {
             // We are transforming a clone along with its original. The below matrix juggling is
             // necessary to ensure that they transform as a whole, i.e. the clone's induced
             // transform and its move compensation are both cancelled out.
@@ -1774,7 +1761,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             Geom::Affine t_inv = t.inverse();
             Geom::Affine result = t_inv * item->transform * t;
 
-            if (transform_clone_with_original && (prefs_parallel || prefs_unmoved) && affine.isTranslation()) {
+            if (sibling_state == SiblingState::SIBLING_CLONE_ORIGINAL && (prefs_parallel || prefs_unmoved) && affine.isTranslation()) {
                 // we need to cancel out the move compensation, too
 
                 // find out the clone move, same as in sp_use_move_compensate
@@ -1800,7 +1787,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                     item->doWriteTransform(move, &t, compensate);
                 }
 
-            } else if (transform_offset_with_source && (prefs_parallel || prefs_unmoved) && affine.isTranslation()){
+            } else if (sibling_state == SiblingState::SIBLING_OFFSET_SOURCE && (prefs_parallel || prefs_unmoved) && affine.isTranslation()){
                 Geom::Affine parent = item->transform;
                 Geom::Affine offset_move = parent.inverse() * t * parent;
 
@@ -1817,6 +1804,8 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                 // just apply the result
                 item->doWriteTransform(result, &t, compensate);
             }
+        } else if (sibling_state == SiblingState::SIBLING_TEXT_SHAPE_INSIDE) {
+            item->readAttr(SPAttr::TRANSFORM);
 
         } else {
             if (set_i2d) {
@@ -4338,6 +4327,58 @@ void ObjectSet::fillBetweenMany()
     add(fillRepr);
 
     DocumentUndo::done(doc, _("Create linked fill object between paths"), "");
+}
+
+/**
+ * Associates the given SPItem with a SiblingState enum
+ * Needed for handling special cases while transforming objects
+ * Inserts the [SPItem, SiblingState] pair to ObjectSet._sibling_state map
+ * @param item
+ * @return the SiblingState
+ */
+SiblingState
+ObjectSet::getSiblingState(SPItem *item) {
+    auto offset = dynamic_cast<SPOffset *>(item);
+    auto flowtext = dynamic_cast<SPFlowtext *>(item);
+
+    auto check_item = _sibling_state.find(item);
+    if (check_item != _sibling_state.end() && check_item->second > SiblingState::SIBLING_NONE) {
+        return check_item->second;
+    }
+
+    SiblingState ret = SiblingState::SIBLING_NONE;
+
+	// moving both a clone and its original or any ancestor
+    if (object_set_contains_original(item, this)) {
+        ret = SiblingState::SIBLING_CLONE_ORIGINAL;
+
+	// moving both a text-on-path and its path
+    } else if ((dynamic_cast<SPText *>(item) && item->firstChild() && dynamic_cast<SPTextPath *>(item->firstChild())) &&
+                    includes(sp_textpath_get_path_item(dynamic_cast<SPTextPath *>(item->firstChild())))) {
+        ret = SiblingState::SIBLING_TEXT_PATH;
+
+	// moving both a flowtext and its frame
+    } else if (flowtext && includes(flowtext->get_frame(nullptr))) {
+        ret = SiblingState::SIBLING_TEXT_FLOW_FRAME;
+
+	// moving both an offset and its source
+    } else if (offset && offset->sourceHref && includes(sp_offset_get_source(offset))) {
+        ret = SiblingState::SIBLING_OFFSET_SOURCE;
+
+	// moving object containing sub object
+    } else if (item->style && item->style->shape_inside.containsAnyShape(this)) {
+        ret = SiblingState::SIBLING_TEXT_SHAPE_INSIDE;
+    }
+
+	_sibling_state[item] = ret;
+
+    return ret;
+}
+
+void
+ObjectSet::clearSiblingStates()
+{
+    _sibling_state.clear();
 }
 
 /**

@@ -365,6 +365,7 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
     Geom::Affine const affine( Geom::Translate(-norm) * rel_affine * Geom::Translate(norm) );
 
     if (_show == SHOW_CONTENT) {
+        auto selection = _desktop->getSelection();
         // update the content
         for (unsigned i = 0; i < _items.size(); i++) {
             SPItem &item = *_items[i];
@@ -372,6 +373,19 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
                 _desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot transform an embedded SVG."));
                 break;
             }
+
+            SiblingState sibling_state = selection->getSiblingState(&item);
+
+            /**
+             * Need checks for each SiblingState
+             * Outside of SIBLING_TEXT_SHAPE_INSIDE and SIBLING_TEXT_PATH,
+             * the rest of them need testing
+             * This just skips the transformation
+             */
+            if (sibling_state == SiblingState::SIBLING_TEXT_SHAPE_INSIDE || sibling_state == SiblingState::SIBLING_TEXT_PATH) {
+                continue;
+            }
+
             Geom::Affine const &prev_transform = _items_affines[i];
             item.set_i2d_affine(prev_transform * affine);
             // The new affine will only have been applied if the transformation is different from the previous one, see SPItem::set_item_transform

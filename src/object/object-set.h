@@ -61,6 +61,21 @@ enum bool_op
 };
 typedef enum bool_op BooleanOp;
 
+/**
+ * SiblingState enums are used to associate the current state
+ * while grabbing objects. 
+ * Specifically used by ObjectSet.applyAffine() to manage transforms
+ * while dragging objects
+ */
+enum class SiblingState {
+    SIBLING_NONE,		// no relation to item
+    SIBLING_CLONE_ORIGINAL,	// moving both a clone and its original or any ancestor
+    SIBLING_OFFSET_SOURCE,	// moving both an offset and its source
+    SIBLING_TEXT_PATH,		// moving both a text-on-path and its path
+    SIBLING_TEXT_FLOW_FRAME,	// moving both a flowtext and its frame
+    SIBLING_TEXT_SHAPE_INSIDE,	// moving object containing sub object
+};
+
 class SPBox3D;
 class Persp3D;
 
@@ -483,10 +498,14 @@ public:
     void swapFillStroke();
     void fillBetweenMany();
 
+    SiblingState getSiblingState(SPItem *item);
+    void insertSiblingState(SPObject *object, SiblingState state);
+    void clearSiblingStates();
+
 protected:
     virtual void _connectSignals(SPObject* object) {};
     virtual void _releaseSignals(SPObject* object) {};
-    virtual void _emitChanged(bool persist_selection_context = false) {}
+    virtual void _emitChanged(bool persist_selection_context = false);
     void _add(SPObject* object);
     void _clear();
     void _remove(SPObject* object);
@@ -507,6 +526,7 @@ protected:
 private:
     BoolOpErrors pathBoolOp(bool_op bop, const bool skip_undo, const bool checked = false, const Glib::ustring icon_name = nullptr, const Glib::ustring description = "");
     void _disconnect(SPObject* object);
+    std::map<SPObject *, SiblingState> _sibling_state;
 
 };
 

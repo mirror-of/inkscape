@@ -39,6 +39,9 @@
 
 #include "xml/repr.h"
 
+namespace Inkscape {
+class ObjectSet;
+};
 
 static const unsigned SP_STYLE_FLAG_ALWAYS (1 << 2);
 static const unsigned SP_STYLE_FLAG_IFSET  (1 << 0);
@@ -653,6 +656,7 @@ public:
 
 public:
     std::vector<SPShapeReference *> hrefs;
+    bool containsAnyShape(Inkscape::ObjectSet *set);
 };
 
 /// Color type internal to SPStyle, FIXME Add string value to store SVG named color.
