@@ -31,6 +31,7 @@
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "layer-manager.h"
+#include "message-stack.h"
 #include "verbs.h"
 
 #include "actions/actions-tools.h"
@@ -778,8 +779,16 @@ ObjectsPanel::ObjectsPanel() :
     _tree.signal_button_press_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false);
     _tree.signal_button_release_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false);
     _tree.signal_key_press_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleKeyEvent), false);
+    _tree.signal_key_release_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleKeyEvent), false);
     _tree.signal_motion_notify_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleMotionEvent), false);
-    // watch mouse leave too
+
+    // Set a status bar text when entering the widget
+    _tree.signal_enter_notify_event().connect([=](GdkEventCrossing*){
+        getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE,
+         _("<b>Hold ALT</b> while hovering over item to highlight, <b>hold SHIFT</b> and click to hide/lock all."));
+        return false;
+    }, false);
+    // watch mouse leave too to clear any state.
     _tree.signal_leave_notify_event().connect([=](GdkEventCrossing*){ return _handleMotionEvent(nullptr); }, false);
 
     // Before expanding a row, replace the dummy child with the actual children
@@ -1032,6 +1041,7 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
     if (!desktop)
         return false;
 
+    bool press = event->type == GDK_KEY_PRESS;
     Gtk::AccelKey shortcut = Inkscape::Shortcuts::get_from_event(event);
     switch (shortcut.get_key()) {
         case GDK_KEY_Escape:
@@ -1045,10 +1055,15 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         case GDK_KEY_Return:
         case GDK_KEY_space:
             return false;
+
+        case GDK_KEY_Alt_L:
+        case GDK_KEY_Alt_R:
+            _handleTransparentHover(press);
+            return false;
     }
 
     // invoke user defined shortcuts first
-    if (Inkscape::Shortcuts::getInstance().invoke_verb(event, desktop))
+    if (press && Inkscape::Shortcuts::getInstance().invoke_verb(event, desktop))
         return true;
     return false;
 }
@@ -1067,9 +1082,12 @@ bool ObjectsPanel::_handleMotionEvent(GdkEventMotion* motion_event)
         if (auto row = *_store->get_iter(_hovered_row_ref.get_path()))
             row[_model->_colHover] = false;
     }
-    // Allow this function to be called blind.
-    if (!motion_event)
+    // Allow this function to be called by LEAVE motion
+    if (!motion_event) {
+        _hovered_row_ref = Gtk::TreeModel::RowReference();
+        _handleTransparentHover(false);
         return false;
+    }
 
     Gtk::TreeModel::Path path;
     Gtk::TreeViewColumn* col = nullptr;
@@ -1081,7 +1099,59 @@ bool ObjectsPanel::_handleMotionEvent(GdkEventMotion* motion_event)
         }
     }
 
+    _handleTransparentHover(motion_event->state & GDK_MOD1_MASK);
     return false;
+}
+
+void ObjectsPanel::_handleTransparentHover(bool enabled)
+{
+    SPItem *item = nullptr;
+    if (enabled && _hovered_row_ref) {
+        if (auto row = *_store->get_iter(_hovered_row_ref.get_path())) {
+            item = getItem(row);
+        }
+    }
+
+    if (item == _solid_item)
+        return;
+
+    // Set the target item, this prevents reruning too.
+    _solid_item = item;
+    auto desktop = getDesktop();
+
+    // Reset all the items in the list.
+    for (auto &item : _translucent_items) {
+        Inkscape::DrawingItem *arenaitem = item->get_arenaitem(desktop->dkey);
+        arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(item->style->opacity.value));
+    }
+    _translucent_items.clear();
+
+    if (item) {
+        _generateTranslucentItems(getDocument()->getRoot());
+
+        for (auto &item : _translucent_items) {
+            Inkscape::DrawingItem *arenaitem = item->get_arenaitem(desktop->dkey);
+            arenaitem->setOpacity(0.2);
+        }
+    }
+}
+
+/**
+ * Generate a new list of sibling items (recursive)
+ */
+void ObjectsPanel::_generateTranslucentItems(SPItem *parent)
+{
+    if (parent == _solid_item)
+        return;
+    if (parent->isAncestorOf(_solid_item)) {
+        for (auto &child: parent->children) {
+            if (auto item = dynamic_cast<SPItem *>(&child)) {
+                _generateTranslucentItems(item);
+            }
+        }
+    } else {
+        _translucent_items.push_back(parent);
+    }
 }
 
 /**

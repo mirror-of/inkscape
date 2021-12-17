@@ -137,6 +137,8 @@ private:
     bool _handleMotionEvent(GdkEventMotion* motion_event);
     
     void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleTransparentHover(bool enabled);
+    void _generateTranslucentItems(SPItem *parent);
 
     void _takeAction(int val);
     
@@ -148,6 +150,9 @@ private:
     void on_drag_end(const Glib::RefPtr<Gdk::DragContext> &) override;
 
     friend class ObjectWatcher;
+
+    SPItem *_solid_item;
+    std::list<SPItem *> _translucent_items;
 };
 
 
