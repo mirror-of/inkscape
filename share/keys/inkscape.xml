@@ -350,7 +350,7 @@ override) the bindings in the main default.xml.
   <bind gaction="app.object-flip-vertical"               keys="v" />
 
   <bind gaction="app.object-align('hcenter')"            keys="&lt;primary&gt;&lt;alt&gt;h" />
-  <bind gaction="app.object-align('vcenter')"            keys="&lt;primary&gt;&lt;alt&gt;v" />
+  <bind gaction="app.object-align('vcenter')"            keys="&lt;primary&gt;&lt;alt&gt;t" />
   <bind gaction="app.object-align('bottom')"             keys="&lt;primary&gt;&lt;alt&gt;KP_2" />
   <bind gaction="app.object-align('left')"               keys="&lt;primary&gt;&lt;alt&gt;KP_4" />
   <bind gaction="app.object-align('hcenter vcenter')"    keys="&lt;primary&gt;&lt;alt&gt;KP_5" />
