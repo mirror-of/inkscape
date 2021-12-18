@@ -88,6 +88,7 @@ $ARCH-python-six \
 $ARCH-python-gobject \
 $ARCH-python-pyserial \
 $ARCH-python-coverage \
+$ARCH-python-packaging \
 $ARCH-scour
 
 # install modules needed by extensions manager

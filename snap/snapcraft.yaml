@@ -116,6 +116,7 @@ parts:
       - cssselect
       - pip
       - pyserial
+      - packaging
       - scour
       - virtualenv
     stage-packages:
