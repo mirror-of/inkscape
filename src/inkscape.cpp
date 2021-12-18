@@ -221,6 +221,8 @@ Application::Application(bool use_gui) :
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
         themecontext = new Inkscape::UI::ThemeContext();
         themecontext->add_gtk_css(false);
+        auto scale = prefs->getDoubleLimited("theme/fontscale", 100, 50, 150);
+        themecontext->adjust_global_font_scale(scale / 100.0);
         Inkscape::DeviceManager::getManager().loadConfig();
     }
 

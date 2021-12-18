@@ -1656,16 +1656,51 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Change GTK theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::comboThemeChange));
     }
+
     _sys_user_themes_dir_copy.init(g_build_filename(g_get_user_data_dir(), "themes", nullptr), _("Open themes folder"));
     _page_theme.add_line(true, _("User themes:"), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true, Gtk::manage(new Gtk::Box()));
     _contrast_theme.init("/theme/contrast", 1, 10, 1, 2, 10, 1);
-    Gtk::Widget *space = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
+
+    _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
+    {
+        auto font_scale = new Inkscape::UI::Widget::PrefSlider();
+        font_scale = Gtk::manage(font_scale);
+        font_scale->init("/theme/fontscale", 50, 150, 5, 5, 100, 0); // 50% to 150%
+        font_scale->getSlider()->signal_format_value().connect([=](double val) {
+            return Glib::ustring::format(std::fixed, std::setprecision(0), val) + "%";
+        });
+        // Live updates commented out; too disruptive
+        // font_scale->getSlider()->signal_value_changed().connect([=](){
+            // INKSCAPE.themecontext->adjust_global_font_scale(font_scale->getSlider()->get_value() / 100.0);
+        // });
+        auto space = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
+        space->set_valign(Gtk::ALIGN_CENTER);
+        auto reset = Gtk::make_managed<Gtk::Button>();
+        reset->set_tooltip_text(_("Reset font size to 100%"));
+        reset->set_image_from_icon_name("reset-settings-symbolic");
+        reset->set_size_request(30, -1);
+        auto apply = Gtk::make_managed<Gtk::Button>(_("Apply"));
+        apply->set_tooltip_text(_("Apply font size changes to the UI"));
+        apply->set_valign(Gtk::ALIGN_FILL);
+        apply->set_margin_right(5);
+        reset->set_valign(Gtk::ALIGN_FILL);
+        space->add(*apply);
+        space->add(*reset);
+        reset->signal_clicked().connect([=](){
+            font_scale->getSlider()->set_value(100);
+            INKSCAPE.themecontext->adjust_global_font_scale(1.0);
+        });
+        apply->signal_clicked().connect([=](){
+            INKSCAPE.themecontext->adjust_global_font_scale(font_scale->getSlider()->get_value() / 100.0);
+        });
+        _page_theme.add_line(false, _("_Font scale:"), *font_scale, "", _("Adjust size of UI fonts"), true, space);
+    }
+    auto space = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
     space->set_size_request(_sb_width / 3, -1);
     _page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
                          _("Make background brighter or darker to adjust contrast"), true, space);
     _contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastThemeChange));
     _contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastThemeChange));
-    _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
 
     if (dark_themes[current_theme]) {
         _dark_theme.get_parent()->set_no_show_all(false);
@@ -1769,6 +1804,7 @@ void InkscapePreferences::initPageUI()
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
         _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, _("(requires restart)"),
                              _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.ui' file determines whether to display icons in menus."), false);
+
 
     this->AddPage(_page_theme, _("Theming"), iter_ui, PREFS_PAGE_UI_THEME);
     symbolicThemeCheck();
