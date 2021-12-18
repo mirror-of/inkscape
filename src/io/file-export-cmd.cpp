@@ -43,8 +43,13 @@
 // C++17 std::filesystem (with #include <filesystem> ) then we drop this dep
 // (Dev meeting, 2020-09-25)
 
+#ifdef G_OS_WIN32
+#include <filesystem>
+namespace filesystem = std::filesystem;
+#else
 #include <boost/filesystem.hpp>
 namespace filesystem = boost::filesystem;
+#endif
 
 InkFileExportCmd::InkFileExportCmd()
     : export_overwrite(false)
@@ -75,7 +80,11 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 
     // Get export type from filename supplied with --export-filename
     if (!export_filename.empty() && export_filename != "-") {
+#ifdef G_OS_WIN32
+        auto fn = filesystem::u8path(export_filename);
+#else
         auto fn = filesystem::path(export_filename);
+#endif
         if (!fn.has_extension()) {
             if (export_type.empty() && export_extension.empty()) {
                 std::cerr << "InkFileExportCmd::do_export: No export type specified. "
