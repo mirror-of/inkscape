@@ -164,7 +164,6 @@ void SatelliteParam::start_listening(SPObject *to)
 
 void SatelliteParam::quit_listening()
 {
-    return;
     if (linked_changed_connection) {
         linked_changed_connection.disconnect();
     }
