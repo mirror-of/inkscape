@@ -28,11 +28,11 @@
 #include "context-fns.h"
 #include "desktop.h"
 #include "include/macros.h"
+#include "inkscape-application.h" // Undo check
 #include "message-context.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -984,14 +984,14 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
 
-    // Check for undo if we have started drawing a path.
+    // Check for undo if we have started drawing a path. User might have change shortcut.
     if (this->npoints > 0) {
         Gtk::AccelKey shortcut = Inkscape::Shortcuts::get_from_event((GdkEventKey*)event);
-        Inkscape::Verb* verb = Inkscape::Shortcuts::getInstance().get_verb_from_shortcut(shortcut);
-        if (verb) {
-            unsigned int vcode = verb->get_code();
-            if (vcode == SP_VERB_EDIT_UNDO)
-                return _undoLastPoint();
+        auto app = InkscapeApplication::instance();
+        auto gapp = app->gtk_app();
+        auto actions = gapp->get_actions_for_accel(shortcut.get_abbrev());
+        if (std::find(actions.begin(), actions.end(), "win.undo") != actions.end()) {
+            return _undoLastPoint();
         }
     }
 
