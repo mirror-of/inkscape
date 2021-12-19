@@ -1427,12 +1427,8 @@ RotateableStrokeWidth::do_scroll(double by, guint modifier) {
 
 Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop)
 {
-    Dialog::DialogBase *dialog = desktop->getContainer()->get_dialog("FillStroke");
-    if (!dialog) {
-        desktop->getContainer()->new_dialog("FillStroke");
-        return dynamic_cast<Dialog::FillAndStroke *>(desktop->getContainer()->get_dialog("FillStroke"));
-    }
-    return dynamic_cast<Dialog::FillAndStroke *>(dialog);
+    desktop->getContainer()->new_dialog("FillStroke");
+    return dynamic_cast<Dialog::FillAndStroke *>(desktop->getContainer()->get_dialog("FillStroke"));
 }
 
 } // namespace Widget
