@@ -451,10 +451,10 @@ void randomize(Inkscape::Selection* selection)
 
         // Second, assign minimum/maxiumum values to two different items randomly.
         int nitems = items.size();
-        int imin = random() % nitems;
-        int imax = random() % nitems;
+        int imin = rand() % nitems;
+        int imax = rand() % nitems;
         while (imin == imax) {
-            imax = random() % nitems;
+            imax = rand() % nitems;
         }
 
 
