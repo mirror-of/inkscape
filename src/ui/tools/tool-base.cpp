@@ -326,6 +326,7 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
         delta *= nudge;
     }
 
+    bool moved = true;
     if (shape_editor && shape_editor->has_knotholder()) {
         KnotHolder * knotholder = shape_editor->knotholder;
         if (knotholder) {
@@ -343,10 +344,12 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
                     }
                 }
             }
+        } else {
+            moved = false;
         }
     }
 
-    return true;
+    return moved;
 }
 
 
