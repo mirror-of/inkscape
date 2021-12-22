@@ -1208,7 +1208,7 @@ void Effect::doOnBeforeCommit()
             DocumentUndo::ScopedInsensitive _no_undo(sp_lpe_item->document);
             sp_lpe_item_update_patheffect(sp_lpe_item, false, true);
         }
-        _lpe_action == LPE_NONE;
+        _lpe_action = LPE_NONE;
         return;
     }
     Inkscape::LivePathEffect::SatelliteArrayParam *lpesatellites = nullptr;
