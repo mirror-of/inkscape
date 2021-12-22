@@ -657,10 +657,16 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
 
 void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 {
-    if (_label_visible)
-        return;
-
     for (auto const &page : _notebook.get_children()) {
+        if (_prev_alloc_width) {
+            auto dialogbase = dynamic_cast<DialogBase*>(page);
+            if (dialogbase) {
+                dialogbase->setShowing(curr_page == page);
+            }
+        }
+        if (_label_visible) {
+            continue;
+        }
         Gtk::EventBox *cover = dynamic_cast<Gtk::EventBox *>(_notebook.get_tab_label(*page));
         if (!cover) {
             continue;
@@ -701,7 +707,7 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
         close->hide();
         label->hide();
     }
-    if (_prev_alloc_width) {
+    if (_prev_alloc_width && !_label_visible) {
         queue_allocate(); 
     }
 }

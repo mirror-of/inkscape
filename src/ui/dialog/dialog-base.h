@@ -87,21 +87,23 @@ public:
     void focus_dialog();
     // return focus back to canvas
     void defocus_dialog();
-
+    bool getShowing() { return _showing; }
     // Too many dialogs have unprotected calls to ask for this data
     SPDesktop *getDesktop() const { return desktop; }
 protected:
     InkscapeApplication *getApp() const { return _app; }
     SPDocument *getDocument() const { return document; }
     Selection *getSelection() const { return selection; }
-
+    friend class DialogNotebook;
+    void setShowing(bool showing);
     Glib::ustring _name;             // Gtk widget name (must be set!)
     Glib::ustring const _prefs_path; // Stores characteristic path for loading/saving the dialog position.
     Glib::ustring const _dialog_type; // Type of dialog (we could just use _pref_path?).
 private:
     bool blink_off(); // timer callback
     bool on_key_press_event(GdkEventKey* key_event) override;
-
+    // return if dialog is on visible tab
+    bool _showing = true;
     void unsetDesktop();
     void desktopDestroyed(SPDesktop* old_desktop);
     void setDocument(SPDocument *new_document);
@@ -111,6 +113,8 @@ private:
      */
     virtual void desktopReplaced() {}
     virtual void documentReplaced() {}
+    void selectionChanged_impl(Inkscape::Selection *selection);
+    void selectionModified_impl(Inkscape::Selection *selection, guint flags);
     virtual void selectionChanged(Inkscape::Selection *selection) {};
     virtual void selectionModified(Inkscape::Selection *selection, guint flags) {};
 

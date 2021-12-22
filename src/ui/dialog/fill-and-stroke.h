@@ -67,6 +67,8 @@ protected:
     void _onSwitchPage(Gtk::Widget *page, guint pagenum);
 
 private:
+    void selectionChanged(Selection *selection) override;
+    void selectionModified(Selection *selection, guint flags) override;
     FillAndStroke(FillAndStroke const &d) = delete;
     FillAndStroke& operator=(FillAndStroke const &d) = delete;
 

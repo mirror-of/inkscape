@@ -182,11 +182,17 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
 
 void StyleDialog::_nodeAdded(Inkscape::XML::Node &node)
 {
+    if (!getShowing()) {
+        return;
+    }
     readStyleElement();
 }
 
 void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 {
+    if (!getShowing()) {
+        return;
+    }
     if (_textNode == &repr) {
         _textNode = nullptr;
     }
@@ -196,6 +202,9 @@ void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 
 void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
 {
+    if (!getShowing()) {
+        return;
+    }
     g_debug("StyleDialog::_nodeChanged");
     readStyleElement();
 }

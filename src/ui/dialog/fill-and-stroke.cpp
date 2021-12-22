@@ -84,6 +84,31 @@ FillAndStroke::~FillAndStroke()
     _subject.setDesktop(nullptr);
 }
 
+void FillAndStroke::selectionChanged(Selection *selection)
+{
+    if (fillWdgt) {
+        fillWdgt->performUpdate();
+    }
+    if (strokeWdgt) {
+        strokeWdgt->performUpdate();
+    }
+    if (strokeStyleWdgt) {
+        strokeStyleWdgt->selectionChangedCB();
+    }
+}
+void FillAndStroke::selectionModified(Selection *selection, guint flags)
+{
+    if (fillWdgt) {
+        fillWdgt->selectionModifiedCB(flags);
+    }
+    if (strokeWdgt) {
+        strokeWdgt->selectionModifiedCB(flags);
+    }
+    if (strokeStyleWdgt) {
+        strokeStyleWdgt->selectionModifiedCB(flags);
+    }
+}
+
 void FillAndStroke::desktopReplaced()
 {
     if (fillWdgt) {

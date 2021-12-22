@@ -159,8 +159,8 @@ void DialogBase::setDesktop(SPDesktop *new_desktop)
             _desktop_destroyed = desktop->connectDestroy( sigc::mem_fun(*this, &DialogBase::desktopDestroyed));
             if (desktop->selection) {
                 selection = desktop->selection;
-                _select_changed = selection->connectChanged(sigc::mem_fun(*this, &DialogBase::selectionChanged));
-                _select_modified = selection->connectModified(sigc::mem_fun(*this, &DialogBase::selectionModified));
+                _select_changed = selection->connectChanged(sigc::mem_fun(*this, &DialogBase::selectionChanged_impl));
+                _select_modified = selection->connectModified(sigc::mem_fun(*this, &DialogBase::selectionModified_impl));
             }
         }
         if (desktop) {
@@ -170,6 +170,35 @@ void DialogBase::setDesktop(SPDesktop *new_desktop)
         }
         desktopReplaced();
     }
+}
+
+/**
+ * implementation method that call to main function only when tab is showing
+ */
+void 
+DialogBase::selectionChanged_impl(Inkscape::Selection *selection) {
+    if (_showing) {
+        selectionChanged(selection);
+    }
+}
+
+/**
+ * implementation method that call to main function only when tab is showing
+ */
+void 
+DialogBase::selectionModified_impl(Inkscape::Selection *selection, guint flags) {
+    if (_showing) {
+        selectionModified(selection, flags);
+    }
+}
+
+/**
+ * function called from notebook dialog that preform an update of the dialog and set the dialog showed state true
+ */
+void 
+DialogBase::setShowing(bool showing) {
+    _showing = showing;
+    selectionChanged(getSelection());
 }
 
 /**
