@@ -673,7 +673,7 @@ void ColorICCSelectorImpl::_switchToProfile(gchar const *name)
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 struct _cmp {
-  bool operator()(const SPObject * const & a, const SPObject * const & b)
+  bool operator()(const SPObject * const & a, const SPObject * const & b) const
   {
     const Inkscape::ColorProfile &a_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*a);
     const Inkscape::ColorProfile &b_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*b);

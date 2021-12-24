@@ -116,7 +116,7 @@ private:
 struct VPDrag;
 
 struct less_ptr : public std::binary_function<VanishingPoint *, VanishingPoint *, bool> {
-    bool operator()(VanishingPoint *vp1, VanishingPoint *vp2) {
+    bool operator()(VanishingPoint *vp1, VanishingPoint *vp2) const {
         return GPOINTER_TO_INT(vp1) < GPOINTER_TO_INT(vp2);
     }
 };
