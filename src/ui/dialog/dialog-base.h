@@ -41,10 +41,7 @@ class DialogBase : public Gtk::Box
 
 public:
     DialogBase(gchar const *prefs_path = nullptr, Glib::ustring dialog_type = "");
-    ~DialogBase() override {
-        ensure_size();
-        unsetDesktop();
-    };
+    ~DialogBase() override;
 
     /**
      * The update() method is essential to Gtk state management. DialogBase implementations get updated whenever
@@ -57,25 +54,14 @@ public:
     // Public for future use, say if the desktop is smartly set when docking dialogs.
     void setDesktop(SPDesktop *new_desktop);
 
-    void on_map() override
-    {
-        // Update asks the dialogs if they need their Gtk widgets updated.
-        update();
-        // Set the desktop on_map, although we might want to be smarter about this.
-        setDesktop(dynamic_cast<SPDesktop *>(_app->get_active_view()));
-        parent_type::on_map();
-    }
+    void on_map() override;
+
     /*
      * Often the dialog won't request the right size until the window has
      * been pushed to resize all it's children. We do this on dialog creation
      * and destruction.
      */
-    void ensure_size()
-    {
-        if (desktop) {
-            desktop->getToplevel()->resize_children();
-        }
-    }
+    void ensure_size();
 
     // Getters and setters
     Glib::ustring get_name() { return _name; };
