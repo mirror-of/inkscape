@@ -499,7 +499,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     bool near_start_point = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.01);
     bool near_origin = Geom::are_near(previous_origin, (Geom::Point)origin, 0.01);
     if (!near_start_point && !is_load) {
-        if (!lpeitem->document->isSeeking()) {
+        if (lpeitem->document->isSensitive()) {
             starting_angle.param_set_value(deg_from_rad(-angle_between(dir, starting_point - origin)));
         }
         if (GDK_SHIFT_MASK) {
