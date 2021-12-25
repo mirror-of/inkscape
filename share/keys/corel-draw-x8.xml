@@ -97,7 +97,7 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind gaction="win.dialog-open('Export')"               keys="&lt;ctrl&gt;e, &lt;ctrl&gt;E" />
 <bind gaction="win.dialog-open('FillStroke')"           keys="F11" />
 <bind gaction="win.dialog-ope('Find')"                  keys="&lt;ctrl&gt;f, &lt;ctrl&gt;F" />
-<bind gaction="win.dialog-open('Preferences')"          keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
+<bind gaction="app.preferences"                         keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
 <bind gaction="win.dialog-open('Text')"                 keys="&lt;ctrl&gt;&lt;shift&gt;t, &lt;ctrl&gt;&lt;shift&gt;T" />
 <bind gaction="win.dialog-open('Transform')"            keys="&lt;alt&gt;F8" />
 

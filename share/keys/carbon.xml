@@ -85,7 +85,7 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="win.dialog-open('ObjectProperties')"    keys="&lt;primary&gt;&lt;shift&gt;o, &lt;primary&gt;&lt;shift&gt;O" />
   <bind gaction="win.dialog-open('Objects')"             keys="&lt;primary&gt;&lt;shift&gt;l, &lt;primary&gt;&lt;shift&gt;L" />
   <bind gaction="win.dialog-open('PaintServers')" />
-  <bind gaction="win.dialog-open('Preferences')"         keys="&lt;primary&gt;&lt;shift&gt;p, &lt;primary&gt;&lt;shift&gt;P" />
+  <bind gaction="app.preferences"                        keys="&lt;primary&gt;&lt;shift&gt;p, &lt;primary&gt;&lt;shift&gt;P" />
   <bind gaction="win.dialog-open('Selectors')" />
   <bind gaction="win.dialog-open('Spellcheck')"          keys="&lt;primary&gt;&lt;alt&gt;k, &lt;primary&gt;&lt;alt&gt;K" />
   <bind gaction="win.dialog-open('SVGFonts')" />
@@ -145,7 +145,7 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="win.document-print"                     keys="&lt;primary&gt;p, &lt;primary&gt;P" />
   <bind gaction="win.document-cleanup" />
   <bind gaction="win.document-close"                     keys="&lt;primary&gt;w, &lt;primary&gt;W" />
-  <bind gaction="app.quit-inkscape"                      keys="&lt;primary&gt;q, &lt;primary&gt;Q" />
+  <bind gaction="app.quit"                               keys="&lt;primary&gt;q, &lt;primary&gt;Q" />
 
   <!-- Edit -->
   <bind gaction="doc.undo"                               keys="&lt;primary&gt;z, &lt;primary&gt;Z" /> <!--Do not put in Primary,Shift+Y, already used-->
@@ -344,6 +344,6 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="app.last-effect-pref"                   keys="&lt;shift&gt;&lt;alt&gt;q, &lt;shift&gt;&lt;alt&gt;Q" />
 
   <!-- Help -->
-  <bind gaction="app.help-about" />
+  <bind gaction="app.about" />
 
 </keys>

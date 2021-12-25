@@ -133,7 +133,7 @@ Scissor tool - C
 
   <bind gaction="win.document-print"    keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
 
-  <bind gaction="app.quit-inkscape"     keys="&lt;alt&gt;x, &lt;alt&gt;X" />
+  <bind gaction="app.quit"              keys="&lt;alt&gt;x, &lt;alt&gt;X" />
 
 <!-- EDIT MENU -->
 

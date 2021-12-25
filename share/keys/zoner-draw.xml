@@ -57,7 +57,7 @@ See default.xml for more information.
 
 <!-- Options dialog - make sure it's correct one -->
 
-  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;ctrl&gt;m, &lt;ctrl&gt;M" />
+  <bind gaction="app.preferences"                       keys="&lt;ctrl&gt;m, &lt;ctrl&gt;M" />
 
 <!-- Options dialog - make sure it's correct one 
 

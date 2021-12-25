@@ -77,7 +77,7 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="win.document-import"               keys="&lt;ctrl&gt;&lt;shift&gt;I, &lt;ctrl&gt;&lt;shift&gt;i" />
   <bind gaction="win.dialog-open('Export')"         keys="&lt;ctrl&gt;&lt;shift&gt;e, &lt;ctrl&gt;&lt;shift&gt;E" />
   <bind gaction="win.document-close"                keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
-  <bind gaction="app.quit-inkscape"                 keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
+  <bind gaction="app.quit"                          keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
   <bind gaction="win.document-revert" />
   <bind gaction="win.document-save-as" />
   <bind gaction="win.document-cleanup" />
@@ -231,10 +231,10 @@ Hom/end keys-select minimum or maximum feather values
 <!-- Dialogs -->
 
   <bind gaction="win.dialog-ope('XMLEditor')"           keys="&lt;ctrl&gt;&lt;shift&gt;x, &lt;ctrl&gt;&lt;shift&gt;X" />
-  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;ctrl&gt;&lt;shift&gt;q, &lt;ctrl&gt;&lt;shift&gt;Q" />
+  <bind gaction="app.preferences"                       keys="&lt;ctrl&gt;&lt;shift&gt;q, &lt;ctrl&gt;&lt;shift&gt;Q" />
   <bind gaction="win.dialog-open('AlignDistribute')"    keys="&lt;ctrl&gt;&lt;shift&gt;L, &lt;ctrl&gt;&lt;shift&gt;l" />
   <bind gaction="win.dialog-open('Text')"               keys="&lt;shift&gt;F9, &lt;ctrl&gt;&lt;shift&gt;t, &lt;ctrl&gt;&lt;shift&gt;T" />
-  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;ctrl&gt;&lt;shift&gt;O, &lt;ctrl&gt;&lt;shift&gt;o" />
+  <bind gaction="app.preferences"                       keys="&lt;ctrl&gt;&lt;shift&gt;O, &lt;ctrl&gt;&lt;shift&gt;o" />
   <bind gaction="win.dialog-open('FillStroke')"         keys="&lt;ctrl&gt;E, &lt;ctrl&gt;e" />
   <bind gaction="win.dialog-open('Transform')"          keys="&lt;ctrl&gt;&lt;shift&gt;m, &lt;ctrl&gt;&lt;shift&gt;M" />
   <bind gaction="win.dialog-open('Swatches')"           keys="F9, &lt;ctrl&gt;&lt;shift&gt;w, &lt;ctrl&gt;&lt;shift&gt;W" />
@@ -250,7 +250,7 @@ Hom/end keys-select minimum or maximum feather values
 <!-- Help -->
 
   <bind gaction="win.dialog-open('Memory')" />
-  <bind gaction="app.help-about" />
+  <bind gaction="app.about" />
 
 <!-- Effects -->
 

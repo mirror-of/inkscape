@@ -215,18 +215,6 @@ InkscapeWindow::setup_view()
     }
 }
 
-/**
- * Return true if this is the Cmd-Q shortcut on macOS
- */
-inline bool is_Cmd_Q(GdkEventKey *event)
-{
-#ifdef GDK_WINDOWING_QUARTZ
-    return (event->keyval == 'q' && event->state == (GDK_MOD2_MASK | GDK_META_MASK));
-#else
-    return false;
-#endif
-}
-
 bool
 InkscapeWindow::on_key_press_event(GdkEventKey* event)
 {
@@ -260,8 +248,7 @@ InkscapeWindow::on_key_press_event(GdkEventKey* event)
         }
     }
 
-    // Intercept Cmd-Q on macOS to not bypass confirmation dialog
-    if (!is_Cmd_Q(event) && Gtk::Window::on_key_press_event(event)) {
+    if (Gtk::Window::on_key_press_event(event)) {
         return true;
     }
 

@@ -66,7 +66,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_tutorial =
     { "app.tutorial-interpolate",         N_("Inkscape: Interpolate"),            "Tutorial",     N_("Using the interpolate extension")},
     { "app.tutorial-design",              N_("Elements of Design"),               "Tutorial",     N_("Principles of design in the tutorial form")},
     { "app.tutorial-tips",                N_("Tips and Tricks"),                  "Tutorial",     N_("Miscellaneous tips and tricks")},
-    { "app.help-about",                   N_("About Inkscape"),                   "Tutorial",     N_("Inkscape version, authors, license")}
+    { "app.about",                        N_("About Inkscape"),                   "Tutorial",     N_("Inkscape version, authors, license")}
     // clang-format on
 };
 
@@ -89,7 +89,7 @@ add_actions_tutorial(InkscapeApplication* app)
     gapp->add_action( "tutorial-interpolate",            sigc::bind<Glib::ustring>(sigc::ptr_fun(&help_open_tutorial), "tutorial-interpolate"));
     gapp->add_action( "tutorial-design",                 sigc::bind<Glib::ustring>(sigc::ptr_fun(&help_open_tutorial), "tutorial-elements"));
     gapp->add_action( "tutorial-tips",                   sigc::bind<Glib::ustring>(sigc::ptr_fun(&help_open_tutorial), "tutorial-tips"));
-    gapp->add_action( "help-about",                      sigc::ptr_fun(&help_about_inkscape));
+    gapp->add_action( "about",                           sigc::ptr_fun(&help_about_inkscape));
     // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_tutorial);

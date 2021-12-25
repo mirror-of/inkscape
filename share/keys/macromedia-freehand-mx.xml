@@ -74,10 +74,10 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="win.document-print"        keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
   <bind gaction="win.document-import"       keys="&lt;ctrl&gt;r, &lt;ctrl&gt;R" />
   <bind gaction="win.dialog-open('Export')" keys="&lt;ctrl&gt;&lt;shift&gt;r, &lt;ctrl&gt;&lt;shift&gt;R" />
-  <bind gaction="app.quit-inkscape"         keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
+  <bind gaction="app.quit"                  keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
   <bind gaction="win.document-revert" />
   <!-- Alt+F4 included, do not assume the Window Manager provides it.  -->
-  <bind gaction="app.quit-inkscape"         keys="&lt;alt&gt;F4" />
+  <bind gaction="app.quit"                  keys="&lt;alt&gt;F4" />
 
 <!-- Zoom (Inkscape).  View, Magnification (Freehand).  -->
 
@@ -256,8 +256,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
 <!-- Dialogs.  Freehand has a Window menu listing the various palettes/panels.  -->
 
   <!-- Nothing even remotely equivalent -->
-  <bind gaction="win.dialog-ope('XMLEditor')" />
-  <bind gaction="win.dialog-open('Preferences')" />
+  <bind gaction="win.dialog-open('XMLEditor')" />
   <!-- Equivalent exists but no key binding -->
   <bind gaction="win.dialog-open('DocumentProperties')" />
 
@@ -267,7 +266,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   Inkscape will probably move this to Tool options bar anyway.  -->
   <bind gaction="win.dialog-open('Text')" />
 
-  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
+  <bind gaction="app.preferences"                       keys="&lt;ctrl&gt;u, &lt;ctrl&gt;U" />
 
   <!-- Object Panel is the closest equivalent in Freehand -->
   <bind gaction="win.dialog-open('FillStroke')"         keys="&lt;ctrl&gt;F3" />

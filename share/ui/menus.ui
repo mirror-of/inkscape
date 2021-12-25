@@ -93,8 +93,9 @@
       </item>
       <item>
         <attribute name='label' translatable="yes">_Quit</attribute>
-        <attribute name='action'>app.quit-inkscape</attribute>
+        <attribute name='action'>app.quit</attribute>
         <attribute name='icon'>application-exit</attribute>
+        <attribute name='hidden-when'>macos-menubar</attribute>
       </item>
     </section>
   </submenu>
@@ -342,6 +343,7 @@
       	<attribute name='target'>Preferences</attribute>
       	<attribute name='icon'>preferences-system</attribute>
         <attribute name='use-icon'>true</attribute>
+        <attribute name='hidden-when'>macos-menubar</attribute>
       </item>
     </section>
   </submenu>
@@ -1274,9 +1276,10 @@
         </item>
         <item>
           <attribute name='label' translatable="yes">_About Inkscape</attribute>
-          <attribute name='action'>app.help-about</attribute>
+          <attribute name='action'>app.about</attribute>
           <attribute name='icon'>inkscape-logo</attribute>
           <attribute name='use-icon'>true</attribute>
+          <attribute name='hidden-when'>macos-menubar</attribute>
         </item>
       </section>
     </submenu>

@@ -70,7 +70,7 @@ See default.xml for more information.
 
 <!-- Options dialog - make sure it's correct one -->
 
-  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
+  <bind gaction="app.preferences"                       keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
 
 <!-- Options dialog - make sure it's correct one -->
 

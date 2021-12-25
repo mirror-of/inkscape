@@ -141,6 +141,10 @@ add_actions_dialogs(InkscapeWindow* win)
         return;
     }
 
+    // macOS automatically uses app.preferences in the application menu
+    auto *gapp = app->gio_app();
+    gapp->add_action("preferences", [=]() { dialog_open(Glib::Variant<Glib::ustring>::create("Preferences"), win); });
+
     app->get_action_extra_data().add_data(raw_data_dialogs);
 }
 

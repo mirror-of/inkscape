@@ -154,7 +154,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('ObjectProperties')"    keys="&lt;primary&gt;&lt;shift&gt;o"  />
   <bind gaction="win.dialog-open('Objects')"             keys="&lt;primary&gt;&lt;shift&gt;l" />
   <bind gaction="win.dialog-open('PaintServers')" />
-  <bind gaction="win.dialog-open('Preferences')"         keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
+  <bind gaction="app.preferences"                        keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
   <bind gaction="win.dialog-open('Selectors')"           keys="&lt;primary&gt;&lt;shift&gt;q"  />
   <bind gaction="win.dialog-open('Spellcheck')"          keys="&lt;primary&gt;&lt;alt&gt;k"/>
   <bind gaction="win.dialog-open('SVGFonts')" />
@@ -214,7 +214,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.document-print"                     keys="&lt;primary&gt;p" />
   <bind gaction="win.document-cleanup" />
   <bind gaction="win.document-close"                     keys="&lt;primary&gt;w" />
-  <bind gaction="app.quit-inkscape"                      keys="&lt;primary&gt;q" />
+  <bind gaction="app.quit"                               keys="&lt;primary&gt;q" />
 
   <!-- Edit -->
   <bind gaction="doc.undo"                               keys="&lt;primary&gt;z" />
@@ -413,6 +413,6 @@ override) the bindings in the main default.xml.
   <bind gaction="app.last-effect-pref"                   keys="&lt;shift&gt;&lt;alt&gt;q" />
 
   <!-- Help -->
-  <bind gaction="app.help-about" />
+  <bind gaction="app.about" />
 
 </keys>

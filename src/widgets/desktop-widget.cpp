@@ -684,19 +684,6 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
     desktop->zoom_absolute(midpoint_dt, zoom, false);
 }
 
-#ifdef GDK_WINDOWING_QUARTZ
-static GtkMenuItem *_get_help_menu(GtkMenuShell *menu)
-{
-    // Assume "Help" is the last child in menu
-    GtkMenuItem *last = nullptr;
-    auto callback = [](GtkWidget *widget, gpointer data) {
-        *static_cast<GtkMenuItem **>(data) = GTK_MENU_ITEM(widget);
-    };
-    gtk_container_foreach(GTK_CONTAINER(menu), callback, &last);
-    return last;
-}
-#endif
-
 /**
  * Callback to realize desktop widget.
  */
