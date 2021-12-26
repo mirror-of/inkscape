@@ -54,10 +54,8 @@
 #include "profile-manager.h"
 #include "rdf.h"
 
-#include "actions/actions-canvas-snapping.h"
 #include "actions/actions-edit-document.h"
-#include "actions/actions-tutorial.h"
-#include "actions/actions-text.h"
+#include "actions/actions-undo-document.h"
 #include "actions/actions-pages.h"
 
 #include "display/drawing.h"
@@ -156,6 +154,7 @@ SPDocument::SPDocument() :
     action_group = Gio::SimpleActionGroup::create();
     add_actions_edit_document(this);
     add_actions_pages(this);
+    add_actions_undo_document(this);
 }
 
 SPDocument::~SPDocument() {

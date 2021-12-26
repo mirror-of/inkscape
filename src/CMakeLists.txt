@@ -255,6 +255,8 @@ set(inkscape_SRC
   actions/actions-tutorial.cpp
   actions/actions-transform.h
   actions/actions-transform.cpp
+  actions/actions-undo-document.h
+  actions/actions-undo-document.cpp
   actions/actions-view-mode.h
   actions/actions-view-mode.cpp
   actions/actions-view-window.h

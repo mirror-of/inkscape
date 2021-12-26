@@ -104,12 +104,12 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Undo</attribute>
-        <attribute name='action'>win.undo</attribute>
+        <attribute name='action'>doc.undo</attribute>
         <attribute name='icon'>edit-undo</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Redo</attribute>
-        <attribute name='action'>win.redo</attribute>
+        <attribute name='action'>doc.redo</attribute>
         <attribute name='icon'>edit-redo</attribute>
       </item>
       <item>

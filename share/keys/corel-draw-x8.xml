@@ -19,9 +19,9 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind gaction="app.delete"                              keys="Delete" />
 <bind gaction="app.duplicate"                           keys="&lt;ctrl&gt;d, &lt;ctrl&gt;D" />
 <bind gaction="win.paste-in-place"                      keys="&lt;ctrl&gt;v, &lt;ctrl&gt;V" />
-<bind gaction="win.redo"                                keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
+<bind gaction="doc.redo"                                keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
 <bind gaction="win.select-all-layers"                   keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
-<bind gaction="win.undo"                                keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
+<bind gaction="doc.undo"                                keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
 
 <!-- Selection -->
 <bind gaction="app.path-break-apart"                    keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />

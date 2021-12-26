@@ -121,8 +121,8 @@ Future improvements:
   
   <!-- Edit -->
 
-  <bind gaction="win.undo"                                  keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z, &lt;ctrl&gt;&lt;shift&gt;y, &lt;ctrl&gt;&lt;shift&gt;Y" />
-  <bind gaction="win.undo"                                  keys="d, D" />
+  <bind gaction="doc.undo"                                  keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z, &lt;ctrl&gt;&lt;shift&gt;y, &lt;ctrl&gt;&lt;shift&gt;Y" />
+  <bind gaction="doc.undo"                                  keys="d, D" />
   <bind gaction="win.redo"                                  keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z, &lt;ctrl&gt;y, &lt;ctrl&gt;Y" />
   <bind gaction="win.redo"                                  keys="f, F" />
   <bind gaction="app.cut"                                   keys="&lt;ctrl&gt;x, &lt;ctrl&gt;X" />

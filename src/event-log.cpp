@@ -17,8 +17,10 @@
 #include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
-#include "verbs.h"
+#include "inkscape-application.h"
+#include "inkscape-window.h"
 
+#include "ui/desktop/menubar.h"
 #include "util/signal-blocker.h"
 
 namespace
@@ -366,36 +368,31 @@ void EventLog::removeDialogConnection(Gtk::TreeView *event_list_view, CallbackMa
     _priv->removeDialogConnection(event_list_view, callback_connections);
 }
 
+// Enable/disable undo/redo GUI items.
 void
 EventLog::updateUndoVerbs()
 {
-    if(_document) {
-        auto &_columns = getColumns();
+    if (_document) {
 
-        if(_getUndoEvent()) { 
-            Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->sensitive(_document, true);
+        auto group = _document->getActionGroup();
+        if (group) {
+            auto undo_action = group->lookup_action("undo");
+            auto redo_action = group->lookup_action("redo");
+            auto undo_saction = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(undo_action);
+            auto redo_saction = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(redo_action);
+            // GTK4
+            // auto undo_saction = dynamic_cast<Gio::SimpleAction*>(undo_action);
+            // auto redo_saction = dynamic_cast<Gio::SimpleAction*>(redo_action);
+            if (!undo_saction || !redo_saction) {
+                std::cerr << "EventLog::updateUndoVerbs: can't find undo or redo action!" << std::endl;
+                return;
+            }
 
-            Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->name(_document,
-                      Glib::ustring(_("_Undo")) + ": " +
-                      Glib::ustring((*_getUndoEvent())[_columns.description]));
-        } else {
-            Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->name(_document, _("_Undo"));
-            Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->sensitive(_document, false);
+            // Enable/disable menu items.
+            undo_saction->set_enabled(_getUndoEvent());
+            redo_saction->set_enabled(_getRedoEvent());
         }
-
-        if(_getRedoEvent()) {
-            Inkscape::Verb::get(SP_VERB_EDIT_REDO)->sensitive(_document, true);
-            Inkscape::Verb::get(SP_VERB_EDIT_REDO)->name(_document,
-                      Glib::ustring(_("_Redo")) + ": " +
-                      Glib::ustring((*_getRedoEvent())[_columns.description]));
-
-        } else {
-            Inkscape::Verb::get(SP_VERB_EDIT_REDO)->name(_document, _("_Redo"));
-            Inkscape::Verb::get(SP_VERB_EDIT_REDO)->sensitive(_document, false);
-        }
-
     }
-
 }
 
 

@@ -22,24 +22,6 @@
 #include "object/sp-guide.h"
 
 void
-undo(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Undo
-    sp_undo(dt, dt->getDocument());
-}
-
-void
-redo(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Redo
-    sp_redo(dt, dt->getDocument());
-}
-
-void
 paste(InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -97,8 +79,6 @@ path_effect_parameter_next(InkscapeWindow* win)
 std::vector<std::vector<Glib::ustring>> raw_data_edit_window =
 {
     // clang-format off
-    {"win.undo",                                N_("Undo"),                             "Edit",     N_("Undo last action")},
-    {"win.redo",                                N_("Redo"),                             "Edit",     N_("Do again the last undone action")},
     {"win.paste",                               N_("Paste"),                            "Edit",     N_("Paste objects from clipboard to mouse point, or paste text")},
     {"win.paste-in-place",                      N_("Paste In Place"),                   "Edit",     N_("Paste objects from clipboard to mouse point, or paste text")},
     {"win.lock-all-guides",                     N_("Lock All Guides"),                  "Edit",     N_("Toggle lock of all guides in the document")},
@@ -110,8 +90,6 @@ void
 add_actions_edit_window(InkscapeWindow* win)
 {
     // clang-format off
-    win->add_action(        "undo",                            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&undo), win));
-    win->add_action(        "redo",                            sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&redo), win));
     win->add_action(        "paste",                           sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&paste), win));
     win->add_action(        "paste-in-place",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&paste_in_place), win));
     win->add_action_bool(   "lock-all-guides",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&lock_all_guides),   win));

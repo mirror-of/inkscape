@@ -148,8 +148,8 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="app.quit-inkscape"                      keys="&lt;primary&gt;q, &lt;primary&gt;Q" />
 
   <!-- Edit -->
-  <bind gaction="win.undo"                               keys="&lt;primary&gt;z, &lt;primary&gt;Z" /> <!--Do not put in Primary,Shift+Y, already used-->
-  <bind gaction="win.redo"                               keys="&lt;primary&gt;&lt;shift&gt;z, &lt;primary&gt;&lt;shift&gt;Z, &lt;primary&gt;y, &lt;primary&gt;Y" />
+  <bind gaction="doc.undo"                               keys="&lt;primary&gt;z, &lt;primary&gt;Z" /> <!--Do not put in Primary,Shift+Y, already used-->
+  <bind gaction="doc.redo"                               keys="&lt;primary&gt;&lt;shift&gt;z, &lt;primary&gt;&lt;shift&gt;Z, &lt;primary&gt;y, &lt;primary&gt;Y" />
   <bind gaction="app.cut"                                keys="&lt;primary&gt;x, &lt;primary&gt;X, &lt;shift&gt;Delete" />
   <bind gaction="app.copy"                               keys="&lt;primary&gt;c, &lt;primary&gt;C, &lt;primary&gt;Insert" />
   <bind gaction="win.paste"                              keys="&lt;primary&gt;v, &lt;primary&gt;V, &lt;shift&gt;Insert" />

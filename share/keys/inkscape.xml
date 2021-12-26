@@ -217,8 +217,8 @@ override) the bindings in the main default.xml.
   <bind gaction="app.quit-inkscape"                      keys="&lt;primary&gt;q" />
 
   <!-- Edit -->
-  <bind gaction="win.undo"                               keys="&lt;primary&gt;z" />
-  <bind gaction="win.redo"                               keys="&lt;primary&gt;&lt;shift&gt;z,  &lt;primary&gt;y" />
+  <bind gaction="doc.undo"                               keys="&lt;primary&gt;z" />
+  <bind gaction="doc.redo"                               keys="&lt;primary&gt;&lt;shift&gt;z,  &lt;primary&gt;y" />
   <bind gaction="app.cut"                                keys="&lt;primary&gt;x,               &lt;shift&gt;Delete" />
   <bind gaction="app.copy"                               keys="&lt;primary&gt;c,               &lt;primary&gt;Insert"/>
   <bind gaction="win.paste"                              keys="&lt;primary&gt;v,               &lt;shift&gt;Insert"/>

@@ -33,6 +33,7 @@
 ../src/actions/actions-tools.cpp
 ../src/actions/actions-transform.cpp
 ../src/actions/actions-tutorial.cpp
+../src/actions/actions-undo-document.cpp
 ../src/actions/actions-view-mode.cpp
 ../src/actions/actions-view-window.cpp
 ../src/actions/actions-window.cpp
