@@ -93,6 +93,15 @@ void Parameter::param_higlight(bool highlight, bool select)
                 auto c = std::make_unique<SPCurve>();
                 std::vector<Geom::PathVector> cs; // = param_effect->getCanvasIndicators(lpeitems[0]);
                 Geom::OptRect bbox = lpeitems[0]->documentVisualBounds();
+                if (param_effect->helperLineSatellites) {
+                    std::vector<SPObject *> satellites = param_get_satellites();
+                    for (auto iter : satellites) {
+                        SPItem *satelliteitem = dynamic_cast<SPItem *>(iter);
+                        if (satelliteitem) {
+                            bbox.unionWith(satelliteitem->documentVisualBounds());
+                        }
+                    }
+                }
                 Geom::PathVector out;
                 if (bbox) {
                     Geom::Path p = Geom::Path(*bbox);

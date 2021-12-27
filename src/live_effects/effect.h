@@ -158,6 +158,7 @@ public:
     bool refresh_widgets;
     bool finishiddle = false;
     bool satellitestoclipboard = false;
+    bool helperLineSatellites = false;
     BoolParam is_visible;
     HiddenParam lpeversion;
     Geom::PathVector pathvector_before_effect;

@@ -50,6 +50,7 @@ static const Util::EnumData<LPEBool::bool_op_ex> BoolOpData[LPEBool::bool_op_ex_
     {LPEBool::bool_op_ex_diff, N_("difference"), "diff"},
     {LPEBool::bool_op_ex_symdiff, N_("symmetric difference"), "symdiff"},
     {LPEBool::bool_op_ex_cut, N_("division"), "cut"},
+    {LPEBool::bool_op_ex_cut_both, N_("division both"), "cut-both"},
     // Note on naming of operations:
     // bool_op_cut is called "Division" in the manu, see sp_selected_path_cut
     // bool_op_slice is called "Cut path" in the menu, see sp_selected_path_slice
@@ -89,7 +90,7 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     registerParameter(&operand_item);
     registerParameter(&bool_operation);
     registerParameter(&swap_operands);
-    registerParameter(&rmv_inner);
+    //registerParameter(&rmv_inner);
     registerParameter(&fill_type_this);
     registerParameter(&filter);
     registerParameter(&fill_type_operand);
@@ -432,12 +433,21 @@ void LPEBool::remove_filter(SPObject *operand)
     }
 }
 
+void
+LPEBool::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
+{
+    if (onremove) {
+        onremove = false;
+    }
+}
+
 void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
+
     _hp.clear();
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = nullptr;
@@ -479,7 +489,11 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         return;
     }
     SPItem *current_operand = dynamic_cast<SPItem *>(operand_item.getObject());
-    operand =  dynamic_cast<SPItem *>(lpeitem->document->getObjectById(operand_id));
+    if (onremove && current_operand) {
+        operand_id = current_operand->getId();
+        return;
+    }
+    operand =  dynamic_cast<SPItem *>(getSPDoc()->getObjectById(operand_id));
     if (!operand_item.linksToItem()) {
         operand_item.read_from_SVG();
         current_operand = dynamic_cast<SPItem *>(operand_item.getObject());
@@ -540,7 +554,8 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         }
     }
     if (current_operand) {
-        if (is_visible) {
+        bool_op_ex op = bool_operation.get_value();
+        if (is_visible && op != bool_op_ex_cut_both) {
             add_filter();
         } else {
             remove_filter(current_operand);
@@ -560,7 +575,7 @@ void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
     }
 }
 
-Geom::PathVector LPEBool::get_union(SPObject *object)
+Geom::PathVector LPEBool::get_union(SPObject *root, SPObject *object, bool _from_original_d)
 {
     Geom::PathVector res;
     Geom::PathVector clippv;
@@ -573,7 +588,16 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
                 for (auto clip : clip_path_list) {
                     SPShape *clipshape = dynamic_cast<SPShape *>(clip);
                     if (clipshape) {
-                        clippv = clipshape->curve()->get_pathvector();
+                        std::unique_ptr<SPCurve> curve;
+                        if (_from_original_d) {
+                            curve = SPCurve::copy(clipshape->curveForEdit());
+                        } else {
+                            curve = SPCurve::copy(clipshape->curve());
+                        }
+                        if (curve) {
+                            clippv = curve->get_pathvector();
+                            curve->transform(clipshape->transform);
+                        }
                     }
                 }
             }
@@ -583,10 +607,11 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
     if (group) {
         std::vector<SPItem *> item_list = sp_item_group_item_list(group);
         for (auto iter : item_list) {
+            Geom::PathVector tmp = get_union(root, iter, _from_original_d);
             if (res.empty()) {
-                res = get_union(iter);
+                res = tmp;
             } else {
-                res = sp_pathvector_boolop(res, get_union(iter), to_bool_op(bool_op_ex_union), fill_oddEven,
+                res = sp_pathvector_boolop(res, tmp, to_bool_op(bool_op_ex_union), fill_oddEven,
                                            fill_oddEven);
             }
         }
@@ -594,12 +619,19 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
     SPShape *shape = dynamic_cast<SPShape *>(object);
     if (shape) {
         fill_typ originfill = fill_oddEven;
-        SPCurve *curve = shape->curve();
+        std::unique_ptr<SPCurve> curve;
+        if (_from_original_d) {
+            curve = SPCurve::copy(shape->curveForEdit());
+        } else {
+            curve = SPCurve::copy(shape->curve());
+        }
         if (curve) {
+            curve->transform(i2anc_affine(shape, root->parent));
+            Geom::PathVector tmp = curve->get_pathvector();
             if (res.empty()) {
-                res = curve->get_pathvector();
+                res = tmp;
             } else {
-                res = sp_pathvector_boolop(res, curve->get_pathvector(), to_bool_op(bool_op_ex_union), originfill,
+                res = sp_pathvector_boolop(res, tmp, to_bool_op(bool_op_ex_union), originfill,
                                            GetFillTyp(shape));
             }
         }
@@ -609,16 +641,18 @@ Geom::PathVector LPEBool::get_union(SPObject *object)
     if (text) {
         std::unique_ptr<SPCurve> curve = text->getNormalizedBpath();
         if (curve) {
+            curve->transform(i2anc_affine(text, root->parent));
+            Geom::PathVector tmp = curve->get_pathvector();
             if (res.empty()) {
-                res = curve->get_pathvector();
+                res = tmp;
             } else {
-                res = sp_pathvector_boolop(res, curve->get_pathvector(), to_bool_op(bool_op_ex_union), fill_oddEven,
+                res = sp_pathvector_boolop(res, tmp, to_bool_op(bool_op_ex_union), fill_oddEven,
                                            fill_oddEven);
             }
         }
     }
     if (!clippv.empty()) {
-        res = sp_pathvector_boolop(res, clippv, to_bool_op(bool_op_ex_inters), fill_oddEven, fill_oddEven);
+        res = sp_pathvector_boolop(clippv, res, to_bool_op(bool_op_ex_diff), fill_oddEven, fill_oddEven);
     }
     return res;
 }
@@ -632,18 +666,22 @@ void LPEBool::doEffect(SPCurve *curve)
         operand_item.param_set_default();
         return;
     }
+    if (onremove) {
+        current_operand = dynamic_cast<SPItem *>(getSPDoc()->getObjectById(operand_id));
+    }
     if (current_operand) {
         bool_op_ex op = bool_operation.get_value();
         bool swap =  swap_operands.get_value();
+        if (op == bool_op_ex_cut_both) {
+            swap = false;
+        }
 
         Geom::Affine current_affine = sp_lpe_item->transform;
-        Geom::Affine operand_affine = current_operand->transform;
-        Geom::PathVector operand_pv = get_union(current_operand);
+        Geom::PathVector operand_pv = get_union(current_operand, current_operand);
         if (operand_pv.empty()) {
             return;
         }
         path_in *= current_affine;
-        operand_pv *= operand_affine;
 
         Geom::PathVector path_a = swap ? path_in : operand_pv;
         Geom::PathVector path_b = swap ? operand_pv : path_in;
@@ -663,13 +701,17 @@ void LPEBool::doEffect(SPCurve *curve)
         }
 
         Geom::PathVector path_out;
-
+        helperLineSatellites = false;
         if (op == bool_op_ex_cut) {
-            int error = 0;
-            Geom::PathVector path_tmp = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b, false, true, error);
-            for (auto pathit : path_tmp) {
-                if (pathit.size() != 2 || !error) {
-                    path_out.push_back(pathit);
+            if (onremove) {
+                path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(bool_op_ex_diff), fill_a, fill_b);
+            } else {
+                int error = 0;
+                Geom::PathVector path_tmp = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b, false, true, error);
+                for (auto pathit : path_tmp) {
+                    if (pathit.size() != 2 || !error) {
+                        path_out.push_back(pathit);
+                    }
                 }
             }
         /* } else if (op == bool_op_ex_slice) {
@@ -683,17 +725,20 @@ void LPEBool::doEffect(SPCurve *curve)
         } else if (op == bool_op_ex_slice_outside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, false, fill_a, fill_b);
          */
+        } else if (op == bool_op_ex_cut_both){
+            if (onremove) {
+                path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(bool_op_ex_diff), fill_a, fill_b);
+            } else {
+                helperLineSatellites = true;
+                path_out = sp_pathvector_boolop(path_a, path_b, (bool_op) bool_op_diff, fill_a, fill_b);
+                auto tmp = sp_pathvector_boolop(path_a, path_b, (bool_op) bool_op_inters, fill_a, fill_b);
+                path_out.insert(path_out.end(),tmp.begin(),tmp.end());
+                /* auto tmp2 = sp_pathvector_boolop(path_a, path_b, (bool_op) bool_op_diff, fill_a, fill_b);
+                path_out.insert(path_out.end(),tmp2.begin(),tmp2.end()); */
+            }
         } else {
-            path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
+            path_out = sp_pathvector_boolop(path_a, path_b, (bool_op) op, fill_a, fill_b);
         }
-        /*
-        Maybe add a bit simplify?
-        Geom::PathVector pathv = path_out * current_affine.inverse();
-        gdouble size  = Geom::L2(pathv.boundsFast()->dimensions());
-        Path* pathliv = Path_for_pathvector(pathv);
-        pathliv->ConvertEvenLines(0.00002 * size);
-        pathliv->Simplify(0.00002 * size);
-        pathv = Geom::parse_svg_path(pathliv->svg_dump_path()); */
         curve->set_pathvector(path_out * current_affine.inverse());
     }
 }
@@ -703,16 +748,187 @@ void LPEBool::addCanvasIndicators(SPLPEItem const * /*lpeitem*/, std::vector<Geo
     hp_vec.push_back(_hp);
 }
 
-void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
+Inkscape::XML::Node *
+LPEBool::dupleNode(SPObject * origin, Glib::ustring element_type)
+{
+    Inkscape::XML::Document *xml_doc = getSPDoc()->getReprDoc();
+    Inkscape::XML::Node *dest = xml_doc->createElement(element_type.c_str());
+    dest->setAttribute("transform", origin->getAttribute("transform"));
+    dest->setAttribute("d", origin->getAttribute("d"));
+    dest->setAttribute("style", origin->getAttribute("style"));
+    dest->setAttribute("mask", origin->getAttribute("mask"));
+    dest->setAttribute("clip-path", origin->getAttribute("clip-path"));
+    dest->setAttribute("class", origin->getAttribute("class"));
+    dest->setAttribute("style", origin->getAttribute("style"));
+    for (auto iter : origin->style->properties()) {
+        if (iter->style_src != SPStyleSrc::UNSET) {
+            auto key = iter->id();
+            if (key != SPAttr::FONT && key != SPAttr::D && key != SPAttr::MARKER) {
+                const gchar *attr = origin->getAttribute(iter->name().c_str());
+                if (attr) {
+                    dest->setAttribute(iter->name(), attr);
+                }
+            }
+        }
+    }
+    return dest;
+}
+
+void LPEBool::fractureit(SPObject * operandit, Geom::PathVector unionpv)
+{
+    SPItem *operandit_item = dynamic_cast<SPItem *>(operandit);
+    SPGroup *operandit_g = dynamic_cast<SPGroup *>(operandit);
+    SPShape *operandit_shape = dynamic_cast<SPShape *>(operandit);
+    fill_typ fill_a = fill_type_this.get_value() != fill_justDont ? fill_type_this.get_value() : GetFillTyp(operandit_item);
+    fill_typ fill_b = fill_type_operand.get_value() != fill_justDont ? fill_type_operand.get_value() : GetFillTyp(operandit_item);
+    //unionpv *= sp_lpe_item->transform;
+    auto divisionit = dynamic_cast<SPItem *>(getSPDoc()->getObjectById(division_id)); 
+    if (operandit_g) {
+        Inkscape::XML::Node *dest = dupleNode(operandit, "svg:g");
+        dest->setAttribute("transform", nullptr);
+        if (!division_other) {
+            division_other = dynamic_cast<SPGroup *>(sp_lpe_item->parent->appendChildRepr(dest));
+            Inkscape::GC::release(dest);
+            division_other_id = division_other->getId();
+            division_other->parent->reorder(division_other, divisionit);
+        } else {
+            division_other = dynamic_cast<SPGroup *>(division_other->appendChildRepr(dest));
+        } 
+        Inkscape::XML::Node *dest2 = dupleNode(operandit, "svg:g");
+        dest2->setAttribute("transform", nullptr);
+        if (!division_both) {
+            division_both = dynamic_cast<SPGroup *>(sp_lpe_item->parent->appendChildRepr(dest2));
+            Inkscape::GC::release(dest2);
+            division_both->parent->reorder(division_both, division_other);
+        } else {
+            division_both = dynamic_cast<SPGroup *>(division_both->appendChildRepr(dest2));
+        }
+        
+        for (auto& child: operandit_g->children) {
+            SPItem *item = dynamic_cast<SPItem *>(&child);
+            if (item) {
+                fractureit(item, unionpv);
+            }
+        }
+    }
+    if (operandit_shape) {
+        std::unique_ptr<SPCurve> curve = SPCurve::copy(operandit_shape->curve());
+        if (curve) {
+            curve->transform(i2anc_affine(operandit_shape, sp_lpe_item->parent));
+            auto intesect = sp_pathvector_boolop(unionpv, curve->get_pathvector(), (bool_op) bool_op_inters, fill_a, fill_b);
+            Inkscape::XML::Node *dest = dupleNode(operandit_shape, "svg:path");
+            dest->setAttribute("d", sp_svg_write_path(intesect));
+            dest->setAttribute("transform", nullptr);
+            if (!division_other) {
+                division_other = dynamic_cast<SPGroup *>(sp_lpe_item->parent);
+            }
+            SPItem *divisionitem = dynamic_cast<SPItem *>(division_other->appendChildRepr(dest));
+            Inkscape::GC::release(dest);
+            if (division_other_id.empty()) {
+                division_other->reorder(divisionitem, divisionit);
+                division_other_id = Glib::ustring(dest->attribute("id"));
+            }
+            auto operandit_pathv = sp_pathvector_boolop(unionpv, curve->get_pathvector(), (bool_op) bool_op_diff, fill_a, fill_b);
+            Inkscape::XML::Node *dest2 = dupleNode(operandit_shape, "svg:path");
+            dest2->setAttribute("transform", nullptr);
+            dest2->setAttribute("d", sp_svg_write_path(operandit_pathv));
+            if (!division_both) {
+                division_both = dynamic_cast<SPGroup *>(sp_lpe_item->parent);
+                SPItem *divisionitem2 = dynamic_cast<SPItem *>(division_both->appendChildRepr(dest2));
+                division_both->reorder(divisionitem2, divisionitem);
+            } else {
+                division_both->appendChildRepr(dest2);
+            }
+            Inkscape::GC::release(dest2);
+        }
+    }
+}
+
+void LPEBool::divisionit(SPObject * operand_a, SPObject * operand_b, Geom::PathVector unionpv)
+{
+    SPItem *operand_a_item = dynamic_cast<SPItem *>(operand_a);
+    SPItem *operand_b_item = dynamic_cast<SPItem *>(operand_b);
+    SPGroup *operand_b_g = dynamic_cast<SPGroup *>(operand_b);
+    SPShape *operand_b_shape = dynamic_cast<SPShape *>(operand_b);
+    fill_typ fill_a = fill_type_this.get_value() != fill_justDont ? fill_type_this.get_value() : GetFillTyp(operand_a_item);
+    fill_typ fill_b = fill_type_operand.get_value() != fill_justDont ? fill_type_operand.get_value() : GetFillTyp(operand_b_item);
+    if (operand_b_g) {
+        Inkscape::XML::Node *dest = dupleNode(operand_b, "svg:g");
+        dest->setAttribute("transform", nullptr);
+        if (!division) {
+            division = dynamic_cast<SPGroup *>(sp_lpe_item->parent->appendChildRepr(dest));
+            Inkscape::GC::release(dest);
+            division_id = division->getId();
+            division->parent->reorder(division, sp_lpe_item);
+        } else {
+            division = dynamic_cast<SPGroup *>(division->appendChildRepr(dest));
+        }
+        for (auto& child: operand_b_g->children) {
+            SPItem *item = dynamic_cast<SPItem *>(&child);
+            if (item) {
+                divisionit(operand_a, item, unionpv);
+            }
+        }
+    }
+    if (operand_b_shape) {
+        if (!division) {
+            division = dynamic_cast<SPGroup *>(sp_lpe_item->parent);
+        }
+        std::unique_ptr<SPCurve> curve = SPCurve::copy(operand_b_shape->curveForEdit());
+        if (curve) {
+            curve->transform(i2anc_affine(operand_b_shape, sp_lpe_item->parent));
+            auto intesect = sp_pathvector_boolop(unionpv, curve->get_pathvector(), (bool_op) bool_op_inters, fill_a, fill_b);
+            Inkscape::XML::Node *dest = dupleNode(operand_b_shape, "svg:path");
+            dest->setAttribute("d", sp_svg_write_path(intesect));
+            dest->setAttribute("transform", nullptr);
+            SPItem *item = dynamic_cast<SPItem *>(division->appendChildRepr(dest));
+            Inkscape::GC::release(dest);
+            if (item && division_id.empty()) {
+                division_id = item->getId();
+            }
+        }
+    }
+}
+
+void LPEBool::doOnRemove(SPLPEItem const * lpeitem)
 {
     // set "keep paths" hook on sp-lpe-item.cpp
     remove_filter(operand_item.getObject());
-    SPItem *operand = dynamic_cast<SPItem *>(operand_item.getObject());
+    SPItem *operand = dynamic_cast<SPItem *>(getSPDoc()->getObjectById(operand_id));
     if (operand) {
-        operand_item.unlink();
         if (keep_paths) {
+            bool_op_ex op = bool_operation.get_value();
+            if (op == bool_op_ex_cut || op == bool_op_ex_cut_both) {
+                reverse = lpeitem->pos_in_parent() > operand->pos_in_parent();
+                division = nullptr;
+                Geom::PathVector unionpv = get_union(operand, operand);
+                divisionit(operand, sp_lpe_item, unionpv);
+                onremove = true;
+                sp_lpe_item_update_patheffect(sp_lpe_item, false, true);
+                if (op == bool_op_ex_cut_both) {
+                    auto * a = dynamic_cast<SPItem *>(getSPDoc()->getObjectById(division_id)); 
+                    if (a) {
+                        unionpv = get_union(sp_lpe_item, sp_lpe_item, true);
+                        fractureit(operand, unionpv); 
+                        auto * b = dynamic_cast<SPItem *>(getSPDoc()->getObjectById(division_other_id));   
+                        if (a && b) {
+                            if (reverse) {
+                                b->lowerOne();
+                            }
+                        }
+                    }
+                }
+                // we reset variables because LPE is not removed on undo so I need to get clean on redo
+                division = nullptr;
+                division_both = nullptr;
+                division_other = nullptr;
+                operand_id = "";
+                division_id = "";
+                division_other_id = "";
+                onremove = false;
+            }
             if (is_visible) {
-                operand->deleteObject(true);
+                processObjects(LPE_ERASE);
             }
         }
     }

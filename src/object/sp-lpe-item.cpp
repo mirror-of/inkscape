@@ -314,7 +314,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
 }
 
 /**
- * returns true when LPE write unoptimiced
+ * returns false when LPE write unoptimiced
  */
 bool SPLPEItem::optimizeTransforms()
 {

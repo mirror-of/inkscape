@@ -41,6 +41,7 @@ public:
     void on_link_button_click();
     friend class LPEBool;
     friend class LPECloneOriginal;
+    friend class Effect;
     Geom::Affine last_transform;
     bool isConnected() {return !(!linked_changed_connection);}
     void start_listening(SPObject *to);
@@ -48,12 +49,12 @@ protected:
     void unlink();
     void link(Glib::ustring itemid);
     void quit_listening();
-
     void linked_released(SPObject *released_item);
     void linked_deleted(SPObject *deleted_item);
     void linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item);
     void linked_modified(SPObject *linked_obj, guint flags);
     void linked_changed(SPObject *old_obj, SPObject *new_obj);
+    
     std::shared_ptr<SatelliteReference> lperef;
 
 private:

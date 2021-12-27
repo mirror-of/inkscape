@@ -25,6 +25,7 @@
 
 #include "document-undo.h"
 #include "enums.h"                // Clones
+#include "filter-chemistry.h"     // LPE bool
 #include "inkscape-application.h"
 #include "inkscape.h"             // Inkscape::Application - preferences
 
@@ -34,6 +35,8 @@
 #include "object/algorithms/bboxsort.h"      // Sort based on bounding box.
 
 #include "live_effects/effect-enum.h"
+#include "live_effects/effect.h"
+
 #include "object/sp-root.h"       // "Desktop Bounds"
 
 #include "ui/icon-names.h"        // Icon macro used in undo.
@@ -141,14 +144,28 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
 
     // We force unselect operand in bool LPE. TODO: See if we can use "selected" from below.
     auto list = selection->items();
+    std::size_t total = std::distance(list.begin(), list.end());
+    std::vector<SPItem *> selected;
+    std::vector<Inkscape::LivePathEffect::Effect *> bools;
     for (auto itemlist = list.begin(); itemlist != list.end(); ++itemlist) {
-        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*itemlist);
-        if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
-            sp_lpe_item_update_patheffect(lpeitem, false, false);
+        SPItem *item = dynamic_cast<SPItem *>(*itemlist);
+        if (total == 2) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+            if (lpeitem) {
+                for (auto lpe : lpeitem->getPathEffectsOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                    if (!g_strcmp0(lpe->getRepr()->attribute("is_visible"), "true")) {
+                        lpe->getRepr()->setAttribute("is_visible", "false");
+                        bools.emplace_back(lpe);
+                        item->document->ensureUpToDate();
+                    }
+                }
+            }
+        }
+        if (!(item && has_hidder_filter(item) && total > 2)) {
+            selected.emplace_back(item);
         }
     }
 
-    std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
     if (selected.empty()) return;
 
     // Find alignment rectangle. This can come from:

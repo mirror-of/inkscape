@@ -30,11 +30,15 @@ public:
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     void doBeforeEffect(SPLPEItem const *lpeitem) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
+    void doAfterEffect(SPLPEItem const* lpeitem, SPCurve *curve) override;
     void doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/) override;
     void doOnRemove(SPLPEItem const * /*lpeitem*/) override;
     bool doOnOpen(SPLPEItem const *lpeitem) override;
     void add_filter();
-    Geom::PathVector get_union(SPObject *object);
+    void fractureit(SPObject * operandit, Geom::PathVector unionpv);
+    void divisionit(SPObject * operand_a, SPObject * operand_b, Geom::PathVector unionpv);
+    Geom::PathVector get_union(SPObject *root, SPObject *object, bool prefear_original = false);
+    Inkscape::XML::Node *dupleNode(SPObject * origin, Glib::ustring element_type);
     void remove_filter(SPObject *object);
     enum bool_op_ex
     {
@@ -43,6 +47,7 @@ public:
         bool_op_ex_diff = bool_op_diff,
         bool_op_ex_symdiff = bool_op_symdiff,
         bool_op_ex_cut = bool_op_cut,
+        bool_op_ex_cut_both,
         // bool_op_ex_slice = bool_op_slice,
         // bool_op_ex_slice_inside,  // like bool_op_slice, but leaves only the contour pieces inside of the cut path
         // bool_op_ex_slice_outside, // like bool_op_slice, but leaves only the contour pieces outside of the cut path
@@ -66,12 +71,19 @@ private:
     EnumParam<fill_typ> fill_type_operand;
     BoolParam swap_operands;
     BoolParam rmv_inner;
+    bool onremove = false;
     SPItem *operand = nullptr;
     SPObject *parentlpe = nullptr;
+    SPGroup *division = nullptr;
+    SPGroup *division_both = nullptr;
+    SPGroup *division_other = nullptr;
     Glib::ustring operand_id = "";
+    Glib::ustring division_id = "";
+    Glib::ustring division_other_id = "";
     HiddenParam filter;
     Geom::PathVector _hp;
     Geom::Affine prev_affine;
+    bool reverse = false; 
 };
 
 }; //namespace LivePathEffect
