@@ -108,11 +108,25 @@ bool KnotHolder::knot_mouseover() const {
     for (auto i : entity) {
         const SPKnot *knot = i->knot;
 
-        if (knot && (knot->flags & SP_KNOT_MOUSEOVER)) {
+        if (knot && knot->is_mouseover()) {
             return true;
         }
     }
 
+    return false;
+}
+
+/**
+ * Returns true if at least one of the KnotHolderEntities is selected
+ */
+bool KnotHolder::knot_selected() const {
+    for (auto i : entity) {
+        const SPKnot *knot = i->knot;
+
+        if (knot && knot->is_selected()) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -127,7 +141,7 @@ KnotHolder::knot_mousedown_handler(SPKnot *knot, guint state)
             e->knot->selectKnot(false);
         }
         if (e->knot == knot) {
-            if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
+            if (!(e->knot->is_selected()) || !(state & GDK_SHIFT_MASK)){
                 e->knot->selectKnot(true);
             } else {
                 e->knot->selectKnot(false);
@@ -195,7 +209,7 @@ void
 KnotHolder::transform_selected(Geom::Affine transform){
     for (auto & i : entity) {
         SPKnot *knot = i->knot;
-        if (knot->flags & SP_KNOT_SELECTED) {
+        if (knot->is_selected()) {
             knot_moved_handler(knot, knot->pos * transform , 0);
             knot->selectKnot(true);
         }
@@ -212,7 +226,7 @@ KnotHolder::unselect_knots(){
                 KnotHolder * knotholder = shape_editor->knotholder;
                 if (knotholder) {
                     for (auto e : knotholder->entity) {
-                        if (e->knot->flags & SP_KNOT_SELECTED) {
+                        if (e->knot->is_selected()) {
                             e->knot->selectKnot(false);
                         }
                     }
@@ -259,7 +273,7 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
     } else {
         // if a point is dragged while not selected, it should select itself,
         // even if it was just unselected in the mousedown event handler.
-        if (!(knot->flags & SP_KNOT_SELECTED)) {
+        if (!(knot->is_selected())) {
             knot->selectKnot(true);
         } else {
             for(auto e : this->entity) {

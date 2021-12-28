@@ -176,11 +176,11 @@ public:
      */
     bool eventHandler(GdkEvent *event);
 
-    bool is_visible()   { return (flags & SP_KNOT_VISIBLE)   != 0; }
-    bool is_selected()  { return (flags & SP_KNOT_SELECTED)  != 0; }
-    bool is_mouseover() { return (flags & SP_KNOT_MOUSEOVER) != 0; }
-    bool is_dragging()  { return (flags & SP_KNOT_DRAGGING)  != 0; }
-    bool is_grabbed()   { return (flags & SP_KNOT_GRABBED)   != 0; }
+    bool is_visible()   const { return (flags & SP_KNOT_VISIBLE)   != 0; }
+    bool is_selected()  const { return (flags & SP_KNOT_SELECTED)  != 0; }
+    bool is_mouseover() const { return (flags & SP_KNOT_MOUSEOVER) != 0; }
+    bool is_dragging()  const { return (flags & SP_KNOT_DRAGGING)  != 0; }
+    bool is_grabbed()   const { return (flags & SP_KNOT_GRABBED)   != 0; }
 
 private:
     /**

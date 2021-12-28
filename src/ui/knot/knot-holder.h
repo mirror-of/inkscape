@@ -68,6 +68,7 @@ public:
     void setEditTransform(Geom::Affine edit_transform);
     Geom::Affine getEditTransform() const { return _edit_transform; }
 
+    bool knot_selected() const;
     bool knot_mouseover() const;
 
     SPDesktop *getDesktop() { return desktop; }
