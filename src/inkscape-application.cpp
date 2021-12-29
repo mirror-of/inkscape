@@ -68,10 +68,6 @@
 
 #include "widgets/desktop-widget.h" // Access dialog container.
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include <gtkosxapplication.h>
-#endif
-
 #ifdef WITH_DBUS
 # include "extension/dbus/dbus-init.h"
 #endif
@@ -724,16 +720,18 @@ InkscapeApplication::InkscapeApplication()
 
     gapp->signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options));
 
+    if (_with_gui) {
+        // On macOS, this enables:
+        //   - DnD via dock icon
+        //   - system menu "Quit"
+        gtk_app()->property_register_session() = true;
+    }
+
     // This is normally called for us... but after the "handle_local_options" signal is emitted. If
     // we want to rely on actions for handling options, we need to call it here. This appears to
     // have no unwanted side-effect. It will also trigger the call to on_startup().
     gapp->register_application();
 }
-
-#ifdef GDK_WINDOWING_QUARTZ
-static gboolean osx_openfile_callback(GtkosxApplication *, gchar const *, InkscapeApplication *);
-static gboolean osx_quit_callback(GtkosxApplication *, InkscapeApplication *);
-#endif
 
 void
 InkscapeApplication::on_startup2()
@@ -765,20 +763,6 @@ InkscapeApplication::on_startup2()
     // before shortcuts are added.
     // Shortcuts for actions can be set before the actions are created.
     Inkscape::Shortcuts::getInstance().init();
-
-#ifdef GDK_WINDOWING_QUARTZ
-    GtkosxApplication *osxapp = gtkosx_application_get();
-
-    // Install handlers for
-    //   - DnD via dock icon
-    //   - system menu "Quit"
-    g_signal_connect(G_OBJECT(osxapp), "NSApplicationOpenFile", G_CALLBACK(osx_openfile_callback), this);
-    g_signal_connect(G_OBJECT(osxapp), "NSApplicationBlockTermination", G_CALLBACK(osx_quit_callback), this);
-
-   // using quartz accelerators gives menu shortcuts priority over everything else,
-   // messes up text input because Inkscape has single key shortcuts (e.g. 1-6).
-   gtkosx_application_set_use_quartz_accelerators(osxapp, false);
-#endif
 }
 
 /** Create a window given a document. This is used internally in InkscapeApplication.
@@ -1648,30 +1632,6 @@ InkscapeApplication::print_action_list()
                   << ":  " << _action_extra_data.get_tooltip_for_action(fullname) << std::endl;
     }
 }
-
-//   ======================== macOS =============================
-
-#ifdef GDK_WINDOWING_QUARTZ
-/**
- * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
- */
-static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path, InkscapeApplication *app)
-{
-    auto ptr = Gio::File::create_for_path(path);
-    g_return_val_if_fail(ptr, false);
-    app->create_window(ptr);
-    return true;
-}
-
-/**
- * Handle macOS terminating the application
- */
-static gboolean osx_quit_callback(GtkosxApplication *, InkscapeApplication *app)
-{
-    app->destroy_all();
-    return true;
-}
-#endif
 
 /**
  * Return number of open Inkscape Windows (irrespective of number of documents)
