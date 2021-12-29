@@ -23,7 +23,7 @@
       </item>
     </section>
     <submenu id="recent-files">
-      <attribute name='label' translatable='yes'>Recent files</attribute>
+      <attribute name='label' translatable='yes'>Open _Recent</attribute>
     </submenu>   
     <section>
       <item>
