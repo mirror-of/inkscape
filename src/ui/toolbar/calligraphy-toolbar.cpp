@@ -213,10 +213,10 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         /* Fixation */
         std::vector<Glib::ustring> labels = {_("(perpendicular to stroke, \"brush\")"), "", "", "", _("(almost fixed, default)"), _("(fixed by Angle, \"pen\")")};
         std::vector<double>        values = {                                        0, 20, 40, 60,                           90,                            100};
-        auto flatness_val = prefs->getDouble("/tools/calligraphic/flatness", 90);
-        _fixation_adj = Gtk::Adjustment::create(flatness_val, 0.0, 100, 1.0, 10.0);
+        auto flatness_val = prefs->getDouble("/tools/calligraphic/flatness", -90);
+        _fixation_adj = Gtk::Adjustment::create(flatness_val, -100.0, 100.0, 1.0, 10.0);
         auto flatness_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("calligraphy-fixation", _("Fixation:"), _fixation_adj, 1, 0));
-        flatness_item->set_tooltip_text(_("Angle behavior (0 = nib always perpendicular to stroke direction, 100 = fixed angle)"));
+        flatness_item->set_tooltip_text(_("Angle behavior (0 = nib always perpendicular to stroke direction, 100 = fixed angle, -100 = fixed angle in opposite direction)"));
         flatness_item->set_custom_numeric_menu_data(values, labels);
         flatness_item->set_focus_widget(desktop->canvas);
         _fixation_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::flatness_value_changed));

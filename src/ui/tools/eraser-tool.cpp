@@ -238,6 +238,11 @@ bool EraserTool::apply(Geom::Point p) {
         Geom::Point ang1 = Geom::Point(-sin(radians),  cos(radians));
         a1 = atan2(ang1);
     }
+    if (this->flatness < 0.0) {
+        // flips direction. Useful when usetilt is true
+        // allows simulating both pen/charcoal and broad-nibbed pen
+        a1 *= -1;
+    }
 
     // 2. perpendicular to dc->vel (absolutely non-flat nib):
     gdouble const mag_vel = Geom::L2(this->vel);
@@ -262,7 +267,7 @@ bool EraserTool::apply(Geom::Point p) {
         a2 += 2*M_PI;
     // find the flatness-weighted bisector angle, unflip if a2 was flipped
     // FIXME: when dc->vel is oscillating around the fixed angle, the new_ang flips back and forth. How to avoid this?
-    double new_ang = a1 + (1 - this->flatness) * (a2 - a1) - (flipped? M_PI : 0);
+    double new_ang = a1 + (1 - fabs(this->flatness)) * (a2 - a1) - (flipped? M_PI : 0);
 
     // Try to detect a sudden flip when the new angle differs too much from the previous for the
     // current velocity; in that case discard this move

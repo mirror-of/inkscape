@@ -109,7 +109,7 @@ void DynamicBase::set(const Inkscape::Preferences::Entry& value) {
     } else if (path == "tremor") {
         this->tremor = 0.01 * CLAMP(value.getInt(), 0, 100);
     } else if (path == "flatness") {
-        this->flatness = 0.01 * CLAMP(value.getInt(), 0, 100);
+        this->flatness = 0.01 * CLAMP(value.getInt(), -100, 100);
     } else if (path == "usepressure") {
         this->usepressure = value.getBool();
     } else if (path == "usetilt") {

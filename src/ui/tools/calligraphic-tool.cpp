@@ -110,7 +110,7 @@ CalligraphicTool::CalligraphicTool()
     , trace_bg(false)
 {
     this->vel_thin = 0.1;
-    this->flatness = 0.9;
+    this->flatness = -0.9;
     this->cap_rounding = 0.0;
     this->abs_width = false;
 }
@@ -283,6 +283,11 @@ bool CalligraphicTool::apply(Geom::Point p) {
         a1 = ( this->angle / 180.0 ) * M_PI;
     }
     a1 *= -desktop->yaxisdir();
+    if (this->flatness < 0.0) {
+        // flips direction. Useful when this->usetilt
+        // allows simulating both pen and calligraphic brush
+        a1 *= -1;
+    }
     a1 = fmod(a1, M_PI);
     if (a1 > 0.5*M_PI) {
         a1 -= M_PI;
@@ -313,7 +318,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
         a2 += 2*M_PI;
     // find the flatness-weighted bisector angle, unflip if a2 was flipped
     // FIXME: when dc->vel is oscillating around the fixed angle, the new_ang flips back and forth. How to avoid this?
-    double new_ang = a1 + (1 - this->flatness) * (a2 - a1) - (flipped? M_PI : 0);
+    double new_ang = a1 + (1 - fabs(this->flatness)) * (a2 - a1) - (flipped? M_PI : 0);
 
     // Try to detect a sudden flip when the new angle differs too much from the previous for the
     // current velocity; in that case discard this move
