@@ -38,8 +38,16 @@ cat > "$FONTCONFIG_FILE" <<EOF
 EOF
 
 mkdir fonts
-wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.tar.bz2 \
-    && tar -xf dejavu-fonts-ttf-2.37.tar.bz2 && cp dejavu-fonts-ttf-2.37/ttf/* fonts/ && rm -rf dejavu-fonts-ttf-2.37
+dejavufontsarchive="dejavu-fonts-ttf-$$.tar"
+dejavufontsarchivebz2="$dejavufontsarchive.bz2"
+wget -nv -O $dejavufontsarchivebz2 \
+    https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.tar.bz2 \
+    || error "failed to download dejavu fonts"
+# Unzip first as workaround to broken tar. https://github.com/actions/virtual-environments/issues/282
+bunzip2 --keep $dejavufontsarchivebz2
+tar -vxf $dejavufontsarchive -C fonts --strip-components 2 "dejavu-fonts-ttf-2.37/ttf" \
+    || error "failed to extract dejavu fonts"
+rm -vrf dejavu-fonts-ttf-*
 
 # install dependencies
 message "--- Installing dependencies"
