@@ -148,7 +148,6 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         box->set_size_request(item->width, item->height);
         return box;
     });
-    auto& btn_box = get_widget<Gtk::Box>(_builder, "btn-box");
 
     _sandbox = ink_markers_preview_doc(_combo_id);
 

@@ -121,7 +121,7 @@ DialogWindow* DialogManager::find_floating_dialog_window(const Glib::ustring& di
 
     for (auto dlg_wnd : windows) {
         if (auto container = dlg_wnd->get_container()) {
-            if (auto dlg = container->get_dialog(dialog_type)) {
+            if (container->get_dialog(dialog_type)) {
                 return dlg_wnd;
             }
         }
