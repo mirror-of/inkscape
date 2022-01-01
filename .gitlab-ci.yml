@@ -164,7 +164,7 @@ inkscape:windows:x64: &windows_job
     MSYSTEM: MINGW64
     # Workaround for failing CI (hopefully temporary)
     # https://docs.gitlab.com/ee/ci/large_repositories/#git-clean-flags
-    GIT_CLEAN_FLAGS: -ffdx -e build
+    GIT_CLEAN_FLAGS: -ffdx -e "build/dejavu-fonts-ttf-*.tar.bz2"
   script:
     - $env:CHERE_INVOKING = 'yes'  # Preserve the current working directory
     - C:/msys64/usr/bin/bash -lc "buildtools/msys2build_GitLab.sh"
