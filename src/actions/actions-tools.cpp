@@ -394,7 +394,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_tools =
 
     {"win.tool-switch('Zoom')",         N_("Tool: Zoom"),         "Tool Switch",   N_("Zoom in or out.")                                },
     {"win.tool-switch('Measure')",      N_("Tool: Measure"),      "Tool Switch",   N_("Measure objects.")                               },
-    {"win.tool-switch('Page')",         N_("Tool: Pages"),        "Tool Switch",   N_("Create and edit multiple pages")                 },
+    {"win.tool-switch('Pages')",        N_("Tool: Pages"),        "Tool Switch",   N_("Create and edit multiple pages")                 },
 
     {"win.tool-toggle",                 N_("Tool Toggle"),        "Tool Switch",   N_("Toggle between Select tool and last used tool.") },
     // clang-format on

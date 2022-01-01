@@ -1265,6 +1265,11 @@ SPDesktop::get_toolbar_by_name(const Glib::ustring& name)
     return _widget->get_toolbar_by_name(name);
 }
 
+Gtk::Widget *SPDesktop::get_toolbox() const
+{
+    return _widget->get_tool_toolbox();
+}
+
 bool
 SPDesktop::isToolboxButtonActive (gchar const *id)
 {

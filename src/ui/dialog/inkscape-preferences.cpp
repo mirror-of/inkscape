@@ -1812,33 +1812,21 @@ void InkscapePreferences::initPageUI()
     // Toolbars
     _page_toolbars.add_group_header(_("Toolbars"));
     {
-        auto custom = Gtk::make_managed<Gtk::MenuButton>();
-        auto dlg = Gtk::make_managed<Gtk::Popover>();
-        custom->set_label(_("Customize..."));
-        custom->set_popover(*dlg);
-        custom->set_direction(Gtk::ARROW_DOWN);
-        auto toolbox = Glib::wrap(ToolboxFactory::createToolToolbox());
-        toolbox->show_all();
-        const int MARGIN = 6;
-        toolbox->set_margin_start(MARGIN);
-        toolbox->set_margin_end(MARGIN);
-        toolbox->set_margin_top(MARGIN);
-        toolbox->set_margin_bottom(MARGIN);
+        auto vbox = Gtk::manage(new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL));
+        _page_toolbars.add_line(false, "", *vbox, "", _("Select visible tool buttons"), true);
 
+        auto toolbox = Glib::wrap(ToolboxFactory::createToolToolbox());
         sp_traverse_widget_tree(toolbox, [=](Gtk::Widget* widget){
             if (auto flowbox = dynamic_cast<Gtk::FlowBox*>(widget)) {
-                flowbox->set_max_children_per_line(9);
+                flowbox->set_max_children_per_line(1);
                 flowbox->set_selection_mode();
+                flowbox->reparent(*vbox);
             }
-            else if (auto button = dynamic_cast<Gtk::ToggleButton*>(widget)) {
+            if (auto button = dynamic_cast<Gtk::ToggleButton*>(widget)) {
                 assert(GTK_IS_ACTIONABLE(widget->gobj()));
                 // do not execute any action:
                 gtk_actionable_set_action_name(GTK_ACTIONABLE(widget->gobj()), "");
 
-                button->set_margin_start(MARGIN / 2);
-                button->set_margin_end(MARGIN / 2);
-                button->set_margin_top(MARGIN / 2);
-                button->set_margin_bottom(MARGIN / 2);
                 button->set_sensitive();
                 auto path = ToolboxFactory::get_tool_visible_buttons_path(sp_get_action_target(button));
                 auto visible = Inkscape::Preferences::get()->getBool(path, true);
@@ -1849,9 +1837,6 @@ void InkscapePreferences::initPageUI()
             }
             return false;
         });
-
-        dlg->add(*toolbox);
-        _page_toolbars.add_line(false, _("Toolbox buttons:"), *custom, "", _("Select visible tool buttons"), false);
 
         struct tbar_info {const char* label; const char* prefs;} toolbars[] = {
             {_("Toolbox icon size:"),     ToolboxFactory::tools_icon_size},
@@ -1869,7 +1854,6 @@ void InkscapePreferences::initPageUI()
             for (int i = min; i <= max; i += 8) {
                 slider->getSlider()->add_mark(i, Gtk::POS_BOTTOM, i % min ? "" : (std::to_string(100 * i / min) + "%").c_str());
             }
-            slider->set_margin_bottom(MARGIN);
             _page_toolbars.add_line(false, tbox.label, *slider, "", _("Adjust toolbar icon size"));
         }
 

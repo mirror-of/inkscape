@@ -216,6 +216,7 @@ public:
     void toggle_rulers();
     void sticky_zoom_toggled();
 
+    Gtk::Widget *get_tool_toolbox() const { return Glib::wrap(tool_toolbox); }
 private:
     GtkWidget *tool_toolbox;
     GtkWidget *aux_toolbox;
