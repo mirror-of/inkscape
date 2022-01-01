@@ -140,6 +140,33 @@ SPCurve::split() const
 }
 
 /**
+ * Returns a list of new curves of non-overlapping subpath in \a curve.
+ */
+std::list<SPCurve::smart_pointer>
+SPCurve::split_non_overlapping() const
+{
+    std::list<smart_pointer> result;
+
+    for (const auto & path_it : _pathv) {
+        Geom::PathVector newpathv;
+        newpathv.push_back(path_it);
+
+        for (auto &existing : result) {
+            if (is_intersecting(existing->_pathv, newpathv)) {
+                existing->append(newpathv, false);
+                newpathv.clear();
+            }
+        }
+        if (!newpathv.empty()) {
+            SPCurve * newcurve = new SPCurve(newpathv);
+            result.emplace_back(newcurve);
+        }
+    }
+
+    return result;
+}
+
+/**
  * Transform all paths in curve using matrix.
  */
 void

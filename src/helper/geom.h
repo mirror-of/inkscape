@@ -26,6 +26,8 @@ void pathv_matrix_point_bbox_wind_distance ( Geom::PathVector const & pathv, Geo
                                              Geom::Rect *bbox, int *wind, Geom::Coord *dist,
                                              Geom::Coord tolerance, Geom::Rect const *viewbox);
 
+bool is_intersecting(Geom::PathVector const&a, Geom::PathVector const&b);
+
 size_t count_pathvector_nodes(Geom::PathVector const &pathv );
 size_t count_path_nodes(Geom::Path const &path);
 Geom::PathVector pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv );

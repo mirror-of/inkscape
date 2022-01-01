@@ -1011,6 +1011,12 @@
         <attribute name='icon'>path-break-apart</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
+      <item>
+        <attribute name='label' translatable="yes">Split Paths</attribute>
+        <attribute name='action'>app.path-split</attribute>
+        <attribute name='icon'>path-split</attribute>
+        <attribute name='use-icon'>true</attribute>
+      </item>
     </section>
     <section>
       <item>

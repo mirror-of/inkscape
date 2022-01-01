@@ -438,7 +438,7 @@ public:
     //path operations
     //in path-chemistry.cpp
     void combine(bool skip_undo = false);
-    void breakApart(bool skip_undo = false);
+    void breakApart(bool skip_undo = false, bool overlapping = true);
     void toCurves(bool skip_undo = false);
     void toLPEItems();
     void pathReverse();
