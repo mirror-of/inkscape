@@ -4384,6 +4384,8 @@ ObjectSet::clearSiblingStates()
 /**
  * \param with_margins margins defined in the xml under <sodipodi:namedview>
  *                     "fit-margin-..." attributes.  See SPDocument::fitToRect.
+ *
+ * WARNING: this is a page naive and it will break multi page documents.
  */
 bool
 fit_canvas_to_drawing(SPDocument *doc, bool with_margins)
@@ -4408,25 +4410,6 @@ fit_canvas_to_drawing(SPDesktop *desktop)
         DocumentUndo::done(desktop->getDocument(), _("Fit Page to Drawing"), "");
     }
 }
-
-/**
- * Fits canvas to selection or drawing with margins from <sodipodi:namedview>
- * "fit-margin-..." attributes.  See SPDocument::fitToRect
- */
-void fit_canvas_to_selection_or_drawing(SPDesktop *desktop) {
-    g_return_if_fail(desktop != nullptr);
-    SPDocument *doc = desktop->getDocument();
-
-    g_return_if_fail(doc != nullptr);
-    g_return_if_fail(desktop->selection != nullptr);
-
-    bool const changed = ( desktop->selection->isEmpty()
-                           ? fit_canvas_to_drawing(doc, true)
-                           : desktop->selection->fitCanvas(true,true));
-    if (changed) {
-        DocumentUndo::done(desktop->getDocument(), _("Fit Page to Selection or Drawing"), "");
-    }
-};
 
 static void itemtree_map(void (*f)(SPItem *, SPDesktop *), SPObject *root, SPDesktop *desktop) {
     // don't operate on layers

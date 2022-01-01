@@ -15,7 +15,6 @@
 ../src/actions/actions-extra-data.cpp
 ../src/actions/actions-file-window.cpp
 ../src/actions/actions-file.cpp
-../src/actions/actions-fit-canvas.cpp
 ../src/actions/actions-help-url.cpp
 ../src/actions/actions-hide-lock.cpp
 ../src/actions/actions-hint-data.cpp

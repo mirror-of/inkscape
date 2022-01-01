@@ -135,7 +135,7 @@ double PageToolbar::_unit_to_size(std::string number, std::string unit_str, std:
     // Get the best unit, for example 50x40cm means cm for both
     auto unit = _document->getDisplayUnit();
     if (unit_str.empty() && !backup.empty())
-        unit_str == backup;
+        unit_str = backup;
     if (unit_str == "\"")
         unit_str = "in";
 

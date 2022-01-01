@@ -22,6 +22,7 @@ class SPPage;
 
 namespace Inkscape {
 class Selection;
+class ObjectSet;
 class CanvasPage;
 namespace UI {
 namespace Dialog {
@@ -81,6 +82,8 @@ public:
     void deletePage(SPPage *page, bool contents = false);
     void deletePage(bool contents = false);
     void resizePage(double width, double height);
+    void fitToSelection(ObjectSet *selection);
+    void fitToRect(Geom::OptRect box, SPPage *page);
 
     bool subset(SPAttr key, const gchar *value);
     bool setDefaultAttributes(CanvasPage *item);

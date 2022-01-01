@@ -154,25 +154,6 @@ void SPPage::setDesktopSize(double width, double height)
 }
 
 /**
- * Resize the page to the given selection. If nothing is selected,
- * Resize to all the items on this page.
- */
-void SPPage::fitToSelection(Inkscape::ObjectSet *selection)
-{
-    if (!selection || selection->isEmpty()) {
-        auto contents = new Inkscape::ObjectSet();
-        contents->setList(getOverlappingItems());
-        // Do we have anything to do?
-        if (contents->isEmpty())
-            return;
-        fitToSelection(contents);
-        delete contents;
-    } else if (auto box = selection->visualBounds()) {
-        setDesktopRect(*box);
-    }
-}
-
-/**
  * Get the items which are ONLY on this page and don't overlap.
  *
  * This ignores layers so items in the same layer which are shared

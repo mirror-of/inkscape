@@ -305,7 +305,7 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Resize Page to Selection</attribute>
-        <attribute name='action'>win.fit-canvas-to-selection-or-drawing</attribute>
+        <attribute name='action'>app.page-fit-to-selection</attribute>
       </item>
     </section>
     <section>

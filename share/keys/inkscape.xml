@@ -239,7 +239,7 @@ override) the bindings in the main default.xml.
   <bind gaction="app.clone-link-lpe" />
   <bind gaction="app.selection-make-bitmap-copy"         keys="&lt;alt&gt;b" />
   <bind gaction="app.delete"                             keys="Delete, KP_Delete, BackSpace" />
-  <bind gaction="win.fit-canvas-to-selection-or-drawing" keys="&lt;primary&gt;&lt;shift&gt;r" />
+  <bind gaction="app.page-fit-to-selection"              keys="&lt;primary&gt;&lt;shift&gt;r" />
 
   <!-- Select -->
   <bind gaction="win.select-all"                         keys="&lt;primary&gt;a" />

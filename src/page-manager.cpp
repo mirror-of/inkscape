@@ -13,9 +13,12 @@
 #include "desktop.h"
 #include "display/control/canvas-page.h"
 #include "document.h"
+#include "object/object-set.h"
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-page.h"
+#include "object/sp-root.h"
+#include "selection-chemistry.h"
 #include "svg/svg-color.h"
 
 namespace Inkscape {
@@ -49,7 +52,9 @@ void PageManager::addPage(SPPage *page)
     if (auto next = page->getNextPage()) {
         // Inserted in the middle, probably an undo.
         auto it = std::find(pages.begin(), pages.end(), next);
-        g_assert (it != pages.end());
+        if (it != pages.end()) {
+            return; // Already in pages, likely called from namedview build during cloning.
+        }
         pages.insert(it, page);
     } else {
         pages.push_back(page);
@@ -411,6 +416,69 @@ void PageManager::resizePage(double width, double height)
         }
     }
 }
+
+/**
+ * Resize the page to the given selection. If nothing is selected,
+ * Resize to all the items on the selected page.
+ */
+void PageManager::fitToSelection(ObjectSet *selection)
+{
+    auto desktop = selection->desktop();
+    bool move_items = false; // DISABLED: This feature was set as a bug, but it's design is a little odd
+
+    if (!selection || selection->isEmpty()) {
+        // This means there aren't any pages, so revert to the default assumption
+        // that the viewport is resized around ALL objects.
+        if (!_selected_page) {
+            fitToRect(_document->getRoot()->documentVisualBounds(), _selected_page);
+        } else {
+            // This allows the pages to be resized around the items related to the page only.
+            auto contents = ObjectSet();
+            contents.setList(getOverlappingItems(desktop, _selected_page));
+            // Do we have anything to do?
+            if (contents.isEmpty())
+                return;
+            fitToSelection(&contents);
+        }
+    } else if (auto rect = selection->visualBounds()) {
+        if (move_objects() && move_items) {
+            auto prev_items = getOverlappingItems(desktop, _selected_page);
+            auto selected = selection->items();
+            auto origin = Geom::Point(0, 0);
+            if (_selected_page) {
+                origin = _selected_page->getDesktopRect().min();
+            }
+
+            fitToRect(rect, _selected_page);
+
+            // Do not move the selected items, as the page has just been moved around them.
+            std::vector<SPItem *> page_items;
+            std::set_difference(prev_items.begin(), prev_items.end(), selected.begin(), selected.end(),
+                                std::insert_iterator<std::vector<SPItem *> >(page_items, page_items.begin()));
+
+            moveItems(Geom::Translate(rect->min() - origin), page_items);
+        } else {
+            fitToRect(rect, _selected_page);
+        }
+    }
+}
+
+/**
+ * Fit the selected page to the given rectangle.
+ */
+void PageManager::fitToRect(Geom::OptRect rect, SPPage *page)
+{
+    if (!rect) return;
+    bool viewport = true;
+    if (page) {
+        viewport = page->isViewportPage();
+        page->setDesktopRect(*rect);
+    }
+    if (viewport) {
+        _document->fitToRect(*rect);
+    }
+}
+
 
 /**
  * Return a list of objects touching this page, or viewbox (of single page document)

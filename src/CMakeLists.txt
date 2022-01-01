@@ -221,8 +221,6 @@ set(inkscape_SRC
   actions/actions-file-window.cpp
   actions/actions-file.h
   actions/actions-file.cpp
-  actions/actions-fit-canvas.h
-  actions/actions-fit-canvas.cpp
   actions/actions-helper.h
   actions/actions-helper.cpp
   actions/actions-help-url.h

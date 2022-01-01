@@ -170,7 +170,7 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="app.clone-link-lpe" />
   <bind gaction="app.selection-make-bitmap-copy"         keys="&lt;alt&gt;b, &lt;alt&gt;B" />
   <bind gaction="app.delete"                             keys="Delete, KP_Delete, BackSpace" />
-  <bind gaction="win.fit-canvas-to-selection-or-drawing" keys="&lt;primary&gt;&lt;shift&gt;r, &lt;primary&gt;&lt;shift&gt;R" />
+  <bind gaction="app.page-fit-to-selection"              keys="&lt;primary&gt;&lt;shift&gt;r, &lt;primary&gt;&lt;shift&gt;R" />
 
   <!-- Select -->
   <bind gaction="win.select-all"                         keys="&lt;primary&gt;a, &lt;primary&gt;A" />

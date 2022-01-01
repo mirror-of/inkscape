@@ -1669,9 +1669,6 @@ void FitCanvasVerb::perform(SPAction *action, void *data)
         case SP_VERB_FIT_CANVAS_TO_DRAWING:
             fit_canvas_to_drawing(dt);
             break;
-        case SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING:
-            fit_canvas_to_selection_or_drawing(dt);
-            break;
         default:
             return;
     }
@@ -2114,9 +2111,6 @@ Verb *Verb::_base_verbs[] = {
                       N_("Fit the preview box to the current selection"), nullptr),
     new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_DRAWING, "FitCanvasToDrawing", N_("Fit Preview to Drawing"),
                       N_("Fit the preview box to the drawing"), nullptr),
-    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING, "FitCanvasToSelectionOrDrawing",
-                      N_("_Resize Preview to Selection"),
-                      N_("Fit the preview box to the current selection or the drawing if there is no selection"), nullptr),
     // LockAndHide
     new LockAndHideVerb(SP_VERB_UNLOCK_ALL, "UnlockAll", N_("Unlock All"),
                         N_("Unlock all objects in the current layer"), nullptr),
