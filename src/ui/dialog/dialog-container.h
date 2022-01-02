@@ -65,6 +65,7 @@ public:
     void toggle_dialogs();
     void update_dialogs(); // Update all linked dialogs
     void set_desktop(SPDesktop *desktop);
+    SPDesktop* get_desktop();
 
     // State saving functionality
     std::unique_ptr<Glib::KeyFile> save_container_state();

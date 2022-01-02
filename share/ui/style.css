@@ -205,6 +205,11 @@ iconview *:hover {
     font-size: 11px;
 }
 
+.menu-category {
+    font-size: small;
+    font-weight: bold;
+}
+
 #CommandPaletteBase {
     background-color: @theme_base_color; /* some themes don't seem to have a background color for list rows defined and would end up transparent otherwise */
     border: 5px solid @theme_bg_color;
@@ -613,4 +618,18 @@ button.square-button image {
 /* for dialogs with "Apply" button (or equivalent) - larger hit target */
 .wide-apply-button {
     min-width: 150px;
+}
+
+#DockedDialogNotebook {
+    border: none;
+}
+
+#DialogMenuButton {
+    padding: 3px;
+    border: none;
+    opacity: 0.5;
+}
+
+#DialogMenuButton:hover {
+    opacity: 1;
 }

@@ -148,7 +148,6 @@ add_actions_dialogs(InkscapeWindow* win)
     app->get_action_extra_data().add_data(raw_data_dialogs);
 }
 
-
 /*
   Local Variables:
   mode:c++
