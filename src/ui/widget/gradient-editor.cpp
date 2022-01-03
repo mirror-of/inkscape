@@ -329,7 +329,7 @@ GradientEditor::GradientEditor(const char* prefs) :
     update_stops_layout();
 }
 
-GradientEditor::~GradientEditor() {
+GradientEditor::~GradientEditor() noexcept {
 }
 
 void GradientEditor::set_stop_color(SPColor color, float opacity) {

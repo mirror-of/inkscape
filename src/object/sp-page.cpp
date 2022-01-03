@@ -298,7 +298,7 @@ bool SPPage::setPageIndex(int index, bool swap_page)
 SPPage *SPPage::getNextPage()
 {
     SPObject *item = this;
-    while (item = item->getNext()) {
+    while ((item = item->getNext())) {
         if (auto next = dynamic_cast<SPPage *>(item)) {
             return next;
         }
@@ -312,7 +312,7 @@ SPPage *SPPage::getNextPage()
 SPPage *SPPage::getPreviousPage()
 {
     SPObject *item = this;
-    while (item = item->getPrev()) {
+    while ((item = item->getPrev())) {
         if (auto prev = dynamic_cast<SPPage *>(item)) {
             return prev;
         }
@@ -339,7 +339,6 @@ void SPPage::movePage(Geom::Affine translate, bool with_objects)
 
 void SPPage::moveItems(Geom::Affine translate, std::vector<SPItem *> const objects)
 {
-    auto scale = document->getDocumentScale();
     for (auto &item : objects) {
         if (auto parent_item = dynamic_cast<SPItem *>(item->parent)) {
             auto move = item->i2dt_affine() * (translate * parent_item->i2doc_affine().inverse());

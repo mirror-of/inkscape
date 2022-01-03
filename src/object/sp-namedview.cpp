@@ -345,7 +345,6 @@ void SPNamedView::update(SPCtx *ctx, guint flags)
 }
 
 void SPNamedView::set(SPAttr key, const gchar* value) {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Send page attributes to the page manager.
     if (this->_page_manager && this->_page_manager->subset(key, value)) {

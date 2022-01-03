@@ -292,16 +292,6 @@ unsigned long sp_gradient_to_hhssll(SPGradient *gr)
     return ((int)(hsl[0]*100 * 10000)) + ((int)(hsl[1]*100 * 100)) + ((int)(hsl[2]*100 * 1));
 }
 
-static void get_all_doc_items(std::vector<SPItem*> &list, SPObject *from)
-{
-    for (auto& child: from->children) {
-        if (SP_IS_ITEM(&child)) {
-            list.push_back(SP_ITEM(&child));
-        }
-        get_all_doc_items(list, &child);
-    }
-}
-
 /*
  * Map each gradient to its usage count for both fill and stroke styles
  */

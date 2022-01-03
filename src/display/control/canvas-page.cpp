@@ -60,7 +60,7 @@ void CanvasPage::add(Geom::Rect size, CanvasItemGroup *background_group, CanvasI
 void CanvasPage::remove(UI::Widget::Canvas *canvas)
 {
     g_assert(canvas != nullptr);
-    for (auto it = canvas_items.begin(); it != canvas_items.end(); it) {
+    for (auto it = canvas_items.begin(); it != canvas_items.end();) {
         if (canvas == (*it)->get_canvas()) {
             delete (*it);
             it = canvas_items.erase(it);

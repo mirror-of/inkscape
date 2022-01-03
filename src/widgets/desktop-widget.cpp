@@ -276,7 +276,6 @@ SPDesktopWidget::SPDesktopWidget()
                 }
             }
             else if (auto sep = dynamic_cast<Gtk::Separator*>(widget)) {
-                auto parent = sep->get_parent();
                 if (buttons_before_separator <= 0) {
                     sep->hide();
                 }

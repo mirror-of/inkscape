@@ -932,7 +932,7 @@ void ObjectsPanel::selectionChanged(Selection *selected)
                 if (parent->getRepr() == root_watcher->getRepr()) {
                     watcher = root_watcher;
                 } else if (watcher) {
-                    if (watcher = watcher->findChild(parent->getRepr())) {
+                    if ((watcher = watcher->findChild(parent->getRepr()))) {
                         if (auto row = watcher->getRow()) {
                             cleanDummyChildren(*row);
                         }

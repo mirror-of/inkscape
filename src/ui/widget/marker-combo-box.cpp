@@ -144,7 +144,6 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
             box->get_style_context()->add_class("marker-item-box");
         }
         _widgets_to_markers[image] = item;
-        auto alloc = image->get_allocation();
         box->set_size_request(item->width, item->height);
         return box;
     });

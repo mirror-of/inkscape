@@ -86,8 +86,8 @@ void PageToolbar::toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase 
     }
     if (dynamic_cast<Inkscape::UI::Tools::PagesTool *>(ec)) {
         // Save the document and page_manager for future use.
-        if (_document = desktop->getDocument()) {
-            if (_page_manager = _document->getNamedView()->getPageManager()) {
+        if ((_document = desktop->getDocument())) {
+            if ((_page_manager = _document->getNamedView()->getPageManager())) {
                 // Connect the page changed signal and indicate changed
                 _pages_changed = _page_manager->connectPagesChanged(sigc::mem_fun(*this, &PageToolbar::pagesChanged));
                 _page_selected =

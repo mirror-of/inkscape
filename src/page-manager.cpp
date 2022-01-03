@@ -497,7 +497,6 @@ std::vector<SPItem *> PageManager::getOverlappingItems(SPDesktop *desktop, SPPag
  */
 void PageManager::moveItems(Geom::Affine translate, std::vector<SPItem *> const objects)
 {
-    auto scale = _document->getDocumentScale();
     for (auto &item : objects) {
         if (auto parent_item = dynamic_cast<SPItem *>(item->parent)) {
             auto move = item->i2dt_affine() * (translate * parent_item->i2doc_affine().inverse());

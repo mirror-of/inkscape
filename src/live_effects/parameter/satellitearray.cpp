@@ -167,8 +167,7 @@ bool SatelliteArrayParam::param_readSVGValue(const gchar *strvalue)
                 if (w) {
                     Gtk::TreeModel::iterator iter = _store->append();
                     Gtk::TreeModel::Row row = *iter;
-                    SPObject *obj = nullptr;
-                    if (obj = w->getObject()) {
+                    if (auto obj = w->getObject()) {
                         row[_model->_colObject] = Glib::ustring(obj->getId());
                         row[_model->_colLabel]  = obj->label() ? obj->label() : obj->getId();
                         row[_model->_colActive] = w->getActive();

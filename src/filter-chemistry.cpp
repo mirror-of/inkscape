@@ -353,9 +353,6 @@ SPFilter *modify_filter_gaussian_blur_from_item(SPDocument *document, SPItem *it
     if (expansion != 0)
         stdDeviation /= expansion;
 
-    // Get the object size
-    Geom::OptRect const r = item->desktopGeometricBounds();
-
     // Set the filter effects area
     SPFilter *f = item->style->getFilter();
 

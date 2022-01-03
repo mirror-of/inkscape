@@ -594,7 +594,6 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     divider = Geom::Path(line_start);
     divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
     divider.appendNew<Geom::LineSegment>(line_end);
-    Geom::OptRect trianglebounds = divider.boundsFast();
     divider.close();
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
     FillRuleBool fillrule = fill_nonZero;

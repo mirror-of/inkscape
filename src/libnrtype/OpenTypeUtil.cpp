@@ -86,7 +86,7 @@ public:
             return it->second;
 
         // populate more mappings from the set
-        while (more = more && hb_set_next(codepointSet.get(), &codepoint)) {
+        while ((more = (more && hb_set_next(codepointSet.get(), &codepoint)))) {
             // get the glyph that this codepoint is associated with, if any
             hb_codepoint_t tGlyph;
             if (!hb_font_get_nominal_glyph(font, codepoint, &tGlyph)) continue;
