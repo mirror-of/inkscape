@@ -497,13 +497,7 @@ void handle_property_change(GdkScreen* screen, const gchar* name)
                 if ( XGetWindowProperty( xdisplay, GDK_WINDOW_XID(gdk_screen_get_root_window(screen)),
                                          atom, 0, size, False, AnyPropertyType,
                                          &actualType, &actualFormat, &nitems, &bytesAfter, &prop ) == Success ) {
-#if GLIB_CHECK_VERSION(2,67,3)
-                    gpointer profile = g_memdup2( prop, nitems );
-#else
-                    gpointer profile = g_memdup( prop, nitems );
-#endif
-                    set_profile( monitor, (const guint8*)profile, nitems );
-                    free(profile);
+                    set_profile( monitor, static_cast<const guint8*>(prop), nitems );
                     XFree(prop);
                 } else {
                     g_warning("Problem reading profile from root window");
