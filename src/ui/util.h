@@ -41,7 +41,7 @@ void resize_widget_children(Gtk::Widget *widget);
 }
 
 // Get the background-color style property for a given StyleContext
-Gdk::RGBA get_background_color(Glib::RefPtr<Gtk::StyleContext> &context,
+Gdk::RGBA get_background_color(const Glib::RefPtr<Gtk::StyleContext> &context,
                                Gtk::StateFlags                  state = static_cast<Gtk::StateFlags>(0));
 
 #endif

@@ -68,7 +68,7 @@ void resize_widget_children(Gtk::Widget *widget) {
 }
 
 
-Gdk::RGBA get_background_color(Glib::RefPtr<Gtk::StyleContext> &context,
+Gdk::RGBA get_background_color(const Glib::RefPtr<Gtk::StyleContext> &context,
                                Gtk::StateFlags                  state) {
     GdkRGBA *c;
 
