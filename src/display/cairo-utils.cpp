@@ -416,7 +416,11 @@ GdkPixbuf *Pixbuf::apply_embedded_orientation(GdkPixbuf *buf)
 
 Pixbuf *Pixbuf::create_from_buffer(std::string const &buffer, double svgdpi, std::string const &fn)
 {
+#if GLIB_CHECK_VERSION(2,67,3)
+    auto datacopy = (gchar *)g_memdup2(buffer.data(), buffer.size());
+#else
     auto datacopy = (gchar *)g_memdup(buffer.data(), buffer.size());
+#endif
     return Pixbuf::create_from_buffer(std::move(datacopy), buffer.size(), svgdpi, fn);
 }
 
