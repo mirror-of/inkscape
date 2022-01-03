@@ -207,7 +207,6 @@ test:macos:
     - mac
   rules:
     - *do_not_run_for_schedules
-    - *run_otherwise
     # Mac runner is restricted to "inkscape" and "dehesselle" namespaces; only generate pipelines for those
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
     - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
