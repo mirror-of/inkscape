@@ -32,6 +32,9 @@
 /* Define to 1 if you have the <ieeefp.h> header file. */
 #cmakedefine HAVE_IEEEFP_H 1
 
+/* Define to 1 if you have the `mallinfo2' function. */
+#cmakedefine HAVE_MALLINFO2 1
+
 /* Define to 1 if you have the `mallinfo' function. */
 #cmakedefine HAVE_MALLINFO 1
 
