@@ -389,8 +389,8 @@ EventLog::updateUndoVerbs()
             }
 
             // Enable/disable menu items.
-            undo_saction->set_enabled(_getUndoEvent());
-            redo_saction->set_enabled(_getRedoEvent());
+            undo_saction->set_enabled(static_cast<bool>(_getUndoEvent()));
+            redo_saction->set_enabled(static_cast<bool>(_getRedoEvent()));
         }
     }
 }

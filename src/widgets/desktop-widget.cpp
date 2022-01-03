@@ -60,6 +60,7 @@
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-window.h"
 #include "ui/tools/box3d-tool.h"
+#include "ui/util.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
 #include "ui/widget/canvas.h"
@@ -1143,7 +1144,8 @@ void SPDesktopWidget::layoutWidgets()
         _top_toolbars->child_property_height(snap) =  2;
         snap.set_valign(Gtk::ALIGN_CENTER);
     }
-    _top_toolbars->resize_children();
+
+    Inkscape::UI::resize_widget_children(_top_toolbars);
 }
 
 Gtk::Toolbar *
@@ -1209,17 +1211,14 @@ SPDesktopWidget::isToolboxButtonActive (const gchar* id)
 
     // The toolbutton could be a few different types so try casting to
     // each of them.
-    // TODO: This will be simpler in Gtk+ 4 when Actions and ToolItems have gone
+    // TODO: This will be simpler in Gtk+ 4 when ToolItems have gone
     auto toggle_button      = dynamic_cast<Gtk::ToggleButton *>(thing);
-    auto toggle_action      = dynamic_cast<Gtk::ToggleAction *>(thing);
     auto toggle_tool_button = dynamic_cast<Gtk::ToggleToolButton *>(thing);
 
     if ( !thing ) {
         //g_message( "Unable to locate item for {%s}", id );
     } else if (toggle_button) {
         isActive = toggle_button->get_active();
-    } else if (toggle_action) {
-        isActive = toggle_action->get_active();
     } else if (toggle_tool_button) {
         isActive = toggle_tool_button->get_active();
     } else {

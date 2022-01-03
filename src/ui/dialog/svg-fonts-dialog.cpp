@@ -936,7 +936,7 @@ Gtk::Box* SvgFontsDialog::glyphs_tab(){
     glyph_from_path_button.set_always_show_image();
     auto img = Gtk::make_managed<Gtk::Image>();
     img->set_from_icon_name("glyph-copy-from", Gtk::ICON_SIZE_BUTTON);
-    img->set_margin_right(5);
+    img->set_margin_end(5);
     glyph_from_path_button.set_image(*img);
     glyph_from_path_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::set_glyph_description_from_selected_path));
 

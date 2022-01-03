@@ -890,7 +890,8 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
 void MarkerComboBox::on_style_updated() {
     auto background = _background_color;
     if (auto wnd = dynamic_cast<Gtk::Window*>(this->get_toplevel())) {
-        auto color = wnd->get_style_context()->get_background_color();
+        auto sc = wnd->get_style_context();
+        auto color = get_background_color(sc);
         background =
             gint32(0xff * color.get_red()) << 24 |
             gint32(0xff * color.get_green()) << 16 |

@@ -527,7 +527,7 @@ GlyphsPanel::GlyphsPanel()
 
     Gtk::Box *box = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
 
-    entry = Glib::RefPtr<Gtk::Entry>(new Gtk::Entry());
+    entry = std::make_shared<Gtk::Entry>();
     conn = entry->signal_changed().connect(sigc::mem_fun(*this, &GlyphsPanel::calcCanInsert));
     instanceConns.push_back(conn);
     entry->set_width_chars(18);
@@ -536,13 +536,13 @@ GlyphsPanel::GlyphsPanel()
     Gtk::Label *pad = new Gtk::Label("    ");
     box->pack_start(*Gtk::manage(pad), Gtk::PACK_SHRINK);
 
-    label = Glib::RefPtr<Gtk::Label>(new Gtk::Label("      "));
+    label = std::make_shared<Gtk::Label>("      ");
     box->pack_start(*label.get(), Gtk::PACK_SHRINK);
 
     pad = new Gtk::Label("");
     box->pack_start(*Gtk::manage(pad), Gtk::PACK_EXPAND_WIDGET);
 
-    insertBtn = Glib::RefPtr<Gtk::Button>(new Gtk::Button(_("Append")));
+    insertBtn = std::make_shared<Gtk::Button>(_("Append"));
     conn = insertBtn->signal_clicked().connect(sigc::mem_fun(*this, &GlyphsPanel::insertText));
     instanceConns.push_back(conn);
     insertBtn->set_can_default();

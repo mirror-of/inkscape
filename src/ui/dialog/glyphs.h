@@ -63,9 +63,9 @@ private:
 
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::IconView *iconView;
-    Glib::RefPtr<Gtk::Entry> entry;
-    Glib::RefPtr<Gtk::Label> label;
-    Glib::RefPtr<Gtk::Button> insertBtn;
+    std::shared_ptr<Gtk::Entry> entry;
+    std::shared_ptr<Gtk::Label> label;
+    std::shared_ptr<Gtk::Button> insertBtn;
     Gtk::ComboBoxText *scriptCombo;
     Gtk::ComboBoxText *rangeCombo;
     Inkscape::UI::Widget::FontSelector *fontSelector;

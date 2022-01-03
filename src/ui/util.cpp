@@ -54,6 +54,33 @@ bool is_widget_effectively_visible(Gtk::Widget* widget) {
     return widget->get_child_visible();
 }
 
+namespace Inkscape {
+namespace UI {
+void resize_widget_children(Gtk::Widget *widget) {
+    if(widget) {
+        Gtk::Allocation allocation;
+        int             baseline;
+        widget->get_allocated_size(allocation, baseline);
+        widget->size_allocate(allocation, baseline);
+    }
+}
+}
+}
+
+
+Gdk::RGBA get_background_color(Glib::RefPtr<Gtk::StyleContext> &context,
+                               Gtk::StateFlags                  state) {
+    GdkRGBA *c;
+
+    gtk_style_context_get(context->gobj(),
+                          static_cast<GtkStateFlags>(state),
+                          GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+                          nullptr);
+    auto bg_color = Glib::wrap(c);
+
+    return bg_color;
+}
+
 /*
   Local Variables:
   mode:c++

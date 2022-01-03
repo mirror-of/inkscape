@@ -739,12 +739,12 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
                 if (icon) {
                     if (mode == 2) {
                         icon->set_pixel_size(40);
-                        icon->set_margin_right(25);
-                        overlay->set_margin_right(5);
+                        icon->set_margin_end(25);
+                        overlay->set_margin_end(5);
                     } else {
                         icon->set_pixel_size(60);
-                        icon->set_margin_right(0);
-                        overlay->set_margin_right(0);
+                        icon->set_margin_end(0);
+                        overlay->set_margin_end(0);
                     }
                 }
                 Gtk::EventBox *LPESelectorEffectEventFavTop = dynamic_cast<Gtk::EventBox *>(contents_overlay[1]);
@@ -856,10 +856,10 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
                 if (icon) {
                     if (mode == 2) {
                         icon->set_pixel_size(33);
-                        icon->set_margin_right(40);
+                        icon->set_margin_end(40);
                     } else {
                         icon->set_pixel_size(60);
-                        icon->set_margin_right(0);
+                        icon->set_margin_end(0);
                     }
                 }
                 Gtk::EventBox *LPESelectorEffectEventFavTop = dynamic_cast<Gtk::EventBox *>(contents_overlay[1]);

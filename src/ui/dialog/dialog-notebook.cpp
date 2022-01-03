@@ -28,6 +28,7 @@
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-window.h"
 #include "ui/icon-loader.h"
+#include "ui/util.h"
 
 namespace Inkscape {
 namespace UI {
@@ -62,7 +63,6 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     _labels_off = labelstautus == PREFS_NOTEBOOK_LABELS_OFF;
 
     // ============= Notebook menu ==============
-    _menu.set_title("NotebookOptions");
     _notebook.set_name("DockedDialogNotebook");
     _notebook.set_show_border(false);
     _notebook.set_group_name("InkscapeDialogGroup");
@@ -712,7 +712,7 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
     }
     _labels_set_off = _labels_off;
     if (_prev_alloc_width && prev_tabstatus != tabstatus ) {
-        _notebook.resize_children();
+        resize_widget_children(&_notebook);
     }
     if (show && _single_tab_width) {
         _notebook.set_scrollable(true);

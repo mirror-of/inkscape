@@ -61,6 +61,7 @@
 #include "ui/interface.h"
 #include "ui/shortcuts.h"
 #include "ui/modifiers.h"
+#include "ui/util.h"
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/canvas.h"
 #include "ui/themes.h"
@@ -1141,7 +1142,8 @@ void InkscapePreferences::resetIconsColors(bool themechange)
         // This is a hack to fix a proble style is not updated enough fast on
         // change from dark to bright themes
         if (themechange) {
-            base_color = _symbolic_base_color.get_style_context()->get_background_color();
+            auto sc = _symbolic_base_color.get_style_context();
+            base_color = get_background_color(sc);
         }
         SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
         //we copy highlight to not use
@@ -1682,7 +1684,7 @@ void InkscapePreferences::initPageUI()
         auto apply = Gtk::make_managed<Gtk::Button>(_("Apply"));
         apply->set_tooltip_text(_("Apply font size changes to the UI"));
         apply->set_valign(Gtk::ALIGN_FILL);
-        apply->set_margin_right(5);
+        apply->set_margin_end(5);
         reset->set_valign(Gtk::ALIGN_FILL);
         space->add(*apply);
         space->add(*reset);
@@ -3109,7 +3111,8 @@ void InkscapePreferences::on_modifier_selection_changed()
 {
     _kb_is_updated = true;
     Gtk::TreeStore::iterator iter = _mod_tree.get_selection()->get_selected();
-    bool selected = (iter);
+    auto selected = static_cast<bool>(iter);
+
     _kb_mod_ctrl.set_sensitive(selected);
     _kb_mod_shift.set_sensitive(selected);
     _kb_mod_alt.set_sensitive(selected);
