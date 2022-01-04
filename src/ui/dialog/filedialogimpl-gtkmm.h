@@ -133,11 +133,6 @@ private:
     void internalSetup();
 
     /**
-     * Callback for user changing preview checkbox
-     */
-    void _previewEnabledCB();
-
-    /**
      * Callback for seeing if the preview needs to be drawn
      */
     void _updatePreviewCallback();
