@@ -512,7 +512,8 @@ void ThemeContext::adjust_global_font_scale(double factor) {
     os << "widget, menuitem { font-size: " << factor << "rem; }";
     _fontsizeprovider->load_from_data(os.str());
 
-    Gtk::StyleContext::add_provider_for_screen(screen, _fontsizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    // note: priority set to APP - 1 to make sure styles.css take precedence over generic font-size
+    Gtk::StyleContext::add_provider_for_screen(screen, _fontsizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
 }
 
 } // UI

@@ -393,7 +393,8 @@ font-size:13px;
 }
 
 #InkRuler {
-    font-size: 7pt;
+    /* make size relative */
+    font-size: smaller;
 }
 
 /* The actual canvas (Inkscape's drawing area). */
