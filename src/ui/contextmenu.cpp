@@ -631,6 +631,7 @@ void ContextMenu::fireAction(unsigned int code) {
 // group and layer menu
 void ContextMenu::MakeGroupMenu(SPItem* item) {
     auto group = dynamic_cast<SPGroup*>(item);
+    auto root = _desktop->layerManager().currentRoot();
 
     if (group && group->isLayer()) {
         // layer-specific commands
@@ -653,7 +654,7 @@ void ContextMenu::MakeGroupMenu(SPItem* item) {
         /* Ungroup */
         append_item(_("_Ungroup"), true).connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroup));
 
-        if (item->getParentGroup()->isLayer()) {
+        if (item->getParentGroup()->isLayer() || item->getParentGroup() == root) {
             // transform group into layer
             append_item(_("Group to layer"), false).connect([=](){ sp_group_layer_transform(_desktop->doc(), group, SPGroup::LAYER); });
         }
@@ -670,7 +671,6 @@ void ContextMenu::MakeGroupMenu(SPItem* item) {
     }
 
     auto layer = _desktop->layerManager().currentLayer();
-    auto root = _desktop->layerManager().currentRoot();
     if (layer != root) {
         if (layer->parent != root) {
             MIParent.signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LeaveGroup));
