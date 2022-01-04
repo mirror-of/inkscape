@@ -544,9 +544,7 @@ static std::string weight_to_text(PangoWeight w)
         case PANGO_WEIGHT_THIN      : return "thin";
         case PANGO_WEIGHT_ULTRALIGHT: return "ultralight";
         case PANGO_WEIGHT_LIGHT     : return "light";
-#if PANGO_VERSION_CHECK(1,36,6)
         case PANGO_WEIGHT_SEMILIGHT : return "semilight";
-#endif
         case PANGO_WEIGHT_BOOK      : return "book";
         case PANGO_WEIGHT_NORMAL    : return "normalweight";
         case PANGO_WEIGHT_MEDIUM    : return "medium";
@@ -613,7 +611,6 @@ Glib::ustring Layout::dumpAsText() const
                +  Glib::ustring::compose("  in chunk %1 (x=%2, baselineshift=%3)\n", _spans[span_index].in_chunk, _chunks[_spans[span_index].in_chunk].left_x, _spans[span_index].baseline_shift);
 
         if (_spans[span_index].font) {
-#if PANGO_VERSION_CHECK(1,41,1)
             const char* variations = pango_font_description_get_variations(_spans[span_index].font->descr);
             result += Glib::ustring::compose(
                 "    font '%1' %2 %3 %4 %5\n",
@@ -623,15 +620,6 @@ Glib::ustring Layout::dumpAsText() const
                 weight_to_text( pango_font_description_get_weight(_spans[span_index].font->descr) ),
                 (variations?variations:"")
             );
-#else
-            result += Glib::ustring::compose(
-                "    font '%1' %2 %3 %4\n",
-                sp_font_description_get_family(_spans[span_index].font->descr),
-                _spans[span_index].font_size,
-                style_to_text( pango_font_description_get_style(_spans[span_index].font->descr) ),
-                weight_to_text( pango_font_description_get_weight(_spans[span_index].font->descr) )
-            );
-#endif
         }
         result += Glib::ustring::compose("    x_start = %1, x_end = %2\n", _spans[span_index].x_start, _spans[span_index].x_end)
                +  Glib::ustring::compose("    line height: ascent %1, descent %2\n", _spans[span_index].line_height.ascent, _spans[span_index].line_height.descent)

@@ -199,23 +199,22 @@ void font_instance::InitTheFace(bool loadgsub)
 
 #else
 
+        hb_font_t* hb_font = pango_font_get_hb_font(pFont); // Pango owns hb_font.
+
+#if HB_VERSION_ATLEAST(2,6,5)
+        // hb_font is immutable, yet we need to act on it (with set_funcs) to extract the freetype face
+        hb_font_copy = hb_font_create_sub_font(hb_font); 
+        
+        hb_ft_font_set_funcs(hb_font_copy);
+        theFace = hb_ft_font_lock_face(hb_font_copy);
+#else
         theFace = pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
+#endif
+
         if ( theFace ) {
             FT_Select_Charmap(theFace, ft_encoding_unicode);
             FT_Select_Charmap(theFace, ft_encoding_symbol);
         }
-
-#endif
-
-#ifndef USE_PANGO_WIN32
-
-#if PANGO_VERSION_CHECK(1,44,0)  // Released Jul 2019
-        // Pango has already created HarfBuzz font under-the-hood. No need to recreate.
-        hb_font_t* hb_font = pango_font_get_hb_font(pFont); // Pango owns hb_font.
-#else
-        auto const hb_face = hb_ft_face_create(theFace, nullptr); // We own.
-        hb_font_t* hb_font = hb_font_create (hb_face);
-#endif
 
         if (!hb_font) {
             std::cerr << "font_instance::InitTheFace: Failed to get hb_font!" << std::endl;
@@ -232,7 +231,6 @@ void font_instance::InitTheFace(bool loadgsub)
             fontHasSVG = true;
         }
 
-#if PANGO_VERSION_CHECK(1,41,1)
 #if FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 8  // 2.8 does not seem to work even though it has some support.
 
         // 'font-variation-settings' support.
@@ -299,14 +297,7 @@ void font_instance::InitTheFace(bool loadgsub)
             }
         }
 
-#if !PANGO_VERSION_CHECK(1,44,0)  // Released Jul 2019
-        hb_font_destroy (hb_font);
-        hb_face_destroy (hb_face);
-#endif
-
-
 #endif // FreeType
-#endif // Pango
 #endif // !USE_PANGO_WIN32
 
        FindFontMetrics();
@@ -329,7 +320,13 @@ void font_instance::FreeTheFace()
     SelectObject(parent->hScreenDC,GetStockObject(SYSTEM_FONT));
     pango_win32_font_cache_unload(parent->pangoFontCache,theFace);
 #else
+
+#if HB_VERSION_ATLEAST(2,6,5)
+    hb_ft_font_unlock_face(hb_font_copy);
+    hb_font_destroy(hb_font_copy);
+#else
     pango_fc_font_unlock_face(PANGO_FC_FONT(pFont));
+#endif
 #endif
     theFace=nullptr;
 }
@@ -374,13 +371,14 @@ int font_instance::MapUnicodeChar(gunichar c)
 #ifdef USE_PANGO_WIN32
         res = pango_win32_font_get_glyph_index(pFont, c);
 #else
-        theFace = pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
+        if (!theFace) {
+            std::cerr << "Face not properly initialized (should not happen)" << std::endl;
+        }
         if ( c > 0xf0000 ) {
             res = CLAMP(c, 0xf0000, 0x1fffff) - 0xf0000;
         } else {
             res = FT_Get_Char_Index(theFace, c);
         }
-        pango_fc_font_unlock_face(PANGO_FC_FONT(pFont));
 #endif
     }
     return res;

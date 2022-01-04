@@ -57,11 +57,9 @@ size_t font_descr_hash::operator()( PangoFontDescription *const &x) const {
     h += (int)pango_font_description_get_weight(x);
     h *= 1128467;
     h += (int)pango_font_description_get_stretch(x);
-#if PANGO_VERSION_CHECK(1,41,1)
     char const *theV = pango_font_description_get_variations(x);
     h *= 1128467;
     h += (theV)?g_str_hash(theV):0;
-#endif
     return h;
 }
 
@@ -75,10 +73,8 @@ bool  font_descr_equal::operator()( PangoFontDescription *const&a, PangoFontDesc
     if ( pango_font_description_get_variant(a) != pango_font_description_get_variant(b) ) return false;
     if ( pango_font_description_get_weight(a) != pango_font_description_get_weight(b) ) return false;
     if ( pango_font_description_get_stretch(a) != pango_font_description_get_stretch(b) ) return false;
-#if PANGO_VERSION_CHECK(1,41,1)
     if ( g_strcmp0( pango_font_description_get_variations(a),
                     pango_font_description_get_variations(b) ) != 0 ) return false;
-#endif
     return true;
 }
 
@@ -208,12 +204,10 @@ PangoFontDescription* ink_font_description_from_style(SPStyle const *style)
             break;
     }
 
-#if PANGO_VERSION_CHECK(1,41,1)
     // Check if not empty as Pango will add @ to string even if empty (bug in Pango?).
     if (!style->font_variation_settings.axes.empty()) {
         pango_font_description_set_variations(descr, style->font_variation_settings.toString().c_str());
     }
-#endif
 
     return descr;
 }
@@ -264,7 +258,11 @@ font_factory::font_factory() :
 #ifndef USE_PANGO_WIN32
     pango_ft2_font_map_set_resolution(PANGO_FT2_FONT_MAP(fontServer),
                                       72, 72);
+#if PANGO_VERSION_CHECK(1,48,0)
+    pango_fc_font_map_set_default_substitute(PANGO_FC_FONT_MAP(fontServer),
+#else
     pango_ft2_font_map_set_default_substitute(PANGO_FT2_FONT_MAP(fontServer),
+#endif
                                               FactorySubstituteFunc,
                                               this,
                                               nullptr);
@@ -823,15 +821,11 @@ void font_factory::AddFontsDir(char const *utf8dir)
 # endif
 
     FcConfig *conf = nullptr;
-# if PANGO_VERSION_CHECK(1,38,0)
     conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
-# endif
     FcBool res = FcConfigAppFontAddDir(conf, (FcChar8 const *)dir);
     if (res == FcTrue) {
         g_info("Fonts dir '%s' added successfully.", utf8dir);
-# if PANGO_VERSION_CHECK(1,38,0)
         pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
-# endif
     } else {
         g_warning("Could not add fonts dir '%s'.", utf8dir);
     }
@@ -858,15 +852,11 @@ void font_factory::AddFontFile(char const *utf8file)
 # endif
 
     FcConfig *conf = nullptr;
-# if PANGO_VERSION_CHECK(1,38,0)
     conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
-# endif
     FcBool res = FcConfigAppFontAddFile(conf, (FcChar8 const *)file);
     if (res == FcTrue) {
         g_info("Font file '%s' added successfully.", utf8file);
-# if PANGO_VERSION_CHECK(1,38,0)
         pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
-# endif
     } else {
         g_warning("Could not add font file '%s'.", utf8file);
     }

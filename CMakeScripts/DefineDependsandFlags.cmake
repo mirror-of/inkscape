@@ -113,7 +113,7 @@ endif()
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(INKSCAPE_DEP REQUIRED
                   harfbuzz
-                  pangocairo
+                  pangocairo>=1.44
                   pangoft2
                   fontconfig
                   gsl

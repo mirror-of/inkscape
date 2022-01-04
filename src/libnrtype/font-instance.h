@@ -123,6 +123,8 @@ public:
 #ifdef USE_PANGO_WIN32
     HFONT                 theFace = nullptr;
 #else
+    // we need to keep around an rw copy of the (read-only) hb font to extract the freetype face
+    hb_font_t*            hb_font_copy = nullptr;
     FT_Face               theFace = nullptr;
                 // it's a pointer in fact; no worries to ref/unref it, pango does its magic
                 // as long as pFont is valid, theFace is too

@@ -779,18 +779,16 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 PangoItem *pango_item = para.pango_items[unbroken_span.pango_item_index].item;
 
                 // Loop over glyphs in span
-#if PANGO_VERSION_CHECK(1,44,0)
                 double x_offset_cluster = 0.0; // Handle wrong glyph positioning post-1.44 Pango.
-#endif
                 double x_offset_center  = 0.0; // Handle wrong glyph positioning in pre-1.44 Pango.
                 double x_offset_advance = 0.0; // Handle wrong advance in pre-1.44 Pango.
 
 #ifdef DEBUG_GLYPH
-                std::cout << "\nGlyphs in span: x_start: " << new_span.x_start << " y_offset: " << new_span.y_offset
+                std::cerr << "\nGlyphs in span: x_start: " << new_span.x_start << " y_offset: " << new_span.y_offset
                           << "  PangoItem flags: " << (int)pango_item->analysis.flags << " Gravity: " << (int)pango_item->analysis.gravity << std::endl;
-                std::cout << "  Unicode  Glyph  h_advance  v_advance  width  cluster    orientation   new_glyph         delta"     << std::endl;
-                std::cout << "   (hex)     No.                                start                   x       y       x       y"   << std::endl;
-                std::cout << "  -------------------------------------------------------------------------------------------------" << std::endl;
+                std::cerr << "  Unicode  Glyph  h_advance  v_advance  width  cluster    orientation   new_glyph         delta"     << std::endl;
+                std::cerr << "   (hex)     No.                                start                   x       y       x       y"   << std::endl;
+                std::cerr << "  -------------------------------------------------------------------------------------------------" << std::endl;
 #endif
 
                 for (unsigned glyph_index = it_span->start_glyph_index ; glyph_index < it_span->end_glyph_index ; glyph_index++) {
@@ -840,7 +838,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 #ifdef DEBUG_GLYPH
 
                     bool is_cluster_start = unbroken_span_glyph_info->attr.is_cluster_start;
-                    std::cout << "  " << std::hex << std::setw(6) << *iter_source_text << std::dec
+                    std::cerr << "  " << std::hex << std::setw(6) << *iter_source_text << std::dec
                               << "  " << std::setw(6) << new_glyph.glyph
                               << std::fixed << std::showpoint << std::setprecision(2)
                               << "   " << std::setw(6) << glyph_h_advance
@@ -890,7 +888,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage.
 
 #ifdef DEBUG_GLYPH
-                            std::cout << "       Sideways"
+                            std::cerr << "       Sideways"
                                       << "  " << std::setw(6) << new_glyph.x
                                       << "  " << std::setw(6) << new_glyph.y
                                       << "  " << std::setw(6) << delta_x
@@ -911,22 +909,18 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         } else {
                             // Upright orientation
 
-#if PANGO_VERSION_CHECK(1,44,0)
                             auto hb_font = pango_font_get_hb_font(font->pFont);
-#endif
 
 #ifdef DEBUG_GLYPH
-                            std::cout << "        Upright"
+                            std::cerr << "        Upright"
                                       << "  " << std::setw(6) << new_glyph.x
                                       << "  " << std::setw(6) << new_glyph.y
                                       << "  " << std::setw(6) << delta_x
                                       << "  " << std::setw(6) << delta_y;
-#if PANGO_VERSION_CHECK(1,44,0)
                             char glyph_name[32];
                             hb_font_get_glyph_name(hb_font, new_glyph.glyph, glyph_name, sizeof (glyph_name));
-                            std::cout << "  " << (glyph_name ? glyph_name : "");
-#endif
-                            std::cout << std::endl;
+                            std::cerr << "  " << (glyph_name ? glyph_name : "");
+                            std::cerr << std::endl;
 #endif
 
                             if (pango_version_check(1,44,0) != nullptr) {
@@ -996,7 +990,6 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                 new_glyph.x += delta_x;
                                 new_glyph.y -= delta_y;
 
-#if PANGO_VERSION_CHECK(1,44,0)
                                 // Need to shift by horizontal to vertical origin. Recall Pango lays out vertical text
                                 // as horizontal text then rotates by 90 degress so y_origin -> x, x_origin -> -y.
                                 hb_position_t x_origin = 0.0;
@@ -1004,14 +997,12 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                 hb_font_get_glyph_v_origin(hb_font, new_glyph.glyph, &x_origin, &y_origin);
                                 new_glyph.x += y_origin * font_size_multiplier;
                                 new_glyph.y -= x_origin * font_size_multiplier;
-#endif
                             } else {
                                 // 1.48.4 <= Pango (good mark positioning)
                                 new_glyph.x += delta_x;
                                 new_glyph.y -= delta_y;
                             }
 
-#if PANGO_VERSION_CHECK(1,44,0)
                             // If a font has no vertical metrics, HarfBuzz using OpenType functions
                             // (which Pango uses by default from 1.44.0) to position glyphs so that
                             // the top of their "ink rectangle" is at the top of the "em-box". This
@@ -1050,14 +1041,13 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                                 new_glyph.x -= x_offset_cluster;
                             }
-#endif
 
                         }
                     } else {
                         // Horizontal text
 
 #ifdef DEBUG_GLYPH
-                        std::cout << "     Horizontal"
+                        std::cerr << "     Horizontal"
                                   << "  " << std::setw(6) << new_glyph.x
                                   << "  " << std::setw(6) << new_glyph.y
                                   << "  " << std::setw(6) << delta_x
@@ -1342,9 +1332,7 @@ void Layout::Calculator::BrokenSpan::setZero()
 void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) const
 {
     TRACE(("pango version string: %s\n", pango_version_string() ));
-#if PANGO_VERSION_CHECK(1,37,1)
     TRACE((" ... compiled for font features\n"));
-#endif
 
     TRACE(("itemizing para, first input %d\n", para->first_input_index));
 
@@ -1368,20 +1356,16 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
             PangoAttribute *attribute_font_description = pango_attr_font_desc_new(font->descr);
             attribute_font_description->start_index = para->text.bytes();
 
-#if PANGO_VERSION_CHECK(1,37,1)
             PangoAttribute *attribute_font_features =
                 pango_attr_font_features_new( text_source->style->getFontFeatureString().c_str());
             attribute_font_features->start_index = para->text.bytes();
-#endif
             para->text.append(&*text_source->text_begin.base(), text_source->text_length);     // build the combined text
 
             attribute_font_description->end_index = para->text.bytes();
             pango_attr_list_insert(attributes_list, attribute_font_description);
 
-#if PANGO_VERSION_CHECK(1,37,1)
             attribute_font_features->end_index = para->text.bytes();
             pango_attr_list_insert(attributes_list, attribute_font_features);
-#endif
 
             // Set language
             SPObject * object = text_source->source;
@@ -2084,10 +2068,10 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
  * Input: para->first_input_index, para->pango_items
  */
 void Layout::Calculator::dumpPangoItemsOut(ParagraphInfo *para){
-    std::cout << "Pango items: " << para->pango_items.size() << std::endl;
+    std::cerr << "Pango items: " << para->pango_items.size() << std::endl;
     font_factory * factory = font_factory::Default();
     for(unsigned pidx = 0 ; pidx < para->pango_items.size(); pidx++){
-        std::cout 
+        std::cerr 
         << "idx: " << pidx 
         << " offset: " 
         << para->pango_items[pidx].item->offset
@@ -2105,9 +2089,9 @@ void Layout::Calculator::dumpPangoItemsOut(ParagraphInfo *para){
  * Input: para->first_input_index, para->pango_items
  */
 void Layout::Calculator::dumpUnbrokenSpans(ParagraphInfo *para){
-    std::cout << "Unbroken Spans: " << para->unbroken_spans.size() << std::endl;
+    std::cerr << "Unbroken Spans: " << para->unbroken_spans.size() << std::endl;
     for(unsigned uidx = 0 ; uidx < para->unbroken_spans.size(); uidx++){
-        std::cout 
+        std::cerr 
         << "idx: "                 << uidx 
         << " pango_item_index: "   << para->unbroken_spans[uidx].pango_item_index
         << " input_index: "        << para->unbroken_spans[uidx].input_index

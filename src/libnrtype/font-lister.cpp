@@ -797,11 +797,9 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
         case PANGO_WEIGHT_LIGHT:
             sp_repr_css_set_property(css, "font-weight", "300");
             break;
-#if PANGO_VERSION_CHECK(1,36,6)
         case PANGO_WEIGHT_SEMILIGHT:
             sp_repr_css_set_property(css, "font-weight", "350");
             break;
-#endif
         case PANGO_WEIGHT_BOOK:
             sp_repr_css_set_property(css, "font-weight", "380");
             break;
@@ -882,7 +880,6 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
             break;
     }
 
-#if PANGO_VERSION_CHECK(1,41,1)
     // Convert Pango variations string to CSS format
     const char* str = pango_font_description_get_variations(desc);
 
@@ -915,7 +912,6 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
     } else {
         sp_repr_css_unset_property(css,  "font-variation-settings" );
     }
-#endif
     pango_font_description_free(desc);
 }
 
