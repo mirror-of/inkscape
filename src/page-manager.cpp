@@ -239,6 +239,7 @@ void PageManager::disablePages()
     }
 }
 
+
 /**
  * Get page index, returns -1 if the page is not found in this document.
  */
@@ -365,6 +366,20 @@ SPPage *PageManager::getPageAt(Geom::Point pos) const
 }
 
 /**
+ * Returns the page attached to the viewport, or nullptr if no pages
+ * or none of the pages are the viewport page.
+ */
+SPPage *PageManager::getViewportPage() const
+{
+    for (auto &page : pages) {
+        if (page->isViewportPage()) {
+            return page;
+        }
+    }
+    return nullptr;
+}
+
+/**
  * Returns the total area of all the pages in desktop units.
  */
 Geom::OptRect PageManager::getDesktopRect() const
@@ -476,6 +491,10 @@ void PageManager::fitToRect(Geom::OptRect rect, SPPage *page)
     }
     if (viewport) {
         _document->fitToRect(*rect);
+        if (page && !page->isViewportPage()) {
+            // The document's fitToRect has slightly mangled the page rect, fix it.
+            page->setDesktopRect(Geom::Rect(Geom::Point(0, 0), rect->dimensions()));
+        }
     }
 }
 

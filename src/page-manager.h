@@ -49,6 +49,7 @@ public:
     SPPage *getPageAt(Geom::Point pos) const;
     SPPage *getFirstPage() const { return getPage(0); }
     SPPage *getLastPage() const { return getPage(pages.size() - 1); }
+    SPPage *getViewportPage() const;
     std::vector<SPPage *> getPagesFor(SPItem *item, bool contains) const;
     Geom::OptRect getDesktopRect() const;
     bool hasPages() const { return !pages.empty(); }
