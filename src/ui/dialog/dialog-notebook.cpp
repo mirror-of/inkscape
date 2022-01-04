@@ -206,6 +206,11 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 
 DialogNotebook::~DialogNotebook()
 {
+    // disconnect signals first, so no handlers are invoked when removing pages
+    for_each(_conn.begin(), _conn.end(), [&](auto c) { c.disconnect(); });
+    for_each(_connmenu.begin(), _connmenu.end(), [&](auto c) { c.disconnect(); });
+    for_each(_tab_connections.begin(), _tab_connections.end(), [&](auto it) { it.second.disconnect(); });
+
     // Unlink and remove pages
     for (int i = _notebook.get_n_pages(); i >= 0; --i) {
         DialogBase *dialog = dynamic_cast<DialogBase *>(_notebook.get_nth_page(i));
@@ -213,9 +218,6 @@ DialogNotebook::~DialogNotebook()
         _notebook.remove_page(i);
     }
 
-    for_each(_conn.begin(), _conn.end(), [&](auto c) { c.disconnect(); });
-    for_each(_connmenu.begin(), _connmenu.end(), [&](auto c) { c.disconnect(); });
-    for_each(_tab_connections.begin(), _tab_connections.end(), [&](auto it) { it.second.disconnect(); });
     _conn.clear();
     _connmenu.clear();
     _tab_connections.clear();
