@@ -124,7 +124,7 @@ void FileDialogBaseGtk::internalSetup()
         previewCheckbox.set_label(Glib::ustring(_("Enable preview")));
         previewCheckbox.set_active(enablePreview);
 
-        previewCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_previewEnabledCB));
+        previewCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_updatePreviewCallback));
 
         svgexportCheckbox.set_label(Glib::ustring(_("Export as SVG 1.1 per settings in Preferences dialog")));
         svgexportCheckbox.set_active(enableSVGExport);
@@ -153,18 +153,6 @@ void FileDialogBaseGtk::cleanup(bool showConfirmed)
 }
 
 
-void FileDialogBaseGtk::_previewEnabledCB()
-{
-    bool enabled = previewCheckbox.get_active();
-    set_preview_widget_active(enabled);
-    if (enabled) {
-        _updatePreviewCallback();
-    } else if (svgPreview.is_visible()) {
-        // Clears out any current preview image.
-        svgPreview.showNoPreview();
-    }
-}
-
 void FileDialogBaseGtk::_svgexportEnabledCB()
 {
     bool enabled = svgexportCheckbox.get_active();
@@ -179,14 +167,19 @@ void FileDialogBaseGtk::_svgexportEnabledCB()
  */
 void FileDialogBaseGtk::_updatePreviewCallback()
 {
-    Glib::ustring fileName = get_preview_filename();
     bool enabled = previewCheckbox.get_active();
 
+    set_preview_widget_active(enabled);
+
+    if (!enabled)
+        return;
+
+    Glib::ustring fileName = get_preview_filename();
     if (fileName.empty()) {
         fileName = get_preview_uri();
     }
 
-    if (enabled && !fileName.empty()) {
+    if (!fileName.empty()) {
         svgPreview.set(fileName, _dialogType);
     } else {
         svgPreview.showNoPreview();
