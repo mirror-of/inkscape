@@ -77,9 +77,7 @@ PathArrayParam::~PathArrayParam()
 {
     while (!_vector.empty()) {
         PathAndDirectionAndVisible *w = _vector.back();
-        _vector.pop_back();
         unlink(w);
-        delete w;
     }
     delete _model;
 }
@@ -471,8 +469,6 @@ bool PathArrayParam::param_readSVGValue(const gchar *strvalue)
         while (!_vector.empty()) {
             PathAndDirectionAndVisible *w = _vector.back();
             unlink(w);
-            _vector.pop_back();
-            delete w;
         }
         
         if (_store.get()) {
