@@ -150,7 +150,6 @@ void UXManagerImpl::setTask(SPDesktop* dt, gint val)
             switch (val) {
                 default:
                 case 0:
-                    dtw->setToolboxPosition("ToolToolbar", GTK_POS_LEFT);
                     dtw->setToolboxPosition("CommandsToolbar", GTK_POS_TOP);
                     if (notDone) {
                         dtw->setToolboxPosition("AuxToolbar", GTK_POS_TOP);
@@ -160,7 +159,6 @@ void UXManagerImpl::setTask(SPDesktop* dt, gint val)
 
                 case 1:
                 case 2:
-                    dtw->setToolboxPosition("ToolToolbar", GTK_POS_LEFT);
                     dtw->setToolboxPosition("CommandsToolbar", GTK_POS_RIGHT);
                     if (notDone) {
                         dtw->setToolboxPosition("AuxToolbar", GTK_POS_RIGHT);

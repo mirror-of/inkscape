@@ -109,6 +109,7 @@ private:
     // The root vbox of the window layout.
     Gtk::Box *_vbox;
 
+    Gtk::Paned *_tbbox;
     Gtk::Box *_hbox;
     Inkscape::UI::Dialog::DialogContainer *_container = nullptr;
     Inkscape::UI::Dialog::DialogMultipaned *_columns;

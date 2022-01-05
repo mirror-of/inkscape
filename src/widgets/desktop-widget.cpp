@@ -227,6 +227,11 @@ SPDesktopWidget::SPDesktopWidget()
     /* DesktopHBox (Vertical toolboxes, canvas) */
     dtw->_hbox = Gtk::manage(new Gtk::Box());
     dtw->_hbox->set_name("DesktopHbox");
+
+    dtw->_tbbox = Gtk::manage(new Gtk::Paned(Gtk::ORIENTATION_HORIZONTAL));
+    dtw->_tbbox->set_name("ToolboxCanvasPaned");
+    dtw->_hbox->pack_start(*dtw->_tbbox, true, true);
+
     dtw->_vbox->pack_end(*dtw->_hbox, true, true);
 
     dtw->_top_toolbars = Gtk::make_managed<Gtk::Grid>();
@@ -247,7 +252,7 @@ SPDesktopWidget::SPDesktopWidget()
 
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
-    dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
+    dtw->_tbbox->pack1(*Glib::wrap(dtw->tool_toolbox), false, true);
 
     auto set_visible_buttons = [=](GtkWidget* tb) {
         int buttons_before_separator = 0;
@@ -329,7 +334,7 @@ SPDesktopWidget::SPDesktopWidget()
     _container = Gtk::manage(new DialogContainer());
     _columns = _container->get_columns();
     _columns->set_dropzone_sizes(2, -1);
-    dtw->_hbox->pack_start(*_container, false, true);
+    dtw->_tbbox->pack2(*_container, true, true);
 
     _canvas_grid->set_hexpand(true);
     _canvas_grid->set_vexpand(true);
@@ -1231,9 +1236,7 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
 {
     // Note - later on these won't be individual member variables.
     GtkWidget* toolbox = nullptr;
-    if (id == "ToolToolbar") {
-        toolbox = tool_toolbox;
-    } else if (id == "AuxToolbar") {
+    if (id == "AuxToolbar") {
         toolbox = aux_toolbox;
     } else if (id == "CommandsToolbar") {
         toolbox = commands_toolbox;
