@@ -120,7 +120,7 @@ public:
 private:
     void _cleanStyle(SPCSSAttr *);
     void _copySelection(ObjectSet *);
-    void _copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target);
+    void _copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target, bool child = false);
     void _copyUsedDefs(SPItem *);
     void _copyGradient(SPGradient *);
     void _copyPattern(SPPattern *);
@@ -968,11 +968,18 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
  *
  * @param item - The source item (connected to it's document)
  * @param target - The target xml node to store the style in.
+ * @param child - Flag to indicate a recursive call, do not use.
  */
-void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target)
+void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target, bool child)
 {
     auto source = item->getRepr();
-    SPCSSAttr *css = sp_repr_css_attr_inherited(source, "style");
+    SPCSSAttr *css;
+    if (child) {
+        // Child styles shouldn't copy their parent's existing cascaded style.
+        css = sp_repr_css_attr(source, "style");
+    } else {
+        css = sp_repr_css_attr_inherited(source, "style");
+    }
     for (auto iter : item->style->properties()) {
         if (iter->style_src == SPStyleSrc::STYLE_SHEET) {
             css->setAttributeOrRemoveIfEmpty(iter->name(), iter->get_value());
@@ -987,7 +994,7 @@ void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node 
         auto target_child = target->firstChild();
         while (source_child && target_child) {
             if (auto child_item = dynamic_cast<SPItem *>(item->document->getObjectByRepr(source_child))) {
-                _copyCompleteStyle(child_item, target_child);
+                _copyCompleteStyle(child_item, target_child, true);
             }
             source_child = source_child->next();
             target_child = target_child->next();
