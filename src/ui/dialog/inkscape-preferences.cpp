@@ -91,6 +91,8 @@ using Inkscape::UI::Widget::PrefRadioButtons;
 using Inkscape::UI::Widget::PrefSpinButton;
 using Inkscape::UI::Widget::StyleSwatch;
 using Inkscape::CMSSystem;
+using Inkscape::IO::Resource::get_filename;
+using Inkscape::IO::Resource::UIS;
 
 #define REMOVE_SPACES(x)                                                                                               \
     x.erase(0, x.find_first_not_of(' '));                                                                              \
@@ -1817,17 +1819,12 @@ void InkscapePreferences::initPageUI()
 
     // Toolbars
     _page_toolbars.add_group_header(_("Toolbars"));
-    {
-        auto vbox = Gtk::manage(new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL));
-        _page_toolbars.add_line(false, "", *vbox, "", _("Select visible tool buttons"), true);
+    try {
+        auto builder = Gtk::Builder::create_from_file(get_filename(UIS, "toolbar-tool-prefs.ui"));
+        Gtk::Widget* toolbox = nullptr;
+        builder->get_widget("tool-toolbar-prefs", toolbox);
 
-        auto toolbox = Glib::wrap(ToolboxFactory::createToolToolbox());
         sp_traverse_widget_tree(toolbox, [=](Gtk::Widget* widget){
-            if (auto flowbox = dynamic_cast<Gtk::FlowBox*>(widget)) {
-                flowbox->set_max_children_per_line(10);
-                flowbox->set_selection_mode();
-                flowbox->reparent(*vbox);
-            }
             if (auto button = dynamic_cast<Gtk::ToggleButton*>(widget)) {
                 assert(GTK_IS_ACTIONABLE(widget->gobj()));
                 // do not execute any action:
@@ -1843,6 +1840,7 @@ void InkscapePreferences::initPageUI()
             }
             return false;
         });
+        _page_toolbars.add_line(false, "", *toolbox, "", _("Select visible tool buttons"), true);
 
         struct tbar_info {const char* label; const char* prefs;} toolbars[] = {
             {_("Toolbox icon size:"),     ToolboxFactory::tools_icon_size},
@@ -1868,6 +1866,8 @@ void InkscapePreferences::initPageUI()
             { _("Advanced"), 0, _("Expose all snapping options for manual control") }
         };
         _page_toolbars.add_line(false, _("Snap controls bar:"), *Gtk::make_managed<PrefRadioButtons>(snap, "/toolbox/simplesnap"), "", "");
+    } catch (const Glib::Error &ex) {
+        g_error("Couldn't load toolbar-tool-prefs user interface file.");
     }
 
     this->AddPage(_page_toolbars, _("Toolbars"), iter_ui, PREFS_PAGE_UI_TOOLBARS);
