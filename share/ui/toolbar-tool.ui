@@ -149,7 +149,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -171,7 +173,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton" id="toolsradio">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -223,7 +227,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -245,7 +251,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -267,7 +275,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -289,7 +299,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -311,7 +323,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -363,7 +377,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -385,7 +401,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -407,7 +425,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -429,7 +449,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -481,7 +503,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -503,7 +527,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -525,7 +551,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -547,7 +575,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -599,7 +629,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -621,7 +653,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -643,7 +677,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -665,7 +701,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -687,7 +725,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -739,7 +779,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -761,7 +803,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>
@@ -783,7 +827,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
-                  <object class="GtkToggleButton">
+                  <object class="GtkRadioButton">
+                    <property name="group">toolsradio</property>
+                    <property name="draw_indicator">False</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives_default">False</property>

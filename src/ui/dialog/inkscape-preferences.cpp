@@ -1824,7 +1824,7 @@ void InkscapePreferences::initPageUI()
         auto toolbox = Glib::wrap(ToolboxFactory::createToolToolbox());
         sp_traverse_widget_tree(toolbox, [=](Gtk::Widget* widget){
             if (auto flowbox = dynamic_cast<Gtk::FlowBox*>(widget)) {
-                flowbox->set_max_children_per_line(1);
+                flowbox->set_max_children_per_line(10);
                 flowbox->set_selection_mode();
                 flowbox->reparent(*vbox);
             }
