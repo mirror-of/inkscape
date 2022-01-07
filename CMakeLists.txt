@@ -133,6 +133,7 @@ option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
 mark_as_advanced(WITH_FUZZ)
 option(WITH_MANPAGE_COMPRESSION "gzips manpages if gzip is available" ON)
 mark_as_advanced(WITH_MANPAGE_COMPRESSION)
+cmake_dependent_option(WITH_INTERNAL_CAIRO "Use a patched version of cairo" OFF "UNIX" ON)
 
 option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
@@ -286,6 +287,7 @@ message("WITH_NLS:                ${WITH_NLS}")
 message("WITH_OPENMP:             ${WITH_OPENMP}")
 message("WITH_JEMALLOC:           ${WITH_JEMALLOC}")
 message("WITH_INTERNAL_2GEOM:     ${WITH_INTERNAL_2GEOM}")
+message("WITH_INTERNAL_CAIRO:     ${WITH_INTERNAL_CAIRO}")
 message("WITH_X11:                ${WITH_X11}")
 
 message("WITH_PROFILING:          ${WITH_PROFILING}")

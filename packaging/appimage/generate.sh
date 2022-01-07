@@ -7,15 +7,26 @@
 export DEBIAN_FRONTEND=noninteractive
 
 ########################################################################
+# Build pixman 0.40 (needed for dithering)
+########################################################################
+
+git clone https://gitlab.freedesktop.org/pixman/pixman.git
+cd pixman
+git checkout pixman-0.40.0
+./autogen.sh --prefix /usr --libdir /usr/lib/x86_64-linux-gnu
+make install -j$(nproc)
+cd ..
+
+########################################################################
 # Build Inkscape and install to appdir/
 ########################################################################
 
 mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_BINRELOC=ON \
 -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_C_COMPILER_LAUNCHER=ccache \
--DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+-DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DWITH_INTERNAL_CAIRO=ON
 make -j$(nproc)
-make DESTDIR=appdir -j$(nproc) install ; find appdir/
+make DESTDIR=$PWD/appdir -j$(nproc) install ; find appdir/
 cp ../packaging/appimage/AppRun appdir/AppRun ; chmod +x appdir/AppRun
 cp ./appdir/usr/share/icons/hicolor/256x256/apps/org.inkscape.Inkscape.png ./appdir/
 sed -i -e 's|^Icon=.*|Icon=org.inkscape.Inkscape|g' ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop # FIXME
@@ -119,4 +130,5 @@ done
   -executable=appdir/usr/bin/python${PY_VER} \
   "${linuxdeployqtargs[@]}"
 
+#  -executable=appdir/usr/lib/x86_64-linux-gnu/inkscape/libinkscape_base.so \
 mv Inkscape*.AppImage* ../

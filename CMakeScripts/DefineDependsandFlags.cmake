@@ -392,6 +392,10 @@ if(WITH_X11)
     endif()
 endif(WITH_X11)
 
+if(WITH_INTERNAL_CAIRO)
+    add_definitions(-DWITH_PATCHED_CAIRO)
+endif()
+
 # end Dependencies
 
 

@@ -16,6 +16,15 @@
 #ifndef INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 
+// checking if cairo supports dithering
+#ifdef  WITH_PATCHED_CAIRO
+#include "3rdparty/cairo/src/cairo.h"
+#else
+#include <cairo.h>
+#endif
+
+
+
 #include <gtkmm/treerowreference.h>
 #include <iostream>
 #include <iterator>
@@ -338,6 +347,9 @@ protected:
     UI::Widget::PrefSpinButton  _rendering_outline_overlay_opacity;
     UI::Widget::PrefCombo       _rendering_redraw_priority;
     UI::Widget::PrefSpinButton  _filter_multi_threaded;
+#ifdef CAIRO_HAS_DITHER
+    UI::Widget::PrefCheckButton _cairo_dithering;
+#endif
 
     UI::Widget::PrefCheckButton _trans_scale_stroke;
     UI::Widget::PrefCheckButton _trans_scale_corner;

@@ -36,6 +36,7 @@ eval pacman -S $PACMAN_OPTIONS \
 git \
 base-devel \
 $ARCH-toolchain \
+$ARCH-autotools \
 $ARCH-cmake \
 $ARCH-ninja
 
@@ -47,6 +48,7 @@ $ARCH-gsl \
 $ARCH-libxslt \
 $ARCH-boost \
 $ARCH-gtk3 \
+$ARCH-gtk-doc \
 $ARCH-gtkmm3 \
 $ARCH-libsoup
 
