@@ -102,6 +102,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     gap.param_set_range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
     gap.param_set_increments(0.01, 0.01);
     gap.param_set_digits(5);
+    rotation_angle.param_set_digits(5);
     num_copies.param_set_range(1, std::numeric_limits<gint>::max());
     num_copies.param_make_integer();
     apply_to_clippath_and_mask = true;
@@ -491,14 +492,14 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
-    if (Geom::are_near(A, B, 0.001)) {
+    if (Geom::are_near(A, B, 0.01)) {
         B += Geom::Point(1.0, 0.0);
     }
     dir = unit_vector(B - A);
     // I first suspected the minus sign to be a bug in 2geom but it is
     // likely due to SVG's choice of coordinate system orientation (max)
-    bool near_start_point = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.001);
-    bool near_origin = Geom::are_near(previous_origin, (Geom::Point)origin, 0.001);
+    bool near_start_point = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.01);
+    bool near_origin = Geom::are_near(previous_origin, (Geom::Point)origin, 0.01);
     if (!near_start_point && !is_load) {
         if (lpeitem->document->isSensitive()) {
             starting_angle.param_set_value(deg_from_rad(-angle_between(dir, starting_point - origin)));
