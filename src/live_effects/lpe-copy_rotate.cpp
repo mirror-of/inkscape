@@ -102,7 +102,8 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     gap.param_set_range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
     gap.param_set_increments(0.01, 0.01);
     gap.param_set_digits(5);
-    rotation_angle.param_set_digits(5);
+    rotation_angle.param_set_digits(4);
+    origin.param_set_range(0.0001, Geom::infinity())
     num_copies.param_set_range(1, std::numeric_limits<gint>::max());
     num_copies.param_make_integer();
     apply_to_clippath_and_mask = true;
