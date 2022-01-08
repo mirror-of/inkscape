@@ -136,7 +136,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 active = true;
             }
         }
-        if (!active) {
+        if (!active && !is_load && prev_split) {
             lpesatellites.clear();
             return;
         }
@@ -145,6 +145,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         m *= sp_lpe_item->transform;
         toMirror(m);
     }
+    prev_split = split_items;
 }
 
 Gtk::Widget *

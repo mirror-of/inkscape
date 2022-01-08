@@ -171,7 +171,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 active = true;
             }
         }
-        if (!active) {
+        if (!active && !is_load && previous_split) {
             lpesatellites.clear();
             previous_num_copies = 0;
             return;
@@ -231,6 +231,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         }
         reset = false;
     }
+    previous_split = split_items;
 }
 
 void LPECopyRotate::cloneStyle(SPObject *orig, SPObject *dest)

@@ -156,10 +156,30 @@ void SatelliteArrayParam::on_active_toggled(const Glib::ustring &item)
 bool SatelliteArrayParam::param_readSVGValue(const gchar *strvalue)
 {
     if (strvalue) {
-        bool changed =
-            g_strcmp0(strvalue, param_effect->getRepr()->attribute(param_key.c_str())) || !linked_connections.size();
+        bool changed = !linked_connections.size() || !param_effect->is_load;
         if (!ArrayParam::param_readSVGValue(strvalue)) {
             return false;
+        }
+        auto lpeitems = param_effect->getCurrrentLPEItems();
+        if (!lpeitems.size() && !param_effect->is_applied && !param_effect->getSPDoc()->isSeeking()) {
+            param_effect->processObjects(LPE_UPDATE);
+            size_t pos = 0;
+            for (auto w : _vector) {
+                if (w) {
+                    SPObject * tmp = w->getObject();
+                    if (tmp) {
+                        SPObject * successor = tmp->_successor;
+                        unlink(tmp);
+                        if (successor) {
+                            link(successor,pos);
+                        }
+                    }
+                }
+                pos ++;
+            }
+            auto full = param_getSVGValue();
+            param_write_to_repr(full.c_str());
+            update_satellites(false);
         }
         if (_store.get()) {
             _store->clear();

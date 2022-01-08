@@ -76,6 +76,7 @@ private:
     Geom::Point previous_center;
     SPObject *container;
     bool reset;
+    bool prev_split = false;
     bool center_vert;
     bool center_horiz;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&) = delete;

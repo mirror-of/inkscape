@@ -871,11 +871,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             active = true;
         }
     }
-    if (!active) {
+    if (!active && !is_load && prev_active_projection) {
         linked_items.clear();
         prevsatellitecount = 0;
         return;
     }
+    prev_active_projection = active_projection;
     //Avoid crashes on previews
     bool fontsizechanged = false;
     Geom::Affine parentaffinetransform = i2anc_affine(lpeitem->parent, document->getRoot());

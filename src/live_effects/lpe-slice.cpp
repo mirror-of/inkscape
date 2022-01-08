@@ -272,7 +272,7 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
             active = true;
         }
     }
-    if (!active) {
+    if (!active && !is_load) {
         lpesatellites.clear();
         return;
     }

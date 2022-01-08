@@ -94,6 +94,7 @@ private:
     guint pagenumber;
     gchar const* locale_base;
     size_t prevsatellitecount = 0;
+    bool prev_active_projection = false;
     SPObject *parent = nullptr;
     LPEMeasureSegments(const LPEMeasureSegments &) = delete;
     LPEMeasureSegments &operator=(const LPEMeasureSegments &) = delete;

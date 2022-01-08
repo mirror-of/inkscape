@@ -86,6 +86,7 @@ private:
     double previous_num_copies;
     bool reset;
     bool legacytest_livarotonly = false;
+    bool previous_split = false;
     SPObject *container;
     LPECopyRotate(const LPECopyRotate&) = delete;
     LPECopyRotate& operator=(const LPECopyRotate&) = delete;

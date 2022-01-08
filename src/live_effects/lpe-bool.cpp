@@ -484,7 +484,7 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
     if (operand_item.lperef && operand_item.lperef->isAttached() && operand_item.lperef.get()->getObject() == nullptr) {
         active = false;
     }
-    if (!active) {
+    if (!active && !is_load) {
         operand_item.unlink();
         return;
     }

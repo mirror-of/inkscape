@@ -869,16 +869,8 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             for (auto satellite : lpeitem->get_satellites(false, true)) {
                 if (satellite) {
                     SPItem *item2 = dynamic_cast<SPItem *>(satellite);
-                    if (item2) {
-                        bool exists = false;
-                        for (auto item3 : itemlist) {
-                            if (item3 == item2) {
-                                exists = true;
-                            }
-                        }
-                        if (!exists) {
-                            items.push_back(item2);
-                        }
+                    if (item2 && std::find(items.begin(), items.end(), item2) == items.end()) {
+                        items.push_back(item2);
                     }
                 }
             }

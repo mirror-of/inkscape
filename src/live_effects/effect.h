@@ -154,6 +154,7 @@ public:
     bool apply_to_clippath_and_mask;
     bool keep_paths; // set this to false allow retain extra generated objects, see measure line LPE
     bool is_load;
+    bool is_applied;
     bool on_remove_all;
     bool refresh_widgets;
     bool finishiddle = false;
@@ -192,7 +193,6 @@ protected:
     bool _provides_knotholder_entities;
     LPEAction _lpe_action = LPE_NONE;
     int oncanvasedit_it;
-    bool is_applied;
     bool show_orig_path; // set this to true in derived effects to automatically have the original
                          // path displayed as helperpath
 
