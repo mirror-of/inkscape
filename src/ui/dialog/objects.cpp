@@ -1226,7 +1226,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                 } else {
                     selection->set(item);
                 }
-            } else {
+            } else if (!context_menu) {
                 selection->set(item);
             }
 
