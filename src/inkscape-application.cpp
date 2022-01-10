@@ -1617,9 +1617,11 @@ InkscapeApplication::on_new()
 void
 InkscapeApplication::on_quit()
 {
-    // Ensure closing the gtk_app windows
     if (gtk_app()) {
-        if (!destroy_all()) return; // Quit aborted.
+        // For mac, ensure closing the gtk_app windows
+        for (auto window : gtk_app()->get_windows()) {
+            window->close();
+        }
     }
 
     gio_app()->quit();
