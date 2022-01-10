@@ -120,6 +120,15 @@ SPPage *PageManager::newPage()
  */
 SPPage *PageManager::newPage(double width, double height)
 {
+    auto loc = nextPageLocation();
+    return newPage(Geom::Rect::from_xywh(loc, Geom::Point(width, height)));
+}
+
+/**
+ * Return the location of the next created page.
+ */
+Geom::Point PageManager::nextPageLocation() const
+{
     // Get a new location for the page.
     double top = 0.0;
     double left = 0.0;
@@ -129,7 +138,7 @@ SPPage *PageManager::newPage(double width, double height)
             left = rect.right() + 10;
         }
     }
-    return newPage(Geom::Rect(left, top, left + width, top + height));
+    return Geom::Point(left, top);
 }
 
 /**
@@ -164,6 +173,47 @@ SPPage *PageManager::newPage(Geom::Rect rect, bool first_page)
 SPPage *PageManager::newDesktopPage(Geom::Rect rect, bool first_page)
 {
     return newPage(rect * _document->getDocumentScale().inverse(), first_page);
+}
+
+/**
+ * Create a new page from another page. This can be in it's own document
+ * or the same document (cloning) all items are also cloned.
+ */
+SPPage *PageManager::newPage(SPPage *page)
+{
+    auto xml_root = _document->getReprDoc();
+    auto sp_root = _document->getRoot();
+
+    // Record the new location of the new page.
+    enablePages();
+    auto new_loc = nextPageLocation();
+    auto new_page = newDesktopPage(page->getDesktopRect(), false);
+    Geom::Affine page_move = Geom::Translate((new_loc * _document->getDocumentScale()) - new_page->getDesktopRect().min());
+    Geom::Affine item_move = Geom::Translate(new_loc - new_page->getRect().min());
+
+    for (auto &item : page->getOverlappingItems()) {
+        auto new_repr = item->getRepr()->duplicate(xml_root);
+        if (auto new_item = dynamic_cast<SPItem *>(sp_root->appendChildRepr(new_repr))) {
+            Geom::Affine affine = Geom::Affine();
+
+            // 1. apply parent transform (for layers that have been ignored by getOverlappingItems)
+            if (auto parent = dynamic_cast<SPItem *>(item->parent)) {
+                affine *= parent->i2doc_affine();
+            }
+            // 2. unit conversion, add in _document->getDocumentScale()
+            affine *= _document->getDocumentScale().inverse();
+
+            // 3. Add the object's original transform back in.
+            affine *= item->transform;
+
+            // 4. apply item_move to offset it.
+            affine *= item_move;
+
+            new_item->doWriteTransform(affine, &affine, false);
+        }
+    }
+    new_page->movePage(page_move, false);
+    return new_page;
 }
 
 /**
@@ -232,10 +282,8 @@ void PageManager::deletePage(bool content)
  */
 void PageManager::disablePages()
 {
-    if (hasPages()) {
-        for (auto &page : pages) {
-            page->deleteObject();
-        }
+    while (hasPages()) {
+        deletePage(getLastPage(), false);
     }
 }
 

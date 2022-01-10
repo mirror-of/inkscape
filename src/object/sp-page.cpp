@@ -162,10 +162,7 @@ void SPPage::setDesktopSize(double width, double height)
  */
 std::vector<SPItem *> SPPage::getExclusiveItems() const
 {
-    // There's no logical reason why the desktop is needed here
-    // we should have a getItemsInBox that doesn't use the desktop
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    return document->getItemsInBox(desktop->dkey, getDesktopRect(), true, true, true, false);
+    return document->getItemsInBox(0, getDesktopRect(), true, true, true, false);
 }
 
 /**
@@ -173,10 +170,7 @@ std::vector<SPItem *> SPPage::getExclusiveItems() const
  */
 std::vector<SPItem *> SPPage::getOverlappingItems() const
 {
-    // There's no logical reason why the desktop is needed here
-    // we should have a getItemsPartiallyInBox that doesn't use the desktop
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    return document->getItemsPartiallyInBox(desktop->dkey, getDesktopRect(), true, true, true, false);
+    return document->getItemsPartiallyInBox(0, getDesktopRect(), true, true, true, false);
 }
 
 /**

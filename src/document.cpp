@@ -68,6 +68,7 @@
 
 #include "io/dir-util.h"
 #include "layer-manager.h"
+#include "page-manager.h"
 #include "live_effects/lpeobject.h"
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
@@ -301,6 +302,18 @@ void SPDocument::initialize_current_persp3d()
     }
 }
 **/
+
+/**
+ * Enables or disables document pages, usually used in import code.
+ */
+void SPDocument::setPages(bool enabled)
+{
+    if (enabled) {
+        getNamedView()->getPageManager()->enablePages();
+    } else {
+        getNamedView()->getPageManager()->disablePages();
+    }
+}
 
 void SPDocument::queueForOrphanCollection(SPObject *object) {
     g_return_if_fail(object != nullptr);

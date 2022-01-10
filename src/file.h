@@ -124,6 +124,11 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place);
 void sp_file_import (Gtk::Window &parentWindow);
 
 /**
+ * Imports pages into the document.
+ */
+void file_import_pages(SPDocument *this_doc, SPDocument *that_doc);
+
+/**
  * Imports a resource
  */
 SPObject* file_import(SPDocument *in_doc, const Glib::ustring &uri,

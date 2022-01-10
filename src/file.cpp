@@ -45,6 +45,7 @@
 #include "inkscape.h"
 #include "layer-manager.h"
 #include "message-stack.h"
+#include "page-manager.h"
 #include "path-prefix.h"
 #include "print.h"
 #include "rdf.h"
@@ -1058,6 +1059,18 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
         prevent_id_clashes(doc, in_doc, true);
         sp_file_fix_lpe(doc);
+
+        in_doc->importDefs(doc);
+
+        // The extension should set it's pages enabled or disabled when opening
+        // in order to indicate if pages are being imported or if objects are.
+        if (doc->getNamedView()->getPageManager()->hasPages()) {
+            file_import_pages(in_doc, doc);
+            DocumentUndo::done(in_doc, _("Import Pages"), INKSCAPE_ICON("document-import"));
+            // This return is only used by dbus in document-interface.cpp
+            return nullptr;
+        }
+
         SPCSSAttr *style = sp_css_attr_from_object(doc->getRoot());
 
         // Count the number of top-level items in the imported document.
@@ -1079,7 +1092,6 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             did_ungroup=true;
         }
 
-
         // Create a new group if necessary.
         Inkscape::XML::Node *newgroup = nullptr;
         const auto & al = style->attributeList();
@@ -1099,9 +1111,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         } else {
             place_to_insert = in_doc->getRoot();
         }
-        
-        in_doc->importDefs(doc);
-        
+
         // Construct a new object representing the imported image,
         // and insert it into the current document.
         SPObject *new_obj = nullptr;
@@ -1167,6 +1177,25 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
     return nullptr;
 }
 
+/**
+ * Import the given document as a set of multiple pages and append to this one.
+ *
+ * @param this_doc - Our current document, to be changed
+ * @param that_doc - The documennt that contains our importable pages
+ */
+void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
+{
+    auto this_pm = this_doc->getNamedView()->getPageManager();
+    auto that_pm = that_doc->getNamedView()->getPageManager();
+
+    // Make sure objects have visualBounds created for import
+    that_doc->ensureUpToDate();
+
+    std::vector <SPItem *> imported_items;
+    for (auto &that_page : that_pm->getPages()) {
+        this_pm->newPage(that_page);
+    }
+}
 
 /**
  *  Display an Open dialog, import a resource if OK pressed.

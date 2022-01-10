@@ -22,6 +22,7 @@
 #define SVG_COMMON_INPUT_PARAMS \
             "<param name='import_mode_svg' type='optiongroup' gui-text='" N_("SVG Image Import Type:") "' >\n" \
                     "<option value='include' >" N_("Include SVG image as editable object(s) in the current file") "</option>\n" \
+                    "<option value='pages' >" N_("Add SVG as new page(s) in the current file") "</option>\n" \
                     "<option value='embed' >" N_("Embed the SVG file in a image tag (not editable in this document)") "</option>\n" \
                     "<option value='link' >" N_("Link the SVG file in a image tag (not editable in this document).") "</option>\n" \
                   "</param>\n" \
