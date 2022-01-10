@@ -1076,9 +1076,10 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
     }
 
     /* Status text */
+    auto confine_mod = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->get_label();
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
-                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
-                          100 * _absolute_affine[0], 100 * _absolute_affine[3]);
+                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>%s</b> to lock ratio"),
+                          100 * _absolute_affine[0], 100 * _absolute_affine[3], confine_mod.c_str());
 
     return TRUE;
 }
@@ -1180,9 +1181,10 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, Geom
     }
 
     // status text
+    auto confine_mod = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->get_label();
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
-                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
-                          100 * _absolute_affine[0], 100 * _absolute_affine[3]);
+                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>%s</b> to lock ratio"),
+                          100 * _absolute_affine[0], 100 * _absolute_affine[3], confine_mod.c_str());
 
     return TRUE;
 }
@@ -1319,12 +1321,13 @@ gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, Geom::P
     }
 
     // Update the status text
+    auto increment_mod = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->get_label();
     double degrees = mod360symm(Geom::deg_from_rad(radians));
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
                           // TRANSLATORS: don't modify the first ";"
                           // (it will NOT be displayed as ";" - only the second one will be)
-                          _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"),
-                          degrees);
+                          _("<b>Skew</b>: %0.2f&#176;; with <b>%s</b> to snap angle"),
+                          degrees, increment_mod.c_str());
 
     return TRUE;
 }
@@ -1398,11 +1401,12 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
     pt = _point * Geom::Translate(-_origin) * _relative_affine * Geom::Translate(_origin);
 
     // Update the status text
+    auto increment_mod = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->get_label();
     double degrees = mod360symm(Geom::deg_from_rad(radians));
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
                           // TRANSLATORS: don't modify the first ";"
                           // (it will NOT be displayed as ";" - only the second one will be)
-                          _("<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), degrees);
+                          _("<b>Rotate</b>: %0.2f&#176;; with <b>%s</b> to snap angle"), degrees, increment_mod.c_str());
 
     return TRUE;
 }
@@ -1595,13 +1599,15 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
     transform(move, norm);
 
     // status text
+    auto confine_mod = Modifiers::Modifier::get(Modifiers::Type::MOVE_CONFINE)->get_label();
+    auto no_snap_mod = Modifiers::Modifier::get(Modifiers::Type::MOVE_SNAPPING)->get_label();
     Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(dxy[Geom::X], "px");
     Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(dxy[Geom::Y], "px");
     Glib::ustring xs(x_q.string(_desktop->namedview->display_units));
     Glib::ustring ys(y_q.string(_desktop->namedview->display_units));
     _message_context.setF(Inkscape::NORMAL_MESSAGE,
-            _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"),
-            xs.c_str(), ys.c_str());
+            _("<b>Move</b> by %s, %s; with <b>%s</b> to restrict to horizontal/vertical; with <b>%s</b> to disable snapping"),
+            xs.c_str(), ys.c_str(), confine_mod.c_str(), no_snap_mod.c_str());
 }
 
 // Given a location of a handle at the visual bounding box, find the corresponding location at the
