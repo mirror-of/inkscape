@@ -41,7 +41,8 @@ public:
     ColorPicker (const Glib::ustring& title,
                  const Glib::ustring& tip,
                  const guint32 rgba,
-                 bool undo);
+                 bool undo,
+                 Gtk::Button* external_button = nullptr);
 
     ~ColorPicker() override;
 
@@ -51,6 +52,7 @@ public:
     void closeWindow();
     sigc::connection connectChanged (const sigc::slot<void,guint>& slot)
         { return _changed_signal.connect (slot); }
+    void use_transparency(bool enable);
 
 protected:
 
@@ -71,8 +73,12 @@ protected:
     //Inkscape::UI::Dialog::Dialog _colorSelectorDialog;
     Gtk::Dialog _colorSelectorDialog;
     SelectedColor _selected_color;
+
 private:
+    void set_preview(guint32 rgba);
+
     Gtk::Widget *_color_selector;
+    bool _ignore_transparency = false;
 };
 
 

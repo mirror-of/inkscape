@@ -23,10 +23,10 @@ namespace Inkscape {
 /**
  * Returns a list of page sizes.
  */ 
-std::vector<PaperSize *> PaperSize::getPageSizes()
+const std::vector<PaperSize>& PaperSize::getPageSizes()
 {   
     // Static makes us only load pages once.
-    static std::vector<PaperSize *> ret;
+    static std::vector<PaperSize> ret;
     if (!ret.empty())
         return ret;
     
@@ -51,7 +51,7 @@ std::vector<PaperSize *> PaperSize::getPageSizes()
             g_strstrip(line[0]);
             g_strstrip(line[3]);
             Glib::ustring name = line[0];
-            ret.push_back(new PaperSize(name, width, height, Inkscape::Util::unit_table.getUnit(line[3])));
+            ret.push_back(PaperSize(name, width, height, Inkscape::Util::unit_table.getUnit(line[3])));
         }
         g_strfreev(lines); 
         g_free(content);
@@ -96,7 +96,7 @@ void PaperSize::assign(const PaperSize &other)
 /**
  * Returns a matching paper size, if possible.
  */
-PaperSize *PaperSize::findPaperSize(double width, double height, Inkscape::Util::Unit const *unit)
+const PaperSize *PaperSize::findPaperSize(double width, double height, Inkscape::Util::Unit const *unit)
 {
     double smaller = width;
     double larger = height;
@@ -104,9 +104,9 @@ PaperSize *PaperSize::findPaperSize(double width, double height, Inkscape::Util:
         smaller = height;
         larger = width;
     }
-    for (auto &page_size : Inkscape::PaperSize::getPageSizes()) {
-        if (page_size->smaller == smaller && page_size->larger == larger && page_size->unit == unit) {
-            return page_size;
+    for (auto&& page_size : Inkscape::PaperSize::getPageSizes()) {
+        if (page_size.smaller == smaller && page_size.larger == larger && page_size.unit == unit) {
+            return &page_size;
         }
     }
     return nullptr;

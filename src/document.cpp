@@ -666,20 +666,25 @@ Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 }
 
 /// Sets document scale (by changing viewBox)
-void SPDocument::setDocumentScale( double scaleX, double scaleY ) {
+void SPDocument::setDocumentScale(double scaleX, double scaleY) {
+    if (scaleX <= 0 || scaleY <= 0) {
+        g_warning("%s: Invalid scale, has to be positive: %f, %f", __func__, scaleX, scaleY);
+        return;
+    }
 
+    // since scale is doc size / viewbox size, then it follows that viewbox size is doc size / scale
     root->viewBox = Geom::Rect::from_xywh(
         root->viewBox.left(),
         root->viewBox.top(),
-        root->width.computed  * scaleX,
-        root->height.computed * scaleY );
+        root->width.computed  / scaleX,
+        root->height.computed / scaleY);
     root->viewBox_set = true;
     root->updateRepr();
 }
 
 /// Sets document scale (by changing viewBox, x and y scaling equal)
-void SPDocument::setDocumentScale( double scale ) {
-    setDocumentScale( scale, scale );
+void SPDocument::setDocumentScale(double scale) {
+    setDocumentScale(scale, scale);
 }
 
 /// Returns document scale as defined by width/height (in pixels) and viewBox (real world to

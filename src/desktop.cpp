@@ -174,7 +174,7 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     number = namedview->getViewCount();
 
     /* Setup Canvas */
-    canvas->set_background_color(0xffffff00); // Background page sits on.
+    namedview->set_desk_color(this); // Background page sits on.
 
     /* ----------- Canvas Items ------------ */
 
@@ -1445,10 +1445,10 @@ SPDesktop::setDocument (SPDocument *doc)
         activate_guides (true);
     }
 
+    // set new document before firing signal, so handlers can see new value if they query desktop
+    View::setDocument(doc);
 
     _document_replaced_signal.emit (this, doc);
-
-    View::setDocument (doc);
 }
 
 void

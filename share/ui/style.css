@@ -549,6 +549,11 @@ button.link:hover image {
     padding: 5px 3px;
 }
 
+.link-edit-button {
+    padding: 5px 3px;
+    min-width: 0.5em;
+}
+
 /* In some themes stack switcher buttons are extra wide forcing dialogs too wide */
 stackswitcher button {
     padding-left: 1px;
@@ -627,6 +632,31 @@ button.square-button image {
 }
 
 #StyleSwatch label {
+    font-size: small;
+}
+
+#DocumentProperties #NotebookPage {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+/* heading label in dialogs */
+.heading {
+    font-weight: bold;
+    font-size: 1.1em; /* make it optically comparable with non-bold */
+    margin-top: 0.5em;
+}
+/* topmost heading in dialogs */
+.heading.top {
+    margin-top: 0.2em;
+}
+
+/* single-level indentation for labels in a dialog */
+.indent {
+    margin-left: 1em;
+}
+
+.small-font {
     font-size: small;
 }
 

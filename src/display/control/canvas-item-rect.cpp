@@ -163,9 +163,6 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
         rect_transformed[i] = _rect.corner(i) * _affine;
     }
 
-    // canvas scale; impacts shadow size
-    const auto scale = sqrt(_affine[0] * _affine[0] + _affine[1] * _affine[1]);
-
     auto rect = _rect;
 
     using Geom::X;
@@ -196,7 +193,7 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
         buf->cr->transform(m);
         buf->cr->rectangle(rect.corner(0)[X], rect.corner(0)[Y], rect.width(), rect.height());
         // counter fill scaling (necessary for checkerboard pattern)
-        buf->cr->scale(1 / scale, 1 / scale);
+        _background->set_matrix(m);
         buf->cr->set_source(_background);
         buf->cr->fill();
         buf->cr->restore();
@@ -330,8 +327,8 @@ double CanvasItemRect::get_shadow_size() const {
     return size / (scale > 0 ? sqrt(scale) : 1);
 }
 
-void CanvasItemRect::set_background_checkerboard(guint32 rgba) {
-    auto pattern = ink_cairo_pattern_create_checkerboard(rgba);
+void CanvasItemRect::set_background_checkerboard(guint32 rgba, bool use_alpha) {
+    auto pattern = ink_cairo_pattern_create_checkerboard(rgba, use_alpha);
     auto background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern));
     _set_background(background);
 }

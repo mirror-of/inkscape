@@ -18,11 +18,14 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-UnitMenu::UnitMenu() : _type(UNIT_TYPE_NONE)
+UnitMenu::UnitMenu(Gtk::ComboBoxText* external_combo) : _type(UNIT_TYPE_NONE)
 {
-    set_active(0);
-    gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
-    signal_scroll_event().connect(sigc::mem_fun(*this, &UnitMenu::on_scroll_event));
+    _combo = external_combo ? external_combo : this;
+    _combo->set_active(0);
+    _combo->add_events(Gdk::SCROLL_MASK | Gdk::SMOOTH_SCROLL_MASK);
+    if (external_combo) {
+        _combo->signal_scroll_event().connect([](GdkEventScroll*){ return true; }, false);
+    }
 }
 
 UnitMenu::~UnitMenu() = default;
@@ -33,17 +36,17 @@ bool UnitMenu::setUnitType(UnitType unit_type)
     UnitTable::UnitMap m = unit_table.units(unit_type);
 
     for (auto & i : m) {
-        append(i.first);
+        _combo->append(i.first);
     }
     _type = unit_type;
-    set_active_text(unit_table.primary(unit_type));
+    _combo->set_active_text(unit_table.primary(unit_type));
 
     return true;
 }
 
 bool UnitMenu::resetUnitType(UnitType unit_type) 
 {
-    remove_all();
+    _combo->remove_all();
 
     return setUnitType(unit_type);
 }
@@ -51,16 +54,16 @@ bool UnitMenu::resetUnitType(UnitType unit_type)
 void UnitMenu::addUnit(Unit const& u)
 {
     unit_table.addUnit(u, false);
-    append(u.abbr);
+    _combo->append(u.abbr);
 }
 
 Unit const * UnitMenu::getUnit() const
 {
-    if (get_active_text() == "") {
+    if (_combo->get_active_text() == "") {
         g_assert(_type != UNIT_TYPE_NONE);
         return unit_table.getUnit(unit_table.primary(_type));
     }
-    return unit_table.getUnit(get_active_text());
+    return unit_table.getUnit(_combo->get_active_text());
 }
 
 bool UnitMenu::setUnit(Glib::ustring const & unit)
@@ -68,7 +71,7 @@ bool UnitMenu::setUnit(Glib::ustring const & unit)
     // TODO:  Determine if 'unit' is available in the dropdown.
     //        If not, return false
 
-    set_active_text(unit);
+    _combo->set_active_text(unit);
     return true;
 }
 

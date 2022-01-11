@@ -379,9 +379,9 @@ Canvas::set_background_color(guint32 rgba)
  * Set canvas background to a checkerboard pattern.
  */
 void
-Canvas::set_background_checkerboard(guint32 rgba)
+Canvas::set_background_checkerboard(guint32 rgba, bool use_alpha)
 {
-    auto pattern = ink_cairo_pattern_create_checkerboard(rgba);
+    auto pattern = ink_cairo_pattern_create_checkerboard(rgba, use_alpha);
     _background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern));
     _background_is_checkerboard = true;
     redraw_all();

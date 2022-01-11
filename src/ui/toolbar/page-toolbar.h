@@ -69,8 +69,6 @@ private:
     Gtk::ToolButton *btn_move_toggle;
     Gtk::SeparatorToolItem *sep1;
 
-    std::vector<PaperSize *> page_sizes;
-
     double _unit_to_size(std::string number, std::string unit_str, std::string backup);
 };
 

@@ -20,6 +20,7 @@
 #include <gtkmm/notebook.h>
 #include <iostream>
 
+#include "inkscape.h"
 #include "desktop.h"
 #include "ui/dialog/dialog-data.h"
 #include "ui/dialog/dialog-notebook.h"
@@ -96,7 +97,9 @@ void DialogBase::on_map() {
     // Update asks the dialogs if they need their Gtk widgets updated.
     update();
     // Set the desktop on_map, although we might want to be smarter about this.
-    setDesktop(dynamic_cast<SPDesktop *>(_app->get_active_view()));
+    // Note: Inkscape::Application::instance().active_desktop() is used here, as it contains current desktop at
+    // the time of dialog creation. Formerly used _app.get_active_view() did not at application start-up.
+    setDesktop(Inkscape::Application::instance().active_desktop());
     parent_type::on_map();
 }
 
