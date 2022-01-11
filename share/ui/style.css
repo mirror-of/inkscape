@@ -696,3 +696,12 @@ button.square-button image {
 #DesktopStatusBar {
     margin-right: 1em;
 }
+/*
+ * Inkscape Export Dialog
+ */
+#ExportDialog #export_selection{
+	border-radius:0px;
+}
+#ExportDialog #export_preview_box{
+	border:1px solid;
+}

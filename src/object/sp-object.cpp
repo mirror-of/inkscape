@@ -521,18 +521,62 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 
 void SPObject::cropToObject(SPObject *except)
 {
-    std::vector<SPObject*> toDelete;
-    for (auto& child: children) {
+    std::vector<SPObject *> toDelete;
+    for (auto &child : children) {
         if (SP_IS_ITEM(&child)) {
             if (child.isAncestorOf(except)) {
                 child.cropToObject(except);
-            } else if(&child != except) {
+            } else if (&child != except) {
                 sp_object_ref(&child, nullptr);
                 toDelete.push_back(&child);
             }
         }
     }
-    for (auto & i : toDelete) {
+    for (auto &i : toDelete) {
+        i->deleteObject(true, true);
+        sp_object_unref(i, nullptr);
+    }
+}
+
+/**
+ * Removes objects which are not related to given list of objects.
+ *
+ * Use Case: Group[MyRect1 , MyRect2] , MyRect3
+ * List Provided: MyRect1, MyRect3
+ * Output doc: Group[MyRect1], MyRect3
+ * List Provided: MyRect1, Group
+ * Output doc: Group[MyRect1, MyRect2] (notice MyRect2 is not deleted as it is related to Group)
+ */
+void SPObject::cropToObjects(std::vector<SPObject *> except_objects)
+{
+    if (except_objects.empty()) {
+        return;
+    }
+    std::vector<SPObject *> toDelete;
+    for (auto &child : children) {
+        if (SP_IS_ITEM(&child)) {
+            std::vector<SPObject *> except_in_child;
+            bool child_delete_flag = true;
+            for (auto except : except_objects) {
+                if (&child == except) {
+                    child_delete_flag = false;
+                    except_in_child.clear();
+                    break;
+                }
+                if (child.isAncestorOf(except)) {
+                    except_in_child.push_back(except);
+                    child_delete_flag = false;
+                }
+            }
+            if (child_delete_flag) {
+                sp_object_ref(&child, nullptr);
+                toDelete.push_back(&child);
+            } else {
+                child.cropToObjects(except_in_child);
+            }
+        }
+    }
+    for (auto &i : toDelete) {
         i->deleteObject(true, true);
         sp_object_unref(i, nullptr);
     }

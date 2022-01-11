@@ -21,6 +21,7 @@
 class SPDesktop;
 class SPDocument;
 class SPGroup;
+class SPItem;
 
 namespace Inkscape {
     class ObjectHierarchy;
@@ -48,6 +49,7 @@ public:
     void toggleLockAllLayers(bool lock);
     void toggleLockOtherLayers(SPObject *object, bool force_lock = false);
     SPObject *layerForObject(SPObject *object);
+    std::list<SPItem *> getAllLayers();
     bool isLayer(SPObject *object) const;
     static SPGroup *asLayer(SPObject *object);
 

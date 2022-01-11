@@ -194,6 +194,17 @@ void LayerManager::setCurrentLayer(SPObject *object, bool clear) {
     }
 }
 
+std::list<SPItem *> LayerManager::getAllLayers()
+{
+    std::list<SPItem *> layers;
+    for (SPObject *obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj;
+         obj = Inkscape::previous_layer(currentRoot(), obj)) {
+        auto item = SP_ITEM(obj);
+        layers.push_back(item);
+    }
+    return layers;
+}
+
 void LayerManager::toggleHideAllLayers(bool hide) {
     for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
         SP_ITEM(obj)->setHidden(hide);

@@ -12,6 +12,7 @@
 #define INKSCAPE_UI_WIDGET_UNIT_H
 
 #include <gtkmm/comboboxtext.h>
+#include <gtkmm.h>
 #include "util/units.h"
 
 using namespace Inkscape::Util;
@@ -31,6 +32,11 @@ public:
      *    Construct a UnitMenu
      */
     UnitMenu(Gtk::ComboBoxText* external_combo = nullptr);
+
+    /* GtkBuilder constructor */
+    UnitMenu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade):Gtk::ComboBoxText(cobject){
+        UnitMenu();
+    };
 
     ~UnitMenu() override;
 

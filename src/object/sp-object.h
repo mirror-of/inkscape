@@ -466,7 +466,8 @@ public:
     /**
      * Removes all children except for the given object, it's children and it's ancesstors.
      */
-     void cropToObject(SPObject *except);
+    void cropToObject(SPObject *except);
+    void cropToObjects(std::vector<SPObject *> except_objects);
 
     /**
      * Connects a slot to be called when an object is deleted.
