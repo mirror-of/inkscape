@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2021-12-22 14:07+0100\n"
+"POT-Creation-Date: 2022-01-11 17:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6180,8 +6180,8 @@ msgstr ""
 #: ../share/extensions/extrude.inx:12
 #: ../share/extensions/generate_voronoi.inx:20
 #: ../share/extensions/interp.inx:14 ../share/extensions/motion.inx:10
-#: ../share/extensions/pathalongpath.inx:41
-#: ../share/extensions/pathscatter.inx:34
+#: ../share/extensions/pathalongpath.inx:38
+#: ../share/extensions/pathscatter.inx:32
 #: ../share/extensions/voronoi2svg.inx:33
 msgid "Generate from Path"
 msgstr ""
@@ -6339,8 +6339,8 @@ msgstr ""
 #: ../src/extension/prefdialog/prefdialog.cpp:71
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
 #: ../src/ui/dialog/export.cpp:945
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:251
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:244
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:556
 #: ../src/ui/dialog/guides.cpp:185 ../src/ui/dialog/layer-properties.cpp:43
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
@@ -8679,15 +8679,15 @@ msgstr ""
 msgid "Open files saved in Adobe Illustrator 9.0 and newer versions"
 msgstr ""
 
-#: ../src/extension/internal/png-output.cpp:49
+#: ../src/extension/internal/png-output.cpp:67
 msgid "Portable Network Graphic"
 msgstr ""
 
-#: ../src/extension/internal/png-output.cpp:54
+#: ../src/extension/internal/png-output.cpp:72
 msgid "Portable Network Graphic (*.png)"
 msgstr ""
 
-#: ../src/extension/internal/png-output.cpp:55
+#: ../src/extension/internal/png-output.cpp:73
 msgid "Default raster graphic export"
 msgstr ""
 
@@ -13842,7 +13842,7 @@ msgstr ""
 msgid "_File"
 msgstr ""
 
-#: ../src/object/box3d.cpp:244 ../src/object/box3d.cpp:1300
+#: ../src/object/box3d.cpp:242 ../src/object/box3d.cpp:1298
 #: ../src/ui/dialog/inkscape-preferences.cpp:828
 msgid "3D Box"
 msgstr ""
@@ -14934,7 +14934,7 @@ msgid "Group to symbol"
 msgstr ""
 
 #: ../src/selection-chemistry.cpp:3366
-msgid "unSymbol all selected symbols"
+msgid "Remove symbol for editing"
 msgstr ""
 
 #: ../src/selection-chemistry.cpp:3380
@@ -15894,7 +15894,7 @@ msgid "_Delete"
 msgstr ""
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:564 ../src/ui/dialog/input.cpp:904
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:557 ../src/ui/dialog/input.cpp:904
 #: ../src/verbs.cpp:2360 ../src/widgets/desktop-widget.cpp:858
 msgid "_Save"
 msgstr ""
@@ -17359,49 +17359,49 @@ msgstr ""
 msgid "Export as SVG 1.1 per settings in Preferences dialog"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:252
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:245
 msgid "_Open"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:275
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:287
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:268
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:280
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:282
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:289
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:296
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:310
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:267
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:395
 msgid "All Files"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:307
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:286
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:268
 msgid "All Inkscape Files"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:313
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:306
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:269
 msgid "All Images"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:316
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:296
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:309
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:270
 msgid "All Vectors"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:306
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:319
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:299
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:312
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:271
 msgid "All Bitmaps"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:506
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:499
 msgid "Append filename extension automatically"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:690
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:683
 msgid "Guess from extension"
 msgstr ""
 
@@ -28453,56 +28453,56 @@ msgid ""
 "Shift+Click make a cusp node"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1743
+#: ../src/ui/tools/pen-tool.cpp:1746
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp "
 "node, <b>ALT</b> moves previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1744
+#: ../src/ui/tools/pen-tool.cpp:1747
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp "
 "node, <b>ALT</b> moves previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1748
+#: ../src/ui/tools/pen-tool.cpp:1751
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1749
+#: ../src/ui/tools/pen-tool.cpp:1752
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1767
+#: ../src/ui/tools/pen-tool.cpp:1770
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1791
+#: ../src/ui/tools/pen-tool.cpp:1794
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
 "b> to snap angle, with <b>Shift</b> to move this handle only"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1792
+#: ../src/ui/tools/pen-tool.cpp:1795
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle, with <b>Shift</b> to move this handle only"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1944
+#: ../src/ui/tools/pen-tool.cpp:1947
 msgid "Drawing finished"
 msgstr ""
 
@@ -33641,7 +33641,6 @@ msgid "System Default"
 msgstr ""
 
 #: ../share/ui/inkscape-start.glade:991
-#: ../org.inkscape.Inkscape.appdata.xml.in:56
 msgid "Inkscape 1.1"
 msgstr ""
 
@@ -38668,33 +38667,42 @@ msgstr ""
 
 #: ../share/extensions/pathalongpath.inx:25
 msgid ""
-"This effect bends a pattern along arbitrary \"skeleton\" paths. The pattern "
-"is the topmost object in the selection, groups of paths, shapes or clones "
-"are allowed. Text can also be used as pattern, but has to be converted to "
-"path first. The other selected items are skeleton paths, and the pattern is "
-"applied to each of them"
+"This extension bends a pattern along the curvature of selected path objects."
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx:26
+msgid ""
+"There must only be a single pattern object. The pattern object must be the "
+"topmost object in the selection. For the pattern, groups of paths, shapes or "
+"clones are allowed. Text must be converted to path before using it as a "
+"pattern."
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx:27
+msgid ""
+"The pattern can be bent along multiple paths at once, the only condition is "
+"that these must be path objects, no other object types are allowed."
 msgstr ""
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
-"There are two different deformation modes. With \"Snake\", vertical lines "
-"will be perpendicular to the skeleton and horizontal lines will be parallel "
-"(angles are preserved before stretching for paths with high node density). "
-"With \"Ribbon\", vertical lines will remain vertical (lengths are preserved)."
+"There are two different deformation modes. \"Snake\" means that the pattern "
+"will rotate along with the path direction. With \"Ribbon\", the pattern will "
+"stay upright, so the result will look like a printed ribbon."
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx:30
+msgid ""
+"The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
+"applying it to the path."
 msgstr ""
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
-"The \"vertical\" option switches the role of horizontal and vertical lines "
-"in the deformation mode."
-msgstr ""
-
-#: ../share/extensions/pathalongpath.inx:34
-msgid ""
-"Note that the extension does not add additional nodes to the pattern paths. "
-"For high curvature, the result in may therefore look aesthetically "
-"unpleasing. To avoid this, either add addition nodes manually, or convert "
-"all segments to curves beforehand."
+"If your paths have sharp bends that the pattern is supposed to follow, the "
+"result may not look as you expected. This is because the extension cannot "
+"add any new nodes to your pattern objects. To avoid this, either add more "
+"nodes to your pattern objects, or convert all segments to curves beforehand."
 msgstr ""
 
 #: ../share/extensions/pathscatter.inx:8
@@ -38747,9 +38755,12 @@ msgstr ""
 
 #: ../share/extensions/pathscatter.inx:26
 msgid ""
-"This effect scatters a pattern along arbitrary \"skeleton\" paths. The "
-"pattern is the topmost object in the selection; groups of paths, shapes, "
-"clones are allowed. The other selected objects form the skeleton paths."
+"This extension drops copies of a pattern object along one or more paths "
+"without deforming it. The pattern object must be a single path or a group of "
+"paths, shapes or clones. It must be the topmost object in the selection. All "
+"other selected objects must be paths. You can also put a set of different "
+"objects (alternating or randomly) on the path, if you select the option for "
+"picking group members."
 msgstr ""
 
 #: ../share/extensions/pdflatex.inx:3
@@ -41394,246 +41405,16 @@ msgstr ""
 msgid "Main application window"
 msgstr ""
 
-#: ../org.inkscape.Inkscape.appdata.xml.in:45
-msgid "Inkscape 1.1.1"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:47
-msgid "Text stroke to path fixed"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:48
-msgid "Startup time improved"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:49
-msgid "Fixed various crashes"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:58
-msgid "Welcome dialog"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:59
-msgid "Command palette to search for functions"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:60
-msgid "Copypaste parts of paths"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:61
-msgid "Complete rework of the dialog docking system"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:62
-msgid "New outline overlay mode"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:63
-msgid "Search field in Preferences dialog"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:64
-msgid "Improved Export PNG dialog"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:65
-msgid "Ability to directly export JPG, TIFF, optimized PNG, and WebP"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:66
-msgid "Paste now pastes directly above selected object"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:67
-msgid "Beta Extension Manager"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:74
-msgid "Inkscape 1.0"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:76
-msgid "Theming support and more new customization options"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:77
-msgid "Better HiDPI (high resolution) screen support"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:78
-msgid "Native support for macOS with a signed and notarized .dmg file"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:79
-msgid "Coordinate origin in top left corner by default"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:80
-msgid "Canvas rotation and mirroring"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:81
-msgid "On-Canvas alignment of objects"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:82
-msgid "Split view and X-Ray modes"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:83
-msgid ""
-"PowerPencil for drawing editable, variable width strokes with a pressure "
-"sensitive graphics tablet"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:84
-msgid "New PNG export options"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:85
-msgid "Integrated centerline tracing for vectorizing line drawings"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:86
-msgid "Searchable Symbols dialog"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:87
-msgid "New Live Path Effect (LPE) selection dialog"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:88
-msgid ""
-"New Corners (Fillet/chamfer) LPE, (lossless) Boolean Operation LPE "
-"(experimental), Offset LPE and Measure Segments LPE (and more!)"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:89
-msgid ""
-"Path operations, deselection of a large number of paths as well as grouping/"
-"ungrouping are much faster now"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:90
-msgid "Much improved text line-height settings"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:91
-msgid ""
-"Variable fonts support (only if compiled with pango library version &gt;= "
-"1.41.1)"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:92
-msgid "Browser-compatible flowed text"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:93
-msgid ""
-"Extensions programming interface updated, with many new options - Note: this "
-"introduces breaking changes, some third-party extensions will have to be "
-"updated to work with Inkscape 1.0"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:94
-msgid "Python 3 support for extensions"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:102
-msgid "Bugfix release"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:103
-msgid "More python3 compatibility for extensions"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:110
-#: ../org.inkscape.Inkscape.appdata.xml.in:123
-#: ../org.inkscape.Inkscape.appdata.xml.in:136
-msgid "New 0.92.x bugfix release."
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:112
-msgid "Improvements to the align and distribute tool"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:113
-msgid "Support for piping standard input and output"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:114
-msgid "The color slider can be constrained to stepped values"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:115
-msgid "Performance improvements"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:116
-#: ../org.inkscape.Inkscape.appdata.xml.in:129
-msgid "And many more bugfixes"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:125
-msgid "New command-line options to control page size when exporting to SVG"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:126
-msgid "Support for left-to-right languages in the text tool"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:127
-msgid "Improvements to the circle/ellipse/arc tool"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:128
-msgid "Support for multi-line text when exporting to PDF+LaTeX"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:138
-msgid "Better importing and exporting"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:139
-msgid "Greater stability when printing on Windows"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:140
-msgid "Improved fill and stroke HSL color selection"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:141
-msgid "Greater stability when reverting and saving files"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:142
-msgid "An additional handle at the center of shapes"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:143
-msgid "A command line option for updating the file's DPI"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:144
-msgid "Improvements to user-defined shortcuts"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:145
-msgid "Migration to Gitlab to make contribution easier"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:146
-msgid "And many more bugfixes!"
-msgstr ""
-
 #: ../org.inkscape.Inkscape.desktop.template:8
 msgid "Create and edit Scalable Vector Graphics images"
 msgstr ""
 
 #: ../org.inkscape.Inkscape.desktop.template:9
 msgid "image;editor;vector;drawing;"
+msgstr ""
+
+#: ../org.inkscape.Inkscape.desktop.template:17
+msgid "${INKSCAPE_ICONPATH}"
 msgstr ""
 
 #: ../org.inkscape.Inkscape.desktop.template:22

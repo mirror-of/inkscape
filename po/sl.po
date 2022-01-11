@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 1.1.x\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2021-12-22 14:07+0100\n"
+"POT-Creation-Date: 2022-01-11 17:04+0100\n"
 "PO-Revision-Date: 2021-12-22 22:08+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
@@ -6264,8 +6264,8 @@ msgstr "Število notranjih/zunanjih kopij predmeta"
 #: ../share/extensions/extrude.inx:12
 #: ../share/extensions/generate_voronoi.inx:20
 #: ../share/extensions/interp.inx:14 ../share/extensions/motion.inx:10
-#: ../share/extensions/pathalongpath.inx:41
-#: ../share/extensions/pathscatter.inx:34
+#: ../share/extensions/pathalongpath.inx:38
+#: ../share/extensions/pathscatter.inx:32
 #: ../share/extensions/voronoi2svg.inx:33
 msgid "Generate from Path"
 msgstr "Ustvari iz poti"
@@ -6423,8 +6423,8 @@ msgstr "od %i"
 #: ../src/extension/prefdialog/prefdialog.cpp:71
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
 #: ../src/ui/dialog/export.cpp:945
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:251
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:244
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:556
 #: ../src/ui/dialog/guides.cpp:185 ../src/ui/dialog/layer-properties.cpp:43
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
@@ -8780,15 +8780,15 @@ msgid "Open files saved in Adobe Illustrator 9.0 and newer versions"
 msgstr ""
 "Odpri datoteke, shranjene s programom Adobe Illustrator 9.0 ali novejšimi"
 
-#: ../src/extension/internal/png-output.cpp:49
+#: ../src/extension/internal/png-output.cpp:67
 msgid "Portable Network Graphic"
 msgstr "PNG – Portable Network Graphic"
 
-#: ../src/extension/internal/png-output.cpp:54
+#: ../src/extension/internal/png-output.cpp:72
 msgid "Portable Network Graphic (*.png)"
 msgstr "PNG – Portable Network Graphic (*.png)"
 
-#: ../src/extension/internal/png-output.cpp:55
+#: ../src/extension/internal/png-output.cpp:73
 msgid "Default raster graphic export"
 msgstr "Privzeti izvoz rastrske grafike"
 
@@ -10013,8 +10013,6 @@ msgstr "Spregledovanje pisave brez družine, ki bi sesula Pango"
 
 #: ../src/live_effects/effect.cpp:104
 #, fuzzy
-#| msgctxt "path effect"
-#| msgid "Bend"
 msgid "Bend"
 msgstr "Ukrivi"
 
@@ -10024,8 +10022,6 @@ msgstr "Upogni predmet ob ukrivljenosti druge poti"
 
 #: ../src/live_effects/effect.cpp:118
 #, fuzzy
-#| msgctxt "path effect"
-#| msgid "Gears"
 msgid "Gears"
 msgstr "Naprave"
 
@@ -10234,7 +10230,6 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:443
 #, fuzzy
-#| msgid "Pattern stroke"
 msgid "Taper stroke"
 msgstr "Vzorčasta poteza"
 
@@ -10302,8 +10297,6 @@ msgstr "Ustvarite elipso iz 5 vozlišč na njenem obodu"
 
 #: ../src/live_effects/effect.cpp:542
 #, fuzzy
-#| msgctxt "path effect"
-#| msgid "Bounding Box"
 msgid "Bounding Box"
 msgstr "Obrobni okvir"
 
@@ -10344,7 +10337,6 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:599
 #, fuzzy
-#| msgid "Inverse clip"
 msgid "Power clip"
 msgstr "Preobrni izrezek"
 
@@ -10356,7 +10348,6 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:613
 #, fuzzy
-#| msgid "Set mask"
 msgid "Power mask"
 msgstr "Nastavi masko"
 
@@ -11670,7 +11661,6 @@ msgstr "Sredica"
 #: ../src/live_effects/lpe-jointype.cpp:41
 #: ../src/live_effects/lpe-offset.cpp:68
 #, fuzzy
-#| msgid "Miter limit:"
 msgid "Miter Clip"
 msgstr "Spoj pod kotom:"
 
@@ -11749,14 +11739,12 @@ msgstr "Spoj pod kotom:"
 #: ../src/live_effects/lpe-jointype.cpp:67
 #: ../src/live_effects/lpe-offset.cpp:84
 #, fuzzy
-#| msgid "Maximum length of the miter (in units of stroke width)"
 msgid "Maximum length of the miter join (in units of stroke width)"
 msgstr "Najdaljša črta (v enotah kot debelina poteze)"
 
 #: ../src/live_effects/lpe-jointype.cpp:68
 #: ../src/live_effects/lpe-offset.cpp:85
 #, fuzzy
-#| msgid "Force"
 msgid "Force miter"
 msgstr "Sila"
 
@@ -11817,7 +11805,6 @@ msgstr "Znaki križišča"
 
 #: ../src/live_effects/lpe-knot.cpp:373
 #, fuzzy
-#| msgid "Crossings signs"
 msgid "Crossing signs"
 msgstr "Znaki križišča"
 
@@ -12258,7 +12245,6 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
 #, fuzzy
-#| msgid "Block Elements"
 msgid "Blacklist segments"
 msgstr "Bločni elementi"
 
@@ -12270,7 +12256,6 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 #, fuzzy
-#| msgid "Invert fill"
 msgid "Invert blacklist"
 msgstr "Preobrni polnilo"
 
@@ -12281,7 +12266,6 @@ msgstr "Uporabite črni seznam kot beli seznam"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:85
 #, fuzzy
-#| msgid "Show selection cue"
 msgid "Show segment index"
 msgstr "Kaži točko izbire"
 
@@ -12309,7 +12293,6 @@ msgstr "Nariši dimenzijske črte in oznake na drugi strani poti"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:88
 #, fuzzy
-#| msgid "Scale tweak"
 msgid "Scale sensitive"
 msgstr "Prilagoditev s spremembo velikosti"
 
@@ -12354,7 +12337,6 @@ msgstr "Ne prikaži puščic"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 #, fuzzy
-#| msgid "Multiply values &lt; 1"
 msgid "Multiply values < 1"
 msgstr "Pomnoži vrednosti < 1"
 
@@ -12490,7 +12472,6 @@ msgstr "Pomoč"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:104
 #, fuzzy
-#| msgid "Measurement tool"
 msgid "Measure segments help"
 msgstr "Merilno orodje"
 
@@ -12528,7 +12509,6 @@ msgstr "Projekcija"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:518
 #, fuzzy
-#| msgid "Uniform Noise"
 msgid "Non Uniform Scale"
 msgstr "Enoten šum"
 
@@ -12580,7 +12560,6 @@ msgstr "Stapljaj nasprotne strani"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:63
 #, fuzzy
-#| msgid "Clones are translated by the same vector as their original"
 msgid "Picks the part on the other side of the mirror line as the original."
 msgstr "Kloni se premaknejo po istem vektorju kot izvirnik."
 
@@ -12781,7 +12760,6 @@ msgstr "Deformacija ovojnice"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:48
 #, fuzzy
-#| msgid "Perspective"
 msgid "Overflow perspective"
 msgstr "Perspektiva"
 
@@ -12938,7 +12916,6 @@ msgstr "Faktor širine:"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:165
 #, fuzzy
-#| msgid "Scale the width of the stitch path"
 msgid "Scale the stroke's width uniformly along the whole path"
 msgstr "Spremeni merilo širine poti šiva"
 
@@ -13328,7 +13305,6 @@ msgstr "Največja razmestitev Y"
 
 #: ../src/live_effects/lpe-roughen.cpp:50
 #, fuzzy
-#| msgid "visibly randomized"
 msgid "Global randomize"
 msgstr "opazno naključno"
 
@@ -13775,7 +13751,6 @@ msgstr "Debelina poteze:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:89
 #, fuzzy
-#| msgid "Scale the width of the stitch path"
 msgid "The (non-tapered) width of the path"
 msgstr "Spremeni merilo širine poti šiva"
 
@@ -13793,7 +13768,6 @@ msgstr "Končni zamik:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:91
 #, fuzzy
-#| msgid "Use saved size and position of the tile"
 msgid "The ending position of the taper"
 msgstr "Uporabi shranjeno velikost in položaj tlakovca"
 
@@ -13827,7 +13801,6 @@ msgstr "Začetna smer:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:95
 #, fuzzy
-#| msgid "Direction of marks (when viewing along the path from start to end)"
 msgid "Direction of the taper at the path start"
 msgstr "Smer oznak (če gledate vzdolž poti od začetka proti koncu)"
 
@@ -13837,7 +13810,6 @@ msgstr "Končna smer:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:96
 #, fuzzy
-#| msgid "Direction of marks (when viewing along the path from start to end)"
 msgid "Direction of the taper at the path end"
 msgstr "Smer oznak (če gledate vzdolž poti od začetka proti koncu)"
 
@@ -14210,7 +14182,7 @@ msgstr "Spremeni parameter enote"
 msgid "_File"
 msgstr "_Datoteka"
 
-#: ../src/object/box3d.cpp:244 ../src/object/box3d.cpp:1300
+#: ../src/object/box3d.cpp:242 ../src/object/box3d.cpp:1298
 #: ../src/ui/dialog/inkscape-preferences.cpp:828
 msgid "3D Box"
 msgstr "3D-okvir"
@@ -15066,7 +15038,6 @@ msgstr "Spusti na dno"
 
 #: ../src/selection-chemistry.cpp:1196
 #, fuzzy
-#| msgid "Select <b>object(s)</b> to raise to top."
 msgid "Select <b>object(s)</b> to stack up."
 msgstr "Za dvig na vrh izberite kak <b>predmet</b>."
 
@@ -15082,7 +15053,6 @@ msgstr "po skladu navzgor"
 
 #: ../src/selection-chemistry.cpp:1220
 #, fuzzy
-#| msgid "Select <b>object(s)</b> to combine."
 msgid "Select <b>object(s)</b> to stack down."
 msgstr "Izberite <b>predmete</b> za združevanje."
 
@@ -15325,8 +15295,9 @@ msgid "Group to symbol"
 msgstr "Skupina v simbol"
 
 #: ../src/selection-chemistry.cpp:3366
-msgid "unSymbol all selected symbols"
-msgstr ""
+#, fuzzy
+msgid "Remove symbol for editing"
+msgstr "Pretvori skupino v simbol za urejanje"
 
 #: ../src/selection-chemistry.cpp:3380
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -15539,9 +15510,6 @@ msgstr "Ožigosaj"
 
 #: ../src/seltrans.cpp:662
 #, fuzzy
-#| msgid ""
-#| "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with "
-#| "<b>Shift</b> to scale around rotation center"
 msgid ""
 "<b>Scale</b> selection; with <b>%1</b> to scale uniformly; with <b>%2</b> to "
 "scale around rotation center"
@@ -15560,9 +15528,6 @@ msgstr ""
 
 #: ../src/seltrans.cpp:674
 #, fuzzy
-#| msgid ""
-#| "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</"
-#| "b> to rotate around the opposite corner"
 msgid ""
 "<b>Rotate</b> selection; with <b>%1</b> to snap angle; with <b>%2</b> to "
 "rotate around the opposite corner"
@@ -16332,7 +16297,7 @@ msgid "_Delete"
 msgstr "_Izbriši"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:564 ../src/ui/dialog/input.cpp:904
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:557 ../src/ui/dialog/input.cpp:904
 #: ../src/verbs.cpp:2360 ../src/widgets/desktop-widget.cpp:858
 msgid "_Save"
 msgstr "_Shrani"
@@ -17835,49 +17800,49 @@ msgstr "Omogoči predogled"
 msgid "Export as SVG 1.1 per settings in Preferences dialog"
 msgstr "Izvozi kot SVG 1.1 z nastavitvami iz okna Nastavitve"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:252
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:245
 msgid "_Open"
 msgstr "_Odpri"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:275
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:287
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:268
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:280
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:282
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:289
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:296
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:310
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:267
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:395
 msgid "All Files"
 msgstr "Vse datoteke"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:307
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:286
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:268
 msgid "All Inkscape Files"
 msgstr "Vse datoteke Inkscape"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:313
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:306
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:269
 msgid "All Images"
 msgstr "Vse slike"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:316
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:296
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:309
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:270
 msgid "All Vectors"
 msgstr "Vsi vektorji"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:306
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:319
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:299
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:312
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:271
 msgid "All Bitmaps"
 msgstr "Vse bitne slike"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:506
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:499
 msgid "Append filename extension automatically"
 msgstr "Samodejno dodaj pripono datoteke"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:690
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:683
 msgid "Guess from extension"
 msgstr "Določi po priponi datoteke"
 
@@ -23829,7 +23794,6 @@ msgstr "Polmer (slik. točke):"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:54
 #, fuzzy
-#| msgid "Subdivisions:"
 msgid "Chamfer subdivisions:"
 msgstr "Podrazdelki:"
 
@@ -24147,8 +24111,6 @@ msgstr "V"
 
 #: ../src/ui/dialog/objects.cpp:1897
 #, fuzzy
-#| msgctxt "Clonetiler color lightness"
-#| msgid "L"
 msgctxt "Lock"
 msgid "L"
 msgstr "L"
@@ -24161,14 +24123,12 @@ msgstr "T"
 
 #: ../src/ui/dialog/objects.cpp:1899
 #, fuzzy
-#| msgid "CMS"
 msgctxt "Clip and mask"
 msgid "CM"
 msgstr "CMS"
 
 #: ../src/ui/dialog/objects.cpp:1900
 #, fuzzy
-#| msgid "HSL"
 msgctxt "Highlight"
 msgid "HL"
 msgstr "HSL"
@@ -24296,7 +24256,6 @@ msgstr "Točka sidranja:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:48
 #, fuzzy
-#| msgid "Geometric bounding box"
 msgctxt "Polar arrange tab"
 msgid "Objects' bounding boxes:"
 msgstr "Geometrični okvir"
@@ -24871,7 +24830,6 @@ msgstr "Široko"
 #. TRANSLATORS: "Wrap" indicates how colour swatches are displayed
 #: ../src/ui/dialog/swatches.cpp:988
 #, fuzzy
-#| msgid "Wrap"
 msgctxt "Swatches"
 msgid "Wrap"
 msgstr "Prelom vrstice"
@@ -25403,7 +25361,6 @@ msgstr ""
 
 #: ../src/ui/knot/knot-holder.cpp:422 ../src/ui/knot/knot-holder.cpp:424
 #, fuzzy
-#| msgid "Width of filter effects region"
 msgid "<b>Resize</b> the filter effect region"
 msgstr "Širina območja učinkovanja filtra"
 
@@ -25461,13 +25418,11 @@ msgstr "Prezri skupine pri izbiranju elementov"
 
 #: ../src/ui/modifiers.cpp:40
 #, fuzzy
-#| msgid "Select new path"
 msgid "Select with touch-path"
 msgstr "Izberi novo pot"
 
 #: ../src/ui/modifiers.cpp:40
 #, fuzzy
-#| msgid "<b>Draw around</b> handles to select them"
 msgid "Draw a band around items to select them"
 msgstr "<b>Riši okoli</b> ročic, da jih izbereš"
 
@@ -25891,7 +25846,6 @@ msgstr "Prevrni vozlišča navpično"
 
 #: ../src/ui/tool/node.cpp:355
 #, fuzzy
-#| msgid "Cusp node handle"
 msgid "Corner node handle"
 msgstr "Ročica ostrega vozlišča"
 
@@ -25909,7 +25863,6 @@ msgstr "Samodejno zgladi ročico vozlišča"
 
 #: ../src/ui/tool/node.cpp:615
 #, fuzzy
-#| msgid "Cusp node handle"
 msgctxt "Path handle tip"
 msgid "node control handle"
 msgstr "Ročica ostrega vozlišča"
@@ -27257,13 +27210,11 @@ msgstr ""
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:300
 #, fuzzy
-#| msgid "Show the bounding box"
 msgid "Scale mesh to bounding box:"
 msgstr "Pokaži omejevalni okvir"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:301
 #, fuzzy
-#| msgid "Show limiting bounding box"
 msgid "Scale mesh to fit inside bounding box."
 msgstr "Pokaži omejevalni okvir"
 
@@ -27588,7 +27539,6 @@ msgstr "Ustvari niz odsekov prečnih črt"
 #: ../src/ui/toolbar/pencil-toolbar.cpp:267
 #: ../src/ui/toolbar/pencil-toolbar.cpp:268
 #, fuzzy
-#| msgid "Spiro spline"
 msgid "Flatten Spiro or BSpline LPE"
 msgstr "Spiro-zlepek"
 
@@ -27623,7 +27573,6 @@ msgstr "Oblika novih poti, ustvarjenih s svinčnikom"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:446
 #, fuzzy
-#| msgid "Scale the width of the stitch path"
 msgid "Scale of the width of the power stroke shape."
 msgstr "Spremeni merilo širine poti šiva"
 
@@ -29377,7 +29326,6 @@ msgstr "Vstavljena nova vrstica ali stolpec."
 
 #: ../src/ui/tools/mesh-tool.cpp:463
 #, fuzzy
-#| msgid "Show the bounding box"
 msgid "Fit mesh inside bounding box"
 msgstr "Pokaži omejevalni okvir"
 
@@ -29497,7 +29445,7 @@ msgstr ""
 "<b>Kliknite</b> ali <b>kliknite in povlecite</b>, da nadaljujete pot od te "
 "točke. Z dvigalko+klikom izdelate ostro vozlišče"
 
-#: ../src/ui/tools/pen-tool.cpp:1743
+#: ../src/ui/tools/pen-tool.cpp:1746
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp "
@@ -29507,7 +29455,7 @@ msgstr ""
 "ostro vozlišče, <b>dvigalka</b> premakne prejšnjega, z <b>vnašalko</b> ali "
 "<b>dvigalko+vnašalko</b> zaključite"
 
-#: ../src/ui/tools/pen-tool.cpp:1744
+#: ../src/ui/tools/pen-tool.cpp:1747
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp "
@@ -29517,7 +29465,7 @@ msgstr ""
 "vozlišče, <b>dvigalka</b> premakne prejšnjega, z <b>vnašalko</b> ali "
 "<b>dvigalko+vnašalko</b> zaključite"
 
-#: ../src/ui/tools/pen-tool.cpp:1748
+#: ../src/ui/tools/pen-tool.cpp:1751
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -29526,7 +29474,7 @@ msgstr ""
 "<b>Odsek krivulje</b>: kot %3.2f&#176;, razdalja %s; s <b>krmilko</b> "
 "pripnete na kot, z <b>vnašalko</b> ali <b>vnašalko+krmilko</b> zaključite pot"
 
-#: ../src/ui/tools/pen-tool.cpp:1749
+#: ../src/ui/tools/pen-tool.cpp:1752
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -29535,7 +29483,7 @@ msgstr ""
 "<b>Odsek črte</b>: kot %3.2f&#176;, razdalja %s; s <b>krmilko</b> pripnete "
 "na kot, z <b>vnašalko</b> ali <b>dvigalko+vnašalko</b> zaključite pot"
 
-#: ../src/ui/tools/pen-tool.cpp:1767
+#: ../src/ui/tools/pen-tool.cpp:1770
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -29544,7 +29492,7 @@ msgstr ""
 "<b>Ročica krivulje</b>: kot %3.2f&#176;, dolžina %s; s <b>krmilko</b> "
 "prilepite kot"
 
-#: ../src/ui/tools/pen-tool.cpp:1791
+#: ../src/ui/tools/pen-tool.cpp:1794
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -29553,7 +29501,7 @@ msgstr ""
 "<b>Ročica krivulje, simetrična</b>: kot %3.2f&#176;, dolžina %s; s "
 "<b>krmilko</b> pripnete na kot, z <b>dvigalko</b> premaknete le to ročico"
 
-#: ../src/ui/tools/pen-tool.cpp:1792
+#: ../src/ui/tools/pen-tool.cpp:1795
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -29562,7 +29510,7 @@ msgstr ""
 "<b>Ročica krivulje</b>: kot %3.2f&#176;, dolžina %s; s <b>krmilko</b> "
 "pripnete na kot, z <b>dvigalko</b> premaknete le to ročico"
 
-#: ../src/ui/tools/pen-tool.cpp:1944
+#: ../src/ui/tools/pen-tool.cpp:1947
 msgid "Drawing finished"
 msgstr "Risanje končano"
 
@@ -30230,8 +30178,6 @@ msgstr "HSV"
 
 #: ../src/ui/widget/color-scales.cpp:435
 #, fuzzy
-#| msgctxt "Gap"
-#| msgid "_V:"
 msgid "_V:"
 msgstr "Š:"
 
@@ -30413,8 +30359,6 @@ msgstr ""
 
 #: ../src/ui/widget/font-variants.cpp:170
 #, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Sailing"
 msgctxt "Font feature"
 msgid "Titling"
 msgstr "Jadanje"
@@ -30426,7 +30370,6 @@ msgstr "Številke"
 
 #: ../src/ui/widget/font-variants.cpp:173
 #, fuzzy
-#| msgid "Thinning:"
 msgctxt "Font feature"
 msgid "Lining"
 msgstr "Tanjšanje:"
@@ -31162,7 +31105,6 @@ msgstr "Krožen preliv (poteza)"
 
 #: ../src/ui/widget/selected-style.cpp:213
 #, fuzzy
-#| msgid "<b>L</b>"
 msgid "<b>M</b>"
 msgstr "<b>L</b>"
 
@@ -32904,7 +32846,6 @@ msgstr "Ustvari skupino _izrezkov"
 
 #: ../src/verbs.cpp:2688
 #, fuzzy
-#| msgid "Create a clone (a copy linked to the original) of selected object"
 msgid "Creates a clip group using the selected objects as a base"
 msgstr "Ustvari klon izbranega predmeta (dvojnik, povezan z izvirnikom)"
 
@@ -34256,8 +34197,6 @@ msgstr "Uporabi Gaussovo zabrisanost pred prerisovanjem"
 
 #: ../share/ui/dialog-trace.glade:487
 #, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Stacked"
 msgid "Stack"
 msgstr "Zbirka"
 
@@ -34360,7 +34299,6 @@ msgstr "Favorizira povezave, ki so del barve ospredja"
 
 #: ../share/ui/dialog-trace.glade:742
 #, fuzzy
-#| msgid "Radius (pixels):"
 msgid ""
 "Sparse pixels\n"
 "(window radius)"
@@ -34368,7 +34306,6 @@ msgstr "Polmer (slik. točke):"
 
 #: ../share/ui/dialog-trace.glade:755
 #, fuzzy
-#| msgid "Radius (pixels):"
 msgid ""
 "Sparse pixels\n"
 "(multiplier)"
@@ -34881,7 +34818,6 @@ msgid "System Default"
 msgstr "Privzeti sistemski"
 
 #: ../share/ui/inkscape-start.glade:991
-#: ../org.inkscape.Inkscape.appdata.xml.in:56
 msgid "Inkscape 1.1"
 msgstr "Inkscape 1,1"
 
@@ -35076,7 +35012,6 @@ msgstr "X-žarki"
 
 #: ../share/ui/menu-view.ui:187
 #, fuzzy
-#| msgid "Grayscale"
 msgid "Gray Scale"
 msgstr "Sivinsko"
 
@@ -35623,7 +35558,6 @@ msgstr "V polje za zamenjavo vseh vnesite nadomestno pisavo."
 
 #: ../share/extensions/setup_typography_canvas.py:67
 #, fuzzy
-#| msgid "text baseline"
 msgid "baseline"
 msgstr "osnovnica"
 
@@ -37879,42 +37813,36 @@ msgstr "Tipografija:"
 
 #: ../share/extensions/hershey.inx:21
 #, fuzzy
-#| msgid "Sans 1-stroke"
 msgctxt "Font name"
 msgid "Hershey Sans 1-stroke"
 msgstr "Brez zaključkov, enopotezna"
 
 #: ../share/extensions/hershey.inx:25
 #, fuzzy
-#| msgid "Serif medium italic"
 msgctxt "Font name"
 msgid "Hershey Serif medium italic"
 msgstr "Z zaključki, srednja, ležeča"
 
 #: ../share/extensions/hershey.inx:27
 #, fuzzy
-#| msgid "Serif bold"
 msgctxt "Font name"
 msgid "Hershey Serif bold"
 msgstr "Z zaključki, krepka"
 
 #: ../share/extensions/hershey.inx:28
 #, fuzzy
-#| msgid "Serif bold italic"
 msgctxt "Font name"
 msgid "Hershey Serif bold italic"
 msgstr "Z zaključki, krepka, ležeča"
 
 #: ../share/extensions/hershey.inx:30
 #, fuzzy
-#| msgid "Script 1-stroke"
 msgctxt "Font name"
 msgid "Hershey Script 1-stroke"
 msgstr "Pisana, enopotezna"
 
 #: ../share/extensions/hershey.inx:31
 #, fuzzy
-#| msgid "Script medium"
 msgctxt "Font name"
 msgid "Hershey Script medium"
 msgstr "Pisana, srednja"
@@ -39011,7 +38939,6 @@ msgstr "Po Gaussu"
 
 #: ../share/extensions/jitternodes.inx:15
 #, fuzzy
-#| msgid "Normal"
 msgid "Log-normal"
 msgstr "Običajno"
 
@@ -40197,38 +40124,48 @@ msgid "Duplicate the pattern before deformation"
 msgstr "Podvoji vzorec pred deformacijo"
 
 #: ../share/extensions/pathalongpath.inx:25
+#, fuzzy
 msgid ""
-"This effect bends a pattern along arbitrary \"skeleton\" paths. The pattern "
-"is the topmost object in the selection, groups of paths, shapes or clones "
-"are allowed. Text can also be used as pattern, but has to be converted to "
-"path first. The other selected items are skeleton paths, and the pattern is "
-"applied to each of them"
+"This extension bends a pattern along the curvature of selected path objects."
+msgstr "Ta razširitev zahteva dva izbrana predmeta."
+
+#: ../share/extensions/pathalongpath.inx:26
+#, fuzzy
+msgid ""
+"There must only be a single pattern object. The pattern object must be the "
+"topmost object in the selection. For the pattern, groups of paths, shapes or "
+"clones are allowed. Text must be converted to path before using it as a "
+"pattern."
 msgstr ""
 "Ta učinek razprši vzorec vzdolž poljubne poti »okostja«. Vzorec je vrhnji "
-"predmet v izboru. Skupine poti, likov in klonov so dovoljene. Besedilo lahko "
-"uporabi tudi kot vzorec, vendar ga je potrebno prej pretvoriti v pot. Drugi "
-"izbrani elementi so poti okostja, vzorec pa se uveljavi na vsakem izmed njih"
+"predmet v izboru. Skupine poti, likov in klonov so dovoljene. Drugi izbrani "
+"elementi tvorijo poti okostja."
+
+#: ../share/extensions/pathalongpath.inx:27
+msgid ""
+"The pattern can be bent along multiple paths at once, the only condition is "
+"that these must be path objects, no other object types are allowed."
+msgstr ""
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
-"There are two different deformation modes. With \"Snake\", vertical lines "
-"will be perpendicular to the skeleton and horizontal lines will be parallel "
-"(angles are preserved before stretching for paths with high node density). "
-"With \"Ribbon\", vertical lines will remain vertical (lengths are preserved)."
+"There are two different deformation modes. \"Snake\" means that the pattern "
+"will rotate along with the path direction. With \"Ribbon\", the pattern will "
+"stay upright, so the result will look like a printed ribbon."
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx:30
+msgid ""
+"The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
+"applying it to the path."
 msgstr ""
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
-"The \"vertical\" option switches the role of horizontal and vertical lines "
-"in the deformation mode."
-msgstr ""
-
-#: ../share/extensions/pathalongpath.inx:34
-msgid ""
-"Note that the extension does not add additional nodes to the pattern paths. "
-"For high curvature, the result in may therefore look aesthetically "
-"unpleasing. To avoid this, either add addition nodes manually, or convert "
-"all segments to curves beforehand."
+"If your paths have sharp bends that the pattern is supposed to follow, the "
+"result may not look as you expected. This is because the extension cannot "
+"add any new nodes to your pattern objects. To avoid this, either add more "
+"nodes to your pattern objects, or convert all segments to curves beforehand."
 msgstr ""
 
 #: ../share/extensions/pathscatter.inx:8
@@ -40281,13 +40218,13 @@ msgstr "Zaporedno"
 
 #: ../share/extensions/pathscatter.inx:26
 msgid ""
-"This effect scatters a pattern along arbitrary \"skeleton\" paths. The "
-"pattern is the topmost object in the selection; groups of paths, shapes, "
-"clones are allowed. The other selected objects form the skeleton paths."
+"This extension drops copies of a pattern object along one or more paths "
+"without deforming it. The pattern object must be a single path or a group of "
+"paths, shapes or clones. It must be the topmost object in the selection. All "
+"other selected objects must be paths. You can also put a set of different "
+"objects (alternating or randomly) on the path, if you select the option for "
+"picking group members."
 msgstr ""
-"Ta učinek razprši vzorec vzdolž poljubne poti »okostja«. Vzorec je vrhnji "
-"predmet v izboru. Skupine poti, likov in klonov so dovoljene. Drugi izbrani "
-"elementi tvorijo poti okostja."
 
 #: ../share/extensions/pdflatex.inx:3
 msgid "LaTeX (pdflatex)"
@@ -43005,250 +42942,6 @@ msgstr ""
 msgid "Main application window"
 msgstr "Glavno okno programa"
 
-#: ../org.inkscape.Inkscape.appdata.xml.in:45
-msgid "Inkscape 1.1.1"
-msgstr "Inkscape 1.1.1"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:47
-msgid "Text stroke to path fixed"
-msgstr "Popravljeno pretvarjanje potez v poti"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:48
-msgid "Startup time improved"
-msgstr "Pohitritev zagona programa"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:49
-msgid "Fixed various crashes"
-msgstr "Odpravljena razna sesutja"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:58
-msgid "Welcome dialog"
-msgstr "Okno dobrodošlice"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:59
-msgid "Command palette to search for functions"
-msgstr "Ukazna paleta za iskanje funkcij"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:60
-msgid "Copypaste parts of paths"
-msgstr "Kopiranje in lepljenje delov poti"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:61
-msgid "Complete rework of the dialog docking system"
-msgstr "Popolna predelava sistema za sidranje pogovornih oken"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:62
-msgid "New outline overlay mode"
-msgstr "Nov način prekrvanja z orisom"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:63
-msgid "Search field in Preferences dialog"
-msgstr "Polje za iskanje v pogovornem oknu Nastavitve"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:64
-msgid "Improved Export PNG dialog"
-msgstr "Izboljšano pogovorno okno za izvoz PNG"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:65
-msgid "Ability to directly export JPG, TIFF, optimized PNG, and WebP"
-msgstr "Možnost neposrednega izvoza JPG, TIFF, optimiziranega PNG in WebP"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:66
-msgid "Paste now pastes directly above selected object"
-msgstr "Lepljenje zdaj prilepi neposredno nad izbrani predmet"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:67
-msgid "Beta Extension Manager"
-msgstr "Beta različica Upravitelja razširitev"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:74
-msgid "Inkscape 1.0"
-msgstr "Inkscape 1,0"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:76
-msgid "Theming support and more new customization options"
-msgstr "Podpora za teme in več novih možnosti prilagajanja"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:77
-msgid "Better HiDPI (high resolution) screen support"
-msgstr "Boljša podpora zaslonov HiDPI (visoka ločljivost)"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:78
-msgid "Native support for macOS with a signed and notarized .dmg file"
-msgstr "Domorodna podpora za macOS s podpisano in notarizirano .dmg datoteko"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:79
-msgid "Coordinate origin in top left corner by default"
-msgstr "Privzeto izhodišče koordinat v levem zgornjem kotu"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:80
-msgid "Canvas rotation and mirroring"
-msgstr "Vrtenje in zrcaljenje platna"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:81
-msgid "On-Canvas alignment of objects"
-msgstr "Poravnava predmetov na platnu"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:82
-msgid "Split view and X-Ray modes"
-msgstr "Načini deljenega pogleda in žarkov X"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:83
-msgid ""
-"PowerPencil for drawing editable, variable width strokes with a pressure "
-"sensitive graphics tablet"
-msgstr ""
-"PowerPencil za risanj je mogoče urejati, spremenljiva širine potez z "
-"grafično tablico, občutljivo na pritisk"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:84
-msgid "New PNG export options"
-msgstr "Nove možnosti izvoza PNG"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:85
-msgid "Integrated centerline tracing for vectorizing line drawings"
-msgstr "Integrirano sledenje središčnice za vektorizacijo črtnih risb"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:86
-msgid "Searchable Symbols dialog"
-msgstr "Pogovorno okno Simboli, ki jih je mogoče iskati"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:87
-msgid "New Live Path Effect (LPE) selection dialog"
-msgstr "Pogovorno okno za izbiro novega učinka poti v živo (LPE)"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:88
-msgid ""
-"New Corners (Fillet/chamfer) LPE, (lossless) Boolean Operation LPE "
-"(experimental), Offset LPE and Measure Segments LPE (and more!)"
-msgstr ""
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:89
-msgid ""
-"Path operations, deselection of a large number of paths as well as grouping/"
-"ungrouping are much faster now"
-msgstr ""
-"Operacije poti, izbor velikega števila poti in združevanje/razdruževanje so "
-"zdaj veliko hitrejši"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:90
-msgid "Much improved text line-height settings"
-msgstr "Močno izboljšane nastavitve višine vrstice besedila"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:91
-msgid ""
-"Variable fonts support (only if compiled with pango library version &gt;= "
-"1.41.1)"
-msgstr ""
-"Podpora spremenljivim pisavam (samo če je preveden z različico knjižnice "
-"Pango &gt;= 1.41.1)"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:92
-msgid "Browser-compatible flowed text"
-msgstr "Tekoče besedilo, združljivo z brskalniki"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:93
-msgid ""
-"Extensions programming interface updated, with many new options - Note: this "
-"introduces breaking changes, some third-party extensions will have to be "
-"updated to work with Inkscape 1.0"
-msgstr ""
-"Posodobljen programski vmesnik razširitev, s številnimi novimi možnostmi; "
-"opomba: to uvaja prelomne spremembe, nekatere razširitve tretjih oseb bo "
-"potrebno posodobiti, da bodo delovale z Inkscape 1.0."
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:94
-msgid "Python 3 support for extensions"
-msgstr "Podpora za razširitve Python 3"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:102
-msgid "Bugfix release"
-msgstr "Izdaja le s popravki hroščev"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:103
-msgid "More python3 compatibility for extensions"
-msgstr "Več združljivosti s Python3 za razširitve"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:110
-#: ../org.inkscape.Inkscape.appdata.xml.in:123
-#: ../org.inkscape.Inkscape.appdata.xml.in:136
-msgid "New 0.92.x bugfix release."
-msgstr "Nova izdaja 0.92.x le s popravki hroščev."
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:112
-msgid "Improvements to the align and distribute tool"
-msgstr "Izboljšave orodja za poravnavo in porazdelitev"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:113
-msgid "Support for piping standard input and output"
-msgstr "Podpora za cevni standardni vhod in izhod"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:114
-msgid "The color slider can be constrained to stepped values"
-msgstr "Barvni drsnik je mogoče omejiti na vrednosti po korakih"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:115
-msgid "Performance improvements"
-msgstr "Pospešitev delovanja"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:116
-#: ../org.inkscape.Inkscape.appdata.xml.in:129
-msgid "And many more bugfixes"
-msgstr "In še veliko drugih popravkov hroščev"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:125
-msgid "New command-line options to control page size when exporting to SVG"
-msgstr ""
-"Nove možnosti ukazne vrstice za nadzor velikosti strani pri izvozu v SVG"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:126
-msgid "Support for left-to-right languages in the text tool"
-msgstr "Podpora za jezike od leve proti desni v besedilnem orodju"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:127
-msgid "Improvements to the circle/ellipse/arc tool"
-msgstr "Izboljšave orodja za krog/elipso/lok"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:128
-msgid "Support for multi-line text when exporting to PDF+LaTeX"
-msgstr "Podpora za večvrstično besedilo pri izvozu v PDF+LaTeX"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:138
-msgid "Better importing and exporting"
-msgstr "Izboljšan uvoz in izvoz"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:139
-msgid "Greater stability when printing on Windows"
-msgstr "Večja stabilnost pri tiskanju na sistemih Windows"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:140
-msgid "Improved fill and stroke HSL color selection"
-msgstr "Izboljšano izbiranje barv HSL za polnilo in potezo"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:141
-msgid "Greater stability when reverting and saving files"
-msgstr "Večja stabilnost pri povrnitvi in shranjevanju datotek"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:142
-msgid "An additional handle at the center of shapes"
-msgstr "Dodatna ročica v središču likov"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:143
-msgid "A command line option for updating the file's DPI"
-msgstr "Možnost ukazne vrstice za posodabljanje DPI datoteke"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:144
-msgid "Improvements to user-defined shortcuts"
-msgstr "Izboljšave uporabniško opredeljenih bližnjic"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:145
-msgid "Migration to Gitlab to make contribution easier"
-msgstr "Selitev v Gitlab za lažje prispevanje"
-
-#: ../org.inkscape.Inkscape.appdata.xml.in:146
-msgid "And many more bugfixes!"
-msgstr "In še veliko drugih popravkov hroščev!"
-
 #: ../org.inkscape.Inkscape.desktop.template:8
 msgid "Create and edit Scalable Vector Graphics images"
 msgstr "Ustvarjanje in urejanje vektorskih slik SVG"
@@ -43256,6 +42949,10 @@ msgstr "Ustvarjanje in urejanje vektorskih slik SVG"
 #: ../org.inkscape.Inkscape.desktop.template:9
 msgid "image;editor;vector;drawing;"
 msgstr "slika;urejevalnik;vektorski;risba;"
+
+#: ../org.inkscape.Inkscape.desktop.template:17
+msgid "${INKSCAPE_ICONPATH}"
+msgstr ""
 
 #: ../org.inkscape.Inkscape.desktop.template:22
 msgid "New Drawing"
@@ -43468,3 +43165,198 @@ msgstr "polovični em-i"
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr "Polovica višine pisave"
+
+#~ msgid ""
+#~ "This effect bends a pattern along arbitrary \"skeleton\" paths. The "
+#~ "pattern is the topmost object in the selection, groups of paths, shapes "
+#~ "or clones are allowed. Text can also be used as pattern, but has to be "
+#~ "converted to path first. The other selected items are skeleton paths, and "
+#~ "the pattern is applied to each of them"
+#~ msgstr ""
+#~ "Ta učinek razprši vzorec vzdolž poljubne poti »okostja«. Vzorec je vrhnji "
+#~ "predmet v izboru. Skupine poti, likov in klonov so dovoljene. Besedilo "
+#~ "lahko uporabi tudi kot vzorec, vendar ga je potrebno prej pretvoriti v "
+#~ "pot. Drugi izbrani elementi so poti okostja, vzorec pa se uveljavi na "
+#~ "vsakem izmed njih"
+
+#~ msgid "Inkscape 1.1.1"
+#~ msgstr "Inkscape 1.1.1"
+
+#~ msgid "Text stroke to path fixed"
+#~ msgstr "Popravljeno pretvarjanje potez v poti"
+
+#~ msgid "Startup time improved"
+#~ msgstr "Pohitritev zagona programa"
+
+#~ msgid "Fixed various crashes"
+#~ msgstr "Odpravljena razna sesutja"
+
+#~ msgid "Welcome dialog"
+#~ msgstr "Okno dobrodošlice"
+
+#~ msgid "Command palette to search for functions"
+#~ msgstr "Ukazna paleta za iskanje funkcij"
+
+#~ msgid "Copypaste parts of paths"
+#~ msgstr "Kopiranje in lepljenje delov poti"
+
+#~ msgid "Complete rework of the dialog docking system"
+#~ msgstr "Popolna predelava sistema za sidranje pogovornih oken"
+
+#~ msgid "New outline overlay mode"
+#~ msgstr "Nov način prekrvanja z orisom"
+
+#~ msgid "Search field in Preferences dialog"
+#~ msgstr "Polje za iskanje v pogovornem oknu Nastavitve"
+
+#~ msgid "Improved Export PNG dialog"
+#~ msgstr "Izboljšano pogovorno okno za izvoz PNG"
+
+#~ msgid "Ability to directly export JPG, TIFF, optimized PNG, and WebP"
+#~ msgstr "Možnost neposrednega izvoza JPG, TIFF, optimiziranega PNG in WebP"
+
+#~ msgid "Paste now pastes directly above selected object"
+#~ msgstr "Lepljenje zdaj prilepi neposredno nad izbrani predmet"
+
+#~ msgid "Beta Extension Manager"
+#~ msgstr "Beta različica Upravitelja razširitev"
+
+#~ msgid "Inkscape 1.0"
+#~ msgstr "Inkscape 1,0"
+
+#~ msgid "Theming support and more new customization options"
+#~ msgstr "Podpora za teme in več novih možnosti prilagajanja"
+
+#~ msgid "Better HiDPI (high resolution) screen support"
+#~ msgstr "Boljša podpora zaslonov HiDPI (visoka ločljivost)"
+
+#~ msgid "Native support for macOS with a signed and notarized .dmg file"
+#~ msgstr ""
+#~ "Domorodna podpora za macOS s podpisano in notarizirano .dmg datoteko"
+
+#~ msgid "Coordinate origin in top left corner by default"
+#~ msgstr "Privzeto izhodišče koordinat v levem zgornjem kotu"
+
+#~ msgid "Canvas rotation and mirroring"
+#~ msgstr "Vrtenje in zrcaljenje platna"
+
+#~ msgid "On-Canvas alignment of objects"
+#~ msgstr "Poravnava predmetov na platnu"
+
+#~ msgid "Split view and X-Ray modes"
+#~ msgstr "Načini deljenega pogleda in žarkov X"
+
+#~ msgid ""
+#~ "PowerPencil for drawing editable, variable width strokes with a pressure "
+#~ "sensitive graphics tablet"
+#~ msgstr ""
+#~ "PowerPencil za risanj je mogoče urejati, spremenljiva širine potez z "
+#~ "grafično tablico, občutljivo na pritisk"
+
+#~ msgid "New PNG export options"
+#~ msgstr "Nove možnosti izvoza PNG"
+
+#~ msgid "Integrated centerline tracing for vectorizing line drawings"
+#~ msgstr "Integrirano sledenje središčnice za vektorizacijo črtnih risb"
+
+#~ msgid "Searchable Symbols dialog"
+#~ msgstr "Pogovorno okno Simboli, ki jih je mogoče iskati"
+
+#~ msgid "New Live Path Effect (LPE) selection dialog"
+#~ msgstr "Pogovorno okno za izbiro novega učinka poti v živo (LPE)"
+
+#~ msgid ""
+#~ "Path operations, deselection of a large number of paths as well as "
+#~ "grouping/ungrouping are much faster now"
+#~ msgstr ""
+#~ "Operacije poti, izbor velikega števila poti in združevanje/razdruževanje "
+#~ "so zdaj veliko hitrejši"
+
+#~ msgid "Much improved text line-height settings"
+#~ msgstr "Močno izboljšane nastavitve višine vrstice besedila"
+
+#~ msgid ""
+#~ "Variable fonts support (only if compiled with pango library version &gt;= "
+#~ "1.41.1)"
+#~ msgstr ""
+#~ "Podpora spremenljivim pisavam (samo če je preveden z različico knjižnice "
+#~ "Pango &gt;= 1.41.1)"
+
+#~ msgid "Browser-compatible flowed text"
+#~ msgstr "Tekoče besedilo, združljivo z brskalniki"
+
+#~ msgid ""
+#~ "Extensions programming interface updated, with many new options - Note: "
+#~ "this introduces breaking changes, some third-party extensions will have "
+#~ "to be updated to work with Inkscape 1.0"
+#~ msgstr ""
+#~ "Posodobljen programski vmesnik razširitev, s številnimi novimi možnostmi; "
+#~ "opomba: to uvaja prelomne spremembe, nekatere razširitve tretjih oseb bo "
+#~ "potrebno posodobiti, da bodo delovale z Inkscape 1.0."
+
+#~ msgid "Python 3 support for extensions"
+#~ msgstr "Podpora za razširitve Python 3"
+
+#~ msgid "Bugfix release"
+#~ msgstr "Izdaja le s popravki hroščev"
+
+#~ msgid "More python3 compatibility for extensions"
+#~ msgstr "Več združljivosti s Python3 za razširitve"
+
+#~ msgid "New 0.92.x bugfix release."
+#~ msgstr "Nova izdaja 0.92.x le s popravki hroščev."
+
+#~ msgid "Improvements to the align and distribute tool"
+#~ msgstr "Izboljšave orodja za poravnavo in porazdelitev"
+
+#~ msgid "Support for piping standard input and output"
+#~ msgstr "Podpora za cevni standardni vhod in izhod"
+
+#~ msgid "The color slider can be constrained to stepped values"
+#~ msgstr "Barvni drsnik je mogoče omejiti na vrednosti po korakih"
+
+#~ msgid "Performance improvements"
+#~ msgstr "Pospešitev delovanja"
+
+#~ msgid "And many more bugfixes"
+#~ msgstr "In še veliko drugih popravkov hroščev"
+
+#~ msgid "New command-line options to control page size when exporting to SVG"
+#~ msgstr ""
+#~ "Nove možnosti ukazne vrstice za nadzor velikosti strani pri izvozu v SVG"
+
+#~ msgid "Support for left-to-right languages in the text tool"
+#~ msgstr "Podpora za jezike od leve proti desni v besedilnem orodju"
+
+#~ msgid "Improvements to the circle/ellipse/arc tool"
+#~ msgstr "Izboljšave orodja za krog/elipso/lok"
+
+#~ msgid "Support for multi-line text when exporting to PDF+LaTeX"
+#~ msgstr "Podpora za večvrstično besedilo pri izvozu v PDF+LaTeX"
+
+#~ msgid "Better importing and exporting"
+#~ msgstr "Izboljšan uvoz in izvoz"
+
+#~ msgid "Greater stability when printing on Windows"
+#~ msgstr "Večja stabilnost pri tiskanju na sistemih Windows"
+
+#~ msgid "Improved fill and stroke HSL color selection"
+#~ msgstr "Izboljšano izbiranje barv HSL za polnilo in potezo"
+
+#~ msgid "Greater stability when reverting and saving files"
+#~ msgstr "Večja stabilnost pri povrnitvi in shranjevanju datotek"
+
+#~ msgid "An additional handle at the center of shapes"
+#~ msgstr "Dodatna ročica v središču likov"
+
+#~ msgid "A command line option for updating the file's DPI"
+#~ msgstr "Možnost ukazne vrstice za posodabljanje DPI datoteke"
+
+#~ msgid "Improvements to user-defined shortcuts"
+#~ msgstr "Izboljšave uporabniško opredeljenih bližnjic"
+
+#~ msgid "Migration to Gitlab to make contribution easier"
+#~ msgstr "Selitev v Gitlab za lažje prispevanje"
+
+#~ msgid "And many more bugfixes!"
+#~ msgstr "In še veliko drugih popravkov hroščev!"
