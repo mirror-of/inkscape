@@ -52,8 +52,6 @@ int get_active_tool_enum(InkscapeWindow *win);
 void set_active_tool(InkscapeWindow* win, Glib::ustring const &tool);
 void set_active_tool(InkscapeWindow* win, SPItem *item, Geom::Point const p);
 
-void reset_active_tool(InkscapeWindow* win);
-
 void open_tool_preferences(InkscapeWindow* win, Glib::ustring const &tool);
 
 // Deprecated: Long term goal to remove SPDesktop.

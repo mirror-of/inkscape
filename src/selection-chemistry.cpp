@@ -407,17 +407,16 @@ void ObjectSet::deleteItems()
     std::vector<SPItem*> selected(items().begin(), items().end());
     clear();
     sp_selection_delete_impl(selected);
-    if (SPDesktop *d = desktop()) {
-        d->layerManager().currentLayer()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    if (SPDesktop *dt = desktop()) {
+        dt->layerManager().currentLayer()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
-        /* a tool may have set up private information in it's selection context
+        /* A tool may have set up private information in it's selection context
          * that depends on desktop items.  I think the only sane way to deal with
-         * this currently is to reset the current tool, which will reset it's
+         * this currently is to reset the event context which will reset it's
          * associated selection context.  For example: deleting an object
          * while moving it around the canvas.
          */
-        InkscapeWindow *win = d->getInkscapeWindow();
-        reset_active_tool(win);
+        dt->setEventContext(dt->getEventContext()->getPrefsPath());
     }
 
     if(document()) {
@@ -2930,7 +2929,7 @@ void ObjectSet::removeLPESRecursive(bool keep_paths) {
         } else {
             itemsdone_.push_back(it);
         }
-
+        
     }
     setList(itemsdone_);
 }

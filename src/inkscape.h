@@ -50,7 +50,6 @@ void inkscape_ref  (Inkscape::Application & in);
 void inkscape_unref(Inkscape::Application & in);
 
 #define INKSCAPE (Inkscape::Application::instance())
-#define SP_ACTIVE_EVENTCONTEXT (INKSCAPE.active_event_context())
 #define SP_ACTIVE_DOCUMENT (INKSCAPE.active_document())
 #define SP_ACTIVE_DESKTOP (INKSCAPE.active_desktop())
 
@@ -126,7 +125,6 @@ public:
     void selection_changed (Inkscape::Selection * selection);
     void subselection_changed (SPDesktop *desktop);
     void selection_set (Inkscape::Selection * selection);
-    void eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext);
     
     // Moved document add/remove functions into public inkscape.h as they are used
     // (rightly or wrongly) by console-mode functions
@@ -155,8 +153,6 @@ public:
     sigc::signal<void, Inkscape::Selection *, guint /*flags*/> signal_selection_modified;
     // one of selections set
     sigc::signal<void, Inkscape::Selection *> signal_selection_set;
-    // tool switched
-    sigc::signal<void, Inkscape::UI::Tools::ToolBase * /*eventcontext*/> signal_eventcontext_set;
     // some desktop got focus
     sigc::signal<void, SPDesktop *> signal_activate_desktop;
     // some desktop lost focus

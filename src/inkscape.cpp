@@ -565,17 +565,6 @@ Application::selection_set (Inkscape::Selection * selection)
 
 
 void
-Application::eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext)
-{
-    g_return_if_fail (eventcontext != nullptr);
-
-    if (DESKTOP_IS_ACTIVE (eventcontext->getDesktop())) {
-        signal_eventcontext_set.emit(eventcontext);
-    }
-}
-
-
-void
 Application::add_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != nullptr);
@@ -590,7 +579,6 @@ Application::add_desktop (SPDesktop * desktop)
     _desktops->insert(_desktops->begin(), desktop);
 
     signal_activate_desktop.emit(desktop);
-    signal_eventcontext_set.emit(desktop->getEventContext());
     signal_selection_set.emit(desktop->getSelection());
     signal_selection_changed.emit(desktop->getSelection());
 }
@@ -615,16 +603,13 @@ Application::remove_desktop (SPDesktop * desktop)
             _desktops->insert(_desktops->begin(), new_desktop);
 
             signal_activate_desktop.emit(new_desktop);
-            signal_eventcontext_set.emit(new_desktop->getEventContext());
             signal_selection_set.emit(new_desktop->getSelection());
             signal_selection_changed.emit(new_desktop->getSelection());
         } else {
-            signal_eventcontext_set.emit(nullptr);
             if (desktop->getSelection())
                 desktop->getSelection()->clear();
         }
     }
-    desktop->setEventContext("");
 
     _desktops->erase(std::find(_desktops->begin(), _desktops->end(), desktop));
 
@@ -661,7 +646,6 @@ Application::activate_desktop (SPDesktop * desktop)
     _desktops->insert (_desktops->begin(), desktop);
 
     signal_activate_desktop.emit(desktop);
-    signal_eventcontext_set.emit(desktop->getEventContext());
     signal_selection_set(desktop->getSelection());
     signal_selection_changed(desktop->getSelection());
 }
@@ -883,16 +867,6 @@ Application::sole_desktop_for_document(SPDesktop const &desktop) {
         }
     }
     return true;
-}
-
-Inkscape::UI::Tools::ToolBase *
-Application::active_event_context ()
-{
-    if (SP_ACTIVE_DESKTOP) {
-        return SP_ACTIVE_DESKTOP->getEventContext();
-    }
-
-    return nullptr;
 }
 
 Inkscape::ActionContext
