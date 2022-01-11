@@ -51,6 +51,9 @@ set(RENDERING_TESTS
     # -- LPE tests --
     test-powerstroke-join
 
+    # <symbol> geometric properties (SVG 2.0 feature)
+    symbol-svg2-geometry-properties
+
     ${RENDERING_TESTS_64bit}
 )
 

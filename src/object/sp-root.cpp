@@ -24,6 +24,7 @@
 #include "sp-defs.h"
 #include "sp-namedview.h"
 #include "sp-root.h"
+#include "sp-use.h"
 #include "display/drawing-group.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
@@ -268,7 +269,7 @@ void SPRoot::update(SPCtx *ctx, guint flags)
     }
 
     // Calculate x, y, width, height from parent/initial viewport
-    this->calcDimsFromParentViewport(ictx);
+    this->calcDimsFromParentViewport(ictx, false, cloned ? dynamic_cast<SPUse const *>(parent) : nullptr);
 
     // std::cout << "SPRoot::update: final:"
     //           << " x: " << x.computed
