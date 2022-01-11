@@ -3363,7 +3363,7 @@ void ObjectSet::unSymbol()
             }
         }
     }
-    DocumentUndo::done(document(), SP_VERB_EDIT_UNSYMBOL, _("unSymbol all selected symbols"));
+    DocumentUndo::done(document(), SP_VERB_EDIT_UNSYMBOL, _("Remove symbol for editing"));
 }
 
 void ObjectSet::tile(bool apply)
