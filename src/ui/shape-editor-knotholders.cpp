@@ -1095,12 +1095,7 @@ MarkerKnotHolderEntityOrient::set_internal(Geom::Point const &p, Geom::Point con
     double new_angle = atan2(p[Geom::Y] - original_center[Geom::Y], p[Geom::X] - original_center[Geom::X]) * 180.0/M_PI;
     new_angle = new_angle + _edit_rotation + original_center_angle;
 
-    Geom::Point center = Geom::Point(
-    (-sp_marker->refX.computed + getMarkerBounds(item, desktop).min()[Geom::X] + sp_marker->viewBox.width()/2) * getMarkerXScale(item), 
-    (-sp_marker->refY.computed + getMarkerBounds(item, desktop).min()[Geom::Y] + sp_marker->viewBox.height()/2) * getMarkerYScale(item))
-    * getMarkerRotation(item, _edit_rotation, _edit_marker_mode);
-
-    double axis_angle = atan2(center) * 180.0/M_PI;
+    double axis_angle = -((atan2(original_center) * 180.0/M_PI) + _edit_rotation);
 
     sp_marker->orient = new_angle;
     sp_marker->orient_mode = MARKER_ORIENT_ANGLE;
