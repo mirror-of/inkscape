@@ -345,6 +345,29 @@ void ClipboardManagerImpl::copyPathParameter(Inkscape::LivePathEffect::PathParam
 }
 
 /**
+ * If the symbol has a viewBox but no width or height, then take width and
+ * height from the viewBox and set them on the use element. Otherwise, the
+ * use element will have 100% document width and height!
+ */
+static void setWidthHeightFromSymbol( //
+    Inkscape::XML::Node *use,         //
+    Inkscape::XML::Node const *symbol)
+{
+    auto widthAttr = symbol->attribute("width");
+    auto heightAttr = symbol->attribute("height");
+    auto viewBoxAttr = symbol->attribute("viewBox");
+
+    if (viewBoxAttr && !(heightAttr || widthAttr)) {
+        SPViewBox vb;
+        vb.set_viewBox(viewBoxAttr);
+        if (vb.viewBox_set) {
+            use->setAttributeSvgDouble("width", vb.viewBox.width());
+            use->setAttributeSvgDouble("height", vb.viewBox.height());
+        }
+    }
+}
+
+/**
  * Copy a symbol from the symbol dialog.
  * @param symbol The Inkscape::XML::Node for the symbol.
  */
@@ -388,6 +411,9 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
 
     Inkscape::XML::Node *use = _doc->createElement("svg:use");
     use->setAttribute("xlink:href", id );
+
+    setWidthHeightFromSymbol(use, symbol);
+
     // Set a default style in <use> rather than <symbol> so it can be changed.
     use->setAttribute("style", style );
     if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {
