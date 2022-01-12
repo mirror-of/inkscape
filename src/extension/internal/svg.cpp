@@ -921,8 +921,10 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 
     SPDocument *doc = SPDocument::createNewDoc(uri, true);
 
-    // Whis will convert single page docs into multi page mode, and visa-versa
-    doc->setPages(import_pages);
+    // Convert single page docs into multi page mode, and visa-versa
+    if (doc) {
+        doc->setPages(import_pages);
+    }
 
     return doc;
 }
