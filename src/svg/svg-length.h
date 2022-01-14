@@ -73,6 +73,11 @@ public:
 char const *sp_svg_length_get_css_units(SVGLength::Unit unit);
 bool svg_length_absolute_unit(SVGLength::Unit unit);
 
+namespace Inkscape {
+char const *refX_named_to_percent(char const *str);
+char const *refY_named_to_percent(char const *str);
+} // namespace Inkscape
+
 #endif // SEEN_SP_SVG_LENGTH_H
 
 /*

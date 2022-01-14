@@ -22,6 +22,7 @@
 #include "print.h"
 #include "sp-symbol.h"
 #include "sp-use.h"
+#include "svg/svg.h"
 #include "document.h"
 #include "inkscape.h"
 #include "desktop.h"
@@ -33,6 +34,8 @@ SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 SPSymbol::~SPSymbol() = default;
 
 void SPSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
+    this->readAttr(SPAttr::REFX);
+    this->readAttr(SPAttr::REFY);
     this->readAttr(SPAttr::X);
     this->readAttr(SPAttr::Y);
     this->readAttr(SPAttr::WIDTH);
@@ -49,6 +52,18 @@ void SPSymbol::release() {
 
 void SPSymbol::set(SPAttr key, const gchar* value) {
     switch (key) {
+    case SPAttr::REFX:
+        value = Inkscape::refX_named_to_percent(value);
+        this->refX.readOrUnset(value);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
+    case SPAttr::REFY:
+        value = Inkscape::refY_named_to_percent(value);
+        this->refY.readOrUnset(value);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
     case SPAttr::X:
         this->x.readOrUnset(value);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -165,6 +180,14 @@ void SPSymbol::update(SPCtx *ctx, guint flags) {
         rctx.viewport = Geom::Rect::from_xywh(x.computed, y.computed, width.computed, height.computed);
         rctx = get_rctx(&rctx);
 
+        // Shift according to refX, refY
+        if (refX._set && refY._set) {
+            refX.update(1, 1, viewBox.width());
+            refY.update(1, 1, viewBox.height());
+            auto ref = Geom::Point(refX.computed, refY.computed) * c2p;
+            c2p *= Geom::Translate(-ref);
+        }
+
         // And invoke parent method
         SPGroup::update((SPCtx *) &rctx, flags);
 
@@ -187,6 +210,13 @@ void SPSymbol::modified(unsigned int flags) {
 Inkscape::XML::Node* SPSymbol::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:symbol");
+    }
+
+    if (refX._set) {
+        repr->setAttribute("refX", sp_svg_length_write_with_units(refX));
+    }
+    if (refY._set) {
+        repr->setAttribute("refY", sp_svg_length_write_with_units(refY));
     }
 
     this->writeDimensions(repr);

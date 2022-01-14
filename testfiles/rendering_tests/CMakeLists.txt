@@ -53,6 +53,7 @@ set(RENDERING_TESTS
 
     # <symbol> geometric properties (SVG 2.0 feature)
     symbol-svg2-geometry-properties
+    symbol-svg2-ref
 
     ${RENDERING_TESTS_64bit}
 )
