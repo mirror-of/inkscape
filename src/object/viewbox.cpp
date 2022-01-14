@@ -18,6 +18,24 @@
 #include "viewbox.h"
 #include "enums.h"
 #include "sp-item.h"
+#include "svg/stringstream.h"
+
+#include <map>
+
+namespace {
+std::map<unsigned int, char const *> const ASPECT_ALIGN_STRINGS{
+    {SP_ASPECT_NONE, "none"},          //
+    {SP_ASPECT_XMIN_YMIN, "xMinYMin"}, //
+    {SP_ASPECT_XMID_YMIN, "xMidYMin"}, //
+    {SP_ASPECT_XMAX_YMIN, "xMaxYMin"}, //
+    {SP_ASPECT_XMIN_YMID, "xMinYMid"}, //
+    {SP_ASPECT_XMID_YMID, "xMidYMid"}, //
+    {SP_ASPECT_XMAX_YMID, "xMaxYMid"}, //
+    {SP_ASPECT_XMIN_YMAX, "xMinYMax"}, //
+    {SP_ASPECT_XMID_YMAX, "xMidYMax"}, //
+    {SP_ASPECT_XMAX_YMAX, "xMaxYMax"}, //
+};
+}
 
 SPViewBox::SPViewBox()
     : viewBox_set(false)
@@ -263,6 +281,38 @@ SPItemCtx SPViewBox::get_rctx(const SPItemCtx* ictx, double scale_none) {
   }
 
   return rctx;
+}
+
+/**
+ * Write viewBox attribute to XML, if set.
+ */
+void SPViewBox::write_viewBox(Inkscape::XML::Node *repr) const
+{
+    if (viewBox_set) {
+        Inkscape::SVGOStringStream os;
+        os << viewBox.left() << " "  //
+           << viewBox.top() << " "   //
+           << viewBox.width() << " " //
+           << viewBox.height();
+
+        repr->setAttribute("viewBox", os.str());
+    }
+}
+
+/**
+ * Write preserveAspectRatio attribute to XML, if set.
+ */
+void SPViewBox::write_preserveAspectRatio(Inkscape::XML::Node *repr) const
+{
+    if (aspect_set) {
+        std::string aspect = ASPECT_ALIGN_STRINGS.at(aspect_align);
+
+        if (aspect_clip == SP_ASPECT_SLICE) {
+            aspect += " slice";
+        }
+
+        repr->setAttribute("preserveAspectRatio", aspect);
+    }
 }
 
 /*

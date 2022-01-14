@@ -19,6 +19,10 @@
 #include <2geom/rect.h>
 #include <glib.h>
 
+namespace Inkscape::XML {
+class Node;
+} // namespace Inkscape::XML
+
 class SPItemCtx;
 
 class SPViewBox {
@@ -40,6 +44,8 @@ public:
 
   void set_viewBox(const gchar* value);
   void set_preserveAspectRatio(const gchar* value);
+  void write_viewBox(Inkscape::XML::Node *repr) const;
+  void write_preserveAspectRatio(Inkscape::XML::Node *repr) const;
 
   /* Adjusts c2p for viewbox */
   void apply_viewbox(const Geom::Rect& in, double scale_none = 1.0);

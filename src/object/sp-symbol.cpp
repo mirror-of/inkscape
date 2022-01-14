@@ -190,12 +190,8 @@ Inkscape::XML::Node* SPSymbol::write(Inkscape::XML::Document *xml_doc, Inkscape:
     }
 
     this->writeDimensions(repr);
-
-    //XML Tree being used directly here while it shouldn't be.
-    repr->setAttribute("viewBox", this->getRepr()->attribute("viewBox"));
-	
-    //XML Tree being used directly here while it shouldn't be.
-    repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
+    this->write_viewBox(repr);
+    this->write_preserveAspectRatio(repr);
 
     SPGroup::write(xml_doc, repr, flags);
 

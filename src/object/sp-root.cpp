@@ -26,7 +26,6 @@
 #include "sp-root.h"
 #include "sp-use.h"
 #include "display/drawing-group.h"
-#include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
 #include "util/units.h"
@@ -336,13 +335,8 @@ Inkscape::XML::Node *SPRoot::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     repr->setAttribute("width", sp_svg_length_write_with_units(this->width));
     repr->setAttribute("height", sp_svg_length_write_with_units(this->height));
 
-    if (this->viewBox_set) {
-        Inkscape::SVGOStringStream os;
-        os << this->viewBox.left() << " " << this->viewBox.top() << " "
-           << this->viewBox.width() << " " << this->viewBox.height();
-
-        repr->setAttribute("viewBox", os.str());
-    }
+    this->write_viewBox(repr);
+    this->write_preserveAspectRatio(repr);
 
     SPGroup::write(xml_doc, repr, flags);
 

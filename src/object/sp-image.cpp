@@ -462,8 +462,9 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
         repr->setAttributeSvgDouble("height", this->height.computed);
     }
     repr->setAttribute("inkscape:svg-dpi", this->getRepr()->attribute("inkscape:svg-dpi"));
-    //XML Tree being used directly here while it shouldn't be...
-    repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
+
+    this->write_preserveAspectRatio(repr);
+
     if (this->color_profile) {
         repr->setAttribute("color-profile", this->color_profile);
     }
