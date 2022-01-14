@@ -861,9 +861,8 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     // copy the defs used by all items
     auto itemlist= selection->items();
     cloned_elements.clear();
-    std::vector<SPItem *> items;
+    std::vector<SPItem *> items(itemlist.begin(), itemlist.end());
     for (auto item : itemlist) {
-        items.push_back(item);
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (lpeitem) {
             for (auto satellite : lpeitem->get_satellites(false, true)) {

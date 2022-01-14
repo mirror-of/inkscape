@@ -77,6 +77,7 @@ private:
     SPObject *container;
     bool reset;
     bool prev_split = false;
+    bool prev_discard_orig_path = false;
     bool center_vert;
     bool center_horiz;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&) = delete;

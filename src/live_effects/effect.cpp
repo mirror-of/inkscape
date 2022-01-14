@@ -20,6 +20,7 @@
 
 #include "display/curve.h"
 #include "inkscape.h"
+#include "live_effects/effect.h"
 #include "live_effects/lpe-angle_bisector.h"
 #include "live_effects/lpe-attach-path.h"
 #include "live_effects/lpe-bendpath.h"

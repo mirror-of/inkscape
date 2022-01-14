@@ -566,7 +566,7 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
 void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
     operand =  dynamic_cast<SPItem *>(sp_lpe_item->document->getObjectById(operand_id));
-    if (is_visible && operand && !isOnClipboard()) {
+    if (is_visible && sp_lpe_item->pathEffectsEnabled() && operand && !isOnClipboard()) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop && !desktop->getSelection()->includes(operand)) {
             prev_affine = operand->transform * sp_item_transform_repr(sp_lpe_item).inverse() * postmul;

@@ -620,6 +620,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
             if (newLPEObj) {
                 // force always fork with 0 some issues on slices drom slices dont fork
                 newLPEObj->forkPathEffectsIfNecessary(0);
+                sp_lpe_item_update_patheffect(newLPEObj, false, true);
             }
         }
     }

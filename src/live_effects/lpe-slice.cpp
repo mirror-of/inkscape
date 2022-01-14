@@ -306,14 +306,11 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         legacy = false;
         bool creation = write;
         split(sp_lpe_item, curve, slicer, 0, creation);
-        if (lpesatellites.data().size() && (creation || !lpesatellites.is_connected())) {
+        bool connected = lpesatellites.is_connected();
+        if (lpesatellites.data().size() && (creation || !connected)) {
             lpesatellites.write_to_SVG();
-            if (!lpesatellites.is_connected()) {
-                lpesatellites.start_listening();
-                lpesatellites.update_satellites(true);
-            } else {
-                lpesatellites.update_satellites();
-            }
+            lpesatellites.start_listening();
+            lpesatellites.update_satellites(!connected);
         }
         bool maindata = sp_has_path_data(sp_lpe_item, true);
         for (auto & iter : lpesatellites.data()) {

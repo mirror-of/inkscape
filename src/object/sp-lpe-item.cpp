@@ -560,14 +560,6 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         if (c_lpe) {
             d_str = sp_svg_write_path(c_lpe->get_pathvector());
         } else if (shape->getAttribute("d")) {
-            // when "c_lpe" is null we need to stop to allow LPE on elenments with mask and clip
-            // work properly but we need not block when doing CUT/COPY... Operatrions using original-d
-            // so if we not in this case stop execution
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            bool flattening = prefs->getBool("/live_effects/flattening", false);
-            if (!flattening) {
-                return;
-            }
             d_str = shape->getAttribute("d");
         } else {
             return;
@@ -1540,107 +1532,6 @@ bool SPLPEItem::pathEffectsEnabled() const
 {
     return path_effects_enabled > 0;
 }
-
-// 1.1 COPYPASTECLONESTAMPLPEBUG
-bool SPLPEItem::autoFlattenFix() {
-    if (path_effect_list->empty()) {
-        return false;
-    }
-    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
-    {
-        LivePathEffectObject const *lpeobj = (*it)->lpeobject;
-        if (lpeobj) {
-            Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
-            if (lpe) {
-                Inkscape::LivePathEffect::LPECopyRotate const *rc = dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate const *>(lpe);
-                Inkscape::LivePathEffect::LPEMirrorSymmetry const *ms = dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry const *>(lpe);
-                Inkscape::LivePathEffect::LPESlice const *sl = dynamic_cast<Inkscape::LivePathEffect::LPESlice const *>(lpe);
-                Inkscape::LivePathEffect::LPEBool const *bo = dynamic_cast<Inkscape::LivePathEffect::LPEBool const *>(lpe);
-                if ((rc && rc->split_items) || (ms && ms->split_items)) {
-                    return true;
-                } else if (sl || bo) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-void SPLPEItem::removeAllAutoFlatten()
-{
-    cleanupAutoFlatten();
-    if (autoFlattenFix()) {
-        sp_lpe_item_enable_path_effects(this, false);
-    }
-    SPGroup *group = dynamic_cast<SPGroup *>(this);
-    if (group) {
-        std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-        for (auto iter : item_list) {
-            SPLPEItem *subitem = dynamic_cast<SPLPEItem *>(iter);
-            if (subitem) {
-                subitem->removeAllAutoFlatten();
-            }
-        }
-    }
-    if (autoFlattenFix()) {
-        SPDocument *doc = this->document;
-        gchar *id = g_strdup(this->getId());
-        removeAllPathEffects(true);
-        if (doc) {
-            SPObject *newobj = doc->getObjectById(id);
-            SPLPEItem *newlpitem = dynamic_cast<SPLPEItem *>(newobj);
-            if (newlpitem && !newlpitem->path_effects_enabled) {
-                sp_lpe_item_enable_path_effects(newlpitem, true);
-            }
-        }
-        g_free(id);
-    }
-}
-
-void SPLPEItem::cleanupAutoFlatten()
-{
-    SPGroup* group = dynamic_cast<SPGroup  *>(this);
-    if (group) {
-        std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-        for (auto iter : item_list) {
-            SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(iter);
-            if (subitem) {
-                subitem->cleanupAutoFlatten();
-            }
-        }
-    }
-    Glib::ustring  classes = "-slice";
-    if (getAttribute("class")) {
-        Glib::ustring classupd = getAttribute("class");
-        Glib::ustring finalclass = "";
-        for (auto classindi : Glib::Regex::split_simple(" ", classupd)) {
-            size_t pos = classindi.find(classes);
-            if (pos == Glib::ustring::npos && classindi != "UnoptimicedTransforms") {
-                if (finalclass != "") {
-                    finalclass += " ";
-                }
-                finalclass += classindi;
-            }
-        }
-        setAttribute("class", finalclass == "" ? nullptr : finalclass.c_str());
-    }
-}
-
-SPObject * sp_lpe_item_remove_autoflatten(SPItem *item, const gchar *id) {
-    SPObject *ret = dynamic_cast<SPObject *>(item);
-    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-    if (lpeitem) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setBool("/live_effects/flattening", true);
-        lpeitem->removeAllAutoFlatten();
-        prefs->setBool("/live_effects/flattening", false);
-        // we want active document to use clipboard doc
-        ret = SP_ACTIVE_DOCUMENT->getObjectById(id);
-    }
-    return ret;
-}
-// END COPYPASTECLONESTAMPLPEBUG
 
 /*
   Local Variables:

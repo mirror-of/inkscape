@@ -61,9 +61,6 @@ public:
 
     void update(SPCtx* ctx, unsigned int flags) override;
     void modified(unsigned int flags) override;
-    bool autoFlattenFix();
-    void removeAllAutoFlatten();
-    void cleanupAutoFlatten();
     void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
     void remove_child(Inkscape::XML::Node* child) override;
 
@@ -118,7 +115,6 @@ public:
 };
 void sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write); // careful, class already has method with *very* similar name!
 void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
-SPObject * sp_lpe_item_remove_autoflatten(SPItem *item, const gchar *id);
 
 MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_LPE_ITEM, SPLPEItem)
 MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_LPE_ITEM, SPLPEItem)

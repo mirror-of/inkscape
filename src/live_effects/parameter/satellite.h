@@ -45,8 +45,8 @@ public:
     Geom::Affine last_transform;
     bool isConnected() {return !(!linked_changed_connection);}
     void start_listening(SPObject *to);
-protected:
     void unlink();
+protected:
     void link(Glib::ustring itemid);
     void quit_listening();
     void linked_released(SPObject *released_item);

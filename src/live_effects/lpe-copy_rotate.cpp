@@ -197,7 +197,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
             }
             previous_num_copies = num_copies;
         }
-
+        bool forcewrite = write;
         Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
         for (size_t i = 1; i < num_copies; ++i) {
             Geom::Affine r = Geom::identity();
@@ -220,15 +220,14 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
             }
             t *= sp_lpe_item->transform;
             toItem(t, i-1, reset, write);
+            forcewrite = forcewrite || write;
         }
-        if (write || !lpesatellites.is_connected()) {
+        //we keep satelites connected and actived if write needed
+        bool connected = lpesatellites.is_connected();
+        if (forcewrite || !connected) {
             lpesatellites.write_to_SVG();
-            if (!lpesatellites.is_connected()) {
-                lpesatellites.start_listening();
-                lpesatellites.update_satellites(true);
-            } else {
-                lpesatellites.update_satellites();
-            }
+            lpesatellites.start_listening();
+            lpesatellites.update_satellites(!connected);
         }
         reset = false;
     }
