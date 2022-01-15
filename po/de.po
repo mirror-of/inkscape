@@ -15,7 +15,7 @@
 # Benjamin Weis <benjamin.weis@gmx.com>, 2014.
 # Heiko Wöhrle <mail@heikowoehrle.de>, 2014.
 # Sönke Roggatz <s.roggatz@mailing-werkstatt.de>, 2015.
-# Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016, 2019-2021.
+# Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016, 2019-2021, 2022.
 # Patrick Storz <eduard.braun2@gmx.de>, 2015-2020.
 # Michael Rack <miohna@freenet.de>, 2018.
 # Frank Beckmann, 2019.
@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-05-18 14:52+0200\n"
+"POT-Creation-Date: 2022-01-14 15:12+0000\n"
+"PO-Revision-Date: 2022-01-15 17:32+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -15739,7 +15739,6 @@ msgid "Group to symbol"
 msgstr "Gruppieren zum Symbol"
 
 #: ../src/selection-chemistry.cpp:3366
-#, fuzzy
 msgid "Remove symbol for editing"
 msgstr "Symbol zum Bearbeiten in eine Gruppe konvertieren"
 
@@ -34451,12 +34450,11 @@ msgstr "Inkscape-Handbuch"
 
 #: ../src/verbs.cpp:2925
 msgid "Donate"
-msgstr ""
+msgstr "Spenden"
 
 #: ../src/verbs.cpp:2925
-#, fuzzy
 msgid "Donate to Inkscape"
-msgstr "Ü_ber Inkscape"
+msgstr "An Inkscape spenden"
 
 #: ../src/verbs.cpp:2926 ../src/verbs.cpp:2927
 msgid "SVG 1.1 Specification"
@@ -35518,11 +35516,11 @@ msgstr "Desktop SD"
 
 #: ../share/ui/inkscape-start.glade:500
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../share/ui/inkscape-start.glade:508
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../share/ui/inkscape-start.glade:516
 msgid "Mobile-smallest"
@@ -35530,7 +35528,7 @@ msgstr "Kleinstes Smartphone"
 
 #: ../share/ui/inkscape-start.glade:524
 msgid "iPad Pro"
-msgstr ""
+msgstr "iPad Pro"
 
 #: ../share/ui/inkscape-start.glade:532
 msgid "Tablet-smallest"
@@ -36480,28 +36478,24 @@ msgstr ""
 "Bitte geben Sie eine Ersetzungsschriftart im „Alles ersetzen“-Feld ein."
 
 #: ../share/extensions/setup_typography_canvas.py:67
-#, fuzzy
 msgid "baseline"
 msgstr "Text-Grundlinie"
 
 #: ../share/extensions/setup_typography_canvas.py:68
-#, fuzzy
 msgid "ascender"
-msgstr "Aufsteigend:"
+msgstr "Oberlänge"
 
 #: ../share/extensions/setup_typography_canvas.py:69
 msgid "caps"
-msgstr ""
+msgstr "Großbuchstaben"
 
 #: ../share/extensions/setup_typography_canvas.py:70
-#, fuzzy
 msgid "xheight"
 msgstr "x-Höhe"
 
 #: ../share/extensions/setup_typography_canvas.py:71
-#, fuzzy
 msgid "descender"
-msgstr "Absteigend:"
+msgstr "Unterlänge"
 
 #: ../share/extensions/voronoi2svg.py:153
 msgid "Please select objects!"
@@ -41483,28 +41477,32 @@ msgid "Duplicate the pattern before deformation"
 msgstr "Muster vor der Deformation duplizieren"
 
 #: ../share/extensions/pathalongpath.inx:25
-#, fuzzy
 msgid ""
 "This extension bends a pattern along the curvature of selected path objects."
-msgstr "Diese Erweiterung benötigt zwei ausgewählte Objekte."
+msgstr ""
+"Dieser Effekt verbiegt ein Muster so, dass es entlang der Krümmung beliebiger"
+" „Gerüst“-Pfade entlangläuft."
 
 #: ../share/extensions/pathalongpath.inx:26
-#, fuzzy
 msgid ""
 "There must only be a single pattern object. The pattern object must be the "
 "topmost object in the selection. For the pattern, groups of paths, shapes or "
 "clones are allowed. Text must be converted to path before using it as a "
 "pattern."
 msgstr ""
-"Dieser Effekt verstreut ein Muster entlang eines beliebigen „Gerüst“-Pfades. "
-"Das Muster ist das oberste Objekt in einer Auswahl (Gruppierungen von Pfaden/"
-"Formen/Klonen … sind erlaubt)."
+"Das Muster muss aus einem einzigen Objekt bestehen. Es muss von allen"
+" ausgewählten Objekten das oberste sein. Das Muster darf (ggf. gruppierte)"
+" Pfade, Formen oder Klone enthalten. Text muss in Pfade umgewandelt werden,"
+" bevor man ihn als Muster verwenden kann."
 
 #: ../share/extensions/pathalongpath.inx:27
 msgid ""
 "The pattern can be bent along multiple paths at once, the only condition is "
 "that these must be path objects, no other object types are allowed."
 msgstr ""
+"Das Muster kann entlang mehrerer Pfade auf einmal gebogen werden. Die einzige"
+" Bedingung hierfür ist, dass alle diese Pfade echte Pfadobjekte sind. Es sind"
+" keine anderen Objekttypen erlaubt."
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
@@ -41512,12 +41510,18 @@ msgid ""
 "will rotate along with the path direction. With \"Ribbon\", the pattern will "
 "stay upright, so the result will look like a printed ribbon."
 msgstr ""
+"Es gibt zwei unterschiedliche Verformungsmethoden. \"Schlange\" bedeutet,"
+" dass das Muster sich mit der Richtung des Pfadverlaufes dreht. Mit \"Band\""
+" bleibt das Muster aufrecht, so dass das Ergebnis einem bedruckten Band"
+" ähnelt."
 
 #: ../share/extensions/pathalongpath.inx:30
 msgid ""
 "The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
 "applying it to the path."
 msgstr ""
+"Die Option 'Muster ist vertikal' dreht das Muster vor der Verwendung um 90"
+" Grad."
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
@@ -41526,6 +41530,11 @@ msgid ""
 "add any new nodes to your pattern objects. To avoid this, either add more "
 "nodes to your pattern objects, or convert all segments to curves beforehand."
 msgstr ""
+"Wenn Deine Pfade starke Krümmungen oder Zacken aufweisen, deren Verlauf das"
+" Muster folgen soll, kann es passieren, dass das Ergebnis nicht wie gewünscht"
+" aussieht. Das liegt daran, dass die Musterobjekte aus zu wenigen Knoten"
+" bestehen. Um das zu vermeiden, füge weitere Knoten in die Musterobjekte ein"
+" oder konvertiere alle Segmente in Kurven."
 
 #: ../share/extensions/pathscatter.inx:8
 msgid "Follow path orientation"
@@ -41536,9 +41545,8 @@ msgid "Stretch spaces to fit skeleton length"
 msgstr "Leerzeichen strecken, um an Gerüstlänge zu passen"
 
 #: ../share/extensions/pathscatter.inx:13
-#, fuzzy
 msgid "Rotate pattern 90° clockwise"
-msgstr "Auswahl um 90° im Uhrzeigersinn drehen"
+msgstr "Muster um 90° im Uhrzeigersinn drehen"
 
 #: ../share/extensions/pathscatter.inx:14
 msgid "Original pattern will be:"
@@ -41549,9 +41557,8 @@ msgid "Moved"
 msgstr "Verschoben"
 
 #: ../share/extensions/pathscatter.inx:16
-#, fuzzy
 msgid "Duplicated"
-msgstr "Duplizieren"
+msgstr "Dupliziert"
 
 #: ../share/extensions/pathscatter.inx:17
 msgid "Cloned"
@@ -41563,7 +41570,7 @@ msgstr "Ist das Muster eine Gruppe, wähle die Gruppenobjekte aus."
 
 #: ../share/extensions/pathscatter.inx:19
 msgid "Only for options 'moved' and 'duplicated'"
-msgstr ""
+msgstr "Nur für die Optionen 'verschoben' und 'dupliziert'"
 
 #: ../share/extensions/pathscatter.inx:20
 msgid "Pick group members:"
@@ -41586,6 +41593,14 @@ msgid ""
 "objects (alternating or randomly) on the path, if you select the option for "
 "picking group members."
 msgstr ""
+"Diese Erweiterung platziert Kopien eines Musterobjektes entlang eines oder"
+" mehrerer Pfade, ohne das Muster zu verformen. Das Musterobjekt darf (ggf."
+" gruppierte) Pfade, Formen oder Klone enthalten. Es muss von allen"
+" ausgewählten Objekten das oberste sein. Alle anderen ausgewählten Objekte"
+" müssen Pfade sein. Man kann auch eine Auswahl verschiedener Objekte (in"
+" zufälliger Reihenfolge oder nacheinander) entlang der Zielpfade verstreuen,"
+" wenn man die Option für die Verwendung der in der Gruppe enthaltenen Objekte"
+" aktiviert."
 
 #
 # File: ../share/extensions/pdflatex.inx, line: 3
