@@ -675,9 +675,161 @@
          d="m 2,-9 c 0,1.1045695 -0.8954305,2 -2,2 -1.1045695,0 -2,-0.8954305 -2,-2 0,-1.104569 0.8954305,-2 2,-2 1.1045695,0 2,0.895431 2,2 z m 2,0 c 0,3 -3,6 -4,7 -1,-1 -4,-4 -4,-7 0,-2.209139 1.790861,-4 4,-4 2.209139,0 4,1.790861 4,4 z"
          sodipodi:nodetypes="sssssscsss" />
     </marker>
+
     <marker
-       markerWidth="0.52499998"
-       markerHeight="0.99999994"
+       markerWidth="25.285856"
+       markerHeight="25.285856"
+       refX="0.5"
+       refY="24.8"
+       orient="auto"
+       id="Pencil"
+       viewBox="0 0 25.285856 25.285856"
+       preserveAspectRatio="xMidYMid">
+      <g
+         id="g129150"
+         transform="rotate(-45,9.8960744,24.301623)">
+        <path
+           style="fill:#ffeadb;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 11.395811,16.291204 2.8389018,18 11.281989,13.379712 Z"
+           id="path129102"
+           sodipodi:nodetypes="cccc" />
+        <path
+           id="path129104"
+           style="fill:context-stroke;fill-opacity:1;stroke:none"
+           d="m 11.8654,20 h 14.2415 v 3 H 11.8654 c -0.96644,-0.984185 -0.960953,-2.091292 0,-3 z"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           id="path129106"
+           style="fill:context-stroke;stroke:#000000;stroke-width:0"
+           d="M 11.80696,16 H 26.1069 v 4 H 11.80696 c -1.211769,-1.198221 -1.221718,-2.780057 0,-4 z"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:#ffdbc2;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 10.8389,18 H 2.8389018 L 11.8389,15.8 Z"
+           id="path129108"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#f5ad7a;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 11.079475,22.569659 2.8389018,18 11.585758,19.873429 Z"
+           id="path129110"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#fcc39c;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 11.8389,20.2 2.8389018,18 10.8389,17.8 Z"
+           id="path129112"
+           sodipodi:nodetypes="cccc" />
+        <path
+           id="path129114"
+           style="fill:context-stroke;fill-opacity:1;stroke:#000000;stroke-width:0"
+           d="M 11.85202,13 H 26.1069 v 3 H 11.85202 c -1.047549,-0.941426 -0.993936,-2.069912 0,-3 z"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 11.8389,23 2.8389018,18 11.8389,13"
+           id="path129116"
+           sodipodi:nodetypes="ccc" />
+        <path
+           id="path129118"
+           style="fill:none;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 11.80696,16 H 26.1069 v 4 H 11.80696 c -1.211769,-1.198221 -1.221718,-2.780057 0,-4 z"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="m 5.8389018,19.66663 -3,-1.66663 3,-1.66663 z"
+           id="path129120"
+           sodipodi:nodetypes="cccc" />
+        <path
+           id="path129122"
+           style="opacity:0.480349;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 11.801044,13 H 25.1069 v 3 H 11.801044 c -0.977808,-0.941426 -0.927764,-2.069912 0,-3 z"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           id="path129124"
+           style="opacity:0.349345;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.899999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="m 11.8171,20 h 13.2898 v 3 H 11.8171 c -0.901857,-0.984185 -0.896736,-2.091292 0,-3 z"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           id="path129126"
+           style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.899999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="m 11.8654,20 h 14.2415 v 3 H 11.8654 c -0.96644,-0.984185 -0.960953,-2.091292 0,-3 z"
+           sodipodi:nodetypes="ccccc" />
+        <rect
+           style="fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           id="rect129128"
+           width="7"
+           height="10"
+           x="26.5"
+           y="13"
+           ry="2"
+           rx="2" />
+        <path
+           id="path129130"
+           style="fill:#ffffff;fill-opacity:0.18;stroke-width:0.9;stroke-linejoin:round"
+           d="m 29,13 h 3.768096 l 0.695712,3 H 29 Z"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           id="path129132"
+           style="fill-opacity:0.157303;stroke-width:0.9;stroke-linejoin:round"
+           d="m 29,20 h 4.521784 l -0.927616,3 H 29 Z"
+           sodipodi:nodetypes="ccccc" />
+        <rect
+           style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           id="rect129134"
+           width="7"
+           height="10"
+           x="26.5"
+           y="13"
+           ry="2"
+           rx="2" />
+        <path
+           id="path129136"
+           style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.899999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="m 11.8654,13 h 14.2415 v 3 H 11.8654 c -0.96644,-0.984185 -0.960953,-2.091292 0,-3 z"
+           sodipodi:nodetypes="ccccc" />
+        <g
+           id="g129148"
+           transform="translate(-2,-10)">
+          <rect
+             style="fill:#b3b3b3;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+             id="rect129138"
+             width="5"
+             height="3"
+             x="26"
+             y="30" />
+          <rect
+             style="fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:0.899999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+             id="rect129140"
+             width="5"
+             height="2.5"
+             x="26"
+             y="28" />
+          <rect
+             style="fill:#e6e6e6;fill-opacity:1;stroke:none;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+             id="rect129142"
+             width="5"
+             height="3"
+             x="26"
+             y="25" />
+          <rect
+             style="fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:0.899999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+             id="rect129144"
+             width="5"
+             height="2.5"
+             x="26"
+             y="23" />
+          <rect
+             style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+             id="rect129146"
+             width="5"
+             height="10"
+             x="26"
+             y="22.999996" />
+        </g>
+      </g>
+    </marker>
+    <marker
+       markerWidth="0.525"
+       markerHeight="1"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
@@ -695,11 +847,11 @@
     </marker>
     <marker
        markerWidth="1.05"
-       markerHeight="0.99999994"
+       markerHeight="1"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       id="CapRibborn1"
+       id="CapRibbon1"
        viewBox="0 0 1.05 1"
        inkscape:stockid="pin"
        style="overflow:visible"
@@ -713,7 +865,7 @@
     </marker>
     <marker
        markerWidth="1.05"
-       markerHeight="0.99999994"
+       markerHeight="1"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
@@ -731,7 +883,7 @@
     </marker>
     <marker
        markerWidth="0.63628411"
-       markerHeight="0.99999994"
+       markerHeight="1"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
@@ -748,8 +900,8 @@
          transform="scale(0.5)" />
     </marker>
     <marker
-       markerWidth="1.0499998"
-       markerHeight="1.9999996"
+       markerWidth="1.05"
+       markerHeight="2"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
@@ -951,7 +1103,7 @@
        sodipodi:nodetypes="ccc"
        id="path184149" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:4.50434;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#CapRibborn1);marker-end:url(#CapRibborn1);paint-order:fill markers stroke;stop-color:#1c1c1c"
+       style="fill:none;stroke:#000000;stroke-width:4.50434;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#CapRibbon1);marker-end:url(#CapRibbon1);paint-order:fill markers stroke;stop-color:#1c1c1c"
        d="m 169.16905,168.6118 h 32.5 H 235"
        sodipodi:nodetypes="ccc"
        id="path184151" />
