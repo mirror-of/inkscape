@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef SP_ERASER_CONTEXT_H_SEEN
-#define SP_ERASER_CONTEXT_H_SEEN
+#ifndef ERASER_TOOL_H_SEEN
+#define ERASER_TOOL_H_SEEN
 
 /*
  * Handwriting-like drawing mode
@@ -22,50 +22,86 @@
 
 #include <2geom/point.h>
 
+#include "style.h"
 #include "ui/tools/dynamic-base.h"
-
-#define ERC_MIN_PRESSURE      0.0
-#define ERC_MAX_PRESSURE      1.0
-#define ERC_DEFAULT_PRESSURE  1.0
-
-#define ERC_MIN_TILT         -1.0
-#define ERC_MAX_TILT          1.0
-#define ERC_DEFAULT_TILT      0.0
-
-#define ERASER_MODE_DELETE    0
-#define ERASER_MODE_CUT       1
-#define ERASER_MODE_CLIP      2
 
 namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-class EraserTool : public DynamicBase {
-public:
-    EraserTool(SPDesktop *desktop);
-    ~EraserTool() override;
+enum class EraserToolMode
+{
+    DELETE,
+    CUT,
+    CLIP
+};
+extern EraserToolMode const DEFAULT_ERASER_MODE;
 
-    bool root_handler(GdkEvent *event) override;
+class EraserTool : public DynamicBase {
 
 private:
-	void reset(Geom::Point p);
-	void extinput(GdkEvent *event);
-	bool apply(Geom::Point p);
-	void brush();
-	void cancel();
-	void clear_current();
-	void set_to_accumulated();
-	void accumulate();
-	void fit_and_split(bool release);
-	void draw_temporary_box();
-	bool nowidth;
+    // non-static data:
+    EraserToolMode mode = DEFAULT_ERASER_MODE;
+    bool nowidth = false;
+
+    // static data:
+    inline static guint32 const trace_color_rgba   = 0xff0000ff; // RGBA red
+    inline static SPWindRule const trace_wind_rule = SP_WIND_RULE_EVENODD;
+
+    inline static double const tolerance = 0.1;
+
+    inline static double const epsilon       = 0.5e-6;
+    inline static double const epsilon_start = 0.5e-2;
+    inline static double const vel_start     = 1e-5;
+
+    inline static double const drag_default = 1.0;
+    inline static double const drag_min     = 0.0;
+    inline static double const drag_max     = 1.0;
+
+    inline static double const min_pressure     = 0.0;
+    inline static double const max_pressure     = 1.0;
+    inline static double const default_pressure = 1.0;
+
+    inline static double const min_tilt     = -1.0;
+    inline static double const max_tilt     = 1.0;
+    inline static double const default_tilt = 0.0;
+
+public:
+    // public member functions
+    EraserTool(SPDesktop *desktop);
+    ~EraserTool() override;
+    bool root_handler(GdkEvent *event) final;
+
+private:
+    // private member functions
+    void _reset(Geom::Point p);
+    void _extinput(GdkEvent *event);
+    bool _apply(Geom::Point p);
+    void _brush();
+    void _cancel();
+    void _clearCurrent();
+    void _setToAccumulated();
+    void _accumulate();
+    void _fitAndSplit(bool releasing);
+    void _drawTemporaryBox();
+    bool _handleKeypress(GdkEventKey const *key);
+    void _completeBezier(double tolerance_sq, bool releasing);
+    void _failedBezierFallback();
+    void _fitDrawLastPoint();
+    void _clipErase(SPItem *item, SPObject *parent, Geom::OptRect &eraser_box);
+    void _updateMode();
+    void _removeTemporarySegments();
+
+    static void _generateNormalDist2(double &r1, double &r2);
+    static void _addCap(SPCurve &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
+                        Geom::Point const &post, double rounding);
 };
 
-}
-}
-}
+} // namespace Tools
+} // namespace UI
+} // namespace Inkscape
 
-#endif // SP_ERASER_CONTEXT_H_SEEN
+#endif // ERASER_TOOL_H_SEEN
 
 /*
   Local Variables:

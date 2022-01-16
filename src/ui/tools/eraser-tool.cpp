@@ -50,7 +50,6 @@
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "style.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -73,25 +72,14 @@
 
 using Inkscape::DocumentUndo;
 
-#define ERC_RED_RGBA 0xff0000ff
-
-#define TOLERANCE_ERASER 0.1
-
-#define ERASER_EPSILON 0.5e-6
-#define ERASER_EPSILON_START 0.5e-2
-#define ERASER_VEL_START 1e-5
-
-#define DRAG_MIN 0.0
-#define DRAG_DEFAULT 1.0
-#define DRAG_MAX 1.0
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
 
+extern EraserToolMode const DEFAULT_ERASER_MODE = EraserToolMode::CUT;
+
 EraserTool::EraserTool(SPDesktop *desktop)
     : DynamicBase(desktop, "/tools/eraser", "eraser.svg")
-    , nowidth(false)
 {
     accumulated.reset(new SPCurve());
     currentcurve.reset(new SPCurve());
@@ -101,22 +89,10 @@ EraserTool::EraserTool(SPDesktop *desktop)
 
     currentshape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
     currentshape->set_stroke(0x0);
-    currentshape->set_fill(ERC_RED_RGBA, SP_WIND_RULE_EVENODD);
+    currentshape->set_fill(trace_color_rgba, trace_wind_rule);
 
     /* fixme: Cannot we cascade it to root more clearly? */
     currentshape->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), desktop));
-
-/*
-static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
-    {"mass",0.02, 0.0, 1.0},
-    {"wiggle",0.0, 0.0, 1.0},
-    {"angle",30.0, -90.0, 90.0},
-    {"thinning",0.1, -1.0, 1.0},
-    {"tremor",0.0, 0.0, 1.0},
-    {"flatness",0.9, 0.0, 1.0},
-    {"cap_rounding",0.0, 0.0, 5.0}
-};
-*/
 
     sp_event_context_read(this, "mass");
     sp_event_context_read(this, "wiggle");
@@ -131,739 +107,733 @@ static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
     sp_event_context_read(this, "abs_width");
     sp_event_context_read(this, "cap_rounding");
 
-    this->is_drawing = false;
+    is_drawing = false;
     //TODO not sure why get 0.01 if slider width == 0, maybe a double/int problem
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/eraser/selcue", false) != 0) {
-    	this->enableSelectionCue();
+        enableSelectionCue();
     }
+    _updateMode();
 
     // TODO temp force:
-    this->enableSelectionCue();
+    enableSelectionCue();
 }
 
 EraserTool::~EraserTool()
 {
-    if (currentshape) {
-        delete currentshape;
-        currentshape = nullptr;
+    delete currentshape;
+    currentshape = nullptr;
+}
+
+/**  Reads the current Eraser mode from Preferences and sets `mode` accordingly. */
+void EraserTool::_updateMode()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (!prefs) {
+        return;
+    }
+
+    int mode_idx = prefs->getInt("/tools/eraser/mode", 1); // Cut mode is default
+
+    // Note: the integer indices must agree with those in EraserToolbar::_modeAsInt()
+    if (mode_idx == 0) {
+        mode = EraserToolMode::DELETE;
+    } else if (mode_idx == 1) {
+        mode = EraserToolMode::CUT;
+    } else if (mode_idx == 2) {
+        mode = EraserToolMode::CLIP;
+    } else {
+        g_printerr("Error: invalid mode setting \"%d\" for Eraser tool!", mode_idx);
+        mode = DEFAULT_ERASER_MODE;
     }
 }
 
-static double
-flerp(double f0, double f1, double p)
+// TODO: After switch to C++20, replace this with std::lerp
+inline double flerp(double const f0, double const f1, double const p)
 {
-    return f0 + ( f1 - f0 ) * p;
+    return f0 + (f1 - f0) * p;
 }
 
-void EraserTool::reset(Geom::Point p) {
-    this->last = this->cur = getNormalizedPoint(p);
-    this->vel = Geom::Point(0,0);
-    this->vel_max = 0;
-    this->acc = Geom::Point(0,0);
-    this->ang = Geom::Point(0,0);
-    this->del = Geom::Point(0,0);
+inline double square(double const x)
+{
+    return x * x;
 }
 
-void EraserTool::extinput(GdkEvent *event) {
-    if (gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &this->pressure))
-        this->pressure = CLAMP (this->pressure, ERC_MIN_PRESSURE, ERC_MAX_PRESSURE);
-    else
-        this->pressure = ERC_DEFAULT_PRESSURE;
-
-    if (gdk_event_get_axis (event, GDK_AXIS_XTILT, &this->xtilt))
-        this->xtilt = CLAMP (this->xtilt, ERC_MIN_TILT, ERC_MAX_TILT);
-    else
-        this->xtilt = ERC_DEFAULT_TILT;
-
-    if (gdk_event_get_axis (event, GDK_AXIS_YTILT, &this->ytilt))
-        this->ytilt = CLAMP (this->ytilt, ERC_MIN_TILT, ERC_MAX_TILT);
-    else
-        this->ytilt = ERC_DEFAULT_TILT;
+void EraserTool::_reset(Geom::Point p)
+{
+    last = cur = getNormalizedPoint(p);
+    vel = Geom::Point(0, 0);
+    vel_max = 0;
+    acc = Geom::Point(0, 0);
+    ang = Geom::Point(0, 0);
+    del = Geom::Point(0, 0);
 }
 
+void EraserTool::_extinput(GdkEvent *event)
+{
+    if (gdk_event_get_axis(event, GDK_AXIS_PRESSURE, &pressure)) {
+        pressure = CLAMP(pressure, min_pressure, max_pressure);
+    } else {
+        pressure = default_pressure;
+    }
 
-bool EraserTool::apply(Geom::Point p) {
-    Geom::Point n = getNormalizedPoint(p);
+    if (gdk_event_get_axis(event, GDK_AXIS_XTILT, &xtilt)) {
+        xtilt = CLAMP(xtilt, min_tilt, max_tilt);
+    } else {
+        xtilt = default_tilt;
+    }
 
-    /* Calculate mass and drag */
-    double const mass = flerp(1.0, 160.0, this->mass);
-    double const drag = flerp(0.0, 0.5, this->drag * this->drag);
+    if (gdk_event_get_axis(event, GDK_AXIS_YTILT, &ytilt)) {
+        ytilt = CLAMP(ytilt, min_tilt, max_tilt);
+    } else {
+        ytilt = default_tilt;
+    }
+}
 
+bool EraserTool::_apply(Geom::Point p)
+{
     /* Calculate force and acceleration */
-    Geom::Point force = n - this->cur;
+    Geom::Point n = getNormalizedPoint(p);
+    Geom::Point force = n - cur;
 
-    // If force is below the absolute threshold ERASER_EPSILON,
-    // or we haven't yet reached ERASER_VEL_START (i.e. at the beginning of stroke)
-    // _and_ the force is below the (higher) ERASER_EPSILON_START threshold,
-    // discard this move. 
+    // If force is below the absolute threshold `epsilon`,
+    // or we haven't yet reached `vel_start` (i.e. at the beginning of stroke)
+    // _and_ the force is below the (higher) `epsilon_start` threshold,
+    // discard this move.
     // This prevents flips, blobs, and jerks caused by microscopic tremor of the tablet pen,
     // especially bothersome at the start of the stroke where we don't yet have the inertia to
     // smooth them out.
-    if ( Geom::L2(force) < ERASER_EPSILON || (this->vel_max < ERASER_VEL_START && Geom::L2(force) < ERASER_EPSILON_START)) {
-        return FALSE;
+    if (Geom::L2(force) < epsilon || (vel_max < vel_start && Geom::L2(force) < epsilon_start)) {
+        return false;
     }
 
-    this->acc = force / mass;
+    // Calculate mass
+    double const m = flerp(1.0, 160.0, mass);
+    acc = force / m;
+    vel += acc; // Calculate new velocity
+    double const speed = Geom::L2(vel);
 
-    /* Calculate new velocity */
-    this->vel += this->acc;
+    if (speed > vel_max) {
+        vel_max = speed;
+    } else if (speed < epsilon) {
+        return false; // return early if movement is insignificant
+    }
 
-    if (Geom::L2(this->vel) > this->vel_max)
-        this->vel_max = Geom::L2(this->vel);
-
-    /* Calculate angle of drawing tool */
-
-    double a1;
-    if (this->usetilt) {
+    /* Calculate angle of eraser tool */
+    double angle_fixed{0.0};
+    if (usetilt) {
         // 1a. calculate nib angle from input device tilt:
-        gdouble length = std::sqrt(this->xtilt*this->xtilt + this->ytilt*this->ytilt);;
-
-        if (length > 0) {
-            Geom::Point ang1 = Geom::Point(this->ytilt/length, this->xtilt/length);
-            a1 = atan2(ang1);
+        Geom::Point normal{ytilt, xtilt};
+        if (!Geom::is_zero(normal)) {
+            angle_fixed = Geom::atan2(normal);
         }
-        else
-            a1 = 0.0;
+    } else {
+        // 1b. fixed angle (absolutely flat nib):
+        angle_fixed = angle * M_PI / 180.0; // convert to radians
     }
-    else {
-        // 1b. fixed dc->angle (absolutely flat nib):
-        double const radians = ( (this->angle - 90) / 180.0 ) * M_PI;
-        Geom::Point ang1 = Geom::Point(-sin(radians),  cos(radians));
-        a1 = atan2(ang1);
-    }
-    if (this->flatness < 0.0) {
+    if (flatness < 0.0) {
         // flips direction. Useful when usetilt is true
         // allows simulating both pen/charcoal and broad-nibbed pen
-        a1 *= -1;
+        angle_fixed *= -1;
     }
 
-    // 2. perpendicular to dc->vel (absolutely non-flat nib):
-    gdouble const mag_vel = Geom::L2(this->vel);
-    if ( mag_vel < ERASER_EPSILON ) {
-        return FALSE;
-    }
-    Geom::Point ang2 = Geom::rot90(this->vel) / mag_vel;
-
-    // 3. Average them using flatness parameter:
-    // calculate angles
-    double a2 = atan2(ang2);
-    // flip a2 to force it to be in the same half-circle as a1
+    // 2. Angle perpendicular to vel (absolutely non-flat nib):
+    double angle_dynamic = Geom::atan2(Geom::rot90(vel));
+    // flip angle_dynamic to force it to be in the same half-circle as angle_fixed
     bool flipped = false;
-    if (fabs (a2-a1) > 0.5*M_PI) {
-        a2 += M_PI;
+    if (fabs(angle_dynamic - angle_fixed) > M_PI_2) {
+        angle_dynamic += M_PI;
         flipped = true;
     }
-    // normalize a2
-    if (a2 > M_PI)
-        a2 -= 2*M_PI;
-    if (a2 < -M_PI)
-        a2 += 2*M_PI;
-    // find the flatness-weighted bisector angle, unflip if a2 was flipped
-    // FIXME: when dc->vel is oscillating around the fixed angle, the new_ang flips back and forth. How to avoid this?
-    double new_ang = a1 + (1 - fabs(this->flatness)) * (a2 - a1) - (flipped? M_PI : 0);
+    // normalize angle_dynamic
+    if (angle_dynamic > M_PI) {
+        angle_dynamic -= 2 * M_PI;
+    }
+    if (angle_dynamic < -M_PI) {
+        angle_dynamic += 2 * M_PI;
+    }
+
+    // 3. Average them using flatness parameter:
+    // find the flatness-weighted bisector angle, unflip if angle_dynamic was flipped
+    // FIXME: when `vel` is oscillating around the fixed angle, the new_ang flips back and forth.
+    // How to avoid this?
+    double new_ang = flerp(angle_dynamic, angle_fixed, fabs(flatness)) - (flipped ? M_PI : 0);
 
     // Try to detect a sudden flip when the new angle differs too much from the previous for the
     // current velocity; in that case discard this move
-    double angle_delta = Geom::L2(Geom::Point (cos (new_ang), sin (new_ang)) - this->ang);
-    if ( angle_delta / Geom::L2(this->vel) > 4000 ) {
-        return FALSE;
+    double angle_delta = Geom::L2(Geom::Point(cos(new_ang), sin(new_ang)) - ang);
+    if (angle_delta / speed > 4000) {
+        return false;
     }
 
     // convert to point
-    this->ang = Geom::Point (cos (new_ang), sin (new_ang));
-
-//    g_print ("force %g  acc %g  vel_max %g  vel %g  a1 %g  a2 %g  new_ang %g\n", Geom::L2(force), Geom::L2(dc->acc), dc->vel_max, Geom::L2(dc->vel), a1, a2, new_ang);
+    ang = Geom::Point(cos(new_ang), sin(new_ang));
 
     /* Apply drag */
-    this->vel *= 1.0 - drag;
+    double const d = flerp(0.0, 0.5, square(drag));
+    vel *= 1.0 - d;
 
     /* Update position */
-    this->last = this->cur;
-    this->cur += this->vel;
+    last = cur;
+    cur += vel;
 
-    return TRUE;
+    return true;
 }
 
-void EraserTool::brush() {
-    g_assert( this->npoints >= 0 && this->npoints < SAMPLING_SIZE );
+void EraserTool::_brush()
+{
+    g_assert(npoints >= 0 && npoints < SAMPLING_SIZE);
 
     // How much velocity thins strokestyle
-    double vel_thin = flerp (0, 160, this->vel_thin);
+    double const vel_thinning = flerp(0, 160, vel_thin);
 
     // Influence of pressure on thickness
-    double pressure_thick = (this->usepressure ? this->pressure : 1.0);
+    double const pressure_thick = (usepressure ? pressure : 1.0);
 
-    // get the real brush point, not the same as pointer (affected by hatch tracking and/or mass
-    // drag)
-    Geom::Point brush = getViewPoint(this->cur);
-    //Geom::Point brush_w = SP_EVENT_CONTEXT(dc)->desktop->d2w(brush); 
+    // get the real brush point, not the same as pointer (affected by mass drag)
+    Geom::Point brush = getViewPoint(cur);
 
-    double trace_thick = 1;
-
-    double width = (pressure_thick * trace_thick - vel_thin * Geom::L2(this->vel)) * this->width;
+    double const trace_thick = 1;
+    double const speed = Geom::L2(vel);
+    double effective_width = (pressure_thick * trace_thick - vel_thinning * speed) * width;
 
     double tremble_left = 0, tremble_right = 0;
-    if (this->tremor > 0) {
+    if (tremor > 0) {
         // obtain two normally distributed random variables, using polar Box-Muller transform
-        double x1, x2, w, y1, y2;
-        do {
-            x1 = 2.0 * g_random_double_range(0,1) - 1.0;
-            x2 = 2.0 * g_random_double_range(0,1) - 1.0;
-            w = x1 * x1 + x2 * x2;
-        } while ( w >= 1.0 );
-        w = sqrt( (-2.0 * log( w ) ) / w );
-        y1 = x1 * w;
-        y2 = x2 * w;
+        double y1, y2;
+        _generateNormalDist2(y1, y2);
 
         // deflect both left and right edges randomly and independently, so that:
-        // (1) dc->tremor=1 corresponds to sigma=1, decreasing dc->tremor narrows the bell curve;
+        // (1) tremor=1 corresponds to sigma=1, decreasing tremor narrows the bell curve;
         // (2) deflection depends on width, but is upped for small widths for better visual uniformity across widths;
         // (3) deflection somewhat depends on speed, to prevent fast strokes looking
-        // comparatively smooth and slow ones excessively jittery
-        tremble_left  = (y1)*this->tremor * (0.15 + 0.8*width) * (0.35 + 14*Geom::L2(this->vel));
-        tremble_right = (y2)*this->tremor * (0.15 + 0.8*width) * (0.35 + 14*Geom::L2(this->vel));
+        //     comparatively smooth and slow ones excessively jittery
+        double const width_coefficient = 0.15 + 0.8 * effective_width;
+        double const speed_coefficient = 0.35 + 14 * speed;
+        double const total_coefficient = tremor * width_coefficient * speed_coefficient;
+
+        tremble_left  = y1 * total_coefficient;
+        tremble_right = y2 * total_coefficient;
     }
 
-    if ( width < 0.02 * this->width ) {
-        width = 0.02 * this->width;
+    double const min_width = 0.02 * width;
+    if (effective_width < min_width) {
+        effective_width = min_width;
     }
 
     double dezoomify_factor = 0.05 * 1000;
-    if (!this->abs_width) {
+    if (!abs_width) {
         dezoomify_factor /= _desktop->current_zoom();
     }
 
-    Geom::Point del_left = dezoomify_factor * (width + tremble_left) * this->ang;
-    Geom::Point del_right = dezoomify_factor * (width + tremble_right) * this->ang;
+    Geom::Point del_left  = dezoomify_factor * (effective_width + tremble_left)  * ang;
+    Geom::Point del_right = dezoomify_factor * (effective_width + tremble_right) * ang;
 
-    this->point1[this->npoints] = brush + del_left;
-    this->point2[this->npoints] = brush - del_right;
-    
-    if (this->nowidth) {
-        this->point1[this->npoints] = Geom::middle_point(this->point1[this->npoints],this->point2[this->npoints]);
+    point1[npoints] = brush + del_left;
+    point2[npoints] = brush - del_right;
+
+    if (nowidth) {
+        point1[npoints] = Geom::middle_point(point1[npoints], point2[npoints]);
     }
-    this->del = 0.5*(del_left + del_right);
+    del = Geom::middle_point(del_left, del_right);
 
-    this->npoints++;
+    npoints++;
 }
 
-static void
-sp_erc_update_toolbox (SPDesktop *desktop, const gchar *id, double value)
+void EraserTool::_generateNormalDist2(double &r1, double &r2)
 {
-    desktop->setToolboxAdjustmentValue (id, value);
+    // obtain two normally distributed random variables, using polar Box-Muller transform
+    double x1, x2, w;
+    do {
+        x1 = 2.0 * g_random_double_range(0, 1) - 1.0;
+        x2 = 2.0 * g_random_double_range(0, 1) - 1.0;
+        w = square(x1) + square(x2);
+    } while (w >= 1.0);
+    w = sqrt(-2.0 * log(w) / w);
+    r1 = x1 * w;
+    r2 = x2 * w;
 }
 
-void EraserTool::cancel() {
-
-    this->dragging = FALSE;
-    this->is_drawing = false;
+void EraserTool::_cancel()
+{
+    dragging = false;
+    is_drawing = false;
     ungrabCanvasEvents();
 
-    /* Remove all temporary line segments */
-    for (auto segment : this->segments) {
-        delete segment;
-    }
-    this->segments.clear();
+    _removeTemporarySegments();
 
     /* reset accumulated curve */
-    this->accumulated->reset();
-    this->clear_current();
-    if (this->repr) {
-        this->repr = nullptr;
-    }
+    accumulated->reset();
+    _clearCurrent();
+    repr = nullptr;
 }
 
-bool EraserTool::root_handler(GdkEvent* event) {
-    gint ret = FALSE;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint eraser_mode = prefs->getInt("/tools/eraser/mode", 2);
+/** Removes all temporary line segments */
+void EraserTool::_removeTemporarySegments()
+{
+    for (auto segment : segments) {
+        delete segment;
+    }
+    segments.clear();
+}
+
+bool EraserTool::root_handler(GdkEvent* event)
+{
+    bool ret = false;
+    _updateMode();
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                if (Inkscape::have_viable_layer(_desktop, defaultMessageContext()) == false) {
-                    return TRUE;
+                if (!Inkscape::have_viable_layer(_desktop, defaultMessageContext())) {
+                    return true;
                 }
 
                 Geom::Point const button_w(event->button.x, event->button.y);
                 Geom::Point const button_dt(_desktop->w2d(button_w));
 
-                this->reset(button_dt);
-                this->extinput(event);
-                this->apply(button_dt);
+                _reset(button_dt);
+                _extinput(event);
+                _apply(button_dt);
+                accumulated->reset();
 
-                this->accumulated->reset();
+                repr = nullptr;
 
-                if (this->repr) {
-                    this->repr = nullptr;
-                }
-                if ( eraser_mode == ERASER_MODE_DELETE ) {
-                    Inkscape::Rubberband::get(_desktop)->start(_desktop, button_dt);
-                    Inkscape::Rubberband::get(_desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
+                if (mode == EraserToolMode::DELETE) {
+                    auto rubberband = Inkscape::Rubberband::get(_desktop);
+                    rubberband->start(_desktop, button_dt);
+                    rubberband->setMode(RUBBERBAND_MODE_TOUCHPATH);
                 }
                 /* initialize first point */
-                this->npoints = 0;
+                npoints = 0;
 
                 grabCanvasEvents();
-
-                ret = TRUE;
-
-                this->is_drawing = true;
+                is_drawing = true;
+                ret = true;
             }
             break;
 
         case GDK_MOTION_NOTIFY: {
             Geom::Point const motion_w(event->motion.x, event->motion.y);
             Geom::Point motion_dt(_desktop->w2d(motion_w));
-            this->extinput(event);
+            _extinput(event);
 
-            this->message_context->clear();
+            message_context->clear();
 
-            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK)) {
-                this->dragging = TRUE;
+            if (is_drawing && (event->motion.state & GDK_BUTTON1_MASK)) {
+                dragging = true;
 
-                this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
+                message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
 
-                if (!this->apply(motion_dt)) {
-                    ret = TRUE;
+                if (!_apply(motion_dt)) {
+                    ret = true;
                     break;
                 }
 
-                if ( this->cur != this->last ) {
-                    this->brush();
-                    g_assert( this->npoints > 0 );
-                    this->fit_and_split(false);
+                if (cur != last) {
+                    _brush();
+                    g_assert(npoints > 0);
+                    _fitAndSplit(false);
                 }
 
-                ret = TRUE;
+                ret = true;
             }
-            if ( eraser_mode == ERASER_MODE_DELETE ) {
-                this->accumulated->reset();
+            if (mode == EraserToolMode::DELETE) {
+                accumulated->reset();
                 Inkscape::Rubberband::get(_desktop)->move(motion_dt);
             }
-        }
-        break;
-
-    case GDK_BUTTON_RELEASE: {
-        if (event->button.button != 1) {
             break;
         }
-
-        Geom::Point const motion_w(event->button.x, event->button.y);
-        Geom::Point const motion_dt(_desktop->w2d(motion_w));
-
-        ungrabCanvasEvents();
-
-        this->is_drawing = false;
-
-        if (this->dragging && event->button.button == 1) {
-            this->dragging = FALSE;
-
-            this->apply(motion_dt);
-
-            /* Remove all temporary line segments */
-            for (auto segment : this->segments) {
-                delete segment;
-            }
-            this->segments.clear();
-
-            /* Create object */
-            this->fit_and_split(true);
-            this->accumulate();
-            this->set_to_accumulated(); // performs document_done
-
-            /* reset accumulated curve */
-            this->accumulated->reset();
-
-            this->clear_current();
-            if (this->repr) {
-                this->repr = nullptr;
+        case GDK_BUTTON_RELEASE: {
+            if (event->button.button != 1) {
+                break;
             }
 
-            this->message_context->clear();
-            ret = TRUE;
-        }
+            Geom::Point const motion_w(event->button.x, event->button.y);
+            Geom::Point const motion_dt(_desktop->w2d(motion_w));
 
-        if (eraser_mode == ERASER_MODE_DELETE && Inkscape::Rubberband::get(_desktop)->is_started()) {
-            Inkscape::Rubberband::get(_desktop)->stop();
-        }
+            ungrabCanvasEvents();
 
-        break;
-    }
+            is_drawing = false;
 
-    case GDK_KEY_PRESS:
-        switch (get_latin_keyval (&event->key)) {
-//        case GDK_KEY_Up:
-//        case GDK_KEY_KP_Up:
-//            if (!MOD__CTRL_ONLY(event)) {
-//                this->angle += 5.0;
+            if (dragging) {
+                dragging = false;
 
-//                if (this->angle > 90.0) {
-//                    this->angle = 90.0;
-//                }
-//                sp_erc_update_toolbox (_desktop, "eraser-angle", this->angle);
-//                ret = TRUE;
-//            }
-//            break;
+                _apply(motion_dt);
+                _removeTemporarySegments();
 
-//        case GDK_KEY_Down:
-//        case GDK_KEY_KP_Down:
-//            if (!MOD__CTRL_ONLY(event)) {
-//                this->angle -= 5.0;
+                /* Create object */
+                _fitAndSplit(true);
+                _accumulate();
+                _setToAccumulated(); // performs document_done
 
-//                if (this->angle < -90.0) {
-//                    this->angle = -90.0;
-//                }
+                /* reset accumulated curve */
+                accumulated->reset();
 
-//                sp_erc_update_toolbox (_desktop, "eraser-angle", this->angle);
-//                ret = TRUE;
-//            }
-//            break;
+                _clearCurrent();
+                repr = nullptr;
 
-        case GDK_KEY_Right:
-        case GDK_KEY_KP_Right:
-            if (!MOD__CTRL_ONLY(event)) {
-                this->width += 0.01;
+                message_context->clear();
+                ret = true;
+            }
 
-                if (this->width > 1.0) {
-                    this->width = 1.0;
+            if (mode == EraserToolMode::DELETE) {
+                auto r = Inkscape::Rubberband::get(_desktop);
+                if (r->is_started()) {
+                    r->stop();
                 }
-
-                sp_erc_update_toolbox(_desktop, "eraser-width", this->width * 100); // the same spinbutton is for alt+x
-                ret = TRUE;
             }
+
+            break;
+        }
+        case GDK_KEY_PRESS:
+            ret = _handleKeypress(&event->key);
             break;
 
-        case GDK_KEY_Left:
-        case GDK_KEY_KP_Left:
-            if (!MOD__CTRL_ONLY(event)) {
-                this->width -= 0.01;
+        case GDK_KEY_RELEASE:
+            switch (get_latin_keyval(&event->key)) {
+                case GDK_KEY_Control_L:
+                case GDK_KEY_Control_R:
+                    message_context->clear();
+                    break;
 
-                if (this->width < 0.01) {
-                    this->width = 0.01;
-                }
-
-                sp_erc_update_toolbox(_desktop, "eraser-width", this->width * 100);
-                ret = TRUE;
-            }
-            break;
-
-        case GDK_KEY_Home:
-        case GDK_KEY_KP_Home:
-            this->width = 0.01;
-            sp_erc_update_toolbox(_desktop, "eraser-width", this->width * 100);
-            ret = TRUE;
-            break;
-
-        case GDK_KEY_End:
-        case GDK_KEY_KP_End:
-            this->width = 1.0;
-            sp_erc_update_toolbox(_desktop, "eraser-width", this->width * 100);
-            ret = TRUE;
-            break;
-
-        case GDK_KEY_x:
-        case GDK_KEY_X:
-            if (MOD__ALT_ONLY(event)) {
-                _desktop->setToolboxFocusTo("eraser-width");
-                ret = TRUE;
-            }
-            break;
-
-        case GDK_KEY_Escape:
-            if ( eraser_mode == ERASER_MODE_DELETE ) {
-                Inkscape::Rubberband::get(_desktop)->stop();
-            }
-            if (this->is_drawing) {
-                // if drawing, cancel, otherwise pass it up for deselecting
-                this->cancel();
-                ret = TRUE;
-            }
-            break;
-
-        case GDK_KEY_z:
-        case GDK_KEY_Z:
-            if (MOD__CTRL_ONLY(event) && this->is_drawing) {
-                // if drawing, cancel, otherwise pass it up for undo
-                this->cancel();
-                ret = TRUE;
+                default:
+                    break;
             }
             break;
 
         default:
             break;
-        }
-        break;
-
-    case GDK_KEY_RELEASE:
-        switch (get_latin_keyval(&event->key)) {
-            case GDK_KEY_Control_L:
-            case GDK_KEY_Control_R:
-                this->message_context->clear();
-                break;
-
-            default:
-                break;
-        }
-        break;
-
-    default:
-        break;
     }
 
     if (!ret) {
-    	ret = DynamicBase::root_handler(event);
+        ret = DynamicBase::root_handler(event);
     }
-
     return ret;
 }
 
-void EraserTool::clear_current() {
-    // reset bpath
-    this->currentshape->set_bpath(nullptr);
+/** Analyses and handles a key press event, returns true if processed, false if not. */
+bool EraserTool::_handleKeypress(const GdkEventKey *key)
+{
+    bool ret = false;
+    bool just_ctrl = (key->state & GDK_CONTROL_MASK)                      // Ctrl key is down
+                     && !(key->state & (GDK_MOD1_MASK | GDK_SHIFT_MASK)); // but not Alt or Shift
 
-    // reset curve
-    this->currentcurve->reset();
-    this->cal1->reset();
-    this->cal2->reset();
+    bool just_alt = (key->state & GDK_MOD1_MASK)                            // Alt is down
+                    && !(key->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)); // but not Ctrl or Shift
 
-    // reset points
-    this->npoints = 0;
+    switch (get_latin_keyval(key)) {
+        case GDK_KEY_Right:
+        case GDK_KEY_KP_Right:
+            if (!just_ctrl) {
+                width += 0.01;
+                if (width > 1.0) {
+                    width = 1.0;
+                }
+                // Alt+X sets focus to this spinbutton as well
+                _desktop->setToolboxAdjustmentValue("eraser-width", width * 100);
+                ret = true;
+            }
+            break;
+
+        case GDK_KEY_Left:
+        case GDK_KEY_KP_Left:
+            if (!just_ctrl) {
+                width -= 0.01;
+                if (width < 0.01) {
+                    width = 0.01;
+                }
+                _desktop->setToolboxAdjustmentValue("eraser-width", width * 100);
+                ret = true;
+            }
+            break;
+
+        case GDK_KEY_Home:
+        case GDK_KEY_KP_Home:
+            width = 0.01;
+            _desktop->setToolboxAdjustmentValue("eraser-width", width * 100);
+            ret = true;
+            break;
+
+        case GDK_KEY_End:
+        case GDK_KEY_KP_End:
+            width = 1.0;
+            _desktop->setToolboxAdjustmentValue("eraser-width", width * 100);
+            ret = true;
+            break;
+
+        case GDK_KEY_x:
+        case GDK_KEY_X:
+            if (just_alt) {
+                _desktop->setToolboxFocusTo("eraser-width");
+                ret = true;
+            }
+            break;
+
+        case GDK_KEY_Escape:
+            if (mode == EraserToolMode::DELETE) {
+                Inkscape::Rubberband::get(_desktop)->stop();
+            }
+            if (is_drawing) {
+                // if drawing, cancel, otherwise pass it up for deselecting
+                _cancel();
+                ret = true;
+            }
+            break;
+
+        case GDK_KEY_z:
+        case GDK_KEY_Z:
+            if (just_ctrl && is_drawing) { // Ctrl+Z pressed while drawing
+                _cancel();
+                ret = true;
+            } // if not drawing, pass it up for undo
+            break;
+
+        default:
+            break;
+    }
+    return ret;
 }
 
-void EraserTool::set_to_accumulated() {
-    bool workDone = false;
+void EraserTool::_clearCurrent()
+{
+    // reset bpath
+    currentshape->set_bpath(nullptr);
+
+    // reset curve
+    currentcurve->reset();
+    cal1->reset();
+    cal2->reset();
+
+    // reset points
+    npoints = 0;
+}
+
+void EraserTool::_setToAccumulated()
+{
+    bool work_done = false;
     SPDocument *document = _desktop->doc();
-    if (!this->accumulated->is_empty()) {
-        if (!this->repr) {
+
+    if (!accumulated->is_empty()) {
+        if (!repr) {
             /* Create object */
             Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
-            Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
+            Inkscape::XML::Node *eraser_repr = xml_doc->createElement("svg:path");
 
             /* Set style */
-            sp_desktop_apply_style_tool(_desktop, repr, "/tools/eraser", false);
+            sp_desktop_apply_style_tool(_desktop, eraser_repr, "/tools/eraser", false);
 
-            this->repr = repr;
+            repr = eraser_repr;
         }
         SPObject *top_layer = _desktop->layerManager().currentRoot();
-        SPItem *item_repr = SP_ITEM(top_layer->appendChildRepr(this->repr));
-        Inkscape::GC::release(this->repr);
+        SPItem *item_repr = SP_ITEM(top_layer->appendChildRepr(repr));
+        Inkscape::GC::release(repr);
         item_repr->updateRepr();
-        Geom::PathVector pathv = this->accumulated->get_pathvector() * _desktop->dt2doc();
+        Geom::PathVector pathv = accumulated->get_pathvector() * _desktop->dt2doc();
         pathv *= item_repr->i2doc_affine().inverse();
-        this->repr->setAttribute("d", sp_svg_write_path(pathv));
-        Geom::OptRect eraserBbox;
-        if ( this->repr ) {
-            bool wasSelection = false;
+        repr->setAttribute("d", sp_svg_write_path(pathv));
+        Geom::OptRect eraser_bbox;
+        if (repr) {
+            bool was_selection = false;
             Inkscape::Selection *selection = _desktop->getSelection();
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            gint eraser_mode = prefs->getInt("/tools/eraser/mode", ERASER_MODE_CLIP);
+            _updateMode();
             Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
-
-            SPItem *acid = SP_ITEM(_desktop->doc()->getObjectByRepr(this->repr));
-            eraserBbox = acid->documentVisualBounds();
-            std::vector<SPItem*> remainingItems;
-            std::vector<SPItem*> toWorkOn;
+            SPItem *acid = SP_ITEM(_desktop->doc()->getObjectByRepr(repr));
+            eraser_bbox = acid->documentVisualBounds();
+            std::vector<SPItem *> remaining_items;
+            std::vector<SPItem *> to_work_on;
             if (selection->isEmpty()) {
-                if (eraser_mode  == ERASER_MODE_CUT || eraser_mode  == ERASER_MODE_CLIP) {
-                    toWorkOn = document->getItemsPartiallyInBox(_desktop->dkey, *eraserBbox, false, false, false, true);
+                if (mode == EraserToolMode::CUT || mode == EraserToolMode::CLIP) {
+                    to_work_on = document->getItemsPartiallyInBox(_desktop->dkey, *eraser_bbox,
+                                                                  false, false, false, true);
                 } else {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(_desktop);
-                    toWorkOn = document->getItemsAtPoints(_desktop->dkey, r->getPoints());
+                    to_work_on = document->getItemsAtPoints(_desktop->dkey, r->getPoints());
                 }
-                toWorkOn.erase(std::remove(toWorkOn.begin(), toWorkOn.end(), acid), toWorkOn.end());
+                to_work_on.erase(std::remove(to_work_on.begin(), to_work_on.end(), acid), to_work_on.end());
             } else {
-                if (eraser_mode == ERASER_MODE_DELETE) {
+                if (mode == EraserToolMode::DELETE) {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(_desktop);
-                    std::vector<SPItem*> touched;
-                    touched = document->getItemsAtPoints(_desktop->dkey, r->getPoints());
+                    std::vector<SPItem *> touched = document->getItemsAtPoints(_desktop->dkey, r->getPoints());
                     for (auto i : touched) {
-                        if(selection->includes(i)){
-                            toWorkOn.push_back(i);
+                        if (selection->includes(i)) {
+                            to_work_on.push_back(i);
                         }
                     }
                 } else {
-                    toWorkOn.insert(toWorkOn.end(), selection->items().begin(), selection->items().end());
+                    to_work_on.insert(to_work_on.end(), selection->items().begin(), selection->items().end());
                 }
-                wasSelection = true;
+                was_selection = true;
             }
 
-            if ( !toWorkOn.empty() ) {
-                if (eraser_mode  == ERASER_MODE_CUT) {
-                    for (auto i : toWorkOn){
+            if (!to_work_on.empty()) {
+                if (mode == EraserToolMode::CUT) {
+                    for (auto i : to_work_on) { // TODO: Move the loop body to a separate function
                         SPItem *item = i;
                         SPUse *use = dynamic_cast<SPUse *>(item);
-                        if (SP_IS_PATH(item) && SP_PATH(item)->nodesInPath () == 2){
+                        if (SP_IS_PATH(item) && SP_PATH(item)->nodesInPath() == 2) {
                             SPItem *item = i;
                             item->deleteObject(true);
-                            workDone = true;
-                        } else if (SP_IS_GROUP(item) || use ) {
-                            /*Do nothing*/
-                        } else {
+                            work_done = true;
+                        } else if (!SP_IS_GROUP(item) && !use) {
                             Geom::OptRect bbox = item->documentVisualBounds();
-                            if (bbox && bbox->intersects(*eraserBbox)) {
-                                Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
-                                this->repr->parent()->appendChild(dup);
+                            if (bbox && bbox->intersects(*eraser_bbox)) {
+                                Inkscape::XML::Node *dup = repr->duplicate(xml_doc);
+                                repr->parent()->appendChild(dup);
                                 Inkscape::GC::release(dup); // parent takes over
                                 Inkscape::ObjectSet w_selection(_desktop);
                                 w_selection.set(dup);
-                                if (!this->nowidth) {
+                                if (!nowidth) {
                                     w_selection.pathUnion(true);
                                 }
                                 w_selection.add(item);
-                                if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
+                                if (item->style->fill_rule.value == SP_WIND_RULE_EVENODD) {
                                     SPCSSAttr *css = sp_repr_css_attr_new();
                                     sp_repr_css_set_property(css, "fill-rule", "evenodd");
                                     sp_desktop_set_style(_desktop, css);
                                     sp_repr_css_attr_unref(css);
                                     css = nullptr;
                                 }
-                                if (this->nowidth) {
+                                if (nowidth) {
                                     w_selection.pathCut(true);
                                 } else {
                                     w_selection.pathDiff(true);
                                 }
-                                workDone = true; // TODO set this only if something was cut.
+                                work_done = true; // TODO set this only if something was cut.
+
+                                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);
-                                if(!break_apart){
+                                if (!break_apart) {
                                     w_selection.combine(true);
-                                } else {
-                                    if(!this->nowidth){
-                                        w_selection.breakApart(true);
-                                    }
+                                } else if (!nowidth) {
+                                    w_selection.breakApart(true);
                                 }
-                                if ( !w_selection.isEmpty() ) {
+                                if (!w_selection.isEmpty()) {
                                     // If the item was not completely erased, track the new remainder.
                                     std::vector<SPItem*> nowSel(w_selection.items().begin(), w_selection.items().end());
                                     for (auto i2 : nowSel) {
-                                        remainingItems.push_back(i2);
+                                        remaining_items.push_back(i2);
                                     }
                                 }
                             } else {
-                                remainingItems.push_back(item);
+                                remaining_items.push_back(item);
                             }
                         }
                     }
-                } else if (eraser_mode == ERASER_MODE_CLIP) {
-                    if (!this->nowidth) {
-                        remainingItems.clear();
-                        for (auto item : toWorkOn){
-                            Inkscape::ObjectSet w_selection(_desktop);
-                            Geom::OptRect bbox = item->documentVisualBounds();
-                            Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
-                            Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
-                            this->repr->parent()->appendChild(dup);
-                            Inkscape::GC::release(dup); // parent takes over
-                            w_selection.set(dup);
-                            w_selection.pathUnion(true);
-                            if (bbox && bbox->intersects(*eraserBbox)) {
-                                SPClipPath *clip_path = item->getClipObject();
-                                if (clip_path) {
-                                    std::vector<SPItem*> selected;
-                                    selected.push_back(SP_ITEM(clip_path->firstChild()));
-                                    std::vector<Inkscape::XML::Node*> to_select;
-                                    std::vector<SPItem*> items(selected);
-                                    sp_item_list_to_curves(items, selected, to_select);
-                                    Inkscape::XML::Node * clip_data = SP_ITEM(clip_path->firstChild())->getRepr();
-                                    if (!clip_data && !to_select.empty()) {
-                                        clip_data = *(to_select.begin());
-                                    }
-                                    if (clip_data) {
-                                        Inkscape::XML::Node *dup_clip = clip_data->duplicate(xml_doc);
-                                        if (dup_clip) {
-                                            SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
-                                            Inkscape::GC::release(dup_clip);
-                                            if (dup_clip_obj) {
-                                                dup_clip_obj->transform *=
-                                                    item->getRelativeTransform(SP_ITEM(item_repr->parent));
-                                                dup_clip_obj->updateRepr();
-                                                clip_path->deleteObject(true);
-                                                w_selection.raiseToTop(true);
-                                                w_selection.add(dup_clip);
-                                                w_selection.pathDiff(true);
-                                                //SPItem * clip = SP_ITEM(*(w_selection.items().begin()));
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
-                                    sp_desktop_apply_style_tool(_desktop, rect_repr, "/tools/eraser", false);
-                                    SPRect * rect = SP_RECT(item_repr->parent->appendChildRepr(rect_repr));
-                                    Inkscape::GC::release(rect_repr);
-                                    rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
-                                    rect->transform = SP_ITEM(rect->parent)->i2doc_affine().inverse();
-
-                                    rect->updateRepr();
-                                    rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                                    w_selection.raiseToTop(true);
-                                    w_selection.add(rect);
-                                    w_selection.pathDiff(true);
-                                }
-                                w_selection.raiseToTop(true);
-                                w_selection.add(item);
-                                w_selection.setMask(true, false, true);
-                            } else {
-                                SPItem *erase_clip = w_selection.singleItem();
-                                if (erase_clip) {
-                                    erase_clip->deleteObject(true);
-                                }
-                            }
-                            workDone = true;
-                            if (wasSelection) {
-                                remainingItems.push_back(item);
+                } else if (mode == EraserToolMode::CLIP) {
+                    if (!nowidth) {
+                        remaining_items.clear();
+                        for (auto item : to_work_on) {
+                            _clipErase(item, item_repr->parent, eraser_bbox);
+                            if (was_selection) {
+                                remaining_items.push_back(item);
                             }
                         }
+                        work_done = true;
                     }
-                } else {
-                    for (auto item : toWorkOn) {
+                } else if (mode == EraserToolMode::DELETE) {
+                    for (auto item : to_work_on) {
                         item->deleteObject(true);
-                        workDone = true;
                     }
-                }
-
-                if (eraser_mode == ERASER_MODE_DELETE) {
                     selection->deleteItems();
-                    remainingItems.clear();
+                    remaining_items.clear();
+                    work_done = true;
                 }
 
                 selection->clear();
-                if ( wasSelection ) {
-                    if ( !remainingItems.empty() ) {
-                        selection->add(remainingItems.begin(), remainingItems.end());
-                    }
+                if (was_selection && !remaining_items.empty()) {
+                    selection->add(remaining_items.begin(), remaining_items.end());
                 }
             }
             // Remove the eraser stroke itself:
-            sp_repr_unparent( this->repr );
-            this->repr = nullptr;
+            sp_repr_unparent(repr);
+            repr = nullptr;
         }
-    } else {
-        if (this->repr) {
-            sp_repr_unparent(this->repr);
-            this->repr = nullptr;
-        }
+    } else if (repr) {
+        sp_repr_unparent(repr);
+        repr = nullptr;
     }
-    if ( workDone ) {
+
+    if (work_done) {
         DocumentUndo::done(document, _("Draw eraser stroke"), INKSCAPE_ICON("draw-eraser"));
     } else {
         DocumentUndo::cancel(document);
     }
 }
 
-static void
-add_cap(SPCurve &curve,
-        Geom::Point const &pre, Geom::Point const &from,
-        Geom::Point const &to, Geom::Point const &post,
-        double rounding)
+/** Clips through an item */
+void EraserTool::_clipErase(SPItem *item, SPObject *parent, Geom::OptRect &eraser_box)
 {
-    Geom::Point vel = rounding * Geom::rot90( to - from ) / sqrt(2.0);
+    Inkscape::ObjectSet w_selection(_desktop);
+    Geom::OptRect bbox = item->documentVisualBounds();
+    Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
+    Inkscape::XML::Node *dup = repr->duplicate(xml_doc);
+    repr->parent()->appendChild(dup);
+    Inkscape::GC::release(dup); // parent takes over
+    w_selection.set(dup);
+    w_selection.pathUnion(true);
+    if (bbox && bbox->intersects(*eraser_box)) {
+        SPClipPath *clip_path = item->getClipObject();
+        if (clip_path) {
+            std::vector<SPItem *> selected;
+            selected.push_back(SP_ITEM(clip_path->firstChild()));
+            std::vector<Inkscape::XML::Node *> to_select;
+            std::vector<SPItem *> items(selected);
+            sp_item_list_to_curves(items, selected, to_select);
+            Inkscape::XML::Node *clip_data = SP_ITEM(clip_path->firstChild())->getRepr();
+            if (!clip_data && !to_select.empty()) {
+                clip_data = *(to_select.begin());
+            }
+            if (clip_data) {
+                Inkscape::XML::Node *dup_clip = clip_data->duplicate(xml_doc);
+                if (dup_clip) {
+                    SPItem *dup_clip_obj = SP_ITEM(parent->appendChildRepr(dup_clip));
+                    Inkscape::GC::release(dup_clip);
+                    if (dup_clip_obj) {
+                        dup_clip_obj->transform *= item->getRelativeTransform(SP_ITEM(parent));
+                        dup_clip_obj->updateRepr();
+                        clip_path->deleteObject(true);
+                        w_selection.raiseToTop(true);
+                        w_selection.add(dup_clip);
+                        w_selection.pathDiff(true);
+                    }
+                }
+            }
+        } else {
+            Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
+            sp_desktop_apply_style_tool(_desktop, rect_repr, "/tools/eraser", false);
+            SPRect *rect = SP_RECT(parent->appendChildRepr(rect_repr));
+            Inkscape::GC::release(rect_repr);
+            rect->setPosition(bbox->left(), bbox->top(), bbox->width(), bbox->height());
+            rect->transform = SP_ITEM(rect->parent)->i2doc_affine().inverse();
+
+            rect->updateRepr();
+            rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            w_selection.raiseToTop(true);
+            w_selection.add(rect);
+            w_selection.pathDiff(true);
+        }
+        w_selection.raiseToTop(true);
+        w_selection.add(item);
+        w_selection.setMask(true, false, true);
+    } else {
+        SPItem *erase_clip = w_selection.singleItem();
+        if (erase_clip) {
+            erase_clip->deleteObject(true);
+        }
+    }
+}
+
+void EraserTool::_addCap(SPCurve &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
+                         Geom::Point const &post, double rounding)
+{
+    Geom::Point vel = rounding * Geom::rot90(to - from) / M_SQRT2;
     double mag = Geom::L2(vel);
 
     Geom::Point v_in = from - pre;
     double mag_in = Geom::L2(v_in);
 
-    if ( mag_in > ERASER_EPSILON ) {
+    if (mag_in > epsilon) {
         v_in = mag * v_in / mag_in;
     } else {
         v_in = Geom::Point(0, 0);
@@ -872,228 +842,237 @@ add_cap(SPCurve &curve,
     Geom::Point v_out = to - post;
     double mag_out = Geom::L2(v_out);
 
-    if ( mag_out > ERASER_EPSILON ) {
+    if (mag_out > epsilon) {
         v_out = mag * v_out / mag_out;
     } else {
         v_out = Geom::Point(0, 0);
     }
 
-    if ( Geom::L2(v_in) > ERASER_EPSILON || Geom::L2(v_out) > ERASER_EPSILON ) {
+    if (Geom::L2(v_in) > epsilon || Geom::L2(v_out) > epsilon) {
         curve.curveto(from + v_in, to + v_out, to);
     }
 }
 
-void EraserTool::accumulate() {
+void EraserTool::_accumulate()
+{
     // construct a crude outline of the eraser's path.
     // this desperately needs to be rewritten to use the path outliner...
-    if ( !this->cal1->is_empty() && !this->cal2->is_empty() ) {
-        this->accumulated->reset(); /*  Is this required ?? */
-        auto rev_cal2 = this->cal2->create_reverse();
-
-        g_assert(this->cal1->get_segment_count() > 0);
-        g_assert(rev_cal2->get_segment_count() > 0);
-        g_assert( ! this->cal1->first_path()->closed() );
-        g_assert( ! rev_cal2->first_path()->closed() );
-
-        Geom::BezierCurve const * dc_cal1_firstseg  = dynamic_cast<Geom::BezierCurve const *>( this->cal1->first_segment() );
-        Geom::BezierCurve const * rev_cal2_firstseg = dynamic_cast<Geom::BezierCurve const *>( rev_cal2->first_segment() );
-        Geom::BezierCurve const * dc_cal1_lastseg   = dynamic_cast<Geom::BezierCurve const *>( this->cal1->last_segment() );
-        Geom::BezierCurve const * rev_cal2_lastseg  = dynamic_cast<Geom::BezierCurve const *>( rev_cal2->last_segment() );
-
-        g_assert( dc_cal1_firstseg );
-        g_assert( rev_cal2_firstseg );
-        g_assert( dc_cal1_lastseg );
-        g_assert( rev_cal2_lastseg );
-
-        accumulated->append(*cal1);
-        if(!this->nowidth) {
-            add_cap(*accumulated,
-                    dc_cal1_lastseg->finalPoint() - dc_cal1_lastseg->unitTangentAt(1),
-                    dc_cal1_lastseg->finalPoint(),
-                    rev_cal2_firstseg->initialPoint(),
-                    rev_cal2_firstseg->initialPoint() + rev_cal2_firstseg->unitTangentAt(0),
-                    this->cap_rounding);
-
-            this->accumulated->append(*rev_cal2, true);
-
-            add_cap(*accumulated,
-                    rev_cal2_lastseg->finalPoint() - rev_cal2_lastseg->unitTangentAt(1),
-                    rev_cal2_lastseg->finalPoint(),
-                    dc_cal1_firstseg->initialPoint(),
-                    dc_cal1_firstseg->initialPoint() + dc_cal1_firstseg->unitTangentAt(0),
-                    this->cap_rounding);
-
-            this->accumulated->closepath();
-        }
-
-        this->cal1->reset();
-        this->cal2->reset();
+    if (cal1->is_empty() || cal2->is_empty()) {
+        return;
     }
+    accumulated->reset(); /*  Is this required ?? */
+    auto rev_cal2 = cal2->create_reverse();
+
+    g_assert(cal1->get_segment_count() > 0);
+    g_assert(rev_cal2->get_segment_count() > 0);
+    g_assert(!cal1->first_path()->closed());
+    g_assert(!rev_cal2->first_path()->closed());
+
+    Geom::BezierCurve const *dc_cal1_firstseg  = dynamic_cast<Geom::BezierCurve const *>(cal1->first_segment());
+    Geom::BezierCurve const *rev_cal2_firstseg = dynamic_cast<Geom::BezierCurve const *>(rev_cal2->first_segment());
+    Geom::BezierCurve const *dc_cal1_lastseg   = dynamic_cast<Geom::BezierCurve const *>(cal1->last_segment());
+    Geom::BezierCurve const *rev_cal2_lastseg  = dynamic_cast<Geom::BezierCurve const *>(rev_cal2->last_segment());
+
+    g_assert(dc_cal1_firstseg);
+    g_assert(rev_cal2_firstseg);
+    g_assert(dc_cal1_lastseg);
+    g_assert(rev_cal2_lastseg);
+
+    accumulated->append(*cal1);
+    if (!nowidth) {
+        _addCap(*accumulated,
+                dc_cal1_lastseg->finalPoint() - dc_cal1_lastseg->unitTangentAt(1),
+                dc_cal1_lastseg->finalPoint(),
+                rev_cal2_firstseg->initialPoint(),
+                rev_cal2_firstseg->initialPoint() + rev_cal2_firstseg->unitTangentAt(0),
+                cap_rounding);
+
+        accumulated->append(*rev_cal2, true);
+
+        _addCap(*accumulated,
+                rev_cal2_lastseg->finalPoint() - rev_cal2_lastseg->unitTangentAt(1),
+                rev_cal2_lastseg->finalPoint(),
+                dc_cal1_firstseg->initialPoint(),
+                dc_cal1_firstseg->initialPoint() + dc_cal1_firstseg->unitTangentAt(0),
+                cap_rounding);
+
+        accumulated->closepath();
+    }
+    cal1->reset();
+    cal2->reset();
 }
 
-static double square(double const x)
+void EraserTool::_fitAndSplit(bool releasing)
 {
-    return x * x;
-}
-
-void EraserTool::fit_and_split(bool release) {
-    double const tolerance_sq = square(_desktop->w2d().descrim() * TOLERANCE_ERASER);
+    double const tolerance_sq = square(_desktop->w2d().descrim() * tolerance);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    this->nowidth = prefs->getDouble( "/tools/eraser/width", 1) == 0;
+    nowidth = (prefs->getDouble("/tools/eraser/width", 1) == 0);
 
 #ifdef ERASER_VERBOSE
-    g_print("[F&S:R=%c]", release?'T':'F');
+    g_print("[F&S:R=%c]", releasing ? 'T' : 'F');
 #endif
-
-    if (!( this->npoints > 0 && this->npoints < SAMPLING_SIZE ))
+    if (npoints >= SAMPLING_SIZE || npoints <= 0) {
         return; // just clicked
+    }
 
-    if ( this->npoints == SAMPLING_SIZE - 1 || release ) {
-#define BEZIER_SIZE       4
-#define BEZIER_MAX_BEZIERS  8
-#define BEZIER_MAX_LENGTH ( BEZIER_SIZE * BEZIER_MAX_BEZIERS )
+    if (npoints == SAMPLING_SIZE - 1 || releasing) {
+        _completeBezier(tolerance_sq, releasing);
 
 #ifdef ERASER_VERBOSE
-        g_print("[F&S:#] this->npoints:%d, release:%s\n",
-                dc->npoints, release ? "TRUE" : "FALSE");
+        g_print("[%d]Yup\n", npoints);
 #endif
-
-        /* Current eraser */
-        if ( this->cal1->is_empty() || this->cal2->is_empty() ) {
-            /* dc->npoints > 0 */
-            /* g_print("erasers(1|2) reset\n"); */
-            this->cal1->reset();
-            this->cal2->reset();
-
-            this->cal1->moveto(this->point1[0]);
-            this->cal2->moveto(this->point2[0]);
+        if (!releasing) {
+            _fitDrawLastPoint();
         }
 
-        Geom::Point b1[BEZIER_MAX_LENGTH];
-        gint const nb1 = Geom::bezier_fit_cubic_r(b1, this->point1, this->npoints, tolerance_sq, BEZIER_MAX_BEZIERS);
-        g_assert( nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)) );
-
-        Geom::Point b2[BEZIER_MAX_LENGTH];
-        gint const nb2 = Geom::bezier_fit_cubic_r(b2, this->point2, this->npoints, tolerance_sq, BEZIER_MAX_BEZIERS);
-        g_assert( nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)) );
-
-        if ( nb1 != -1 && nb2 != -1 ) {
-            /* Fit and draw and reset state */
-#ifdef ERASER_VERBOSE
-            g_print("nb1:%d nb2:%d\n", nb1, nb2);
-#endif
-
-            /* CanvasShape */
-            if (! release) {
-                this->currentcurve->reset();
-                this->currentcurve->moveto(b1[0]);
-
-                for (Geom::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
-                    this->currentcurve->curveto(bp1[1], bp1[2], bp1[3]);
-                }
-
-                this->currentcurve->lineto(b2[BEZIER_SIZE*(nb2-1) + 3]);
-
-                for (Geom::Point *bp2 = b2 + BEZIER_SIZE * ( nb2 - 1 ); bp2 >= b2; bp2 -= BEZIER_SIZE) {
-                    this->currentcurve->curveto(bp2[2], bp2[1], bp2[0]);
-                }
-
-                // FIXME: this->segments is always NULL at this point??
-                if (this->segments.empty()) { // first segment
-                    add_cap(*currentcurve, b2[1], b2[0], b1[0], b1[1], cap_rounding);
-                }
-
-                this->currentcurve->closepath();
-                this->currentshape->set_bpath(currentcurve.get(), true);
-            }
-
-            /* Current eraser */
-            for (Geom::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
-                this->cal1->curveto(bp1[1], bp1[2], bp1[3]);
-            }
-
-            for (Geom::Point *bp2 = b2; bp2 < b2 + BEZIER_SIZE * nb2; bp2 += BEZIER_SIZE) {
-                this->cal2->curveto(bp2[1], bp2[2], bp2[3]);
-            }
-        } else {
-            /* fixme: ??? */
-#ifdef ERASER_VERBOSE
-            g_print("[fit_and_split] failed to fit-cubic.\n");
-#endif
-            this->draw_temporary_box();
-
-            for (gint i = 1; i < this->npoints; i++) {
-                this->cal1->lineto(this->point1[i]);
-            }
-
-            for (gint i = 1; i < this->npoints; i++) {
-                this->cal2->lineto(this->point2[i]);
-            }
-        }
-
-        /* Fit and draw and copy last point */
-#ifdef ERASER_VERBOSE
-        g_print("[%d]Yup\n", this->npoints);
-#endif
-        if (!release) {
-            gint eraser_mode = prefs->getInt("/tools/eraser/mode",2);
-            g_assert(!this->currentcurve->is_empty());
-
-            guint32 fillColor = sp_desktop_get_color_tool(_desktop, "/tools/eraser", true);
-            double opacity = sp_desktop_get_master_opacity_tool(_desktop, "/tools/eraser");
-            double fillOpacity = sp_desktop_get_opacity_tool(_desktop, "/tools/eraser", true);
-
-            guint fill = (fillColor & 0xffffff00) | SP_COLOR_F_TO_U(opacity*fillOpacity);
-
-            auto cbp = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), currentcurve.get(), true);
-            cbp->set_fill(fill, SP_WIND_RULE_EVENODD);
-            cbp->set_stroke(0x0);
-
-            /* fixme: Cannot we cascade it to root more clearly? */
-            cbp->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), _desktop));
-
-            this->segments.push_back(cbp);
-
-            if (eraser_mode == ERASER_MODE_DELETE) {
-                cbp->hide();
-                this->currentshape->hide();
-            }
-        }
-
-        this->point1[0] = this->point1[this->npoints - 1];
-        this->point2[0] = this->point2[this->npoints - 1];
-        this->npoints = 1;
+        // Copy last point
+        point1[0] = point1[npoints - 1];
+        point2[0] = point2[npoints - 1];
+        npoints = 1;
     } else {
-        this->draw_temporary_box();
+        _drawTemporaryBox();
     }
 }
 
-void EraserTool::draw_temporary_box() {
-    this->currentcurve->reset();
+void EraserTool::_completeBezier(double tolerance_sq, bool releasing)
+{
+    /* Current eraser */
+    if (cal1->is_empty() || cal2->is_empty()) {
+        /* dc->npoints > 0 */
+        cal1->reset();
+        cal2->reset();
 
-    this->currentcurve->moveto(this->point1[this->npoints-1]);
+        cal1->moveto(point1[0]);
+        cal2->moveto(point2[0]);
+    }
+#ifdef ERASER_VERBOSE
+    g_print("[F&S:#] npoints:%d, releasing:%s\n", npoints, releasing ? "TRUE" : "FALSE");
+#endif
 
-    for (gint i = this->npoints-2; i >= 0; i--) {
-        this->currentcurve->lineto(this->point1[i]);
+    unsigned const bezier_size = 4;
+    unsigned const max_beziers = 8;
+    size_t const bezier_max_length = bezier_size * max_beziers;
+
+    Geom::Point b1[bezier_max_length];
+    gint const nb1 = Geom::bezier_fit_cubic_r(b1, point1, npoints, tolerance_sq, max_beziers);
+    g_assert(nb1 * bezier_size <= gint(G_N_ELEMENTS(b1)));
+
+    Geom::Point b2[bezier_max_length];
+    gint const nb2 = Geom::bezier_fit_cubic_r(b2, point2, npoints, tolerance_sq, max_beziers);
+    g_assert(nb2 * bezier_size <= gint(G_N_ELEMENTS(b2)));
+
+    if (nb1 == -1 || nb2 == -1) {
+        _failedBezierFallback(); // TODO: do we ever need this?
+        return;
     }
 
-    for (gint i = 0; i < this->npoints; i++) {
-        this->currentcurve->lineto(this->point2[i]);
+    /* Fit and draw and reset state */
+#ifdef ERASER_VERBOSE
+    g_print("nb1:%d nb2:%d\n", nb1, nb2);
+#endif
+
+    /* CanvasShape */
+    if (!releasing) {
+        currentcurve->reset();
+        currentcurve->moveto(b1[0]);
+
+        for (Geom::Point *bp1 = b1; bp1 < b1 + bezier_size * nb1; bp1 += bezier_size) {
+            currentcurve->curveto(bp1[1], bp1[2], bp1[3]);
+        }
+
+        currentcurve->lineto(b2[bezier_size * (nb2 - 1) + 3]);
+
+        for (Geom::Point *bp2 = b2 + bezier_size * (nb2 - 1); bp2 >= b2; bp2 -= bezier_size) {
+            currentcurve->curveto(bp2[2], bp2[1], bp2[0]);
+        }
+
+        // FIXME: segments is always NULL at this point??
+        if (segments.empty()) { // first segment
+            _addCap(*currentcurve, b2[1], b2[0], b1[0], b1[1], cap_rounding);
+        }
+
+        currentcurve->closepath();
+        currentshape->set_bpath(currentcurve.get(), true);
     }
 
-    if (this->npoints >= 2) {
-        add_cap(*currentcurve,                            //
-                point2[npoints - 2], point2[npoints - 1], //
+    /* Current eraser */
+    for (Geom::Point *bp1 = b1; bp1 < b1 + bezier_size * nb1; bp1 += bezier_size) {
+        cal1->curveto(bp1[1], bp1[2], bp1[3]);
+    }
+
+    for (Geom::Point *bp2 = b2; bp2 < b2 + bezier_size * nb2; bp2 += bezier_size) {
+        cal2->curveto(bp2[1], bp2[2], bp2[3]);
+    }
+}
+
+void EraserTool::_failedBezierFallback()
+{
+    /* fixme: ??? */
+#ifdef ERASER_VERBOSE
+    g_print("[_failedBezierFallback] - failed to fit cubic.\n");
+#endif
+    _drawTemporaryBox();
+
+    for (gint i = 1; i < npoints; i++) {
+        cal1->lineto(point1[i]);
+    }
+
+    for (gint i = 1; i < npoints; i++) {
+        cal2->lineto(point2[i]);
+    }
+}
+
+void EraserTool::_fitDrawLastPoint()
+{
+    g_assert(!currentcurve->is_empty());
+
+    guint32 fillColor = sp_desktop_get_color_tool(_desktop, "/tools/eraser", true);
+    double opacity = sp_desktop_get_master_opacity_tool(_desktop, "/tools/eraser");
+    double fillOpacity = sp_desktop_get_opacity_tool(_desktop, "/tools/eraser", true);
+
+    guint fill = (fillColor & 0xffffff00) | SP_COLOR_F_TO_U(opacity * fillOpacity);
+
+    auto cbp = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), currentcurve.get(), true);
+    cbp->set_fill(fill, trace_wind_rule);
+    cbp->set_stroke(0x0);
+
+    /* fixme: Cannot we cascade it to root more clearly? */
+    cbp->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), _desktop));
+    segments.push_back(cbp);
+
+    if (mode == EraserToolMode::DELETE) {
+        cbp->hide();
+        currentshape->hide();
+    }
+}
+
+void EraserTool::_drawTemporaryBox()
+{
+    currentcurve->reset();
+
+    currentcurve->moveto(point1[npoints - 1]);
+
+    for (gint i = npoints - 2; i >= 0; i--) {
+        currentcurve->lineto(point1[i]);
+    }
+
+    for (gint i = 0; i < npoints; i++) {
+        currentcurve->lineto(point2[i]);
+    }
+
+    if (npoints >= 2) {
+        _addCap(*currentcurve,
+                point2[npoints - 2], point2[npoints - 1],
                 point1[npoints - 1], point1[npoints - 2], cap_rounding);
     }
 
-    this->currentcurve->closepath();
-    this->currentshape->set_bpath(currentcurve.get(), true);
+    currentcurve->closepath();
+    currentshape->set_bpath(currentcurve.get(), true);
 }
 
-}
-}
-}
+} // namespace Tools
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:

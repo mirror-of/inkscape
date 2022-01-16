@@ -52,9 +52,8 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
     : Toolbar(desktop),
     _freeze(false)
 {
-    gint eraser_mode = ERASER_MODE_DELETE;
     auto prefs = Inkscape::Preferences::get();
-
+    gint const eraser_mode = prefs->getInt("/tools/eraser/mode", _modeAsInt(Tools::DEFAULT_ERASER_MODE));
     // Mode
     {
         add_label(_("Mode:"));
@@ -77,8 +76,6 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         clip_btn->set_tooltip_text(_("Clip from objects"));
         clip_btn->set_icon_name(INKSCAPE_ICON("path-intersection"));
         mode_buttons.push_back(clip_btn);
-
-        eraser_mode = prefs->getInt("/tools/eraser/mode", ERASER_MODE_CLIP); // Used at end
 
         mode_buttons[eraser_mode]->set_active();
 
@@ -219,6 +216,26 @@ EraserToolbar::create(SPDesktop *desktop)
     return GTK_WIDGET(toolbar->gobj());
 }
 
+/**
+ * @brief Computes the integer value representing eraser mode
+ * @param mode A mode of the eraser tool, from the enum EraserToolMode
+ * @return the integer to be stored in the prefs as the selected mode
+ */
+guint EraserToolbar::_modeAsInt(Inkscape::UI::Tools::EraserToolMode mode)
+{
+    using namespace Inkscape::UI::Tools;
+
+    if (mode == EraserToolMode::DELETE) {
+        return 0;
+    } else if (mode == EraserToolMode::CUT) {
+        return 1;
+    } else if (mode == EraserToolMode::CLIP) {
+        return 2;
+    } else {
+        return _modeAsInt(DEFAULT_ERASER_MODE);
+    }
+}
+
 void
 EraserToolbar::mode_changed(int mode)
 {
@@ -248,9 +265,11 @@ EraserToolbar::mode_changed(int mode)
 void
 EraserToolbar::set_eraser_mode_visibility(const guint eraser_mode)
 {
-    _split->set_visible((eraser_mode == ERASER_MODE_CUT));
+    using namespace Inkscape::UI::Tools;
 
-    const gboolean visibility = (eraser_mode != ERASER_MODE_DELETE);
+    _split->set_visible(eraser_mode == _modeAsInt(EraserToolMode::CUT));
+
+    const gboolean visibility = (eraser_mode != _modeAsInt(EraserToolMode::DELETE));
 
     const std::array<Gtk::Widget *, 6> arr = {_cap_rounding,
                                               _mass,
