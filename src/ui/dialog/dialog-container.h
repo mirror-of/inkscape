@@ -108,7 +108,7 @@ private:
     void append_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void column_empty(DialogMultipaned *column);
     DialogBase* find_existing_dialog(const Glib::ustring& dialog_type);
-    static bool recreate_dialogs_from_state(const Glib::KeyFile* keyfile);
+    static bool recreate_dialogs_from_state(InkscapeWindow* inkscape_window, const Glib::KeyFile* keyfile);
 };
 
 } // namespace Dialog

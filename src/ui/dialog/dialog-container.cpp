@@ -22,6 +22,7 @@
 
 #include "enums.h"
 #include "inkscape-application.h"
+#include "inkscape-window.h"
 // #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-data.h"
@@ -331,8 +332,10 @@ void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNoteboo
 }
 
 // recreate dialogs hosted (docked) in a floating DialogWindow; window will be created
-bool DialogContainer::recreate_dialogs_from_state(const Glib::KeyFile* keyfile)
+bool DialogContainer::recreate_dialogs_from_state(InkscapeWindow* inkscape_window, const Glib::KeyFile* keyfile)
 {
+    g_assert(inkscape_window != nullptr);
+
     bool restored = false;
     // Step 1: check if we want to load the state
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -377,7 +380,7 @@ bool DialogContainer::recreate_dialogs_from_state(const Glib::KeyFile* keyfile)
         }
 
         // Step 3.1: get the window's container columns where we want to create the dialogs
-        DialogWindow *dialog_window = new DialogWindow(nullptr);
+        DialogWindow *dialog_window = new DialogWindow(inkscape_window, nullptr);
         DialogContainer *active_container = dialog_window->get_container();
         DialogMultipaned *active_columns = active_container ? active_container->get_columns() : nullptr;
 
@@ -482,7 +485,15 @@ DialogWindow *DialogContainer::create_new_floating_dialog(const Glib::ustring& d
     
     // check if this dialog *was* open and floating; if so recreate its window
     if (auto state = DialogManager::singleton().find_dialog_state(dialog_type)) {
-        if (recreate_dialogs_from_state(state.get())) {
+        auto inkscape_window = dynamic_cast<InkscapeWindow *>(get_toplevel());
+        if (!inkscape_window) {
+            // Must be dialog window.
+            auto dialog_window = dynamic_cast<DialogWindow *>(get_toplevel());
+            g_assert(dialog_window != nullptr);
+            inkscape_window = dialog_window->get_inkscape_window();
+        }
+        g_assert(inkscape_window != nullptr);
+        if (recreate_dialogs_from_state(inkscape_window, state.get())) {
             return nullptr;
         }
     }
@@ -681,7 +692,13 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
 
         if (is_dockable) {
             if (floating) {
-                dialog_window = new DialogWindow(nullptr);
+                // Must be dialog window.
+                auto dialog_window = dynamic_cast<DialogWindow *>(get_toplevel());
+                g_assert(dialog_window != nullptr);
+                auto inkscape_window = dialog_window->get_inkscape_window();
+                g_assert(inkscape_window != nullptr);
+
+                dialog_window = new DialogWindow(inkscape_window, nullptr);
                 if (dialog_window) {
                     active_container = dialog_window->get_container();
                     active_columns = dialog_window->get_container()->get_columns();
