@@ -6,22 +6,21 @@
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2007.
 # Alex <pilipchukap@rambler.ru>, 2005.
-# Yuri Chornoivan <yurchor@ukr.net>, 2007-2019, 2021.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007-2019, 2021, 2022.
 # Olexandr Pylypchuk <lxlalexlxl@ukr.net>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-04-07 17:42+0300\n"
+"POT-Creation-Date: 2022-01-14 15:12+0000\n"
+"PO-Revision-Date: 2022-01-15 20:35+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Lokalize 20.12.0\n"
 
 #: ../share/filters/filters.svg.h:2
@@ -5554,6 +5553,8 @@ msgid ""
 "Selected objects require IDs.\n"
 "The following IDs have been assigned:\n"
 msgstr ""
+"Позначені об'єкти потребують ідентифікаторів.\n"
+"З об'єктами пов'язано такі ідентифікатори:\n"
 
 #: ../src/event-log.cpp:186
 msgid "[Unchanged]"
@@ -15621,9 +15622,8 @@ msgid "Group to symbol"
 msgstr "Групу у символ"
 
 #: ../src/selection-chemistry.cpp:3366
-#, fuzzy
 msgid "Remove symbol for editing"
-msgstr "Перетворити символ на групу для редагування"
+msgstr "Вилучити символ для редагування"
 
 #: ../src/selection-chemistry.cpp:3380
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -15831,40 +15831,36 @@ msgid "Stamp"
 msgstr "Штамп"
 
 #: ../src/seltrans.cpp:662
-#, fuzzy
 msgid ""
 "<b>Scale</b> selection; with <b>%1</b> to scale uniformly; with <b>%2</b> to "
 "scale around rotation center"
 msgstr ""
-"<b>Змінювати розмір</b> позначених об'єктів; з <b>Ctrl</b> — зберігати "
-"пропорцію; з <b>Shift</b> — навколо центру обертання"
+"<b>Змінювати розмір</b> позначених об'єктів; з <b>%1</b> — зберігати "
+"пропорцію; з <b>%2</b> — навколо центру обертання"
 
 #: ../src/seltrans.cpp:668
-#, fuzzy
 msgid ""
 "<b>Skew</b> selection; with <b>%1</b> to snap angle; with <b>%2</b> to skew "
 "around the opposite side"
 msgstr ""
-"<b>Нахилити</b> позначені об'єкти; з <b>Ctrl</b> — обмежувати кут; з "
-"<b>Shift</b> — навколо протилежного кута"
+"<b>Нахилити</b> позначені об'єкти; з <b>%1</b> — обмежувати кут; з "
+"<b>%2</b> — навколо протилежного кута"
 
 #: ../src/seltrans.cpp:674
-#, fuzzy
 msgid ""
 "<b>Rotate</b> selection; with <b>%1</b> to snap angle; with <b>%2</b> to "
 "rotate around the opposite corner"
 msgstr ""
-"<b>Обертати</b> позначені об'єкти; з <b>Ctrl</b> — обмежувати кут; з "
-"<b>Shift</b> — навколо протилежного кута"
+"<b>Обертати</b> позначені об'єкти; з <b>%1</b> — обмежувати кут; з "
+"<b>%2</b> — навколо протилежного кута"
 
 #: ../src/seltrans.cpp:680
-#, fuzzy
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with %1 "
 "also uses this center"
 msgstr ""
 "<b>Центр</b> обертання та нахилу: його можна перетягнути; зміна розміру з "
-"Shift також відбувається навколо нього"
+"%1 також відбувається навколо нього"
 
 #
 # File: ../src/seltrans-handles.cpp, line: 23
@@ -16090,6 +16086,7 @@ msgstr "Нічого не було скопійовано."
 #: ../src/ui/clipboard.cpp:451
 msgid "Can't paste text outside of the text tool."
 msgstr ""
+"Неможливо вставити текст поза інструментом тексту."
 
 #: ../src/ui/clipboard.cpp:454 ../src/ui/clipboard.cpp:730
 #: ../src/ui/clipboard.cpp:758 ../src/ui/clipboard.cpp:799
@@ -24986,9 +24983,8 @@ msgid "This value is commented out."
 msgstr "Це значення закоментовано."
 
 #: ../src/ui/dialog/styledialog.cpp:969
-#, fuzzy
 msgid "Current value"
-msgstr "Поточний шар"
+msgstr "Поточне значення"
 
 # File: ../src/ui/dialog/styledialog.cpp, line: 839
 #: ../src/ui/dialog/styledialog.cpp:971
@@ -29738,8 +29734,7 @@ msgstr[2] "Вибрано <b>%d</b> вусів градієнта з %d"
 #: ../src/ui/tools/gradient-tool.cpp:140
 #, c-format
 msgid "<b>No</b> gradient handles selected out of %d on %d selected object"
-msgid_plural ""
-"<b>No</b> gradient handles selected out of %d on %d selected objects"
+msgid_plural "<b>No</b> gradient handles selected out of %d on %d selected objects"
 msgstr[0] "<b>Жодного</b> вуса градієнта з %d в %d вибраному об'єкті"
 msgstr[1] "<b>Жодного</b> вуса градієнта з %d в %d вибраних об'єктах"
 msgstr[2] "<b>Жодного</b> вуса градієнта з %d в %d вибраних об'єктах"
@@ -30435,8 +30430,7 @@ msgstr[2] ""
 #: ../src/ui/tools/text-tool.cpp:1706
 #, c-format
 msgid "Type or edit text (%d character%s); <b>Enter</b> to start new line."
-msgid_plural ""
-"Type or edit text (%d characters%s); <b>Enter</b> to start new line."
+msgid_plural "Type or edit text (%d characters%s); <b>Enter</b> to start new line."
 msgstr[0] ""
 "Введіть або змініть текст (%d символ%s); <b>Enter</b> — початок нового рядка."
 msgstr[1] ""
@@ -34231,11 +34225,11 @@ msgstr "Підручник з Inkscape"
 #: ../src/verbs.cpp:2925
 msgid "Donate"
 msgstr ""
+"Підтримати фінансово"
 
 #: ../src/verbs.cpp:2925
-#, fuzzy
 msgid "Donate to Inkscape"
-msgstr "_Про програму Inkscape"
+msgstr "Підтримати Inkscape фінансово"
 
 #: ../src/verbs.cpp:2926 ../src/verbs.cpp:2927
 msgid "SVG 1.1 Specification"
@@ -35279,10 +35273,12 @@ msgstr "Стільниця SD"
 #: ../share/ui/inkscape-start.glade:500
 msgid "iPhone 5"
 msgstr ""
+"iPhone 5"
 
 #: ../share/ui/inkscape-start.glade:508
 msgid "iPhone X"
 msgstr ""
+"iPhone X"
 
 #: ../share/ui/inkscape-start.glade:516
 msgid "Mobile-smallest"
@@ -35291,6 +35287,7 @@ msgstr "Мобільний, найменший"
 #: ../share/ui/inkscape-start.glade:524
 msgid "iPad Pro"
 msgstr ""
+"iPad Pro"
 
 #: ../share/ui/inkscape-start.glade:532
 msgid "Tablet-smallest"
@@ -35576,9 +35573,8 @@ msgid "Show this every time"
 msgstr "Показувати щоразу"
 
 #: ../share/ui/inkscape-start.glade:2180
-#, fuzzy
 msgid "New Document"
-msgstr "Новий документ %d"
+msgstr "Новий документ"
 
 #: ../share/ui/inkscape-start.glade:2211
 msgid "Time to Draw"
@@ -36222,28 +36218,25 @@ msgid "Please enter a replacement font in the replace all box."
 msgstr "Будь ласка, вкажіть шрифт-замінник у полі заміни всіх елементів."
 
 #: ../share/extensions/setup_typography_canvas.py:67
-#, fuzzy
 msgid "baseline"
-msgstr "базова лінія тексту"
+msgstr "основна лінія"
 
 #: ../share/extensions/setup_typography_canvas.py:68
-#, fuzzy
 msgid "ascender"
-msgstr "Верхній елемент:"
+msgstr "верхній елемент"
 
 #: ../share/extensions/setup_typography_canvas.py:69
 msgid "caps"
 msgstr ""
+"кінчики"
 
 #: ../share/extensions/setup_typography_canvas.py:70
-#, fuzzy
 msgid "xheight"
 msgstr "висота x"
 
 #: ../share/extensions/setup_typography_canvas.py:71
-#, fuzzy
 msgid "descender"
-msgstr "Нижній елемент:"
+msgstr "нижній елемент"
 
 #: ../share/extensions/voronoi2svg.py:153
 msgid "Please select objects!"
@@ -41211,28 +41204,25 @@ msgid "Duplicate the pattern before deformation"
 msgstr "Дублювати візерунок перед деформацією"
 
 #: ../share/extensions/pathalongpath.inx:25
-#, fuzzy
 msgid ""
 "This extension bends a pattern along the curvature of selected path objects."
-msgstr "Для роботи цього додатка потрібно вибрати два об'єкти."
+msgstr "Це розширення вигинає візерунок уздовж кривої позначених об'єктів-контурів."
 
 #: ../share/extensions/pathalongpath.inx:26
-#, fuzzy
 msgid ""
 "There must only be a single pattern object. The pattern object must be the "
 "topmost object in the selection. For the pattern, groups of paths, shapes or "
 "clones are allowed. Text must be converted to path before using it as a "
 "pattern."
 msgstr ""
-"Цей ефект вигинає об'єкт візерунка вздовж довільного скелетного контуру. "
-"Візерунок має бути верхній об'єкт у позначеному (можна використовувати групи "
-"контурів, форми, клони…)"
+"Має бути визначено єдиний об'єкт візерунка. Візерунок має бути верхнім об'єктом у позначеному. Для візерунка можна вибирати групу контурів, форм або клонів. Текст має бути перетворено на контур до використання його як візерунка."
 
 #: ../share/extensions/pathalongpath.inx:27
 msgid ""
 "The pattern can be bent along multiple paths at once, the only condition is "
 "that these must be path objects, no other object types are allowed."
 msgstr ""
+"Візерунок може бути вигнуто уздовж декількох контурів одночасно. Єдиною умовою є те, що вигин має відбуватися уздовж об'єктів контурів. Ніякі інші типи об'єктів використовувати не можна."
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
@@ -41240,12 +41230,14 @@ msgid ""
 "will rotate along with the path direction. With \"Ribbon\", the pattern will "
 "stay upright, so the result will look like a printed ribbon."
 msgstr ""
+"Передбачено два різних режими деформування. У режимі «Змія» візерунок обертатиметься уздовж напрямку контуру. У режимі «Смужка» візерунок лишатиметься подібним до стрічки, тому результати виглядатиме як надрукована смужка."
 
 #: ../share/extensions/pathalongpath.inx:30
 msgid ""
 "The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
 "applying it to the path."
 msgstr ""
+"За допомогою пункту «Візерунок є вертикальним» можна наказати програмі обернути візерунок на 90 градусів до прикладання його до контуру."
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
@@ -41254,6 +41246,7 @@ msgid ""
 "add any new nodes to your pattern objects. To avoid this, either add more "
 "nodes to your pattern objects, or convert all segments to curves beforehand."
 msgstr ""
+"Якщо на ваших контурах є гострі кути, за якими доведеться вигнути візерунок, результат може бути дещо неочікуваним. Причиною є те, що розширення не може додавати до ваших об'єктів візерунків жодних нових вузлів. Щоб уникнути проблем, або додайте вузли до ваших об'єктів візерунка, або попередньо виконайте перетворення усіх прямих відрізків на криві."
 
 #: ../share/extensions/pathscatter.inx:8
 msgid "Follow path orientation"
@@ -41264,9 +41257,8 @@ msgid "Stretch spaces to fit skeleton length"
 msgstr "Витягнути інтервали для відповідності каркасу"
 
 #: ../share/extensions/pathscatter.inx:13
-#, fuzzy
 msgid "Rotate pattern 90° clockwise"
-msgstr "Обернути позначені об'єкти на 90° за годинниковою стрілкою"
+msgstr "Обернути візерунок на 90° за годинниковою стрілкою"
 
 #: ../share/extensions/pathscatter.inx:14
 msgid "Original pattern will be:"
@@ -41277,9 +41269,8 @@ msgid "Moved"
 msgstr "Пересунуто"
 
 #: ../share/extensions/pathscatter.inx:16
-#, fuzzy
 msgid "Duplicated"
-msgstr "Дублювати"
+msgstr "Дубльовано"
 
 #: ../share/extensions/pathscatter.inx:17
 msgid "Cloned"
@@ -41292,6 +41283,7 @@ msgstr "Якщо візерунок є групою, вибрати об'єкт�
 #: ../share/extensions/pathscatter.inx:19
 msgid "Only for options 'moved' and 'duplicated'"
 msgstr ""
+"Лише для варіантів «Пересунуто» та «Дубльовано»"
 
 #: ../share/extensions/pathscatter.inx:20
 msgid "Pick group members:"
@@ -41314,6 +41306,7 @@ msgid ""
 "objects (alternating or randomly) on the path, if you select the option for "
 "picking group members."
 msgstr ""
+"Це розширення розкидає копії об'єкта-візерунка уздовж одного або декількох контурів без деформування візерунка. Об'єкт-візерунок має бути єдиним контуром або групою контурів, форм або клонів. Він має бути найвищим об'єктом у позначеному. Усі інші позначені об'єкти мають бути контурами. Ви також можете розмістити на контурі набір різних об'єктів (перемежовуючи їх або розташовуючи у випадковому порядку), якщо виберете варіант із вибором частин групи."
 
 #
 # File: ../share/extensions/pdflatex.inx, line: 3
