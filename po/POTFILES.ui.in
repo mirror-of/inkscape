@@ -16,4 +16,5 @@
 ../share/ui/toolbar-commands.ui
 ../share/ui/toolbar-page.ui
 ../share/ui/toolbar-snap.ui
+../share/ui/toolbar-tool-prefs.ui
 ../share/ui/toolbar-zoom.ui

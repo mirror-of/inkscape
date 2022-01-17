@@ -210,6 +210,16 @@ iconview *:hover {
     font-weight: bold;
 }
 
+.small-heading {
+    font-size: small;
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.halfrem-vert-space {
+    margin-top: 0.5rem;
+}
+
 #CommandPaletteBase {
     background-color: @theme_base_color; /* some themes don't seem to have a background color for list rows defined and would end up transparent otherwise */
     border: 5px solid @theme_bg_color;
