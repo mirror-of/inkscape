@@ -916,39 +916,37 @@ void ObjectsPanel::setRootWatcher()
         bool layers_only = prefs->getBool("/dialogs/objects/layers_only", false);
         root_watcher = new ObjectWatcher(this, document->getRoot(), nullptr, layers_only);
         layerChanged(getDesktop()->layerManager().currentLayer());
+        selectionChanged(getSelection());
     }
 }
 
 void ObjectsPanel::selectionChanged(Selection *selected)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if(!prefs->getBool("/dialogs/objects/layers_only", false)) {
-        root_watcher->setSelectedBitRecursive(SELECTED_OBJECT, false);
+    root_watcher->setSelectedBitRecursive(SELECTED_OBJECT, false);
 
-        for (auto item : selected->items()) {
-            ObjectWatcher *watcher = nullptr;
-            // This both unpacks the tree, and populates lazy loading
-            for (auto &parent : item->ancestorList(true)) {
-                if (parent->getRepr() == root_watcher->getRepr()) {
-                    watcher = root_watcher;
-                } else if (watcher) {
-                    if ((watcher = watcher->findChild(parent->getRepr()))) {
-                        if (auto row = watcher->getRow()) {
-                            cleanDummyChildren(*row);
-                        }
+    for (auto item : selected->items()) {
+        ObjectWatcher *watcher = nullptr;
+        // This both unpacks the tree, and populates lazy loading
+        for (auto &parent : item->ancestorList(true)) {
+            if (parent->getRepr() == root_watcher->getRepr()) {
+                watcher = root_watcher;
+            } else if (watcher) {
+                if ((watcher = watcher->findChild(parent->getRepr()))) {
+                    if (auto row = watcher->getRow()) {
+                        cleanDummyChildren(*row);
                     }
                 }
             }
-            if (watcher) {
-                if (auto final_watcher = watcher->findChild(item->getRepr())) {
-                    final_watcher->setSelectedBit(SELECTED_OBJECT, true);
-                    _tree.expand_to_path(final_watcher->getTreePath());
-                } else {
-                    g_warning("Can't find final step in tree selection!");
-                }
+        }
+        if (watcher) {
+            if (auto final_watcher = watcher->findChild(item->getRepr())) {
+                final_watcher->setSelectedBit(SELECTED_OBJECT, true);
+                _tree.expand_to_path(final_watcher->getTreePath());
             } else {
-                g_warning("Can't find a mid step in tree selection!");
+                g_warning("Can't find final step in tree selection!");
             }
+        } else {
+            g_warning("Can't find a mid step in tree selection!");
         }
     }
 }
