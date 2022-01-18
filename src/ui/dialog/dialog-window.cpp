@@ -111,7 +111,7 @@ DialogWindow::DialogWindow(InkscapeWindow *inkscape_window, Gtk::Widget *page)
     add(*box_outer);
 
     // =============== Container ================
-    _container = Gtk::manage(new DialogContainer());
+    _container = Gtk::manage(new DialogContainer(inkscape_window));
     DialogMultipaned *columns = _container->get_columns();
     auto drop_size = Inkscape::Preferences::get()->getBool("/options/dockingzone/value", true) ? WINDOW_DROPZONE_SIZE / 2 : WINDOW_DROPZONE_SIZE;
     columns->set_dropzone_sizes(drop_size, drop_size);
@@ -160,14 +160,14 @@ DialogWindow::DialogWindow(InkscapeWindow *inkscape_window, Gtk::Widget *page)
 /**
  * Change InkscapeWindow that DialogWindow is linked to.
  */
-void DialogWindow::set_inkscape_window(InkscapeWindow* window)
+void DialogWindow::set_inkscape_window(InkscapeWindow* inkscape_window)
 {
-    if (!window) {
-        std::cerr << "DialogWindow::set_inkscape_window: no window!" << std::endl;
+    if (!inkscape_window) {
+        std::cerr << "DialogWindow::set_inkscape_window: no inkscape_window!" << std::endl;
         return;
     }
 
-    _inkscape_window = window;
+    _inkscape_window = inkscape_window;
     update_dialogs();
 }
 
@@ -180,7 +180,7 @@ void DialogWindow::update_dialogs()
     g_assert(_container != nullptr);
     g_assert(_inkscape_window != nullptr);
 
-    _container->set_desktop(_inkscape_window->get_desktop());
+    _container->set_inkscape_window(_inkscape_window);
     _container->update_dialogs(); // Updating dialogs is not using the _app reference here.
 
     // Set window title.

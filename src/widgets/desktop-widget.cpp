@@ -38,6 +38,7 @@
 #include "enums.h"
 #include "file.h"
 #include "inkscape-application.h"
+#include "inkscape-window.h"
 #include "inkscape-version.h"
 
 #include "display/control/canvas-axonomgrid.h"
@@ -203,7 +204,8 @@ bool SPDesktopWidget::SignalEvent(GdkEvent* event)
     return false;
 }
 
-SPDesktopWidget::SPDesktopWidget()
+SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
+    : window (inkscape_window)
 {
     auto *const dtw = this;
 
@@ -331,7 +333,7 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_canvas->set_cms_active(prefs->getBool("/options/displayprofile/enable"));
 
     /* Dialog Container */
-    _container = Gtk::manage(new DialogContainer());
+    _container = Gtk::manage(new DialogContainer(inkscape_window));
     _columns = _container->get_columns();
     _columns->set_dropzone_sizes(2, -1);
     dtw->_tbbox->pack2(*_container, true, true);
@@ -1290,8 +1292,8 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
 }
 
 
-SPDesktopWidget::SPDesktopWidget(SPDocument *document)
-    : SPDesktopWidget()
+SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *document)
+    : SPDesktopWidget(inkscape_window)
 {
     set_name("SPDesktopWidget");
 

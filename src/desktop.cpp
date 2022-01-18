@@ -1302,7 +1302,7 @@ void SPDesktop::updateNow()
 
 void SPDesktop::updateDialogs()
 {
-    getContainer()->set_desktop(this);
+    getContainer()->set_inkscape_window(getInkscapeWindow());
 }
 
 void

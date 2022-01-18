@@ -46,7 +46,7 @@ class DialogContainer : public Gtk::Box
     using parent_type = Gtk::Box;
 
 public:
-    DialogContainer();
+    DialogContainer(InkscapeWindow* inkscape_window);
     ~DialogContainer() override;
 
     // Columns-related functions
@@ -64,8 +64,8 @@ public:
     const std::multimap<Glib::ustring, DialogBase *> *get_dialogs() { return &dialogs; };
     void toggle_dialogs();
     void update_dialogs(); // Update all linked dialogs
-    void set_desktop(SPDesktop *desktop);
-    SPDesktop* get_desktop();
+    void set_inkscape_window(InkscapeWindow *inkscape_window);
+    InkscapeWindow* get_inkscape_window() { return _inkscape_window; }
 
     // State saving functionality
     std::unique_ptr<Glib::KeyFile> save_container_state();
@@ -79,7 +79,8 @@ public:
     void load_container_state(Glib::KeyFile& state, const std::string& window_id);
 
 private:
-    DialogMultipaned *columns;                    // The main widget inside which other children are kept.
+    InkscapeWindow *_inkscape_window = nullptr;   // Every container is attached to an InkscapeWindow.
+    DialogMultipaned *columns = nullptr;          // The main widget inside which other children are kept.
     std::vector<Gtk::TargetEntry> target_entries; // What kind of object can be dropped.
 
     /**

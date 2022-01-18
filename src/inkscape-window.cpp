@@ -96,7 +96,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add(*_mainbox);
 
     // Desktop widget (=> MultiPaned)
-    _desktop_widget = new SPDesktopWidget(_document);
+    _desktop_widget = new SPDesktopWidget(this, _document);
     _desktop_widget->window = this;
     _desktop_widget->show();
     _desktop = _desktop_widget->desktop;

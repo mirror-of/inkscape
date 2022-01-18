@@ -74,8 +74,11 @@ DialogContainer::~DialogContainer() {
     delete columns;
 }
 
-DialogContainer::DialogContainer()
+DialogContainer::DialogContainer(InkscapeWindow* inkscape_window)
+    : _inkscape_window(inkscape_window)
 {
+    g_assert(_inkscape_window != nullptr);
+
     get_style_context()->add_class("DialogContainer");
 
     // Setup main column
@@ -485,15 +488,7 @@ DialogWindow *DialogContainer::create_new_floating_dialog(const Glib::ustring& d
     
     // check if this dialog *was* open and floating; if so recreate its window
     if (auto state = DialogManager::singleton().find_dialog_state(dialog_type)) {
-        auto inkscape_window = dynamic_cast<InkscapeWindow *>(get_toplevel());
-        if (!inkscape_window) {
-            // Must be dialog window.
-            auto dialog_window = dynamic_cast<DialogWindow *>(get_toplevel());
-            g_assert(dialog_window != nullptr);
-            inkscape_window = dialog_window->get_inkscape_window();
-        }
-        g_assert(inkscape_window != nullptr);
-        if (recreate_dialogs_from_state(inkscape_window, state.get())) {
+        if (recreate_dialogs_from_state(_inkscape_window, state.get())) {
             return nullptr;
         }
     }
@@ -589,8 +584,11 @@ void DialogContainer::update_dialogs()
     for_each(dialogs.begin(), dialogs.end(), [&](auto dialog) { dialog.second->update(); });
 }
 
-void DialogContainer::set_desktop(SPDesktop *desktop)
+void DialogContainer::set_inkscape_window(InkscapeWindow* inkscape_window)
 {
+    g_assert(inkscape_window != nullptr);
+    _inkscape_window = inkscape_window;
+    auto desktop = _inkscape_window->get_desktop();
     for_each(dialogs.begin(), dialogs.end(), [&](auto dialog) { dialog.second->setDesktop(desktop); });
 }
 
@@ -692,13 +690,7 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
 
         if (is_dockable) {
             if (floating) {
-                // Must be dialog window.
-                auto dialog_window = dynamic_cast<DialogWindow *>(get_toplevel());
-                g_assert(dialog_window != nullptr);
-                auto inkscape_window = dialog_window->get_inkscape_window();
-                g_assert(inkscape_window != nullptr);
-
-                dialog_window = new DialogWindow(inkscape_window, nullptr);
+                dialog_window = new DialogWindow(_inkscape_window, nullptr);
                 if (dialog_window) {
                     active_container = dialog_window->get_container();
                     active_columns = dialog_window->get_container()->get_columns();

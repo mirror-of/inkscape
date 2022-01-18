@@ -33,6 +33,7 @@
 // forward declaration
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
 
+class InkscapeWindow;
 struct SPCanvasItem;
 class SPDocument;
 class SPDesktop;
@@ -75,10 +76,10 @@ void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
 class SPDesktopWidget : public SPViewWidget {
     using parent_type = SPViewWidget;
 
-    SPDesktopWidget();
+    SPDesktopWidget(InkscapeWindow *inkscape_window);
 
 public:
-    SPDesktopWidget(SPDocument *document);
+    SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *document);
     ~SPDesktopWidget() override;
 
     Inkscape::UI::Widget::CanvasGrid *get_canvas_grid() { return _canvas_grid; }  // Temp, I hope!
@@ -92,7 +93,7 @@ public:
 
     SPDesktop *desktop = nullptr;
 
-    Gtk::Window *window = nullptr;
+    InkscapeWindow *window = nullptr;
     Gtk::MenuBar *_menubar;
 private:
     // Flags for ruler event handling
