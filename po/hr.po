@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-11-06 18:24+0100\n"
+"PO-Revision-Date: 2022-01-13 13:36+0100\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -21247,15 +21247,15 @@ msgstr "Ikone i tekst"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1564
 msgid "Dockbar style (requires restart):"
-msgstr "Stil bočne trake (ponovo pokreni program):"
+msgstr "Stil prikvačive trake (ponovo pokreni program):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1565
 msgid ""
 "Selects whether the vertical bars on the dockbar will show text labels, "
 "icons, or both"
 msgstr ""
-"Odabire, hoće li okomite trake u bočnoj traci prikazati tekstne oznake, "
-"ikone ili oboje"
+"Odabire, hoće li okomite trake u prikvačivoj traci prikazati tekstualne "
+"oznake, ikone ili oboje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1572
 msgid "Switcher style (requires restart):"
@@ -21265,8 +21265,8 @@ msgstr "Stil registra (ponovo pokreni program):"
 msgid ""
 "Selects whether the dockbar switcher will show text labels, icons, or both"
 msgstr ""
-"Odabire, hoće li registri u bočnoj traci prikazati tekstualne oznake, ikone "
-"ili oboje"
+"Odabire, hoće li registri u prikvačivoj traci prikazati tekstualne oznake, "
+"ikone ili oboje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1576
 msgid "Origin at upper left with y-axis pointing down (requires restart)"
@@ -21512,7 +21512,7 @@ msgstr "Nemoj spremiti stanje dijaloških okvira"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1770
 #: ../src/ui/dialog/inkscape-preferences.cpp:1820
 msgid "Dockable"
-msgstr "Prikvačeno"
+msgstr "Prikačivo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1771
 #: ../src/ui/dialog/inkscape-preferences.cpp:1822
@@ -28919,7 +28919,7 @@ msgstr "Kanali:"
 #: ../src/ui/toolbar/tweak-toolbar.cpp:205
 msgctxt "Hue"
 msgid "H"
-msgstr "H"
+msgstr "N"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:206
 msgid "In color mode, act on object's hue"
@@ -33910,12 +33910,11 @@ msgstr "Priručnik za Inkscape"
 
 #: ../src/verbs.cpp:2925
 msgid "Donate"
-msgstr ""
+msgstr "Doniraj"
 
 #: ../src/verbs.cpp:2925
-#, fuzzy
 msgid "Donate to Inkscape"
-msgstr "O programu _Inkscape"
+msgstr "Doniraj Inkscapeu"
 
 #: ../src/verbs.cpp:2926 ../src/verbs.cpp:2927
 msgid "SVG 1.1 Specification"
@@ -34954,11 +34953,11 @@ msgstr "Računalo SD"
 
 #: ../share/ui/inkscape-start.glade:500
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../share/ui/inkscape-start.glade:508
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../share/ui/inkscape-start.glade:516
 msgid "Mobile-smallest"
@@ -34966,7 +34965,7 @@ msgstr "Najmanji mobitel"
 
 #: ../share/ui/inkscape-start.glade:524
 msgid "iPad Pro"
-msgstr ""
+msgstr "iPad Pro"
 
 #: ../share/ui/inkscape-start.glade:532
 msgid "Tablet-smallest"
@@ -36143,7 +36142,7 @@ msgstr "Odredi slučajno"
 
 #: ../share/extensions/color_randomize.inx:7
 msgid "Hue range (%)"
-msgstr "Nijansa (%)"
+msgstr "Raspon nijanse (%)"
 
 #: ../share/extensions/color_randomize.inx:8
 msgid "Saturation range (%)"
@@ -43931,20 +43930,8 @@ msgstr "polu-četverci"
 msgid "Half of font height"
 msgstr "Pola visine fonta"
 
-#~ msgid " %1\n"
-#~ msgstr " %1\n"
-
 #~ msgid "unSymbol all selected symbols"
 #~ msgstr "poništiti simbole svih odabranih simbola"
-
-#~ msgid "Mobile-fruit Phone 5"
-#~ msgstr "Voćni mobitel Phone 5"
-
-#~ msgid "Mobile-fruit Phone X"
-#~ msgstr "Voćni mobitel Phone X"
-
-#~ msgid "Tablet-fruit Pad Pro"
-#~ msgstr "Voćni tablet Pad Pro"
 
 #~ msgid ""
 #~ "This effect bends a pattern along arbitrary \"skeleton\" paths. The "
@@ -43990,14 +43977,49 @@ msgstr "Pola visine fonta"
 #~ "Za izbjegavanje toga, dodaj čvorove za dodavanje ručno ili prethodno "
 #~ "pretvori sve segmente u krivulje."
 
-#~| msgid "Inkscape 1.1"
-#~ msgid "Inkscape 1.1-rc"
-#~ msgstr "Inkscape 1.1-rc"
+#~ msgid "Inkscape 1.1.1"
+#~ msgstr "Inkscape 1.1.1"
 
-#~ msgid "Release Candidate"
-#~ msgstr "Kandidat izdanja"
+#~ msgid "Text stroke to path fixed"
+#~ msgstr "Pretvaranje linije teksta u stazu ispravljeno"
 
-#~| msgid "Inkscape 1.1"
+#~ msgid "Startup time improved"
+#~ msgstr "Poboljšanjo vrijeme pokretanja"
+
+#~ msgid "Fixed various crashes"
+#~ msgstr "Ispravljeni su razni problemi"
+
+#~ msgid "Welcome dialog"
+#~ msgstr "Prozor dobrodošlice"
+
+#~ msgid "Command palette to search for functions"
+#~ msgstr "Paleta neredbi za traženje funkcija"
+
+#~ msgid "Copypaste parts of paths"
+#~ msgstr "Kopiraj i umetni dijelove staza"
+
+#~ msgid "Complete rework of the dialog docking system"
+#~ msgstr "Potpuno prerađen sustav za prikvačivanje dijaloga"
+
+#~ msgid "New outline overlay mode"
+#~ msgstr "Novi modus prekrivanja konturama"
+
+#~ msgid "Search field in Preferences dialog"
+#~ msgstr "Polje pretrage u dijalogu postavki"
+
+#~ msgid "Improved Export PNG dialog"
+#~ msgstr "Poboljšan dijalog za izvoz PNG-a"
+
+#~ msgid "Ability to directly export JPG, TIFF, optimized PNG, and WebP"
+#~ msgstr ""
+#~ "Mogućnost za izravni izvoz formata JPG, TIFF, optimizirani PNG i WebP"
+
+#~ msgid "Paste now pastes directly above selected object"
+#~ msgstr "Funkcija zalijepi sada lijepi izravno iznad odabranog objekta"
+
+#~ msgid "Beta Extension Manager"
+#~ msgstr "Beta verzija upravljača proširenjima"
+
 #~ msgid "Inkscape 1.0"
 #~ msgstr "Inkscape 1.0"
 
@@ -44079,7 +44101,6 @@ msgstr "Pola visine fonta"
 #~ "Napomena: ovo uvodi izvanredne promjene, neka proširenja trećih strana "
 #~ "morat će se aktualizirati kako bi radila s Inkscapeom 1.0"
 
-#~| msgid "Phonetic Extensions"
 #~ msgid "Python 3 support for extensions"
 #~ msgstr "Python 3 podrška za proširenja"
 
