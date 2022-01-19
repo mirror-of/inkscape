@@ -409,7 +409,7 @@ public:
     void relink();
     void cloneOriginal();
     void cloneOriginalPathLPE(bool allow_transforms = false);
-    Inkscape::XML::Node* group();
+    Inkscape::XML::Node* group(int type = 0);
     void popFromGroup();
     void ungroup(bool skip_undo = false);
     

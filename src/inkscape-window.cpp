@@ -29,7 +29,6 @@
 #include "actions/actions-edit-window.h"
 #include "actions/actions-file-window.h"
 #include "actions/actions-help-url.h"
-#include "actions/actions-hide-lock.h"
 #include "actions/actions-layer.h"
 #include "actions/actions-node-align.h" // Node alignment.
 #include "actions/actions-paths.h"  // TEMP
@@ -110,7 +109,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add_actions_edit_window(this);          // Actions to edit.
     add_actions_file_window(this);          // Actions for file actions which are desktop dependent.
     add_actions_help_url(this);             // Actions to help url.
-    add_actions_hide_lock(this);            // Actions to transform dialog.
     add_actions_layer(this);                // Actions for layer.
     add_actions_node_align(this);           // Actions to align and distribute nodes (requiring Node tool).
     add_actions_path(this);                 // Actions for paths. TEMP

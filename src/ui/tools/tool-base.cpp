@@ -1310,6 +1310,7 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
     }
 
     ContextMenu* menu = new ContextMenu(desktop, item);
+    menu->attach_to_widget(*(desktop->getCanvas())); // So actions work!
     menu->show();
 
     switch (event->type) {

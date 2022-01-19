@@ -1231,7 +1231,8 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
             }
 
             if (context_menu) {
-                ContextMenu *menu = new ContextMenu(getDesktop(), item);
+                ContextMenu *menu = new ContextMenu(getDesktop(), item, true); // true == hide menu item for opening this dialog!
+                menu->attach_to_widget(*this); // So actions work!
                 menu->show();
                 menu->popup_at_pointer(nullptr);
             }

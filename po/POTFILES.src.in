@@ -12,6 +12,8 @@
 ../src/actions/actions-edit-window.cpp
 ../src/actions/actions-edit.cpp
 ../src/actions/actions-effect.cpp
+../src/actions/actions-element-a.cpp
+../src/actions/actions-element-image.cpp
 ../src/actions/actions-extra-data.cpp
 ../src/actions/actions-file-window.cpp
 ../src/actions/actions-file.cpp

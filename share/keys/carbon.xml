@@ -238,8 +238,8 @@ See "inkscape.xml" for information about file structure.
   <!-- Layers -->
   <bind gaction="win.layer-new"                          keys="&lt;primary&gt;&lt;shift&gt;N,         &lt;primary&gt;&lt;shift&gt;n" />
   <bind gaction="win.layer-rename" />
-  <bind gaction="win.layer-toggle-hide" />
-  <bind gaction="win.layer-toggle-lock" />
+  <bind gaction="win.layer-hide-toggle" />
+  <bind gaction="win.layer-lock-toggle" />
   <bind gaction="win.layer-previous"                     keys="&lt;primary&gt;Page_Up,                &lt;primary&gt;KP_Page_Up" />
   <bind gaction="win.layer-next"                         keys="&lt;primary&gt;Page_Down,              &lt;primary&gt;KP_Page_Down" />
   <bind gaction="win.selection-move-to-layer-above"      keys="&lt;shift&gt;Page_Up,                  &lt;shift&gt;KP_Page_Up" />

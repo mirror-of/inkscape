@@ -5,60 +5,233 @@
  *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
+ *   Tavmjong Bah
  *
- * Copyright (C) 2021 Authors
+ * Copyright (C) 2021-2022 Authors
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "actions-hide-lock.h"
+
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
 #include <glibmm/i18n.h>
 
-#include "actions-hide-lock.h"
 #include "inkscape-application.h"
-#include "inkscape-window.h"
-#include "desktop.h"
 #include "document-undo.h"
-#include "selection-chemistry.h"
 
-void
-hide_lock_unhide_all(InkscapeWindow* win)
+#include "object/sp-root.h"
+
+// Helper to unlock/unhide everything. (Could also be used to lock/hide everything but that isn't very useful.)
+static bool
+hide_lock_recurse(bool (*f)(SPItem*, bool), SPItem *item, bool hide_or_lock)
 {
-    SPDesktop* dt = win->get_desktop();
-    SPDocument *doc = dt->getDocument();
-    unhide_all(dt);
-    Inkscape::DocumentUndo::done(doc, _("Unhide all objects in the current layer"), "");
+    bool changed = false;
+
+    if (f(item, hide_or_lock)) {
+        changed = true;
+    }
+
+    for (auto& child : item->children) {
+        auto item = dynamic_cast<SPItem*>(&child);
+        if (item && hide_lock_recurse(f, item, hide_or_lock)) {
+            changed = true;
+        }
+    }
+
+    return changed;
 }
 
-void
-hide_lock_unlock_all(InkscapeWindow* win)
+// Helper to hide/unhide one item.
+bool
+hide_lock_hide(SPItem* item, bool hide)
 {
-    SPDesktop* dt = win->get_desktop();
-    SPDocument *doc = dt->getDocument();
-    unlock_all(dt);
-    Inkscape::DocumentUndo::done(doc, _("Unlock all objects in the current layer"), "");
+    bool changed = false;
+    if (item->isHidden() != hide) {
+        item->setHidden(hide);
+        changed = true;
+    }
+    return changed;
+}
+
+// Helper to lock/unlock one item.
+bool
+hide_lock_lock(SPItem* item, bool lock)
+{
+    bool changed = false;
+    if (item->isLocked() != lock) {
+        item->setLocked(lock);
+        changed = true;
+    }
+    return changed;
+}
+
+// Unhide all
+void
+hide_lock_unhide_all(InkscapeApplication* app)
+{
+    auto document = app->get_active_document();
+    auto root = document->getRoot();
+
+    bool changed = hide_lock_recurse(&hide_lock_hide, root, false); // Unhide
+
+    if (changed) {
+        Inkscape::DocumentUndo::done(document, _("Unhid all objects in the current layer"), "");
+    }
+}
+
+// Unlock all
+void
+hide_lock_unlock_all(InkscapeApplication* app)
+{
+    auto document = app->get_active_document();
+    auto root = document->getRoot();
+
+    bool changed = hide_lock_recurse(&hide_lock_lock, root, false); // Unlock
+
+    if (changed) {
+        Inkscape::DocumentUndo::done(document, _("Unlocked all objects in the current layer"), "");
+    }
+}
+
+// Unhide selected items and their descendents.
+void
+hide_lock_unhide_below(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+    if (!selection) {
+        std::cerr << "hide_lock_unhide_below: no selection!" << std::endl;
+        return;
+    }
+
+    bool changed = false;
+    for (auto item : selection->items()) {
+        if (hide_lock_recurse(&hide_lock_hide, item, false)) {
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        auto document = app->get_active_document();
+        Inkscape::DocumentUndo::done(document, _("Unhid selected items and their descendents."), "");
+    }
+}
+
+// Unlock selected items and their descendents.
+void
+hide_lock_unlock_below(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+    if (!selection) {
+        std::cerr << "hide_lock_unhide_below: no selection!" << std::endl;
+        return;
+    }
+
+    bool changed = false;
+    for (auto item : selection->items()) {
+        if (hide_lock_recurse(&hide_lock_lock, item, false)) {
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        auto document = app->get_active_document();
+        Inkscape::DocumentUndo::done(document, _("Unlocked selected items and their descendents."), "");
+    }
+}
+
+// Hide/unhide selected items.
+void
+hide_lock_hide_selected(InkscapeApplication* app, bool hide)
+{
+    auto selection = app->get_active_selection();
+    if (!selection) {
+        std::cerr << "hide_lock_hide_selected: no selection!" << std::endl;
+        return;
+    }
+
+    bool changed = false;
+    for (auto item : selection->items()) {
+        if (hide_lock_hide(item, hide)) {
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        auto document = app->get_active_document();
+        Inkscape::DocumentUndo::done(document, (hide ? _("Hid selected items.") : _("Unhid selected items.")), "");
+        selection->clear();
+    }
+}
+
+// Lock/Unlock selected items.
+void
+hide_lock_lock_selected(InkscapeApplication* app, bool lock)
+{
+    auto selection = app->get_active_selection();
+    if (!selection) {
+        std::cerr << "hide_lock_lock_selected: no selection!" << std::endl;
+        return;
+    }
+
+    bool changed = false;
+    for (auto item : selection->items()) {
+        if (hide_lock_lock(item, lock)) {
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        auto document = app->get_active_document();
+        Inkscape::DocumentUndo::done(document, (lock ? _("Locked selected items.") : _("Unlocked selected items.")), "");
+        selection->clear();
+    }
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_hide_lock =
 {
     // clang-format off
-    {"win.unhide-all",      N_("Unhide All"),     "Hide and Lock",      N_("Unhide all objects in the current layer")                                    },
-    {"win.unlock-all",      N_("Unlock All"),     "Hide and Lock",      N_("Unlock all objects in the current layer")                                    }
+    {"app.unhide-all",              N_("Unhide All"),         "Hide and Lock",      N_("Unhide all objects in the current layer")      },
+    {"app.unlock-all",              N_("Unlock All"),         "Hide and Lock",      N_("Unlock all objects in the current layer")      },
+
+    {"app.selection-hide",          N_("Hide selection"),     "Hide and Lock",      N_("Hide all selected objects")                    },
+    {"app.selection-unhide",        N_("Unhide selection"),   "Hide and Lock",      N_("Unhide all selected objects")                  },
+    {"app.selection-unhide-below",  N_("Unhide descendents"), "Hide and Lock",      N_("Unhide all items inside selected objects")     },
+
+    {"app.selection-lock",          N_("Lock selection"),     "Hide and Lock",      N_("Lock all selected objects")                    },
+    {"app.selection-unlock",        N_("Unlock selection"),   "Hide and Lock",      N_("Unlock all selected objects")                  },
+    {"app.selection-unlock-below",  N_("Unlock descendents"), "Hide and Lock",      N_("Unlock all items inside selected objects")     },
     // clang-format on
 };
 
 void
-add_actions_hide_lock(InkscapeWindow* win)
+add_actions_hide_lock(InkscapeApplication* app)
 {
+    auto *gapp = app->gio_app();
+
     // clang-format off
-    win->add_action( "unhide-all",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&hide_lock_unhide_all), win));
-    win->add_action( "unlock-all",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&hide_lock_unlock_all), win));
+    gapp->add_action( "unhide-all",             sigc::bind<InkscapeApplication*>(      sigc::ptr_fun(&hide_lock_unhide_all),    app));
+    gapp->add_action( "unlock-all",             sigc::bind<InkscapeApplication*>(      sigc::ptr_fun(&hide_lock_unlock_all),    app));
+
+    gapp->add_action( "selection-hide",         sigc::bind<InkscapeApplication*, bool>(sigc::ptr_fun(&hide_lock_hide_selected), app, true ));
+    gapp->add_action( "selection-unhide",       sigc::bind<InkscapeApplication*, bool>(sigc::ptr_fun(&hide_lock_hide_selected), app, false));
+    gapp->add_action( "selection-unhide-below", sigc::bind<InkscapeApplication*>(      sigc::ptr_fun(&hide_lock_unhide_below),  app));
+
+    gapp->add_action( "selection-lock",         sigc::bind<InkscapeApplication*, bool>(sigc::ptr_fun(&hide_lock_lock_selected), app, true ));
+    gapp->add_action( "selection-unlock",       sigc::bind<InkscapeApplication*, bool>(sigc::ptr_fun(&hide_lock_lock_selected), app, false));
+    gapp->add_action( "selection-unlock-below", sigc::bind<InkscapeApplication*>(      sigc::ptr_fun(&hide_lock_unlock_below),  app));
     // clang-format on
 
-    auto app = InkscapeApplication::instance();
-    if (!app) {
-        std::cerr << "add_actions_hide_lock: no app!" << std::endl;
-        return;
-    }
     app->get_action_extra_data().add_data(raw_data_hide_lock);
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

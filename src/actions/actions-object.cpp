@@ -102,7 +102,7 @@ object_unlink_clones(InkscapeApplication *app)
 }
 
 void
-set_clip(InkscapeApplication *app)
+object_clip_set(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
 
@@ -111,7 +111,7 @@ set_clip(InkscapeApplication *app)
 }
 
 void
-object_set_inverse(InkscapeApplication *app)
+object_clip_set_inverse(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
 
@@ -122,7 +122,7 @@ object_set_inverse(InkscapeApplication *app)
 }
 
 void
-object_release(InkscapeApplication *app)
+object_clip_release(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
 
@@ -133,16 +133,25 @@ object_release(InkscapeApplication *app)
 }
 
 void
-set_mask(InkscapeApplication *app)
+object_clip_set_group(InkscapeApplication *app)
+{
+    Inkscape::Selection *selection = app->get_active_selection();
+    selection->setClipGroup();
+    // Undo added in setClipGroup().
+}
+
+void
+object_mask_set(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
 
     // Object Mask Set
     selection->setMask(false, false);
+    // Undo added in setMask().
 }
 
 void
-object_set_inverse_mask(InkscapeApplication *app)
+object_mask_set_inverse(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
 
@@ -153,7 +162,7 @@ object_set_inverse_mask(InkscapeApplication *app)
 }
 
 void
-object_release_mask(InkscapeApplication *app)
+object_mask_release(InkscapeApplication *app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
 
@@ -259,15 +268,19 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
     // clang-format off
     {"app.object-set-attribute",        N_("Set Attribute"),                    "Object",     N_("Set or update an attribute of selected objects; usage: object-set-attribute:attribute name, attribute value;")},
     {"app.object-set-property",         N_("Set Property"),                     "Object",     N_("Set or update a property on selected objects; usage: object-set-property:property name, property value;")},
+
     {"app.object-unlink-clones",        N_("Unlink Clones"),                    "Object",     N_("Unlink clones and symbols")},
     {"app.object-to-path",              N_("Object To Path"),                   "Object",     N_("Convert shapes to paths")},
     {"app.object-stroke-to-path",       N_("Stroke to Path"),                   "Object",     N_("Convert strokes to paths")},
+
     {"app.object-set-clip",             N_("Object Clip Set"),                  "Object",     N_("Apply clipping path to selection (using the topmost object as clipping path)")},
     {"app.object-set-inverse-clip",     N_("Object Clip Set Inverse"),          "Object",     N_("Apply inverse clipping path to selection (using the topmost object as clipping path)")},
     {"app.object-release-clip",         N_("Object Clip Release"),              "Object",     N_("Remove clipping path from selection")},
+    {"app.object-set-clip-group",       N_("Object Clip Set Group"),            "Object",     N_("Create a self-clipping group to which objects (not contributing to the clip-path) can be added")},
     {"app.object-set-mask",             N_("Object Mask Set"),                  "Object",     N_("Apply mask to selection (using the topmost object as mask)")},
     {"app.object-set-inverse-mask",     N_("Object Mask Set Inverse"),          "Object",     N_("Set Inverse (LPE)")},
     {"app.object-release-mask",         N_("Object Mask Release"),              "Object",     N_("Remove mask from selection")},
+
     {"app.object-rotate-90-cw",         N_("Object Rotate 90"),                 "Object",     N_("Rotate selection 90° clockwise")},
     {"app.object-rotate-90-ccw",        N_("Object Rotate 90 CCW"),             "Object",     N_("Rotate selection 90° counter-clockwise")},
     {"app.object-flip-horizontal",      N_("Object Flip Horizontal"),           "Object",     N_("Flip selected objects horizontally")},
@@ -293,28 +306,27 @@ add_actions_object(InkscapeApplication* app)
 
     auto *gapp = app->gio_app();
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
-
     // clang-format off
     gapp->add_action_with_parameter( "object-set-attribute",            String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),  app));
     gapp->add_action_with_parameter( "object-set-property",             String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),   app));
+
     gapp->add_action(                "object-unlink-clones",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),          app));
     gapp->add_action(                "object-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),                app));
     gapp->add_action(                "object-stroke-to-path",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),         app));
-    gapp->add_action(                "object-set-clip",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_clip),                      app));
-    gapp->add_action(                "object-set-inverse-clip",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse),            app));
-    gapp->add_action(                "object-release-clip",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release),                app));
-    gapp->add_action(                "object-set-mask",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&set_mask),                      app));
-    gapp->add_action(                "object-set-inverse-mask",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_inverse_mask),       app));
-    gapp->add_action(                "object-release-mask",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_release_mask),           app));
+
+    gapp->add_action(                "object-set-clip",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set),               app));
+    gapp->add_action(                "object-set-inverse-clip",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set_inverse),       app));
+    gapp->add_action(                "object-release-clip",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_release),           app));
+    gapp->add_action(                "object-set-clip-group",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set_group),         app));
+    gapp->add_action(                "object-set-mask",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_set),               app));
+    gapp->add_action(                "object-set-inverse-mask",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_set_inverse),       app));
+    gapp->add_action(                "object-release-mask",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_release),           app));
+
     gapp->add_action(                "object-rotate-90-cw",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),           app));
     gapp->add_action(                "object-rotate-90-ccw",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),           app));
     gapp->add_action(                "object-flip-horizontal",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_horizontal),        app));
     gapp->add_action(                "object-flip-vertical",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_vertical),          app));
     // clang-format on
-
-#endif
 
     app->get_action_extra_data().add_data(raw_data_object);
     app->get_action_hint_data().add_data(hint_data_object);

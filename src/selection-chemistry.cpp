@@ -781,7 +781,7 @@ void sp_edit_invert_in_all_layers(SPDesktop *desktop)
     sp_edit_select_all_full(desktop, true, true);
 }
 
-Inkscape::XML::Node* ObjectSet::group() {
+Inkscape::XML::Node* ObjectSet::group(int type) {
     SPDocument *doc = document();
     if(!doc)
         return nullptr;
@@ -790,7 +790,7 @@ Inkscape::XML::Node* ObjectSet::group() {
         return nullptr;
     }
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
+    Inkscape::XML::Node *group = (type == 0) ? xml_doc->createElement("svg:g") : xml_doc->createElement("svg:a");
 
     std::vector<Inkscape::XML::Node*> p(xmlNodes().begin(), xmlNodes().end());
     std::sort(p.begin(), p.end(), sp_repr_compare_position_bool);
@@ -851,7 +851,11 @@ Inkscape::XML::Node* ObjectSet::group() {
     topmost_parent->addChildAtPos(group, topmost + 1);
 
     set(doc->getObjectByRepr(group));
-    DocumentUndo::done(doc, _("Group"), INKSCAPE_ICON("object-group"));
+    if (type == 0) {
+        DocumentUndo::done(doc, _("Group"), INKSCAPE_ICON("object-group"));
+    } else {
+        DocumentUndo::done(doc, _("Anchor"), INKSCAPE_ICON("object-group"));
+    }
 
     return group;
 }

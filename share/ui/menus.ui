@@ -665,11 +665,11 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Show/Hide Current Layer</attribute>
-        <attribute name='action'>win.layer-toggle-hide</attribute>
+        <attribute name='action'>win.layer-hide-toggle</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Lock/Unlock Current Layer</attribute>
-        <attribute name='action'>win.layer-toggle-lock</attribute>
+        <attribute name='action'>win.layer-lock-toggle</attribute>
       </item>
     </section>
     <section>
@@ -917,11 +917,11 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">Unhide All</attribute>
-        <attribute name='action'>win.unhide-all</attribute>
+        <attribute name='action'>app.unhide-all</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Unlock All</attribute>
-        <attribute name='action'>win.unlock-all</attribute>
+        <attribute name='action'>app.unlock-all</attribute>
       </item>
     </section>
     <section>
