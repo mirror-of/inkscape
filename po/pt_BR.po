@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-08-07 16:14-0300\n"
+"POT-Creation-Date: 2022-01-17 14:44+0000\n"
+"PO-Revision-Date: 2022-01-18 10:19-0300\n"
 "Last-Translator: João Lima Neto <contato@joaolimaneto.com.br>\n"
 "Language-Team: Brazilian Portuguese <contato@joaolimaneto.com.br>\n"
 "Language: pt_BR\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-Poedit-Bookmarks: 2980,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: ../share/filters/filters.svg.h:2
@@ -13723,7 +13723,7 @@ msgstr "Meno_r comprimento:"
 
 #: ../src/live_effects/lpe-ruler.cpp:42
 msgid "Length of minor ruler marks"
-msgstr "Comprimento da menor marca de régua "
+msgstr "Comprimento da menor marca de régua"
 
 #: ../src/live_effects/lpe-ruler.cpp:43
 msgid "Major steps_:"
@@ -15646,9 +15646,8 @@ msgid "Group to symbol"
 msgstr "Grupo para símbolo"
 
 #: ../src/selection-chemistry.cpp:3366
-#, fuzzy
 msgid "Remove symbol for editing"
-msgstr "Converter Contorno em Caminho"
+msgstr "Remover símbolo para edição"
 
 #: ../src/selection-chemistry.cpp:3380
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -25085,7 +25084,7 @@ msgstr "Coordenada Y padrão da origem de um glifo (para texto horizontal)"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:463
 msgid "Font Face Attributes"
-msgstr "Atributos dr Face da Fonte"
+msgstr "Atributos de Face da Fonte"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:464
 msgid "Family Name:"
@@ -25112,7 +25111,7 @@ msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid "Ascent:"
-msgstr "Aascensão:"
+msgstr "Ascendente:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid ""
@@ -25122,7 +25121,7 @@ msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:467
 msgid "Descent:"
-msgstr "Descida:"
+msgstr "Descendente:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:467
 msgid "Amount of space taken up by descenders like the tail on the letter 'g'"
@@ -25958,7 +25957,7 @@ msgstr "Panorâmica/Rolar para cima e para baixo"
 
 #: ../src/ui/modifiers.cpp:33
 msgid "Horizontal pan"
-msgstr "Panorâmico horizontal:"
+msgstr "Panorâmico horizontal"
 
 #: ../src/ui/modifiers.cpp:33
 msgid "Pan/Scroll left and right"
@@ -41524,28 +41523,32 @@ msgid "Duplicate the pattern before deformation"
 msgstr "Duplicar o padrão antes da deformação"
 
 #: ../share/extensions/pathalongpath.inx:25
-#, fuzzy
 msgid ""
 "This extension bends a pattern along the curvature of selected path objects."
-msgstr "Esta extensão requer dois caminhos selecionados."
+msgstr ""
+"Essa extensão dobra um padrão ao longo da curvatura dos objetos de caminho "
+"selecionados."
 
 #: ../share/extensions/pathalongpath.inx:26
-#, fuzzy
 msgid ""
 "There must only be a single pattern object. The pattern object must be the "
 "topmost object in the selection. For the pattern, groups of paths, shapes or "
 "clones are allowed. Text must be converted to path before using it as a "
 "pattern."
 msgstr ""
-"Esse efeito espalha um padrão ao longo de caminhos de \"esqueleto\" "
-"arbitrários. O padrão deve ser o objeto superior da seleção. Grupos de "
-"caminhos, formas, clones são históricos."
+"Deve haver apenas um único objeto de padrão. O objeto padrão deve ser o "
+"objeto mais alto na seleção. Para o padrão, são permitidos grupos de "
+"caminhos, formas ou clones. O texto deve ser convertido em caminho antes de "
+"usá-lo como padrão."
 
 #: ../share/extensions/pathalongpath.inx:27
 msgid ""
 "The pattern can be bent along multiple paths at once, the only condition is "
 "that these must be path objects, no other object types are allowed."
 msgstr ""
+"O padrão pode ser dobrado ao longo de vários caminhos ao mesmo tempo, a "
+"única condição é que estes devem ser objetos de caminho, nenhum outro tipo "
+"de objeto é permitido."
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
@@ -41553,12 +41556,17 @@ msgid ""
 "will rotate along with the path direction. With \"Ribbon\", the pattern will "
 "stay upright, so the result will look like a printed ribbon."
 msgstr ""
+"Existem dois modos de deformação diferentes. \"Serpente\" significa que o "
+"padrão irá girar junto com a direção do caminho. Com \"Fita\", o padrão "
+"ficará na vertical, de modo que o resultado parecerá uma fita impressa."
 
 #: ../share/extensions/pathalongpath.inx:30
 msgid ""
 "The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
 "applying it to the path."
 msgstr ""
+"A opção \"O padrão é vertical\" gira o padrão em 90 graus antes de aplicá-lo "
+"ao caminho."
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
@@ -41567,6 +41575,11 @@ msgid ""
 "add any new nodes to your pattern objects. To avoid this, either add more "
 "nodes to your pattern objects, or convert all segments to curves beforehand."
 msgstr ""
+"Se seus caminhos tiverem curvas acentuadas que o padrão deve seguir, o "
+"resultado pode não parecer como o esperado. Isso ocorre porque a extensão "
+"não pode adicionar novos nós aos seus objetos padrão. Para evitar isso, "
+"adicione mais nós aos seus objetos de padrão ou converta todos os segmentos "
+"em curvas antecipadamente."
 
 #: ../share/extensions/pathscatter.inx:8
 msgid "Follow path orientation"
@@ -41631,6 +41644,12 @@ msgid ""
 "objects (alternating or randomly) on the path, if you select the option for "
 "picking group members."
 msgstr ""
+"Essa extensão descarta cópias de um objeto padrão ao longo de um ou mais "
+"caminhos sem deformá-lo. O objeto padrão deve ser um único caminho ou um "
+"grupo de caminhos, formas ou clones. Deve ser o objeto mais alto na seleção. "
+"Todos os outros objetos selecionados devem ser caminhos. Você também pode "
+"colocar um conjunto de objetos diferentes (alternando ou aleatoriamente) no "
+"caminho, se selecionar a opção de selecionar membros do grupo."
 
 #
 # File: ../share/extensions/pdflatex.inx, line: 3
@@ -44754,11 +44773,11 @@ msgstr "meio-ems"
 msgid "Half of font height"
 msgstr "Metade da altura da fonte"
 
-#~ msgid " %1\n"
-#~ msgstr " %1\n"
-
 #~ msgid "unSymbol all selected symbols"
 #~ msgstr "unSymbol todos os símbolos selecionados"
+
+#~ msgid " %1\n"
+#~ msgstr " %1\n"
 
 #~ msgid ""
 #~ "This effect bends a pattern along arbitrary \"skeleton\" paths. The "
