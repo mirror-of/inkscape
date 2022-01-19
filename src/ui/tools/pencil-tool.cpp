@@ -824,13 +824,12 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
             min = max;
         }
         double dezoomify_factor = 0.05 * 1000 / _desktop->current_zoom();
-        double pressure_shrunk = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
+        double const pressure_shrunk = pressure * (max - min) + min; // C++20 -> use std::lerp()
         double pressure_computed = std::abs(pressure_shrunk * dezoomify_factor);
         double pressure_computed_scaled = std::abs(pressure_computed * _desktop->getDocument()->getDocumentScale().inverse()[Geom::X]);
         if (p != this->p[this->_npoints - 1]) {
             this->_wps.emplace_back(distance, pressure_computed_scaled);
         }
-        pressure_computed = std::abs(pressure_computed);
         if (pressure_computed) {
             Geom::Circle pressure_dot(p, pressure_computed);
             Geom::Piecewise<Geom::D2<Geom::SBasis>> pressure_piecewise;
