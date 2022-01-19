@@ -999,11 +999,13 @@ bool ObjectsPanel::toggleVisible(GdkEventButton* event, Gtk::TreeModel::Row row)
             if (auto desktop = getDesktop()) {
                 if (desktop->layerManager().isLayer(item)) {
                     desktop->layerManager().toggleLayerSolo(item);
-                    DocumentUndo::done(desktop->getDocument(), _("Toggle layer solo"), "");
+                    DocumentUndo::done(getDocument(), _("Hide other layers"), "");
                 }
             }
         } else {
             item->setHidden(!row[_model->_colInvisible]);
+            // Use maybeDone so user can flip back and forth without making loads of undo items
+            DocumentUndo::maybeDone(getDocument(), "toggle-vis", _("Toggle item visibility"), "");
         }
     }
     return true;
@@ -1022,11 +1024,13 @@ bool ObjectsPanel::toggleLocked(GdkEventButton* event, Gtk::TreeModel::Row row)
             if (auto desktop = getDesktop()) {
                 if (desktop->layerManager().isLayer(item)) {
                     desktop->layerManager().toggleLockOtherLayers(item);
-                    DocumentUndo::done(desktop->getDocument(), _("Lock other layers"), "");
+                    DocumentUndo::done(getDocument(), _("Lock other layers"), "");
                 }
             }
         } else {
             item->setLocked(!row[_model->_colLocked]);
+            // Use maybeDone so user can flip back and forth without making loads of undo items
+            DocumentUndo::maybeDone(getDocument(), "toggle-lock", _("Toggle item locking"), "");
         }
     }
     return true;
