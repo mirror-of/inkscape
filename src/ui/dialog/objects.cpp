@@ -1210,8 +1210,8 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         // Select items on button release to not confuse drag (unless it's a right-click)
         // Right-click selects too to set up the stage for context menu which frequently relies on current selection!
         if (!_is_editing && (event->type == GDK_BUTTON_RELEASE || context_menu)) {
-            if (event->state & GDK_SHIFT_MASK) {
-                // Select everything between this row and the already seleced item
+            if (event->state & GDK_SHIFT_MASK && !selection->isEmpty()) {
+                // Select everything between this row and the last seleced item
                 selection->setBetween(item);
             } else if (event->state & GDK_CONTROL_MASK) {
                 selection->toggle(item);
