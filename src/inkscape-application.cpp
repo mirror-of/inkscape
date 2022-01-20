@@ -1378,7 +1378,9 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("with-gui")        ||
         options->contains("batch-process")
         ) {
-        _with_gui = true; // Override turning GUI off
+        _with_gui = bool(gtk_app()); // Override turning GUI off
+        if (!_with_gui)
+            std::cerr << "No GUI available, some actions may fail" << std::endl;
     }
 
     if (options->contains("batch-process"))  _batch_process = true;
