@@ -102,7 +102,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_
 
         gmenu_section = Gio::Menu::create();
         AppendItemFromAction(gmenu_section, "app.duplicate", _("Duplic_ate"), "edit-duplicate");
-        AppendItemFromAction(gmenu_section, "app.delete",    _("_Delete"),    "edit-delete");
+        AppendItemFromAction(gmenu_section, "app.delete-selection", _("_Delete"), "edit-delete");
         gmenu->append_section(gmenu_section);
 
         if (item) {

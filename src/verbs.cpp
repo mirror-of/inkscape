@@ -838,6 +838,7 @@ void EditVerb::perform(SPAction *action, void *data)
             dt->selection->removeFilter();
             break;
         case SP_VERB_EDIT_DELETE:
+            // Only used in dbus, can be removed.
             dt->selection->deleteItems();
             break;
         case SP_VERB_EDIT_DUPLICATE:

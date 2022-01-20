@@ -93,6 +93,7 @@ public:
 
     const std::string& getPrefsPath() override;
 
+    void deleteSelected();
 private:
     void _selectionChanged(Inkscape::Selection *selection);
     void _selectionModified(Inkscape::Selection *selection, guint flags);

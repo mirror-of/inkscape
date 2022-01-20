@@ -192,6 +192,12 @@ void TextTool::setup() {
     }
 }
 
+void TextTool::deleteSelected()
+{
+    Inkscape::UI::Tools::sp_text_delete_selection(desktop->event_context);
+    DocumentUndo::done(desktop->getDocument(), _("Delete text"), INKSCAPE_ICON("draw-text"));
+}
+
 void TextTool::finish() {
     if (this->desktop) {
         sp_signal_disconnect_by_data(this->desktop->getCanvas()->gobj(), this);

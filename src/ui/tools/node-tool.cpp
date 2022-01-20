@@ -259,6 +259,13 @@ void NodeTool::finish()
     ToolBase::finish();
 }
 
+void NodeTool::deleteSelected()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    // This takes care of undo internally
+    _multipath->deleteNodes(prefs->getBool("/tools/nodes/delete_preserves_shape", true));
+}
+
 // show helper paths of the applied LPE, if any
 void sp_update_helperpath(SPDesktop *desktop)
 {

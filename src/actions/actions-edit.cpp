@@ -20,6 +20,9 @@
 #include "selection-chemistry.h"
 #include "object/sp-guide.h"
 
+#include "ui/tools/text-tool.h"
+#include "ui/tools/node-tool.h"
+
 void
 object_to_pattern(InkscapeApplication *app)
 {
@@ -205,7 +208,29 @@ edit_delete(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
 
-    //  Delete
+    // For text and node too special handling.
+    if (auto desktop = selection->desktop()) {
+        if (auto text_tool = dynamic_cast<Inkscape::UI::Tools::TextTool*>(desktop->event_context)) {
+            text_tool->deleteSelected();
+            return;
+        }
+        if (auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context)) {
+            // This means we delete items is no nodes are selected.
+            if (node_tool->_selected_nodes) {
+                node_tool->deleteSelected();
+                return;
+            }
+        }
+    }
+
+    //  Delete select objects only.
+    selection->deleteItems();
+}
+
+void
+edit_delete_selection(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
     selection->deleteItems();
 }
 
@@ -259,7 +284,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit =
     {"app.clone-link",                          N_("Relink to Copied"),                 "Edit",     N_("Relink the selected clones to the object currently on the clipboard")},
     {"app.select-original",                     N_("Select Original"),                  "Edit",     N_("Select the object to which the selected clone is linked")},
     {"app.clone-link-lpe",                      N_("Clone original path (LPE)"),        "Edit",     N_("Creates a new path, applies the Clone original LPE, and refers it to the selected path")},
-    {"app.delete",                              N_("Delete"),                           "Edit",     N_("Delete selection")},
+    {"app.delete",                              N_("Delete"),                           "Edit",     N_("Delete selected items, nodes or text.")},
+    {"app.delete-selection",                    N_("Delete Items"),                     "Edit",     N_("Delete selected items")},
     {"app.paste-path-effect",                   N_("Paste Path Effect"),                "Edit",     N_("Apply the path effect of the copied object to selection")},
     {"app.remove-path-effect",                  N_("Remove Path Effect"),               "Edit",     N_("Remove any path effects from selected objects")},
     {"app.fit-canvas-to-selection",             N_("Fit Page to Selection"),            "Edit",     N_("Fit the page to the current selection")}
@@ -293,6 +319,7 @@ add_actions_edit(InkscapeApplication* app)
     gapp->add_action( "select-original",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_original), app));
     gapp->add_action( "clone-link-lpe",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&clone_link_lpe), app));
     gapp->add_action( "delete",                          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&edit_delete), app));
+    gapp->add_action( "delete-selection",                sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&edit_delete_selection), app));
     gapp->add_action( "paste-path-effect",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&paste_path_effect), app));
     gapp->add_action( "remove-path-effect",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&remove_path_effect), app));
     gapp->add_action( "fit-canvas-to-selection",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&fit_canvas_to_selection), app));
