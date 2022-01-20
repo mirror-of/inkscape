@@ -125,7 +125,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
             item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
         }
 
-        if (radius == 0 && item->style->filter.set
+        if (radius == 0 && item->style->filter.set && item->style->getFilter()
             && filter_is_single_gaussian_blur(item->style->getFilter())) {
             remove_filter(item, false);
         } else if (radius != 0) {
