@@ -1219,12 +1219,6 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                     if (getDesktop()->layerManager().currentLayer() != item) {
                         getDesktop()->layerManager().setCurrentLayer(item, true);
                     }
-                }
-                // Clicking on layers firstly switches to that layer.
-                else if (selection->includes(item)) {
-                    selection->clear();
-                } else if (_layer != item) {
-                    getDesktop()->layerManager().setCurrentLayer(item, true);
                 } else {
                     selection->set(item);
                 }
