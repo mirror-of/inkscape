@@ -725,14 +725,15 @@ static bool sort_fill_queue_horizontal(Geom::Point a, Geom::Point b) {
 
 /**
  * Perform a flood fill operation.
- * @param event_context The event context for this tool.
+ * @param desktop The desktop of this tool's event context.
  * @param event The details of this event.
  * @param union_with_selection If true, union the new fill with the current selection.
  * @param is_point_fill If false, use the Rubberband "touch selection" to get the initial points for the fill.
  * @param is_touch_fill If true, use only the initial contact point in the Rubberband "touch selection" as the fill target color.
  */
-static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, bool union_with_selection, bool is_point_fill, bool is_touch_fill) {
-    SPDesktop *desktop = event_context->getDesktop();
+static void sp_flood_do_flood_fill(SPDesktop *desktop, GdkEvent *event,
+                                   bool union_with_selection, bool is_point_fill, bool is_touch_fill) {
+
     SPDocument *document = desktop->getDocument();
 
     document->ensureUpToDate();
@@ -1153,23 +1154,29 @@ bool FloodTool::root_handler(GdkEvent* event) {
             Inkscape::Rubberband *r = Inkscape::Rubberband::get(_desktop);
 
             if (r->is_started()) {
-                // set "busy" cursor  THIS LEADS TO CRASHES. USER CAN CHANGE TOOLS AS IT CALLS GTK MAIN LOOP
-                _desktop->setWaitingCursor();
-
                 dragging = false;
-
                 bool is_point_fill = this->within_tolerance;
                 bool is_touch_fill = event->button.state & GDK_MOD1_MASK;
-                    
-                sp_flood_do_flood_fill(this, event, event->button.state & GDK_SHIFT_MASK, is_point_fill, is_touch_fill);
 
-                _desktop->clearWaitingCursor();
+                // It's possible for the user to sneakily change the tool while the
+                // Gtk main loop has control, so we save the current desktop address:
+                SPDesktop* current_desktop = _desktop;
 
-                ret = TRUE;
-
+                current_desktop->setWaitingCursor();
+                sp_flood_do_flood_fill(current_desktop, event,
+                                       event->button.state & GDK_SHIFT_MASK,
+                                       is_point_fill, is_touch_fill);
+                current_desktop->clearWaitingCursor();
                 r->stop();
 
-                this->defaultMessageContext()->clear();
+                // We check whether our object was deleted by SPDesktop::setEventContext()
+                // TODO: fix SPDesktop so that it doesn't kill us before we're done
+                ToolBase *current_context = current_desktop->getEventContext();
+
+                if (current_context == (ToolBase*)this) { // We're still alive
+                    this->defaultMessageContext()->clear();
+                } // else just return without dereferencing `this`.
+                ret = true;
             }
         }
         break;
