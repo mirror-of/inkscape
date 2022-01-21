@@ -307,6 +307,11 @@ void SPGuide::showSPGuide(Inkscape::CanvasItemGroup *group)
 
     item->connect_event(sigc::bind(sigc::ptr_fun(&sp_dt_guide_event), item, this));
 
+    // Ensure event forwarding by the guide handle ("the dot") to the corresponding line
+    auto dot = item->dot();
+    auto dot_handler = [=](GdkEvent *ev) { return sp_dt_guide_event(ev, item, this); };
+    dot->connect_event(dot_handler);
+
     views.push_back(item);
 }
 

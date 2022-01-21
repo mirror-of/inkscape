@@ -4,26 +4,22 @@
  */
 
 /*
- * Author:
- *   Tavmjong Bah
+ * Authors:
+ *   Tavmjong Bah       - Rewrite of SPGuideLine
+ *   Rafael Siejakowski - Tweaks to handle appearance
  *
- * Copyright (C) 2020 Tavmjong Bah
+ * Copyright (C) 2020-2022 the Authors.
  *
- * Rewrite of SPGuideLine
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "canvas-item-guideline.h"
 
-#include <utility> // std::move
-
 #include <2geom/line.h>
 
 #include "canvas-item-ctrl.h"
 
-#include "color.h" // SP_RGBA_x_F
-#include "inkscape.h" // SP_ACTIVE_DESKTOP  FIXME!
 #include "desktop.h" // Canvas orientation so label is orientated correctly.
 
 #include "ui/widget/canvas.h"
@@ -36,29 +32,25 @@ namespace Inkscape {
 CanvasItemGuideLine::CanvasItemGuideLine(CanvasItemGroup *group, Glib::ustring label,
                                          Geom::Point const &origin, Geom::Point const &normal)
     : CanvasItem(group)
-    , _label(std::move(label))
     , _origin(origin)
     , _normal(normal)
+    , _label(std::move(label))
 {
     _name = "CanvasItemGuideLine:" + _label;
     _pickable = true; // For now, everybody gets events from this class!
-    _bounds = Geom::Rect(-Geom::infinity(), -Geom::infinity(), Geom::infinity(), Geom::infinity()); // Required when rotating canvas.
+
+    // Required when rotating canvas:
+    _bounds = Geom::Rect(-Geom::infinity(), -Geom::infinity(), Geom::infinity(), Geom::infinity());
 
     // Control to move guide line.
-    _origin_ctrl = new CanvasItemCtrl(group, CANVAS_ITEM_CTRL_SHAPE_CIRCLE, _origin);
+    _origin_ctrl = std::make_unique<CanvasItemGuideHandle>(group, _origin, this);
     _origin_ctrl->set_name("CanvasItemGuideLine:Ctrl:" + _label);
-    _origin_ctrl->set_pickable(false); // Line beneath is pickable. Handle is display only!
+    _origin_ctrl->set_size_default();
+    _origin_ctrl->set_pickable(true); // The handle will also react to dragging
     set_locked(false); // Init _origin_ctrl shape and stroke.
 }
 
-/**
- * Destructor: needed to destroy origin ctrl point.
- */
-CanvasItemGuideLine::~CanvasItemGuideLine()
-{
-    delete _origin_ctrl;
-    // Base class destructor automatically called.
-}
+CanvasItemGuideLine::~CanvasItemGuideLine() = default;
 
 /**
  * Sets origin of guide line (place where handle is located).
@@ -120,6 +112,14 @@ bool CanvasItemGuideLine::contains(Geom::Point const &p, double tolerance)
 }
 
 /**
+ * Returns the pointer to the origin control (the "dot")
+ */
+CanvasItemGuideHandle* CanvasItemGuideLine::dot() const
+{
+    return _origin_ctrl.get();
+}
+
+/**
  * Update and redraw control guideLine.
  */
 void CanvasItemGuideLine::update(Geom::Affine const &affine)
@@ -144,7 +144,7 @@ void CanvasItemGuideLine::render(Inkscape::CanvasItemBuffer *buf)
 {
     if (!buf) {
         std::cerr << "CanvasItemGuideLine::Render: No buffer!" << std::endl;
-         return;
+        return;
     }
 
     if (!_visible) {
@@ -153,65 +153,73 @@ void CanvasItemGuideLine::render(Inkscape::CanvasItemBuffer *buf)
     }
 
     // Document to canvas
-    Geom::Point normal = _normal * _affine.withoutTranslation(); // Direction only
-    Geom::Point origin = _origin * _affine;
+    Geom::Point const normal = _normal * _affine.withoutTranslation(); // Direction only
+    Geom::Point const origin = _origin * _affine;
 
-    buf->cr->save();
-    // Canvas to screen
-    buf->cr->translate( -buf->rect.left(), -buf->rect.top());
-    buf->cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
-                             SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
-    buf->cr->set_line_width(1);
+    /* Need to use floor()+0.5 such that Cairo will draw us lines with a width of a single pixel,
+     * without any aliasing. For this we need to position the lines at exactly half pixels, see
+     * https://www.cairographics.org/FAQ/#sharp_lines
+     * Must be consistent with the pixel alignment of the grid lines, see CanvasXYGrid::Render(),
+     * and the drawing of the rulers.
+     * Lastly, the origin control is also pixel-aligned and we want to visually cut through its
+     * exact center.
+     */
+    Geom::Point const aligned_origin = origin.floor() + Geom::Point(0.5, 0.5);
+
+    // Set up the Cairo rendering context
+    Cairo::RefPtr<Cairo::Context> ctx = buf->cr;
+    ctx->save();
+    ctx->translate(-buf->rect.left(), -buf->rect.top()); // Canvas to screen
+    ctx->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
+                         SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
+    ctx->set_line_width(1);
 
     if (_inverted) {
         // operator not available in cairo C++ bindings
-        cairo_set_operator(buf->cr->cobj(), CAIRO_OPERATOR_DIFFERENCE);
+        cairo_set_operator(ctx->cobj(), CAIRO_OPERATOR_DIFFERENCE);
     }
 
-    if (!_label.empty()) {
-        int px = std::round(origin.x());
-        int py = std::round(origin.y());
-        buf->cr->save();
-        buf->cr->translate(px, py);
-        SPDesktop * desktop = SP_ACTIVE_DESKTOP; // TODO Fix me!
-        buf->cr->rotate(atan2(normal.cw()) + M_PI * (desktop && desktop->is_yaxisdown() ? 1 : 0));
-        buf->cr->translate(0, -5); // Offset
-        buf->cr->move_to(0, 0);
-        buf->cr->show_text(_label);
-        buf->cr->restore();
+    if (!_label.empty()) { // Render text label
+        ctx->save();
+        ctx->translate(aligned_origin.x(), aligned_origin.y());
+
+        SPDesktop *desktop = nullptr;
+        if (_canvas) {
+            desktop = _canvas->get_desktop();
+        }
+        ctx->rotate(atan2(normal.cw()) + M_PI * (desktop && desktop->is_yaxisdown() ? 1 : 0));
+        ctx->translate(0, -(_origin_ctrl->radius() + LABEL_SEP)); // Offset by dot radius + 2
+        ctx->move_to(0, 0);
+        ctx->show_text(_label);
+        ctx->restore();
     }
 
     // Draw guide.
-    // Special case horizontal and vertical lines so they accurately align to the to pixels.
-    
-    // Need to use floor()+0.5 such that Cairo will draw us lines with a width of a single pixel, without any aliasing.
-    // For this we need to position the lines at exactly half pixels, see https://www.cairographics.org/FAQ/#sharp_lines
-    // Must be consistent with the pixel alignment of the grid lines, see CanvasXYGrid::Render(), and the drawing of the rulers
-    
+    // Special case: horizontal and vertical lines (easier calculations)
+
     // Don't use isHorizontal()/isVertical() as they test only exact matches.
     if (Geom::are_near(normal.y(), 0.0)) {
         // Vertical
-        double position = floor(origin.x()) + 0.5;
-        buf->cr->move_to(position, buf->rect.top()    + 0.5);
-        buf->cr->line_to(position, buf->rect.bottom() - 0.5);
+        double const position = aligned_origin.x();
+        ctx->move_to(position, buf->rect.top()    + 0.5);
+        ctx->line_to(position, buf->rect.bottom() - 0.5);
     } else if (Geom::are_near(normal.x(), 0.0)) {
         // Horizontal
-        double position = floor(origin.y()) + 0.5;
-        buf->cr->move_to(buf->rect.left()   + 0.5, position);
-        buf->cr->line_to(buf->rect.right()  - 0.5, position);
+        double position = aligned_origin.y();
+        ctx->move_to(buf->rect.left()  + 0.5, position);
+        ctx->line_to(buf->rect.right() - 0.5, position);
     } else {
         // Angled
-        Geom::Line guide =
-            Geom::Line::from_origin_and_vector( origin, Geom::rot90(normal) );
+        Geom::Line line = Geom::Line::from_origin_and_vector(aligned_origin, Geom::rot90(normal));
 
-        // Find intersections of guide with buf rectangle. There should be zero or two.
+        // Find intersections of the line with buf rectangle. There should be zero or two.
         std::vector<Geom::Point> intersections;
         for (unsigned i = 0; i < 4; ++i) {
-            Geom::LineSegment side( buf->rect.corner(i), buf->rect.corner((i+1)%4) );
+            Geom::LineSegment side(buf->rect.corner(i), buf->rect.corner((i+1)%4));
             try {
-                Geom::OptCrossing oc = Geom::intersection(guide, side);
+                Geom::OptCrossing oc = Geom::intersection(line, side);
                 if (oc) {
-                    intersections.push_back( guide.pointAt((*oc).ta));
+                    intersections.push_back(line.pointAt((*oc).ta));
                 }
             } catch (Geom::InfiniteSolutions) {
                 // Shouldn't happen as we have already taken care of horizontal/vertical guides.
@@ -220,33 +228,37 @@ void CanvasItemGuideLine::render(Inkscape::CanvasItemBuffer *buf)
         }
 
         if (intersections.size() == 2) {
-            double x0 = intersections[0].x();
-            double x1 = intersections[1].x();
-            double y0 = intersections[0].y();
-            double y1 = intersections[1].y();
-            buf->cr->move_to(x0, y0);
-            buf->cr->line_to(x1, y1);
+            double const x0 = intersections[0].x();
+            double const x1 = intersections[1].x();
+            double const y0 = intersections[0].y();
+            double const y1 = intersections[1].y();
+            ctx->move_to(x0, y0);
+            ctx->line_to(x1, y1);
         }
     }
-    buf->cr->stroke();
+    ctx->stroke();
 
-    buf->cr->restore();
+    ctx->restore();
 }
 
 void CanvasItemGuideLine::hide()
 {
     CanvasItem::hide();
-    if (_origin_ctrl) {
-        _origin_ctrl->hide();
-    }
+    _origin_ctrl->hide();
 }
 
 void CanvasItemGuideLine::show()
 {
     CanvasItem::show();
-    if (_origin_ctrl) {
-        _origin_ctrl->show();
-    }
+    _origin_ctrl->show();
+}
+
+void CanvasItemGuideLine::set_stroke(guint32 color)
+{
+    // Make sure the fill of the control is the same as the stroke
+    // of the guide-line:
+    _origin_ctrl->set_fill(color);
+    CanvasItem::set_stroke(color);
 }
 
 void CanvasItemGuideLine::set_label(Glib::ustring const & label)
@@ -263,13 +275,57 @@ void CanvasItemGuideLine::set_locked(bool locked)
         _locked = locked;
         if (_locked) {
             _origin_ctrl->set_shape(CANVAS_ITEM_CTRL_SHAPE_CROSS);
-            _origin_ctrl->set_stroke(0x0000ff80);
-            _origin_ctrl->set_size(7);
+            _origin_ctrl->set_stroke(CONTROL_LOCKED_COLOR);
+            _origin_ctrl->set_fill(0x00000000);   // no fill
         } else {
             _origin_ctrl->set_shape(CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-            _origin_ctrl->set_stroke(0xff000080);
-            _origin_ctrl->set_size(5);
+            _origin_ctrl->set_stroke(0x00000000); // no stroke
+            _origin_ctrl->set_fill(_stroke);      // fill the control with this guide's color
         }
+    }
+}
+
+//===============================================================================================
+
+/**
+ * @brief Create a handle ("dot") along a guide line
+ * @param group - the associated canvas item group
+ * @param pos   - position
+ * @param line  - pointer to the corresponding guide line
+ */
+CanvasItemGuideHandle::CanvasItemGuideHandle(CanvasItemGroup *group,
+                                             Geom::Point const &pos,
+                                             CanvasItemGuideLine* line)
+    : CanvasItemCtrl(group, CANVAS_ITEM_CTRL_SHAPE_CIRCLE, pos)
+    , _my_line(line) // Save a pointer to our guide line
+{
+}
+
+/**
+ * Return the radius of the handle dot
+ */
+double CanvasItemGuideHandle::radius() const
+{
+    return 0.5 * static_cast<double>(_width); // radius is half the width
+}
+
+/**
+ * Update the size of the handle based on the index from Preferences
+ */
+void CanvasItemGuideHandle::set_size_via_index(int index)
+{
+    double const r = static_cast<double>(index) * SCALE;
+    unsigned long const rounded_diameter = std::lround(r * 2.0); // diameter is twice the radius
+    unsigned long size = rounded_diameter | 0x1; // make sure the size is always odd
+    if (size < MINIMUM_SIZE) {
+        size = MINIMUM_SIZE;
+    }
+    if (_width != size) {
+        _width = size;
+        _height = size;
+        _built = false;
+        request_update();
+        _my_line->request_update();
     }
 }
 

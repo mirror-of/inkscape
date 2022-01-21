@@ -60,7 +60,7 @@ public:
     void set_mode(int mode);
     void set_mode_default();
     void set_size(int size);
-    void set_size_via_index(int size_index);
+    virtual void set_size_via_index(int size_index);
     void set_size_default(); // Use preference and type to set size.
     void set_size_extra(int extra); // Used to temporary increase size of ctrl.
     void set_anchor(SPAnchorType anchor);

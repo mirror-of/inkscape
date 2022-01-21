@@ -110,6 +110,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
     SPDesktop *desktop = guide_item->get_canvas()->get_desktop();
     if (!desktop) {
         std::cerr << "sp_dt_guide_event: No desktop!" << std::endl;
+        return false;
     }
     // Limit to select tool only.
     if (!dynamic_cast<Inkscape::UI::Tools::SelectTool *>(desktop->event_context) &&
@@ -443,7 +444,6 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
     return ret;
 }
 
-//static std::map<GdkInputSource, std::string> switchMap;
 static std::map<std::string, Glib::ustring> toolToUse;
 static std::string lastName;
 static GdkInputSource lastType = GDK_SOURCE_MOUSE;

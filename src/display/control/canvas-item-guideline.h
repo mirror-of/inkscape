@@ -7,12 +7,12 @@
  */
 
 /*
- * Author:
- *   Tavmjong Bah
+ * Authors:
+ *   Tavmjong Bah       - Rewrite of SPGuideLine
+ *   Rafael Siejakowski - Tweaks to handle appearance
  *
- * Copyright (C) 2020 Tavmjong Bah
+ * Copyright (C) 2020-2022 the Authors.
  *
- * Rewrite of SPGuideLine
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -23,11 +23,12 @@
 #include <2geom/transforms.h>
 
 #include "canvas-item.h"
+#include "canvas-item-ctrl.h"
 
 namespace Inkscape {
 
-class CanvasItemCtrl;
 class CanvasItemGroup; // A canvas control that contains other canvas controls.
+class CanvasItemGuideHandle; // A handle ("dot") serving as draggable origin control
 
 class CanvasItemGuideLine : public CanvasItem {
 
@@ -53,11 +54,15 @@ public:
     // Properties
     void hide() override;
     void show() override;
+    void set_stroke(guint32 color) final;
     void set_label(Glib::ustring const & label);
     void set_locked(bool locked);
     void set_inverted(bool inverted);
     void set_sensitive(bool sensitive) { _sensitive = sensitive; }
  
+    // Getters
+    CanvasItemGuideHandle* dot() const;
+
 protected:
     Geom::Point _origin;
     Geom::Point _normal = Geom::Point(0,1);
@@ -65,10 +70,28 @@ protected:
     bool _locked = true; // Flipped in constructor to trigger init of _origin_ctrl.
     bool _inverted = false;
     bool _sensitive = false;
-    Inkscape::CanvasItemCtrl *_origin_ctrl = nullptr; // To move guide line.
+    std::unique_ptr<CanvasItemGuideHandle> _origin_ctrl;
 
+private:
+    inline static guint32 const CONTROL_LOCKED_COLOR = 0x00000080; // RGBA black semitranslucent
+    inline static double const LABEL_SEP = 2.0; // Distance between the label and the origin control
 };
 
+
+class CanvasItemGuideHandle : public CanvasItemCtrl {
+
+public:
+    CanvasItemGuideHandle(CanvasItemGroup *group, Geom::Point const &pos, CanvasItemGuideLine *line);
+    double radius() const;
+    void set_size_via_index(int index) final;
+
+private:
+    CanvasItemGuideLine *_my_line; // The guide line we belong to
+
+    // static data
+    inline static double   const SCALE        = 0.55; // handle size relative to an auto-smooth node
+    inline static unsigned const MINIMUM_SIZE = 7;    // smallest handle size, must be an odd int
+};
 
 } // namespace Inkscape
 
