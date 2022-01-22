@@ -85,12 +85,15 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
     // rx/ry units menu: create
     //tracker->addUnit( SP_UNIT_PERCENT, 0 );
     // fixme: add % meaning per cent of the width/height
-    _tracker->setActiveUnit(desktop->getNamedView()->display_units);
+    auto init_units = desktop->getNamedView()->display_units;
+    _tracker->setActiveUnit(init_units);
     _mode_item->set_use_markup(true);
 
     /* W */
     {
         auto width_val = prefs->getDouble("/tools/shapes/rect/width", 0);
+        width_val = Quantity::convert(width_val, "px", init_units);
+
         _width_adj = Gtk::Adjustment::create(width_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _width_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-width", _("W:"), _width_adj));
         _width_item->get_spin_button()->addUnitTracker(_tracker);
@@ -111,6 +114,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
     /* H */
     {
         auto height_val = prefs->getDouble("/tools/shapes/rect/height", 0);
+        height_val = Quantity::convert(height_val, "px", init_units);
 
         _height_adj = Gtk::Adjustment::create(height_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _height_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
@@ -133,6 +137,8 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
         std::vector<Glib::ustring> labels = {_("not rounded"), "", "", "", "", "", "", "",  ""};
         std::vector<double>        values = {             0.5,  1,  2,  3,  5, 10, 20, 50, 100};
         auto rx_val = prefs->getDouble("/tools/shapes/rect/rx", 0);
+        rx_val = Quantity::convert(rx_val, "px", init_units);
+
         _rx_adj = Gtk::Adjustment::create(rx_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
                                                            _rx_adj,
@@ -151,6 +157,8 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
         std::vector<Glib::ustring> labels = {_("not rounded"), "", "", "", "", "", "", "",  ""};
         std::vector<double>        values = {             0.5,  1,  2,  3,  5, 10, 20, 50, 100};
         auto ry_val = prefs->getDouble("/tools/shapes/rect/ry", 0);
+        ry_val = Quantity::convert(ry_val, "px", init_units);
+
         _ry_adj = Gtk::Adjustment::create(ry_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
                                                            _ry_adj,

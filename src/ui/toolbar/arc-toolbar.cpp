@@ -78,7 +78,8 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
         _freeze(false),
         _repr(nullptr)
 {
-    _tracker->setActiveUnit(desktop->getNamedView()->display_units);
+    auto init_units = desktop->getNamedView()->display_units;
+    _tracker->setActiveUnit(init_units);
     auto prefs = Inkscape::Preferences::get();
 
     {
@@ -91,6 +92,8 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
     {
         std::vector<double> values = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         auto rx_val = prefs->getDouble("/tools/shapes/arc/rx", 0);
+        rx_val = Quantity::convert(rx_val, "px", init_units);
+
         _rx_adj = Gtk::Adjustment::create(rx_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _rx_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("arc-rx", _("Rx:"), _rx_adj));
         _rx_item->set_tooltip_text(_("Horizontal radius of the circle, ellipse, or arc"));
@@ -108,6 +111,8 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
     {
         std::vector<double> values = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         auto ry_val = prefs->getDouble("/tools/shapes/arc/ry", 0);
+        ry_val = Quantity::convert(ry_val, "px", init_units);
+
         _ry_adj = Gtk::Adjustment::create(ry_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _ry_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("arc-ry", _("Ry:"), _ry_adj));
         _ry_item->set_tooltip_text(_("Vertical radius of the circle, ellipse, or arc"));
