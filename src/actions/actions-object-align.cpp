@@ -190,7 +190,7 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
             focus = selection->smallestItem(direction);
             break;
         case ObjectAlignTarget::PAGE:
-            b = document->preferredBounds();
+            b = document->pageBounds();
             break;
         case ObjectAlignTarget::DRAWING:
             b = document->getRoot()->desktopPreferredBounds();
