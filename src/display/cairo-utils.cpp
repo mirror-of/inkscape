@@ -1844,72 +1844,90 @@ guint32 argb32_from_rgba(guint32 in)
 const guchar* pixbuf_to_png(guchar const**rows, guchar* px, int num_rows, int num_cols, int stride, int color_type, int bit_depth)
 {
     int n_fields = 1 + (color_type&2) + (color_type&4)/4;
-    const guchar* new_data = (const guchar*)malloc((n_fields * bit_depth * num_rows * num_cols)/8 + 64);
+    const guchar* new_data = (const guchar*)malloc(((n_fields * bit_depth * num_cols + 7)/8) * num_rows);
     char* ptr = (char*) new_data;
-    int pad=0; //used when we write image data smaller than one byte (for instance in black and white images where 1px = 1bit)
-    for(int row = 0; row < num_rows; ++row){
+    // Used when we write image data smaller than one byte (for instance in
+    // black and white images where 1px = 1bit). Only possible with greyscale.
+    int pad = 0;
+    for (int row = 0; row < num_rows; ++row) {
         rows[row] = (const guchar*)ptr;
-        for(int col = 0; col < num_cols; ++col){
+        for (int col = 0; col < num_cols; ++col) {
             guint32 *pixel = reinterpret_cast<guint32*>(px + row*stride)+col;
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-            //this part should probably be rewritten as (a tested, working) big endian, using htons() and ntohs()
-            guint64 a = (*pixel & 0xff000000) >> 24;
-            guint64 b = (*pixel & 0x00ff0000) >> 16;
-            guint64 g = (*pixel & 0x0000ff00) >> 8;
-            guint64 r = (*pixel & 0x000000ff);
 
-            //one of possible rgb to greyscale formulas. This one is called "luminance, "luminosity" or "luma" 
+            guint64 pix3 = (*pixel & 0xff000000) >> 24;
+            guint64 pix2 = (*pixel & 0x00ff0000) >> 16;
+            guint64 pix1 = (*pixel & 0x0000ff00) >> 8;
+            guint64 pix0 = (*pixel & 0x000000ff);
+
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+            guint64 a = pix3, b = pix2, g = pix1, r = pix0;
+#else
+            guint64 r = pix3, g = pix2, b = pix1, a = pix0;
+#endif
+
+            // One of possible rgb to greyscale formulas. This one is called "luminance", "luminosity" or "luma" 
             guint16 gray = (guint16)((guint32)((0.2126*(r<<24) + 0.7152*(g<<24) + 0.0722*(b<<24)))>>16); 
             
-            if (!pad) *((guint64*)ptr)=0;
-            if (color_type & 2) { //RGB
+            if (color_type & 2) { // RGB or RGBA
                 // for 8bit->16bit transition, I take the FF -> FFFF convention (multiplication by 0x101). 
-                // If you prefer FF -> FF00 (multiplication by 0x100), remove the <<8, <<24, <<40  and <<56
-                if (color_type & 4) { //RGBA
-                    if (bit_depth==8)
+                // If you prefer FF -> FF00 (multiplication by 0x100), remove the <<8, <<24, <<40 and <<56
+                // for little-endian, and remove the <<0, <<16, <<32 and <<48 for big-endian.
+                if (color_type & 4) { // RGBA
+                    if (bit_depth == 8)
                         *((guint32*)ptr) = *pixel; 
                     else 
-                        *((guint64*)ptr) = (guint64)((a<<56)+(a<<48)+(b<<40)+(b<<32)+(g<<24)+(g<<16)+(r<<8)+(r));
+                        // This uses the samples in the order they appear in pixel rather than
+                        // normalised to abgr or rgba in order to make it endian agnostic,
+                        // exploiting the symmetry of the expression (0x101 is the same in both
+                        // endiannesses and each sample is multiplied by that).
+                        *((guint64*)ptr) = (guint64)((pix3<<56)+(pix3<<48)+(pix2<<40)+(pix2<<32)+(pix1<<24)+(pix1<<16)+(pix0<<8)+(pix0));
+                } else { // RGB
+                    if (bit_depth == 8) {
+                        *ptr = r;
+                        *(ptr+1) = g;
+                        *(ptr+2) = b;
+                    } else {
+                        *((guint16*)ptr) = (r<<8)+r;
+                        *((guint16*)(ptr+2)) = (g<<8)+g;
+                        *((guint16*)(ptr+4)) = (b<<8)+b;
+                    }
                 }
-                else{ //no alpha
-                    if(bit_depth==8) 
-                        *((guint32*)ptr) = ((*pixel)<<8)>>8; 
-                    else 
-                        *((guint64*)ptr) = (guint64)((b<<40)+(b<<32)+(g<<24)+(g<<16)+(r<<8)+r);
-                }
-            } else { //Grayscale
-		int realpad = 8 - bit_depth - pad; // in PNG numbers are stored left to right, but in most significant bits first, so the first one processed is the ``big'' mask, etc.
-                if(bit_depth==16) 
-                    *(guint16*)ptr= ((gray & 0xff00)>>8) + ((gray &0x00ff)<<8);
-                else *((guint16*)ptr) += guint16(((gray >> (16-bit_depth))<<realpad) ); //note the "+="
-                
-                if(color_type & 4) { //Alpha channel
-                    if (bit_depth == 16)
-                        *((guint32*)(ptr+2)) = a + (a<<8);
-                    else
-                        *((guint32*)(ptr)) += guint32((a << 8) >> (16 - bit_depth))<<(bit_depth + realpad);
+            } else { // Grayscale
+                if (bit_depth == 16) {
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+                    *(guint16*)ptr = ((gray & 0xff00)>>8) + ((gray & 0x00ff)<<8);
+#else
+                    *(guint16*)ptr = gray;
+#endif
+                    // For 8bit->16bit this mirrors RGB(A), multiplying by
+                    // 0x101; if you prefer multiplying by 0x100, remove the
+                    // <<8 for little-endian, and remove the unshifted value
+                    // for big-endian.
+                    if (color_type & 4) // Alpha channel
+                        *((guint16*)(ptr+2)) = a + (a<<8);
+                } else if (bit_depth == 8) {
+                    *ptr = guint8(gray >> 8);
+                    if (color_type & 4) // Alpha channel
+                        *((guint8*)(ptr+1)) = a;
+                } else {
+                    if (!pad) *ptr=0;
+                    // In PNG numbers are stored left to right, but in most significant bits first, so the first one processed is the ``big'' mask, etc.
+                    int realpad = 8 - bit_depth - pad;
+                    *ptr += guint8((gray >> (16-bit_depth))<<realpad); // Note the "+="
+                    if (color_type & 4) // Alpha channel
+                        *(ptr+1) += guint8((a >> (8-bit_depth))<<(bit_depth + realpad));
                 }
             }
 
-#else       
-            // I don't have any access to a big-endian machine to test this. It should still work with default export settings.
-            guint64 r = (*pixel & 0xff000000) >> 24;
-            guint64 g = (*pixel & 0x00ff0000) >> 16;
-            guint64 b = (*pixel & 0x0000ff00) >> 8;
-            guint64 a = (*pixel & 0x000000ff);
-            guint32 gray = (guint32)(0.2126*(r<<24) + 0.7152*(g<<24) + 0.0722*(b<<24));
-            if(color_type & 2){
-                if(bit_depth==8)*ptr = *pixel; else *ptr = (guint64)((r<<56)+(g<<40)+(b<<24)+(a<<8));
-            } else {
-                *((guint32*)ptr) += guint32(gray>>pad);
-                if(color_type & 4) *((guint32*)ptr) += guint32((a>>pad)>> bit_depth);
-            }
-#endif
-            pad+=bit_depth*n_fields;
-            ptr+=(pad/8);
-            pad%=8;
+            pad += bit_depth*n_fields;
+            ptr += pad/8;
+            pad %= 8;
         }
-        if(pad){pad=0;ptr++;}//align bytes on rows
+        // Align bytes on rows
+        if (pad) {
+            pad = 0;
+            ptr++;
+        }
     }
     return new_data; 
 }
