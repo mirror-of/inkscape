@@ -231,7 +231,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
             }
 
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if (!lpe || document->stylesheetchg || !performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
+            if (!lpe || (document->stylesheetchg && lpe->is_load) || !performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
                 return false;
             }
             auto hreflist = lpeobj->hrefList;
