@@ -484,7 +484,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             static Inkscape::Util::Unit const *px = unit_table.getUnit("px");
             Inkscape::Util::Unit const *new_unit = px;
 
-            if (value && document->getRoot()->viewBox_set) {
+            if (value) {
                 Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
                 if ( !unit_table.hasUnit(value) ) {
                     g_warning("Unrecognized unit `%s'", value);
