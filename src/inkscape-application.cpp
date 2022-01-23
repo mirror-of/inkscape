@@ -21,12 +21,15 @@
 #endif
 
 #include "inkscape-application.h"
+#include "inkscape-version-info.h"
 #include "inkscape-window.h"
 
 #include "auto-save.h"              // Auto-save
 #include "desktop.h"                // Access to window
 #include "file.h"                   // sp_file_convert_dpi
 #include "inkscape.h"               // Inkscape::Application
+#include "path-prefix.h"            // Data directory
+#include "verbs.h"                  // TEMP list verbs
 
 #include "include/glibmm_version.h"
 
@@ -548,26 +551,31 @@ InkscapeApplication::_start_main_option_section(const Glib::ustring& section_nam
     }
 }
 
-// Note: We tried using Gio::APPLICATION_CAN_OVERRIDE_APP_ID instead of
-// Gio::APPLICATION_NON_UNIQUE. The advantages of this is that copy/paste between windows would be
-// more reliable and that we wouldn't have multiple Inkscape instance writing to the preferences
-// file at the same time (if started as separate processes). This caused problems with batch
-// processing files and with extensions as they rely on having multiple instances of Inkscape
-// running independently. In principle one can use --gapplication-app-id to run a new instance of
-// Inkscape but this with our current structure fails with the error message:
-// "g_application_set_application_id: assertion '!application->priv->is_registered' failed".
-// It also require generating new id's for each separate Inkscape instance required.
-
 InkscapeApplication::InkscapeApplication()
 {
     using T = Gio::Application;
 
-    auto app_id = "org.inkscape.Inkscape";
+    auto app_id = Glib::ustring("org.inkscape.Inkscape");
     auto flags = Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
-                 Gio::APPLICATION_NON_UNIQUE;
+                 Gio::APPLICATION_CAN_OVERRIDE_APP_ID;
+    auto non_unique = false;
+
+    // Allow an independent instance of Inkscape to run. Will have matching DBus name and paths
+    // (e.g org.inkscape.Inkscape.tag, /org/inkscape/Inkscape/tag/window/1).
+    // If this flag isn't set, any new instance of Inkscape will be merged with the already running
+    // instance of Inkscape before on_open() or on_activate() is called.
+    if (Glib::getenv("INKSCAPE_APP_ID_TAG") != "") {
+        flags |= Gio::APPLICATION_CAN_OVERRIDE_APP_ID;
+        app_id += "." + Glib::getenv("INKSCAPE_APP_ID_TAG");
+        if (!Gio::Application::id_is_valid(app_id)) {
+            std::cerr << "InkscapeApplication: invalid application id: " << app_id << std::endl;
+            std::cerr << "  tag must be ASCII and not start with a number." << std::endl;
+        }
+        non_unique = true;
+    }
 
     if (gtk_init_check(nullptr, nullptr)) {
-        g_set_prgname(app_id);
+        g_set_prgname(app_id.c_str());
         _gio_application = Gtk::Application::create(app_id, flags);
     } else {
         _gio_application = Gio::Application::create(app_id, flags);
@@ -643,6 +651,7 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "debug-info",             '\0', N_("Print debugging information"),                                                        "");
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "system-data-directory",  '\0', N_("Print system data directory"),                                             "");
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "user-data-directory",    '\0', N_("Print user data directory"),                                               "");
+    gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "app-id-tag",             '\0', N_("Create a unique instance of Inkscape with the application ID 'org.inkscape.Inkscape.TAG'"), "");
 
     // Open/Import
     _start_main_option_section(_("File import"));
@@ -726,17 +735,12 @@ InkscapeApplication::InkscapeApplication()
 
     gapp->signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options));
 
-    if (_with_gui) {
+    if (_with_gui && !non_unique) { // Will fail to register if not unique.
         // On macOS, this enables:
         //   - DnD via dock icon
         //   - system menu "Quit"
         gtk_app()->property_register_session() = true;
     }
-
-    // This is normally called for us... but after the "handle_local_options" signal is emitted. If
-    // we want to rely on actions for handling options, we need to call it here. This appears to
-    // have no unwanted side-effect. It will also trigger the call to on_startup().
-    gapp->register_application();
 }
 
 void
@@ -1320,39 +1324,53 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         return -1; // Keep going
     }
 
-    auto *gapp = gio_app();
+    // ===================== APP ID ====================
+    if (options->contains("app-id-tag")) {
+        Glib::ustring id_tag;
+        options->lookup_value("app-id-tag", id_tag);
+        Glib::ustring app_id = "org.inkscape.Inkscape." + id_tag;
+        if (Gio::Application::id_is_valid(app_id)) {
+            _gio_application->set_id(app_id);
+        } else {
+            std::cerr << "InkscapeApplication: invalid application id: " << app_id << std::endl;
+            std::cerr << "  tag must be ASCII and not start with a number." << std::endl;
+        }
+    }
 
     // ===================== QUERY =====================
     // These are processed first as they result in immediate program termination.
+    // Note: we cannot use actions here as the app has not been registered yet (registering earlier
+    // causes problems with changing the app id).
     if (options->contains("version")) {
-        gapp->activate_action("inkscape-version");
+        std::cout << Inkscape::inkscape_version() << std::endl;
         return EXIT_SUCCESS;
     }
     
     if (options->contains("debug-info")) {
-        gapp->activate_action("debug-info");
+        std::cout << Inkscape::debug_info() << std::endl;
         return EXIT_SUCCESS;
     }
 
     if (options->contains("system-data-directory")) {
-        gapp->activate_action("system-data-directory");
+        std::cout << Glib::build_filename(get_inkscape_datadir(), "inkscape") << std::endl;
         return EXIT_SUCCESS;
     }
 
     if (options->contains("user-data-directory")) {
-        gapp->activate_action("user-data-directory");
+        std::cout << Inkscape::IO::Resource::profile_path("") << std::endl;
         return EXIT_SUCCESS;
     }
 
     if (options->contains("verb-list")) {
-        gapp->activate_action("verb-list");
+        Inkscape::Verb::list();
         return EXIT_SUCCESS;
     }
 
-    if (options->contains("action-list")) {
-        gapp->activate_action("action-list");
-        return EXIT_SUCCESS;
-    }
+    // Can't do this until after app is registered!
+    // if (options->contains("action-list")) {
+    //     print_action_list();
+    //     return EXIT_SUCCESS;
+    // }
 
     // For options without arguments.
     auto base = Glib::VariantBase();
@@ -1399,6 +1417,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
         options->contains("vacuum-defs")           ||
         options->contains("select")                ||
+        options->contains("action-list")           ||
         options->contains("actions")               ||
         options->contains("verb")                  ||
         options->contains("shell")
@@ -1426,6 +1445,15 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         _auto_export = true;
     }
 
+    // If we are running in command-line mode (without gui) and we haven't explicitly changed the app_id,
+    // change it here so that this instance of Inkscape is not merged with an existing instance (otherwise
+    // unwanted windows will pop up and the command-line arguments will be ignored).
+    if (_with_gui == false &&
+        !options->contains("app-id-tag")) {
+        Glib::ustring app_id = "org.inkscape.Inkscape.p" + std::to_string(getpid());
+        _gio_application->set_id(app_id);
+    }
+
     // ==================== ACTIONS ====================
     // Actions as an argument string: e.g.: --actions="query-id:rect1;query-x".
     // Actions will be processed in order that they are given in argument.
@@ -1435,6 +1463,10 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         parse_actions(actions, _command_line_actions);
     }
 
+    // This must be done after the app has been registered!
+    if (options->contains("action-list")) {
+        _command_line_actions.push_back(std::make_pair("action-list", base));
+    }
 
     // ================= OPEN/IMPORT ===================
 

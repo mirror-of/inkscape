@@ -84,8 +84,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     set_resizable(true);
 
-    insert_action_group("doc", document->getActionGroup());
-
     // =============== Build interface ===============
 
     // Main box
@@ -101,6 +99,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     _desktop = _desktop_widget->desktop;
 
     // =================== Actions ===================
+
     // After canvas has been constructed.. move to canvas proper.
     add_actions_canvas_mode(this);          // Actions to change canvas display mode.
     add_actions_canvas_snapping(this);      // Actions to toggle on/off snapping modes.
@@ -116,6 +115,15 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add_actions_tools(this);                // Actions to switch between tools.
     add_actions_view_mode(this);            // Actions to change how Inkscape canvas is displayed.
     add_actions_view_window(this);          // Actions to add/change window of Inkscape
+
+    // Add document action group to window and export to DBus.
+    insert_action_group("doc", document->getActionGroup());
+
+    auto connection = _app->gio_app()->get_dbus_connection();
+    if (connection) {
+        std::string document_action_group_name = _app->gio_app()->get_dbus_object_path() + "/document/" + std::to_string(get_id());
+        connection->export_action_group(document_action_group_name, document->getActionGroup());
+    }
 
     // This is called here (rather than in InkscapeApplication) solely to add win level action
     // tooltips to the menu label-to-tooltip map.
