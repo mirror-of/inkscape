@@ -239,6 +239,7 @@ private:
     void rotation_populate_popup(Gtk::Menu *menu);
   //void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
     void update_statusbar_visibility();
+    void apply_ctrlbar_settings();
 
 public:
     void cms_adjust_toggled();

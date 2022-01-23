@@ -305,23 +305,15 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
         int s = prefs->getIntLimited(ToolboxFactory::tools_icon_size, min, min, max);
         ToolboxFactory::set_icon_size(tool_toolbox, s);
     };
-    auto set_ctrlbar_prefs = [=]() {
-        int min = ToolboxFactory::min_pixel_size;
-        int max = ToolboxFactory::max_pixel_size;
-        int size = prefs->getIntLimited(ToolboxFactory::ctrlbars_icon_size, min, min, max);
-        ToolboxFactory::set_icon_size(snap_toolbox, size);
-        ToolboxFactory::set_icon_size(commands_toolbox, size);
-        ToolboxFactory::set_icon_size(aux_toolbox, size);
-    };
 
     // watch for changes
     _tb_icon_sizes1 = prefs->createObserver(ToolboxFactory::tools_icon_size,    [=]() { set_toolbar_prefs(); });
-    _tb_icon_sizes2 = prefs->createObserver(ToolboxFactory::ctrlbars_icon_size, [=]() { set_ctrlbar_prefs(); });
+    _tb_icon_sizes2 = prefs->createObserver(ToolboxFactory::ctrlbars_icon_size, [=]() { apply_ctrlbar_settings(); });
     _tb_visible_buttons = prefs->createObserver(ToolboxFactory::tools_visible_buttons, [=]() { set_visible_buttons(tool_toolbox); });
 
     // restore preferences
     set_toolbar_prefs();
-    set_ctrlbar_prefs();
+    apply_ctrlbar_settings();
     set_visible_buttons(tool_toolbox);
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
@@ -498,6 +490,16 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
     dtw->_canvas_grid->ShowCommandPalette(false);
 
     dtw->_canvas->grab_focus();
+}
+
+void SPDesktopWidget::apply_ctrlbar_settings() {
+    Inkscape::Preferences* prefs = Inkscape::Preferences::get();
+    int min = ToolboxFactory::min_pixel_size;
+    int max = ToolboxFactory::max_pixel_size;
+    int size = prefs->getIntLimited(ToolboxFactory::ctrlbars_icon_size, min, min, max);
+    ToolboxFactory::set_icon_size(snap_toolbox, size);
+    ToolboxFactory::set_icon_size(commands_toolbox, size);
+    ToolboxFactory::set_icon_size(aux_toolbox, size);
 }
 
 void SPDesktopWidget::update_statusbar_visibility() {
@@ -1289,6 +1291,10 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
     }
 
     layoutWidgets();
+
+    // temporary for Gtk3: Gtk toolbar resets icon sizes, so reapply them
+    // TODO: remove this call in Gtk4 after Gtk::Toolbar is eliminated
+    apply_ctrlbar_settings();
 }
 
 
