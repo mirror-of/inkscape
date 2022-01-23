@@ -818,7 +818,9 @@ void Script::checkStderr (const Glib::ustring &data,
 
 bool Script::cancelProcessing () {
     _canceled = true;
-    _main_loop->quit();
+    if (_main_loop) {
+        _main_loop->quit();
+    }
     Glib::spawn_close_pid(_pid);
 
     return true;
@@ -933,6 +935,8 @@ int Script::execute (const std::list<std::string> &in_command,
         fileerr.read(Glib::IO_IN);
     }
 
+    _main_loop.reset();
+
     if (_canceled) {
         // std::cout << "Script Canceled" << std::endl;
         return 0;
@@ -959,6 +963,7 @@ int Script::execute (const std::list<std::string> &in_command,
 
 void Script::file_listener::init(int fd, Glib::RefPtr<Glib::MainLoop> main) {
     _channel = Glib::IOChannel::create_from_fd(fd);
+    _channel->set_close_on_unref(true);
     _channel->set_encoding();
     _conn = main->get_context()->signal_io().connect(sigc::mem_fun(*this, &file_listener::read), _channel, Glib::IO_IN | Glib::IO_HUP | Glib::IO_ERR);
     _main_loop = main;
