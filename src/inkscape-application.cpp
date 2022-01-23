@@ -74,10 +74,6 @@
 
 #include "widgets/desktop-widget.h" // Access dialog container.
 
-#ifdef WITH_DBUS
-# include "extension/dbus/dbus-init.h"
-#endif
-
 #ifdef ENABLE_NLS
 // Native Language Support - shouldn't this always be used?
 #include "helper/gettext.h"   // gettext init
@@ -726,11 +722,6 @@ InkscapeApplication::InkscapeApplication()
     _start_main_option_section();
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",                 '\0', N_("Start Inkscape in interactive shell mode"),                                 "");
 
-#ifdef WITH_DBUS
-    _start_main_option_section(_("D-Bus"));
-    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "dbus-listen",           '\0', N_("Enter a listening loop for D-Bus messages in console mode"),                "");
-    gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "dbus-name",             '\0', N_("Specify the D-Bus name; default is 'org.inkscape'"),            N_("BUS-NAME"));
-#endif // WITH_DBUS
     // clang-format on
 
     gapp->signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options));
@@ -855,17 +846,6 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
 
     _active_document = document;
     _active_window   = window;
-
-#ifdef WITH_DBUS
-    if (window) {
-        SPDesktop* desktop = window->get_desktop();
-        if (desktop) {
-            Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
-        } else {
-            std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to create desktop!" << std::endl;
-        }
-    }
-#endif
 }
 
 /** Destroy a window and close the document it contains. Aborts if document needs saving.
@@ -1613,19 +1593,6 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         options->lookup_value("export-png-color-mode", _file_export.export_png_color_mode);
     }
 
-
-    // ==================== D-BUS ======================
-
-#ifdef WITH_DBUS
-    // Before initializing extensions, we must set the DBus bus name if required
-    if (options->contains("dbus-listen")) {
-        std::string dbus_name;
-        options->lookup_value("dbus-name", dbus_name);
-        if (!dbus_name.empty()) {
-            Inkscape::Extension::Dbus::dbus_set_bus_name(dbus_name.c_str());
-        }
-    }
-#endif
 
     GVariantDict *options_copy = options->gobj_copy();
     GVariant *options_var = g_variant_dict_end(options_copy);

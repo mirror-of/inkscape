@@ -253,10 +253,6 @@ if(WITH_MAGICK)
 	)
 endif()
 
-if(WITH_DBUS)
-        add_subdirectory(dbus)
-endif()
-
 # add_inkscape_lib(extension_LIB "${extension_SRC}")
 add_inkscape_source("${extension_SRC}")
 

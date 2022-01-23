@@ -65,9 +65,6 @@
 #include "preferences.h"
 #include "io/sys.h"
 #include "io/resource.h"
-#ifdef WITH_DBUS
-#include "dbus/dbus-init.h"
-#endif
 
 #ifdef WITH_MAGICK
 #include <Magick++.h>
@@ -191,14 +188,6 @@ init()
     Internal::BlurEdge::init();
     Internal::GimpGrad::init();
     Internal::Grid::init();
-
-#ifdef WITH_DBUS
-    static bool dbus_was_init = false;
-    if (! dbus_was_init) {
-        Dbus::init();
-        dbus_was_init = true;
-    }
-#endif
 
     /* Raster Effects */
 #ifdef WITH_MAGICK

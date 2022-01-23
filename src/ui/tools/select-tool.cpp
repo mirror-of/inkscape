@@ -55,10 +55,6 @@
 
 #include "ui/widget/canvas.h"
 
-#ifdef WITH_DBUS
-#include "extension/dbus/document-interface.h"
-#endif
-
 
 using Inkscape::DocumentUndo;
 using Inkscape::Modifiers::Modifier;
@@ -651,9 +647,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         // item has been moved
                         _seltrans->ungrab();
                         this->moved = FALSE;
-#ifdef WITH_DBUS
-                        dbus_send_ping(desktop, this->item);
-#endif
                     } else if (this->item && !drag_escaped) {
                         // item has not been moved -> simply a click, do selecting
                         if (!selection->isEmpty()) {

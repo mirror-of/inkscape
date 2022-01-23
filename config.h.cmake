@@ -68,9 +68,6 @@
 /* Define to 1 if `usmblks' is member of `struct mallinfo'. */
 #cmakedefine HAVE_STRUCT_MALLINFO_USMBLKS 1
 
-/* Build in dbus */
-#cmakedefine WITH_DBUS 1
-
 /* enable gtk spelling widget and built-in spellchecker */
 #cmakedefine WITH_GSPELL 1
 

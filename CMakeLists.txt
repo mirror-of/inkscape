@@ -107,7 +107,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR} C
 # Options
 # -----------------------------------------------------------------------------
 option(WITH_GNU_READLINE "Compile with GNU Readline support (shell mode)" ON)
-option(WITH_DBUS "Compile with support for DBus interface" OFF)
 option(ENABLE_LCMS "Compile with LCMS support" ON)
 option(WITH_SVG2 "Compile with support for new SVG2 features" ON)
 option(WITH_LPETOOL "Compile with LPE Tool" OFF)
@@ -277,7 +276,6 @@ message("ENABLE_LCMS:             ${ENABLE_LCMS}")
 message("ENABLE_POPPLER:          ${ENABLE_POPPLER}")
 message("ENABLE_POPPLER_CAIRO:    ${ENABLE_POPPLER_CAIRO}")
 message("WITH_GNU_READLINE:       ${WITH_GNU_READLINE}")
-message("WITH_DBUS:               ${WITH_DBUS}")
 message("WITH_GSPELL:             ${WITH_GSPELL}")
 message("WITH_IMAGE_MAGICK:       ${WITH_IMAGE_MAGICK}")
 message("WITH_GRAPHICS_MAGICK:    ${WITH_GRAPHICS_MAGICK}")

@@ -410,10 +410,6 @@ else()
     set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "@loader_path/..")
 endif()
 
-if(WITH_DBUS)
-    add_dependencies(inkscape_base inkscape_dbus)
-endif()
-
 target_link_libraries(inkscape_base PUBLIC Boost::filesystem)
 
 # Link the inkscape_base library against all external dependencies

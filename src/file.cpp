@@ -80,10 +80,6 @@ using Inkscape::DocumentUndo;
 using Inkscape::IO::Resource::TEMPLATES;
 using Inkscape::IO::Resource::USER;
 
-#ifdef WITH_DBUS
-#include "extension/dbus/dbus-init.h"
-#endif
-
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -117,10 +113,6 @@ SPDesktop *sp_file_new(const std::string &templ)
     InkscapeWindow* win = app->window_open (doc);
 
     SPDesktop* desktop = win->get_desktop();
-
-#ifdef WITH_DBUS
-    Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
-#endif
 
     return desktop;
 }
@@ -1067,7 +1059,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         if (doc->getNamedView()->getPageManager()->hasPages()) {
             file_import_pages(in_doc, doc);
             DocumentUndo::done(in_doc, _("Import Pages"), INKSCAPE_ICON("document-import"));
-            // This return is only used by dbus in document-interface.cpp
+            // This return is only used by dbus in document-interface.cpp (now removed).
             return nullptr;
         }
 
