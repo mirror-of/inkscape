@@ -67,8 +67,6 @@ protected:
     void  build_snap();
     void  build_gridspage();
 
-    void  create_guides_around_page();
-    void  delete_all_guides();
     void  build_cms();
     void  build_scripting();
     void  build_metadata();

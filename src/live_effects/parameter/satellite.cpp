@@ -30,7 +30,6 @@
 #include "object/sp-item.h"
 #include "object/uri.h"
 #include "ui/icon-names.h"
-#include "verbs.h"
 
 namespace Inkscape {
 

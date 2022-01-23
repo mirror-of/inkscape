@@ -28,8 +28,6 @@
 #include "selection.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
-
 
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
@@ -66,10 +64,33 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL);
-    add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS);
-    auto deselect_button                 = add_toolbutton_for_verb(SP_VERB_EDIT_DESELECT);
-    _context_items.push_back(deselect_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Select Al_l")));
+        button->set_tooltip_text(N_("Select all objects"));
+        button->set_icon_name(INKSCAPE_ICON("edit-select-all"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "win.select-all");
+        add(*button);
+    }
+
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Select All in All La_yers")));
+        button->set_tooltip_text(N_("Select all objects in all visible and unlocked layers"));
+        button->set_icon_name(INKSCAPE_ICON("edit-select-all-layers"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "win.select-all-layers");
+        add(*button);
+    }
+
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("D_eselect")));
+        button->set_tooltip_text(N_("Deselect any selected objects"));
+        button->set_icon_name(INKSCAPE_ICON("edit-select-none"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "win.select-none");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
     _select_touch_btn->set_label(_("Select by touch"));
     _select_touch_btn->set_tooltip_text(_("Toggle selection box to select all touched objects."));
@@ -81,31 +102,87 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    auto object_rotate_90_ccw_button     = add_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CCW);
-    _context_items.push_back(object_rotate_90_ccw_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Rotate _90\xc2\xb0 CCW")));
+        button->set_tooltip_text(N_("Rotate selection 90\xc2\xb0 counter-clockwise"));
+        button->set_icon_name(INKSCAPE_ICON("object-rotate-left"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.object-rotate-90-ccw");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
-    auto object_rotate_90_cw_button      = add_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CW);
-    _context_items.push_back(object_rotate_90_cw_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Rotate _90\xc2\xb0 CW")));
+        button->set_tooltip_text(N_("Rotate selection 90\xc2\xb0 clockwise"));
+        button->set_icon_name(INKSCAPE_ICON("object-rotate-right"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.object-rotate-90-cw");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
-    auto object_flip_horizontal_button   = add_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_HORIZONTAL);
-    _context_items.push_back(object_flip_horizontal_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Flip _Horizontal")));
+        button->set_tooltip_text(N_("Flip selected objects horizontally"));
+        button->set_icon_name(INKSCAPE_ICON("object-flip-horizontal"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.object-flip-horizontal");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
-    auto object_flip_vertical_button     = add_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_VERTICAL);
-    _context_items.push_back(object_flip_vertical_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Flip _Vertical")));
+        button->set_tooltip_text(N_("Flip selected objects vertically"));
+        button->set_icon_name(INKSCAPE_ICON("object-flip-vertical"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.object-flip-vertical");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    auto selection_to_front_button       = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_FRONT);
-    _context_items.push_back(selection_to_front_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Raise to _Top")));
+        button->set_tooltip_text(N_("Raise selection to top"));
+        button->set_icon_name(INKSCAPE_ICON("selection-top"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.selection-top");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
-    auto selection_raise_button          = add_toolbutton_for_verb(SP_VERB_SELECTION_RAISE);
-    _context_items.push_back(selection_raise_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("_Raise")));
+        button->set_tooltip_text(N_("Raise selection one step"));
+        button->set_icon_name(INKSCAPE_ICON("selection-raise"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.selection-raise");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
-    auto selection_lower_button          = add_toolbutton_for_verb(SP_VERB_SELECTION_LOWER);
-    _context_items.push_back(selection_lower_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("_Lower")));
+        button->set_tooltip_text(N_("Lower selection one step"));
+        button->set_icon_name(INKSCAPE_ICON("selection-lower"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.selection-lower");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
-    auto selection_to_back_button        = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_BACK);
-    _context_items.push_back(selection_to_back_button);
+    {
+        auto button = Gtk::manage(new Gtk::ToolButton(N_("Lower to _Bottom")));
+        button->set_tooltip_text(N_("Lower selection to bottom"));
+        button->set_icon_name(INKSCAPE_ICON("selection-bottom"));
+        // Must use C API until GTK4
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "app.selection-bottom");
+        add(*button);
+        _context_items.push_back(button);
+    }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 

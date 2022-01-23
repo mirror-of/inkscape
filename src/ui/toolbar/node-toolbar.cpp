@@ -38,7 +38,6 @@
 #include "document-undo.h"
 #include "inkscape.h"
 #include "selection-chemistry.h"
-#include "verbs.h"
 
 #include "helper/action.h"
 
@@ -245,12 +244,20 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     auto context = Inkscape::ActionContext(_desktop);
 
     {
-        auto object_to_path_item = SPAction::create_toolbutton_for_verb(SP_VERB_OBJECT_TO_CURVE, context);
+        auto object_to_path_item = Gtk::manage(new Gtk::ToolButton(_("_Object to Path")));
+        object_to_path_item->set_tooltip_text(_("Convert selected object to path"));
+        object_to_path_item->set_icon_name(INKSCAPE_ICON("object-to-path"));
+        // Must use C API until GTK4.
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(object_to_path_item->gobj()), "app.object-to-path");
         add(*object_to_path_item);
     }
 
     {
-        auto stroke_to_path_item = SPAction::create_toolbutton_for_verb(SP_VERB_SELECTION_OUTLINE, context);
+        auto stroke_to_path_item = Gtk::manage(new Gtk::ToolButton(_("_Stroke to Path")));
+        stroke_to_path_item->set_tooltip_text(_("Convert selected object's stroke to paths"));
+        stroke_to_path_item->set_icon_name(INKSCAPE_ICON("stroke-to-path"));
+        // Must use C API until GTK4.
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(stroke_to_path_item->gobj()), "app.object-stroke-to-path");
         add(*stroke_to_path_item);
     }
 
@@ -317,7 +324,11 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     }
 
     {
-        _nodes_lpeedit_item = SPAction::create_toolbutton_for_verb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, context);
+        _nodes_lpeedit_item = Gtk::manage(new Gtk::ToolButton(N_("Next path effect parameter")));
+        _nodes_lpeedit_item->set_tooltip_text(N_("Show next editable path effect parameter"));
+        _nodes_lpeedit_item->set_icon_name(INKSCAPE_ICON("path-effect-parameter-next"));
+        // Must use C API until GTK4.
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(_nodes_lpeedit_item->gobj()), "win.path-effect-parameter-next");
         add(*_nodes_lpeedit_item);
     }
 

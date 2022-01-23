@@ -19,7 +19,6 @@
 #include "desktop.h"
 #include "document.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "helper/action.h"
 #include "helper/action-context.h"
@@ -30,6 +29,7 @@
 #include "extension/effect.h"
 #include "extension/system.h"
 
+#include "path/path-offset.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -54,9 +54,14 @@ BlurEdge::load (Inkscape::Extension::Extension */*module*/)
     \param  desktop What should be edited.
 */
 void
-BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *view, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-    Inkscape::Selection * selection     = static_cast<SPDesktop *>(desktop)->selection;
+    auto desktop = dynamic_cast<SPDesktop *>(view);
+    if (!desktop) {
+        std::cerr << "BlurEdge::effect: view is not desktop!" << std::endl;
+        return;
+    }
+    Inkscape::Selection * selection     = desktop->selection;
 
     double width = module->get_param_float("blur-width");
     int    steps = module->get_param_int("num-steps");
@@ -91,15 +96,17 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
             new_group->appendChild(new_items[i]);
             selection->add(new_items[i]);
             selection->toCurves();
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
 
             if (offset < 0.0) {
                 /* Doing an inset here folks */
                 offset *= -1.0;
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_INSET)->get_action(Inkscape::ActionContext(desktop)), nullptr);
+                sp_selected_path_inset(desktop);
             } else if (offset > 0.0) {
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET)->get_action(Inkscape::ActionContext(desktop)), nullptr);
+                sp_selected_path_offset(desktop);
             }
 
             selection->clear();

@@ -54,22 +54,6 @@ Toolbar::add_toggle_button(const Glib::ustring &label_text,
 }
 
 /**
- * \brief Add a toolbutton that performs a given verb
- *
- * \param[in] verb_code The code for the verb (e.g., SP_VERB_EDIT_SELECT_ALL)
- *
- * \returns a pointer to the toolbutton
- */
-Gtk::ToolButton *
-Toolbar::add_toolbutton_for_verb(unsigned int verb_code)
-{
-    auto context = Inkscape::ActionContext(_desktop);
-    auto button  = SPAction::create_toolbutton_for_verb(verb_code, context);
-    add(*button);
-    return button;
-}
-
-/**
  * \brief Add a separator line to the toolbar
  *
  * \details This is just a convenience wrapper for the

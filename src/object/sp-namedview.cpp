@@ -39,7 +39,6 @@
 #include "sp-page.h"
 #include "sp-item-group.h"
 #include "sp-root.h"
-#include "verbs.h"
 
 #include "actions/actions-canvas-snapping.h"
 #include "display/control/canvas-grid.h"
@@ -192,7 +191,7 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
         repr->removeAttribute("gridempopacity");
         repr->removeAttribute("gridempspacing");
 
-//        SPDocumentUndo::done(doc, SP_VERB_DIALOG_DOCPROPERTIES, _("Create new grid from pre0.46 grid settings"));
+//        SPDocumentUndo::done(doc, _("Create new grid from pre0.46 grid settings"), "");
     }
 }
 

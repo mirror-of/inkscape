@@ -23,7 +23,6 @@
 #include "lpe-knot.h"
 
 // for change crossing undo
-#include "verbs.h"
 #include "document.h"
 #include "document-undo.h"
 

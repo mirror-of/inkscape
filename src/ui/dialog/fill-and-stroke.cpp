@@ -23,7 +23,6 @@
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "verbs.h"
 
 #include "svg/css-ostringstream.h"
 

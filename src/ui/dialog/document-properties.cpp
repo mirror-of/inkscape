@@ -26,7 +26,6 @@
 #include <vector>
 #include "style.h"
 #include "rdf.h"
-#include "verbs.h"
 
 #include "actions/actions-tools.h"
 #include "display/control/canvas-grid.h"
@@ -490,30 +489,9 @@ void DocumentProperties::build_guides()
     attach_all(_page_guides->table(), widget_array, G_N_ELEMENTS(widget_array));
     inner->set_hexpand(false);
 
-    _create_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::create_guides_around_page));
-    _delete_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::delete_all_guides));
-}
-
-void DocumentProperties::create_guides_around_page()
-{
-    Verb *verb = Verb::get( SP_VERB_EDIT_GUIDES_AROUND_PAGE );
-    if (verb) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(getDesktop()));
-        if (action) {
-            sp_action_perform(action, nullptr);
-        }
-    }
-}
-
-void DocumentProperties::delete_all_guides()
-{
-    Verb *verb = Verb::get( SP_VERB_EDIT_DELETE_ALL_GUIDES );
-    if (verb) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(getDesktop()));
-        if (action) {
-            sp_action_perform(action, nullptr);
-        }
-    }
+    // Must use C API until GTK4.
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(_create_guides_btn.gobj()), "doc.create-guides-around-page");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(_delete_guides_btn.gobj()), "doc.delete-all-guides");
 }
 
 /// Populates the available color profiles combo box

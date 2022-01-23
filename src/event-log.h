@@ -111,8 +111,7 @@ public:
     void removeDialogConnection(Gtk::TreeView *event_list_view, CallbackMap *callback_connections);
 
     /*
-     * Updates the sensitivity and names of SP_VERB_EDIT_UNDO and SP_VERB_EDIT_REDO to reflect the
-     * current state.
+     * Updates the sensitivity of undo and redo actions.
      */
     void updateUndoVerbs();
 
