@@ -588,6 +588,14 @@ void Inkscape::ObjectSnapper::freeSnap(IntermSnapResults &isr,
         return;
     }
 
+    /* Get a list of all the SPItems that we will try to snap to; this only needs to be done for the object snapper,
+    not for the grid snappers, so we'll do this here and not in the Snapmanager::freeSnap(). This saves us from wasting
+    precious CPU cycles */
+    if (p.getSourceNum() <= 0) {
+        Geom::Rect const local_bbox_to_snap = bbox_to_snap ? *bbox_to_snap : Geom::Rect(p.getPoint(), p.getPoint());
+        _snapmanager->_findCandidates(_snapmanager->getDocument()->getRoot(), it, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
+    }
+
     _snapNodes(isr, p, unselected_nodes);
 
     if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PATH, SNAPTARGET_PATH_INTERSECTION, SNAPTARGET_BBOX_EDGE, SNAPTARGET_PAGE_BORDER, SNAPTARGET_TEXT_BASELINE)) {
@@ -626,6 +634,14 @@ void Inkscape::ObjectSnapper::constrainedSnap( IntermSnapResults &isr,
 
     // project the mouse pointer onto the constraint. Only the projected point will be considered for snapping
     Geom::Point pp = c.projection(p.getPoint());
+
+    /* Get a list of all the SPItems that we will try to snap to; this only needs to be done for the object snapper,
+    not for the grid snappers, so we'll do this here and not in the Snapmanager::freeSnap(). This saves us from wasting
+    precious CPU cycles */
+    if (p.getSourceNum() <= 0) {
+        Geom::Rect const local_bbox_to_snap = bbox_to_snap ? *bbox_to_snap : Geom::Rect(pp, pp); // Using the projected point here! Not so in freeSnap()!
+        _snapmanager->_findCandidates(_snapmanager->getDocument()->getRoot(), it, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
+    }
 
     // A constrained snap, is a snap in only one degree of freedom (specified by the constraint line).
     // This is useful for example when scaling an object while maintaining a fixed aspect ratio. It's
