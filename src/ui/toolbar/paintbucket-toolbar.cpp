@@ -64,7 +64,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
 
         for (auto item: Inkscape::UI::Tools::FloodTool::channel_list) {
             Gtk::TreeModel::Row row = *(store->append());
-            row[columns.col_label    ] = item;
+            row[columns.col_label    ] = _(item.c_str());
             row[columns.col_sensitive] = true;
         }
 
