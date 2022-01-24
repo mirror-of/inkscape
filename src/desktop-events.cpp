@@ -333,6 +333,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                         guide->moveto(guide->getPoint(), false);
                         guide->set_normal(guide->getNormal(), false);
                         sp_guide_remove(guide);
+                        guide_item = nullptr;
                         desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
 
                         DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
@@ -342,7 +343,9 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                     desktop->set_coordinate_status(event_dt);
                 }
                 drag_type = SP_DRAG_NONE;
-                guide_item->ungrab();
+                if (guide_item) {
+                    guide_item->ungrab();
+                }
                 ret = true;
             }
             break;
@@ -393,6 +396,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                     SPDocument *doc = guide->document;
                     if (!guide->getLocked()) {
                         sp_guide_remove(guide);
+                        guide_item = nullptr;
                         DocumentUndo::done(doc, SP_VERB_NONE, _("Delete guide"));
                         ret = true;
                         sp_event_context_discard_delayed_snap_event(desktop->event_context);
