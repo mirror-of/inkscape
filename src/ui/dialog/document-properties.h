@@ -42,6 +42,7 @@ namespace Inkscape {
         namespace Widget {
             class EntityEntry;
             class NotebookPage;
+            class PageProperties;
         }
         namespace Dialog {
 
@@ -98,13 +99,18 @@ protected:
     void  embedded_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
     void  load_default_metadata();
     void  save_default_metadata();
+    void update_viewbox(SPDesktop* desktop);
+    void update_scale_ui(SPDesktop* desktop);
+    void update_viewbox_ui(SPDesktop* desktop);
+    void set_document_scale(SPDesktop* desktop, double scale_x);
+    void set_viewbox_pos(SPDesktop* desktop, double x, double y);
+    void set_viewbox_size(SPDesktop* desktop, double width, double height);
 
     Inkscape::XML::SignalObserver _emb_profiles_observer, _scripts_observer;
     Gtk::Notebook  _notebook;
 
     UI::Widget::NotebookPage   *_page_page;
     UI::Widget::NotebookPage   *_page_guides;
-    // UI::Widget::NotebookPage   *_page_snap;
     UI::Widget::NotebookPage   *_page_cms;
     UI::Widget::NotebookPage   *_page_scripting;
 
@@ -119,19 +125,6 @@ protected:
 
     UI::Widget::Registry _wr;
     //---------------------------------------------------------------
-    Gtk::Grid            _rcb_doc_props_left;
-    Gtk::Grid            _rcb_doc_props_right;
-    UI::Widget::RegisteredCheckButton _rcb_antialias;
-    UI::Widget::RegisteredCheckButton _rcb_checkerboard;
-    UI::Widget::RegisteredCheckButton _rcb_canb;
-    UI::Widget::RegisteredCheckButton _rcb_bord;
-    UI::Widget::RegisteredCheckButton _rcb_shad;
-    UI::Widget::RegisteredSuffixedInteger _rcb_shwd;
-    UI::Widget::RegisteredColorPicker _rcp_bg;
-    UI::Widget::RegisteredColorPicker _rcp_blkout;
-    UI::Widget::RegisteredColorPicker _rcp_bord;
-    UI::Widget::RegisteredUnitMenu    _rum_deflt;
-    //---------------------------------------------------------------
     UI::Widget::RegisteredCheckButton _rcb_sgui;
     UI::Widget::RegisteredCheckButton _rcb_lgui;
     UI::Widget::RegisteredColorPicker _rcp_gui;
@@ -139,15 +132,7 @@ protected:
     Gtk::Button                       _create_guides_btn;
     Gtk::Button                       _delete_guides_btn;
     //---------------------------------------------------------------
-    // UI::Widget::ToleranceSlider       _rsu_sno;
-    // UI::Widget::ToleranceSlider       _rsu_sn;
-    // UI::Widget::ToleranceSlider       _rsu_gusn;
-    // UI::Widget::ToleranceSlider       _rsu_assn;
-    // UI::Widget::ToleranceSlider       _rsu_dssn;
-    // UI::Widget::RegisteredCheckButton _rcb_snclp;
-    // UI::Widget::RegisteredCheckButton _rcb_snmsk;
-    // UI::Widget::RegisteredCheckButton _rcb_perp;
-    // UI::Widget::RegisteredCheckButton _rcb_tang;
+    UI::Widget::PageProperties* _page;
     //---------------------------------------------------------------
     Gtk::Button         _unlink_btn;
     class AvailableProfilesColumns : public Gtk::TreeModel::ColumnRecord
@@ -236,11 +221,20 @@ private:
     void onNewGrid();
     void onRemoveGrid();
 
-    // callback for document unit change
-    void onDocUnitChange();
+    // callback for display unit change
+    void display_unit_change(const Inkscape::Util::Unit* unit);
 
+    struct watch_connection {
+        ~watch_connection() { disconnect(); }
+        void connect(Inkscape::XML::Node* node, const Inkscape::XML::NodeEventVector& vector, void* data);
+        void disconnect();
+    private:
+        Inkscape::XML::Node* _node = nullptr;
+        void* _data = nullptr;
+    };
     // nodes connected to listeners
-    Inkscape::XML::Node *_repr_namedview = nullptr;
+    watch_connection _namedview_connection;
+    watch_connection _root_connection;
 };
 
 } // namespace Dialog

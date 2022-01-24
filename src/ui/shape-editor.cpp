@@ -61,15 +61,19 @@ void ShapeEditor::unset_item(bool keep_knotholder) {
     }
     if (this->lpeknotholder) {
         Inkscape::XML::Node *old_repr = this->lpeknotholder->repr;
+        bool remove = false;
         if (old_repr && old_repr == lpeknotholder_listener_attached_for) {
             sp_repr_remove_listener_by_data(old_repr, this);
             Inkscape::GC::release(old_repr);
-            lpeknotholder_listener_attached_for = nullptr;
+            remove = true;
         }
 
         if (!keep_knotholder) {
             delete this->lpeknotholder;
             this->lpeknotholder = nullptr;
+        }
+        if (remove) {
+            lpeknotholder_listener_attached_for = nullptr;
         }
     }
 }

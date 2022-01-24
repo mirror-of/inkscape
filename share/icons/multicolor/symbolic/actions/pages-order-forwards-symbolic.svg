@@ -7,7 +7,7 @@
    width="16"
    height="16"
    viewBox="0 0 16 16"
-   sodipodi:docname="pages-order-forward.svg"
+   sodipodi:docname="pages-order-forwards-symbolic.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -22,190 +22,19 @@
        line_width="2"
        linecap_type="round"
        is_visible="true"
-       id="path-effect892"
-       effect="join_type"
-       lpeversion="1" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="round"
-       line_width="3.77953"
-       linecap_type="round"
-       is_visible="true"
-       id="path-effect872"
-       effect="join_type"
-       lpeversion="1" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect847"
-       is_visible="true"
-       lpeversion="1"
-       linecap_type="butt"
-       line_width="1.5"
-       linejoin_type="round"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect949"
-       is_visible="true"
-       linecap_type="round"
-       line_width="3"
-       linejoin_type="round"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="round"
-       line_width="1"
-       linecap_type="round"
-       is_visible="true"
        id="path-effect1916"
        effect="join_type"
        lpeversion="1" />
     <inkscape:path-effect
-       hide_knots="false"
-       only_selected="true"
-       apply_with_radius="true"
-       apply_no_radius="true"
-       use_knot_distance="false"
-       flexible="false"
-       chamfer_steps="1"
-       radius="0"
-       mode="F"
-       method="auto"
-       unit="px"
-       satellites_param="F,0,0,1,0,2,0,1 @ F,0,0,1,0,2,0,1 @ F,0,0,1,0,2,0,1 @ F,0,0,1,0,2,0,1 | F,0,1,1,0,0,0,1 @ F,0,1,1,0,0,0,1 @ F,0,1,1,0,0,0,1 @ F,0,1,1,0,0,0,1"
-       is_visible="true"
-       id="path-effect957"
-       effect="fillet_chamfer" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="round"
-       line_width="2.5"
-       linecap_type="round"
-       is_visible="true"
-       id="path-effect4438"
-       effect="join_type" />
-    <inkscape:path-effect
-       hide_knots="false"
-       only_selected="false"
-       apply_with_radius="true"
-       apply_no_radius="true"
-       use_knot_distance="true"
-       flexible="false"
-       chamfer_steps="1"
-       radius="0"
-       mode="C"
-       method="auto"
-       unit="px"
-       satellites_param="C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 | C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1 @ C,0,0,1,0,0,0,1"
-       lpeversion="1"
-       is_visible="true"
-       id="path-effect841"
-       effect="fillet_chamfer" />
-    <inkscape:path-effect
-       lpeversion="1"
-       id="path-effect862"
-       allow_transforms="false"
-       method="d"
-       linkeditem="#path1684"
-       effect="clone_original" />
-    <inkscape:path-effect
-       effect="fillet_chamfer"
-       id="path-effect852"
-       is_visible="true"
-       lpeversion="1"
-       satellites_param="F,0,0,1,0,4.1866037,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,2.3255295,0,1 @ F,0,0,1,0,1.4512654,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,4.0301588,0,1 @ F,0,0,1,0,2.541165,0,1 | F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
-       unit="px"
-       method="auto"
-       mode="F"
-       radius="0"
-       chamfer_steps="1"
-       flexible="false"
-       use_knot_distance="true"
-       apply_no_radius="true"
-       apply_with_radius="true"
-       only_selected="false"
-       hide_knots="false" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="miter"
-       line_width="2"
-       linecap_type="butt"
-       lpeversion="1"
-       is_visible="true"
-       id="path-effect850"
-       effect="join_type" />
-    <inkscape:path-effect
-       update_on_knot_move="true"
-       attempt_force_join="true"
-       miter_limit="4"
-       offset="1"
-       unit="px"
-       linejoin_type="miter"
-       lpeversion="1"
-       is_visible="true"
-       id="path-effect848"
-       effect="offset" />
-    <inkscape:path-effect
-       hide_knots="false"
-       only_selected="false"
-       apply_with_radius="true"
-       apply_no_radius="true"
-       use_knot_distance="true"
-       flexible="false"
-       chamfer_steps="1"
-       radius="0"
-       mode="F"
-       method="auto"
-       unit="px"
-       satellites_param="F,0,0,1,0,4,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,2,0,1 @ F,0,0,1,0,2,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,4,0,1 @ F,0,0,1,0,3.491767,0,1 | F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
-       lpeversion="1"
-       is_visible="true"
-       id="path-effect838"
-       effect="fillet_chamfer" />
-    <inkscape:path-effect
-       effect="fillet_chamfer"
-       id="path-effect839"
-       is_visible="false"
-       lpeversion="1"
-       satellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 | F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
-       unit="px"
-       method="auto"
-       mode="F"
-       radius="0"
-       chamfer_steps="1"
-       flexible="false"
-       use_knot_distance="true"
-       apply_no_radius="true"
-       apply_with_radius="true"
-       only_selected="false"
-       hide_knots="false" />
-    <inkscape:path-effect
        effect="join_type"
-       id="path-effect837"
+       id="path-effect848-3"
        is_visible="true"
        lpeversion="1"
        linecap_type="butt"
        line_width="2"
-       linejoin_type="miter"
+       linejoin_type="round"
        miter_limit="100"
        attempt_force_join="true" />
-    <inkscape:path-effect
-       effect="offset"
-       id="path-effect835"
-       is_visible="true"
-       lpeversion="1"
-       linejoin_type="miter"
-       unit="px"
-       offset="1"
-       miter_limit="4"
-       attempt_force_join="true"
-       update_on_knot_move="true" />
   </defs>
   <sodipodi:namedview
      objecttolerance="10"
@@ -213,15 +42,15 @@
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="11.313709"
-     inkscape:cx="2.8726213"
-     inkscape:cy="7.7781746"
+     inkscape:zoom="38.653995"
+     inkscape:cx="6.7263423"
+     inkscape:cy="6.7263423"
      inkscape:window-width="1920"
      inkscape:window-height="1163"
      inkscape:window-x="1200"
      inkscape:window-y="533"
      inkscape:window-maximized="1"
-     inkscape:current-layer="snap-page"
+     inkscape:current-layer="snap-page-7"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
@@ -234,85 +63,42 @@
        type="xygrid"
        id="grid"
        spacingx="0.5"
-       spacingy="0.5" />
+       spacingy="0.5"
+       empspacing="2" />
   </sodipodi:namedview>
   <g
      transform="translate(-979,-527.3622)"
      inkscape:label="00334"
      id="snap-page">
-    <path
-       style="opacity:0;fill:none"
-       d="m 979,527.3622 h 16 v 16 h -16 z"
-       id="rect16572-9"
-       inkscape:connector-curvature="0" />
-    <path
-       id="rect2058"
-       style="color:#000000;fill:#000000;-inkscape-stroke:none;paint-order:markers fill stroke"
-       d="m 988,530.52135 -1.66015,-1.65885 H 982.5 v 8 h 5.5 z m -4.5,-0.65885 h 2.5 v 0.9987 l 1,10e-4 v 5 h -3.5 z"
-       sodipodi:nodetypes="ccccccccccccc" />
     <g
-       id="path5308"
-       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#009909;fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1;stroke:none;paint-order:markers fill stroke">
+       id="snap-page-7"
+       inkscape:label="00334">
       <path
-         style="color:#000000;fill:#009909;stroke-width:1;-inkscape-stroke:none;paint-order:markers fill stroke;font-variation-settings:normal;vector-effect:none;fill-opacity:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1;stroke:none"
-         d="m 988,531.3622 h 4.5"
-         id="path1231" />
+         id="path1080"
+         style=""
+         inkscape:transform-center-x="-0.37500328"
+         inkscape:transform-center-y="6.9652184e-06"
+         d="m 992,538.3622 v -2 h -4 v -2 h 4 v -2 l 3,3 z"
+         class="success"
+         sodipodi:nodetypes="cccccccc" />
       <path
-         style="color:#000000;fill:#009909;-inkscape-stroke:none;paint-order:markers fill stroke;font-variation-settings:normal;vector-effect:none;fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1;stroke:none"
-         d="m 988,530.86133 v 1 h 4.5 v -1 z"
-         id="path1233" />
+         class="base"
+         inkscape:label="star out"
+         inkscape:connector-curvature="0"
+         d="m 989.67779,530.62694 -2.1775,-2.0073 a 1,1 0 0 0 -0.67808,-0.26474 l -6.8165,0.002 a 1,1 0 0 0 -0.99971,1 v 12.0053 a 1,1 0 0 0 1.0002,1 l 9.994,-0.002 a 1,1 0 0 0 0.9998,-1 v -1.998 a 1,1 0 1 0 -2,0 v 1.998 l 0.9998,-1 -9.994,0.002 1.0002,1 v -12.0053 l -0.99971,1 6.8165,-0.002 -0.67808,-0.26474 2.1775,2.0073 a 1,1 0 1 0 1.35558,-1.47052 z"
+         id="polygon1138"
+         sodipodi:nodetypes="cccccc"
+         inkscape:original-d="m 989,531.3622 -2.1775,-2.0073 -6.8165,0.002 v 12.0053 l 9.994,-0.002 v -1.998"
+         inkscape:path-effect="#path-effect1916"
+         style="" />
+      <path
+         d="m 986,529.3622 v 2 a 1,1 0 0 0 1,1 h 2 v -2 h -2 l 1,1 v -2 z"
+         id="path845"
+         inkscape:path-effect="#path-effect848-3"
+         inkscape:original-d="m 987,529.3622 v 2 h 2"
+         sodipodi:nodetypes="ccc" />
     </g>
-    <path
-       id="use6327"
-       style="vector-effect:none;fill:#009909;stroke-width:1;paint-order:markers fill stroke;stop-color:#000000;font-variation-settings:normal;opacity:1;fill-opacity:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-opacity:1;stroke:none"
-       d="m 992.00004,529.36218 v 4 l 2,-2 z"
-       sodipodi:nodetypes="cccc" />
-    <path
-       id="path8970"
-       style="color:#000000;fill:#000000;-inkscape-stroke:none;paint-order:markers fill stroke"
-       d="m 988.5,533.8622 v 1 h 3.5 v 0.99805 l 1,0.002 v 5 h -3.5 v -6.00005 h -1 v 7.00005 h 5.5 v -6.3418 l -1.66016,-1.6582 z"
-       sodipodi:nodetypes="cccccccccccccc" />
-    <path
-       id="path9052"
-       style="color:#000000;fill:#000000;-inkscape-stroke:none;paint-order:markers fill stroke"
-       d="m 1,6.5 v 8 h 5.5 v -5 h -1 v 4 H 2 v -6 h 1.5 v -1 z"
-       transform="translate(979,527.3622)"
-       sodipodi:nodetypes="ccccccccccc" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect16572"
-       d="m 979,15 h 16 v 16 h -16 z"
-       style="opacity:0;fill:none"
-       transform="translate(0,512.3622)" />
-    <path
-       style="color:#000000;fill:#000000;-inkscape-stroke:none;font-variation-settings:normal;opacity:0.5;vector-effect:none;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke;stop-color:#000000;stop-opacity:1"
-       d="m 986.5,537.86133 v 1 h 1 v -1 z"
-       id="path9714" />
-    <path
-       style="color:#000000;fill:#000000;-inkscape-stroke:none;font-variation-settings:normal;opacity:0.5;vector-effect:none;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke;stop-color:#000000;stop-opacity:1"
-       d="m 986.5,539.36133 v 1 h 1 v -1 z"
-       id="path9716" />
-    <path
-       style="color:#000000;fill:#000000;-inkscape-stroke:none;font-variation-settings:normal;opacity:0.5;vector-effect:none;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke;stop-color:#000000;stop-opacity:1"
-       d="m 986.5,540.86133 v 1 h 1 v -1 z"
-       id="path9720" />
-    <path
-       style="opacity:0;fill:none"
-       d="m 961.5,526.8622 h 16 v 16 h -16 z"
-       id="rect16572-9-5"
-       inkscape:connector-curvature="0" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect16572-2"
-       d="m 961.5,526.8622 h 16 v 16 h -16 z"
-       style="opacity:0;fill:none" />
   </g>
-  <style
-     id="s0">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
   <style
      id="s2"> 
      @import '../../highlights.css'; 
@@ -322,521 +108,5 @@
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-0"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-7">
-   .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-   .dark    {  }
-  </style>
-  <style
-     id="s2-9"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-06">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-26"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-5">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-6"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-6-2">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-0-0"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-7-2">
-   .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-   .dark    {  }
-  </style>
-  <style
-     id="s2-9-3"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-9">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-1"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-93">
-.success { fill:#009909; }
-.warning { fill:#FF1990; }
-.error { fill:#00AAFF; }
-</style>
-  <style
-     id="s2-60">
-@import '../../highlights.css';
-</style>
-  <style
-     id="s0-1">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-8"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-2">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-2"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-931">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-94"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-0">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-63"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-15">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-5"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-56">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-93"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-25">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-4"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-3">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-07"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-270">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-936"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-6-0">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-0-62"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-7-6">
-   .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-   .dark    {  }
-  </style>
-  <style
-     id="s2-9-1"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-06-8">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-26-7"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-5-9">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-6-2"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-6-2-0">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-0-0-2"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-7-2-3">
-   .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-   .dark    {  }
-  </style>
-  <style
-     id="s2-9-3-7"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-9-5">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-1-9"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-93-2">
-.success { fill:#009909; }
-.warning { fill:#FF1990; }
-.error { fill:#00AAFF; }
-</style>
-  <style
-     id="s2-60-2">
-@import '../../highlights.css';
-</style>
-  <style
-     id="s0-1-8">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-8-9"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-2-7">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-2-3"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-931-6">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-94-1"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-0-2">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-63-9"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-15-3">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-5-1"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-56-94">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-93-7"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-25-8">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-4-4"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-3-5">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-07-0"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-27">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-09"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-6-3">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-0-6"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-7-0">
-   .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-   .dark    {  }
-  </style>
-  <style
-     id="s2-9-6"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-06-2">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-26-6"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-5-1">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-6-8"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-6-2-7">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-0-0-9"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-7-2-2">
-   .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-   .dark    {  }
-  </style>
-  <style
-     id="s2-9-3-0"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-9-2">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-1-3"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-93-7">
-.success { fill:#009909; }
-.warning { fill:#FF1990; }
-.error { fill:#00AAFF; }
-</style>
-  <style
-     id="s2-60-5">
-@import '../../highlights.css';
-</style>
-  <style
-     id="s0-1-9">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-8-2"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-2-2">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-2-8"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-931-9">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-94-7"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-0-3">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-63-6"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-15-1">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-5-2"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-56-9">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-93-3"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-25-1">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-4-9"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-3-4">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-07-7"> 
-     @import '../../highlights.css'; 
-  </style>
-  <style
-     id="s0-67">
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
-  </style>
-  <style
-     id="s2-53"> 
-     @import '../../highlights.css'; 
   </style>
 </svg>

@@ -35,7 +35,7 @@ unsigned int sp_svg_number_read_d( const char *str, double *val );
 /*
  * No buffer overflow checking is done, so better wrap them if needed
  */
-unsigned int sp_svg_number_write_de( char *buf, int bufLen, double val, unsigned int tprec, int min_exp );
+std::string sp_svg_number_write_de( double val, unsigned int tprec, int min_exp );
 
 /* Length */
 

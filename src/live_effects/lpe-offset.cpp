@@ -108,6 +108,30 @@ LPEOffset::~LPEOffset()
     modified_connection.disconnect();
 };
 
+bool LPEOffset::doOnOpen(SPLPEItem const *lpeitem)
+{
+    bool fixed = false;
+    if (!is_load || is_applied) {
+        return fixed;
+    }
+    legacytest_livarotonly = false;
+    Glib::ustring version = lpeversion.param_getSVGValue();
+    if (version < "1.2") {
+        if (!SP_ACTIVE_DESKTOP) {
+            legacytest_livarotonly = true;
+        }
+        lpeversion.param_setValue("1.2", true);
+        fixed = true;
+    }
+    return fixed;
+}
+
+void
+LPEOffset::doOnApply(SPLPEItem const* lpeitem)
+{
+    lpeversion.param_setValue("1.2", true);
+}
+
 void
 LPEOffset::modified(SPObject *obj, guint flags)
 {
@@ -126,29 +150,6 @@ LPEOffset::modified(SPObject *obj, guint flags)
             sp_lpe_item_update_patheffect (sp_lpe_item, true, true);
         }
     }
-}
-
-static void
-sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
-{
-    Path *orig = new Path;
-    orig->LoadPathVector(pathvector);
-    Shape *theShape = new Shape;
-    Shape *theRes = new Shape;
-    orig->ConvertWithBackData (1.0);
-    orig->Fill (theShape, 0);
-    theRes->ConvertToShape (theShape, FillRule(fillkind));
-    Path *originaux[1];
-    originaux[0] = orig;
-    Path *res = new Path;
-    theRes->ConvertToForme (res, 1, originaux, true);
-
-    delete theShape;
-    delete theRes;
-    char *res_d = res->svg_dump_path ();
-    delete res;
-    delete orig;
-    pathvector  = sp_svg_read_pathv(res_d);
 }
 
 Geom::Point get_nearest_point(Geom::PathVector pathv, Geom::Point point)
@@ -271,7 +272,6 @@ void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve)
             _knot_entity->knot_get();
         }
     }
-    is_load = false;
 }
 
 // TODO: find a way to not remove wanted self intersections
@@ -562,8 +562,12 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
     } else if (to_offset < 0) {
         for (auto &i : mix_pathv_workon) {
+            double gap = 0.01;
+            if (legacytest_livarotonly) {
+                gap = 0;
+            }
             Geom::Path tmp =
-                half_outline(i.reversed(), std::abs(to_offset),
+                half_outline(i.reversed(), std::abs(to_offset - gap),
                              (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit), join, tolerance);
             // not remember why i instead tmp, afete 1.1 release we can switch to tmp to tests
             if (i.closed()) {
@@ -598,8 +602,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             sp_flatten(outline, fill_nonZero);
             double size = Geom::L2(Geom::bounds_fast(ret_closed)->dimensions());
             size /= sp_lpe_item->i2doc_affine().descrim();
-            ret_closed = sp_pathvector_boolop(outline, ret_closed, bool_op_diff, fill_nonZero, fill_nonZero);
-            if (!liveknot) {
+            ret_closed = sp_pathvector_boolop(outline, ret_closed, bool_op_diff, fill_nonZero, fill_nonZero, legacytest_livarotonly);
+            if (!liveknot && legacytest_livarotonly) {
                 ret_closed = sp_simplify_pathvector(ret_closed, 0.0003 * size);
             }
         }

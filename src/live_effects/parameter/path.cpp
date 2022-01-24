@@ -78,7 +78,7 @@ PathParam::PathParam( const Glib::ustring& label, const Glib::ustring& tip,
 
 PathParam::~PathParam()
 {
-    remove_link();
+    unlink();
 //TODO: Removed to fix a bug https://bugs.launchpad.net/inkscape/+bug/1716926
 //      Maybe wee need to resurrect, not know when this code is added, but seems also not working now in a few test I do.
 //      in the future and do a deeper fix in multi-path-manipulator
@@ -138,7 +138,7 @@ PathParam::param_readSVGValue(const gchar * strvalue)
 {
     if (strvalue) {
         _pathvector.clear();
-        remove_link();
+        unlink();
         must_recalculate_pwd2 = true;
 
         if (strvalue[0] == '#') {
@@ -323,7 +323,7 @@ PathParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 void
 PathParam::set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & newpath, bool write_to_svg)
 {
-    remove_link();
+    unlink();
     _pathvector = Geom::path_from_piecewise(newpath, LPE_CONVERSION_TOLERANCE);
 
     if (write_to_svg) {
@@ -354,7 +354,7 @@ PathParam::set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & newpa
 void
 PathParam::set_new_value (Geom::PathVector const &newpath, bool write_to_svg)
 {
-    remove_link();
+    unlink();
     if (newpath.empty()) {
         param_set_and_write_default();
         return;
@@ -421,8 +421,7 @@ PathParam::ref_changed(SPObject */*old_ref*/, SPObject *new_ref)
     }
 }
 
-void
-PathParam::remove_link()
+void PathParam::unlink()
 {
     if (href) {
         ref.detach();
@@ -435,7 +434,7 @@ void
 PathParam::linked_delete(SPObject */*deleted*/)
 {
     quit_listening();
-    remove_link();
+    unlink();
     set_new_value (_pathvector, true);
 }
 
@@ -513,7 +512,7 @@ PathParam::paste_param_path(const char *svgd)
     // only recognize a non-null, non-empty string
     if (svgd && *svgd) {
         // remove possible link to path
-        remove_link();
+        unlink();
         SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
         std::string svgd_new;
         if (item != nullptr) {

@@ -14,8 +14,9 @@
 #include <vector>
 
 #include <glibmm/i18n.h>
-
+#include <2geom/intersection-graph.h>
 #include <2geom/svg-path-parser.h> // to get from SVG on boolean to Geom::Path
+#include <2geom/utils.h>
 
 #include "path-boolop.h"
 #include "path-util.h"
@@ -143,14 +144,77 @@ double get_threshold(SPItem const *item, double threshold)
     return threshold;
 }
 
+void
+sp_flatten(Geom::PathVector &pathvector, FillRule fillkind)
+{
+    Path *orig = new Path;
+    orig->LoadPathVector(pathvector);
+    Shape *theShape = new Shape;
+    Shape *theRes = new Shape;
+    orig->ConvertWithBackData(1.0);
+    orig->Fill(theShape, 0);
+    theRes->ConvertToShape(theShape, fillkind);
+    Path *originaux[1];
+    originaux[0] = orig;
+    Path *res = new Path;
+    theRes->ConvertToForme(res, 1, originaux, true);
+
+    delete theShape;
+    delete theRes;
+    char *res_d = res->svg_dump_path();
+    delete res;
+    delete orig;
+    pathvector = sp_svg_read_pathv(res_d);
+}
+
 // boolean operations PathVectors A,B -> PathVector result.
 // This is derived from sp_selected_path_boolop
 // take the source paths from the file, do the operation, delete the originals and add the results
 // fra,fra are fill_rules for PathVectors a,b
 Geom::PathVector 
-sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, bool_op bop, fill_typ fra, fill_typ frb)
-{        
+sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, bool_op bop, 
+                     fill_typ fra, fill_typ frb, bool livarotonly, bool flattenbefore)
+{  
+    int error = 0;
+    return sp_pathvector_boolop(pathva, pathvb, bop, fra, frb, livarotonly, flattenbefore, error);
+}
 
+Geom::PathVector 
+sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, bool_op bop,
+                     fill_typ fra, fill_typ frb, bool livarotonly, bool flattenbefore, int &error)
+{       
+    if (!livarotonly) {
+        try {
+            Geom::PathVector a = pathv_to_linear_and_cubic_beziers(pathva);
+            Geom::PathVector b = pathv_to_linear_and_cubic_beziers(pathvb);
+            if (flattenbefore) {
+                sp_flatten(a, fra);
+                sp_flatten(b, frb);
+            }
+            Geom::PathVector out;
+            // dont change tolerande give errors on boolops
+            auto pig = Geom::PathIntersectionGraph(a, b, Geom::EPSILON);
+            if (bop == bool_op_inters) {
+                out = pig.getIntersection();
+            } else if (bop == bool_op_union) {
+                out = pig.getUnion();
+            } else if (bop == bool_op_diff) {
+                out = pig.getBminusA(); //livarot order...
+            } else if (bop == bool_op_symdiff) {
+                out = pig.getXOR();
+            } else if (bop == bool_op_cut) {
+                out = pig.getBminusA();
+                auto tmp = pig.getIntersection();
+                out.insert(out.end(), tmp.begin(), tmp.end()); 
+            } else if (bop == bool_op_slice) {
+                // go to livarot
+            }
+            return out;
+        } catch (...) {
+            g_warning("Path Intersection Graph failed boolops, fallback to livarot");
+        }
+    }
+    error = 1;
     // extract the livarot Paths from the source objects
     // also get the winding rule specified in the style
     int nbOriginaux = 2;
@@ -357,7 +421,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             break;
         case DONE_NO_PATH:
             if (!skip_undo) { 
-                DocumentUndo::done(doc, description, nullptr);
+                DocumentUndo::done(doc, description, "");
             }
             break;
         case DONE:

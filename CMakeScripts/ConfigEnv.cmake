@@ -6,9 +6,6 @@ if(WIN32)
 
   include(CMakeScripts/ConfigEnvMinGW.cmake)
 
-  set(CMAKE_C_COMPILER "${MINGW_BIN}/gcc.exe")
-  set(CMAKE_CXX_COMPILER "${MINGW_BIN}/g++.exe")
-
   # Setup Windows resource files compiler.
   set(CMAKE_RC_COMPILER "${MINGW_BIN}/windres.exe")
   set(CMAKE_RC_COMPILER_INIT windres)

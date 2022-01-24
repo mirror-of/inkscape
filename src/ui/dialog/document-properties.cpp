@@ -46,6 +46,9 @@
 #include "xml/node-event-vector.h"
 
 #include "page-manager.h"
+#include "svg/svg-color.h"
+
+#include "ui/widget/page-properties.h"
 
 namespace Inkscape {
 namespace UI {
@@ -54,10 +57,7 @@ namespace Dialog {
 #define SPACE_SIZE_X 15
 #define SPACE_SIZE_Y 10
 
-
 //===================================================
-
-//---------------------------------------------------
 
 static void on_child_added(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void * data);
 static void on_child_removed(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void * data);
@@ -89,26 +89,14 @@ DocumentProperties& DocumentProperties::getInstance()
 
 DocumentProperties::DocumentProperties()
     : DialogBase("/dialogs/documentoptions", "DocumentProperties")
-    , _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
+    , _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, false, true)))
     , _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
-    // , _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_cms(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_scripting(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_external_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_embedded_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_metadata1(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_metadata2(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
-    //---------------------------------------------------------------
-    , _rcb_antialias(_("Use antialiasing"), _("If unset, no antialiasing will be done on the drawing"), "shape-rendering", _wr, false, nullptr, nullptr, nullptr, "crispEdges")
-    , _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false)
-    , _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false)
-    , _rcb_shad(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _wr, false)
-    , _rcb_shwd(_("_Border shadow width"), _("Width of page border when set"), "", "inkscape:pageshadow", _wr)
-    , _rcp_bg(_("Page color:"), _("Page color"), _("Default color of new pages."), "pagecolor", "inkscape:pageopacity", _wr)
-    , _rcp_blkout(_("Desk color:"), _("Desk color"), _("Color of the desk background."), "inkscape:deskcolor", "inkscape:deskopacity", _wr)
-    , _rcb_checkerboard(_("Desk Checkerboard"), _("If set, use a colored checkerboard for the desk background"), "inkscape:pagecheckerboard", _wr, false)
-    , _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr)
-    , _rum_deflt(_("Display _units:"), "inkscape:document-units", _wr)
     //---------------------------------------------------------------
     //General guide options
     , _rcb_sgui(_("Show _guides"), _("Show or hide guides"), "showguides", _wr)
@@ -118,38 +106,6 @@ DocumentProperties::DocumentProperties()
     , _create_guides_btn(_("Create guides around the page"))
     , _delete_guides_btn(_("Delete all guides"))
     //---------------------------------------------------------------
-/*
-    , _rsu_sno(_("Snap _distance"), _("Snap only when _closer than:"), _("Always snap"),
-               _("Snapping distance, in screen pixels, for snapping to objects"), _("Always snap to objects, regardless of their distance"),
-               _("If set, objects only snap to another object when it's within the range specified below"),
-               "objecttolerance", _wr)
-    //Options for snapping to grids
-    , _rsu_sn(_("Snap d_istance"), _("Snap only when c_loser than:"), _("Always snap"),
-              _("Snapping distance, in screen pixels, for snapping to grid"), _("Always snap to grids, regardless of the distance"),
-              _("If set, objects only snap to a grid line when it's within the range specified below"),
-              "gridtolerance", _wr)
-    //Options for snapping to guides
-    , _rsu_gusn(_("Snap dist_ance"), _("Snap only when close_r than:"), _("Always snap"),
-                _("Snapping distance, in screen pixels, for snapping to guides"), _("Always snap to guides, regardless of the distance"),
-                _("If set, objects only snap to a guide when it's within the range specified below"),
-                "guidetolerance", _wr)
-    //Options for alignment snapping
-    , _rsu_assn(_("Snap dista_nce"), _("Snap only when cl_oser than:"), _("Always snap"),
-                _("Snapping distance, in screen pixels, for alignment snapping"), _("Always snap to alignment guides, regardless of the distance"),
-                _("If set, objects only snap to as alignment guide when it's within the range specified below"),
-                "alignmenttolerance", _wr)
-    //Options for distribution snapping
-    , _rsu_dssn(_("Snap distanc_e"), _("Snap only _when closer than:"), _("Always snap"),
-                _("Snapping distance, in screen pixels, for distribution snapping"), _("Always snap objects at equal distance, regardless of the distance"),
-                _("If set, objects only snap to at equal distances when it's within the range specified below"),
-                "distributiontolerance", _wr)
-*/
-    //---------------------------------------------------------------
-    // , _rcb_snclp(_("Snap to clip paths"), _("When snapping to paths, then also try snapping to clip paths"), "inkscape:snap-path-clip", _wr)
-    // , _rcb_snmsk(_("Snap to mask paths"), _("When snapping to paths, then also try snapping to mask paths"), "inkscape:snap-path-mask", _wr)
-    // , _rcb_perp(_("Snap perpendicularly"), _("When snapping to paths or guides, then also try snapping perpendicularly"), "inkscape:snap-perpendicular", _wr)
-    // , _rcb_tang(_("Snap tangentially"), _("When snapping to paths or guides, then also try snapping tangentially"), "inkscape:snap-tangential", _wr)
-    //---------------------------------------------------------------
     , _grids_label_crea("", Gtk::ALIGN_START)
     , _grids_button_new(C_("Grid", "_New"), _("Create new grid."))
     , _grids_button_remove(C_("Grid", "_Remove"), _("Remove selected grid."))
@@ -158,13 +114,12 @@ DocumentProperties::DocumentProperties()
     , _grids_hbox_crea(Gtk::ORIENTATION_HORIZONTAL)
     , _grids_space(Gtk::ORIENTATION_HORIZONTAL)
 {
-    set_spacing (4);
+    set_spacing (0);
     pack_start(_notebook, true, true);
 
     _notebook.append_page(*_page_page,      _("Display"));
     _notebook.append_page(*_page_guides,    _("Guides"));
     _notebook.append_page(_grids_vbox,      _("Grids"));
-    // _notebook.append_page(*_page_snap,      _("Snap"));
     _notebook.append_page(*_page_cms,       _("Color"));
     _notebook.append_page(*_page_scripting, _("Scripting"));
     _notebook.append_page(*_page_metadata1, _("Metadata"));
@@ -174,7 +129,6 @@ DocumentProperties::DocumentProperties()
     build_page();
     build_guides();
     build_gridspage();
-    // build_snap();
     build_cms();
     build_scripting();
     build_metadata();
@@ -182,9 +136,6 @@ DocumentProperties::DocumentProperties()
 
     _grids_button_new.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onNewGrid));
     _grids_button_remove.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onRemoveGrid));
-
-    _rum_deflt._changed_connection.block();
-    _rum_deflt.getUnitMenu()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onDocUnitChange));
 }
 
 void DocumentProperties::init()
@@ -195,10 +146,6 @@ void DocumentProperties::init()
 
 DocumentProperties::~DocumentProperties()
 {
-    if (_repr_namedview) {
-        _repr_namedview->removeListenerByData(this);
-        _repr_namedview = nullptr;
-    }
     for (auto & it : _rdflist)
         delete it;
 }
@@ -255,71 +202,263 @@ void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n)
     }
 }
 
+void set_namedview_bool(SPDesktop* desktop, const Glib::ustring& operation, SPAttr key, bool on) {
+    if (!desktop || !desktop->getDocument()) return;
+
+    desktop->getNamedView()->change_bool_setting(key, on);
+
+    desktop->getDocument()->setModifiedSinceSave();
+    DocumentUndo::done(desktop->getDocument(), operation, "");
+}
+
+void set_color(SPDesktop* desktop, Glib::ustring operation, unsigned int rgba, SPAttr color_key, SPAttr opacity_key = SPAttr::INVALID) {
+    if (!desktop || !desktop->getDocument()) return;
+
+    desktop->getNamedView()->change_color(rgba, color_key, opacity_key);
+
+    desktop->getDocument()->setModifiedSinceSave();
+    DocumentUndo::maybeDone(desktop->getDocument(), ("document-color-" + operation).c_str(), operation, "");
+}
+
+void set_document_dimensions(SPDesktop* desktop, double width, double height, const Inkscape::Util::Unit* unit) {
+    if (!desktop) return;
+
+    Inkscape::Util::Quantity w = Inkscape::Util::Quantity(width, unit);
+    Inkscape::Util::Quantity h = Inkscape::Util::Quantity(height, unit);
+    SPDocument* doc = desktop->getDocument();
+    Inkscape::Util::Quantity const old_height = doc->getHeight();
+    bool change_size = true;
+    doc->setWidthAndHeight(w, h, change_size);
+    // The origin for the user is in the lower left corner; this point should remain stationary when
+    // changing the page size. The SVG's origin however is in the upper left corner, so we must compensate for this
+    if (change_size && !doc->is_yaxisdown()) {
+        Geom::Translate const vert_offset(Geom::Point(0, (old_height.value("px") - h.value("px"))));
+        doc->getRoot()->translateChildItems(vert_offset);
+    }
+    // units: this is most likely not needed, units are part of document size attributes
+    // if (unit) {
+        // set_namedview_value(desktop, "", SPAttr::UNITS)
+        // write_str_to_xml(desktop, _("Set document unit"), "unit", unit->abbr.c_str());
+    // }
+    DocumentUndo::done(doc, _("Set page size"), "");
+}
+
+void DocumentProperties::set_viewbox_pos(SPDesktop* desktop, double x, double y) {
+    if (!desktop) return;
+
+    auto document = desktop->getDocument();
+    if (!document) return;
+
+    auto box = document->getViewBox();
+    document->setViewBox(Geom::Rect::from_xywh(x, y, box.width(), box.height()));
+    DocumentUndo::done(document, _("Set viewbox position"), "");
+    update_scale_ui(desktop);
+}
+
+void DocumentProperties::set_viewbox_size(SPDesktop* desktop, double width, double height) {
+    if (!desktop) return;
+
+    auto document = desktop->getDocument();
+    if (!document) return;
+
+    auto box = document->getViewBox();
+    document->setViewBox(Geom::Rect::from_xywh(box.min()[Geom::X], box.min()[Geom::Y], width, height));
+    DocumentUndo::done(document, _("Set viewbox size"), "");
+    update_scale_ui(desktop);
+}
+
+// helper function to set document scale; uses magnitude of document width/height only, not computed (pixel) values
+void set_document_scale_helper(SPDocument& document, double scale) {
+    if (scale <= 0) return;
+
+    auto root = document.getRoot();
+    auto box = document.getViewBox();
+    document.setViewBox(Geom::Rect::from_xywh(
+        box.min()[Geom::X], box.min()[Geom::Y],
+        root->width.value / scale, root->height.value / scale)
+    );
+}
+
+void DocumentProperties::set_document_scale(SPDesktop* desktop, double scale) {
+    if (!desktop) return;
+
+    auto document = desktop->getDocument();
+    if (!document) return;
+
+    if (scale > 0) {
+        set_document_scale_helper(*document, scale);
+        update_viewbox_ui(desktop);
+        update_scale_ui(desktop);
+        DocumentUndo::done(document, _("Set page scale"), "");
+    }
+}
+
+// document scale as a ratio of document size and viewbox size
+// as described in Wiki: https://wiki.inkscape.org/wiki/index.php/Units_In_Inkscape
+// for example: <svg width="100mm" height="100mm" viewBox="0 0 100 100"> will report 1:1 scale
+std::optional<Geom::Scale> get_document_scale_helper(SPDocument& doc) {
+    auto root = doc.getRoot();
+    if (root &&
+        root->width._set  && root->width.unit  != SVGLength::PERCENT &&
+        root->height._set && root->height.unit != SVGLength::PERCENT) {
+        if (root->viewBox_set) {
+            // viewbox and document size present
+            auto vw = root->viewBox.width();
+            auto vh = root->viewBox.height();
+            if (vw > 0 && vh > 0) {
+                return Geom::Scale(root->width.value / vw, root->height.value / vh);
+            }
+        }
+        else {
+            // no viewbox, use SVG size in pixels
+            auto w = root->width.computed;
+            auto h = root->height.computed;
+            if (w > 0 && h > 0) {
+                return Geom::Scale(root->width.value / w, root->height.value / h);
+            }
+        }
+    }
+
+    // there is no scale concept applicable in the current state
+    return std::optional<Geom::Scale>();
+}
+
+void DocumentProperties::update_scale_ui(SPDesktop* desktop) {
+    if (!desktop) return;
+
+    auto document = desktop->getDocument();
+    if (!document) return;
+
+    using UI::Widget::PageProperties;
+    if (auto scale = get_document_scale_helper(*document)) {
+        auto sx = (*scale)[Geom::X];
+        auto sy = (*scale)[Geom::Y];
+        double eps = 0.0001; // TODO: tweak this value
+        bool uniform = fabs(sx - sy) < eps;
+        _page->set_dimension(PageProperties::Dimension::Scale, sx, sx); // only report one, only one "scale" is used
+        _page->set_check(PageProperties::Check::NonuniformScale, !uniform);
+        _page->set_check(PageProperties::Check::DisabledScale, false);
+    }
+    else {
+        // no scale
+        _page->set_dimension(PageProperties::Dimension::Scale, 1, 1);
+        _page->set_check(PageProperties::Check::NonuniformScale, false);
+        _page->set_check(PageProperties::Check::DisabledScale, true);
+    }
+}
+
+void DocumentProperties::update_viewbox_ui(SPDesktop* desktop) {
+    if (!desktop) return;
+
+    auto document = desktop->getDocument();
+    if (!document) return;
+
+    using UI::Widget::PageProperties;
+    Geom::Rect viewBox = document->getViewBox();
+    _page->set_dimension(PageProperties::Dimension::ViewboxPosition, viewBox.min()[Geom::X], viewBox.min()[Geom::Y]);
+    _page->set_dimension(PageProperties::Dimension::ViewboxSize, viewBox.width(), viewBox.height());
+}
+
 void DocumentProperties::build_page()
 {
+    using UI::Widget::PageProperties;
+    _page = Gtk::manage(PageProperties::create());
+    _page_page->table().attach(*_page, 0, 0);
     _page_page->show();
 
-    Gtk::Label* label_gen = Gtk::manage (new Gtk::Label);
-    label_gen->set_markup (_("<b>General</b>"));
+    _page->signal_color_changed().connect([=](unsigned int color, PageProperties::Color element){
+        if (_wr.isUpdating() || !_wr.desktop()) return;
 
-    Gtk::Label *label_for = Gtk::manage (new Gtk::Label);
-    label_for->set_markup (_("<b>Page Size</b>"));
+        _wr.setUpdating(true);
+        switch (element) {
+            case PageProperties::Color::Desk:
+                set_color(_wr.desktop(), _("Desk color"), color, SPAttr::INKSCAPE_DESK_COLOR);
+                break;
+            case PageProperties::Color::Background:
+                set_color(_wr.desktop(), _("Background color"), color, SPAttr::PAGECOLOR, SPAttr::INKSCAPE_PAGEOPACITY);
+                break;
+            case PageProperties::Color::Border:
+                set_color(_wr.desktop(), _("Border color"), color, SPAttr::BORDERCOLOR, SPAttr::BORDEROPACITY);
+                break;
+        }
+        _wr.setUpdating(false);
+    });
 
-    Gtk::Label* label_bkg = Gtk::manage (new Gtk::Label);
-    label_bkg->set_markup (_("<b>Desk</b>"));
+    _page->signal_dimmension_changed().connect([=](double x, double y, const Inkscape::Util::Unit* unit, PageProperties::Dimension element){
+        if (_wr.isUpdating() || !_wr.desktop()) return;
 
-    Gtk::Label* label_dsp = Gtk::manage (new Gtk::Label);
-    label_dsp->set_markup (_("<b>Display</b>"));
+        _wr.setUpdating(true);
+        switch (element) {
+            case PageProperties::Dimension::PageTemplate:
+            case PageProperties::Dimension::PageSize:
+                set_document_dimensions(_wr.desktop(), x, y, unit);
+                update_viewbox(_wr.desktop());
+                break;
 
-    _rcb_doc_props_left.set_border_width(4);
-    _rcb_doc_props_left.set_row_spacing(4);
-    _rcb_doc_props_left.set_column_spacing(4);
-    _rcb_doc_props_right.set_border_width(4);
-    _rcb_doc_props_right.set_row_spacing(4);
-    _rcb_doc_props_right.set_column_spacing(4);
+            case PageProperties::Dimension::ViewboxSize:
+                set_viewbox_size(_wr.desktop(), x, y);
+                break;
 
-    Gtk::Widget *const widget_array[] =
-    {
-        label_gen,            nullptr,
-        nullptr,              &_rum_deflt,
-        nullptr,              nullptr,
-        label_for,            nullptr,
-        nullptr,              nullptr,
-        nullptr,              nullptr,
-        &_rcb_doc_props_left, &_rcb_doc_props_right,
-    };
-    attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array));
+            case PageProperties::Dimension::ViewboxPosition:
+                set_viewbox_pos(_wr.desktop(), x, y);
+                break;
 
-    Gtk::Widget *const widget_array_left[] =
-    {
-        label_bkg,            nullptr,
-        nullptr,              &_rcb_checkerboard,
-        nullptr,              &_rcp_blkout,
-        label_dsp,            nullptr,
-        nullptr,              &_rcb_antialias,
-    };
-    attach_all(_rcb_doc_props_left, widget_array_left, G_N_ELEMENTS(widget_array_left));
+            case PageProperties::Dimension::Scale:
+                set_document_scale(_wr.desktop(), x); // only uniform scale; there's no 'y' in the dialog
+        }
+        _wr.setUpdating(false);
+    });
 
-    Gtk::Widget *const widget_array_right[] =
-    {
-        nullptr,              &_rcb_canb,
-        nullptr,              &_rcb_bord,
-        nullptr,              &_rcb_shad,
-        nullptr,              &_rcb_shwd,
-        nullptr,              &_rcp_bord,
-        nullptr,              &_rcp_bg,
-    };
-    attach_all(_rcb_doc_props_right, widget_array_right, G_N_ELEMENTS(widget_array_right));
+    _page->signal_check_toggled().connect([=](bool checked, PageProperties::Check element){
+        if (_wr.isUpdating() || !_wr.desktop()) return;
 
-    std::list<Gtk::Widget*> _slaveList;
-    _slaveList.push_back(&_rcb_bord);
-    _slaveList.push_back(&_rcb_shad);
-    _slaveList.push_back(&_rcb_shwd);
-    _slaveList.push_back(&_rcp_bord);
-    _rcb_canb.setSlaveWidgets(_slaveList);
+        _wr.setUpdating(true);
+        switch (element) {
+            case PageProperties::Check::Checkerboard:
+                set_namedview_bool(_wr.desktop(), _("Toggle checkerboard"), SPAttr::INKSCAPE_DESK_CHECKERBOARD, checked);
+                break;
+            case PageProperties::Check::Border:
+                set_namedview_bool(_wr.desktop(), _("Toggle page border"), SPAttr::SHOWBORDER, checked);
+                break;
+            case PageProperties::Check::BorderOnTop:
+                set_namedview_bool(_wr.desktop(), _("Toggle border on top"), SPAttr::BORDERLAYER, checked);
+                break;
+            case PageProperties::Check::Shadow:
+                set_namedview_bool(_wr.desktop(), _("Toggle page shadow"), SPAttr::SHOWPAGESHADOW, checked);
+                break;
+            case PageProperties::Check::AntiAlias:
+                set_namedview_bool(_wr.desktop(), _("Toggle anti-aliasing"), SPAttr::SHAPE_RENDERING, checked);
+                break;
+        }
+        _wr.setUpdating(false);
+    });
 
-    _rcb_shwd.setRange(0, 999);
+    _page->signal_unit_changed().connect([=](const Inkscape::Util::Unit* unit, PageProperties::Units element){
+        if (_wr.isUpdating() || !_wr.desktop()) return;
 
+        if (element == PageProperties::Units::Display) {
+            // display only units
+            display_unit_change(unit);
+        }
+        else if (element == PageProperties::Units::Document) {
+            // not used, fired with page size
+        }
+    });
+
+    _page->signal_resize_to_fit().connect([=](){
+        if (_wr.isUpdating() || !_wr.desktop()) return;
+
+        if (auto document = getDocument()) {
+            if (auto pm = document->getNamedView()->getPageManager()) {
+                pm->selectPage(0);
+                // fit page to selection or content, if there's no selection
+                pm->fitToSelection(_wr.desktop()->getSelection());
+                DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
+
+                update_widgets();
+            }
+        }
+    });
 }
 
 void DocumentProperties::build_guides()
@@ -329,10 +468,6 @@ void DocumentProperties::build_guides()
     Gtk::Label *label_gui = Gtk::manage (new Gtk::Label);
     label_gui->set_markup (_("<b>Guides</b>"));
 
-    _rum_deflt.set_margin_start(0);
-    _rcp_bg.set_margin_start(0);
-    _rcp_blkout.set_margin_start(0);
-    _rcp_bord.set_margin_start(0);
     _rcp_gui.set_margin_start(0);
     _rcp_hgui.set_margin_start(0);
     _rcp_gui.set_hexpand();
@@ -358,53 +493,6 @@ void DocumentProperties::build_guides()
     _create_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::create_guides_around_page));
     _delete_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::delete_all_guides));
 }
-
-/*
-void DocumentProperties::build_snap()
-{
-    _page_snap->show();
-
-    Gtk::Label *label_o = Gtk::manage (new Gtk::Label);
-    label_o->set_markup (_("<b>Snap to objects</b>"));
-    Gtk::Label *label_gr = Gtk::manage (new Gtk::Label);
-    label_gr->set_markup (_("<b>Snap to grids</b>"));
-    Gtk::Label *label_gu = Gtk::manage (new Gtk::Label);
-    label_gu->set_markup (_("<b>Snap to guides</b>"));
-    Gtk::Label *label_as = Gtk::manage (new Gtk::Label);
-    label_as->set_markup (_("<b>Alignment Snapping</b>"));
-    Gtk::Label *label_ds = Gtk::manage (new Gtk::Label);
-    label_ds->set_markup (_("<b>Distance Snapping</b>"));
-    // Gtk::Label *label_m = Gtk::manage (new Gtk::Label);
-    // label_m->set_markup (_("<b>Miscellaneous</b>"));
-
-    // auto spacer = Gtk::manage(new Gtk::Label());
-
-    Gtk::Widget *const array[] =
-    {
-        label_o,     nullptr,
-        nullptr,     _rsu_sno._vbox,
-        // &_rcb_snclp, spacer,
-        // nullptr,     &_rcb_snmsk,
-        nullptr,     nullptr,
-        label_gr,    nullptr,
-        nullptr,     _rsu_sn._vbox,
-        nullptr,     nullptr,
-        label_gu,    nullptr,
-        nullptr,     _rsu_gusn._vbox,
-        nullptr,     nullptr,
-        label_as,    nullptr,
-        nullptr,     _rsu_assn._vbox,
-        nullptr,     nullptr,
-        label_ds,    nullptr,
-        nullptr,     _rsu_dssn._vbox,
-        nullptr,     nullptr,
-        // label_m,     nullptr,
-        // nullptr,     &_rcb_perp,
-        // nullptr,     &_rcb_tang
-    };
-    attach_all(_page_snap->table(), array, G_N_ELEMENTS(array));
- }
- */
 
 void DocumentProperties::create_guides_around_page()
 {
@@ -1353,6 +1441,7 @@ void DocumentProperties::build_gridspage()
 
     _grids_space.set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
 
+    _grids_vbox.set_name("NotebookPage");
     _grids_vbox.set_border_width(4);
     _grids_vbox.set_spacing(4);
     _grids_vbox.pack_start(_grids_label_crea, false, false);
@@ -1364,6 +1453,22 @@ void DocumentProperties::build_gridspage()
 }
 
 
+void DocumentProperties::update_viewbox(SPDesktop* desktop) {
+    if (!desktop) return;
+
+    auto* document = desktop->getDocument();
+    if (!document) return;
+
+    using UI::Widget::PageProperties;
+    SPRoot* root = document->getRoot();
+    if (root->viewBox_set) {
+        auto& vb = root->viewBox;
+        _page->set_dimension(PageProperties::Dimension::ViewboxPosition, vb.min()[Geom::X], vb.min()[Geom::Y]);
+        _page->set_dimension(PageProperties::Dimension::ViewboxSize, vb.width(), vb.height());
+    }
+
+    update_scale_ui(desktop);
+}
 
 /**
  * Update dialog widgets from desktop. Also call updateWidget routines of the grids.
@@ -1377,31 +1482,13 @@ void DocumentProperties::update_widgets()
     auto nv = desktop->getNamedView();
     auto pm = nv->getPageManager();
 
-    _wr.setUpdating (true);
-    set_sensitive (true);
-
-    // Desk settings
-    _rcb_checkerboard.setActive(nv->desk_checkerboard);
-    _rcp_blkout.setRgba32(nv->desk_color);
-
-    // Page defaults
-    _rcp_bg.setRgba32(pm->background_color);
-    _rcb_canb.setActive(pm->border_show);
-    _rcb_bord.setActive(pm->border_on_top);
-    _rcp_bord.setRgba32(pm->border_color);
-    _rcb_shad.setActive(pm->shadow_show);
-    _rcb_shwd.setValue(pm->shadow_size);
+    _wr.setUpdating(true);
 
     SPRoot *root = document->getRoot();
-    _rcb_antialias.set_xml_target(root->getRepr(), document);
-    _rcb_antialias.setActive(root->style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
-
-    if (nv->display_units) {
-        _rum_deflt.setUnit (nv->display_units->abbr);
-    }
 
     double doc_w = root->width.value;
     Glib::ustring doc_w_unit = unit_table.getUnit(root->width.unit)->abbr;
+    bool percent = doc_w_unit == "%";
     if (doc_w_unit == "") {
         doc_w_unit = "px";
     } else if (doc_w_unit == "%" && root->viewBox_set) {
@@ -1410,12 +1497,35 @@ void DocumentProperties::update_widgets()
     }
     double doc_h = root->height.value;
     Glib::ustring doc_h_unit = unit_table.getUnit(root->height.unit)->abbr;
+    percent = percent || doc_h_unit == "%";
     if (doc_h_unit == "") {
         doc_h_unit = "px";
     } else if (doc_h_unit == "%" && root->viewBox_set) {
         doc_h_unit = "px";
         doc_h = root->viewBox.height();
     }
+    using UI::Widget::PageProperties;
+    // dialog's behavior is not entirely correct when document sizes are expressed in '%', so put up a disclaimer
+    _page->set_check(PageProperties::Check::UnsupportedSize, percent);
+
+    _page->set_dimension(PageProperties::Dimension::PageSize, doc_w, doc_h);
+    _page->set_unit(PageProperties::Units::Document, doc_w_unit);
+
+    update_viewbox_ui(desktop);
+    update_scale_ui(desktop);
+
+    if (nv->display_units) {
+        _page->set_unit(PageProperties::Units::Display, nv->display_units->abbr);
+    }
+    _page->set_check(PageProperties::Check::Checkerboard, nv->desk_checkerboard);
+    _page->set_color(PageProperties::Color::Desk, nv->desk_color);
+    _page->set_color(PageProperties::Color::Background, pm->background_color);
+    _page->set_check(PageProperties::Check::Border, pm->border_show);
+    _page->set_check(PageProperties::Check::BorderOnTop, pm->border_on_top);
+    _page->set_color(PageProperties::Color::Border, pm->border_color);
+    _page->set_check(PageProperties::Check::Shadow, pm->shadow_show);
+
+    _page->set_check(PageProperties::Check::AntiAlias, root->style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
 
     //-----------------------------------------------------------guide page
 
@@ -1423,18 +1533,6 @@ void DocumentProperties::update_widgets()
     _rcb_lgui.setActive (nv->lockguides);
     _rcp_gui.setRgba32 (nv->guidecolor);
     _rcp_hgui.setRgba32 (nv->guidehicolor);
-
-    //-----------------------------------------------------------snap page
-
-    // _rsu_sno.setValue (nv->snap_manager.snapprefs.getObjectTolerance());
-    // _rsu_sn.setValue (nv->snap_manager.snapprefs.getGridTolerance());
-    // _rsu_gusn.setValue (nv->snap_manager.snapprefs.getGuideTolerance());
-    // _rsu_assn.setValue (nv->snap_manager.snapprefs.getAlignmentTolerance());
-    // _rsu_dssn.setValue (nv->snap_manager.snapprefs.getDistributionTolerance());
-    // _rcb_snclp.setActive (nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_CLIP));
-    // _rcb_snmsk.setActive (nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_MASK));
-    // _rcb_perp.setActive (nv->snap_manager.snapprefs.getSnapPerp());
-    // _rcb_tang.setActive (nv->snap_manager.snapprefs.getSnapTang());
 
     //-----------------------------------------------------------grids page
 
@@ -1479,9 +1577,6 @@ void DocumentProperties::on_response (int id)
 {
     if (id == Gtk::RESPONSE_DELETE_EVENT || id == Gtk::RESPONSE_CLOSE)
     {
-        _rcp_bg.closeWindow();
-        _rcp_blkout.closeWindow();
-        _rcp_bord.closeWindow();
         _rcp_gui.closeWindow();
         _rcp_hgui.closeWindow();
     }
@@ -1508,16 +1603,34 @@ void DocumentProperties::save_default_metadata()
     }
 }
 
+void DocumentProperties::watch_connection::connect(Inkscape::XML::Node* node, const Inkscape::XML::NodeEventVector& vector, void* data) {
+    disconnect();
+    if (!node) return;
+
+    _node = node;
+    _data = data;
+    node->addListener(&vector, data);
+}
+
+void DocumentProperties::watch_connection::disconnect() {
+    if (_node) {
+        _node->removeListenerByData(_data);
+        _node = nullptr;
+        _data = nullptr;
+    }
+}
+
 void DocumentProperties::documentReplaced()
 {
-    if (_repr_namedview) {
-        _repr_namedview->removeListenerByData(this);
-        _repr_namedview = nullptr;
-    }
+    _root_connection.disconnect();
+    _namedview_connection.disconnect();
+
     if (auto desktop = getDesktop()) {
         _wr.setDesktop(desktop);
-        _repr_namedview = desktop->getNamedView()->getRepr();
-        _repr_namedview->addListener(&_repr_events, this);
+        _namedview_connection.connect(desktop->getNamedView()->getRepr(), _repr_events, this);
+        if (auto document = desktop->getDocument()) {
+            _root_connection.connect(document->getRoot()->getRepr(), _repr_events, this);
+        }
         populate_linked_profiles_box();
         update_widgets();
     }
@@ -1590,10 +1703,9 @@ void DocumentProperties::onRemoveGrid()
     }
 }
 
-/** Callback for document unit change. */
 /* This should not effect anything in the SVG tree (other than "inkscape:document-units").
    This should only effect values displayed in the GUI. */
-void DocumentProperties::onDocUnitChange()
+void DocumentProperties::display_unit_change(const Inkscape::Util::Unit* doc_unit)
 {
     SPDocument *document = getDocument();
     // Don't execute when change is being undone
@@ -1605,13 +1717,12 @@ void DocumentProperties::onDocUnitChange()
         return;
     }
 
-
     Inkscape::XML::Node *repr = getDesktop()->getNamedView()->getRepr();
     /*Inkscape::Util::Unit const *old_doc_unit = unit_table.getUnit("px");
     if(repr->attribute("inkscape:document-units")) {
         old_doc_unit = unit_table.getUnit(repr->attribute("inkscape:document-units"));
     }*/
-    Inkscape::Util::Unit const *doc_unit = _rum_deflt.getUnit();
+    // Inkscape::Util::Unit const *doc_unit = _rum_deflt.getUnit();
 
     // Set document unit
     Inkscape::SVGOStringStream os;

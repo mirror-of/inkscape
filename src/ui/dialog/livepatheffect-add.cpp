@@ -276,7 +276,6 @@ LivePathEffectAdd::LivePathEffectAdd()
     int height;
     window->get_size(width, height);
     _LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
-    _LPEDialogSelector->set_transient_for(*window);
     _LPESelectorFlowBox->set_focus_vadjustment(_LPEScrolled->get_vadjustment());
     _LPEDialogSelector->show_all_children();
     _lasteffect = nullptr;
@@ -740,12 +739,12 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
                 if (icon) {
                     if (mode == 2) {
                         icon->set_pixel_size(40);
-                        icon->set_margin_right(25);
-                        overlay->set_margin_right(5);
+                        icon->set_margin_end(25);
+                        overlay->set_margin_end(5);
                     } else {
                         icon->set_pixel_size(60);
-                        icon->set_margin_right(0);
-                        overlay->set_margin_right(0);
+                        icon->set_margin_end(0);
+                        overlay->set_margin_end(0);
                     }
                 }
                 Gtk::EventBox *LPESelectorEffectEventFavTop = dynamic_cast<Gtk::EventBox *>(contents_overlay[1]);
@@ -857,10 +856,10 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
                 if (icon) {
                     if (mode == 2) {
                         icon->set_pixel_size(33);
-                        icon->set_margin_right(40);
+                        icon->set_margin_end(40);
                     } else {
                         icon->set_pixel_size(60);
-                        icon->set_margin_right(0);
+                        icon->set_margin_end(0);
                     }
                 }
                 Gtk::EventBox *LPESelectorEffectEventFavTop = dynamic_cast<Gtk::EventBox *>(contents_overlay[1]);
@@ -951,6 +950,8 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
     dial._LPESelectorFlowBox->set_sort_func(sigc::mem_fun(dial, &LivePathEffectAdd::on_sort));
     Glib::RefPtr<Gtk::Adjustment> vadjust = dial._LPEScrolled->get_vadjustment();
     vadjust->set_value(vadjust->get_lower());
+    Gtk::Window *window = desktop->getToplevel();
+    dial._LPEDialogSelector->set_transient_for(*window);
     dial._LPEDialogSelector->show();
     int searchlen = dial._LPEFilter->get_text().length();
     if (searchlen > 0) {

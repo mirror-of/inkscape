@@ -184,7 +184,7 @@ private:
     Inkscape::CanvasItemCtrl *_grip;
     Inkscape::CanvasItemCurve *_l[4];
     std::vector<SPItem*> _stamp_cache;
-
+    bool _stamped = false;
     Geom::Point _origin; ///< position of origin for transforms
     Geom::Point _point; ///< original position of the knot being used for the current transform
     Geom::Point _point_geom; ///< original position of the knot being used for the current transform

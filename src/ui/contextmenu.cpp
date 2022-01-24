@@ -4,6 +4,9 @@
  * Context menu
  */
 /* Authors:
+ *   Tavmjong Bah
+ *
+ * Rewrite of code authored by:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
  *   bulia byak <buliabyak@users.sf.net>
@@ -11,6 +14,7 @@
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
  *
+ * Copyright (C) 2022 Tavmjong Bah
  * Copyright (C) 2012 Kris De Gussem
  * Copyright (C) 2010 authors
  * Copyright (C) 1999-2005 authors
@@ -22,147 +26,240 @@
 
 #include "contextmenu.h"
 
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>
-
-#include <gtkmm/box.h>
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/image.h>
-#include <gtkmm/separatormenuitem.h>
 
 #include "desktop.h"
 #include "document.h"
-#include "document-undo.h"
-#include "inkscape.h"
 #include "layer-manager.h"
-#include "message-context.h"
-#include "message-stack.h"
 #include "selection.h"
-#include "selection-chemistry.h"
-#include "shortcuts.h"
-#include "verbs.h"
-
-#include "helper/action-context.h"
-#include "helper/action.h"
-
-#include "include/gtkmm_version.h"
-
-#include "live_effects/lpe-powerclip.h"
-#include "live_effects/lpe-powermask.h"
 
 #include "object/sp-anchor.h"
-#include "object/sp-clippath.h"
 #include "object/sp-image.h"
-#include "object/sp-mask.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
 #include "ui/desktop/menu-icon-shift.h"
-//#include "ui/dialog/dialog-manager.h"
-#include "ui/dialog/dialog-container.h"
-#include "ui/dialog/layer-properties.h"
-#include "ui/icon-loader.h"
-#include "ui/icon-names.h"
-#include "ui/shortcuts.h"
 
-using Inkscape::DocumentUndo;
-
-static bool temporarily_block_actions = false;
-
-ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
-    _item(item),
-    MIGroup(),
-    MIParent(_("Go to parent"))
+ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_objects_menu_item)
 {
     set_name("ContextMenu");
 
-    _object = static_cast<SPObject *>(item);
-    _desktop = desktop;
+    // std::cout << "ContextMenu::ContextMenu: " << (item ? item->getId() : "no item") << std::endl;
+    action_group = Gio::SimpleActionGroup::create();
+    insert_action_group("ctx", action_group);
+    auto document = desktop->getDocument();
+    action_group->add_action("unhide-objects-below-cursor", sigc::bind<SPDocument*, bool>(sigc::mem_fun(this, &ContextMenu::unhide_or_unlock), document, true));
+    action_group->add_action("unlock-objects-below-cursor", sigc::bind<SPDocument*, bool>(sigc::mem_fun(this, &ContextMenu::unhide_or_unlock), document, false));
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _show_icons = prefs->getInt("/theme/menuIcons_canvas", true);
+    auto gmenu         = Gio::Menu::create(); // Main menu
+    auto gmenu_section = Gio::Menu::create(); // Section (used multiple times)
 
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_UNDO));
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_REDO));
-    AddSeparator();
+    auto layer = Inkscape::LayerManager::asLayer(item);  // Layers have their own context menu in the Object and Layers dialog.
+    auto root = desktop->layerManager().currentRoot();
 
-    auto layer = Inkscape::LayerManager::asLayer(_object);
+    // "item" is the object that was under the mouse when right-clicked. It determines what is shown
+    // in the menu thus it makes the most sense that it is either selected or part of the current
+    // selection.
+    auto selection = desktop->selection;
+    if (item && !selection->includes(item)) {
+        selection->set(item);
+    }
+
+    // Get a list of items under the cursor, used for unhiding and unlocking.
+    auto point_document = desktop->point() * desktop->dt2doc();
+    Geom::Rect b(point_document, point_document + Geom::Point(1, 1)); // Seems strange to use a rect!
+    items_under_cursor = document->getItemsPartiallyInBox(desktop->dkey, b, true, true, true, true);
+    bool has_hidden_below_cursor = false;
+    bool has_locked_below_cursor = false;
+    for (auto item : items_under_cursor) {
+        if (item->isHidden()) {
+            has_hidden_below_cursor = true;
+        }
+        if (item->isLocked()) {
+            has_locked_below_cursor = true;
+        }
+    }
+    // std::cout << "Items below cursor: " << items_under_cursor.size()
+    //           << "  hidden: " << std::boolalpha << has_hidden_below_cursor
+    //           << "  locked: " << std::boolalpha << has_locked_below_cursor
+    //           << std::endl;
+
+    // clang-tidy off
+
+    // Undo/redo
+    // gmenu_section = Gio::Menu::create();
+    // AppendItemFromAction(gmenu_section, "doc.undo",      _("Undo"),       "edit-undo");
+    // AppendItemFromAction(gmenu_section, "doc.redo",      _("Redo"),       "edit-redo");
+    // gmenu->append_section(gmenu_section);
+
     if (!layer) {
-        // don't bother adding copy/paste/cut when clicking on a layer; it won't work unless layer is *selected*
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_CUT));
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_COPY));
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_PASTE));
-        AddSeparator();
-    }
-    // when clicking an a current layer, show layer-specific duplicate action;
-    // layer has it's own "duplicate" action which varies from "selection duplicate" for better or worse
-    auto duplicate = layer ? SP_VERB_LAYER_DUPLICATE : SP_VERB_EDIT_DUPLICATE;
-    AppendItemFromVerb(Inkscape::Verb::get(duplicate));
-    // layer-specific delete action
-    auto del = layer ? SP_VERB_LAYER_DELETE : SP_VERB_EDIT_DELETE;
-    AppendItemFromVerb(Inkscape::Verb::get(del));
 
-    positionOfLastDialog = 10; // 9 in front + 1 for the separator in the next if; used to position the dialog menu entries below each other
-    /* Item menu */
-    if (item!=nullptr) {
-        AddSeparator();
-        MakeObjectMenu();
-    }
-    AddSeparator();
-    /* Lock/Unock Hide/Unhide*/
-    auto point_doc = _desktop->point() * _desktop->dt2doc();
-    Geom::Rect b(point_doc, point_doc + Geom::Point(1, 1));
-    std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true, true, true);
-    bool has_down_hidden = false;
-    bool has_down_locked = false;
-    for(auto & down_item : down_items){
-        if(down_item->isHidden()) {
-            has_down_hidden = true;
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section, "app.cut",       _("Cu_t"),       "edit-cut");
+        AppendItemFromAction(gmenu_section, "app.copy",      _("_Copy"),      "edit-copy");
+        AppendItemFromAction(gmenu_section, "win.paste",     _("_Paste"),     "edit-paste");
+        gmenu->append_section(gmenu_section);
+
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section, "app.duplicate", _("Duplic_ate"), "edit-duplicate");
+        AppendItemFromAction(gmenu_section, "app.delete-selection", _("_Delete"), "edit-delete");
+        gmenu->append_section(gmenu_section);
+
+        if (item) {
+
+            // Dialogs
+            auto gmenu_dialogs = Gio::Menu::create();
+            if (!hide_layers_and_objects_menu_item) { // Hidden when context menu is popped up in Layers and Objects dialog!
+                AppendItemFromAction(gmenu_dialogs, "win.dialog-open('Objects')",                   _("Layers and Objects..."), "dialog-objects"             );
+            }
+            AppendItemFromAction(gmenu_dialogs,     "win.dialog-open('ObjectProperties')",          _("_Object Properties..."), "dialog-object-properties"   );
+
+            if (dynamic_cast<SPShape*>(item) || dynamic_cast<SPText*>(item) || dynamic_cast<SPGroup*>(item)) {
+                AppendItemFromAction(gmenu_dialogs, "win.dialog-open('FillStroke')",                _("_Fill and Stroke..."),   "dialog-fill-and-stroke"     );
+            }
+
+            // Image dialogs (mostly).
+            if (dynamic_cast<SPImage*>(item)) {
+                AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('ObjectAttributes')",          _("Image _Properties..."),  "dialog-fill-and-stroke");
+                AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Trace')",                     _("_Trace Bitmap..."),      "bitmap-trace"          );
+                auto image = dynamic_cast<SPImage*>(item);
+                if (strncmp(image->href, "data", 4) == 0) {
+                    // Image is embeded.
+                    AppendItemFromAction( gmenu_dialogs, "app.org.inkscape.filter.extract_image",        _("Extract Image..."),      ""                      );
+                } else {
+                    // Image is linked.
+                    AppendItemFromAction( gmenu_dialogs, "app.org.inkscape.filter.selected.embed_image", _("Embed Image"),           ""                      );
+                    AppendItemFromAction( gmenu_dialogs, "app.element-image-edit",                       _("Edit Externally..."),    ""                      );
+                }
+            }
+
+            // Text dialogs.
+            if (dynamic_cast<SPText*>(item)) {
+                AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Text')",                      _("_Text and Font..."),     "dialog-text-and-font"  );
+                AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Spellcheck')",                _("Check Spellin_g..."),    "tools-check-spelling"  );
+            }
+            gmenu->append_section(gmenu_dialogs); // We might add to it later...
+
+            if (!dynamic_cast<SPAnchor*>(item)) {
+                // Item menu
+
+                // Selection
+                gmenu_section = Gio::Menu::create();
+                auto gmenu_submenu = Gio::Menu::create();
+                AppendItemFromAction(     gmenu_submenu, "win.select-same-fill-and-stroke",     _("Fill _and Stroke"),      "edit-select-same-fill-and-stroke");
+                AppendItemFromAction(     gmenu_submenu, "win.select-same-fill",                _("_Fill Color"),           "edit-select-same-fill"           );
+                AppendItemFromAction(     gmenu_submenu, "win.select-same-stroke-color",        _("_Stroke Color"),         "edit-select-same-stroke-color"   );
+                AppendItemFromAction(     gmenu_submenu, "win.select-same-stroke-style",        _("Stroke St_yle"),         "edit-select-same-stroke-style"   );
+                AppendItemFromAction(     gmenu_submenu, "win.select-same-object-type",         _("_Object Type"),          "edit-select-same-object-type"    );
+                gmenu_section->append_submenu(_("Select Sa_me"), gmenu_submenu);
+                gmenu->append_section(gmenu_section);
+
+                // Groups and Layers
+                gmenu_section = Gio::Menu::create();
+                AppendItemFromAction(     gmenu_section, "win.selection-move-to-layer",         _("_Move to Layer..."),     ""                                );
+                AppendItemFromAction(     gmenu_section, "app.selection-link",                  _("Create anchor (hyperlink)"),   ""                          );
+                AppendItemFromAction(     gmenu_section, "app.selection-group",                 _("_Group"),                ""                                );
+                if (dynamic_cast<SPGroup*>(item)) {
+                    AppendItemFromAction( gmenu_section, "app.selection-ungroup",               _("_Ungroup"),              ""                                );
+                    Glib::ustring label = Glib::ustring::compose(_("Enter group %1"), item->defaultLabel());
+                    AppendItemFromAction( gmenu_section, "win.selection-group-enter",           label,                      ""                                );
+                    if (item->getParentGroup()->isLayer() || item->getParentGroup() == root) {
+                        // A layer should be a child of root or another layer.
+                        AppendItemFromAction( gmenu_section, "win.layer-from-group",            _("Group to Layer"),        ""                                );
+                    }
+                }
+                auto group = dynamic_cast<SPGroup*>(item->parent);
+                if (group && !group->isLayer()) {
+                    AppendItemFromAction( gmenu_section, "win.selection-group-exit",            _("Exit group"),            ""                                );
+                    AppendItemFromAction( gmenu_section, "app.selection-ungroup-pop",           _("_Pop selection out of group"), ""                          );
+                }
+                gmenu->append_section(gmenu_section);
+
+                // Clipping and Masking
+                gmenu_section = Gio::Menu::create();
+                if (selection->size() > 1) {
+                    AppendItemFromAction( gmenu_section, "app.object-set-clip",                 _("Set Cl_ip"),             ""                                );
+                }
+                if (item->getClipObject()) {
+                    AppendItemFromAction( gmenu_section, "app.object-release-clip",             _("Release C_lip"),         ""                                );
+                } else {
+                    AppendItemFromAction( gmenu_section, "app.object-set-clip-group",           _("Set Clip G_roup"),       ""                                );
+                }
+                if (selection->size() > 1) {
+                    AppendItemFromAction( gmenu_section, "app.object-set-mask",                 _("Set Mask"),              ""                                );
+                }
+                if (item->getMaskObject()) {
+                    AppendItemFromAction( gmenu_section, "app.object-release-mask",             _("Release Mask"),          ""                                );
+                }
+                gmenu->append_section(gmenu_section);
+
+                // Hide and Lock
+                gmenu_section = Gio::Menu::create();
+                AppendItemFromAction(     gmenu_section, "app.selection-hide",                  _("Hide Selected Objects"), ""                                );
+                AppendItemFromAction(     gmenu_section, "app.selection-lock",                  _("Lock Selected Objects"), ""                                );
+                gmenu->append_section(gmenu_section);
+
+            } else {
+                // Anchor menu
+                gmenu_section = Gio::Menu::create();
+                AppendItemFromAction(     gmenu_section, "win.dialog-open('ObjectAttributes')", _("Link _Properties..."),   ""                                );
+                AppendItemFromAction(     gmenu_section, "app.element-a-open-link",             _("_Open link in browser"), ""                                );
+                AppendItemFromAction(     gmenu_section, "app.selection-ungroup",               _("_Remove Link"),          ""                                );
+                AppendItemFromAction(     gmenu_section, "win.selection-group-enter",           _("Enter Group"),           ""                                );
+                gmenu->append_section(gmenu_section);
+            }
         }
-        if(down_item->isLocked()) {
-            has_down_locked = true;
+
+        // Hidden or locked beneath cursor
+        gmenu_section = Gio::Menu::create();
+        if (has_hidden_below_cursor) {
+            AppendItemFromAction( gmenu_section, "ctx.unhide-objects-below-cursor",     _("Unhide Objects Below Cursor"),  ""                         );
         }
-    }
-    Gtk::MenuItem* mi;
+        if (has_locked_below_cursor) {
+            AppendItemFromAction( gmenu_section, "ctx.unlock-objects-below-cursor",     _("Unlock Objects Below Cursor"),  ""                         );
+        }
+        gmenu->append_section(gmenu_section);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Hide Selected Objects"),true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::HideSelected));
-    if (_desktop->selection->isEmpty()) {
-        mi->set_sensitive(false);
-    }
-    mi->show();
-    append(*mi);//insert(*mi,positionOfLastDialog++);
+    } else {
+        // Layers: Only used in "Layers and Objects" dialog.
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Unhide Objects Below"),true));
-    mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnHideBelow), down_items));
-    if (!has_down_hidden) {
-        mi->set_sensitive(false);
-    }
-    mi->show();
-    append(*mi);//insert(*mi,positionOfLastDialog++);
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section,     "win.layer-new",                _("_Add Layer..."),              "layer-new");
+        AppendItemFromAction(gmenu_section,     "win.layer-duplicate",          _("D_uplicate Layer"),           "layer-duplicate");
+        AppendItemFromAction(gmenu_section,     "win.layer-delete",             _("_Delete Layer"),              "layer-delete");
+        AppendItemFromAction(gmenu_section,     "win.layer-rename",             _("Re_name Layer..."),           "layer-rename");
+        AppendItemFromAction(gmenu_section,     "win.layer-to-group",           _("Layer to _Group"),            "dialog-objects");
+        gmenu->append_section(gmenu_section);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Lock Selected Objects"),true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LockSelected));
-    if (_desktop->selection->isEmpty()) {
-        mi->set_sensitive(false);
-    }
-    mi->show();
-    append(*mi);//insert(*mi,positionOfLastDialog++);
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section,     "win.layer-raise",              _("_Raise Layer"),               "layer-raise");
+        AppendItemFromAction(gmenu_section,     "win.layer-lower",              _("_Lower Layer"),               "layer-lower");
+        gmenu->append_section(gmenu_section);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Unlock Objects Below"),true));
-    mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnLockBelow), down_items));
-    if (!has_down_locked) {
-        mi->set_sensitive(false);
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section,     "win.layer-hide-toggle-others", _("_Hide/show other layers"),    "");
+        AppendItemFromAction(gmenu_section,     "win.layer-hide-all",           _("_Hide all layers"),           "");
+        AppendItemFromAction(gmenu_section,     "win.layer-unhide-all",         _("_Show all layers"),           "");
+        gmenu->append_section(gmenu_section);
+
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section,     "win.layer-lock-toggle-others", _("_Lock/unlock other layers"),  "");
+        AppendItemFromAction(gmenu_section,     "win.layer-lock-all",           _("_Lock all layers"),           "");
+        AppendItemFromAction(gmenu_section,     "win.layer-unlock-all",         _("_Unlock all layers"),         "");
+        gmenu->append_section(gmenu_section);
+
     }
-    mi->show();
-    append(*mi);//insert(*mi,positionOfLastDialog++);
+    // clang-tidy on
+
+    bind_model(gmenu, true);
+
 
     // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
     signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(shift_icons), this));
 
     // Set the style and icon theme of the new menu based on the desktop
-    if (Gtk::Window *window = _desktop->getToplevel()) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (Gtk::Window *window = desktop->getToplevel()) {
         if (window->get_style_context()->has_class("dark")) {
             get_style_context()->add_class("dark");
         } else {
@@ -176,841 +273,37 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     }
 }
 
-ContextMenu::~ContextMenu(void)
-= default;
-
-Gtk::SeparatorMenuItem* ContextMenu::AddSeparator()
+void
+ContextMenu::AppendItemFromAction(Glib::RefPtr<Gio::Menu> gmenu, Glib::ustring action, Glib::ustring label, Glib::ustring icon)
 {
-    Gtk::SeparatorMenuItem* sep = Gtk::manage(new Gtk::SeparatorMenuItem());
-    sep->show();
-    append(*sep);
-    return sep;
-}
-
-void ContextMenu::EnterGroup(Gtk::MenuItem* mi)
-{
-    _desktop->layerManager().setCurrentLayer(_MIGroup_group);
-    _desktop->selection->clear();
-}
-
-void ContextMenu::LeaveGroup()
-{
-    _desktop->layerManager().setCurrentLayer(_desktop->layerManager().currentLayer()->parent);
-}
-
-void ContextMenu::LockSelected()
-{
-    auto itemlist = _desktop->selection->items();
-    for(auto i=itemlist.begin();i!=itemlist.end(); ++i) {
-         (*i)->setLocked(true);
-    }
-}
-
-void ContextMenu::HideSelected()
-{
-    auto itemlist =_desktop->selection->items();
-    for(auto i=itemlist.begin();i!=itemlist.end(); ++i) {
-         (*i)->setHidden(true);
-    }
-}
-
-void ContextMenu::UnLockBelow(std::vector<SPItem *> items)
-{
-    _desktop->selection->clear();
-    for(auto & item : items) {
-        if (item->isLocked()) {
-            item->setLocked(false);
-            _desktop->selection->add(item);
-        }
-    }
-}
-
-void ContextMenu::UnHideBelow(std::vector<SPItem *> items)
-{
-    _desktop->selection->clear();
-    for(auto & item : items) {
-        if (item->isHidden()) {
-            item->setHidden(false);
-            _desktop->selection->add(item);
-        }
-    }
-}
-
-/*
- * Some day when the right-click menus are ready to start working
- * smarter with the verbs, we'll need to change this NULL being
- * sent to sp_action_perform to something useful, or set some kind
- * of global "right-clicked position" variable for actions to
- * investigate when they're called.
- */
-static void
-context_menu_item_on_my_activate(void */*object*/, SPAction *action)
-{
-    if (!temporarily_block_actions) {
-        sp_action_perform(action, nullptr);
-    }
-}
-
-static void
-context_menu_item_on_my_select(void */*object*/, SPAction *action)
-{
-    sp_action_get_view(action)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, action->tip);
-}
-
-static void
-context_menu_item_on_my_deselect(void */*object*/, SPAction *action)
-{
-    sp_action_get_view(action)->tipsMessageContext()->clear();
-}
-
-
-// TODO: Update this to allow radio items to be used
-void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)
-{
-    SPAction *action;
-    SPDesktop *view = _desktop;
-
-    if (verb->get_code() == SP_VERB_NONE) {
-        Gtk::MenuItem *item = AddSeparator();
-        item->show();
-        append(*item);
-    } else {
-        action = verb->get_action(Inkscape::ActionContext(view));
-        if (!action) {
-            return;
-        }
-        // Create the menu item itself
-        auto const item = Gtk::manage(new Gtk::MenuItem());
-
-        // Now create the label and add it to the menu item (with mnemonic)
-        auto const label = Gtk::manage(new Gtk::AccelLabel(action->name, true));
-        label->set_xalign(0.0);
-        Inkscape::Shortcuts::getInstance().add_accelerator(item, action->verb);
-        label->set_accel_widget(*item);
-
-        // If there is an image associated with the action, then we can add it as an icon for the menu item
-        if (_show_icons && action->image) {
-            item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
-            auto const icon = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
-
-            // create a box to hold icon and label as GtkMenuItem derives from GtkBin and can only hold one child
-            auto const box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
-            box->pack_start(*icon, false, false, 0);
-            box->pack_start(*label, true, true, 0);
-
-            item->add(*box);
-        } else {
-            item->add(*label);
-        }
-
-        action->signal_set_sensitive.connect(sigc::mem_fun(*this, &ContextMenu::set_sensitive));
-        action->signal_set_name.connect(sigc::mem_fun(*item, &ContextMenu::set_name));
-
-        if (!action->sensitive) {
-            item->set_sensitive(FALSE);
-        }
-
-        item->set_events(Gdk::KEY_PRESS_MASK);
-        item->signal_activate().connect(sigc::bind(sigc::ptr_fun(context_menu_item_on_my_activate),item,action));
-        item->signal_select().connect(sigc::bind(sigc::ptr_fun(context_menu_item_on_my_select),item,action));
-        item->signal_deselect().connect(sigc::bind(sigc::ptr_fun(context_menu_item_on_my_deselect),item,action));
-        item->show_all();
-
-        append(*item);
-    }
-}
-
-void ContextMenu::MakeObjectMenu()
-{
-    if (SP_IS_ITEM(_object)) {
-        MakeItemMenu(Inkscape::LayerManager::asLayer(_object));
-    }
-
-    if (SP_IS_ITEM(_object)) {
-        MakeGroupMenu(SP_ITEM(_object));
-    }
-
-    if (SP_IS_ANCHOR(_object)) {
-        MakeAnchorMenu();
-    }
-
-    if (SP_IS_IMAGE(_object)) {
-        MakeImageMenu();
-    }
-
-    if (SP_IS_SHAPE(_object)) {
-        MakeShapeMenu();
-    }
-
-    if (SP_IS_TEXT(_object)) {
-        MakeTextMenu();
-    }
-}
-
-void ContextMenu::MakeItemMenu(SPGroup* layer)
-{
-    Gtk::MenuItem* mi;
-
-    /* Item dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Object Properties..."),true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemProperties));
-    mi->show();
-    append(*mi);//insert(*mi,positionOfLastDialog++);
-
-    AddSeparator();
-
-    /* Select item */
-    if (Inkscape::Verb::getbyid( "org.inkscape.follow_link" )) {
-        mi = Gtk::manage(new Gtk::MenuItem(_("_Select This"), true));
-        if (_desktop->selection->includes(_item)) {
-            mi->set_sensitive(FALSE);
-        } else {
-            mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemSelectThis));
-        }
-        mi->show();
-        append(*mi);
-    }
-
-    // several options are not applicable to layers; adding them makes context menu unwieldy,
-    // so we need to be selective, or else it grows too much
-    if (!layer) {
-        mi = Gtk::manage(new Gtk::MenuItem(_("Select Same")));
-        mi->show();
-        Gtk::Menu *select_same_submenu = Gtk::manage(new Gtk::Menu());
-        if (_desktop->selection->isEmpty()) {
-            mi->set_sensitive(FALSE);
-        }
-        mi->set_submenu(*select_same_submenu);
-        append(*mi);
-
-        /* Select same fill and stroke */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Fill and Stroke"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameFillStroke));
-        mi->set_sensitive(!SP_IS_ANCHOR(_item));
-        mi->show();
-        select_same_submenu->append(*mi);
-
-        /* Select same fill color */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Fill Color"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameFillColor));
-        mi->set_sensitive(!SP_IS_ANCHOR(_item));
-        mi->show();
-        select_same_submenu->append(*mi);
-
-        /* Select same stroke color */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Stroke Color"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameStrokeColor));
-        mi->set_sensitive(!SP_IS_ANCHOR(_item));
-        mi->show();
-        select_same_submenu->append(*mi);
-
-        /* Select same stroke style */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Stroke Style"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameStrokeStyle));
-        mi->set_sensitive(!SP_IS_ANCHOR(_item));
-        mi->show();
-        select_same_submenu->append(*mi);
-
-        /* Select same stroke style */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Object Type"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameObjectType));
-        mi->set_sensitive(!SP_IS_ANCHOR(_item));
-        mi->show();
-        select_same_submenu->append(*mi);
-    }
-
-    /* Move to layer */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Move to Layer..."), true));
-    if (_desktop->selection->isEmpty()) {
-        mi->set_sensitive(FALSE);
-    } else {
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemMoveTo));
-    }
-    mi->show();
-    append(*mi);
-
-    if (!layer) {
-        /* Create link */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Create _Link"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemCreateLink));
-        mi->set_sensitive(!SP_IS_ANCHOR(_item));
-        mi->show();
-        append(*mi);
-
-        bool ClipRefOK=false;
-        bool MaskRefOK=false;
-        if (_item && _item->getClipObject()) {
-            ClipRefOK = true;
-        }
-        if (_item && _item->getMaskObject()) {
-            MaskRefOK = true;
-        }
-        /* Set mask */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Set Mask"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetMask));
-        if (ClipRefOK || MaskRefOK) {
-            mi->set_sensitive(FALSE);
-        } else {
-            mi->set_sensitive(TRUE);
-        }
-        mi->show();
-        append(*mi);
-
-        /* Release mask */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Release Mask"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseMask));
-        if (MaskRefOK) {
-            mi->set_sensitive(TRUE);
-        } else {
-            mi->set_sensitive(FALSE);
-        }
-        mi->show();
-        append(*mi);
-
-        /*SSet Clip Group */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Create Clip G_roup"),true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::CreateGroupClip));
-        mi->set_sensitive(TRUE);
-        mi->show();
-        append(*mi);
-
-        /* Set Clip */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Set Cl_ip"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetClip));
-        if (ClipRefOK || MaskRefOK) {
-            mi->set_sensitive(FALSE);
-        } else {
-            mi->set_sensitive(TRUE);
-        }
-        mi->show();
-        append(*mi);
-
-        /* Release Clip */
-        mi = Gtk::manage(new Gtk::MenuItem(_("Release C_lip"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseClip));
-        if (ClipRefOK) {
-            mi->set_sensitive(TRUE);
-        } else {
-            mi->set_sensitive(FALSE);
-        }
-        mi->show();
-        append(*mi);
-
-        /* Group */
-        mi = Gtk::manage(new Gtk::MenuItem(_("_Group"), true));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateGroup));
-        if (_desktop->selection->isEmpty()) {
-            mi->set_sensitive(FALSE);
-        } else {
-            mi->set_sensitive(TRUE);
-        }
-        mi->show();
-        append(*mi);
-    }
-}
-
-void ContextMenu::SelectSameFillStroke()
-{
-    sp_select_same_fill_stroke_style(_desktop, true, true, true);
-}
-
-void ContextMenu::SelectSameFillColor()
-{
-    sp_select_same_fill_stroke_style(_desktop, true, false, false);
-}
-
-void ContextMenu::SelectSameStrokeColor()
-{
-    sp_select_same_fill_stroke_style(_desktop, false, true, false);
-}
-
-void ContextMenu::SelectSameStrokeStyle()
-{
-    sp_select_same_fill_stroke_style(_desktop, false, false, true);
-}
-
-void ContextMenu::SelectSameObjectType()
-{
-    sp_select_same_object_type(_desktop);
-}
-
-void ContextMenu::ItemProperties()
-{
-    _desktop->selection->set(_item);
-    _desktop->getContainer()->new_dialog("ObjectProperties");
-}
-
-void ContextMenu::ItemSelectThis()
-{
-    _desktop->selection->set(_item);
-}
-
-void ContextMenu::ItemMoveTo()
-{
-    Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(_desktop, _desktop->layerManager().currentLayer());
-}
-
-
-
-void ContextMenu::ItemCreateLink()
-{
-    Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
-    Inkscape::XML::Node *repr = xml_doc->createElement("svg:a");
-    _item->parent->getRepr()->addChild(repr, _item->getRepr());
-    SPObject *object = _item->document->getObjectByRepr(repr);
-    g_return_if_fail(SP_IS_ANCHOR(object));
-
-    const char *id = _item->getRepr()->attribute("id");
-    Inkscape::XML::Node *child = _item->getRepr()->duplicate(xml_doc);
-    _item->deleteObject(false);
-    repr->addChild(child, nullptr);
-    child->setAttribute("id", id);
-
-    Inkscape::GC::release(repr);
-    Inkscape::GC::release(child);
-
-    Inkscape::DocumentUndo::done(object->document, _("Create link"), "");
-
-    _desktop->selection->set(SP_ITEM(object));
-    _desktop->getContainer()->new_dialog("ObjectAttributes");
-}
-
-void ContextMenu::SetMask()
-{
-    _desktop->selection->setMask(false, false);
-}
-
-void ContextMenu::ReleaseMask()
-{
-    Inkscape::LivePathEffect::sp_remove_powermask(_desktop->selection);
-    _desktop->selection->unsetMask(false);
-}
-
-void ContextMenu::CreateGroupClip()
-{
-    _desktop->selection->setClipGroup();
-}
-
-void ContextMenu::SetClip()
-{
-    _desktop->selection->setMask(true, false);
-}
-
-
-void ContextMenu::ReleaseClip()
-{
-    Inkscape::LivePathEffect::sp_remove_powerclip(_desktop->selection);
-    _desktop->selection->unsetMask(true);
-}
-
-void sp_group_layer_transform(SPDocument* document, SPGroup* group, SPGroup::LayerMode mode) {
-    if (!group) return;
-
-    group->setLayerMode(mode);
-    group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
-    if (document) {
-        DocumentUndo::done(document, mode == SPGroup::GROUP ? _("Layer to group") : _("Group to layer"), INKSCAPE_ICON("dialog-objects"));
-    }
-}
-
-Glib::SignalProxy<void> ContextMenu::append_item(const char* label, bool mnemonic) {
-    auto mi = Gtk::make_managed<Gtk::MenuItem>(label, mnemonic);
-    mi->show();
-    append(*mi);
-    return mi->signal_activate();
-}
-
-void ContextMenu::fireAction(unsigned int code) {
-    if (Inkscape::Verb* verb = Inkscape::Verb::get(code)) {
-        if (SPAction* action = verb->get_action(Inkscape::ActionContext(_desktop))) {
-            sp_action_perform(action, nullptr);
-        }
-    }
-}
-
-// group and layer menu
-void ContextMenu::MakeGroupMenu(SPItem* item) {
-    auto group = dynamic_cast<SPGroup*>(item);
-
-    if (group && group->isLayer()) {
-        // layer-specific commands
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_NEW));
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_RENAME));
-        AddSeparator();
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_SOLO));
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_SHOW_ALL));
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_HIDE_ALL));
-        AddSeparator();
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_LOCK_OTHERS));
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_LOCK_ALL));
-        AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_LAYER_UNLOCK_ALL));
-        AddSeparator();
-
-        // transform layer into group
-        append_item(_("Layer to group"), false).connect([=]() { sp_group_layer_transform(_desktop->doc(), group, SPGroup::GROUP); });
-    }
-    else if (group) {
-        /* Ungroup */
-        append_item(_("_Ungroup"), true).connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroup));
-
-        if (item->getParentGroup()->isLayer()) {
-            // transform group into layer
-            append_item(_("Group to layer"), false).connect([=](){ sp_group_layer_transform(_desktop->doc(), group, SPGroup::LAYER); });
-        }
-
-        // enter group
-        auto layer = _desktop->layerManager().currentLayer();
-        if (item != layer) {
-            MIGroup.set_label(Glib::ustring::compose(_("Enter group %1"), item->defaultLabel()));
-            _MIGroup_group = item;
-            MIGroup.signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &ContextMenu::EnterGroup),&MIGroup));
-            MIGroup.show();
-            append(MIGroup);
-        }
-    }
-
-    auto layer = _desktop->layerManager().currentLayer();
-    auto root = _desktop->layerManager().currentRoot();
-    if (layer != root) {
-        if (layer->parent != root) {
-            MIParent.signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LeaveGroup));
-            MIParent.show();
-            append(MIParent);
-
-            /* Pop selection out of group */
-            Gtk::MenuItem* miu = Gtk::manage(new Gtk::MenuItem(_("_Pop selection out of group"), true));
-            miu->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroupPopSelection));
-            miu->show();
-            append(*miu);
-        }
-    }
-}
-
-void ContextMenu::ActivateGroup()
-{
-    _desktop->selection->group();
-}
-
-void ContextMenu::ActivateUngroup()
-{
-	std::vector<SPItem*> children;
-
-    sp_item_group_ungroup(static_cast<SPGroup*>(_item), children);
-    _desktop->selection->setList(children);
-}
-
-void ContextMenu::ActivateUngroupPopSelection()
-{
-    _desktop->selection->popFromGroup();
-}
-
-
-void ContextMenu::MakeAnchorMenu()
-{
-    Gtk::MenuItem* mi;
-
-    /* Link dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Link _Properties..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkProperties));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-
-    /* Select item */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Follow Link"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkFollow));
-    mi->show();
-    append(*mi);
-
-    /* Reset transformations */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Remove Link"), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkRemove));
-    mi->show();
-    append(*mi);
-}
-
-void ContextMenu::AnchorLinkProperties()
-{
-    _desktop->getContainer()->new_dialog("ObjectAttributes");
-}
-
-void ContextMenu::AnchorLinkFollow()
-{
-
-    if (_desktop->selection->isEmpty()) {
-        _desktop->selection->set(_item);
-    }
-    // Opening the selected links with a python extension
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.follow_link" );
-    if (verb) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
-        if (action) {
-            sp_action_perform(action, nullptr);
-        }
-    }
-}
-
-void ContextMenu::AnchorLinkRemove()
-{
-	std::vector<SPItem*> children;
-    sp_item_group_ungroup(static_cast<SPAnchor*>(_item), children, false);
-    Inkscape::DocumentUndo::done(_desktop->doc(), _("Remove link"), "");
-}
-
-void ContextMenu::MakeImageMenu ()
-{
-    Gtk::MenuItem* mi;
-    Inkscape::XML::Node *ir = _object->getRepr();
-    const gchar *href = ir->attribute("xlink:href");
-
-    /* Image properties */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Image _Properties..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageProperties));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-
-    /* Edit externally */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Edit Externally..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEdit));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-    if ( (!href) || ((strncmp(href, "data:", 5) == 0)) ) {
-        mi->set_sensitive( FALSE );
-    }
-
-    /* Trace Bitmap */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Trace Bitmap..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTraceBitmap));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-    if (_desktop->selection->isEmpty()) {
-        mi->set_sensitive(FALSE);
-    }
-
-    /* Embed image */
-    if (Inkscape::Verb::getbyid( "org.inkscape.filter.selected.embed_image" )) {
-        mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEmbed));
-        mi->show();
-        insert(*mi,positionOfLastDialog++);
-        if ( (!href) || ((strncmp(href, "data:", 5) == 0)) ) {
-            mi->set_sensitive( FALSE );
-        }
-    }
-
-    /* Extract image */
-    if (Inkscape::Verb::getbyid( "org.inkscape.filter.extract_image" )) {
-        mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Extract Image...")));
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageExtract));
-        mi->show();
-        insert(*mi,positionOfLastDialog++);
-        if ( (!href) || ((strncmp(href, "data:", 5) != 0)) ) {
-            mi->set_sensitive( FALSE );
-        }
-    }
-}
-
-void ContextMenu::ImageProperties()
-{
-    _desktop->getContainer()->new_dialog("ObjectAttributes");
-}
-
-Glib::ustring ContextMenu::getImageEditorName(bool is_svg) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring value;
-    if (!is_svg) {
-        Glib::ustring choices = prefs->getString("/options/bitmapeditor/value");
-        if (!choices.empty()) {
-            value = choices;
-        }
-        else {
-            value = "gimp";
-        }
-    } else {
-        Glib::ustring choices = prefs->getString("/options/svgeditor/value");
-        if (!choices.empty()) {
-            value = choices;
-        }
-        else {
-            value = "inkscape";
-        }
+    bool show_icons = prefs->getInt("/theme/menuIcons_canvas", true);
+
+    auto menu_item = Gio::MenuItem::create(label, action);
+    if (icon != "" && show_icons) {
+        auto _icon = Gio::Icon::create(icon);
+        menu_item->set_icon(_icon);
     }
-    return value;
+    gmenu->append_item(menu_item);
 }
 
-void ContextMenu::ImageEdit()
+void
+ContextMenu::unhide_or_unlock(SPDocument* document, bool unhide)
 {
-    if (_desktop->selection->isEmpty()) {
-        _desktop->selection->set(_item);
-    }
-
-    GError* errThing = nullptr;
-    Glib::ustring bmpeditor = getImageEditorName();
-    Glib::ustring cmdline = bmpeditor;
-    std::string name;
-    std::string fullname;
-
-#ifdef _WIN32
-    // g_spawn_command_line_sync parsing is done according to Unix shell rules,
-    // not Windows command interpreter rules. Thus we need to enclose the
-    // executable path with single quotes.
-    int index = cmdline.find(".exe");
-    if ( index < 0 ) index = cmdline.find(".bat");
-    if ( index < 0 ) index = cmdline.find(".com");
-    if ( index >= 0 ) {
-        Glib::ustring editorBin = cmdline.substr(0, index + 4).c_str();
-        Glib::ustring args = cmdline.substr(index + 4, cmdline.length()).c_str();
-        editorBin.insert(0, "'");
-        editorBin.append("'");
-        cmdline = editorBin;
-        cmdline.append(args);
-    } else {
-        // Enclose the whole command line if no executable path can be extracted.
-        cmdline.insert(0, "'");
-        cmdline.append("'");
-    }
-#endif
-
-    auto itemlist= _desktop->selection->items();
-    for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        Inkscape::XML::Node *ir = (*i)->getRepr();
-        const gchar *href = ir->attribute("xlink:href");
-
-        if (strncmp (href,"file:",5) == 0) {
-        // URI to filename conversion
-          name = Glib::filename_from_uri(href);
+    for (auto item : items_under_cursor) {
+        if (unhide) {
+            if (item->isHidden()) {
+                item->setHidden(false);
+            }
         } else {
-          name.append(href);
-        }
-
-        if (Glib::path_is_absolute(name)) {
-            fullname = name;
-        } else if (SP_ACTIVE_DOCUMENT->getDocumentBase()) {
-            fullname = Glib::build_filename(SP_ACTIVE_DOCUMENT->getDocumentBase(), name);
-        } else {
-            fullname = Glib::build_filename(Glib::get_current_dir(), name);
-        }
-        if (name.substr(name.find_last_of(".") + 1) == "SVG" ||
-            name.substr(name.find_last_of(".") + 1) == "svg"   )
-        {
-            cmdline.erase(0, bmpeditor.length());
-            Glib::ustring svgeditor = getImageEditorName(true);
-            cmdline = svgeditor.append(cmdline);
-        }
-        cmdline.append(" '");
-        cmdline.append(fullname.c_str());
-        cmdline.append("'");
-    }
-
-    //g_warning("##Command line: %s\n", cmdline.c_str());
-
-    g_spawn_command_line_async(cmdline.c_str(), &errThing);
-
-    if ( errThing ) {
-        g_warning("Problem launching editor (%d). %s", errThing->code, errThing->message);
-        (_desktop->messageStack())->flash(Inkscape::ERROR_MESSAGE, errThing->message);
-        g_error_free(errThing);
-        errThing = nullptr;
-    }
-}
-
-void ContextMenu::ImageTraceBitmap()
-{
-    _desktop->getContainer()->new_dialog("Trace");
-}
-
-void ContextMenu::ImageEmbed()
-{
-    if (_desktop->selection->isEmpty()) {
-        _desktop->selection->set(_item);
-    }
-
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.filter.selected.embed_image" );
-    if (verb) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
-        if (action) {
-            sp_action_perform(action, nullptr);
+            if (item->isLocked()) {
+                item->setLocked(false);
+            }
         }
     }
-}
 
-void ContextMenu::ImageExtract()
-{
-    if (_desktop->selection->isEmpty()) {
-        _desktop->selection->set(_item);
-    }
-
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.filter.extract_image" );
-    if (verb) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
-        if (action) {
-            sp_action_perform(action, nullptr);
-        }
-    }
-}
-
-void ContextMenu::MakeShapeMenu ()
-{
-    Gtk::MenuItem* mi;
-
-    /* Item dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Fill and Stroke..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-}
-
-void ContextMenu::FillSettings()
-{
-    if (_desktop->selection->isEmpty()) {
-        _desktop->selection->set(_item);
-    }
-
-    _desktop->getContainer()->new_dialog("FillStroke");
-}
-
-void ContextMenu::MakeTextMenu ()
-{
-    Gtk::MenuItem* mi;
-
-    /* Fill and Stroke dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Fill and Stroke..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-
-    /* Edit Text dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Text and Font..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::TextSettings));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-
-#if WITH_GSPELL
-    /* Spellcheck dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Check Spellin_g..."), true));
-    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SpellcheckSettings));
-    mi->show();
-    insert(*mi,positionOfLastDialog++);
-#endif
-}
-
-void ContextMenu::TextSettings ()
-{
-    if (_desktop->selection->isEmpty()) {
-        _desktop->selection->set(_item);
-    }
-
-    _desktop->getContainer()->new_dialog("Text");
-}
-
-void ContextMenu::SpellcheckSettings ()
-{
-#if WITH_GSPELL
-    if (_desktop->selection->isEmpty()) {
-        _desktop->selection->set(_item);
-    }
-
-    _desktop->getContainer()->new_dialog("Spellcheck");
-#endif
+    // We wouldn't be here if we didn't make a change.
+    Inkscape::DocumentUndo::done(document, (unhide ? _("Unhid objects") : _("Unlocked objects")), "");
 }
 
 /*

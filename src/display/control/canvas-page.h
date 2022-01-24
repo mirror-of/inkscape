@@ -39,7 +39,7 @@ public:
     void show();
     void hide();
 
-    bool setAttributes(bool on_top, guint32 border, guint32 bg, int shadow);
+    bool setAttributes(bool on_top, guint32 border, guint32 bg, int shadow, bool checkerboard);
     void setOutline(bool outline);
 
     bool is_selected = false;
@@ -52,7 +52,8 @@ private:
     int _shadow_size = 0;
     bool _border_on_top = true;
     guint32 _background_color = 0xffffff00;
-    guint32 _border_color = 0x000000cc;
+    guint32 _border_color = 0x00000040;
+    bool _checkerboard = false;
 };
 
 };

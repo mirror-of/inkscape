@@ -440,6 +440,9 @@ void SnapManager::guideFreeSnap(Geom::Point &p, Geom::Point &origin_or_vector, b
         candidate.addVector(Geom::rot90(origin_or_vector));
     }
 
+    // collect candidates
+    _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, true, Geom::Rect(p, p), false, Geom::identity());
+
     IntermSnapResults isr;
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
@@ -468,6 +471,9 @@ void SnapManager::guideConstrainedSnap(Geom::Point &p, SPGuide const &guideline)
 
     IntermSnapResults isr;
     Inkscape::Snapper::SnapConstraint cl(guideline.getPoint(), Geom::rot90(guideline.getNormal()));
+
+    // collect candidates
+    _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, true, Geom::Rect(p, p), false, Geom::identity());
 
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {

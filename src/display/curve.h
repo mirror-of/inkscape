@@ -106,6 +106,7 @@ public:
     smart_pointer create_reverse() const;
 
     std::list<smart_pointer> split() const;
+    std::list<smart_pointer> split_non_overlapping() const;
 
     friend class std::default_delete<SPCurve>;
     friend class CurveTest; // for ref count test

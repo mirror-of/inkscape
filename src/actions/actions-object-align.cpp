@@ -15,24 +15,29 @@
  *
  */
 
+#include "actions-object-align.h"
+
 #include <iostream>
+#include <limits>
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
 #include <glibmm/i18n.h>
 
-#include "actions-object-align.h"
-
-#include "actions-helper.h"
 #include "document-undo.h"
 #include "enums.h"                // Clones
+#include "filter-chemistry.h"     // LPE bool
 #include "inkscape-application.h"
-#include "inkscape.h"             // Inkscape::Application
-#include "selection.h"            // Selection
+#include "inkscape.h"             // Inkscape::Application - preferences
+
+#include "object/algorithms/graphlayout.h"   // Graph layout objects.
+#include "object/algorithms/removeoverlap.h" // Remove overlaps between objects.
+#include "object/algorithms/unclump.h"       // Rearrange objects.
+#include "object/algorithms/bboxsort.h"      // Sort based on bounding box.
 
 #include "live_effects/effect-enum.h"
-#include "object/object-set.h"    // Selection enum
+#include "live_effects/effect.h"
+
 #include "object/sp-root.h"       // "Desktop Bounds"
-#include "path/path-simplify.h"
 
 #include "ui/icon-names.h"        // Icon macro used in undo.
 
@@ -45,6 +50,34 @@ enum class ObjectAlignTarget {
     DRAWING,
     SELECTION
 };
+
+void
+object_align_on_canvas(InkscapeApplication *app)
+{
+    // Get Action
+    auto *gapp = app->gio_app();
+    auto action = gapp->lookup_action("object-align-on-canvas");
+    if (!action) {
+        std::cerr << "object_align_on_canvas: action missing!" << std::endl;
+        return;
+    }
+
+    auto saction = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(action);
+    if (!saction) {
+        std::cerr << "object_align_on_canvas: action not SimpleAction!" << std::endl;
+        return;
+    }
+
+    // Toggle state
+    bool state = false;
+    saction->get_state(state);
+    state = !state;
+    saction->change_state(state);
+
+    // Toggle action
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/dialogs/align/oncanvas", state);
+}
 
 void
 object_align(const Glib::VariantBase& value, InkscapeApplication *app)
@@ -111,14 +144,28 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
 
     // We force unselect operand in bool LPE. TODO: See if we can use "selected" from below.
     auto list = selection->items();
+    std::size_t total = std::distance(list.begin(), list.end());
+    std::vector<SPItem *> selected;
+    std::vector<Inkscape::LivePathEffect::Effect *> bools;
     for (auto itemlist = list.begin(); itemlist != list.end(); ++itemlist) {
-        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*itemlist);
-        if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
-            sp_lpe_item_update_patheffect(lpeitem, false, false);
+        SPItem *item = dynamic_cast<SPItem *>(*itemlist);
+        if (total == 2) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+            if (lpeitem) {
+                for (auto lpe : lpeitem->getPathEffectsOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                    if (!g_strcmp0(lpe->getRepr()->attribute("is_visible"), "true")) {
+                        lpe->getRepr()->setAttribute("is_visible", "false");
+                        bools.emplace_back(lpe);
+                        item->document->ensureUpToDate();
+                    }
+                }
+            }
+        }
+        if (!(item && has_hidder_filter(item) && total > 2)) {
+            selected.emplace_back(item);
         }
     }
 
-    std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
     if (selected.empty()) return;
 
     // Find alignment rectangle. This can come from:
@@ -143,7 +190,7 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
             focus = selection->smallestItem(direction);
             break;
         case ObjectAlignTarget::PAGE:
-            b = document->preferredBounds();
+            b = document->pageBounds();
             break;
         case ObjectAlignTarget::DRAWING:
             b = document->getRoot()->desktopPreferredBounds();
@@ -208,29 +255,6 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
         Inkscape::DocumentUndo::done(document, _("Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 }
-
-class BBoxSort {
-
-public:
-    BBoxSort(SPItem *item, Geom::Rect const &bounds, Geom::Dim2 orientation, double begin, double end)
-        : item(item)
-        , bbox(bounds)
-    {
-        anchor = begin * bbox.min()[orientation] + end * bbox.max()[orientation];
-    }
-
-    BBoxSort(const BBoxSort &rhs) = default; // Should really be vector of pointers to avoid copying class when sorting.
-    ~BBoxSort() = default;
-
-    double anchor = 0.0;
-    SPItem* item = nullptr;
-    Geom::Rect bbox;
-};
-
-bool operator< (const BBoxSort &a, const BBoxSort &b) {
-    return a.anchor < b.anchor;
-}
-
 
 void
 object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
@@ -352,19 +376,239 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 }
 
+/* --------------- Rearrange ----------------- */
+
+class RotateCompare
+{
+public:
+    RotateCompare(Geom::Point& center) : center(center) {}
+
+    bool operator()(const SPItem* a, const SPItem* b) {
+        Geom::Point point_a = a->getCenter() - (center);
+        Geom::Point point_b = b->getCenter() - (center);
+
+        // Sort according to angle.
+        double angle_a = Geom::atan2(point_a);
+        double angle_b = Geom::atan2(point_b);
+        if (angle_a != angle_b) return (angle_a < angle_b);
+
+        // Sort by distance
+        return point_a.length() < point_b.length();
+    }
+
+private:
+    Geom::Point center;
+};
+
+enum SortOrder {
+    SelectionOrder,
+    ZOrder,
+    Rotate
+};
+
+static bool PositionCompare(const SPItem* a, const SPItem* b) {
+    return sp_item_repr_compare_position(a, b) < 0;
+}
+
+void exchange(Inkscape::Selection* selection, SortOrder order)
+{
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+
+    // Reorder items.
+    switch (order) {
+        case SelectionOrder:
+            break;
+        case ZOrder:
+            std::sort(items.begin(), items.end(), PositionCompare);
+            break;
+        case Rotate:
+            auto center = selection->center();
+            if (center) {
+                std::sort(items.begin(), items.end(), RotateCompare(*center));
+            }
+            break;
+    }
+
+    // Move items.
+    Geom::Point p1 = items.back()->getCenter();
+    for (SPItem *item : items) {
+        Geom::Point p2 = item->getCenter();
+        Geom::Point delta = p1 - p2;
+        item->move_rel(Geom::Translate(delta));
+        p1 = p2;
+    }
+}
+
+/*
+ *  The algorithm keeps the size of the bounding box of the centers of all items constant. This
+ *  ensures there is no growth or shrinking or drift of the overall area of the items on sequential
+ *  randomizations.
+ */
+void randomize(Inkscape::Selection* selection)
+{
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+
+    // Do 'x' and 'y' independently.
+    for (int i = 0; i < 2; i++) {
+
+        // First, find maximum and minumum centers.
+        double min = std::numeric_limits<double>::max();
+        double max = std::numeric_limits<double>::min();
+
+        for (auto item : items) {
+            double center = item->getCenter()[i];
+            if (min > center) {
+                min = center;
+            }
+            if (max < center) {
+                max = center;
+            }
+        }
+
+
+        // Second, assign minimum/maxiumum values to two different items randomly.
+        int nitems = items.size();
+        int imin = rand() % nitems;
+        int imax = rand() % nitems;
+        while (imin == imax) {
+            imax = rand() % nitems;
+        }
+
+
+        // Third, find new positions of item centers.
+        int index = 0;
+        for (auto item : items) {
+            double z = 0.0;
+            if (index == imin) {
+                z = min;
+            } else  if (index == imax) {
+                z = max;
+            } else {
+                z = g_random_double_range(min, max);
+            }
+
+            double delta = z - item->getCenter()[i];
+            Geom::Point t;
+            t[i] = delta;
+            item->move_rel(Geom::Translate(t));
+
+            ++index;
+        }
+    }
+}
+
+
+void
+object_rearrange(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    auto token = s.get();
+
+    auto selection = app->get_active_selection();
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    if (items.size() < 2) {
+        return;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+    prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+
+    // clang-format off
+    if      (token == "graph"     ) { graphlayout(items); }
+    else if (token == "exchange"  ) { exchange(selection, SortOrder::SelectionOrder); }
+    else if (token == "exchangez" ) { exchange(selection, SortOrder::ZOrder); }
+    else if (token == "rotate"    ) { exchange(selection, SortOrder::Rotate); }
+    else if (token == "randomize" ) { randomize(selection); }
+    else if (token == "unclump"   ) { unclump(items); }
+    else {
+        std::cerr << "object_rearrange: unhandled argument: " << token << std::endl;
+     }
+    // clang-format on
+
+    // Restore compensation setting.
+    prefs->setInt("/options/clonecompensation/value", saved_compensation);
+
+    Inkscape::DocumentUndo::done( document, _("Rearrange"), INKSCAPE_ICON("dialog-align-and-distribute"));
+}
+
+
+void
+object_remove_overlaps(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    if (items.size() < 2) {
+        return;
+    }
+
+    // We used tuple so as not to convert from double to string and back again (from Align and Distrobute dialog).
+    if (value.get_type_string() != "(dd)") {
+        std::cerr << "object_remove_overlaps:  wrong variant type: " << value.get_type_string() << " (should be '(dd)')" << std::endl;
+    }
+
+    auto tuple = Glib::VariantBase::cast_dynamic<Glib::Variant<std::tuple<double, double>>>(value);
+    auto [hgap, vgap] = tuple.get();
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+    prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+
+    removeoverlap(items, hgap, vgap);
+
+    // Restore compensation setting.
+    prefs->setInt("/options/clonecompensation/value", saved_compensation);
+
+    Inkscape::DocumentUndo::done( document, _("Remove overlaps"), INKSCAPE_ICON("dialog-align-and-distribute"));
+}
+
+
 std::vector<std::vector<Glib::ustring>> raw_data_object_align =
 {
     // clang-format off
-    {"app.object-align",      N_("Align objects"),      "Object", N_("Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?")},
-    {"app.object-distribute", N_("Distribute objects"), "Object", N_("Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | top | vcenter | bottom]"                                               )}
+    {"app.object-align-on-canvas",         N_("Enable on-canvas alignment"),  "Object", N_("Enable on-canvas alignment handles."                                                                                           )},
+
+    {"app.object-align",                   N_("Align objects"), "Object", N_("Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?")},
+
+    {"app.object-distribute",              N_("Distribute objects"),          "Object", N_("Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | top | vcenter | bottom]"                           )},
+    {"app.object-distribute('hgap')",      N_("Even horizontal gaps"),        "Object", N_("Distribute horizontally with even horizontal gaps."                                                                            )},
+    {"app.object-distribute('left')",      N_("Even left edges"),             "Object", N_("Distribute horizontally with even spacing between left edges."                                                                 )},
+    {"app.object-distribute('hcenter')",   N_("Even horizontal centers"),     "Object", N_("Distribute horizontally with even spacing between centers."                                                                    )},
+    {"app.object-distribute('right')",     N_("Even right edges"),            "Object", N_("Distribute horizontally with even spacing between right edges."                                                                )},
+    {"app.object-distribute('vgap')",      N_("Even vertical gaps"),          "Object", N_("Distribute vertically with even vertical gaps."                                                                                )},
+    {"app.object-distribute('top')",       N_("Even top edges"),              "Object", N_("Distribute vertically with even spacing between top edges."                                                                    )},
+    {"app.object-distribute('vcenter')",   N_("Even vertical centers"),       "Object", N_("Distribute vertically with even spacing between centers."                                                                      )},
+    {"app.object-distribute('bottom')",    N_("Even bottom edges"),           "Object", N_("Distribute vertically with even spacing between bottom edges."                                                                 )}, 
+
+    {"app.object-rearrange",               N_("Rearrange objects"),           "Object", N_("Rearrange selected objects; usage: [graph | exchange | exchangez | rotate | randomize | unclump]"                              )},
+    {"app.object-rearrange('graph')",      N_("Rearrange as graph"),          "Object", N_("Nicely arrange selected connector network."                                                                                    )},
+    {"app.object-rearrange('exchange')",   N_("Exchange in selection order"), "Object", N_("Exchange positions of selected objects - selection order."                                                                     )},
+    {"app.object-rearrange('exchangez')",  N_("Exchange in z-order"),         "Object", N_("Exchange positions of selected objects - stacking order."                                                                      )},
+    {"app.object-rearrange('rotate')",     N_("Exchange around center"),      "Object", N_("Exchange positions of selected objects - rotate around center point."                                                          )},
+    {"app.object-rearrange('randomize')",  N_("Random exchange"),             "Object", N_("Randomize centers in both dimensions."                                                                                         )},
+    {"app.object-rearrange('unclump')",    N_("Unclump"),                     "Object", N_("Unclump objects: try to equalize edge-to-edge distances."                                                                      )},
+
+    {"app.object-remove-overlaps",         N_("Remove overlaps"),             "Object", N_("Remove overlaps between objects: requires two comma separated numbers (horizontal and vertical gaps)."                         )},
     // clang-format on
 };
 
 std::vector<std::vector<Glib::ustring>> hint_data_object_align =
 {
     // clang-format off
-    {"app.object-align",      N_("Give String input for  Relativity  <space>   Alignment")},
-    {"app.object-distribute", N_("Give String input for  Distribution (hgap, left, hcenter, right, vgap, top, vcenter, bottom)")}
+    {"app.object-align",           N_("Give String input for  Relativity  <space>   Alignment")                                        },
+    {"app.object-distribute",      N_("Give String input for  Distribution (hgap, left, hcenter, right, vgap, top, vcenter, bottom)")  },
+    {"app.object-rearrange",       N_("Give String input for  Method: (graph, exchange, exchangez, rotate, randomize, unclump)")       },
+    {"app.object-remove-overlaps", N_("Give two comma separated numbers")                                                              },
     // clang-format on
 };
 
@@ -372,23 +616,25 @@ void
 add_actions_object_align(InkscapeApplication* app)
 {
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
+    std::vector<Glib::VariantType> dd = {Glib::VARIANT_TYPE_DOUBLE, Glib::VARIANT_TYPE_DOUBLE};
+    Glib::VariantType Tuple_DD = Glib::VariantType::create_tuple(dd);
 
     auto *gapp = app->gio_app();
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
+    auto prefs = Inkscape::Preferences::get();
+    bool on_canvas = prefs->getBool("/dialogs/align/oncanvas");
 
     // clang-format off
-    gapp->add_action_with_parameter( "object-align",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align),      app));
-    gapp->add_action_with_parameter( "object-distribute", String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_distribute), app));
+    gapp->add_action_bool(           "object-align-on-canvas",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align_on_canvas),  app), on_canvas);
+    gapp->add_action_with_parameter( "object-align",             String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align),            app));
+    gapp->add_action_with_parameter( "object-distribute",        String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_distribute),       app));
+    gapp->add_action_with_parameter( "object-rearrange",         String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rearrange),        app));
+    gapp->add_action_with_parameter( "object-remove-overlaps",   Tuple_DD, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_remove_overlaps),  app));
     // clang-format on
-
-#endif
 
     app->get_action_extra_data().add_data(raw_data_object_align);
     app->get_action_hint_data().add_data(hint_data_object_align);
 }
-
 
 /*
   Local Variables:

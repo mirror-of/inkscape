@@ -11,16 +11,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <gtkmm.h>
+
 #include "live_effects/effect.h"
-#include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/originalitemarray.h"
 #include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/colorpicker.h"
+#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/fontbutton.h"
 #include "live_effects/parameter/message.h"
+#include "live_effects/parameter/satellitearray.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/unit.h"
-
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -41,6 +41,8 @@ public:
     void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
     void doEffect (SPCurve * curve) override {};
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
+    bool doOnOpen(SPLPEItem const *lpeitem) override;
+    void processObjects(LPEAction lpe_action) override;
     Gtk::Widget * newWidget() override;
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
@@ -62,12 +64,12 @@ private:
     ScalarParam scale;
     TextParam format;
     TextParam blacklist;
+    BoolParam scale_sensitive;
     BoolParam active_projection;
     BoolParam whitelist;
     BoolParam showindex;
     BoolParam arrows_outside;
     BoolParam flip_side;
-    BoolParam scale_sensitive;
     BoolParam local_locale;
     BoolParam rotate_anotation;
     BoolParam hide_back;
@@ -77,7 +79,8 @@ private:
     BoolParam centers;
     BoolParam maxmin;
     BoolParam smallx100;
-    OriginalItemArrayParam linked_items;
+    std::vector<Glib::ustring> items;
+    SatelliteArrayParam linked_items;
     ScalarParam distance_projection;
     ScalarParam angle_projection;
     BoolParam avoid_overlapping;
@@ -90,6 +93,9 @@ private:
     double arrow_gap;
     guint pagenumber;
     gchar const* locale_base;
+    size_t prevsatellitecount = 0;
+    bool prev_active_projection = false;
+    SPObject *parent = nullptr;
     LPEMeasureSegments(const LPEMeasureSegments &) = delete;
     LPEMeasureSegments &operator=(const LPEMeasureSegments &) = delete;
 

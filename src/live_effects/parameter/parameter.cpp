@@ -7,16 +7,16 @@
 
 #include "parameter.h"
 
+#include <glibmm/i18n.h>
 #include <utility>
 
+#include "display/control/canvas-item-bpath.h"
+#include "display/curve.h"
 #include "live_effects/effect.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "ui/icon-names.h"
 #include "xml/repr.h"
-
-#include <glibmm/i18n.h>
-
 
 #define noLPEREALPARAM_DEBUG
 
@@ -38,6 +38,19 @@ Parameter::Parameter(Glib::ustring label, Glib::ustring tip, Glib::ustring key, 
 {
 }
 
+Parameter::~Parameter()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop && ownerlocator) {
+        desktop->remove_temporary_canvasitem(ownerlocator);
+    }
+    if (selection_changed_connection) {
+        selection_changed_connection->disconnect();
+        delete selection_changed_connection;
+        selection_changed_connection = nullptr;
+    }
+}
+
 void Parameter::param_write_to_repr(const char *svgd)
 {
     param_effect->getRepr()->setAttribute(param_key, svgd);
@@ -47,6 +60,133 @@ void Parameter::write_to_SVG()
 {
     param_write_to_repr(param_getSVGValue().c_str());
 }
+
+/*
+ * sometimes for example on ungrouping or loading documents we need to relay in stored value instead the volatile
+ * version in the parameter
+ */
+void Parameter::read_from_SVG()
+{
+    const gchar *val = param_effect->getRepr()->attribute(param_key.c_str());
+    if (val) {
+        param_readSVGValue(val);
+    }
+}
+
+void Parameter::param_higlight(bool highlight, bool select)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        std::vector<SPLPEItem *> lpeitems;
+        if (!highlight && ownerlocator) {
+            desktop->remove_temporary_canvasitem(ownerlocator);
+            ownerlocator = nullptr;
+        }
+        if (highlight) {
+            lpeitems = param_effect->getCurrrentLPEItems();
+            if (lpeitems.size() == 1 && param_effect->is_visible) {
+                if (select && !lpeitems[0]->isHidden()) {
+                    desktop->selection->clear();
+                    desktop->selection->add(lpeitems[0]);
+                    return;
+                }
+                auto c = std::make_unique<SPCurve>();
+                std::vector<Geom::PathVector> cs; // = param_effect->getCanvasIndicators(lpeitems[0]);
+                Geom::OptRect bbox = lpeitems[0]->documentVisualBounds();
+                if (param_effect->helperLineSatellites) {
+                    std::vector<SPObject *> satellites = param_get_satellites();
+                    for (auto iter : satellites) {
+                        SPItem *satelliteitem = dynamic_cast<SPItem *>(iter);
+                        if (satelliteitem) {
+                            bbox.unionWith(satelliteitem->documentVisualBounds());
+                        }
+                    }
+                }
+                Geom::PathVector out;
+                if (bbox) {
+                    Geom::Path p = Geom::Path(*bbox);
+                    out.push_back(p);
+                }
+                cs.push_back(out);
+                for (auto &p2 : cs) {
+                    p2 *= desktop->dt2doc();
+                    c->append(p2);
+                }
+                if (!c->is_empty()) {
+                    desktop->remove_temporary_canvasitem(ownerlocator);
+                    auto tmpitem = new Inkscape::CanvasItemBpath(desktop->getCanvasTemp(), c.get(), true);
+                    tmpitem->set_stroke(0x0000ff9a);
+                    tmpitem->set_fill(0x0, SP_WIND_RULE_NONZERO); // No fill
+                    ownerlocator = desktop->add_temporary_canvasitem(tmpitem, 0);
+                }
+            }
+        }
+    }
+}
+
+void Parameter::change_selection(Inkscape::Selection *selection)
+{
+    update_satellites(false);
+}
+
+void Parameter::update_satellites(bool updatelpe)
+{
+    if (param_key == "linked_items" || param_key == "operand-path" || param_key == "linkeditem" ||
+        param_key == "lpesatellites") {
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            DocumentUndo::ScopedInsensitive _no_undo(desktop->getDocument());
+            param_higlight(false, false);
+            Inkscape::Selection *selection = desktop->selection;
+            if (selection) {
+                std::vector<SPObject *> satellites = param_get_satellites();
+                if (!selection_changed_connection) {
+                    selection_changed_connection = new sigc::connection(
+                        selection->connectChanged(sigc::mem_fun(*this, &Parameter::change_selection)));
+                }
+                if (selection->singleItem()) {
+                    if (param_effect->isOnClipboard()) {
+                        return;
+                    }
+                    // we always start hidding helper path
+                    for (auto iter : satellites) {
+                        // if selection is current ref we highlight original sp_lpe_item to
+                        // give visual feedback to the user to know whats the LPE item that generate the selection
+                        if (iter && selection->includes(iter)) {
+                            const gchar *classtoparentchar = iter->getAttribute("class");
+                            if (classtoparentchar) {
+                                Glib::ustring classtoparent = classtoparentchar;
+                                if (classtoparent.find("lpeselectparent ") != Glib::ustring::npos) {
+                                    param_higlight(true, true);
+                                } else {
+                                    param_higlight(true, false);
+                                }
+                            } else {
+                                param_higlight(true, false);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (updatelpe) {
+            std::vector<SPLPEItem *> lpeitems = param_effect->getCurrrentLPEItems();
+            if (lpeitems.size() == 1 && param_effect->is_visible) {
+                sp_lpe_item_update_patheffect(lpeitems[0], false, false);
+            }
+        }
+    }
+}
+
+/*
+ * we get satellites of parameter, virtual function overided by some parameter with linked satellites
+ */
+std::vector<SPObject *> Parameter::param_get_satellites()
+{
+    std::vector<SPObject *> objs;
+    return objs;
+};
 
 /*###########################################
  *   REAL PARAM
@@ -189,8 +329,6 @@ void ScalarParam::param_set_increments(double step, double page)
     inc_step = step;
     inc_page = page;
 }
-
-
 
 } /* namespace LivePathEffect */
 } /* namespace Inkscape */

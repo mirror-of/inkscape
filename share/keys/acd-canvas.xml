@@ -133,13 +133,13 @@ Scissor tool - C
 
   <bind gaction="win.document-print"    keys="&lt;ctrl&gt;p, &lt;ctrl&gt;P" />
 
-  <bind gaction="app.quit-inkscape"     keys="&lt;alt&gt;x, &lt;alt&gt;X" />
+  <bind gaction="app.quit"              keys="&lt;alt&gt;x, &lt;alt&gt;X" />
 
 <!-- EDIT MENU -->
 
-  <bind gaction="win.undo"    keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
+  <bind gaction="doc.undo"    keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
 
-  <bind gaction="win.redo"    keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
+  <bind gaction="doc.redo"    keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
 
 <!-- Repeat - Alt+Enter - Inkscape doesn't have it yet -->
 

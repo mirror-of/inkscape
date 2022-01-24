@@ -14,7 +14,11 @@
 #include "livarot/Path.h"       // FillRule
 #include "object/object-set.h"  // bool_op
 
-Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, bool_op bop, FillRule fra, FillRule frb);
+void sp_flatten(Geom::PathVector &pathvector, FillRule fillkind);
+Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, bool_op bop,
+                                      FillRule fra, FillRule frb, bool livarotonly, bool flattenbefore, int &error);
+Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, bool_op bop,
+                                      FillRule fra, FillRule frb, bool livarotonly = false, bool flattenbefore = true);
 
 #endif // PATH_BOOLOP_H
 

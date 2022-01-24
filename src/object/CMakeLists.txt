@@ -179,3 +179,4 @@ set(object_SRC
 add_inkscape_source("${object_SRC}")
 
 add_subdirectory(filters)
+add_subdirectory(algorithms)

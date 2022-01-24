@@ -177,33 +177,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
         // If any if statement is false, do nothing... don't overwrite 'd' from attribute
     }
 
-
-    // this->readAttr(SPAttr::INKSCAPE_ORIGINAL_D); // bug #1299948
-    // Why we take the long way of doing this probably needs some explaining:
-    //
-    // Normally upon being built, reading the inkscape:original-d attribute
-    // will cause the path to actually _write to its repr_ in response to this.
-    // This is bad, bad news if the attached effect refers to a path which
-    // hasn't been constructed yet.
-    // 
-    // What will happen is the effect parameter will cause the effect to
-    // recalculate with a completely different value due to the parameter being
-    // "empty" -- even worse, an undo event might be created with the bad value,
-    // and undoing the current action could cause it to revert to the "bad"
-    // state. (After that, the referred object will be constructed and the
-    // reference will trigger the path effect to update and commit the right
-    // value to "d".)
-    //
-    // This mild nastiness here (don't recalculate effects on build) prevents a
-    // plethora of issues with effects with linked parameters doing wild and
-    // stupid things on new documents upon a mere undo.
-
-    if (gchar const* s = this->getRepr()->attribute("inkscape:original-d"))
-    {
-        // Write the value to _curve_before_lpe, do not recalculate effects
-        Geom::PathVector pv = sp_svg_read_pathv(s);
-        _curve_before_lpe.reset(new SPCurve(pv));
-    }
+    this->readAttr(SPAttr::INKSCAPE_ORIGINAL_D);
     this->readAttr(SPAttr::D);
 
     /* d is a required attribute */
@@ -234,16 +208,8 @@ void SPPath::set(SPAttr key, const gchar* value) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
                 setCurveBeforeLPE(std::make_unique<SPCurve>(pv));
             } else {
-                bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
-                if (!haslpe) {
-                    this->setCurveBeforeLPE(nullptr);
-                } else {
-                    //This happends on undo, fix bug:#1791784
-                    this->removeAllPathEffects(false);
-                }
+                this->setCurveBeforeLPE(nullptr);
             }
-            // fix issue https://gitlab.com/inkscape/inbox/-/issues/5460
-            sp_lpe_item_update_patheffect(this, false, false);
             break;
 
        case SPAttr::D:
@@ -345,6 +311,8 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
             setCurveBeforeLPE(std::move(_curve));
         }
         _curve_before_lpe->transform(transform);
+        // fix issue https://gitlab.com/inkscape/inbox/-/issues/5460
+        sp_lpe_item_update_patheffect(this, false, false);
     } else {
         _curve->transform(transform);
     }

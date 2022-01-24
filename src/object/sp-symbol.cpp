@@ -21,6 +21,7 @@
 #include "attributes.h"
 #include "print.h"
 #include "sp-symbol.h"
+#include "sp-use.h"
 #include "document.h"
 #include "inkscape.h"
 #include "desktop.h"
@@ -32,6 +33,10 @@ SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 SPSymbol::~SPSymbol() = default;
 
 void SPSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::WIDTH);
+    this->readAttr(SPAttr::HEIGHT);
     this->readAttr(SPAttr::VIEWBOX);
     this->readAttr(SPAttr::PRESERVEASPECTRATIO);
 
@@ -44,6 +49,26 @@ void SPSymbol::release() {
 
 void SPSymbol::set(SPAttr key, const gchar* value) {
     switch (key) {
+    case SPAttr::X:
+        this->x.readOrUnset(value);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
+    case SPAttr::Y:
+        this->y.readOrUnset(value);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
+    case SPAttr::WIDTH:
+        this->width.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
+    case SPAttr::HEIGHT:
+        this->height.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
     case SPAttr::VIEWBOX:
         set_viewBox( value );
         // std::cout << "Symbol: ViewBox: " << viewBox << std::endl;
@@ -132,7 +157,13 @@ void SPSymbol::update(SPCtx *ctx, guint flags) {
     if (this->cloned) {
 
         SPItemCtx *ictx = (SPItemCtx *) ctx;
-        SPItemCtx rctx = get_rctx( ictx );
+
+        // Calculate x, y, width, height from parent/initial viewport
+        this->calcDimsFromParentViewport(ictx, false, dynamic_cast<SPUse const *>(parent));
+
+        SPItemCtx rctx = *ictx;
+        rctx.viewport = Geom::Rect::from_xywh(x.computed, y.computed, width.computed, height.computed);
+        rctx = get_rctx(&rctx);
 
         // And invoke parent method
         SPGroup::update((SPCtx *) &rctx, flags);
@@ -158,11 +189,9 @@ Inkscape::XML::Node* SPSymbol::write(Inkscape::XML::Document *xml_doc, Inkscape:
         repr = xml_doc->createElement("svg:symbol");
     }
 
-    //XML Tree being used directly here while it shouldn't be.
-    repr->setAttribute("viewBox", this->getRepr()->attribute("viewBox"));
-	
-    //XML Tree being used directly here while it shouldn't be.
-    repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
+    this->writeDimensions(repr);
+    this->write_viewBox(repr);
+    this->write_preserveAspectRatio(repr);
 
     SPGroup::write(xml_doc, repr, flags);
 

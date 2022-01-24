@@ -464,11 +464,50 @@ void SPShape::modified(unsigned int flags) {
         }
     }
 
-    if (flags != 29 && flags != 253 && !_curve) {
+    if (!_curve) {
         sp_lpe_item_update_patheffect(this, true, false);
-    } else if (!_curve) {
-        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
+}
+
+bool SPShape::checkBrokenPathEffect()
+{
+    if (hasBrokenPathEffect()) {
+        g_warning("The shape has unknown LPE on it. Convert to path to make it editable preserving the appearance; "
+                  "editing it will remove the bad LPE");
+
+        if (this->getRepr()->attribute("d")) {
+            // unconditionally read the curve from d, if any, to preserve appearance
+            Geom::PathVector pv = sp_svg_read_pathv(this->getAttribute("d"));
+            setCurveInsync(std::make_unique<SPCurve>(pv));
+            setCurveBeforeLPE(curve());
+        }
+
+        return true;
+    }
+    return false;
+}
+
+/* Reset the shape's curve to the "original_curve"
+ *  This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+
+bool SPShape::prepareShapeForLPE(SPCurve const *c, bool is_rect)
+{
+    auto const before = curveBeforeLPE();
+    if (before && before->get_pathvector() != c->get_pathvector()) {
+        setCurveBeforeLPE(std::move(c));
+        sp_lpe_item_update_patheffect(this, true, false);
+        return true;
+    }
+
+    if (hasPathEffectOnClipOrMaskRecursive(this)) {
+        if (!before && this->getRepr()->attribute("d")) {
+            Geom::PathVector pv = sp_svg_read_pathv(getAttribute("d"));
+            setCurveInsync(std::make_unique<SPCurve>(pv));
+        }
+        setCurveBeforeLPE(std::move(c));
+        return true;
+    }
+    return false;
 }
 
 Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const {
@@ -822,7 +861,12 @@ void SPShape::print(SPPrintContext* ctx) {
 
 void SPShape::update_patheffect(bool write)
 {
-    if (auto c_lpe = SPCurve::copy(curveForEdit())) {
+    auto c_lpe = SPCurve::copy(curveForEdit());
+    if (!c_lpe) {
+        set_shape();
+        c_lpe = SPCurve::copy(curveForEdit());
+    }
+    if (c_lpe) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
         this->setCurveInsync(c_lpe.get());
@@ -842,10 +886,12 @@ void SPShape::update_patheffect(bool write)
         } 
         if (write && success) {
             Inkscape::XML::Node *repr = this->getRepr();
-            if (c_lpe != nullptr) {
-                repr->setAttribute("d", sp_svg_write_path(c_lpe->get_pathvector()));
-            } else {
-                repr->removeAttribute("d");
+            if (repr) {
+                if (c_lpe != nullptr) {
+                    repr->setAttribute("d", sp_svg_write_path(c_lpe->get_pathvector()));
+                } else {
+                    repr->removeAttribute("d");
+                }
             }
         }
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

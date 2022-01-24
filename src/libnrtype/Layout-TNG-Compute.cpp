@@ -529,12 +529,17 @@ double Layout::Calculator::_getChunkLeftWithAlignment(ParagraphInfo const &para,
 
     switch (para.alignment) {
         case FULL:
-            if (!it_chunk->broken_spans.empty()
-                && it_chunk->broken_spans.back().end.iter_span != para.unbroken_spans.end()) {   // don't justify the last chunk in the para
-                if (it_chunk->whitespace_count)
+            // Don't justify the last line chunk in the span
+            if (!it_chunk->broken_spans.empty() && it_chunk->broken_spans.back().end.iter_span != para.unbroken_spans.end()) {
+
+                // Don't justify a single word or a line that ends with a manual line break.
+                PangoLogAttr const &char_attributes = _charAttributes(para, it_chunk->broken_spans.back().end);
+                if (it_chunk->whitespace_count && !char_attributes.is_mandatory_break) {
+
+                    // Set the amount of extra space between each word to a fraction
+                    // of the remaining line space to justify this line.
                     *add_to_each_whitespace = (it_chunk->scanrun_width - it_chunk->text_width) / it_chunk->whitespace_count;
-                //else
-                    //add_to_each_charspace = something
+                }
             }
             return it_chunk->x;
         case LEFT:

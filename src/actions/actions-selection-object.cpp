@@ -22,8 +22,11 @@
 #include "actions-selection-object.h"
 #include "actions-helper.h"
 #include "inkscape-application.h"
+#include "inkscape-window.h" // Anchor
 #include "inkscape.h"
 #include "selection.h"
+
+#include "ui/dialog/dialog-container.h" // Used by select_object_link() to open dialog to add hyperlink.
 
 void
 select_object_group(InkscapeApplication* app)
@@ -50,6 +53,21 @@ select_object_ungroup_pop(InkscapeApplication* app)
 
     // Pop Selected Objects out of Group
     selection->popFromGroup();
+}
+
+void
+select_object_link(InkscapeApplication* app)
+{
+    Inkscape::Selection *selection = app->get_active_selection();
+
+    // Group with <a>
+    auto anchor = selection->group(1);
+    selection->set(anchor);
+
+    // Open dialog to set link.
+    if (app->get_active_window()) {
+        app->get_active_window()->get_desktop()->getContainer()->new_dialog("ObjectAttributes");
+    }
 }
 
 void
@@ -94,10 +112,12 @@ std::vector<std::vector<Glib::ustring>> raw_data_selection_object =
     { "app.selection-group",                N_("Group"),                                 "Select",   N_("Group selected objects")},
     { "app.selection-ungroup",              N_("Ungroup"),                               "Select",   N_("Ungroup selected objects")},
     { "app.selection-ungroup-pop",          N_("Pop Selected Objects out of Group"),     "Select",   N_("Pop selected objects out of group")},
+    { "app.selection-link",                 N_("Link"),                                  "Select",   N_("Add an anchor to selected objects")},
+
     { "app.selection-top",                  N_("Raise to Top"),                          "Select",   N_("Raise selection to top")},
     { "app.selection-raise",                N_("Raise"),                                 "Select",   N_("Raise selection one step")},
     { "app.selection-lower",                N_("Lower"),                                 "Select",   N_("Lower selection one step")},
-    { "app.selection-bottom",               N_("Lower to Bottom"),                       "Select",   N_("Lower selection to bottom")}
+    { "app.selection-bottom",               N_("Lower to Bottom"),                       "Select",   N_("Lower selection to bottom")},
     // clang-format on
 };
 
@@ -107,9 +127,12 @@ add_actions_selection_object(InkscapeApplication* app)
     auto *gapp = app->gio_app();
 
     // clang-format off
+    // See actions-layer.cpp for "enter-group" and "exit-group".
     gapp->add_action( "selection-group",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_group),           app));
     gapp->add_action( "selection-ungroup",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup),         app));
     gapp->add_action( "selection-ungroup-pop",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_ungroup_pop),     app));
+    gapp->add_action( "selection-link",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_object_link),            app));
+
     gapp->add_action( "selection-top",                sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_top),                 app));
     gapp->add_action( "selection-raise",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_raise),               app));
     gapp->add_action( "selection-lower",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_lower),               app));

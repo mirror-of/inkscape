@@ -27,11 +27,11 @@
 
 /*
 File:      upmf.h
-Version:   0.0.5
-Date:      26-JAN-2016
+Version:   0.0.6
+Date:      13-MAY-2020
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2016 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2020 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifndef _UPMF_
@@ -1354,7 +1354,7 @@ typedef struct {
                             Each data field is an array of a basic type of Units 
                             bytes repeated Reps times */
     size_t      Units; /**< Number of bytes in each unit of each data field. */
-    size_t      Reps;  /**< MNumber of repeats of Units in eah data field. */
+    size_t      Reps;  /**< Number of repeats of Units in each data field. */
     int         TE;    /**< (Target Endian). Only relevant for Units of 2 or 4*/
 } U_SERIAL_DESC;
 

@@ -23,7 +23,7 @@
       </item>
     </section>
     <submenu id="recent-files">
-      <attribute name='label' translatable='yes'>Recent files</attribute>
+      <attribute name='label' translatable='yes'>Open _Recent</attribute>
     </submenu>   
     <section>
       <item>
@@ -93,8 +93,9 @@
       </item>
       <item>
         <attribute name='label' translatable="yes">_Quit</attribute>
-        <attribute name='action'>app.quit-inkscape</attribute>
+        <attribute name='action'>app.quit</attribute>
         <attribute name='icon'>application-exit</attribute>
+        <attribute name='hidden-when'>macos-menubar</attribute>
       </item>
     </section>
   </submenu>
@@ -104,12 +105,12 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Undo</attribute>
-        <attribute name='action'>win.undo</attribute>
+        <attribute name='action'>doc.undo</attribute>
         <attribute name='icon'>edit-undo</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Redo</attribute>
-        <attribute name='action'>win.redo</attribute>
+        <attribute name='action'>doc.redo</attribute>
         <attribute name='icon'>edit-redo</attribute>
       </item>
       <item>
@@ -304,7 +305,7 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Resize Page to Selection</attribute>
-        <attribute name='action'>win.fit-canvas-to-selection-or-drawing</attribute>
+        <attribute name='action'>app.page-fit-to-selection</attribute>
       </item>
     </section>
     <section>
@@ -342,6 +343,7 @@
       	<attribute name='target'>Preferences</attribute>
       	<attribute name='icon'>preferences-system</attribute>
         <attribute name='use-icon'>true</attribute>
+        <attribute name='hidden-when'>macos-menubar</attribute>
       </item>
     </section>
   </submenu>
@@ -663,11 +665,11 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">_Show/Hide Current Layer</attribute>
-        <attribute name='action'>win.layer-toggle-hide</attribute>
+        <attribute name='action'>win.layer-hide-toggle</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">_Lock/Unlock Current Layer</attribute>
-        <attribute name='action'>win.layer-toggle-lock</attribute>
+        <attribute name='action'>win.layer-lock-toggle</attribute>
       </item>
     </section>
     <section>
@@ -915,11 +917,11 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">Unhide All</attribute>
-        <attribute name='action'>win.unhide-all</attribute>
+        <attribute name='action'>app.unhide-all</attribute>
       </item>
       <item>
         <attribute name='label' translatable="yes">Unlock All</attribute>
-        <attribute name='action'>win.unlock-all</attribute>
+        <attribute name='action'>app.unlock-all</attribute>
       </item>
     </section>
     <section>
@@ -1007,6 +1009,12 @@
         <attribute name='label' translatable="yes">Break _Apart</attribute>
         <attribute name='action'>app.path-break-apart</attribute>
         <attribute name='icon'>path-break-apart</attribute>
+        <attribute name='use-icon'>true</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable="yes">Split Paths</attribute>
+        <attribute name='action'>app.path-split</attribute>
+        <attribute name='icon'>path-split</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
     </section>
@@ -1274,9 +1282,10 @@
         </item>
         <item>
           <attribute name='label' translatable="yes">_About Inkscape</attribute>
-          <attribute name='action'>app.help-about</attribute>
+          <attribute name='action'>app.about</attribute>
           <attribute name='icon'>inkscape-logo</attribute>
           <attribute name='use-icon'>true</attribute>
+          <attribute name='hidden-when'>macos-menubar</attribute>
         </item>
       </section>
     </submenu>

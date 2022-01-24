@@ -189,7 +189,7 @@ ObjectSet::combine(bool skip_undo)
 }
 
 void
-ObjectSet::breakApart(bool skip_undo)
+ObjectSet::breakApart(bool skip_undo, bool overlapping)
 {
     if (isEmpty()) {
         if(desktop())
@@ -232,8 +232,7 @@ ObjectSet::breakApart(bool skip_undo)
         // it's going to resurrect as one of the pieces, so we delete without advertisement
         item->deleteObject(false);
 
-
-        auto list = curve->split();
+        auto list = overlapping ? curve->split() : curve->split_non_overlapping();
 
         std::vector<Inkscape::XML::Node*> reprs;
         for (auto const &curve : list) {

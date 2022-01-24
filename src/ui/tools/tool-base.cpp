@@ -326,10 +326,12 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
         delta *= nudge;
     }
 
+    bool moved = false;
     if (shape_editor && shape_editor->has_knotholder()) {
         KnotHolder * knotholder = shape_editor->knotholder;
-        if (knotholder) {
+        if (knotholder && knotholder->knot_selected()) {
             knotholder->transform_selected(Geom::Translate(delta));
+            moved = true;
         }
     } else {
         auto nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
@@ -338,15 +340,16 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
                 ShapeEditor *shape_editor = _shape_editor.second.get();
                 if (shape_editor && shape_editor->has_knotholder()) {
                     KnotHolder * knotholder = shape_editor->knotholder;
-                    if (knotholder) {
+                    if (knotholder && knotholder->knot_selected()) {
                         knotholder->transform_selected(Geom::Translate(delta));
+                        moved = true;
                     }
                 }
             }
         }
     }
 
-    return true;
+    return moved;
 }
 
 
@@ -1307,6 +1310,7 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
     }
 
     ContextMenu* menu = new ContextMenu(desktop, item);
+    menu->attach_to_widget(*(desktop->getCanvas())); // So actions work!
     menu->show();
 
     switch (event->type) {

@@ -36,10 +36,10 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "enums.h"
-#include "graphlayout.h"
 #include "layer-manager.h"
 #include "selection.h"
 
+#include "object/algorithms/graphlayout.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
 

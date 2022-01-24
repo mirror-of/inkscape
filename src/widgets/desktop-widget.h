@@ -33,6 +33,7 @@
 // forward declaration
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
 
+class InkscapeWindow;
 struct SPCanvasItem;
 class SPDocument;
 class SPDesktop;
@@ -75,10 +76,10 @@ void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
 class SPDesktopWidget : public SPViewWidget {
     using parent_type = SPViewWidget;
 
-    SPDesktopWidget();
+    SPDesktopWidget(InkscapeWindow *inkscape_window);
 
 public:
-    SPDesktopWidget(SPDocument *document);
+    SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *document);
     ~SPDesktopWidget() override;
 
     Inkscape::UI::Widget::CanvasGrid *get_canvas_grid() { return _canvas_grid; }  // Temp, I hope!
@@ -92,7 +93,7 @@ public:
 
     SPDesktop *desktop = nullptr;
 
-    Gtk::Window *window = nullptr;
+    InkscapeWindow *window = nullptr;
     Gtk::MenuBar *_menubar;
 private:
     // Flags for ruler event handling
@@ -109,6 +110,7 @@ private:
     // The root vbox of the window layout.
     Gtk::Box *_vbox;
 
+    Gtk::Paned *_tbbox;
     Gtk::Box *_hbox;
     Inkscape::UI::Dialog::DialogContainer *_container = nullptr;
     Inkscape::UI::Dialog::DialogMultipaned *_columns;
@@ -216,6 +218,7 @@ public:
     void toggle_rulers();
     void sticky_zoom_toggled();
 
+    Gtk::Widget *get_tool_toolbox() const { return Glib::wrap(tool_toolbox); }
 private:
     GtkWidget *tool_toolbox;
     GtkWidget *aux_toolbox;
@@ -236,6 +239,7 @@ private:
     void rotation_populate_popup(Gtk::Menu *menu);
   //void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
     void update_statusbar_visibility();
+    void apply_ctrlbar_settings();
 
 public:
     void cms_adjust_toggled();

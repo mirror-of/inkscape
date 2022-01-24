@@ -101,21 +101,16 @@ FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 {
 }
 
-void FilletChamferPropertiesDialog::showDialog(
-    SPDesktop *desktop, 
-    double _amount,
-    const Inkscape::LivePathEffect::
-    FilletChamferKnotHolderEntity *pt,
-    bool _use_distance,
-    bool _aprox_radius,
-    Satellite _satellite)
+void FilletChamferPropertiesDialog::showDialog(SPDesktop *desktop, double _amount,
+                                               const Inkscape::LivePathEffect::FilletChamferKnotHolderEntity *pt,
+                                               bool _use_distance, bool _aprox_radius, NodeSatellite _nodesatellite)
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
     dialog->_setUseDistance(_use_distance);
     dialog->_setAprox(_aprox_radius);
     dialog->_setAmount(_amount);
-    dialog->_setSatellite(_satellite);
+    dialog->_setNodeSatellite(_nodesatellite);
     dialog->_setPt(pt);
 
     dialog->set_title(_("Modify Fillet-Chamfer"));
@@ -135,13 +130,13 @@ void FilletChamferPropertiesDialog::_apply()
     double d_pos =  _fillet_chamfer_position_numeric.get_value();
     if (d_pos >= 0) {
         if (_fillet_chamfer_type_fillet.get_active() == true) {
-            _satellite.satellite_type = FILLET;
+            _nodesatellite.nodesatellite_type = FILLET;
         } else if (_fillet_chamfer_type_inverse_fillet.get_active() == true) {
-            _satellite.satellite_type = INVERSE_FILLET;
+            _nodesatellite.nodesatellite_type = INVERSE_FILLET;
         } else if (_fillet_chamfer_type_inverse_chamfer.get_active() == true) {
-            _satellite.satellite_type = INVERSE_CHAMFER;
+            _nodesatellite.nodesatellite_type = INVERSE_CHAMFER;
         } else {
-            _satellite.satellite_type = CHAMFER;
+            _nodesatellite.nodesatellite_type = CHAMFER;
         }
         if (_flexible) {
             if (d_pos > 99.99999 || d_pos < 0) {
@@ -149,13 +144,13 @@ void FilletChamferPropertiesDialog::_apply()
             }
             d_pos = d_pos / 100;
         }
-        _satellite.amount = d_pos;
+        _nodesatellite.amount = d_pos;
         size_t steps = (size_t)_fillet_chamfer_chamfer_subdivisions.get_value();
         if (steps < 1) {
             steps = 1;
         }
-        _satellite.steps = steps;
-        _knotpoint->knot_set_offset(_satellite);
+        _nodesatellite.steps = steps;
+        _knotpoint->knot_set_offset(_nodesatellite);
     }
     _close();
 }
@@ -183,7 +178,7 @@ void FilletChamferPropertiesDialog::_handleButtonEvent(GdkEventButton *event)
     }
 }
 
-void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
+void FilletChamferPropertiesDialog::_setNodeSatellite(NodeSatellite nodesatellite)
 {
     double position;
     std::string distance_or_radius = std::string(_("Radius"));
@@ -193,7 +188,7 @@ void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
     if (_use_distance) {
         distance_or_radius = std::string(_("Knot distance"));
     }
-    if (satellite.is_time) {
+    if (nodesatellite.is_time) {
         position = _amount * 100;
         _flexible = true;
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
@@ -204,17 +199,17 @@ void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
         position = _amount;
     }
     _fillet_chamfer_position_numeric.set_value(position);
-    _fillet_chamfer_chamfer_subdivisions.set_value(satellite.steps);
-    if (satellite.satellite_type == FILLET) {
+    _fillet_chamfer_chamfer_subdivisions.set_value(nodesatellite.steps);
+    if (nodesatellite.nodesatellite_type == FILLET) {
         _fillet_chamfer_type_fillet.set_active(true);
-    } else if (satellite.satellite_type == INVERSE_FILLET) {
+    } else if (nodesatellite.nodesatellite_type == INVERSE_FILLET) {
         _fillet_chamfer_type_inverse_fillet.set_active(true);
-    } else if (satellite.satellite_type == CHAMFER) {
+    } else if (nodesatellite.nodesatellite_type == CHAMFER) {
         _fillet_chamfer_type_chamfer.set_active(true);
-    } else if (satellite.satellite_type == INVERSE_CHAMFER) {
+    } else if (nodesatellite.nodesatellite_type == INVERSE_CHAMFER) {
         _fillet_chamfer_type_inverse_chamfer.set_active(true);
     }
-    _satellite = satellite;
+    _nodesatellite = nodesatellite;
 }
 
 void FilletChamferPropertiesDialog::_setPt(

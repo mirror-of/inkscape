@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  *
- * Actions related to selection wich require desktop.
+ * Actions related to selection which require desktop.
  *
  * These are linked to the desktop as they operate differently
  * depending on if the node tool is in use or not.

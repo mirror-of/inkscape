@@ -20,6 +20,7 @@
 #include <gtkmm/notebook.h>
 #include <iostream>
 
+#include "inkscape.h"
 #include "desktop.h"
 #include "ui/dialog/dialog-data.h"
 #include "ui/dialog/dialog-notebook.h"
@@ -28,6 +29,7 @@
 #include "ui/tools/tool-base.h"
 #include "widgets/spw-utilities.h"
 #include "ui/widget/canvas.h"
+#include "ui/util.h"
 
 namespace Inkscape {
 namespace UI {
@@ -49,8 +51,7 @@ DialogBase::DialogBase(gchar const *prefs_path, Glib::ustring dialog_type)
     , _dialog_type(dialog_type)
     , _app(InkscapeApplication::instance())
 {
-    // Derive a pretty display name for the dialog based on the verbs name.
-    // TODO: This seems fragile. Should verbs have a proper display name?
+    // Derive a pretty display name for the dialog.
     auto it = dialog_data.find(dialog_type);
     if (it != dialog_data.end()) {
 
@@ -75,6 +76,31 @@ DialogBase::DialogBase(gchar const *prefs_path, Glib::ustring dialog_type)
     set_name(_dialog_type); // Essential for dialog functionality
     property_margin().set_value(1); // Essential for dialog UI
     ensure_size();
+}
+
+DialogBase::~DialogBase() {
+#ifdef _WIN32
+    // this is bad, but it supposedly fixes some resizng problem on Windows
+    ensure_size();
+#endif
+
+    unsetDesktop();
+};
+
+void DialogBase::ensure_size() {
+    if (desktop) {
+        resize_widget_children(desktop->getToplevel());
+    }
+}
+
+void DialogBase::on_map() {
+    // Update asks the dialogs if they need their Gtk widgets updated.
+    update();
+    // Set the desktop on_map, although we might want to be smarter about this.
+    // Note: Inkscape::Application::instance().active_desktop() is used here, as it contains current desktop at
+    // the time of dialog creation. Formerly used _app.get_active_view() did not at application start-up.
+    setDesktop(Inkscape::Application::instance().active_desktop());
+    parent_type::on_map();
 }
 
 bool DialogBase::on_key_press_event(GdkEventKey* key_event) {
@@ -151,26 +177,60 @@ bool DialogBase::blink_off()
  */
 void DialogBase::setDesktop(SPDesktop *new_desktop)
 {
-    if (desktop != new_desktop) {
-        unsetDesktop();
+    if (desktop == new_desktop) {
+        return;
+    }
+
+    unsetDesktop();
+
+    if (new_desktop) {
         desktop = new_desktop;
 
-        if (desktop) {
-            _doc_replaced = desktop->connectDocumentReplaced(sigc::hide<0>(sigc::mem_fun(*this, &DialogBase::setDocument)));
-            _desktop_destroyed = desktop->connectDestroy( sigc::mem_fun(*this, &DialogBase::desktopDestroyed));
-            if (desktop->selection) {
-                selection = desktop->selection;
-                _select_changed = selection->connectChanged(sigc::mem_fun(*this, &DialogBase::selectionChanged));
-                _select_modified = selection->connectModified(sigc::mem_fun(*this, &DialogBase::selectionModified));
-            }
+        if (desktop->selection) {
+            selection = desktop->selection;
+            _select_changed = selection->connectChanged(sigc::mem_fun(*this, &DialogBase::selectionChanged_impl));
+            _select_modified = selection->connectModified(sigc::mem_fun(*this, &DialogBase::selectionModified_impl));
         }
-        if (desktop) {
-            this->setDocument(desktop->getDocument());
-        } else {
-            this->setDocument(nullptr);
+
+        _doc_replaced = desktop->connectDocumentReplaced(sigc::hide<0>(sigc::mem_fun(*this, &DialogBase::setDocument)));
+        _desktop_destroyed = desktop->connectDestroy(sigc::mem_fun(*this, &DialogBase::desktopDestroyed));
+        this->setDocument(desktop->getDocument());
+
+        if (desktop->selection) {
+            this->selectionChanged(selection);
         }
-        desktopReplaced();
     }
+
+    desktopReplaced();
+}
+
+/**
+ * implementation method that call to main function only when tab is showing
+ */
+void 
+DialogBase::selectionChanged_impl(Inkscape::Selection *selection) {
+    if (_showing) {
+        selectionChanged(selection);
+    }
+}
+
+/**
+ * implementation method that call to main function only when tab is showing
+ */
+void 
+DialogBase::selectionModified_impl(Inkscape::Selection *selection, guint flags) {
+    if (_showing) {
+        selectionModified(selection, flags);
+    }
+}
+
+/**
+ * function called from notebook dialog that preform an update of the dialog and set the dialog showed state true
+ */
+void 
+DialogBase::setShowing(bool showing) {
+    _showing = showing;
+    selectionChanged(getSelection());
 }
 
 /**

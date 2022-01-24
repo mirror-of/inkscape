@@ -479,6 +479,23 @@ pathv_matrix_point_bbox_wind_distance (Geom::PathVector const & pathv, Geom::Aff
 
 //#################################################################################
 
+/**
+ * Basic check on intersecting path vectors
+ */
+bool is_intersecting(Geom::PathVector const&a, Geom::PathVector const&b) {
+    for (auto &node : b.nodes()) {
+        if (a.winding(node)) {
+            return true;
+        }
+    }
+   for (auto &node : a.nodes()) {
+        if (b.winding(node)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /*
  * Converts all segments in all paths to Geom::LineSegment or Geom::HLineSegment or
  * Geom::VLineSegment or Geom::CubicBezier.

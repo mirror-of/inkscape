@@ -609,7 +609,7 @@ void VPDrag::updateBoxHandles()
         return;
     }
 
-    Inkscape::UI::Tools::ToolBase *ec = INKSCAPE.active_event_context();
+    Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->getEventContext();
     g_assert(ec != nullptr);
     if (ec->shape_editor != nullptr) {
         ec->shape_editor->update_knotholder();

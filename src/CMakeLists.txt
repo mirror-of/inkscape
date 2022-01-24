@@ -37,7 +37,6 @@ set(inkscape_SRC
   gc-finalized.cpp
   gradient-chemistry.cpp
   gradient-drag.cpp
-  graphlayout.cpp
   guide-snapper.cpp
   id-clash.cpp
   inkscape.cpp
@@ -61,7 +60,6 @@ set(inkscape_SRC
   proj_pt.cpp
   pure-transform.cpp
   rdf.cpp
-  removeoverlap.cpp
   rubberband.cpp
   selcue.cpp
   selection-chemistry.cpp
@@ -80,7 +78,6 @@ set(inkscape_SRC
   text-chemistry.cpp
   text-editing.cpp
   transf_mat_3x4.cpp
-  unclump.cpp
   unicoderange.cpp
   vanishing-point.cpp
   verbs.cpp
@@ -129,7 +126,6 @@ set(inkscape_SRC
   gc-finalized.h
   gradient-chemistry.h
   gradient-drag.h
-  graphlayout.h
   guide-snapper.h
   helper-fns.h
   id-clash.h
@@ -159,7 +155,6 @@ set(inkscape_SRC
   proj_pt.h
   pure-transform.h
   rdf.h
-  removeoverlap.h
   rubberband.h
   selcue.h
   selection-chemistry.h
@@ -185,7 +180,6 @@ set(inkscape_SRC
   text-editing.h
   text-tag-attributes.h
   transf_mat_3x4.h
-  unclump.h
   undo-stack-observer.h
   unicoderange.h
   vanishing-point.h
@@ -223,12 +217,14 @@ set(inkscape_SRC
   actions/actions-edit.cpp
   actions/actions-effect.h
   actions/actions-effect.cpp
+  actions/actions-element-a.h
+  actions/actions-element-a.cpp
+  actions/actions-element-image.h
+  actions/actions-element-image.cpp
   actions/actions-file-window.h
   actions/actions-file-window.cpp
   actions/actions-file.h
   actions/actions-file.cpp
-  actions/actions-fit-canvas.h
-  actions/actions-fit-canvas.cpp
   actions/actions-helper.h
   actions/actions-helper.cpp
   actions/actions-help-url.h
@@ -237,6 +233,8 @@ set(inkscape_SRC
   actions/actions-hide-lock.cpp
   actions/actions-layer.h
   actions/actions-layer.cpp
+  actions/actions-node-align.h
+  actions/actions-node-align.cpp
   actions/actions-object.h
   actions/actions-object.cpp
   actions/actions-object-align.h
@@ -259,6 +257,8 @@ set(inkscape_SRC
   actions/actions-tutorial.cpp
   actions/actions-transform.h
   actions/actions-transform.cpp
+  actions/actions-undo-document.h
+  actions/actions-undo-document.cpp
   actions/actions-view-mode.h
   actions/actions-view-mode.cpp
   actions/actions-view-window.h
@@ -408,10 +408,6 @@ if(NOT APPLE)
     set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "$ORIGIN/..")
 else()
     set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "@loader_path/..")
-endif()
-
-if(WITH_DBUS)
-    add_dependencies(inkscape_base inkscape_dbus)
 endif()
 
 target_link_libraries(inkscape_base PUBLIC Boost::filesystem)

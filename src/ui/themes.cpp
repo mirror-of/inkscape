@@ -24,6 +24,7 @@
 #include <utility>
 #include <vector>
 #include <regex>
+#include "svg/css-ostringstream.h"
 
 namespace Inkscape {
 namespace UI {
@@ -495,6 +496,24 @@ std::vector<guint32> ThemeContext::getHighlightColors(Gtk::Window *window)
         colors.push_back(rgba);
     }
     return colors;
+}
+
+void ThemeContext::adjust_global_font_scale(double factor) {
+    if (factor < 0.1 || factor > 10) {
+        g_warning("Invalid font scaling factor %f in ThemeContext::adjust_global_font_scale", factor);
+        return;
+    }
+
+    auto screen = Gdk::Screen::get_default();
+    Gtk::StyleContext::remove_provider_for_screen(screen, _fontsizeprovider);
+
+    Inkscape::CSSOStringStream os;
+    os.precision(3);
+    os << "widget, menuitem { font-size: " << factor << "rem; }";
+    _fontsizeprovider->load_from_data(os.str());
+
+    // note: priority set to APP - 1 to make sure styles.css take precedence over generic font-size
+    Gtk::StyleContext::add_provider_for_screen(screen, _fontsizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
 }
 
 } // UI

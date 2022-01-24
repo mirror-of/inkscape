@@ -101,7 +101,7 @@ void add_actions_pages(SPDocument* doc)
     // Note: This will only work for the first ux to load, possible problem.
     auto app = InkscapeApplication::instance();
     if (!app) {
-        std::cerr << "add_actions_canvas_snapping: no app!" << std::endl;
+        std::cerr << "add_actions_pages: no app!" << std::endl;
         return;
     }
     app->get_action_extra_data().add_data(raw_data_actions);

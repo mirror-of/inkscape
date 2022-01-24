@@ -124,6 +124,11 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place);
 void sp_file_import (Gtk::Window &parentWindow);
 
 /**
+ * Imports pages into the document.
+ */
+void file_import_pages(SPDocument *this_doc, SPDocument *that_doc);
+
+/**
  * Imports a resource
  */
 SPObject* file_import(SPDocument *in_doc, const Glib::ustring &uri,
@@ -168,6 +173,7 @@ void sp_file_convert_dpi(SPDocument *doc);
 void sp_file_fix_empty_lines(SPDocument *doc);
 void sp_file_fix_osb(SPObject *doc);
 void sp_file_fix_feComposite(SPObject *doc);
+void sp_file_fix_lpe(SPDocument *doc);
 enum File_DPI_Fix { FILE_DPI_UNCHANGED = 0, FILE_DPI_VIEWBOX_SCALED, FILE_DPI_DOCUMENT_SCALED };
 extern int sp_file_convert_dpi_method_commandline;
 

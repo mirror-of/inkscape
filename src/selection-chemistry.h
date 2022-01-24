@@ -103,7 +103,6 @@ void sp_document_get_export_hints (SPDocument * doc, Glib::ustring &filename, fl
 
 bool fit_canvas_to_drawing(SPDocument *, bool with_margins = false);
 void fit_canvas_to_drawing(SPDesktop *);
-void fit_canvas_to_selection_or_drawing(SPDesktop *);
 
 void unlock_all(SPDesktop *dt);
 void unlock_all_in_all_layers(SPDesktop *dt);

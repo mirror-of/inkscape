@@ -90,6 +90,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     , effectcontrol_frame("")
     , button_add()
     , button_remove()
+    , button_original()
     , button_up()
     , button_down()
     , current_lpeitem(nullptr)
@@ -123,6 +124,10 @@ LivePathEffectEditor::LivePathEffectEditor()
     lpe_style_button(button_remove, INKSCAPE_ICON("list-remove"));
     button_remove.set_relief(Gtk::RELIEF_NONE);
 
+    button_original.set_tooltip_text(_("Select origin item"));
+    lpe_style_button(button_original, INKSCAPE_ICON("clone-original"));
+    button_original.set_relief(Gtk::RELIEF_NONE);
+
     button_up.set_tooltip_text(_("Raise the current path effect"));
     lpe_style_button(button_up, INKSCAPE_ICON("go-up"));
     button_up.set_relief(Gtk::RELIEF_NONE);
@@ -137,12 +142,14 @@ LivePathEffectEditor::LivePathEffectEditor()
     toolbar_hbox.set_child_secondary( button_add , true);
     toolbar_hbox.add( button_remove );
     toolbar_hbox.set_child_secondary( button_remove , true);
+    toolbar_hbox.add(button_original);
     toolbar_hbox.add( button_up );
     toolbar_hbox.add( button_down );
     toolbar_hbox.set_child_non_homogeneous (button_add,true);
     toolbar_hbox.set_child_non_homogeneous (button_remove,true);
     toolbar_hbox.set_child_non_homogeneous (button_up,true);
     toolbar_hbox.set_child_non_homogeneous (button_down,true);
+    toolbar_hbox.set_child_non_homogeneous(button_original, true);
 
     //Create the Tree model:
     effectlist_store = Gtk::ListStore::create(columns);
@@ -176,6 +183,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     // connect callback functions to buttons
     button_add.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onAdd));
     button_remove.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onRemove));
+    button_original.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onOriginal));
     button_up.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onUp));
     button_down.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onDown));
 
@@ -197,7 +205,7 @@ bool LivePathEffectEditor::_on_button_release(GdkEventButton* button_event) {
         return true;
     }
     Gtk::TreeModel::iterator it = sel->get_selected();
-    LivePathEffect::LPEObjectReference * lperef = (*it)[columns.lperef];
+    std::shared_ptr<LivePathEffect::LPEObjectReference> lperef = (*it)[columns.lperef];
     if (lperef && current_lpeitem && current_lperef != lperef) {
         if (lperef->getObject()) {
             LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
@@ -284,10 +292,11 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
     }
     current_lpeitem = nullptr;
     effectlist_store->clear();
-
+    button_original.set_sensitive(false);
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
         if ( item ) {
+            button_original.set_sensitive(true);
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
             if ( lpeitem ) {
                 effect_list_reload(lpeitem);
@@ -422,8 +431,8 @@ void LivePathEffectEditor::onAdd()
                         selection->set(orig);
 
                         // delete clone but remember its id and transform
-                        gchar *id = g_strdup(item->getRepr()->attribute("id"));
-                        gchar *transform = g_strdup(item->getRepr()->attribute("transform"));
+                        gchar *id = g_strdup(item->getAttribute("id"));
+                        gchar *transform = g_strdup(item->getAttribute("transform"));
                         item->deleteObject(false);
                         item = nullptr;
 
@@ -435,6 +444,7 @@ void LivePathEffectEditor::onAdd()
                         if (new_item && (new_item != orig)) {
                             new_item->setAttribute("id", id);
                             new_item->setAttribute("transform", transform);
+                            new_item->setAttribute("class", "fromclone");
                         }
                         g_free(id);
                         g_free(transform);
@@ -469,6 +479,40 @@ LivePathEffectEditor::onRemove()
         }
     }
 
+}
+
+gboolean removeselectclass(gpointer data)
+{
+    SPItem *item = reinterpret_cast<SPItem *>(data);
+    const gchar *classitem = item->getAttribute("class");
+    if (classitem) {
+        Glib::ustring classtoparent = classitem;
+        classtoparent.erase(classtoparent.find("lpeselectparent "), 16);
+        if (classtoparent.empty()) {
+            item->setAttribute("class", nullptr);
+        } else {
+            item->setAttribute("class", classtoparent.c_str());
+        }
+    }
+    return FALSE;
+}
+
+void LivePathEffectEditor::onOriginal()
+{
+    auto selection = getSelection();
+    if (selection && !selection->isEmpty()) {
+        if (SPItem *item = selection->singleItem()) {
+            const gchar *classtoparentchar = item->getAttribute("class");
+            Glib::ustring classtoparent = "lpeselectparent ";
+            if (classtoparentchar) {
+                classtoparent += classtoparentchar;
+            }
+            // here we fire a update and the lpe original check for this class and select
+            item->setAttribute("class", classtoparent.c_str());
+            selection->set(item);
+            g_timeout_add(100, &removeselectclass, item);
+        }
+    }
 }
 
 void LivePathEffectEditor::onUp()
@@ -520,11 +564,11 @@ void LivePathEffectEditor::on_effect_selection_changed()
     }
     button_remove.set_sensitive(true);
     Gtk::TreeModel::iterator it = sel->get_selected();
-    LivePathEffect::LPEObjectReference * lperef = (*it)[columns.lperef];
+    std::shared_ptr<LivePathEffect::LPEObjectReference> lperef = (*it)[columns.lperef];
 
     if (lperef && current_lpeitem && current_lperef != lperef) {
         // The last condition ignore Gtk::TreeModel may occasionally be changed emitted when nothing has happened
-        if (lperef->getObject()) {
+        if (current_lpeitem->pathEffectsEnabled() && lperef->getObject()) {
             lpe_list_locked = true; // prevent reload of the list which would lose selection
             current_lpeitem->setCurrentPathEffect(lperef);
             current_lperef = lperef;
@@ -537,7 +581,9 @@ void LivePathEffectEditor::on_effect_selection_changed()
                 if (selection && !selection->isEmpty() && !selection_changed_lock) {
                     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(selection->singleItem());
                     if (lpeitem) {
-                        selection->set(lpeitem);
+                        // this is need because set dont update selected LPE knots
+                        selection->clear();
+                        selection->add(lpeitem);
                         Inkscape::UI::Tools::sp_update_helperpath(getDesktop());
                     }
                 }
@@ -552,7 +598,7 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
     Gtk::TreeModel::Children::iterator iter = effectlist_view.get_model()->get_iter(str);
     Gtk::TreeModel::Row row = *iter;
 
-    LivePathEffect::LPEObjectReference * lpeobjref = row[columns.lperef];
+    std::shared_ptr<LivePathEffect::LPEObjectReference> lpeobjref = row[columns.lperef];
 
     if ( lpeobjref && lpeobjref->lpeobject->get_lpe() ) {
         bool newValue = !row[columns.col_visible];

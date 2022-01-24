@@ -199,8 +199,8 @@ GradientEditor::GradientEditor(const char* prefs) :
     auto& gradBox = get_widget<Gtk::Box>(_builder, "gradientBox");
     const int dot_size = 8;
     _gradient_image.show();
-    _gradient_image.set_margin_left(dot_size / 2);
-    _gradient_image.set_margin_right(dot_size / 2);
+    _gradient_image.set_margin_start(dot_size / 2);
+    _gradient_image.set_margin_end(dot_size / 2);
     // gradient stop selected in a gradient widget; sync list selection
     _gradient_image.signal_stop_selected().connect([=](size_t index) {
         select_stop(index);
@@ -329,7 +329,7 @@ GradientEditor::GradientEditor(const char* prefs) :
     update_stops_layout();
 }
 
-GradientEditor::~GradientEditor() {
+GradientEditor::~GradientEditor() noexcept {
 }
 
 void GradientEditor::set_stop_color(SPColor color, float opacity) {

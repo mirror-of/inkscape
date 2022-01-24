@@ -125,8 +125,7 @@ private:
     ObjectsPanel(ObjectsPanel const &) = delete; // no copy
     ObjectsPanel &operator=(ObjectsPanel const &) = delete; // no assign
 
-    Gtk::Button *_addBarButton(char const* iconName, char const* tooltip, int verb_id);
-    void _fireAction( unsigned int code );
+    Gtk::Button *_addBarButton(char const* iconName, char const* tooltip, char const *action_name);
     void _objects_toggle();
     
     bool toggleVisible(GdkEventButton* event, Gtk::TreeModel::Row row);
@@ -137,9 +136,9 @@ private:
     bool _handleMotionEvent(GdkEventMotion* motion_event);
     
     void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleTransparentHover(bool enabled);
+    void _generateTranslucentItems(SPItem *parent);
 
-    void _takeAction(int val);
-    
     bool select_row( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
 
     bool on_drag_motion(const Glib::RefPtr<Gdk::DragContext> &, int, int, guint) override;
@@ -148,6 +147,9 @@ private:
     void on_drag_end(const Glib::RefPtr<Gdk::DragContext> &) override;
 
     friend class ObjectWatcher;
+
+    SPItem *_solid_item;
+    std::list<SPItem *> _translucent_items;
 };
 
 

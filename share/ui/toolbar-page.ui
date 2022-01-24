@@ -49,7 +49,7 @@
       <object class="GtkToolButton" id="page_fit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">win.fit-canvas-to-selection-or-drawing</property>
+        <property name="action_name">app.page-fit-to-selection</property>
         <property name="label" translatable="yes">Fit Page to Selection</property>
         <property name="icon_name">pages-resize</property>
       </object>

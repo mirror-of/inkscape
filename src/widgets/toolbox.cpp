@@ -174,10 +174,6 @@ static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType /*h
 
 GtkWidget *ToolboxFactory::createToolToolbox()
 {
-    auto tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(tb, "ToolToolbox");
-    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
-
     Glib::ustring tool_toolbar_builder_file = get_filename(UIS, "toolbar-tool.ui");
     auto builder = Gtk::Builder::create();
     try
@@ -189,15 +185,13 @@ GtkWidget *ToolboxFactory::createToolToolbox()
         std::cerr << "ToolboxFactor::createToolToolbox: " << tool_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
     }
 
-    Gtk::FlowBox* toolbar = nullptr;
+    Gtk::Widget* toolbar = nullptr;
     builder->get_widget("tool-toolbar", toolbar);
     if (!toolbar) {
         std::cerr << "InkscapeWindow: Failed to load tool toolbar!" << std::endl;
-    } else {
-        gtk_box_pack_start(GTK_BOX(tb), GTK_WIDGET(toolbar->gobj()), false, false, 0);
     }
 
-    return toolboxNewCommon( tb, BAR_TOOL, GTK_POS_LEFT );
+    return toolboxNewCommon( GTK_WIDGET(toolbar->gobj()), BAR_TOOL, GTK_POS_LEFT );
 }
 
 GtkWidget *ToolboxFactory::createAuxToolbox()

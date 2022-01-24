@@ -185,7 +185,7 @@ XmlTree::XmlTree()
     Gtk::Box *actionsbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     actionsbox->set_valign(Gtk::ALIGN_START);
     Gtk::Label *attrtogglerlabel = Gtk::manage(new Gtk::Label(_("Show attributes")));
-    attrtogglerlabel->set_margin_right(5);
+    attrtogglerlabel->set_margin_end(5);
     _attrswitch.get_style_context()->add_class("inkswitch");
     _attrswitch.get_style_context()->add_class("rawstyle");
     _attrswitch.property_active() = attrtoggler;

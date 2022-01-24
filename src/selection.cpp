@@ -102,6 +102,7 @@ void Selection::_emitModified(guint flags) {
 }
 
 void Selection::_emitChanged(bool persist_selection_context/* = false */) {
+    ObjectSet::_emitChanged();
     if (persist_selection_context) {
         if (nullptr == _selection_context) {
             _selection_context = _desktop->layerManager().currentLayer();

@@ -68,6 +68,8 @@ private:
 
     sigc::connection _selector_changed_connection;
     sigc::connection _page_modified_connection;
+    sigc::connection _doc_replaced_connection;
+    sigc::connection _doc_modified_connection;
     sigc::connection _zoom_connection;
 
     bool dragging_viewbox = false;

@@ -90,7 +90,9 @@ public:
     StrokeStyle();
     ~StrokeStyle() override;
     void setDesktop(SPDesktop *desktop);
-
+    void updateLine();
+    void selectionModifiedCB(guint flags);
+    void selectionChangedCB();
 private:
     /** List of valid types for the stroke-style radio-button widget */
     enum StrokeStyleButtonType {
@@ -121,7 +123,6 @@ private:
             gchar const *stroke_style;         ///< The stroke style associated with the button
     };
 
-    void updateLine();
     void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
     void setDashSelectorFromStyle(Inkscape::UI::Widget::DashSelector *dsel, SPStyle *style);
     void setJoinType (unsigned const jointype);
@@ -141,8 +142,6 @@ private:
                                         gchar const           *stroke_style);
 
     // Callback functions
-    void selectionModifiedCB(guint flags);
-    void selectionChangedCB();
     void widthChangedCB();
     void miterLimitChangedCB();
     void lineDashChangedCB();
@@ -182,8 +181,6 @@ private:
 
     gboolean update;
     SPDesktop *desktop;
-    sigc::connection selectChangedConn;
-    sigc::connection selectModifiedConn;
     sigc::connection startMarkerConn;
     sigc::connection midMarkerConn;
     sigc::connection endMarkerConn;

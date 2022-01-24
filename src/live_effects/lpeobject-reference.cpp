@@ -4,10 +4,11 @@
  *
  * Copyright (C) 2007 Johan Engelen
  *
- * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ * Release under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpeobject-reference.h"
+#include "live_effects/effect.h"
 
 #include <cstring>
 
@@ -20,7 +21,7 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static void lpeobjectreference_href_changed(SPObject *old_ref, SPObject *ref, LPEObjectReference *lpeobjref);
-static void lpeobjectreference_delete_self(SPObject *deleted, LPEObjectReference *lpeobjref);
+static void lpeobjectreference_release_self(SPObject *release, LPEObjectReference *lpeobjref);
 static void lpeobjectreference_source_modified(SPObject *iSource, guint flags, LPEObjectReference *lpeobjref);
 
 LPEObjectReference::LPEObjectReference(SPObject* i_owner) : URIReference(i_owner)
@@ -95,7 +96,7 @@ LPEObjectReference::start_listening(LivePathEffectObject* to)
     }
     lpeobject = to;
     lpeobject_repr = to->getRepr();
-    _delete_connection = to->connectDelete(sigc::bind(sigc::ptr_fun(&lpeobjectreference_delete_self), this));
+    _release_connection = to->connectRelease(sigc::bind(sigc::ptr_fun(&lpeobjectreference_release_self), this));
     _modified_connection = to->connectModified(sigc::bind<2>(sigc::ptr_fun(&lpeobjectreference_source_modified), this));
 }
 
@@ -103,7 +104,7 @@ void
 LPEObjectReference::quit_listening()
 {
     _modified_connection.disconnect();
-    _delete_connection.disconnect();
+    _release_connection.disconnect();
     lpeobject_repr = nullptr;
     lpeobject = nullptr;
 }
@@ -111,7 +112,7 @@ LPEObjectReference::quit_listening()
 static void
 lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObjectReference *lpeobjref)
 {
-    lpeobjref->quit_listening();
+    //lpeobjref->quit_listening();
     LivePathEffectObject *refobj = dynamic_cast<LivePathEffectObject *>( lpeobjref->getObject() );
     if ( refobj ) {
         lpeobjref->start_listening(refobj);
@@ -122,13 +123,14 @@ lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObj
 }
 
 static void
-lpeobjectreference_delete_self(SPObject */*deleted*/, LPEObjectReference *lpeobjref)
+lpeobjectreference_release_self(SPObject */*release*/, LPEObjectReference *lpeobjref)
 {
     lpeobjref->quit_listening();
     lpeobjref->unlink();
     if (lpeobjref->user_unlink) {
         lpeobjref->user_unlink(lpeobjref, lpeobjref->owner);
     }
+    
 }
 
 static void

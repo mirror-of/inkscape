@@ -350,13 +350,6 @@ canvas_interface_mode(int value, InkscapeWindow *win)
     SPDesktop* dt = win->get_desktop();
     Inkscape::UI::UXManager::getInstance()->setTask(dt, value);
 
-#ifdef GDK_WINDOWING_QUARTZ
-    // TODO uncomment this or figure out what to do with it.
-    //  this is just to be able to build successfuly for mac.
-    // call later, crashes during startup if called directly
-    // g_idle_add(sync_menubar, nullptr);
-#endif
-
     // Message FIXME having some error
     // dt->tipsMessageContext()->clear();
     // dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tip.c_str() )  );

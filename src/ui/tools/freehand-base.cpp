@@ -227,8 +227,6 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
 
     // TODO: Don't paste path if nothing is on the clipboard
     SPDocument *document = dc->getDesktop()->doc();
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     Effect::createAndApply(PATTERN_ALONG_PATH, document, item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
@@ -240,7 +238,6 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Inkscape::SVGOStringStream os;
     os << scale;
     lpe->getRepr()->setAttribute("prop_scale", os.str());
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 void spdc_apply_style(SPObject *obj)
@@ -306,8 +303,6 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
             return;
         }
     }
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     Effect::createAndApply(POWERSTROKE, document, item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
 
@@ -323,7 +318,6 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     lpe->getRepr()->setAttribute("miter_limit", "4");
     lpe->getRepr()->setAttribute("scale_width", "1");
     lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *item)
@@ -338,8 +332,6 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     if (!document || !desktop) {
         return;
     }
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     if(!SP_IS_LPE_ITEM(item) || !SP_LPE_ITEM(item)->hasPathEffectOfType(BEND_PATH)){
         Effect::createAndApply(BEND_PATH, document, item);
     }
@@ -357,7 +349,6 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
     lpe->getRepr()->setAttribute("vertical", "false");
     static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem *item)
@@ -367,8 +358,6 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     if (!document || !desktop) {
         return;
     }
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     using namespace Inkscape::LivePathEffect;
 
     Effect::createAndApply(SIMPLIFY, document, item);
@@ -380,7 +369,6 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     lpe->getRepr()->setAttribute("helper_size", "0");
     lpe->getRepr()->setAttribute("simplify_individual_paths", "false");
     lpe->getRepr()->setAttribute("simplify_just_coalesce", "false");
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 static shapeType previous_shape_type = NONE;
@@ -692,13 +680,13 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
             auto *c = c_smart_ptr.get();
             g_return_if_fail( c->get_segment_count() > 0 );
             if ( !c->is_closed() ) {
-                SPDrawAnchor *a;
-                a = sp_draw_anchor_new(dc, c, TRUE, *(c->first_point()));
+                std::unique_ptr<SPDrawAnchor> a =
+                    std::make_unique<SPDrawAnchor>(dc, c, TRUE, *(c->first_point()));
                 if (a)
-                    dc->white_anchors.push_back(a);
-                a = sp_draw_anchor_new(dc, c, FALSE, *(c->last_point()));
+                    dc->white_anchors.push_back(std::move(a));
+                a = std::make_unique<SPDrawAnchor>(dc, c, FALSE, *(c->last_point()));
                 if (a)
-                    dc->white_anchors.push_back(a);
+                    dc->white_anchors.push_back(std::move(a));
             }
         }
         // fixme: recalculate active anchor?
@@ -956,11 +944,11 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
 
     // Test green anchor
     if (dc->green_anchor) {
-        active = sp_draw_anchor_test(dc->green_anchor, p, TRUE);
+        active = dc->green_anchor->anchorTest(p, TRUE);
     }
 
-    for (auto i:dc->white_anchors) {
-        SPDrawAnchor *na = sp_draw_anchor_test(i, p, !active);
+    for (auto& i:dc->white_anchors) {
+        SPDrawAnchor *na = i->anchorTest(p, !active);
         if ( !active && na ) {
             active = na;
         }
@@ -975,8 +963,6 @@ static void spdc_reset_white(FreehandBase *dc)
         dc->white_item = nullptr;
     }
     dc->white_curves.clear();
-    for (auto i:dc->white_anchors)
-        sp_draw_anchor_destroy(i);
     dc->white_anchors.clear();
 }
 
@@ -1004,9 +990,7 @@ static void spdc_free_colors(FreehandBase *dc)
     }
     dc->green_bpaths.clear();
     dc->green_curve.reset();
-    if (dc->green_anchor) {
-        dc->green_anchor = sp_draw_anchor_destroy(dc->green_anchor);
-    }
+    dc->green_anchor.reset();
 
     // White
     if (dc->white_item) {
@@ -1014,8 +998,6 @@ static void spdc_free_colors(FreehandBase *dc)
         dc->white_item = nullptr;
     }
     dc->white_curves.clear();
-    for (auto i : dc->white_anchors)
-        sp_draw_anchor_destroy(i);
     dc->white_anchors.clear();
 }
 

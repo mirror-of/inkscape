@@ -246,12 +246,20 @@ void TraceDialogImpl2::abort()
 }
 
 void TraceDialogImpl2::selectionChanged(Inkscape::Selection *selection) {
+    // refresh preview when selecting or deselecting images (in general: when selection changes)
     previewCallback(false);
 }
 
-void TraceDialogImpl2::selectionModified(Selection *selection, guint flags)
-{
-    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) {
+void TraceDialogImpl2::selectionModified(Selection *selection, guint flags) {
+    // Note: original refresh condition commended out, as selection modified fires when moving images around slowing on-canvas operations.
+    // Note: is there a use-case where preview needs to be refreshed when images are manipulated? I haven't found one.
+
+//    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) {
+
+    // this condition is satisfied when imported image gets places on canvas; this is actually wrong
+    // and there should just be "selection changed", but there isn't
+    auto mask = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG;
+    if ((flags & mask) == mask) {
         previewCallback(false);
     }
 }

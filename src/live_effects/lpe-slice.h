@@ -18,12 +18,13 @@
  */
 
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "live_effects/parameter/parameter.h"
-#include "live_effects/parameter/bool.h"
-#include "live_effects/parameter/point.h"
 #include "live_effects/lpegroupbbox.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/parameter/bool.h"
+#include "live_effects/parameter/parameter.h"
+#include "live_effects/parameter/point.h"
+#include "live_effects/parameter/satellitearray.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -39,27 +40,30 @@ public:
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
-    Gtk::Widget * newWidget() override;
+    Gtk::Widget *newWidget() override;
+    bool doOnOpen(SPLPEItem const *lpeitem) override;
     void cloneStyle(SPObject *orig, SPObject *dest);
-    void split(SPItem* item, SPCurve *curve, std::vector<std::pair<Geom::Line, size_t> > slicer, size_t splitindex);
-    void splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t> slicer, bool toggle, bool is_original = false);
+    bool split(SPItem *item, SPCurve *curve, std::vector<std::pair<Geom::Line, size_t>> slicer, size_t splitindex,
+               bool &creation);
+    bool splititem(SPItem *item, SPCurve *curve, std::pair<Geom::Line, size_t> slicer, bool toggle,
+                   bool is_original = false);
     bool haschildslice(SPItem *item);
     std::vector<std::pair<Geom::Line, size_t> > getSplitLines();
     void cloneD(SPObject *orig, SPObject *dest, bool is_original); 
     Inkscape::XML::Node *createPathBase(SPObject *elemref);
     Geom::PathVector cutter(Geom::PathVector const & path_in);
     void originalDtoD(SPShape const *shape, SPCurve *curve);
-    void reloadOriginal (SPLPEItem const *lpeitem);
-    SPLPEItem * getOriginal(SPLPEItem const *lpeitem);
     void originalDtoD(SPItem *item);
     void resetStyles();
     void centerVert();
     void centerHoriz();
+    SPObject *container;
 
 protected:
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
+    SatelliteArrayParam lpesatellites;
     BoolParam allow_transforms;
     PointParam start_point;
     PointParam end_point;
@@ -70,7 +74,8 @@ private:
     bool center_vert;
     bool center_horiz;
     bool allow_transforms_prev;
-    SPObject *parentlpe;
+    size_t objindex = 0;
+    bool legacy = false;
     LPESlice(const LPESlice&) = delete;
     LPESlice& operator=(const LPESlice&) = delete;
 };

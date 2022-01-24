@@ -353,9 +353,6 @@ SPFilter *modify_filter_gaussian_blur_from_item(SPDocument *document, SPItem *it
     if (expansion != 0)
         stdDeviation /= expansion;
 
-    // Get the object size
-    Geom::OptRect const r = item->desktopGeometricBounds();
-
     // Set the filter effects area
     SPFilter *f = item->style->getFilter();
 
@@ -400,7 +397,6 @@ void remove_filter (SPObject *item, bool recursive)
     sp_repr_css_attr_unref(css);
 }
 
-// 1.1 COPYPASTECLONESTAMPLPEBUG
 void remove_hidder_filter (SPObject *item)
 {
     SPFilter *filt = item->style->getFilter();
@@ -411,7 +407,18 @@ void remove_hidder_filter (SPObject *item)
         }
     }
 }
-// END COPYPASTECLONESTAMPLPEBUG
+
+bool has_hidder_filter(SPObject *item)
+{
+    SPFilter *filt = item->style->getFilter();
+    if (filt && filt->getId()) {
+        Glib::ustring filter = filt->getId();
+        if (!filter.rfind("selectable_hidder_filter", 0)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 /**
  * Removes the first feGaussianBlur from the filter attached to given item.

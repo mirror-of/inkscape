@@ -143,7 +143,6 @@ public:
     /// current selection; will never generally be NULL
     Inkscape::Selection       *selection;
     Inkscape::UI::Tools::ToolBase            *event_context;
-    DocumentInterface *dbus_document_interface;
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;
     /// Stored settings for print dialogue
@@ -417,6 +416,7 @@ public:
     void layoutWidget();
     void setToolboxFocusTo (gchar const* label);
     Gtk::Toolbar *get_toolbar_by_name(const Glib::ustring& name);
+    Gtk::Widget *get_toolbox() const;
     void setToolboxAdjustmentValue (gchar const* id, double val);
     bool isToolboxButtonActive (gchar const *id);
     void updateNow();

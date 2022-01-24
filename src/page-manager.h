@@ -22,6 +22,7 @@ class SPPage;
 
 namespace Inkscape {
 class Selection;
+class ObjectSet;
 class CanvasPage;
 namespace UI {
 namespace Dialog {
@@ -48,6 +49,7 @@ public:
     SPPage *getPageAt(Geom::Point pos) const;
     SPPage *getFirstPage() const { return getPage(0); }
     SPPage *getLastPage() const { return getPage(pages.size() - 1); }
+    SPPage *getViewportPage() const;
     std::vector<SPPage *> getPagesFor(SPItem *item, bool contains) const;
     Geom::OptRect getDesktopRect() const;
     bool hasPages() const { return !pages.empty(); }
@@ -55,6 +57,7 @@ public:
     int getPageIndex(SPPage *page) const;
     int getSelectedPageIndex() const;
     Geom::Rect getSelectedPageRect() const;
+    Geom::Point nextPageLocation() const;
 
     void enablePages();
     void disablePages();
@@ -75,12 +78,15 @@ public:
     void centerToSelectedPage(SPDesktop *desktop) { centerToPage(desktop, _selected_page); };
 
     SPPage *newPage();
+    SPPage *newPage(SPPage *page);
     SPPage *newPage(double width, double height);
     SPPage *newPage(Geom::Rect rect, bool first_page = false);
     SPPage *newDesktopPage(Geom::Rect rect, bool first_page = false);
     void deletePage(SPPage *page, bool contents = false);
     void deletePage(bool contents = false);
     void resizePage(double width, double height);
+    void fitToSelection(ObjectSet *selection);
+    void fitToRect(Geom::OptRect box, SPPage *page);
 
     bool subset(SPAttr key, const gchar *value);
     bool setDefaultAttributes(CanvasPage *item);
@@ -109,10 +115,9 @@ protected:
     SVGBool border_show;
     SVGBool border_on_top;
     SVGBool shadow_show;
+    SVGBool _checkerboard;
 
-    guint32 border_color = 0x000000cc;
-
-    int shadow_size = 0;
+    guint32 border_color = 0x0000003f;
 
 private:
     SPDocument *_document;

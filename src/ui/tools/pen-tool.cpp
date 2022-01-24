@@ -28,11 +28,11 @@
 #include "context-fns.h"
 #include "desktop.h"
 #include "include/macros.h"
+#include "inkscape-application.h" // Undo check
 #include "message-context.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -420,7 +420,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                                 // Create green anchor
                                 p = event_dt;
                                 this->_endpointSnap(p, bevent.state);
-                                this->green_anchor = sp_draw_anchor_new(this, this->green_curve.get(), true, p);
+                                this->green_anchor.reset(new SPDrawAnchor(this, this->green_curve.get(), true, p));
                             }
                             this->_setInitialPoint(p);
                         } else {
@@ -984,14 +984,14 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
 
-    // Check for undo if we have started drawing a path.
+    // Check for undo if we have started drawing a path. User might have change shortcut.
     if (this->npoints > 0) {
         Gtk::AccelKey shortcut = Inkscape::Shortcuts::get_from_event((GdkEventKey*)event);
-        Inkscape::Verb* verb = Inkscape::Shortcuts::getInstance().get_verb_from_shortcut(shortcut);
-        if (verb) {
-            unsigned int vcode = verb->get_code();
-            if (vcode == SP_VERB_EDIT_UNDO)
-                return _undoLastPoint();
+        auto app = InkscapeApplication::instance();
+        auto gapp = app->gtk_app();
+        auto actions = gapp->get_actions_for_accel(shortcut.get_abbrev());
+        if (std::find(actions.begin(), actions.end(), "win.undo") != actions.end()) {
+            return _undoLastPoint();
         }
     }
 
@@ -1193,12 +1193,14 @@ void PenTool::_resetColors() {
     }
     this->green_bpaths.clear();
     this->green_curve->reset();
-    if (this->green_anchor) {
-        this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
-    }
+    this->green_anchor.reset();
+
     this->sa = nullptr;
     this->ea = nullptr;
-    this->sa_overwrited->reset();
+
+    if (this->sa_overwrited) {
+        this->sa_overwrited->reset();
+    }
 
     this->npoints = 0;
     this->red_curve_is_valid = false;
@@ -1334,7 +1336,8 @@ void PenTool::_bsplineSpiroStartAnchor(bool shift)
     LivePathEffect::LPEBSpline *lpe_bsp = nullptr;
 
     if (SP_IS_LPE_ITEM(this->white_item) && SP_LPE_ITEM(this->white_item)->hasPathEffect()){
-        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(this->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        Inkscape::LivePathEffect::Effect *thisEffect =
+            SP_LPE_ITEM(this->white_item)->getFirstPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
         if(thisEffect){
             lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
         }
@@ -1347,7 +1350,8 @@ void PenTool::_bsplineSpiroStartAnchor(bool shift)
     LivePathEffect::LPESpiro *lpe_spi = nullptr;
 
     if (SP_IS_LPE_ITEM(this->white_item) && SP_LPE_ITEM(this->white_item)->hasPathEffect()){
-        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(this->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::SPIRO);
+        Inkscape::LivePathEffect::Effect *thisEffect =
+            SP_LPE_ITEM(this->white_item)->getFirstPathEffectOfType(Inkscape::LivePathEffect::SPIRO);
         if(thisEffect){
             lpe_spi = dynamic_cast<LivePathEffect::LPESpiro*>(thisEffect->getLPEObj()->get_lpe());
         }
@@ -1956,9 +1960,7 @@ void PenTool::_finish(gboolean const closed) {
     cl0->hide();
     cl1->hide();
 
-    if (this->green_anchor) {
-        this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
-    }
+    this->green_anchor.reset();
 
     forced_redraws_stop();
 

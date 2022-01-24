@@ -2162,9 +2162,9 @@ bool has_visible_text(SPObject const *obj)
 
     if (SP_IS_STRING(obj) && !SP_STRING(obj)->string.empty()) {
         hasVisible = true; // maybe we should also check that it's not all whitespace?
-    } else {
+    } else if (is_part_of_text_subtree(obj)) {
         for (auto& child: obj->children) {
-            if (is_part_of_text_subtree(&child) && has_visible_text(&child)) {
+            if (has_visible_text(&child)) {
                 hasVisible = true;
                 break;
             }

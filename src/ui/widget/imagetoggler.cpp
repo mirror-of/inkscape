@@ -61,9 +61,17 @@ void ImageToggler::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
     }
 
     // Hide when not being used.
+    double alpha = 1.0;
     bool visible = _property_activatable.get_value()
                 || _property_active.get_value();
     if (!visible) {
+        // XXX There is conflict about this value, some users want 0.2, others want 0.0
+        alpha = 0.0;
+    }
+    if (_property_gossamer.get_value()) {
+        alpha += 0.2;
+    }
+    if (alpha <= 0.0) {
         return;
     }
 
@@ -85,9 +93,9 @@ void ImageToggler::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
     cairo_set_source_surface(cr->cobj(), surface, x, y);
     cr->set_operator(Cairo::OPERATOR_ATOP);
     cr->rectangle(x, y, _size, _size);
-    if (_property_gossamer.get_value()) {
+    if (alpha < 1.0) {
         cr->clip();
-        cr->paint_with_alpha(0.2);
+        cr->paint_with_alpha(alpha);
     } else {
         cr->fill();
     }

@@ -19,10 +19,11 @@
  */
 
 #include <2geom/affine.h>
+#include "sp-dimensions.h"
 #include "sp-item-group.h"
 #include "viewbox.h"
 
-class SPSymbol : public SPGroup, public SPViewBox {
+class SPSymbol : public SPGroup, public SPViewBox, public SPDimensions {
 public:
 	SPSymbol();
 	~SPSymbol() override;

@@ -23,9 +23,9 @@ public:
     void readOrUnset(gchar const *str);
 
 private:
-    bool _is_set;
-    bool _value;
-    bool _default;
+    bool _is_set = false;
+    bool _value = false;
+    bool _default = false;
 };
 
 #endif // SEEN_SP_SVG_ANGLE_H

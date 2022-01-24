@@ -62,6 +62,7 @@
 
 #include "ui/dialog/filedialog.h"
 #include "ui/icon-names.h"
+#include "ui/util.h"
 #include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/spinbutton.h"
 
@@ -1911,7 +1912,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 
     // TODO: In Gtk+ 4, the state is not used in get_color
     auto state = sc->get_state();
-    auto bg_color = sc->get_background_color(state);
+    auto bg_color = get_background_color(sc, state);
     auto orig_color = sc->get_color(state);
     Gdk::RGBA fg_color;
     Gdk::RGBA mid_color;

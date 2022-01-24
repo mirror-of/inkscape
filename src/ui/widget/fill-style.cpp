@@ -36,6 +36,7 @@
 #include "object/sp-radial-gradient.h"
 #include "object/sp-text.h"
 #include "object/sp-stop.h"
+#include "ui/dialog/dialog-base.h"
 #include "style.h"
 
 #include "ui/icon-names.h"
@@ -54,9 +55,7 @@ namespace Widget {
 FillNStroke::FillNStroke(FillOrStroke k)
     : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
     , kind(k)
-    , selectChangedConn()
     , subselChangedConn()
-    , selectModifiedConn()
     , eventContextConn()
 {
     // Add and connect up the paint selector widget:
@@ -85,9 +84,7 @@ FillNStroke::~FillNStroke()
     }
 
     _psel = nullptr;
-    selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
-    selectChangedConn.disconnect();
     eventContextConn.disconnect();
 }
 
@@ -112,24 +109,16 @@ void FillNStroke::setDesktop(SPDesktop *desktop)
             _drag_id = 0;
         }
         if (_desktop) {
-            selectModifiedConn.disconnect();
             subselChangedConn.disconnect();
-            selectChangedConn.disconnect();
             eventContextConn.disconnect();
             stop_selected_connection.disconnect();
         }
         _desktop = desktop;
         if (desktop && desktop->selection) {
-            selectChangedConn =
-                desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
             // subselChangedConn =
                 // desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
             eventContextConn = desktop->connectEventContextChanged(sigc::hide(sigc::bind(
                 sigc::mem_fun(*this, &FillNStroke::eventContextCB), (Inkscape::UI::Tools::ToolBase *)nullptr)));
-
-            // Must check flags, so can't call performUpdate() directly.
-            selectModifiedConn = desktop->selection->connectModified(
-                sigc::hide<0>(sigc::mem_fun(*this, &FillNStroke::selectionModifiedCB)));
 
             stop_selected_connection = desktop->connect_gradient_stop_selected([=](void* sender, SPStop* stop){
                 if (sender != this) {
@@ -161,7 +150,11 @@ void FillNStroke::performUpdate()
     if (_update || !_desktop) {
         return;
     }
-
+    auto *widg = get_parent()->get_parent()->get_parent()->get_parent(); 
+    auto dialogbase = dynamic_cast<Inkscape::UI::Dialog::DialogBase*>(widg);
+    if (dialogbase && !dialogbase->getShowing()) {
+        return;
+    }
     if (_drag_id) {
         // local change; do nothing, but reset the flag
         g_source_remove(_drag_id);

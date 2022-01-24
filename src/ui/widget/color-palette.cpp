@@ -375,7 +375,7 @@ void ColorPalette::set_up_scrolling() {
     if (_compact) {
         box.set_orientation(Gtk::ORIENTATION_HORIZONTAL);
         btn_menu.set_margin_bottom(0);
-        btn_menu.set_margin_right(0);
+        btn_menu.set_margin_end(0);
         // in compact mode scrollbars are hidden; they take up too much space
         set_valign(Gtk::ALIGN_START);
         set_vexpand(false);
@@ -417,7 +417,7 @@ void ColorPalette::set_up_scrolling() {
     else {
         box.set_orientation(Gtk::ORIENTATION_VERTICAL);
         btn_menu.set_margin_bottom(2);
-        btn_menu.set_margin_right(2);
+        btn_menu.set_margin_end(2);
         // in normal mode use regular full-size scrollbars
         set_valign(Gtk::ALIGN_FILL);
         set_vexpand(true);

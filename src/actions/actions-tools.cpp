@@ -261,7 +261,6 @@ tool_switch(Glib::ustring const &tool, InkscapeWindow *win)
     // Switch to new tool. TODO: Clean this up. This should be one window function. Setting tool via preference path is a bit strange.
     dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tool_msg[tool].c_str() ) );
     dt->setEventContext(tool_data[tool].pref_path);
-    INKSCAPE.eventcontext_set(dt->getEventContext());
 }
 
 /**
@@ -394,7 +393,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_tools =
 
     {"win.tool-switch('Zoom')",         N_("Tool: Zoom"),         "Tool Switch",   N_("Zoom in or out.")                                },
     {"win.tool-switch('Measure')",      N_("Tool: Measure"),      "Tool Switch",   N_("Measure objects.")                               },
-    {"win.tool-switch('Page')",         N_("Tool: Pages"),        "Tool Switch",   N_("Create and edit multiple pages")                 },
+    {"win.tool-switch('Pages')",        N_("Tool: Pages"),        "Tool Switch",   N_("Create and edit multiple pages")                 },
 
     {"win.tool-toggle",                 N_("Tool Toggle"),        "Tool Switch",   N_("Toggle between Select tool and last used tool.") },
     // clang-format on

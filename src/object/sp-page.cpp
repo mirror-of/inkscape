@@ -154,25 +154,6 @@ void SPPage::setDesktopSize(double width, double height)
 }
 
 /**
- * Resize the page to the given selection. If nothing is selected,
- * Resize to all the items on this page.
- */
-void SPPage::fitToSelection(Inkscape::ObjectSet *selection)
-{
-    if (!selection || selection->isEmpty()) {
-        auto contents = new Inkscape::ObjectSet();
-        contents->setList(getOverlappingItems());
-        // Do we have anything to do?
-        if (contents->isEmpty())
-            return;
-        fitToSelection(contents);
-        delete contents;
-    } else if (auto box = selection->visualBounds()) {
-        setDesktopRect(*box);
-    }
-}
-
-/**
  * Get the items which are ONLY on this page and don't overlap.
  *
  * This ignores layers so items in the same layer which are shared
@@ -181,10 +162,7 @@ void SPPage::fitToSelection(Inkscape::ObjectSet *selection)
  */
 std::vector<SPItem *> SPPage::getExclusiveItems() const
 {
-    // There's no logical reason why the desktop is needed here
-    // we should have a getItemsInBox that doesn't use the desktop
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    return document->getItemsInBox(desktop->dkey, getDesktopRect(), true, true, true, false);
+    return document->getItemsInBox(0, getDesktopRect(), true, true, true, false);
 }
 
 /**
@@ -192,10 +170,7 @@ std::vector<SPItem *> SPPage::getExclusiveItems() const
  */
 std::vector<SPItem *> SPPage::getOverlappingItems() const
 {
-    // There's no logical reason why the desktop is needed here
-    // we should have a getItemsPartiallyInBox that doesn't use the desktop
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    return document->getItemsPartiallyInBox(desktop->dkey, getDesktopRect(), true, true, true, false);
+    return document->getItemsPartiallyInBox(0, getDesktopRect(), true, true, true, false);
 }
 
 /**
@@ -317,7 +292,7 @@ bool SPPage::setPageIndex(int index, bool swap_page)
 SPPage *SPPage::getNextPage()
 {
     SPObject *item = this;
-    while (item = item->getNext()) {
+    while ((item = item->getNext())) {
         if (auto next = dynamic_cast<SPPage *>(item)) {
             return next;
         }
@@ -331,7 +306,7 @@ SPPage *SPPage::getNextPage()
 SPPage *SPPage::getPreviousPage()
 {
     SPObject *item = this;
-    while (item = item->getPrev()) {
+    while ((item = item->getPrev())) {
         if (auto prev = dynamic_cast<SPPage *>(item)) {
             return prev;
         }
@@ -358,7 +333,6 @@ void SPPage::movePage(Geom::Affine translate, bool with_objects)
 
 void SPPage::moveItems(Geom::Affine translate, std::vector<SPItem *> const objects)
 {
-    auto scale = document->getDocumentScale();
     for (auto &item : objects) {
         if (auto parent_item = dynamic_cast<SPItem *>(item->parent)) {
             auto move = item->i2dt_affine() * (translate * parent_item->i2doc_affine().inverse());

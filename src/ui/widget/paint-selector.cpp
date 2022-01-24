@@ -1293,7 +1293,7 @@ gboolean PaintSelector::isSeparator(GtkTreeModel *model, GtkTreeIter *iter, gpoi
 SPPattern *PaintSelector::getPattern()
 {
     SPPattern *pat = nullptr;
-    g_return_val_if_fail(_mode == MODE_PATTERN, NULL);
+    g_return_val_if_fail(_mode == MODE_PATTERN, nullptr);
 
     /* no pattern menu if we were just selected */
     if (!_patternmenu) {

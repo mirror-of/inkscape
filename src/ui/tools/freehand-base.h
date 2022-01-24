@@ -65,13 +65,13 @@ public:
     // Green - New path as it's drawn.
     std::vector<Inkscape::CanvasItemBpath *> green_bpaths;
     std::unique_ptr<SPCurve> green_curve;
-    SPDrawAnchor *green_anchor;
+    std::unique_ptr<SPDrawAnchor> green_anchor;
     gboolean green_closed; // a flag meaning we hit the green anchor, so close the path on itself
 
     // White
     SPItem *white_item;
     std::list<std::unique_ptr<SPCurve>> white_curves;
-    std::vector<SPDrawAnchor*> white_anchors;
+    std::vector<std::unique_ptr<SPDrawAnchor>> white_anchors;
 
     // Temporary modified curve when start anchor
     std::unique_ptr<SPCurve> sa_overwrited;

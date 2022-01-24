@@ -67,9 +67,6 @@
 // TODO: also check if it is correct to be using two different epsilon values
 
 static void sp_image_set_curve(SPImage *image);
-
-static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base,
-                                                  double svgdpi = 0);
 static void sp_image_update_arenaitem (SPImage *img, Inkscape::DrawingImage *ai);
 static void sp_image_update_canvas_image (SPImage *image);
 
@@ -329,8 +326,15 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
                 svgdpi = g_ascii_strtod(this->getRepr()->attribute("inkscape:svg-dpi"), nullptr);
             }
             this->dpi = svgdpi;
-            pixbuf = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                              this->getRepr()->attribute("sodipodi:absref"), doc->getDocumentBase(), svgdpi);
+            pixbuf = readImage(this->getRepr()->attribute("xlink:href"),
+                               this->getRepr()->attribute("sodipodi:absref"),
+                               doc->getDocumentBase(), svgdpi);
+            if (!pixbuf) {
+                // Passing in our previous size allows us to preserve the image's expected size.
+                auto broken_width = width._set ? width.computed : 640;
+                auto broken_height = height._set ? height.computed : 640;
+                pixbuf = getBrokenImage(broken_width, broken_height); 
+            }
 
             if (pixbuf) {
                 if ( this->color_profile ) apply_profile( pixbuf );
@@ -369,7 +373,7 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     this->calcDimsFromParentViewport(ictx);
 
     // Image creates a new viewport
-    ictx->viewport= Geom::Rect::from_xywh( this->x.computed, this->y.computed,
+    ictx->viewport = Geom::Rect::from_xywh(this->x.computed, this->y.computed,
                                            this->width.computed, this->height.computed);
  
     this->clipbox = ictx->viewport;
@@ -391,8 +395,6 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->sx = c2p[0];
         this->sy = c2p[3];
     }
-
-
 
     // TODO: eliminate ox, oy, sx, sy
 
@@ -462,8 +464,9 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
         repr->setAttributeSvgDouble("height", this->height.computed);
     }
     repr->setAttribute("inkscape:svg-dpi", this->getRepr()->attribute("inkscape:svg-dpi"));
-    //XML Tree being used directly here while it shouldn't be...
-    repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
+
+    this->write_preserveAspectRatio(repr);
+
     if (this->color_profile) {
         repr->setAttribute("color-profile", this->color_profile);
     }
@@ -541,8 +544,9 @@ gchar* SPImage::description() const {
         if (this->getRepr()->attribute("inkscape:svg-dpi")) {
             svgdpi = g_ascii_strtod(this->getRepr()->attribute("inkscape:svg-dpi"), nullptr);
         }
-        pb = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                      this->getRepr()->attribute("sodipodi:absref"), this->document->getDocumentBase(), svgdpi);
+        pb = readImage(this->getRepr()->attribute("xlink:href"),
+                       this->getRepr()->attribute("sodipodi:absref"),
+                       this->document->getDocumentBase(), svgdpi);
 
         if (pb) {
             ret = g_strdup_printf(_("%d &#215; %d: %s"),
@@ -550,6 +554,8 @@ gchar* SPImage::description() const {
                                         pb->height(),
                                         href_desc);
             delete pb;
+        } else {
+            ret = g_strdup(_("{Broken Image}"));
         }
     }
 
@@ -565,21 +571,8 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int /*
     return ai;
 }
 
-static std::string broken_image_svg = R"A(
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640">
-  <rect width="100%" height="100%" style="fill:white;stroke:red;stroke-width:20px"/>
-  <rect x="35%" y="10%" width="30%" height="30%" style="fill:red"/>
-  <path d="m 280,120  80,80" style="fill:none;stroke:white;stroke-width:20px"/>
-  <path d="m 360,120 -80,80" style="fill:none;stroke:white;stroke-width:20px"/>
-  <g style="font-family:sans-serif;font-size:100px;font-weight:bold;text-anchor:middle">
-    <text x="50%" y="380">Linked</text>
-    <text x="50%" y="490">Image</text>
-    <text x="50%" y="600">Not Found</text>
-  </g>
-</svg>
-)A";
 
-Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base, double svgdpi)
+Inkscape::Pixbuf *SPImage::readImage(gchar const *href, gchar const *absref, gchar const *base, double svgdpi)
 {
     Inkscape::Pixbuf *inkpb = nullptr;
 
@@ -626,13 +619,41 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
             return inkpb;
         }
     }
+    return inkpb;
+}
 
-    /* Nope: We do not find any valid pixmap file :-( */
-    // Need a "fake" filename to trigger svg mode.
-    inkpb = Inkscape::Pixbuf::create_from_buffer(broken_image_svg, 0, "brokenimage.svg");
+static std::string broken_image_svg = R"A(
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}">
+  <defs>
+    <symbol id="nope" style="fill:none;stroke:#ffffff;stroke-width:3" viewBox="0 0 10 10" preserveAspectRatio="{aspect}">
+      <circle cx="0" cy="0" r="10" style="fill:#a40000;stroke:#cc0000" />
+      <line x1="0" x2="0" y1="-5" y2="5" transform="rotate(45)" />
+      <line x1="0" x2="0" y1="-5" y2="5" transform="rotate(-45)" />
+    </symbol>
+  </defs>
+  <rect width="100%" height="100%" style="fill:white;stroke:#cc0000;stroke-width:6%" />
+  <use xlink:href="#nope" width="30%" height="30%" x="50%" y="50%" />
+</svg>
 
-    /* It's included here so if it still does not does load, */
-    /* our libraries are broken! */
+)A";
+
+/**
+ * Load a standard broken image svg, used if we fail to load pixbufs from the href.
+ */
+Inkscape::Pixbuf *SPImage::getBrokenImage(double width, double height)
+{
+    // Cheap templating for size allows for dynamic sized svg
+    std::string copy = broken_image_svg;
+    copy.replace(copy.find("{width}"), std::string("{width}").size(), std::to_string(width));
+    copy.replace(copy.find("{height}"), std::string("{height}").size(), std::to_string(height));
+
+    // Aspect attemps to make the image better for different ratios of images we might be dropped into
+    copy.replace(copy.find("{aspect}"), std::string("{aspect}").size(), 
+            width > height ? "xMinYMid" : "xMidYMin");
+
+    auto inkpb = Inkscape::Pixbuf::create_from_buffer(copy, 0, "brokenimage.svg");
+
+    /* It's included here so if it still does not does load, our libraries are broken! */
     g_assert (inkpb != nullptr);
 
     return inkpb;

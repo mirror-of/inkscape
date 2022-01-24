@@ -18,7 +18,6 @@ class InkscapeWindow;
 // Standard function to add actions.
 void add_actions_dialogs(InkscapeWindow* win);
 
-
 #endif // INK_ACTIONS_DIALOGS_H
 
 /*

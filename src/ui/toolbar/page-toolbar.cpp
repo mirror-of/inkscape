@@ -59,9 +59,9 @@ PageToolbar::PageToolbar(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builde
         if (entry_page_sizes) {
             entry_page_sizes->signal_activate().connect(sigc::mem_fun(*this, &PageToolbar::sizeChanged));
         }
-        page_sizes = Inkscape::PaperSize::getPageSizes();
+        auto& page_sizes = Inkscape::PaperSize::getPageSizes();
         for (int i = 0; i < page_sizes.size(); i++) {
-            combo_page_sizes->append(std::to_string(i), page_sizes[i]->getDescription());
+            combo_page_sizes->append(std::to_string(i), page_sizes[i].getDescription());
         }
     }
 
@@ -86,8 +86,8 @@ void PageToolbar::toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase 
     }
     if (dynamic_cast<Inkscape::UI::Tools::PagesTool *>(ec)) {
         // Save the document and page_manager for future use.
-        if (_document = desktop->getDocument()) {
-            if (_page_manager = _document->getNamedView()->getPageManager()) {
+        if ((_document = desktop->getDocument())) {
+            if ((_page_manager = _document->getNamedView()->getPageManager())) {
                 // Connect the page changed signal and indicate changed
                 _pages_changed = _page_manager->connectPagesChanged(sigc::mem_fun(*this, &PageToolbar::pagesChanged));
                 _page_selected =
@@ -114,10 +114,11 @@ void PageToolbar::sizeChoose()
 {
     try {
         auto page_id = std::stoi(combo_page_sizes->get_active_id());
+        auto& page_sizes = Inkscape::PaperSize::getPageSizes();
         if (page_id >= 0 && page_id < page_sizes.size()) {
-            auto ps = page_sizes[page_id];
-            auto smaller = ps->unit->convert(ps->smaller, "px");
-            auto larger = ps->unit->convert(ps->larger, "px");
+            auto&& ps = page_sizes[page_id];
+            auto smaller = ps.unit->convert(ps.smaller, "px");
+            auto larger = ps.unit->convert(ps.larger, "px");
             _page_manager->resizePage(smaller, larger);
             DocumentUndo::maybeDone(_document, "page-resize", _("Resize Page"), INKSCAPE_ICON("tool-pages"));
         }
@@ -135,7 +136,7 @@ double PageToolbar::_unit_to_size(std::string number, std::string unit_str, std:
     // Get the best unit, for example 50x40cm means cm for both
     auto unit = _document->getDisplayUnit();
     if (unit_str.empty() && !backup.empty())
-        unit_str == backup;
+        unit_str = backup;
     if (unit_str == "\"")
         unit_str = "in";
 

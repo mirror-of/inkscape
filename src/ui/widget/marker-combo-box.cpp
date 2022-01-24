@@ -144,11 +144,9 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
             box->get_style_context()->add_class("marker-item-box");
         }
         _widgets_to_markers[image] = item;
-        auto alloc = image->get_allocation();
         box->set_size_request(item->width, item->height);
         return box;
     });
-    auto& btn_box = get_widget<Gtk::Box>(_builder, "btn-box");
 
     _sandbox = ink_markers_preview_doc(_combo_id);
 
@@ -832,9 +830,11 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
     }
 
     auto cross = _sandbox->getObjectsBySelector(".cross");
+    double stroke = 0.5;
     for (auto el : cross) {
         if (SPCSSAttr* css = sp_repr_css_attr(el->getRepr(), "style")) {
             sp_repr_css_set_property(css, "display", checkerboard ? "block" : "none");
+            sp_repr_css_set_property_double(css, "stroke-width", stroke);
             el->changeCSS(css, "style");
             sp_repr_css_attr_unref(css);
         }
@@ -853,6 +853,33 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
         return g_bad_marker;
     }
 
+    if (auto measure = dynamic_cast<SPItem*>(_sandbox->getObjectById("measure-marker"))) {
+        if (auto box = measure->documentVisualBounds()) {
+            // check size of the marker applied to a path with stroke of 1px
+            auto size = std::max(box->width(), box->height());
+            const double small = 5.0;
+            // if too small, then scale up; clip needs to be enabled for scale to work
+            if (size > 0 && size < small) {
+                auto factor = 1 + small - size;
+                scale *= factor;
+                no_clip = false;
+
+                // adjust cross stroke
+                stroke /= factor;
+                for (auto el : cross) {
+                    if (SPCSSAttr* css = sp_repr_css_attr(el->getRepr(), "style")) {
+                        sp_repr_css_set_property_double(css, "stroke-width", stroke);
+                        el->changeCSS(css, "style");
+                        sp_repr_css_attr_unref(css);
+                    }
+                }
+
+                _sandbox->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                _sandbox->ensureUpToDate();
+            }
+        }
+    }
+
     /* Update to renderable state */
     const double device_scale = get_scale_factor();
     auto surface = render_surface(drawing, scale, *dbox, pixel_size, device_scale, checkerboard ? &_background_color : nullptr, no_clip);
@@ -867,7 +894,8 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
 void MarkerComboBox::on_style_updated() {
     auto background = _background_color;
     if (auto wnd = dynamic_cast<Gtk::Window*>(this->get_toplevel())) {
-        auto color = wnd->get_style_context()->get_background_color();
+        auto sc = wnd->get_style_context();
+        auto color = get_background_color(sc);
         background =
             gint32(0xff * color.get_red()) << 24 |
             gint32(0xff * color.get_green()) << 16 |
@@ -939,13 +967,17 @@ gchar const *buffer = R"A(
 
     <!-- cross at the end of the line to help position marker -->
     <symbol id="cross" width="25" height="25" viewBox="0 0 25 25">
-      <path class="cross" style="mix-blend-mode:difference;stroke:#fff;stroke-width:0.5;stroke-opacity:0.5;fill:none;display:block" d="M 0,0 M 25,25 M 10,10 15,15 M 10,15 15,10" />
+      <path class="cross" style="mix-blend-mode:difference;stroke:#7ff;stroke-opacity:1;fill:none;display:block" d="M 0,0 M 25,25 M 10,10 15,15 M 10,15 15,10" />
+      <!-- <path class="cross" style="mix-blend-mode:difference;stroke:#7ff;stroke-width:1;stroke-opacity:1;fill:none;display:block;-inkscape-stroke:hairline" d="M 0,0 M 25,25 M 10,10 15,15 M 10,15 15,10" /> -->
     </symbol>
+
+    <!-- very short path with 1px stroke used to measure size of marker -->
+    <path id="measure-marker" style="stroke-width:1.0;stroke-opacity:0.01;marker-start:url(#sample)" d="M 0,9999 m 0,0.1" />
 
     <path id="line-marker-start" class="line colors" style="stroke-width:2;stroke-opacity:0.2" d="M 12.5,12.5 l 1000,0" />
     <!-- <g id="marker-start" class="group" style="filter:url(#softGlow)"> -->
     <g id="marker-start" class="group">
-      <path class="colors" style="stroke-width:1.7;stroke-opacity:0;marker-start:url(#sample)"
+      <path class="colors" style="stroke-width:2;stroke-opacity:0;marker-start:url(#sample)"
        d="M 12.5,12.5 L 25,12.5"/>
       <rect x="0" y="0" width="25" height="25" style="fill:none;stroke:none"/>
       <use xlink:href="#cross" width="25" height="25" />
@@ -953,7 +985,7 @@ gchar const *buffer = R"A(
 
     <path id="line-marker-mid" class="line colors" style="stroke-width:2;stroke-opacity:0.2" d="M -1000,12.5 L 1000,12.5" />
     <g id="marker-mid" class="group">
-      <path class="colors" style="stroke-width:1.7;stroke-opacity:0;marker-mid:url(#sample)"
+      <path class="colors" style="stroke-width:2;stroke-opacity:0;marker-mid:url(#sample)"
        d="M 0,12.5 L 12.5,12.5 L 25,12.5"/>
       <rect x="0" y="0" width="25" height="25" style="fill:none;stroke:none"/>
       <use xlink:href="#cross" width="25" height="25" />
@@ -961,7 +993,7 @@ gchar const *buffer = R"A(
 
     <path id="line-marker-end" class="line colors" style="stroke-width:2;stroke-opacity:0.2" d="M -1000,12.5 L 12.5,12.5" />
     <g id="marker-end" class="group">
-      <path class="colors" style="stroke-width:1.7;stroke-opacity:0;marker-end:url(#sample)"
+      <path class="colors" style="stroke-width:2;stroke-opacity:0;marker-end:url(#sample)"
        d="M 0,12.5 L 12.5,12.5"/>
       <rect x="0" y="0" width="25" height="25" style="fill:none;stroke:none"/>
       <use xlink:href="#cross" width="25" height="25" />

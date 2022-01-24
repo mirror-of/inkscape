@@ -41,14 +41,12 @@ class PolarArrangeTab;
 class ArrangeDialog : public DialogBase
 {
 private:
-	Gtk::Box        *_arrangeBox;
-	Gtk::Notebook   *_notebook;
+    Gtk::Box        *_arrangeBox;
+    Gtk::Notebook   *_notebook;
     AlignAndDistribute* _align_tab;
-	GridArrangeTab  *_gridArrangeTab;
-	PolarArrangeTab *_polarArrangeTab;
+    GridArrangeTab  *_gridArrangeTab;
+    PolarArrangeTab *_polarArrangeTab;
     Gtk::Button     *_arrangeButton;
-
-    void selectionChanged(Inkscape::Selection*) override;
 
 public:
     ArrangeDialog();

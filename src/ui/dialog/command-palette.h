@@ -48,6 +48,7 @@ enum class TypeOfVariant
     INT,
     DOUBLE,
     STRING,
+    TUPLE_DD
 };
 
 enum class CPMode

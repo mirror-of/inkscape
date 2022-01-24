@@ -18,6 +18,7 @@
 #include "display/cairo-utils.h"
 #include "io/resource.h"
 #include "ui/cursor-utils.h"
+#include "ui/util.h"
 
 // widget's height; it should take stop template's height into account
 // current value is fine-tuned to make stop handles overlap gradient image just the right amount
@@ -109,7 +110,8 @@ void GradientWithStops::update() {
 // capture background color when styles change
 void GradientWithStops::on_style_updated() {
     if (auto wnd = dynamic_cast<Gtk::Window*>(this->get_toplevel())) {
-        _background_color = wnd->get_style_context()->get_background_color();
+        auto sc = wnd->get_style_context();
+        _background_color = get_background_color(sc);
     }
 
     // load and cache cursors
@@ -537,3 +539,14 @@ void GradientWithStops::set_focused_stop(int index) {
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -33,6 +33,7 @@
 #include "ui/widget/marker-combo-box.h"
 #include "ui/widget/unit-menu.h"
 #include "ui/tools/marker-tool.h"
+#include "ui/dialog/dialog-base.h"
 
 #include "actions/actions-tools.h"
 
@@ -138,8 +139,6 @@ StrokeStyle::StrokeStyle() :
     dashSelector(),
     update(false),
     desktop(nullptr),
-    selectChangedConn(),
-    selectModifiedConn(),
     startMarkerConn(),
     midMarkerConn(),
     endMarkerConn(),
@@ -395,8 +394,6 @@ StrokeStyle::StrokeStyle() :
 
 StrokeStyle::~StrokeStyle()
 {
-    selectModifiedConn.disconnect();
-    selectChangedConn.disconnect();
 }
 
 void StrokeStyle::setDesktop(SPDesktop *desktop)
@@ -404,19 +401,12 @@ void StrokeStyle::setDesktop(SPDesktop *desktop)
     if (this->desktop != desktop) {
 
         if (this->desktop) {
-            selectModifiedConn.disconnect();
-            selectChangedConn.disconnect();
             _document_replaced_connection.disconnect();
         }
         this->desktop = desktop;
 
         if (!desktop) {
             return;
-        }
-
-        if (desktop->selection) {
-            selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &StrokeStyle::selectionChangedCB)));
-            selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &StrokeStyle::selectionModifiedCB)));
         }
 
         _document_replaced_connection =
@@ -754,6 +744,12 @@ void
 StrokeStyle::updateLine()
 {
     if (update) {
+        return;
+    }
+
+    auto *widg = get_parent()->get_parent()->get_parent()->get_parent(); 
+    auto dialogbase = dynamic_cast<Inkscape::UI::Dialog::DialogBase*>(widg);
+    if (dialogbase && !dialogbase->getShowing()) {
         return;
     }
 

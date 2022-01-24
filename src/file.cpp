@@ -45,6 +45,7 @@
 #include "inkscape.h"
 #include "layer-manager.h"
 #include "message-stack.h"
+#include "page-manager.h"
 #include "path-prefix.h"
 #include "print.h"
 #include "rdf.h"
@@ -79,10 +80,6 @@ using Inkscape::DocumentUndo;
 using Inkscape::IO::Resource::TEMPLATES;
 using Inkscape::IO::Resource::USER;
 
-#ifdef WITH_DBUS
-#include "extension/dbus/dbus-init.h"
-#endif
-
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -116,10 +113,6 @@ SPDesktop *sp_file_new(const std::string &templ)
     InkscapeWindow* win = app->window_open (doc);
 
     SPDesktop* desktop = win->get_desktop();
-
-#ifdef WITH_DBUS
-    Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
-#endif
 
     return desktop;
 }
@@ -955,24 +948,23 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         }
     }
 
-    auto layer = desktop->layerManager().currentLayer();
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
-    if(clipboard) //???? Removed dead code can cause any bug, need to reimplement undead
-    for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
-        if(target_document->getObjectById(obj->attribute("id"))) continue;
-        Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        SPObject * pasted = layer->appendChildRepr(obj_copy);
-        Inkscape::GC::release(obj_copy);
-        SPLPEItem * pasted_lpe_item = dynamic_cast<SPLPEItem *>(pasted);
-        if (pasted_lpe_item){
-            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+    auto layer = desktop->layerManager().currentLayer();
+    Geom::Affine doc2parent = layer->i2doc_affine().inverse();
+
+    if (clipboard) {
+        for (Inkscape::XML::Node *obj = clipboard->firstChild(); obj; obj = obj->next()) {
+            if (target_document->getObjectById(obj->attribute("id")))
+                continue;
+            Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
+            layer->appendChildRepr(obj_copy);
+            Inkscape::GC::release(obj_copy);
+            pasted_objects_not.push_back(obj_copy);
         }
-        pasted_objects_not.push_back(obj_copy);
     }
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects_not);
-    Geom::Affine doc2parent = layer->i2doc_affine().inverse();
-    selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
+
     selection->deleteItems();
 
     // Change the selection to the freshly pasted objects
@@ -980,7 +972,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     for (auto item : selection->items()) {
         SPLPEItem *pasted_lpe_item = dynamic_cast<SPLPEItem *>(item);
         if (pasted_lpe_item) {
-            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+            sp_lpe_item_enable_path_effects(pasted_lpe_item, false);
         }
     }
     // Apply inverse of parent transform
@@ -1017,6 +1009,12 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         }
 
         selection->moveRelative(offset);
+        for (auto po : pasted_objects) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(target_document->getObjectByRepr(po));
+            if (lpeitem) {
+                sp_lpe_item_enable_path_effects(lpeitem, true);
+            }
+        }
     }
     target_document->emitReconstructionFinish();
 }
@@ -1051,8 +1049,19 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
     if (doc != nullptr) {
         Inkscape::XML::rebase_hrefs(doc, in_doc->getDocumentBase(), false);
         Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
+        prevent_id_clashes(doc, in_doc, true);
+        sp_file_fix_lpe(doc);
 
-        prevent_id_clashes(doc, in_doc);
+        in_doc->importDefs(doc);
+
+        // The extension should set it's pages enabled or disabled when opening
+        // in order to indicate if pages are being imported or if objects are.
+        if (doc->getNamedView()->getPageManager()->hasPages()) {
+            file_import_pages(in_doc, doc);
+            DocumentUndo::done(in_doc, _("Import Pages"), INKSCAPE_ICON("document-import"));
+            // This return is only used by dbus in document-interface.cpp (now removed).
+            return nullptr;
+        }
 
         SPCSSAttr *style = sp_css_attr_from_object(doc->getRoot());
 
@@ -1094,8 +1103,6 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         } else {
             place_to_insert = in_doc->getRoot();
         }
-
-        in_doc->importDefs(doc);
 
         // Construct a new object representing the imported image,
         // and insert it into the current document.
@@ -1150,7 +1157,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                 }
             }
         }
-
+        
         DocumentUndo::done(in_doc, _("Import"), INKSCAPE_ICON("document-import"));
         return new_obj;
     } else if (!cancelled) {
@@ -1162,6 +1169,25 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
     return nullptr;
 }
 
+/**
+ * Import the given document as a set of multiple pages and append to this one.
+ *
+ * @param this_doc - Our current document, to be changed
+ * @param that_doc - The documennt that contains our importable pages
+ */
+void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
+{
+    auto this_pm = this_doc->getNamedView()->getPageManager();
+    auto that_pm = that_doc->getNamedView()->getPageManager();
+
+    // Make sure objects have visualBounds created for import
+    that_doc->ensureUpToDate();
+
+    std::vector <SPItem *> imported_items;
+    for (auto &that_page : that_pm->getPages()) {
+        this_pm->newPage(that_page);
+    }
+}
 
 /**
  *  Display an Open dialog, import a resource if OK pressed.

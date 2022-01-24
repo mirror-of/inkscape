@@ -456,7 +456,11 @@ public:
             g_assert_not_reached();
         }
         char buffer[40];
-        result.append("#<");
+        result.append("#");
+        if (node.attribute("id")) {
+            result.append(node.attribute("id"));
+        }
+        result.append("<");
         result.append(type_name);
         result.append(":");
         snprintf(buffer, 40, "0x%p", &node);

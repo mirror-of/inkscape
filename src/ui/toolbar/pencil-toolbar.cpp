@@ -320,7 +320,7 @@ PencilToolbar::shapewidth_value_changed()
         case Inkscape::UI::Tools::TRIANGLE_OUT:
             prefs->setDouble("/live_effects/powerstroke/width", width);
             if (lpeitem) {
-                LPEPowerStroke *effect = dynamic_cast<LPEPowerStroke *>(lpeitem->getPathEffectOfType(POWERSTROKE));
+                LPEPowerStroke *effect = dynamic_cast<LPEPowerStroke *>(lpeitem->getFirstPathEffectOfType(POWERSTROKE));
                 if (effect) {
                     std::vector<Geom::Point> points = effect->offset_points.data();
                     if (points.size() == 1) {
@@ -336,7 +336,7 @@ PencilToolbar::shapewidth_value_changed()
             prefs->setDouble("/live_effects/skeletal/width", width);
             if (lpeitem) {
                 LPEPatternAlongPath *effect =
-                    dynamic_cast<LPEPatternAlongPath *>(lpeitem->getPathEffectOfType(PATTERN_ALONG_PATH));
+                    dynamic_cast<LPEPatternAlongPath *>(lpeitem->getFirstPathEffectOfType(PATTERN_ALONG_PATH));
                 if (effect) {
                     effect->prop_scale.param_set_value(width);
                     sp_lpe_item_update_patheffect(lpeitem, false, true);
@@ -346,7 +346,7 @@ PencilToolbar::shapewidth_value_changed()
         case Inkscape::UI::Tools::BEND_CLIPBOARD:
             prefs->setDouble("/live_effects/bend_path/width", width);
             if (lpeitem) {
-                LPEBendPath *effect = dynamic_cast<LPEBendPath *>(lpeitem->getPathEffectOfType(BEND_PATH));
+                LPEBendPath *effect = dynamic_cast<LPEBendPath *>(lpeitem->getFirstPathEffectOfType(BEND_PATH));
                 if (effect) {
                     effect->prop_scale.param_set_value(width);
                     sp_lpe_item_update_patheffect(lpeitem, false, true);
@@ -636,7 +636,8 @@ PencilToolbar::tolerance_value_changed()
     for (auto it(selected.begin()); it != selected.end(); ++it){
         SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*it);
         if (lpeitem && lpeitem->hasPathEffect()){
-            Inkscape::LivePathEffect::Effect* simplify = lpeitem->getPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
+            Inkscape::LivePathEffect::Effect *simplify =
+                lpeitem->getFirstPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
             if(simplify){
                 Inkscape::LivePathEffect::LPESimplify *lpe_simplify = dynamic_cast<Inkscape::LivePathEffect::LPESimplify*>(simplify->getLPEObj()->get_lpe());
                 if (lpe_simplify) {
@@ -644,7 +645,8 @@ PencilToolbar::tolerance_value_changed()
                     tol = tol/(100.0*(102.0-tol));
                     std::ostringstream ss;
                     ss << tol;
-                    Inkscape::LivePathEffect::Effect* powerstroke = lpeitem->getPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
+                    Inkscape::LivePathEffect::Effect *powerstroke =
+                        lpeitem->getFirstPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
                     bool simplified = false;
                     if(powerstroke){
                         Inkscape::LivePathEffect::LPEPowerStroke *lpe_powerstroke = dynamic_cast<Inkscape::LivePathEffect::LPEPowerStroke*>(powerstroke->getLPEObj()->get_lpe());

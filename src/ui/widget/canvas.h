@@ -71,7 +71,7 @@ public:
     void scroll_to(Geom::Point const &c, bool clear);
 
     void set_background_color(guint32 rgba);
-    void set_background_checkerboard(guint32 rgba = 0xC4C4C4FF);
+    void set_background_checkerboard(guint32 rgba = 0xC4C4C4FF, bool use_alpha = false);
 
     void set_drawing_disabled(bool disable) { _drawing_disabled = disable; } // Disable during path ops, etc.
     bool is_dragging() {return _is_dragging; }                // selection-chemistry.cpp

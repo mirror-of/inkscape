@@ -49,7 +49,7 @@ public:
     void set_inverted(bool inverted = false);
     void set_shadow(guint32 color, int width);
     void set_background(guint32 background);
-    void set_background_checkerboard(guint32 rgba);
+    void set_background_checkerboard(guint32 rgba, bool use_alpha);
  
 protected:
     void _set_background(Cairo::RefPtr<Cairo::Pattern> background);

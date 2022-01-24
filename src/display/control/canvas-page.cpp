@@ -60,7 +60,7 @@ void CanvasPage::add(Geom::Rect size, CanvasItemGroup *background_group, CanvasI
 void CanvasPage::remove(UI::Widget::Canvas *canvas)
 {
     g_assert(canvas != nullptr);
-    for (auto it = canvas_items.begin(); it != canvas_items.end(); it) {
+    for (auto it = canvas_items.begin(); it != canvas_items.end();) {
         if (canvas == (*it)->get_canvas()) {
             delete (*it);
             it = canvas_items.erase(it);
@@ -95,19 +95,15 @@ void CanvasPage::update(Geom::Rect size, const char *txt, bool outline)
 {
     // Put these in the preferences?
     bool border_on_top = _border_on_top;
-    int shadow_size = _shadow_size;
-    guint32 shadow_color = 0x00000088;
+    guint32 shadow_color = _border_color; // there's no separate shadow color in the UI, border color is used
     guint32 select_color = 0xff0000cc;
     guint32 border_color = _border_color;
-    // TODO: This ignores the requested transparency to paint the background.
-    // there is disagreement between developers about this feature.
-    guint32 background_color = _background_color | 0xff;
 
     // This is used when showing the viewport as *not a page* it's mostly
     // never used as the first page is normally the viewport too.
     if (outline) {
         border_on_top = false;
-        shadow_size = 0;
+        _shadow_size = 0;
         border_color = select_color;
     }
 
@@ -119,7 +115,7 @@ void CanvasPage::update(Geom::Rect size, const char *txt, bool outline)
             // This will put the border on the background OR foreground layer as needed.
             if (is_foreground == border_on_top) {
                 rect->show();
-                rect->set_shadow(shadow_color, shadow_size);
+                rect->set_shadow(shadow_color, _shadow_size);
                 rect->set_stroke(is_selected ? select_color : border_color);
             } else {
                 rect->hide();
@@ -129,7 +125,14 @@ void CanvasPage::update(Geom::Rect size, const char *txt, bool outline)
             // This undoes the hide for the background rect, but that's ok
             if (!is_foreground) {
                 rect->show();
-                rect->set_background(background_color);
+                if (_checkerboard) {
+                    rect->set_background_checkerboard(_background_color, true);
+                }
+                else {
+    // TODO: This ignores the requested transparency to paint the background.
+    // there is disagreement between developers about this feature.
+                    rect->set_background(_background_color | 0xff);
+                }
             }
         }
         if (auto label = dynamic_cast<CanvasItemText *>(item)) {
@@ -146,13 +149,14 @@ void CanvasPage::update(Geom::Rect size, const char *txt, bool outline)
     }
 }
 
-bool CanvasPage::setAttributes(bool on_top, guint32 border, guint32 bg, int shadow)
+bool CanvasPage::setAttributes(bool on_top, guint32 border, guint32 bg, int shadow, bool checkerboard)
 {
-    if (on_top != _border_on_top || border != _border_color || bg != _background_color || shadow != _shadow_size) {
+    if (on_top != _border_on_top || border != _border_color || bg != _background_color || shadow != _shadow_size || checkerboard != _checkerboard) {
         this->_border_on_top = on_top;
         this->_border_color = border;
         this->_background_color = bg;
-        this->_shadow_size = shadow;
+        _shadow_size = shadow;
+        _checkerboard = checkerboard;
         return true;
     }
     return false;

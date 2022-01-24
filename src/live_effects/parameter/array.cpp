@@ -4,11 +4,14 @@
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
 #include "live_effects/parameter/array.h"
-#include "helper-fns.h"
+
 #include <2geom/coord.h>
 #include <2geom/point.h>
+
+#include "helper-fns.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
 
 namespace Inkscape {
 
@@ -47,44 +50,67 @@ ArrayParam<Geom::Point>::readsvg(const gchar * str)
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }
 
+template <>
+std::shared_ptr<SatelliteReference> ArrayParam<std::shared_ptr<SatelliteReference>>::readsvg(const gchar *str)
+{
+    std::shared_ptr<SatelliteReference> satellitereference = nullptr;
+    if (!str) {
+        return satellitereference;
+    }
+
+    gchar **strarray = g_strsplit(str, ",", 2);
+    if (strarray[0] != nullptr && g_strstrip(strarray[0])[0] == '#') {
+        try {
+            bool active = strarray[1] != nullptr;
+            satellitereference = std::make_shared<SatelliteReference>(param_effect->getLPEObj(), active);
+            satellitereference->attach(Inkscape::URI(g_strstrip(strarray[0])));
+            if (active) {
+                satellitereference->setActive(strncmp(strarray[1], "1", 1) == 0);
+            }
+        } catch (Inkscape::BadURIException &e) {
+            g_warning("%s (%s)", e.what(), strarray[0]);
+            satellitereference->detach();
+        }
+    }
+    g_strfreev(strarray);
+    return satellitereference;
+}
 
 template <>
-std::vector<Satellite>
-ArrayParam<std::vector<Satellite > >::readsvg(const gchar * str)
+std::vector<NodeSatellite> ArrayParam<std::vector<NodeSatellite>>::readsvg(const gchar *str)
 {
-    std::vector<Satellite> subpath_satellites;
+    std::vector<NodeSatellite> subpath_nodesatellites;
     if (!str) {
-        return subpath_satellites;
+        return subpath_nodesatellites;
     }
     gchar ** strarray = g_strsplit(str, "@", 0);
     gchar ** iter = strarray;
     while (*iter != nullptr) {
         gchar ** strsubarray = g_strsplit(*iter, ",", 8);
         if (*strsubarray[7]) {//steps always > 0
-            Satellite *satellite = new Satellite();
-            satellite->setSatelliteType(g_strstrip(strsubarray[0]));
-            satellite->is_time = strncmp(strsubarray[1],"1",1) == 0;
-            satellite->selected = strncmp(strsubarray[2],"1",1) == 0;
-            satellite->has_mirror = strncmp(strsubarray[3],"1",1) == 0;
-            satellite->hidden = strncmp(strsubarray[4],"1",1) == 0;
+            NodeSatellite *nodesatellite = new NodeSatellite();
+            nodesatellite->setNodeSatellitesType(g_strstrip(strsubarray[0]));
+            nodesatellite->is_time = strncmp(strsubarray[1], "1", 1) == 0;
+            nodesatellite->selected = strncmp(strsubarray[2], "1", 1) == 0;
+            nodesatellite->has_mirror = strncmp(strsubarray[3], "1", 1) == 0;
+            nodesatellite->hidden = strncmp(strsubarray[4], "1", 1) == 0;
             double amount,angle;
             float stepsTmp;
             sp_svg_number_read_d(strsubarray[5], &amount);
             sp_svg_number_read_d(strsubarray[6], &angle);
             sp_svg_number_read_f(g_strstrip(strsubarray[7]), &stepsTmp);
             unsigned int steps = (unsigned int)stepsTmp;
-            satellite->amount = amount;
-            satellite->angle = angle;
-            satellite->steps = steps;
-            subpath_satellites.push_back(*satellite);
+            nodesatellite->amount = amount;
+            nodesatellite->angle = angle;
+            nodesatellite->steps = steps;
+            subpath_nodesatellites.push_back(*nodesatellite);
         }
         g_strfreev (strsubarray);
         iter++;
     }
     g_strfreev (strarray);
-    return subpath_satellites;
+    return subpath_nodesatellites;
 }
-
 
 } /* namespace LivePathEffect */
 

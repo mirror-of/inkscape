@@ -10,43 +10,45 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpe-measure-segments.h"
+
+#include <cmath>
+#include <iomanip>
+#include <libnrtype/font-lister.h>
+#include <pangomm/fontdescription.h>
+
 #include "2geom/affine.h"
 #include "2geom/angle.h"
 #include "2geom/point.h"
 #include "2geom/ray.h"
 #include "display/curve.h"
+#include "document-undo.h"
+#include "document.h"
 #include "helper/geom.h"
-#include "text-editing.h"
+#include "inkscape.h"
+#include "libnrtype/Layout-TNG.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/parameter/satellite-reference.h"
 #include "object/sp-defs.h"
-#include "object/sp-text.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-group.h"
 #include "object/sp-item.h"
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
+#include "object/sp-text.h"
+#include "path-chemistry.h"
+#include "preferences.h"
+#include "style.h"
 #include "svg/stringstream.h"
-#include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/svg-length.h"
+#include "svg/svg.h"
+#include "text-editing.h"
 #include "util/units.h"
 #include "xml/node.h"
 #include "xml/sp-css-attr.h"
-#include "libnrtype/Layout-TNG.h"
-#include "document.h"
-#include "document-undo.h"
-#include "inkscape.h"
-#include "preferences.h"
-#include "path-chemistry.h"
-#include "style.h"
-
-#include <cmath>
-#include <iomanip>
-#include <libnrtype/font-lister.h>
-#include <pangomm/fontdescription.h>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -92,7 +94,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     hide_arrows(_("Hide arrows"), _("Don't show any arrows"), "hide_arrows", &wr, this, false),
     // active for 1.1
     smallx100(_("Multiply values &lt; 1"), _("Multiply values smaller than 1 by 100 and leave out the unit"), "smallx100", &wr, this, false),
-    linked_items(_("Linked objects:"), _("Objects whose nodes are projected onto the path and generate new measurements"), "linked_items", &wr, this),
+    linked_items(_("Linked objects:"), _("Objects whose nodes are projected onto the path and generate new measurements"), "linked_items", &wr, this, true),
     distance_projection(_("Distance"), _("Distance of the dimension lines from the outermost node"), "distance_projection", &wr, this, 20.0),
     angle_projection(_("Angle of projection"), _("Angle of projection in 90° steps"), "angle_projection", &wr, this, 0.0),
     active_projection(_("Activate projection"), _("Activate projection mode"), "active_projection", &wr, this, false),
@@ -206,6 +208,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
+    keep_paths = false;
     doOnRemove(nullptr);
 }
 
@@ -507,11 +510,13 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     }
     rstring->setContent(label_value.c_str());
     // this boring hack is to update the text with document scale inituialy loaded without root transform
-    Geom::OptRect bounds = SP_ITEM(elemref)->geometricBounds();
-    if (bounds) {
-        anotation_width = bounds->width();
-        rtext->setAttributeSvgDouble("x", pos[Geom::X] - (anotation_width / 2.0));
-        rtspan->removeAttribute("style");
+    if (elemref) {
+        Geom::OptRect bounds = SP_ITEM(elemref)->geometricBounds();
+        if (bounds) {
+            anotation_width = bounds->width();
+            rtext->setAttributeSvgDouble("x", pos[Geom::X] - (anotation_width / 2.0));
+            rtspan->removeAttribute("style");
+        }
     }
 
     std::string transform;
@@ -641,6 +646,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
         elemref = document->getRoot()->appendChildRepr(line);
         Inkscape::GC::release(line);
     }
+    sp_repr_css_attr_unref (css);
 }
 
 void
@@ -694,6 +700,8 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         styleContent = styleContent + Glib::ustring("\n.measure-line") + Glib::ustring("\n{\n}");
         textNode->setContent(styleContent.c_str());
     }
+    document->stylesheetchg = false;
+    linked_items.update_satellites();
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
@@ -761,7 +769,9 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
         }
     } else if (shape && !bboxonly) {
         SPCurve const *c = shape->curve();
-        current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
+        if (c) {
+            current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
+        }
     } else if ((text || flowtext) && !bboxonly) {
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
         do {
@@ -825,16 +835,50 @@ static void extractFirstPoint(Geom::Point & dest, const Glib::ustring & lpobjid,
     }
 }
 
+bool
+LPEMeasureSegments::doOnOpen(SPLPEItem const* lpeitem) {
+    if (!is_load || is_applied) {
+        return false;
+    }
+    if (active_projection) {
+        linked_items.read_from_SVG();
+        linked_items.update_satellites(true);
+    }
+    return true;
+}
+
 void
 LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    if (isOnClipboard()) {
+        return;
+    }
+    if (!linked_items.data().size()) {
+        linked_items.read_from_SVG();
+        if (linked_items.data().size()) {
+            linked_items.update_satellites();
+        }
+    }
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     Glib::ustring lpobjid = this->lpeobj->getId();
     SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
+    bool active = !linked_items.data().size();
+    for (auto lpereference : linked_items.data()) {
+        if (lpereference && lpereference.get()->isAttached() && lpereference.get()->getObject() != nullptr) {
+            active = true;
+        }
+    }
+    if (!active && !is_load && prev_active_projection) {
+        linked_items.clear();
+        prevsatellitecount = 0;
+        return;
+    }
+    prev_active_projection = active_projection;
     //Avoid crashes on previews
+    bool fontsizechanged = false;
     Geom::Affine parentaffinetransform = i2anc_affine(lpeitem->parent, document->getRoot());
     Geom::Affine affinetransform = i2anc_affine(lpeitem, document->getRoot());
     Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();
@@ -852,9 +896,15 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             transform *= Geom::Translate(mid);
             std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox, centers, bboxonly, angle_projection);
             nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
-            for (auto & iter : linked_items._vector) {
+            auto satellites = linked_items.data();
+            if (satellites.size() != prevsatellitecount ) {
+                prevsatellitecount = satellites.size();
+                linked_items.update_satellites(true);
+            }
+            prevsatellitecount = satellites.size();
+            for (auto & iter : satellites) {
                 SPObject *obj;
-                if (iter->ref.isAttached() &&  iter->actived && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj)) {
+                if (iter && iter->isAttached() && iter->getActive() && (obj = iter->getObject()) && SP_IS_ITEM(obj)) {
                     SPItem * item = dynamic_cast<SPItem *>(obj);
                     if (item) {
                         Geom::Affine affinetransform_sub = i2anc_affine(item, document->getRoot());
@@ -867,6 +917,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     }
                 }
             }
+            
             double maxdistance = -std::numeric_limits<double>::max();
             std::vector<double> result;
             for (auto & node : nodes) {
@@ -906,6 +957,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             pathvector *= Geom::Rotate(angle);
             pathvector *= Geom::Translate(mid);
         }
+        
     }
 
     //end projection prepare
@@ -922,7 +974,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         auto fontdesc_ustring = fontbutton.param_getSVGValue();
         Pango::FontDescription fontdesc(fontdesc_ustring);
         double newfontsize = fontdesc.get_size() / (double)Pango::SCALE;
-        bool fontsizechanged = false;
         if (newfontsize != fontsize) {
             fontsize = Inkscape::Util::Quantity::convert(newfontsize, "pt", display_unit.c_str());
             fontsizechanged = true;
@@ -1194,6 +1245,71 @@ LPEMeasureSegments::doOnRemove (SPLPEItem const* /*lpeitem*/)
         return;
     }
     processObjects(LPE_ERASE);
+    items.clear();
+}
+
+// we override processObjects because sattellite items are not selectable and dont surf any issues
+void
+LPEMeasureSegments::processObjects(LPEAction lpe_action)
+{
+    if (lpe_action == LPE_UPDATE && _lpe_action != LPE_ERASE) {
+        _lpe_action = lpe_action;
+        return;
+    }
+    SPDocument *document = getSPDoc();
+    if (!document) {
+        return;
+    }
+    sp_lpe_item = dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin());
+    if (!document || !sp_lpe_item) {
+        return;
+    }
+    sp_lpe_item_enable_path_effects(sp_lpe_item, false);
+    for (auto id : items) {
+        SPObject *elemref = nullptr;
+        if ((elemref = document->getObjectById(id.c_str()))) {
+            Inkscape::XML::Node * elemnode = elemref->getRepr();
+            auto item = dynamic_cast<SPItem *>(elemref);
+            SPCSSAttr *css;
+            Glib::ustring css_str;
+            switch (lpe_action){
+            case LPE_TO_OBJECTS:
+                if (item->isHidden()) {
+                    item->deleteObject(true);
+                } else {
+                    elemnode->removeAttribute("sodipodi:insensitive");
+                    if (!SP_IS_DEFS(item->parent)) {
+                        item->moveTo(sp_lpe_item, false);
+                    }
+                }
+                break;
+
+            case LPE_ERASE:
+                item->deleteObject(true);
+                break;
+
+            case LPE_VISIBILITY:
+                css = sp_repr_css_attr_new();
+                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
+                if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
+                    css->setAttribute("display", "none");
+                } else {
+                    css->removeAttribute("display");
+                }
+                sp_repr_css_write_string(css,css_str);
+                elemnode->setAttributeOrRemoveIfEmpty("style", css_str);
+                sp_repr_css_attr_unref (css);
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+    if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
+        items.clear();
+    }
+    sp_lpe_item_enable_path_effects(sp_lpe_item, true);
 }
 
 }; //namespace LivePathEffect

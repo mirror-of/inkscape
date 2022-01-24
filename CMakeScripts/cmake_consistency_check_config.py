@@ -4,7 +4,6 @@ IGNORE = (
     # dirs
     "/cxxtest/",
     "/dom/work/",
-    "/extension/dbus/",
     "/src/extension/dxf2svg/",
     "/test/",
 

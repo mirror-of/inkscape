@@ -62,7 +62,7 @@ Future improvements:
   <bind gaction="win.document-import"                       keys="&lt;ctrl&gt;i, &lt;ctrl&gt;I" />
   <bind gaction="win.dialog-open('Export')"                 keys="&lt;ctrl&gt;&lt;shift&gt;e, &lt;ctrl&gt;&lt;shift&gt;E" />
   <bind gaction="win.document-close"                        keys="&lt;ctrl&gt;w, &lt;ctrl&gt;W" />
-  <bind gaction="app.quit-inkscape"                         keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
+  <bind gaction="app.quit"                                  keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
   <bind gaction="win.document-revert" />
   <bind gaction="win.document-cleanup" />
 
@@ -121,8 +121,8 @@ Future improvements:
   
   <!-- Edit -->
 
-  <bind gaction="win.undo"                                  keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z, &lt;ctrl&gt;&lt;shift&gt;y, &lt;ctrl&gt;&lt;shift&gt;Y" />
-  <bind gaction="win.undo"                                  keys="d, D" />
+  <bind gaction="doc.undo"                                  keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z, &lt;ctrl&gt;&lt;shift&gt;y, &lt;ctrl&gt;&lt;shift&gt;Y" />
+  <bind gaction="doc.undo"                                  keys="d, D" />
   <bind gaction="win.redo"                                  keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z, &lt;ctrl&gt;y, &lt;ctrl&gt;Y" />
   <bind gaction="win.redo"                                  keys="f, F" />
   <bind gaction="app.cut"                                   keys="&lt;ctrl&gt;x, &lt;ctrl&gt;X" />
@@ -246,7 +246,7 @@ Future improvements:
   <bind gaction="win.dialog-open('Clonetiler')"/>
   <bind gaction="win.dialog-open('XMLEditor')"               keys="&lt;primary&gt;&lt;shift&gt;x" />
   <bind gaction="win.dialog-open('Input')" />
-  <bind gaction="win.dialog-open('Preferences')"             keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
+  <bind gaction="app.preferences"                            keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
   <bind gaction="win.dialog-open('LivePathEffect')"          keys="&lt;primary&gt;ampersand, &lt;primary&gt;&lt;shift&gt;7" />
   <bind gaction="win.dialog-open('Trace')"                   keys="&lt;alt&gt;&lt;shift&gt;b"/>
   <bind gaction="win.dialog-open('DocumentProperties')"      keys="&lt;primary&gt;&lt;shift&gt;d" />
@@ -262,7 +262,7 @@ Future improvements:
 <!-- Help -->
 
   <bind gaction="win.dialog-open('Memory')" />
-  <bind gaction="app.help-about" />
+  <bind gaction="app.about" />
   <!-- There are also verbs for tutorials, if you really need them -->
 
 <!-- Effects -->

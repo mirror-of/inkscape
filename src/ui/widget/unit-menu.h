@@ -30,7 +30,7 @@ public:
     /**
      *    Construct a UnitMenu
      */
-    UnitMenu();
+    UnitMenu(Gtk::ComboBoxText* external_combo = nullptr);
 
     ~UnitMenu() override;
 
@@ -126,6 +126,8 @@ protected:
      * block scroll from widget if is inside a scrolled window.
      */
     bool on_scroll_event(GdkEventScroll *event) override;
+
+    Gtk::ComboBoxText* _combo;
 };
 
 } // namespace Widget

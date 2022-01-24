@@ -10,15 +10,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glib.h>
 #include <vector>
 
-#include <glib.h>
-
+#include "bad-uri-exception.h"
+#include "helper/geom-nodesatellite.h"
 #include "live_effects/parameter/parameter.h"
-
-#include "helper/geom-satellite.h"
-#include "svg/svg.h"
+#include "live_effects/parameter/satellite-reference.h"
+#include "object/uri.h"
 #include "svg/stringstream.h"
+#include "svg/svg.h"
 
 namespace Inkscape {
 
@@ -112,13 +113,25 @@ protected:
         str << vector_data;
     }
 
-    void writesvgData(SVGOStringStream &str, std::vector<Satellite> const &vector_data) const {
+    void writesvgData(SVGOStringStream &str, std::shared_ptr<SatelliteReference> const &vector_data) const
+    {
+        if (vector_data && vector_data->isAttached()) {
+            str << vector_data->getURI()->str();
+            if (vector_data->getHasActive()) {
+                str << ",";
+                str << vector_data->getActive();
+            }
+        }
+    }
+
+    void writesvgData(SVGOStringStream &str, std::vector<NodeSatellite> const &vector_data) const
+    {
         for (size_t i = 0; i < vector_data.size(); ++i) {
             if (i != 0) {
-                // separate items with @ symbol ¿Any other?
+                // separate nodes with @ symbol ( we use | for paths)
                 str << " @ ";
             }
-            str << vector_data[i].getSatelliteTypeGchar();
+            str << vector_data[i].getNodeSatellitesTypeGchar();
             str << ",";
             str << vector_data[i].is_time;
             str << ",";

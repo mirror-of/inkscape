@@ -127,6 +127,8 @@ public:
     static SPDocument *createNewDocFromMem(char const*buffer, int length, bool keepalive);
            SPDocument *createChildDoc(std::string const &filename);
 
+    void setPages(bool enabled);
+
     // Make a copy, you are responsible for the copy.
     std::unique_ptr<SPDocument> copy() const;
 
@@ -161,6 +163,8 @@ public:
     SPObject *getXMLDialogSelectedObject() { return _activexmltree; }
 
     Inkscape::EventLog* get_event_log() { return _event_log; }
+    // allow not update LPE on stylesheet change
+    bool stylesheetchg = false;
 
 private:
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
@@ -245,12 +249,14 @@ public:
     void bindObjectToId(char const *id, SPObject *object);
     SPObject *getObjectById(Glib::ustring const &id) const;
     SPObject *getObjectById(char const *id) const;
+    SPObject *getObjectByHref(Glib::ustring const &href) const;
+    SPObject *getObjectByHref(char const *href) const;
 
     void bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object);
     SPObject *getObjectByRepr(Inkscape::XML::Node *repr) const;
 
     std::vector<SPObject *> getObjectsByClass(Glib::ustring const &klass) const;
-    std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element) const;
+    std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element, bool custom = false) const;
     std::vector<SPObject *> getObjectsBySelector(Glib::ustring const &selector) const;
 
     void set_reference_document(SPDocument* document);
@@ -292,6 +298,7 @@ public:
     // Document undo/redo ----------------------
     unsigned long serial() const { return _serial; }  // Returns document's unique number.
     bool isSeeking() const {return seeking;} // In a transition between two "good" states of document?
+    bool isPartial() const {return partial != nullptr;} // In partianl undo/redo transaction
     void reset_key(void *dummy) { actionkey.clear(); }
     bool isSensitive() const { return sensitive; }
 
@@ -391,6 +398,7 @@ private:
     typedef sigc::signal<void> ReconstructionStart;
     typedef sigc::signal<void> ReconstructionFinish;
     typedef sigc::signal<void> CommitSignal;
+    typedef sigc::signal<void> BeforeCommitSignal; // allow to add actions berfore commit to include in undo
 
     typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
     typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
@@ -403,6 +411,7 @@ private:
     SPDocument::ReconstructionStart _reconstruction_start_signal;
     SPDocument::ReconstructionFinish  _reconstruction_finish_signal;
     SPDocument::CommitSignal commit_signal; // Used by friend Inkscape::DocumentUndo
+    SPDocument::BeforeCommitSignal before_commit_signal; // Used by friend Inkscape::DocumentUndo
 
     bool oldSignalsConnected;
 
@@ -438,6 +447,7 @@ public:
     sigc::connection connectModified(ModifiedSignal::slot_type slot);
     sigc::connection connectFilenameSet(FilenameSetSignal::slot_type slot);
     sigc::connection connectCommit(CommitSignal::slot_type slot);
+    sigc::connection connectBeforeCommit(BeforeCommitSignal::slot_type slot);
     sigc::connection connectIdChanged(const char *id, IDChangedSignal::slot_type slot);
     sigc::connection connectResourcesChanged(char const *key, SPDocument::ResourcesChangedSignal::slot_type slot);
     sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);

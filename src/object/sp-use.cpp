@@ -168,10 +168,7 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
 
     SPItem::write(xml_doc, repr, flags);
 
-    repr->setAttributeSvgDouble("x", this->x.computed);
-    repr->setAttributeSvgDouble("y", this->y.computed);
-    repr->setAttribute("width", sp_svg_length_write_with_units(this->width));
-    repr->setAttribute("height", sp_svg_length_write_with_units(this->height));
+    this->writeDimensions(repr);
 
     if (this->ref->getURI()) {
         auto uri_string = this->ref->getURI()->str();
@@ -596,12 +593,6 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     if (this->child) {
         sp_object_ref(this->child);
 
-        // viewport is only changed if referencing a symbol or svg element
-        if( SP_IS_SYMBOL(this->child) || SP_IS_ROOT(this->child) ) {
-            cctx.viewport = Geom::Rect::from_xywh(0, 0, this->width.computed, this->height.computed);
-            cctx.i2vp = Geom::identity();
-        }
-        
         if (childflags || (this->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             SPItem const *chi = dynamic_cast<SPItem const *>(child);
             g_assert(chi != nullptr);

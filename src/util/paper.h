@@ -29,20 +29,20 @@ public:
     PaperSize(std::string name, double smaller, double larger, Inkscape::Util::Unit const *unit);
     PaperSize(const PaperSize &other) { assign(other); } 
     PaperSize &operator=(const PaperSize &other) { assign(other); return *this; }
- 
-    virtual ~PaperSize() = default;
-            
+
+    ~PaperSize() = default;
+
     std::string name;
     double smaller;
     double larger;
     Inkscape::Util::Unit const *unit; /// pointer to object in UnitTable, do not delete
-            
+
     std::string getDescription() const;
 
-    static std::vector<PaperSize *> getPageSizes();
-    static PaperSize *findPaperSize(double width, double height, Inkscape::Util::Unit const *unit);
+    static const std::vector<PaperSize>& getPageSizes();
+    static const PaperSize *findPaperSize(double width, double height, Inkscape::Util::Unit const *unit);
     static std::string toDescription(std::string name, double x, double y, Inkscape::Util::Unit const *unit);
-            
+
 private:
     void assign(const PaperSize &other);
 };

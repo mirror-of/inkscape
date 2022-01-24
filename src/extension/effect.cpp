@@ -30,11 +30,16 @@ namespace Extension {
 
 Effect * Effect::_last_effect = nullptr;
 
-// Adds effect to Gio::Actions
+/**
+ * Adds effect to Gio::Actions
+ *
+ *  \c effect is Filter or Extension
+ *  \c show_prefs is used to show preferences dialog
+*/
 void
-action_effect (Effect* effect)
+action_effect (Effect* effect, bool show_prefs)
 {
-    if (effect->_workingDialog) {
+    if (effect->_workingDialog && show_prefs) {
         effect->prefs(InkscapeApplication::instance()->get_active_view());
     } else {
         effect->effect(InkscapeApplication::instance()->get_active_view());
@@ -121,7 +126,8 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     std::string action_id = "app." + std::string(get_id());
 
     static auto gapp = InkscapeApplication::instance()->gtk_app();
-    gapp->add_action( this->get_id(), sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this));
+    gapp->add_action( this->get_id(), sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, true));
+    gapp->add_action( Glib::ustring(get_id()) + ".noprefs", sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, false));
 
     if (!hidden) {
         // Submenu retrieval as a list of strings (to handle nested menus).
@@ -131,13 +137,15 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         if (local_effects_menu && local_effects_menu->attribute("name") && !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
 
             std::vector<std::vector<Glib::ustring>>raw_data_filter =
-                {{ action_id, get_name(), "Filter", description }};
+                {{ action_id, get_name(), "Filter", description },
+                 { action_id + ".noprefs", Glib::ustring(get_name()) + " " + _("(No preferences)"), "Filter", description }};
             app->get_action_extra_data().add_data(raw_data_filter);
 
         } else {
 
             std::vector<std::vector<Glib::ustring>>raw_data_effect =
-                {{ action_id, get_name(), "Effect", description }};
+                {{ action_id, get_name(), "Effect", description },
+                 { action_id + ".noprefs", Glib::ustring(get_name()) + " " + _("(No preferences)"), "Effect", description }};
             app->get_action_extra_data().add_data(raw_data_effect);
 
             sub_menu_list.push_front("Effects");

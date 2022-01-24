@@ -58,7 +58,7 @@ using Inkscape::Util::unit_table;
 #define DEFAULTGRIDEMPSPACING 5
 #define DEFAULTGUIDECOLOR 0x0000ff7f
 #define DEFAULTGUIDEHICOLOR 0xff00007f
-#define DEFAULTDESKCOLOR 0xffffff00
+#define DEFAULTDESKCOLOR 0xffffffff
 
 static void sp_namedview_setup_guides(SPNamedView * nv);
 static void sp_namedview_lock_guides(SPNamedView * nv);
@@ -77,12 +77,12 @@ SPNamedView::SPNamedView()
     this->guidecolor = 0;
     this->guidehicolor = 0;
     this->views.clear();
-    this->page_size_units = nullptr;
+    // this->page_size_units = nullptr;
     this->window_x = 0;
     this->cy = 0;
     this->window_y = 0;
     this->display_units = nullptr;
-    this->page_size_units = nullptr;
+    // this->page_size_units = nullptr;
     this->cx = 0;
     this->rotation = 0;
     this->window_width = 0;
@@ -226,7 +226,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::BORDEROPACITY);
     this->readAttr(SPAttr::PAGECOLOR);
     this->readAttr(SPAttr::INKSCAPE_DESK_COLOR);
-    this->readAttr(SPAttr::INKSCAPE_DESK_OPACITY);
+    // this->readAttr(SPAttr::INKSCAPE_DESK_OPACITY);
     this->readAttr(SPAttr::INKSCAPE_DESK_CHECKERBOARD);
     this->readAttr(SPAttr::INKSCAPE_PAGESHADOW);
     this->readAttr(SPAttr::INKSCAPE_ZOOM);
@@ -238,33 +238,6 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::INKSCAPE_WINDOW_X);
     this->readAttr(SPAttr::INKSCAPE_WINDOW_Y);
     this->readAttr(SPAttr::INKSCAPE_WINDOW_MAXIMIZED);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_GLOBAL);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_NODE);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_OTHERS);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_FROM_GUIDE);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_ROTATION_CENTER);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_SMOOTH);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_LINE_MIDPOINT);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_OBJECT_MIDPOINT);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_TEXT_BASELINE);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_MIDPOINT);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_GUIDE);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_GRID);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_INTERSECTION);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_PERP);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_TANG);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_CLIP);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_MASK);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_CUSP);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_CORNER);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_PAGE_BORDER);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_ALIGNMENT_SELF);
-    // this->readAttr(SPAttr::INKSCAPE_SNAP_DISTRIBUTION);
     this->readAttr(SPAttr::INKSCAPE_CURRENT_LAYER);
     this->readAttr(SPAttr::INKSCAPE_CONNECTOR_SPACING);
     this->readAttr(SPAttr::INKSCAPE_LOCKGUIDES);
@@ -299,6 +272,16 @@ void SPNamedView::release() {
     SPObjectGroup::release();
 }
 
+void SPNamedView::set_desk_color(SPDesktop* desktop) {
+    if (desktop) {
+        if (desk_checkerboard) {
+            desktop->getCanvas()->set_background_checkerboard(desk_color);
+        } else {
+            desktop->getCanvas()->set_background_color(desk_color);
+        }
+    }
+}
+
 void SPNamedView::modified(unsigned int flags)
 {
     // Copy the page style for the default viewport attributes
@@ -312,11 +295,7 @@ void SPNamedView::modified(unsigned int flags)
     }
     // Add desk color, and chckerboard pattern to desk view
     for (auto desktop : views) {
-        if (desk_checkerboard) {
-            desktop->getCanvas()->set_background_checkerboard(desk_color);
-        } else {
-            desktop->getCanvas()->set_background_color(desk_color);
-        }
+        set_desk_color(desktop);
     }
 
     for (auto child : this->childList(false)) {
@@ -345,8 +324,6 @@ void SPNamedView::update(SPCtx *ctx, guint flags)
 }
 
 void SPNamedView::set(SPAttr key, const gchar* value) {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool global_snapping = prefs->getBool("/options/snapdefault/value", true);
 
     // Send page attributes to the page manager.
     if (this->_page_manager && this->_page_manager->subset(key, value)) {
@@ -437,16 +414,16 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SPAttr::INKSCAPE_DESK_COLOR:
-        desk_color = (desk_color & 0xff) | (DEFAULTDESKCOLOR & 0xffffff00);
+        // desk_color = (desk_color & 0xff) | (DEFAULTDESKCOLOR & 0xffffff00);
         if (value) {
-            desk_color = (desk_color & 0xff) | sp_svg_read_color(value, desk_color);
+            desk_color = /*(desk_color & 0xff) |*/ sp_svg_read_color(value, desk_color);
         }
         this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         break;
-    case SPAttr::INKSCAPE_DESK_OPACITY:
-        sp_ink_read_opacity(value, &desk_color, DEFAULTDESKCOLOR);
-        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-        break;
+    // case SPAttr::INKSCAPE_DESK_OPACITY:
+    //     sp_ink_read_opacity(value, &desk_color, DEFAULTDESKCOLOR);
+    //     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    //     break;
     case SPAttr::INKSCAPE_DESK_CHECKERBOARD:
         this->desk_checkerboard.readOrUnset(value);
         this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -528,6 +505,7 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     }
+    /*
     case SPAttr::UNITS: {
         // Only used in "Custom size" section of Document Properties dialog
             Inkscape::Util::Unit const *new_unit = nullptr;
@@ -536,22 +514,22 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
                 Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
                 if ( !unit_table.hasUnit(value) ) {
                     g_warning("Unrecognized unit `%s'", value);
-                    /* fixme: Document errors should be reported in the status bar or
+                    / * fixme: Document errors should be reported in the status bar or
                      * the like (e.g. as per
                      * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing); g_log
-                     * should be only for programmer errors. */
+                     * should be only for programmer errors. * /
                 } else if ( req_unit->isAbsolute() ) {
                     new_unit = req_unit;
                 } else {
                     g_warning("Document units must be absolute like `mm', `pt' or `px', but found `%s'",
                               value);
-                    /* fixme: Don't use g_log (see above). */
+                    / * fixme: Don't use g_log (see above). * /
                 }
             }
             this->page_size_units = new_unit;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    }
+    } */
     default:
             SPObjectGroup::set(key, value);
             break;
@@ -1170,6 +1148,27 @@ void SPNamedView::scrollAllDesktops(double dx, double dy, bool is_scrolling) {
     for(auto & view : this->views) {
         view->scroll_relative_in_svg_coords(dx, dy, is_scrolling);
     }
+}
+
+void SPNamedView::change_color(unsigned int rgba, SPAttr color_key, SPAttr opacity_key /*= SPAttr::INVALID*/) {
+    gchar buf[32];
+    sp_svg_write_color(buf, sizeof(buf), rgba);
+    getRepr()->setAttribute(sp_attribute_name(color_key), buf);
+
+    if (opacity_key != SPAttr::INVALID) {
+        getRepr()->setAttributeCssDouble(sp_attribute_name(opacity_key), (rgba & 0xff) / 255.0);
+    }
+}
+
+void SPNamedView::change_bool_setting(SPAttr key, bool value) {
+    const char* str_value = nullptr;
+    if (key == SPAttr::SHAPE_RENDERING) {
+        str_value = value ? "auto" : "crispEdges";
+    }
+    else {
+        str_value = value ? "true" : "false";
+    }
+    getRepr()->setAttribute(sp_attribute_name(key), str_value);
 }
 
 /*

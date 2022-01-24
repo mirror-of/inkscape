@@ -289,11 +289,8 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
             repr->removeAttribute("orient");
 	}
 
-	/* fixme: */
-	//XML Tree being used directly here while it shouldn't be....
-	repr->setAttribute("viewBox", this->getRepr()->attribute("viewBox"));
-	//XML Tree being used directly here while it shouldn't be....
-	repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
+    this->write_viewBox(repr);
+    this->write_preserveAspectRatio(repr);
 
 	SPGroup::write(xml_doc, repr, flags);
 
@@ -334,7 +331,6 @@ void sp_validate_marker(SPMarker *sp_marker, SPDocument *doc) {
     }
 
     Geom::Rect bounds(r->min() * doc->dt2doc(), r->max() * doc->dt2doc());
-    Geom::Point const center = bounds.dimensions() * 0.5;
 
     if(!sp_marker->refX._set) {
         sp_marker->setAttribute("refX", "0.0");

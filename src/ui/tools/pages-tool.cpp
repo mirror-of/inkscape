@@ -79,7 +79,10 @@ void PagesTool::finish()
         drag_shapes.clear(); // Already deleted by group
     }
 
+    _doc_replaced_connection.disconnect();
+    _doc_modified_connection.disconnect();
     _zoom_connection.disconnect();
+
 }
 
 void PagesTool::setup()
@@ -90,6 +93,7 @@ void PagesTool::setup()
 
     // Stash the regular object selection so we don't modify them in base-tools root handler.
     desktop->selection->setBackup();
+    desktop->selection->clear();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     drag_tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
@@ -122,6 +126,18 @@ void PagesTool::setup()
     _selector_changed_connection =
             _page_manager->connectPageSelected(sigc::mem_fun(*this, &PagesTool::selectionChanged));
     selectionChanged(_page_manager->getSelected());
+
+    _doc_replaced_connection = desktop->connectDocumentReplaced([=](SPDesktop *desktop, SPDocument *document) {
+        finish();
+        setup();
+    });
+
+    _doc_modified_connection = desktop->getDocument()->connectModified([=](guint){
+        // This readjusts the knot when in single page mode.
+        if (!_page_manager->hasPages()) {
+            selectionChanged(nullptr);
+        }
+    });
 
     _zoom_connection = desktop->signal_zoom_changed.connect([=](double) {
         // This readjusts the knot on zoom because the viewbox position
@@ -299,13 +315,14 @@ bool PagesTool::root_handler(GdkEvent *event)
             desktop->snapindicator->remove_snaptarget();
             break;
         }
-        case GDK_KEY_RELEASE: {
+        case GDK_KEY_PRESS: {
             if (event->key.keyval == GDK_KEY_Escape) {
                 mouse_is_pressed = false;
                 ret = true;
             }
             if (event->key.keyval == GDK_KEY_Delete) {
                 _page_manager->deletePage(_page_manager->move_objects());
+
                 Inkscape::DocumentUndo::done(desktop->getDocument(), "Delete Page", INKSCAPE_ICON("tool-pages"));
                 ret = true;
             }
@@ -335,6 +352,7 @@ bool PagesTool::root_handler(GdkEvent *event)
             this->set_cursor("page-draw.svg");
         }
     }
+
 
     return ret ? true : ToolBase::root_handler(event);
 }

@@ -39,116 +39,91 @@ sp_svg_transform_write(Geom::Affine const &transform)
         return "scale(0)";
     }
 
-    // FIXME legacy C code!
-    // the function sp_svg_number_write_de is stopping me from using a proper C++ string
 
-    gchar c[256]; // string buffer
-    unsigned p = 0; // position in the buffer
+    std::stringstream c(""); // string buffer
 
     if (transform.isIdentity()) {
         // We are more or less identity, so no transform attribute needed:
         return {};
     } else if (transform.isScale()) {
         // We are more or less a uniform scale
-        strcpy (c + p, "scale(");
-        p += 6;
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[0], prec, min_exp );
+        c << "scale(";
+        c << sp_svg_number_write_de(transform[0], prec, min_exp);
         if (Geom::are_near(transform[0], transform[3], e)) {
-            c[p++] = ')';
-            c[p] = '\000';
+            c << ")";
         } else {
-            c[p++] = ',';
-            p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[3], prec, min_exp );
-            c[p++] = ')';
-            c[p] = '\000';
+            c << ",";
+            c << sp_svg_number_write_de(transform[3], prec, min_exp);
+            c << ")";
         }
     } else if (transform.isTranslation()) {
         // We are more or less a pure translation
-        strcpy (c + p, "translate(");
-        p += 10;
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[4], prec, min_exp );
+        c  << "translate(";
+        c << sp_svg_number_write_de(transform[4], prec, min_exp);
         if (Geom::are_near(transform[5], 0.0, e)) {
-            c[p++] = ')';
-            c[p] = '\000';
+            c << ")";
         } else {
-            c[p++] = ',';
-            p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[5], prec, min_exp );
-            c[p++] = ')';
-            c[p] = '\000';
+            c << ",";
+            c << sp_svg_number_write_de(transform[5], prec, min_exp);
+            c << ")";
         }
     } else if (transform.isRotation()) {
         // We are more or less a pure rotation
-        strcpy(c + p, "rotate(");
-        p += 7;
-
+        c << "rotate(";
         double angle = std::atan2(transform[1], transform[0]) * (180 / M_PI);
-        p += sp_svg_number_write_de(c + p, sizeof(c) - p, angle, prec, min_exp);
-
-        c[p++] = ')';
-        c[p] = '\000';
+        c << sp_svg_number_write_de(angle, prec, min_exp);
+        c << ")";
     } else if (transform.withoutTranslation().isRotation()) {
         // Solution found by Johan Engelen
         // Refer to the matrix in svg-affine-test.h
 
         // We are a rotation about a special axis
-        strcpy(c + p, "rotate(");
-        p += 7;
-
+        c << "rotate(";
         double angle = std::atan2(transform[1], transform[0]) * (180 / M_PI);
-        p += sp_svg_number_write_de(c + p, sizeof(c) - p, angle, prec, min_exp);
-        c[p++] = ',';
+        c << sp_svg_number_write_de(angle, prec, min_exp);
+        c << ",";
 
         Geom::Affine const& m = transform;
         double tx = (m[2]*m[5]+m[4]-m[4]*m[3]) / (1-m[3]-m[0]+m[0]*m[3]-m[2]*m[1]);
-        p += sp_svg_number_write_de(c + p, sizeof(c) - p, tx, prec, min_exp);
 
-        c[p++] = ',';
+        c << sp_svg_number_write_de(tx, prec, min_exp);
+        c << ",";
 
         double ty = (m[1]*tx + m[5]) / (1 - m[3]);
-        p += sp_svg_number_write_de(c + p, sizeof(c) - p, ty, prec, min_exp);
-
-        c[p++] = ')';
-        c[p] = '\000';
+        c << sp_svg_number_write_de(ty, prec, min_exp);
+        c << ")";
     } else if (transform.isHShear()) {
         // We are more or less a pure skewX
-        strcpy(c + p, "skewX(");
-        p += 6;
-
+        c << "skewX(";
         double angle = atan(transform[2]) * (180 / M_PI);
-        p += sp_svg_number_write_de(c + p, sizeof(c) - p, angle, prec, min_exp);
-
-        c[p++] = ')';
-        c[p] = '\000';
+        c << sp_svg_number_write_de(angle, prec, min_exp);
+        c << ")";
     } else if (transform.isVShear()) {
         // We are more or less a pure skewY
-        strcpy(c + p, "skewY(");
-        p += 6;
-
+        c << "skewY(";
         double angle = atan(transform[1]) * (180 / M_PI);
-        p += sp_svg_number_write_de(c + p, sizeof(c) - p, angle, prec, min_exp);
 
-        c[p++] = ')';
-        c[p] = '\000';
+        c << sp_svg_number_write_de(angle, prec, min_exp);
+        c << ")";
     } else {
-        strcpy (c + p, "matrix(");
-        p += 7;
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[0], prec, min_exp );
-        c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[1], prec, min_exp );
-        c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[2], prec, min_exp );
-        c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[3], prec, min_exp );
-        c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[4], prec, min_exp );
-        c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[5], prec, min_exp );
-        c[p++] = ')';
-        c[p] = '\000';
+        c << "matrix(";
+        c << sp_svg_number_write_de(transform[0], prec, min_exp);
+        c << ",";
+        c << sp_svg_number_write_de(transform[1], prec, min_exp);
+        c << ",";
+        c << sp_svg_number_write_de(transform[2], prec, min_exp);
+        c << ",";
+        c << sp_svg_number_write_de(transform[3], prec, min_exp);
+        c << ",";
+        c << sp_svg_number_write_de(transform[4], prec, min_exp);
+        c << ",";
+        c << sp_svg_number_write_de(transform[5], prec, min_exp);
+        c << ")";
     }
 
-    assert(p <= sizeof(c));
-    return c;
+    assert(c.str().length() <= 256);
+    return c.str();
+
 }
 
 /*

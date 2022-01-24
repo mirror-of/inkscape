@@ -90,6 +90,13 @@ select_path_break_apart(InkscapeApplication *app)
 }
 
 void
+select_path_split(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+    selection->breakApart(false, false);
+}
+
+void
 fill_between_paths(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -168,6 +175,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_path =
     {"app.path-cut",                 N_("Cut Path"),             "Path",   N_("Cut the bottom path's stroke into pieces, removing fill")},
     {"app.path-combine",             N_("Combine"),              "Path",   N_("Combine several paths into one")},
     {"app.path-break-apart",         N_("Break Apart"),          "Path",   N_("Break selected paths into subpaths")},
+    {"app.path-split",               N_("Split Apart"),          "Path",   N_("Split selected paths into non-overlapping sections")},
     {"app.path-fill-between-paths",  N_("Fill between paths"),   "Path",   N_("Create a fill object using the selected paths")},
     {"app.path-simplify",            N_("Simplify"),             "Path",   N_("Simplify selected paths (remove extra nodes)")},
 
@@ -193,6 +201,7 @@ add_actions_path(InkscapeApplication* app)
     gapp->add_action(               "path-cut",                sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_path_cut),           app));
     gapp->add_action(               "path-combine",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_path_combine),       app));
     gapp->add_action(               "path-break-apart",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_path_break_apart),   app));
+    gapp->add_action(               "path-split",              sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_path_split),         app));
     gapp->add_action(               "path-fill-between-paths", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&fill_between_paths),        app));
     gapp->add_action(               "path-simplify",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_path_simplify),      app));
     // clangt on

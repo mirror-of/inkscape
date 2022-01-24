@@ -76,6 +76,10 @@ bool ObjectSet::remove(SPObject* object) {
     return false;
 }
 
+void ObjectSet::_emitChanged(bool persist_selection_context /*= false*/) {
+    _sibling_state.clear();
+}
+
 bool ObjectSet::includes(SPObject *object) {
     g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
@@ -207,6 +211,16 @@ SPItem *ObjectSet::singleItem() {
     return nullptr;
 }
 
+SPItem *ObjectSet::firstItem() const
+{
+    return _container.size() ? SP_ITEM(_container.front()) : nullptr;
+}
+
+SPItem *ObjectSet::lastItem() const
+{
+    return _container.size() ? SP_ITEM(_container.back()) : nullptr;
+}
+
 SPItem *ObjectSet::smallestItem(CompareSize compare) {
     return _sizeistItem(true, compare);
 }
@@ -257,7 +271,7 @@ Inkscape::XML::Node *ObjectSet::topRepr() const
         return nullptr;
     }
 
-#ifdef __APPLE__
+#ifdef _LIBCPP_VERSION
     // workaround for
     // static_assert(__is_cpp17_forward_iterator<_ForwardIterator>::value
     auto const n = std::vector<Inkscape::XML::Node *>(nodes.begin(), nodes.end());
@@ -287,7 +301,7 @@ int ObjectSet::setBetween(SPObject *obj_a, SPObject *obj_b)
 {
     auto parent = obj_a->parent;
     if (!obj_b)
-        obj_b = singleItem();
+        obj_b = lastItem();
 
     if (!obj_a || !obj_b || parent != obj_b->parent) {
         return 0;

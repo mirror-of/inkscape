@@ -523,7 +523,7 @@ void SPStyleElem::read_content() {
             g_printerr("parsing error code=%u\n", unsigned(parse_status));
         }
     }
-
+    document->stylesheetchg = true;
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
     document->getRoot()->requestDisplayUpdate(SP_OBJECT_STYLESHEET_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |

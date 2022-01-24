@@ -50,11 +50,15 @@ class DialogContainer;
 DialogWindow::~DialogWindow() {}
 
 // Create a dialog window and move page from old notebook.
-DialogWindow::DialogWindow(Gtk::Widget *page)
+DialogWindow::DialogWindow(InkscapeWindow *inkscape_window, Gtk::Widget *page)
     : Gtk::Window()
     , _app(InkscapeApplication::instance())
+    , _inkscape_window(inkscape_window)
     , _title(_("Dialog Window"))
 {
+    g_assert(_app != nullptr);
+    g_assert(_inkscape_window != nullptr);
+
     // ============ Initialization ===============
     // Setting the window type
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -65,19 +69,9 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     }
 
     set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+    set_transient_for(*inkscape_window);
 
-    auto desktop = SP_ACTIVE_DESKTOP;
-    if (window_above && desktop) {
-        if (Gtk::Window *top_win = desktop->getToplevel()) {
-            set_transient_for(*top_win);
-        }
-    }
-
-    // Add the window to our app
-    if (!_app) {
-        std::cerr << "DialogWindow::DialogWindow(): _app is null" << std::endl;
-        return;
-    }
+    // Add the dialog window to our app
     _app->gtk_app()->add_window(*this);
 
     this->signal_delete_event().connect([=](GdkEventAny *) {
@@ -85,6 +79,16 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
         delete this;
         return true;
     });
+
+    auto win_action_group = dynamic_cast<Gio::ActionGroup *>(inkscape_window);
+    if (win_action_group) {
+        // Must use C API as C++ API takes a RefPtr which we can't get (easily).
+        gtk_widget_insert_action_group(GTK_WIDGET(this->gobj()), "win", win_action_group->gobj());
+    } else {
+        std::cerr << "DialogWindow::DialogWindow: Can't find InkscapeWindow Gio:ActionGroup!" << std::endl;
+    }
+
+    insert_action_group("doc", inkscape_window->get_document()->getActionGroup());
 
     // ============ Theming: icons ==============
 
@@ -107,7 +111,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     add(*box_outer);
 
     // =============== Container ================
-    _container = Gtk::manage(new DialogContainer());
+    _container = Gtk::manage(new DialogContainer(inkscape_window));
     DialogMultipaned *columns = _container->get_columns();
     auto drop_size = Inkscape::Preferences::get()->getBool("/options/dockingzone/value", true) ? WINDOW_DROPZONE_SIZE / 2 : WINDOW_DROPZONE_SIZE;
     columns->set_dropzone_sizes(drop_size, drop_size);
@@ -153,9 +157,18 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     // window is created hidden; don't show it now, its size needs to be restored
 }
 
-void DialogWindow::set_desktop(SPDesktop *desktop)
+/**
+ * Change InkscapeWindow that DialogWindow is linked to.
+ */
+void DialogWindow::set_inkscape_window(InkscapeWindow* inkscape_window)
 {
-    _container->set_desktop(desktop);
+    if (!inkscape_window) {
+        std::cerr << "DialogWindow::set_inkscape_window: no inkscape_window!" << std::endl;
+        return;
+    }
+
+    _inkscape_window = inkscape_window;
+    update_dialogs();
 }
 
 /**
@@ -163,27 +176,28 @@ void DialogWindow::set_desktop(SPDesktop *desktop)
  */
 void DialogWindow::update_dialogs()
 {
+    g_assert(_app != nullptr);
+    g_assert(_container != nullptr);
+    g_assert(_inkscape_window != nullptr);
+
+    _container->set_inkscape_window(_inkscape_window);
     _container->update_dialogs(); // Updating dialogs is not using the _app reference here.
 
-    if (!_app) {
-        std::cerr << "DialogWindow::update_dialogs(): _app is null" << std::endl;
-        return;
+    // Set window title.
+    const std::multimap<Glib::ustring, DialogBase *> *dialogs = _container->get_dialogs();
+    if (dialogs->size() > 1) {
+        _title = "Multiple dialogs";
+    } else if (dialogs->size() == 1) {
+        _title = dialogs->begin()->second->get_name();
+    } else {
+        // Should not happen... but does on closing a window!
+        // std::cerr << "DialogWindow::update_dialogs(): No dialogs!" << std::endl;
+        _title = "";
     }
 
-    if (_container) {
-        const std::multimap<Glib::ustring, DialogBase *> *dialogs = _container->get_dialogs();
-        if (dialogs->size() > 1) {
-            _title = "Multiple dialogs";
-        } else if (dialogs->size() == 1) {
-            _title = dialogs->begin()->second->get_name();
-        }
-    }
-
-    if (_app->get_active_document()) {
-        auto document_name = _app->get_active_document()->getDocumentName();
-        if (document_name) {
-            set_title(_title + " - " + Glib::ustring(document_name));
-        }
+    auto document_name = _inkscape_window->get_document()->getDocumentName();
+    if (document_name) {
+        set_title(_title + " - " + Glib::ustring(document_name));
     }
 }
 
@@ -251,11 +265,12 @@ bool DialogWindow::on_key_press_event(GdkEventKey *key_event)
         }
     }
 
+    // Pass key event to this window or to app (via this window).
     if (Gtk::Window::on_key_press_event(key_event)) {
         return true;
     }
 
-    // Pass key event to active InkscapeWindow to handle app level shortcuts.
+    // Pass key event to active InkscapeWindow to handle win (and app) level shortcuts.
     if (_app->get_active_window()->on_key_press_event(key_event)) {
         return true;
     }

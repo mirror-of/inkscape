@@ -23,6 +23,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "verbs.h"
+
 #include <cstring>
 #include <string>
 
@@ -95,7 +97,6 @@
 #include "ui/widget/canvas.h"  // Canvas area
 
 using Inkscape::DocumentUndo;
-using Inkscape::UI::Dialog::ActionAlign;
 using Inkscape::UI::Dialog::DialogContainer;
 
 /**
@@ -221,25 +222,6 @@ public:
         Verb(code, id, name, tip, image, _("Object"))
     { }
 }; // ObjectVerb class
-
-/**
- * A class to encompass all of the verbs which deal with operations relative to context.
- */
-class ContextVerb : public Verb {
-private:
-    static void perform(SPAction *action, void *mydata);
-protected:
-    SPAction *make_action(Inkscape::ActionContext const & context) override;
-public:
-    /** Use the Verb initializer with the same parameters. */
-    ContextVerb(unsigned int const code,
-                gchar const *id,
-                gchar const *name,
-                gchar const *tip,
-                gchar const *image) :
-        Verb(code, id, name, tip, image, _("Context"))
-    { }
-}; // ContextVerb class
 
 /**
  * A class to encompass all of the verbs which deal with text operations.
@@ -389,19 +371,6 @@ SPAction *LayerVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *ObjectVerb::make_action(Inkscape::ActionContext const & context)
-{
-    return make_action_helper(context, &perform);
-}
-
-/**
- * Create an action for a \c ContextVerb.
- *
- * Calls \c make_action_helper with the \c vector.
- *
- * @param  context  Which context the action should be created for.
- * @return The built action.
- */
-SPAction *ContextVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -790,13 +759,41 @@ void EditVerb::perform(SPAction *action, void *data)
 
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
-
+    Glib::ustring switch_selector_to = get_active_tool(dt);
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EDIT_UNDO:
+            // this fix crashes on undo with knots forcing regenerate knots on undo
+            if (switch_selector_to == "Node") {
+                dt->selection->setBackup();
+            }
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, "Select");
+            }
             sp_undo(dt, dt->getDocument());
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, switch_selector_to);
+            }
+            if (switch_selector_to == "Node") {
+                dt->selection->restoreBackup();
+                dt->selection->emptyBackup();
+            }
             break;
         case SP_VERB_EDIT_REDO:
+            // this fix crashes on redo with knots forcing regenerate knots on undo
+            if (switch_selector_to == "Node") {
+                dt->selection->setBackup();
+            }
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, "Select");
+            }
             sp_redo(dt, dt->getDocument());
+            if (switch_selector_to != "Select") {
+                set_active_tool(dt, switch_selector_to);
+            }
+            if (switch_selector_to == "Node") {
+                dt->selection->restoreBackup();
+                dt->selection->emptyBackup();
+            }
             break;
         case SP_VERB_EDIT_CUT:
             dt->selection->cut();
@@ -841,6 +838,7 @@ void EditVerb::perform(SPAction *action, void *data)
             dt->selection->removeFilter();
             break;
         case SP_VERB_EDIT_DELETE:
+            // Only used in dbus, can be removed.
             dt->selection->deleteItems();
             break;
         case SP_VERB_EDIT_DUPLICATE:
@@ -1545,49 +1543,6 @@ void ObjectVerb::perform( SPAction *action, void *data)
 /**
  * Decode the verb code and take appropriate action.
  */
-void ContextVerb::perform(SPAction *action, void *data)
-{
-    SPDesktop *dt;
-    sp_verb_t verb;
-    int vidx;
-
-    g_return_if_fail(ensure_desktop_valid(action));
-    dt = sp_action_get_desktop(action);
-
-    verb = (sp_verb_t)GPOINTER_TO_INT((gpointer)data);
-
-    switch (verb) {
-        case SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR:
-        case SP_VERB_ALIGN_HORIZONTAL_LEFT:
-        case SP_VERB_ALIGN_HORIZONTAL_CENTER:
-        case SP_VERB_ALIGN_HORIZONTAL_RIGHT:
-        case SP_VERB_ALIGN_HORIZONTAL_LEFT_TO_ANCHOR:
-        case SP_VERB_ALIGN_VERTICAL_BOTTOM_TO_ANCHOR:
-        case SP_VERB_ALIGN_VERTICAL_TOP:
-        case SP_VERB_ALIGN_VERTICAL_CENTER:
-        case SP_VERB_ALIGN_VERTICAL_BOTTOM:
-        case SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR:
-        case SP_VERB_ALIGN_BOTH_TOP_LEFT:
-        case SP_VERB_ALIGN_BOTH_TOP_RIGHT:
-        case SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT:
-        case SP_VERB_ALIGN_BOTH_BOTTOM_LEFT:
-        case SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR:
-        case SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR:
-        case SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR:
-        case SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR:
-        case SP_VERB_ALIGN_BOTH_CENTER:
-            ActionAlign::do_verb_action(dt, verb);
-            break;
-
-        default:
-            break;
-    }
-
-} // end of sp_verb_action_ctx_perform()
-
-/**
- * Decode the verb code and take appropriate action.
- */
 void TextVerb::perform(SPAction *action, void */*data*/)
 {
     g_return_if_fail(ensure_desktop_valid(action));
@@ -1714,9 +1669,6 @@ void FitCanvasVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_FIT_CANVAS_TO_DRAWING:
             fit_canvas_to_drawing(dt);
-            break;
-        case SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING:
-            fit_canvas_to_selection_or_drawing(dt);
             break;
         default:
             return;
@@ -2160,9 +2112,6 @@ Verb *Verb::_base_verbs[] = {
                       N_("Fit the preview box to the current selection"), nullptr),
     new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_DRAWING, "FitCanvasToDrawing", N_("Fit Preview to Drawing"),
                       N_("Fit the preview box to the drawing"), nullptr),
-    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING, "FitCanvasToSelectionOrDrawing",
-                      N_("_Resize Preview to Selection"),
-                      N_("Fit the preview box to the current selection or the drawing if there is no selection"), nullptr),
     // LockAndHide
     new LockAndHideVerb(SP_VERB_UNLOCK_ALL, "UnlockAll", N_("Unlock All"),
                         N_("Unlock all objects in the current layer"), nullptr),
@@ -2177,63 +2126,6 @@ Verb *Verb::_base_verbs[] = {
                  N_("Link an ICC color profile"), nullptr),
     new EditVerb(SP_VERB_EDIT_REMOVE_COLOR_PROFILE, "RemoveColorProfile", N_("Remove Color Profile"),
                  N_("Remove a linked ICC color profile"), nullptr),
-    // Align
-    new ContextVerb(SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR, "AlignHorizontalRightToAnchor",
-                    N_("Align right edges of objects to the left edge of the anchor"),
-                    N_("Align right edges of objects to the left edge of the anchor"),
-                    INKSCAPE_ICON("align-horizontal-right-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_HORIZONTAL_LEFT, "AlignHorizontalLeft", N_("Align left edges"),
-                    N_("Align left edges"), INKSCAPE_ICON("align-horizontal-left")),
-    new ContextVerb(SP_VERB_ALIGN_HORIZONTAL_CENTER, "AlignHorizontalCenter", N_("Center on vertical axis"),
-                    N_("Center on vertical axis"), INKSCAPE_ICON("align-horizontal-center")),
-    new ContextVerb(SP_VERB_ALIGN_HORIZONTAL_RIGHT, "AlignHorizontalRight", N_("Align right sides"),
-                    N_("Align right sides"), INKSCAPE_ICON("align-horizontal-right")),
-    new ContextVerb(SP_VERB_ALIGN_HORIZONTAL_LEFT_TO_ANCHOR, "AlignHorizontalLeftToAnchor",
-                    N_("Align left edges of objects to the right edge of the anchor"),
-                    N_("Align left edges of objects to the right edge of the anchor"),
-                    INKSCAPE_ICON("align-horizontal-left-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_VERTICAL_BOTTOM_TO_ANCHOR, "AlignVerticalBottomToAnchor",
-                    N_("Align bottom edges of objects to the top edge of the anchor"),
-                    N_("Align bottom edges of objects to the top edge of the anchor"),
-                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_VERTICAL_TOP, "AlignVerticalTop", N_("Align top edges"), N_("Align top edges"),
-                    INKSCAPE_ICON("align-vertical-top")),
-    new ContextVerb(SP_VERB_ALIGN_VERTICAL_CENTER, "AlignVerticalCenter", N_("Center on horizontal axis"),
-                    N_("Center on horizontal axis"), INKSCAPE_ICON("align-vertical-center")),
-    new ContextVerb(SP_VERB_ALIGN_VERTICAL_BOTTOM, "AlignVerticalBottom", N_("Align bottom edges"),
-                    N_("Align bottom edges"), INKSCAPE_ICON("align-vertical-bottom")),
-    new ContextVerb(SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR, "AlignVerticalTopToAnchor",
-                    N_("Align top edges of objects to the bottom edge of the anchor"),
-                    N_("Align top edges of objects to the bottom edge of the anchor"),
-                    INKSCAPE_ICON("align-vertical-top")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_LEFT, "AlignBothTopLeft", N_("Align top-left corners"),
-                    N_("Align top-left corners"), INKSCAPE_ICON("align-vertical-top-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_RIGHT, "AlignBothTopRight", N_("Align top-right corners"),
-                    N_("Align top-right corners"), INKSCAPE_ICON("align-vertical-top-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT, "AlignBothBottomRight", N_("Align bottom-right corners"),
-                    N_("Align bottom-right corners"), INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_LEFT, "AlignBothBottomLeft", N_("Align bottom-left corners"),
-                    N_("Align bottom-left corners"), INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR, "AlignBothTopLeftToAnchor",
-                    N_("Align top-left corners of objects to the bottom-right corner of the anchor"),
-                    N_("Align top-left corners of objects to the bottom-right corner of the anchor"),
-                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR, "AlignBothTopRightToAnchor",
-                    N_("Align top-right corners of objects to the bottom-left corner of the anchor"),
-                    N_("Align top-right corners of objects to the bottom-left corner of the anchor"),
-                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR, "AlignBothBottomRightToAnchor",
-                    N_("Align bottom-right corners of objects to the top-left corner of the anchor"),
-                    N_("Align bottom-right corners of objects to the top-left corner of the anchor"),
-                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR, "AlignBothBottomLeftToAnchor",
-                    N_("Align bottom-left corners of objects to the top-right corner of the anchor"),
-                    N_("Align bottom-left corners of objects to the top-right corner of the anchor"),
-                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_BOTH_CENTER, "AlignVerticalHorizontalCenter",
-                    N_("Center on horizontal and vertical axis"), N_("Center on horizontal and vertical axis"),
-                    INKSCAPE_ICON("align-vertical-center")),
-
     // Footer
     new Verb(SP_VERB_LAST, " '\"invalid id", nullptr, nullptr, nullptr, nullptr)};
 

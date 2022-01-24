@@ -19,9 +19,13 @@
 
 #include "inkscape.h"             // Inkscape::Application
 #include "selection.h"            // Selection
+#include "page-manager.h"
 
 #include "object/sp-root.h"       // select_all: document->getRoot();
 #include "object/sp-item-group.h" // select_all
+#include "object/sp-namedview.h"
+
+#include "ui/icon-names.h"
 
 void
 select_clear(InkscapeApplication* app)
@@ -241,6 +245,37 @@ selection_make_bitmap_copy(InkscapeApplication *app)
     selection->createBitmapCopy();
 }
 
+void
+selection_stack_up(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+    selection->stackUp();
+}
+
+void
+selection_stack_down(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+    selection->stackDown();
+}
+
+void
+page_fit_to_selection(InkscapeApplication *app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
+    if (auto manager = document->getNamedView()->getPageManager()) {
+        manager->fitToSelection(selection);
+        Inkscape::DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
+    }
+}
+
+
+
 std::vector<std::vector<Glib::ustring>> raw_data_selection =
 {
     // clang-format offs
@@ -255,7 +290,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_selection =
     {"app.select-all",                      N_("Select All Objects"),   "Select",   N_("Select all; options: 'all' (every object including groups), 'layers', 'no-layers' (top level objects in layers), 'groups' (all groups including layers), 'no-groups' (all objects other than groups and layers, default)")},
     {"app.select-invert",                   N_("Invert Selection"),     "Select",   N_("Invert selection; options: 'all', 'layers', 'no-layers', 'groups', 'no-groups' (default)")},
     {"app.select-list",                     N_("List Selection"),       "Select",   N_("Print a list of objects in current selection")},
-    {"app.selection-make-bitmap-copy",      N_("Make a Bitmap Copy"),   "Select",   N_("Export selection to a bitmap and insert it into document")}
+    {"app.selection-make-bitmap-copy",      N_("Make a Bitmap Copy"),   "Select",   N_("Export selection to a bitmap and insert it into document")},
+    {"app.selection-stack-up",              N_("Move up the Stack"),    "Select",   N_("Move the selection up in the stack order")},
+    {"app.selection-stack-down",            N_("Move down the Stack"),  "Select",   N_("Move the selection down in the stack order")},
+    {"app.page-fit-to-selection",           N_("Resize Page to Selection"), "Page", N_("Fit the page to the current selection or the drawing if there is no selection")}
     // clang-format on
 };
 
@@ -277,6 +315,9 @@ add_actions_selection(InkscapeApplication* app)
     gapp->add_action_radio_string(  "select-invert",                sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_invert),                 app), "null");
     gapp->add_action(               "select-list",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_list),                   app)        );
     gapp->add_action(               "selection-make-bitmap-copy",   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_make_bitmap_copy),    app));
+    gapp->add_action(               "selection-stack-up",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_stack_up),            app));
+    gapp->add_action(               "selection-stack-down",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_stack_down),          app));
+    gapp->add_action(               "page-fit-to-selection",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&page_fit_to_selection),         app));
     // clangt on
 
     app->get_action_extra_data().add_data(raw_data_selection);

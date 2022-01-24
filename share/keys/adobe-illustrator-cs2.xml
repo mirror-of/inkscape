@@ -117,7 +117,7 @@ See default.xml for more information.
 <!-- Dialog -->
 
   <!-- Preferences -->
-  <bind gaction="win.dialog-open('Preferences')"        keys="&lt;primary&gt;k" />
+  <bind gaction="app.preferences"                       keys="&lt;primary&gt;k" />
   
   <!-- Document Setup -->
   <bind gaction="win.dialog-open('DocumentProperties')" keys="&lt;primary&gt;&lt;alt&gt;p" />

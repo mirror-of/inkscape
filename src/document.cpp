@@ -54,10 +54,8 @@
 #include "profile-manager.h"
 #include "rdf.h"
 
-#include "actions/actions-canvas-snapping.h"
 #include "actions/actions-edit-document.h"
-#include "actions/actions-tutorial.h"
-#include "actions/actions-text.h"
+#include "actions/actions-undo-document.h"
 #include "actions/actions-pages.h"
 
 #include "display/drawing.h"
@@ -70,6 +68,7 @@
 
 #include "io/dir-util.h"
 #include "layer-manager.h"
+#include "page-manager.h"
 #include "live_effects/lpeobject.h"
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
@@ -156,6 +155,7 @@ SPDocument::SPDocument() :
     action_group = Gio::SimpleActionGroup::create();
     add_actions_edit_document(this);
     add_actions_pages(this);
+    add_actions_undo_document(this);
 }
 
 SPDocument::~SPDocument() {
@@ -302,6 +302,18 @@ void SPDocument::initialize_current_persp3d()
     }
 }
 **/
+
+/**
+ * Enables or disables document pages, usually used in import code.
+ */
+void SPDocument::setPages(bool enabled)
+{
+    if (enabled) {
+        getNamedView()->getPageManager()->enablePages();
+    } else {
+        getNamedView()->getPageManager()->disablePages();
+    }
+}
 
 void SPDocument::queueForOrphanCollection(SPObject *object) {
     g_return_if_fail(object != nullptr);
@@ -476,7 +488,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     }
 
     /** Fix feComposite (pre-1.2 files) **/
-    if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 1)) {
+    if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 2)) {
         sp_file_fix_feComposite(document->getRoot());
     }
 
@@ -484,12 +496,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     /** Fix dpi (pre-92 files). With GUI fixed in Inkscape::Application::fix_document. **/
     if ( !(INKSCAPE.use_gui()) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
         sp_file_convert_dpi(document);
-    }
-
-    // Update LPE's   See: Related bug:#1769679 #18
-    SPDefs * defs = document->getDefs();
-    if (defs) {
-        defs->emitModified(SP_OBJECT_MODIFIED_CASCADE);
     }
 
     // Update document level action settings
@@ -660,20 +666,25 @@ Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 }
 
 /// Sets document scale (by changing viewBox)
-void SPDocument::setDocumentScale( double scaleX, double scaleY ) {
+void SPDocument::setDocumentScale(double scaleX, double scaleY) {
+    if (scaleX <= 0 || scaleY <= 0) {
+        g_warning("%s: Invalid scale, has to be positive: %f, %f", __func__, scaleX, scaleY);
+        return;
+    }
 
+    // since scale is doc size / viewbox size, then it follows that viewbox size is doc size / scale
     root->viewBox = Geom::Rect::from_xywh(
         root->viewBox.left(),
         root->viewBox.top(),
-        root->width.computed  * scaleX,
-        root->height.computed * scaleY );
+        root->width.computed  / scaleX,
+        root->height.computed / scaleY);
     root->viewBox_set = true;
     root->updateRepr();
 }
 
 /// Sets document scale (by changing viewBox, x and y scaling equal)
-void SPDocument::setDocumentScale( double scale ) {
-    setDocumentScale( scale, scale );
+void SPDocument::setDocumentScale(double scale) {
+    setDocumentScale(scale, scale);
 }
 
 /// Returns document scale as defined by width/height (in pixels) and viewBox (real world to
@@ -1071,6 +1082,25 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
     return getObjectById(Glib::ustring(id));
 }
 
+SPObject *SPDocument::getObjectByHref(Glib::ustring const &href) const
+{
+    if (iddef.empty()) {
+        return nullptr;
+    }
+    Glib::ustring id = href;
+    id = id.erase(0, 1);
+    return getObjectById(id);
+}
+
+SPObject *SPDocument::getObjectByHref(gchar const *href) const
+{
+    if (href == nullptr) {
+        return nullptr;
+    }
+
+    return getObjectByHref(Glib::ustring(href));
+}
+
 void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
 {
     if (parent) {
@@ -1107,28 +1137,29 @@ std::vector<SPObject *> SPDocument::getObjectsByClass(Glib::ustring const &klass
     return objects;
 }
 
-void _getObjectsByElementRecursive(Glib::ustring const &element, SPObject *parent,
-                                   std::vector<SPObject *> &objects)
+void _getObjectsByElementRecursive(Glib::ustring const &element, SPObject *parent, std::vector<SPObject *> &objects,
+                                   bool custom)
 {
     if (parent) {
-        Glib::ustring prefixed = "svg:" + element;
+        Glib::ustring prefixed = custom ? "inkscape:" : "svg:";
+        prefixed += element;
         if (parent->getRepr()->name() == prefixed) {
             objects.push_back(parent);
         }
 
         // Check children
         for (auto& child : parent->children) {
-            _getObjectsByElementRecursive(element, &child, objects);
+            _getObjectsByElementRecursive(element, &child, objects, custom);
         }
     }
 }
 
-std::vector<SPObject *> SPDocument::getObjectsByElement(Glib::ustring const &element) const
+std::vector<SPObject *> SPDocument::getObjectsByElement(Glib::ustring const &element, bool custom) const
 {
     std::vector<SPObject *> objects;
     g_return_val_if_fail(!element.empty(), objects);
 
-    _getObjectsByElementRecursive(element, root, objects);
+    _getObjectsByElementRecursive(element, root, objects, custom);
     return objects;
 }
 
@@ -1353,6 +1384,8 @@ SPDocument::idle_handler()
     if (!status) {
         modified_connection.disconnect();
     }
+    // this hack prevent update LPE items on load documents with stylesheet
+    stylesheetchg = false;
     return status;
 }
 
@@ -2058,6 +2091,11 @@ sigc::connection SPDocument::connectFilenameSet(SPDocument::FilenameSetSignal::s
 sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
 {
     return commit_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectBeforeCommit(SPDocument::BeforeCommitSignal::slot_type slot)
+{
+    return before_commit_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectIdChanged(gchar const *id,

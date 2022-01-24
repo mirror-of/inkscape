@@ -102,11 +102,11 @@ static char const preferences_skeleton[] =
     </group>
 
     <eventcontext id="calligraphic" style="fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;"
-                       mass="2" angle="30" width="15.118" thinning="10" flatness="90" cap_rounding="0.0" usecurrent="1"
+                       mass="2" angle="30" width="15.118" thinning="10" flatness="-90" cap_rounding="0.0" usecurrent="1"
                        tracebackground="0" usepressure="1" usetilt="0" keep_selected="1" abs_width="1" unit="mm">
 
       <group id="preset">
-        <group id="cp0" name="Dip pen" mass="2" wiggle="0.0" angle="30.0" thinning="10" tremor="0.0" flatness="90" cap_rounding="0.0" tracebackground="0" usepressure="1" usetilt="1" />
+        <group id="cp0" name="Dip pen" mass="2" wiggle="0.0" angle="30.0" thinning="10" tremor="0.0" flatness="-90" cap_rounding="0.0" tracebackground="0" usepressure="1" usetilt="1" />
         <group id="cp1" name="Marker" mass="2" wiggle="0.0" angle="90.0" thinning="0.0" tremor="0.0" flatness="0.0" cap_rounding="1.0" tracebackground="0" usepressure="0" usetilt="0" />
         <group id="cp2" name="Brush" mass="2" wiggle="25" angle="45.0" thinning="-40" tremor="0.0" flatness="16" cap_rounding=".1" tracebackground="0" usepressure="1" usetilt="1" />
         <group id="cp3" name="Wiggly" usetilt="1" tracebackground="0" usepressure="1" cap_rounding="0.1" flatness="16" tremor="18" thinning="-30" angle="30" wiggle="50" mass="0" />

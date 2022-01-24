@@ -15,6 +15,10 @@
 
 #include "svg/svg-length.h"
 
+namespace Inkscape::XML {
+class Node;
+} // namespace Inkscape::XML
+
 class SPItemCtx;
 
 class SPDimensions {
@@ -24,7 +28,9 @@ public:
     SVGLength y;
     SVGLength width;
     SVGLength height;
-    void calcDimsFromParentViewport(const SPItemCtx *ictx, bool assign_to_set = false);
+    void calcDimsFromParentViewport(const SPItemCtx *ictx, bool assign_to_set = false,
+                                    SPDimensions const *use = nullptr);
+    void writeDimensions(Inkscape::XML::Node *) const;
 };
 
 #endif

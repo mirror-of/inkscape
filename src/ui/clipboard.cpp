@@ -29,67 +29,59 @@
 #include "context-fns.h"
 #include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
 #include "desktop.h"
+#include "display/curve.h"
 #include "document.h"
-#include "file.h"          // for file_import, used in _pasteImage
-#include "gradient-drag.h"
-#include "inkscape.h"
-#include "message-stack.h"
-#include "path-chemistry.h"
-#include "filter-chemistry.h"
-#include "selection-chemistry.h"
-#include "style.h"
-#include "text-chemistry.h"
-#include "text-editing.h"
-
 #include "extension/db.h" // extension database
 #include "extension/find_extension_by_mime.h"
 #include "extension/input.h"
 #include "extension/output.h"
-
+#include "file.h" // for file_import, used in _pasteImage
+#include "filter-chemistry.h"
+#include "gradient-drag.h"
 #include "helper/png-write.h"
-
+#include "id-clash.h"
 #include "inkgc/gc-core.h"
-
+#include "inkscape.h"
+#include "live_effects/lpe-bspline.h"
+#include "live_effects/lpe-spiro.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
-#include "live_effects/lpe-spiro.h"
-#include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/path.h"
-
+#include "message-stack.h"
 #include "object/box3d.h"
 #include "object/persp3d.h"
 #include "object/sp-clippath.h"
 #include "object/sp-defs.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-gradient-reference.h"
-#include "object/sp-linear-gradient.h"
-#include "object/sp-radial-gradient.h"
-#include "object/sp-mesh-gradient.h"
 #include "object/sp-hatch.h"
 #include "object/sp-item-transform.h"
+#include "object/sp-linear-gradient.h"
 #include "object/sp-marker.h"
 #include "object/sp-mask.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-path.h"
 #include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
 #include "object/sp-rect.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-textpath.h"
 #include "object/sp-use.h"
-#include "object/sp-path.h"
-
+#include "path-chemistry.h"
+#include "selection-chemistry.h"
+#include "style.h"
 #include "svg/css-ostringstream.h" // used in copy
 #include "svg/svg-color.h"
-#include "svg/svg.h"               // for sp_svg_transform_write, used in _copySelection
-
-#include "ui/tools/dropper-tool.h" // used in copy()
-#include "ui/tools/text-tool.h"
-#include "ui/tools/node-tool.h"
-#include "ui/tool/multi-path-manipulator.h"
+#include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
+#include "text-chemistry.h"
+#include "text-editing.h"
 #include "ui/tool/control-point-selection.h"
-
+#include "ui/tool/multi-path-manipulator.h"
+#include "ui/tools/dropper-tool.h" // used in copy()
+#include "ui/tools/node-tool.h"
+#include "ui/tools/text-tool.h"
 #include "util/units.h"
-#include "display/curve.h"
-
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
 
@@ -128,7 +120,7 @@ public:
 private:
     void _cleanStyle(SPCSSAttr *);
     void _copySelection(ObjectSet *);
-    void _copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target);
+    void _copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target, bool child = false);
     void _copyUsedDefs(SPItem *);
     void _copyGradient(SPGradient *);
     void _copyPattern(SPPattern *);
@@ -503,13 +495,24 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
             return true;
         }
     }
-
+    // copy definitions
+    prevent_id_clashes(tempdoc.get(), desktop->getDocument(), true);
     sp_import_document(desktop, tempdoc.get(), in_place);
-
     // _copySelection() has put all items in groups, now ungroup them (preserves transform
     // relationships of clones, text-on-path, etc.)
     if (target == "image/x-inkscape-svg") {
         desktop->selection->ungroup(true);
+        std::vector<SPItem *> vec2(desktop->selection->items().begin(), desktop->selection->items().end());
+        for (auto item : vec2) {
+            // just a bit beauty on paste hidden items unselect
+            if (vec2.size() > 1 && item->isHidden()) {
+                desktop->selection->remove(item);
+            }
+            SPLPEItem *pasted_lpe_item = dynamic_cast<SPLPEItem *>(item);
+            if (pasted_lpe_item) {
+                remove_hidder_filter(pasted_lpe_item);
+            }
+        }
     }
 
     return true;
@@ -858,8 +861,22 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     // copy the defs used by all items
     auto itemlist= selection->items();
     cloned_elements.clear();
-    for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        SPItem *item = *i;
+    std::vector<SPItem *> items(itemlist.begin(), itemlist.end());
+    for (auto item : itemlist) {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem) {
+            for (auto satellite : lpeitem->get_satellites(false, true)) {
+                if (satellite) {
+                    SPItem *item2 = dynamic_cast<SPItem *>(satellite);
+                    if (item2 && std::find(items.begin(), items.end(), item2) == items.end()) {
+                        items.push_back(item2);
+                    }
+                }
+            }
+        }
+    }
+    cloned_elements.clear();
+    for (auto item : items) {
         if (item) {
             _copyUsedDefs(item);
         } else {
@@ -868,7 +885,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     }
 
     // copy the representation of the items
-    std::vector<SPObject*> sorted_items(itemlist.begin(), itemlist.end());
+    std::vector<SPObject *> sorted_items(items.begin(), items.end());
     {
         // Get external text references and add them to sorted_items
         auto ext_refs = text_categorize_refs(selection->document(),
@@ -920,19 +937,6 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
 
             // copy complete inherited style
             _copyCompleteStyle(item, obj_copy);
-
-            // 1.1 COPYPASTECLONESTAMPLPEBUG
-            if (_clipboardSPDoc) {
-                SPItem *newitem = dynamic_cast<SPItem *>(_clipboardSPDoc->getObjectByRepr(obj_copy));
-                if (newitem) {
-                    remove_hidder_filter(newitem);
-                    gchar *id = strdup(newitem->getId());
-                    newitem = (SPItem *)sp_lpe_item_remove_autoflatten(newitem, id);
-                    g_free(id);
-                }
-            }
-            // END COPYPASTECLONESTAMPLPEBUG
-
         }
     }
     // copy style for Paste Style action
@@ -963,11 +967,18 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
  *
  * @param item - The source item (connected to it's document)
  * @param target - The target xml node to store the style in.
+ * @param child - Flag to indicate a recursive call, do not use.
  */
-void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target)
+void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target, bool child)
 {
     auto source = item->getRepr();
-    SPCSSAttr *css = sp_repr_css_attr_inherited(source, "style");
+    SPCSSAttr *css;
+    if (child) {
+        // Child styles shouldn't copy their parent's existing cascaded style.
+        css = sp_repr_css_attr(source, "style");
+    } else {
+        css = sp_repr_css_attr_inherited(source, "style");
+    }
     for (auto iter : item->style->properties()) {
         if (iter->style_src == SPStyleSrc::STYLE_SHEET) {
             css->setAttributeOrRemoveIfEmpty(iter->name(), iter->get_value());
@@ -982,7 +993,7 @@ void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node 
         auto target_child = target->firstChild();
         while (source_child && target_child) {
             if (auto child_item = dynamic_cast<SPItem *>(item->document->getObjectByRepr(source_child))) {
-                _copyCompleteStyle(child_item, target_child);
+                _copyCompleteStyle(child_item, target_child, true);
             }
             source_child = source_child->next();
             target_child = target_child->next();

@@ -295,16 +295,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
 }
 
 void SPSpiral::set_shape() {
-    if (hasBrokenPathEffect()) {
-        g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
-
-        if (this->getRepr()->attribute("d")) {
-            // unconditionally read the curve from d, if any, to preserve appearance
-            Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
-            setCurveInsync(std::make_unique<SPCurve>(pv));
-            setCurveBeforeLPE(curve());
-        }
-
+    if (checkBrokenPathEffect()) {
         return;
     }
 
@@ -345,18 +336,7 @@ void SPSpiral::set_shape() {
         this->fitAndDraw(c.get(), (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
     }
 
-    /* Reset the shape's curve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-
-    auto const before = this->curveBeforeLPE();
-    if (before && before->get_pathvector() != c->get_pathvector()) {
-        setCurveBeforeLPE(std::move(c));
-        sp_lpe_item_update_patheffect(this, true, false);
-        return;
-    }
-
-    if (hasPathEffectOnClipOrMaskRecursive(this)) {
-        setCurveBeforeLPE(std::move(c));
+    if (prepareShapeForLPE(c.get())) {
         return;
     }
 

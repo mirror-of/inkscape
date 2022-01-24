@@ -418,15 +418,7 @@ const char *SPGenericEllipse::displayName() const
 void SPGenericEllipse::set_shape()
 {
     // std::cout << "SPGenericEllipse::set_shape: Entrance" << std::endl;
-    if (hasBrokenPathEffect()) {
-        g_warning("The ellipse shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as ellipse will remove the bad LPE");
-
-        if (this->getRepr()->attribute("d")) {
-            // unconditionally read the curve from d, if any, to preserve appearance
-            Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
-            setCurveInsync(std::make_unique<SPCurve>(pv));
-        }
-
+    if (checkBrokenPathEffect()) {
         return;
     }
     if (Geom::are_near(this->rx.computed, 0) || Geom::are_near(this->ry.computed, 0)) {
@@ -477,21 +469,10 @@ void SPGenericEllipse::set_shape()
     // Stretching / moving the calculated shape to fit the actual dimensions.
     Geom::Affine aff = Geom::Scale(rx.computed, ry.computed) * Geom::Translate(cx.computed, cy.computed);
     c->transform(aff);
-    
-    /* Reset the shape's curve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    auto const before = this->curveBeforeLPE();
-    if (before && before->get_pathvector() != c->get_pathvector()) {
-        setCurveBeforeLPE(std::move(c));
-        sp_lpe_item_update_patheffect(this, true, false);
+    // this is a memory leak? is done this way in al object/shapes
+    if (prepareShapeForLPE(c.get())) {
         return;
     }
-
-    if (hasPathEffectOnClipOrMaskRecursive(this)) {
-        setCurveBeforeLPE(std::move(c));
-        return;
-    }
-
     // This happends on undo, fix bug:#1791784
     setCurveInsync(std::move(c));
 }

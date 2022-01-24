@@ -121,7 +121,7 @@ DialogWindow* DialogManager::find_floating_dialog_window(const Glib::ustring& di
 
     for (auto dlg_wnd : windows) {
         if (auto container = dlg_wnd->get_container()) {
-            if (auto dlg = container->get_dialog(dialog_type)) {
+            if (container->get_dialog(dialog_type)) {
                 return dlg_wnd;
             }
         }
@@ -157,7 +157,6 @@ std::shared_ptr<Glib::KeyFile> DialogManager::find_dialog_state(const Glib::ustr
 const char dialogs_state[] = "dialogs-state-ex.ini";
 const char save_dialog_position[] = "/options/savedialogposition/value";
 const char transient_group[] = "transient";
-const char floating_group[] = "floating";
 
 // list of dialogs sharing the same state
 std::vector<Glib::ustring> DialogManager::count_dialogs(const Glib::KeyFile *state) const

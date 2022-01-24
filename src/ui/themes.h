@@ -50,6 +50,8 @@ Glib::RefPtr<Gtk::CssProvider> getContrastThemeProvider() { return _contrastthem
 Glib::RefPtr<Gtk::CssProvider> getThemeProvider() { return _themeprovider;}
 Glib::RefPtr<Gtk::CssProvider> getStyleProvider() { return _styleprovider;}
 sigc::signal<void> getChangeThemeSignal() { return _signal_change_theme;}
+// set application-wide font size adjustment by a factor, where 1 is 100% (no change)
+void adjust_global_font_scale(double factor);
 
 // True if current theme (applied one) is dark
 bool isCurrentThemeDark(Gtk::Container *window);
@@ -65,6 +67,7 @@ private:
     Glib::RefPtr<Gtk::CssProvider> _colorizeprovider;
     Glib::RefPtr<Gtk::CssProvider> _spinbuttonprovider;
     std::unique_ptr<Preferences::Observer> _spinbutton_observer;
+    Glib::RefPtr<Gtk::CssProvider> _fontsizeprovider = Gtk::CssProvider::create();
 };
 
 }

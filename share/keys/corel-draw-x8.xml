@@ -19,9 +19,9 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind gaction="app.delete"                              keys="Delete" />
 <bind gaction="app.duplicate"                           keys="&lt;ctrl&gt;d, &lt;ctrl&gt;D" />
 <bind gaction="win.paste-in-place"                      keys="&lt;ctrl&gt;v, &lt;ctrl&gt;V" />
-<bind gaction="win.redo"                                keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
+<bind gaction="doc.redo"                                keys="&lt;ctrl&gt;&lt;shift&gt;z, &lt;ctrl&gt;&lt;shift&gt;Z" />
 <bind gaction="win.select-all-layers"                   keys="&lt;ctrl&gt;a, &lt;ctrl&gt;A" />
-<bind gaction="win.undo"                                keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
+<bind gaction="doc.undo"                                keys="&lt;ctrl&gt;z, &lt;ctrl&gt;Z" />
 
 <!-- Selection -->
 <bind gaction="app.path-break-apart"                    keys="&lt;ctrl&gt;k, &lt;ctrl&gt;K" />
@@ -43,6 +43,13 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind gaction="app.object-to-path"                      keys="&lt;ctrl&gt;q, &lt;ctrl&gt;Q" />
 
 <!-- Context -->
+
+<bind gaction="app.object-align('hcenter')"            keys="c, C" />
+<bind gaction="app.object-align('vcenter')"            keys="e, E" />
+<bind gaction="app.object-align('bottom')"             keys="b, B" />
+<bind gaction="app.object-align('left')"               keys="l, L" />
+<bind gaction="app.object-align('right')"              keys="r, R" />
+<bind gaction="app.object-align('top')"                keys="t, T" />
 
 <bind key="c" action="AlignHorizontalCenter" display="true" />
 <bind key="C" action="AlignHorizontalCenter" />
@@ -90,7 +97,7 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind gaction="win.dialog-open('Export')"               keys="&lt;ctrl&gt;e, &lt;ctrl&gt;E" />
 <bind gaction="win.dialog-open('FillStroke')"           keys="F11" />
 <bind gaction="win.dialog-ope('Find')"                  keys="&lt;ctrl&gt;f, &lt;ctrl&gt;F" />
-<bind gaction="win.dialog-open('Preferences')"          keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
+<bind gaction="app.preferences"                         keys="&lt;ctrl&gt;j, &lt;ctrl&gt;J" />
 <bind gaction="win.dialog-open('Text')"                 keys="&lt;ctrl&gt;&lt;shift&gt;t, &lt;ctrl&gt;&lt;shift&gt;T" />
 <bind gaction="win.dialog-open('Transform')"            keys="&lt;alt&gt;F8" />
 

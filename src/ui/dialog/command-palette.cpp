@@ -614,6 +614,9 @@ bool CommandPalette::ask_action_parameter(const ActionPtrName &action_ptr_name)
             case TypeOfVariant::STRING:
                 type_string = "string";
                 break;
+            case TypeOfVariant::TUPLE_DD:
+                type_string = "pair of doubles";
+                break;
             default:
                 break;
         }
@@ -1271,6 +1274,35 @@ bool CommandPalette::execute_action(const ActionPtrName &action_ptr_name, const 
         case TypeOfVariant::STRING:
             action_ptr->activate(Glib::Variant<Glib::ustring>::create(value));
             break;
+        case TypeOfVariant::TUPLE_DD:
+            try {
+                double d0 = 0;
+                double d1 = 0;
+                std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", value);
+
+                try {
+                    if (tokens.size() != 2) {
+                        throw std::invalid_argument("requires two numbers");
+                    }
+                } catch (...) {
+                    throw;
+                }
+
+                try {
+                    d0 = std::stod(tokens[0]);
+                    d1 = std::stod(tokens[1]);
+                } catch (...) {
+                    throw;
+                }
+
+                auto variant = Glib::Variant<std::tuple<double, double>>::create(std::tuple<double, double>(d0, d1));
+                action_ptr->activate(variant);
+            } catch (...) {
+                if (SPDesktop *dt = SP_ACTIVE_DESKTOP; dt) {
+                    dt->messageStack()->flash(ERROR_MESSAGE, _("Invalid input! Enter two comma separated numbers."));
+                }
+            }
+            break;
         case TypeOfVariant::UNKNOWN:
             std::cerr << "CommandPalette::execute_action: unhandled action value type (Unknown Type) " << action_name
                       << std::endl;
@@ -1296,7 +1328,10 @@ TypeOfVariant CommandPalette::get_action_variant_type(const ActionPtr &action_pt
             return TypeOfVariant::DOUBLE;
         } else if (type.get_string() == "s") {
             return TypeOfVariant::STRING;
+        } else if (type.get_string() == "(dd)") {
+            return TypeOfVariant::TUPLE_DD;
         } else {
+            std::cerr << "CommandPalette::get_action_variant_type: unknown variant type: " << type.get_string() << std::endl;
             return TypeOfVariant::UNKNOWN;
         }
     }
@@ -1586,3 +1621,14 @@ std::optional<HistoryType> CPHistoryXML::_get_operation_type(Inkscape::XML::Node
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

@@ -31,6 +31,7 @@
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "layer-manager.h"
+#include "message-stack.h"
 #include "verbs.h"
 
 #include "actions/actions-tools.h"
@@ -55,6 +56,7 @@
 #include "ui/tools/node-tool.h"
 
 #include "ui/contextmenu.h"
+#include "ui/util.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/shapeicon.h"
@@ -778,8 +780,16 @@ ObjectsPanel::ObjectsPanel() :
     _tree.signal_button_press_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false);
     _tree.signal_button_release_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false);
     _tree.signal_key_press_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleKeyEvent), false);
+    _tree.signal_key_release_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleKeyEvent), false);
     _tree.signal_motion_notify_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleMotionEvent), false);
-    // watch mouse leave too
+
+    // Set a status bar text when entering the widget
+    _tree.signal_enter_notify_event().connect([=](GdkEventCrossing*){
+        getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE,
+         _("<b>Hold ALT</b> while hovering over item to highlight, <b>hold SHIFT</b> and click to hide/lock all."));
+        return false;
+    }, false);
+    // watch mouse leave too to clear any state.
     _tree.signal_leave_notify_event().connect([=](GdkEventCrossing*){ return _handleMotionEvent(nullptr); }, false);
 
     // Before expanding a row, replace the dummy child with the actual children
@@ -831,18 +841,19 @@ ObjectsPanel::ObjectsPanel() :
     _object_mode.property_active().signal_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_objects_toggle));
 
     _buttonsPrimary.pack_start(_object_mode, Gtk::PACK_SHRINK);
-    _buttonsPrimary.pack_start(*_addBarButton(INKSCAPE_ICON("layer-new"), _("Add layer..."), (int)SP_VERB_LAYER_NEW), Gtk::PACK_SHRINK);
+    _buttonsPrimary.pack_start(*_addBarButton(INKSCAPE_ICON("layer-new"), _("Add layer..."), "win.layer-new"), Gtk::PACK_SHRINK);
 
-    _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("edit-delete"), _("Remove object"), (int)SP_VERB_EDIT_DELETE), Gtk::PACK_SHRINK);
-    _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("go-down"), _("Move Down"), (int)SP_VERB_SELECTION_STACK_DOWN), Gtk::PACK_SHRINK);
-    _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("go-up"), _("Move Up"), (int)SP_VERB_SELECTION_STACK_UP), Gtk::PACK_SHRINK);
+    _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("edit-delete"), _("Remove object"), "app.delete-selection"), Gtk::PACK_SHRINK);
+    _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("go-down"), _("Move Down"), "app.selection-stack-down"), Gtk::PACK_SHRINK);
+    _buttonsSecondary.pack_end(*_addBarButton(INKSCAPE_ICON("go-up"), _("Move Up"), "app.selection-stack-up"), Gtk::PACK_SHRINK);
 
     _buttonsRow.pack_start(_buttonsPrimary, Gtk::PACK_SHRINK);
     _buttonsRow.pack_end(_buttonsSecondary, Gtk::PACK_SHRINK);
 
-    selection_color = _tree.get_style_context()->get_background_color(Gtk::STATE_FLAG_SELECTED);
-    _tree_style = _tree.signal_style_updated().connect([&](){
-        selection_color = _tree.get_style_context()->get_background_color(Gtk::STATE_FLAG_SELECTED);
+    selection_color = get_background_color(_tree.get_style_context(), Gtk::STATE_FLAG_SELECTED);
+    _tree_style = _tree.signal_style_updated().connect([=](){
+        selection_color = get_background_color(_tree.get_style_context(), Gtk::STATE_FLAG_SELECTED);
+
         if (!root_watcher) return;
         for (auto&& kv : root_watcher->child_watchers) {
             if (kv.second) {
@@ -905,39 +916,37 @@ void ObjectsPanel::setRootWatcher()
         bool layers_only = prefs->getBool("/dialogs/objects/layers_only", false);
         root_watcher = new ObjectWatcher(this, document->getRoot(), nullptr, layers_only);
         layerChanged(getDesktop()->layerManager().currentLayer());
+        selectionChanged(getSelection());
     }
 }
 
 void ObjectsPanel::selectionChanged(Selection *selected)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if(!prefs->getBool("/dialogs/objects/layers_only", false)) {
-        root_watcher->setSelectedBitRecursive(SELECTED_OBJECT, false);
+    root_watcher->setSelectedBitRecursive(SELECTED_OBJECT, false);
 
-        for (auto item : selected->items()) {
-            ObjectWatcher *watcher = nullptr;
-            // This both unpacks the tree, and populates lazy loading
-            for (auto &parent : item->ancestorList(true)) {
-                if (parent->getRepr() == root_watcher->getRepr()) {
-                    watcher = root_watcher;
-                } else if (watcher) {
-                    if (watcher = watcher->findChild(parent->getRepr())) {
-                        if (auto row = watcher->getRow()) {
-                            cleanDummyChildren(*row);
-                        }
+    for (auto item : selected->items()) {
+        ObjectWatcher *watcher = nullptr;
+        // This both unpacks the tree, and populates lazy loading
+        for (auto &parent : item->ancestorList(true)) {
+            if (parent->getRepr() == root_watcher->getRepr()) {
+                watcher = root_watcher;
+            } else if (watcher) {
+                if ((watcher = watcher->findChild(parent->getRepr()))) {
+                    if (auto row = watcher->getRow()) {
+                        cleanDummyChildren(*row);
                     }
                 }
             }
-            if (watcher) {
-                if (auto final_watcher = watcher->findChild(item->getRepr())) {
-                    final_watcher->setSelectedBit(SELECTED_OBJECT, true);
-                    _tree.expand_to_path(final_watcher->getTreePath());
-                } else {
-                    g_warning("Can't find final step in tree selection!");
-                }
+        }
+        if (watcher) {
+            if (auto final_watcher = watcher->findChild(item->getRepr())) {
+                final_watcher->setSelectedBit(SELECTED_OBJECT, true);
+                _tree.expand_to_path(final_watcher->getTreePath());
             } else {
-                g_warning("Can't find a mid step in tree selection!");
+                g_warning("Can't find final step in tree selection!");
             }
+        } else {
+            g_warning("Can't find a mid step in tree selection!");
         }
     }
 }
@@ -964,7 +973,7 @@ void ObjectsPanel::layerChanged(SPObject *layer)
 /**
  * Stylizes a button using the given icon name and tooltip
  */
-Gtk::Button* ObjectsPanel::_addBarButton(char const* iconName, char const* tooltip, int verb_id)
+Gtk::Button* ObjectsPanel::_addBarButton(char const* iconName, char const* tooltip, char const *action_name)
 {
     Gtk::Button* btn = Gtk::manage(new Gtk::Button());
     auto child = Glib::wrap(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR));
@@ -972,7 +981,8 @@ Gtk::Button* ObjectsPanel::_addBarButton(char const* iconName, char const* toolt
     btn->add(*child);
     btn->set_relief(Gtk::RELIEF_NONE);
     btn->set_tooltip_text(tooltip);
-    btn->signal_clicked().connect(sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), verb_id));
+    // This c code is required because the gtkmm is broken for actions
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(btn->gobj()), action_name);
     return btn;
 }
 
@@ -988,11 +998,13 @@ bool ObjectsPanel::toggleVisible(GdkEventButton* event, Gtk::TreeModel::Row row)
             if (auto desktop = getDesktop()) {
                 if (desktop->layerManager().isLayer(item)) {
                     desktop->layerManager().toggleLayerSolo(item);
-                    DocumentUndo::done(desktop->getDocument(), _("Toggle layer solo"), "");
+                    DocumentUndo::done(getDocument(), _("Hide other layers"), "");
                 }
             }
         } else {
             item->setHidden(!row[_model->_colInvisible]);
+            // Use maybeDone so user can flip back and forth without making loads of undo items
+            DocumentUndo::maybeDone(getDocument(), "toggle-vis", _("Toggle item visibility"), "");
         }
     }
     return true;
@@ -1011,11 +1023,13 @@ bool ObjectsPanel::toggleLocked(GdkEventButton* event, Gtk::TreeModel::Row row)
             if (auto desktop = getDesktop()) {
                 if (desktop->layerManager().isLayer(item)) {
                     desktop->layerManager().toggleLockOtherLayers(item);
-                    DocumentUndo::done(desktop->getDocument(), _("Lock other layers"), "");
+                    DocumentUndo::done(getDocument(), _("Lock other layers"), "");
                 }
             }
         } else {
             item->setLocked(!row[_model->_colLocked]);
+            // Use maybeDone so user can flip back and forth without making loads of undo items
+            DocumentUndo::maybeDone(getDocument(), "toggle-lock", _("Toggle item locking"), "");
         }
     }
     return true;
@@ -1032,6 +1046,7 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
     if (!desktop)
         return false;
 
+    bool press = event->type == GDK_KEY_PRESS;
     Gtk::AccelKey shortcut = Inkscape::Shortcuts::get_from_event(event);
     switch (shortcut.get_key()) {
         case GDK_KEY_Escape:
@@ -1045,10 +1060,15 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         case GDK_KEY_Return:
         case GDK_KEY_space:
             return false;
+
+        case GDK_KEY_Alt_L:
+        case GDK_KEY_Alt_R:
+            _handleTransparentHover(press);
+            return false;
     }
 
     // invoke user defined shortcuts first
-    if (Inkscape::Shortcuts::getInstance().invoke_verb(event, desktop))
+    if (press && Inkscape::Shortcuts::getInstance().invoke_verb(event, desktop))
         return true;
     return false;
 }
@@ -1067,9 +1087,12 @@ bool ObjectsPanel::_handleMotionEvent(GdkEventMotion* motion_event)
         if (auto row = *_store->get_iter(_hovered_row_ref.get_path()))
             row[_model->_colHover] = false;
     }
-    // Allow this function to be called blind.
-    if (!motion_event)
+    // Allow this function to be called by LEAVE motion
+    if (!motion_event) {
+        _hovered_row_ref = Gtk::TreeModel::RowReference();
+        _handleTransparentHover(false);
         return false;
+    }
 
     Gtk::TreeModel::Path path;
     Gtk::TreeViewColumn* col = nullptr;
@@ -1081,7 +1104,59 @@ bool ObjectsPanel::_handleMotionEvent(GdkEventMotion* motion_event)
         }
     }
 
+    _handleTransparentHover(motion_event->state & GDK_MOD1_MASK);
     return false;
+}
+
+void ObjectsPanel::_handleTransparentHover(bool enabled)
+{
+    SPItem *item = nullptr;
+    if (enabled && _hovered_row_ref) {
+        if (auto row = *_store->get_iter(_hovered_row_ref.get_path())) {
+            item = getItem(row);
+        }
+    }
+
+    if (item == _solid_item)
+        return;
+
+    // Set the target item, this prevents reruning too.
+    _solid_item = item;
+    auto desktop = getDesktop();
+
+    // Reset all the items in the list.
+    for (auto &item : _translucent_items) {
+        Inkscape::DrawingItem *arenaitem = item->get_arenaitem(desktop->dkey);
+        arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(item->style->opacity.value));
+    }
+    _translucent_items.clear();
+
+    if (item) {
+        _generateTranslucentItems(getDocument()->getRoot());
+
+        for (auto &item : _translucent_items) {
+            Inkscape::DrawingItem *arenaitem = item->get_arenaitem(desktop->dkey);
+            arenaitem->setOpacity(0.2);
+        }
+    }
+}
+
+/**
+ * Generate a new list of sibling items (recursive)
+ */
+void ObjectsPanel::_generateTranslucentItems(SPItem *parent)
+{
+    if (parent == _solid_item)
+        return;
+    if (parent->isAncestorOf(_solid_item)) {
+        for (auto &child: parent->children) {
+            if (auto item = dynamic_cast<SPItem *>(&child)) {
+                _generateTranslucentItems(item);
+            }
+        }
+    } else {
+        _translucent_items.push_back(parent);
+    }
 }
 
 /**
@@ -1134,8 +1209,8 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         // Select items on button release to not confuse drag (unless it's a right-click)
         // Right-click selects too to set up the stage for context menu which frequently relies on current selection!
         if (!_is_editing && (event->type == GDK_BUTTON_RELEASE || context_menu)) {
-            if (event->state & GDK_SHIFT_MASK) {
-                // Select everything between this row and the already seleced item
+            if (event->state & GDK_SHIFT_MASK && !selection->isEmpty()) {
+                // Select everything between this row and the last seleced item
                 selection->setBetween(item);
             } else if (event->state & GDK_CONTROL_MASK) {
                 selection->toggle(item);
@@ -1145,21 +1220,16 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                     if (getDesktop()->layerManager().currentLayer() != item) {
                         getDesktop()->layerManager().setCurrentLayer(item, true);
                     }
-                }
-                // Clicking on layers firstly switches to that layer.
-                else if (selection->includes(item)) {
-                    selection->clear();
-                } else if (_layer != item) {
-                    getDesktop()->layerManager().setCurrentLayer(item, true);
                 } else {
                     selection->set(item);
                 }
-            } else {
+            } else if (!context_menu) {
                 selection->set(item);
             }
 
             if (context_menu) {
-                ContextMenu *menu = new ContextMenu(getDesktop(), item);
+                ContextMenu *menu = new ContextMenu(getDesktop(), item, true); // true == hide menu item for opening this dialog!
+                menu->attach_to_widget(*this); // So actions work!
                 menu->show();
                 menu->popup_at_pointer(nullptr);
             }
@@ -1170,21 +1240,6 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         }
     }
     return false;
-}
-
-/**
- * Executes the given button action during the idle time
- */
-void ObjectsPanel::_takeAction(int val)
-{
-    if (auto desktop = getDesktop()) {
-        if (auto verb = Verb::get(val)) {
-            SPAction *action = verb->get_action(desktop);
-            if (action) {
-                sp_action_perform( action, nullptr );
-            }
-        }
-    }
 }
 
 /**
