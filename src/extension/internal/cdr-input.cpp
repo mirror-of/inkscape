@@ -296,9 +296,11 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
      SPDocument * doc = SPDocument::createNewDocFromMem(tmpSVGOutput[page_num-1].cstr(), strlen(tmpSVGOutput[page_num-1].cstr()), TRUE);
 
-     // Set viewBox if it doesn't exist
      if (doc && !doc->getRoot()->viewBox_set) {
-         doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
+          // Scales the document to account for 72dpi scaling in librevenge(<=0.0.4)
+          doc->setWidth(Inkscape::Util::Quantity(doc->getWidth().quantity, "pt"), false);
+          doc->setHeight(Inkscape::Util::Quantity(doc->getHeight().quantity, "pt"), false);
+          doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value("pt"), doc->getHeight().value("pt")));
      }
      return doc;
 }
