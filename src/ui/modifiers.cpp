@@ -203,7 +203,7 @@ void responsive_tooltip(Inkscape::MessageContext *message_context, GdkEvent *eve
     va_start(args, num_args);
     for(int i = 0; i < num_args; i++) {
         auto modifier = Modifier::get(va_arg(args, Type));
-        auto name = std::string(modifier->get_name());
+        auto name = std::string(_(modifier->get_name()));
         switch (modifier->get_and_mask()) {
             case CTRL:
                 ctrl_msg += name + ", ";
