@@ -251,7 +251,7 @@ void CanvasItemCtrl::update(Geom::Affine const &affine)
 
     // Position must also be integer.
     Geom::Point position = _position * _affine;
-    Geom::IntPoint iposition(position.x(), position.y());
+    Geom::IntPoint iposition = position.floor();
 
     _bounds *= Geom::Translate(iposition);
 
