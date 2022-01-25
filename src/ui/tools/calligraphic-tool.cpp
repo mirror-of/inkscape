@@ -802,7 +802,10 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
             this->message_context->clear();
             ret = TRUE;
-        } else if (!this->dragging && event->button.button == 1){
+        } else if (!this->dragging
+                   && event->button.button == 1
+                   && Inkscape::have_viable_layer(desktop, defaultMessageContext()))
+        {
             spdc_create_single_dot(this, desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
         }
         break;
