@@ -6,9 +6,8 @@
  *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
  *
+ * TODO: REMOVE THIS FILE It's really not necessary.
  */
-
-#include "actions-helper.h"
 
 #include "inkscape-application.h"
 #include "inkscape.h"
@@ -25,9 +24,7 @@ get_document_and_selection(InkscapeApplication* app, SPDocument** document, Inks
         return false;
     }
 
-    // To do: get selection from active view (which could be from desktop or not).
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(*document);
-    *selection = context.getSelection();
+    *selection = app->get_active_selection();
     if (!*selection) {
         std::cerr << "get_document_and_selection: No selection!" << std::endl;
         return false;

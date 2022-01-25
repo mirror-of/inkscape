@@ -7,61 +7,6 @@ This file contains the Inkscape keyboard shortcuts for MacOSX.
 See "inkscape.xml" for information about file structure.
 -->
 
-<!-- VERBS (Deprecated) -->
-
-  <!-- Edit -->
-  <bind key="Tab" action="EditSelectNext" display="true" />
-  <bind key="ISO_Left_Tab" action="EditSelectNext" />
-  <bind key="Tab" modifiers="Shift" action="EditSelectPrev" display="true" />
-  <bind key="ISO_Left_Tab" modifiers="Shift" action="EditSelectPrev" />
-
-  <bind key="7" action="EditNextPathEffectParameter" display="true" />
-
-  <bind action="EditSwapFillStroke" display="true" />
-
-  <bind key="comma" action="SelectionShrink" display="true" />
-  <bind key="less" action="SelectionShrink" />
-
-  <bind key="comma" modifiers="Alt" action="SelectionShrinkScreen" />
-  <bind key="less" modifiers="Alt" action="SelectionShrinkScreen" />
-
-  <bind key="comma" modifiers="Primary" action="SelectionShrinkHalve" />
-  <bind key="less" modifiers="Primary" action="SelectionShrinkHalve" />
-
-  <bind key="period" action="SelectionGrow" display="true" />
-  <bind key="greater" action="SelectionGrow" />
-
-  <bind key="period" modifiers="Alt" action="SelectionGrowScreen" />
-  <bind key="greater" modifiers="Alt" action="SelectionGrowScreen" />
-
-  <bind key="period" modifiers="Primary" action="SelectionGrowDouble" />
-  <bind key="greater" modifiers="Primary" action="SelectionGrowDouble" />
-
-  <bind key="t" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
-  <bind key="T" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
-
-  <!-- Path -->
-  <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true" />
-  <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
-
-  <bind key="parenright" modifiers="Alt,Shift" action="SelectionOffsetScreen10" display="true" />
-  <bind key="0" modifiers="Alt,Shift" action="SelectionOffsetScreen10" />
-
-  <bind key="parenleft" modifiers="Alt" action="SelectionInsetScreen" display="true" />
-  <bind key="9" modifiers="Alt" action="SelectionInsetScreen" />
-
-  <bind key="parenleft" modifiers="Alt,Shift" action="SelectionInsetScreen10" display="true" />
-  <bind key="9" modifiers="Alt,Shift" action="SelectionInsetScreen10" />
-
-  <!-- Layers -->
-  <bind action="LayerHideAll" />
-  <bind action="LayerSolo" />
-  <bind action="LayerShowAll" />
-
-  <bind action="LayerLockAll" />
-  <bind action="LayerLockOthers" />
-  <bind action="LayerUnlockAll" />
-
 <!-- ACTIONS -->
 
   <!-- Base -->
@@ -166,8 +111,8 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="app.clone-unlink"                       keys="&lt;alt&gt;&lt;shift&gt;d, &lt;alt&gt;&lt;shift&gt;D" />
   <bind gaction="app.clone-unlink-recursively" />
   <bind gaction="app.clone-link" />
-  <bind gaction="app.select-original"                    keys="&lt;shift&gt;d, &lt;shift&gt;D" />
   <bind gaction="app.clone-link-lpe" />
+  <bind gaction="app.select-original"                    keys="&lt;shift&gt;d, &lt;shift&gt;D" />
   <bind gaction="app.selection-make-bitmap-copy"         keys="&lt;alt&gt;b, &lt;alt&gt;B" />
   <bind gaction="app.delete"                             keys="Delete, KP_Delete, BackSpace" />
   <bind gaction="app.page-fit-to-selection"              keys="&lt;primary&gt;&lt;shift&gt;r, &lt;primary&gt;&lt;shift&gt;R" />
@@ -251,6 +196,14 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="win.layer-bottom"                       keys="&lt;primary&gt;&lt;shift&gt;End,       &lt;primary&gt;&lt;shift&gt;KP_End" />
   <bind gaction="win.layer-duplicate" />
   <bind gaction="win.layer-delete" />
+  <bind gaction="win.layer-hide-all" />
+  <bind gaction="win.layer-unhide-all" />
+  <bind gaction="win.layer-hide-toggle" />
+  <bind gaction="win.layer-hide-toggle-others" />
+  <bind gaction="win.layer-lock-all" />
+  <bind gaction="win.layer-unlock-all" />
+  <bind gaction="win.layer-lock-toggle" />
+  <bind gaction="win.layer-lock-toggle-others" />
 
   <!-- Object -->
   <bind gaction="app.selection-group"                    keys="&lt;primary&gt;g, &lt;primary&gt;G, &lt;primary&gt;&lt;shift&gt;u, &lt;primary&gt;&lt;shift&gt;U" />
@@ -319,10 +272,14 @@ See "inkscape.xml" for information about file structure.
                                                                &lt;primary&gt;&lt;shift&gt;parenleft,
                                                                &lt;primary&gt;9,
                                                                &lt;primary&gt;&lt;shift&gt;9" />
-  <bind gaction="win.path-outset"                        keys="&lt;primary&gt;parenright,
+  <bind gaction="win.path-offset"                        keys="&lt;primary&gt;parenright,
                                                                &lt;primary&gt;&lt;shift&gt;parenright,
                                                                &lt;primary&gt;0,
                                                                &lt;primary&gt;&lt;shift&gt;0" />
+  <bind gaction="win.path-inset-screen( 1.0)"            keys="               &lt;alt&gt;parenleft" />
+  <bind gaction="win.path-offset-screen( 1.0)"           keys="               &lt;alt&gt;parenright" />
+  <bind gaction="win.path-inset-screen(10.0)"            keys="&lt;primary&gt;&lt;alt&gt;parenleft" />
+  <bind gaction="win.path-offset-screen(10.0)"           keys="&lt;primary&gt;&lt;alt&gt;parenright" />
   <bind gaction="win.path-offset-dynamic"                keys="&lt;primary&gt;j, &lt;primary&gt;J" />
   <bind gaction="win.path-offset-linked"                 keys="&lt;primary&gt;&lt;alt&gt;j, &lt;primary&gt;&lt;alt&gt;J" />
 
@@ -330,6 +287,7 @@ See "inkscape.xml" for information about file structure.
   <bind gaction="win.path-reverse" />
   <bind gaction="app.paste-path-effect"                  keys="&lt;primary&gt;ampersand, &lt;primary&gt;7" />
   <bind gaction="app.remove-path-effect" />
+  <bind gaction="win.path-effect-parameter-next"         keys="7"/>
 
   <!-- Text -->
   <bind gaction="app.text-flow-into-frame"               keys="&lt;alt&gt;w, &lt;alt&gt;W" />

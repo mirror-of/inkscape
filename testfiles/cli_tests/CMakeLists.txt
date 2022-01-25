@@ -730,10 +730,10 @@ add_cli_test(actions-transform-rotate      INPUT_FILENAME pyramids.svg
                                            REFERENCE_FILENAME actions-transform-rotate_expected.png)
 
 # transform-scale
-add_cli_test(actions-transform-scale       INPUT_FILENAME pyramids.svg
-                                           PARAMETERS --actions=select-by-id:quad_snapped_1$<SEMICOLON>transform-scale:10
-                                           OUTPUT_FILENAME actions-transform-scale.png
-                                           REFERENCE_FILENAME actions-transform-scale_expected.png)
+add_cli_test(actions-transform-grow        INPUT_FILENAME pyramids.svg
+                                           PARAMETERS --actions=select-by-id:quad_snapped_1$<SEMICOLON>transform-grow:10
+                                           OUTPUT_FILENAME actions-transform-grow.png
+                                           REFERENCE_FILENAME actions-transform-grow_expected.png)
 
 # transform-translate
 add_cli_test(actions-transform-translate   INPUT_FILENAME pyramids.svg
@@ -751,10 +751,6 @@ add_cli_test(actions-transform-translate   INPUT_FILENAME pyramids.svg
 add_cli_test(actions-user-data-directory   PARAMETERS --actions=user-data-directory ENVIRONMENT unset PASS_FOR_OUTPUT "inkscape\n$")
 
 # vacuum-defs
-# verb
-# verb-list: test = verb-list
-add_cli_test(actions-verb-list             PARAMETERS --actions=verb-list PASS_FOR_OUTPUT "FileNew:")
-
 # window-close
 # window-open
 
@@ -764,12 +760,6 @@ add_cli_test(action_test_multiline_anchoring
                         PARAMETERS --actions=select-by-id:grouped_text$<SEMICOLON>transform-translate:10,0$<SEMICOLON>transform-translate:-10,0$<SEMICOLON>export-filename:multiline-anchoring_out.svg$<SEMICOLON>export-plain-svg$<SEMICOLON>export-do
                         EXPECTED_FILES multiline-anchoring_out.svg
                         TEST_SCRIPT match_regex_fail.sh multiline-anchoring_out.svg "(x=\"[3-9][0-9]{2}\")|(x=\"[12][0-9]{3}\")|(y=\"[0-9]{2}\")|(y=\"1[0-9]{2}\")")
-
-#############
-### verbs ###
-#############
-
-# TODO
 
 ###########################
 ### file format support ###

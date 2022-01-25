@@ -52,7 +52,6 @@ transform_translate(const Glib::VariantBase& value, InkscapeApplication *app)
 void
 transform_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
 {
-
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
     auto selection = app->get_active_selection();
 
@@ -74,6 +73,31 @@ transform_scale(const Glib::VariantBase& value, InkscapeApplication *app)
 }
 
 void
+transform_grow(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
+    auto selection = app->get_active_selection();
+    selection->scaleGrow(d.get());
+}
+
+void
+transform_grow_step(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto selection = app->get_active_selection();
+    selection->scaleGrow(d.get() * prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
+}
+
+void
+transform_grow_screen(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
+    auto selection = app->get_active_selection();
+    selection->scaleGrow(d.get());
+}
+
+void
 transform_remove(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
@@ -90,7 +114,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_transform =
     {"app.transform-translate",   N_("Translate"),          "Transform",  N_("Translate selected objects (dx,dy)")},
     {"app.transform-rotate",      N_("Rotate"),             "Transform",  N_("Rotate selected objects by degrees")},
     {"app.transform-scale",       N_("Scale"),              "Transform",  N_("Scale selected objects by scale factor")},
-    {"app.transform-remove",      N_("Remove Transforms"),  "Transform",  N_("Remove any transforms from selected objects")}
+    {"app.transform-grow",        N_("Grow/Shrink"),        "Transform",  N_("Grow/shrink selected objects")},
+    {"app.transform-grow-step",   N_("Grow/Shrink Step"),   "Transform",  N_("Grow/shrink selected objects by multiple of step value")},
+    {"app.transform-grow-screen", N_("Grow/Shrink Screen"), "Transform",  N_("Grow/shrink selected objects relative to zoom level")},
+    {"app.transform-remove",      N_("Remove Transforms"),  "Transform",  N_("Remove any transforms from selected objects")},
     // clang-format on
 };
 
@@ -99,7 +126,9 @@ std::vector<std::vector<Glib::ustring>> hint_data_transform =
     // clang-format off
     {"app.transform-translate",     N_("Give two comma separated numbers")},
     {"app.transform-rotate",        N_("Give input for angle of Clockwise Rotation")},
-    {"app.transform-scale",         N_("Give input for Scale")}
+    {"app.transform-scale",         N_("Give input for Scale")},
+    {"app.transform-grow",          N_("Give 1.0 or -1.0 to grow or shrink selection by preference amount")},
+    {"app.transform-grow-screen",   N_("Give positive or negative number to grow or shrink selection relative to zoom level")},
     // clang-format on
 };
 
@@ -113,17 +142,15 @@ add_actions_transform(InkscapeApplication* app)
 
     auto *gapp = app->gio_app();
 
-    // Debian 9 has 2.50.0
-#if GLIB_CHECK_VERSION(2, 52, 0)
-
     // clang-format off
     gapp->add_action_with_parameter( "transform-translate",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_translate),       app));
     gapp->add_action_with_parameter( "transform-rotate",         Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_rotate),          app));
     gapp->add_action_with_parameter( "transform-scale",          Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_scale),           app));
+    gapp->add_action_with_parameter( "transform-grow",           Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_grow),            app));
+    gapp->add_action_with_parameter( "transform-grow-step",      Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_grow_step),       app));
+    gapp->add_action_with_parameter( "transform-grow-screen",    Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_grow_screen),     app));
     gapp->add_action(                "transform-remove",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_remove),          app));
     // clang-format on
-
-#endif
 
     app->get_action_extra_data().add_data(raw_data_transform);
     app->get_action_hint_data().add_data(hint_data_transform);

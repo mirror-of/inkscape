@@ -948,7 +948,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
 {
     Inkscape::Selection *selection = sp_action_get_selection(action);
     SPDesktop *dt = sp_action_get_desktop(action);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Some of these operations have been modified so they work in command-line mode!
     // In this case, all we need is a selection
@@ -988,38 +987,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->unlinkRecursive(true);
             selection->pathSlice();
             break;
-        case SP_VERB_SELECTION_GROW:
-        {
-            // FIXME these and the other grow/shrink they should use gobble_key_events.
-            // the problem is how to get access to which key, if any, to gobble.
-            selection->scale(prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
-            break;
-        }
-        case SP_VERB_SELECTION_GROW_SCREEN:
-        {
-            selection->scaleScreen(2);
-            break;
-        }
-        case SP_VERB_SELECTION_GROW_DOUBLE:
-        {
-            selection->scaleTimes(2);
-            break;
-        }
-        case SP_VERB_SELECTION_SHRINK:
-        {
-            selection->scale(-prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
-            break;
-        }
-        case SP_VERB_SELECTION_SHRINK_SCREEN:
-        {
-            selection->scaleScreen(-2);
-            break;
-        }
-        case SP_VERB_SELECTION_SHRINK_HALVE:
-        {
-            selection->scaleTimes(0.5);
-            break;
-        }
         case SP_VERB_SELECTION_TO_FRONT:
             selection->raiseToTop();
             break;

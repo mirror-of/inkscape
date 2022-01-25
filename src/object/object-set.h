@@ -497,9 +497,9 @@ public:
     void rotate90(bool ccw);
     void rotate(double);
     void rotateScreen(double);
-    void scale(double);
+    void scaleGrow(double);
     void scaleScreen(double);
-    void scaleTimes(double);
+    void scale(double);
     void move(double dx, double dy);
     void moveScreen(double dx, double dy);
     

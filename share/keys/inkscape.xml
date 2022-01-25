@@ -4,37 +4,6 @@
 <!--
 This file contains the default Inkscape keyboard shortcuts.
 
-There are two types of bindings, the first for the deprecated "verbs" and the second
-for Gio::actions.
-
-=========== Verbs ===========
-
-- The "key" attribute contains the key name. The names are the same as those in the
-<gdk/gdkkeysyms.h> header file but without the leading "GDK_". If you don't have GDK
-source locally, you can view that file at:
-
-  http://git.gnome.org/browse/gtk+/plain/gdk/gdkkeysyms.h
-
-- The "modifiers" attribute contains a comma-separated list of modifiers, which can be
-one or more of: "Ctrl", "Shift", "Alt", "Meta", "Super", "Hyper", or "Primary".
-
-"Primary" means Meta on Apple and Ctrl everywhere else, it's recommended over the use of Ctrl.
-
-- The "action" attribute contains the name of the action. The complete list of actions
-(called "verbs") is in the file src/verbs.cpp in Inkscape source; there you can see
-brief descriptions of what each action does. The same action may have multiple key
-bindings.
-
-Note: "verbs" are deprecated, being replaced by Gio::Actions.
-
-- The "display" attribute controls whether this binding will be displayed in the menu
-and tooltips. Only one binding for each action may have this attribute.
-
-Note that the current file lists ALL Inkscape actions, even those that do not have any
-keys in the default mapping (those don't have "key" or "modifiers" attributes). You can
-assign any keys to these actions by adding "key" and "modifiers" attributes to
-them. Developers: Please add here any new verbs you create!
-
 ========== Actions ==========
 
 - The "keys" attribute contains a comma separated list of shortcuts which can include the
@@ -57,59 +26,6 @@ have a default.xml in your personal Inkscape profile directory (e.g. ~/.config/i
 on Unix). The bindings in that personal file are added to (or, if there's a conflict,
 override) the bindings in the main default.xml.
 -->
-
-<!-- VERBS (Deprecated) -->
-
-  <!-- Edit -->
-  <bind key="Tab" action="EditSelectNext" display="true" />
-  <bind key="ISO_Left_Tab" action="EditSelectPrev" display="true" />
-
-  <bind key="7" action="EditNextPathEffectParameter" display="true" />
-
-  <bind action="EditSwapFillStroke" display="true" />
-
-  <bind key="comma" action="SelectionShrink" display="true" />
-  <bind key="less" action="SelectionShrink" />
-
-  <bind key="comma" modifiers="Alt" action="SelectionShrinkScreen" />
-  <bind key="less" modifiers="Alt" action="SelectionShrinkScreen" />
-
-  <bind key="comma" modifiers="Primary" action="SelectionShrinkHalve" />
-  <bind key="less" modifiers="Primary" action="SelectionShrinkHalve" />
-
-  <bind key="period" action="SelectionGrow" display="true" />
-  <bind key="greater" action="SelectionGrow" />
-
-  <bind key="period" modifiers="Alt" action="SelectionGrowScreen" />
-  <bind key="greater" modifiers="Alt" action="SelectionGrowScreen" />
-
-  <bind key="period" modifiers="Primary" action="SelectionGrowDouble" />
-  <bind key="greater" modifiers="Primary" action="SelectionGrowDouble" />
-
-  <bind key="t" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
-  <bind key="T" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
-
-  <!-- Path -->
-  <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true" />
-  <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
-
-  <bind key="parenright" modifiers="Alt,Shift" action="SelectionOffsetScreen10" display="true" />
-  <bind key="0" modifiers="Alt,Shift" action="SelectionOffsetScreen10" />
-
-  <bind key="parenleft" modifiers="Alt" action="SelectionInsetScreen" display="true" />
-  <bind key="9" modifiers="Alt" action="SelectionInsetScreen" />
-
-  <bind key="parenleft" modifiers="Alt,Shift" action="SelectionInsetScreen10" display="true" />
-  <bind key="9" modifiers="Alt,Shift" action="SelectionInsetScreen10" />
-
-  <!-- Layers -->
-  <bind action="LayerHideAll" />
-  <bind action="LayerSolo" />
-  <bind action="LayerShowAll" />
-
-  <bind action="LayerLockAll" />
-  <bind action="LayerLockOthers" />
-  <bind action="LayerUnlockAll" />
 
   <modifier action="canvas-pan-y" modifiers=""/>
   <modifier action="canvas-pan-x" modifiers="Shift"/>
@@ -235,8 +151,8 @@ override) the bindings in the main default.xml.
   <bind gaction="app.clone-unlink"                       keys="&lt;alt&gt;&lt;shift&gt;d" />
   <bind gaction="app.clone-unlink-recursively" />
   <bind gaction="app.clone-link" />
-  <bind gaction="app.select-original"                    keys="&lt;shift&gt;d" />
   <bind gaction="app.clone-link-lpe" />
+  <bind gaction="app.select-original"                    keys="&lt;shift&gt;d" />
   <bind gaction="app.selection-make-bitmap-copy"         keys="&lt;alt&gt;b" />
   <bind gaction="app.delete"                             keys="Delete, KP_Delete, BackSpace" />
   <bind gaction="app.page-fit-to-selection"              keys="&lt;primary&gt;&lt;shift&gt;r" />
@@ -250,6 +166,8 @@ override) the bindings in the main default.xml.
   <bind gaction="win.select-same-object-type"            keys="&lt;shift&gt;&lt;alt&gt;a" />
   <bind gaction="win.select-invert"                      keys="exclam ,&lt;shift&gt;exclam"/>
   <bind gaction="win.select-none"                        keys="Escape"/>
+  <bind gaction="win.select-next"                        keys="Tab"/>
+  <bind gaction="win.select-previous"                    keys="ISO_Left_Tab"/>
 
   <!-- View -->
   <!-- Canvas Transform -->
@@ -320,6 +238,14 @@ override) the bindings in the main default.xml.
   <bind gaction="win.layer-bottom"                       keys="&lt;primary&gt;&lt;shift&gt;End,       &lt;primary&gt;&lt;shift&gt;KP_End" />
   <bind gaction="win.layer-duplicate" />
   <bind gaction="win.layer-delete" />
+  <bind gaction="win.layer-hide-all" />
+  <bind gaction="win.layer-unhide-all" />
+  <bind gaction="win.layer-hide-toggle" />
+  <bind gaction="win.layer-hide-toggle-others" />
+  <bind gaction="win.layer-lock-all" />
+  <bind gaction="win.layer-unlock-all" />
+  <bind gaction="win.layer-lock-toggle" />
+  <bind gaction="win.layer-lock-toggle-others" />
 
   <!-- Object -->
   <bind gaction="app.selection-group"                    keys="&lt;primary&gt;g,              &lt;primary&gt;&lt;shift&gt;u" />
@@ -357,6 +283,15 @@ override) the bindings in the main default.xml.
   <bind gaction="app.object-align('right')"              keys="&lt;primary&gt;&lt;alt&gt;KP_6" />
   <bind gaction="app.object-align('top')"                keys="&lt;primary&gt;&lt;alt&gt;KP_8" />
 
+  <!-- Object Transform -->
+  <bind gaction="app.transform-remove"                   keys="&lt;shift&gt;&lt;alt&gt;t" />
+  <bind gaction="app.transform-scale(2.0)"               keys="&lt;primary&gt;period, &lt;primary&gt;greater" />
+  <bind gaction="app.transform-grow-step(1.0)"           keys="               period,                greater" /> <!-- uses preference step value -->
+  <bind gaction="app.transform-grow-screen(2.0)"         keys="    &lt;alt&gt;period,     &lt;alt&gt;greater" />
+  <bind gaction="app.transform-scale(0.5)"               keys="&lt;primary&gt;comma,  &lt;primary&gt;less" />
+  <bind gaction="app.transform-grow-step(-1.0)"          keys="               comma,                 less" />  <!-- shrink -->
+  <bind gaction="app.transform-grow-screen(-2.0)"        keys="    &lt;alt&gt;comma,      &lt;alt&gt;less" />  <!-- shrink -->
+
   <bind gaction="win.unhide-all" />
   <bind gaction="win.unlock-all" />
 
@@ -388,10 +323,14 @@ override) the bindings in the main default.xml.
                                                                &lt;primary&gt;&lt;shift&gt;parenleft,
                                                                &lt;primary&gt;9,
                                                                &lt;primary&gt;&lt;shift&gt;9" />
-  <bind gaction="win.path-outset"                        keys="&lt;primary&gt;parenright,
+  <bind gaction="win.path-offset"                        keys="&lt;primary&gt;parenright,
                                                                &lt;primary&gt;&lt;shift&gt;parenright,
                                                                &lt;primary&gt;0,
                                                                &lt;primary&gt;&lt;shift&gt;0" />
+  <bind gaction="win.path-inset-screen( 1.0)"            keys="               &lt;alt&gt;parenleft" />
+  <bind gaction="win.path-offset-screen( 1.0)"           keys="               &lt;alt&gt;parenright" />
+  <bind gaction="win.path-inset-screen(10.0)"            keys="&lt;primary&gt;&lt;alt&gt;parenleft" />
+  <bind gaction="win.path-offset-screen(10.0)"           keys="&lt;primary&gt;&lt;alt&gt;parenright" />
   <bind gaction="win.path-offset-dynamic"                keys="&lt;primary&gt;j"/>
   <bind gaction="win.path-offset-linked"                 keys="&lt;primary&gt;&lt;alt&gt;j" />
 
@@ -399,6 +338,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.path-reverse"/>
   <bind gaction="app.paste-path-effect"                  keys="ampersand, &lt;primary&gt;7" />
   <bind gaction="app.remove-path-effect"/>
+  <bind gaction="win.path-effect-parameter-next"         keys="7"/>
 
   <!-- Text -->
   <bind gaction="app.text-flow-into-frame"               keys="&lt;alt&gt;w" />
