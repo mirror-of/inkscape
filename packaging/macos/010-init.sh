@@ -28,13 +28,12 @@ source "$(dirname "${BASH_SOURCE[0]}")"/bash_d/bash_d.sh
 bash_d_include echo
 bash_d_include error
 bash_d_include lib
-bash_d_include sed
 
 ### variables ##################################################################
 
 #--------------------------------------------------------------- toolset version
 
-VERSION=0.56
+VERSION=0.57
 
 #-------------------------------------------------------------- target OS by SDK
 
@@ -43,7 +42,7 @@ VERSION=0.56
 # SDK is available as the default one.
 
 export SDKROOT=${SDKROOT:-$(\
-  xcodebuild -version -sdk macosx10.11 Path 2>/dev/null ||
+  xcodebuild -version -sdk macosx10.13 Path 2>/dev/null ||
   xcodebuild -version -sdk macosx Path)\
 }
 
