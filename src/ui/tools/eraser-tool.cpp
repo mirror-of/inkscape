@@ -453,6 +453,10 @@ bool EraserTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_RELEASE: {
+        if (event->button.button != 1) {
+            break;
+        }
+
         Geom::Point const motion_w(event->button.x, event->button.y);
         Geom::Point const motion_dt(desktop->w2d(motion_w));
 
