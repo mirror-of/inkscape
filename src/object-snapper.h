@@ -84,7 +84,9 @@ private:
     void _snapPathsConstrained(IntermSnapResults &isr,
                  Inkscape::SnapCandidatePoint const &p, // in desktop coordinates
                  SnapConstraint const &c,
-                 Geom::Point const &p_proj_on_constraint) const;
+                 Geom::Point const &p_proj_on_constraint,
+				 std::vector<SnapCandidatePoint> *unselected_nodes,
+				 SPPath const *selected_path) const;
 
     void _snapPathsTangPerp(bool snap_tang,
                             bool snap_perp,
