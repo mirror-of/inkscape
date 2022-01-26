@@ -733,6 +733,8 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
+                        <property name="action-name">app.object-distribute-text</property>
+                        <property name="action-target">'horizontal'</property>
                         <property name="image">image-distribute-horizontal-baseline</property>
                         <property name="relief">none</property>
                         <property name="always-show-image">True</property>
@@ -811,6 +813,8 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
+                        <property name="action-name">app.object-distribute-text</property>
+                        <property name="action-target">'vertical'</property>
                         <property name="image">image-distribute-vertical-baseline</property>
                         <property name="relief">none</property>
                         <property name="always-show-image">True</property>

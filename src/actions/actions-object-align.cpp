@@ -28,6 +28,10 @@
 #include "filter-chemistry.h"     // LPE bool
 #include "inkscape-application.h"
 #include "inkscape.h"             // Inkscape::Application - preferences
+#include "text-editing.h"
+
+#include "object/sp-text.h"
+#include "object/sp-flowtext.h"
 
 #include "object/algorithms/graphlayout.h"   // Graph layout objects.
 #include "object/algorithms/removeoverlap.h" // Remove overlaps between objects.
@@ -376,6 +380,178 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 }
 
+class Baseline
+{
+public:
+    Baseline(SPItem *item, Geom::Point base, Geom::Dim2 orientation)
+        : _item (item)
+        , _base (base)
+        , _orientation (orientation)
+    {}
+    SPItem *_item = nullptr;
+    Geom::Point _base;
+    Geom::Dim2 _orientation;
+};
+
+static bool operator< (const Baseline &a, const Baseline &b)
+{
+    return (a._base[a._orientation] < b._base[b._orientation]);
+}
+
+void
+object_distribute_text(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    auto token = s.get();
+
+    Geom::Dim2 orientation = Geom::Dim2::X;
+    if (token.find("vertical") != Glib::ustring::npos) {
+        orientation = Geom::Dim2::Y;
+    }
+
+    auto selection = app->get_active_selection();
+    if (selection->size() < 2) {
+        return;
+    }
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    std::vector<Baseline> baselines;
+    Geom::Point b_min = Geom::Point ( HUGE_VAL,  HUGE_VAL);
+    Geom::Point b_max = Geom::Point (-HUGE_VAL, -HUGE_VAL);
+
+    for (auto item : selection->items()) {
+        if (dynamic_cast<SPText *>(item) || dynamic_cast<SPFlowtext *>(item)) {
+            Inkscape::Text::Layout const *layout = te_get_layout(item);
+            std::optional<Geom::Point> pt = layout->baselineAnchorPoint();
+            if (pt) {
+                Geom::Point base = *pt * item->i2dt_affine();
+                if (base[Geom::X] < b_min[Geom::X]) b_min[Geom::X] = base[Geom::X];
+                if (base[Geom::Y] < b_min[Geom::Y]) b_min[Geom::Y] = base[Geom::Y];
+                if (base[Geom::X] > b_max[Geom::X]) b_max[Geom::X] = base[Geom::X];
+                if (base[Geom::Y] > b_max[Geom::Y]) b_max[Geom::Y] = base[Geom::Y];
+                baselines.emplace_back(Baseline(item, base, orientation));
+            }
+        }
+    }
+
+    if (baselines.size() < 2) {
+        return;
+    }
+
+    std::stable_sort(baselines.begin(), baselines.end());
+
+    double step = (b_max[orientation] - b_min[orientation])/(baselines.size() - 1);
+    int i = 0;
+    for (auto& baseline : baselines) {
+        Geom::Point t(0.0, 0.0);
+        t[orientation] = b_min[orientation] + (step * i) - baseline._base[orientation];
+        baseline._item->move_rel(Geom::Translate(t));
+        ++i;
+    }
+
+    Inkscape::DocumentUndo::done( document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
+}
+
+void
+object_align_text(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(" ", s.get());
+
+    // Defaults
+    auto target = ObjectAlignTarget::SELECTION;
+    auto orientation = Geom::Dim2::X;
+    auto direction = Inkscape::Selection::HORIZONTAL;
+
+    for (auto token : tokens) {
+
+        // Target
+        if      (token == "last"     ) target = ObjectAlignTarget::LAST;
+        else if (token == "first"    ) target = ObjectAlignTarget::FIRST;
+        else if (token == "biggest"  ) target = ObjectAlignTarget::BIGGEST;
+        else if (token == "smallest" ) target = ObjectAlignTarget::SMALLEST;
+        else if (token == "page"     ) target = ObjectAlignTarget::PAGE;
+        else if (token == "drawing"  ) target = ObjectAlignTarget::DRAWING;
+        else if (token == "selection") target = ObjectAlignTarget::SELECTION;
+
+        // Direction
+        if      (token == "vertical" ) {
+            orientation = Geom::Dim2::Y;
+            direction = Inkscape::Selection::VERTICAL;
+        }
+    }
+
+    auto selection = app->get_active_selection();
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    // Find alignment rectangle. This can come from:
+    // - The bounding box of an object
+    // - The bounding box of a group of objects
+    // - The bounding box of the page, drawing, or selection.
+    SPItem *focus = nullptr;
+    Geom::OptRect b = Geom::OptRect();
+
+    switch (target) {
+        case ObjectAlignTarget::LAST:
+            focus = selection->items().back();
+            break;
+        case ObjectAlignTarget::FIRST:
+            focus = selection->items().front();
+            break;
+        case ObjectAlignTarget::BIGGEST:
+            focus = selection->largestItem(direction);
+            break;
+        case ObjectAlignTarget::SMALLEST:
+            focus = selection->smallestItem(direction);
+            break;
+        case ObjectAlignTarget::PAGE:
+            b = document->pageBounds();
+            break;
+        case ObjectAlignTarget::DRAWING:
+            b = document->getRoot()->desktopPreferredBounds();
+            break;
+        case ObjectAlignTarget::SELECTION:
+            b = selection->preferredBounds();
+            break;
+        default:
+            g_assert_not_reached ();
+            break;
+    };
+
+    Geom::Point ref_point;
+    if (focus) {
+        if (dynamic_cast<SPText *>(focus) || dynamic_cast<SPFlowtext *>(focus)) {
+            ref_point = *(te_get_layout(focus)->baselineAnchorPoint())*(focus->i2dt_affine());
+        } else {
+            ref_point = focus->desktopPreferredBounds()->min();
+        }
+    } else {
+        ref_point = b->min();
+    }
+
+    for (auto item : selection->items()) {
+        if (dynamic_cast<SPText *>(item) || dynamic_cast<SPFlowtext *>(item)) {
+            Inkscape::Text::Layout const *layout = te_get_layout(item);
+            std::optional<Geom::Point> pt = layout->baselineAnchorPoint();
+            if (pt) {
+                Geom::Point base = *pt * (item)->i2dt_affine();
+                Geom::Point t(0.0, 0.0);
+                t[orientation] = ref_point[orientation] - base[orientation];
+                item->move_rel(Geom::Translate(t));
+            }
+        }
+    }
+
+    Inkscape::DocumentUndo::done( document, _("Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
+}
+
 /* --------------- Rearrange ----------------- */
 
 class RotateCompare
@@ -578,7 +754,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_object_align =
     // clang-format off
     {"app.object-align-on-canvas",         N_("Enable on-canvas alignment"),  "Object", N_("Enable on-canvas alignment handles."                                                                                           )},
 
-    {"app.object-align",                   N_("Align objects"), "Object", N_("Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?")},
+    {"app.object-align",                   N_("Align objects"),      "Object", N_("Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?")},
+    {"app.object-align-text",              N_("Align text objects"), "Object", N_("Align selected text alignment points; usage: [[vertical | horizontal] [last|first|biggest|smallest|page|drawing|selection]?"            )},
 
     {"app.object-distribute",              N_("Distribute objects"),          "Object", N_("Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | top | vcenter | bottom]"                           )},
     {"app.object-distribute('hgap')",      N_("Even horizontal gaps"),        "Object", N_("Distribute horizontally with even horizontal gaps."                                                                            )},
@@ -589,6 +766,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_object_align =
     {"app.object-distribute('top')",       N_("Even top edges"),              "Object", N_("Distribute vertically with even spacing between top edges."                                                                    )},
     {"app.object-distribute('vcenter')",   N_("Even vertical centers"),       "Object", N_("Distribute vertically with even spacing between centers."                                                                      )},
     {"app.object-distribute('bottom')",    N_("Even bottom edges"),           "Object", N_("Distribute vertically with even spacing between bottom edges."                                                                 )}, 
+
+    {"app.object-distribute-text",         N_("Distribute text objects"),     "Object", N_("Distribute text alignment points; usage [vertical | horizontal ]"                                                              )},
+    {"app.object-distribute-text('horizontal')", N_("Distribute text objects"),     "Object", N_("Distribute text alignment points horizontally"                                                                           )},
+    {"app.object-distribute-text('vertical')",   N_("Distribute text objects"),     "Object", N_("Distribute text alignment points vertically"                                                                             )},
 
     {"app.object-rearrange",               N_("Rearrange objects"),           "Object", N_("Rearrange selected objects; usage: [graph | exchange | exchangez | rotate | randomize | unclump]"                              )},
     {"app.object-rearrange('graph')",      N_("Rearrange as graph"),          "Object", N_("Nicely arrange selected connector network."                                                                                    )},
@@ -627,7 +808,9 @@ add_actions_object_align(InkscapeApplication* app)
     // clang-format off
     gapp->add_action_bool(           "object-align-on-canvas",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align_on_canvas),  app), on_canvas);
     gapp->add_action_with_parameter( "object-align",             String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align),            app));
+    gapp->add_action_with_parameter( "object-align-text",        String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align_text),       app));
     gapp->add_action_with_parameter( "object-distribute",        String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_distribute),       app));
+    gapp->add_action_with_parameter( "object-distribute-text",   String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_distribute_text),  app));
     gapp->add_action_with_parameter( "object-rearrange",         String,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rearrange),        app));
     gapp->add_action_with_parameter( "object-remove-overlaps",   Tuple_DD, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_remove_overlaps),  app));
     // clang-format on

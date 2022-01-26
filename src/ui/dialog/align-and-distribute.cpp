@@ -101,11 +101,13 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase* dlg)
         {"align-horizontal-center",          "hcenter"       },
         {"align-horizontal-right",           "right"         },
         {"align-horizontal-left-to-anchor",  "left anchor"   },
+        {"align-horizontal-baseline",        "horizontal"    },
         {"align-vertical-bottom-to-anchor",  "bottom anchor" },
         {"align-vertical-top",               "top"           },
         {"align-vertical-center",            "vcenter"       },
         {"align-vertical-bottom",            "bottom"        },
-        {"align-vertical-top-to-anchor",     "top anchor"    }
+        {"align-vertical-top-to-anchor",     "top anchor"    },
+        {"align-vertical-baseline",          "vertical"      }
     };
     // clang-format on
 
@@ -249,7 +251,12 @@ AlignAndDistribute::on_align_button_press_event(GdkEventButton* button_event, co
 
     auto variant = Glib::Variant<Glib::ustring>::create(argument);
     auto app = Gio::Application::get_default();
-    app->activate_action("object-align", variant);
+
+    if (align_to.find("vertical") != Glib::ustring::npos or align_to.find("horizontal") != Glib::ustring::npos) {
+        app->activate_action("object-align-text", variant);
+    } else {
+        app->activate_action("object-align",      variant);
+    }
 
     return true;
 }
