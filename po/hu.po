@@ -7,15 +7,15 @@
 # Arpad Biro <biro.arpad gmail>, 2004-2006, 2007, 2008, 2009, 2010.
 # Peter Bojtos <ptr@ulx.hu>, 2015.
 # Balázs Meskó <meskobalazs@mailbox.org>, 2018-2021
-# Gyuris Gellért <jobel@ujevangelizacio.hu>, 2017-2021
+# Gyuris Gellért <jobel@ujevangelizacio.hu>, 2017-2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-05-09 11:08+0000\n"
-"Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>, 2021\n"
+"POT-Creation-Date: 2022-01-14 15:12+0000\n"
+"PO-Revision-Date: 2022-01-24 23:20+0100\n"
+"Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>, 2022\n"
 "Language-Team: Hungarian (https://www.transifex.com/fsf-hu/teams/77907/hu/)\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -15533,9 +15533,8 @@ msgid "Group to symbol"
 msgstr "Csoport szimbólummá"
 
 #: ../src/selection-chemistry.cpp:3366
-#, fuzzy
 msgid "Remove symbol for editing"
-msgstr "Szimbólum csoporttá alakítása a szerkesztéséhez"
+msgstr "Szerkesztett szimbólum eltávolítása"
 
 #: ../src/selection-chemistry.cpp:3380
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -34214,12 +34213,11 @@ msgstr "Inkscape-kézikönyv"
 
 #: ../src/verbs.cpp:2925
 msgid "Donate"
-msgstr ""
+msgstr "Támogatás"
 
 #: ../src/verbs.cpp:2925
-#, fuzzy
 msgid "Donate to Inkscape"
-msgstr "Az Inkscape _névjegye"
+msgstr "Az Inkscape támogatása"
 
 #: ../src/verbs.cpp:2926 ../src/verbs.cpp:2927
 msgid "SVG 1.1 Specification"
@@ -35264,11 +35262,11 @@ msgstr "Képernyő SD"
 
 #: ../share/ui/inkscape-start.glade:500
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../share/ui/inkscape-start.glade:508
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../share/ui/inkscape-start.glade:516
 msgid "Mobile-smallest"
@@ -35276,7 +35274,7 @@ msgstr "Mobil, legkisebb"
 
 #: ../share/ui/inkscape-start.glade:524
 msgid "iPad Pro"
-msgstr ""
+msgstr "iPad Pro"
 
 #: ../share/ui/inkscape-start.glade:532
 msgid "Tablet-smallest"
@@ -36199,28 +36197,24 @@ msgid "Please enter a replacement font in the replace all box."
 msgstr "Adjon megy egy helyettesítő betűkészletet az összes csere dobozban."
 
 #: ../share/extensions/setup_typography_canvas.py:67
-#, fuzzy
 msgid "baseline"
-msgstr "szövegalapvonal"
+msgstr "alapvonal"
 
 #: ../share/extensions/setup_typography_canvas.py:68
-#, fuzzy
 msgid "ascender"
-msgstr "Felnyúló szár:"
+msgstr "felnyúló szár"
 
 #: ../share/extensions/setup_typography_canvas.py:69
 msgid "caps"
-msgstr ""
+msgstr "vonalvég"
 
 #: ../share/extensions/setup_typography_canvas.py:70
-#, fuzzy
 msgid "xheight"
 msgstr "x-magasság"
 
 #: ../share/extensions/setup_typography_canvas.py:71
-#, fuzzy
 msgid "descender"
-msgstr "Lenyúló szár:"
+msgstr "lenyúló szár"
 
 #: ../share/extensions/voronoi2svg.py:153
 msgid "Please select objects!"
@@ -41124,28 +41118,33 @@ msgid "Duplicate the pattern before deformation"
 msgstr "A minta duplázása az alakváltoztatás előtt"
 
 #: ../share/extensions/pathalongpath.inx:25
-#, fuzzy
 msgid ""
 "This extension bends a pattern along the curvature of selected path objects."
-msgstr "Ennek a kiterjesztésnek két kijelölt objektumra van szüksége."
+msgstr ""
+"A kiterjesztés egy mintát hajlít a kijelölt útvonalobjektumok görbülete"
+" mentén."
 
 #: ../share/extensions/pathalongpath.inx:26
-#, fuzzy
 msgid ""
 "There must only be a single pattern object. The pattern object must be the "
 "topmost object in the selection. For the pattern, groups of paths, shapes or "
 "clones are allowed. Text must be converted to path before using it as a "
 "pattern."
 msgstr ""
-"Ez az effektus szétszór egy mintát tetszőleges, vázként használt útvonalak "
-"mentén. A mintának a kijelölés legfelső objektumának kell lennie. Útvonalak, "
-"alakzatok és klónok csoportjai is használhatók."
+"Csak egyetlen mintaobjektum lehet. A mintaobjektum kell a legfelső legyen a "
+"kijelölésben. A mintához útvonalcsoportok, alakzatok vagy klónok is "
+"használhatók. A szöveget át kell alakítani útvonallá mintaként való"
+" használatához."
 
 #: ../share/extensions/pathalongpath.inx:27
 msgid ""
 "The pattern can be bent along multiple paths at once, the only condition is "
 "that these must be path objects, no other object types are allowed."
 msgstr ""
+"A mintát egyszerre több útvonal mentén is meg lehet hajlítani, az egyetlen"
+" feltétel az, hogy "
+"hogy ezeknek útvonalobjektumoknak kell lenniük, más objektumtípusok nem"
+" engedélyezettek."
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
@@ -41153,12 +41152,17 @@ msgid ""
 "will rotate along with the path direction. With \"Ribbon\", the pattern will "
 "stay upright, so the result will look like a printed ribbon."
 msgstr ""
+"Két különböző deformációs mód létezik. A „kígyó” azt jelenti, hogy a minta "
+"az útvonal irányával együtt forog. A „szalag” módban a minta függőleges "
+"marad, így az eredmény úgy néz ki, mint egy nyomtatott szalag."
 
 #: ../share/extensions/pathalongpath.inx:30
 msgid ""
 "The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
 "applying it to the path."
 msgstr ""
+"„A minta függőleges” opció 90 fokkal elforgatja a mintát az útvonalra való"
+" alkalmazása előtt."
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
@@ -41167,6 +41171,14 @@ msgid ""
 "add any new nodes to your pattern objects. To avoid this, either add more "
 "nodes to your pattern objects, or convert all segments to curves beforehand."
 msgstr ""
+"Ha az útvonal éles kanyarokat tartalmaz, amelyeket a mintának követnie kell,"
+" akkor a "
+"az eredmény valószínű nem az elvárt lesz. Ez azért van, mert a kiterjesztés"
+" nem tud "
+"új csomópontokat hozzáadni a mintaobjektumokhoz. Ennek elkerülése érdekében"
+" vagy adjon hozzá több "
+"csomópontot a mintaobjektumokhoz, vagy előzetesen alakítson át minden"
+" szegmenst görbévé."
 
 #: ../share/extensions/pathscatter.inx:8
 msgid "Follow path orientation"
@@ -41177,9 +41189,8 @@ msgid "Stretch spaces to fit skeleton length"
 msgstr "Üres helyek nyújtása, hogy illeszkedjen a váz hosszához"
 
 #: ../share/extensions/pathscatter.inx:13
-#, fuzzy
 msgid "Rotate pattern 90° clockwise"
-msgstr "A kijelölés elforgatása az óramutató járásának irányában 90 fokkal"
+msgstr "Minta elforgatása az óramutató járásának irányában 90 fokkal"
 
 #: ../share/extensions/pathscatter.inx:14
 msgid "Original pattern will be:"
@@ -41190,9 +41201,8 @@ msgid "Moved"
 msgstr "Áthelyeződik"
 
 #: ../share/extensions/pathscatter.inx:16
-#, fuzzy
 msgid "Duplicated"
-msgstr "Kettőzés"
+msgstr "Duplikált"
 
 #: ../share/extensions/pathscatter.inx:17
 msgid "Cloned"
@@ -41204,7 +41214,7 @@ msgstr "Ha a minta csoport, vegye fel a csoportelemeket"
 
 #: ../share/extensions/pathscatter.inx:19
 msgid "Only for options 'moved' and 'duplicated'"
-msgstr ""
+msgstr "Csak az „áthelyezett” és a „duplikált” beállítások esetében."
 
 #: ../share/extensions/pathscatter.inx:20
 msgid "Pick group members:"
@@ -41227,6 +41237,16 @@ msgid ""
 "objects (alternating or randomly) on the path, if you select the option for "
 "picking group members."
 msgstr ""
+"Ez a kiterjesztés egy vagy több útvonal mentén helyezi el egy mintaobjektum"
+" deformálás "
+"nélküli másolatait. A mintaobjektumnak egyetlen útvonalnak vagy útvonal-,"
+" alakzat-, ill. "
+"klóncsoportnak kell lennie. A kijelölés legfelső objektumának kell lennie."
+" Minden további "
+"kijelölt objektum útvonal kell legyen. Különböző objektumokat (váltakozva"
+" vagy "
+"véletlenszerűen) is el lehet helyezni az útvonalon, ha kiválasztja a"
+" csoporttagok kiszemelését."
 
 #: ../share/extensions/pdflatex.inx:3
 msgid "LaTeX (pdflatex)"
