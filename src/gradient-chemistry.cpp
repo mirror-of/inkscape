@@ -32,7 +32,6 @@
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 #include "selection.h"
-#include "verbs.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"

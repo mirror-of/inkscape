@@ -108,18 +108,39 @@ select_none(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectNone(dt);
 }
 
+void
+select_next(InkscapeWindow* win)
+{
+    SPDesktop* dt = win->get_desktop();
+
+    // Select next
+    Inkscape::SelectionHelper::selectNext(dt);
+}
+
+void
+select_previous(InkscapeWindow* win)
+{
+    SPDesktop* dt = win->get_desktop();
+
+    // Select previous
+    Inkscape::SelectionHelper::selectPrev(dt);
+}
+
 std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
 {
     // clang-format off
-    {"win.select-all",                          N_("Select All"),                   "Selection",        N_("Select all objects or all nodes")},
-    {"win.select-all-layers",                   N_("Select All in All Layers"),     "Selection",        N_("Select all objects in all visible and unlocked layers")},
-    {"win.select-same-fill-and-stroke",         N_("Fill and Stroke"),              "Selection",        N_("Select all objects with the same fill and stroke as the selected objects")},
-    {"win.select-same-fill",                    N_("Fill Color"),                   "Selection",        N_("Select all objects with the same fill as the selected objects")},
-    {"win.select-same-stroke-color",            N_("Stroke Color"),                 "Selection",        N_("Select all objects with the same stroke as the selected objects")},
-    {"win.select-same-stroke-style",            N_("Stroke Style"),                 "Selection",        N_("Select all objects with the same stroke style (width, dash, markers) as the selected objects")},
-    {"win.select-same-object-type",             N_("Object Type"),                  "Selection",        N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
-    {"win.select-invert",                       N_("Invert Selection"),             "Selection",        N_("Invert selection (unselect what is selected and select everything else)")},
-    {"win.select-none",                         N_("Deselect"),                     "Selection",        N_("Deselect any selected objects or nodes")},
+    {"win.select-all",                          N_("Select All"),                   "Select",        N_("Select all objects or all nodes")},
+    {"win.select-all-layers",                   N_("Select All in All Layers"),     "Select",        N_("Select all objects in all visible and unlocked layers")},
+    {"win.select-same-fill-and-stroke",         N_("Fill and Stroke"),              "Select",        N_("Select all objects with the same fill and stroke as the selected objects")},
+    {"win.select-same-fill",                    N_("Fill Color"),                   "Select",        N_("Select all objects with the same fill as the selected objects")},
+    {"win.select-same-stroke-color",            N_("Stroke Color"),                 "Select",        N_("Select all objects with the same stroke as the selected objects")},
+    {"win.select-same-stroke-style",            N_("Stroke Style"),                 "Select",        N_("Select all objects with the same stroke style (width, dash, markers) as the selected objects")},
+    {"win.select-same-object-type",             N_("Object Type"),                  "Select",        N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
+    {"win.select-invert",                       N_("Invert Selection"),             "Select",        N_("Invert selection (unselect what is selected and select everything else)")},
+    {"win.select-none",                         N_("Deselect"),                     "Select",        N_("Deselect any selected objects or nodes")},
+    {"win.select-next",                         N_("Select Next"),                  "Select",        N_("Select next object in stack")},
+    {"win.select-previous",                     N_("Select Previous"),              "Select",        N_("Select previous object in stack")},
+
     // clang-format on
 };
 
@@ -136,6 +157,8 @@ add_actions_select_window(InkscapeWindow* win)
     win->add_action( "select-same-object-type",         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_same_object_type), win));
     win->add_action( "select-invert",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_invert), win));
     win->add_action( "select-none",                     sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_none), win));
+    win->add_action( "select-next",                     sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_next), win));
+    win->add_action( "select-previous",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_previous), win));
     // clang-format on
 
     auto app = InkscapeApplication::instance();

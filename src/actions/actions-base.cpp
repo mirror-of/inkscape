@@ -22,8 +22,6 @@
 #include "inkscape.h"             // Inkscape::Application
 #include "inkscape-version-info.h"// Inkscape version
 #include "path-prefix.h"          // Extension directory
-#include "extension/init.h"       // List verbs
-#include "verbs.h"                // List verbs
 #include "selection.h"            // Selection
 #include "object/sp-root.h"       // query_all()
 #include "file.h"                 // dpi convert method
@@ -51,16 +49,6 @@ void
 print_user_data_directory()
 {
     std::cout << Inkscape::IO::Resource::profile_path("") << std::endl;
-}
-
-void
-print_verb_list()
-{
-    // This really shouldn't go here, we should init the app.
-    // But, since we're just exiting in this path, there is
-    // no harm, and this is really a better place to put
-    // everything else.
-    Inkscape::Verb::list();       // verbs.h
 }
 
 // Helper function for query_x(), query_y(), query_width(), and query_height().
@@ -186,26 +174,6 @@ no_convert_baseline()
     sp_no_convert_text_baseline_spacing = true;
 }
 
-// Temporary: Verbs are to be replaced by Gio::Actions!
-void
-verbs(Glib::ustring verblist, InkscapeApplication* app)
-{
-    auto tokens = Glib::Regex::split_simple("\\s*;\\s*", verblist);
-    for (auto token : tokens) {
-        std::vector<Glib::ustring> parts = Glib::Regex::split_simple("\\s*:\\s*", token); // Second part is always ignored... we could implement it but better to switch to Gio::Actions
-        if (!parts.empty() && !parts[0].empty()) {
-            Inkscape::Verb* verb = Inkscape::Verb::getbyid(parts[0].c_str());
-            if (verb == nullptr) {
-                std::cerr << "verbs_action: Invalid verb: " << parts[0] << std::endl;
-                break;
-            }
-            // Inkscape::ActionContext context = INKSCAPE.action_context_for_document(*document);
-            SPAction* action = verb->get_action(INKSCAPE.active_action_context());
-            sp_action_perform(action, nullptr);  // Data is ignored!
-        }
-    }
-}
-
 void
 vacuum_defs(InkscapeApplication* app)
 {
@@ -225,8 +193,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_base =
     {"app.system-data-directory",     N_("System Directory"),        "Base",       N_("Print system data directory and exit")              },
     {"app.user-data-directory",       N_("User Directory"),          "Base",       N_("Print user data directory and exit")                },
     {"app.action-list",               N_("List Actions"),            "Base",       N_("Print a list of actions and exit")                  },
-    {"app.verb-list",                 N_("List Verbs"),              "Base",       N_("Print a list of verbs and exit")                    },
-    {"app.verb",                      N_("Execute Verb"),            "Base",       N_("Execute verb(s)")                                   },
     {"app.vacuum-defs",               N_("Clean up Document"),       "Base",       N_("Remove unused definitions (gradients, etc.)")       },
     {"app.quit",                      N_("Quit"),                    "Base",       N_("Immediately quit Inkscape")                         },
 
@@ -254,8 +220,6 @@ add_actions_base(InkscapeApplication* app)
     gapp->add_action(               "system-data-directory",                               sigc::ptr_fun(&print_system_data_directory)            );
     gapp->add_action(               "user-data-directory",                                 sigc::ptr_fun(&print_user_data_directory)              );
     gapp->add_action(               "action-list",        sigc::mem_fun(app, &InkscapeApplication::print_action_list)                             );
-    gapp->add_action(               "verb-list",                                           sigc::ptr_fun(&print_verb_list)                        );
-    gapp->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
     gapp->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
     gapp->add_action(               "quit",               sigc::mem_fun(app, &InkscapeApplication::on_quit)                                       );
 

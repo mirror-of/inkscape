@@ -2330,7 +2330,7 @@ void ObjectSet::rotateScreen(double angle)
                             _("Rotate by pixels"), INKSCAPE_ICON("tool-pointer"));
 }
 
-void ObjectSet::scale(double grow)
+void ObjectSet::scaleGrow(double grow)
 {
     if (isEmpty())
         return;
@@ -2353,8 +2353,8 @@ void ObjectSet::scale(double grow)
 
     if (document()) {
             DocumentUndo::maybeDone(document(),
-                                    ( (grow > 0) ? "selector:scale:larger" : "selector:scale:smaller" ),
-                                    _("Scale"), INKSCAPE_ICON("tool-pointer"));
+                                    ((grow > 0) ? "selector:grow:larger" : "selector:grow:smaller" ),
+                                    ((grow > 0) ? _("Grow") : _("Shrink")), INKSCAPE_ICON("tool-pointer"));
     }
 }
 
@@ -2362,10 +2362,10 @@ void ObjectSet::scaleScreen(double grow_pixels)
 {
     if(!desktop())
         return;
-    scale(grow_pixels / desktop()->current_zoom());
+    scaleGrow(grow_pixels / desktop()->current_zoom());
 }
 
-void ObjectSet::scaleTimes(double times)
+void ObjectSet::scale(double times)
 {
     if (isEmpty())
         return;

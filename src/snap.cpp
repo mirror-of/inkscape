@@ -157,11 +157,6 @@ Inkscape::SnappedPoint SnapManager::freeSnap(Inkscape::SnapCandidatePoint const 
     IntermSnapResults isr;
     SnapperList const snappers = getSnappers();
 
-    if (p.getSourceNum() <= 0){
-        Geom::Rect const local_bbox_to_snap = bbox_to_snap ? *bbox_to_snap : Geom::Rect(p.getPoint(), p.getPoint());
-        _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
-    }
-
     for (auto snapper : snappers) {
         snapper->freeSnap(isr, p, bbox_to_snap, &_objects_to_ignore, _unselected_nodes);
     }
@@ -282,12 +277,6 @@ Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::SnapCandidatePoint
             return result;
         }
         return no_snap;
-    }
-
-    // this makes sure that _findCandidates populates the respective vectors for a snapper.
-    if (p.getSourceNum() <= 0){
-        Geom::Rect const local_bbox_to_snap = bbox_to_snap ? *bbox_to_snap : Geom::Rect(p.getPoint(), p.getPoint());
-        _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, p.getSourceNum() <= 0, local_bbox_to_snap, false, Geom::identity());
     }
 
     IntermSnapResults isr;
@@ -440,9 +429,6 @@ void SnapManager::guideFreeSnap(Geom::Point &p, Geom::Point &origin_or_vector, b
         candidate.addVector(Geom::rot90(origin_or_vector));
     }
 
-    // collect candidates
-    _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, true, Geom::Rect(p, p), false, Geom::identity());
-
     IntermSnapResults isr;
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
@@ -471,9 +457,6 @@ void SnapManager::guideConstrainedSnap(Geom::Point &p, SPGuide const &guideline)
 
     IntermSnapResults isr;
     Inkscape::Snapper::SnapConstraint cl(guideline.getPoint(), Geom::rot90(guideline.getNormal()));
-
-    // collect candidates
-    _findCandidates(getDocument()->getRoot(), &_objects_to_ignore, true, Geom::Rect(p, p), false, Geom::identity());
 
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {

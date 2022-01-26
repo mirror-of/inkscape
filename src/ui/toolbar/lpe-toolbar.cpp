@@ -30,8 +30,6 @@
 #include <gtkmm/radiotoolbutton.h>
 #include <gtkmm/separatortoolitem.h>
 
-#include "verbs.h"
-
 #include "live_effects/lpe-line_segment.h"
 
 #include "helper/action-context.h"

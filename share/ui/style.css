@@ -692,3 +692,7 @@ button.square-button image {
 #DialogMenuButton:hover {
     opacity: 1;
 }
+
+#DesktopStatusBar {
+    margin-right: 1em;
+}
