@@ -259,6 +259,14 @@ public:
     std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element, bool custom = false) const;
     std::vector<SPObject *> getObjectsBySelector(Glib::ustring const &selector) const;
 
+    /**
+     * @brief Set the reference document object.
+     * Use this function to extend functionality of getObjectById() - it will search in reference document.
+     * This is useful when rendering objects that have been copied from this document into a sandbox document.
+     * Setting reference will allow sandbox document to find gradients, or linked objects that may have been
+     * referenced by copied object.
+     * @param document 
+     */
     void set_reference_document(SPDocument* document);
 
     // Find items by geometry --------------------
