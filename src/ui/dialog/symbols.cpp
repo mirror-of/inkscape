@@ -1217,10 +1217,13 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
 
   // Replace old "the_symbol" in preview_document by new.
   Inkscape::XML::Node *root = preview_document->getReprRoot();
+
+  preview_document->set_reference_document(nullptr);
   SPObject *symbol_old = preview_document->getObjectById("the_symbol");
   if (symbol_old) {
       symbol_old->deleteObject(false);
   }
+  preview_document->set_reference_document(getDocument());
 
   // First look for default style stored in <symbol>
   gchar const* style = repr->attribute("inkscape:symbol-style");
@@ -1233,8 +1236,6 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
       style = symbol->document->getReprRoot()->attribute("style");
     }
   }
-  // Last ditch effort to provide some default styling
-  if( !style ) style = "fill:#bbbbbb;stroke:#808080";
 
   // This is for display in Symbols dialog only
   if( style ) repr->setAttribute( "style", style );

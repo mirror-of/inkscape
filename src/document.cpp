@@ -1275,6 +1275,14 @@ std::vector<Glib::ustring> SPDocument::getLanguages() const
     return document_languages;
 }
 
+SPDocument *SPDocument::getParent()
+{
+    if (_parent_document)
+        return _parent_document;
+
+    return _ref_document;
+}
+
 /* Object modification root handler */
 
 void SPDocument::requestModified()

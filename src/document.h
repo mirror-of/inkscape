@@ -200,8 +200,7 @@ public:
 
     std::vector<Glib::ustring> getLanguages() const;
 
-    SPDocument *getParent() { return _parent_document; }
-    SPDocument const *getParent() const { return _parent_document; }
+    SPDocument *getParent();
 
     // Styling
     CRCascade    *getStyleCascade() { return style_cascade; }
