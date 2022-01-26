@@ -91,13 +91,6 @@ See default.xml for more information.
   <bind gaction="win.paste-in-place"  keys="&lt;primary&gt;&lt;shift&gt;b" />
   <bind gaction="win.select-none"     keys="&lt;primary&gt;&lt;shift&gt;a" />
 
-  <!-- Swap fill and stroke -->
-  <bind key="x" modifiers="Shift" action="EditSwapFillStroke" display="true" />
-  
-  <!-- Raising and Lowering Selections -->
-  <bind key="bracketright" modifiers="Primary,Alt" action="EditSelectNext" display="true" />
-  <bind key="bracketleft" modifiers="Primary,Alt" action="EditSelectPrev" display="true" />
-
   <bind gaction="app.selection-top"     keys="&lt;primary&gt;&lt;shift&gt;bracketright" />
   <bind gaction="app.selection-bottom"  keys="&lt;primary&gt;&lt;shift&gt;bracketleft" />
 

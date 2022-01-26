@@ -15,8 +15,6 @@
 
 #include "desktop.h"
 
-#include "helper/action.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {

@@ -29,7 +29,7 @@
 #include "file.h"                   // sp_file_convert_dpi
 #include "inkscape.h"               // Inkscape::Application
 #include "path-prefix.h"            // Data directory
-#include "verbs.h"                  // TEMP list verbs
+#include "helper/action-context.h"  // TEMP
 
 #include "include/glibmm_version.h"
 
@@ -710,15 +710,10 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "actions",                'a', N_("List of actions (with optional arguments) to execute"),     N_("ACTION(:ARG)[;ACTION(:ARG)]*"));
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "action-list",           '\0', N_("List all available actions"),                                               "");
 
-    // Verbs
-    _start_main_option_section();
-    gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "verb",                  '\0', N_("List of verbs to execute"),                                 N_("VERB[;VERB]*"));
-    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "verb-list",             '\0', N_("List all available verbs"),                                                 "");
-
     // Interface
     _start_main_option_section(_("Interface"));
-    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",               'g', N_("With graphical user interface (required by some actions/verbs)"),           "");
-    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",         '\0', N_("Close GUI after executing all actions/verbs"),"");
+    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",               'g', N_("With graphical user interface (required by some actions)"),                 "");
+    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",         '\0', N_("Close GUI after executing all actions"),                                    "");
     _start_main_option_section();
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",                 '\0', N_("Start Inkscape in interactive shell mode"),                                 "");
 
@@ -756,14 +751,6 @@ InkscapeApplication::on_startup2()
     // build_menu(); // Builds and adds menu to app. Used by all Inkscape windows. This can be done
                      // before all actions defined. * For the moment done by each window so we can add
                      // window action info to menu_label_to_tooltip map.
-
-    // Shortcuts
-    // For verbs, shortcuts need to be setup before GUI elements are created! After verbs are gone,
-    // this can be removed. Initialization will then happen on first call to Shortcuts::getInstance()
-    // in Inkscape::Window constructor which will allow verification that actions exist
-    // before shortcuts are added.
-    // Shortcuts for actions can be set before the actions are created.
-    Inkscape::Shortcuts::getInstance().init();
 }
 
 /** Create a window given a document. This is used internally in InkscapeApplication.
@@ -1132,12 +1119,6 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
                 // Stateless (i.e. no value).
                 action_vector.push_back( std::make_pair( action, Glib::VariantBase() ) );
             }
-        } else {
-            // Assume a verb
-            // std::cerr << "InkscapeApplication::parse_actions: '"
-            //           << action << "' is not a valid action! Assuming verb!" << std::endl;
-            action_vector.push_back(
-                std::make_pair("verb", Glib::Variant<Glib::ustring>::create(action)));
         }
     }
 }
@@ -1204,9 +1185,9 @@ InkscapeApplication::shell()
     std::cout << "Inkscape interactive shell mode. Type 'action-list' to list all actions. "
               << "Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
-    std::cout << " action1:arg1; action2:arg2; verb1; verb2; ..." << std::endl;
+    std::cout << " action1:arg1; action2:arg2; ..." << std::endl;
     if (!_with_gui) {
-        std::cout << "Only verbs that don't require a desktop may be used." << std::endl;
+        std::cout << "Only actions that don't require a desktop may be used." << std::endl;
     }
 
 #ifdef WITH_GNU_READLINE
@@ -1341,11 +1322,6 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         return EXIT_SUCCESS;
     }
 
-    if (options->contains("verb-list")) {
-        Inkscape::Verb::list();
-        return EXIT_SUCCESS;
-    }
-
     // Can't do this until after app is registered!
     // if (options->contains("action-list")) {
     //     print_action_list();
@@ -1399,7 +1375,6 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         options->contains("select")                ||
         options->contains("action-list")           ||
         options->contains("actions")               ||
-        options->contains("verb")                  ||
         options->contains("shell")
         ) {
         _with_gui = false;
@@ -1492,8 +1467,6 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
     // =================== PROCESS =====================
 
-    // Note: this won't work with --verb="FileSave,FileClose" unless some additional verb changes the file. FIXME
-    // One can use --verb="FileVacuum,FileSave,FileClose".
     if (options->contains("vacuum-defs"))  _command_line_actions.push_back(std::make_pair("vacuum-defs", base));
 
     if (options->contains("select")) {
@@ -1504,16 +1477,6 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
                 std::make_pair("select", Glib::Variant<Glib::ustring>::create(select)));
         }
     }
-
-    if (options->contains("verb")) {
-        Glib::ustring verb;
-        options->lookup_value("verb", verb);
-        if (!verb.empty()) {
-            _command_line_actions.push_back(
-                std::make_pair("verb", Glib::Variant<Glib::ustring>::create(verb)));
-        }
-    }
-
 
     // ==================== EXPORT =====================
     if (options->contains("export-filename")) {

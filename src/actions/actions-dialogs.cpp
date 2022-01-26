@@ -58,6 +58,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_dialogs =
     {"win.dialog-open('Transform')",          N_("Open Transform"),            "Dialog",  N_("Precisely control objects' transformations")                                             },
     {"win.dialog-open('UndoHistory')",        N_("Open UndoHistory"),          "Dialog",  N_("Undo History")                                                                           },
     {"win.dialog-open('XMLEditor')",          N_("Open XMLEditor"),            "Dialog",  N_("View and edit the XML tree of the document")                                             },
+    {"app.preferences",                       N_("Open Preferences"),          "Dialog",  N_("Edit global Inkscape preferences")                                                       },
 #if WITH_GSPELL
     {"win.dialog-open('Spellcheck')",         N_("Open Spellcheck"),           "Dialog",  N_("Check spelling of text in document")                                                     },
 #endif

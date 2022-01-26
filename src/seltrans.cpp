@@ -44,7 +44,6 @@
 #include "live_effects/effect-enum.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpe-bool.h"
-#include "helper/action.h"
 
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"

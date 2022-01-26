@@ -51,9 +51,6 @@
 #include "display/control/canvas-item-rect.h"
 #include "display/control/canvas-item-rotate.h"
 
-#include "helper/action-context.h"
-#include "helper/action.h" //sp_action_perform
-
 #include "io/fix-broken-links.h"
 
 #include "object/sp-namedview.h"

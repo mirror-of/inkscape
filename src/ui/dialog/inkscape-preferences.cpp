@@ -44,7 +44,6 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "style.h"
-#include "verbs.h"
 
 #include "display/control/canvas-grid.h"
 #include "display/nr-filter-gaussian.h"
@@ -3023,22 +3022,13 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
         (new_shortcut_key.get_key() != current_shortcut_key.get_key() ||
          new_shortcut_key.get_mod() != current_shortcut_key.get_mod())
         ) {
-        // check if there is currently a verb assigned to this shortcut; if yes ask if the shortcut should be reassigned
+        // Check if there is currently an actions assigned to this shortcut; if yes ask if the shortcut should be reassigned
         Glib::ustring action_name;
-        Inkscape::Verb *current_verb = shortcuts.get_verb_from_shortcut(new_shortcut_key);
-        if (current_verb) {
-            action_name = _(current_verb->get_name());
-            Glib::ustring::size_type pos = 0;
-            while ((pos = action_name.find('_', pos)) != action_name.npos) { // strip mnemonics
-                action_name.erase(pos, 1);
-            }
-        } else {
-            Glib::ustring accel = Gtk::AccelGroup::name(accel_key, accel_mods);
-            auto *app = InkscapeApplication::instance()->gtk_app();
-            std::vector<Glib::ustring> actions = app->get_actions_for_accel(accel);
-            if (!actions.empty()) {
-                action_name = actions[0];
-            }
+        Glib::ustring accel = Gtk::AccelGroup::name(accel_key, accel_mods);
+        auto *app = InkscapeApplication::instance()->gtk_app();
+        std::vector<Glib::ustring> actions = app->get_actions_for_accel(accel);
+        if (!actions.empty()) {
+            action_name = actions[0];
         }
 
         if (!action_name.empty()) {
@@ -3200,83 +3190,6 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     _kb_store->clear();
     _mod_store->clear();
 
-    std::vector<Verb *>verbs = Inkscape::Verb::getList();
-
-    for (auto verb : verbs) {
-
-        if (!verb) {
-            continue;
-        }
-        if (!verb->get_name()){
-            continue;
-        }
-
-        Gtk::TreeStore::Path path;
-        if (_kb_store->iter_is_valid(_kb_store->get_iter("0"))) {
-            path = _kb_store->get_path(_kb_store->get_iter("0"));
-        }
-
-        // Find this group in the tree
-        Glib::ustring group = verb->get_group() ? _(verb->get_group()) : _("Misc");
-        Glib::ustring verb_id = verb->get_id();
-        if (verb_id .compare(0,26,"org.inkscape.effect.filter") == 0) {
-            group = _("Filters");
-        }
-        Gtk::TreeStore::iterator iter_group;
-        bool found = false;
-        while (path) {
-            iter_group = _kb_store->get_iter(path);
-            if (!_kb_store->iter_is_valid(iter_group)) {
-                break;
-            }
-            Glib::ustring name = (*iter_group)[_kb_columns.name];
-            if ((*iter_group)[_kb_columns.name] == group) {
-                found = true;
-                break;
-            }
-            path.next();
-        }
-
-        if (!found) {
-            // Add the group if not there
-            iter_group = _kb_store->append();
-            (*iter_group)[_kb_columns.name] = group;
-            (*iter_group)[_kb_columns.shortcut] = "";
-            (*iter_group)[_kb_columns.id] = "";
-            (*iter_group)[_kb_columns.description] = "";
-            (*iter_group)[_kb_columns.shortcutkey] = Gtk::AccelKey();
-            (*iter_group)[_kb_columns.user_set] = 0;
-        }
-
-        // Remove the key accelerators from the verb name
-        Glib::ustring name = _(verb->get_name());
-        std::string::size_type k = 0;
-        while((k=name.find('_',k))!=name.npos) {
-            name.erase(k, 1);
-        }
-
-        // Get the shortcut label
-        Gtk::AccelKey shortcut_key = shortcuts.get_shortcut_from_verb(verb);
-        Glib::ustring shortcut_label = "";
-        if (!shortcut_key.is_null()) {
-            shortcut_label = Glib::Markup::escape_text(shortcuts.get_label(shortcut_key));
-        }
-        // Add the verb to the group
-        Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
-        (*row)[_kb_columns.name] =  name;
-        (*row)[_kb_columns.shortcut] = shortcut_label;
-        (*row)[_kb_columns.description] = (verb->get_short_tip() && strlen(verb->get_short_tip() )) ? _(verb->get_short_tip()) : "";
-        (*row)[_kb_columns.shortcutkey] = shortcut_key;
-        (*row)[_kb_columns.id] = verb->get_id();
-        (*row)[_kb_columns.user_set] = shortcuts.is_user_set(shortcut_key);
-
-        if (selected_id == verb->get_id()) {
-            Gtk::TreeStore::Path sel_path = _kb_filter->convert_child_path_to_path(_kb_store->get_path(row));
-            _kb_tree.expand_to_path(sel_path);
-            _kb_tree.get_selection()->select(sel_path);
-        }
-    }
-
     // Gio::Actions
 
     auto iapp = InkscapeApplication::instance();
@@ -3305,8 +3218,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (section.empty()) section = "Misc";
         if (section != old_section) {
             iter_group = _kb_store->append();
-            Glib::ustring name = Glib::ustring::compose("%1: %2", _("Actions"), section);
-            (*iter_group)[_kb_columns.name] = name;
+            (*iter_group)[_kb_columns.name] = section;
             (*iter_group)[_kb_columns.shortcut] = "";
             (*iter_group)[_kb_columns.description] = "";
             (*iter_group)[_kb_columns.shortcutkey] = Gtk::AccelKey();

@@ -80,7 +80,6 @@ set(inkscape_SRC
   transf_mat_3x4.cpp
   unicoderange.cpp
   vanishing-point.cpp
-  verbs.cpp
   version.cpp
 
   # -------
@@ -183,7 +182,6 @@ set(inkscape_SRC
   undo-stack-observer.h
   unicoderange.h
   vanishing-point.h
-  verbs.h
   version.h
 
   # TEMP  Need to detangle inkscape-view from ui/interface.cpp

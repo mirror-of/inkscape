@@ -31,8 +31,6 @@
 #include "preferences.h"
 #include "shortcuts.h"
 
-#include "helper/action.h"
-
 #include "io/sys.h"
 
 #include "object/sp-namedview.h"

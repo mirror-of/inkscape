@@ -30,7 +30,6 @@
 #include "actions/actions-tools.h"
 #include "display/control/canvas-grid.h"
 #include "document-properties.h"
-#include "helper/action.h"
 #include "include/gtkmm_version.h"
 #include "io/sys.h"
 #include "object/sp-root.h"

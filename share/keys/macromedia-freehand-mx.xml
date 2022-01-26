@@ -164,8 +164,6 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="win.select-all-layers" keys="&lt;ctrl&gt;&lt;shift&gt;a, &lt;ctrl&gt;&lt;shift&gt;A" />
 
   <bind gaction="win.select-invert" />
-  <bind action="EditInvertInAllLayers" />
-  <bind action="EditClearAll" /> 
 
 <!-- Objects/selection -->
 
@@ -190,8 +188,6 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="app.object-rotate-90-cw" />
   <bind gaction="app.object-rotate-90-ccw" />
 
-  <bind action="ObjectRemoveTransform" /> 
-
 <!-- Path -->
 
   <bind gaction="app.object-to-path"                    keys="&lt;ctrl&gt;&lt;shift&gt;c, &lt;ctrl&gt;&lt;shift&gt;C" />
@@ -210,20 +206,6 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind gaction="win.path-offset-linked"         keys="&lt;ctrl&gt;&lt;alt&gt;j, &lt;ctrl&gt;&lt;alt&gt;J" />
   <bind gaction="app.path-simplify"              keys="&lt;ctrl&gt;l, &lt;ctrl&gt;L" />
   <bind gaction="win.path-reverse" />
-
-  <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true"/>
-  <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
-
-  <bind key="parenright" modifiers="Alt,Shift" action="SelectionOffsetScreen10" display="true"/>
-  <bind key="0" modifiers="Alt,Shift" action="SelectionOffsetScreen10" />
-
-
-  <bind key="parenleft" modifiers="Alt" action="SelectionInsetScreen" display="true"/>
-  <bind key="9" modifiers="Alt" action="SelectionInsetScreen" />
-
-  <bind key="parenleft" modifiers="Alt,Shift" action="SelectionInsetScreen10" display="true"/>
-  <bind key="9" modifiers="Alt,Shift" action="SelectionInsetScreen10" />
-
 
 <!-- Text -->
 
@@ -282,11 +264,6 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
 
   <!-- Swatches in Freehand is a sub-tab of the Assets Panel.  -->
   <bind gaction="win.dialog-open('Swatches')"           keys="&lt;ctrl&gt;F9" />
-
-  <bind action="DialogClonetiler" />
-  <!-- <bind action="DialogArrange" /> -->
-  <bind action="DialogDebug" />
-  <bind action="DialogInput" />
 
   <!-- DialogsToggle (Hide Panels), see above in the View menu section -->
 

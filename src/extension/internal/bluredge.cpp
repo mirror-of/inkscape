@@ -20,8 +20,6 @@
 #include "document.h"
 #include "selection.h"
 
-#include "helper/action.h"
-#include "helper/action-context.h"
 #include "preferences.h"
 #include "path-chemistry.h"
 #include "object/sp-item.h"

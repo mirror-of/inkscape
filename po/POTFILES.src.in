@@ -404,7 +404,6 @@
 ../src/util/enums.h
 ../src/util/paper.cpp
 ../src/vanishing-point.cpp
-../src/verbs.cpp
 ../src/widgets/desktop-widget.cpp
 ../src/widgets/ege-paint-def.cpp
 ../src/widgets/sp-attribute-widget.cpp

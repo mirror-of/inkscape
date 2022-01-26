@@ -43,7 +43,6 @@
 #include "actions/actions-tools.h" // Invoke gradient tool
 #include "display/cairo-utils.h"
 #include "extension/db.h"
-#include "helper/action.h"
 #include "io/resource.h"
 #include "io/sys.h"
 #include "object/sp-defs.h"

@@ -24,7 +24,6 @@
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
 
-#include "helper/action.h"
 #include "ui/icon-loader.h"
 
 #include "live_effects/effect.h"

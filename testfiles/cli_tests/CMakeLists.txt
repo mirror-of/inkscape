@@ -531,7 +531,6 @@ add_cli_test(query-height  PARAMETERS --query-id=rect2 --query-height INPUT_FILE
 
 # --action-list / --verb-list
 add_cli_test(action-list   PARAMETERS --action-list PASS_FOR_OUTPUT "file-new")
-add_cli_test(verb-list     PARAMETERS --verb-list   PASS_FOR_OUTPUT "FileNew:")
 
 # --with-gui
 

@@ -28,7 +28,6 @@
 #include "actions/actions-effect-data.h"
 #include "actions/actions-extra-data.h"
 #include "actions/actions-hint-data.h"
-#include "helper/action.h"
 #include "io/file-export-cmd.h"   // File export (non-verb)
 
 typedef std::vector<std::pair<std::string, Glib::VariantBase> > action_vector_t;

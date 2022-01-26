@@ -16,7 +16,6 @@
 #include "inkscape.h"
 #include "timer.h"
 
-#include "helper/action.h"
 #include "implementation/implementation.h"
 #include "prefdialog/prefdialog.h"
 #include "ui/view/view.h"

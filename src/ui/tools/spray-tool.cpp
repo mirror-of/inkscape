@@ -51,8 +51,6 @@
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-drawing.h"
 
-#include "helper/action.h"
-
 #include "object/box3d.h"
 #include "object/sp-use.h"
 #include "object/sp-item-transform.h"

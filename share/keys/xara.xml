@@ -192,18 +192,6 @@ Hom/end keys-select minimum or maximum feather values
   <bind gaction="app.path-simplify" />
   <bind gaction="win.path-reverse" />
 
-  <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true"/>
-  <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
-
-  <bind key="parenright" modifiers="Alt,Shift" action="SelectionOffsetScreen10" display="true"/>
-  <bind key="0" modifiers="Alt,Shift" action="SelectionOffsetScreen10" />
-
-  <bind key="parenleft" modifiers="Alt" action="SelectionInsetScreen" display="true"/>
-  <bind key="9" modifiers="Alt" action="SelectionInsetScreen" />
-
-  <bind key="parenleft" modifiers="Alt,Shift" action="SelectionInsetScreen10" display="true"/>
-  <bind key="9" modifiers="Alt,Shift" action="SelectionInsetScreen10" />
-
 <!-- Text -->
 
   <bind gaction="app.text-flow-into-frame"          keys="&lt;alt&gt;w, &lt;alt&gt;W" />

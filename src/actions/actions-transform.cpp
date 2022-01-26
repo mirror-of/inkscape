@@ -128,6 +128,7 @@ std::vector<std::vector<Glib::ustring>> hint_data_transform =
     {"app.transform-rotate",        N_("Give input for angle of Clockwise Rotation")},
     {"app.transform-scale",         N_("Give input for Scale")},
     {"app.transform-grow",          N_("Give 1.0 or -1.0 to grow or shrink selection by preference amount")},
+    {"app.transform-grow-step",     N_("Give positive or negative number to grow or shrink selection relative to preference value")},
     {"app.transform-grow-screen",   N_("Give positive or negative number to grow or shrink selection relative to zoom level")},
     // clang-format on
 };

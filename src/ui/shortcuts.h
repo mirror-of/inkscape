@@ -18,7 +18,6 @@
 #include <gtkmm.h>
 
 namespace Inkscape {
-class Verb;
 
 namespace UI {
 namespace View {
@@ -55,10 +54,9 @@ public:
     {
         static Shortcuts instance;
 
-        // Uncomment after verbs are gone. Until then, initialization explicitly called in InkscapeApplication::on_startup2().
-        // if (!instance.initialized) {
-        //     instance.init();
-        // }
+        if (!instance.initialized) {
+            instance.init();
+        }
 
         return instance;
     }
@@ -78,16 +76,10 @@ public:
     bool write(Glib::RefPtr<Gio::File> file, What what = User);
     bool write_user();
 
-    // Verb stuff, to be removed.
-    Gtk::AccelKey get_shortcut_from_verb(Verb* verb);
-    Verb* get_verb_from_shortcut(const Gtk::AccelKey& shortcut);
-    bool invoke_verb(GdkEventKey const *event, UI::View::View *view);
-
-    bool is_user_set(Gtk::AccelKey verb_shortcut);
     bool is_user_set(Glib::ustring& action);
 
     // Add/remove shortcuts
-    bool add_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut, bool user, bool is_primary = false);
+    bool add_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut, bool user);
     bool remove_shortcut(Glib::ustring name);
     Glib::ustring remove_shortcut(const Gtk::AccelKey& shortcut);
 
@@ -96,19 +88,14 @@ public:
     bool remove_user_shortcut(Glib::ustring name);
     bool clear_user_shortcuts();
 
+    // Invoke action corresponding to key
+    bool invoke_action(GdkEventKey const *event);
+
     // Utility
     static Glib::ustring get_label(const Gtk::AccelKey& shortcut);
-    static Glib::ustring get_modifiers_verb(unsigned int mod_val);
     static Gtk::AccelKey get_from_event(GdkEventKey const *event, bool fix = false);
     std::vector<Glib::ustring> list_all_detailed_action_names();
     std::vector<Glib::ustring> list_all_actions();
-
-    // Will disappear after verbs are gone. (Use Gtk::AccelGroup functions instead for actions.)
-    Glib::ustring shortcut_to_accelerator(const Gtk::AccelKey& shortcut);
-    Gtk::AccelKey accelerator_to_shortcut(const Glib::ustring& accelerator);
-
-    // Will disappear after verbs are gone. 
-    void add_accelerator(Gtk::Widget *widget, Verb* verb);
 
     static std::vector<std::pair<Glib::ustring, Glib::ustring>> get_file_names();
 
@@ -128,11 +115,6 @@ private:
     // Gio::Actions
     Glib::RefPtr<Gtk::Application> app;
     std::map<Glib::ustring, bool> action_user_set;
-
-    // Legacy verbs
-    std::map<Gtk::AccelKey, Inkscape::Verb*, accel_key_less> shortcut_to_verb_map;
-    std::map<Inkscape::Verb *, Gtk::AccelKey> primary;  // Shown in menus, etc.
-    std::set<Gtk::AccelKey, accel_key_less> user_set;
 
     void _read(XML::Node const &keysnode, bool user_set);
 

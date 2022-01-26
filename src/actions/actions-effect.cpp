@@ -59,8 +59,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_effect =
 {
     // clang-format off
     {"app.edit-remove-filter",      N_("Remove Filters"),                   "Filter",           N_("Remove any filters from selected objects")},
-    {"app.last-effect",             N_("Previous Extension"),               "Extenssion",       N_("Repeat the last extension with the same settings")},
-    {"app.last-effect-pref",        N_("Previous Extension Settings"),      "Extenssion",       N_("Repeat the last extension with new settings")}
+    {"app.last-effect",             N_("Previous Extension"),               "Extension",        N_("Repeat the last extension with the same settings")},
+    {"app.last-effect-pref",        N_("Previous Extension Settings"),      "Extension",        N_("Repeat the last extension with new settings")}
     // clang-format on
 };
 

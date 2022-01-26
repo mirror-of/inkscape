@@ -47,8 +47,6 @@
 
 #include "extension/db.h"
 
-#include "helper/action.h"
-
 #include "object/sp-image.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
@@ -63,7 +61,6 @@
 #include "ui/tools/box3d-tool.h"
 #include "ui/util.h"
 #include "ui/uxmanager.h"
-#include "ui/widget/button.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/combo-tool-item.h"

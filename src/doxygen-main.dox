@@ -302,7 +302,6 @@ namespace XML {}
  * [\ref menus-skeleton.h, \ref preferences-skeleton.h]
  * [\ref select-toolbar.cpp] [\ref shortcuts.cpp]
  * [\ref sp-cursor.cpp] [\ref text-edit.cpp] [\ref toolbox.cpp]
- * Inkscape::Verb [\ref verbs.h]
  *
  */
 /** \page XmlTree CSS/XML Tree Classes and Files

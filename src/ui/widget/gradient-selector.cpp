@@ -29,7 +29,6 @@
 #include "style.h"
 
 #include "actions/actions-tools.h" // Invoke gradient tool
-#include "helper/action.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/widget/gradient-vector-selector.h"

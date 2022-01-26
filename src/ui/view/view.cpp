@@ -17,7 +17,6 @@
 #include "view.h"
 #include "message-stack.h"
 #include "message-context.h"
-#include "verbs.h"
 #include "inkscape.h"
 
 namespace Inkscape {
@@ -81,8 +80,6 @@ void View::_close() {
         }
         _doc = nullptr;
     }
-    
-   Inkscape::Verb::delete_all_view (this);
 }
 
 void View::emitResized (double width, double height)

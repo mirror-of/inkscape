@@ -39,8 +39,6 @@
 #include "inkscape.h"
 #include "selection-chemistry.h"
 
-#include "helper/action.h"
-
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
@@ -240,8 +238,6 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
-
-    auto context = Inkscape::ActionContext(_desktop);
 
     {
         auto object_to_path_item = Gtk::manage(new Gtk::ToolButton(_("_Object to Path")));

@@ -13,14 +13,6 @@ source locally, you can view that file at:
 - The "modifiers" attribute contains a comma-separated list of modifiers, which can be
 one or more of: "Ctrl", "Shift", "Alt".
 
-- The "action" attribute contains the name of the action. The complete list of actions
-(called "verbs") is in the file src/verbs.cpp in Inkscape source; there you can see
-brief descriptions of what each action does. The same action may have multiple key
-bindings.
-
-- The "display" attribute controls whether this binding will be displayed in the menu
-and tooltips. Only one binding for each action may have this attribute.
-
 In case of conflict, those bindings that come later override those before them. This
 file resides in the share/keys directory of your Inkscape installation, but you may also
 have a default.xml in your personal Inkscape profile directory (e.g. ~/.inkscape

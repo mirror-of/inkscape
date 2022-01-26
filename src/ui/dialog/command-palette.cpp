@@ -116,7 +116,7 @@ CommandPalette::CommandPalette()
     _CPSuggestions->set_activate_on_single_click();
     _CPSuggestions->set_selection_mode(Gtk::SELECTION_SINGLE);
 
-    // Setup operations [actions, verbs, extensions]
+    // Setup operations [actions, extensions]
     {
         // setup actions - win doc actions loaded in open()
         load_app_actions();

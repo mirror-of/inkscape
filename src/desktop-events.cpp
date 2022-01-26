@@ -40,8 +40,6 @@
 #include "display/control/snap-indicator.h"
 #include "display/control/canvas-item-guideline.h"
 
-#include "helper/action.h"
-
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"

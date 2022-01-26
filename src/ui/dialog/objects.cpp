@@ -32,11 +32,8 @@
 #include "inkscape.h"
 #include "layer-manager.h"
 #include "message-stack.h"
-#include "verbs.h"
 
 #include "actions/actions-tools.h"
-
-#include "helper/action.h"
 
 #include "include/gtkmm_version.h"
 
@@ -981,7 +978,7 @@ Gtk::Button* ObjectsPanel::_addBarButton(char const* iconName, char const* toolt
     btn->add(*child);
     btn->set_relief(Gtk::RELIEF_NONE);
     btn->set_tooltip_text(tooltip);
-    // This c code is required because the gtkmm is broken for actions
+    // Must use C API until GTK4.
     gtk_actionable_set_action_name(GTK_ACTIONABLE(btn->gobj()), action_name);
     return btn;
 }
@@ -1067,9 +1064,6 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
             return false;
     }
 
-    // invoke user defined shortcuts first
-    if (press && Inkscape::Shortcuts::getInstance().invoke_verb(event, desktop))
-        return true;
     return false;
 }
 
