@@ -1214,7 +1214,7 @@ void GrDragger::updateControlSizesOverload(SPKnot * knot)
     // TODO: code should likely be merged
     int knot_size = size * 2 + 3;
     if(knot->shape == Inkscape::CANVAS_ITEM_CTRL_SHAPE_TRIANGLE) {
-        knot_size = size * 2 + 1;
+        knot_size = size * 8 + 1;
     }
 
     knot->setSize(knot_size);
