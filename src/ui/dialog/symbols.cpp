@@ -1218,7 +1218,6 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
   // Replace old "the_symbol" in preview_document by new.
   Inkscape::XML::Node *root = preview_document->getReprRoot();
 
-  preview_document->set_reference_document(nullptr);
   SPObject *symbol_old = preview_document->getObjectById("the_symbol");
   if (symbol_old) {
       symbol_old->deleteObject(false);
@@ -1289,6 +1288,8 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
 
     pixbuf = Glib::wrap(render_pixbuf(renderDrawing, scale, *dbox, psize));
   }
+
+  preview_document->set_reference_document(nullptr);
 
   return pixbuf;
 }
