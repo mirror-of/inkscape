@@ -42,17 +42,17 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             selection = desktop->selection;
         }
         Geom::Affine transf = sp_item_transform_repr(sp_lpe_item);
-        if (transf != Geom::identity()) {
+        if (is_load && transf != Geom::identity()) {
             sp_lpe_item->doWriteTransform(Geom::identity());
         }
         if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
             SPItem * linked1 = linked_path.getObject();
-            if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
+            if (is_load && linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
                 linked1->doWriteTransform(transf);
             }
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
             SPItem * linked2 = second_path.getObject();
-            if (linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
+            if (is_load && linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
                 linked2->doWriteTransform(transf);
             }
             Geom::PathVector second_pathv = second_path.get_pathvector();
@@ -97,7 +97,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
         }
         else if ( linked_path.linksToPath() && linked_path.getObject() ) {
             SPItem *linked1 = linked_path.getObject();
-            if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
+            if (is_load && linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
                 linked1->doWriteTransform(transf);
             }
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
@@ -115,7 +115,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
         }
         else if ( second_path.linksToPath() && second_path.getObject() ) {
             SPItem *linked2 = second_path.getObject();
-            if (linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
+            if (is_load && linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
                 linked2->doWriteTransform(transf);
             }
             Geom::PathVector second_pathv = second_path.get_pathvector();

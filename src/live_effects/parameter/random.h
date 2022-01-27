@@ -46,6 +46,7 @@ public:
     void resetRandomizer();
     operator gdouble();
     inline gdouble get_value() { return value; } ;
+    ParamType paramType() const override { return ParamType::RANDOM; };
 
 protected:
     long startseed;

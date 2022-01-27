@@ -60,7 +60,7 @@ public:
     void param_update_default(const gchar * default_point) override;
     bool providesKnotHolderEntities() const override { return true; }
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-
+    ParamType paramType() const override { return ParamType::TRANSFORMED_POINT; };
 private:
     TransformedPointParam(const TransformedPointParam&) = delete;
     TransformedPointParam& operator=(const TransformedPointParam&) = delete;

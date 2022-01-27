@@ -36,7 +36,7 @@ public:
     void param_set_default() override;
 
     const Glib::ustring get_value() const { return defvalue; };
-
+    ParamType paramType() const override { return ParamType::FONT_BUTTON; };
 private:
     FontButtonParam(const FontButtonParam&) = delete;
     FontButtonParam& operator=(const FontButtonParam&) = delete;

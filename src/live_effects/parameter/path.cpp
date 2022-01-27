@@ -133,6 +133,24 @@ PathParam::param_set_and_write_default()
     param_write_to_repr(defvalue);
 }
 
+std::vector<SPObject *> PathParam::param_get_satellites()
+{
+    
+    std::vector<SPObject *> objs;
+    if (ref.isAttached()) {
+        // we reload connexions in case are lost for example item recreation on ungroup
+        if (!linked_transformed_connection) {
+            write_to_SVG();
+        }
+
+        SPObject * linked_obj = ref.getObject();
+        if (linked_obj) {
+            objs.push_back(linked_obj);
+        }
+    }
+    return objs;
+}
+
 bool
 PathParam::param_readSVGValue(const gchar * strvalue)
 {
@@ -141,7 +159,20 @@ PathParam::param_readSVGValue(const gchar * strvalue)
         unlink();
         must_recalculate_pwd2 = true;
 
+        
         if (strvalue[0] == '#') {
+            bool write = false;
+            SPObject * old_ref = param_effect->getSPDoc()->getObjectByHref(strvalue);
+            if (old_ref) {
+                SPObject * successor = old_ref->_successor;
+                Glib::ustring id = strvalue;
+                if (successor) {
+                    id = successor->getId();
+                    id.insert(id.begin(), '#');
+                    write = true;
+                }
+                strvalue = id.c_str();
+            }
             if (href)
                 g_free(href);
             href = g_strdup(strvalue);
@@ -158,6 +189,10 @@ PathParam::param_readSVGValue(const gchar * strvalue)
                 g_warning("%s", e.what());
                 ref.detach();
                 _pathvector = sp_svg_read_pathv(defvalue);
+            }
+            if (write) {
+                auto full = param_getSVGValue();
+                param_write_to_repr(full.c_str());
             }
         } else {
             _pathvector = sp_svg_read_pathv(strvalue);

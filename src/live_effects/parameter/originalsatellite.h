@@ -23,7 +23,7 @@ public:
                            Inkscape::UI::Widget::Registry *wr, Effect *effect);
     ~OriginalSatelliteParam() override;
     Gtk::Widget * param_newWidget() override;
-
+    ParamType paramType() const override { return ParamType::ORIGINAL_SATELLITE; };
 protected:
     void on_select_original_button_click();
 

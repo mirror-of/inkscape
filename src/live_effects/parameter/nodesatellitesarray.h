@@ -67,7 +67,7 @@ public:
 
     friend class FilletChamferKnotHolderEntity;
     friend class LPEFilletChamfer;
-
+    ParamType paramType() const override { return ParamType::NODE_SATELLITE_ARRAY; };
 protected:
     KnotHolder *_knoth;
 

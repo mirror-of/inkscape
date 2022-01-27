@@ -85,7 +85,7 @@ public:
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     std::vector<SPLPEItem *> getCurrrentLPEItems() const;
-
+    void update_satellites(bool updatelpe = false);
 private:
     virtual void transform_multiply(Geom::Affine const &postmul, bool set);
 

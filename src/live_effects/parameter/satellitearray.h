@@ -43,6 +43,7 @@ public:
     void setUpdating(bool updating) { _updating = updating; }
     bool getUpdating() const { return _updating; }
     void start_listening();
+    ParamType paramType() const override { return ParamType::SATELLITE_ARRAY; };
 protected:
     void quit_listening();
     bool _updateLink(const Gtk::TreeIter &iter, std::shared_ptr<SatelliteReference> lpref);

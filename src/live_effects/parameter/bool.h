@@ -43,6 +43,7 @@ public:
     void param_update_default(const gchar * default_value) override;
     bool get_value() const { return value; };
     inline operator bool() const { return value; };
+    ParamType paramType() const override { return ParamType::BOOL; };
 
 private:
     bool value;

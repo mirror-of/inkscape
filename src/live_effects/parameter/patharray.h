@@ -64,6 +64,7 @@ public:
     ~PathArrayParam() override;
 
     Gtk::Widget * param_newWidget() override;
+    std::vector<SPObject *> param_get_satellites() override;
     bool param_readSVGValue(const gchar * strvalue) override;
     Glib::ustring param_getSVGValue() const override;
     Glib::ustring param_getDefaultSVGValue() const override;
@@ -77,7 +78,7 @@ public:
     void allowOnlyBsplineSpiro(bool allow_only_bspline_spiro){ _allow_only_bspline_spiro = allow_only_bspline_spiro; update();};
 
     std::vector<PathAndDirectionAndVisible*> _vector;
-
+    ParamType paramType() const override { return ParamType::PATH_ARRAY; };
 protected:
     bool _updateLink(const Gtk::TreeIter& iter, PathAndDirectionAndVisible* pd);
     bool _selectIndex(const Gtk::TreeIter& iter, int* i);

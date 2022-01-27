@@ -92,7 +92,8 @@ class Parameter {
     Glib::ustring param_tooltip;
     Inkscape::UI::Widget::Registry *param_wr;
     Glib::ustring param_label;
-
+    EffectType effectType() const;
+    virtual ParamType paramType() const;
     bool oncanvas_editable;
     bool widget_is_visible;
     bool widget_is_enabled;

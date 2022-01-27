@@ -50,7 +50,7 @@ public:
   virtual void toggled();
   void param_update_default(bool default_value);
   void param_update_default(const gchar *default_value) override;
-
+  ParamType paramType() const override { return ParamType::TOGGLE_BUTTON; };
 private:
     void refresh_button();
     bool value;

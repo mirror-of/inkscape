@@ -99,9 +99,24 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
 }
 
 void LPEBendPath::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
-{
+{   
+    Inkscape::Selection * selection = nullptr;
+    SPItem *linked = nullptr;
+    if (SP_ACTIVE_DESKTOP) {
+        selection = SP_ACTIVE_DESKTOP->getSelection();
+        linked = dynamic_cast<SPItem *>(bend_path.getObject());
+    }
     if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
         bend_path.param_transform_multiply(postmul, false);
+    } else if( //this allow transform user spected way when lpeitem and pathparamenter are both selected
+        sp_lpe_item && 
+        sp_lpe_item->pathEffectsEnabled() &&
+        linked &&
+        (selection->includes(linked))) 
+    {
+        Geom::Affine transformlpeitem = sp_item_transform_repr(sp_lpe_item).inverse() * postmul;
+        sp_lpe_item->transform *= transformlpeitem.inverse();
+        sp_lpe_item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 

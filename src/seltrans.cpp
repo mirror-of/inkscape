@@ -567,9 +567,9 @@ void Inkscape::SelTrans::stamp()
         }
         std::vector<Inkscape::XML::Node *> copies;
         // special case on clones when draging a clone without his original
-        // we check idf is selected if is selected or is not clone original
-        // lpewe preform the write stament on line:616
-        bool clonelpeselected = true;
+        // we check if his satellite is selected  if has clone original
+        // to allow preform the write stament on line:616
+        bool lpewritetransforms = true;
         for (auto old_obj : l) {
             SPLPEItem *oldLPEObj = dynamic_cast<SPLPEItem *>(old_obj);
             if (oldLPEObj) {
@@ -578,7 +578,19 @@ void Inkscape::SelTrans::stamp()
                     std::vector<SPObject *> satellites = effect->effect_get_satellites();
                     for (auto obj : satellites) {
                         if (!selection->includes(obj)) {
-                            clonelpeselected = false;
+                            lpewritetransforms = false;
+                        }
+                    }
+                }
+                effect = oldLPEObj->getFirstPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH);
+                if (effect) {
+                    if (!oldLPEObj->optimizeTransforms() && selection->includes(oldLPEObj)) {
+                        lpewritetransforms = false;
+                        std::vector<SPObject *> satellites = effect->effect_get_satellites();
+                        for (auto obj : satellites) {
+                            if (selection->includes(obj)) {
+                                lpewritetransforms = true;
+                            }
                         }
                     }
                 }
@@ -615,7 +627,11 @@ void Inkscape::SelTrans::stamp()
                     sp_lpe_item_enable_path_effects(newLPEObj,false);
                 }
             }
-            if (!newLPEObj || !clonelpeselected || !newLPEObj->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
+            if (!newLPEObj || 
+                !lpewritetransforms || 
+                (!newLPEObj->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) &&
+                 !newLPEObj->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH))) 
+            {
                 copy_item->doWriteTransform(*new_affine);
                 if ( copy_item->isCenterSet() && _center ) {
                     copy_item->setCenter(*_center * _current_relative_affine);

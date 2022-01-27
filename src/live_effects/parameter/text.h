@@ -51,6 +51,7 @@ public:
     void setAnchor(double x_value, double y_value);
 
     const Glib::ustring get_value() const { return value; };
+    ParamType paramType() const override { return ParamType::TEXT; };
 
 private:
     TextParam(const TextParam&) = delete;

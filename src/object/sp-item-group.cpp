@@ -983,6 +983,15 @@ void SPGroup::update_patheffect(bool write) {
 
     for (auto sub_item : item_list) {
         if (sub_item) {
+            // not need lpe version < 1 (issue only relpy on lower LPE on nested LPEs
+            // this not happends because is done at very first stage
+            // we need to be sure performed to inform lpe original bounds ok, 
+            // if not original_bbox function fail on update groups
+            SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);
+            if (sub_shape && sub_shape->hasPathEffectRecursive()) {
+                sub_shape->bbox_vis_cache_is_valid = false;
+                sub_shape->bbox_geom_cache_is_valid = false;
+            }
             SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
             if (lpe_item) {
                 lpe_item->update_patheffect(write);

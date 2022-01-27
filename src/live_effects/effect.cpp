@@ -1383,8 +1383,18 @@ void Effect::processObjects(LPEAction lpe_action)
 bool Effect::doOnOpen(SPLPEItem const * /*lpeitem*/)
 {
     // Do nothing for simple effects
+    update_satellites();
     return false;
 }
+
+void
+Effect::update_satellites(bool updatelpe) {
+    std::vector<Inkscape::LivePathEffect::Parameter *>::iterator p;
+    for (p = param_vector.begin(); p != param_vector.end(); ++p) {
+        (*p)->update_satellites(updatelpe);
+    }
+}
+
 
 /**
  * Is performed each time before the effect is updated.
@@ -1406,6 +1416,7 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/, SPCurve *curve)
 {
     //Do nothing for simple effects
+    update_satellites();
 }
 
 void Effect::doOnException(SPLPEItem const * /*lpeitem*/)

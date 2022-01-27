@@ -86,7 +86,7 @@ public:
         param_write_to_repr(str);
         g_free(str);
     }
-
+    ParamType paramType() const override { return ParamType::ARRAY; };
 protected:
     std::vector<StorageType> _vector;
     size_t _default_size;

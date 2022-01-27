@@ -13,6 +13,7 @@
 #include "display/control/canvas-item-bpath.h"
 #include "display/curve.h"
 #include "live_effects/effect.h"
+#include "live_effects/effect-enum.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "ui/icon-names.h"
@@ -60,6 +61,19 @@ void Parameter::write_to_SVG()
 {
     param_write_to_repr(param_getSVGValue().c_str());
 }
+
+EffectType Parameter::effectType() const 
+{ 
+    if (param_effect) {
+        return param_effect->effectType(); 
+    }
+    return INVALID_LPE;
+};
+
+ParamType Parameter::paramType() const 
+{ 
+    return INVALID_PARAM;
+};
 
 /*
  * sometimes for example on ungrouping or loading documents we need to relay in stored value instead the volatile
@@ -131,8 +145,8 @@ void Parameter::change_selection(Inkscape::Selection *selection)
 
 void Parameter::update_satellites(bool updatelpe)
 {
-    if (param_key == "linked_items" || param_key == "operand-path" || param_key == "linkeditem" ||
-        param_key == "lpesatellites") {
+    if (paramType() == ParamType::SATELLITE || paramType() == ParamType::SATELLITE_ARRAY || paramType() == ParamType::PATH ||
+        paramType() == ParamType::PATH_ARRAY || paramType() == ParamType::ORIGINAL_PATH || paramType() == ParamType::ORIGINAL_SATELLITE) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
             DocumentUndo::ScopedInsensitive _no_undo(desktop->getDocument());

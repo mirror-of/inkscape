@@ -98,7 +98,7 @@ public:
     void param_set_value(E val) {
         value = val;
     }
-
+    ParamType paramType() const override { return ParamType::ENUM; };
 private:
     E value;
     E defvalue;

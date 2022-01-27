@@ -61,6 +61,7 @@ public:
 
     bool providesKnotHolderEntities() const override { return true; }
     void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
+    ParamType paramType() const override { return ParamType::POINT; };
     friend class PointParamKnotHolderEntity;
 private:
     PointParam(const PointParam&) = delete;

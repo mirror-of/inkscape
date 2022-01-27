@@ -25,6 +25,9 @@
 #include "extract-uri.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
+#include "live_effects/parameter/originalpath.h"
+#include "live_effects/parameter/path.h"
+#include "live_effects/parameter/patharray.h"
 #include "live_effects/parameter/originalsatellite.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/satellitearray.h"
@@ -201,32 +204,41 @@ static void find_references(SPObject *elem, refmap_type &refmap, bool from_clipb
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect *effect = lpeobj->get_lpe();
             if (effect) {
-                std::vector<Inkscape::LivePathEffect::Parameter *>::iterator p;
-                for (p = effect->param_vector.begin(); p != effect->param_vector.end(); ++p) {
-                    Inkscape::LivePathEffect::Parameter *param = *p;
-                    if (dynamic_cast<Inkscape::LivePathEffect::OriginalSatelliteParam *>(param) ||
-                        dynamic_cast<Inkscape::LivePathEffect::SatelliteArrayParam *>(param)) {
-                        const gchar *val = repr_elem->attribute(param->param_key.c_str());
+                for (auto &p : effect->param_vector) {
+                    if (p->paramType() == Inkscape::LivePathEffect::SATELLITE || 
+                        p->paramType() == Inkscape::LivePathEffect::SATELLITE_ARRAY || 
+                        p->paramType() == Inkscape::LivePathEffect::PATH ||
+                        p->paramType() == Inkscape::LivePathEffect::PATH_ARRAY ||
+                        p->paramType() == Inkscape::LivePathEffect::ORIGINAL_PATH || 
+                        p->paramType() == Inkscape::LivePathEffect::ORIGINAL_SATELLITE) 
+                    {
+                        const gchar *val = repr_elem->attribute(p->param_key.c_str());
                         if (val) {
-                            gchar **strarray = g_strsplit(val, " | ", 0);
+                            gchar **strarray = g_strsplit(val, "|", 0);
                             if (strarray) {
                                 unsigned int i = 0;
                                 Glib::ustring realycopied = "";
                                 bool write = false;
                                 while (strarray[i]) {
-                                    if (strarray[i][0] == '#') {
-                                        std::string id(strarray[i] + 1);
+                                    gchar *splitid = g_strdup(g_strstrip(strarray[i]));
+                                    if (splitid[0] == '#') {
+                                        std::string id(splitid + 1);
                                         if (size_t pos = id.find(",")) {
                                             if (pos != Glib::ustring::npos) {
                                                 id.erase(pos);
                                             }
                                         }
 
-                                        IdReference idref = {REF_HREF, elem, param->param_key.c_str()};
+                                        IdReference idref = {REF_HREF, elem, p->param_key.c_str()};
                                         SPObject *refobj = elem->document->getObjectById(id);
                                         // special tweak to allow clone original LPE keep cloned on copypase without
-                                        // operand
-                                        bool bypass = (param->param_key == "linkeditem") && !refobj;
+                                        // operand also added to path parameters
+                                        bool cloneoriginal = p->effectType() == Inkscape::LivePathEffect::CLONE_ORIGINAL;
+                                        bool bypass = ((p->param_key == "linkeditem") && cloneoriginal);
+                                        bypass = bypass || p->paramType() == Inkscape::LivePathEffect::ParamType::PATH;
+                                        bypass = bypass || p->paramType() == Inkscape::LivePathEffect::ParamType::ORIGINAL_PATH;
+                                        bypass = bypass || p->paramType() == Inkscape::LivePathEffect::ParamType::PATH_ARRAY;
+                                        bypass = bypass && !refobj;
                                         if (refobj || bypass) {
                                             if (!bypass) {
                                                 refmap[id].push_back(idref);
@@ -236,15 +248,16 @@ static void find_references(SPObject *elem, refmap_type &refmap, bool from_clipb
                                             if (!realycopied.empty()) {
                                                 realycopied += " | ";
                                             }
-                                            realycopied += strarray[i];
+                                            realycopied += splitid;
                                         } else {
                                             write = true;
                                         }
                                     }
                                     i++;
+                                    g_free(splitid);
                                 }
                                 if (write) {
-                                    repr_elem->setAttribute(param->param_key.c_str(), realycopied.c_str());
+                                    repr_elem->setAttribute(p->param_key.c_str(), realycopied.c_str());
                                 }
                                 g_strfreev(strarray);
                             }

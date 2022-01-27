@@ -40,7 +40,7 @@ public:
     Gtk::Widget * param_newWidget() override;
     
     operator Inkscape::Util::Unit const *() const { return unit; }
-
+    ParamType paramType() const override { return ParamType::UNIT; };
 private:
     Inkscape::Util::Unit const *unit;
     Inkscape::Util::Unit const *defunit;

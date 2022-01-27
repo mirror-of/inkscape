@@ -41,7 +41,7 @@ public:
     void param_set_default() override;
     void param_set_min_height(int height);
     const gchar *  get_value() const { return message; };
-
+    ParamType paramType() const override { return ParamType::MESSAGE; };
 private:
     Gtk::Label * _label;
     int _min_height;

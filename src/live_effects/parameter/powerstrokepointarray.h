@@ -55,6 +55,7 @@ public:
     std::vector<Geom::Point> reverse_controlpoints(bool write);
     void set_scale_width(double scale_width){_scale_width = scale_width;};
     double _scale_width;
+    ParamType paramType() const override { return ParamType::POWERSTROKE_POINT_ARRAY; };
     friend class PowerStrokePointArrayParamKnotHolderEntity;
 
 private:

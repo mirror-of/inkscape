@@ -398,8 +398,7 @@ void PathManipulator::duplicateNodes()
 void PathManipulator::copySelectedPath(Geom::PathBuilder *builder)
 {
     // Ignore LivePathEffect paths
-    SPPath *path = dynamic_cast<SPPath *>(_path);
-    if (!path)
+    if (!_path || dynamic_cast<LivePathEffectObject *>(_path))
         return;
     // Rebuild the selected parts of each subpath
     for (auto &subpath : _subpaths) {

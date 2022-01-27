@@ -36,6 +36,7 @@ public:
     void param_set_default() override;
 
     guint32 get_value() const { return value; };
+    ParamType paramType() const override { return ParamType::COLOR_PICKER; };
 
 private:
     ColorPickerParam(const ColorPickerParam&) = delete;

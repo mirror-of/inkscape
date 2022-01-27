@@ -45,7 +45,7 @@ public:
     void param_update_default(const gchar * default_value) override;
 
     const Glib::ustring get_value() const { return value; };
-
+    ParamType paramType() const override { return ParamType::HIDDEN; };
 private:
     HiddenParam(const HiddenParam&) = delete;
     HiddenParam& operator=(const HiddenParam&) = delete;

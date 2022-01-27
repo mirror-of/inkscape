@@ -79,6 +79,33 @@ enum EffectType {
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being
                 // last. - johan)
 };
+//ALPHABETIC
+enum ParamType {
+    ARRAY = 0,
+    BOOL,
+    COLOR_PICKER,
+    ENUM,
+    FONT_BUTTON,
+    HIDDEN,
+    MESSAGE,
+    NODE_SATELLITE_ARRAY,
+    ORIGINAL_PATH,
+    ORIGINAL_SATELLITE,
+    PATH_REFERENCE,
+    PATH,
+    PATH_ARRAY,
+    POINT,
+    POWERSTROKE_POINT_ARRAY,
+    RANDOM,
+    SATELLITE,
+    SATELLITE_ARRAY,
+    TEXT,
+    TOGGLE_BUTTON,
+    TRANSFORMED_POINT,
+    UNIT,
+    VECTOR,
+    INVALID_PARAM // This must be last
+};
 
 template <typename E>
 struct EnumEffectData {

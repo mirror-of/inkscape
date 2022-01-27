@@ -60,7 +60,7 @@ public:
     void param_update_default(const gchar * default_point) override;
     bool providesKnotHolderEntities() const override { return true; }
     void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
-
+    ParamType paramType() const override { return ParamType::VECTOR; };
 private:
     VectorParam(const VectorParam&) = delete;
     VectorParam& operator=(const VectorParam&) = delete;
