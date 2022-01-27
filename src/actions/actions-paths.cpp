@@ -244,12 +244,13 @@ add_actions_path(InkscapeWindow* win)
     Glib::VariantType Double(Glib::VARIANT_TYPE_DOUBLE);
 
     // clang-format off
-    win->add_action(                "path-inset",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_inset),          win));
-    win->add_action(                "path-offset",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset),         win));
-    win->add_action_with_parameter( "path-inset-screen",   Double, sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_inset_screen),   win));
-    win->add_action_with_parameter( "path-offset-screen",  Double, sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_screen),  win));
-    win->add_action(                "path-offset-linked",          sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_linked),  win));
-    win->add_action(                "path-reverse",                sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_reverse),        win));
+    win->add_action(                "path-inset",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_inset),          win));
+    win->add_action(                "path-offset",                  sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset),         win));
+    win->add_action_with_parameter( "path-inset-screen",    Double, sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_inset_screen),   win));
+    win->add_action_with_parameter( "path-offset-screen",   Double, sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_screen),  win));
+    win->add_action(                "path-offset-dynamic",          sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_dynamic), win));
+    win->add_action(                "path-offset-linked",           sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_offset_linked),  win));
+    win->add_action(                "path-reverse",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_path_reverse),        win));
     // clang-format on
 }
 

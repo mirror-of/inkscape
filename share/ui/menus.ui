@@ -1027,7 +1027,7 @@
       </item>
       <item>
         <attribute name='label' translatable="yes">Outs_et</attribute>
-        <attribute name='action'>win.path-outset</attribute>
+        <attribute name='action'>win.path-offset</attribute>
         <attribute name='icon'>path-outset</attribute>
         <attribute name='use-icon'>true</attribute>
       </item>
