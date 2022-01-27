@@ -157,8 +157,14 @@ static SPGradient *sp_gradient_get_private_normalized(SPDocument *document, SPGr
         repr = xml_doc->createElement("svg:meshgradient");
     }
 
-    // privates are garbage-collectable
-    repr->setAttribute("inkscape:collect", "always");
+    // make auto collection optional
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/option/gradient/auto_collect", true)) {
+        repr->setAttribute("inkscape:collect", "always");
+    } else {
+        repr->setAttribute("inkscape:collect", "never");
+    }
+
 
     // link to shared
     sp_gradient_repr_set_link(repr, shared);
@@ -1773,7 +1779,14 @@ SPGradient *sp_document_default_gradient_vector( SPDocument *document, SPColor c
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:linearGradient");
 
     if ( !singleStop ) {
-        repr->setAttribute("inkscape:collect", "always");
+        // make auto collection optional
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if (prefs->getBool("/option/gradient/auto_collect", true)) {
+            repr->setAttribute("inkscape:collect", "always");
+        } else {
+            repr->setAttribute("inkscape:collect", "never");
+        }
+        
         // set here, but removed when it's edited in the gradient editor
         // to further reduce clutter, we could
         // (1) here, search gradients by color and return what is found without duplication
