@@ -143,26 +143,18 @@ gint UXManagerImpl::getDefaultTask( SPDesktop *desktop )
 void UXManagerImpl::setTask(SPDesktop* dt, gint val)
 {
     for (auto dtw : dtws) {
-        gboolean notDone = Inkscape::Preferences::get()->getBool("/options/workarounds/dynamicnotdone", false);
-
         if (dtw->desktop == dt) {
             int taskNum = val;
             switch (val) {
                 default:
                 case 0:
                     dtw->setToolboxPosition("CommandsToolbar", GTK_POS_TOP);
-                    if (notDone) {
-                        dtw->setToolboxPosition("AuxToolbar", GTK_POS_TOP);
-                    }
                     taskNum = val; // in case it was out of range
                     break;
 
                 case 1:
                 case 2:
                     dtw->setToolboxPosition("CommandsToolbar", GTK_POS_RIGHT);
-                    if (notDone) {
-                        dtw->setToolboxPosition("AuxToolbar", GTK_POS_RIGHT);
-                    }
             }
             Glib::ustring prefPath = getLayoutPrefPath( dtw->desktop );
             Inkscape::Preferences::get()->setInt( prefPath + "task/taskset", taskNum );

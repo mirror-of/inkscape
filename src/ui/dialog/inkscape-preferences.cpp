@@ -1583,10 +1583,6 @@ void InkscapePreferences::initPageUI()
     _ui_realworldzoom.init( _("Show zoom percentage corrected by factor"), "/options/zoomcorrection/shown", true);
     _page_ui.add_line( false, "", _ui_realworldzoom, "", _("Zoom percentage can be either by the physical units or by pixels."));
 
-    _ui_partialdynamic.init( _("Enable dynamic relayout for incomplete sections"), "/options/workarounds/dynamicnotdone", false);
-    _page_ui.add_line( false, "", _ui_partialdynamic, "",
-                       _("When on, will allow dynamic layout of components that are not completely finished being refactored"), true);
-
     /* show infobox */
     _show_filters_info_box.init( _("Show filter primitives infobox (requires restart)"), "/options/showfiltersinfobox/value", true);
     _page_ui.add_line(false, "", _show_filters_info_box, "",
