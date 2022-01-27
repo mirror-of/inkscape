@@ -165,7 +165,6 @@ static SPGradient *sp_gradient_get_private_normalized(SPDocument *document, SPGr
         repr->setAttribute("inkscape:collect", "never");
     }
 
-
     // link to shared
     sp_gradient_repr_set_link(repr, shared);
 
@@ -1786,7 +1785,7 @@ SPGradient *sp_document_default_gradient_vector( SPDocument *document, SPColor c
         } else {
             repr->setAttribute("inkscape:collect", "never");
         }
-        
+
         // set here, but removed when it's edited in the gradient editor
         // to further reduce clutter, we could
         // (1) here, search gradients by color and return what is found without duplication

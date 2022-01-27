@@ -1038,7 +1038,11 @@ void InkscapePreferences::initPageTools()
                            _("Default angle of new linear gradients in degrees (clockwise from horizontal)"), false);
 
     _misc_gradient_collect.init(_("Delete gradients that are not used"), "/option/gradient/auto_collect", true);
-    _page_gradient.add_line(true, "",_misc_gradient_collect, "", _("When enabled, the gradients that are not used will be auto deleted (auto collected) from the SVG file. If disabled, the gradients that are not used will be preserved in the SVG file for latter use. This setting will be applied only on the new gradients."), true);
+    _page_gradient.add_line(true, "", _misc_gradient_collect, "",
+                            _("When enabled, the gradients that are not used will be auto deleted (auto collected) "
+                              "from the SVG file. If disabled, the gradients that are not used will be preserved in "
+                              "the SVG file for latter use. This setting will be applied only on the new gradients."),
+                            true);
 
     //Dropper
     this->AddSelcueCheckbox(_page_dropper, "/tools/dropper", true);
