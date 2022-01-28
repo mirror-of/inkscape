@@ -741,7 +741,11 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
                 show ? close->show() : close->hide();
                 show ? label->show() : label->hide();
             } else if (tabstatus == TabsStatus::NONE || _labels_off) {
-                close->hide();
+                if (page != _notebook.get_nth_page(n)) {
+                    close->hide();
+                } else {
+                    close->show();
+                }
                 label->hide();
             } else {
                 close->show();
@@ -789,7 +793,7 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
             }
 
             if (close) {
-                if (tabstatus == TabsStatus::NONE) {
+                if (tabstatus == TabsStatus::NONE && curr_page != page) {
                     close->hide();
                 } else {
                     close->show();
