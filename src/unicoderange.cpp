@@ -111,7 +111,7 @@ Glib::ustring UnicodeRange::attribute_string(){
     Glib::ustring result;
     unsigned int i;
     for(i=0; i<this->unichars.size(); i++){
-g_warning("uni: %d %x", i, unichars[i]);
+// g_warning("uni: %d %x", i, unichars[i]);
         result += this->unichars[i];
         if (i!=this->unichars.size()-1) result += ",";
     }

@@ -39,7 +39,6 @@
 #include "object/sp-root.h"
 #include "object/sp-item-group.h"
 
-#include "util/find-last-if.h"
 #include "xml/node-observer.h"
 
 namespace Inkscape {
@@ -309,11 +308,10 @@ static SPObject *next_sibling_layer(SPObject *layer) {
  *  @returns NULL if there are no further layers under a parent
  */
 static SPObject *previous_sibling_layer(SPObject *layer) {
-    using Inkscape::Algorithms::find_last_if;
-
     SPObject::ChildrenList &list = layer->parent->children;
-    auto l = find_last_if(list.begin(), list.iterator_to(*layer), &is_layer);
-    return l != list.iterator_to(*layer) ? &*(l) : nullptr;
+    auto start = SPObject::ChildrenList::reverse_iterator(list.iterator_to(*layer));
+    auto l = std::find_if(start, list.rend(), &is_layer);
+    return l != list.rend() ? &*l : nullptr;
 }
 
 /** Finds the first child of a \a layer
@@ -337,14 +335,12 @@ static SPObject *first_descendant_layer(SPObject *layer) {
  *  @returns NULL if layer has no sublayers
  */
 static SPObject *last_child_layer(SPObject *layer) {
-    using Inkscape::Algorithms::find_last_if;
-
-    auto l = find_last_if(layer->children.begin(), layer->children.end(), &is_layer);
-    return l != layer->children.end() ? &*l : nullptr;
+    auto& list = layer->children;
+    auto l = std::find_if(list.rbegin(), list.rend(), &is_layer);
+    return l != list.rend() ? &*l : nullptr;
 }
 
 static SPObject *last_elder_layer(SPObject *root, SPObject *layer) {
-    using Inkscape::Algorithms::find_last_if;
     SPObject *result = nullptr;
 
     while ( layer != root ) {
@@ -385,8 +381,6 @@ SPObject *next_layer(SPObject *root, SPObject *layer) {
  *  @returns NULL if there are no prior layers under \a root.
  */
 SPObject *previous_layer(SPObject *root, SPObject *layer) {
-    using Inkscape::Algorithms::find_last_if;
-
     g_return_val_if_fail(layer != nullptr, NULL);
     SPObject *result = nullptr;
 
@@ -451,68 +445,72 @@ SPObject *create_layer(SPObject *root, SPObject *layer, LayerRelativePosition po
     return document->getObjectByRepr(repr);
 }
 
+std::vector<SPItem*> get_layers_to_toggle(SPObject* layer, SPObject* current_root) {
+    std::vector<SPItem*> layers;
+    if (!SP_IS_GROUP(layer) ||
+        !(current_root == layer || (current_root && current_root->isAncestorOf(layer)))) {
+        g_warning("Bogus input to get_layers_to_toggle_toggle");
+        return layers;
+    }
+
+    for (SPObject* obj = Inkscape::next_layer(current_root, layer); obj; obj = Inkscape::next_layer(current_root, obj)) {
+        // skip ancestors
+        auto item = SP_ITEM(obj);
+        if (!obj->isAncestorOf(layer) && item) {
+            layers.push_back(item);
+        }
+    }
+    for (SPObject* obj = Inkscape::previous_layer(current_root, layer); obj; obj = Inkscape::previous_layer(current_root, obj)) {
+        auto item = SP_ITEM(obj);
+        if (!obj->isAncestorOf(layer) && item) {
+            layers.push_back(item);
+        }
+    }
+
+    return layers;
+}
+
 /**
  * Toggle the sensitivity of every layer except the given layer.
  */
-void LayerManager::toggleLockOtherLayers(SPObject *object) {
-    g_return_if_fail(SP_IS_GROUP(object));
-    g_return_if_fail( currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)) );
+void LayerManager::toggleLockOtherLayers(SPObject *object, bool force_lock) {
+    auto layers = get_layers_to_toggle(object, currentRoot());
+    if (layers.empty()) return;
 
-    bool othersLocked = false;
-    std::vector<SPObject*> layers;
-    for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
-        // Don't lock any ancestors, since that would in turn lock the layer as well
-        if (!obj->isAncestorOf(object)) {
-            layers.push_back(obj);
-            othersLocked |= !SP_ITEM(obj)->isLocked();
-        }
-    }
-    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
-        if (!obj->isAncestorOf(object)) {
-            layers.push_back(obj);
-            othersLocked |= !SP_ITEM(obj)->isLocked();
+    bool othersLocked = force_lock ? true : std::any_of(layers.begin(), layers.end(), [](SPItem* l){ return !l->isLocked(); });
+
+    if (SPItem* item = SP_ITEM(object)) {
+        if (item->isLocked()) {
+            item->setLocked(false);
         }
     }
 
-    SPItem *item = SP_ITEM(object);
-    if ( item->isLocked() ) {
-        item->setLocked(false);
-    }
-    for (auto & layer : layers) {
-        SP_ITEM(layer)->setLocked(othersLocked);
+    for (auto layer : layers) {
+        if (layer->isLocked() != othersLocked) {
+            layer->setLocked(othersLocked);
+        }
     }
 }
 
 /**
  * Toggle the visibility of every layer except the given layer.
  */
-void LayerManager::toggleLayerSolo(SPObject *object) {
-    g_return_if_fail(SP_IS_GROUP(object));
-    g_return_if_fail( currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)) );
+void LayerManager::toggleLayerSolo(SPObject *object, bool force_hide) {
+    auto layers = get_layers_to_toggle(object, currentRoot());
+    if (layers.empty()) return;
 
-    bool othersShowing = false;
-    std::vector<SPObject*> layers;
-    for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
-        // Don't hide ancestors, since that would in turn hide the layer as well
-        if (!obj->isAncestorOf(object)) {
-            layers.push_back(obj);
-            othersShowing |= !SP_ITEM(obj)->isHidden();
-        }
-    }
-    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
-        if (!obj->isAncestorOf(object)) {
-            layers.push_back(obj);
-            othersShowing |= !SP_ITEM(obj)->isHidden();
-        }
-    }
+    bool othersShowing = force_hide ? true : std::any_of(layers.begin(), layers.end(), [](SPItem* l){ return !l->isHidden(); });
 
-    SPItem *item = SP_ITEM(object);
-    if ( item->isHidden() ) {
-        item->setHidden(false);
+    if (SPItem* item = SP_ITEM(object)) {
+        if (item->isHidden()) {
+            item->setHidden(false);
+        }
     }
 
     for (auto & layer : layers) {
-        SP_ITEM(layer)->setHidden(othersShowing);
+        if (layer->isHidden() != othersShowing) {
+            layer->setHidden(othersShowing);
+        }
     }
 }
 

@@ -14,6 +14,7 @@
  */
 
 #include "sp-object.h"
+class SPGlyph;
 
 class SPFont : public SPObject {
 public:
@@ -27,6 +28,12 @@ public:
     double vert_origin_y;
     double vert_adv_y;
 
+    // add new glyph to the font with optional name and given unicode string (code point, or code points for the glyph)
+    SPGlyph* create_new_glyph(const char* name, const char* unicode);
+
+    // sort glyphs in the font by "unicode" attribute (code points)
+    void sort_glyphs();
+
 protected:
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 	void release() override;
@@ -39,6 +46,9 @@ protected:
 	void update(SPCtx* ctx, unsigned int flags) override;
 
 	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
+
+private:
+    bool _block = false;
 };
 
 MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_FONT, SPFont)

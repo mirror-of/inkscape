@@ -33,6 +33,7 @@
 #include "style.h"
 #include "live_effects/lpeobject.h"
 #include "sp-factory.h"
+#include "sp-font.h"
 #include "sp-paint-server.h"
 #include "sp-root.h"
 #include "sp-style-elem.h"
@@ -461,6 +462,8 @@ void SPObject::requestOrphanCollection() {
     if (dynamic_cast<SPStyleElem *>(this)) {
         // leave it
     } else if (dynamic_cast<SPScript *>(this)) {
+        // leave it
+    } else if (dynamic_cast<SPFont*>(this)) {
         // leave it
     } else if ((! prefs->getBool("/options/cleanupswatches/value", false)) && SP_IS_PAINT_SERVER(this) && static_cast<SPPaintServer*>(this)->isSwatch() ) {
         // leave it

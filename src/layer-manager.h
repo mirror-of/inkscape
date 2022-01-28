@@ -43,10 +43,10 @@ public:
 
     void reset();
     void setCurrentLayer(SPObject *object, bool clear=false);
-    void toggleLayerSolo(SPObject *object);
+    void toggleLayerSolo(SPObject *object, bool force_hide = false);
     void toggleHideAllLayers(bool hide);
     void toggleLockAllLayers(bool lock);
-    void toggleLockOtherLayers(SPObject *object);
+    void toggleLockOtherLayers(SPObject *object, bool force_lock = false);
     SPObject *layerForObject(SPObject *object);
     bool isLayer(SPObject *object) const;
     static SPGroup *asLayer(SPObject *object);

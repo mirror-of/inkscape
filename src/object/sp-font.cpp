@@ -14,6 +14,7 @@
 #include "xml/repr.h"
 #include "attributes.h"
 #include "sp-font.h"
+#include "sp-glyph.h"
 #include "document.h"
 
 #include "display/nr-svgfonts.h"
@@ -56,7 +57,7 @@ void SPFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
 void SPFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
     SPObject::child_added(child, ref);
 
-    this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    if (!_block) this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -66,7 +67,7 @@ void SPFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 void SPFont::remove_child(Inkscape::XML::Node* child) {
     SPObject::remove_child(child);
 
-    this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    if (!_block) this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void SPFont::release() {
@@ -189,6 +190,77 @@ Inkscape::XML::Node* SPFont::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     return repr;
 }
+
+using Inkscape::XML::Node;
+
+SPGlyph* SPFont::create_new_glyph(const char* name, const char* unicode) {
+
+    Inkscape::XML::Document* xml_doc = document->getReprDoc();
+
+    // create a new glyph
+    Inkscape::XML::Node* grepr = xml_doc->createElement("svg:glyph");
+
+    grepr->setAttribute("glyph-name", name);
+    grepr->setAttribute("unicode", unicode);
+
+    // Append the new glyph node to the current font
+    getRepr()->appendChild(grepr);
+    Inkscape::GC::release(grepr);
+
+    // get corresponding object
+    SPGlyph* g = SP_GLYPH(document->getObjectByRepr(grepr));
+
+    g_assert(g != nullptr);
+    g_assert(SP_IS_GLYPH(g));
+
+    g->setCollectionPolicy(SPObject::COLLECT_WITH_PARENT);
+
+    return g;
+}
+
+void SPFont::sort_glyphs() {
+    auto* repr = getRepr();
+    g_assert(repr);
+
+    std::vector<std::pair<SPGlyph*, Node*>> glyphs;
+    glyphs.reserve(repr->childCount());
+
+    // collect all glyphs (SPGlyph and their representations) 
+    for (auto&& node : children) {
+        if (auto g = dynamic_cast<SPGlyph*>(&node)) {
+            glyphs.emplace_back(g, g->getRepr());
+            // keep representation around as it gets removed
+            g->getRepr()->anchor();
+        }
+    }
+
+    // now sort by unicode point
+    std::stable_sort(begin(glyphs), end(glyphs), [](const std::pair<SPGlyph*, Node*>& a, const std::pair<SPGlyph*, Node*>& b) {
+        // compare individual unicode points in each string one by one to establish glyph order
+        // note: ustring operator< doesn't work as expected
+        const auto& str1 = a.first->unicode;
+        const auto& str2 = b.first->unicode;
+        return std::lexicographical_compare(str1.begin(), str1.end(), str2.begin(), str2.end());
+    });
+
+    // remove all glyph nodes from the document; block notifications
+    _block = true;
+
+    for (auto&& glyph : glyphs) {
+        repr->removeChild(glyph.second);
+    }
+
+    // re-add them in the desired order
+    for (auto&& glyph : glyphs) {
+        repr->appendChild(glyph.second);
+        glyph.second->release();
+    }
+
+    _block = false;
+    // notify listeners about the change
+    parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+}
+
 /*
   Local Variables:
   mode:c++

@@ -13,7 +13,6 @@ set(util_SRC
 	const_char_ptr.h
 	enums.h
 	expression-evaluator.h
-	find-last-if.h
 	fixed_point.h
 	format.h
 	forward-pointer-iterator.h

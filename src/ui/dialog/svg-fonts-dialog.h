@@ -18,6 +18,7 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/iconview.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
@@ -62,6 +63,76 @@ public:
     GlyphComboBox();
     void update(SPFont*);
 };
+
+// cell text renderer for SVG font glyps (relying on Cairo "user font");
+// it can accept mouse clicks and report them via signal_clicked()
+class SvgGlyphRenderer : public Gtk::CellRenderer {
+public:
+    SvgGlyphRenderer() :
+        Glib::ObjectBase(typeid(CellRenderer)),
+        Gtk::CellRenderer(),
+        _property_active(*this, "active", true),
+        _property_activatable(*this, "activatable", true),
+        _property_glyph(*this, "glyph", "") {
+
+        property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
+    }
+
+    ~SvgGlyphRenderer() override = default;
+
+    Glib::PropertyProxy<Glib::ustring> property_glyph() { return _property_glyph.get_proxy(); }
+    Glib::PropertyProxy<bool> property_active() { return _property_active.get_proxy(); }
+    Glib::PropertyProxy<bool> property_activatable() { return _property_activatable.get_proxy(); }
+
+    sigc::signal<void (const GdkEvent*, const Glib::ustring&)>& signal_clicked() {
+        return _signal_clicked;
+    }
+ 
+    void set_svg_font(SvgFont* font) {
+        _font = font;
+    }
+
+    void set_font_size(int size) {
+        _font_size = size;
+    }
+
+    void set_tree(Gtk::Widget* tree) {
+        _tree = tree;
+    }
+
+    void set_cell_size(int w, int h) {
+        _width = w;
+        _height = h;
+    }
+
+    int get_width() const {
+        return _width;
+    }
+
+    void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr, Gtk::Widget& widget, const Gdk::Rectangle& background_area, const Gdk::Rectangle& cell_area, Gtk::CellRendererState flags) override;
+
+    bool activate_vfunc(GdkEvent* event, Gtk::Widget& widget, const Glib::ustring& path, const Gdk::Rectangle& background_area, const Gdk::Rectangle& cell_area, Gtk::CellRendererState flags) override;
+
+    void get_preferred_width_vfunc(Gtk::Widget& widget, int& min_w, int& nat_w) const override {
+        min_w = nat_w = _width;
+    }
+
+    void get_preferred_height_vfunc(Gtk::Widget& widget, int& min_h, int& nat_h) const override {
+        min_h = nat_h = _height;
+    }
+
+private:
+    int _width = 0;
+    int _height = 0;
+    int _font_size = 0;
+    Glib::Property<Glib::ustring> _property_glyph;
+    Glib::Property<bool> _property_active;
+    Glib::Property<bool> _property_activatable;
+    SvgFont* _font = nullptr;
+    Gtk::Widget* _tree = nullptr;
+    sigc::signal<void (const GdkEvent*, const Glib::ustring&)> _signal_clicked;
+};
+
 
 class SvgFontsDialog : public DialogBase
 {
@@ -124,7 +195,10 @@ public:
     OperationBlocker _update;
 
 private:
-    void update_glyphs();
+    void update_glyphs(SPGlyph* changed_glyph = nullptr);
+    void update_glyph(SPGlyph* glyph);
+    void set_glyph_row(const Gtk::TreeRow& row, SPGlyph& glyph);
+    void refresh_svgfont();
     void update_sensitiveness();
     void update_global_settings_tab();
     void populate_glyphs_box();
@@ -152,13 +226,16 @@ private:
     void create_kerning_pairs_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
     void kerning_pairs_list_button_release(GdkEventButton* event);
 
+    Gtk::TreeModel::iterator get_selected_glyph_iter();
+    void set_selected_glyph(SPGlyph* glyph);
+    void edit_glyph(SPGlyph* glyph);
+    void sort_glyphs(SPFont* font);
+
     Inkscape::XML::SignalObserver _defs_observer; //in order to update fonts
     Inkscape::XML::SignalObserver _glyphs_observer;
-
     Inkscape::auto_connection _defs_observer_connection;
 
     Gtk::Box* AttrCombo(gchar* lbl, const SPAttr attr);
-//    Gtk::Box* AttrSpin(gchar* lbl, const SPAttr attr);
     Gtk::Box* global_settings_tab();
 
     // <font>
@@ -189,12 +266,11 @@ private:
     class Columns : public Gtk::TreeModel::ColumnRecord
     {
     public:
-        Columns()
-	{
+        Columns() {
             add(spfont);
             add(svgfont);
             add(label);
-	}
+        }
 
         Gtk::TreeModelColumn<SPFont*> spfont;
         Gtk::TreeModelColumn<SvgFont*> svgfont;
@@ -208,40 +284,48 @@ private:
     class GlyphsColumns : public Gtk::TreeModel::ColumnRecord
     {
     public:
-        GlyphsColumns()
-	{
+        GlyphsColumns() {
             add(glyph_node);
             add(glyph_name);
             add(unicode);
+            add(UplusCode);
             add(advance);
-	}
+            add(name_markup);
+        }
 
         Gtk::TreeModelColumn<SPGlyph*> glyph_node;
         Gtk::TreeModelColumn<Glib::ustring> glyph_name;
         Gtk::TreeModelColumn<Glib::ustring> unicode;
+        Gtk::TreeModelColumn<Glib::ustring> UplusCode;
         Gtk::TreeModelColumn<double> advance;
+        Gtk::TreeModelColumn<Glib::ustring> name_markup;
     };
+    enum GlyphColumnIndex { ColGlyph, ColName, ColString, ColUplusCode, ColAdvance };
     GlyphsColumns _GlyphsListColumns;
     Glib::RefPtr<Gtk::ListStore> _GlyphsListStore;
     Gtk::TreeView _GlyphsList;
     Gtk::ScrolledWindow _GlyphsListScroller;
+    Gtk::ScrolledWindow _glyphs_icon_scroller;
+    Gtk::IconView _glyphs_grid;
+    SvgGlyphRenderer* _glyph_renderer = nullptr;
+    SvgGlyphRenderer* _glyph_cell_renderer = nullptr;
 
     class KerningPairColumns : public Gtk::TreeModel::ColumnRecord
     {
     public:
-      KerningPairColumns()
-	{
-	  add(first_glyph);
-	  add(second_glyph);
-	  add(kerning_value);
-	  add(spnode);
-	}
+        KerningPairColumns() {
+            add(first_glyph);
+            add(second_glyph);
+            add(kerning_value);
+            add(spnode);
+        }
 
-      Gtk::TreeModelColumn<Glib::ustring> first_glyph;
-      Gtk::TreeModelColumn<Glib::ustring> second_glyph;
-      Gtk::TreeModelColumn<double> kerning_value;
-      Gtk::TreeModelColumn<SPGlyphKerning*> spnode;
+        Gtk::TreeModelColumn<Glib::ustring> first_glyph;
+        Gtk::TreeModelColumn<Glib::ustring> second_glyph;
+        Gtk::TreeModelColumn<double> kerning_value;
+        Gtk::TreeModelColumn<SPGlyphKerning *> spnode;
     };
+
     KerningPairColumns _KerningPairsListColumns;
     Glib::RefPtr<Gtk::ListStore> _KerningPairsListStore;
     Gtk::TreeView _KerningPairsList;
@@ -254,6 +338,8 @@ private:
     Gtk::Box glyphs_vbox;
     Gtk::Box kerning_vbox;
     Gtk::Entry _preview_entry;
+    bool _show_glyph_list = true;
+    void set_glyphs_view_mode(bool list);
 
     Gtk::Menu _FontsContextMenu;
     Gtk::Menu _GlyphsContextMenu;
@@ -269,11 +355,10 @@ private:
     {
     public:
         EntryWidget()
-        : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
-	{
+        : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) {
             this->add(this->_label);
             this->add(this->_entry);
-	}
+        }
         void set_label(const gchar* l){
             this->_label.set_text(l);
         }
