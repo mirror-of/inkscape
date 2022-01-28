@@ -599,6 +599,7 @@ bool PageManager::subset(SPAttr key, const gchar *value)
             this->background_color = this->background_color & 0xff;
             if (value) {
                 this->background_color = this->background_color | sp_svg_read_color(value, this->background_color);
+                return false; // propagate further
             }
             break;
         case SPAttr::INKSCAPE_PAGEOPACITY:

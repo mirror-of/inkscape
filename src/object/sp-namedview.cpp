@@ -57,7 +57,7 @@ using Inkscape::Util::unit_table;
 #define DEFAULTGRIDEMPSPACING 5
 #define DEFAULTGUIDECOLOR 0x0000ff7f
 #define DEFAULTGUIDEHICOLOR 0xff00007f
-#define DEFAULTDESKCOLOR 0xffffffff
+#define DEFAULTDESKCOLOR 0xd1d1d1ff
 
 static void sp_namedview_setup_guides(SPNamedView * nv);
 static void sp_namedview_lock_guides(SPNamedView * nv);
@@ -225,7 +225,6 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::BORDEROPACITY);
     this->readAttr(SPAttr::PAGECOLOR);
     this->readAttr(SPAttr::INKSCAPE_DESK_COLOR);
-    // this->readAttr(SPAttr::INKSCAPE_DESK_OPACITY);
     this->readAttr(SPAttr::INKSCAPE_DESK_CHECKERBOARD);
     this->readAttr(SPAttr::INKSCAPE_PAGESHADOW);
     this->readAttr(SPAttr::INKSCAPE_ZOOM);
@@ -332,177 +331,144 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
 
     switch (key) {
     case SPAttr::VIEWONLY:
-            this->editable = (!value);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->editable = (!value);
+        break;
     case SPAttr::SHOWGUIDES:
         this->showguides.readOrUnset(value);
         sp_namedview_setup_guides(this);
-        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SPAttr::INKSCAPE_LOCKGUIDES:
         this->lockguides.readOrUnset(value);
         this->lockGuides();
-        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SPAttr::SHOWGRIDS:
         this->grids_visible.readOrUnset(value);
-        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SPAttr::GRIDTOLERANCE:
-            this->snap_manager.snapprefs.setGridTolerance(value ? g_ascii_strtod(value, nullptr) : 10000);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->snap_manager.snapprefs.setGridTolerance(value ? g_ascii_strtod(value, nullptr) : 10000);
+        break;
     case SPAttr::GUIDETOLERANCE:
-            this->snap_manager.snapprefs.setGuideTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->snap_manager.snapprefs.setGuideTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
+        break;
     case SPAttr::OBJECTTOLERANCE:
-            this->snap_manager.snapprefs.setObjectTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->snap_manager.snapprefs.setObjectTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
+        break;
     case SPAttr::ALIGNMENTTOLERANCE:
-            this->snap_manager.snapprefs.setAlignementTolerance(value ? g_ascii_strtod(value, nullptr) : 5);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->snap_manager.snapprefs.setAlignementTolerance(value ? g_ascii_strtod(value, nullptr) : 5);
+        break;
     case SPAttr::DISTRIBUTIONTOLERANCE:
-            this->snap_manager.snapprefs.setDistributionTolerance(value ? g_ascii_strtod(value, nullptr) : 5);
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->snap_manager.snapprefs.setDistributionTolerance(value ? g_ascii_strtod(value, nullptr) : 5);
+        break;
     case SPAttr::GUIDECOLOR:
-            this->guidecolor = (this->guidecolor & 0xff) | (DEFAULTGUIDECOLOR & 0xffffff00);
-
-            if (value) {
-                this->guidecolor = (this->guidecolor & 0xff) | sp_svg_read_color(value, this->guidecolor);
-            }
-
-            for(auto guide : this->guides) {
-                guide->setColor(this->guidecolor);
-                guide->readAttr(SPAttr::INKSCAPE_COLOR);
-            }
-
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->guidecolor = (this->guidecolor & 0xff) | (DEFAULTGUIDECOLOR & 0xffffff00);
+        if (value) {
+            this->guidecolor = (this->guidecolor & 0xff) | sp_svg_read_color(value, this->guidecolor);
+        }
+        for(auto guide : this->guides) {
+            guide->setColor(this->guidecolor);
+            guide->readAttr(SPAttr::INKSCAPE_COLOR);
+        }
+        break;
     case SPAttr::GUIDEOPACITY:
         sp_ink_read_opacity(value, &this->guidecolor, DEFAULTGUIDECOLOR);
-
         for (auto guide : this->guides) {
             guide->setColor(this->guidecolor);
             guide->readAttr(SPAttr::INKSCAPE_COLOR);
-            }
-
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        }
+        break;
     case SPAttr::GUIDEHICOLOR:
-            this->guidehicolor = (this->guidehicolor & 0xff) | (DEFAULTGUIDEHICOLOR & 0xffffff00);
-
-            if (value) {
-                this->guidehicolor = (this->guidehicolor & 0xff) | sp_svg_read_color(value, this->guidehicolor);
-            }
-            for(auto guide : this->guides) {
-            	guide->setHiColor(this->guidehicolor);
-            }
-
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->guidehicolor = (this->guidehicolor & 0xff) | (DEFAULTGUIDEHICOLOR & 0xffffff00);
+        if (value) {
+            this->guidehicolor = (this->guidehicolor & 0xff) | sp_svg_read_color(value, this->guidehicolor);
+        }
+        for(auto guide : this->guides) {
+            guide->setHiColor(this->guidehicolor);
+        }
+        break;
     case SPAttr::GUIDEHIOPACITY:
         sp_ink_read_opacity(value, &this->guidehicolor, DEFAULTGUIDEHICOLOR);
         for (auto guide : this->guides) {
             guide->setHiColor(this->guidehicolor);
-            }
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SPAttr::INKSCAPE_DESK_COLOR:
-        // desk_color = (desk_color & 0xff) | (DEFAULTDESKCOLOR & 0xffffff00);
-        if (value) {
-            desk_color = /*(desk_color & 0xff) |*/ sp_svg_read_color(value, desk_color);
         }
-        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         break;
-    // case SPAttr::INKSCAPE_DESK_OPACITY:
-    //     sp_ink_read_opacity(value, &desk_color, DEFAULTDESKCOLOR);
-    //     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    //     break;
+    case SPAttr::PAGECOLOR:
+        // if desk color is not defined in a document, then use page color
+        if (value && _default_desk_color) {
+            desk_color = sp_svg_read_color(value, desk_color);
+            _default_desk_color = false;
+        }
+        break;
+    case SPAttr::INKSCAPE_DESK_COLOR:
+        if (value) {
+            desk_color = sp_svg_read_color(value, desk_color);
+            _default_desk_color = false;
+        }
+        break;
     case SPAttr::INKSCAPE_DESK_CHECKERBOARD:
         this->desk_checkerboard.readOrUnset(value);
-        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SPAttr::INKSCAPE_ZOOM:
-            this->zoom = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->zoom = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
+        break;
     case SPAttr::INKSCAPE_ROTATION:
-            this->rotation = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->rotation = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
+        break;
     case SPAttr::INKSCAPE_CX:
-            this->cx = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->cx = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
+        break;
     case SPAttr::INKSCAPE_CY:
-            this->cy = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->cy = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
+        break;
     case SPAttr::INKSCAPE_WINDOW_WIDTH:
-            this->window_width = value? atoi(value) : -1; // -1 means not set
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->window_width = value? atoi(value) : -1; // -1 means not set
+        break;
     case SPAttr::INKSCAPE_WINDOW_HEIGHT:
-            this->window_height = value ? atoi(value) : -1; // -1 means not set
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->window_height = value ? atoi(value) : -1; // -1 means not set
+        break;
     case SPAttr::INKSCAPE_WINDOW_X:
-            this->window_x = value ? atoi(value) : 0;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->window_x = value ? atoi(value) : 0;
+        break;
     case SPAttr::INKSCAPE_WINDOW_Y:
-            this->window_y = value ? atoi(value) : 0;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->window_y = value ? atoi(value) : 0;
+        break;
     case SPAttr::INKSCAPE_WINDOW_MAXIMIZED:
-            this->window_maximized = value ? atoi(value) : 0;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->window_maximized = value ? atoi(value) : 0;
+        break;
     case SPAttr::INKSCAPE_CURRENT_LAYER:
-            this->default_layer_id = value ? g_quark_from_string(value) : 0;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->default_layer_id = value ? g_quark_from_string(value) : 0;
+        break;
     case SPAttr::INKSCAPE_CONNECTOR_SPACING:
-            this->connector_spacing = value ? g_ascii_strtod(value, nullptr) :
-                    defaultConnSpacing;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        this->connector_spacing = value ? g_ascii_strtod(value, nullptr) : defaultConnSpacing;
+        break;
     case SPAttr::INKSCAPE_DOCUMENT_UNITS: {
-            /* The default display unit if the document doesn't override this: e.g. for files saved as
-             * `plain SVG', or non-inkscape files, or files created by an inkscape 0.40 &
-             * earlier.
-             *
-             * Note that these units are not the same as the units used for the values in SVG!
-             *
-             * We default to `px'.
-             */
-            static Inkscape::Util::Unit const *px = unit_table.getUnit("px");
-            Inkscape::Util::Unit const *new_unit = px;
+        /* The default display unit if the document doesn't override this: e.g. for files saved as
+            * `plain SVG', or non-inkscape files, or files created by an inkscape 0.40 &
+            * earlier.
+            *
+            * Note that these units are not the same as the units used for the values in SVG!
+            *
+            * We default to `px'.
+            */
+        static Inkscape::Util::Unit const *px = unit_table.getUnit("px");
+        Inkscape::Util::Unit const *new_unit = px;
 
-            if (value) {
-                Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
-                if ( !unit_table.hasUnit(value) ) {
-                    g_warning("Unrecognized unit `%s'", value);
-                    /* fixme: Document errors should be reported in the status bar or
-                     * the like (e.g. as per
-                     * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing); g_log
-                     * should be only for programmer errors. */
-                } else if ( req_unit->isAbsolute() ) {
-                    new_unit = req_unit;
-                } else {
-                    g_warning("Document units must be absolute like `mm', `pt' or `px', but found `%s'",
-                              value);
-                    /* fixme: Don't use g_log (see above). */
-                }
+        if (value) {
+            Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
+            if ( !unit_table.hasUnit(value) ) {
+                g_warning("Unrecognized unit `%s'", value);
+                /* fixme: Document errors should be reported in the status bar or
+                    * the like (e.g. as per
+                    * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing); g_log
+                    * should be only for programmer errors. */
+            } else if ( req_unit->isAbsolute() ) {
+                new_unit = req_unit;
+            } else {
+                g_warning("Document units must be absolute like `mm', `pt' or `px', but found `%s'", value);
+                /* fixme: Don't use g_log (see above). */
             }
-            this->display_units = new_unit;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
+        }
+        this->display_units = new_unit;
+        break;
     }
     /*
     case SPAttr::UNITS: {
@@ -526,13 +492,14 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
                 }
             }
             this->page_size_units = new_unit;
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     } */
     default:
-            SPObjectGroup::set(key, value);
-            break;
+        SPObjectGroup::set(key, value);
+        return;
     }
+
+    this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /**
