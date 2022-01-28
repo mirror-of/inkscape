@@ -19,7 +19,6 @@
 #include "inkscape-window.h"
 
 #include "inkscape.h"             // Inkscape::Application
-#include "helper/action-context.h"
 
 // Actions for window handling (should be integrated with file dialog).
 

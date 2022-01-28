@@ -67,6 +67,7 @@ public:
      * @param desktop the desktop associated with the layer model, or NULL if in console mode
      */
     Selection(SPDesktop *desktop);
+    Selection(SPDocument *document);
     ~Selection() override;
 
     /** no copy. */

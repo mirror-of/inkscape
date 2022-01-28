@@ -51,6 +51,16 @@ Selection::Selection(SPDesktop *desktop):
 {
 }
 
+Selection::Selection(SPDocument *document):
+    ObjectSet(document),
+    _selection_context(nullptr),
+    _flags(0),
+    _idle(0),
+    anchor_x(0.0),
+    anchor_y(0.0)
+{
+}
+
 Selection::~Selection() {
     if (_idle) {
         g_source_remove(_idle);
@@ -88,7 +98,6 @@ gboolean Selection::_emit_modified(Selection *selection)
 }
 
 void Selection::_emitModified(guint flags) {
-    INKSCAPE.selection_modified(this, flags);
     _modified_signal.emit(this, flags);
 
     if (_desktop) {
@@ -129,7 +138,6 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
         }
     }
 
-    INKSCAPE.selection_changed(this);
     _changed_signal.emit(this);
 }
 

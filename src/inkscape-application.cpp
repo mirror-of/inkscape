@@ -29,7 +29,6 @@
 #include "file.h"                   // sp_file_convert_dpi
 #include "inkscape.h"               // Inkscape::Application
 #include "path-prefix.h"            // Data directory
-#include "helper/action-context.h"  // TEMP
 
 #include "include/glibmm_version.h"
 
@@ -220,11 +219,9 @@ InkscapeApplication::document_swap(InkscapeWindow* window, SPDocument* document)
     INKSCAPE.add_document(document);
     INKSCAPE.remove_document(old_document);
 
-    // ActionContext should be removed once verbs are gone but we use it for now.
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
     _active_document  = document;
-    _active_selection = context.getSelection();
-    _active_view      = context.getView();
+    _active_selection = desktop->getSelection();
+    _active_view      = desktop;
     _active_window    = window;
     return true;
 }
@@ -392,12 +389,10 @@ InkscapeApplication::window_open(SPDocument* document)
     // To be removed (add once per window)!
     INKSCAPE.add_document(document);
 
-    // ActionContext should be removed once verbs are gone but we use it for now.
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-    _active_selection = context.getSelection();
-    _active_view      = context.getView();
-    _active_document  = document;
     _active_window    = window;
+    _active_view      = window->get_desktop();
+    _active_selection = window->get_desktop()->getSelection();
+    _active_document  = document;
 
     auto it = _documents.find(document);
     if (it != _documents.end()) {
@@ -929,15 +924,15 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
     bool replace = _use_pipe || _batch_process;
 
     // Open window if needed (reuse window if we are doing one file at a time inorder to save overhead).
+    _active_document  = document;
     if (_with_gui) {
         _active_window = create_window(document, replace);
+        _active_view = _active_window->get_desktop();
+    } else {
+        _active_window = nullptr;
+        _active_view = nullptr;
+        _active_selection = document->getSelection();
     }
-
-    // ActionContext should be removed once verbs are gone but we use it for now.
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-    _active_document  = document;
-    _active_selection = context.getSelection();
-    _active_view      = context.getView();
 
     document->ensureUpToDate(); // Or queries don't work!
 

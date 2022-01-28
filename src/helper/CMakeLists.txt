@@ -10,7 +10,6 @@ set(sp_marshal_SRC
 )
 
 set(helper_SRC
-	action-context.cpp
 	geom.cpp
 	geom-nodetype.cpp
 	geom-pathstroke.cpp
@@ -28,7 +27,6 @@ set(helper_SRC
 
 	# -------
 	# Headers
-	action-context.h
 	geom-curves.h
 	geom-nodetype.h
 	geom-pathstroke.h

@@ -42,8 +42,6 @@
 #include "extension/init.h"
 #include "extension/system.h"
 
-#include "helper/action-context.h"
-
 #include "io/resource.h"
 #include "io/fix-broken-links.h"
 #include "io/sys.h"
@@ -521,50 +519,6 @@ Application::crash_handler (int /*signum*/)
 
 
 void
-Application::selection_modified (Inkscape::Selection *selection, guint flags)
-{
-    g_return_if_fail (selection != nullptr);
-
-    if (DESKTOP_IS_ACTIVE (selection->desktop())) {
-        signal_selection_modified.emit(selection, flags);
-    }
-}
-
-
-void
-Application::selection_changed (Inkscape::Selection * selection)
-{
-    g_return_if_fail (selection != nullptr);
-
-    if (DESKTOP_IS_ACTIVE (selection->desktop())) {
-        signal_selection_changed.emit(selection);
-    }
-}
-
-void
-Application::subselection_changed (SPDesktop *desktop)
-{
-    g_return_if_fail (desktop != nullptr);
-
-    if (DESKTOP_IS_ACTIVE (desktop)) {
-        signal_subselection_changed.emit(desktop);
-    }
-}
-
-
-void
-Application::selection_set (Inkscape::Selection * selection)
-{
-    g_return_if_fail (selection != nullptr);
-
-    if (DESKTOP_IS_ACTIVE (selection->desktop())) {
-        signal_selection_set.emit(selection);
-        signal_selection_changed.emit(selection);
-    }
-}
-
-
-void
 Application::add_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != nullptr);
@@ -784,16 +738,6 @@ Application::add_document (SPDocument *document)
                 iter.second ++;
             }
        }
-    } else {
-        // insert succeeded, this document is new.
-
-        // Create a selection model tied to the document for running without a GUI.
-        // We create the model even if there is a GUI as there might not be a window
-        // tied to the document (which would have its own selection model) as in the
-        // case where a verb requires a GUI where it's not really needed (conversion
-        // of verbs to actions will eliminate this need).
-        g_assert(_selection_models.find(document) == _selection_models.end());
-        _selection_models[document] = new AppSelectionModel(document);
     }
 }
 
@@ -813,12 +757,6 @@ Application::remove_document (SPDocument *document)
             if (iter->second < 1) {
                 // this was the last one, remove the pair from list
                 _document_set.erase (iter);
-
-                // also remove the selection model
-                std::map<SPDocument *, AppSelectionModel *>::iterator sel_iter = _selection_models.find(document);
-                if (sel_iter != _selection_models.end()) {
-                    _selection_models.erase(sel_iter);
-                }
 
                 return true;
             } else {
@@ -868,43 +806,6 @@ Application::sole_desktop_for_document(SPDesktop const &desktop) {
     }
     return true;
 }
-
-Inkscape::ActionContext
-Application::active_action_context()
-{
-    if (SP_ACTIVE_DESKTOP) {
-        return Inkscape::ActionContext(SP_ACTIVE_DESKTOP);
-    }
-
-    SPDocument *doc = active_document();
-    if (!doc) {
-        return Inkscape::ActionContext();
-    }
-
-    return action_context_for_document(doc);
-}
-
-Inkscape::ActionContext
-Application::action_context_for_document(SPDocument *doc)
-{
-    // If there are desktops, check them first to see if the document is bound to one of them
-    if (_desktops != nullptr) {
-        for (auto desktop : *_desktops) {
-            if (desktop->doc() == doc) {
-                return Inkscape::ActionContext(desktop);
-            }
-        }
-    }
-
-    // Document is not associated with any desktops - maybe we're in command-line mode
-    std::map<SPDocument *, AppSelectionModel *>::iterator sel_iter = _selection_models.find(doc);
-    if (sel_iter == _selection_models.end()) {
-        std::cout << "Application::action_context_for_document: no selection model" << std::endl;
-        return Inkscape::ActionContext();
-    }
-    return Inkscape::ActionContext(sel_iter->second->getSelection());
-}
-
 
 /*#####################
 # HELPERS

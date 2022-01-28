@@ -1281,7 +1281,6 @@ SPDesktop::emitToolSubselectionChanged(gpointer data)
 
 void SPDesktop::emitToolSubselectionChangedEx(gpointer data, SPObject* object) {
     _tool_subselection_changed.emit(data, object);
-    INKSCAPE.subselection_changed(this);
 }
 
 sigc::connection SPDesktop::connectToolSubselectionChanged(const sigc::slot<void, gpointer>& slot) {

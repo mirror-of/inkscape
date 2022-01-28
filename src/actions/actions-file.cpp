@@ -18,7 +18,6 @@
 #include "inkscape-application.h"
 
 #include "inkscape.h"             // Inkscape::Application
-#include "helper/action-context.h"
 
 // Actions for file handling (should be integrated with file dialog).
 
@@ -35,10 +34,9 @@ file_open(const Glib::VariantBase& value, InkscapeApplication *app)
     SPDocument *document = app->document_open(file);
     INKSCAPE.add_document(document);
 
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
     app->set_active_document(document);
-    app->set_active_selection(context.getSelection());
-    app->set_active_view(context.getView());
+    app->set_active_selection(document->getSelection());
+    app->set_active_view(nullptr);
 
     document->ensureUpToDate();
 }
@@ -64,10 +62,9 @@ file_new(const Glib::VariantBase& value, InkscapeApplication *app)
     SPDocument *document = app->document_new(s.get());
     INKSCAPE.add_document(document);
 
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
     app->set_active_document(document);
-    app->set_active_selection(context.getSelection());
-    app->set_active_view(context.getView());
+    app->set_active_selection(document->getSelection());
+    app->set_active_view(nullptr); // No desktop (yet).
 
     document->ensureUpToDate();
 }

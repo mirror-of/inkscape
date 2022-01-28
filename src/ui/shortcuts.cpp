@@ -30,8 +30,6 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 
-#include "helper/action-context.h"
-
 #include "io/resource.h"
 #include "io/dir-util.h"
 

@@ -117,6 +117,7 @@ SPDocument::SPDocument() :
     _event_log(new Inkscape::EventLog(this)),
     profileManager(nullptr), // deferred until after other initialization
     router(new Avoid::Router(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
+    _selection(new Inkscape::Selection(this)),
     oldSignalsConnected(false),
     current_persp3d(nullptr),
     current_persp3d_impl(nullptr),

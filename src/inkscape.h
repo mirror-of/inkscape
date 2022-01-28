@@ -37,8 +37,6 @@ class ToolBase;
 } // namespace Tools
 } // namespace UI
 
-class ActionContext;
-
 namespace XML {
 class Node;
 struct Document;
@@ -52,21 +50,6 @@ void inkscape_unref(Inkscape::Application & in);
 #define INKSCAPE (Inkscape::Application::instance())
 #define SP_ACTIVE_DOCUMENT (INKSCAPE.active_document())
 #define SP_ACTIVE_DESKTOP (INKSCAPE.active_desktop())
-
-class AppSelectionModel {
-    Inkscape::Selection *_selection;
-
-public:
-    AppSelectionModel(SPDocument *doc) {
-        // TODO: is this really how we should manage the lifetime of the selection?
-        // I just copied this from the initialization of the Selection in SPDesktop.
-        // When and how is it actually released?
-        _selection = Inkscape::GC::release(new Inkscape::Selection(nullptr));
-        _selection->setDocument(doc);
-    }
-
-    Inkscape::Selection *getSelection() const { return _selection; }
-};
 
 namespace Inkscape {
 
@@ -101,11 +84,9 @@ public:
     Inkscape::UI::Tools::ToolBase * active_event_context();
     SPDocument * active_document();
     SPDesktop * active_desktop();
-    // Use this function to get selection model etc for a document
-    Inkscape::ActionContext action_context_for_document(SPDocument *doc);
-    Inkscape::ActionContext active_action_context();
-    Inkscape::UI::ThemeContext *themecontext = nullptr;
     bool sole_desktop_for_document(SPDesktop const &desktop);
+
+    Inkscape::UI::ThemeContext *themecontext = nullptr;
     
     // Inkscape desktop stuff
     void add_desktop(SPDesktop * desktop);
@@ -121,10 +102,6 @@ public:
     SPDesktop * prev_desktop ();
     
     void external_change ();
-    void selection_modified (Inkscape::Selection *selection, guint flags);
-    void selection_changed (Inkscape::Selection * selection);
-    void subselection_changed (SPDesktop *desktop);
-    void selection_set (Inkscape::Selection * selection);
     
     // Moved document add/remove functions into public inkscape.h as they are used
     // (rightly or wrongly) by console-mode functions
@@ -192,7 +169,6 @@ public:
     Application* operator&() const; // no pointer access
 
     std::map<SPDocument *, int> _document_set;
-    std::map<SPDocument *, AppSelectionModel *> _selection_models;
     std::vector<SPDesktop *> *_desktops = nullptr;
 
     unsigned refCount = 1;
