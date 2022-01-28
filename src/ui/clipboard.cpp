@@ -279,9 +279,6 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
         // Special case for copying part of a path instead of the whole selected object.
         auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
         if (node_tool && node_tool->_selected_nodes) {
-            _discardInternalClipboard();
-            _createInternalClipboard();
-
             SPObject *first_path = nullptr;
             for (auto obj : set->items()) {
                 if(SP_IS_PATH(obj)) {
@@ -293,6 +290,12 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
             auto builder = new Geom::PathBuilder();
             node_tool->_multipath->copySelectedPath(builder);
             Geom::PathVector pathv = builder->peek();
+
+            // discardInternalClipboard done after copy, as deleting clipboard
+            // document may trigger tool switch (as in PathParam::~PathParam)
+            _discardInternalClipboard();
+            _createInternalClipboard();
+
             // Were any nodes actually copied?
             if (!pathv.empty()) {
                 Inkscape::XML::Node *pathRepr = _doc->createElement("svg:path");
