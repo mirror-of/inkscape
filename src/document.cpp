@@ -1066,6 +1066,9 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
         return (rv->second);
     } else if (_parent_document) {
         return _parent_document->getObjectById(id);
+    }
+    else if (_ref_document) {
+        return _ref_document->getObjectById(id);
     } else {
         return nullptr;
     }
@@ -2148,6 +2151,24 @@ SPDocument::emitReconstructionFinish()
     // Reference to the old persp3d object is invalid after reconstruction.
     initialize_current_persp3d();
 **/
+}
+
+void SPDocument::set_reference_document(SPDocument* document) {
+    _ref_document = document;
+}
+
+SPDocument* SPDocument::get_reference_document() {
+    return _ref_document;
+}
+
+SPDocument::install_reference_document::install_reference_document(SPDocument* inject_into, SPDocument* reference) {
+    g_assert(inject_into);
+    _parent = inject_into;
+    _parent->set_reference_document(reference);
+}
+
+SPDocument::install_reference_document::~install_reference_document() {
+    _parent->set_reference_document(nullptr);
 }
 
 /*

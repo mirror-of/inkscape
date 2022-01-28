@@ -748,6 +748,12 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
         return g_bad_marker;
     }
 
+    SPObject *oldmarker = _sandbox->getObjectById("sample");
+    if (oldmarker) {
+        oldmarker->deleteObject(false);
+    }
+
+    SPDocument::install_reference_document scoped(_sandbox.get(), marker->document);
     // Create a copy repr of the marker with id="sample"
     Inkscape::XML::Document *xml_doc = _sandbox->getReprDoc();
     Inkscape::XML::Node *mrepr = marker->getRepr()->duplicate(xml_doc);
@@ -755,10 +761,6 @@ MarkerComboBox::create_marker_image(Geom::IntPoint pixel_size, gchar const *mnam
 
     // Replace the old sample in the sandbox by the new one
     Inkscape::XML::Node *defsrepr = _sandbox->getObjectById("defs")->getRepr();
-    SPObject *oldmarker = _sandbox->getObjectById("sample");
-    if (oldmarker) {
-        oldmarker->deleteObject(false);
-    }
 
     // TODO - This causes a SIGTRAP on windows
     defsrepr->appendChild(mrepr);

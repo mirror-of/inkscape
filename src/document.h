@@ -274,6 +274,26 @@ public:
     std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element, bool custom = false) const;
     std::vector<SPObject *> getObjectsBySelector(Glib::ustring const &selector) const;
 
+    /**
+     * @brief Set the reference document object.
+     * Use this function to extend functionality of getObjectById() - it will search in reference document.
+     * This is useful when rendering objects that have been copied from this document into a sandbox document.
+     * Setting reference will allow sandbox document to find gradients, or linked objects that may have been
+     * referenced by copied object.
+     * @param document 
+     */
+    void set_reference_document(SPDocument* document);
+    SPDocument* get_reference_document();
+
+    /**
+     * @brief Object used to temporarily set and then automatically clear reference document.
+     */
+    struct install_reference_document {
+        install_reference_document(SPDocument* inject_into, SPDocument* reference);
+        ~install_reference_document();
+    private:
+        SPDocument* _parent;
+    };
 
     // Find items by geometry --------------------
     void build_flat_item_list(unsigned int dkey, SPGroup *group, gboolean into_groups) const;
@@ -354,6 +374,8 @@ private:
     SPDocument *_parent_document;
     // When copying documents, this can refer to it's original
     SPDocument const *_original_document;
+    // Reference document to fall back to when getObjectById cannot find element in '*this' document
+    SPDocument* _ref_document = nullptr;
 
     // Styling
     CRCascade *style_cascade;
