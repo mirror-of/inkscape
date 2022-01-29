@@ -864,9 +864,6 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
             children[i]->size_allocate(child_allocation);
         }
     }
-
-    _resizing_widget1 = nullptr;
-    _resizing_widget2 = nullptr;
 }
 
 void DialogMultipaned::forall_vfunc(gboolean, GtkCallback callback, gpointer callback_data)
