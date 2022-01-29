@@ -695,7 +695,7 @@ void ColorICCSelector::_colorChanged()
 #endif // DEBUG_LCMS
 
     _impl->_profilesChanged((_impl->_color.color().icc) ? _impl->_color.color().icc->colorProfile : std::string(""));
-    ColorScales::setScaled(_impl->_adj, _impl->_color.alpha());
+    ColorScales<>::setScaled(_impl->_adj, _impl->_color.alpha());
 
     _impl->_setProfile(_impl->_color.color().icc);
     _impl->_fixupNeeded = 0;
@@ -846,7 +846,7 @@ void ColorICCSelectorImpl::_updateSliders(gint ignore)
                         cmsUInt16Number *scratch = getScratch();
                         cmsUInt16Number filler[4] = { 0, 0, 0, 0 };
                         for (guint j = 0; j < _profChannelCount; j++) {
-                            filler[j] = 0x0ffff * ColorScales::getScaled(_compUI[j]._adj);
+                            filler[j] = 0x0ffff * ColorScales<>::getScaled(_compUI[j]._adj);
                         }
 
                         cmsUInt16Number *p = scratch;
@@ -899,7 +899,7 @@ void ColorICCSelectorImpl::_adjustmentChanged(Glib::RefPtr<Gtk::Adjustment> &adj
     gint match = -1;
 
     SPColor newColor(iccSelector->_impl->_color.color());
-    gfloat scaled = ColorScales::getScaled(iccSelector->_impl->_adj);
+    gfloat scaled = ColorScales<>::getScaled(iccSelector->_impl->_adj);
     if (iccSelector->_impl->_adj == adjustment) {
 #ifdef DEBUG_LCMS
         g_message("ALPHA");
@@ -921,7 +921,7 @@ void ColorICCSelectorImpl::_adjustmentChanged(Glib::RefPtr<Gtk::Adjustment> &adj
 
         cmsUInt16Number tmp[4];
         for (guint i = 0; i < 4; i++) {
-            tmp[i] = ColorScales::getScaled(iccSelector->_impl->_compUI[i]._adj) * 0x0ffff;
+            tmp[i] = ColorScales<>::getScaled(iccSelector->_impl->_compUI[i]._adj) * 0x0ffff;
         }
         guchar post[4] = { 0, 0, 0, 0 };
 
@@ -947,7 +947,7 @@ void ColorICCSelectorImpl::_adjustmentChanged(Glib::RefPtr<Gtk::Adjustment> &adj
             newColor = other;
             newColor.icc->colors.clear();
             for (guint i = 0; i < iccSelector->_impl->_profChannelCount; i++) {
-                gdouble val = ColorScales::getScaled(iccSelector->_impl->_compUI[i]._adj);
+                gdouble val = ColorScales<>::getScaled(iccSelector->_impl->_compUI[i]._adj);
                 val *= iccSelector->_impl->_compUI[i]._component.scale;
                 if (iccSelector->_impl->_compUI[i]._component.scale == 256) {
                     val -= 128;
@@ -972,7 +972,7 @@ void ColorICCSelectorImpl::_sliderGrabbed()
     //     if (!iccSelector->_dragging) {
     //         iccSelector->_dragging = TRUE;
     //         iccSelector->_grabbed();
-    //         iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_impl->_adj ),
+    //         iccSelector->_updateInternals( iccSelector->_color, ColorScales<>::getScaled( iccSelector->_impl->_adj ),
     //         iccSelector->_dragging );
     //     }
 }
@@ -983,7 +983,7 @@ void ColorICCSelectorImpl::_sliderReleased()
     //     if (iccSelector->_dragging) {
     //         iccSelector->_dragging = FALSE;
     //         iccSelector->_released();
-    //         iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_adj ),
+    //         iccSelector->_updateInternals( iccSelector->_color, ColorScales<>::getScaled( iccSelector->_adj ),
     //         iccSelector->_dragging );
     //     }
 }
@@ -999,7 +999,7 @@ void ColorICCSelectorImpl::_sliderChanged()
 #endif // DEBUG_LCMS
     //     ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 
-    //     iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_adj ),
+    //     iccSelector->_updateInternals( iccSelector->_color, ColorScales<>::getScaled( iccSelector->_adj ),
     //     iccSelector->_dragging );
 }
 

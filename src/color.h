@@ -80,6 +80,9 @@ struct SPColor {
 
     static void rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b);
     static void cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k);
+
+    static void rgb_to_hsluv_floatv (float *hsluv, float r, float g, float b);
+    static void hsluv_to_rgb_floatv (float *rgb, float h, float s, float l);
 };
 
 

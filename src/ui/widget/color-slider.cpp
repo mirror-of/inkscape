@@ -154,7 +154,7 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event)
         _oldvalue = _value;
         gfloat value = CLAMP((gfloat)(event->x - cx) / cw, 0.0, 1.0);
         bool constrained = event->state & GDK_CONTROL_MASK;
-        ColorScales::setScaled(_adjustment, value, constrained);
+        ColorScales<>::setScaled(_adjustment, value, constrained);
         signal_dragged.emit();
 
 	auto window = _gdk_window->gobj();
@@ -196,7 +196,7 @@ bool ColorSlider::on_motion_notify_event(GdkEventMotion *event)
         cw = allocation.get_width() - 2 * cx;
         gfloat value = CLAMP((gfloat)(event->x - cx) / cw, 0.0, 1.0);
         bool constrained = event->state & GDK_CONTROL_MASK;
-        ColorScales::setScaled(_adjustment, value, constrained);
+        ColorScales<>::setScaled(_adjustment, value, constrained);
         signal_dragged.emit();
     }
 
@@ -225,7 +225,7 @@ void ColorSlider::setAdjustment(Glib::RefPtr<Gtk::Adjustment> adjustment)
         _adjustment_value_changed_connection =
             _adjustment->signal_value_changed().connect(sigc::mem_fun(this, &ColorSlider::_onAdjustmentValueChanged));
 
-        _value = ColorScales::getScaled(_adjustment);
+        _value = ColorScales<>::getScaled(_adjustment);
 
         _onAdjustmentChanged();
     }
@@ -235,7 +235,7 @@ void ColorSlider::_onAdjustmentChanged() { queue_draw(); }
 
 void ColorSlider::_onAdjustmentValueChanged()
 {
-    if (_value != ColorScales::getScaled(_adjustment)) {
+    if (_value != ColorScales<>::getScaled(_adjustment)) {
         gint cx, cy, cw, ch;
         auto style_context = get_style_context();
         auto allocation    = get_allocation();
@@ -244,11 +244,11 @@ void ColorSlider::_onAdjustmentValueChanged()
         cy = padding.get_top();
         cw = allocation.get_width() - 2 * cx;
         ch = allocation.get_height() - 2 * cy;
-        if ((gint)(ColorScales::getScaled(_adjustment) * cw) != (gint)(_value * cw)) {
+        if ((gint)(ColorScales<>::getScaled(_adjustment) * cw) != (gint)(_value * cw)) {
             gint ax, ay;
             gfloat value;
             value = _value;
-            _value = ColorScales::getScaled(_adjustment);
+            _value = ColorScales<>::getScaled(_adjustment);
             ax = (int)(cx + value * cw - ARROW_SIZE / 2 - 2);
             ay = cy;
             queue_draw_area(ax, ay, ARROW_SIZE + 4, ch);
@@ -257,7 +257,7 @@ void ColorSlider::_onAdjustmentValueChanged()
             queue_draw_area(ax, ay, ARROW_SIZE + 4, ch);
         }
         else {
-            _value = ColorScales::getScaled(_adjustment);
+            _value = ColorScales<>::getScaled(_adjustment);
         }
     }
 }

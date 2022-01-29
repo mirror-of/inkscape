@@ -21,6 +21,7 @@
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 #include "color.h"
+#include "hsluv.h"
 #include "svg/svg-icc-color.h"
 #include "svg/svg-color.h"
 
@@ -445,6 +446,42 @@ SPColor::cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k)
     rgb[0] = 1.0 - c;
     rgb[1] = 1.0 - m;
     rgb[2] = 1.0 - y;
+}
+
+/**
+ * Fill hsluv float array from r,g,b float values.
+ */
+void
+SPColor::rgb_to_hsluv_floatv (float *hsluv, float r, float g, float b)
+{
+    double h, s, l;
+    Hsluv::rgb_to_hsluv(r, g, b, &h, &s, &l);
+
+    h /= 360.0;
+    s /= 100.0;
+    l /= 100.0;
+
+    hsluv[0] = std::min(1.0, std::max(0.0, h));
+    hsluv[1] = std::min(1.0, std::max(0.0, s));
+    hsluv[2] = std::min(1.0, std::max(0.0, l));
+}
+
+/**
+ * Fill rgb float array from h,s,l float values.
+ */
+void
+SPColor::hsluv_to_rgb_floatv (float *rgb, float h, float s, float l)
+{
+    h *= 360.0;
+    s *= 100.0;
+    l *= 100.0;
+
+    double r, g, b;
+    Hsluv::hsluv_to_rgb(h, s, l, &r, &g, &b);
+
+    rgb[0] = r;
+    rgb[1] = g;
+    rgb[2] = b;
 }
 
 /*

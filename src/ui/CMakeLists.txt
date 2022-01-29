@@ -173,7 +173,6 @@ set(ui_SRC
 	widget/color-preview.cpp	icon-loader.cpp
 	widget/color-scales.cpp
 	widget/color-slider.cpp
-	widget/color-wheel-selector.cpp
 	widget/combo-box-entry-tool-item.cpp
 	widget/combo-tool-item.cpp
 	widget/dash-selector.cpp
@@ -424,7 +423,6 @@ set(ui_SRC
 	widget/color-preview.h
 	widget/color-scales.h
 	widget/color-slider.h
-	widget/color-wheel-selector.h
 	widget/combo-enums.h
 	widget/combo-box-entry-tool-item.h
 	widget/combo-tool-item.h

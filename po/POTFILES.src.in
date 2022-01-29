@@ -373,7 +373,6 @@
 ../src/ui/widget/color-icc-selector.cpp
 ../src/ui/widget/color-notebook.cpp
 ../src/ui/widget/color-scales.cpp
-../src/ui/widget/color-wheel-selector.cpp
 ../src/ui/widget/combo-enums.h
 ../src/ui/widget/dash-selector.cpp
 ../src/ui/widget/entity-entry.cpp

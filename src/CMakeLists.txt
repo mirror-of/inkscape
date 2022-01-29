@@ -12,6 +12,7 @@ set(inkscape_SRC
   attributes.cpp
   auto-save.cpp
   axis-manip.cpp
+  hsluv.cpp
   color.cpp
   composite-undo-stack-observer.cpp
   conditions.cpp
@@ -97,6 +98,7 @@ set(inkscape_SRC
   cms-system.h
   color-profile-cms-fns.h
   color-rgba.h
+  hsluv.h
   color.h
   colorspace.h
   composite-undo-stack-observer.h
