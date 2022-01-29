@@ -252,6 +252,15 @@ static void remove_marker_context_paint (Inkscape::XML::Node *repr,
             marker_fixed_id += "_S" + stroke;
         }
 
+        {
+            // Replace characters from color value that are invalid in ids
+            gchar *normalized_id = g_strdup(marker_fixed_id.c_str());
+            g_strdelimit(normalized_id, "#%", '-');
+            g_strdelimit(normalized_id, "(), \n\t\r", '.');
+            marker_fixed_id = normalized_id;
+            g_free(normalized_id);
+        }
+
         // See if a fixed marker already exists.
         // Could be more robust, assumes markers are direct children of <defs>.
         Inkscape::XML::Node* marker_fixed = sp_repr_lookup_child(defs, "id", marker_fixed_id.c_str());
