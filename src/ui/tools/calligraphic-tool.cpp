@@ -807,6 +807,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                    && Inkscape::have_viable_layer(desktop, defaultMessageContext()))
         {
             spdc_create_single_dot(this, desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
+            ret = TRUE;
         }
         break;
     }
