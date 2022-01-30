@@ -273,7 +273,8 @@ OriginalItemArrayParam::on_link_button_click()
 {
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
      //without second parameter populate all elements filled inside the called function
-    std::vector<Glib::ustring> itemsid = cm->getElementsOfType(SP_ACTIVE_DESKTOP, "*", 1);
+    std::vector<Glib::ustring> itemsid = cm->getElementsOfType(SP_ACTIVE_DESKTOP, "*", 2);
+    std::vector<Glib::ustring> outer_group = cm->getElementsOfType(SP_ACTIVE_DESKTOP, "*", 1);
 
     if (itemsid.empty()) {
         return;
@@ -290,6 +291,10 @@ OriginalItemArrayParam::on_link_button_click()
         os << iter->href << "," << (iter->actived ? "1" : "0");
     }
     for (auto itemid : itemsid) {
+        if (outer_group.front() == itemid) {
+            // workaround the extra outer group added to a clipboard.
+            continue;
+        }
         // add '#' at start to make it an uri.
         itemid.insert(itemid.begin(), '#');
 
