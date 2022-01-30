@@ -999,7 +999,6 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects_not);
     Geom::Affine doc2parent = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
     selection->deleteItems();
 
     // Change the selection to the freshly pasted objects
