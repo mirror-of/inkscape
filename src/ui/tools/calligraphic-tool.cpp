@@ -486,7 +486,9 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                         if (this->hatch_livarot_path)
                             delete this->hatch_livarot_path;
                         this->hatch_livarot_path = Path_for_item (this->hatch_item, true, true);
-                        this->hatch_livarot_path->ConvertWithBackData(0.01);
+                        if (hatch_livarot_path) {
+                            hatch_livarot_path->ConvertWithBackData(0.01);
+                        }
                     }
 
                     // calculate pointer point in the guide item's coords
@@ -495,15 +497,16 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
                     // calculate the nearest point on the guide path
                     std::optional<Path::cut_position> position = get_nearest_position_on_Path(this->hatch_livarot_path, pointer);
-                    nearest = get_point_on_Path(this->hatch_livarot_path, position->piece, position->t);
+                    if (position) {
+                        nearest = get_point_on_Path(hatch_livarot_path, position->piece, position->t);
 
+                        // distance from pointer to nearest
+                        hatch_dist = Geom::L2(pointer - nearest);
+                        // unit-length vector
+                        hatch_unit_vector = (pointer - nearest) / hatch_dist;
 
-                    // distance from pointer to nearest
-                    hatch_dist = Geom::L2(pointer - nearest);
-                    // unit-length vector
-                    hatch_unit_vector = (pointer - nearest)/hatch_dist;
-
-                    this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Guide path selected</b>; start drawing along the guide with <b>Ctrl</b>"));
+                        this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Guide path selected</b>; start drawing along the guide with <b>Ctrl</b>"));
+                    }
                 } else {
                     this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Select a guide path</b> to track with <b>Ctrl</b>"));
                 }

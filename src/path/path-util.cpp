@@ -170,9 +170,13 @@ std::unique_ptr<SPCurve> curve_for_item_before_LPE(SPItem *item)
 
 std::optional<Path::cut_position> get_nearest_position_on_Path(Path *path, Geom::Point p, unsigned seg)
 {
+    std::optional<Path::cut_position> result;
+    if (!path) {
+        return result; // returns empty std::optional
+    }
     //get nearest position on path
-    Path::cut_position pos = path->PointToCurvilignPosition(p, seg);
-    return pos;
+    result = path->PointToCurvilignPosition(p, seg);
+    return result;
 }
 
 Geom::Point get_point_on_Path(Path *path, int piece, double t)
