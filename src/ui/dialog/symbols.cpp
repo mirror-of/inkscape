@@ -1222,6 +1222,8 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
       symbol_old->deleteObject(false);
   }
 
+  SPDocument::install_reference_document scoped(preview_document, getDocument());
+
   // First look for default style stored in <symbol>
   gchar const* style = repr->attribute("inkscape:symbol-style");
   if(!style) {
@@ -1233,8 +1235,6 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
       style = symbol->document->getReprRoot()->attribute("style");
     }
   }
-  // Last ditch effort to provide some default styling
-  if( !style ) style = "fill:#bbbbbb;stroke:#808080";
 
   // This is for display in Symbols dialog only
   if( style ) repr->setAttribute( "style", style );

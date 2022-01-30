@@ -1006,6 +1006,8 @@ SPStyle::_mergeObjectStylesheet( SPObject const *const object, SPDocument *const
 
     if (auto *const parent = document->getParent()) {
         _mergeObjectStylesheet(object, parent);
+    } else if (auto *const parent = document->get_reference_document()) {
+        _mergeObjectStylesheet(object, parent);
     }
 
     CRPropList *props = nullptr;
