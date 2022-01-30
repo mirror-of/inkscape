@@ -940,7 +940,7 @@ void SnapManager::_findCandidates(SPObject* parent,
                             bool overflow = false;
                             // See if the item is within range
                             auto display_area = getDesktop()->get_display_area();
-                            if (display_area.contains(bbox_of_item->min()) || display_area.contains(bbox_of_item->max())) {
+                            if (display_area.intersects(*bbox_of_item)) {
                                 // Finally add the object to _candidates.
                                 align_snapper_candidates->push_back(Inkscape::SnapCandidateItem(item, clip_or_mask, additional_affine));
                                 // For debugging: print the id of the candidate to the console
