@@ -7,13 +7,14 @@
 # Artur Krzysztof Wróblewski <krypalkora1984@gmail.com>, 2010-2019.
 # Grzegorz Szymaszek <gszymaszek@short.pl>, 2020.
 # Artur Krzysztof Wróblewski <krypalkora1984@gmail.com>, 2021.
+# Rafał Siejakowski <rs@rs-math.net>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 1.1\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-06-21 12:48+0200\n"
+"PO-Revision-Date: 2022-01-30 16:48-0300\n"
 "Last-Translator: Grzegorz Szymaszek\n"
 "Language-Team: Freelancer\n"
 "Language: pl_PL\n"
@@ -41100,15 +41101,15 @@ msgid ""
 "\"3\" is specified, the coordinate 3.14159 is output as 3.14 while the "
 "coordinate 123.675 is output as 124."
 msgstr ""
-"Określa liczbę cyfr znaczących, które powinny być dane wyjściowe dla "
-"współrzędnych. Należy zauważyć, że cyfr znaczących są * nie * liczba miejsc "
-"dziesiętnych, ale całkowita liczba cyfr w danych wyjściowych. Na przykład, "
-"jeśli określono wartość \"3\", Współrzędna 3,14159 jest dane wyjściowe jako "
-"3,14 podczas współrzędnych 123,675 jest wyjście jako 124."
+"Określa liczbę cyfr znaczących, które mają być zapisane dla współrzędnych. "
+"Uwaga: liczba cyfr znaczących *nie* jest liczbą miejsc dziesiętnych, lecz "
+"całkowitą liczbą cyfr w danych wyjściowych. Na przykład jeśli "
+"określono wartość \"3\", to współrzędna 3,14159 będzie zapisana jako 3,14 "
+"zaś współrzędna 123,675 jako 124 w danych wyjściowych."
 
 #: ../share/extensions/output_scour.inx:14
 msgid "Shorten color values"
-msgstr "Skrócone wartości kolorów"
+msgstr "Skróć wartości kolorów"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 14
@@ -41117,22 +41118,22 @@ msgid ""
 "Convert all color specifications to #RRGGBB (or #RGB where applicable) "
 "format."
 msgstr ""
-"Konwertuj wszystkie specyfikacje kolorów do formatu #RRGGBB (lub #RGB w "
-"stosownych przypadkach)."
+"Konwertuj wszystkie specyfikacje kolorów do formatu #RRGGBB (lub #RGB "
+"gdy to możliwe)."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 17
 #: ../share/extensions/output_scour.inx:17
 msgid "Convert CSS attributes to XML attributes"
-msgstr "Konwertowanie atrybutów CSS na atrybuty XML"
+msgstr "Konwertuj atrybuty CSS na atrybuty XML"
 
 #: ../share/extensions/output_scour.inx:17
 msgid ""
 "Convert styles from style tags and inline style=\"\" declarations into XML "
 "attributes."
 msgstr ""
-"Konwertowanie stylów ze znaczników stylu i stylu wbudowanego = \"\" "
-"deklaracje do atrybutów XML."
+"Konwertuj style ze znaczników stylu oraz deklaracji style=\"\" na atrybuty "
+"XML."
 
 #: ../share/extensions/output_scour.inx:21
 msgid "Collapse groups"
@@ -41143,12 +41144,12 @@ msgid ""
 "Remove useless groups, promoting their contents up one level. Requires "
 "\"Remove unused IDs\" to be set."
 msgstr ""
-"Usuń zbędne grupy, promując ich zawartość w górę o jeden poziom. Wymaga "
-"ustawienia \"Usuń nieużywane identyfikatory\"."
+"Usuń zbędne grupy przenosząc ich zawartość w górę o jeden poziom. Wymaga "
+"ustawienia \"Usuń nieużywane identyfikatory (ID)\"."
 
 #: ../share/extensions/output_scour.inx:24
 msgid "Create groups for similar attributes"
-msgstr "Tworzenie grup dla podobnych atrybutów"
+msgstr "Utwórz grupy dla podobnych atrybutów"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 24
@@ -41157,8 +41158,8 @@ msgid ""
 "Create groups for runs of elements having at least one attribute in common "
 "(e.g. fill-color, stroke-opacity, ...)."
 msgstr ""
-"Tworzenie grup dla uruchomień elementów posiadających co najmniej jeden "
-"atrybut wspólny (np. kolor wypełnienia, obrys-krycie,...)."
+"Utwórz grupy dla następujących po sobie elementów o co najmniej jednym "
+"wspólnym atrybucie (np. fill-color, stroke-opacity, ...)."
 
 #: ../share/extensions/output_scour.inx:28
 msgid "Keep editor data"
@@ -41178,7 +41179,7 @@ msgstr ""
 # File: ../share/extensions/output_scour.inx, line: 31
 #: ../share/extensions/output_scour.inx:31
 msgid "Keep unreferenced definitions"
-msgstr "Zachowaj definicje nieużywane"
+msgstr "Zachowaj nieużywane definicje"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 31
@@ -41190,7 +41191,7 @@ msgstr "Zachowaj definicje elementów, które nie są obecnie używane w SVG"
 # File: ../share/extensions/output_scour.inx, line: 35
 #: ../share/extensions/output_scour.inx:35
 msgid "Work around renderer bugs"
-msgstr "Obejścia błędów renderowania"
+msgstr "Zastosuj obejścia błędów renderowania"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 35
@@ -41199,8 +41200,8 @@ msgid ""
 "Works around some common renderer bugs (mainly libRSVG) at the cost of a "
 "slightly larger SVG file."
 msgstr ""
-"Obejście niektórych typowych błędów renderowania (głównie libRSVG) kosztem "
-"nieco większego pliku SVG."
+"Zapewnia obejście niektórych pospolitych błędów renderowania (głównie "
+"libRSVG) kosztem nieco większego pliku SVG."
 
 #: ../share/extensions/output_scour.inx:38
 msgid "Document options"
@@ -41218,12 +41219,12 @@ msgid ""
 "especially if special characters are used in the document) from the file "
 "header."
 msgstr ""
-"Usuwa deklarację XML (co jest opcjonalne, ale powinny być dostarczone, "
+"Usuwa deklarację XML (która jest opcjonalna, ale powinna być zamieszczona, "
 "zwłaszcza jeśli znaki specjalne są używane w dokumencie) z nagłówka pliku."
 
 #: ../share/extensions/output_scour.inx:44
 msgid "Remove metadata"
-msgstr "Usuwanie metadanych"
+msgstr "Usuń metadane"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 44
@@ -41234,12 +41235,12 @@ msgid ""
 "enabled browsers, etc."
 msgstr ""
 "Usuń znaczniki metadanych wraz ze wszystkimi zawartymi informacjami, które "
-"mogą zawierać informacje o licencjach i autorach, alternatywne wersje "
-"przeglądarek innych niż SVG, itp."
+"mogą zawierać informacje o licencjach i autorach, alternatywne wersje dla"
+"przeglądarek nieobsługujących SVG, itp."
 
 #: ../share/extensions/output_scour.inx:47
 msgid "Remove comments"
-msgstr "Usuwanie komentarzy"
+msgstr "Usuń komentarze"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 47
@@ -41249,7 +41250,7 @@ msgstr "Usuń wszystkie komentarze XML z danych wyjściowych."
 
 #: ../share/extensions/output_scour.inx:50
 msgid "Embed raster images"
-msgstr "Osadzanie obrazów rastrowych"
+msgstr "Osadź obrazy rastrowe"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 50
@@ -41258,8 +41259,8 @@ msgid ""
 "Resolve external references to raster images and embed them as Base64-"
 "encoded data URLs."
 msgstr ""
-"Rozwiąż zewnętrzne odniesienia do obrazów rastrowych i osadź je jako adresy "
-"URL danych zakodowanych w formacie base64."
+"Rozwiąż zewnętrzne odniesienia do obrazów rastrowych i osadź je jako "
+"elementy \"data URL\" zakodowane w formacie base64."
 
 #: ../share/extensions/output_scour.inx:53
 msgid "Enable viewboxing"
@@ -41273,18 +41274,17 @@ msgid ""
 "introduce a viewBox specifying the drawings dimensions."
 msgstr ""
 "Ustaw rozmiar strony na 100%/100% (Pełna szerokość i wysokość obszaru "
-"wyświetlania) i wprowadź viewBox określający wymiary rysunków."
+"wyświetlania) i wprowadź element viewBox określający wymiary rysunków."
 
 #: ../share/extensions/output_scour.inx:55
 msgid "Pretty-printing"
-msgstr "Pretty-printing"
+msgstr "Formatowanie kodu"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 58
 #: ../share/extensions/output_scour.inx:58
 msgid "Format output with line-breaks and indentation"
-msgstr ""
-"Formatowanie danych wyjściowych za pomocą podziałów i znakó końca wierszy"
+msgstr "Sformatuj dane wyjściowe za pomocą wcięć i znaków końca linii"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 58
@@ -41294,9 +41294,9 @@ msgid ""
 "to hand-edit the SVG file you can disable this option to bring down the file "
 "size even more at the cost of clarity."
 msgstr ""
-"Twórz ładnie sformatowane dane wyjściowe, w tym podziały wierszy. Jeśli nie "
-"zamierzasz ręcznie edytować plik SVG można wyłączyć tę opcję, aby przywrócić "
-"rozmiar pliku jeszcze bardziej kosztem jasności."
+"Stwórz ładnie sformatowane dane wyjściowe zawierające podziały na linijki. "
+"Jeśli nie zamierzasz ręcznie edytować pliku SVG, możesz wyłączyć tę opcję, "
+"aby jeszcze bardziej zmniejszyć rozmiar pliku kosztem jego przejrzystości."
 
 #: ../share/extensions/output_scour.inx:61
 msgid "Indentation characters:"
@@ -41308,9 +41308,10 @@ msgid ""
 "Specify \"None\" to disable indentation. This option has no effect if "
 "\"Format output with line-breaks and indentation\" is disabled."
 msgstr ""
-"Typ wcięcia używane dla każdego poziomu zagnieżdżenia w danych wyjściowych. "
-"Określ \"none\", aby wyłączyć wcięcie. Ta opcja nie ma znaczenia, jeśli "
-"\"format wyjściowy z przerwami i wcięciami\" jest wyłączony."
+"Typ wcięcia używanego na każdym poziomie zagnieżdżenia w danych wyjściowych. "
+"Określ \"Brak\" aby wyłączyć wcięcia. Ta opcja nie ma skutku gdy pole "
+"\"Sformatuj dane wyjściowe za pomocą wcięć i znaków końca linii\" nie jest "
+"zaznaczone."
 
 #: ../share/extensions/output_scour.inx:62
 msgid "Space"
@@ -41318,7 +41319,7 @@ msgstr "Spacja"
 
 #: ../share/extensions/output_scour.inx:63
 msgid "Tab"
-msgstr "Karta"
+msgstr "Tabulator"
 
 #: ../share/extensions/output_scour.inx:64
 msgctxt "Indent"
@@ -41334,12 +41335,13 @@ msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
 msgstr ""
-"Głębokość wybranego typu wcięć. Np. Jeśli wybierzesz \"2\" każdy poziom "
-"zagnieżdżenia w wyjściu będzie wcięty przez dwie dodatkowe spacje/tabulatory."
+"Głębokość wybranego typu wcięć. Np. jeśli wybierzesz \"2\", to każdy poziom "
+"zagnieżdżenia w danych wyjściowych będzie wcięty przez dwie dodatkowe spacje "
+"lub tabulatory."
 
 #: ../share/extensions/output_scour.inx:71
 msgid "Strip the \"xml:space\" attribute from the root SVG element"
-msgstr "Rozkłądanie atrybutu \"XML: Space\" z głównego elementu SVG"
+msgstr "Wytnij atrybut \"xml:space\" z głównego elementu SVG"
 
 #: ../share/extensions/output_scour.inx:71
 msgid ""
@@ -41347,9 +41349,9 @@ msgid ""
 "root SVG element which instructs the SVG editor not to change whitespace in "
 "the document at all (and therefore overrides the options above)."
 msgstr ""
-"Jest to użyteczne, gdy plik wejściowy określa \"XML: Space = 'preserve '\" w "
-"głównym elemencie SVG, który nakazuje edytorowi SVG nie zmianę odstępu w "
-"dokumencie w ogóle (i dlatego zastępuje powyższe opcje)."
+"Jest to przydatne, gdy plik wejściowy określa \"xml:space='preserve'\" w "
+"głównym elemencie SVG, nakazując edytorowi SVG niezmienianie odstępu w "
+"dokumencie (co zastępuje powyższe opcje)."
 
 #: ../share/extensions/output_scour.inx:73
 msgid "IDs"
@@ -41357,7 +41359,7 @@ msgstr "IDs"
 
 #: ../share/extensions/output_scour.inx:76
 msgid "Remove unused IDs"
-msgstr "Usuń nieużywane identyfikatory ID"
+msgstr "Usuń nieużywane identyfikatory (ID)"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 76
@@ -41366,14 +41368,14 @@ msgid ""
 "Remove all unreferenced IDs from elements. Those are not needed for "
 "rendering."
 msgstr ""
-"Usuń wszystkie nieużywane identyfikatory z elementów. Te nie są potrzebne do "
+"Usuń wszystkie nieużywane identyfikatory z elementów. Nie są one potrzebne do "
 "renderowania."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 80
 #: ../share/extensions/output_scour.inx:80
 msgid "Shorten IDs"
-msgstr "Skróć identyfikatory ID"
+msgstr "Skróć identyfikatory (ID)"
 
 #: ../share/extensions/output_scour.inx:80
 msgid ""
@@ -41381,29 +41383,29 @@ msgid ""
 "shortest values to the most-referenced elements. For instance, "
 "\"linearGradient5621\" will become \"a\" if it is the most used element."
 msgstr ""
-"Minimalizuj długość identyfikatorów ID przy użyciu tylko małych liter, "
-"przypisując najkrótszą wartość do najczęściej przywoływanego elementu. Na "
-"przykład \"linearGradient5621\" staną się \"a\", jeśli jest to najczęściej "
-"używany element."
+"Minimalizuj długość identyfikatorów (ID) używając tylko małych liter oraz "
+"przypisując najkrótszy identyfikator do najczęściej przywoływanego elementu. "
+"Na przykład \"linearGradient5621\" zostanie zmieniony na \"a\", jeśli jest "
+"to identyfikator najczęściej używanego elementu."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 83
 #: ../share/extensions/output_scour.inx:83
 msgid "Prefix shortened IDs with:"
-msgstr "Prefiks skrócone identyfikatory ID z:"
+msgstr "Poprzedź skrócone identyfikatory (ID) przedrostkiem:"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 83
 #: ../share/extensions/output_scour.inx:83
 msgid "Prepend shortened IDs with the specified prefix."
-msgstr "Prepend skróconych identyfikatorów ID z określonym prefiksem."
+msgstr "Poprzedź skrócone identyfikatory (ID) określonym przedrostkiem."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 87
 #: ../share/extensions/output_scour.inx:87
 msgid "Preserve manually created IDs not ending with digits"
 msgstr ""
-"Zachowaj ręcznie utworzone identyfikatory ID, które nie kończą się cyfrą"
+"Zachowaj ręcznie utworzone identyfikatory (ID), które nie kończą się cyfrą"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 87
@@ -41414,39 +41416,39 @@ msgid ""
 "preserved while numbered IDs (as they are generated by most SVG editors "
 "including Inkscape) will be removed/shortened."
 msgstr ""
-"Identyfikatory opisowe, które zostały ręcznie utworzone w celu odniesienia "
-"lub oznaczenia określonych elementów lub grup (np. #arrowStart, #arrowEnd "
-"lub #textLabels) zostaną zachowane, a identyfikatory numerowane (ponieważ są "
-"generowane przez większość edytorów SVG, w tym Inkscape) zostaną usunięte/"
-"skrócone."
+"Identyfikatory opisowe, które zostały utworzone ręcznie w celu oznaczenia "
+"określonych elementów lub grup, albo odnoszenia się do nich (np. #arrowStart, "
+"#arrowEnd lub #textLabels) zostaną zachowane, zaś identyfikatory numerowane "
+"(jako że są generowane przez większość edytorów SVG, w tym Inkscape) zostaną "
+"usunięte/skrócone."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 90
 #: ../share/extensions/output_scour.inx:90
 msgid "Preserve the following IDs:"
-msgstr "Zachowaj następujące identyfikatory ID:"
+msgstr "Zachowaj następujące identyfikatory (ID):"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 90
 #: ../share/extensions/output_scour.inx:90
 msgid "A comma-separated list of IDs that are to be preserved."
 msgstr ""
-"Rozdzielana przecinkami lista identyfikatorów ID, które mają być zachowane."
+"Rozdzielona przecinkami lista identyfikatorów (ID), które mają być zachowane."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 93
 #: ../share/extensions/output_scour.inx:93
 msgid "Preserve IDs starting with:"
-msgstr "Zachowaj identyfikatory ID zaczynające się od:"
+msgstr "Zachowaj identyfikatory (ID) zaczynające się od:"
 
 #: ../share/extensions/output_scour.inx:93
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr ""
-"Zachowaj wszystkie identyfikatory ID, które zaczynają się od określonego "
-"prefiksu (np. Określ \"flaga\", aby zachować \"flag-MX\", \"Flaga-pt\", "
-"itp.)."
+"Zachowaj wszystkie identyfikatory (ID), które zaczynają się od określonego "
+"przedrostka (np. określ \"flaga\", aby zachować \"flaga-MX\", \"flaga-pt\", "
+"itd.)."
 
 #: ../share/extensions/output_scour.inx:101
 msgid "Optimized SVG Output is provided by"
@@ -41454,11 +41456,11 @@ msgstr "Zoptymalizowane wyjście SVG jest dostarczane przez"
 
 #: ../share/extensions/output_scour.inx:102
 msgid "Scour - An SVG Scrubber"
-msgstr "Scour-scrubber SVG"
+msgstr "Scour - Czyściciel SVG"
 
 #: ../share/extensions/output_scour.inx:104
 msgid "For details please refer to"
-msgstr "Szczegółowe informacje można znaleźć w"
+msgstr "Szczegółowe informacje można znaleźć na"
 
 #: ../share/extensions/output_scour.inx:105
 msgid "https://github.com/scour-project/scour"
@@ -41466,11 +41468,11 @@ msgstr "https://github.com/scour-project/scour"
 
 #: ../share/extensions/output_scour.inx:110
 msgid "This version of the extension is designed for"
-msgstr "Ta wersja rozszerzenia jest przeznaczona do"
+msgstr "Ta wersja rozszerzenia jest przeznaczona dla"
 
 #: ../share/extensions/output_scour.inx:111
 msgid "Scour 0.31+"
-msgstr "Scour 0.31 +"
+msgstr "Scour 0.31+"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 109
@@ -41480,7 +41482,7 @@ msgstr "Pokaż ostrzeżenia dla starszych wersji Scour"
 
 #: ../share/extensions/output_scour.inx:122
 msgid "Optimized SVG (*.svg)"
-msgstr "Zotymalizowany SVG (*.svg)"
+msgstr "Zoptymalizowany SVG (*.svg)"
 
 #: ../share/extensions/param_curves.inx:3
 msgid "Parametric Curves"
