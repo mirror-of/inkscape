@@ -30,6 +30,9 @@ function(add_cli_test name)
 
     set(testname  cli_${name})
 
+    #disable dithering
+    set(ARG_PARAMETERS ${ARG_PARAMETERS}  "--export-png-use-dithering=false")
+
     if(DEFINED ARG_OUTPUT_FILENAME)
         # for actions: if an export-do is present do not append export-filename option to prevent
         if(NOT ARG_PARAMETERS MATCHES "export-do")

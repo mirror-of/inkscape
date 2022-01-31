@@ -456,6 +456,10 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
     gdouble dpi = 0.0;
     guint32 bgcolor = get_bgcolor(doc);
 
+    auto prefs = Inkscape::Preferences::get();
+    bool old_dither = prefs->getBool("/options/dithering/value", true);
+    prefs->setBool("/options/dithering/value", export_png_use_dithering);
+
     // Export each object in list (or root if empty).  Use ';' so in future it could be possible to selected multiple objects to export together.
     std::vector<Glib::ustring> objects = Glib::Regex::split_simple("\\s*;\\s*", export_id);
     if (objects.empty()) {
@@ -705,6 +709,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
         }
 
     } // End loop over objects.
+    prefs->setBool("/options/dithering/value", old_dither);
     return 0;
 }
 

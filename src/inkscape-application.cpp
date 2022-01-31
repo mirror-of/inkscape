@@ -14,6 +14,13 @@
 #include <regex>
 #include <numeric>
 
+// checking if dithering is supported
+#ifdef  WITH_PATCHED_CAIRO
+#include "3rdparty/cairo/src/cairo.h"
+#else
+#include <cairo.h>
+#endif
+
 #include <glibmm/i18n.h>  // Internationalization
 
 #ifdef HAVE_CONFIG_H
@@ -685,6 +692,7 @@ InkscapeApplication::InkscapeApplication()
     // FIXME: Opacity should really be a DOUBLE, but an upstream bug means 0.0 is detected as NULL
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"), N_("VALUE")); // Bxx
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-png-color-mode", '\0', N_("Color mode (bit depth and color type) for exported bitmaps (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)"), N_("COLOR-MODE")); // Bxx
+    gapp->add_main_option_entry(T::OPTION_TYPE_STRING,      "export-png-use-dithering", '\0', N_("Force dithering or disables it"), "false|true"); // Bxx
 
     // Query - Geometry
     _start_main_option_section(_("Query object/document geometry"));
@@ -1280,6 +1288,7 @@ InkscapeApplication::shell()
 int
 InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
 {
+    auto prefs = Inkscape::Preferences::get();
     if (!options) {
         std::cerr << "InkscapeApplication::on_handle_local_options: options is null!" << std::endl;
         return -1; // Keep going
@@ -1557,6 +1566,17 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("export-png-color-mode")) {
         options->lookup_value("export-png-color-mode", _file_export.export_png_color_mode);
     }
+
+    if (options->contains("export-png-use-dithering")) {
+#ifndef CAIRO_HAS_DITHER
+        std::cerr << "Your cairo version does not support dithering! Option will be ignored." << std::endl;
+#endif
+        Glib::ustring val;
+        options->lookup_value("export-png-use-dithering", val);
+        if (val == "true") _file_export.export_png_use_dithering = true;
+        else if (val == "false") _file_export.export_png_use_dithering = false;
+        else std::cerr << "invalid value for export-png-use-dithering. Ignoring." << std::endl;
+    } else _file_export.export_png_use_dithering = prefs->getBool("/options/dithering/value", true);
 
 
     GVariantDict *options_copy = options->gobj_copy();

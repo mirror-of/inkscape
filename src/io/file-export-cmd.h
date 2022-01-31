@@ -72,6 +72,7 @@ public:
     double        export_background_opacity;
     Glib::ustring export_png_color_mode;
     bool          export_plain_svg;
+    bool          export_png_use_dithering;
 };
 
 #endif // INK_FILE_EXPORT_CMD_H

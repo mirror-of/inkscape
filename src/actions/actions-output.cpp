@@ -209,6 +209,14 @@ export_png_color_mode(const Glib::VariantBase&  value, InkscapeApplication *app)
 }
 
 void
+export_png_use_dithering(const Glib::VariantBase&  value, InkscapeApplication *app)
+{
+    Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
+    app->file_export()->export_png_use_dithering = b.get();
+    // std::cout << s.get() << std::endl;
+}
+
+void
 export_do(InkscapeApplication *app)
 {
     SPDocument* document = app->get_active_document();
@@ -248,6 +256,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_output =
     {"app.export-background",         N_("Export Background"),         "Export",     N_("Include background color in exported file")          },
     {"app.export-background-opacity", N_("Export Background Opacity"), "Export",     N_("Include background opacity in exported file")        },
     {"app.export-png-color-mode",     N_("Export PNG Color Mode"),     "Export",     N_("Set color mode for PNG export")                      },
+    {"app.export-png-use-dithering",  N_("Export PNG Dithering"),      "Export",     N_("Set dithering for PNG export")                       },
 
     {"app.export-do",                 N_("Do Export"),                 "Export",     N_("Do export")                                          }
     // clang-format on
@@ -281,7 +290,8 @@ std::vector<std::vector<Glib::ustring>> hint_data_output =
     {"app.export-use-hints",          N_("Give input 0/1 for No/Yes to Export Use Hints")       },
     {"app.export-background",         N_("Give String input Background")                        },
     {"app.export-background-opacity", N_("Give input 0/1 for No/Yes to Background Opacity")     },
-    {"app.export-png-color-mode",     N_("Give String input PNG Color Mode")                    }
+    {"app.export-png-color-mode",     N_("Give String input PNG Color Mode")                    },
+    {"app.export-png-use-dithering",  N_("Give input 0/1 for No/Yes to use dithering")          }
     // clang-format on
 };
 
@@ -327,6 +337,7 @@ add_actions_output(InkscapeApplication* app)
     gapp->add_action_with_parameter( "export-background",        String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_background),   app));
     gapp->add_action_with_parameter( "export-background-opacity",Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_background_opacity), app));
     gapp->add_action_with_parameter( "export-png-color-mode",    String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_png_color_mode), app));
+    gapp->add_action_with_parameter( "export-png-use-dithering", Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_png_use_dithering), app));
 
     // Extra
     gapp->add_action(                "export-do",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_do),           app));
