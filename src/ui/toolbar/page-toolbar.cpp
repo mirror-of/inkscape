@@ -209,6 +209,7 @@ void PageToolbar::selectionChanged(SPPage *page)
 {
     _page_modified.disconnect();
     if (!_page_manager) return;
+    text_page_label->set_tooltip_text(_("Page label"));
 
     // Set label widget content with page label.
     if (page) {
@@ -219,7 +220,6 @@ void PageToolbar::selectionChanged(SPPage *page)
 
         gchar *format = g_strdup_printf(_("Page %d"), page->getPagePosition());
         text_page_label->set_placeholder_text(format);
-        // text_page_label->set_tooltip_text(_("Page label"));
         g_free(format);
 >>>>>>> 3cc5022acc (Remove code duplication and correct eg. spelling)
 
