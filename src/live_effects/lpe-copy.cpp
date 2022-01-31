@@ -224,8 +224,8 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         double maxheight = 0;
         double maxwidth = 0;
         double minheight = std::numeric_limits<double>::max();
-        double y[(int)num_cols] = {}; 
-        double ygap[(int)num_cols] = {}; 
+        double y[(int)num_cols]; 
+        double ygap[(int)num_cols]; 
         double yset = 0;
         Geom::OptRect prev_bbox;
         Geom::OptRect bbox = sp_lpe_item->geometricBounds();
@@ -644,8 +644,8 @@ Gtk::Widget * LPECopy::newWidget()
                     } else {
                         rows->set_active();
                     }
-                    container->pack_start(*rows, false, false, 0.5);
-                    container->pack_start(*cols, false, false, 0.5);
+                    container->pack_start(*rows, false, false, 1);
+                    container->pack_start(*cols, false, false, 1);
                     cols->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetCols));
                     rows->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetRows));
                     bwidg->pack_start(*container, false, false, 0);
@@ -671,10 +671,10 @@ Gtk::Widget * LPECopy::newWidget()
                     } else {
                         none->set_active();
                     }
-                    container->pack_start(*rows, false, false, 0.5);
-                    container->pack_start(*cols, false, false, 0.5);
-                    container->pack_start(*both, false, false, 0.5);
-                    container->pack_start(*none, false, false, 0.5);
+                    container->pack_start(*rows, false, false, 1);
+                    container->pack_start(*cols, false, false, 1);
+                    container->pack_start(*both, false, false, 1);
+                    container->pack_start(*none, false, false, 1);
                     none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), false, false));
                     cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), true, false));
                     rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), false, true));
@@ -702,10 +702,10 @@ Gtk::Widget * LPECopy::newWidget()
                     } else {
                         none->set_active();
                     }
-                    container->pack_start(*rows, false, false, 0.5);
-                    container->pack_start(*cols, false, false, 0.5);
-                    container->pack_start(*both, false, false, 0.5);
-                    container->pack_start(*none, false, false, 0.5);
+                    container->pack_start(*rows, false, false, 1);
+                    container->pack_start(*cols, false, false, 1);
+                    container->pack_start(*both, false, false, 1);
+                    container->pack_start(*none, false, false, 1);
                     none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), false, false));
                     cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), true, false));
                     rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), false, true));
@@ -763,7 +763,7 @@ LPECopy::generate_buttons(Gtk::Box *container, Gtk::RadioButton::Group &group, g
         }
         button->set_tooltip_text(tooltip);
         button->set_margin_left(1);
-        container->pack_start(*button, false, false, 0.5);
+        container->pack_start(*button, false, false, 1);
     }
 }
 
@@ -964,9 +964,9 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
     //double posy = ((*gap_bbox).top() - (*bbox).top()) / (*gap_bbox).height() ;
     double factorx = original_width/(*bbox).width();
     double factory = original_height/(*bbox).height();
-    double y[(int)num_cols] = {}; 
+    double y[(int)num_cols]; 
     double yset = 0;
-    double gap[(int)num_cols] = {}; 
+    double gap[(int)num_cols]; 
     for (int i = 0; i < num_rows; ++i) {
         double fracy = 1;
         if (num_rows != 1) {
