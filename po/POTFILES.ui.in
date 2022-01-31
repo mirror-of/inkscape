@@ -1,6 +1,7 @@
 ../share/ui/color-palette.glade
 ../share/ui/command-palette-operation.glade
 ../share/ui/dialog-css.glade
+../share/ui/dialog-export.glade
 ../share/ui/dialog-livepatheffect-add.glade
 ../share/ui/dialog-livepatheffect-effect.glade
 ../share/ui/dialog-save-template.glade

@@ -184,7 +184,6 @@ bool SPItem::isHidden(unsigned display_key) const {
     return true;
 }
 
-
 void SPItem::setHighlight(guint32 color) {
     _highlightColor = color;
     updateRepr();

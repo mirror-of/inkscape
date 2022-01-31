@@ -292,7 +292,7 @@ void PageManager::disablePages()
 /**
  * Get page index, returns -1 if the page is not found in this document.
  */
-int PageManager::getPageIndex(SPPage *page) const
+int PageManager::getPageIndex(const SPPage *page) const
 {
     if (page) {
         auto it = std::find(pages.begin(), pages.end(), page);

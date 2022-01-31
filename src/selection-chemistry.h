@@ -99,8 +99,6 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item);
 void sp_undo (SPDesktop *desktop, SPDocument *doc);
 void sp_redo (SPDesktop *desktop, SPDocument *doc);
 
-void sp_document_get_export_hints (SPDocument * doc, Glib::ustring &filename, float *xdpi, float *ydpi);
-
 bool fit_canvas_to_drawing(SPDocument *, bool with_margins = false);
 void fit_canvas_to_drawing(SPDesktop *);
 

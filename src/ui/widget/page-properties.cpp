@@ -113,16 +113,14 @@ public:
             });
         }
 
-        auto& display_units = get_widget<Gtk::ComboBoxText>(_builder, "display-units");
-        _display_units = std::make_unique<UnitMenu>(&display_units);
+        _builder->get_widget_derived("display-units", _display_units);
         _display_units->setUnitType(UNIT_TYPE_LINEAR);
-        display_units.signal_changed().connect([=](){ set_display_unit(); });
+        _display_units->signal_changed().connect([=](){ set_display_unit(); });
 
-        auto& page_units = get_widget<Gtk::ComboBoxText>(_builder, "page-units");
-        _page_units = std::make_unique<UnitMenu>(&page_units);
+        _builder->get_widget_derived("page-units", _page_units);
         _page_units->setUnitType(UNIT_TYPE_LINEAR);
         _current_page_unit = _page_units->getUnit();
-        page_units.signal_changed().connect([=](){ set_page_unit(); });
+        _page_units->signal_changed().connect([=](){ set_page_unit(); });
 
         for (auto&& page : PaperSize::getPageSizes()) {
             auto item = new Gtk::MenuItem(page.getDescription());
@@ -498,8 +496,8 @@ private:
     Gtk::CheckButton& _checkerboard;
     Gtk::CheckButton& _antialias;
     Gtk::Button& _link_width_height;
-    std::unique_ptr<UnitMenu> _display_units;
-    std::unique_ptr<UnitMenu> _page_units;
+    UnitMenu *_display_units;
+    UnitMenu *_page_units;
     const Unit* _current_page_unit = nullptr;
     OperationBlocker _update;
     double _size_ratio = 1; // width to height ratio

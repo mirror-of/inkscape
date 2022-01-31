@@ -1717,6 +1717,37 @@ Glib::ustring SPObject::textualContent() const
     return text;
 }
 
+Glib::ustring SPObject::getExportFilename() const
+{
+    if (auto filename = repr->attribute("inkscape:export-filename")) {
+        return Glib::ustring(filename);
+    }
+    return "";
+}
+
+void SPObject::setExportFilename(Glib::ustring filename)
+{
+    repr->setAttributeOrRemoveIfEmpty("inkscape:export-filename", filename.c_str());
+}
+
+Geom::Point SPObject::getExportDpi() const
+{
+    return Geom::Point(
+        repr->getAttributeDouble("inkscape:export-xdpi", 0.0),
+        repr->getAttributeDouble("inkscape:export-ydpi", 0.0));
+}
+
+void SPObject::setExportDpi(Geom::Point dpi)
+{
+    if (!dpi.x() || !dpi.y()) {
+        repr->removeAttribute("inkscape:export-xdpi");
+        repr->removeAttribute("inkscape:export-ydpi");
+    } else {
+        repr->setAttributeSvgDouble("inkscape:export-xdpi", dpi.x());
+        repr->setAttributeSvgDouble("inkscape:export-ydpi", dpi.y());
+    }
+}
+
 // For debugging: Print SP tree structure.
 void SPObject::recursivePrintTree( unsigned level )
 {

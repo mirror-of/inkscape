@@ -700,8 +700,11 @@ button.square-button image {
  * Inkscape Export Dialog
  */
 #ExportDialog #export_selection{
-	border-radius:0px;
+    border-radius: 0px;
 }
-#ExportDialog #export_preview_box{
-	border:1px solid;
+#ExportDialog #export_preview_single {
+    border: 1px solid;
+}
+#ExportDialog #export_preview_batch {
+    border: 1px solid;
 }

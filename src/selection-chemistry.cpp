@@ -3565,74 +3565,6 @@ void ObjectSet::untile()
     }
 }
 
-void ObjectSet::getExportHints(Glib::ustring &filename, float *xdpi, float *ydpi)
-{
-    if (isEmpty()) {
-        return;
-    }
-
-    auto reprlst = xmlNodes();
-    bool filename_search = TRUE;
-    bool xdpi_search = TRUE;
-    bool ydpi_search = TRUE;
-
-    for (auto i=reprlst.begin();filename_search&&xdpi_search&&ydpi_search&&i!=reprlst.end();++i){
-        gchar const *dpi_string;
-        Inkscape::XML::Node *repr = *i;
-
-        if (filename_search) {
-            const gchar* tmp = repr->attribute("inkscape:export-filename");
-            if (tmp){
-                filename = tmp;
-                filename_search = FALSE;
-            }
-            else{
-                filename.clear();
-            }
-        }
-
-        if (xdpi_search) {
-            dpi_string = repr->attribute("inkscape:export-xdpi");
-            if (dpi_string != nullptr) {
-                *xdpi = g_ascii_strtod(dpi_string, nullptr);
-                xdpi_search = FALSE;
-            }
-        }
-
-        if (ydpi_search) {
-            dpi_string = repr->attribute("inkscape:export-ydpi");
-            if (dpi_string != nullptr) {
-                *ydpi = g_ascii_strtod(dpi_string, nullptr);
-                ydpi_search = FALSE;
-            }
-        }
-    }
-}
-
-void sp_document_get_export_hints(SPDocument *doc, Glib::ustring &filename, float *xdpi, float *ydpi)
-{
-    Inkscape::XML::Node * repr = doc->getReprRoot();
-
-    const gchar* tmp = repr->attribute("inkscape:export-filename");
-    if(tmp)
-    {
-        filename = tmp;
-    }
-    else
-    {
-        filename.clear();
-    }
-    gchar const *dpi_string = repr->attribute("inkscape:export-xdpi");
-    if (dpi_string != nullptr) {
-        *xdpi = g_ascii_strtod(dpi_string, nullptr);
-    }
-
-    dpi_string = repr->attribute("inkscape:export-ydpi");
-    if (dpi_string != nullptr) {
-        *ydpi = g_ascii_strtod(dpi_string, nullptr);
-    }
-}
-
 void ObjectSet::createBitmapCopy()
 {
 
@@ -3684,21 +3616,21 @@ void ObjectSet::createBitmapCopy()
         // If minsize is given, look up minimum bitmap size (default 250 pixels) and calculate resolution from it
         res = Inkscape::Util::Quantity::convert(prefs_min, "in", "px") / MIN(bbox->width(), bbox->height());
     } else {
-        float hint_xdpi = 0, hint_ydpi = 0;
-        Glib::ustring hint_filename;
-        // take resolution hint from the selected objects
-        getExportHints(hint_filename, &hint_xdpi, &hint_ydpi);
-        if (hint_xdpi != 0) {
-            res = hint_xdpi;
+
+        // Get export DPI from the first item available
+        auto dpi = Geom::Point(0, 0);
+        for (auto &item : items_) {
+            dpi = item->getExportDpi();
+            if (dpi.x()) break;
+        }
+        if (!dpi.x()) {
+            dpi = doc->getRoot()->getExportDpi();
+        }
+        if (dpi.x()) {
+            res = dpi.x();
         } else {
-            // take resolution hint from the document
-            sp_document_get_export_hints(doc, hint_filename, &hint_xdpi, &hint_ydpi);
-            if (hint_xdpi != 0) {
-                res = hint_xdpi;
-            } else {
-                // if all else fails, take the default 96 dpi
-                res = Inkscape::Util::Quantity::convert(1, "in", "px");
-            }
+            // if all else fails, take the default 96 dpi
+            res = Inkscape::Util::Quantity::convert(1, "in", "px");
         }
     }
 

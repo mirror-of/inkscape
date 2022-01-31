@@ -25,34 +25,26 @@ class Drawing;
 namespace UI {
 namespace Dialog {
 
-class ExportPreview : public Gtk::Box
+class ExportPreview : public Gtk::Image
 {
 public:
-    ExportPreview();
+    ExportPreview() {};
     ~ExportPreview() override;
 
+    ExportPreview(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade):Gtk::Image(cobject){};
 private:
+    int size = 128; // size of preview image
     bool isLastHide = false;
-
-private:
+    SPDocument *_document = nullptr;
     SPItem *_item = nullptr;
-
     Geom::OptRect _dbox;
 
-    SPDocument *_document = nullptr;
-
-    Drawing *drawing;
-    unsigned int visionkey;
-    Glib::Timer *timer;
-    Glib::Timer *renderTimer;
-    bool pending;
-    gdouble minDelay;
-
-    int size; // size of preview image
-
-    guchar *pixMem;    // Our Itme pixels
-    Gtk::Image *image; // Our Item Image
-
+    Drawing *drawing = nullptr;
+    unsigned int visionkey = 0;
+    Glib::Timer *timer = nullptr;
+    Glib::Timer *renderTimer = nullptr;
+    bool pending = false;
+    gdouble minDelay = 0.1;
 public:
     void setDocument(SPDocument *document);
     void refreshHide(const std::vector<SPItem *> *list);
@@ -67,7 +59,6 @@ public:
         size = newSize;
         resetPixels();
     }
-
 private:
     void refreshPreview();
     void renderPreview();

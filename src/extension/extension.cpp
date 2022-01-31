@@ -682,6 +682,19 @@ Extension::get_param_bool(const gchar *name) const
 }
 
 /**
+ * \return   The value of the param or the alternate if the param doesn't exist.
+ * \brief    Like get_param_bool but with a default on param_not_exist error.
+ */
+bool Extension::get_param_bool(const gchar *name, bool alt) const
+{
+    try {
+        return get_param_bool(name);
+    } catch (Extension::param_not_exist) {
+        return alt;
+    }
+}
+
+/**
     \return   The integer value for the parameter specified
     \brief    Gets a parameter identified by name with the integer placed in value.
     \param    name   The name of the parameter to get
@@ -697,6 +710,20 @@ Extension::get_param_int(const gchar *name) const
 }
 
 /**
+ * \return   The value of the param or the alternate if the param doesn't exist.
+ * \brief    Like get_param_int but with a default on param_not_exist error.
+ */
+int Extension::get_param_int(const gchar *name, int alt) const
+{
+    try {
+        return get_param_int(name);
+    } catch (Extension::param_not_exist) {
+        return alt;
+    }
+}
+
+
+/**
     \return   The double value for the float parameter specified
     \brief    Gets a float parameter identified by name with the double placed in value.
     \param    name   The name of the parameter to get
@@ -709,6 +736,19 @@ Extension::get_param_float(const gchar *name) const
     const InxParameter *param;
     param = get_param(name);
     return param->get_float();
+}
+
+/**
+ * \return   The value of the param or the alternate if the param doesn't exist.
+ * \brief    Like get_param_float but with a default on param_not_exist error.
+ */
+double Extension::get_param_float(const gchar *name, double alt) const
+{
+    try {
+        return get_param_float(name);
+    } catch (Extension::param_not_exist) {
+        return alt;
+    }
 }
 
 /**
@@ -727,6 +767,19 @@ Extension::get_param_string(const gchar *name) const
 }
 
 /**
+ * \return   The value of the param or the alternate if the param doesn't exist.
+ * \brief    Like get_param_string but with a default on param_not_exist error.
+ */
+const char *Extension::get_param_string(const gchar *name, const char *alt) const
+{
+    try {
+        return get_param_string(name);
+    } catch (Extension::param_not_exist) {
+        return alt;
+    }
+}
+
+/**
     \return   The string value for the parameter specified
     \brief    Gets a parameter identified by name with the string placed in value.
     \param    name   The name of the parameter to get
@@ -739,6 +792,19 @@ Extension::get_param_optiongroup(const gchar *name) const
     const InxParameter *param;
     param = get_param(name);
     return param->get_optiongroup();
+}
+
+/**
+ * \return   The value of the param or the alternate if the param doesn't exist.
+ * \brief    Like get_param_optiongroup but with a default on param_not_exist error.
+ */
+const char *Extension::get_param_optiongroup(const gchar *name, const char *alt) const
+{
+    try {
+        return get_param_optiongroup(name);
+    } catch (Extension::param_not_exist) {
+        return alt;
+    }
 }
 
 /**

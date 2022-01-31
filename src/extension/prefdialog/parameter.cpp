@@ -120,7 +120,9 @@ int InxParameter::get_int() const
 {
     ParamInt const *intpntr = dynamic_cast<ParamInt const *>(this);
     if (!intpntr) {
-        throw param_not_int_param();
+        // This allows option groups to contain integers. Consider just using this.
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        return prefs->getInt(this->pref_name());
     }
     return intpntr->get();
 }

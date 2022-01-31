@@ -2105,6 +2105,10 @@ void InkscapePreferences::initPageIO()
     _page_io.add_line( false, "", _misc_default_metadata, "",
                            _("Add default metadata to new documents. Default metadata can be set from Document Properties->Metadata."), true);
 
+    _export_all_extensions.init( _("Show all outputs in Export Dialog"), "/dialogs/export/show_all_extensions", false);
+    _page_io.add_line( false, "", _export_all_extensions, "",
+                           _("Will list all possible output extensions in the Export Dialog selection."), true);
+
     // Input devices options
     _mouse_sens.init ( "/options/cursortolerance/value", 0.0, 30.0, 1.0, 1.0, 8.0, true, false);
     _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels (requires restart)"),

@@ -4,6 +4,7 @@ set(util_SRC
 	expression-evaluator.cpp
 	share.cpp
 	paper.cpp
+	preview.cpp
 	units.cpp
 	ziptool.cpp
 
@@ -19,6 +20,7 @@ set(util_SRC
 	longest-common-suffix.h
 	pages-skeleton.h
 	paper.h
+	preview.h
 	reference.h
 	share.h
 	signal-blocker.h

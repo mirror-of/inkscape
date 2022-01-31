@@ -396,6 +396,7 @@ protected:
 
     UI::Widget::PrefCheckButton _misc_comment;
     UI::Widget::PrefCheckButton _misc_default_metadata;
+    UI::Widget::PrefCheckButton _export_all_extensions;
     UI::Widget::PrefCheckButton _misc_forkvectors;
     UI::Widget::PrefSpinButton  _misc_gradientangle;
     UI::Widget::PrefCheckButton _misc_gradient_collect;

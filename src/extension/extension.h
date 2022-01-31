@@ -48,6 +48,9 @@ namespace Gtk {
 /** Which output module should be used? */
 #define SP_MODULE_KEY_OUTPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 
+/** Internal raster extensions */
+#define SP_MODULE_KEY_RASTER_PNG "org.inkscape.output.png.inkscape"
+
 /** Defines the key for Postscript printing */
 #define SP_MODULE_KEY_PRINT_PS    "org.inkscape.print.ps"
 #define SP_MODULE_KEY_PRINT_CAIRO_PS    "org.inkscape.print.ps.cairo"
@@ -224,9 +227,14 @@ private:
 
 public:
     bool        get_param_bool          (const gchar *name) const;
+    bool        get_param_bool          (const gchar *name, bool alt) const;
     int         get_param_int           (const gchar *name) const;
+    int         get_param_int           (const gchar *name, int alt) const;
     double      get_param_float         (const gchar *name) const;
+    double      get_param_float         (const gchar *name, double alt) const;
+    const char *get_param_string        (const gchar *name, const char *alt) const;
     const char *get_param_string        (const gchar *name) const;
+    const char *get_param_optiongroup   (const gchar *name, const char *alt) const;
     const char *get_param_optiongroup   (const gchar *name) const;
     guint32     get_param_color         (const gchar *name) const;
 

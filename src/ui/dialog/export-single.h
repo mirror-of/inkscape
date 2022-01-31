@@ -14,17 +14,29 @@
 #ifndef SP_EXPORT_SINGLE_H
 #define SP_EXPORT_SINGLE_H
 
-#include <gtkmm.h>
-
-#include "export-helper.h"
-#include "export-preview.h"
-#include "extension/output.h"
 #include "ui/widget/scrollprotected.h"
-#include "ui/widget/unit-menu.h"
+
+class InkscapeApplication;
+class SPDesktop;
+class SPDocument;
+class SPObject;
 
 namespace Inkscape {
+    class Selection;
+    class Preferences;
+    class PageManager;
+
+namespace Util {
+    class Unit;
+}
 namespace UI {
+    namespace Widget {
+        class UnitMenu;
+    }
 namespace Dialog {
+    class ExportPreview;
+    class ExtensionList;
+    class ExportProgressDialog;
 
 class SingleExport : public Gtk::Box
 {
@@ -32,11 +44,12 @@ public:
     SingleExport(){};
     SingleExport(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade)
         : Gtk::Box(cobject){};
-    ~SingleExport() override;
+    ~SingleExport() override{};
 
 private:
     InkscapeApplication *_app = nullptr;
     SPDesktop *_desktop = nullptr;
+    PageManager *_page_manager = nullptr;
 
 private:
     bool setupDone = false; // To prevent setup() call add connections again.
@@ -80,10 +93,10 @@ private:
     Gtk::Box *si_units_row = nullptr;
     Gtk::CheckButton *show_export_area = nullptr;
     Inkscape::UI::Widget::UnitMenu *units = nullptr;
+    Gtk::Label *si_name_label = nullptr;
 
     Gtk::CheckButton *si_hide_all = nullptr;
 
-    Gtk::Box *si_preview_box = nullptr;
     Gtk::CheckButton *si_show_preview = nullptr;
     ExportPreview *preview = nullptr;
 
@@ -92,10 +105,9 @@ private:
     Gtk::Button *si_export = nullptr;
     Gtk::Box *adv_box = nullptr;
     Gtk::ProgressBar *_prog = nullptr;
+    Gtk::Button *page_prev = nullptr;
+    Gtk::Button *page_next = nullptr;
 
-    AdvanceOptions advance_options;
-
-private:
     bool filename_modified;
     Glib::ustring original_name;
     Glib::ustring doc_export_name;
@@ -114,21 +126,14 @@ private:
     void setupExtensionList();
     void setupSpinButtons();
     void toggleSpinButtonVisibility();
-
-private:
     void refreshPreview();
 
-private:
     // change range and callbacks to spinbuttons
     template <typename T>
     void setupSpinButton(Gtk::SpinButton *sb, double val, double min, double max, double step, double page, int digits,
                          bool sensitive, void (SingleExport::*cb)(T), T param);
 
-private:
     void setDefaultSelectionMode();
-    void setDefaultFilename();
-
-private:
     void onAreaXChange(sb_type type);
     void onAreaYChange(sb_type type);
     void onDpiChange(sb_type type);
@@ -145,12 +150,15 @@ public:
     void refresh()
     {
         refreshArea();
-        refreshExportHints();
+        refreshPage();
+        loadExportHints();
     };
 
 private:
     void refreshArea();
-    void refreshExportHints();
+    void refreshPage();
+    void loadExportHints();
+    void saveExportHints(SPObject *target);
     void areaXChange(sb_type type);
     void areaYChange(sb_type type);
     void dpiChange(sb_type type);
@@ -183,12 +191,14 @@ private:
     bool interrupted;
 
 private:
-    // Signals
+    // Gtk Signals
     std::vector<sigc::connection> spinButtonConns;
     sigc::connection filenameConn;
     sigc::connection extensionConn;
     sigc::connection exportConn;
     sigc::connection browseConn;
+    // Document Signals
+    sigc::connection _page_selected_connection;
 };
 } // namespace Dialog
 } // namespace UI

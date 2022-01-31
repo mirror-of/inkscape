@@ -16,29 +16,37 @@
 
 #include <gtkmm.h>
 
-#include "export-helper.h"
-#include "extension/output.h"
-#include "ui/widget/scroll-utils.h"
 #include "ui/widget/scrollprotected.h"
-#include "ui/widget/unit-menu.h"
+
+class InkscapeApplication;
+class SPDocument;
+class SPDesktop;
 
 namespace Inkscape {
+    class PageManager;
+    class Preferences;
+    class Selection;
+
 namespace UI {
 namespace Dialog {
 
+class ExportList;
 class BatchItem;
+class ExportProgressDialog;
 
 class BatchExport : public Gtk::Box
 {
 public:
-    BatchExport(){};
+    BatchExport() {};
     BatchExport(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade)
         : Gtk::Box(cobject){};
-    ~BatchExport() override;
+    ~BatchExport() override = default;
 
 private:
     InkscapeApplication *_app;
     SPDesktop *_desktop = nullptr;
+    SPDocument *_document = nullptr;
+    PageManager *_page_manager = nullptr;
 
 private:
     bool setupDone = false; // To prevent setup() call add connections again.
@@ -49,12 +57,14 @@ public:
     void setDesktop(SPDesktop *desktop) { _desktop = desktop; }
     void selectionChanged(Inkscape::Selection *selection);
     void selectionModified(Inkscape::Selection *selection, guint flags);
+    void pagesChanged();
 
 private:
     enum selection_mode
     {
         SELECTION_LAYER = 0, // Default is alaways placed first
         SELECTION_SELECTION,
+        SELECTION_PAGE,
     };
 
 private:
@@ -64,20 +74,15 @@ private:
     Gtk::FlowBox *preview_container = nullptr;
     Gtk::CheckButton *show_preview = nullptr;
     Gtk::Label *num_elements = nullptr;
-    Gtk::Box *adv_box = nullptr;
     Gtk::CheckButton *hide_all = nullptr;
     Gtk::Entry *filename_entry = nullptr;
     Gtk::Button *export_btn = nullptr;
     Gtk::ProgressBar *_prog = nullptr;
     ExportList *export_list = nullptr;
 
-    AdvanceOptions advance_options;
-
-private:
     // Store all items to be displayed in flowbox
     std::map<std::string, BatchItem *> current_items;
 
-private:
     bool filename_modified;
     Glib::ustring original_name;
     Glib::ustring doc_export_name;
@@ -90,29 +95,24 @@ public:
     // initialise variables from builder
     void initialise(const Glib::RefPtr<Gtk::Builder> &builder);
     void setup();
-    bool getNonConflictingFilename(Glib::ustring &filename, Glib::ustring const extension);
 
 private:
     void setDefaultSelectionMode();
-    void setDefaultFilename();
-
-private:
     void onFilenameModified();
     void onAreaTypeToggle(selection_mode key);
     void onExport();
     void onBrowse(Gtk::EntryIconPosition pos, const GdkEventButton *ev);
 
+    void refreshPreview();
+    void refreshItems();
+    void loadExportHints();
+
 public:
     void refresh()
     {
         refreshItems();
-        refreshExportHints();
+        loadExportHints();
     };
-
-private:
-    void refreshPreview();
-    void refreshItems();
-    void refreshExportHints();
 
 private:
     void setExporting(bool exporting, Glib::ustring const &text = "");
@@ -139,12 +139,14 @@ private:
     ExportProgressDialog *prog_dlg = nullptr;
     bool interrupted;
 
-private:
+    // Gtk Signals
     sigc::connection filenameConn;
     sigc::connection exportConn;
     sigc::connection browseConn;
     sigc::connection selectionModifiedConn;
     sigc::connection selectionChangedConn;
+    // SVG Signals
+    sigc::connection _pages_changed_connection;
 };
 } // namespace Dialog
 } // namespace UI

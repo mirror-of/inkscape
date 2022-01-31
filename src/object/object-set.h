@@ -504,7 +504,6 @@ public:
     void moveScreen(double dx, double dy);
     
     // various
-    void getExportHints(Glib::ustring &filename, float *xdpi, float *ydpi);
     bool fitCanvas(bool with_margins, bool skip_undo = false);
     void swapFillStroke();
     void fillBetweenMany();

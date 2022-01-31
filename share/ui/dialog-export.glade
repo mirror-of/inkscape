@@ -35,7 +35,6 @@
                   <object class="GtkViewport">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="double-buffered">False</property>
                     <property name="hscroll-policy">natural</property>
                     <property name="shadow-type">none</property>
                     <child>
@@ -177,20 +176,16 @@
                             <property name="can-focus">False</property>
                             <property name="spacing">20</property>
                             <child>
-                              <object class="GtkBox" id="si_preview_box">
+                              <object class="GtkImage" id="si_preview">
+                                <property name="name">export_preview_single</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-start">5</property>
-                                <property name="margin-end">5</property>
-                                <property name="margin-top">5</property>
-                                <property name="margin-bottom">5</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="stock">gtk-missing-image</property>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
@@ -241,7 +236,7 @@
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
-                            <property name="top-attach">13</property>
+                            <property name="top-attach">14</property>
                             <property name="width">4</property>
                           </packing>
                         </child>
@@ -295,22 +290,6 @@
                           <packing>
                             <property name="left-attach">1</property>
                             <property name="top-attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="si_advance_box">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">14</property>
-                            <property name="width">6</property>
                           </packing>
                         </child>
                         <child>
@@ -563,6 +542,76 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkButton" id="page_prev">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes">Select the previous page</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">pan-start</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="si_area_name">
+                                <property name="can-focus">False</property>
+                                <property name="margin-top">5</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="label" translatable="yes">{name}</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="page_next">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes">Select the next page</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">pan-end</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">13</property>
+                            <property name="width">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
                           <placeholder/>
                         </child>
                         <child>
@@ -751,7 +800,7 @@
                   <object class="GtkButton" id="si_export">
                     <property name="label" translatable="yes">Export</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                   </object>
                   <packing>
@@ -777,11 +826,11 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="tooltip-text" translatable="yes">Export a part of document</property>
-            <property name="double-buffered">False</property>
             <property name="label" translatable="yes">Single Image</property>
             <property name="justify">right</property>
           </object>
           <packing>
+            <property name="tab-expand">True</property>
             <property name="tab-fill">False</property>
           </packing>
         </child>
@@ -789,7 +838,6 @@
           <object class="GtkBox" id="Batch Export">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="double-buffered">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkScrolledWindow" id="b_scroll">
@@ -805,7 +853,7 @@
                     <property name="can-focus">False</property>
                     <property name="shadow-type">none</property>
                     <child>
-                      <!-- n-columns=6 n-rows=8 -->
+                      <!-- n-columns=6 n-rows=6 -->
                       <object class="GtkGrid">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -819,8 +867,6 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="hscrollbar-policy">never</property>
-                            <property name="window-placement-set">False</property>
                             <property name="shadow-type">in</property>
                             <child>
                               <object class="GtkViewport">
@@ -830,9 +876,12 @@
                                   <object class="GtkFlowBox" id="b_preview_box">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="homogeneous">True</property>
-                                    <property name="column-spacing">10</property>
-                                    <property name="row-spacing">10</property>
+                                    <property name="margin-start">5</property>
+                                    <property name="margin-end">5</property>
+                                    <property name="margin-top">5</property>
+                                    <property name="margin-bottom">5</property>
+                                    <property name="column-spacing">6</property>
+                                    <property name="row-spacing">6</property>
                                     <property name="max-children-per-line">10</property>
                                     <property name="selection-mode">none</property>
                                     <property name="activate-on-single-click">False</property>
@@ -877,7 +926,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Export Layers as separate file</property>
+                                <property name="tooltip-text" translatable="yes">Export Layers as separate files</property>
                                 <property name="active">True</property>
                                 <property name="draw-indicator">False</property>
                                 <property name="group">b_s_selection</property>
@@ -886,6 +935,24 @@
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="b_s_pages">
+                                <property name="label" translatable="yes">Pages</property>
+                                <property name="name">export_selection</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="receives-default">False</property>
+                                <property name="tooltip-text" translatable="yes">Export Pages as separate files</property>
+                                <property name="active">True</property>
+                                <property name="draw-indicator">False</property>
+                                <property name="group">b_s_selection</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>
@@ -909,7 +976,7 @@
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">2</property>
-                            <property name="width">3</property>
+                            <property name="width">5</property>
                           </packing>
                         </child>
                         <child>
@@ -935,22 +1002,7 @@
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
-                            <property name="top-attach">5</property>
-                            <property name="width">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="b_advance_box">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">6</property>
+                            <property name="top-attach">3</property>
                             <property name="width">6</property>
                           </packing>
                         </child>
@@ -980,34 +1032,10 @@
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
-                            <property name="top-attach">3</property>
+                            <property name="top-attach">4</property>
                             <property name="width">6</property>
                             <property name="height">2</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                     </child>
@@ -1079,13 +1107,11 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="tooltip-text" translatable="yes">Batch Export Objects and Layers</property>
-            <property name="double-buffered">False</property>
             <property name="label" translatable="yes">Batch Export</property>
-            <property name="justify">right</property>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="position">2</property>
+            <property name="tab-expand">True</property>
             <property name="tab-fill">False</property>
           </packing>
         </child>

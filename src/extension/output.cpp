@@ -13,6 +13,7 @@
 
 #include "document.h"
 
+#include "io/sys.h"
 #include "implementation/implementation.h"
 
 #include "prefdialog/prefdialog.h"
@@ -50,6 +51,7 @@ Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     filetypetooltip = nullptr;
     dataloss = true;
     savecopyonly = false;
+    exported = false;
     raster = false;
 
     if (repr != nullptr) {
@@ -62,6 +64,9 @@ Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
                 if (child_repr->attribute("raster") && !strcmp(child_repr->attribute("raster"), "true")) {
                      raster = true;
+                }
+                if (child_repr->attribute("is_exported") && !strcmp(child_repr->attribute("is_exported"), "true")) {
+                     exported = true;
                 }
 
                 child_repr = child_repr->firstChild();
@@ -263,6 +268,17 @@ Output::export_raster(const SPDocument *doc, std::string png_filename, gchar con
     return;
 }
 
+/**
+ * Adds a valid extension to the filename if it's missing.
+ */
+void
+Output::add_extension(Glib::ustring &filename)
+{
+    auto current_ext = Inkscape::IO::get_file_extension(filename);
+    if (extension && current_ext != extension) {
+        filename = filename + extension;
+    }
+}
 
 } }  /* namespace Inkscape, Extension */
 

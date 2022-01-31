@@ -54,7 +54,7 @@ public:
     Geom::OptRect getDesktopRect() const;
     bool hasPages() const { return !pages.empty(); }
     int getPageCount() const { return pages.size(); }
-    int getPageIndex(SPPage *page) const;
+    int getPageIndex(const SPPage *page) const;
     int getSelectedPageIndex() const;
     Geom::Rect getSelectedPageRect() const;
     Geom::Point nextPageLocation() const;

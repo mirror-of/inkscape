@@ -147,7 +147,7 @@ void PageSelector::renderPageLabel(Gtk::TreeModel::const_iterator const &row)
         if (auto label = page->label()) {
             format = g_strdup_printf("<span size=\"smaller\"><tt>%d.</tt>%s</span>", page_num, label);
         } else {
-            format = g_strdup_printf("<span size=\"smaller\"><i>Page %d</i></span>", page_num);
+            format = g_strdup_printf("<span size=\"smaller\"><i>%s</i></span>", page->getDefaultLabel().c_str());
         }
 
         _label_renderer.property_markup() = format;

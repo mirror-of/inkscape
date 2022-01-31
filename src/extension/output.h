@@ -28,6 +28,7 @@ class Output : public Extension {
     bool   dataloss;             /**< The extension causes data loss on save */
     bool   savecopyonly;         /**< Limit output option to Save a Copy */
     bool   raster;               /**< Is the extension expecting a png file */
+    bool   exported;             /**< Is the extension available in the export dialog */
 
 public:
     class save_failed {};        /**< Generic failure for an undescribed reason */
@@ -60,6 +61,8 @@ public:
     bool         causes_dataloss() { return dataloss; };
     bool         savecopy_only() { return savecopyonly; };
     bool         is_raster() { return raster; };
+    bool         is_exported() { return exported; };
+    void         add_extension(Glib::ustring &filename);
 };
 
 } }  /* namespace Inkscape, Extension */

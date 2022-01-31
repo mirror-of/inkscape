@@ -50,7 +50,7 @@ static std::map<std::string, DialogData> dialog_data =
     {"AlignDistribute",    {_("_Align and Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"), DialogData::Basic }},
     {"CloneTiler",         {_("Create Tiled Clones"),   INKSCAPE_ICON("dialog-tile-clones"),          DialogData::Basic }},
     {"DocumentProperties", {_("_Document Properties"),  INKSCAPE_ICON("document-properties"),         DialogData::Settings }},
-    {"Export",             {_("_Export PNG Image"),     INKSCAPE_ICON("document-export"),             DialogData::Basic }},
+    {"Export",             {_("_Export"),               INKSCAPE_ICON("document-export"),             DialogData::Basic }},
     {"FillStroke",         {_("_Fill and Stroke"),      INKSCAPE_ICON("dialog-fill-and-stroke"),      DialogData::Basic }},
     {"FilterEffects",      {_("Filter _Editor"),        INKSCAPE_ICON("dialog-filters"),              DialogData::Advanced }},
     {"Find",               {_("_Find/Replace"),         INKSCAPE_ICON("edit-find"),                   DialogData::Basic }},

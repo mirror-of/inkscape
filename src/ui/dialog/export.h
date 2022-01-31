@@ -16,17 +16,24 @@
 
 #include <gtkmm.h>
 
-#include "export-batch.h"
-#include "export-helper.h"
-#include "export-single.h"
-#include "extension/output.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/scrollprotected.h"
-#include "ui/widget/unit-menu.h"
+
+class SPPage;
 
 namespace Inkscape {
+    class Preferences;
+    namespace Util {
+        class Unit;
+    }
+    namespace Extension {
+        class Output;
+    }
+
 namespace UI {
 namespace Dialog {
+    class SingleExport;
+    class BatchExport;
 
 enum notebook_page
 {
@@ -34,11 +41,41 @@ enum notebook_page
     BATCH_EXPORT
 };
 
+class ExportProgressDialog : public Gtk::Dialog
+{
+private:
+    Gtk::ProgressBar *_progress = nullptr;
+    Gtk::Widget *_export_panel = nullptr;
+    int _current = 0;
+    int _total = 0; 
+    bool _stopped = false;
+  
+public:
+    ExportProgressDialog(const Glib::ustring &title, bool modal = false)
+        : Gtk::Dialog(title, modal)
+    {}
+      
+    inline void set_export_panel(const decltype(_export_panel) export_panel) { _export_panel = export_panel; }
+    inline decltype(_export_panel) get_export_panel() const { return _export_panel; }
+      
+    inline void set_progress(const decltype(_progress) progress) { _progress = progress; }
+    inline decltype(_progress) get_progress() const { return _progress; }
+      
+    inline void set_current(const int current) { _current = current; }
+    inline int get_current() const { return _current; }
+      
+    inline void set_total(const int total) { _total = total; }
+    inline int get_total() const { return _total; }
+      
+    inline bool get_stopped() const { return _stopped; }
+    inline void set_stopped() { _stopped = true; }
+};
+
 class Export : public DialogBase
 {
 public:
     Export();
-    ~Export() override;
+    ~Export() override = default;
 
     static Export &getInstance() { return *new Export(); }
 
@@ -47,28 +84,42 @@ private:
     Gtk::Box *container = nullptr;            // Main Container
     Gtk::Notebook *export_notebook = nullptr; // Notebook Container for single and batch export
 
-private:
     SingleExport *single_image = nullptr;
     BatchExport *batch_export = nullptr;
 
-private:
     Inkscape::Preferences *prefs = nullptr;
 
     // setup default values of widgets
     void setDefaultNotebookPage();
     std::map<notebook_page, int> pages;
 
-private:
     // signals callback
     void onRealize();
-    void onPageSwitch(Widget *page, guint page_number);
-
-private:
+    void onNotebookPageSwitch(Widget *page, guint page_number);
     void documentReplaced() override;
     void desktopReplaced() override;
     void selectionChanged(Inkscape::Selection *selection) override;
     void selectionModified(Inkscape::Selection *selection, guint flags) override;
+
+public:
+    static std::string absolutizePath(SPDocument *doc, const std::string &filename);
+    static bool unConflictFilename(SPDocument *doc, Glib::ustring &filename, Glib::ustring const extension);
+    static std::string filePathFromObject(SPDocument *doc, SPObject *obj, const Glib::ustring &file_entry_text);
+    static std::string filePathFromId(SPDocument *doc, Glib::ustring id, const Glib::ustring &file_entry_text);
+    static Glib::ustring defaultFilename(SPDocument *doc, Glib::ustring &filename_entry_text, Glib::ustring extension);
+
+    static bool exportRaster(
+        Geom::Rect const &area, unsigned long int const &width, unsigned long int const &height,
+        float const &dpi, Glib::ustring const &filename, bool overwrite,
+        unsigned (*callback)(float, void *), ExportProgressDialog *&prog_dialog,
+        Inkscape::Extension::Output *extension, std::vector<SPItem *> *items = nullptr, int run = 0);
+  
+    static bool exportVector(
+        Inkscape::Extension::Output *extension, SPDocument *doc, Glib::ustring const &filename,
+        bool overwrite, std::vector<SPItem *> *items = nullptr, SPPage *page = nullptr);
+
 };
+
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape

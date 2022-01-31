@@ -10,6 +10,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glibmm/i18n.h>
+
 #include "sp-page.h"
 
 #include "attributes.h"
@@ -230,7 +232,7 @@ void SPPage::setSelected(bool sel)
 /**
  * Returns the page number (order of pages) starting at 1
  */
-int SPPage::getPageIndex()
+int SPPage::getPageIndex() const
 {
     if (_manager) {
         return _manager->getPageIndex(this);
@@ -387,6 +389,23 @@ Inkscape::XML::Node *SPPage::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     repr->setAttributeSvgDouble("height", this->height.computed);
 
     return SPObject::write(xml_doc, repr, flags);
+}
+
+std::string SPPage::getDefaultLabel() const
+{
+    gchar *format = g_strdup_printf(_("Page %d"), getPagePosition());
+    auto ret = std::string(format);
+    g_free(format);
+    return ret;
+}
+
+std::string SPPage::getLabel() const
+{
+    auto ret = label();
+    if (!ret) {
+        return getDefaultLabel();
+    }
+    return std::string(ret);
 }
 
 /*

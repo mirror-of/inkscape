@@ -31,7 +31,7 @@ public:
     /**
      *    Construct a UnitMenu
      */
-    UnitMenu(Gtk::ComboBoxText* external_combo = nullptr);
+    UnitMenu();
 
     /* GtkBuilder constructor */
     UnitMenu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade):Gtk::ComboBoxText(cobject){

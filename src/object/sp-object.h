@@ -67,6 +67,7 @@ class SPObject;
 #include <sigc++/signal.h>
 #include <vector>
 #include <boost/intrusive/list.hpp>
+#include "2geom/point.h" // Used for dpi only
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
 
@@ -353,6 +354,18 @@ public:
      * The second argument is optional - @see setTitleOrDesc() below for details.
      */
     bool setDesc(char const *desc, bool verbatim=false);
+
+    /**
+     * Get and set the exportable filename on this object. Usually sp-item or sp-page
+     */
+    Glib::ustring getExportFilename() const;
+    void setExportFilename(Glib::ustring filename);
+
+    /**
+     * Get and set the exported DPI for this objet, if available.
+     */
+    Geom::Point getExportDpi() const;
+    void setExportDpi(Geom::Point dpi);
 
     /**
      * Set the policy under which this object will be orphan-collected.

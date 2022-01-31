@@ -20,51 +20,16 @@
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
-#include "preview-util.h"
+#include "util/preview.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-ExportPreview::ExportPreview()
-    : drawing(nullptr)
-    , visionkey(0)
-    , timer(nullptr)
-    , renderTimer(nullptr)
-    , pending(false)
-    , minDelay(0.1)
-    , size(128)
-{
-    pixMem = nullptr;
-    image = nullptr;
-    int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, size);
-    pixMem = new guchar[size * stride];
-    memset(pixMem, 0x00, size * stride);
-
-    auto pb = Gdk::Pixbuf::create_from_data(pixMem, Gdk::COLORSPACE_RGB, true, 8, size, size, stride);
-    image = Gtk::manage(new Gtk::Image(pb));
-    image->show();
-    image->set_name("export_preview_image");
-    // add this image to box here
-    this->pack_start(*image, true, true, 0);
-    show_all_children();
-    this->set_name("export_preview_box");
-    this->set_can_focus(false);
-    image->set_can_focus(false);
-}
-
 void ExportPreview::resetPixels()
 {
-    if (pixMem) {
-        delete pixMem;
-        pixMem = nullptr;
-    }
-    int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, size);
-    pixMem = new guchar[size * stride];
-    auto pb = Gdk::Pixbuf::create_from_data(pixMem, Gdk::COLORSPACE_RGB, true, 8, size, size, stride);
-    memset(pixMem, 0x00, size * stride);
-    image->set(pb);
-    image->show();
+    clear();
+    show();
 }
 
 ExportPreview::~ExportPreview()
@@ -93,6 +58,7 @@ ExportPreview::~ExportPreview()
 void ExportPreview::setItem(SPItem *item)
 {
     _item = item;
+    _dbox = Geom::OptRect();
 }
 void ExportPreview::setDbox(double x0, double x1, double y0, double y1)
 {
@@ -102,6 +68,7 @@ void ExportPreview::setDbox(double x0, double x1, double y0, double y1)
     if ((x1 - x0 == 0) || (y1 - y0) == 0) {
         return;
     }
+    _item = nullptr;
     _dbox = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)) * _document->dt2doc();
 }
 
@@ -226,26 +193,16 @@ void ExportPreview::renderPreview()
     }
 
     if (_document) {
-        unsigned unused;
-        int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, size);
-        guchar *px = nullptr;
-
-        if (_dbox) {
-            px = Inkscape::UI::PREVIEW::sp_icon_doc_icon(_document, *drawing, nullptr, size, unused, &_dbox);
-        } else if (_item) {
-            gchar const *id = _item->getId();
-            px = Inkscape::UI::PREVIEW::sp_icon_doc_icon(_document, *drawing, id, size, unused);
+        GdkPixbuf *pb = nullptr;
+        if (_item) {
+            pb = Inkscape::UI::PREVIEW::render_preview(_document, *drawing, _item, size, size);
+        } else if (_dbox) {
+            pb = Inkscape::UI::PREVIEW::render_preview(_document, *drawing, nullptr, size, size, &_dbox);
         }
-
-        if (px) {
-            memcpy(pixMem, px, size * stride);
-            g_free(px);
-            px = nullptr;
-        } else {
-            memset(pixMem, 0, size * stride);
+        if (pb) {
+            set(Glib::wrap(pb));
+            show();
         }
-        image->set(image->get_pixbuf());
-        image->show();
     }
 
     renderTimer->stop();

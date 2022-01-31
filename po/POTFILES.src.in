@@ -227,6 +227,7 @@
 ../src/object/sp-marker.cpp
 ../src/object/sp-namedview.cpp
 ../src/object/sp-offset.cpp
+../src/object/sp-page.cpp
 ../src/object/sp-path.cpp
 ../src/object/sp-polygon.cpp
 ../src/object/sp-polyline.cpp
@@ -270,6 +271,8 @@
 ../src/ui/dialog/dialog-notebook.cpp
 ../src/ui/dialog/dialog-window.cpp
 ../src/ui/dialog/document-properties.cpp
+../src/ui/dialog/export-batch.cpp
+../src/ui/dialog/export-single.cpp
 ../src/ui/dialog/export.cpp
 ../src/ui/dialog/filedialogimpl-gtkmm.cpp
 ../src/ui/dialog/filedialogimpl-win32.cpp

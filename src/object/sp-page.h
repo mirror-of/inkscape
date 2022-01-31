@@ -46,8 +46,8 @@ public:
 
     void setSelected(bool selected);
     bool setDefaultAttributes();
-    int getPageIndex();
-    int getPagePosition() { return getPageIndex() + 1; }
+    int getPageIndex() const;
+    int getPagePosition() const { return getPageIndex() + 1; }
     bool setPageIndex(int index, bool swap_page);
     bool setPagePosition(int position, bool swap_page) { return setPageIndex(position - 1, swap_page); }
 
@@ -64,6 +64,8 @@ public:
     std::vector<SPItem *> getOverlappingItems() const;
     bool itemOnPage(SPItem *item, bool contains = false) const;
     bool isViewportPage() const;
+    std::string getDefaultLabel() const;
+    std::string getLabel() const;
 
 protected:
     void build(SPDocument *doc, Inkscape::XML::Node *repr) override;
