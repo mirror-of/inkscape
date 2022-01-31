@@ -12,10 +12,9 @@
 # 驿窗 <classenu@163.com>, 2021.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: Inkscape 0.92.x\n"
+msgstr "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2022-01-11 17:04+0100\n"
+"POT-Creation-Date: 2021-12-13 05:40+0000\n"
 "PO-Revision-Date: 2021-09-26 21:11+0800\n"
 "Last-Translator: 驿窗 <classenu@163.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -1138,7 +1137,7 @@ msgstr "漫画式奶油"
 #: ../share/filters/filters.svg.h:791 ../share/filters/filters.svg.h:795
 #: ../share/filters/filters.svg.h:799
 msgid "Non-Realistic 3D Shaders"
-msgstr ""
+msgstr "Non-Realistic 3D Shaders"
 
 #: ../share/filters/filters.svg.h:432
 msgid "Comics shader with creamy waves transparency"
@@ -1156,7 +1155,7 @@ msgstr "在交叉处产生溢出边沿的可着色斑点"
 
 #: ../share/filters/filters.svg.h:438
 msgid "Dark and Glow"
-msgstr ""
+msgstr "暗调与辉光"
 
 #: ../share/filters/filters.svg.h:440
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
@@ -1944,7 +1943,7 @@ msgstr "通过青色/黄色/洋红色通道渲染可着色背景"
 
 #: ../share/filters/filters.svg.h:838
 msgid "Contouring Table"
-msgstr ""
+msgstr "轮廓线表"
 
 #: ../share/filters/filters.svg.h:840
 msgid "Blurred multiple contours for objects"
@@ -1960,7 +1959,7 @@ msgstr "将模糊轮廓转换为海报层次感"
 
 #: ../share/filters/filters.svg.h:846
 msgid "Contouring Discrete"
-msgstr ""
+msgstr "轮廓线分离"
 
 #: ../share/filters/filters.svg.h:848
 msgid "Sharp multiple contour for objects"
@@ -3969,17 +3968,17 @@ msgstr "空白"
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold Roll"
-msgstr ""
+msgstr "A4三折页"
 
 #: ../share/templates/templates.h:1
 msgid ""
 "An A4 page 3-fold Roll template with guides, print marks, and marked leaflet "
 "pages. Inner and outer page contents go into their respective Layers."
-msgstr ""
+msgstr "A4尺寸做的三折页模板，带有参考线、印刷标记及折页页码。内页和外页内容都已经分配到对应的图层。"
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold"
-msgstr ""
+msgstr "A4三折页"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -4063,27 +4062,27 @@ msgstr "显示用户数据目录并退出"
 
 #: ../src/actions/actions-base.cpp:234
 msgid "List Actions"
-msgstr ""
+msgstr "动作列表"
 
 #: ../src/actions/actions-base.cpp:234
 msgid "Print a list of actions and exit"
-msgstr ""
+msgstr "输出动作列表并退出"
 
 #: ../src/actions/actions-base.cpp:235
 msgid "List Verbs"
-msgstr ""
+msgstr "命令清单"
 
 #: ../src/actions/actions-base.cpp:235
 msgid "Print a list of verbs and exit"
-msgstr ""
+msgstr "输出命令清单并退出"
 
 #: ../src/actions/actions-base.cpp:236
 msgid "Execute Verb"
-msgstr ""
+msgstr "执行命令"
 
 #: ../src/actions/actions-base.cpp:236
 msgid "Execute verb(s)"
-msgstr ""
+msgstr "执行命令"
 
 #: ../src/actions/actions-base.cpp:237
 msgid "Clean up Document"
@@ -4091,7 +4090,7 @@ msgstr "清理文档"
 
 #: ../src/actions/actions-base.cpp:237
 msgid "Remove unused definitions (gradients, etc.)"
-msgstr ""
+msgstr "移除未使用的定义(比如渐变)"
 
 #: ../src/actions/actions-base.cpp:238
 msgid "Quit"
@@ -4103,7 +4102,7 @@ msgstr "立即退出Inkscape"
 
 #: ../src/actions/actions-base.cpp:240
 msgid "Import Page Number"
-msgstr ""
+msgstr "导入页码"
 
 #: ../src/actions/actions-base.cpp:240
 msgid "Select PDF page number to import"
@@ -4111,59 +4110,59 @@ msgstr "选择要导入的PDF页码"
 
 #: ../src/actions/actions-base.cpp:241
 msgid "Import DPI Method"
-msgstr ""
+msgstr "导入DPI方式"
 
 #: ../src/actions/actions-base.cpp:241
 msgid "Set DPI conversion method for legacy Inkscape files"
-msgstr ""
+msgstr "为传统的inkscape文件设置DPI转换方式"
 
 #: ../src/actions/actions-base.cpp:242
 msgid "No Import Baseline Conversion"
-msgstr ""
+msgstr "不导入基线转换"
 
 #: ../src/actions/actions-base.cpp:242
 msgid "Do not convert text baselines in legacy Inkscape files"
-msgstr ""
+msgstr "传统inkscape文件不转换文字基线"
 
 #: ../src/actions/actions-base.cpp:244
 msgid "Query X"
-msgstr ""
+msgstr "Query X"
 
 #: ../src/actions/actions-base.cpp:244
 msgid "Query 'x' value(s) of selected objects"
-msgstr ""
+msgstr "查询选中对象的'x'值"
 
 #: ../src/actions/actions-base.cpp:245
 msgid "Query Y"
-msgstr ""
+msgstr "Query Y"
 
 #: ../src/actions/actions-base.cpp:245
 msgid "Query 'y' value(s) of selected objects"
-msgstr ""
+msgstr "查询选中对象的'y'值"
 
 #: ../src/actions/actions-base.cpp:246
 msgid "Query Width"
-msgstr ""
+msgstr "Query Width"
 
 #: ../src/actions/actions-base.cpp:246
 msgid "Query 'width' value(s) of object(s)"
-msgstr ""
+msgstr "查询对象的'宽度'值"
 
 #: ../src/actions/actions-base.cpp:247
 msgid "Query Height"
-msgstr ""
+msgstr "Query Height"
 
 #: ../src/actions/actions-base.cpp:247
 msgid "Query 'height' value(s) of object(s)"
-msgstr ""
+msgstr "查询对象的'高度'值"
 
 #: ../src/actions/actions-base.cpp:248
 msgid "Query All"
-msgstr ""
+msgstr "Query All"
 
 #: ../src/actions/actions-base.cpp:248
 msgid "Query 'x', 'y', 'width', and 'height'"
-msgstr ""
+msgstr "查询'x', 'y', '宽度',  '高度'"
 
 #: ../src/actions/actions-canvas-mode.cpp:256
 msgid "Display Mode: Normal"
@@ -4195,7 +4194,7 @@ msgstr "显示模式:Hairlines"
 
 #: ../src/actions/actions-canvas-mode.cpp:259
 msgid "Render thin lines visibly"
-msgstr ""
+msgstr "极细线渲染时明显可见"
 
 #: ../src/actions/actions-canvas-mode.cpp:260
 msgid "Display Mode Cycle"
@@ -4264,163 +4263,163 @@ msgstr "打开/关闭吸附功能"
 
 #: ../src/actions/actions-canvas-snapping.cpp:187
 msgid "Snap Bounding Boxes"
-msgstr ""
+msgstr "吸附边界框"
 
 #: ../src/actions/actions-canvas-snapping.cpp:187
 msgid "Toggle snapping to bounding boxes (global)"
-msgstr ""
+msgstr "吸附到边界框(全局)"
 
 #: ../src/actions/actions-canvas-snapping.cpp:188
 msgid "Snap Bounding Box Edges"
-msgstr ""
+msgstr "吸附到边界框的边缘"
 
 #: ../src/actions/actions-canvas-snapping.cpp:188
 msgid "Toggle snapping to bounding-box edges"
-msgstr ""
+msgstr "吸附到边界框的边缘"
 
 #: ../src/actions/actions-canvas-snapping.cpp:189
 msgid "Snap Bounding Box Corners"
-msgstr ""
+msgstr "吸附到边界框的角"
 
 #: ../src/actions/actions-canvas-snapping.cpp:189
 msgid "Toggle snapping to bounding-box corners"
-msgstr ""
+msgstr "吸附到边界框的角"
 
 #: ../src/actions/actions-canvas-snapping.cpp:190
 msgid "Snap Bounding Box Edge Midpoints"
-msgstr ""
+msgstr "吸附到边界框边缘的中线位置"
 
 #: ../src/actions/actions-canvas-snapping.cpp:190
 msgid "Toggle snapping to bounding-box edge mid-points"
-msgstr ""
+msgstr "吸附到边界框边缘的中线位置"
 
 #: ../src/actions/actions-canvas-snapping.cpp:191
 msgid "Snap Bounding Box Centers"
-msgstr ""
+msgstr "吸附到边界框的中心"
 
 #: ../src/actions/actions-canvas-snapping.cpp:191
 msgid "Toggle snapping to bounding-box centers"
-msgstr ""
+msgstr "吸附到边界框的中心"
 
 #: ../src/actions/actions-canvas-snapping.cpp:193
 msgid "Snap Nodes"
-msgstr ""
+msgstr "吸附节点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:193
 msgid "Toggle snapping to nodes (global)"
-msgstr ""
+msgstr "吸附到节点(全局)"
 
 #: ../src/actions/actions-canvas-snapping.cpp:194
 msgid "Snap Paths"
-msgstr ""
+msgstr "吸附路径"
 
 #: ../src/actions/actions-canvas-snapping.cpp:194
 msgid "Toggle snapping to paths"
-msgstr ""
+msgstr "吸附到路径"
 
 #: ../src/actions/actions-canvas-snapping.cpp:195
 msgid "Snap Path Intersections"
-msgstr ""
+msgstr "吸附路径交点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:195
 msgid "Toggle snapping to path intersections"
-msgstr ""
+msgstr "吸附到路径交点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:196
 msgid "Snap Cusp Nodes"
-msgstr ""
+msgstr "吸附尖角节点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:196
 msgid "Toggle snapping to cusp nodes, including rectangle corners"
-msgstr ""
+msgstr "吸附到尖角节点, 包括矩形的角"
 
 #: ../src/actions/actions-canvas-snapping.cpp:197
 msgid "Snap Smooth Node"
-msgstr ""
+msgstr "吸附平滑节点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:197
 msgid "Toggle snapping to smooth nodes, including quadrant points of ellipses"
-msgstr ""
+msgstr "吸附到平滑节点, 包括椭圆的四个极限点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:198
 msgid "Snap Line Midpoints"
-msgstr ""
+msgstr "吸附直线中点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:198
 msgid "Toggle snapping to midpoints of lines"
-msgstr ""
+msgstr "吸附到直线段的中点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:200
 msgid "Snap Others"
-msgstr ""
+msgstr "其它吸附"
 
 #: ../src/actions/actions-canvas-snapping.cpp:200
 msgid "Toggle snapping to misc. points (global)"
-msgstr ""
+msgstr "吸附到其它位置点(全局)"
 
 #: ../src/actions/actions-canvas-snapping.cpp:201
 msgid "Snap Object Midpoint"
-msgstr ""
+msgstr "吸附对象中心点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:201
 msgid "Toggle snapping to object midpoint"
-msgstr ""
+msgstr "吸附到对象的中心点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:202
 msgid "Snap Rotation Center"
-msgstr ""
+msgstr "吸附旋转中心"
 
 #: ../src/actions/actions-canvas-snapping.cpp:202
 msgid "Toggle snapping to object rotation center"
-msgstr ""
+msgstr "吸附到对象的旋转中心点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:203
 msgid "Snap Text Baselines"
-msgstr ""
+msgstr "吸附文本基线"
 
 #: ../src/actions/actions-canvas-snapping.cpp:203
 msgid "Toggle snapping to text baseline and text anchors"
-msgstr ""
+msgstr "吸附到文本基线和文本锚点"
 
 #: ../src/actions/actions-canvas-snapping.cpp:205
 msgid "Snap Page Border"
-msgstr ""
+msgstr "吸附页面边缘"
 
 #: ../src/actions/actions-canvas-snapping.cpp:205
 msgid "Toggle snapping to page border"
-msgstr ""
+msgstr "吸附到页面边缘"
 
 #: ../src/actions/actions-canvas-snapping.cpp:206
 msgid "Snap Grids"
-msgstr ""
+msgstr "吸附网格"
 
 #: ../src/actions/actions-canvas-snapping.cpp:206
 msgid "Toggle snapping to grids"
-msgstr ""
+msgstr "吸附到网格"
 
 #: ../src/actions/actions-canvas-snapping.cpp:207
 msgid "Snap Guide Lines"
-msgstr ""
+msgstr "吸附参考线"
 
 #: ../src/actions/actions-canvas-snapping.cpp:207
 msgid "Toggle snapping to guide lines"
-msgstr ""
+msgstr "吸附到参考线"
 
 #: ../src/actions/actions-canvas-snapping.cpp:209
 msgid "Snap Mask Paths"
-msgstr ""
+msgstr "吸附蒙版路径"
 
 #: ../src/actions/actions-canvas-snapping.cpp:209
 msgid "Toggle snapping to mask paths"
-msgstr ""
+msgstr "吸附到蒙版路径"
 
 #: ../src/actions/actions-canvas-snapping.cpp:210
 msgid "Snap Clip Paths"
-msgstr ""
+msgstr "吸附剪裁路径"
 
 #: ../src/actions/actions-canvas-snapping.cpp:210
 msgid "Toggle snapping to clip paths"
-msgstr ""
+msgstr "吸附到剪裁路径"
 
 #: ../src/actions/actions-canvas-transform.cpp:200
 msgid "Zoom In"
@@ -4618,17 +4617,17 @@ msgstr "对齐对象"
 msgid ""
 "Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|"
 "bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?"
-msgstr ""
+msgstr "Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]?群组？锚点？"
 
 #: ../src/actions/actions-object-align.cpp:357
 msgid "Distribute objects"
-msgstr ""
+msgstr "分布对象"
 
 #: ../src/actions/actions-object-align.cpp:357
 msgid ""
 "Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | "
 "top | vcenter | bottom]"
-msgstr ""
+msgstr "Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | top | vcenter | bottom]"
 
 #: ../src/actions/actions-object.cpp:144
 msgid "Set Attribute"
@@ -4638,17 +4637,17 @@ msgstr "设置属性"
 msgid ""
 "Set or update an attribute of selected objects; usage: object-set-attribute:"
 "attribute name, attribute value;"
-msgstr ""
+msgstr "Set or update an attribute of selected objects; usage: object-set-attribute:attribute name, attribute value;"
 
 #: ../src/actions/actions-object.cpp:145
 msgid "Set Property"
-msgstr ""
+msgstr "设置属性"
 
 #: ../src/actions/actions-object.cpp:145
 msgid ""
 "Set or update a property on selected objects; usage: object-set-property:"
 "property name, property value;"
-msgstr ""
+msgstr "Set or update a property on selected objects; usage: object-set-property:property name, property value;"
 
 #: ../src/actions/actions-object.cpp:146
 msgid "Unlink Clones"
@@ -4656,7 +4655,7 @@ msgstr "断开克隆"
 
 #: ../src/actions/actions-object.cpp:146
 msgid "Unlink clones and symbols"
-msgstr ""
+msgstr "断开克隆和symbols"
 
 #: ../src/actions/actions-object.cpp:147
 msgid "Object To Path"
@@ -4676,11 +4675,11 @@ msgstr "把描边转成路径"
 
 #: ../src/actions/actions-object.cpp:149
 msgid "Simplify Path"
-msgstr ""
+msgstr "简化路径"
 
 #: ../src/actions/actions-object.cpp:149
 msgid "Simplify paths, reducing node counts"
-msgstr ""
+msgstr "简化路径, 减少节点数量"
 
 #: ../src/actions/actions-output.cpp:225
 msgid "Export Type"
@@ -4704,87 +4703,87 @@ msgstr "覆盖导出"
 
 #: ../src/actions/actions-output.cpp:227
 msgid "Allow to overwrite existing files during export"
-msgstr ""
+msgstr "导出时允许覆盖已有文件"
 
 #: ../src/actions/actions-output.cpp:229
 msgid "Export Area"
-msgstr ""
+msgstr "导出区域"
 
 #: ../src/actions/actions-output.cpp:229
 msgid "Set export area"
-msgstr ""
+msgstr "设置导出区域"
 
 #: ../src/actions/actions-output.cpp:230
 msgid "Export Area Drawing"
-msgstr ""
+msgstr "导出绘图区域"
 
 #: ../src/actions/actions-output.cpp:230
 msgid "Export drawing area"
-msgstr ""
+msgstr "导出绘图区域"
 
 #: ../src/actions/actions-output.cpp:231
 msgid "Export Area Page"
-msgstr ""
+msgstr "导出页面区域"
 
 #: ../src/actions/actions-output.cpp:231
 msgid "Export page area"
-msgstr ""
+msgstr "导出页面区域"
 
 #: ../src/actions/actions-output.cpp:232
 msgid "Export Margin"
-msgstr ""
+msgstr "导出页边距"
 
 #: ../src/actions/actions-output.cpp:232
 msgid "Set additional export margin"
-msgstr ""
+msgstr "设置额外的导出页边距"
 
 #: ../src/actions/actions-output.cpp:233
 msgid "Export Area Snap"
-msgstr ""
+msgstr "导出吸附区域"
 
 #: ../src/actions/actions-output.cpp:233
 msgid "Snap export area to integer values"
-msgstr ""
+msgstr "吸附导出区域为整数值"
 
 #: ../src/actions/actions-output.cpp:234
 msgid "Export Width"
-msgstr ""
+msgstr "导出宽度"
 
 #: ../src/actions/actions-output.cpp:234
 msgid "Set export width"
-msgstr ""
+msgstr "设置导出宽度"
 
 #: ../src/actions/actions-output.cpp:235
 msgid "Export Height"
-msgstr ""
+msgstr "导出高度"
 
 #: ../src/actions/actions-output.cpp:235
 msgid "Set export height"
-msgstr ""
+msgstr "设置导出高度"
 
 #: ../src/actions/actions-output.cpp:237
 msgid "Export ID"
-msgstr ""
+msgstr "导出ID"
 
 #: ../src/actions/actions-output.cpp:237
 msgid "Export selected ID(s)"
-msgstr ""
+msgstr "导出选中的ID"
 
 #: ../src/actions/actions-output.cpp:238
 msgid "Export ID Only"
-msgstr ""
+msgstr "仅导出ID"
 
 #: ../src/actions/actions-output.cpp:238
 msgid "Hide any objects not given in export-id option"
-msgstr ""
+msgstr "隐藏未在导出ID中列出的对象"
 
 #: ../src/actions/actions-output.cpp:240
 msgid "Export Plain SVG"
-msgstr ""
+msgstr "导出纯SVG"
 
 #: ../src/actions/actions-output.cpp:240
 msgid "Export as plain SVG"
-msgstr ""
+msgstr "导出为纯SVG格式"
 
 #: ../src/actions/actions-output.cpp:241
 msgid "Export DPI"
@@ -4796,11 +4795,11 @@ msgstr "设置导出DPI"
 
 #: ../src/actions/actions-output.cpp:242
 msgid "Export Ignore Filters"
-msgstr ""
+msgstr "导出忽略滤镜"
 
 #: ../src/actions/actions-output.cpp:242
 msgid "Export without filters to avoid rasterization for PDF, PS, EPS"
-msgstr ""
+msgstr "不带滤镜导出, 避免PDF, PS, EPS光栅化"
 
 #: ../src/actions/actions-output.cpp:243
 msgid "Export Text to Path"
@@ -4808,7 +4807,7 @@ msgstr "导出文本为路径"
 
 #: ../src/actions/actions-output.cpp:243
 msgid "Convert texts to paths in the exported file"
-msgstr ""
+msgstr "导出时把文字转为路径"
 
 #: ../src/actions/actions-output.cpp:244
 msgid "Export PS Level"
@@ -4844,7 +4843,7 @@ msgstr "导出背景"
 
 #: ../src/actions/actions-output.cpp:248
 msgid "Include background color in exported file"
-msgstr ""
+msgstr "导出时包括背景颜色"
 
 #: ../src/actions/actions-output.cpp:249
 msgid "Export Background Opacity"
@@ -4852,11 +4851,11 @@ msgstr "导出背景不透明度"
 
 #: ../src/actions/actions-output.cpp:249
 msgid "Include background opacity in exported file"
-msgstr ""
+msgstr "导出时包含背景透明度"
 
 #: ../src/actions/actions-output.cpp:250
 msgid "Export PNG Color Mode"
-msgstr ""
+msgstr "导出PNG颜色模式"
 
 #: ../src/actions/actions-output.cpp:250
 msgid "Set color mode for PNG export"
@@ -4864,7 +4863,7 @@ msgstr "为PNG导出设置颜色模式"
 
 #: ../src/actions/actions-output.cpp:252
 msgid "Do Export"
-msgstr ""
+msgstr "执行导出"
 
 #: ../src/actions/actions-output.cpp:252
 msgid "Do export"
@@ -4888,7 +4887,7 @@ msgstr "选择"
 
 #: ../src/actions/actions-selection.cpp:240
 msgid "Select by ID (deprecated)"
-msgstr ""
+msgstr "按ID选择(deprecated)"
 
 #: ../src/actions/actions-selection.cpp:241
 msgid "Deselect"
@@ -4896,7 +4895,7 @@ msgstr "撤销选择"
 
 #: ../src/actions/actions-selection.cpp:241
 msgid "Deselect by ID (deprecated)"
-msgstr ""
+msgstr "按ID取消选择(deprecated)"
 
 #: ../src/actions/actions-selection.cpp:242
 msgid "Select by ID"
@@ -4908,11 +4907,11 @@ msgstr "按ID撤销选择"
 
 #: ../src/actions/actions-selection.cpp:244
 msgid "Select by Class"
-msgstr ""
+msgstr "按class选择"
 
 #: ../src/actions/actions-selection.cpp:244
 msgid "Select by class"
-msgstr ""
+msgstr "按class选择"
 
 #: ../src/actions/actions-selection.cpp:245
 msgid "Select by Element"
@@ -4939,7 +4938,7 @@ msgid ""
 "Select all; options: 'all' (every object including groups), 'layers', 'no-"
 "layers' (top level objects in layers), 'groups' (all groups including "
 "layers), 'no-groups' (all objects other than groups and layers, default)"
-msgstr ""
+msgstr "全选; 选项: 'all' (全部对象，包括群组), 'layers', 'no-layers' (层内最顶层对象), 'groups' (所有群组，包括层), 'no-groups' (除组和层以外的所有对象，默认 )"
 
 #: ../src/actions/actions-selection.cpp:248
 msgid "Invert Selection"
@@ -4949,23 +4948,23 @@ msgstr "反选"
 msgid ""
 "Invert selection; options: 'all', 'layers', 'no-layers', 'groups', 'no-"
 "groups' (default)"
-msgstr ""
+msgstr "反转选择; 选项: 'all', 'layers', 'no-layers', 'groups', 'no-groups' (default)"
 
 #: ../src/actions/actions-selection.cpp:249
 msgid "List Selection"
-msgstr ""
+msgstr "选择列表"
 
 #: ../src/actions/actions-selection.cpp:249
 msgid "Print a list of objects in current selection"
-msgstr ""
+msgstr "输出当前选中对象的列表"
 
 #: ../src/actions/actions-transform.cpp:90
 msgid "Translate"
-msgstr ""
+msgstr "转换"
 
 #: ../src/actions/actions-transform.cpp:90
 msgid "Translate selected objects (dx,dy)"
-msgstr ""
+msgstr "转换选中的对象(dx,dy)"
 
 #: ../src/actions/actions-transform.cpp:91 ../src/selection-chemistry.cpp:1948
 #: ../src/seltrans.cpp:466 ../src/ui/dialog/transformation.cpp:813
@@ -4974,7 +4973,7 @@ msgstr "旋转"
 
 #: ../src/actions/actions-transform.cpp:91
 msgid "Rotate selected objects by degrees"
-msgstr ""
+msgstr "按度数旋转选中的对象"
 
 #: ../src/actions/actions-transform.cpp:92
 #: ../src/live_effects/lpe-measure-segments.cpp:79
@@ -4986,7 +4985,7 @@ msgstr "缩放"
 
 #: ../src/actions/actions-transform.cpp:92
 msgid "Scale selected objects by scale factor"
-msgstr ""
+msgstr "按比例缩放选中的对象"
 
 #: ../src/actions/actions-transform.cpp:93
 msgid "Remove Transforms"
@@ -5002,7 +5001,7 @@ msgstr "窗口打开"
 
 #: ../src/actions/actions-window.cpp:55
 msgid "Open a window for the active document; GUI only"
-msgstr ""
+msgstr "为活动文档打开一个窗口; 仅GUI"
 
 #: ../src/actions/actions-window.cpp:56
 msgid "Window Close"
@@ -5014,20 +5013,20 @@ msgstr "关闭激活窗口"
 
 #: ../src/auto-save.cpp:150
 msgid "Autosave failed! Could not find inkscape extension to save document."
-msgstr ""
+msgstr "自动保存失败！没有可用的inkscape扩展来保存文档"
 
 #: ../src/auto-save.cpp:153 ../src/auto-save.cpp:159
 #, c-format
 msgid "Autosave failed! File %s could not be saved."
-msgstr "Autosave failed!无法保存文件 %s."
+msgstr "自动保存失败！无法保存文件 %s."
 
 #: ../src/context-fns.cpp:46 ../src/context-fns.cpp:75
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
-msgstr ""
+msgstr "<b>当前图层是隐藏状态</b>. 解除隐藏后可以进行绘图."
 
 #: ../src/context-fns.cpp:52 ../src/context-fns.cpp:81
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr ""
+msgstr "<b>当前图层是锁定状态</b>. 解锁后可以进行绘图."
 
 #: ../src/desktop-events.cpp:330
 msgid "Move guide"
@@ -5174,7 +5173,7 @@ msgstr "启用(_E)"
 # File: ../src/display/canvas-grid.cpp, line: 306
 #: ../src/display/control/canvas-grid.cpp:256
 msgid "Makes the grid available for working with on the canvas."
-msgstr ""
+msgstr "使网格可以在画布上工作."
 
 #: ../src/display/control/canvas-grid.cpp:260
 msgid "Snap to visible _grid lines only"
@@ -5184,7 +5183,7 @@ msgstr "仅粘附到可见网格线(_G)"
 msgid ""
 "When zoomed out, not all grid lines will be displayed. Only the visible ones "
 "will be snapped to"
-msgstr ""
+msgstr "放大时, 不是所有的网格线都能显示. 只有显示的部分可以吸附"
 
 #: ../src/display/control/canvas-grid.cpp:265
 msgid "_Visible"
@@ -5194,7 +5193,7 @@ msgstr "可见(_V)"
 msgid ""
 "Determines whether the grid is displayed or not. Objects are still snapped "
 "to invisible grids."
-msgstr ""
+msgstr "决定是否显示网格线对象仍然吸附到可见网格线"
 
 #: ../src/display/control/canvas-grid.cpp:279
 msgid "_Show dots instead of lines"
@@ -5453,7 +5452,8 @@ msgstr "未命名文档 %d"
 msgid ""
 "Selected objects require IDs.\n"
 "The following IDs have been assigned:\n"
-msgstr ""
+msgstr "选中对象需要ID.\n"
+"以下ID已经分配: \n"
 
 #: ../src/event-log.cpp:186
 msgid "[Unchanged]"
@@ -5469,11 +5469,11 @@ msgstr "重做(_R)"
 
 #: ../src/extension/dependency.cpp:339
 msgid "Dependency"
-msgstr ""
+msgstr "Dependency"
 
 #: ../src/extension/dependency.cpp:340
 msgid "type"
-msgstr ""
+msgstr "type"
 
 #: ../src/extension/dependency.cpp:341
 msgid "location"
@@ -5504,7 +5504,7 @@ msgstr "%s 正在进行工作,请稍候..."
 msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
-msgstr ""
+msgstr "  这是由于该扩展名.inx文件不正确导致. 不正确的.inx文件可能是由于inkscape没有正确安装造成的. "
 
 #: ../src/extension/extension.cpp:311
 msgid "the XML description of it got lost."
@@ -5554,14 +5554,14 @@ msgstr "未激活"
 
 #: ../src/extension/implementation/script.cpp:643
 msgid "The output from the extension could not be parsed."
-msgstr ""
+msgstr "引扩展输出无法解析. "
 
 #: ../src/extension/implementation/script.cpp:949
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
 "expected."
-msgstr ""
+msgstr "Inkscape从执行的脚本接收了额外的信息. 脚本没有返回错误, 但这有可能表明结果与预期不符. "
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:41
 msgid "Adaptive Threshold"
@@ -5961,8 +5961,7 @@ msgstr "通道:"
 msgid ""
 "Level the specified channel of selected bitmap(s) by scaling values falling "
 "between the given ranges to the full color range"
-msgstr ""
-"用落在给定范围至全部色彩范围之间的缩放数值来调整位图所指定颜色通道的色阶"
+msgstr "用落在给定范围至全部色彩范围之间的缩放数值来调整位图所指定颜色通道的色阶"
 
 #: ../src/extension/internal/bitmap/medianFilter.cpp:39
 msgid "Median"
@@ -6192,8 +6191,8 @@ msgstr "在对象的内外产生偏移副本的数量"
 #: ../share/extensions/extrude.inx:12
 #: ../share/extensions/generate_voronoi.inx:20
 #: ../share/extensions/interp.inx:14 ../share/extensions/motion.inx:10
-#: ../share/extensions/pathalongpath.inx:38
-#: ../share/extensions/pathscatter.inx:32
+#: ../share/extensions/pathalongpath.inx:41
+#: ../share/extensions/pathscatter.inx:34
 #: ../share/extensions/voronoi2svg.inx:33
 msgid "Generate from Path"
 msgstr "从路径生成"
@@ -6351,8 +6350,8 @@ msgstr "共 %i 页"
 #: ../src/extension/prefdialog/prefdialog.cpp:71
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
 #: ../src/ui/dialog/export.cpp:945
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:244
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:556
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:251
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563
 #: ../src/ui/dialog/guides.cpp:185 ../src/ui/dialog/layer-properties.cpp:43
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
@@ -7489,7 +7488,7 @@ msgstr "分别微调 CMY 通道并将其与不同背景类型混合"
 
 #: ../src/extension/internal/filter/color.h:1547
 msgid "Quadritone Fantasy"
-msgstr ""
+msgstr "幻想四重奏"
 
 #: ../src/extension/internal/filter/color.h:1549
 msgid "Hue distribution (°)"
@@ -7563,7 +7562,7 @@ msgstr "互斥"
 
 #: ../src/extension/internal/filter/color.h:1661
 msgid "Simple blend filter"
-msgstr ""
+msgstr "简单混合滤镜"
 
 #: ../src/extension/internal/filter/color.h:1726
 msgid "Hue rotation (°)"
@@ -7785,7 +7784,7 @@ msgstr "外部"
 #: ../src/ui/dialog/command-palette.cpp:262
 #: ../src/ui/widget/preferences-widget.cpp:931
 msgid "Open"
-msgstr "开口"
+msgstr "打开"
 
 #: ../src/extension/internal/filter/morphology.h:67
 #: ../src/ui/tools/measure-tool.cpp:1239 ../src/ui/widget/page-sizer.cpp:59
@@ -8196,7 +8195,7 @@ msgstr "简单的海报效果"
 
 #: ../src/extension/internal/filter/protrusions.h:50
 msgid "Snow Crest"
-msgstr ""
+msgstr "雪峰"
 
 #: ../src/extension/internal/filter/protrusions.h:52
 msgid "Drift Size"
@@ -8387,7 +8386,7 @@ msgstr "图片导入类型:"
 msgid ""
 "Embed results in stand-alone, larger SVG files. Link references a file "
 "outside this SVG document and all files must be moved together."
-msgstr ""
+msgstr "将结果嵌入到独立的、更大的SVG文件中. 链接引用了此SVG文档以外的文件，所有文件必须一起移动. "
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:200
 #: ../src/ui/dialog/inkscape-preferences.cpp:2634
@@ -8430,7 +8429,7 @@ msgstr "图形渲染模式:"
 msgid ""
 "When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will "
 "not work in all browsers.)"
-msgstr ""
+msgstr "当图像放大时，应用平滑或保持块状(像素化). (可能无法在所有浏览器上都能工作)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:210
 #: ../src/extension/internal/svg.h:30
@@ -8614,7 +8613,7 @@ msgid ""
 "Import via external library. Text consists of groups containing cloned "
 "glyphs where each glyph is a path. Images are stored internally. Meshes "
 "cause entire document to be rendered as a raster image."
-msgstr ""
+msgstr "通过外部库导入. 文本由包含克隆字形的组组成，每个字形是一个路径。图像是内部存储的。网格导致整个文档被渲染成光栅图像。"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:144
 msgid "Internal import"
@@ -8625,7 +8624,7 @@ msgid ""
 "Import via internal (Poppler derived) library. Text is stored as text but "
 "white space is missing. Meshes are converted to tiles, the number depends on "
 "the precision set below."
-msgstr ""
+msgstr "通过内部(Poppler derived)库导入。文本以文本形式存储，但缺少空白部分。网格被转换为贴片，其数量取决于下面的精度设置。"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:152
 msgid "rough"
@@ -8691,17 +8690,17 @@ msgstr "Adobe Illustrator 9.0 及以上版本 (*.ai)"
 msgid "Open files saved in Adobe Illustrator 9.0 and newer versions"
 msgstr "打开使用 Adobe Illustrator 9.0(或更新版本)保存的文件"
 
-#: ../src/extension/internal/png-output.cpp:67
+#: ../src/extension/internal/png-output.cpp:49
 msgid "Portable Network Graphic"
 msgstr "便携式网络图形"
 
-#: ../src/extension/internal/png-output.cpp:72
+#: ../src/extension/internal/png-output.cpp:54
 msgid "Portable Network Graphic (*.png)"
 msgstr "便携式网络图形(*.png)"
 
-#: ../src/extension/internal/png-output.cpp:73
+#: ../src/extension/internal/png-output.cpp:55
 msgid "Default raster graphic export"
-msgstr ""
+msgstr "默认光栅图像导出"
 
 #: ../src/extension/internal/pov-out.cpp:713
 msgid "PovRay Output"
@@ -8758,15 +8757,15 @@ msgstr "SVG图像导入类型:"
 
 #: ../src/extension/internal/svg.h:24
 msgid "Include SVG image as editable object(s) in the current file"
-msgstr ""
+msgstr "将SVG图像作为可编辑对象包含在当前文件中"
 
 #: ../src/extension/internal/svg.h:25
 msgid "Embed the SVG file in a image tag (not editable in this document)"
-msgstr ""
+msgstr "在图像标签中嵌入SVG文件（在本文档中不可编辑）"
 
 #: ../src/extension/internal/svg.h:26
 msgid "Link the SVG file in a image tag (not editable in this document)."
-msgstr ""
+msgstr "在一个图像标签中链接SVG文件（在本文档中不可编辑）。"
 
 #: ../src/extension/internal/svgz.cpp:45
 msgid "SVGZ Input"
@@ -8925,39 +8924,39 @@ msgstr "该效果会在画布上实时预览吗？"
 
 #: ../src/extension/system.cpp:133 ../src/extension/system.cpp:135
 msgid "Format autodetect failed. The file is being opened as SVG."
-msgstr ""
+msgstr "格式自动检测失败。该文件被打开为SVG。"
 
 #: ../src/file-update.cpp:394
 msgid "Convert legacy Inkscape file"
-msgstr ""
+msgstr "转换传统的Inkscape文件"
 
 #: ../src/file-update.cpp:400
 msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
-msgstr ""
+msgstr "是在Inkscape的旧版本（90DPI）中创建的，我们需要使它与新版本（96DPI）兼容。告诉我们这个文件的情况：\n"
 
 #: ../src/file-update.cpp:408
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
-msgstr ""
+msgstr "该文件包含用于屏幕显示的数字艺术作品。<b>(Choose if unsure.)</b>"
 
 #: ../src/file-update.cpp:411
 msgid "This file is intended for physical output, such as paper or 3D prints."
-msgstr ""
+msgstr "这个文件是为物理输出准备的，如纸张打印或3D打印。"
 
 #: ../src/file-update.cpp:413
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
-msgstr ""
+msgstr "诸如剪辑、蒙版、滤镜和克隆等元素的外观最为重要。<b>(Choose if unsure.)</b>"
 
 #: ../src/file-update.cpp:417
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
-msgstr ""
+msgstr "文件中对象的物理单位大小和位置值的准确性是最重要的。(Experimental.)"
 
 #: ../src/file-update.cpp:419
 msgid "Create a backup file in same directory."
@@ -8965,7 +8964,7 @@ msgstr "在同一目录创建备份文件."
 
 #: ../src/file-update.cpp:420
 msgid "More details..."
-msgstr ""
+msgstr "更多细节..."
 
 #. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language
 #. code to the link this way: https://inkscape.org/[lang]/learn/faq#dpi_change
@@ -8991,7 +8990,15 @@ msgid ""
 "\n"
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
-msgstr ""
+msgstr "<small>我们更新了Inkscape，以遵循96DPI的CSS标准，以提高浏览器的兼容性；我们过去使用90DPI。用于屏幕显示的数字艺术作品\n"
+"显示的数字作品将被转换为96DPI，不需要缩放，应该不会受到影响。\n"
+"对于特定的物理尺寸，以90DPI绘制的艺术品，如果在没有任何缩放的情况下转换为96DPI，会显得太小。有两种缩放方法: \n"
+"\n"
+"<b>缩放整个文档：</b>最不容易出错的方法，它保留了艺术品的外观，包括过滤器和蒙版的位置等。\n"
+"美术作品相对于文档大小的比例可能不准确。\n"
+"\n"
+"<b>缩放作品中的单个元素：</b>这种方法不太可靠，可能导致外观改变。\n"
+"但对于依赖准确尺寸和位置的物理输出来说，这种方法更好（例如，用于3D打印）。"
 
 #: ../src/file-update.cpp:460
 msgid "OK"
@@ -9003,11 +9010,11 @@ msgstr "刷新文档"
 
 #: ../src/file.cpp:182
 msgid "Document not saved yet.  Cannot revert."
-msgstr ""
+msgstr "文档未保存.  未还原."
 
 #: ../src/file.cpp:188
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
-msgstr ""
+msgstr "所作修改将会丢失！确定要重新载入文档 %1?"
 
 #: ../src/file.cpp:202
 msgid "Document reverted."
@@ -9040,7 +9047,7 @@ msgstr "在 &lt;defs&gt; 没有未使用定义."
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
-msgstr ""
+msgstr "没有可用的inkscape扩展来保存文档 (%s). 这可能是因为不知道的文件扩展名造成. "
 
 #: ../src/file.cpp:490 ../src/file.cpp:500 ../src/file.cpp:509
 #: ../src/file.cpp:516 ../src/file.cpp:521 ../src/file.cpp:533
@@ -9052,7 +9059,7 @@ msgstr "文档未保存."
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
-msgstr ""
+msgstr "文件  %s  被写保护. 请取消写保护后重试. "
 
 #: ../src/file.cpp:508 ../src/file.cpp:542
 #, c-format
@@ -9064,7 +9071,8 @@ msgstr "无法保存文件 %s."
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
-msgstr ""
+msgstr "无法保存文件: \n"
+"没有找到ID为 '%s' 的对象。"
 
 #: ../src/file.cpp:530
 #, c-format
@@ -9073,10 +9081,9 @@ msgid ""
 "\n"
 "The following additional information was returned by the output extension:\n"
 "'%s'"
-msgstr ""
-"无法保存文件 %s.\n"
+msgstr "无法保存文件 %s.\n"
 "\n"
-"The following additional information was returned by the output extension:\n"
+"输出扩展程序返回了以下附加信息: \n"
 "'%s'"
 
 #: ../src/file.cpp:565 ../src/file.cpp:567
@@ -9371,8 +9378,7 @@ msgstr "删除渐变色标"
 msgid ""
 "%s %d for: %s%s; drag with <b>Ctrl</b> to snap offset; click with <b>Ctrl"
 "+Alt</b> to delete stop"
-msgstr ""
-"%s %d 属于:%s%s;按住<b>Ctrl</b>拖动吸附偏移;按住<b>Ctrl+Alt</b>单击删除色标"
+msgstr "%s %d 属于:%s%s;按住<b>Ctrl</b>拖动吸附偏移;按住<b>Ctrl+Alt</b>单击删除色标"
 
 #: ../src/gradient-drag.cpp:1429 ../src/gradient-drag.cpp:1438
 #: ../src/gradient-drag.cpp:1445
@@ -9382,16 +9388,14 @@ msgstr " (描边)"
 #: ../src/gradient-drag.cpp:1435
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s for: %s%s"
 
 #: ../src/gradient-drag.cpp:1442
 #, c-format
 msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
 "preserve angle, with <b>Ctrl+Shift</b> to scale around center"
-msgstr ""
-"%s 属于:%s%s;按住<b>Ctrl</b>拖动吸附角,按住<b>Ctrl+Alt</b>保持角度,按住"
-"<b>Ctrl+Shift</b>以中心缩放"
+msgstr "%s 属于:%s%s;按住<b>Ctrl</b>拖动吸附角,按住<b>Ctrl+Alt</b>保持角度,按住<b>Ctrl+Shift</b>以中心缩放"
 
 #: ../src/gradient-drag.cpp:1450
 msgid ""
@@ -9430,7 +9434,9 @@ msgid ""
 "re-run the setup and select 'Tutorials'.\n"
 "The tutorials can also be found online at https://inkscape.org/en/learn/"
 "tutorials/"
-msgstr ""
+msgstr "教程未安装。\n"
+"对于Linux，你可能需要安装 'inkscape-tutorials'；对于Windows，请重新运行设置并选择 'Tutorials'。\n"
+"这些教程也可以在网上找到：https://inkscape.org/en/learn/tutorials/"
 
 #: ../src/inkscape-application.cpp:329
 msgid "Broken links have been changed to point to existing files."
@@ -9440,13 +9446,13 @@ msgstr "无效的链接已变成指向现有文件."
 # File: ../src/inkscape-application.cpp, line: 526
 #: ../src/inkscape-application.cpp:605
 msgid "file1 [file2 [fileN]]"
-msgstr ""
+msgstr "file1 [file2 [fileN]]"
 
 #
 # File: ../src/inkscape-application.cpp, line: 527
 #: ../src/inkscape-application.cpp:606
 msgid "Process (or open) one or more files."
-msgstr ""
+msgstr "处理（或打开）一个或多个文件。"
 
 #: ../src/inkscape-application.cpp:607
 msgid "Examples:"
@@ -9456,19 +9462,19 @@ msgstr "示例:"
 # File: ../src/inkscape-application.cpp, line: 529
 #: ../src/inkscape-application.cpp:608
 msgid "Export input SVG (%1) to PDF (%2) format:"
-msgstr ""
+msgstr "将输入的SVG (%1) 导出为PDF (%2) 格式："
 
 #
 # File: ../src/inkscape-application.cpp, line: 531
 #: ../src/inkscape-application.cpp:610
 msgid "Export input files (%1) to PNG format keeping original name (%2):"
-msgstr ""
+msgstr "将输入文件 (%1) 导出为PNG格式，保持原名称 (%2) ："
 
 #
 # File: ../src/inkscape-application.cpp, line: 533
 #: ../src/inkscape-application.cpp:612
 msgid "See %1 and %2 for more details."
-msgstr ""
+msgstr "更多信息请参考 %1 和 %2 . "
 
 #: ../src/inkscape-application.cpp:617
 msgid "Print Inkscape version"
@@ -9494,7 +9500,7 @@ msgstr "文件导入"
 # File: ../src/inkscape-application.cpp, line: 541
 #: ../src/inkscape-application.cpp:624
 msgid "Read input file from standard input (stdin)"
-msgstr ""
+msgstr "从标准输入(stdin)读取输入文件"
 
 #: ../src/inkscape-application.cpp:625
 msgid "PDF page number to import"
@@ -9502,13 +9508,13 @@ msgstr "选择要导入PDF页码"
 
 #: ../src/inkscape-application.cpp:625
 msgid "PAGE"
-msgstr ""
+msgstr "PAGE"
 
 #
 # File: ../src/inkscape-application.cpp, line: 495
 #: ../src/inkscape-application.cpp:626
 msgid "Use poppler when importing via commandline"
-msgstr ""
+msgstr "通过命令行导入时使用poppler"
 
 #
 # File: ../src/inkscape-application.cpp, line: 544
@@ -9516,17 +9522,17 @@ msgstr ""
 msgid ""
 "Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|"
 "scale-document]"
-msgstr ""
+msgstr "用于转换0.92以前的文档dpi的方法，如果需要的话:[none|scale-viewbox|scale-document]"
 
 #: ../src/inkscape-application.cpp:627
 msgid "METHOD"
-msgstr ""
+msgstr "METHOD"
 
 #
 # File: ../src/inkscape-application.cpp, line: 545
 #: ../src/inkscape-application.cpp:628
 msgid "Do not fix pre-0.92 document's text baseline spacing on opening"
-msgstr ""
+msgstr "不在打开时修复0.92版文件的文本基线间距"
 
 #: ../src/inkscape-application.cpp:631
 msgid "File export"
@@ -9536,7 +9542,7 @@ msgstr "文件导出"
 msgid ""
 "Output file name (defaults to input filename; file type is guessed from "
 "extension if present; use '-' to write to stdout)"
-msgstr ""
+msgstr "输出文件名（默认为输入文件名；如果有扩展名，则从扩展名猜测文件类型；使用 '-' 写到stdout）。"
 
 #: ../src/inkscape-application.cpp:632
 msgid "FILENAME"
@@ -9545,28 +9551,28 @@ msgstr "文件名"
 #: ../src/inkscape-application.cpp:633
 msgid ""
 "Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
-msgstr ""
+msgstr "覆盖输入文件（否则，如果类型不改变，则添加 '_out' 后缀）。"
 
 #
 #: ../src/inkscape-application.cpp:634
 msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
-msgstr ""
+msgstr "输出的文件类型： [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:634
 msgid "TYPE[,TYPE]*"
-msgstr ""
+msgstr "TYPE[,TYPE]*"
 
 #: ../src/inkscape-application.cpp:635
 msgid "Extension ID to use for exporting"
-msgstr ""
+msgstr "用于导出的扩展ID"
 
 #: ../src/inkscape-application.cpp:635
 msgid "EXTENSION-ID"
-msgstr ""
+msgstr "EXTENSION-ID"
 
 #: ../src/inkscape-application.cpp:638
 msgid "Export geometry"
-msgstr ""
+msgstr "导出几何图形"
 
 #: ../src/inkscape-application.cpp:639
 msgid "Area to export is page"
@@ -9580,7 +9586,7 @@ msgstr "导出区域是整个绘图(不是页面)"
 # File: ../src/inkscape-application.cpp, line: 557
 #: ../src/inkscape-application.cpp:641
 msgid "Area to export in SVG user units"
-msgstr ""
+msgstr "以SVG用户单位导出的区域"
 
 #: ../src/inkscape-application.cpp:641
 msgid "x0:y0:x1:y1"
@@ -9650,7 +9656,7 @@ msgstr ""
 # File: ../src/inkscape-application.cpp, line: 569
 #: ../src/inkscape-application.cpp:653
 msgid "Postscript level (2 or 3); default is 3"
-msgstr ""
+msgstr "Postscript level (2或3); 默认3"
 
 #: ../src/inkscape-application.cpp:653
 msgid "LEVEL"
@@ -9658,7 +9664,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:654
 msgid "PDF version (1.4 or 1.5); default is 1.5"
-msgstr ""
+msgstr "PDF版本(1.4或1.5); 默认1.5"
 
 #: ../src/inkscape-application.cpp:654
 msgid "VERSION"
@@ -9666,7 +9672,7 @@ msgstr "版本"
 
 #: ../src/inkscape-application.cpp:655
 msgid "Convert text to paths (PS/EPS/PDF/SVG)"
-msgstr ""
+msgstr "文字转路径(PS/EPS/PDF/SVG)"
 
 #: ../src/inkscape-application.cpp:656
 msgid "Export text separately to LaTeX file (PS/EPS/PDF)"
@@ -9815,7 +9821,7 @@ msgstr "以交互式shell模式启动Inkscape"
 # File: ../src/inkscape-application.cpp, line: 611
 #: ../src/inkscape-application.cpp:696
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: ../src/inkscape-application.cpp:697
 msgid "Enter a listening loop for D-Bus messages in console mode"
@@ -9823,7 +9829,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:698
 msgid "Specify the D-Bus name; default is 'org.inkscape'"
-msgstr ""
+msgstr "指定D-Bus名称; 默认'org.inkscape'"
 
 #: ../src/inkscape-application.cpp:698
 msgid "BUS-NAME"
@@ -9849,16 +9855,16 @@ msgstr "自动备份下列文档失败:\n"
 
 #: ../src/inkview-application.cpp:64
 msgid "Inkview - An SVG File Viewer"
-msgstr ""
+msgstr "Inkview - 一个SVG文件浏览器"
 
 #: ../src/inkview-application.cpp:69
 msgid "path1 [path2 [pathN]]"
-msgstr ""
+msgstr "path1 [path2 [pathN]]"
 
 #: ../src/inkview-application.cpp:70
 msgid ""
 "Open one or more SVG files (or folders containing SVG files) for viewing."
-msgstr ""
+msgstr "打开一个或多个SVG文件(或者包含SVG文件的目录)开始预览."
 
 #: ../src/inkview-application.cpp:77
 msgid "Print Inkview version"
@@ -9866,7 +9872,7 @@ msgstr "显示Inkview版本"
 
 #: ../src/inkview-application.cpp:78
 msgid "Launch in fullscreen mode"
-msgstr ""
+msgstr "以全屏模式启动"
 
 #: ../src/inkview-application.cpp:79
 msgid "Search folders recursively"
@@ -9910,8 +9916,7 @@ msgstr "修复损坏的链接"
 
 #: ../src/libnrtype/FontFactory.cpp:668
 msgid "Ignoring font without family that will crash Pango"
-msgstr ""
-"忽略没有字族信息会导致 Pango 崩溃\n"
+msgstr "忽略没有字族信息会导致 Pango 崩溃\n"
 "的字体"
 
 #: ../src/live_effects/effect.cpp:104
@@ -12664,11 +12669,11 @@ msgstr "清除(_C)"
 
 #: ../src/live_effects/lpe-powerclip.cpp:29
 msgid "Hide clip"
-msgstr ""
+msgstr "隐藏剪裁"
 
 #: ../src/live_effects/lpe-powerclip.cpp:30
 msgid "Inverse clip"
-msgstr ""
+msgstr "反转剪裁"
 
 #: ../src/live_effects/lpe-powerclip.cpp:31
 msgid "Flatten clip"
@@ -12690,15 +12695,15 @@ msgstr ""
 
 #: ../src/live_effects/lpe-powermask.cpp:37
 msgid "Invert mask"
-msgstr ""
+msgstr "反转蒙版"
 
 #: ../src/live_effects/lpe-powermask.cpp:39
 msgid "Hide mask"
-msgstr ""
+msgstr "隐藏蒙版"
 
 #: ../src/live_effects/lpe-powermask.cpp:40
 msgid "Add background to mask"
-msgstr ""
+msgstr "背景添加到蒙版"
 
 #: ../src/live_effects/lpe-powermask.cpp:41
 msgid "Background color and opacity"
@@ -12706,7 +12711,7 @@ msgstr "背景颜色和透明度"
 
 #: ../src/live_effects/lpe-powermask.cpp:41
 msgid "Set color and opacity of the background"
-msgstr ""
+msgstr "设置背景的颜色和透明度"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:131
 msgid "CubicBezierSmooth"
@@ -12792,19 +12797,19 @@ msgstr "凹端"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:36
 msgid "Auto ellipse"
-msgstr ""
+msgstr "自动椭圆"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:37
 msgid "Force circle"
-msgstr ""
+msgstr "强制正圆"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:38
 msgid "Isometric circle"
-msgstr ""
+msgstr "等距圆"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:40
 msgid "Perspective circle"
-msgstr ""
+msgstr "透视圆"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:43
 msgid "Steiner ellipse"
@@ -13082,7 +13087,7 @@ msgstr "根据线段数"
 
 #: ../src/live_effects/lpe-roughen.cpp:31
 msgid "By max. segment size"
-msgstr ""
+msgstr "By max. segment size"
 
 #: ../src/live_effects/lpe-roughen.cpp:36
 msgid "Along nodes"
@@ -13106,7 +13111,7 @@ msgstr "分割方式"
 
 #: ../src/live_effects/lpe-roughen.cpp:46
 msgid "Max. segment size"
-msgstr ""
+msgstr "Max. segment size"
 
 #: ../src/live_effects/lpe-roughen.cpp:47
 msgid "Number of segments"
@@ -13114,11 +13119,11 @@ msgstr "线段数量"
 
 #: ../src/live_effects/lpe-roughen.cpp:48
 msgid "Max. displacement in X"
-msgstr ""
+msgstr "Max. displacement in X"
 
 #: ../src/live_effects/lpe-roughen.cpp:49
 msgid "Max. displacement in Y"
-msgstr ""
+msgstr "Max. displacement in Y"
 
 #: ../src/live_effects/lpe-roughen.cpp:50
 msgid "Global randomize"
@@ -13150,7 +13155,7 @@ msgstr "喷绘工具友好"
 
 #: ../src/live_effects/lpe-roughen.cpp:55
 msgid "For use with spray tool in copy mode"
-msgstr ""
+msgstr "在复制模式下与喷涂工具一起使用 "
 
 #: ../src/live_effects/lpe-roughen.cpp:142
 msgid "<b>Add nodes</b> Subdivide each segment"
@@ -13355,7 +13360,7 @@ msgstr "描边长度的随机变化量(相对于最大长度)"
 
 #: ../src/live_effects/lpe-sketch.cpp:37
 msgid "Max. overlap:"
-msgstr ""
+msgstr "Max. overlap:"
 
 #: ../src/live_effects/lpe-sketch.cpp:38
 msgid "How much successive strokes should overlap (relative to maximum length)"
@@ -13371,7 +13376,7 @@ msgstr "重叠量的随机偏差(相对于最大重叠量)"
 
 #: ../src/live_effects/lpe-sketch.cpp:41
 msgid "Max. end tolerance:"
-msgstr ""
+msgstr "Max. end tolerance:"
 
 #: ../src/live_effects/lpe-sketch.cpp:42
 msgid ""
@@ -13389,7 +13394,7 @@ msgstr "每个描边与原始路径的平均距离"
 
 #: ../src/live_effects/lpe-sketch.cpp:45
 msgid "Max. tremble:"
-msgstr ""
+msgstr "Max. tremble:"
 
 #: ../src/live_effects/lpe-sketch.cpp:46
 msgid "Maximum tremble magnitude"
@@ -13426,7 +13431,7 @@ msgstr "曲率与结构线长度相关的缩放因子(尝试五倍偏移)"
 
 #: ../src/live_effects/lpe-sketch.cpp:54
 msgid "Max. length:"
-msgstr ""
+msgstr "Max. length:"
 
 #: ../src/live_effects/lpe-sketch.cpp:54
 msgid "Maximum length of construction lines"
@@ -13989,7 +13994,7 @@ msgstr "修改计量参数"
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../src/object/box3d.cpp:242 ../src/object/box3d.cpp:1298
+#: ../src/object/box3d.cpp:244 ../src/object/box3d.cpp:1300
 #: ../src/ui/dialog/inkscape-preferences.cpp:828
 msgid "3D Box"
 msgstr "3D透视"
@@ -14257,11 +14262,11 @@ msgstr "条件群组"
 
 #: ../src/object/sp-text.cpp:331
 msgid "Auto-wrapped text"
-msgstr ""
+msgstr "自动文本"
 
 #: ../src/object/sp-text.cpp:333
 msgid "Text in-a-shape"
-msgstr ""
+msgstr "文字依形状排列"
 
 #: ../src/object/sp-text.cpp:335 ../src/verbs.cpp:356
 #: ../share/extensions/hershey.inx:125 ../share/extensions/lorem_ipsum.inx:19
@@ -14553,11 +14558,11 @@ msgstr "%s 是无效的Inkscape配置文件."
 
 #: ../src/preferences.cpp:281
 msgid "Preferences file was backed up to"
-msgstr ""
+msgstr "首选项文件备份到"
 
 #: ../src/preferences.cpp:282
 msgid "There was an error trying to reset the preferences file."
-msgstr ""
+msgstr "尝试重置首选项文件时出错。 "
 
 #: ../src/rdf.cpp:179
 msgid "CC Attribution"
@@ -14775,7 +14780,7 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:849
 msgid "Selection <b>not in a group</b>."
-msgstr ""
+msgstr "选中对象<b>不在群组内</b>."
 
 #: ../src/selection-chemistry.cpp:859
 msgid "Objects in selection must have the same grandparents."
@@ -14783,7 +14788,7 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:867
 msgid "Pop selection from group"
-msgstr ""
+msgstr "所选对象脱离群组"
 
 #: ../src/selection-chemistry.cpp:932
 msgid "Select a <b>group</b> to ungroup."
@@ -14833,7 +14838,7 @@ msgstr "置底"
 
 #: ../src/selection-chemistry.cpp:1196
 msgid "Select <b>object(s)</b> to stack up."
-msgstr ""
+msgstr "选择<b>object(s)</b>进行堆叠."
 
 #: ../src/selection-chemistry.cpp:1207
 msgid "We hit top."
@@ -15026,8 +15031,7 @@ msgstr "断开克隆"
 msgid ""
 "Unable to unlink. Check the setting for 'Unlinking Clones' in your "
 "preferences."
-msgstr ""
-"无法解除链接. Check the setting for 'Unlinking Clones' in your preferences."
+msgstr "无法解除链接. Check the setting for 'Unlinking Clones' in your preferences."
 
 #: ../src/selection-chemistry.cpp:2861
 msgid "Unlink clone recursively"
@@ -15081,9 +15085,8 @@ msgid "Group to symbol"
 msgstr "群组转成符号"
 
 #: ../src/selection-chemistry.cpp:3366
-#, fuzzy
-msgid "Remove symbol for editing"
-msgstr "将符号转换成群组进行编辑"
+msgid "unSymbol all selected symbols"
+msgstr ""
 
 #: ../src/selection-chemistry.cpp:3380
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -15159,7 +15162,7 @@ msgstr "页面适合选区"
 
 #: ../src/selection-chemistry.cpp:4343 ../src/verbs.cpp:2499
 msgid "Swap fill and stroke of an object"
-msgstr ""
+msgstr "交换填充和描边"
 
 #: ../src/selection-chemistry.cpp:4362
 msgid "Select <b>path(s)</b> to create fill between."
@@ -15256,7 +15259,7 @@ msgstr "使用<b>Shift+D</b>查找框架"
 #, c-format
 msgid "<b>%1$i</b> objects selected of type %2$s"
 msgid_plural "<b>%1$i</b> objects selected of types %2$s"
-msgstr[0] "已选择类型 %2$s 的 <b>%1$i</b> 个对象"
+msgstr[0] "<b>%1$i</b> objects selected of type %2$s"
 
 #: ../src/selection-describer.cpp:230
 #, c-format
@@ -15355,9 +15358,7 @@ msgstr "移动<b>中心</b>到 %s, %s"
 msgid ""
 "<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
 "with <b>Shift</b> to disable snapping"
-msgstr ""
-"<b>移动</b> %s,%s 距离; 使用<b>Ctrl</b>限制水平/垂直移动;按住 <b>Shift</b> 禁"
-"用吸附"
+msgstr "<b>移动</b> %s,%s 距离; 使用<b>Ctrl</b>限制水平/垂直移动;按住 <b>Shift</b> 禁用吸附"
 
 #: ../src/text-chemistry.cpp:79
 msgid "Select <b>a text and a path</b> to put text on path."
@@ -15367,13 +15368,13 @@ msgstr "选择<b>文字和路径</b>把文字放在路径上."
 msgid ""
 "This text object is <b>already put on a path</b>. Remove it from the path "
 "first. Use <b>Shift+D</b> to look up its path."
-msgstr ""
+msgstr "文字对象<b>已经沿路径排列</b>. 先从路径释放. 按<b>Shift+D</b>查看其路径. "
 
 #: ../src/text-chemistry.cpp:90
 msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
-msgstr ""
+msgstr "在此版本中，您不能让文本沿矩形排列. 先把矩形转成路径."
 
 #: ../src/text-chemistry.cpp:100
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
@@ -15431,7 +15432,7 @@ msgstr "把浮动文本转化成文本"
 
 #: ../src/text-chemistry.cpp:604
 msgid "Flowed text(s) must be <b>visible</b> in order to be converted."
-msgstr ""
+msgstr "流文本必须<b>visible</b>才能被转换."
 
 #: ../src/text-chemistry.cpp:609
 msgid "<b>No flowed text(s)</b> to convert in the selection."
@@ -15447,7 +15448,9 @@ msgid ""
 "document before continuing.\n"
 "\n"
 "Continue the procedure (without saving)?"
-msgstr ""
+msgstr "图像可能太大了. 过程可能需要一段时间，在继续之前建议保存文档. \n"
+"\n"
+"继续该过程(不保存)? "
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:539
 #: ../src/trace/potrace/inkscape-potrace.cpp:602
@@ -15494,7 +15497,7 @@ msgstr "临摹位图轮廓"
 #: ../src/trace/trace.cpp:542
 #, c-format
 msgid "Trace: Done. %ld nodes created"
-msgstr ""
+msgstr "Trace: 完成. %ld 节点已创建"
 
 #: ../src/ui/clipboard.cpp:314
 msgid "Nothing was copied."
@@ -15502,7 +15505,7 @@ msgstr "什么都没复制."
 
 #: ../src/ui/clipboard.cpp:451
 msgid "Can't paste text outside of the text tool."
-msgstr ""
+msgstr "无法在文本工具之外粘贴文本."
 
 #: ../src/ui/clipboard.cpp:454 ../src/ui/clipboard.cpp:730
 #: ../src/ui/clipboard.cpp:758 ../src/ui/clipboard.cpp:799
@@ -15539,7 +15542,7 @@ msgstr "剪贴板中没有路径."
 
 #: ../src/ui/clipboard.cpp:829
 msgid "Clipboard does not contain any objects of type \"%1\"."
-msgstr ""
+msgstr "剪贴板不包含任何\"%1\"类型的对象. "
 
 #: ../src/ui/contextmenu.cpp:74
 msgid "Go to parent"
@@ -15975,7 +15978,7 @@ msgstr "最大值"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1103
 msgid "Treat selection as group"
-msgstr ""
+msgstr "将选择视为群组"
 
 #
 # File: ../src/ui/dialog/align-and-distribute.cpp, line: 1107
@@ -16006,7 +16009,7 @@ msgstr "值"
 
 #: ../src/ui/dialog/attrdialog.cpp:197
 msgid "Shift+Return for a new line"
-msgstr ""
+msgstr "Shift+回车 换行"
 
 #: ../src/ui/dialog/attrdialog.cpp:437
 msgid "<b>Click</b> attribute to edit."
@@ -16017,7 +16020,7 @@ msgstr "<b>单击</b>属性编辑."
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
-msgstr ""
+msgstr "已选择属性<b>%s</b>. 完成编辑后按<b>Ctrl+回车</b>提交."
 
 #: ../src/ui/dialog/attrdialog.cpp:512 ../src/ui/dialog/attrdialog.cpp:539
 msgid "Delete attribute"
@@ -16025,7 +16028,7 @@ msgstr "删除属性"
 
 #: ../src/ui/dialog/attrdialog.cpp:661
 msgid "Rename attribute"
-msgstr ""
+msgstr "重命名属性"
 
 #: ../src/ui/dialog/attrdialog.cpp:715
 msgid "Change attribute value"
@@ -16046,7 +16049,7 @@ msgid "_Delete"
 msgstr "删除(_D)"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:557 ../src/ui/dialog/input.cpp:904
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:564 ../src/ui/dialog/input.cpp:904
 #: ../src/verbs.cpp:2360 ../src/widgets/desktop-widget.cpp:858
 msgid "_Save"
 msgstr "保存(_S)"
@@ -16485,7 +16488,7 @@ msgstr ""
 
 #: ../src/ui/dialog/clonetiler.cpp:821
 msgid "1. Pick from the drawing:"
-msgstr "1. Pick from the drawing:"
+msgstr "1. 从绘图拾取:"
 
 #: ../src/ui/dialog/clonetiler.cpp:833
 msgid "Pick the visible color and opacity"
@@ -16576,7 +16579,7 @@ msgstr "反转拾取值"
 
 #: ../src/ui/dialog/clonetiler.cpp:934
 msgid "3. Apply the value to the clones':"
-msgstr "3. Apply the value to the clones':"
+msgstr "3. 值应用到克隆: "
 
 #: ../src/ui/dialog/clonetiler.cpp:944
 msgid "Presence"
@@ -16787,11 +16790,11 @@ msgstr ""
 
 #: ../src/ui/dialog/command-palette.cpp:1154
 msgid "Invalid input! Enter an integer number."
-msgstr ""
+msgstr "无效输入!输入整数."
 
 #: ../src/ui/dialog/command-palette.cpp:1163
 msgid "Invalid input! Enter a decimal number."
-msgstr ""
+msgstr "无效输入!输入一个十进制数."
 
 #: ../src/ui/dialog/debug.cpp:66
 msgid "Messages"
@@ -16808,11 +16811,11 @@ msgstr "释放日志消息"
 #: ../src/ui/dialog/dialog-container.cpp:235
 #: ../src/ui/dialog/dialog-notebook.cpp:68
 msgid "Close Tab"
-msgstr ""
+msgstr "关闭选项卡"
 
 #: ../src/ui/dialog/dialog-multipaned.cpp:440
 msgid "You can drop dockable dialogs here."
-msgstr ""
+msgstr "您可以把对话框放到这里."
 
 #: ../src/ui/dialog/dialog-notebook.cpp:74
 msgid "Close Notebook"
@@ -16820,19 +16823,19 @@ msgstr ""
 
 #: ../src/ui/dialog/dialog-notebook.cpp:80
 msgid "Move Tab to New Window"
-msgstr ""
+msgstr "选项卡移到新窗口"
 
 #: ../src/ui/dialog/dialog-notebook.cpp:90
 msgid "Labels: automatic"
-msgstr ""
+msgstr "标签: 自动"
 
 #: ../src/ui/dialog/dialog-notebook.cpp:93
 msgid "Labels: always off"
-msgstr ""
+msgstr "标签: 保持关闭"
 
 #: ../src/ui/dialog/dialog-window.cpp:55
 msgid "Dialog Window"
-msgstr ""
+msgstr "对话框窗口"
 
 #: ../src/ui/dialog/document-properties.cpp:101
 msgid "Use antialiasing"
@@ -16945,7 +16948,7 @@ msgstr "鼠标移上去的参考线颜色"
 
 #: ../src/ui/dialog/document-properties.cpp:116
 msgid "Create guides around the page"
-msgstr ""
+msgstr "在页面周围创建参考线"
 
 #: ../src/ui/dialog/document-properties.cpp:117
 msgid "Delete all guides"
@@ -17205,7 +17208,7 @@ msgstr "新建"
 
 #: ../src/ui/dialog/document-properties.cpp:860
 msgid "Script ID"
-msgstr ""
+msgstr "Script ID"
 
 #: ../src/ui/dialog/document-properties.cpp:866
 msgid "<b>Content:</b>"
@@ -17318,7 +17321,7 @@ msgstr "压缩"
 
 #: ../src/ui/dialog/export.cpp:176
 msgid "pHYs dpi"
-msgstr ""
+msgstr "pHYs dpi"
 
 #: ../src/ui/dialog/export.cpp:181
 msgid "Hide all except selected"
@@ -17332,9 +17335,7 @@ msgstr "完成时关闭"
 msgid ""
 "Export each selected object into its own PNG file, using export hints if any "
 "(caution, overwrites without asking!)"
-msgstr ""
-"将选定的对象根据导出设置逐个导出到单独的PNG文件,如果有导出设置的话(注意:覆盖"
-"文件时没有提示!)"
+msgstr "将选定的对象根据导出设置逐个导出到单独的PNG文件,如果有导出设置的话(注意:覆盖文件时没有提示!)"
 
 #: ../src/ui/dialog/export.cpp:195
 msgid "In the exported image, hide all objects except those that are selected"
@@ -17514,49 +17515,49 @@ msgstr "启用预览"
 msgid "Export as SVG 1.1 per settings in Preferences dialog"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:245
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:252
 msgid "_Open"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:268
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:280
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:282
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:275
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:287
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:289
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:296
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:310
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:267
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:395
 msgid "All Files"
 msgstr "所有文件"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:286
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:307
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:268
 msgid "All Inkscape Files"
 msgstr "所有Inkscape文件"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:306
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:313
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:269
 msgid "All Images"
 msgstr "所有图像"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:296
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:309
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:316
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:270
 msgid "All Vectors"
 msgstr "所有矢量"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:299
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:312
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:306
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:319
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:271
 msgid "All Bitmaps"
 msgstr "所有位图"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:499
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:506
 msgid "Append filename extension automatically"
 msgstr "自动为文件名添加后缀"
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:683
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:690
 msgid "Guess from extension"
 msgstr "根据后缀名判断"
 
@@ -17865,9 +17866,7 @@ msgid ""
 "If the arithmetic operation is chosen, each result pixel is computed using "
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
 "values of the first and second inputs respectively."
-msgstr ""
-"如果使用该算法操作,每个结果像素通过 k1*i1*i2 + k2*i1 + k3*i2 + k4 得到,其中 "
-"i1 和 i2 分别是第一个和第二个输入的像素值."
+msgstr "如果使用该算法操作,每个结果像素通过 k1*i1*i2 + k2*i1 + k3*i2 + k4 得到,其中 i1 和 i2 分别是第一个和第二个输入的像素值."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2801
 msgid "K2:"
@@ -18124,9 +18123,7 @@ msgid ""
 "color components (red, green, blue, and alpha) according to particular "
 "transfer functions, allowing operations like brightness and contrast "
 "adjustment, color balance, and thresholding."
-msgstr ""
-"滤镜基元 <b>feComponentTransfer</b> 根据特定的转换方式修改输入的色彩成分(红/"
-"绿/蓝和不透明度),操作效果类似于亮度和对比度调整/色彩平衡/以及色阈值."
+msgstr "滤镜基元 <b>feComponentTransfer</b> 根据特定的转换方式修改输入的色彩成分(红/绿/蓝和不透明度),操作效果类似于亮度和对比度调整/色彩平衡/以及色阈值."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2910
 msgid ""
@@ -18555,8 +18552,7 @@ msgstr "选择一种属性"
 msgid ""
 "\n"
 "Some fonts are not available and have been substituted."
-msgstr ""
-"\n"
+msgstr "\n"
 "某些字体无法使用,已被替换."
 
 #: ../src/ui/dialog/font-substitution.cpp:70
@@ -18893,7 +18889,7 @@ msgstr "吕底亚语"
 
 #: ../src/ui/dialog/glyphs.cpp:135
 msgid "Avestan"
-msgstr ""
+msgstr "阿维斯陀"
 
 #: ../src/ui/dialog/glyphs.cpp:136 ../src/ui/dialog/glyphs.cpp:347
 msgid "Bamum"
@@ -18901,19 +18897,19 @@ msgstr "巴姆穆"
 
 #: ../src/ui/dialog/glyphs.cpp:137
 msgid "Egyptian Hieroglpyhs"
-msgstr ""
+msgstr "埃及象形文字"
 
 #: ../src/ui/dialog/glyphs.cpp:138
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "皇室亚兰"
 
 #: ../src/ui/dialog/glyphs.cpp:139
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr " 巴拉维铭文"
 
 #: ../src/ui/dialog/glyphs.cpp:140
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "帕提亚铭文"
 
 #: ../src/ui/dialog/glyphs.cpp:141 ../src/ui/dialog/glyphs.cpp:358
 msgid "Javanese"
@@ -18921,7 +18917,7 @@ msgstr "爪哇语"
 
 #: ../src/ui/dialog/glyphs.cpp:142
 msgid "Kaithi"
-msgstr ""
+msgstr "凯提文"
 
 #: ../src/ui/dialog/glyphs.cpp:143 ../src/ui/dialog/glyphs.cpp:344
 msgid "Lisu"
@@ -18933,11 +18929,11 @@ msgstr "曼尼普尔文"
 
 #: ../src/ui/dialog/glyphs.cpp:145
 msgid "Old South Arabian"
-msgstr ""
+msgstr "旧南阿拉伯 "
 
 #: ../src/ui/dialog/glyphs.cpp:146
 msgid "Old Turkic"
-msgstr ""
+msgstr "古突厥语"
 
 #: ../src/ui/dialog/glyphs.cpp:147 ../src/ui/dialog/glyphs.cpp:247
 msgid "Samaritan"
@@ -18953,27 +18949,27 @@ msgstr "越南傣文"
 
 #: ../src/ui/dialog/glyphs.cpp:150
 msgid "Batak"
-msgstr ""
+msgstr "巴塔克"
 
 #: ../src/ui/dialog/glyphs.cpp:151
 msgid "Brahmi"
-msgstr ""
+msgstr "婆罗米文"
 
 #: ../src/ui/dialog/glyphs.cpp:152
 msgid "Mandaic"
-msgstr ""
+msgstr "曼达文"
 
 #: ../src/ui/dialog/glyphs.cpp:153
 msgid "Chakma"
-msgstr ""
+msgstr "查克玛"
 
 #: ../src/ui/dialog/glyphs.cpp:154
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "麦罗埃文"
 
 #: ../src/ui/dialog/glyphs.cpp:155
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "麦罗埃象形文字"
 
 #: ../src/ui/dialog/glyphs.cpp:156
 msgid "Miao"
@@ -18985,7 +18981,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:158
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: ../src/ui/dialog/glyphs.cpp:159
 msgid "Takri"
@@ -19657,7 +19653,7 @@ msgstr "设置引导线属性"
 
 #: ../src/ui/dialog/guides.cpp:156
 msgid "Duplicate guide"
-msgstr ""
+msgstr "复制参考线"
 
 #: ../src/ui/dialog/guides.cpp:181
 msgid "Guideline"
@@ -19837,7 +19833,7 @@ msgstr "油漆桶"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:840
 msgid "Tweak"
-msgstr "调整"
+msgstr "微调"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:841
 msgid "Spray"
@@ -19907,8 +19903,7 @@ msgstr "将群组作为单个的对象"
 msgid ""
 "Treat groups as a single object during conversion to guides rather than "
 "converting each child separately"
-msgstr ""
-"转换为参考线时,将群组作为一个单独的对象,而不是对其中的每个子项单独进行转换"
+msgstr "转换为参考线时,将群组作为一个单独的对象,而不是对其中的每个子项单独进行转换"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:866
 msgid "Average all sketches"
@@ -20083,7 +20078,7 @@ msgid ""
 "The start and end of the measurement tool's control line will not be "
 "considered for calculating lengths. Only lengths between actual curve "
 "intersections will be displayed."
-msgstr ""
+msgstr "计算长度时不考虑测量工具控制线的起点和终点。只会显示实际曲线交点之间的长度。"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:960
 msgid "Sketch mode"
@@ -20179,9 +20174,7 @@ msgid ""
 "When on, shared gradient definitions are automatically forked on change; "
 "uncheck to allow sharing of gradient definitions so that editing one object "
 "may affect other objects using the same gradient"
-msgstr ""
-"选定时,修改时共享的渐变将自动分离;如果不选定,修改时将影响到所有共享该渐变的对"
-"象"
+msgstr "选定时,修改时共享的渐变将自动分离;如果不选定,修改时将影响到所有共享该渐变的对象"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1026
 msgid "Linear gradient _angle:"
@@ -20398,11 +20391,11 @@ msgstr "坎那达文 (kn)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1460
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
-msgstr ""
+msgstr "Kashmiri in Perso-Arabic script (ks@aran)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1460
 msgid "Kashmiri in Devanagari script (ks@deva)"
-msgstr ""
+msgstr "Kashmiri in Devanagari script (ks@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1460
 msgid "Khmer (km)"
@@ -20701,7 +20694,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1584
 msgid "Handle size"
-msgstr ""
+msgstr "手柄尺寸"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1586
 msgid "Set the relative size of node handles"
@@ -20709,17 +20702,17 @@ msgstr "设置节点控制柄的相对大小"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1588
 msgid "Cursor size"
-msgstr ""
+msgstr "光标尺寸"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1589
 msgid "Enable cursor scaling"
-msgstr ""
+msgstr "允许光标缩放"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1590
 msgid ""
 "When off, cursor scaling is disabled. Cursor scaling may be broken when "
 "fractional scaling is enabled."
-msgstr ""
+msgstr "如果关闭，光标缩放会禁用. Cursor scaling may be broken when fractional scaling is enabled."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1593
 msgid "Theme"
@@ -20781,7 +20774,7 @@ msgstr "用户图标位置"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1686
 msgid "Use symbolic icons"
-msgstr "使用符号式图标"
+msgstr "使用symbolic 图标"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1689
 msgid "Use default base color for icons"
@@ -20885,9 +20878,7 @@ msgid ""
 "You can either enable or disable all icons in menus. By default, the setting "
 "for the 'show-icons' attribute in the 'menus.xml' file determines whether to "
 "display icons in menus."
-msgstr ""
-"可以设置是否在菜单中显示图标. 默认情况下,由'menus.xml'文件中的'show-icons'属"
-"性来决定是否在菜单中显示图标."
+msgstr "可以设置是否在菜单中显示图标. 默认情况下,由'menus.xml'文件中的'show-icons'属性来决定是否在菜单中显示图标."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1760
 msgid "Themeing"
@@ -21087,9 +21078,7 @@ msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
 "above the right scrollbar)"
-msgstr ""
-"当窗口尺寸改变时缩放绘图,保持相同的可视面积(此为默认,可用右边滚动条上的按钮改"
-"变)"
+msgstr "当窗口尺寸改变时缩放绘图,保持相同的可视面积(此为默认,可用右边滚动条上的按钮改变)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1857
 msgid ""
@@ -21228,8 +21217,7 @@ msgstr "添加默认元数据到新文档"
 msgid ""
 "Add default metadata to new documents. Default metadata can be set from "
 "Document Properties->Metadata."
-msgstr ""
-"添加默认元数据到新文档可以在菜单 文件->文档属性->元数据 中设置默认元数据."
+msgstr "添加默认元数据到新文档可以在菜单 文件->文档属性->元数据 中设置默认元数据."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1992
 msgid "_Grab sensitivity:"
@@ -21343,9 +21331,7 @@ msgid ""
 "Path data should be written: only with absolute coordinates, only with "
 "relative coordinates, or optimized for string length (mixed absolute and "
 "relative coordinates)"
-msgstr ""
-"路径数据应该这样写入:只使用绝对坐标/只使用相对坐标/或者最优字符串长度(混合绝"
-"对和相对坐标)"
+msgstr "路径数据应该这样写入:只使用绝对坐标/只使用相对坐标/或者最优字符串长度(混合绝对和相对坐标)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2028
 msgid "Force repeat commands"
@@ -21450,8 +21436,7 @@ msgstr "读取"
 msgid ""
 "Check attributes and style properties on reading in SVG files (including "
 "those internal to Inkscape which will slow down startup)"
-msgstr ""
-"在读取 SVG 时检查属性和样式属性(包括那些将会减慢启动的内置于 Inkscape 的属性)"
+msgstr "在读取 SVG 时检查属性和样式属性(包括那些将会减慢启动的内置于 Inkscape 的属性)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2069
 msgid "Editing"
@@ -21461,8 +21446,7 @@ msgstr "编辑"
 msgid ""
 "Check attributes and style properties while editing SVG files (may slow down "
 "Inkscape, mostly useful for debugging)"
-msgstr ""
-"在编辑 SVG 文件时检查属性和样式属性(可能会减慢 Inkscape,大多数对调试有用)"
+msgstr "在编辑 SVG 文件时检查属性和样式属性(可能会减慢 Inkscape,大多数对调试有用)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2071
 msgid "Writing"
@@ -22009,9 +21993,7 @@ msgid ""
 "When multiple snap solutions are found, then Inkscape can either prefer the "
 "closest transformation (when set to 0), or prefer the node that was "
 "initially the closest to the pointer (when set to 1)"
-msgstr ""
-"当有多种吸附方式时,Inkscape可以优先选择最接近变换后的(设置为 0),或者一开始最"
-"接近指针的点(设置为 1)"
+msgstr "当有多种吸附方式时,Inkscape可以优先选择最接近变换后的(设置为 0),或者一开始最接近指针的点(设置为 1)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2365
 msgid "Snap the mouse pointer when dragging a constrained knot"
@@ -22022,9 +22004,7 @@ msgid ""
 "When dragging a knot along a constraint line, then snap the position of the "
 "mouse pointer instead of snapping the projection of the knot onto the "
 "constraint line"
-msgstr ""
-"当沿着一条约束线拖动一个结时,那么吸附鼠标指针的位置而不是吸附结的投影到约束线"
-"上"
+msgstr "当沿着一条约束线拖动一个结时,那么吸附鼠标指针的位置而不是吸附结的投影到约束线上"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2369
 msgid "Delayed snap"
@@ -22075,9 +22055,7 @@ msgid ""
 "When on, angles are displayed with 0 at north, 0 to 360 range, positive "
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
 "counterclockwise"
-msgstr ""
-"当打开时,角度将会按照 0 度在北部/范围 0 到 360 度/顺时针方向显示;否则 0 度在"
-"东方,范围 -180 到 180 度,逆时针方向"
+msgstr "当打开时,角度将会按照 0 度在北部/范围 0 到 360 度/顺时针方向显示;否则 0 度在东方,范围 -180 到 180 度,逆时针方向"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2393
 msgctxt "Rotation angle"
@@ -22183,9 +22161,7 @@ msgstr "当原始对象移动时,克隆保持自己的位置"
 msgid ""
 "Each clone moves according to the value of its transform= attribute; for "
 "example, a rotated clone will move in a different direction than its original"
-msgstr ""
-"每个克隆的移动量依据 transform= 属性的值决定.例如,旋转过的克隆与原对象移动方"
-"向不同"
+msgstr "每个克隆的移动量依据 transform= 属性的值决定.例如,旋转过的克隆与原对象移动方向不同"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2432
 msgid "Deleting original: clones"
@@ -22212,9 +22188,7 @@ msgid ""
 "When duplicating a selection containing both a clone and its original "
 "(possibly in groups), relink the duplicated clone to the duplicated original "
 "instead of the old original"
-msgstr ""
-"当再制的选区同时包含原始和其克隆对象时(比如同时在群组中),将再制的克隆链接到再"
-"制的原始对象上,而不是旧的原始对象."
+msgstr "当再制的选区同时包含原始和其克隆对象时(比如同时在群组中),将再制的克隆链接到再制的原始对象上,而不是旧的原始对象."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2444
 msgid "Unlinking clones"
@@ -22347,9 +22321,7 @@ msgstr "MiB"
 msgid ""
 "Set the amount of memory per document which can be used to store rendered "
 "parts of the drawing for later reuse; set to zero to disable caching"
-msgstr ""
-"设置每个文档可以用于存储作为绘图的已渲染部分用于以后重复使用的内存的数量;设"
-"为 0 表示禁用缓存"
+msgstr "设置每个文档可以用于存储作为绘图的已渲染部分用于以后重复使用的内存的数量;设为 0 表示禁用缓存"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2516
 msgid "Rendering tile multiplier:"
@@ -23014,9 +22986,7 @@ msgstr "按键"
 msgid ""
 "A device can be 'Disabled', its co-ordinates mapped to the whole 'Screen', "
 "or to a single (usually focused) 'Window'"
-msgstr ""
-"可以\"禁用\"的设备,它的坐标映射到整个\"屏幕\",或者一个单一(通常是聚焦的)的"
-"\"窗口\""
+msgstr "可以\"禁用\"的设备,它的坐标映射到整个\"屏幕\",或者一个单一(通常是聚焦的)的\"窗口\""
 
 #: ../src/ui/dialog/input.cpp:1433
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:130
@@ -24997,8 +24967,7 @@ msgstr "调节<b>垂直圆角</b>半径;按住 <b>Ctrl</b> 使水平半径也相
 msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
-msgstr ""
-"调节矩形的<b>宽度和高度</b>;按住 <b>Ctrl</b> 锁定比率或者仅沿一个方向拉伸"
+msgstr "调节矩形的<b>宽度和高度</b>;按住 <b>Ctrl</b> 锁定比率或者仅沿一个方向拉伸"
 
 #: ../src/ui/shape-editor-knotholders.cpp:579
 msgid "Drag to move the rectangle"
@@ -25011,8 +24980,7 @@ msgstr ""
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
-msgstr ""
-"在X/Y方向上缩放透视图;<b>Shift</b>沿Z轴缩放;<b>Ctrl</b>限制沿边或对角线方向"
+msgstr "在X/Y方向上缩放透视图;<b>Shift</b>沿Z轴缩放;<b>Ctrl</b>限制沿边或对角线方向"
 
 #: ../src/ui/shape-editor-knotholders.cpp:851
 #: ../src/ui/shape-editor-knotholders.cpp:855
@@ -25021,8 +24989,7 @@ msgstr ""
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
-msgstr ""
-"沿Z轴缩放;<b>Shift</b>在 X/Y 方向上缩放透视图;<b>Ctrl</b>限制沿边或对角线方向"
+msgstr "沿Z轴缩放;<b>Shift</b>在 X/Y 方向上缩放透视图;<b>Ctrl</b>限制沿边或对角线方向"
 
 #: ../src/ui/shape-editor-knotholders.cpp:867
 msgid "Move the box in perspective"
@@ -25058,18 +25025,14 @@ msgstr ""
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
-msgstr ""
-"调节星形或者多边形的 <b>尖角半径</b>;按住 <b>Shift</b> 舍入;按住 <b>Alt</b> "
-"随机"
+msgstr "调节星形或者多边形的 <b>尖角半径</b>;按住 <b>Shift</b> 舍入;按住 <b>Alt</b> 随机"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1362
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
 "randomize"
-msgstr ""
-"调节星形的<b>基准半径</b>; 按住 <b>Ctrl</b> 保持星形线半径(没有歪斜);按住 "
-"<b>Shift</b> 舍入;按住 <b>Alt</b> 随机化"
+msgstr "调节星形的<b>基准半径</b>; 按住 <b>Ctrl</b> 保持星形线半径(没有歪斜);按住 <b>Shift</b> 舍入;按住 <b>Alt</b> 随机化"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1369
 msgid "Drag to move the star"
@@ -25083,17 +25046,13 @@ msgstr ""
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
-msgstr ""
-"从<b>内部</b>卷起/展开螺旋;按住 <b>Ctrl</b> 吸附角度;按住 <b>Alt</b> 合并/分"
-"解"
+msgstr "从<b>内部</b>卷起/展开螺旋;按住 <b>Ctrl</b> 吸附角度;按住 <b>Alt</b> 合并/分解"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1618
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"
-msgstr ""
-"从<b>外部</b>卷起/展开螺旋;按住 <b>Ctrl</b> 吸附角度;按住 <b>Alt</b> 合并/分"
-"解"
+msgstr "从<b>外部</b>卷起/展开螺旋;按住 <b>Ctrl</b> 吸附角度;按住 <b>Alt</b> 合并/分解"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1670
 msgid "Adjust the <b>offset distance</b>"
@@ -25147,24 +25106,21 @@ msgctxt "Path segment tip"
 msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Shift, Ctrl+Alt)"
-msgstr ""
-"<b>B 样条线段</b>:拖动以设定形状,双击添加节点,单击选择 (更多:Shift/Ctrl+Alt)"
+msgstr "<b>B 样条线段</b>:拖动以设定形状,双击添加节点,单击选择 (更多:Shift/Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:211
 msgctxt "Path segment tip"
 msgid ""
 "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick to "
 "insert node, click to select (more: Shift, Ctrl+Alt)"
-msgstr ""
-"<b>直线段</b>拖动转为贝塞尔线段,双击添加节点,单击选择 (更多:Shift/Ctrl+Alt)"
+msgstr "<b>直线段</b>拖动转为贝塞尔线段,双击添加节点,单击选择 (更多:Shift/Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:215
 msgctxt "Path segment tip"
 msgid ""
 "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Shift, Ctrl+Alt)"
-msgstr ""
-"<b>贝塞尔线段</b>拖动以设定形状,双击添加节点,单击选择 (更多:Shift/Ctrl+Alt)"
+msgstr "<b>贝塞尔线段</b>拖动以设定形状,双击添加节点,单击选择 (更多:Shift/Ctrl+Alt)"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:318
 msgid "Retract handles"
@@ -25291,9 +25247,7 @@ msgctxt "Path handle tip"
 msgid ""
 "<b>Shift+Ctrl+Alt</b>: preserve length and snap rotation angle to %g° "
 "increments, and rotate both handles"
-msgstr ""
-"<b>Shift+Ctrl+Alt</b>: 保留长度并限制旋转角度为 %g° 的整数倍,且同时旋转两个手"
-"柄"
+msgstr "<b>Shift+Ctrl+Alt</b>: 保留长度并限制旋转角度为 %g° 的整数倍,且同时旋转两个手柄"
 
 #: ../src/ui/tool/node.cpp:628
 #, c-format
@@ -25364,9 +25318,7 @@ msgctxt "Path handle tip"
 msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+S to make smooth, "
 "Shift+Y to make symmetric. (more: %s)"
-msgstr ""
-"<b>%s</b>: drag to shape the path, hover to lock, Shift+S to make smooth, "
-"Shift+Y to make symmetric. (more: %s)"
+msgstr "<b>%s</b>: drag to shape the path, hover to lock, Shift+S to make smooth, Shift+Y to make symmetric. (more: %s)"
 
 #: ../src/ui/tool/node.cpp:701
 #, c-format
@@ -25374,9 +25326,7 @@ msgctxt "Path handle tip"
 msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+Y to make symmetric. "
 "(more: %s)"
-msgstr ""
-"<b>%s</b>: drag to shape the path, hover to lock, Shift+Y to make symmetric. "
-"(more: %s)"
+msgstr "<b>%s</b>: drag to shape the path, hover to lock, Shift+Y to make symmetric. (more: %s)"
 
 #: ../src/ui/tool/node.cpp:710
 #, c-format
@@ -25384,9 +25334,7 @@ msgctxt "Path handle tip"
 msgid ""
 "<b>%s</b>: drag to make smooth, hover to lock, Shift+Y to make symmetric. "
 "(more: %s)"
-msgstr ""
-"<b>%s</b>: drag to make smooth, hover to lock, Shift+Y to make symmetric. "
-"(more: %s)"
+msgstr "<b>%s</b>: drag to make smooth, hover to lock, Shift+Y to make symmetric. (more: %s)"
 
 #: ../src/ui/tool/node.cpp:719
 #, c-format
@@ -25400,9 +25348,7 @@ msgctxt "Path handle tip"
 msgid ""
 "<b>BSpline node handle</b> (%.3g power): Shift-drag to move, double-click to "
 "reset. (more: %s)"
-msgstr ""
-"<b>BSpline node handle</b> (%.3g power): Shift-drag to move, double-click to "
-"reset. (more: %s)"
+msgstr "<b>BSpline node handle</b> (%.3g power): Shift-drag to move, double-click to reset. (more: %s)"
 
 #: ../src/ui/tool/node.cpp:735
 msgctxt "Path handle tip"
@@ -25457,9 +25403,7 @@ msgctxt "Path node tip"
 msgid ""
 "<b>BSpline node</b> (%.3g power): drag to shape the path. (more: Shift, "
 "Ctrl, Alt)"
-msgstr ""
-"<b>BSpline node</b> (%.3g power): 拖动可修改曲线形状. (辅助键: Shift, Ctrl, "
-"Alt)"
+msgstr "<b>BSpline node</b> (%.3g power): 拖动可修改曲线形状. (辅助键: Shift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1643
 #, c-format
@@ -25467,9 +25411,7 @@ msgctxt "Path node tip"
 msgid ""
 "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles. "
 "(more: Shift, Ctrl, Alt)"
-msgstr ""
-"<b>%s</b>: 单击可切换缩放/旋转控制,拖动可修改曲线形状. (辅助键: Shift, Ctrl, "
-"Alt)"
+msgstr "<b>%s</b>: 单击可切换缩放/旋转控制,拖动可修改曲线形状. (辅助键: Shift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1652
 #, c-format
@@ -25477,8 +25419,7 @@ msgctxt "Path node tip"
 msgid ""
 "<b>%s</b>: drag to shape the path, click to select only this node. (more: "
 "Shift, Ctrl, Alt)"
-msgstr ""
-"<b>%s</b>: 单击可选择该节点,拖动可修改曲线形状. (辅助键: Shift, Ctrl, Alt)"
+msgstr "<b>%s</b>: 单击可选择该节点,拖动可修改曲线形状. (辅助键: Shift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1660
 #, c-format
@@ -25486,9 +25427,7 @@ msgctxt "Path node tip"
 msgid ""
 "<b>BSpline node</b> (%.3g power): drag to shape the path, click to select "
 "only this node. (more: Shift, Ctrl, Alt)"
-msgstr ""
-"<b>BSpline node</b> (%.3g power): 单击可选择该节点,拖动可修改曲线形状. (辅助"
-"键: Shift, Ctrl, Alt)"
+msgstr "<b>BSpline node</b> (%.3g power): 单击可选择该节点,拖动可修改曲线形状. (辅助键: Shift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1679
 #, c-format
@@ -26061,7 +26000,7 @@ msgstr "忽略"
 #: ../src/ui/toolbar/connector-toolbar.cpp:85
 #: ../src/ui/tools/connector-tool.cpp:1330
 msgid "Make connectors ignore selected objects"
-msgstr "让连接器忽略选中对象"
+msgstr "让连接器不绕开选中对象"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:93
 msgid "Orthogonal"
@@ -26135,8 +26074,7 @@ msgstr "拾取"
 msgid ""
 "Pick both the color and the alpha (transparency) under cursor; otherwise, "
 "pick only the visible color premultiplied by alpha"
-msgstr ""
-"同时拾取目标颜色的色值和透明通道值; 否则, 放弃透明通道,仅保留同等视觉效果"
+msgstr "同时拾取目标颜色的色值和透明通道值; 否则, 放弃透明通道,仅保留同等视觉效果"
 
 #: ../src/ui/toolbar/dropper-toolbar.cpp:72
 msgid "Assign"
@@ -26286,9 +26224,7 @@ msgid ""
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
 "(spreadMethod=\"repeat\"), or repeat the gradient in alternating opposite "
 "directions (spreadMethod=\"reflect\")"
-msgstr ""
-"是要使用渐变向量的终点颜色填充(spreadMethod=\"pad\"),还是在相同的方向重复渐变"
-"(spreadMethod=\"repeat\")还是交替反向渐变(spreadMethod=\"reflect\")"
+msgstr "是要使用渐变向量的终点颜色填充(spreadMethod=\"pad\"),还是在相同的方向重复渐变(spreadMethod=\"repeat\")还是交替反向渐变(spreadMethod=\"reflect\")"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:490
 msgid "No stops"
@@ -26584,9 +26520,7 @@ msgstr "椭圆线"
 msgid ""
 "Make selected sides elliptical by changing length of handles. Works best if "
 "handles already approximate ellipse."
-msgstr ""
-"对于选中网格线段,通过调整手柄长度来使其变成椭圆线. 在线段已经接近椭圆线时易产"
-"生效果."
+msgstr "对于选中网格线段,通过调整手柄长度来使其变成椭圆线. 在线段已经接近椭圆线时易产生效果."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:291
 msgid "Pick colors:"
@@ -26635,8 +26569,7 @@ msgid ""
 "\n"
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
-msgstr ""
-"网格渐变已经成为SVG2标准的一部分:\n"
+msgstr "网格渐变已经成为SVG2标准的一部分:\n"
 "* 具体实现规则仍可能发生变化. \n"
 "* 网页浏览器可能无法正常显示. \n"
 "\n"
@@ -26809,7 +26742,7 @@ msgstr "显示路径的轮廓(不带路径效果)"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:71
 msgid "Fill by"
-msgstr "填充使用"
+msgstr "算法规则"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:86
 msgid ""
@@ -26819,7 +26752,7 @@ msgstr "单击的像素与将要填充的临近像素的最大差异"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Grow/shrink by:"
-msgstr "扩张/收缩:"
+msgstr "伸缩:"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:107
 msgid ""
@@ -27848,15 +27781,15 @@ msgstr "文本:改变旋转"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:55
 msgid "(pinch tweak)"
-msgstr "(挤压扭曲)"
+msgstr "(挤压微调)"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:55
 msgid "(broad tweak)"
-msgstr "(广泛扭曲)"
+msgstr "(广泛微调)"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:61
 msgid "The width of the tweak area (relative to the visible canvas area)"
-msgstr "扭曲区域宽度(相对于可见画布)"
+msgstr "微调区域宽度(相对于可见画布)"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:72
 msgid "(minimum force)"
@@ -27872,11 +27805,11 @@ msgstr "力度:"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:77
 msgid "The force of the tweak action"
-msgstr "扭曲力"
+msgstr "微调力度"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:89
 msgid "Use the pressure of the input device to alter the force of tweak action"
-msgstr "使用输入设备的压力改变扭曲力度"
+msgstr "使用输入设备的压力改变微调力度"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:102
 msgid "Move mode"
@@ -27948,7 +27881,7 @@ msgstr "吸引/排斥模式"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:143
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
-msgstr "向光标的位置收缩路径;按Shift则为排斥"
+msgstr "将路径向光标的位置吸引; 按Shift则为排斥"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:147
 msgid "Roughen mode"
@@ -28056,7 +27989,7 @@ msgstr "直接修改选中路径点(节点)."
 
 #: ../src/ui/tools-switch.cpp:92
 msgid "To tweak a path by pushing, select it and drag over it."
-msgstr "单击, 选中并拖动以调整路径."
+msgstr "单击, 选中并拖动以微调路径."
 
 #: ../src/ui/tools-switch.cpp:93
 msgid ""
@@ -28068,31 +28001,31 @@ msgstr "<b>拖动</b>/<b>单击</b>或<b>单击并滚动</b>以喷涂选中对�
 msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
 "resize. <b>Click</b> to select."
-msgstr ""
+msgstr "<b>拖动</b>以创建矩形. <b>拖动控制</b>调整圆角和尺寸<b>点击</b>选择."
 
 #: ../src/ui/tools-switch.cpp:95
 msgid ""
 "<b>Drag</b> to create a 3D box. <b>Drag controls</b> to resize in "
 "perspective. <b>Click</b> to select (with <b>Ctrl+Alt</b> for single faces)."
-msgstr ""
+msgstr "<b>拖动</b>以创建三维图形. <b>拖动控制</b>在透视中调整尺寸. <b>单击</b>选择(使用<b>Ctrl+Alt</b> 选择单面). "
 
 #: ../src/ui/tools-switch.cpp:96
 msgid ""
 "<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or "
 "segment. <b>Click</b> to select."
-msgstr ""
+msgstr "<b>拖动</b>以创建椭圆形. <b>拖动控制</b>创建弧或线段<b>点击</b>选择."
 
 #: ../src/ui/tools-switch.cpp:97
 msgid ""
 "<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. "
 "<b>Click</b> to select."
-msgstr ""
+msgstr "<b>拖动</b>以创建星形. <b>拖动控制</b>调整星形. <b>点击</b>选择."
 
 #: ../src/ui/tools-switch.cpp:98
 msgid ""
 "<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral "
 "shape. <b>Click</b> to select."
-msgstr ""
+msgstr "<b>拖动</b>以创建螺旋形. <b>拖动控制</b>调整螺旋形. <b>点击</b>选择."
 
 #: ../src/ui/tools-switch.cpp:99
 msgid ""
@@ -28117,24 +28050,19 @@ msgstr ""
 msgid ""
 "<b>Click</b> to select or create text, <b>drag</b> to create flowed text; "
 "then type."
-msgstr ""
-"<b>单击</b>以选择或者创建文字,<b>拖动</b>以创建浮动文字;然后输入需要的文字."
+msgstr "<b>单击</b>以选择或者创建文字,<b>拖动</b>以创建浮动文字;然后输入需要的文字."
 
 #: ../src/ui/tools-switch.cpp:103
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, "
 "<b>drag handles</b> to adjust gradients."
-msgstr ""
-"<b>拖动</b>或<b>双击</b>以在选择的对象上创建渐变,<b>拖动控制组件</b>以调节渐"
-"变."
+msgstr "<b>拖动</b>或<b>双击</b>以在选择的对象上创建渐变,<b>拖动控制组件</b>以调节渐变."
 
 #: ../src/ui/tools-switch.cpp:104
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a mesh on selected objects, "
 "<b>drag handles</b> to adjust meshes."
-msgstr ""
-"<b>拖动</b>或<b>双击</b>以在选择的对象上创建网孔,<b>拖动控制点</b> 以调节网"
-"孔."
+msgstr "<b>拖动</b>或<b>双击</b>以在选择的对象上创建网孔,<b>拖动控制点</b> 以调节网孔."
 
 #: ../src/ui/tools-switch.cpp:105
 msgid ""
@@ -28151,9 +28079,7 @@ msgid ""
 "<b>Click</b> to set fill, <b>Shift+click</b> to set stroke; <b>drag</b> to "
 "average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> "
 "to copy the color under mouse to clipboard"
-msgstr ""
-"<b>单击</b>以设置填充,<b>Shift+单击</b>以设置描边;<b>拖动</b>以平均区域里颜"
-"色;按住 <b>Alt</b> 拾取反色;按 <b>Ctrl+C</b> 以复制鼠标下的颜色到剪贴板"
+msgstr "<b>单击</b>以设置填充,<b>Shift+单击</b>以设置描边;<b>拖动</b>以平均区域里颜色;按住 <b>Alt</b> 拾取反色;按 <b>Ctrl+C</b> 以复制鼠标下的颜色到剪贴板"
 
 #: ../src/ui/tools-switch.cpp:108
 msgid "<b>Click and drag</b> between shapes to create a connector."
@@ -28164,9 +28090,7 @@ msgid ""
 "<b>Click</b> to paint a bounded area, <b>Shift+click</b> to union the new "
 "fill with the current selection, <b>Ctrl+click</b> to change the clicked "
 "object's fill and stroke to the current setting."
-msgstr ""
-"<b>单击</b>以填充一个被包围的区域,<b>Shift+单击</b>以联合当前选区和新的填充内"
-"容,<b>Ctrl+单击</b>以使用当前设置替换单击对象的填充和描边设置."
+msgstr "<b>单击</b>以填充一个被包围的区域,<b>Shift+单击</b>以联合当前选区和新的填充内容,<b>Ctrl+单击</b>以使用当前设置替换单击对象的填充和描边设置."
 
 #: ../src/ui/tools-switch.cpp:110
 msgid "<b>Drag</b> to erase."
@@ -28190,8 +28114,7 @@ msgstr "<b>Shift</b>:在起始点周围绘制"
 msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> "
 "to draw around the starting point"
-msgstr ""
-"<b>椭圆</b>:%s &#215; %s (比例 %d:%d);按住 <b>Shift</b> 以在起点周围绘制"
+msgstr "<b>椭圆</b>:%s &#215; %s (比例 %d:%d);按住 <b>Shift</b> 以在起点周围绘制"
 
 #: ../src/ui/tools/arc-tool.cpp:406
 #, c-format
@@ -28374,9 +28297,7 @@ msgstr "<b>区域未闭合</b>,无法填充."
 msgid ""
 "<b>Only the visible part of the bounded area was filled.</b> If you want to "
 "fill all of the area, undo, zoom out, and fill again."
-msgstr ""
-"<b>只有封闭区域的可见部分被填充</b>.如果想要填充所有区域, 请撤销, 放大, 重新"
-"填充."
+msgstr "<b>只有封闭区域的可见部分被填充</b>.如果想要填充所有区域, 请撤销, 放大, 重新填充."
 
 #: ../src/ui/tools/flood-tool.cpp:1076 ../src/ui/tools/flood-tool.cpp:1217
 msgid "Fill bounded area"
@@ -28550,14 +28471,14 @@ msgstr[0] " 从 %d 个网格控制点中"
 #, c-format
 msgid "<b>%d</b> mesh handle selected out of %d"
 msgid_plural "<b>%d</b> mesh handles selected out of %d"
-msgstr[0] "从 %2$d 个里选取了 <b>%1$d</b> 个网格控制点"
+msgstr[0] "<b>%d</b> mesh handle selected out of %d"
 
 #. TRANSLATORS: The plural refers to number of selected objects
 #: ../src/ui/tools/mesh-tool.cpp:158
 #, c-format
 msgid "<b>No</b> mesh handles selected out of %d on %d selected object"
 msgid_plural "<b>No</b> mesh handles selected out of %d on %d selected objects"
-msgstr[0] "从 %2$d 个选取对象的 %1$d 个里<b>没有</b>选择网格控制点"
+msgstr[0] "<b>No</b> mesh handles selected out of %d on %d selected object"
 
 #: ../src/ui/tools/mesh-tool.cpp:277
 msgid "Split mesh row/column"
@@ -28674,8 +28595,7 @@ msgstr "<b>单击</b>或<b>单击拖动</b>闭合或完成路径."
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to close and finish the path. Shift"
 "+Click make a cusp node"
-msgstr ""
-"<b>单击</b>或<b>单击拖动</b>闭合或完成路径. Shift+Click make a cusp node"
+msgstr "<b>单击</b>或<b>单击拖动</b>闭合或完成路径. Shift+Click make a cusp node"
 
 #: ../src/ui/tools/pen-tool.cpp:596
 msgid ""
@@ -28686,63 +28606,58 @@ msgstr "<b>单击</b>或<b>单击拖动</b>从这点继续路径."
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point. "
 "Shift+Click make a cusp node"
-msgstr ""
-"<b>单击</b>或<b>单击拖动</b>从这点继续路径. Shift+Click make a cusp node"
+msgstr "<b>单击</b>或<b>单击拖动</b>从这点继续路径. Shift+Click make a cusp node"
 
-#: ../src/ui/tools/pen-tool.cpp:1746
+#: ../src/ui/tools/pen-tool.cpp:1743
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp "
 "node, <b>ALT</b> moves previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1747
+#: ../src/ui/tools/pen-tool.cpp:1744
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp "
 "node, <b>ALT</b> moves previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1751
+#: ../src/ui/tools/pen-tool.cpp:1748
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1752
+#: ../src/ui/tools/pen-tool.cpp:1749
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
 
-#: ../src/ui/tools/pen-tool.cpp:1770
+#: ../src/ui/tools/pen-tool.cpp:1767
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr "<b>曲线控制点</b>:角度 %3.2f&#176;,长度%s;按住 <b>Ctrl</b> 吸附角度"
 
-#: ../src/ui/tools/pen-tool.cpp:1794
+#: ../src/ui/tools/pen-tool.cpp:1791
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
 "b> to snap angle, with <b>Shift</b> to move this handle only"
-msgstr ""
-"<b>曲线控制柄,对称</b>:角度%3.2f&#176;,长度 %s;按住 <b>Ctrl</b> 吸附角度,"
-"<b>Shift</b> 只移动该控制柄"
+msgstr "<b>曲线控制柄,对称</b>:角度%3.2f&#176;,长度 %s;按住 <b>Ctrl</b> 吸附角度,<b>Shift</b> 只移动该控制柄"
 
-#: ../src/ui/tools/pen-tool.cpp:1795
+#: ../src/ui/tools/pen-tool.cpp:1792
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle, with <b>Shift</b> to move this handle only"
-msgstr ""
-"<b>曲线控制柄</b>:角度 %3.2f&#176;,长度 %s;按住 <b>Ctrl</b> 吸附角度,"
-"<b>Shift</b> 只移动该控制柄"
+msgstr "<b>曲线控制柄</b>:角度 %3.2f&#176;,长度 %s;按住 <b>Ctrl</b> 吸附角度,<b>Shift</b> 只移动该控制柄"
 
-#: ../src/ui/tools/pen-tool.cpp:1947
+#: ../src/ui/tools/pen-tool.cpp:1944
 msgid "Drawing finished"
 msgstr "绘图完成"
 
@@ -28783,26 +28698,21 @@ msgstr "<b>Ctrl</b>:制作正方形或者整数比矩形,锁定一个圆角"
 msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</"
 "b> to draw around the starting point"
-msgstr ""
-"<b>矩形</b>:%s &#215; %s(约束到长宽比 %d:%d);按住 <b>Shift</b> 在起点附近绘制"
+msgstr "<b>矩形</b>:%s &#215; %s(约束到长宽比 %d:%d);按住 <b>Shift</b> 在起点附近绘制"
 
 #: ../src/ui/tools/rect-tool.cpp:423
 #, c-format
 msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
-msgstr ""
-"<b>矩形</b>:%s &#215; %s(约束到黄金分割比 1.618:1);按住 <b>Shift</b> 在起点附"
-"近绘制"
+msgstr "<b>矩形</b>:%s &#215; %s(约束到黄金分割比 1.618:1);按住 <b>Shift</b> 在起点附近绘制"
 
 #: ../src/ui/tools/rect-tool.cpp:427
 #, c-format
 msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
-msgstr ""
-"<b>矩形</b>:%s &#215; %s(约束到黄金分割比 1:1.618);按住 <b>Shift</b> 在起点附"
-"近绘制"
+msgstr "<b>矩形</b>:%s &#215; %s(约束到黄金分割比 1:1.618);按住 <b>Shift</b> 在起点附近绘制"
 
 #: ../src/ui/tools/rect-tool.cpp:433
 #, c-format
@@ -29149,59 +29059,59 @@ msgstr ""
 
 #: ../src/ui/tools/tweak-tool.cpp:1191
 msgid "<b>Nothing selected!</b> Select objects to tweak."
-msgstr "<b>没有选择对象!</b>请选择对象然后扭曲(tweak)."
+msgstr "<b>没有选择对象!</b>请选择对象然后调整(tweak)."
 
 #: ../src/ui/tools/tweak-tool.cpp:1225
 msgid "Move tweak"
-msgstr "移动扭曲"
+msgstr "移动微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1229
 msgid "Move in/out tweak"
-msgstr "移入/移出扭曲"
+msgstr "移入/移出微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1233
 msgid "Move jitter tweak"
-msgstr "移动抖动扭曲"
+msgstr "移动抖动微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1237
 msgid "Scale tweak"
-msgstr "缩放扭曲"
+msgstr "缩放微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1241
 msgid "Rotate tweak"
-msgstr "旋转扭曲"
+msgstr "旋转微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1245
 msgid "Duplicate/delete tweak"
-msgstr "再制/删除扭曲"
+msgstr "再制/删除微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1249
 msgid "Push path tweak"
-msgstr "推压路径扭曲"
+msgstr "推压路径微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1253
 msgid "Shrink/grow path tweak"
-msgstr "收缩/扩张路径扭曲"
+msgstr "收缩/扩张路径微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1257
 msgid "Attract/repel path tweak"
-msgstr "吸引/排斥路径扭曲"
+msgstr "吸引/排斥路径微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1261
 msgid "Roughen path tweak"
-msgstr "毛边路径扭曲"
+msgstr "粗糙路径微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1265
 msgid "Color paint tweak"
-msgstr "色彩绘画扭曲"
+msgstr "色彩绘画微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1269
 msgid "Color jitter tweak"
-msgstr "色彩抖动扭曲"
+msgstr "色彩抖动微调"
 
 #: ../src/ui/tools/tweak-tool.cpp:1273
 msgid "Blur tweak"
-msgstr "模糊扭曲"
+msgstr "模糊微调"
 
 #: ../src/ui/widget/canvas-grid.cpp:118
 msgid "Toggle color-managed display for this document window"
@@ -30100,9 +30010,7 @@ msgid ""
 "Use the <b>Node tool</b> to adjust position, scale, and rotation of the "
 "pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to "
 "create a new pattern from selection."
-msgstr ""
-"使用<b>节点工具</b>来调整画布上图案的位置/缩放/角度. Use <b>Object &gt; "
-"Pattern &gt; Objects to Pattern</b> to create a new pattern from selection."
+msgstr "使用<b>节点工具</b>来调整画布上图案的位置/缩放/角度. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to create a new pattern from selection."
 
 #: ../src/ui/widget/paint-selector.cpp:1232
 msgid "<b>Pattern fill</b>"
@@ -30453,9 +30361,7 @@ msgid ""
 "Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</"
 "b> to adjust lightness, with <b>Shift</b> to adjust saturation, without "
 "modifiers to adjust hue"
-msgstr ""
-"正在调整 <b>alpha</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按下 <b>Ctrl</b> 调整"
-"亮度,按住 <b>Shift</b> 调整饱和度,不带修改键调整色调"
+msgstr "正在调整 <b>alpha</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按下 <b>Ctrl</b> 调整亮度,按住 <b>Shift</b> 调整饱和度,不带修改键调整色调"
 
 #: ../src/ui/widget/selected-style.cpp:1304
 msgid "Adjust saturation"
@@ -30467,9 +30373,7 @@ msgid ""
 "Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
 "<b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without "
 "modifiers to adjust hue"
-msgstr ""
-"正在调整<b>饱和度</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Ctrl</b> 调整"
-"亮度,按住 <b>Alt</b> 调整 alpha,不带修改键调整色调"
+msgstr "正在调整<b>饱和度</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Ctrl</b> 调整亮度,按住 <b>Alt</b> 调整 alpha,不带修改键调整色调"
 
 #: ../src/ui/widget/selected-style.cpp:1310
 msgid "Adjust lightness"
@@ -30481,9 +30385,7 @@ msgid ""
 "Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
 "<b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without "
 "modifiers to adjust hue"
-msgstr ""
-"正在调整<b>亮度</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Shift</b> 调整"
-"饱和度,按住 <b>Alt</b> 调整 alpha,不带修改键调整色调"
+msgstr "正在调整<b>亮度</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Shift</b> 调整饱和度,按住 <b>Alt</b> 调整 alpha,不带修改键调整色调"
 
 #: ../src/ui/widget/selected-style.cpp:1316
 msgid "Adjust hue"
@@ -30495,9 +30397,7 @@ msgid ""
 "Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</"
 "b> to adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> "
 "to adjust lightness"
-msgstr ""
-"正在调整<b>色调</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Shift</b> 调整"
-"饱和度,按住 <b>Alt</b> 调整 alpha,按住 <b>Ctrl</b> 调整亮度"
+msgstr "正在调整<b>色调</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Shift</b> 调整饱和度,按住 <b>Alt</b> 调整 alpha,按住 <b>Ctrl</b> 调整亮度"
 
 #: ../src/ui/widget/selected-style.cpp:1422
 #: ../src/ui/widget/selected-style.cpp:1436
@@ -30695,9 +30595,7 @@ msgid "<b>Finite</b> vanishing point shared by <b>%d</b> box"
 msgid_plural ""
 "<b>Finite</b> vanishing point shared by <b>%d</b> boxes; drag with <b>Shift</"
 "b> to separate selected box(es)"
-msgstr[0] ""
-"<b>%d</b> 个透视图共享<b>有限</b>消失点;按下 <b>Shift</b> 拖动以分开选定的多"
-"个透视图"
+msgstr[0] "<b>%d</b> 个透视图共享<b>有限</b>消失点;按下 <b>Shift</b> 拖动以分开选定的多个透视图"
 
 #: ../src/vanishing-point.cpp:330
 #, c-format
@@ -30912,7 +30810,7 @@ msgstr "保存为模板..."
 
 #: ../src/verbs.cpp:2366
 msgid "Save a copy of the document as template"
-msgstr ""
+msgstr "文档保存为模板"
 
 #: ../src/verbs.cpp:2367
 msgid "_Print..."
@@ -31136,7 +31034,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2434
 msgid "Unlink all clones in the selection, even if they are in groups."
-msgstr ""
+msgstr "取消链接选择中的全部克隆，即使它们在组中。 "
 
 #: ../src/verbs.cpp:2436
 msgid "Relink to Copied"
@@ -31671,7 +31569,7 @@ msgstr "在一个表格或圆圈中安排选择的对象"
 
 #: ../src/verbs.cpp:2607
 msgid "Fill between paths"
-msgstr ""
+msgstr "路径间填充"
 
 #: ../src/verbs.cpp:2608
 msgid "Create a fill object using the selected paths"
@@ -31847,7 +31745,7 @@ msgstr "顺时针旋转 _90°"
 
 #: ../src/verbs.cpp:2654
 msgid "Rotate selection 90° clockwise"
-msgstr "顺时针旋转选区 90°"
+msgstr "顺时针旋转选区90°"
 
 #: ../src/verbs.cpp:2655
 msgid "Rotate 9_0° CCW"
@@ -31855,7 +31753,7 @@ msgstr "逆时针旋转 9_0°"
 
 #: ../src/verbs.cpp:2658
 msgid "Rotate selection 90° counter-clockwise"
-msgstr "逆时针旋转选区 90°"
+msgstr "逆时针旋转选区90°"
 
 #: ../src/verbs.cpp:2659
 msgid "Remove _Transformations"
@@ -31987,11 +31885,11 @@ msgstr "节点工具: 通过编辑节点来调整路径"
 #: ../src/verbs.cpp:2698
 msgctxt "ContextVerb"
 msgid "Tweak"
-msgstr "调整"
+msgstr "微调"
 
 #: ../src/verbs.cpp:2699
 msgid "Tweak objects by sculpting or painting"
-msgstr "调整工具: 通过描绘/雕刻来扭曲对象"
+msgstr "微调工具: 通过描绘/雕刻来微调对象"
 
 #: ../src/verbs.cpp:2700
 msgctxt "ContextVerb"
@@ -32313,11 +32211,11 @@ msgstr "打开连接器工具的首选项"
 
 #: ../src/verbs.cpp:2779
 msgid "Paint Bucket Preferences"
-msgstr "油漆桶设置"
+msgstr "油漆桶首选项"
 
 #: ../src/verbs.cpp:2780
 msgid "Open Preferences for the Paint Bucket tool"
-msgstr "打开油漆桶设置工具"
+msgstr "打开油漆桶首选项"
 
 #: ../src/verbs.cpp:2781
 msgid "Eraser Preferences"
@@ -32341,7 +32239,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2791
 msgid "Show or hide the on-canvas command palette"
-msgstr ""
+msgstr "显示或隐藏画布上的命令面板 "
 
 #: ../src/verbs.cpp:2792
 msgid "_Rulers"
@@ -32469,7 +32367,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2829
 msgid "Prototype Dialog"
-msgstr ""
+msgstr "原型对话框"
 
 #: ../src/verbs.cpp:2832
 msgid "P_references"
@@ -32499,7 +32397,7 @@ msgstr "Unicode字符(_U)"
 
 #: ../src/verbs.cpp:2844
 msgid "Select Unicode characters from a palette"
-msgstr ""
+msgstr "从色板中选择Unicode字符"
 
 #. TRANSLATORS: "Swatches" means: color samples
 #: ../src/verbs.cpp:2847
@@ -32742,7 +32640,7 @@ msgstr "Donate"
 
 #: ../src/verbs.cpp:2925
 msgid "Donate to Inkscape"
-msgstr ""
+msgstr "向Inkscape捐助"
 
 #: ../src/verbs.cpp:2926 ../src/verbs.cpp:2927
 msgid "SVG 1.1 Specification"
@@ -32970,9 +32868,7 @@ msgstr "水平和垂直轴上的中心"
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
-msgstr ""
-"<b>欢迎来到 Inkscape!</b>使用形状或手绘工具创建对象;使用选择工具(箭头)移动或"
-"者变换对象"
+msgstr "<b>欢迎来到 Inkscape!</b>使用形状或手绘工具创建对象;使用选择工具(箭头)移动或者变换对象"
 
 #: ../src/widgets/desktop-widget.cpp:317
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
@@ -33041,9 +32937,7 @@ msgid ""
 "closing?</span>\n"
 "\n"
 "If you close without saving, your changes will be discarded."
-msgstr ""
-"<span weight=\"bold\" size=\"larger\">关闭之前保存对文档\"%s\"所作的更改？</"
-"span>\n"
+msgstr "<span weight=\"bold\" size=\"larger\">关闭之前保存对文档\"%s\"所作的更改？</span>\n"
 "\n"
 "如果没有保存关闭文档,所作的更改将会丢失."
 
@@ -33058,9 +32952,7 @@ msgid ""
 "format that may cause data loss!</span>\n"
 "\n"
 "Do you want to save this file as Inkscape SVG?"
-msgstr ""
-"<span weight=\"bold\" size=\"larger\">此文件\"%s\"用此格式保存可能会导致数据"
-"遗失!</span>\n"
+msgstr "<span weight=\"bold\" size=\"larger\">此文件\"%s\"用此格式保存可能会导致数据遗失!</span>\n"
 "\n"
 "您是否要将这个文件保存成 Inkscape SVG？"
 
@@ -33229,34 +33121,21 @@ msgid ""
 "Preprocessing your images to increase contrast is recommended.\n"
 "  4) If your goal is to get few nodes and good precision, manual tracing is "
 "always best.\n"
-msgstr ""
-"\n"
-"  This dialog allows you to automatically convert a raster graphic into "
-"vector paths. Several options are available for different use cases:\n"
-" * \"Brightness cutoff\" detects areas that are darker than the threshold "
-"value and creates a path enclosing them (using potrace).\n"
-" * \"Edge detection\" detects changes greater than the given threshold value "
-"in the brightness of color patches and creates paths to separate them (using "
-"potrace).\n"
-" * \"Color quantization\" separates the image into the given number of "
-"colors, and separates them with a path (using potrace).\n"
+msgstr "\n"
+"  This dialog allows you to automatically convert a raster graphic into vector paths. Several options are available for different use cases:\n"
+" * \"Brightness cutoff\" detects areas that are darker than the threshold value and creates a path enclosing them (using potrace).\n"
+" * \"Edge detection\" detects changes greater than the given threshold value in the brightness of color patches and creates paths to separate them (using potrace).\n"
+" * \"Color quantization\" separates the image into the given number of colors, and separates them with a path (using potrace).\n"
 " * \"Autotrace\" uses the autotrace algorithm with the given option.\n"
-" * \"Centerline tracing\" tries to vectorize a line drawing (with "
-"autotrace).\n"
-" * \"Multiple scans\" options separate the image into a number of scans, "
-"depending on brightness, color separation, or gray levels (using potrace), "
-"or using the autotrace algorithm, and create several paths for those.\n"
-" * The \"Pixel art\" tab allows to use an algorithm for pixel recognition or "
-"one for depixelizing to vectorize pixel art images.\n"
+" * \"Centerline tracing\" tries to vectorize a line drawing (with autotrace).\n"
+" * \"Multiple scans\" options separate the image into a number of scans, depending on brightness, color separation, or gray levels (using potrace), or using the autotrace algorithm, and create several paths for those.\n"
+" * The \"Pixel art\" tab allows to use an algorithm for pixel recognition or one for depixelizing to vectorize pixel art images.\n"
 "\n"
 " * NOTE:\n"
 "  1) Save your work before tracing\n"
-"  2) Watch your pixel count: \"Trace pixel art\" creates up to one path per "
-"pixel. It is not recommended for images that are not pixel art.\n"
-"  3) Autotrace is slower than potrace, it is not recommended for big images. "
-"Preprocessing your images to increase contrast is recommended.\n"
-"  4) If your goal is to get few nodes and good precision, manual tracing is "
-"always best.\n"
+"  2) Watch your pixel count: \"Trace pixel art\" creates up to one path per pixel. It is not recommended for images that are not pixel art.\n"
+"  3) Autotrace is slower than potrace, it is not recommended for big images. Preprocessing your images to increase contrast is recommended.\n"
+"  4) If your goal is to get few nodes and good precision, manual tracing is always best.\n"
 
 #: ../share/ui/dialog-trace.glade:135
 msgid "Create a single path or create a group of paths"
@@ -33529,9 +33408,7 @@ msgstr "翻译人员"
 msgid ""
 "<big><b>See the full details about the Inkscape licenses <a href=\"https://"
 "inkscape.org/about/license/\">here</a>!</b></big>"
-msgstr ""
-"<big><b>Inkscape许可协议的详细内容请参考<a href=\"https://inkscape.org/about/"
-"license/\">这里</a>!</b></big>"
+msgstr "<big><b>Inkscape许可协议的详细内容请参考<a href=\"https://inkscape.org/about/license/\">这里</a>!</b></big>"
 
 #: ../share/ui/inkscape-about.glade:228
 msgid "License file failed to load."
@@ -33975,26 +33852,21 @@ msgid ""
 "the world to enjoy free from restrictions and free from costs. <b>\n"
 "If you would like to get involved and make the next version of Inkscape even "
 "better, please consider joining the Inkscape project today.</b></big>"
-msgstr ""
-"<big><b>Inkscape是由和您一样的用户来提供支持的.</b> 大家按能力自由贡献时间/资"
-"金或技术,然后创建了这款自由软件,让所有人都可以不受限制地免费使用. <b>\n"
-"如果您也想为Inkscape的未来发展提供一些力所能及的帮助,请随时加入Inkscape项目."
-"</b></big>"
+msgstr "<big><b>Inkscape是由和您一样的用户来提供支持的.</b> 大家按能力自由贡献时间/资金或技术,然后创建了这款自由软件,让所有人都可以不受限制地免费使用. <b>\n"
+"如果您也想为Inkscape的未来发展提供一些力所能及的帮助,请随时加入Inkscape项目.</b></big>"
 
 #: ../share/ui/inkscape-start.glade:1639
 msgid ""
 "Learn how to\n"
 "Contribute Time"
-msgstr ""
-"看看如何\n"
+msgstr "看看如何\n"
 "贡献时间"
 
 #: ../share/ui/inkscape-start.glade:1697
 msgid ""
 "Learn how to\n"
 "Fund Inkscape"
-msgstr ""
-"看看如何\n"
+msgstr "看看如何\n"
 "资助Inkscape"
 
 #: ../share/ui/inkscape-start.glade:1745
@@ -34138,9 +34010,7 @@ msgstr ""
 msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
 "to Release 13 format using QCad."
-msgstr ""
-"%d ENTITIES of type POLYLINE encountered and ignored. 请尝试用QCad转换到版本"
-"R13."
+msgstr "%d ENTITIES of type POLYLINE encountered and ignored. 请尝试用QCad转换到版本R13."
 
 #: ../share/extensions/funcplot.py:82
 msgid "Invalid function specification"
@@ -34193,9 +34063,7 @@ msgstr ""
 msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
 "or image/x-icon"
-msgstr ""
-"%s 不是以下类型中的一个:image/png, image/jpeg, image/bmp, image/gif, image/"
-"tiff 或 image/x-icon"
+msgstr "%s 不是以下类型中的一个:image/png, image/jpeg, image/bmp, image/gif, image/tiff 或 image/x-icon"
 
 #: ../share/extensions/inkex/bezier.py:405
 msgid "Area is zero, cannot calculate Center of Mass"
@@ -34357,17 +34225,14 @@ msgstr "没有选择要插值的内容"
 msgid ""
 "To assign an effect, please select an object.\n"
 "\n"
-msgstr ""
-"要分配效果,请选择一个对象.\n"
+msgstr "要分配效果,请选择一个对象.\n"
 "\n"
 
 #: ../share/extensions/jessyink_effects.py:40
 msgid ""
 "No object selected. Please select the object you want to assign an effect to "
 "and then press apply.\n"
-msgstr ""
-"无选中对象. Please select the object you want to assign an effect to and "
-"then press apply.\n"
+msgstr "无选中对象. Please select the object you want to assign an effect to and then press apply.\n"
 
 #: ../share/extensions/jessyink_install.py:34
 msgid ""
@@ -34401,16 +34266,14 @@ msgstr "JessyInk 脚本已安装."
 msgid ""
 "\n"
 "Master slide:"
-msgstr ""
-"\n"
+msgstr "\n"
 "主幻灯片:"
 
 #: ../share/extensions/jessyink_summary.py:56
 msgid ""
 "\n"
 "Slide {0!s}:"
-msgstr ""
-"\n"
+msgstr "\n"
 "幻灯片 {0!s}:"
 
 #: ../share/extensions/jessyink_summary.py:62
@@ -34498,17 +34361,14 @@ msgstr "无法获取包含影片组件的选取图层."
 msgid ""
 "Could not obtain the selected layer for inclusion of the video element.\n"
 "\n"
-msgstr ""
-"无法获取包含影片组件的选取图层.\n"
+msgstr "无法获取包含影片组件的选取图层.\n"
 "\n"
 
 #: ../share/extensions/jessyink_view.py:38
 msgid ""
 "No object selected. Please select the object you want to assign a view to "
 "and then press apply.\n"
-msgstr ""
-"无选中对象. Please select the object you want to assign a view to and then "
-"press apply.\n"
+msgstr "无选中对象. Please select the object you want to assign a view to and then press apply.\n"
 
 #: ../share/extensions/markers_strokepaint.py:88
 #, python-format
@@ -34599,8 +34459,7 @@ msgstr "仅找到下列字体:%s"
 msgid ""
 "Found the following fonts:\n"
 "%s"
-msgstr ""
-"找到下列字体:\n"
+msgstr "找到下列字体:\n"
 "%s"
 
 #: ../share/extensions/replace_font.py:173
@@ -34765,8 +34624,7 @@ msgid ""
 "    * Lightness: add/subtract % (min=-100, max=100).\n"
 "    * Random Hue/Saturation/Lightness: randomize the parameter's value.\n"
 "      "
-msgstr ""
-"\n"
+msgstr "\n"
 "HSL方式调整选中对象的色相/饱和度/亮度.\n"
 "选项:\n"
 "    * Hue: rotate by degrees (wraps around).\n"
@@ -35165,20 +35023,15 @@ msgid ""
 "plot the isogonal and isotomic conjugate of the point. Be aware that this "
 "may cause a divide-by-zero error for certain points.\n"
 "            "
-msgstr ""
-"This extension draws constructions about a triangle defined by the first 3 "
-"nodes of a selected path. You may select one of preset objects or create "
-"your own ones.\n"
+msgstr "This extension draws constructions about a triangle defined by the first 3 nodes of a selected path. You may select one of preset objects or create your own ones.\n"
 "\n"
 "All units are the Inkscape's pixel unit. Angles are all in radians.\n"
-"You can specify a point by trilinear coordinates or by a triangle centre "
-"function.\n"
+"You can specify a point by trilinear coordinates or by a triangle centre function.\n"
 "Enter as functions of the side length or angles.\n"
 "Trilinear elements should be separated by a colon: ':'.\n"
 "Side lengths are represented as 's_a', 's_b' and 's_c'.\n"
 "Angles corresponding to these are 'a_a', 'a_b', and 'a_c'.\n"
-"You can also use the semi-perimeter and area of the triangle as constants. "
-"Write 'area' or 'semiperim' for these.\n"
+"You can also use the semi-perimeter and area of the triangle as constants. Write 'area' or 'semiperim' for these.\n"
 "\n"
 "You can use any standard Python math function:\n"
 "ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
@@ -35190,10 +35043,7 @@ msgstr ""
 "Also available are the inverse trigonometric functions:\n"
 "sec(x); csc(x); cot(x)\n"
 "\n"
-"You can specify the radius of a circle around a custom point using a "
-"formula, which may also contain the side lengths, angles, etc. You can also "
-"plot the isogonal and isotomic conjugate of the point. Be aware that this "
-"may cause a divide-by-zero error for certain points.\n"
+"You can specify the radius of a circle around a custom point using a formula, which may also contain the side lengths, angles, etc. You can also plot the isogonal and isotomic conjugate of the point. Be aware that this may cause a divide-by-zero error for certain points.\n"
 "            "
 
 #: ../share/extensions/dxf12_outlines.inx:3
@@ -35574,10 +35424,8 @@ msgid ""
 "   X scale is set so that left and right edges of rectangle are at +/-1.\n"
 "   Isotropic scaling is disabled.\n"
 "   First derivative is always determined numerically."
-msgstr ""
-"Select a rectangle before calling the extension,\n"
-"it will determine X and Y scales. If you wish to fill the area, then add x-"
-"axis endpoints.\n"
+msgstr "Select a rectangle before calling the extension,\n"
+"it will determine X and Y scales. If you wish to fill the area, then add x-axis endpoints.\n"
 "\n"
 "With polar coordinates:\n"
 "   Start and end X values define the angle range in radians.\n"
@@ -36479,18 +36327,13 @@ msgid ""
 "Each first level layer is converted to a Gimp layer. Sublayers are "
 "concatenated and converted with their first level parent layer into a single "
 "Gimp layer."
-msgstr ""
-"This extension exports the document to Gimp XCF format according to the "
-"following options:\n"
+msgstr "This extension exports the document to Gimp XCF format according to the following options:\n"
 "    * Save Guides: convert all guides to Gimp guides.\n"
-"    * Save Grid: convert the first rectangular grid to a Gimp grid (note "
-"that the default Inkscape grid is very narrow when shown in Gimp).\n"
+"    * Save Grid: convert the first rectangular grid to a Gimp grid (note that the default Inkscape grid is very narrow when shown in Gimp).\n"
 "    * Save Background: add the document background to each converted layer.\n"
 "    * File Resolution: XCF file resolution, in DPI.\n"
 "\n"
-"Each first level layer is converted to a Gimp layer. Sublayers are "
-"concatenated and converted with their first level parent layer into a single "
-"Gimp layer."
+"Each first level layer is converted to a Gimp layer. Sublayers are concatenated and converted with their first level parent layer into a single Gimp layer."
 
 #: ../share/extensions/gimp_xcf.inx:27 ../share/extensions/gimp_xcf.inx:28
 msgid "GIMP XCF maintaining layers (*.xcf)"
@@ -36841,8 +36684,7 @@ msgstr "赫尔希文字"
 msgid ""
 "\n"
 "Hershey Text\n"
-msgstr ""
-"\n"
+msgstr "\n"
 "赫尔希文字\n"
 
 #: ../share/extensions/hershey.inx:13
@@ -37011,9 +36853,7 @@ msgid ""
 "Please note that you can only open HPGL files written by Inkscape, to open "
 "other HPGL files please change their file extension to .plt, make sure you "
 "have UniConverter installed and open them again."
-msgstr ""
-"请注意,您只可以打开由 Inkscape 编写的 HPGL 文件,要打开其他 HPGL 文件,请更改它"
-"们的文件扩展名为 .plt,确保您已安装 UniConverter 并再次打开它们."
+msgstr "请注意,您只可以打开由 Inkscape 编写的 HPGL 文件,要打开其他 HPGL 文件,请更改它们的文件扩展名为 .plt,确保您已安装 UniConverter 并再次打开它们."
 
 #: ../share/extensions/hpgl_input.inx:8 ../share/extensions/hpgl_output.inx:10
 #: ../share/extensions/plotter.inx:68
@@ -37086,9 +36926,7 @@ msgstr "笔力度(g):"
 msgid ""
 "The amount of force pushing down the pen in grams, set to 0 to omit command; "
 "most plotters ignore this command (Default: 0)"
-msgstr ""
-"笔下推的力度大小,以克为单位,设为 0 表示省略命令; 大多数绘图仪忽略这个命令(默"
-"认:0)"
+msgstr "笔下推的力度大小,以克为单位,设为 0 表示省略命令; 大多数绘图仪忽略这个命令(默认:0)"
 
 #: ../share/extensions/hpgl_output.inx:14 ../share/extensions/plotter.inx:72
 msgid "Pen speed (cm/s or mm/s):"
@@ -37155,8 +36993,7 @@ msgstr "外切割距离(毫米):"
 msgid ""
 "The distance in mm that will be cut over the starting point of the path to "
 "prevent open paths, set to 0.0 to omit command (Default: 1.00)"
-msgstr ""
-"在路径的开始点外开始切割避免打开路径的毫米数,设为 0.0 表示省略命令(默认:1.00)"
+msgstr "在路径的开始点外开始切割避免打开路径的毫米数,设为 0.0 表示省略命令(默认:1.00)"
 
 #: ../share/extensions/hpgl_output.inx:29
 msgid "Tool (Knife) offset correction (mm):"
@@ -37186,8 +37023,7 @@ msgstr "曲线平展:"
 msgid ""
 "Curves are divided into lines, this number controls how fine the curves will "
 "be reproduced, the smaller the finer (Default: '1.2')"
-msgstr ""
-"曲线被划分为多条线,整个数值控制重现的曲线有多精细,数值越小越精细(默认: '1.2')"
+msgstr "曲线被划分为多条线,整个数值控制重现的曲线有多精细,数值越小越精细(默认: '1.2')"
 
 #: ../share/extensions/hpgl_output.inx:32 ../share/extensions/plotter.inx:90
 msgid "Auto align"
@@ -37204,9 +37040,7 @@ msgstr ""
 msgid ""
 "All these settings depend on the plotter you use, for more information "
 "please consult the manual or homepage for your plotter."
-msgstr ""
-"所有这些设置都取决于您使用的绘图仪,要获取更多信息,请参考您的绘图仪的手册或者"
-"主页."
+msgstr "所有这些设置都取决于您使用的绘图仪,要获取更多信息,请参考您的绘图仪的手册或者主页."
 
 #: ../share/extensions/hpgl_output.inx:40
 msgid "Export an HP Graphics Language file"
@@ -37457,9 +37291,7 @@ msgid ""
 "This effect applies a value for any interpolatable attribute for all "
 "elements inside the selected group or for all elements in a multiple "
 "selection."
-msgstr ""
-"这个效果应用一个值于选择组中的所有元素的任何可插值属性,或者一个多项选择中的所"
-"有元素的任何可插值属性."
+msgstr "这个效果应用一个值于选择组中的所有元素的任何可插值属性,或者一个多项选择中的所有元素的任何可插值属性."
 
 #: ../share/extensions/jessyink_autotexts.inx:3
 msgid "Auto-texts"
@@ -38140,8 +37972,7 @@ msgid ""
 "    * Layout margins: white space around each part of the layout.\n"
 "    * Layout padding: inner padding for each part of the layout.\n"
 "      "
-msgstr ""
-"\n"
+msgstr "\n"
 "Parameters:\n"
 "    * Page size: width and height.\n"
 "    * Page margins: extra space around each page.\n"
@@ -38397,22 +38228,13 @@ msgid ""
 "  * When calculating area, the result should be precise for polygons and "
 "Bezier curves. If a circle is used, the area may be too high by as much as "
 "0.03%."
-msgstr ""
-"This effect measures the length, area, or center-of-mass of the selected "
-"paths. Length and area are added as a text object with the selected units. "
-"Center-of-mass is shown as a cross symbol.\n"
+msgstr "This effect measures the length, area, or center-of-mass of the selected paths. Length and area are added as a text object with the selected units. Center-of-mass is shown as a cross symbol.\n"
 "\n"
-"  * Text display format can be either Text-On-Path, or stand-alone text at a "
-"specified angle.\n"
-"  * The number of significant digits can be controlled by the Precision "
-"field.\n"
+"  * Text display format can be either Text-On-Path, or stand-alone text at a specified angle.\n"
+"  * The number of significant digits can be controlled by the Precision field.\n"
 "  * The Offset field controls the distance from the text to the path.\n"
-"  * The Scale factor can be used to make measurements in scaled drawings. "
-"For example, if 1 cm in the drawing equals 2.5 m in the real world, Scale "
-"must be set to 250.\n"
-"  * When calculating area, the result should be precise for polygons and "
-"Bezier curves. If a circle is used, the area may be too high by as much as "
-"0.03%."
+"  * The Scale factor can be used to make measurements in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the real world, Scale must be set to 250.\n"
+"  * When calculating area, the result should be precise for polygons and Bezier curves. If a circle is used, the area may be too high by as much as 0.03%."
 
 #: ../share/extensions/measure.inx:49
 msgid "Font size (px):"
@@ -39124,13 +38946,10 @@ msgid ""
 "    * Starting dot number: first number in the sequence, assigned to the "
 "first node of the path.\n"
 "    * Step: numbering step between two nodes."
-msgstr ""
-"This extension replaces the selection's nodes with numbered dots according "
-"to the following options:\n"
+msgstr "This extension replaces the selection's nodes with numbered dots according to the following options:\n"
 "    * Font size: size of the node number labels (20px, 12pt...).\n"
 "    * Dot size: diameter of the dots placed at path nodes (10px, 2mm...).\n"
-"    * Starting dot number: first number in the sequence, assigned to the "
-"first node of the path.\n"
+"    * Starting dot number: first number in the sequence, assigned to the first node of the path.\n"
 "    * Step: numbering step between two nodes."
 
 #: ../share/extensions/path_to_absolute.inx:3
@@ -39181,44 +39000,34 @@ msgid "Duplicate the pattern before deformation"
 msgstr "变形前再制图案"
 
 #: ../share/extensions/pathalongpath.inx:25
-#, fuzzy
 msgid ""
-"This extension bends a pattern along the curvature of selected path objects."
-msgstr "本扩展需要至少一个已选的路径。"
-
-#: ../share/extensions/pathalongpath.inx:26
-msgid ""
-"There must only be a single pattern object. The pattern object must be the "
-"topmost object in the selection. For the pattern, groups of paths, shapes or "
-"clones are allowed. Text must be converted to path before using it as a "
-"pattern."
-msgstr ""
-
-#: ../share/extensions/pathalongpath.inx:27
-msgid ""
-"The pattern can be bent along multiple paths at once, the only condition is "
-"that these must be path objects, no other object types are allowed."
+"This effect bends a pattern along arbitrary \"skeleton\" paths. The pattern "
+"is the topmost object in the selection, groups of paths, shapes or clones "
+"are allowed. Text can also be used as pattern, but has to be converted to "
+"path first. The other selected items are skeleton paths, and the pattern is "
+"applied to each of them"
 msgstr ""
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
-"There are two different deformation modes. \"Snake\" means that the pattern "
-"will rotate along with the path direction. With \"Ribbon\", the pattern will "
-"stay upright, so the result will look like a printed ribbon."
-msgstr ""
-
-#: ../share/extensions/pathalongpath.inx:30
-msgid ""
-"The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
-"applying it to the path."
+"There are two different deformation modes. With \"Snake\", vertical lines "
+"will be perpendicular to the skeleton and horizontal lines will be parallel "
+"(angles are preserved before stretching for paths with high node density). "
+"With \"Ribbon\", vertical lines will remain vertical (lengths are preserved)."
 msgstr ""
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
-"If your paths have sharp bends that the pattern is supposed to follow, the "
-"result may not look as you expected. This is because the extension cannot "
-"add any new nodes to your pattern objects. To avoid this, either add more "
-"nodes to your pattern objects, or convert all segments to curves beforehand."
+"The \"vertical\" option switches the role of horizontal and vertical lines "
+"in the deformation mode."
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx:34
+msgid ""
+"Note that the extension does not add additional nodes to the pattern paths. "
+"For high curvature, the result in may therefore look aesthetically "
+"unpleasing. To avoid this, either add addition nodes manually, or convert "
+"all segments to curves beforehand."
 msgstr ""
 
 #: ../share/extensions/pathscatter.inx:8
@@ -39271,12 +39080,9 @@ msgstr "连续"
 
 #: ../share/extensions/pathscatter.inx:26
 msgid ""
-"This extension drops copies of a pattern object along one or more paths "
-"without deforming it. The pattern object must be a single path or a group of "
-"paths, shapes or clones. It must be the topmost object in the selection. All "
-"other selected objects must be paths. You can also put a set of different "
-"objects (alternating or randomly) on the path, if you select the option for "
-"picking group members."
+"This effect scatters a pattern along arbitrary \"skeleton\" paths. The "
+"pattern is the topmost object in the selection; groups of paths, shapes, "
+"clones are allowed. The other selected objects form the skeleton paths."
 msgstr ""
 
 #
@@ -41619,8 +41425,7 @@ msgstr "该效果添加的特征仅在兼容 SVG 的浏览器 (例如 Firefox)�
 msgid ""
 "This effect sets one or more attributes in the second selected element, when "
 "a defined event occurs on the first selected element."
-msgstr ""
-"当第一个选中对象上发生指定事件时,该效果设置第二个选择对象的一个或多个属性."
+msgstr "当第一个选中对象上发生指定事件时,该效果设置第二个选择对象的一个或多个属性."
 
 #: ../share/extensions/web_set_att.inx:36
 msgid ""
@@ -41661,8 +41466,7 @@ msgstr "第一个选择对象传递到其他"
 msgid ""
 "This effect transmits one or more attributes from the first selected element "
 "to the second when an event occurs."
-msgstr ""
-"当第一个选中对象上发生指定事件时,该效果设置第二个选择对象的一个或多个属性."
+msgstr "当第一个选中对象上发生指定事件时,该效果设置第二个选择对象的一个或多个属性."
 
 #: ../share/extensions/web_transmit_att.inx:34
 msgid ""
@@ -44259,6 +44063,9 @@ msgstr ""
 #~ "(dxfpoint) or clear point sign."
 #~ msgstr ""
 #~ "未选择内容。请选择一些内容用于转换为钻尖点(dxfpoint)或者清理点标志。"
+
+#~ msgid "This extension requires at least one selected path."
+#~ msgstr "本扩展需要至少一个已选的路径。"
 
 #~ msgid "Tool diameter must be > 0 but tool's diameter on '%s' layer is not!"
 #~ msgstr "工具直径必须 > 0 但是在“%s”层上的工具直径不是！"
