@@ -55,7 +55,6 @@ public:
     void toMirror(Geom::Affine transform);
     void cloneD(SPObject *orig, SPObject *dest);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
-    void resetStyles();
     void centerVert();
     void centerHoriz();
     BoolParam split_items;
@@ -70,6 +69,7 @@ private:
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
     BoolParam split_open;
+    BoolParam link_styles;
     PointParam start_point;
     PointParam end_point;
     PointParam center_point;

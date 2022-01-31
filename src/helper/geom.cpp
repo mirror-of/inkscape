@@ -430,6 +430,21 @@ geom_curve_bbox_wind_distance(Geom::Curve const & c, Geom::Affine const &m,
     }
 }
 
+bool 
+pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3)
+{
+    //http://totologic.blogspot.com.es/2014/01/accurate-point-in-triangle-test.html
+    using Geom::X;
+    using Geom::Y;
+    double denominator = (p1[X]*(p2[Y] - p3[Y]) + p1[Y]*(p3[X] - p2[X]) + p2[X]*p3[Y] - p2[Y]*p3[X]);
+    double t1 = (p[X]*(p3[Y] - p1[Y]) + p[Y]*(p1[X] - p3[X]) - p1[X]*p3[Y] + p1[Y]*p3[X]) / denominator;
+    double t2 = (p[X]*(p2[Y] - p1[Y]) + p[Y]*(p1[X] - p2[X]) - p1[X]*p2[Y] + p1[Y]*p2[X]) / -denominator;
+    double s = t1 + t2;
+
+    return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
+}
+
+
 /* Calculates...
    and returns ... in *wind and the distance to ... in *dist.
    Returns bounding box in *bbox if bbox!=NULL.

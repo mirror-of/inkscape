@@ -2625,6 +2625,12 @@ void InkscapePreferences::initPageBehavior()
     _page_cleanup.add_line( true, "", _cleanup_swatches, "",
                            _("Remove unused swatches when doing a document cleanup")); // tooltip
     this->AddPage(_page_cleanup, _("Cleanup"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLEANUP);
+
+    _page_lpe.add_group_header( _("Copy"));
+    _lpe_copy_mirroricons.init ( _("Use icons instead less checks on LPE copy"), "/live_effects/copy/mirroricons", true); // text label
+    _page_lpe.add_line( true, "", _lpe_copy_mirroricons, "",
+                           _("Use 16 icons instead 4 checks on LPE copy in mirror zone")); // tooltip
+    this->AddPage(_page_lpe, _("Live Path Effects (LPE)"), iter_behavior, PREFS_PAGE_BEHAVIOR_LPE);
 }
 
 void InkscapePreferences::initPageRendering()

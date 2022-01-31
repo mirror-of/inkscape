@@ -49,20 +49,6 @@ static const Util::EnumData<RotateMethod> RotateMethodData[RM_END] = {
 static const Util::EnumDataConverter<RotateMethod>
 RMConverter(RotateMethodData, RM_END);
 
-bool 
-pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3)
-{
-    //http://totologic.blogspot.com.es/2014/01/accurate-point-in-triangle-test.html
-    using Geom::X;
-    using Geom::Y;
-    double denominator = (p1[X]*(p2[Y] - p3[Y]) + p1[Y]*(p3[X] - p2[X]) + p2[X]*p3[Y] - p2[Y]*p3[X]);
-    double t1 = (p[X]*(p3[Y] - p1[Y]) + p[Y]*(p1[X] - p3[X]) - p1[X]*p3[Y] + p1[Y]*p3[X]) / denominator;
-    double t2 = (p[X]*(p2[Y] - p1[Y]) + p[Y]*(p1[X] - p2[X]) - p1[X]*p2[Y] + p1[Y]*p2[X]) / -denominator;
-    double s = t1 + t2;
-
-    return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
-}
-
 LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     // do not change name of this parameter us used in oncommit
@@ -77,6 +63,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     copies_to_360(_("Distribute evenly"), _("Angle between copies is 360°/number of copies (ignores rotation angle setting)"), "copies_to_360", &wr, this, true),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, so each can have its own style"), "split_items", &wr, this, false),
+    link_styles(_("Link styles"), _("Link styles on split mode"), "link_styles", &wr, this, false),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
@@ -99,6 +86,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&copies_to_360);
     registerParameter(&mirror_copies);
     registerParameter(&split_items);
+    registerParameter(&link_styles);
     gap.param_set_range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
     gap.param_set_increments(0.01, 0.01);
     gap.param_set_digits(5);
@@ -110,7 +98,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     previous_origin = Geom::Point(0,0);
     previous_start_point = Geom::Point(0,0);
     starting_point.param_widget_is_visible(false);
-    reset = false;
+    reset = link_styles;
 }
 
 LPECopyRotate::~LPECopyRotate()
@@ -229,7 +217,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
             lpesatellites.start_listening();
             lpesatellites.update_satellites(!connected);
         }
-        reset = false;
+        reset = link_styles;
     }
     previous_split = split_items;
 }
@@ -379,7 +367,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset, bool &write)
     }
     cloneD(sp_lpe_item, elemref, transform);
     elemref->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
-    reset = false;
+    reset = link_styles;
     // allow use on clones even in diferent parent
     /* if (elemref->parent != container) {
         if (!creation) {
@@ -395,12 +383,6 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset, bool &write)
         write = true;
         lpesatellites.link(elemref, i);
     }
-}
-
-void
-LPECopyRotate::resetStyles(){
-    reset = true;
-    doAfterEffect(sp_lpe_item, nullptr);
 }
 
 Gtk::Widget * LPECopyRotate::newWidget()
@@ -431,12 +413,6 @@ Gtk::Widget * LPECopyRotate::newWidget()
 
         ++it;
     }
-    Gtk::Box * hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
-    Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset styles"))));
-    reset_button->signal_clicked().connect(sigc::mem_fun (*this,&LPECopyRotate::resetStyles));
-    reset_button->set_size_request(110, 20);
-    vbox->pack_start(*hbox, true, true, 2);
-    hbox->pack_start(*reset_button, false, false, 2);
     if(Gtk::Widget* widg = defaultParamSet()) {
         vbox->pack_start(*widg, true, true, 2);
     }
@@ -466,7 +442,10 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if (!split_items && lpesatellites.data().size()) {
         processObjects(LPE_ERASE);
     }
-    if (!lpesatellites.data().size()) {
+    if (link_styles) {
+        reset = true;
+    }
+    if (split_items && !lpesatellites.data().size()) {
         lpesatellites.read_from_SVG();
         if (lpesatellites.data().size()) {
             lpesatellites.update_satellites();

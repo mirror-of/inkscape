@@ -94,6 +94,7 @@ enum {
     PREFS_PAGE_BEHAVIOR_MASKS,
     PREFS_PAGE_BEHAVIOR_MARKERS,
     PREFS_PAGE_BEHAVIOR_CLEANUP,
+    PREFS_PAGE_BEHAVIOR_LPE,
     PREFS_PAGE_IO,
     PREFS_PAGE_IO_MOUSE,
     PREFS_PAGE_IO_SVGOUTPUT,
@@ -194,6 +195,7 @@ protected:
     UI::Widget::DialogPage _page_mask;
     UI::Widget::DialogPage _page_markers;
     UI::Widget::DialogPage _page_cleanup;
+    UI::Widget::DialogPage _page_lpe;
 
     UI::Widget::DialogPage _page_io;
     UI::Widget::DialogPage _page_mouse;
@@ -375,6 +377,8 @@ protected:
     UI::Widget::PrefCheckButton _markers_color_update;
 
     UI::Widget::PrefCheckButton _cleanup_swatches;
+
+    UI::Widget::PrefCheckButton _lpe_copy_mirroricons;
 
     UI::Widget::PrefSpinButton  _importexport_export_res;
     UI::Widget::PrefSpinButton  _importexport_import_res;

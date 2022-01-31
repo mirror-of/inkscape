@@ -56,7 +56,6 @@ public:
     void toItem(Geom::Affine transform, size_t i, bool reset, bool &write);
     void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
-    void resetStyles();
     //virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
     BoolParam split_items;
 protected:
@@ -73,6 +72,7 @@ private:
     ScalarParam gap;
     BoolParam copies_to_360;
     BoolParam mirror_copies;
+    BoolParam link_styles;
     Geom::Point A;
     Geom::Point B;
     Geom::Point dir;

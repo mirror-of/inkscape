@@ -58,6 +58,7 @@ enum EffectType {
     DASHED_STROKE,
     BOOL_OP,
     SLICE,
+    COPY,
     // PUT NEW LPE BEFORE EXPERIMENTAL IN THE SAME ORDER AS IN effect.cpp
     // Visible Experimental LPE's
     ANGLE_BISECTOR,

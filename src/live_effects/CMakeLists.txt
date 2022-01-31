@@ -13,6 +13,7 @@ set(live_effects_SRC
 	lpe-circle_with_radius.cpp
 	lpe-clone-original.cpp
 	lpe-constructgrid.cpp
+	lpe-copy.cpp
 	lpe-copy_rotate.cpp
 	lpe-curvestitch.cpp
 	lpe-dashed-stroke.cpp
@@ -108,6 +109,7 @@ set(live_effects_SRC
 	lpe-circle_with_radius.h
 	lpe-clone-original.h
 	lpe-constructgrid.h
+	lpe-copy.h
 	lpe-copy_rotate.h
 	lpe-curvestitch.h
 	lpe-dashed-stroke.h

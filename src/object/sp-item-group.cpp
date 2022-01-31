@@ -980,7 +980,6 @@ void SPGroup::update_patheffect(bool write) {
     g_message("sp_group_update_patheffect: %p\n", lpeitem);
 #endif
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
-
     for (auto sub_item : item_list) {
         if (sub_item) {
             // not need lpe version < 1 (issue only relpy on lower LPE on nested LPEs

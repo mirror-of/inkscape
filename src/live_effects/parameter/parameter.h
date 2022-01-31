@@ -101,7 +101,6 @@ class Parameter {
   protected:
       Inkscape::Display::TemporaryItem *ownerlocator = nullptr;
       Effect *param_effect;
-      /* friend class LPECopyRotate; */
       void param_write_to_repr(const char *svgd);
 };
 

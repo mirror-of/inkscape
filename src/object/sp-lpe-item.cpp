@@ -28,6 +28,7 @@
 #include "live_effects/lpe-bool.h"
 #include "live_effects/lpe-clone-original.h"
 #include "live_effects/lpe-copy_rotate.h"
+#include "live_effects/lpe-copy.h"
 #include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-measure-segments.h"
 #include "live_effects/lpe-slice.h"
@@ -352,7 +353,8 @@ bool SPLPEItem::optimizeTransforms()
                     dynamic_cast<Inkscape::LivePathEffect::LPESlice *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPEBool *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe)) {
+                    dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe) ||
+                    dynamic_cast<Inkscape::LivePathEffect::LPECopy *>(lpe)) {
                     return false;
                 }
             }

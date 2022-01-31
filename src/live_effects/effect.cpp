@@ -32,6 +32,7 @@
 #include "live_effects/lpe-clone-original.h"
 #include "live_effects/lpe-constructgrid.h"
 #include "live_effects/lpe-copy_rotate.h"
+#include "live_effects/lpe-copy.h"
 #include "live_effects/lpe-curvestitch.h"
 #include "live_effects/lpe-dashed-stroke.h"
 #include "live_effects/lpe-dynastroke.h"
@@ -636,6 +637,20 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//on_text
         false ,//experimental
     },
+    /* 1.2 */
+    {
+        COPY,
+        NC_("path effect", "Copies") ,//label
+        "copy" ,//key
+        "copy" ,//icon
+        N_("Create multiple copies of an object. The copies can be styled independently.") ,//description
+        true  ,//on_path
+        true  ,//on_shape
+        true  ,//on_group
+        false ,//on_image
+        false ,//on_text
+        false ,//experimental
+    },
     // VISIBLE experimental LPE
     {
         ANGLE_BISECTOR,
@@ -1024,6 +1039,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case SLICE:
             neweffect = static_cast<Effect *>(new LPESlice(lpeobj));
+            break;
+        case COPY:
+            neweffect = static_cast<Effect*> ( new LPECopy(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
