@@ -61,7 +61,8 @@ public:
     InkFileExportCmd *file_export() { return &_file_export; }
     int on_handle_local_options(const Glib::RefPtr<Glib::VariantDict> &options);
     void on_new();
-    void on_quit();
+    void on_quit(); // Check for data loss.
+    void on_quit_immediate(); // Don't check for data loss.
 
     // Gio::Actions need to know what document, selection, view to work on.
     // In headless mode, these are set for each file processed.

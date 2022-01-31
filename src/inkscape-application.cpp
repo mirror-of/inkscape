@@ -1000,6 +1000,11 @@ InkscapeApplication::on_activate()
 
     // Process document (command line actions, shell, create window)
     process_document (document, output);
+
+    if (_batch_process) {
+        // If with_gui, we've reused a window for each file. We must quit to destroy it.
+        gio_app()->quit();
+    }
 }
 
 // Open document window for each file. Either this or on_activate() is called.
@@ -1584,6 +1589,15 @@ InkscapeApplication::on_quit()
         }
     }
 
+    gio_app()->quit();
+}
+
+/*
+ * Quit without checking for data loss.
+ */
+void
+InkscapeApplication::on_quit_immediate()
+{
     gio_app()->quit();
 }
 

@@ -194,7 +194,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_base =
     {"app.user-data-directory",       N_("User Directory"),          "Base",       N_("Print user data directory and exit")                },
     {"app.action-list",               N_("List Actions"),            "Base",       N_("Print a list of actions and exit")                  },
     {"app.vacuum-defs",               N_("Clean up Document"),       "Base",       N_("Remove unused definitions (gradients, etc.)")       },
-    {"app.quit",                      N_("Quit"),                    "Base",       N_("Immediately quit Inkscape")                         },
+    {"app.quit",                      N_("Quit"),                    "Base",       N_("Quit Inkscape, check for data loss")                },
+    {"app.quit-immediate",            N_("Quit Immediately"),        "Base",       N_("Immediately quit Inkscape, no check for data loss") },
 
     {"app.open-page",                 N_("Import Page Number"),      "Import",     N_("Select PDF page number to import")                  },
     {"app.convert-dpi-method",        N_("Import DPI Method"),       "Import",     N_("Set DPI conversion method for legacy Inkscape files")},
@@ -222,6 +223,7 @@ add_actions_base(InkscapeApplication* app)
     gapp->add_action(               "action-list",        sigc::mem_fun(app, &InkscapeApplication::print_action_list)                             );
     gapp->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
     gapp->add_action(               "quit",               sigc::mem_fun(app, &InkscapeApplication::on_quit)                                       );
+    gapp->add_action(               "quit-immediate",     sigc::mem_fun(app, &InkscapeApplication::on_quit_immediate)                             );
 
     gapp->add_action_radio_integer( "open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
     gapp->add_action_radio_string(  "convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");
