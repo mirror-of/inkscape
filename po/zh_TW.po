@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-06-14 09:32+0800\n"
+"PO-Revision-Date: 2022-01-22 15:29+0800\n"
 "Last-Translator: Dongjun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -19,9 +19,8 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 
 #: ../share/filters/filters.svg.h:2
-#, fuzzy
 msgid "Fast Crop"
-msgstr "較快"
+msgstr "快速裁剪"
 
 #: ../share/filters/filters.svg.h:3 ../share/filters/filters.svg.h:527
 #: ../share/filters/filters.svg.h:531 ../share/filters/filters.svg.h:651
@@ -36,7 +35,7 @@ msgstr "填充和透明度"
 
 #: ../share/filters/filters.svg.h:4
 msgid "Does not filter but adds a filter region"
-msgstr ""
+msgstr "不要有濾鏡效果但加入濾鏡區域"
 
 #: ../share/filters/filters.svg.h:6
 msgid "Smart Jelly"
@@ -4033,14 +4032,12 @@ msgid "Print Inkscape version and exit"
 msgstr "印出 Inkscape 版本後結束"
 
 #: ../src/actions/actions-base.cpp:231
-#, fuzzy
 msgid "Debug Info"
-msgstr "文件資訊"
+msgstr "程式除錯資訊"
 
 #: ../src/actions/actions-base.cpp:231
-#, fuzzy
 msgid "Print debugging information and exit"
-msgstr "列出動作清單後結束"
+msgstr "印出程式除錯資訊並離開"
 
 #: ../src/actions/actions-base.cpp:232
 msgid "System Directory"
@@ -5460,6 +5457,8 @@ msgid ""
 "Selected objects require IDs.\n"
 "The following IDs have been assigned:\n"
 msgstr ""
+"選取的物件需要識別碼。\n"
+"下面的識別碼已被指派：\n"
 
 #: ../src/event-log.cpp:186
 msgid "[Unchanged]"
@@ -9506,9 +9505,8 @@ msgid "Print Inkscape version"
 msgstr "印出 Inkscape 版本"
 
 #: ../src/inkscape-application.cpp:618
-#, fuzzy
 msgid "Print debugging information"
-msgstr "顯示除錯資訊"
+msgstr "顯示程式除錯資訊"
 
 #: ../src/inkscape-application.cpp:619
 msgid "Print system data directory"
@@ -15065,9 +15063,8 @@ msgid "Group to symbol"
 msgstr "群組轉成符號"
 
 #: ../src/selection-chemistry.cpp:3366
-#, fuzzy
 msgid "Remove symbol for editing"
-msgstr "將符號轉換成群組進行編輯"
+msgstr "編輯時移除符號"
 
 #: ../src/selection-chemistry.cpp:3380
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -15261,40 +15258,34 @@ msgid "Stamp"
 msgstr "圖章"
 
 #: ../src/seltrans.cpp:662
-#, fuzzy
 msgid ""
 "<b>Scale</b> selection; with <b>%1</b> to scale uniformly; with <b>%2</b> to "
 "scale around rotation center"
 msgstr ""
-"<b>縮放</b>選取區；按著 <b>Ctrl</b> 可均勻縮放；按著 <b>Shift</b> 可從旋轉中"
-"心四周縮放"
+"<b>縮放</b>選取區；按著 <b>％1</b> 可均勻縮放；按著 <b>％2</b> 可從旋轉中心四"
+"周縮放"
 
 #: ../src/seltrans.cpp:668
-#, fuzzy
 msgid ""
 "<b>Skew</b> selection; with <b>%1</b> to snap angle; with <b>%2</b> to skew "
 "around the opposite side"
 msgstr ""
-"<b>傾斜</b>選取區；按著 <b>Ctrl</b> 可貼齊角度；按著 <b>Shift</b> 可繞著對邊"
-"傾斜"
+"<b>傾斜</b>選取區；按著 <b>％1</b> 可貼齊角度；按著 <b>％2</b> 可繞著對邊傾斜"
 
 #: ../src/seltrans.cpp:674
-#, fuzzy
 msgid ""
 "<b>Rotate</b> selection; with <b>%1</b> to snap angle; with <b>%2</b> to "
 "rotate around the opposite corner"
 msgstr ""
-"<b>旋轉</b>選取區；按著 <b>Ctrl</b> 可貼齊角度；按著 <b>Shift</b> 可繞著對角"
-"旋轉"
+"<b>旋轉</b>選取區；按著 <b>％1</b> 可貼齊角度；按著 <b>％2</b> 可繞著對角旋轉"
 
 #: ../src/seltrans.cpp:680
-#, fuzzy
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with %1 "
 "also uses this center"
 msgstr ""
-"旋轉和傾斜的<b>中心點</b>：拖曳可變更位置；按著 Shift 縮放物件時也使用這個中"
-"心點"
+"旋轉和傾斜的<b>中心點</b>：拖曳可變更位置；按著 ％1 縮放物件時也使用這個中心"
+"點"
 
 #: ../src/seltrans.cpp:686
 msgid ""
@@ -15503,7 +15494,7 @@ msgstr "沒有複製任何東西。"
 
 #: ../src/ui/clipboard.cpp:451
 msgid "Can't paste text outside of the text tool."
-msgstr ""
+msgstr "不使用文字工具時不要貼上文字。"
 
 #: ../src/ui/clipboard.cpp:454 ../src/ui/clipboard.cpp:730
 #: ../src/ui/clipboard.cpp:758 ../src/ui/clipboard.cpp:799
@@ -20857,7 +20848,6 @@ msgid "Use default base color for icons"
 msgstr "使用圖示的預設基色"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1692
-#, fuzzy
 msgid "Use default highlight colors for icons"
 msgstr "使用圖示的預設突顯色"
 
@@ -22811,13 +22801,12 @@ msgid "Misc"
 msgstr "其他"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3181
-#, fuzzy
 msgid "Actions"
-msgstr "動作："
+msgstr "動作"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3200 ../src/ui/shortcuts.cpp:775
 msgid "Numpad"
-msgstr ""
+msgstr "數字鍵"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3299
 msgid "Ignore words with digits"
@@ -23986,7 +23975,7 @@ msgstr "開始(_S)"
 
 #: ../src/ui/dialog/spellcheck.cpp:115
 msgid "No dictionaries installed"
-msgstr ""
+msgstr "未安裝字典"
 
 #: ../src/ui/dialog/spellcheck.cpp:126
 msgid "Suggestions:"
@@ -24063,9 +24052,8 @@ msgid "This value is commented out."
 msgstr "這個數值已註解掉。"
 
 #: ../src/ui/dialog/styledialog.cpp:969
-#, fuzzy
 msgid "Current value"
-msgstr "目前圖層"
+msgstr "目前數值"
 
 #: ../src/ui/dialog/styledialog.cpp:971
 msgid "Used in %1"
@@ -32935,12 +32923,11 @@ msgstr "Inkscape 使用手冊"
 
 #: ../src/verbs.cpp:2925
 msgid "Donate"
-msgstr ""
+msgstr "贊助"
 
 #: ../src/verbs.cpp:2925
-#, fuzzy
 msgid "Donate to Inkscape"
-msgstr "關於 Inkscape"
+msgstr "贊助 Inkscape"
 
 #: ../src/verbs.cpp:2926 ../src/verbs.cpp:2927
 msgid "SVG 1.1 Specification"
@@ -33764,14 +33751,12 @@ msgid "Version Copied!"
 msgstr "已複製版本！"
 
 #: ../share/ui/inkscape-about.glade:372
-#, fuzzy
 msgid "Debug Info Copied!"
-msgstr "已複製版本！"
+msgstr "已複製程式除錯資訊！"
 
 #: ../share/ui/inkscape-about.glade:393
-#, fuzzy
 msgid "Click to copy debug info to the clipboard"
-msgstr "按一下複製版本號碼至剪貼簿"
+msgstr "按一下可複製程式除錯資訊至剪貼簿"
 
 #: ../share/ui/inkscape-start.glade:57 ../share/ui/inkscape-start.glade:1446
 msgid "Dark"
@@ -33963,11 +33948,11 @@ msgstr "桌面 SD"
 
 #: ../share/ui/inkscape-start.glade:500
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../share/ui/inkscape-start.glade:508
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../share/ui/inkscape-start.glade:516
 msgid "Mobile-smallest"
@@ -33975,7 +33960,7 @@ msgstr "行動裝置-最小尺寸"
 
 #: ../share/ui/inkscape-start.glade:524
 msgid "iPad Pro"
-msgstr ""
+msgstr "iPad Pro"
 
 #: ../share/ui/inkscape-start.glade:532
 msgid "Tablet-smallest"
@@ -34114,19 +34099,16 @@ msgid "Video UHD 8k"
 msgstr "影片 UHD 8k"
 
 #: ../share/ui/inkscape-start.glade:901
-#, fuzzy
 msgid "Classic Inkscape (default)"
-msgstr "Inkscape（預設）"
+msgstr "標準 Inkscape（預設）"
 
 #: ../share/ui/inkscape-start.glade:915
-#, fuzzy
 msgid "Classic Symbolic"
-msgstr "棋類符號"
+msgstr "標準符號"
 
 #: ../share/ui/inkscape-start.glade:929
-#, fuzzy
 msgid "Colorful"
-msgstr "顏色"
+msgstr "彩色"
 
 #: ../share/ui/inkscape-start.glade:943
 #: ../share/extensions/color_grayscale.inx:3
@@ -34139,7 +34121,6 @@ msgid "Compacted (Small Screens)"
 msgstr "簡潔式 (小螢幕)"
 
 #: ../share/ui/inkscape-start.glade:971
-#, fuzzy
 msgid "System Default"
 msgstr "系統預設"
 
@@ -34155,27 +34136,25 @@ msgstr "歡迎！"
 #. Not automatic, but will be turned into start-welcome-text.svg
 #: ../share/ui/inkscape-start.glade:1043
 msgid "Let's set up a few things..."
-msgstr ""
+msgstr "開始進行設定..."
 
 #: ../share/ui/inkscape-start.glade:1151
 msgid ""
 "<b>Warning:</b> Using a non-standard shortcut keyboard layout could make it "
 "harder to follow tutorials."
-msgstr ""
+msgstr "<b>警告：</b> 使用非標準快捷鍵鍵盤的排列會比較難隨著指導手冊練習。"
 
 #: ../share/ui/inkscape-start.glade:1210
-#, fuzzy
 msgid "Appearance"
-msgstr "出現"
+msgstr "外觀"
 
 #: ../share/ui/inkscape-start.glade:1411
 msgid "Select the default color background for the canvas"
 msgstr "選擇畫布的預設色彩背景"
 
 #: ../share/ui/inkscape-start.glade:1458
-#, fuzzy
 msgid "Set to dark theme"
-msgstr "使用暗色主題"
+msgstr "設定為暗色主題"
 
 #: ../share/ui/inkscape-start.glade:1557
 msgid "Quick Setup"
@@ -34260,9 +34239,8 @@ msgid "Show this every time"
 msgstr "每次都顯示"
 
 #: ../share/ui/inkscape-start.glade:2180
-#, fuzzy
 msgid "New Document"
-msgstr "新文件 %d"
+msgstr "新增文件"
 
 #: ../share/ui/inkscape-start.glade:2211
 msgid "Time to Draw"
@@ -34447,11 +34425,11 @@ msgid ""
 msgstr "{} 現在為 svg 中的字典。請使用 `self.svg.selected`。"
 
 #: ../share/extensions/inkex/deprecated.py:137
-#, fuzzy
 msgid ""
 "{} is now a method in the SvgDocumentElement class. Use `self.svg.get_ids()` "
 "instead."
-msgstr "{} 現在為 svg 文件中的方法。請改用 `self.svg.get_ids()`。"
+msgstr ""
+"{} 現在為 SvgDocumentElement 類別中的方法。請改用 `self.svg.get_ids()`。"
 
 #: ../share/extensions/inkex/deprecated.py:144
 msgid "Use `self.svg.get_ids()` instead of {} and `doc_ids`."
@@ -34849,28 +34827,24 @@ msgid "Please enter a replacement font in the replace all box."
 msgstr "請在全部取代欄位中輸入取代字型。"
 
 #: ../share/extensions/setup_typography_canvas.py:67
-#, fuzzy
 msgid "baseline"
 msgstr "文字基線"
 
 #: ../share/extensions/setup_typography_canvas.py:68
-#, fuzzy
 msgid "ascender"
-msgstr "上緣："
+msgstr "上緣"
 
 #: ../share/extensions/setup_typography_canvas.py:69
 msgid "caps"
-msgstr ""
+msgstr "大寫"
 
 #: ../share/extensions/setup_typography_canvas.py:70
-#, fuzzy
 msgid "xheight"
 msgstr "x 高度"
 
 #: ../share/extensions/setup_typography_canvas.py:71
-#, fuzzy
 msgid "descender"
-msgstr "下緣："
+msgstr "下緣"
 
 #: ../share/extensions/voronoi2svg.py:153
 msgid "Please select objects!"
@@ -35699,9 +35673,8 @@ msgid "Exports the colors of this document as GIMP Palette"
 msgstr "將此檔案的顏色匯出成 GIMP 調色盤"
 
 #: ../share/extensions/extension-manager-bootstrap.inx:3
-#, fuzzy
 msgid "Manage Extensions"
-msgstr "管理擴充功能..."
+msgstr "管理擴充功能"
 
 #: ../share/extensions/extrude.inx:6
 msgid "Lines"
@@ -37259,46 +37232,39 @@ msgid "Font face:"
 msgstr "字型面："
 
 #: ../share/extensions/hershey.inx:21
-#, fuzzy
 msgctxt "Font name"
 msgid "Hershey Sans 1-stroke"
-msgstr "Hershey 無襯線 1-筆劃"
+msgstr "[字型名稱] Hershey 無襯線 1-筆劃"
 
 #: ../share/extensions/hershey.inx:25
-#, fuzzy
 msgctxt "Font name"
 msgid "Hershey Serif medium italic"
-msgstr "Hershey 襯線中號斜體"
+msgstr "[字型名稱] Hershey 襯線中號斜體"
 
 #: ../share/extensions/hershey.inx:27
-#, fuzzy
 msgctxt "Font name"
 msgid "Hershey Serif bold"
-msgstr "Hershey 襯線粗體"
+msgstr "[字型名稱] Hershey 襯線粗體"
 
 #: ../share/extensions/hershey.inx:28
-#, fuzzy
 msgctxt "Font name"
 msgid "Hershey Serif bold italic"
-msgstr "Hershey 襯線粗斜體"
+msgstr "[字型名稱] Hershey 襯線粗斜體"
 
 #: ../share/extensions/hershey.inx:30
-#, fuzzy
 msgctxt "Font name"
 msgid "Hershey Script 1-stroke"
-msgstr "Hershey 書寫體 1-筆劃"
+msgstr "[字型名稱] Hershey 書寫體 1-筆劃"
 
 #: ../share/extensions/hershey.inx:31
-#, fuzzy
 msgctxt "Font name"
 msgid "Hershey Script medium"
-msgstr "Hershey 書寫體中號"
+msgstr "[字型名稱] Hershey 書寫體中號"
 
 #: ../share/extensions/hershey.inx:46
-#, fuzzy
 msgctxt "Font name"
 msgid "EMS Readability Italic"
-msgstr "EMS 易讀斜體"
+msgstr "[字型名稱] EMS 易讀斜體"
 
 #. Block above this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:50
@@ -39605,7 +39571,7 @@ msgstr "蜿蜒"
 
 #: ../share/extensions/pathalongpath.inx:16
 msgid "Ribbon"
-msgstr "緞帶"
+msgstr "帶狀"
 
 #: ../share/extensions/pathalongpath.inx:18
 #: ../share/extensions/pathscatter.inx:10
@@ -39631,27 +39597,27 @@ msgid "Duplicate the pattern before deformation"
 msgstr "變形前再製圖樣"
 
 #: ../share/extensions/pathalongpath.inx:25
-#, fuzzy
 msgid ""
 "This extension bends a pattern along the curvature of selected path objects."
-msgstr "此擴充功能至少要選擇一個路徑。"
+msgstr "此擴充功能會讓圖案沿著選取路徑物件的曲線彎曲。"
 
 #: ../share/extensions/pathalongpath.inx:26
-#, fuzzy
 msgid ""
 "There must only be a single pattern object. The pattern object must be the "
 "topmost object in the selection. For the pattern, groups of paths, shapes or "
 "clones are allowed. Text must be converted to path before using it as a "
 "pattern."
 msgstr ""
-"這個特效可沿著任意「骨架」路徑散佈圖案。圖案必須在選取區的最上層。可以是路"
-"徑、形狀、仿製物件的群組。"
+"只能有單一圖案物件。圖案物件必須在選取範圍的最上層，圖案可以是路徑群組、形狀"
+"或仿製物件。文字必須先轉成路徑才能作為圖案使用。"
 
 #: ../share/extensions/pathalongpath.inx:27
 msgid ""
 "The pattern can be bent along multiple paths at once, the only condition is "
 "that these must be path objects, no other object types are allowed."
 msgstr ""
+"圖案可以一次沿著多個路徑彎曲，唯一的條件是這些都是路徑物件，不能是其他類型的"
+"物件。"
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
@@ -39659,12 +39625,14 @@ msgid ""
 "will rotate along with the path direction. With \"Ribbon\", the pattern will "
 "stay upright, so the result will look like a printed ribbon."
 msgstr ""
+"有兩種變形模式。「蜿蜒」模式表示圖案會隨著路徑的方向旋轉。而「帶狀」模式圖案"
+"則會維持直立，所以效果會像列印的色帶。"
 
 #: ../share/extensions/pathalongpath.inx:30
 msgid ""
 "The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
 "applying it to the path."
-msgstr ""
+msgstr "選項「垂直圖案」會在套用到路徑前旋轉 90 度。"
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
@@ -39673,6 +39641,9 @@ msgid ""
 "add any new nodes to your pattern objects. To avoid this, either add more "
 "nodes to your pattern objects, or convert all segments to curves beforehand."
 msgstr ""
+"如果你要隨著彎曲的物件有銳利彎曲面，那效果可能會不如你預期。這是因為擴充程式"
+"不會加入任何新節點到你的圖案物件。要避免這種情形，可以讓圖案物件加入更多的節"
+"點，或事先將全部線段轉成曲線。"
 
 #: ../share/extensions/pathscatter.inx:8
 msgid "Follow path orientation"
@@ -39683,9 +39654,8 @@ msgid "Stretch spaces to fit skeleton length"
 msgstr "伸展間距以符合骨架長度"
 
 #: ../share/extensions/pathscatter.inx:13
-#, fuzzy
 msgid "Rotate pattern 90° clockwise"
-msgstr "將選取區順時針旋轉 90°"
+msgstr "順時針旋轉圖案 90°"
 
 #: ../share/extensions/pathscatter.inx:14
 msgid "Original pattern will be:"
@@ -39696,7 +39666,6 @@ msgid "Moved"
 msgstr "移動"
 
 #: ../share/extensions/pathscatter.inx:16
-#, fuzzy
 msgid "Duplicated"
 msgstr "再製"
 
@@ -39710,7 +39679,7 @@ msgstr "若圖樣是一個群組，請挑選群組成員"
 
 #: ../share/extensions/pathscatter.inx:19
 msgid "Only for options 'moved' and 'duplicated'"
-msgstr ""
+msgstr "僅適用「移動」和「再製」選項"
 
 #: ../share/extensions/pathscatter.inx:20
 msgid "Pick group members:"
@@ -39733,6 +39702,10 @@ msgid ""
 "objects (alternating or randomly) on the path, if you select the option for "
 "picking group members."
 msgstr ""
+"此擴充程式會沿著單一或多個路徑在不變形的情形下擺放圖案物件的副本。圖案物件必"
+"須是單一路徑或路徑群組、形狀、仿製物件。必須在選取範圍的最上層。全部其他選取"
+"的物件必須是路徑。如果你啟用拾取群組成員的選項，也可以在路徑上擺放一整組的不"
+"同物件 (交錯或隨機)。"
 
 #: ../share/extensions/pdflatex.inx:3
 msgid "LaTeX (pdflatex)"
@@ -39882,7 +39855,6 @@ msgid "Parallel port:"
 msgstr "平行連接埠："
 
 #: ../share/extensions/plotter.inx:14
-#, fuzzy
 msgid ""
 "The port of your parallel connection, on Windows not currently supported, on "
 "Linux something like: '/dev/usb/lp2' (default: /dev/usb/lp2)"
@@ -39895,12 +39867,11 @@ msgid "Serial port:"
 msgstr "序列連接埠："
 
 #: ../share/extensions/plotter.inx:15
-#, fuzzy
 msgid ""
 "The port of your serial connection, on Windows something like 'COM1', on "
 "Linux something like: '/dev/ttyUSB0' (default: COM1)"
 msgstr ""
-"你的序列連接埠，Windows 系統上格式為「COM1」之類的，Linux 系統上則像「/dev/"
+"你的序列連接埠，Windows 系統上為「COM1」之類的，Linux 系統上則像「/dev/"
 "ttyUSB0」(預設:「COM1」)"
 
 #: ../share/extensions/plotter.inx:16
@@ -39908,7 +39879,6 @@ msgid "Serial baud rate:"
 msgstr "序列連線鮑率："
 
 #: ../share/extensions/plotter.inx:16
-#, fuzzy
 msgid "The Baud rate of your serial connection (default: 9600)"
 msgstr "你的序列連線鮑率 (預設:「9600」)"
 
@@ -39917,7 +39887,6 @@ msgid "Serial byte size:"
 msgstr "序列位元組大小："
 
 #: ../share/extensions/plotter.inx:33
-#, fuzzy
 msgid ""
 "The Byte size of your serial connection, 99% of all plotters use the default "
 "setting (default: 8 Bits)"
@@ -39928,7 +39897,6 @@ msgid "Serial stop bits:"
 msgstr "序列停止位元："
 
 #: ../share/extensions/plotter.inx:39
-#, fuzzy
 msgid ""
 "The Stop bits of your serial connection, 99% of all plotters use the default "
 "setting (default: 1 Bit)"
@@ -39939,7 +39907,6 @@ msgid "Serial parity:"
 msgstr "序列奇偶性："
 
 #: ../share/extensions/plotter.inx:44
-#, fuzzy
 msgid ""
 "The Parity of your serial connection, 99% of all plotters use the default "
 "setting (default: None)"
@@ -39950,7 +39917,6 @@ msgid "Serial flow control:"
 msgstr "序列串流控制："
 
 #: ../share/extensions/plotter.inx:51
-#, fuzzy
 msgid ""
 "The software / hardware flow control of your serial connection (default: "
 "Software)"
@@ -39973,7 +39939,6 @@ msgid "Command language:"
 msgstr "指令語言："
 
 #: ../share/extensions/plotter.inx:57
-#, fuzzy
 msgid "The command language to use (default: HPGL)"
 msgstr "要使用的指令語言 (預設：HPGL)"
 
@@ -40010,37 +39975,33 @@ msgid "Parallel (LPT) connections are not supported."
 msgstr "不支援並聯連線 (LPT)。"
 
 #: ../share/extensions/plotter.inx:68
-#, fuzzy
 msgid ""
 "The number of steps the plotter moves when it moves by 1 inch on the X axis "
 "(default: 1016.0)"
-msgstr "若在 X 軸方向移動 1 英寸則繪圖機移動的步階數 (預設:「1016.0」)"
+msgstr "若在 X 軸方向移動 1 英寸則繪圖機移動的步階數 (預設: 1016.0)"
 
 #: ../share/extensions/plotter.inx:69
-#, fuzzy
 msgid ""
 "The number of steps the plotter moves when it moves by 1 inch on the Y axis "
 "(default: 1016.0)"
-msgstr "若在 Y 軸方向移動 1 英寸則繪圖機移動的步階數 (預設:「1016.0」)"
+msgstr "若在 Y 軸方向移動 1 英寸則繪圖機移動的步階數 (預設: 1016.0)"
 
 #: ../share/extensions/plotter.inx:70
-#, fuzzy
 msgid ""
 "The number of the pen (tool) to use (standard: '1'). Can also be defined in "
 "the layer name (e.g. 'Pen 1')"
-msgstr "要使用的筆號 (刀具) (標準:「1」) 也可以在圖層名稱中定義。如 (Pen 1)"
+msgstr ""
+"要使用的筆號 (刀具) (標準:「1」)。 也可以在圖層名稱中定義 (如「Pen 1」)"
 
 #: ../share/extensions/plotter.inx:71
-#, fuzzy
 msgid ""
 "The force pushing down the pen in grams. Set to 0 to omit command; most "
 "plotters ignore this command (default: 0)"
 msgstr ""
-"筆下壓的力道，單位為克重，設定為 0 表示省略指令；大多數的繪圖機會忽略該指令 "
-"(預設：0)"
+"筆下壓的力道，單位為克重，設定為 0 表示忽略指令；大多數的繪圖機會忽略該指令 "
+"(預設: 0)"
 
 #: ../share/extensions/plotter.inx:72
-#, fuzzy
 msgid ""
 "The speed the pen will move with in centimeters or millimeters per second "
 "(depending on your plotter model). Set to 0 to omit command. Most plotters "
@@ -40048,40 +40009,34 @@ msgid ""
 "with the pen number (e.g. 'Pen 3 Speed 10')."
 msgstr ""
 "筆移動的速度，單位為每秒多少公分或公釐 (取決於你的繪圖機)，設定為 0 表示省略"
-"指令。大多數的繪圖機會忽略該指令。(預設：0) 可以在圖層名稱中加上畫筆編號來定"
-"義。例如 (Pen 3 Speed 10)"
+"指令。大多數的繪圖機會忽略該指令 (預設：0)。可以在圖層名稱中加上畫筆編號來定"
+"義 (例如「Pen 3 Speed 10」)。"
 
 #: ../share/extensions/plotter.inx:73
 msgid "Rotation (°, clockwise):"
 msgstr "旋轉 (°, 順時針)："
 
 #: ../share/extensions/plotter.inx:73
-#, fuzzy
 msgid "Rotation of the drawing (default: 0°)"
 msgstr "圖畫的旋轉角度 (預設：0°)"
 
 #: ../share/extensions/plotter.inx:79
-#, fuzzy
 msgid "Check this to mirror the X axis (default: Unchecked)"
 msgstr "勾選此項可依照 X 軸鏡射 (預設：不勾選)"
 
 #: ../share/extensions/plotter.inx:80
-#, fuzzy
 msgid "Check this to mirror the Y axis (default: Unchecked)"
 msgstr "勾選此項可依照 Y 軸鏡射 (預設：不勾選)"
 
 #: ../share/extensions/plotter.inx:81
-#, fuzzy
 msgid "Center origin"
 msgstr "複製原本路徑"
 
 #: ../share/extensions/plotter.inx:81
-#, fuzzy
 msgid "Check this if your plotter uses a centered origin (default: Unchecked)"
 msgstr "若想要讓繪圖機將零點置中請勾選此項 (預設：不勾選)"
 
 #: ../share/extensions/plotter.inx:83
-#, fuzzy
 msgid ""
 "If you want to use multiple pens and speeds with your pen plotter, create "
 "one layer for each pen number and speed value, name the layers \"Pen 1 Speed "
@@ -40094,45 +40049,40 @@ msgstr ""
 "代上面的選項。"
 
 #: ../share/extensions/plotter.inx:86
-#, fuzzy
 msgid ""
 "The distance in mm that will be cut over the starting point of the path to "
 "prevent open paths. Set to 0.0 to omit command (default: 1.00)."
 msgstr ""
-"將會切割超過路徑起點多少距離以避免開放路徑，單位為公釐，設定為 0 表示省略指"
-"令 (預設:「1.00」)"
+"將會切割超過路徑起點多少距離以避免開放路徑，單位為公釐，設定為 0.0 表示忽略指"
+"令 (預設: 1.00)。"
 
 #: ../share/extensions/plotter.inx:87
-#, fuzzy
 msgid "Tool (knife) offset correction (mm):"
-msgstr "刀具偏移校正 (公釐)："
+msgstr "刀具 (刀) 偏移校正 (公釐)："
 
 #: ../share/extensions/plotter.inx:87
-#, fuzzy
 msgid ""
 "The offset from the tool tip to the tool axis in mm. Set to 0.0 to omit "
 "command (default: 0.25)."
 msgstr ""
-"刀具尖端到刀具軸的偏移，單位為公釐，設定為 0 表示省略指令 (預設:「0.25」)"
+"刀具尖端到刀具軸的偏移，單位為公釐，設定為 0.0 表示忽略指令 (預設: 0.25)。"
 
 #: ../share/extensions/plotter.inx:88
-#, fuzzy
 msgid ""
 "Check this to cut a small line to correctly align the tool orientation "
 "before the real drawing starts (default: Checked)."
-msgstr "勾選此項可於真正開始繪製前先切割細線以正確地對齊刀具方向。(預設：勾選)"
+msgstr ""
+"勾選此項可於真正開始繪製前先切割細線以正確地對齊刀具方向 (預設：勾選)。"
 
 #: ../share/extensions/plotter.inx:89
-#, fuzzy
 msgid ""
 "Curves are divided into lines. This number controls how fine the curves will "
 "be reproduced, the smaller the finer (default: 1.2)."
 msgstr ""
 "曲線要細分的線段數量，此數量會控制曲線重新產生的精細程度，數值愈小則愈精細 "
-"(預設:「1.2」)"
+"(預設: 1.2)。"
 
 #: ../share/extensions/plotter.inx:90
-#, fuzzy
 msgid ""
 "Check this to auto align the drawing to the origin (plus the tool offset if "
 "used). If unchecked, you have to make sure that all parts of your drawing "
@@ -40452,9 +40402,8 @@ msgid "Learn more details about JPEG:"
 msgstr "深入了解 JPEG 的資訊："
 
 #: ../share/extensions/raster_output_jpg.inx:16
-#, fuzzy
 msgid "https://inkscape.org/learn/jpg/"
-msgstr "https://inkscape.org/learn/jpeg/"
+msgstr "https://inkscape.org/learn/jpg/"
 
 #: ../share/extensions/raster_output_jpg.inx:22
 #: ../share/extensions/raster_output_tiff.inx:23
@@ -40469,18 +40418,16 @@ msgid "Quality between 0 and 100"
 msgstr "介於 0 到 100 的品質等級"
 
 #: ../share/extensions/raster_output_jpg.inx:26
-#, fuzzy
 msgid "Progressive"
-msgstr "積極："
+msgstr "積極"
 
 #: ../share/extensions/raster_output_jpg.inx:26
 msgid "Store image as a progressive JPEG file."
 msgstr "用積極式 JPEG 檔案儲存影像。"
 
 #: ../share/extensions/raster_output_jpg.inx:33
-#, fuzzy
 msgid "JPEG (*.jpg)"
-msgstr "JPEG (*.jpeg)"
+msgstr "JPEG (*.jpg)"
 
 #: ../share/extensions/raster_output_jpg.inx:34
 msgid "Render to JPEG file format"
@@ -40531,19 +40478,16 @@ msgid "Lossy Options"
 msgstr "有損選項"
 
 #: ../share/extensions/raster_output_png.inx:22
-#, fuzzy
 msgid "Allow bit depth reduction"
-msgstr "減少雜訊"
+msgstr "允許減少位元深度"
 
 #: ../share/extensions/raster_output_png.inx:23
-#, fuzzy
 msgid "Allow color type reduction"
-msgstr "減少色彩類型"
+msgstr "允許減少色彩類型"
 
 #: ../share/extensions/raster_output_png.inx:24
-#, fuzzy
 msgid "Allow palette reduction"
-msgstr "減少調色盤"
+msgstr "允許減少調色盤"
 
 #: ../share/extensions/raster_output_png.inx:31
 msgid "Optimized PNG (*.png)"
@@ -40576,7 +40520,7 @@ msgstr "群組 4"
 
 #: ../share/extensions/raster_output_tiff.inx:13
 msgid "JPEG"
-msgstr ""
+msgstr "JPEG"
 
 #: ../share/extensions/raster_output_tiff.inx:14
 msgid "Deflate"
@@ -40651,9 +40595,8 @@ msgid "WebP (*.webp)"
 msgstr "WebP (*.webp)"
 
 #: ../share/extensions/raster_output_webp.inx:32
-#, fuzzy
 msgid "Export to WebP file format."
-msgstr "匯出為 webp 檔案格式。"
+msgstr "匯出為 WebP 檔案格式。"
 
 #: ../share/extensions/render_alphabetsoup.inx:3
 msgid "Alphabet Soup"
@@ -41960,12 +41903,11 @@ msgid "element is loaded by browser"
 msgstr "瀏覽器已載入元素"
 
 #: ../share/extensions/web_interactive_mockup.inx:21
-#, fuzzy
 msgid ""
 "This extension allows you to create interactive elements in your drawing. "
 "These will react to user actions when the file is viewed in a web browser."
 msgstr ""
-"這個特效讓您可以在畫作中建立互動元素。用網頁瀏覽器檢視檔案時這些元素會根據使"
+"這個特效讓您可以在繪圖中建立互動元素。用網頁瀏覽器檢視檔案時這些元素會根據使"
 "用者的動作做出反應。"
 
 #: ../share/extensions/web_interactive_mockup.inx:22
