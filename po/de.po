@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2022-01-14 15:12+0000\n"
-"PO-Revision-Date: 2022-01-15 17:32+0100\n"
+"PO-Revision-Date: 2022-01-31 16:20+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -12631,7 +12631,7 @@ msgstr "Keine Pfeile zeichnen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 msgid "Multiply values < 1"
-msgstr "Werte &lt 1 multiplizieren"
+msgstr "Werte &lt; 1 multiplizieren"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 92
