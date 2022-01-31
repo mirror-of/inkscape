@@ -1603,7 +1603,7 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
     updateRepr();
 
     if (lpeitem && lpeitem->hasPathEffectRecursive()) {
-        sp_lpe_item_update_patheffect(lpeitem, false, false);
+        sp_lpe_item_update_patheffect(lpeitem, true, false);
     }
 
     // send the relative transform with a _transformed_signal

@@ -1385,8 +1385,6 @@ SPDocument::idle_handler()
     if (!status) {
         modified_connection.disconnect();
     }
-    // this hack prevent update LPE items on load documents with stylesheet
-    stylesheetchg = false;
     return status;
 }
 

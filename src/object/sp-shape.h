@@ -56,7 +56,7 @@ public:
     void setCurveBeforeLPE(SPCurve const *new_curve);
     void setCurveBeforeLPE(std::unique_ptr<SPCurve> &&);
     bool checkBrokenPathEffect();
-    bool prepareShapeForLPE(SPCurve const *c, bool is_rect = false);
+    bool prepareShapeForLPE(SPCurve const *c);
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
 

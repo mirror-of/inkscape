@@ -490,7 +490,7 @@ bool SPShape::checkBrokenPathEffect()
 /* Reset the shape's curve to the "original_curve"
  *  This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
 
-bool SPShape::prepareShapeForLPE(SPCurve const *c, bool is_rect)
+bool SPShape::prepareShapeForLPE(SPCurve const *c)
 {
     auto const before = curveBeforeLPE();
     if (before && before->get_pathvector() != c->get_pathvector()) {

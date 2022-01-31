@@ -484,46 +484,50 @@ void PathParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved
 }
 
 void
-PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
+PathParam::linked_modified_callback(SPObject *linked_obj, guint flags)
 {
-    std::unique_ptr<SPCurve> curve;
-    if (auto shape = dynamic_cast<SPShape const *>(linked_obj)) {
-        if (_from_original_d) {
-            curve = SPCurve::copy(shape->curveForEdit());
-        } else {
-            curve = SPCurve::copy(shape->curve());
-        }
-    }
-
-    SPText *text = dynamic_cast<SPText *>(linked_obj);
-    if (text) {
-        bool hidden = text->isHidden();
-        if (hidden) {
-            if (_pathvector.empty()) {
-                text->setHidden(false);
-                curve = text->getNormalizedBpath();
-                text->setHidden(true);
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+                 SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) 
+    {
+        std::unique_ptr<SPCurve> curve;
+        if (auto shape = dynamic_cast<SPShape const *>(linked_obj)) {
+            if (_from_original_d) {
+                curve = SPCurve::copy(shape->curveForEdit());
             } else {
-                if (curve == nullptr) {
-                    curve.reset(new SPCurve());
-                }
-                curve->set_pathvector(_pathvector);
+                curve = SPCurve::copy(shape->curve());
             }
-        } else {
-            curve = text->getNormalizedBpath();
         }
-    }
 
-    if (curve == nullptr) {
-        // curve invalid, set default value
-        _pathvector = sp_svg_read_pathv(defvalue);
-    } else {
-        _pathvector = curve->get_pathvector();
-    }
+        SPText *text = dynamic_cast<SPText *>(linked_obj);
+        if (text) {
+            bool hidden = text->isHidden();
+            if (hidden) {
+                if (_pathvector.empty()) {
+                    text->setHidden(false);
+                    curve = text->getNormalizedBpath();
+                    text->setHidden(true);
+                } else {
+                    if (curve == nullptr) {
+                        curve.reset(new SPCurve());
+                    }
+                    curve->set_pathvector(_pathvector);
+                }
+            } else {
+                curve = text->getNormalizedBpath();
+            }
+        }
 
-    must_recalculate_pwd2 = true;
-    emit_changed();
-    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        if (curve == nullptr) {
+            // curve invalid, set default value
+            _pathvector = sp_svg_read_pathv(defvalue);
+        } else {
+            _pathvector = curve->get_pathvector();
+        }
+
+        must_recalculate_pwd2 = true;
+        emit_changed();
+        param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 void

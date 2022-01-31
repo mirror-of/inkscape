@@ -82,8 +82,8 @@ bool LPECloneOriginal::doOnOpen(SPLPEItem const *lpeitem)
 {
     // we need to inform when all items are ready to read svg relink clones
     // previouly couldent be because clones are not ready (load later)
-    linkeditem.read_from_SVG();
-    linkeditem.update_satellites(true);
+    linkeditem.start_listening(linkeditem.getObject());
+    linkeditem.connect_selection_changed();
     return false;
 }
 

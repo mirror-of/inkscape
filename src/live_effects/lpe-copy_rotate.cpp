@@ -140,7 +140,8 @@ bool LPECopyRotate::doOnOpen(SPLPEItem const *lpeitem)
     if (!split_items) {
         return fixed;
     }
-    lpesatellites.update_satellites();
+    lpesatellites.start_listening();
+    lpesatellites.connect_selection_changed();
     container = lpeitem->parent;
     return fixed;
 }
@@ -259,6 +260,9 @@ void LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transfor
             cloneD(child, dest_child, transform);
             index++;
         }
+        return;
+    } else if( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() != SP_GROUP(dest)->getItemCount()) {
+        split_items.param_setValue(false);
         return;
     }
 

@@ -143,6 +143,21 @@ void Parameter::change_selection(Inkscape::Selection *selection)
     update_satellites(false);
 }
 
+void Parameter::connect_selection_changed()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Inkscape::Selection *selection = desktop->selection;
+        if (selection) {
+            std::vector<SPObject *> satellites = param_get_satellites();
+            if (!selection_changed_connection) {
+                selection_changed_connection = new sigc::connection(
+                    selection->connectChanged(sigc::mem_fun(*this, &Parameter::change_selection)));
+            }
+        }
+    }
+}
+
 void Parameter::update_satellites(bool updatelpe)
 {
     if (paramType() == ParamType::SATELLITE || paramType() == ParamType::SATELLITE_ARRAY || paramType() == ParamType::PATH ||
@@ -154,10 +169,7 @@ void Parameter::update_satellites(bool updatelpe)
             Inkscape::Selection *selection = desktop->selection;
             if (selection) {
                 std::vector<SPObject *> satellites = param_get_satellites();
-                if (!selection_changed_connection) {
-                    selection_changed_connection = new sigc::connection(
-                        selection->connectChanged(sigc::mem_fun(*this, &Parameter::change_selection)));
-                }
+                connect_selection_changed();
                 if (selection->singleItem()) {
                     if (param_effect->isOnClipboard()) {
                         return;

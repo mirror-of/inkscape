@@ -466,14 +466,18 @@ void PathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAn
 
 void PathArrayParam::linked_modified(SPObject *linked_obj, guint flags, PathAndDirectionAndVisible *to)
 {
-    if (!to) {
-        return;
-    }
-    setPathVector(linked_obj, flags, to);
-    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    if (_store.get()) {
-        _store->foreach_iter(
-            sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::_updateLink), to));
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+                 SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) 
+    {
+        if (!to) {
+            return;
+        }
+        setPathVector(linked_obj, flags, to);
+        param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        if (_store.get()) {
+            _store->foreach_iter(
+                sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &PathArrayParam::_updateLink), to));
+        }
     }
 }
 

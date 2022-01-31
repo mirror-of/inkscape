@@ -1478,7 +1478,6 @@ void Effect::doOnOpen_impl()
     std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
     if (lpeitems.size() == 1) {
         is_load = true;
-        lpeitems[0]->document->stylesheetchg = false;
         doOnOpen(lpeitems[0]);
     }
 }

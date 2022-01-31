@@ -700,7 +700,6 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         styleContent = styleContent + Glib::ustring("\n.measure-line") + Glib::ustring("\n{\n}");
         textNode->setContent(styleContent.c_str());
     }
-    document->stylesheetchg = false;
     linked_items.update_satellites();
     DocumentUndo::setUndoSensitive(document, saved);
 }
@@ -841,8 +840,8 @@ LPEMeasureSegments::doOnOpen(SPLPEItem const* lpeitem) {
         return false;
     }
     if (active_projection) {
-        linked_items.read_from_SVG();
-        linked_items.update_satellites(true);
+        linked_items.start_listening();
+        linked_items.connect_selection_changed();
     }
     return true;
 }

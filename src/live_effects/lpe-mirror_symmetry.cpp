@@ -116,8 +116,8 @@ bool LPEMirrorSymmetry::doOnOpen(SPLPEItem const *lpeitem)
         fixed = true;
         lpesatellites.write_to_SVG();
     }
-    lpesatellites.read_from_SVG();
-    lpesatellites.update_satellites(true);
+    lpesatellites.start_listening();
+    lpesatellites.connect_selection_changed();
     container = dynamic_cast<SPObject *>(lpeitem->parent);
     return fixed;
 }
@@ -356,6 +356,9 @@ void LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest)
             cloneD(child, dest_child);
             index++;
         }
+        return;
+    } else if( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() != SP_GROUP(dest)->getItemCount()) {
+        split_items.param_setValue(false);
         return;
     }
 

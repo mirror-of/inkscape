@@ -106,7 +106,7 @@ void SatelliteArrayParam::start_listening()
                 linked_connections.emplace_back(item->connectRelease(
                     sigc::hide(sigc::mem_fun(*this, &SatelliteArrayParam::updatesignal))));
                 linked_connections.emplace_back(item->connectModified(
-                    sigc::hide(sigc::hide(sigc::mem_fun(*this, &SatelliteArrayParam::updatesignal)))));
+                    sigc::mem_fun(*this, &SatelliteArrayParam::linked_modified)));
                 linked_connections.emplace_back(item->connectTransformed(
                     sigc::hide(sigc::hide(sigc::mem_fun(*this, &SatelliteArrayParam::updatesignal)))));
                 linked_connections.emplace_back(ref->changedSignal().connect(
@@ -116,9 +116,18 @@ void SatelliteArrayParam::start_listening()
     }
 }
 
+void SatelliteArrayParam::linked_modified(SPObject *linked_obj, guint flags) {
+    if (!param_effect->is_load && param_effect->_lpe_action == LPE_NONE && 
+        flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+                 SP_OBJECT_VIEWPORT_MODIFIED_FLAG))
+    {
+        param_effect->processObjects(LPE_UPDATE);
+    }
+}
+
 void SatelliteArrayParam::updatesignal()
 {
-    if (param_effect->_lpe_action == LPE_NONE) {
+    if (!param_effect->is_load && param_effect->_lpe_action == LPE_NONE) {
         param_effect->processObjects(LPE_UPDATE);
     }
 }
@@ -162,7 +171,6 @@ bool SatelliteArrayParam::param_readSVGValue(const gchar *strvalue)
         }
         auto lpeitems = param_effect->getCurrrentLPEItems();
         if (!lpeitems.size() && !param_effect->is_applied && !param_effect->getSPDoc()->isSeeking()) {
-            param_effect->processObjects(LPE_UPDATE);
             size_t pos = 0;
             for (auto w : _vector) {
                 if (w) {

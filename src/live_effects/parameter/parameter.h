@@ -97,6 +97,7 @@ class Parameter {
     bool oncanvas_editable;
     bool widget_is_visible;
     bool widget_is_enabled;
+    void connect_selection_changed();
 
   protected:
       Inkscape::Display::TemporaryItem *ownerlocator = nullptr;

@@ -110,8 +110,8 @@ LPEBool::~LPEBool() {
 
 bool LPEBool::doOnOpen(SPLPEItem const *lpeitem)
 {
-    operand_item.read_from_SVG();
-    operand_item.update_satellites(true);
+    operand_item.start_listening(operand_item.getObject());
+    operand_item.connect_selection_changed();
     return false;
 }
 

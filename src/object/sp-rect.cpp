@@ -279,7 +279,7 @@ void SPRect::set_shape() {
 
     c->closepath();
 
-    if (prepareShapeForLPE(c.get(), true)) {
+    if (prepareShapeForLPE(c.get())) {
         return;
     }
 

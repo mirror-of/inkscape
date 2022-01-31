@@ -232,7 +232,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
             }
 
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if (!lpe || (document->stylesheetchg && lpe->is_load) || !performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
+            if (!lpe || !performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
                 return false;
             }
             auto hreflist = lpeobj->hrefList;
@@ -265,6 +265,8 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
         }
         //if is not clip or mask or LPE apply to clip and mask
         if (!is_clip_or_mask || lpe->apply_to_clippath_and_mask) {
+            // Uncoment to know updates
+            // g_debug("LPE running:: %s",Inkscape::LivePathEffect::LPETypeConverter.get_key(lpe->effectType()).c_str());
             lpe->setCurrentShape(current);
             if (!SP_IS_GROUP(this)) {
                 lpe->pathvector_before_effect = curve->get_pathvector();
@@ -444,7 +446,8 @@ lpeobject_ref_modified(SPObject */*href*/, guint flags, SPLPEItem *lpeitem)
 #ifdef SHAPE_VERBOSE
     g_message("lpeobject_ref_modified");
 #endif
-    if (flags != 29 && flags != 253) {
+    if (flags != 29 && flags != 253 && !(flags & SP_OBJECT_STYLESHEET_MODIFIED_FLAG))
+    {
         sp_lpe_item_update_patheffect(lpeitem, true, true);
     }
 }

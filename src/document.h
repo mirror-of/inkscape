@@ -163,8 +163,6 @@ public:
     SPObject *getXMLDialogSelectedObject() { return _activexmltree; }
 
     Inkscape::EventLog* get_event_log() { return _event_log; }
-    // allow not update LPE on stylesheet change
-    bool stylesheetchg = false;
 
 private:
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);

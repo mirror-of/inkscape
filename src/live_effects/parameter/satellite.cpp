@@ -13,7 +13,6 @@
 #include "enums.h"
 #include "inkscape.h"
 #include "live_effects/effect.h"
-#include "live_effects/lpe-clone-original.h"
 #include "live_effects/lpeobject.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
@@ -182,7 +181,9 @@ void SatelliteParam::start_listening(SPObject *to)
         linked_modified_connection = item->connectModified(sigc::mem_fun(*this, &SatelliteParam::linked_modified));
         linked_transformed_connection =
             item->connectTransformed(sigc::mem_fun(*this, &SatelliteParam::linked_transformed));
-        linked_modified(item, SP_OBJECT_MODIFIED_FLAG);
+        if (!param_effect->is_load) {
+            linked_modified(item, SP_OBJECT_MODIFIED_FLAG);
+        }
     }
 }
 
@@ -219,19 +220,23 @@ void SatelliteParam::linked_released(SPObject *released)
 
 void SatelliteParam::linked_modified(SPObject *linked_obj, guint flags)
 {
-    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    last_transform = Geom::identity();
-    update_satellites();
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+                 SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+        param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        last_transform = Geom::identity();
+        if (effectType() != CLONE_ORIGINAL) {
+            update_satellites();
+        }
+    }
 }
 
 void SatelliteParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item)
 {
     last_transform = *rel_transf;
-    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
         Inkscape::Selection *selection = desktop->getSelection();
-        if (dynamic_cast<Inkscape::LivePathEffect::LPECloneOriginal *>(param_effect->getLPEObj()->get_lpe())) {
+        if (effectType() == CLONE_ORIGINAL) {
             auto hreflist = param_effect->getLPEObj()->hrefList;
             if (hreflist.size()) {
                 SPLPEItem *sp_lpe_item = dynamic_cast<SPLPEItem *>(*hreflist.begin());
@@ -243,8 +248,10 @@ void SatelliteParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *
                         guint mode = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_PARALLEL);
                         if (!selection->includes(item) &&
                             (!(m.isTranslation()) || mode == SP_CLONE_COMPENSATION_NONE)) {
-                            item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                            update_satellites();
+                            if (!param_effect->is_load) {
+                                item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                                update_satellites();
+                            }
                             return;
                         }
                         // calculate the compensation matrix and the advertized movement matrix
@@ -272,9 +279,11 @@ void SatelliteParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *
                     }
                 }
             }
+        } else {
+            update_satellites();
         }
     }
-    update_satellites();
+    
 }
 
 // UI

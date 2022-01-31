@@ -423,7 +423,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             std::ostringstream ss;
             ss << tol;
             spdc_apply_simplify(ss.str(), dc, item);
-            sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+            sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), true, false);
         }
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->getDesktop()->getDocument(), item);
@@ -923,6 +923,10 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             } else {
                 dc->selection->set(repr);
             }
+        }
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(dc->white_item); 
+        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+            sp_lpe_item_update_patheffect(lpeitem, true, false);
         }
         DocumentUndo::done(doc, _("Draw path"), SP_IS_PEN_CONTEXT(dc)? INKSCAPE_ICON("draw-path") : INKSCAPE_ICON("draw-freehand"));
 

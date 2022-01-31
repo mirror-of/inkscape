@@ -92,8 +92,8 @@ LPESlice::doOnOpen(SPLPEItem const* lpeitem) {
         fixed = true;
         lpesatellites.write_to_SVG();
     }
-    lpesatellites.read_from_SVG();
-    lpesatellites.update_satellites(true);
+    lpesatellites.start_listening();
+    lpesatellites.connect_selection_changed();
     return fixed;
 }
 
