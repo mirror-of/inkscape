@@ -100,7 +100,7 @@ protected:
         failed.pop_back();
     }
 
-    void TearDown( ) 
+    void TearDown( ) override
     { 
         Glib::ustring ids = "";
         for (auto fail : failed) {
