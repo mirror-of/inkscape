@@ -326,6 +326,9 @@ void IconPreviewPanel::setDocument( SPDocument *document )
 
 void IconPreviewPanel::refreshPreview()
 {
+    if (!drawing) {
+        return;
+    }
     SPDesktop *desktop = getDesktop();
     if (!timer) {
         timer = new Glib::Timer();
