@@ -181,24 +181,6 @@ flerp(double f0, double f1, double p)
     return f0 + ( f1 - f0 ) * p;
 }
 
-///* Get normalized point */
-// Geom::Point CalligraphicTool::getNormalizedPoint(Geom::Point v) const {
-//    Geom::Rect drect = _desktop->get_display_area();
-//
-//    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
-//
-//    return Geom::Point(( v[Geom::X] - drect.min()[Geom::X] ) / max,  ( v[Geom::Y] - drect.min()[Geom::Y] ) / max);
-//}
-//
-///* Get view point */
-// Geom::Point CalligraphicTool::getViewPoint(Geom::Point n) const {
-//    Geom::Rect drect = _desktop->get_display_area();
-//
-//    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
-//
-//    return Geom::Point(n[Geom::X] * max + drect.min()[Geom::X], n[Geom::Y] * max + drect.min()[Geom::Y]);
-//}
-
 void CalligraphicTool::reset(Geom::Point p) {
     this->last = this->cur = this->getNormalizedPoint(p);
 

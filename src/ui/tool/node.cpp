@@ -516,7 +516,6 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             Inkscape::Snapper::SnapConstraint cl(_parent->position(),
                 _parent->position() - node_away->position());
             Inkscape::SnappedPoint p;
-            std::cout << "Snapping entered at C" << std::endl;
             p = sm.constrainedSnap(Inkscape::SnapCandidatePoint(new_pos, SNAPSOURCE_NODE_HANDLE), cl);
             new_pos = p.getPoint();
         } else if (ctrl_constraint) {
@@ -524,7 +523,6 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             // We should get all possible constraints and snap along them using
             // multipleConstrainedSnaps, instead of first snapping to angle and then to objects
             Inkscape::SnappedPoint p;
-            std::cout << "Snapping entered at D" << std::endl;
             p = sm.constrainedSnap(Inkscape::SnapCandidatePoint(new_pos, SNAPSOURCE_NODE_HANDLE), *ctrl_constraint);
             new_pos = p.getPoint();
         } else {
@@ -1492,7 +1490,6 @@ void Node::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             // with Ctrl, constrain to axes
             constraints.emplace_back(origin, Geom::Point(1, 0));
             constraints.emplace_back(origin, Geom::Point(0, 1));
-            std::cout << "Snapping entered at B" << std::endl;
             sp = sm.multipleConstrainedSnaps(Inkscape::SnapCandidatePoint(new_pos, _snapSourceType()), constraints, held_shift(*event));
         }
         new_pos = sp.getPoint();

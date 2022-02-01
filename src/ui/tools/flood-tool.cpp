@@ -127,10 +127,8 @@ FloodTool::FloodTool(SPDesktop *desktop)
 FloodTool::~FloodTool() {
     this->sel_changed_connection.disconnect();
 
-    if (shape_editor) {
-        delete shape_editor;
-        shape_editor = nullptr;
-    }
+    delete shape_editor;
+    shape_editor = nullptr;
 
     /* fixme: This is necessary because we do not grab */
     if (this->item) {

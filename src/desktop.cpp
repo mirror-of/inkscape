@@ -308,6 +308,11 @@ void SPDesktop::destroy()
         canvas_drawing = nullptr;
     }
 
+    if (event_context) {
+        delete event_context;
+        event_context = nullptr;
+    }
+
     _guides_message_context = nullptr;
 }
 
