@@ -34,18 +34,11 @@ namespace Tools {
 
 class SpiralTool : public ToolBase {
 public:
-	SpiralTool();
-	~SpiralTool() override;
+    SpiralTool(SPDesktop *desktop);
+    ~SpiralTool() override;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	void finish() override;
 	void set(const Inkscape::Preferences::Entry& val) override;
 	bool root_handler(GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
-
 private:
 	SPSpiral * spiral;
 	Geom::Point center;

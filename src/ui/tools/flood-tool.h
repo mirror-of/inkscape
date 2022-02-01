@@ -30,20 +30,15 @@ namespace Tools {
 
 class FloodTool : public ToolBase {
 public:
-	FloodTool();
-	~FloodTool() override;
+    FloodTool(SPDesktop *desktop);
+    ~FloodTool() override;
 
 	SPItem *item;
 
 	sigc::connection sel_changed_connection;
 
-	static const std::string prefsPath;
-
-	void setup() override;
 	bool root_handler(GdkEvent* event) override;
 	bool item_handler(SPItem* item, GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
 
 	static void set_channels(gint channels);
 	static const std::vector<Glib::ustring> channel_list;

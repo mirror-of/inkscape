@@ -72,14 +72,8 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-const std::string& TweakTool::getPrefsPath() {
-	return TweakTool::prefsPath;
-}
-
-const std::string TweakTool::prefsPath = "/tools/tweak";
-
-TweakTool::TweakTool()
-    : ToolBase("tweak-push.svg")
+TweakTool::TweakTool(SPDesktop *desktop)
+    : ToolBase(desktop, "/tools/tweak", "tweak-push.svg")
     , pressure(TC_DEFAULT_PRESSURE)
     , dragging(false)
     , usepressure(false)
@@ -97,6 +91,35 @@ TweakTool::TweakTool()
     , do_l(true)
     , do_o(false)
 {
+    dilate_area = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
+    dilate_area->set_stroke(0xff9900ff);
+    dilate_area->set_fill(0x0, SP_WIND_RULE_EVENODD);
+    dilate_area->hide();
+
+    this->is_drawing = false;
+
+    sp_event_context_read(this, "width");
+    sp_event_context_read(this, "mode");
+    sp_event_context_read(this, "fidelity");
+    sp_event_context_read(this, "force");
+    sp_event_context_read(this, "usepressure");
+    sp_event_context_read(this, "doh");
+    sp_event_context_read(this, "dol");
+    sp_event_context_read(this, "dos");
+    sp_event_context_read(this, "doo");
+
+    this->style_set_connection = desktop->connectSetStyle( // catch style-setting signal in this tool
+        //sigc::bind(sigc::ptr_fun(&sp_tweak_context_style_set), this)
+   		sigc::mem_fun(this, &TweakTool::set_style)
+    );
+    
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/tools/tweak/selcue")) {
+        this->enableSelectionCue();
+    }
+    if (prefs->getBool("/tools/tweak/gradientdrag")) {
+        this->enableGrDrag();
+    }
 }
 
 TweakTool::~TweakTool() {
@@ -129,8 +152,8 @@ void TweakTool::update_cursor (bool with_shift) {
     guint num = 0;
     gchar *sel_message = nullptr;
 
-    if (!desktop->selection->isEmpty()) {
-        num = (guint) boost::distance(desktop->selection->items());
+    if (!_desktop->selection->isEmpty()) {
+        num = (guint)boost::distance(_desktop->selection->items());
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -227,40 +250,6 @@ bool TweakTool::set_style(const SPCSSAttr* css) {
     }
 
     return false;
-}
-
-void TweakTool::setup() {
-    ToolBase::setup();
-
-    dilate_area = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
-    dilate_area->set_stroke(0xff9900ff);
-    dilate_area->set_fill(0x0, SP_WIND_RULE_EVENODD);
-    dilate_area->hide();
-
-    this->is_drawing = false;
-
-    sp_event_context_read(this, "width");
-    sp_event_context_read(this, "mode");
-    sp_event_context_read(this, "fidelity");
-    sp_event_context_read(this, "force");
-    sp_event_context_read(this, "usepressure");
-    sp_event_context_read(this, "doh");
-    sp_event_context_read(this, "dol");
-    sp_event_context_read(this, "dos");
-    sp_event_context_read(this, "doo");
-
-    this->style_set_connection = desktop->connectSetStyle( // catch style-setting signal in this tool
-        //sigc::bind(sigc::ptr_fun(&sp_tweak_context_style_set), this)
-   		sigc::mem_fun(this, &TweakTool::set_style)
-    );
-    
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/tweak/selcue")) {
-        this->enableSelectionCue();
-    }
-    if (prefs->getBool("/tools/tweak/gradientdrag")) {
-        this->enableGrDrag();
-    }
 }
 
 void TweakTool::set(const Inkscape::Preferences::Entry& val) {
@@ -1146,15 +1135,14 @@ bool TweakTool::root_handler(GdkEvent* event) {
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-
-                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
+                if (Inkscape::have_viable_layer(_desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
 
                 Geom::Point const button_w(event->button.x,
                                          event->button.y);
-                Geom::Point const button_dt(desktop->w2d(button_w));
-                this->last_push = desktop->dt2doc(button_dt);
+                Geom::Point const button_dt(_desktop->w2d(button_w));
+                this->last_push = _desktop->dt2doc(button_dt);
 
                 sp_tweak_extinput(this, event);
 
@@ -1170,21 +1158,21 @@ bool TweakTool::root_handler(GdkEvent* event) {
         {
             Geom::Point const motion_w(event->motion.x,
                                      event->motion.y);
-            Geom::Point motion_dt(desktop->w2d(motion_w));
-            Geom::Point motion_doc(desktop->dt2doc(motion_dt));
+            Geom::Point motion_dt(_desktop->w2d(motion_w));
+            Geom::Point motion_doc(_desktop->dt2doc(motion_dt));
             sp_tweak_extinput(this, event);
 
             // draw the dilating cursor
             double radius = get_dilate_radius(this);
-            Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(desktop->w2d(motion_w)));
+            Geom::Affine const sm(Geom::Scale(radius, radius) * Geom::Translate(_desktop->w2d(motion_w)));
             Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1)); // Unit circle centered at origin.
             path *= sm;
             dilate_area->set_bpath(path);
             dilate_area->show();
 
             guint num = 0;
-            if (!desktop->selection->isEmpty()) {
-                num = (guint) boost::distance(desktop->selection->items());
+            if (!_desktop->selection->isEmpty()) {
+                num = (guint)boost::distance(_desktop->selection->items());
             }
             if (num == 0) {
                 this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));
@@ -1205,7 +1193,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_RELEASE:
         {
             Geom::Point const motion_w(event->button.x, event->button.y);
-            Geom::Point const motion_dt(desktop->w2d(motion_w));
+            Geom::Point const motion_dt(_desktop->w2d(motion_w));
 
             forced_redraws_stop();
             this->is_drawing = false;
@@ -1214,7 +1202,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
                 if (!this->has_dilated) {
                     // if we did not rub, do a light tap
                     this->pressure = 0.03;
-                    sp_tweak_dilate (this, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
+                    sp_tweak_dilate(this, motion_w, _desktop->dt2doc(motion_dt), Geom::Point(0, 0), MOD__SHIFT(event));
                 }
                 this->is_dilating = false;
                 this->has_dilated = false;
@@ -1260,7 +1248,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
                         text = _("Blur tweak");
                         break;
                 }
-                DocumentUndo::done(this->desktop->getDocument(), text.c_str(), INKSCAPE_ICON("tool-tweak"));
+                DocumentUndo::done(_desktop->getDocument(), text.c_str(), INKSCAPE_ICON("tool-tweak"));
             }
             break;
         }
@@ -1378,7 +1366,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
                         if (this->force > 1.0) {
                             this->force = 1.0;
                         }
-                        desktop->setToolboxAdjustmentValue ("tweak-force", this->force * 100);
+                        _desktop->setToolboxAdjustmentValue("tweak-force", this->force * 100);
                         ret = TRUE;
                     }
                     break;
@@ -1389,7 +1377,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
                         if (this->force < 0.0) {
                             this->force = 0.0;
                         }
-                        desktop->setToolboxAdjustmentValue ("tweak-force", this->force * 100);
+                        _desktop->setToolboxAdjustmentValue("tweak-force", this->force * 100);
                         ret = TRUE;
                     }
                     break;
@@ -1400,7 +1388,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
                         if (this->width > 1.0) {
                             this->width = 1.0;
                         }
-                        desktop->setToolboxAdjustmentValue ("tweak-width", this->width * 100); // the same spinbutton is for alt+x
+                        _desktop->setToolboxAdjustmentValue ("tweak-width", this->width * 100); // the same spinbutton is for alt+x
                         sp_tweak_update_area(this);
                         ret = TRUE;
                     }
@@ -1412,7 +1400,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
                         if (this->width < 0.01) {
                             this->width = 0.01;
                         }
-                        desktop->setToolboxAdjustmentValue ("tweak-width", this->width * 100);
+                        _desktop->setToolboxAdjustmentValue("tweak-width", this->width * 100);
                         sp_tweak_update_area(this);
                         ret = TRUE;
                     }
@@ -1420,21 +1408,21 @@ bool TweakTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_Home:
                 case GDK_KEY_KP_Home:
                     this->width = 0.01;
-                    desktop->setToolboxAdjustmentValue ("tweak-width", this->width * 100);
+                    _desktop->setToolboxAdjustmentValue("tweak-width", this->width * 100);
                     sp_tweak_update_area(this);
                     ret = TRUE;
                     break;
                 case GDK_KEY_End:
                 case GDK_KEY_KP_End:
                     this->width = 1.0;
-                    desktop->setToolboxAdjustmentValue ("tweak-width", this->width * 100);
+                    _desktop->setToolboxAdjustmentValue("tweak-width", this->width * 100);
                     sp_tweak_update_area(this);
                     ret = TRUE;
                     break;
                 case GDK_KEY_x:
                 case GDK_KEY_X:
                     if (MOD__ALT_ONLY(event)) {
-                        desktop->setToolboxFocusTo ("tweak-width");
+                        _desktop->setToolboxFocusTo("tweak-width");
                         ret = TRUE;
                     }
                     break;

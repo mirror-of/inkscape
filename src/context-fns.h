@@ -35,7 +35,6 @@ extern bool have_viable_layer(SPDesktop *desktop, MessageContext *message);
 extern bool have_viable_layer(SPDesktop *desktop, MessageStack *message);
 Geom::Rect snap_rectangular_box(SPDesktop const *desktop, SPItem *item,
                               Geom::Point const &pt, Geom::Point const &center, int state);
-Geom::Point setup_for_drag_start(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase* ec, GdkEvent *ev);
 
 }
 

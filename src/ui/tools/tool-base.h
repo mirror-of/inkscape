@@ -46,7 +46,6 @@ namespace Tools {
 class ToolBase;
 
 gboolean sp_event_context_snap_watchdog_callback(gpointer data);
-void sp_event_context_discard_delayed_snap_event(ToolBase *ec);
 
 class DelayedSnapEvent {
 public:
@@ -136,15 +135,13 @@ void sp_event_context_snap_delay_handler(ToolBase *ec, gpointer const dse_item, 
 class ToolBase : public sigc::trackable
 {
 public:
-    ToolBase(std::string cursor_filename, bool uses_snap=true);
+    ToolBase(SPDesktop *desktop, std::string prefs_path, std::string cursor_filename, bool uses_snap = true);
 
     virtual ~ToolBase();
 
     ToolBase(const ToolBase&) = delete;
     ToolBase& operator=(const ToolBase&) = delete;
 
-    virtual void setup();
-    virtual void finish();
     virtual void set(const Inkscape::Preferences::Entry& val);
     virtual bool root_handler(GdkEvent *event);
     virtual bool item_handler(SPItem *item, GdkEvent *event);
@@ -153,19 +150,14 @@ public:
     bool are_buttons_1_and_3_on() const;
     bool are_buttons_1_and_3_on(GdkEvent *event);
 
-    virtual const std::string& getPrefsPath() = 0;
+    std::string getPrefsPath() { return _prefs_path; };
     void enableSelectionCue (bool enable=true);
-    void enableGrDrag (bool enable=true);
-    bool deleteSelectedDrag(bool just_one);
 
     Inkscape::MessageContext *defaultMessageContext() const {
         return message_context.get();
     }
 
-    GrDrag *get_drag () { return _grdrag; }
-
-    void setDesktop(SPDesktop *desktop_in) { desktop = desktop_in; }
-    SPDesktop *getDesktop() { return desktop; }
+    SPDesktop *getDesktop() { return _desktop; }
     SPGroup *currentLayer() const;
 
     // Commonly used CanvasItemCatchall grab/ungrab.
@@ -195,8 +187,11 @@ public:
         ToolBase * const ec;
     };
 
-// private:
+private:
     Inkscape::Preferences::Observer *pref_observer = nullptr;
+    std::string _prefs_path;
+
+protected:
     Glib::RefPtr<Gdk::Cursor> _cursor;
     std::string _cursor_filename = "select.svg";
     std::string _cursor_default = "select.svg";
@@ -211,6 +206,8 @@ public:
     SPItem *item_to_select = nullptr; ///< the item where mouse_press occurred, to
                                       ///< be selected if this is a click not drag
 
+    Geom::Point setup_for_drag_start(GdkEvent *ev);
+
 private:
     enum
     {
@@ -222,6 +219,11 @@ private:
     } panning = PANNING_NONE;
 
 public:
+    gint start_root_handler(GdkEvent *event);
+    gint tool_root_handler(GdkEvent *event);
+    gint start_item_handler(SPItem *item, GdkEvent *event);
+    gint virtual_item_handler(SPItem *item, GdkEvent *event);
+
     /// True if we're panning with any method (space bar, middle-mouse, right-mouse+Ctrl)
     bool is_panning() const { return panning != 0; }
 
@@ -242,10 +244,16 @@ public:
     bool _uses_snap = false;
     DelayedSnapEvent *_delayed_snap_event = nullptr;
 
+    void discard_delayed_snap_event();
     void set_cursor(std::string filename);
     void use_cursor(Glib::RefPtr<Gdk::Cursor> cursor);
     Glib::RefPtr<Gdk::Cursor> get_cursor(Glib::RefPtr<Gdk::Window> window, std::string filename);
     void use_tool_cursor();
+
+    void enableGrDrag(bool enable = true);
+    bool deleteSelectedDrag(bool just_one);
+    bool hasGradientDrag() const;
+    GrDrag *get_drag() { return _grdrag; }
 
 protected:
     bool sp_event_context_knot_mouseover() const;
@@ -255,7 +263,7 @@ protected:
     void forced_redraws_start(int count, bool reset = false);
     void forced_redraws_stop();
 
-    SPDesktop *desktop = nullptr;
+    SPDesktop *_desktop = nullptr;
 
 private:
 
@@ -264,10 +272,6 @@ private:
 
 void sp_event_context_read(ToolBase *ec, gchar const *key);
 
-gint sp_event_context_root_handler(ToolBase *ec, GdkEvent *event);
-gint sp_event_context_virtual_root_handler(ToolBase *ec, GdkEvent *event);
-gint sp_event_context_item_handler(ToolBase *ec, SPItem *item, GdkEvent *event);
-gint sp_event_context_virtual_item_handler(ToolBase *ec, SPItem *item, GdkEvent *event);
 
 void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event);
 

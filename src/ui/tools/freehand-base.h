@@ -41,7 +41,7 @@ enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, BEND_CLIPB
 
 class FreehandBase : public ToolBase {
 public:
-    FreehandBase(const std::string& cursor_filename);
+    FreehandBase(SPDesktop *desktop, std::string prefs_path, const std::string &cursor_filename);
     ~FreehandBase() override;
 
     Inkscape::Selection *selection;
@@ -101,9 +101,6 @@ public:
     void set(const Inkscape::Preferences::Entry& val) override;
 
 protected:
-
-    void setup() override;
-    void finish() override;
     bool root_handler(GdkEvent* event) override;
 };
 

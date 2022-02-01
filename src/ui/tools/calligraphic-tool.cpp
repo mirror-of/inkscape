@@ -89,22 +89,15 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-const std::string& CalligraphicTool::getPrefsPath() {
-	return CalligraphicTool::prefsPath;
-}
-
-
-const std::string CalligraphicTool::prefsPath = "/tools/calligraphic";
-
-CalligraphicTool::CalligraphicTool()
-    : DynamicBase("calligraphy.svg")
+CalligraphicTool::CalligraphicTool(SPDesktop *desktop)
+    : DynamicBase(desktop, "/tools/calligraphic", "calligraphy.svg")
     , keep_selected(true)
     , hatch_spacing(0)
     , hatch_spacing_step(0)
     , hatch_item(nullptr)
     , hatch_livarot_path(nullptr)
-    , hatch_last_nearest(Geom::Point(0,0))
-    , hatch_last_pointer(Geom::Point(0,0))
+    , hatch_last_nearest(Geom::Point(0, 0))
+    , hatch_last_pointer(Geom::Point(0, 0))
     , hatch_escaped(false)
     , just_started_drawing(false)
     , trace_bg(false)
@@ -113,16 +106,6 @@ CalligraphicTool::CalligraphicTool()
     this->flatness = -0.9;
     this->cap_rounding = 0.0;
     this->abs_width = false;
-}
-
-CalligraphicTool::~CalligraphicTool() {
-    if (this->hatch_area) {
-        delete this->hatch_area;
-    }
-}
-
-void CalligraphicTool::setup() {
-    DynamicBase::setup();
 
     this->accumulated.reset(new SPCurve());
     this->currentcurve.reset(new SPCurve());
@@ -165,6 +148,18 @@ void CalligraphicTool::setup() {
     }
 }
 
+CalligraphicTool::~CalligraphicTool()
+{
+    if (hatch_area) {
+        delete hatch_area;
+        hatch_area = nullptr;
+    }
+    if (currentshape) {
+        delete currentshape;
+        currentshape = nullptr;
+    }
+}
+
 void CalligraphicTool::set(const Inkscape::Preferences::Entry& val) {
     Glib::ustring path = val.getEntryName();
 
@@ -187,8 +182,8 @@ flerp(double f0, double f1, double p)
 }
 
 ///* Get normalized point */
-//Geom::Point CalligraphicTool::getNormalizedPoint(Geom::Point v) const {
-//    Geom::Rect drect = desktop->get_display_area();
+// Geom::Point CalligraphicTool::getNormalizedPoint(Geom::Point v) const {
+//    Geom::Rect drect = _desktop->get_display_area();
 //
 //    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
 //
@@ -196,8 +191,8 @@ flerp(double f0, double f1, double p)
 //}
 //
 ///* Get view point */
-//Geom::Point CalligraphicTool::getViewPoint(Geom::Point n) const {
-//    Geom::Rect drect = desktop->get_display_area();
+// Geom::Point CalligraphicTool::getViewPoint(Geom::Point n) const {
+//    Geom::Rect drect = _desktop->get_display_area();
 //
 //    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
 //
@@ -282,7 +277,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
         // 1b. fixed dc->angle (absolutely flat nib):
         a1 = ( this->angle / 180.0 ) * M_PI;
     }
-    a1 *= -desktop->yaxisdir();
+    a1 *= -_desktop->yaxisdir();
     if (this->flatness < 0.0) {
         // flips direction. Useful when this->usetilt
         // allows simulating both pen and calligraphic brush
@@ -354,14 +349,14 @@ void CalligraphicTool::brush() {
     // get the real brush point, not the same as pointer (affected by hatch tracking and/or mass
     // drag)
     Geom::Point brush = getViewPoint(this->cur);
-    Geom::Point brush_w = desktop->d2w(brush);
+    Geom::Point brush_w = _desktop->d2w(brush);
 
     double trace_thick = 1;
     if (this->trace_bg) {
         // Trace background, use single pixel under brush.
         Geom::IntRect area = Geom::IntRect::from_xywh(brush_w.floor(), Geom::IntPoint(1, 1));
 
-        Inkscape::CanvasItemDrawing *canvas_item_drawing = desktop->getCanvasDrawing();
+        Inkscape::CanvasItemDrawing *canvas_item_drawing = _desktop->getCanvasDrawing();
         Inkscape::Drawing *drawing = canvas_item_drawing->get_drawing();
 
         // Ensure drawing up-to-date. (Is this really necessary?)
@@ -409,7 +404,7 @@ void CalligraphicTool::brush() {
 
     double dezoomify_factor = 0.05 * 1000;
     if (!this->abs_width) {
-        dezoomify_factor /= desktop->current_zoom();
+        dezoomify_factor /= _desktop->current_zoom();
     }
 
     Geom::Point del_left = dezoomify_factor * (width + tremble_left) * this->ang;
@@ -458,7 +453,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
+                if (Inkscape::have_viable_layer(_desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
 
@@ -485,7 +480,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
         {
             Geom::Point const motion_w(event->motion.x,
                                      event->motion.y);
-            Geom::Point motion_dt(desktop->w2d(motion_w));
+            Geom::Point motion_dt(_desktop->w2d(motion_w));
             this->extinput(event);
 
             this->message_context->clear();
@@ -499,7 +494,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
             if (event->motion.state & GDK_CONTROL_MASK) { // hatching - sense the item
 
-                SPItem *selected = desktop->getSelection()->singleItem();
+                SPItem *selected = _desktop->getSelection()->singleItem();
                 if (selected && (SP_IS_SHAPE(selected) || SP_IS_TEXT(selected))) {
                     // One item selected, and it's a path;
                     // let's try to track it as a guide
@@ -694,7 +689,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 if (this->hatch_spacing == 0 && hatch_dist != 0) {
                     // Haven't set spacing yet: gray, center free, update radius live
 
-                    Geom::Point c = desktop->w2d(motion_w);
+                    Geom::Point c = _desktop->w2d(motion_w);
                     Geom::Affine const sm (Geom::Scale(hatch_dist, hatch_dist) * Geom::Translate(c));
                     path *= sm;
 
@@ -747,7 +742,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
     case GDK_BUTTON_RELEASE:
     {
         Geom::Point const motion_w(event->button.x, event->button.y);
-        Geom::Point const motion_dt(desktop->w2d(motion_w));
+        Geom::Point const motion_dt(_desktop->w2d(motion_w));
 
         ungrabCanvasEvents();
 
@@ -804,9 +799,9 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
             ret = TRUE;
         } else if (!this->dragging
                    && event->button.button == 1
-                   && Inkscape::have_viable_layer(desktop, defaultMessageContext()))
+                   && Inkscape::have_viable_layer(_desktop, defaultMessageContext()))
         {
-            spdc_create_single_dot(this, desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
+            spdc_create_single_dot(this, _desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
             ret = TRUE;
         }
         break;
@@ -820,7 +815,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->angle += 5.0;
                 if (this->angle > 90.0)
                     this->angle = 90.0;
-                sp_ddc_update_toolbox (desktop, "calligraphy-angle", this->angle);
+                sp_ddc_update_toolbox(_desktop, "calligraphy-angle", this->angle);
                 ret = TRUE;
             }
             break;
@@ -830,7 +825,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->angle -= 5.0;
                 if (this->angle < -90.0)
                     this->angle = -90.0;
-                sp_ddc_update_toolbox (desktop, "calligraphy-angle", this->angle);
+                sp_ddc_update_toolbox(_desktop, "calligraphy-angle", this->angle);
                 ret = TRUE;
             }
             break;
@@ -840,7 +835,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->width = Quantity::convert(this->width, "px", unit) + 0.01;
                 if (this->width > 1.0)
                     this->width = 1.0;
-                sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100); // the same spinbutton is for alt+x
+                sp_ddc_update_toolbox (_desktop, "calligraphy-width", this->width * 100); // the same spinbutton is for alt+x
                 ret = TRUE;
             }
             break;
@@ -850,26 +845,26 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->width = Quantity::convert(this->width, "px", unit) - 0.01;
                 if (this->width < 0.00001)
                     this->width = 0.00001;
-                sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100);
+                sp_ddc_update_toolbox(_desktop, "calligraphy-width", this->width * 100);
                 ret = TRUE;
             }
             break;
         case GDK_KEY_Home:
         case GDK_KEY_KP_Home:
             this->width = 0.00001;
-            sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100);
+            sp_ddc_update_toolbox(_desktop, "calligraphy-width", this->width * 100);
             ret = TRUE;
             break;
         case GDK_KEY_End:
         case GDK_KEY_KP_End:
             this->width = 1.0;
-            sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100);
+            sp_ddc_update_toolbox(_desktop, "calligraphy-width", this->width * 100);
             ret = TRUE;
             break;
         case GDK_KEY_x:
         case GDK_KEY_X:
             if (MOD__ALT_ONLY(event)) {
-                desktop->setToolboxFocusTo ("calligraphy-width");
+                _desktop->setToolboxFocusTo("calligraphy-width");
                 ret = TRUE;
             }
             break;
@@ -938,11 +933,11 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
     if (!this->accumulated->is_empty()) {
         if (!this->repr) {
             /* Create object */
-            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+            Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
             /* Set style */
-            sp_desktop_apply_style_tool (desktop, repr, "/tools/calligraphic", false);
+            sp_desktop_apply_style_tool(_desktop, repr, "/tools/calligraphic", false);
 
             this->repr = repr;
 
@@ -953,18 +948,18 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
             item->updateRepr();
         }
 
-        Geom::PathVector pathv = this->accumulated->get_pathvector() * desktop->dt2doc();
+        Geom::PathVector pathv = this->accumulated->get_pathvector() * _desktop->dt2doc();
         this->repr->setAttribute("d", sp_svg_write_path(pathv));
 
         if (unionize) {
-            desktop->getSelection()->add(this->repr);
-            desktop->getSelection()->pathUnion(true);
+            _desktop->getSelection()->add(this->repr);
+            _desktop->getSelection()->pathUnion(true);
         } else if (subtract) {
-            desktop->getSelection()->add(this->repr);
-            desktop->getSelection()->pathDiff(true);
+            _desktop->getSelection()->add(this->repr);
+            _desktop->getSelection()->pathDiff(true);
         } else {
             if (this->keep_selected) {
-                desktop->getSelection()->set(this->repr);
+                _desktop->getSelection()->set(this->repr);
             }
         }
 
@@ -972,13 +967,13 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
         // First, find out whether our repr is still linked to a valid object. In this case,
         // we need to write the transform data only for this element.
         // Either there was no boolean op or it failed.
-        SPItem *result = SP_ITEM(desktop->doc()->getObjectByRepr(this->repr));
+        SPItem *result = SP_ITEM(_desktop->doc()->getObjectByRepr(this->repr));
 
         if (result == nullptr) {
             // The boolean operation succeeded.
             // Now we fetch the single item, that has been set as selected by the boolean op.
             // This is its result.
-            result = desktop->getSelection()->singleItem();
+            result = _desktop->getSelection()->singleItem();
         }
         result->doWriteTransform(result->transform, nullptr, true);
     } else {
@@ -989,7 +984,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
         this->repr = nullptr;
     }
 
-    DocumentUndo::done(desktop->getDocument(), _("Draw calligraphic stroke"), INKSCAPE_ICON("draw-calligraphic"));
+    DocumentUndo::done(_desktop->getDocument(), _("Draw calligraphic stroke"), INKSCAPE_ICON("draw-calligraphic"));
 }
 
 static void
@@ -1059,7 +1054,7 @@ static double square(double const x)
 }
 
 void CalligraphicTool::fit_and_split(bool release) {
-    double const tolerance_sq = square( desktop->w2d().descrim() * TOLERANCE_CALLIGRAPHIC );
+    double const tolerance_sq = square(_desktop->w2d().descrim() * TOLERANCE_CALLIGRAPHIC);
 
 #ifdef DYNA_DRAW_VERBOSE
     g_print("[F&S:R=%c]", release?'T':'F');
@@ -1153,17 +1148,17 @@ void CalligraphicTool::fit_and_split(bool release) {
         if (!release) {
             g_assert(!this->currentcurve->is_empty());
 
-            guint32 fillColor = sp_desktop_get_color_tool (desktop, "/tools/calligraphic", true);
-            double opacity = sp_desktop_get_master_opacity_tool (desktop, "/tools/calligraphic");
-            double fillOpacity = sp_desktop_get_opacity_tool (desktop, "/tools/calligraphic", true);
+            guint32 fillColor = sp_desktop_get_color_tool(_desktop, "/tools/calligraphic", true);
+            double opacity = sp_desktop_get_master_opacity_tool(_desktop, "/tools/calligraphic");
+            double fillOpacity = sp_desktop_get_opacity_tool(_desktop, "/tools/calligraphic", true);
             guint fill = (fillColor & 0xffffff00) | SP_COLOR_F_TO_U(opacity*fillOpacity);
 
-            auto cbp = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), currentcurve.get(), true);
+            auto cbp = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), currentcurve.get(), true);
             cbp->set_fill(fill, SP_WIND_RULE_EVENODD);
             cbp->set_stroke(0x0);
 
             /* fixme: Cannot we cascade it to root more clearly? */
-            cbp->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), desktop));
+            cbp->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), _desktop));
 
             this->segments.push_back(cbp);
         }

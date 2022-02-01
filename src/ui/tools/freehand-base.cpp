@@ -76,8 +76,8 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc);
 static void spdc_reset_white(FreehandBase *dc);
 static void spdc_free_colors(FreehandBase *dc);
 
-FreehandBase::FreehandBase(const std::string& cursor_filename)
-    : ToolBase(cursor_filename)
+FreehandBase::FreehandBase(SPDesktop *desktop, std::string prefs_path, const std::string &cursor_filename)
+    : ToolBase(desktop, prefs_path, cursor_filename)
     , selection(nullptr)
     , attach(false)
     , red_color(0xff00007f)
@@ -102,21 +102,6 @@ FreehandBase::FreehandBase(const std::string& cursor_filename)
     , is_tablet(false)
     , pressure(DEFAULT_PRESSURE)
 {
-}
-
-FreehandBase::~FreehandBase() {
-    ungrabCanvasEvents();
-
-    if (this->selection) {
-        this->selection = nullptr;
-    }
-
-    spdc_free_colors(this);
-}
-
-void FreehandBase::setup() {
-    ToolBase::setup();
-
     this->selection = desktop->getSelection();
 
     // Connect signals to track selection changes
@@ -157,7 +142,8 @@ void FreehandBase::setup() {
     spdc_attach_selection(this, this->selection);
 }
 
-void FreehandBase::finish() {
+FreehandBase::~FreehandBase()
+{
     this->sel_changed_connection.disconnect();
     this->sel_modified_connection.disconnect();
 
@@ -168,8 +154,6 @@ void FreehandBase::finish() {
     }
 
     spdc_free_colors(this);
-
-    ToolBase::finish();
 }
 
 void FreehandBase::set(const Inkscape::Preferences::Entry& /*value*/) {

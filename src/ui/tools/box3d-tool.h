@@ -46,19 +46,13 @@ namespace Tools {
 
 class Box3dTool : public ToolBase {
 public:
-	Box3dTool();
-	~Box3dTool() override;
+    Box3dTool(SPDesktop *desktop);
+    ~Box3dTool() override;
 
-	Box3D::VPDrag * _vpdrag;
+    Box3D::VPDrag *_vpdrag;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	void finish() override;
-	bool root_handler(GdkEvent* event) override;
-	bool item_handler(SPItem* item, GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
+    bool root_handler(GdkEvent *event) override;
+    bool item_handler(SPItem *item, GdkEvent *event) override;
 
 private:
     SPBox3D* box3d;

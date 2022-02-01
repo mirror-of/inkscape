@@ -59,7 +59,7 @@ namespace Tools {
 
 class ConnectorTool : public ToolBase {
 public:
-    ConnectorTool();
+    ConnectorTool(SPDesktop *desktop);
     ~ConnectorTool() override;
 
     Inkscape::Selection *selection;
@@ -110,15 +110,9 @@ public:
     gchar *ehref;
     gchar *sub_ehref;
 
-    static std::string const prefsPath;
-
-    void setup() override;
-    void finish() override;
     void set(const Inkscape::Preferences::Entry& val) override;
     bool root_handler(GdkEvent* event) override;
     bool item_handler(SPItem* item, GdkEvent* event) override;
-
-    std::string const& getPrefsPath() override;
 
     void cc_clear_active_shape();
     void cc_set_active_conn(SPItem *item);

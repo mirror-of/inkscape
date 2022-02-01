@@ -52,7 +52,7 @@ namespace Tools {
 
 class LpeTool : public PenTool {
 public:
-    LpeTool();
+    LpeTool(SPDesktop *desktop);
     ~LpeTool() override;
 
     ShapeEditor* shape_editor = nullptr;
@@ -63,13 +63,7 @@ public:
 
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
-
-    static const std::string prefsPath;
-
-    const std::string& getPrefsPath() override;
-
 protected:
-    void setup() override;
     void set(const Inkscape::Preferences::Entry& val) override;
     bool root_handler(GdkEvent* event) override;
     bool item_handler(SPItem* item, GdkEvent* event) override;

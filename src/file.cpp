@@ -1000,7 +1000,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         if (!in_place) {
             SnapManager &m = desktop->namedview->snap_manager;
             m.setup(desktop);
-            sp_event_context_discard_delayed_snap_event(desktop->event_context);
+            desktop->event_context->discard_delayed_snap_event();
 
             // get offset from mouse pointer to bbox center, snap to grid if enabled
             Geom::Point mouse_offset = desktop->point() - sel_bbox->midpoint();

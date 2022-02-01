@@ -29,27 +29,20 @@ namespace UI {
 namespace Tools {
 
 class MarkerTool : public ToolBase {
-	public:
-		MarkerTool();
+public:
+    MarkerTool(SPDesktop *desktop);
+    ~MarkerTool() override;
 
-		~MarkerTool() override;
+    void selection_changed(Inkscape::Selection *selection);
 
-		void setup() override;
-		void finish() override;
-		void selection_changed(Inkscape::Selection* selection);
+    bool root_handler(GdkEvent *event) override;
+    std::map<SPItem *, std::unique_ptr<ShapeEditor>> _shape_editors;
 
-		bool root_handler(GdkEvent* event) override;
-		const std::string& getPrefsPath() override;
+    int editMarkerMode = -1;
 
-		static const std::string prefsPath;
-		std::map<SPItem *, std::unique_ptr<ShapeEditor>> _shape_editors;
-		
-		int editMarkerMode = -1;
-
-	private:
-		sigc::connection sel_changed_connection;
-        ShapeRecord get_marker_transform(SPShape* shape, SPItem *parent_item, SPMarker *sp_marker, SPMarkerLoc marker_type);
-		
+private:
+    sigc::connection sel_changed_connection;
+    ShapeRecord get_marker_transform(SPShape *shape, SPItem *parent_item, SPMarker *sp_marker, SPMarkerLoc marker_type);
 };
 
 }}}

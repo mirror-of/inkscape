@@ -85,7 +85,10 @@ bool sp_desktop_root_handler(GdkEvent *event, SPDesktop *desktop)
         snoop_extended(event, desktop);
     }
 
-    return (bool)sp_event_context_root_handler(desktop->event_context, event);
+    if (auto ec = desktop->event_context) {
+        return (bool)ec->start_root_handler(event);
+    }
+    return false;
 }
 
 
@@ -122,7 +125,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
         case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
                 drag_type = SP_DRAG_NONE;
-                sp_event_context_discard_delayed_snap_event(desktop->event_context);
+                desktop->event_context->discard_delayed_snap_event();
                 guide_item->ungrab();
                 Inkscape::UI::Dialogs::GuidelinePropertiesDialog::showDialog(guide, desktop);
                 ret = true;
@@ -250,7 +253,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
 
         case GDK_BUTTON_RELEASE:
             if (drag_type != SP_DRAG_NONE && event->button.button == 1) {
-                sp_event_context_discard_delayed_snap_event(desktop->event_context);
+                desktop->event_context->discard_delayed_snap_event();
 
                 if (moved) {
                     Geom::Point const event_w(event->button.x,
@@ -397,7 +400,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                         guide_item = nullptr;
                         DocumentUndo::done(doc, _("Delete guide"), "");
                         ret = true;
-                        sp_event_context_discard_delayed_snap_event(desktop->event_context);
+                        desktop->event_context->discard_delayed_snap_event();
                         desktop->event_context->use_tool_cursor();
                     }
                     break;

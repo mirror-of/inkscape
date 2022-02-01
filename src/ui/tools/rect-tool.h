@@ -32,19 +32,12 @@ namespace Tools {
 
 class RectTool : public ToolBase {
 public:
-	RectTool();
-	~RectTool() override;
+    RectTool(SPDesktop *desktop);
+    ~RectTool() override;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	void finish() override;
 	void set(const Inkscape::Preferences::Entry& val) override;
 	bool root_handler(GdkEvent* event) override;
 	bool item_handler(SPItem* item, GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
-
 private:
 	SPRect *rect;
 	Geom::Point center;

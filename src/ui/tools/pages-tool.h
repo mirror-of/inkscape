@@ -38,17 +38,10 @@ namespace Tools {
 class PagesTool : public ToolBase
 {
 public:
-    PagesTool();
+    PagesTool(SPDesktop *desktop);
     ~PagesTool() override;
 
-    static const std::string prefsPath;
-
-    void setup() override;
-    void finish() override;
     bool root_handler(GdkEvent *event) override;
-
-    const std::string &getPrefsPath() override;
-
 private:
     void selectionChanged(SPPage *page);
     SPPage *pageUnder(Geom::Point pt);

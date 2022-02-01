@@ -42,15 +42,10 @@ namespace Tools {
 
 class EraserTool : public DynamicBase {
 public:
-	EraserTool();
-	~EraserTool() override;
+    EraserTool(SPDesktop *desktop);
+    ~EraserTool() override;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	bool root_handler(GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
+    bool root_handler(GdkEvent *event) override;
 
 private:
 	void reset(Geom::Point p);

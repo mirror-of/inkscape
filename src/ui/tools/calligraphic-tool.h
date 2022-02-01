@@ -46,16 +46,11 @@ namespace Tools {
 
 class CalligraphicTool : public DynamicBase {
 public:
-	CalligraphicTool();
-	~CalligraphicTool() override;
+    CalligraphicTool(SPDesktop *desktop);
+    ~CalligraphicTool() override;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	void set(const Inkscape::Preferences::Entry& val) override;
-	bool root_handler(GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
+    void set(const Inkscape::Preferences::Entry &val) override;
+    bool root_handler(GdkEvent *event) override;
 
 private:
     /** newly created object remain selected */

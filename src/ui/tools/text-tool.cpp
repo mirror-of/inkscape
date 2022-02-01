@@ -80,28 +80,9 @@ static gint sptc_focus_in(GtkWidget *widget, GdkEventFocus *event, TextTool *tc)
 static gint sptc_focus_out(GtkWidget *widget, GdkEventFocus *event, TextTool *tc);
 static void sptc_commit(GtkIMContext *imc, gchar *string, TextTool *tc);
 
-const std::string& TextTool::getPrefsPath() {
-    return TextTool::prefsPath;
-}
-
-const std::string TextTool::prefsPath = "/tools/text";
-
-
-TextTool::TextTool()
-    : ToolBase("text.svg")
+TextTool::TextTool(SPDesktop *desktop)
+    : ToolBase(desktop, "/tools/text", "text.svg")
 {
-}
-
-TextTool::~TextTool() {
-    delete this->shape_editor;
-    this->shape_editor = nullptr;
-
-    ungrabCanvasEvents();
-
-    Inkscape::Rubberband::get(this->desktop)->stop();
-}
-
-void TextTool::setup() {
     GtkSettings* settings = gtk_settings_get_default();
     gint timeout = 0;
     g_object_get( settings, "gtk-cursor-blink-time", &timeout, nullptr );
@@ -159,25 +140,23 @@ void TextTool::setup() {
         }
     }
 
-    ToolBase::setup();
+    this->shape_editor = new ShapeEditor(desktop);
 
-    this->shape_editor = new ShapeEditor(this->desktop);
-
-    SPItem *item = this->desktop->getSelection()->singleItem();
+    SPItem *item = desktop->getSelection()->singleItem();
     if (item && (SP_IS_FLOWTEXT(item) || SP_IS_TEXT(item))) {
         this->shape_editor->set_item(item);
     }
 
-    this->sel_changed_connection = desktop->getSelection()->connectChangedFirst(
+    this->sel_changed_connection = _desktop->getSelection()->connectChangedFirst(
         sigc::mem_fun(*this, &TextTool::_selectionChanged)
     );
-    this->sel_modified_connection = desktop->getSelection()->connectModifiedFirst(
+    this->sel_modified_connection = _desktop->getSelection()->connectModifiedFirst(
         sigc::mem_fun(*this, &TextTool::_selectionModified)
     );
-    this->style_set_connection = desktop->connectSetStyle(
+    this->style_set_connection = _desktop->connectSetStyle(
         sigc::mem_fun(*this, &TextTool::_styleSet)
     );
-    this->style_query_connection = desktop->connectQueryStyle(
+    this->style_query_connection = _desktop->connectQueryStyle(
         sigc::mem_fun(*this, &TextTool::_styleQueried)
     );
 
@@ -192,15 +171,10 @@ void TextTool::setup() {
     }
 }
 
-void TextTool::deleteSelected()
+TextTool::~TextTool()
 {
-    Inkscape::UI::Tools::sp_text_delete_selection(desktop->event_context);
-    DocumentUndo::done(desktop->getDocument(), _("Delete text"), INKSCAPE_ICON("draw-text"));
-}
-
-void TextTool::finish() {
-    if (this->desktop) {
-        sp_signal_disconnect_by_data(this->desktop->getCanvas()->gobj(), this);
+    if (_desktop) {
+        sp_signal_disconnect_by_data(_desktop->getCanvas()->gobj(), this);
     }
 
     this->enableGrDrag(false);
@@ -248,7 +222,18 @@ void TextTool::finish() {
     }
     text_selection_quads.clear();
 
-    ToolBase::finish();
+    delete this->shape_editor;
+    this->shape_editor = nullptr;
+
+    ungrabCanvasEvents();
+
+    Inkscape::Rubberband::get(_desktop)->stop();
+}
+
+void TextTool::deleteSelected()
+{
+    Inkscape::UI::Tools::sp_text_delete_selection(_desktop->event_context);
+    DocumentUndo::done(_desktop->getDocument(), _("Delete text"), INKSCAPE_ICON("draw-text"));
 }
 
 bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
@@ -264,12 +249,12 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
                 // this var allow too much lees subbselection queries
                 // reducing it to cursor iteracion, mouseup and down
                 // find out clicked item, disregarding groups
-                item_ungrouped = desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE);
+                item_ungrouped = _desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE);
                 if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
-                    desktop->getSelection()->set(item_ungrouped);
+                    _desktop->getSelection()->set(item_ungrouped);
                     if (this->text) {
                         // find out click point in document coordinates
-                        Geom::Point p = desktop->w2d(Geom::Point(event->button.x, event->button.y));
+                        Geom::Point p = _desktop->w2d(Geom::Point(event->button.x, event->button.y));
                         // set the cursor closest to that point
                         if (event->button.state & GDK_SHIFT_MASK) {
                             this->text_sel_start = old_start;
@@ -314,9 +299,9 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
         case GDK_BUTTON_RELEASE:
             if (event->button.button == 1 && this->dragging) {
                 this->dragging = 0;
-                sp_event_context_discard_delayed_snap_event(this);
+                this->discard_delayed_snap_event();
                 ret = TRUE;
-                desktop->emit_text_cursor_moved(this, this);
+                _desktop->emit_text_cursor_moved(this, this);
             }
             break;
         case GDK_MOTION_NOTIFY:
@@ -462,8 +447,7 @@ bool TextTool::root_handler(GdkEvent* event) {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-
-                if (Inkscape::have_viable_layer(desktop, desktop->getMessageStack()) == false) {
+                if (Inkscape::have_viable_layer(_desktop, _desktop->getMessageStack()) == false) {
                     return TRUE;
                 }
 
@@ -473,15 +457,15 @@ bool TextTool::root_handler(GdkEvent* event) {
                 this->within_tolerance = true;
 
                 Geom::Point const button_pt(event->button.x, event->button.y);
-                Geom::Point button_dt(desktop->w2d(button_pt));
+                Geom::Point button_dt(_desktop->w2d(button_pt));
 
-                SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop);
+                SnapManager &m = _desktop->namedview->snap_manager;
+                m.setup(_desktop);
                 m.freeSnapReturnByRef(button_dt, Inkscape::SNAPSOURCE_NODE_HANDLE);
                 m.unSetup();
 
                 this->p0 = button_dt;
-                Inkscape::Rubberband::get(desktop)->start(desktop, this->p0);
+                Inkscape::Rubberband::get(_desktop)->start(_desktop, this->p0);
 
                 grabCanvasEvents();
 
@@ -504,28 +488,28 @@ bool TextTool::root_handler(GdkEvent* event) {
                 this->within_tolerance = false;
 
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
-                Geom::Point p = desktop->w2d(motion_pt);
+                Geom::Point p = _desktop->w2d(motion_pt);
 
-                SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop);
+                SnapManager &m = _desktop->namedview->snap_manager;
+                m.setup(_desktop);
                 m.freeSnapReturnByRef(p, Inkscape::SNAPSOURCE_NODE_HANDLE);
                 m.unSetup();
 
-                Inkscape::Rubberband::get(desktop)->move(p);
+                Inkscape::Rubberband::get(_desktop)->move(p);
                 gobble_motion_events(GDK_BUTTON1_MASK);
 
                 // status text
                 Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(fabs((p - this->p0)[Geom::X]), "px");
                 Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(fabs((p - this->p0)[Geom::Y]), "px");
-                Glib::ustring xs = x_q.string(desktop->namedview->display_units);
-                Glib::ustring ys = y_q.string(desktop->namedview->display_units);
+                Glib::ustring xs = x_q.string(_desktop->namedview->display_units);
+                Glib::ustring ys = y_q.string(_desktop->namedview->display_units);
                 this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs.c_str(), ys.c_str());
             } else if (!this->sp_event_context_knot_mouseover()) {
-                SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop);
+                SnapManager &m = _desktop->namedview->snap_manager;
+                m.setup(_desktop);
 
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
-                Geom::Point motion_dt(desktop->w2d(motion_w));
+                Geom::Point motion_dt(_desktop->w2d(motion_w));
                 m.preSnap(Inkscape::SnapCandidatePoint(motion_dt, Inkscape::SNAPSOURCE_OTHER_HANDLE));
                 m.unSetup();
             }
@@ -534,7 +518,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 if (!layout)
                     break;
                 // find out click point in document coordinates
-                Geom::Point p = desktop->w2d(Geom::Point(event->button.x, event->button.y));
+                Geom::Point p = _desktop->w2d(Geom::Point(event->button.x, event->button.y));
                 // set the cursor closest to that point
                 Inkscape::Text::Layout::iterator new_end = sp_te_get_position_by_coords(this->text, p);
                 if (this->dragging == 2) {
@@ -562,7 +546,7 @@ bool TextTool::root_handler(GdkEvent* event) {
             }
             // find out item under mouse, disregarding groups
             SPItem *item_ungrouped =
-                desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE, nullptr);
+                _desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE, nullptr);
             if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
                 Inkscape::Text::Layout const *layout = te_get_layout(item_ungrouped);
                 if (layout->inputTruncated()) {
@@ -579,11 +563,11 @@ bool TextTool::root_handler(GdkEvent* event) {
                 this->set_cursor("text-insert.svg");
                 sp_text_context_update_text_selection(this);
                 if (SP_IS_TEXT(item_ungrouped)) {
-                    desktop->event_context->defaultMessageContext()->set(
+                    _desktop->event_context->defaultMessageContext()->set(
                         Inkscape::NORMAL_MESSAGE,
                         _("<b>Click</b> to edit the text, <b>drag</b> to select part of the text."));
                 } else {
-                    desktop->event_context->defaultMessageContext()->set(
+                    _desktop->event_context->defaultMessageContext()->set(
                         Inkscape::NORMAL_MESSAGE,
                         _("<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."));
                 }
@@ -591,30 +575,30 @@ bool TextTool::root_handler(GdkEvent* event) {
             } else {
                 // update cursor and statusbar: we are not over a text object now
                 this->set_cursor("text.svg");
-                desktop->event_context->defaultMessageContext()->clear();
+                _desktop->event_context->defaultMessageContext()->clear();
                 this->over_text = false;
             }
         } break;
 
         case GDK_BUTTON_RELEASE:
             if (event->button.button == 1) {
-                sp_event_context_discard_delayed_snap_event(this);
+                this->discard_delayed_snap_event();
 
-                Geom::Point p1 = desktop->w2d(Geom::Point(event->button.x, event->button.y));
+                Geom::Point p1 = _desktop->w2d(Geom::Point(event->button.x, event->button.y));
 
-                SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop);
+                SnapManager &m = _desktop->namedview->snap_manager;
+                m.setup(_desktop);
                 m.freeSnapReturnByRef(p1, Inkscape::SNAPSOURCE_NODE_HANDLE);
                 m.unSetup();
 
                 ungrabCanvasEvents();
 
-                Inkscape::Rubberband::get(desktop)->stop();
+                Inkscape::Rubberband::get(_desktop)->stop();
 
                 if (this->creating && this->within_tolerance) {
                     /* Button 1, set X & Y & new item */
-                    desktop->getSelection()->clear();
-                    this->pdoc = desktop->dt2doc(p1);
+                    _desktop->getSelection()->clear();
+                    this->pdoc = _desktop->dt2doc(p1);
                     this->show = TRUE;
                     this->phase = true;
                     this->nascent_object = true; // new object was just created
@@ -623,15 +607,15 @@ bool TextTool::root_handler(GdkEvent* event) {
                     cursor->show();
                     // Cursor height is defined by the new text object's font size; it needs to be set
                     // artificially here, for the text object does not exist yet:
-                    double cursor_height = sp_desktop_get_font_size_tool(desktop);
-                    auto const y_dir = desktop->yaxisdir();
+                    double cursor_height = sp_desktop_get_font_size_tool(_desktop);
+                    auto const y_dir = _desktop->yaxisdir();
                     Geom::Point const cursor_size(0, y_dir * cursor_height);
                     cursor->set_coords(p1, p1 - cursor_size);
                     if (this->imc) {
                         GdkRectangle im_cursor;
-                        Geom::Point const top_left = desktop->get_display_area().corner(0);
-                        Geom::Point const im_d0 = desktop->d2w(p1 - top_left);
-                        Geom::Point const im_d1 = desktop->d2w(p1 - cursor_size - top_left);
+                        Geom::Point const top_left = _desktop->get_display_area().corner(0);
+                        Geom::Point const im_d0 = _desktop->d2w(p1 - top_left);
+                        Geom::Point const im_d1 = _desktop->d2w(p1 - cursor_size - top_left);
                         Geom::Rect const im_rect(im_d0, im_d1);
                         im_cursor.x = (int) floor(im_rect.left());
                         im_cursor.y = (int) floor(im_rect.top());
@@ -643,34 +627,34 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                     this->within_tolerance = false;
                 } else if (this->creating) {
-                    double cursor_height = sp_desktop_get_font_size_tool(desktop);
+                    double cursor_height = sp_desktop_get_font_size_tool(_desktop);
                     if (fabs(p1[Geom::Y] - this->p0[Geom::Y]) > cursor_height) {
                         // otherwise even one line won't fit; most probably a slip of hand (even if bigger than tolerance)
 
                         if (prefs->getBool("/tools/text/use_svg2", true)) {
                             // SVG 2 text
 
-                            SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);
+                            SPItem *text = create_text_with_rectangle (_desktop, this->p0, p1);
 
-                            desktop->getSelection()->set(text);
+                            _desktop->getSelection()->set(text);
 
                         } else {
                             // SVG 1.2 text
 
-                            SPItem *ft = create_flowtext_with_internal_frame (desktop, this->p0, p1);
+                            SPItem *ft = create_flowtext_with_internal_frame (_desktop, this->p0, p1);
 
-                            desktop->getSelection()->set(ft);
+                            _desktop->getSelection()->set(ft);
                         }
 
-                        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Flowed text is created."));
-                        DocumentUndo::done(desktop->getDocument(),  _("Create flowed text"), INKSCAPE_ICON("draw-text"));
+                        _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Flowed text is created."));
+                        DocumentUndo::done(_desktop->getDocument(),  _("Create flowed text"), INKSCAPE_ICON("draw-text"));
 
                     } else {
-                        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is <b>too small</b> for the current font size. Flowed text not created."));
+                        _desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is <b>too small</b> for the current font size. Flowed text not created."));
                     }
                 }
                 this->creating = false;
-                desktop->emit_text_cursor_moved(this, this);
+                _desktop->emit_text_cursor_moved(this, this);
                 return TRUE;
             }
             break;
@@ -779,7 +763,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                         int screenlines = 1;
                         if (this->text) {
                             double spacing = sp_te_get_average_linespacing(this->text);
-                            Geom::Rect const d = desktop->get_display_area().bounds();
+                            Geom::Rect const d = _desktop->get_display_area().bounds();
                             screenlines = (int) floor(fabs(d.min()[Geom::Y] - d.max()[Geom::Y])/spacing) - 1;
                             if (screenlines <= 0)
                                 screenlines = 1;
@@ -790,7 +774,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                             case GDK_KEY_x:
                             case GDK_KEY_X:
                                 if (MOD__ALT_ONLY(event)) {
-                                    desktop->setToolboxFocusTo("TextFontFamilyAction_entry");
+                                    _desktop->setToolboxFocusTo("TextFontFamilyAction_entry");
                                     return TRUE;
                                 }
                                 break;
@@ -804,8 +788,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     this->text_sel_start = this->text_sel_end = sp_te_replace(this->text, this->text_sel_start, this->text_sel_end, "\302\240");
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
-                                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No-break space"));
-                                    DocumentUndo::done(desktop->getDocument(),  _("Insert no-break space"), INKSCAPE_ICON("draw-text"));
+                                    _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No-break space"));
+                                    DocumentUndo::done(_desktop->getDocument(),  _("Insert no-break space"), INKSCAPE_ICON("draw-text"));
                                     return TRUE;
                                 }
                                 break;
@@ -841,7 +825,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         sp_repr_css_set_property(css, "font-weight", "normal");
                                     sp_te_apply_style(this->text, this->text_sel_start, this->text_sel_end, css);
                                     sp_repr_css_attr_unref(css);
-                                    DocumentUndo::done(desktop->getDocument(),  _("Make bold"), INKSCAPE_ICON("draw-text"));
+                                    DocumentUndo::done(_desktop->getDocument(),  _("Make bold"), INKSCAPE_ICON("draw-text"));
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
                                     return TRUE;
@@ -858,7 +842,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         sp_repr_css_set_property(css, "font-style", "italic");
                                     sp_te_apply_style(this->text, this->text_sel_start, this->text_sel_end, css);
                                     sp_repr_css_attr_unref(css);
-                                    DocumentUndo::done(desktop->getDocument(),  _("Make italic"), INKSCAPE_ICON("draw-text"));
+                                    DocumentUndo::done(_desktop->getDocument(),  _("Make italic"), INKSCAPE_ICON("draw-text"));
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
                                     return TRUE;
@@ -902,7 +886,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                                 sp_text_context_update_cursor(this);
                                 sp_text_context_update_text_selection(this);
-                                DocumentUndo::done(desktop->getDocument(),  _("New line"), INKSCAPE_ICON("draw-text"));
+                                DocumentUndo::done(_desktop->getDocument(),  _("New line"), INKSCAPE_ICON("draw-text"));
                                 return TRUE;
                             }
                             case GDK_KEY_BackSpace:
@@ -943,7 +927,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
-                                    DocumentUndo::done(desktop->getDocument(),  _("Backspace"), INKSCAPE_ICON("draw-text"));
+                                    DocumentUndo::done(_desktop->getDocument(),  _("Backspace"), INKSCAPE_ICON("draw-text"));
                                 }
                                 return TRUE;
                             case GDK_KEY_Delete:
@@ -981,7 +965,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
-                                    DocumentUndo::done(desktop->getDocument(),  _("Delete"), INKSCAPE_ICON("draw-text"));
+                                    DocumentUndo::done(_desktop->getDocument(),  _("Delete"), INKSCAPE_ICON("draw-text"));
                                 }
                                 return TRUE;
                             case GDK_KEY_Left:
@@ -992,12 +976,12 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         gint mul = 1 + gobble_key_events(
                                             get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*-10, 0));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(mul*-10, 0));
                                         else
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*-1, 0));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(mul*-1, 0));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(desktop->getDocument(), "kern:left",  _("Kern to the left"), INKSCAPE_ICON("draw-text"));
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:left",  _("Kern to the left"), INKSCAPE_ICON("draw-text"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorLeftWithControl();
@@ -1016,12 +1000,12 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         gint mul = 1 + gobble_key_events(
                                             get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*10, 0));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(mul*10, 0));
                                         else
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*1, 0));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(mul*1, 0));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(desktop->getDocument(), "kern:right",  _("Kern to the right"), INKSCAPE_ICON("draw-text"));
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:right",  _("Kern to the right"), INKSCAPE_ICON("draw-text"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorRightWithControl();
@@ -1040,12 +1024,12 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         gint mul = 1 + gobble_key_events(
                                             get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*-10));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(0, mul*-10));
                                         else
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*-1));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(0, mul*-1));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(desktop->getDocument(), "kern:up",  _("Kern up"), INKSCAPE_ICON("draw-text"));
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:up",  _("Kern up"), INKSCAPE_ICON("draw-text"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorUpWithControl();
@@ -1064,12 +1048,12 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         gint mul = 1 + gobble_key_events(
                                             get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*10));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(0, mul*10));
                                         else
-                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*1));
+                                            sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, Geom::Point(0, mul*1));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(desktop->getDocument(), "kern:down",  _("Kern down"), INKSCAPE_ICON("draw-text"));
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:down",  _("Kern down"), INKSCAPE_ICON("draw-text"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorDownWithControl();
@@ -1122,9 +1106,9 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 if (this->creating) {
                                     this->creating = false;
                                     ungrabCanvasEvents();
-                                    Inkscape::Rubberband::get(desktop)->stop();
+                                    Inkscape::Rubberband::get(_desktop)->stop();
                                 } else {
-                                    desktop->getSelection()->clear();
+                                    _desktop->getSelection()->clear();
                                 }
                                 this->nascent_object = FALSE;
                                 return TRUE;
@@ -1134,14 +1118,14 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         if (MOD__ALT(event)) {
                                             if (MOD__SHIFT(event)) {
                                                 // FIXME: alt+shift+[] does not work, don't know why
-                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -10);
+                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, -10);
                                             } else {
-                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -1);
+                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, -1);
                                             }
                                         } else {
-                                            sp_te_adjust_rotation(this->text, this->text_sel_start, this->text_sel_end, desktop, -90);
+                                            sp_te_adjust_rotation(this->text, this->text_sel_start, this->text_sel_end, _desktop, -90);
                                         }
-                                        DocumentUndo::maybeDone(desktop->getDocument(), "textrot:ccw",  _("Rotate counterclockwise"), INKSCAPE_ICON("draw-text"));
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "textrot:ccw",  _("Rotate counterclockwise"), INKSCAPE_ICON("draw-text"));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
                                         return TRUE;
@@ -1154,14 +1138,14 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         if (MOD__ALT(event)) {
                                             if (MOD__SHIFT(event)) {
                                                 // FIXME: alt+shift+[] does not work, don't know why
-                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 10);
+                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, 10);
                                             } else {
-                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 1);
+                                                sp_te_adjust_rotation_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, 1);
                                             }
                                         } else {
-                                            sp_te_adjust_rotation(this->text, this->text_sel_start, this->text_sel_end, desktop, 90);
+                                            sp_te_adjust_rotation(this->text, this->text_sel_start, this->text_sel_end, _desktop, 90);
                                         }
-                                        DocumentUndo::maybeDone(desktop->getDocument(), "textrot:cw",  _("Rotate clockwise"), INKSCAPE_ICON("draw-text"));
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "textrot:cw",  _("Rotate clockwise"), INKSCAPE_ICON("draw-text"));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
                                         return TRUE;
@@ -1174,16 +1158,16 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     if (MOD__ALT(event)) {
                                         if (MOD__CTRL(event)) {
                                             if (MOD__SHIFT(event))
-                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -10);
+                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, -10);
                                             else
-                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -1);
-                                            DocumentUndo::maybeDone(desktop->getDocument(), "linespacing:dec",  _("Contract line spacing"), INKSCAPE_ICON("draw-text"));
+                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, -1);
+                                            DocumentUndo::maybeDone(_desktop->getDocument(), "linespacing:dec",  _("Contract line spacing"), INKSCAPE_ICON("draw-text"));
                                         } else {
                                             if (MOD__SHIFT(event))
-                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -10);
+                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, -10);
                                             else
-                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -1);
-                                            DocumentUndo::maybeDone(desktop->getDocument(), "letterspacing:dec",  _("Contract letter spacing"), INKSCAPE_ICON("draw-text"));
+                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, -1);
+                                            DocumentUndo::maybeDone(_desktop->getDocument(), "letterspacing:dec",  _("Contract letter spacing"), INKSCAPE_ICON("draw-text"));
                                         }
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
@@ -1197,16 +1181,16 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     if (MOD__ALT(event)) {
                                         if (MOD__CTRL(event)) {
                                             if (MOD__SHIFT(event))
-                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 10);
+                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, 10);
                                             else
-                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 1);
-                                            DocumentUndo::maybeDone(desktop->getDocument(), "linespacing:inc",  _("Expand line spacing"), INKSCAPE_ICON("draw-text"));
+                                                sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, 1);
+                                            DocumentUndo::maybeDone(_desktop->getDocument(), "linespacing:inc",  _("Expand line spacing"), INKSCAPE_ICON("draw-text"));
                                         } else {
                                             if (MOD__SHIFT(event))
-                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 10);
+                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, 10);
                                             else
-                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 1);
-                                            DocumentUndo::maybeDone(desktop->getDocument(), "letterspacing:inc",  _("Expand letter spacing"), INKSCAPE_ICON("draw-text"));
+                                                sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, _desktop, 1);
+                                            DocumentUndo::maybeDone(_desktop->getDocument(), "letterspacing:inc",  _("Expand letter spacing"), INKSCAPE_ICON("draw-text"));
                                         }
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
@@ -1241,10 +1225,10 @@ bool TextTool::root_handler(GdkEvent* event) {
                     if (this->creating) {
                         this->creating = false;
                         ungrabCanvasEvents();
-                        Inkscape::Rubberband::get(desktop)->stop();
+                        Inkscape::Rubberband::get(_desktop)->stop();
                     }
                 } else if ((group0_keyval == GDK_KEY_x || group0_keyval == GDK_KEY_X) && MOD__ALT_ONLY(event)) {
-                    desktop->setToolboxFocusTo("TextFontFamilyAction_entry");
+                    _desktop->setToolboxFocusTo("TextFontFamilyAction_entry");
                     return TRUE;
                 }
             }
@@ -1544,7 +1528,7 @@ bool TextTool::_styleSet(SPCSSAttr const *css)
         sptext->updateRepr();
     }
 
-    DocumentUndo::done(desktop->getDocument(), _("Set text style"), INKSCAPE_ICON("draw-text"));
+    DocumentUndo::done(_desktop->getDocument(), _("Set text style"), INKSCAPE_ICON("draw-text"));
     sp_text_context_update_cursor(this);
     sp_text_context_update_text_selection(this);
     return true;
@@ -1612,8 +1596,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
     // due to interruptible display, tc may already be destroyed during a display update before
     // the cursor update (can't do both atomically, alas)
     if (!tc->getDesktop()) return;
-
-    SPDesktop* desktop = tc->getDesktop();
+    auto desktop = tc->getDesktop();
 
     if (tc->text) {
         Geom::Point p0, p1;

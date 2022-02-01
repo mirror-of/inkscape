@@ -37,58 +37,58 @@
 
 using namespace Inkscape::UI::Tools;
 
-ToolBase *ToolFactory::createObject(std::string const& id)
+ToolBase *ToolFactory::createObject(SPDesktop *desktop, std::string const &id)
 {
     ToolBase *tool = nullptr;
 
     if (id == "/tools/shapes/arc")
-        tool = new ArcTool;
+        tool = new ArcTool(desktop);
     else if (id == "/tools/shapes/3dbox")
-        tool = new Box3dTool;
+        tool = new Box3dTool(desktop);
     else if (id == "/tools/calligraphic")
-        tool = new CalligraphicTool;
+        tool = new CalligraphicTool(desktop);
     else if (id == "/tools/connector")
-        tool = new ConnectorTool;
+        tool = new ConnectorTool(desktop);
     else if (id == "/tools/dropper")
-        tool = new DropperTool;
+        tool = new DropperTool(desktop);
     else if (id == "/tools/eraser")
-        tool = new EraserTool;
+        tool = new EraserTool(desktop);
     else if (id == "/tools/paintbucket")
-        tool = new FloodTool;
+        tool = new FloodTool(desktop);
     else if (id == "/tools/gradient")
-        tool = new GradientTool;
+        tool = new GradientTool(desktop);
     else if (id == "/tools/lpetool")
-        tool = new LpeTool;
+        tool = new LpeTool(desktop);
     else if (id == "/tools/marker")
-        tool = new MarkerTool;
+        tool = new MarkerTool(desktop);
     else if (id == "/tools/measure")
-        tool = new MeasureTool;
+        tool = new MeasureTool(desktop);
     else if (id == "/tools/mesh")
-        tool = new MeshTool;
+        tool = new MeshTool(desktop);
     else if (id == "/tools/nodes")
-        tool = new NodeTool;
+        tool = new NodeTool(desktop);
     else if (id == "/tools/pages")
-        tool = new PagesTool;
+        tool = new PagesTool(desktop);
     else if (id == "/tools/freehand/pencil")
-        tool = new PencilTool;
+        tool = new PencilTool(desktop);
     else if (id == "/tools/freehand/pen")
-        tool = new PenTool;
+        tool = new PenTool(desktop);
     else if (id == "/tools/shapes/rect")
-        tool = new RectTool;
+        tool = new RectTool(desktop);
     else if (id == "/tools/select")
-        tool = new SelectTool;
+        tool = new SelectTool(desktop);
     else if (id == "/tools/shapes/spiral")
-        tool = new SpiralTool;
+        tool = new SpiralTool(desktop);
     else if (id == "/tools/spray")
-        tool = new SprayTool;
+        tool = new SprayTool(desktop);
     else if (id == "/tools/shapes/star")
-        tool = new StarTool;
+        tool = new StarTool(desktop);
     else if (id == "/tools/text")
-        tool = new TextTool;
+        tool = new TextTool(desktop);
     else if (id == "/tools/tweak")
-        tool = new TweakTool;
+        tool = new TweakTool(desktop);
     else if (id == "/tools/zoom")
-        tool = new ZoomTool;
+        tool = new ZoomTool(desktop);
     else
         fprintf(stderr, "WARNING: unknown tool: %s", id.c_str());
 

@@ -27,29 +27,10 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-const std::string& ZoomTool::getPrefsPath() {
-	return ZoomTool::prefsPath;
-}
-
-const std::string ZoomTool::prefsPath = "/tools/zoom";
-
-ZoomTool::ZoomTool()
-    : ToolBase("zoom-in.svg")
+ZoomTool::ZoomTool(SPDesktop *desktop)
+    : ToolBase(desktop, "/tools/zoom", "zoom-in.svg")
     , escaped(false)
 {
-}
-
-ZoomTool::~ZoomTool() = default;
-
-void ZoomTool::finish() {
-    this->enableGrDrag(false);
-
-    ungrabCanvasEvents();
-
-    ToolBase::finish();
-}
-
-void ZoomTool::setup() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (prefs->getBool("/tools/zoom/selcue")) {
@@ -59,8 +40,12 @@ void ZoomTool::setup() {
     if (prefs->getBool("/tools/zoom/gradientdrag")) {
         this->enableGrDrag();
     }
+}
 
-    ToolBase::setup();
+ZoomTool::~ZoomTool()
+{
+    this->enableGrDrag(false);
+    ungrabCanvasEvents();
 }
 
 bool ZoomTool::root_handler(GdkEvent* event) {
@@ -75,7 +60,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_PRESS:
         {
             Geom::Point const button_w(event->button.x, event->button.y);
-            Geom::Point const button_dt(desktop->w2d(button_w));
+            Geom::Point const button_dt(_desktop->w2d(button_w));
 
             if (event->button.button == 1) {
                 // save drag origin
@@ -83,7 +68,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                 yp = (gint) event->button.y;
                 within_tolerance = true;
 
-                Inkscape::Rubberband::get(desktop)->start(desktop, button_dt);
+                Inkscape::Rubberband::get(_desktop)->start(_desktop, button_dt);
 
                 escaped = false;
 
@@ -93,7 +78,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                                        ? zoom_inc
                                        : 1 / zoom_inc );
 
-                desktop->zoom_relative(button_dt, zoom_rel);
+                _desktop->zoom_relative(button_dt, zoom_rel);
                 ret = true;
             }
 
@@ -120,8 +105,8 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                 within_tolerance = false;
 
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
-                Geom::Point const motion_dt(desktop->w2d(motion_w));
-                Inkscape::Rubberband::get(desktop)->move(motion_dt);
+                Geom::Point const motion_dt(_desktop->w2d(motion_w));
+                Inkscape::Rubberband::get(_desktop)->move(motion_dt);
                 gobble_motion_events(GDK_BUTTON1_MASK);
             }
             break;
@@ -129,25 +114,25 @@ bool ZoomTool::root_handler(GdkEvent* event) {
       	case GDK_BUTTON_RELEASE:
         {
             Geom::Point const button_w(event->button.x, event->button.y);
-            Geom::Point const button_dt(desktop->w2d(button_w));
+            Geom::Point const button_dt(_desktop->w2d(button_w));
 
             if ( event->button.button == 1) {
-                Geom::OptRect const b = Inkscape::Rubberband::get(desktop)->getRectangle();
+                Geom::OptRect const b = Inkscape::Rubberband::get(_desktop)->getRectangle();
 
                 if (b && !within_tolerance && !(GDK_SHIFT_MASK & event->button.state) ) {
-                    desktop->set_display_area(*b, 10);
+                    _desktop->set_display_area(*b, 10);
                 } else if (!escaped) {
                     double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
                                            ? 1 / zoom_inc
                                            : zoom_inc );
 
-                    desktop->zoom_relative(button_dt, zoom_rel);
+                    _desktop->zoom_relative(button_dt, zoom_rel);
                 }
 
                 ret = true;
             }
 
-            Inkscape::Rubberband::get(desktop)->stop();
+            Inkscape::Rubberband::get(_desktop)->stop();
 
             ungrabCanvasEvents();
 			
@@ -158,11 +143,11 @@ bool ZoomTool::root_handler(GdkEvent* event) {
         case GDK_KEY_PRESS:
             switch (get_latin_keyval (&event->key)) {
                 case GDK_KEY_Escape:
-                    if (!Inkscape::Rubberband::get(desktop)->is_started()) {
-                        Inkscape::SelectionHelper::selectNone(desktop);
+                    if (!Inkscape::Rubberband::get(_desktop)->is_started()) {
+                        Inkscape::SelectionHelper::selectNone(_desktop);
                     }
 
-                    Inkscape::Rubberband::get(desktop)->stop();
+                    Inkscape::Rubberband::get(_desktop)->stop();
                     xp = yp = 0;
                     escaped = true;
                     ret = true;

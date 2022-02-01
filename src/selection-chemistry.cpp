@@ -236,8 +236,8 @@ void SelectionHelper::selectNext(SPDesktop *dt)
 
     Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
     GradientTool *gt = dynamic_cast<GradientTool*>(ec);
-    if (gt && ec->_grdrag->isNonEmpty()) {
-        Inkscape::UI::Tools::sp_gradient_context_select_next(ec);
+    if (gt && ec->hasGradientDrag()) {
+        gt->select_next();
     } else {
         sp_selection_item_next(dt);
     }
@@ -253,8 +253,8 @@ void SelectionHelper::selectPrev(SPDesktop *dt)
 
     Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
     GradientTool *gt = dynamic_cast<GradientTool*>(ec);
-    if (gt && ec->_grdrag->isNonEmpty()) {
-        Inkscape::UI::Tools::sp_gradient_context_select_prev(ec);
+    if (gt && ec->hasGradientDrag()) {
+        gt->select_prev();
     } else {
         sp_selection_item_prev(dt);
     }

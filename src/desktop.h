@@ -142,7 +142,7 @@ public:
     SPNamedView               *namedview;
     /// current selection; will never generally be NULL
     Inkscape::Selection       *selection;
-    Inkscape::UI::Tools::ToolBase            *event_context;
+    Inkscape::UI::Tools::ToolBase *event_context = nullptr;
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;
     /// Stored settings for print dialogue

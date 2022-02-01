@@ -560,12 +560,9 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
 void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidget *toolbox)
 {
-    gchar const *tname = ( eventcontext
-                           ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
-                           : nullptr );
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].tool_name.c_str()));
-        if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
+        if (eventcontext && eventcontext->getPrefsPath() == aux_toolboxes[i].type_name) {
             gtk_widget_show_now(sub_toolbox);
             g_object_set_data(G_OBJECT(toolbox), "shows", sub_toolbox);
         } else {

@@ -39,8 +39,7 @@ namespace Tools {
 
 class TextTool : public ToolBase {
 public:
-
-    TextTool();
+    TextTool(SPDesktop *desktop);
     ~TextTool() override;
 
     sigc::connection sel_changed_connection;
@@ -84,15 +83,8 @@ public:
     /* Preedit String */
     gchar* preedit_string = nullptr;
 
-    static const std::string prefsPath;
-
-    void setup() override;
-    void finish() override;
     bool root_handler(GdkEvent* event) override;
     bool item_handler(SPItem* item, GdkEvent* event) override;
-
-    const std::string& getPrefsPath() override;
-
     void deleteSelected();
 private:
     void _selectionChanged(Inkscape::Selection *selection);

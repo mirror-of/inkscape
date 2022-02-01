@@ -33,37 +33,10 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-const std::string& MarkerTool::getPrefsPath() {
-	return MarkerTool::prefsPath;
-}
-
-const std::string MarkerTool::prefsPath = "/tools/marker";
-
-MarkerTool::MarkerTool()
-    :   ToolBase("select.svg")
+MarkerTool::MarkerTool(SPDesktop *desktop)
+    : ToolBase(desktop, "/tools/marker", "select.svg")
 {
-}
-
-MarkerTool::~MarkerTool() {
-    this->_shape_editors.clear();
-    
-    this->enableGrDrag(false);
-    this->sel_changed_connection.disconnect();
-}
-
-void MarkerTool::finish() {
-    ungrabCanvasEvents();
-
-    this->message_context->clear();
-    this->sel_changed_connection.disconnect();
-    
-    ToolBase::finish();
-}
-
-void MarkerTool::setup() {
-
-    ToolBase::setup();
-    Inkscape::Selection *selection = this->desktop->getSelection();
+    Inkscape::Selection *selection = desktop->getSelection();
 
     this->sel_changed_connection.disconnect();
     this->sel_changed_connection = selection->connectChanged(
@@ -74,7 +47,17 @@ void MarkerTool::setup() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/marker/selcue")) this->enableSelectionCue();
     if (prefs->getBool("/tools/marker/gradientdrag")) this->enableGrDrag();
+}
 
+MarkerTool::~MarkerTool()
+{
+    ungrabCanvasEvents();
+
+    this->message_context->clear();
+    this->_shape_editors.clear();
+
+    this->enableGrDrag(false);
+    this->sel_changed_connection.disconnect();
 }
 
 /*
@@ -85,10 +68,9 @@ void MarkerTool::setup() {
 void MarkerTool::selection_changed(Inkscape::Selection *selection) {
     using namespace Inkscape::UI;
 
-    SPDesktop *desktop = this->desktop;;
-    g_assert(desktop != nullptr);
+    g_assert(_desktop != nullptr);
 
-    SPDocument *doc = desktop->getDocument();
+    SPDocument *doc = _desktop->getDocument();
     g_assert(doc != nullptr);
 
     auto selected_items = selection->items();
@@ -128,7 +110,7 @@ void MarkerTool::selection_changed(Inkscape::Selection *selection) {
                             break;
                     }
 
-                    auto si = std::make_unique<ShapeEditor>(this->desktop, sr.edit_transform, sr.edit_rotation, editMarkerMode);
+                    auto si = std::make_unique<ShapeEditor>(_desktop, sr.edit_transform, sr.edit_rotation, editMarkerMode);
                     si->set_item(dynamic_cast<SPItem *>(sr.object));
 
                     this->_shape_editors.insert({item, std::move(si)});
@@ -141,10 +123,9 @@ void MarkerTool::selection_changed(Inkscape::Selection *selection) {
 
 // handles selection of new items
 bool MarkerTool::root_handler(GdkEvent* event) {
-    SPDesktop *desktop = this->desktop;
-    g_assert(desktop != nullptr);
+    g_assert(_desktop != nullptr);
 
-    Inkscape::Selection *selection = desktop->getSelection();
+    Inkscape::Selection *selection = _desktop->getSelection();
     gint ret = false;
     
     switch (event->type) {
@@ -152,7 +133,7 @@ bool MarkerTool::root_handler(GdkEvent* event) {
             if (event->button.button == 1) {
 
                 Geom::Point const button_w(event->button.x, event->button.y);  
-                this->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
+                this->item_to_select = sp_event_context_find_item (_desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
 
                 grabCanvasEvents();
                 ret = true;
@@ -191,10 +172,10 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
 
     // scale marker transform with parent stroke width
     SPStyle *style = shape->style;
-    Geom::Scale scale = this->desktop->getDocument()->getDocumentScale(); 
-    
+    Geom::Scale scale = _desktop->getDocument()->getDocumentScale();
+
     if(sp_marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
-        scale = Geom::Scale(style->stroke_width.computed * this->desktop->getDocument()->getDocumentScale()[Geom::X]);
+        scale = Geom::Scale(style->stroke_width.computed * _desktop->getDocument()->getDocumentScale()[Geom::X]);
     }
 
     Geom::PathVector const &pathv = shape->curve()->get_pathvector();

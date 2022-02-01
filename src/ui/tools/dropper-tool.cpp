@@ -50,22 +50,9 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-const std::string& DropperTool::getPrefsPath() {
-	return DropperTool::prefsPath;
-}
-
-const std::string DropperTool::prefsPath = "/tools/dropper";
-
-DropperTool::DropperTool()
-    : ToolBase("dropper-pick-fill.svg")
+DropperTool::DropperTool(SPDesktop *desktop)
+    : ToolBase(desktop, "/tools/dropper", "dropper-pick-fill.svg")
 {
-}
-
-DropperTool::~DropperTool() = default;
-
-void DropperTool::setup() {
-    ToolBase::setup();
-
     area = new Inkscape::CanvasItemBpath(desktop->getCanvasControls());
     area->set_stroke(0x0000007f);
     area->set_fill(0x0, SP_WIND_RULE_EVENODD);
@@ -82,7 +69,8 @@ void DropperTool::setup() {
     }
 }
 
-void DropperTool::finish() {
+DropperTool::~DropperTool()
+{
     this->enableGrDrag(false);
 
     ungrabCanvasEvents();
@@ -91,8 +79,6 @@ void DropperTool::finish() {
         delete this->area;
         this->area = nullptr;
     }
-
-    ToolBase::finish();
 }
 
 /**
@@ -155,8 +141,8 @@ bool DropperTool::root_handler(GdkEvent* event) {
     // Only if dropping mode enabled and object's color is set.
     // Otherwise dropping mode disabled.
     if(this->dropping) {
-	Inkscape::Selection *selection = desktop->getSelection();
-	g_assert(selection);
+        Inkscape::Selection *selection = _desktop->getSelection();
+        g_assert(selection);
         guint32 apply_color;
         bool apply_set = false;
         for (auto& obj: selection->objects()) {
@@ -223,8 +209,8 @@ bool DropperTool::root_handler(GdkEvent* event) {
                     }
                     this->radius = rw;
 
-                    Geom::Point const cd = desktop->w2d(this->centre);
-                    Geom::Affine const w2dt = desktop->w2d();
+                    Geom::Point const cd = _desktop->w2d(this->centre);
+                    Geom::Affine const w2dt = _desktop->w2d();
                     const double scale = rw * w2dt.descrim();
                     Geom::Affine const sm( Geom::Scale(scale, scale) * Geom::Translate(cd) );
 
@@ -246,7 +232,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
                     pick_area = Geom::IntRect::from_xywh(floor(event->button.x), floor(event->button.y), 1, 1);
                 }
 
-                Inkscape::CanvasItemDrawing *canvas_item_drawing = desktop->getCanvasDrawing();
+                Inkscape::CanvasItemDrawing *canvas_item_drawing = _desktop->getCanvasDrawing();
                 Inkscape::Drawing *drawing = canvas_item_drawing->get_drawing();
 
                 // Ensure drawing up-to-date. (Is this really necessary?)
@@ -258,7 +244,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
                 if (pick == SP_DROPPER_PICK_VISIBLE) {
                     // compose with page color
-                    auto bg = desktop->getNamedView()->getPageManager()->getDefaultBackgroundColor();
+                    auto bg = _desktop->getNamedView()->getPageManager()->getDefaultBackgroundColor();
                     R = R + bg[0] * (1 - A);
                     G = G + bg[1] * (1 - A);
                     B = B + bg[2] * (1 - A);
@@ -301,13 +287,13 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
                 ungrabCanvasEvents();
 
-                Inkscape::Selection *selection = desktop->getSelection();
+                Inkscape::Selection *selection = _desktop->getSelection();
                 g_assert(selection);
                 std::vector<SPItem *> old_selection(selection->items().begin(), selection->items().end());
                 if(this->dropping) {
 		    Geom::Point const button_w(event->button.x, event->button.y);
 		    // remember clicked item, disregarding groups, honoring Alt
-		    this->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
+		    this->item_to_select = sp_event_context_find_item (_desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
 
                     // Change selected object to object under cursor
                     if (this->item_to_select) {
@@ -324,16 +310,16 @@ bool DropperTool::root_handler(GdkEvent* event) {
                     onetimepick_signal.emit(&picked_color);
                     onetimepick_signal.clear();
                     // Do this last as it destroys the picker tool.
-                    sp_toggle_dropper(desktop);
+                    sp_toggle_dropper(_desktop);
                     return true;
                 }
 
                 // do the actual color setting
-                sp_desktop_set_color(desktop, picked_color, false, !this->stroke);
+                sp_desktop_set_color(_desktop, picked_color, false, !this->stroke);
 
                 // REJON: set aux. toolbar input to hex color!
-                if (!(desktop->getSelection()->isEmpty())) {
-                    DocumentUndo::done(desktop->getDocument(), _("Set picked color"), INKSCAPE_ICON("color-picker"));
+                if (!(_desktop->getSelection()->isEmpty())) {
+                    DocumentUndo::done(_desktop->getDocument(), _("Set picked color"), INKSCAPE_ICON("color-picker"));
                 }
                 if(this->dropping) {
                     selection->setList(old_selection);
@@ -356,8 +342,8 @@ bool DropperTool::root_handler(GdkEvent* event) {
             }
             break;
           case GDK_KEY_Escape:
-            desktop->getSelection()->clear();
-            break;
+              _desktop->getSelection()->clear();
+              break;
         }
         break;
     }
@@ -387,8 +373,8 @@ bool DropperTool::root_handler(GdkEvent* event) {
                                         (this->stroke ? "dropper-pick-stroke.svg" : "dropper-pick-fill.svg") );
 
     // We do this ourselves to get color correct.
-    auto display = desktop->getCanvas()->get_display();
-    auto window = desktop->getCanvas()->get_window();
+    auto display = _desktop->getCanvas()->get_display();
+    auto window = _desktop->getCanvas()->get_window();
     auto cursor = load_svg_cursor(display, window, _cursor_filename, get_color(invert));
     window->set_cursor(cursor);
 

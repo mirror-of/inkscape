@@ -72,19 +72,45 @@ static Geom::Point pen_drag_origin_w(0, 0);
 static bool pen_within_tolerance = false;
 const double HANDLE_CUBIC_GAP = 0.001;
 
-const std::string& PenTool::getPrefsPath() {
-    return PenTool::prefsPath;
-}
-
-const std::string PenTool::prefsPath = "/tools/freehand/pen";
-
-PenTool::PenTool(const std::string& cursor_filename)
-    : FreehandBase(cursor_filename)
+PenTool::PenTool(SPDesktop *desktop, std::string prefs_path, const std::string &cursor_filename)
+    : FreehandBase(desktop, prefs_path, cursor_filename)
 {
     tablet_enabled = false;
+
+    // Pen indicators (temporary handles shown when adding a new node).
+    c0 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
+    c1 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
+    c0->set_fill(0x0);
+    c1->set_fill(0x0);
+    c0->hide();
+    c1->hide();
+
+    cl0 = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
+    cl1 = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
+    cl0->hide();
+    cl1->hide();
+
+    sp_event_context_read(this, "mode");
+
+    this->anchor_statusbar = false;
+
+    this->setPolylineMode();
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/tools/freehand/pen/selcue")) {
+        this->enableSelectionCue();
+    }
 }
 
 PenTool::~PenTool() {
+    this->discard_delayed_snap_event();
+
+    if (this->npoints != 0) {
+        // switching context - finish path
+        this->ea = nullptr; // unset end anchor if set (otherwise crashes)
+        this->_finish(false);
+    }
+
     if (this->c0) {
         delete c0;
     }
@@ -119,37 +145,6 @@ void PenTool::setPolylineMode() {
     }
 }
 
-/**
- * Callback to initialize PenTool object.
- */
-void PenTool::setup() {
-
-    FreehandBase::setup();
-
-    // Pen indicators (temporary handles shown when adding a new node).
-    c0 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
-    c1 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
-    c0->set_fill(0x0);
-    c1->set_fill(0x0);
-    c0->hide();
-    c1->hide();
-
-    cl0 = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
-    cl1 = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
-    cl0->hide();
-    cl1->hide();
-
-    sp_event_context_read(this, "mode");
-
-    this->anchor_statusbar = false;
-
-    this->setPolylineMode();
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/freehand/pen/selcue")) {
-        this->enableSelectionCue();
-    }
-}
 
 void PenTool::_cancel() {
     this->num_clicks = 0;
@@ -163,21 +158,6 @@ void PenTool::_cancel() {
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
 
     forced_redraws_stop();
-}
-
-/**
- * Finalization callback.
- */
-void PenTool::finish() {
-    sp_event_context_discard_delayed_snap_event(this);
-
-    if (this->npoints != 0) {
-        // switching context - finish path
-        this->ea = nullptr; // unset end anchor if set (otherwise crashes)
-        this->_finish(false);
-    }
-
-    FreehandBase::finish();
 }
 
 /**
@@ -316,7 +296,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
     }
 
     Geom::Point const event_w(bevent.x, bevent.y);
-    Geom::Point event_dt(desktop->w2d(event_w));
+    Geom::Point event_dt(_desktop->w2d(event_w));
     //Test whether we hit any anchor.
     SPDrawAnchor * const anchor = spdc_test_inside(this, event_w);
 
@@ -335,8 +315,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
     if (bevent.button == 1
         // make sure this is not the last click for a waiting LPE (otherwise we want to finish the path)
         && this->expecting_clicks_for_LPE != 1) {
-
-        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
+        if (Inkscape::have_viable_layer(_desktop, defaultMessageContext()) == false) {
             return true;
         }
 
@@ -373,8 +352,8 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                             if ((bevent.state & GDK_CONTROL_MASK) && (this->polylines_only || this->polylines_paraxial)) {
                                 p = event_dt;
                                 if (!(bevent.state & GDK_SHIFT_MASK)) {
-                                    SnapManager &m = desktop->namedview->snap_manager;
-                                    m.setup(desktop);
+                                    SnapManager &m = _desktop->namedview->snap_manager;
+                                    m.setup(_desktop);
                                     m.freeSnapReturnByRef(p, Inkscape::SNAPSOURCE_NODE_HANDLE);
                                     m.unSetup();
                                 }
@@ -402,19 +381,19 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                                 // Adjust point to anchor if needed; if we have a waiting LPE, we need
                                 // a fresh path to be created so don't continue an existing one
                                 p = anchor->dp;
-                                desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
+                                _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
                             } else {
                                 // This is the first click of a new curve; deselect item so that
                                 // this curve is not combined with it (unless it is drawn from its
                                 // anchor, which is handled by the sibling branch above)
-                                Inkscape::Selection * const selection = desktop->getSelection();
+                                Inkscape::Selection * const selection = _desktop->getSelection();
                                 if (!(bevent.state & GDK_SHIFT_MASK) || this->hasWaitingLPE()) {
                                     // if we have a waiting LPE, we need a fresh path to be created
                                     // so don't append to an existing one
                                     selection->clear();
-                                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
+                                    _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
                                 } else if (selection->singleItem() && SP_IS_PATH(selection->singleItem())) {
-                                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
+                                    _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
                                 }
 
                                 // Create green anchor
@@ -523,7 +502,7 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     pen_within_tolerance = false;
 
     // Find desktop coordinates
-    Geom::Point p = desktop->w2d(event_w);
+    Geom::Point p = _desktop->w2d(event_w);
 
     // Test, whether we hit any anchor
     SPDrawAnchor *anchor = spdc_test_inside(this, event_w);
@@ -538,8 +517,8 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         this->_setSubsequentPoint(p, true);
                         ret = true;
                     } else if (!this->sp_event_context_knot_mouseover()) {
-                        SnapManager &m = desktop->namedview->snap_manager;
-                        m.setup(desktop);
+                        SnapManager &m = _desktop->namedview->snap_manager;
+                        m.setup(_desktop);
                         m.preSnap(Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_NODE_HANDLE));
                         m.unSetup();
                     }
@@ -553,8 +532,8 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                     break;
                 case PenTool::STOP:
                     if (!this->sp_event_context_knot_mouseover()) {
-                        SnapManager &m = desktop->namedview->snap_manager;
-                        m.setup(desktop);
+                        SnapManager &m = _desktop->namedview->snap_manager;
+                        m.setup(_desktop);
                         m.preSnap(Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_NODE_HANDLE));
                         m.unSetup();
                     }
@@ -603,8 +582,8 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 
                         }
                         if (!this->sp_event_context_knot_mouseover()) {
-                            SnapManager &m = desktop->namedview->snap_manager;
-                            m.setup(desktop);
+                            SnapManager &m = _desktop->namedview->snap_manager;
+                            m.setup(_desktop);
                             m.preSnap(Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_NODE_HANDLE));
                             m.unSetup();
                         }
@@ -631,8 +610,8 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                     // Don't break; fall through to default to do preSnapping
                 default:
                     if (!this->sp_event_context_knot_mouseover()) {
-                        SnapManager &m = desktop->namedview->snap_manager;
-                        m.setup(desktop);
+                        SnapManager &m = _desktop->namedview->snap_manager;
+                        m.setup(_desktop);
                         m.preSnap(Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_NODE_HANDLE));
                         m.unSetup();
                     }
@@ -670,7 +649,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
         Geom::Point const event_w(revent.x, revent.y);
 
         // Find desktop coordinates
-        Geom::Point p = this->desktop->w2d(event_w);
+        Geom::Point p = _desktop->w2d(event_w);
 
         // Test whether we hit any anchor.
 
@@ -763,7 +742,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
     if (this->expecting_clicks_for_LPE == 0 && this->hasWaitingLPE()) {
         this->setPolylineMode();
 
-        Inkscape::Selection *selection = this->desktop->getSelection();
+        Inkscape::Selection *selection = _desktop->getSelection();
 
         if (this->waiting_LPE) {
             // we have an already created LPE waiting for a path
@@ -799,7 +778,7 @@ void PenTool::_redrawAll() {
         this->green_bpaths.clear();
 
         // one canvas bpath for all of green_curve
-        auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), green_curve.get(), true);
+        auto canvas_shape = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), green_curve.get(), true);
         canvas_shape->set_stroke(green_color);
         canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
         this->green_bpaths.push_back(canvas_shape);
@@ -852,7 +831,7 @@ void PenTool::_lastpointMove(gdouble x, gdouble y) {
     if (this->npoints != 5)
         return;
 
-    y *= -this->desktop->yaxisdir();
+    y *= -_desktop->yaxisdir();
 
     // green
     if (!this->green_curve->is_unset()) {
@@ -872,7 +851,7 @@ void PenTool::_lastpointMove(gdouble x, gdouble y) {
 }
 
 void PenTool::_lastpointMoveScreen(gdouble x, gdouble y) {
-    this->_lastpointMove(x / this->desktop->current_zoom(), y / this->desktop->current_zoom());
+    this->_lastpointMove(x / _desktop->current_zoom(), y / _desktop->current_zoom());
 }
 
 void PenTool::_lastpointToCurve() {
@@ -1163,7 +1142,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
         case GDK_KEY_g:
         case GDK_KEY_G:
             if (MOD__SHIFT_ONLY(event)) {
-                this->desktop->selection->toGuides();
+                _desktop->selection->toGuides();
                 ret = true;
             }
             break;
@@ -1229,13 +1208,13 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
 
     Geom::Point rel = p - this->p[pc_point_to_compare];
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(Geom::L2(rel), "px");
-    Glib::ustring dist = q.string(desktop->namedview->display_units);
+    Glib::ustring dist = q.string(_desktop->namedview->display_units);
     double angle = atan2(rel[Geom::Y], rel[Geom::X]) * 180 / M_PI;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/options/compassangledisplay/value", false) != 0) {
         angle = 90 - angle;
 
-        if (desktop->is_yaxisdown()) {
+        if (_desktop->is_yaxisdown()) {
             angle = 180 - angle;
         }
 
@@ -1284,7 +1263,7 @@ void PenTool::_bsplineSpiroColor()
         this->green_bpaths.clear();
 
         // one canvas bpath for all of green_curve
-        auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), green_curve.get(), true);
+        auto canvas_shape = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), green_curve.get(), true);
         canvas_shape->set_stroke(green_color);
         canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
         this->green_bpaths.push_back(canvas_shape);
@@ -1527,7 +1506,7 @@ void PenTool::_bsplineSpiroMotion(guint const state){
     this->green_bpaths.clear();
 
     // one canvas bpath for all of green_curve
-    auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), green_curve.get(), true);
+    auto canvas_shape = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), green_curve.get(), true);
     canvas_shape->set_stroke(green_color);
     canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
     this->green_bpaths.push_back(canvas_shape);
@@ -1825,7 +1804,7 @@ void PenTool::_finishSegment(Geom::Point const q, guint const state) { // use 'q
         auto curve = this->red_curve->copy();
 
         /// \todo fixme:
-        auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), curve.get(), true);
+        auto canvas_shape = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), curve.get(), true);
         canvas_shape->set_stroke(green_color);
         canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
         this->green_bpaths.push_back(canvas_shape);
@@ -1944,7 +1923,7 @@ void PenTool::_finish(gboolean const closed) {
 
     this->message_context->clear();
 
-    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Drawing finished"));
+    _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Drawing finished"));
 
     // cancelate line without a created segment
     this->red_curve->reset();
@@ -2016,13 +1995,13 @@ void PenTool::_setToNearestHorizVert(Geom::Point &pt, guint const state) const {
     Inkscape::Snapper::SnapConstraint cl(origin, target);
 
     // Snap along the constraint line; if we didn't snap then still the constraint will be applied
-    SnapManager &m = this->desktop->namedview->snap_manager;
+    SnapManager &m = _desktop->namedview->snap_manager;
 
-    Inkscape::Selection *selection = this->desktop->getSelection();
+    Inkscape::Selection *selection = _desktop->getSelection();
     // selection->singleItem() is the item that is currently being drawn. This item will not be snapped to (to avoid self-snapping)
     // TODO: Allow snapping to the stationary parts of the item, and only ignore the last segment
 
-    m.setup(this->desktop, true, selection->singleItem());
+    m.setup(_desktop, true, selection->singleItem());
     m.constrainedSnapReturnByRef(pt, Inkscape::SNAPSOURCE_NODE_HANDLE, cl);
     m.unSetup();
 }

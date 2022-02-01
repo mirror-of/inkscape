@@ -43,7 +43,7 @@ namespace Tools {
 
 class DynamicBase : public ToolBase {
 public:
-    DynamicBase(const std::string& cursor_filename);
+    DynamicBase(SPDesktop *desktop, std::string prefs_path, const std::string &cursor_filename);
     ~DynamicBase() override;
 
     void set(const Inkscape::Preferences::Entry& val) override;

@@ -25,19 +25,13 @@ namespace Tools {
 
 class ZoomTool : public ToolBase {
 public:
-	ZoomTool();
-	~ZoomTool() override;
+    ZoomTool(SPDesktop *desktop);
+    ~ZoomTool() override;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	void finish() override;
-	bool root_handler(GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
+    bool root_handler(GdkEvent *event) override;
 
 private:
-	bool escaped;
+    bool escaped;
 };
 
 }

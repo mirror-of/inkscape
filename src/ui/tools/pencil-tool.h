@@ -45,8 +45,9 @@ enum PencilState {
  */
 class PencilTool : public FreehandBase {
 public:
-    PencilTool();
+    PencilTool(SPDesktop *desktop);
     ~PencilTool() override;
+
     Geom::Point p[16];
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
@@ -54,14 +55,9 @@ public:
     void powerStrokeInterpolate(Geom::Path const path);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
-    static const std::string prefsPath;
-    const std::string& getPrefsPath() override;
 
 protected:
-
-    void setup() override;
     bool root_handler(GdkEvent* event) override;
-
 private:
     bool _handleButtonPress(GdkEventButton const &bevent);
     bool _handleMotionNotify(GdkEventMotion const &mevent);

@@ -76,12 +76,6 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-const std::string& FloodTool::getPrefsPath() {
-	return FloodTool::prefsPath;
-}
-
-const std::string FloodTool::prefsPath = "/tools/paintbucket";
-
 // TODO: Replace by C++11 initialization
 // Must match PaintBucketChannels enum
 Glib::ustring ch_init[8] = {
@@ -104,19 +98,39 @@ Glib::ustring gap_init[4] = {
 };
 const std::vector<Glib::ustring> FloodTool::gap_list( gap_init, gap_init+4 );
 
-FloodTool::FloodTool()
-    : ToolBase("flood.svg")
+FloodTool::FloodTool(SPDesktop *desktop)
+    : ToolBase(desktop, "/tools/paintbucket", "flood.svg")
     , item(nullptr)
 {
     // TODO: Why does the flood tool use a hardcoded tolerance instead of a pref?
     this->tolerance = 4;
+
+    this->shape_editor = new ShapeEditor(desktop);
+
+    SPItem *item = desktop->getSelection()->singleItem();
+    if (item) {
+        this->shape_editor->set_item(item);
+    }
+
+    this->sel_changed_connection.disconnect();
+    this->sel_changed_connection = desktop->getSelection()->connectChanged(
+    	sigc::mem_fun(this, &FloodTool::selection_changed)
+    );
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    if (prefs->getBool("/tools/paintbucket/selcue")) {
+        this->enableSelectionCue();
+    }
 }
 
 FloodTool::~FloodTool() {
     this->sel_changed_connection.disconnect();
 
-    delete this->shape_editor;
-    this->shape_editor = nullptr;
+    if (shape_editor) {
+        delete shape_editor;
+        shape_editor = nullptr;
+    }
 
     /* fixme: This is necessary because we do not grab */
     if (this->item) {
@@ -132,29 +146,6 @@ void FloodTool::selection_changed(Inkscape::Selection* selection) {
     this->shape_editor->unset_item();
     this->shape_editor->set_item(selection->singleItem());
 }
-
-void FloodTool::setup() {
-    ToolBase::setup();
-
-    this->shape_editor = new ShapeEditor(this->desktop);
-
-    SPItem *item = this->desktop->getSelection()->singleItem();
-    if (item) {
-        this->shape_editor->set_item(item);
-    }
-
-    this->sel_changed_connection.disconnect();
-    this->sel_changed_connection = this->desktop->getSelection()->connectChanged(
-    	sigc::mem_fun(this, &FloodTool::selection_changed)
-    );
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    if (prefs->getBool("/tools/paintbucket/selcue")) {
-        this->enableSelectionCue();
-    }
-}
-
 
 // Changes from 0.48 -> 0.49 (Cairo)
 // 0.49: Ignores alpha in background
@@ -1087,13 +1078,13 @@ bool FloodTool::item_handler(SPItem* item, GdkEvent* event) {
     case GDK_BUTTON_PRESS:
         if ((event->button.state & GDK_CONTROL_MASK) && event->button.button == 1) {
             Geom::Point const button_w(event->button.x, event->button.y);
-            
-            SPItem *item = sp_event_context_find_item (desktop, button_w, TRUE, TRUE);
-            
-            // Set style
-            desktop->applyCurrentOrToolStyle(item, "/tools/paintbucket", false);
 
-            DocumentUndo::done(desktop->getDocument(), _("Set style on object"), INKSCAPE_ICON("color-fill"));
+            SPItem *item = sp_event_context_find_item(_desktop, button_w, TRUE, TRUE);
+
+            // Set style
+            _desktop->applyCurrentOrToolStyle(item, "/tools/paintbucket", false);
+
+            DocumentUndo::done(_desktop->getDocument(), _("Set style on object"), INKSCAPE_ICON("color-fill"));
             // Dead assignment: Value stored to 'ret' is never read
             //ret = TRUE;
         }
@@ -1122,18 +1113,18 @@ bool FloodTool::root_handler(GdkEvent* event) {
         if (event->button.button == 1) {
             if (!(event->button.state & GDK_CONTROL_MASK)) {
                 Geom::Point const button_w(event->button.x, event->button.y);
-    
-                if (Inkscape::have_viable_layer(desktop, this->defaultMessageContext())) {
+
+                if (Inkscape::have_viable_layer(_desktop, this->defaultMessageContext())) {
                     // save drag origin
                     this->xp = (gint) button_w[Geom::X];
                     this->yp = (gint) button_w[Geom::Y];
                     this->within_tolerance = true;
                       
                     dragging = true;
-                    
-                    Geom::Point const p(desktop->w2d(button_w));
-                    Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
-                    Inkscape::Rubberband::get(desktop)->start(desktop, p);
+
+                    Geom::Point const p(_desktop->w2d(button_w));
+                    Inkscape::Rubberband::get(_desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
+                    Inkscape::Rubberband::get(_desktop)->start(_desktop, p);
                 }
             }
         }
@@ -1149,10 +1140,10 @@ bool FloodTool::root_handler(GdkEvent* event) {
             this->within_tolerance = false;
             
             Geom::Point const motion_pt(event->motion.x, event->motion.y);
-            Geom::Point const p(desktop->w2d(motion_pt));
+            Geom::Point const p(_desktop->w2d(motion_pt));
 
-            if (Inkscape::Rubberband::get(desktop)->is_started()) {
-                Inkscape::Rubberband::get(desktop)->move(p);
+            if (Inkscape::Rubberband::get(_desktop)->is_started()) {
+                Inkscape::Rubberband::get(_desktop)->move(p);
                 this->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Draw over</b> areas to add to fill, hold <b>Alt</b> for touch fill"));
                 gobble_motion_events(GDK_BUTTON1_MASK);
             }
@@ -1161,11 +1152,11 @@ bool FloodTool::root_handler(GdkEvent* event) {
 
     case GDK_BUTTON_RELEASE:
         if (event->button.button == 1) {
-            Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
+            Inkscape::Rubberband *r = Inkscape::Rubberband::get(_desktop);
 
             if (r->is_started()) {
                 // set "busy" cursor  THIS LEADS TO CRASHES. USER CAN CHANGE TOOLS AS IT CALLS GTK MAIN LOOP
-                desktop->setWaitingCursor();
+                _desktop->setWaitingCursor();
 
                 dragging = false;
 
@@ -1173,8 +1164,8 @@ bool FloodTool::root_handler(GdkEvent* event) {
                 bool is_touch_fill = event->button.state & GDK_MOD1_MASK;
                     
                 sp_flood_do_flood_fill(this, event, event->button.state & GDK_SHIFT_MASK, is_point_fill, is_touch_fill);
-                    
-                desktop->clearWaitingCursor();
+
+                _desktop->clearWaitingCursor();
 
                 ret = TRUE;
 
@@ -1216,9 +1207,8 @@ void FloodTool::finishItem() {
     if (this->item != nullptr) {
         this->item->updateRepr();
 
-        desktop->getSelection()->set(this->item);
-
-        DocumentUndo::done(desktop->getDocument(), _("Fill bounded area"), INKSCAPE_ICON("color-fill"));
+        _desktop->getSelection()->set(this->item);
+        DocumentUndo::done(_desktop->getDocument(), _("Fill bounded area"), INKSCAPE_ICON("color-fill"));
 
         this->item = nullptr;
     }

@@ -47,8 +47,8 @@ enum {
 
 class TweakTool : public ToolBase {
 public:
-	TweakTool();
-	~TweakTool() override;
+    TweakTool(SPDesktop *desktop);
+    ~TweakTool() override;
 
     /* extended input data */
     gdouble pressure;
@@ -76,20 +76,14 @@ public:
     bool do_l;
     bool do_o;
 
-  	sigc::connection style_set_connection;
+    sigc::connection style_set_connection;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	void set(const Inkscape::Preferences::Entry& val) override;
-	bool root_handler(GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
-
-	void update_cursor(bool with_shift);
+    void set(const Inkscape::Preferences::Entry &val) override;
+    bool root_handler(GdkEvent *event) override;
+    void update_cursor(bool with_shift);
 
 private:
-	bool set_style(const SPCSSAttr* css);
+    bool set_style(const SPCSSAttr *css);
 };
 
 }

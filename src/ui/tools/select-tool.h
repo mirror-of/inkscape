@@ -29,8 +29,8 @@ namespace Tools {
 
 class SelectTool : public ToolBase {
 public:
-	SelectTool();
-	~SelectTool() override;
+    SelectTool(SPDesktop *desktop);
+    ~SelectTool() override;
 
 	bool dragging;
 	bool moved;
@@ -47,15 +47,9 @@ public:
 	Inkscape::SelectionDescriber *_describer;
 	gchar *no_selection_msg = nullptr;
 
-	static const std::string prefsPath;
-
-	void setup() override;
 	void set(const Inkscape::Preferences::Entry& val) override;
 	bool root_handler(GdkEvent* event) override;
 	bool item_handler(SPItem* item, GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
-
 private:
 	bool sp_select_context_abort();
 	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event);

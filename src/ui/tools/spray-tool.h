@@ -58,7 +58,7 @@ enum {
 
 class SprayTool : public ToolBase {
 public:
-    SprayTool();
+    SprayTool(SPDesktop *desktop);
     ~SprayTool() override;
 
     //ToolBase event_context;
@@ -114,15 +114,9 @@ public:
     double rand_picked;
     sigc::connection style_set_connection;
 
-    static const std::string prefsPath;
-
-    void setup() override;
     void set(const Inkscape::Preferences::Entry& val) override;
     virtual void setCloneTilerPrefs();
     bool root_handler(GdkEvent* event) override;
-
-    const std::string& getPrefsPath() override;
-
     void update_cursor(bool /*with_shift*/);
 
     ObjectSet* objectSet() {

@@ -415,7 +415,7 @@ MeshToolbar::toggle_fill_stroke()
 
     MeshTool *mt = get_mesh_tool();
     if (mt) {
-        GrDrag *drag = mt->_grdrag;
+        GrDrag *drag = mt->get_drag();
         drag->updateDraggers();
         drag->updateLines();
         drag->updateLevels();
@@ -428,7 +428,7 @@ MeshToolbar::toggle_handles()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
-        GrDrag *drag = mt->_grdrag;
+        GrDrag *drag = mt->get_drag();
         drag->refreshDraggers();
     }
 }
@@ -567,36 +567,32 @@ MeshToolbar::type_changed(int mode)
 void
 MeshToolbar::toggle_sides()
 {
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_TOGGLE );
+    if (MeshTool *mt = get_mesh_tool()) {
+        mt->corner_operation(MG_CORNER_SIDE_TOGGLE);
     }
 }
 
 void
 MeshToolbar::make_elliptical()
 {
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_ARC );
+    if (MeshTool *mt = get_mesh_tool()) {
+        mt->corner_operation(MG_CORNER_SIDE_ARC);
     }
 }
 
 void
 MeshToolbar::pick_colors()
 {
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_COLOR_PICK );
+    if (MeshTool *mt = get_mesh_tool()) {
+        mt->corner_operation(MG_CORNER_COLOR_PICK);
     }
 }
 
 void
 MeshToolbar::fit_mesh()
 {
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_fit_mesh_in_bbox( mt );
+    if (MeshTool *mt = get_mesh_tool()) {
+        mt->fit_mesh_in_bbox();
     }
 }
 

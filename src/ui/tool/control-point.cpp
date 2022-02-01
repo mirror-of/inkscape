@@ -305,9 +305,8 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
             // (This is needed because we might not have snapped on the latest GDK_MOTION_NOTIFY event
             // if the mouse speed was too high. This is inherent to the snap-delay mechanism.
             // We must snap at some point in time though, and this is our last chance)
-            // PS: For other contexts this is handled already in sp_event_context_item_handler or
-            // sp_event_context_root_handler
-            //if (_desktop && _desktop->event_context && _desktop->event_context->_delayed_snap_event) {
+            // PS: For other contexts this is handled already in start_item_handler or start_root_handler
+            // if (_desktop && _desktop->event_context && _desktop->event_context->_delayed_snap_event) {
             if (event_context->_delayed_snap_event) {
                 sp_event_context_snap_watchdog_callback(event_context->_delayed_snap_event);
             }
@@ -366,7 +365,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
             if (!_drag_initiated) break;
 
             // temporarily disable snapping - we might snap to a different place than we were initially
-            sp_event_context_discard_delayed_snap_event(event_context);
+            event_context->discard_delayed_snap_event();
             SnapPreferences &snapprefs = _desktop->namedview->snap_manager.snapprefs;
             bool snap_save = snapprefs.getSnapEnabledGlobally();
             snapprefs.setSnapEnabledGlobally(false);

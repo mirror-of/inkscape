@@ -110,7 +110,7 @@ SPKnot::~SPKnot() {
     }
 
     // FIXME: cannot snap to destroyed knot (lp:1309050)
-    //sp_event_context_discard_delayed_snap_event(this->desktop->event_context);
+    // this->desktop->event_context->discard_delayed_snap_event();
     knot_deleted_callback(this);
 }
 
@@ -178,7 +178,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
             if (desktop->event_context->_delayed_snap_event) {
                 sp_event_context_snap_watchdog_callback(desktop->event_context->_delayed_snap_event);
             }
-            sp_event_context_discard_delayed_snap_event(desktop->event_context);
+            desktop->event_context->discard_delayed_snap_event();
             pressure = 0;
 
             if (transform_escaped) {
@@ -213,7 +213,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
             if (desktop->event_context->_delayed_snap_event) {
                 sp_event_context_snap_watchdog_callback(desktop->event_context->_delayed_snap_event);
             }
-            sp_event_context_discard_delayed_snap_event(desktop->event_context);
+            desktop->event_context->discard_delayed_snap_event();
             pressure = 0;
 
             if (transform_escaped) {
@@ -318,7 +318,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
                 grabbed = false;
                 moved = false;
 
-                sp_event_context_discard_delayed_snap_event(desktop->event_context);
+                desktop->event_context->discard_delayed_snap_event();
                 break;
             default:
                 consumed = false;

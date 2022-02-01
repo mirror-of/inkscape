@@ -34,8 +34,8 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-DynamicBase::DynamicBase(const std::string& cursor_filename)
-    : ToolBase(cursor_filename)
+DynamicBase::DynamicBase(SPDesktop *desktop, std::string prefs_path, const std::string &cursor_filename)
+    : ToolBase(desktop, prefs_path, cursor_filename)
     , accumulated(nullptr)
     , currentshape(nullptr)
     , currentcurve(nullptr)
@@ -86,7 +86,7 @@ void DynamicBase::set(const Inkscape::Preferences::Entry& value) {
     Glib::ustring path = value.getEntryName();
     
     // ignore preset modifications
-    static Glib::ustring const presets_path = this->pref_observer->observed_path + "/preset";
+    static Glib::ustring const presets_path = getPrefsPath() + "/preset";
     Glib::ustring const &full_path = value.getPath();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -123,7 +123,7 @@ void DynamicBase::set(const Inkscape::Preferences::Entry& value) {
 
 /* Get normalized point */
 Geom::Point DynamicBase::getNormalizedPoint(Geom::Point v) const {
-    auto drect = this->desktop->get_display_area();
+    auto drect = _desktop->get_display_area();
 
     double const max = drect.maxExtent();
 
@@ -132,7 +132,7 @@ Geom::Point DynamicBase::getNormalizedPoint(Geom::Point v) const {
 
 /* Get view point */
 Geom::Point DynamicBase::getViewPoint(Geom::Point n) const {
-    auto drect = this->desktop->get_display_area();
+    auto drect = _desktop->get_display_area();
 
     double const max = drect.maxExtent();
 

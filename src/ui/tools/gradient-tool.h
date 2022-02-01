@@ -23,6 +23,8 @@
 #define SP_GRADIENT_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::GradientTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_GRADIENT_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::GradientTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
+class GrDrag;
+
 namespace Inkscape {
 
 class Selection;
@@ -32,34 +34,30 @@ namespace Tools {
 
 class GradientTool : public ToolBase {
 public:
-	GradientTool();
-	~GradientTool() override;
+    GradientTool(SPDesktop *desktop);
+    ~GradientTool() override;
 
-    Geom::Point origin;
+    bool root_handler(GdkEvent *event) override;
+    void add_stops_between_selected_stops();
 
-    bool cursor_addnode;
+    void select_next();
+    void select_prev();
 
-    bool node_added;
-
+private:
     Geom::Point mousepoint_doc; // stores mousepoint when over_line in doc coords
+    Geom::Point origin;
+    bool cursor_addnode;
+    bool node_added;
 
     sigc::connection *selcon;
     sigc::connection *subselcon;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	bool root_handler(GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
-
-private:
-	void selection_changed(Inkscape::Selection*);
+    void selection_changed(Inkscape::Selection *);
+    void simplify(double tolerance);
+    void add_stop_near_point(SPItem *item, Geom::Point mouse_p, guint32 etime);
+    void drag(Geom::Point const pt, guint state, guint32 etime);
+    SPItem *is_over_curve(Geom::Point event_p);
 };
-
-void sp_gradient_context_select_next (ToolBase *event_context);
-void sp_gradient_context_select_prev (ToolBase *event_context);
-void sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc);
 
 }
 }

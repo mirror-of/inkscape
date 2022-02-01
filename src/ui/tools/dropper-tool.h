@@ -42,21 +42,14 @@ namespace Tools {
 
 class DropperTool : public ToolBase {
 public:
-	DropperTool();
-	~DropperTool() override;
+    DropperTool(SPDesktop *desktop);
+    ~DropperTool() override;
 
-	static const std::string prefsPath;
-
-	const std::string& getPrefsPath() override;
-
-	guint32 get_color(bool invert=false, bool non_dropping=false);
-
-        sigc::signal<void, ColorRGBA *> onetimepick_signal;
+    guint32 get_color(bool invert = false, bool non_dropping = false);
+    sigc::signal<void, ColorRGBA *> onetimepick_signal;
 
 protected:
-	void setup() override;
-	void finish() override;
-	bool root_handler(GdkEvent* event) override;
+    bool root_handler(GdkEvent *event) override;
 
 private:
     // Stored color.

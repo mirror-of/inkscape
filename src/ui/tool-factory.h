@@ -14,18 +14,17 @@
 
 #include <string>
 
+class SPDesktop;
 namespace Inkscape {
 namespace UI {
 namespace Tools {
-
 class ToolBase;
-
 }
 }
 }
 
 struct ToolFactory {
-    static Inkscape::UI::Tools::ToolBase *createObject(std::string const& id);
+    static Inkscape::UI::Tools::ToolBase *createObject(SPDesktop *desktop, std::string const &id);
 };
 
 

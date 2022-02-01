@@ -793,10 +793,8 @@ GradientToolbar::add_stop()
     }
 
     auto ev = _desktop->getEventContext();
-    auto rc = SP_GRADIENT_CONTEXT(ev);
-
-    if (rc) {
-        sp_gradient_context_add_stops_between_selected_stops(rc);
+    if (auto rc = SP_GRADIENT_CONTEXT(ev)) {
+        rc->add_stops_between_selected_stops();
     }
 }
 

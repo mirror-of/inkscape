@@ -61,42 +61,18 @@ namespace Inkscape::UI::Tools {
 
 void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpointer data);
 
-const std::string& LpeTool::getPrefsPath() {
-	return LpeTool::prefsPath;
-}
-
-const std::string LpeTool::prefsPath = "/tools/lpetool";
-
-LpeTool::LpeTool()
-    : PenTool("geometric.svg")
+LpeTool::LpeTool(SPDesktop *desktop)
+    : PenTool(desktop, "/tools/lpetool", "geometric.svg")
     , mode(Inkscape::LivePathEffect::BEND_PATH)
 {
-}
-
-LpeTool::~LpeTool() {
-    delete this->shape_editor;
-
-    if (canvas_bbox) {
-        delete canvas_bbox;
-    }
-
-    lpetool_delete_measuring_items(this);
-    measuring_items.clear();
-
-    this->sel_changed_connection.disconnect();
-}
-
-void LpeTool::setup() {
-    PenTool::setup();
-
-    Inkscape::Selection *selection = this->desktop->getSelection();
+    Inkscape::Selection *selection = desktop->getSelection();
     SPItem *item = selection->singleItem();
 
     this->sel_changed_connection.disconnect();
     this->sel_changed_connection =
         selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_lpetool_context_selection_changed), (gpointer)this));
 
-    this->shape_editor = new ShapeEditor(this->desktop);
+    this->shape_editor = new ShapeEditor(desktop);
 
     lpetool_context_switch_mode(this, Inkscape::LivePathEffect::INVALID_LPE);
     lpetool_context_reset_limiting_bbox(this);
@@ -114,6 +90,20 @@ void LpeTool::setup() {
     if (prefs->getBool("/tools/lpetool/selcue")) {
         this->enableSelectionCue();
     }
+}
+
+LpeTool::~LpeTool()
+{
+    delete this->shape_editor;
+
+    if (canvas_bbox) {
+        delete canvas_bbox;
+    }
+
+    lpetool_delete_measuring_items(this);
+    measuring_items.clear();
+
+    this->sel_changed_connection.disconnect();
 }
 
 /**
@@ -143,7 +133,7 @@ bool LpeTool::item_handler(SPItem* item, GdkEvent* event) {
         case GDK_BUTTON_PRESS:
         {
             // select the clicked item but do nothing else
-            Inkscape::Selection * const selection = this->desktop->getSelection();
+            Inkscape::Selection *const selection = _desktop->getSelection();
             selection->clear();
             selection->add(item);
             ret = TRUE;
@@ -165,7 +155,7 @@ bool LpeTool::item_handler(SPItem* item, GdkEvent* event) {
 }
 
 bool LpeTool::root_handler(GdkEvent* event) {
-    Inkscape::Selection *selection = desktop->getSelection();
+    Inkscape::Selection *selection = _desktop->getSelection();
 
     bool ret = false;
 
@@ -182,7 +172,7 @@ bool LpeTool::root_handler(GdkEvent* event) {
                     // don't do anything for now if we are inactive (except clearing the selection
                     // since this was a click into empty space)
                     selection->clear();
-                    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Choose a construction tool from the toolbar."));
+                    _desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Choose a construction tool from the toolbar."));
                     ret = true;
                     break;
                 }

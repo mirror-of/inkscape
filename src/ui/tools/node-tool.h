@@ -44,26 +44,19 @@ namespace Tools {
 
 class NodeTool : public ToolBase {
 public:
-    NodeTool();
+    NodeTool(SPDesktop *desktop);
     ~NodeTool() override;
 
     Inkscape::UI::ControlPointSelection* _selected_nodes = nullptr;
     Inkscape::UI::MultiPathManipulator* _multipath = nullptr;
     std::vector<Inkscape::Display::TemporaryItem *> _helperpath_tmpitem;
+    std::map<SPItem *, std::unique_ptr<ShapeEditor>> _shape_editors;
 
     bool edit_clipping_paths = false;
     bool edit_masks = false;
 
-    static const std::string prefsPath;
-
-    void setup() override;
-    void finish() override;
     void set(const Inkscape::Preferences::Entry& val) override;
     bool root_handler(GdkEvent* event) override;
-
-    const std::string& getPrefsPath() override;
-    std::map<SPItem *, std::unique_ptr<ShapeEditor>> _shape_editors;
-
     void deleteSelected();
 private:
     sigc::connection _selection_changed_connection;

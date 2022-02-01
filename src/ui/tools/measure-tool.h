@@ -37,12 +37,9 @@ namespace Tools {
 
 class MeasureTool : public ToolBase {
 public:
-    MeasureTool();
+    MeasureTool(SPDesktop *desktop);
     ~MeasureTool() override;
 
-    static const std::string prefsPath;
-
-    void finish() override;
     bool root_handler(GdkEvent* event) override;
     virtual void showCanvasItems(bool to_guides = false, bool to_item = false, bool to_phantom = false, Inkscape::XML::Node *measure_repr = nullptr);
     virtual void reverseKnots();
@@ -53,7 +50,6 @@ public:
     virtual void reset();
     virtual void setMarkers();
     virtual void setMarker(bool isStart);
-    const std::string& getPrefsPath() override;
     Geom::Point readMeasurePoint(bool is_start);
 
     void showInfoBox(Geom::Point cursor, bool into_groups);
@@ -80,6 +76,12 @@ public:
     void knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotClickHandler(SPKnot *knot, guint state);
     void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);
+    void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32 color, Inkscape::XML::Node *measure_repr);
+    void createAngleDisplayCurve(Geom::Point const &center, Geom::Point const &end, Geom::Point const &anchor,
+                                 double angle, bool to_phantom,
+                                 std::vector<Inkscape::CanvasItem *> &measure_phantom_items,
+                                 std::vector<Inkscape::CanvasItem *> &measure_tmp_items,
+                                 Inkscape::XML::Node *measure_repr = nullptr);
 
 private:
     std::optional<Geom::Point> explicit_base;

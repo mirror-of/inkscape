@@ -29,8 +29,9 @@ namespace Tools {
  */
 class PenTool : public FreehandBase {
 public:
-    PenTool(const std::string& cursor_filename = "pen.svg");
-    PenTool(gchar const *const *cursor_shape);
+    PenTool(SPDesktop *desktop,
+        std::string prefs_path = "/tools/freehand/pen",
+        const std::string& cursor_filename = "pen.svg");
     ~PenTool() override;
 
     enum Mode {
@@ -73,18 +74,12 @@ public:
     
     bool events_disabled = false;
 
-    static const std::string prefsPath;
-
-    const std::string& getPrefsPath() override;
-
     void nextParaxialDirection(Geom::Point const &pt, Geom::Point const &origin, guint state);
     void setPolylineMode();
     bool hasWaitingLPE();
     void waitForLPEMouseClicks(Inkscape::LivePathEffect::EffectType effect_type, unsigned int num_clicks, bool use_polylines = true);
 
 protected:
-    void setup() override;
-    void finish() override;
     void set(const Inkscape::Preferences::Entry& val) override;
     bool root_handler(GdkEvent* event) override;
     bool item_handler(SPItem* item, GdkEvent* event) override;

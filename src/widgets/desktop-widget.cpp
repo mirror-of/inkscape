@@ -1866,7 +1866,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::W
     Geom::Point const event_win(wx, wy);
 
     if (_ruler_clicked && event->button == 1) {
-        sp_event_context_discard_delayed_snap_event(desktop->event_context);
+        desktop->event_context->discard_delayed_snap_event();
 
         auto seat = gdk_device_get_seat(event->device);
         gdk_seat_ungrab(seat);

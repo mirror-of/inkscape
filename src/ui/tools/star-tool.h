@@ -31,22 +31,16 @@ namespace Tools {
 
 class StarTool : public ToolBase {
 public:
-	StarTool();
-	~StarTool() override;
+    StarTool(SPDesktop *desktop);
+    ~StarTool() override;
 
-	static const std::string prefsPath;
-
-	void setup() override;
-	void finish() override;
-	void set(const Inkscape::Preferences::Entry& val) override;
-	bool root_handler(GdkEvent* event) override;
-
-	const std::string& getPrefsPath() override;
+    void set(const Inkscape::Preferences::Entry &val) override;
+    bool root_handler(GdkEvent *event) override;
 
 private:
-	SPStar* star;
+    SPStar *star;
 
-	Geom::Point center;
+    Geom::Point center;
 
     /* Number of corners */
     gint magnitude;

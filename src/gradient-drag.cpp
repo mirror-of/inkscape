@@ -774,8 +774,8 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 d_new->parent->selected.erase(dragger);
                 delete dragger;
 
-                // throw out delayed snap context 
-                Inkscape::UI::Tools::sp_event_context_discard_delayed_snap_event(desktop->event_context);
+                // throw out delayed snap context
+                desktop->event_context->discard_delayed_snap_event();
 
                 // update the new merged dragger
                 d_new->fireDraggables(true, false, true);

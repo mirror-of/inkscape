@@ -101,7 +101,6 @@ SPDesktop::SPDesktop()
     : namedview(nullptr)
     , canvas(nullptr)
     , selection(nullptr)
-    , event_context(nullptr)
     , temporary_item_list(nullptr)
     , snapindicator(nullptr)
     , current(nullptr)  // current style
@@ -426,22 +425,12 @@ void SPDesktop::setEventContext(const std::string& toolName)
 {
     // Tool should be able to be replaced with itself. See commit 29df5ca05d
     if (event_context) {
-        event_context->finish();
         delete event_context;
+        event_context = nullptr;
     }
 
-    if (toolName.empty()) {
-        event_context = nullptr;
-    } else {
-        event_context = ToolFactory::createObject(toolName);
-        event_context->setDesktop(this);
-        event_context->message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(this->messageStack()));
-        event_context->setup();
-
-        // Make sure no delayed snapping events are carried over after switching tools
-        // (this is only an additional safety measure against sloppy coding, because each
-        // tool should take care of this by itself)
-        sp_event_context_discard_delayed_snap_event(event_context);
+    if (!toolName.empty()) {
+        event_context = ToolFactory::createObject(this, toolName);
     }
 
     _event_context_changed_signal.emit(this, event_context);
@@ -1474,12 +1463,14 @@ _drawing_handler (GdkEvent *event, Inkscape::DrawingItem *drawing_item, SPDeskto
         return true;
     }
 
-    if (drawing_item) {
-        SPItem *spi = drawing_item->getItem();
-        return sp_event_context_item_handler (desktop->event_context, spi, event);
-    } else {
-        return sp_event_context_root_handler (desktop->event_context, event);
+    if (auto ec = desktop->event_context) {
+        if (drawing_item) {
+            return ec->start_item_handler(drawing_item->getItem(), event);
+        } else {
+            return ec->start_root_handler(event);
+        }
     }
+    return false;
 }
 
 /// Called when document is starting to be rebuilt.
