@@ -1228,12 +1228,13 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         Geom::Point rel_position = Geom::Point(origin, origin);
         Geom::Point pos = desktop->w2d(cursor);
         double gap = Inkscape::Util::Quantity::convert(7 + fontsize, "px", unit->abbr);
+        double yaxisdir = desktop->yaxisdir();
 
         if (only_selected) {
             if (desktop->getSelection()->includes(over)) {
-                showItemInfoText(pos + (rel_position * zoom), _("Selected"), fontsize);
+                showItemInfoText(pos - (yaxisdir * rel_position * zoom), _("Selected"), fontsize);
             } else {
-                showItemInfoText(pos + (rel_position * zoom), _("Not selected"), fontsize);
+                showItemInfoText(pos - (yaxisdir * rel_position * zoom), _("Not selected"), fontsize);
             }
             rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
         }
@@ -1243,13 +1244,13 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
             precision_str << _("Length") <<  ": %." << precision << "f %s";
             measure_str = g_strdup_printf(precision_str.str().c_str(), item_length, unit_name.c_str());
             precision_str.str("");
-            showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
+            showItemInfoText(pos - (yaxisdir * rel_position * zoom), measure_str, fontsize);
             rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
 
         } else if (SP_IS_GROUP(over)) {
 
             measure_str = _("Press 'CTRL' to measure into group");
-            showItemInfoText(pos + (rel_position * zoom), measure_str, fontsize);
+            showItemInfoText(pos - (yaxisdir * rel_position * zoom), measure_str, fontsize);
             rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
 
         }
@@ -1257,25 +1258,25 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         precision_str <<  "Y: %." << precision << "f %s";
         measure_str = g_strdup_printf(precision_str.str().c_str(), item_y, unit_name.c_str());
         precision_str.str("");
-        showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
+        showItemInfoText(pos - (yaxisdir * rel_position * zoom), measure_str, fontsize);
         rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
 
         precision_str <<  "X: %." << precision << "f %s";
         measure_str = g_strdup_printf(precision_str.str().c_str(), item_x, unit_name.c_str());
         precision_str.str("");
-        showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
+        showItemInfoText(pos - (yaxisdir * rel_position * zoom), measure_str, fontsize);
         rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
 
         precision_str << _("Height") << ": %." << precision << "f %s";
         measure_str = g_strdup_printf(precision_str.str().c_str(), item_height, unit_name.c_str());
         precision_str.str("");
-        showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
+        showItemInfoText(pos - (yaxisdir * rel_position * zoom), measure_str, fontsize);
         rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
 
         precision_str << _("Width") << ": %." << precision << "f %s";
         measure_str = g_strdup_printf(precision_str.str().c_str(), item_width, unit_name.c_str());
         precision_str.str("");
-        showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
+        showItemInfoText(pos - (yaxisdir * rel_position * zoom), measure_str, fontsize);
         g_free(measure_str);
     }
 }
