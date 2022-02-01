@@ -590,7 +590,7 @@ Gtk::Widget * LPECopy::newWidget()
                     combo = dynamic_cast<Gtk::Widget*>(widgcombo);
                     if (usemirroricons) {
                         Gtk::RadioButton::Group group;
-                        Gtk::Frame * frame  = Gtk::manage(new Gtk::Frame("Mirroring mode"));
+                        Gtk::Frame * frame  = Gtk::manage(new Gtk::Frame(_("Mirroring mode")));
                         Gtk::Box * cbox  = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,8));
                         Gtk::Box * vbox1 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
                         Gtk::Box * hbox1 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
