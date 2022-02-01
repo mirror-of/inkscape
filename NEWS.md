@@ -1,888 +1,429 @@
-Inkscape 1.0beta2
+Inkscape 1.2-alpha
 
 Release highlights
 
-Released on 2019-12-01
+Released on 2022-02-05
 
-  • Better support for macOS
-  • Rendering performance improvements
-  • Various bugfixes
-
-Known issues
-
-  • Fontconfig errors on some configurations
-  • Pango 1.44 has issues with vertical text
-
-
-Inkscape 1.0beta
-
-Release highlights
-
-Released on 2019-09-07
-
-  • Changes to extensions translation system and to .inx format
-  • New trace dialog with basic autotrace support
-  • Improved XML dialog
-  • Hatches and pattern UI (GSOC 2019)
-
-Known issues
-
-  • Various warnings printed to console output
-  • Performance issues when Objects dialog or XML dialog has been opened
-  • Text toolbar and UX is subject to change, specially for setting line heights
+    Inkscape documents can now hold multiple pages, which are managed by the new Page tool
+    Editable markers and dash patterns
+    On-canvas alignment snapping
+    Selectable origin for numerical scaling and moving
+    All alignment options in a single dialog
+    Gradient editing in the Fill and Stroke dialog
+    Layers and objects dialog merged
+    Snap settings refactored
+    Configurable Tool bar, continuous icon scaling and many more new customization options
+    Performance improvements for many parts of the interface and many different functions
+    Many crash & bug fixes
 
 
-Inkscape 1.0alpha2
+==================================================================
+===                                                            ===
+===     The authoritative version of the changelog is at       ===
+=== https://wiki.inkscape.org/wiki/index.php/Release_notes/1.2 ===
+===                                                            ===
+==================================================================
 
-Release highlights
+General user interface
+Color palette
 
-Released on 2019-06-02
+The overall look and options of the Color palette and the Swatches dialog got a massive overhaul (MR #2881):
 
-  • Performance improvements
-  • "Native" MacOS look
-  • Various fixes
+    When switching the color palette, the switcher shows a colorful preview line for each palette
+    Between 1 and 5 palette rows that can be displayed all at once, or scrolled through vertically / using the arrow buttons
+    Improved and reliably working settings for padding, tile size and tile shape / auto-stretching
 
-Inkscape 1.0alpha
+Status Bar
 
-Release highlights
+    The layer selection dropdown has been replaced by a layer indicator. Clicking on the indicator opens the new Layers and object dialog. This change improves Inkscape's performance for documents with many layers (MR #3648).
+    The status bar contents is now configurable, see Customization section.
 
-Released on 2019-01-16.
+Tool bar
 
-  • Themeing support
-  • Origin in top left corner (optional)
-  • Canvas rotation and mirroring
-  • Better hidpi screen support
-  • Control width of PowerStroke with pressure sensitive graphics tablet
-  • Fillet/chamfer LPE
-  • New PNG export options
-  • Path operations and deselection of a large number of paths are much faster
-    now
+    The tool bar width can now be resized and also wraps into multiple columns automatically if the screen height is too small for all icons to fit.
+    You can customize which tools will be part of the tool bar in the preferences, see Customization section
 
-Important changes
-
-For users
-
-Custom Icon Sets
-
-Icon sets do no longer consist of a single file that contains all icons, but of
-single files for each icon. The directory structure must follow the standard
-structure for gnome icons.
-
-If you would like to create or convert your own icon set to the new format,
-please see the 'hicolor' and 'Tango' icon theme folders in your Inkscape
-installation 'share' directory for suitable examples.
-
-As a side effect of a bug fix to the icon preview dialog (see below), custom UI
-icon SVG files need to be updated to have their background color alpha channel
-set to 0 so that they display correctly (see Bug #1661989).
-
-Third-party extensions
-
-Third-party extensions need to be updated to work with this version of
-Inkscape.
-
-For extension writers
-
-[TBC - not final] Extensions have undergone some fundamental changes.
-Inkscape's stock extensions have been moved to their own repository and were
-updated for compatibility with Python 3. Internally, extensions have been
-reorganized and many functions have been deprecated.
-
-[Extension manager? How-to-guide for updating? New API elements?
-Documentation?]
-
-Instructions for updating old extensions are available at Updating your
-Extension for 1.0
-
-Also note the changed command line options.
-
-For packagers and those who compile Inkscape
-
-  • autotools builds have been dropped. Please use CMake for building Inkscape
-    from now on. More info is available on our website.
-  • libsoup dependency added: we use libsoup for making http requests without
-    the need for dbus and gvfs.
-  • Inkscape now uses a git submodule for the extensions directory. If you have
-    cloned the repository and are not building from the release source code
-    tarball, please note the updated build instructions
-  • On Ubuntu 18.04, Gnome's fallback icon set (package
-    'adwaita-icon-theme-full'), that is needed to display Inkscape's default
-    icons completely, is no longer automatically installed. It has been added
-    as a 'recommends' level dependency.
-  • lib2geom: [insert up-to-date info here]
-
-General: Application
-
-Several small performance improvements in various areas add up to make Inkscape
-run more smoothly than before (e.g. MR #448).
-
-General User Interface
-
-The user interface has been changed to using a more recent version of GTK+, the
-widget toolkit that Inkscape uses to draw the user interface on the screen.
-This new version brings a lot of improvements, especially for users of hidpi
-screens. Updating Inkscape for using it has been a large effort that has been
-anticipated eagerly for a long time, and was a focus of the Boston Hackfest.
-
-Window position / size
-
-Improvements and fixes to the code for handling/restoring window size and
-position [1] . The window manager handles most of the job now which should make
-it much more robust. If you still encounter problems with this, please report
-those to our bug tracker.
-
-HiDPI
-
-Icons
-
-[Please fill in]
+Dithering
 
 
-Y Axis Inversion
+Inkscape's gradients sometimes suffered from visible steps between colors, a phenomenon also known as gradient banding. Gradient banding is caused by the difference between how many different colors are available for the selected image file format and how many colors a human eye can discern. The effect becomes especially prominent when exporting a gradient that only spans a small color range to a high-resolution image. There just aren't enough colors available for a smooth transition.
 
-During the Inkscape Hackfest in Kiel, a large change by Thomas Holder was
-integrated into the Inkscape codebase. It allows you to optionally set the
-origin of your document to the top left corner of the page. This finally makes
-the coordinates that you can see in the interface match the ones that are saved
-in the SVG data (unit conversions/transformations may be required), and makes
-working in Inkscape more comfortable for people who are used to this more
-standard behavior.
+Dithering softens these steps by scattering pixels of the different adjacent colors along the gradient, a little bit like a blur.
 
+Dithering is now used both for Export of raster images as well as for displaying gradients on canvas(MR #3812). This functionality requires a special version of Cairo, our rendering engine. This means that it will only be available in the pre-packaged builds (for macOS, Windows and for the Linux AppImage).
 
-  • Option in the preferences' 'Interface' section
-
-    Option in the preferences' 'Interface' section
-
-  • Effect of the option (left upper page corner at 0/0)
-
-    Effect of the option (left upper page corner at 0/0)
+For standard Linux package formats (deb, rpm, …), it depends upon your Linux distribution maintainers whether they will patch up the version of Cairo they want to distribute. We hope that this change will one day also be included in the official Cairo packages (Link to ongoing discussion).
 
 Canvas
+Page
 
-Canvas Rotation
+    The page shadow now has a more realistic, blurry, fade-out look (MR #3128). [TODO: add a small screenshot]
+    Settings for the page background / decoration were refactored, see section about Document properties dialog.
+    Inkscape documents can now hold multiple pages! Learn more in the section about the new Page tool.
 
-With Ctrl+Shift+Scroll wheel the drawing area can be rotated and viewed from
-different angles. In the bottom right corner of the Window, the viewing angle
-can be entered manually. Right-click to select between a set of preset values.
-Keyboard shortcuts for clockwise/counter-clockwise/no rotation can be set in
-the preferences.
+Snapping
+Snap bar is now Snap popover
+The snap bar has been replaced with a new 'popover'-type dialog, which will unfold when you click on the little arrow symbol in the top right corner, next to the snap symbol. Snap options now have always-visible descriptions, to make them easier to understand (MR #3323).
+
+To activate / deactivate snapping globally, click on the snap symbol in the top right corner or press %.
+
+The popover dialog has two different modes:
+
+    Simple: Only 3 options: snap bounding boxes and paths, activate / deactivate the new alignment snapping). This provides a simple preset for many use cases.
+    Advanced: Gives the familiar granular control over every snapping option. Switching from 'Advanced' back to 'Simple' is not merely a visual change, but will reset snap settings to defaults.
 
 
-Canvas rotation.gif
+Snapping preferences globalized
 
-Canvas Mirroring
+Snap settings are no longer saved with the document, but are set globally for all documents in the preferences and in the snap popover dialog. The option for enabling snapping in new documents has been removed, as it no longer makes sense.
 
-The canvas can now be flipped, to ensure that the drawing does not lean to one
-side, and looks good either way. The vertical/horizontal flipping is available
-from the menu View > Canvas orientation > Flip horizontally / Flip vertically.
-Keyboard shortcuts for flipping the canvas can be set in the preferences (Edit
-> Preferences > Interface > Keyboard shortcuts).
+The options for snapping perpependicularly and tangentially to paths or guide lines have been moved from the document preferences to the snap popover to make them more discoverable. The other snap options from the document settings dialog were removed. [TODO: check whether this is still true at the time of release] 
 
-Flip canvas 300px.gif
+Alignment and Distribution snapping
+During Google Summer of Code 2021, GSOC student Parth Pant worked on adding on-canvas alignment and distribution snapping, with support of the mentors Thomas Holder and Marc Jeanmougin. As a result, three new modes of on-canvas snapping have been added. These new modes make aligning and distributing objects a very easy drag-and-drop operation (MR #3294)..
 
-Pinch-to-zoom
+When on-canvas alignment is active, Inkscape will display horizontal or vertical temporary guide lines that indicate when the selected object can be aligned relative to another object on the canvas. It connects the points of the objects that are in alignment. With distribution snapping, multiple objects close by are taken into account, making it possible to align objects in a grid, with very little effort.
 
-On supported hardware (trackpad, touchpad, multi-touch screen), the canvas can
-be zoomed with the two-finger pinch gesture.
+The temporary guide lines only appear while editing / moving objects on the canvas. Once a guide shows up, the movement of the selection is loosely constrained in the direction of the guide.
 
-Visible Hairlines Display Mode
+Alignment and Distribution snapping guide lines display the distance(s) between objects as a little label per default. This can be disabled from Edit → Preferences → Snapping: Show snap distance in case of alignment or distribution snap.
 
-This new display mode is available under the "View->Display mode" menu. It
-ensures that all lines are visible, regardless of zoom level, while still
-drawing everything else normally.
+The 'Simple' mode of the snapping popover dialog allows you to simply activate or deactivate Alignment snapping. The 'Advanced' mode gives you additional control by allowing you to en-/disable:
 
-This is especially useful for some CNC machines like laser cutters and vinyl
-cutters which use hairlines to denote cut lines.
-
-Visible hairlines.gif
-
-Paths
-
-Changed behavior of Stroke to Path
-
-The 'Stroke to Path' command now not only converts the stroke of a shape to
-path, but effectively splits it into its components.
-
-In the case of applying it to a path that only has a stroke, the behavior is
-unchanged.
-
-For paths that don't only have a stroke, but also a fill and/or markers, the
-result will be a group consisting of:
-
-  • Stroke outline turned to path
-  • Fill (if there was one)
-  • A group of all markers (if applicable; one group per marker, consisting of
-    its outline and its fill turned into a path)
-
-Stroke to path.gif
-
-Unlinking Clones for Path Operations
-
-Clones and Symbols are now automatically unlinked, before a Boolean operation
-(union, difference, etc.), or one of the Path operations 'Combine', 'Break
-apart', or 'Stroke to Path' is performed.
-
-A setting in the preferences at Behavior → Clones → Unlink Clones allows to
-disable the automatic unlinking.
+    Self snapping: Toggle alignment snapping for nodes in the same path while editing nodes or node handles
+    Distribution snapping: Toggle distribution snapping
 
 Tools
+Page tool
 
-Calligraphy Tool
+The new Page tool (lowest button in the tool bar) allows you to create multi-page Inkscape documents, and to import as well as export multi-page PDF documents. (MR #3486, MR #3785, MR #3821). It supports overlapping pages and pages of different sizes in a single document.
 
-A new option to add dots has been added to the tool. Click in place without
-moving the mouse to create a dot, Shift+Click to create a larger dot [needs
-documentation in keyboard shortcut list].
+Tool usage:
 
-Circle Tool
+    To create a new page either:
+        click-and-drag on the canvas
+        or click on the 'Create a new page' button in the tool controls
+    To delete a page, click on the page to select it, then click on the button Delete selected page or use the Del or Backspace keys.
+    To move a page on the canvas, click-and-drag it to the desired new position. If the option to Move overlapping objects is active, this will also move any objects that touch the page along with it.
+    To change a page's size:
+        click on a page whose size you want to change to select it, then drag the square-shaped handle in its bottom right corner
+        click on the page, and then choose one of the predefined sizes in the page size dropdown, or enter your size values for the 'Custom' option, by typing them into the field in the form of 10cm x 15cm
+    To fit a page to:
+        the size of the drawing: make sure to have no object selected before you switch to the Page tool. Then select a page by clicking on it, then click on the button 'Fit page to drawing or selection' in the tool controls
+        a selected object: first select the object(s) with the selection tool, then switch to the Page tool, click on a page to select it, then press the the button 'Fit page to drawing or selection' in the tool controls
+    To add a label to your page, select the page by clicking on it, then enter a name or label for it into the text field in the page tool's tool controls. Labels are always visible, no matter which tool is currently selected.
+    To export a multi-page PDF file, use File → Save a copy … → PDF. This will automatically include all pages.
+    To open or import a multi-page PDF or (pdf-based) AI file, use File → Open/Import → select file name → choose to import 'All' pages [Known issue: 'import' moves content of some pages to some far out place in the drawing]
 
-The circle tool can now also create closed ("filleted") circle shapes (closed
-arcs) with the click of a button.
+Note: Multi-page SVG files are an Inkscape-specific concept. Web browsers will only display the first page of your document, which corresponds to the 'viewbox' area of the SVG file.
+Selector Tool
 
-  • Circle tool shapes in this release
+The tool now allows to set the origin of the selection for precise numerical positioning:
 
-    Circle tool shapes in this release
+    Click on one of the 9 object handles to select your desired origin for the scaling, or select and then drag the middle handle to the desired position
+    A small red circle now indicates the new origin and the x/y position in the tool controls will adjust to the new origin.
+    Now edit the x, y, width or height values to move and scale your object using the new origin (MR #2700)
+Text Tool
 
-Eraser
+    Kerning options are now symbolized by a button between the subscript and text direction selectors. Clicking on it will open a so-called pop-over, where all previously available options can be found. This change saves space in the Text tool's toolbar.
+    Negative kerning values can now be as little as -1000 (previously -100), making them symmetrical to their positive counterparts (MR #2569, MR #3434)
+    Padding: Text that is flowed into a shape and standard flowed text now have an additional square-shaped handle in the top right corner. Move the handle to adjust the text padding inside the frame (MR #2769) [Currently broken]
+    Exclusion zones: Text can now flow around one or more movable objects:
+        Select all object(s) (use only shapes and paths on the same object hierarchy level as the text; no groups / clones / images supported) and the text.
+        Set the exclusion zone by going to Text → Set subtraction frames.
+        Now you can move the exclusion objects around or edit their shape, and the text will adjust automatically.
+        If you want to change the exclusion zones again at a later point, repeat the process with all objects that the text should flow around.
 
-New option to erase as clip, which allows to non-destructively erase (parts of)
-all kinds of elements, including raster images and clones.
+Background info: SVG 2.0 flowed text allows for shape-padding and shape-subtract attributes. shape-padding lets the text flow into a shape and leave some space between its edges and w where the text will start to flow. shape-subtract subtracts shapes with margin, so text can flow around other objects in the scene. These attributes were supported in Inkscape 1.0, but not exposed to the user. This version of Inkscape includes both an adjustable on-canvas knot for changing the padding as well as a Text menu item for setting text subtraction properties with a further knot to adjust it's margins.
 
-Erase with clip.gif
+[See merge request for animated gifs to add here]
+Path Operations
 
+    New Split path operation, available from Path → Split path:
+    The function separates a path object that consists of multiple subpaths into a set of path objects that 'belong together'. This means that parts of a path that have holes in them are kept as whole objects. The function works by splitting up a path into non-intersecting bits, keeping intersecting bits together.
+    Example: A path that consists of a word, like 'Inkscape' will be split into 8 parts, one for each letter. With the familiar 'Break apart' function, there would be 12 parts, because of the holes in the letters that would be split off as their own objects, too (MR #3738).[TODO: add animation]
+    On-Canvas Boolean operations [TODO: fill in if merged, seems to have low probability, lots of work to be done] https://gitlab.com/inkscape/inkscape/-/merge_requests/3357 Osama Ahmad with mentors Thomas Holder, Marc Jeanmougin, Martin Owens
 
-Measurement Tool
+Dialogs
+General
 
-Hovering over a path with the tool now displays the length, height, width and
-position of the path. If you hover over a group, it will show the width, height
-and position of the group. Holding Shift switches to showing info about the
-constituents of the group.
+    A mini-menu (downward pointing arrow symbol) was added into the title bar of every multi-dialog panel (also called 'notebook'). You can use it to close the current tab, to undock it, or to close the whole panel. It also shows a list of available dialogs, sorted by purpose, allowing you to open them with a click ((MR #3728)
+    Open dialogs are now less costly for performance, because they do not update when it's not needed (MR #3369), or when they are hidden (MR #3761)
+    Docking zones now expand and flash slowly when a dialog is dragged close to them. This makes it easier to see where docking is possible (MR #3729)
+    The text labels of docked dialogs are now more responsive to the width of dialog (MR #3627)
 
-The tool also has a new option to only measure selected objects when using
-click-and-drag.
+Align and distribute
 
-  • New info text from measurement tool (for a group)
+    The formerly separate Arrange dialog is now integrated with the Align and Distribute dialog. With its three tabs, more user-friendly names and some small visual tweaks, the dialog now holds everything that is needed for aligning, distributing and arranging objects in your drawing (MR #3382, MR #3667).
+    The icons inside this dialog are now smaller.
+    Node aligment and distribution is nolonger shown on first run Just when you use node editing tool
+Document Properties
 
-    New info text from measurement tool (for a group)
+The 'Snapping' tab was removed in favor of a global snapping preference, see Snapping section.
 
-  • Measurement tool info text for a single path (in a group with Shift)
+The first tab of the Document properties dialog was refactored thoroughly to make it easier to use:
 
-    Measurement tool info text for a single path (in a group with Shift)
+    It's now labelled 'Display' instead of 'Page'
+    The long list of different document formats is now available from a dropdown
+    There is a preview available of the page format and colors [TODO: needs screenshot]
+    The page area(s) in a document can now have a different color than the underlying 'desk' area [TODO: mention in highlights?]
+    The other options have been rearranged to look tidier
+    The option to add margins to a document when resizing it is currently unavailable [TODO: hopefully get that back before the release]
 
-  • Measuring only the selected object (the ice cap)
+(MR #3700).
 
-    Measuring only the selected object (the ice cap)
+(MR #3400, MR #3403)
+Fill and Stroke dialog
+Color selector
 
-Pencil Tool
+    The more intuitive HSL mode (hue, saturation, lightness) is now the default mode of the color selector.
+    All color selection modes (e.g. HSL, HSV, RGB, CMYK, color wheel, CMS) have been moved into drop-down menu, with icons. You can get the old, tabbed look back by disabling the option in Edit → Preferences → Interface: Use compact color selector mode switch (MR #3443).
 
-PowerPencil
+Gradient Editor is back
 
-Pressure sensitivity can now be enabled for the Pencil tool. This feature makes
-use of the PowerStroke Live Path Effect (LPE).
+A replacement for the gradient editor was added to the Fill and Stroke dialog (MR #2688, Bug ux#67).
 
-New settings for the tool are available for tweaking the behavior of the
-PowerStroke LPE when it is being created with the Pencil tool (and a graphics
-tablet/stylus):
+This allows you to add, edit and delete gradient stops directly in the 'Fill and Stroke' dialog again:
 
-  • Use pressure input (in the tool controls bar): activates the PowerStroke
-    feature, if a pressure sensitive device is available.
-  • Min/Max (in the tool controls bar): determines the minimal and maximal
-    stroke width (0 to 100%). This does not change the number of available
-    pressure levels, but spreads them out in the available line width interval.
-  • Additionally, the PowerStroke LPE itself has been improved, to better work
-    when used in this new way, see the section about LPE updates.
-  • Pressure change for new knot (in the global Inkscape preferences, Edit >
-    Preferences > Tools > Pencil): adds a PowerStroke Knot when the stylus
-    pressure changes by this percentage.
+    to add a new stop, double click on the gradient preview
+    to move a stop, click and drag it along the gradient preview or enter the stop offset numerically for more precision
+    to remove a stop, click on it to select it, then press the Del or Backspace key
+    The Gradient tool toolbar options `repeat mode`, `reverse gradient direction`, a gradient selection library and a list of all stops have been added here, too, so all the options pertaining to gradients are in easy reach.
+    we added a preference to auto delete non used gradients. previously, inkscape deletes the non used gradients automatically. now, we made this optional so that, users can preserve those gradients in SVG file. https://gitlab.com/inkscape/inkscape/-/merge_requests/3897
 
-[needs video/gif]
+Markers
 
-Clipping / Masking
+The markers drop down list has been replaced by a little dialog that displays all available markers in a grid, and even allows you to edit the selected marker! This project was undertaken by GSOC student Rachana Podaralla with the mentors Michael Kowalski, Marc Jeanmougin and Martin Owens (MR #3394, MR #3420).
 
-Clip paths and masks now have an inverse mode in the menu, using the PowerClip
-and PowerMask LPEs.
+When clicking on the drop down for the start, middle or end markers, you will see the following:
 
-Inverse clip 400.gif
+    a list of markers used in the current document at the top
+    below that, a list of all available markers, which also contains some fun new markers!
+    at the bottom, the 'Edit' section, with:
+        a preview of how the marker will look
+        some number fields to change the size of the marker (keep the lock on to scale proportionally)
+        an option to scale the markers when the stroke width is changed
+        options for changing the marker direction
+        the option to change the marker's angle and to have that angle fixed
+        marker offsetting options
+        a button to enable editing of markers (rotate, scale, move) on the canvas
 
-Live Path Effects
+Custom Dash patterns
 
-Live Path Effects received a major overhaul, with lots of improvements and new
-features. The main changes are:
+To choose your own dash pattern, select Custom in the dash pattern drop-down menu. This will make a new text field show up where you can add your new custom dash pattern by typing in numbers. Each number corresponds to the length of a dash or a gap. It always starts with a dash, and when it reaches the end, it will continue with the first number again, for the next gap or dash. So if you enter an even number of numbers, e.g. '1 1 4.5 4.5' the pattern will be 'dot - short gap - dash - long gap' and then repeat again, and for an uneven number of numbers, the pattern will be inverted when the first 'set' ends.
 
-  • Set default parameters: default values for any LPE can be set in the
-    respective LPE's dialog, when it is applied to an object
+On the canvas, you can watch how your object changes when you change the custom dash pattern numbers.
 
-(Note: we have the 'multiple desktop preferences' problem here: If you have
-multiple Inkscape windows open, the last one will determine what will be saved
-to the preferences file, as preferences changes are only saved when Inkscape is
-closed, and the settings are only loaded from file when a new window is opened.
-)
+[TODO: needs gif]
+Other small changes
 
-  • Clip and Mask: improved handling
-  • Fix multiple LPE BBox: a problem with the size of the bounding box when
-    applying multiple LPEs to an object has been fixed
-  • Knots on shapes: show edit knots in LPE shapes
-  • Switch knots: change the handles to the correct LPE handles when one
-    selects an LPE in the list of active LPEs for the selected object.
+Line cap and line join order buttons have been reordered, so they match vertically (MR #3402).
+Layers and Objects dialog
 
+A new dialog was created that merges the functionality of the familiar 'Layers' and 'Objects' dialogs, with better performance (MR #2466, MR #3635, MR #2466, MR #3741, MR #3597, MR #3645).
 
-In addition to this, the LPE list now features an icon for each LPE (TBC).
+It is available from both the 'Layers' and the 'Objects' menu and offers the following functionality:
 
-  • Set default values for Mirror LPE
+    a button to toggle between 'Layers' and 'Objects' view
+    a list of all layers and objects in the drawing, featuring new icons for the different object types
+    8 alternating default colors for layers and the objects in them:
+        these colors are used for drawing the paths in the respective layers
+        the colors can be set (in case they clash with your theme, or you cannot see the paths that you draw) in the file style.css in your Inkscape preferences directory
+    layer and object colors can be customized for each layer/object on its own, by clicking on the vertical color bar at the end of each line
+    tiny mask and scissor symbols indicate that a clip or mask is applied to an object
+    object and layer names (label, not id) can be changed after a double-click on the current name
+    icons for locking and hiding a layer/object light up when you hover over the layer's row:
+        click to hide/unhide, lock/unlock, Shift+click to hide/lock other items [TODO: check whether 'on same level' would apply, doesn't work currently]
+    holding Alt while hovering over an object in the dialog will highlight that object on canvas
+    layers as well as objects can be multi-selected
+    the context (right-click) menu for layers provides options to move, delete, rename the current layer, to lock/hide all/other/the current layers, to add a new layer and to convert a layer to a group
+    the context menu for objects provides the same options as it would when you right-click on the object on canvas
 
-    Set default values for Mirror LPE
+Note:
 
+    the (partially hidden) setting for path colors in the preferences file is no longer respected. Adjust the style.css file as a workaround.
+    the dialog no longer offers the options to change opacity, blur or blend mode. Use the Fill and Stroke dialog as a workaround.
+    the type-forward search to filter for objects is no longer available. For objects, use the Search and Replace dialog as a workaround, for layers there is currently no replacement.
 
-Boolean Operations LPE
+[TODO: needs a picture]
+Preferences
 
-[The Boolean Operations LPE finally makes non-destructive boolean operations
-available in Inkscape. It works by adding the LPE to a path, then linking a
-copied path to it by clicking on the 'link to path' button. That way, two
-[more?] paths can be combined to a single shape, and both are still editable.
-Available options:
+    The preferences zoom ruler now respects your theme's look (MR #3450)
+    An option to make Select same behave like Select all with respect to whether it selects objects only in the current layer or in all layers was added to Edit → Preferences → Behavior → Selecting (MR #2832)
 
-  • union
-  • symmetric difference
-  • intersection
-  • division
-  • difference
-  • cut outside
-  • cut inside
-  • cut
+SVG Font Editor
 
-] functionality incomplete currently, does not hide linked operand, see https:/
-/gitlab.com/inkscape/inkscape/-/merge_requests/20#note_100799480
+Bug fixes, small face lift and UX and performance improvements of the dialog (MR #3396, MR #3552, MR #3628)
 
-  • Boolean Operations LPE
+To improve font editing experience new dialog simplifies glyph organization. When editing a font users can start by inserting new glyphs (glyph auto generation makes it easy - press '+' to add new glyphs). Next the user can select a glyph they want to edit and hit "Edit" button. Inkscape will then create a layer dedicated to this glyph, switch to it, and hide other layers. Thanks to this feature canvas can remain uncluttered, with only edited glyph visible.
 
-    Boolean Operations LPE
+SVG font dialog improvements:
 
-BSPline and Spiro
+    speed improvements: Inkscape can now handle fonts with thousands of glyphs
+    automatic glyph generation: adding new glyph creates new entry and populates unicode string based on the last defined glyph; pressing '+' creates glyphs with consecutive unicodes
+    glyph management: glyph editing action creates glyph-specific layers to keep glyphs organized
+    added grid glyph view which offers larger preview than a list
 
-Improvements in Pen/Pencil mode. With "Alt", you can move the previous node.
+Swatches
 
-'Clone Original' Improvements
+The Swatches dialog uses the same improved settings as the color palette.
+Text and Font dialog
 
-This path effect now allows various objects instead of only paths and is even
-more powerful.
+The dialog's width has been reduced, so it won't take up excessive amounts of space when docked (MR #3314).
 
-Demo Video
 
-Demo Video
+Trace Bitmap
 
-Dash Stroke LPE
+The Trace Bitmap dialog received a few updates and some more polish (MR #3405):
 
-This new LPE creates uniformly dashed paths, optionally by subdividing the
-path's segments, or including dashes that are symmetrically wrapped around
-corners.
+    The preview auto-updates more reliably and shows a better preview image.
+    The preview location now adjusts to the dialog's format: if it is wider than tall, it moves to the right side, and if it is taller than wide, the preview appears at the bottom of the dialog.
+    The number entry fields are now accompanied by draggable sliders.
 
-  • Rectangles with dash stroke LPE with various settings
+Transform dialog
 
-    Rectangles with dash stroke LPE with various settings
+We cleaned up this dialog, reduced width and added explanation for metric transformations (MR #3381)
 
-Demo Video
 
-Ellipse from Points
+Filters
+Live path effects
 
-This new LPE creates an optimally fitted ellipse from a path's nodes.
+We added button in to Live Path Effect Dialog that will select parent path that is related to that path. It quality of life feature for Booleans, Copie, etc...
 
-In contrast to the already existing LPE "Ellipse by 5 points" this LPE is more
-flexible (since, depending on the number of points available, it can fit both
-circles and ellipses) and has more features. Especially technical illustrators
-can benefit from these features.
+Select satelit.png
 
-See LPE:_Ellipse_from_Points for a documentation.
 
-  • Ellipse (5 nodes), circle (3 nodes), circle segment (3 nodes), isometric
-    circle (3 nodes), isometric circle with frame (3 nodes)
+We also fixed Problems that weare present when you copy/duplicate/ or stamped paths with LPE. This fixies big namber of bugs
 
-    Ellipse (5 nodes), circle (3 nodes), circle segment (3 nodes), isometric
-    circle (3 nodes), isometric circle with frame (3 nodes)
+TODO: needs more info
 
-Embroidery Stitch LPE
+MR #3479
+Copy LPE
 
-This new LPE can add nodes to your paths and create jump stitches, to create
-data that can be converted for use with a stitching machine. To view the
-stitches that you added, activate the 'Show stitches' checkbox, and, if
-necessary, adjust the 'Show stitch gap' value, so you can see the single
-stitches.
+New Copies Lpe. This will allows you to quickly copy large number of objects non distractively. Has many advanced features like mirroring or transformations to create interesting grids and pattrens and variations quickly.
 
-There are various options for calculating the order of the stitching, for
-connecting the parts of the drawing and 3 different stitch patterns available.
-It is suggested to play around with these until you like the result.
+Features:
 
-For exporting your data, you can, for example, use the HPGL file format and go
-from there.
+    Cloning of objects in rows an colloms
+    Offset of rows and colloms
+    16 Mirroring modes
+    Linear Blendin of scale (4 mode+ mirroing)
+    Linear Blendin of rotation (4 modes + mirroing)
+    Custom Gap Controls
+    Custom styling of clones
 
-  • Inkscape Logo with Embroidery LPE (stitches made visible)
+Copie LPE.gif
 
-    Inkscape Logo with Embroidery LPE (stitches made visible)
+MR #3814
+Fixes
 
-  • Options: left: methods to order subpaths, right: methods to connect end
-    points of subpaths
-
-    Available options: left: methods to order subpaths, right: methods to
-    connect end points of subpaths
-
-Fill Between Many / Fill Between Strokes LPE
-
-New options added:
-
-  • Fuse coincident points: [describe]
-  • Join subpaths: [describe]
-  • Close: [describe]
-  • LPEs on linked: [describe] (Fill Between Many only)
-
-Fillet/Chamfer LPE
-
-This new LPE adds fillet and chamfer to paths. Also adds a new internal class
-that allows to handle extra info per node, the LPE itself is an example of use
-the new classes.
-
-Demo video
-
-  • Chamfer by LPE
-
-    Chamfer with LPE
-
-  • Chamfer with 2 steps
-
-    Chamfer with 2 steps
-
-  • Inverse Chamfer with 2 steps
-
-    Inverse Chamfer with 2 steps
-
-  • Fillet with LPE
-
-    Fillet with LPE
-
-  • Inverse fillet with LPE
-
-    Inverse fillet with LPE
-
-Knot LPE
-
-New options added:
-
-  • Inverse: use the stroke width of the other path as basis for calculating
-    the gap length
-  • Add stroke width: make the gap wider by adding the width of the stroke to
-    the value for the gap length
-  • Add bottom (other?) stroke width: make the gap wider by adding the width of
-    the bottom (other?) stroke to the value for the gap length
-  • Crossing signs: [not final]
-
-Measure Segments LPE
-
-This new path effect adds DIN and custom style measuring lines to "straight"
-segments in a path.
-
-Demo video
-
-  • Measure Segments LPE
-
-    Measure Segments LPE
-
-Mirror Symmetry and Rotate Copies LPE
-
-  • Split feature: This new feature allows custom styles for each part of the
-    resulting drawing without unlinking the LPE. Demo Video
-  • The LPE display now updates accordingly when there are objects added or
-    removed.
-
-  • Separate styles for rotated copies
-
-    Separate styles for rotated copies
-
-Power Clip and Power Mask LPE
-
-This new LPE adds options to clips and masks.
-
-
-PowerStroke LPE Improvements
-
-  • Width scale setting added: adjust the overall width of the stroke after it
-    has been drawn.
-  • Closed paths: PowerStroke now works much better on closed paths.
+    Perspective/envelope LPE now works on objects with 0 width or height . (edge cases for single line stroke) (MR #2712)
 
 Import / Export
 
-Linking and embedding SVG files
+[TODO: not available yet, fill in when/if merged] Anshudhar Kumar Singh with mentors Michael Kowalski, Ted Gould, Tavmjong Bah https://gitlab.com/inkscape/inkscape/-/merge_requests/3825
+Customization / Theming
+General User Interface
 
-On import of an SVG file, there is now a dialog that asks if the user would
-like to link to the SVG file, to embed it (base64 encoded) into an <img> tag,
-or if the objects in the SVG file should be imported into the document (which
-was how Inkscape handled importing SVG files previously).
+    The font size in the user interface can be adjusted at Edit → Preferences → Interface → Theming: Font scale (MR #3690)
+    The +/- buttons for number entry fields are now smaller. If you prefer the old, wider buttons, they can be turned on again by disabling Preferences → Interface : Use narrow number entry boxes . (MR #3358)
 
-[ TBC: The dpi value for displaying embedded SVG files can be set in the import
-dialog.]
+Bars / Toolbars
 
-This makes importing SVG files work (almost) the same as importing raster
-images.
+    You can now hide elements from the status bar (style indicator, layer indicator, mouse coordinates, canvas rotation) at Edit → Preferences → Interface: Status bar (MR #3445)
+    You can now hide tools from the tool bar at Edit → Preferences → Interface → Toolbars: Toolbars (MR #3515)
 
+Editing toolbox.gif [TODO: outdated, needs new recording]
+Cursors
 
-The 'Embed' and 'Extract' options in the context menu for linked SVG files work
-the same as they do for raster images. The 'Edit externally' option will open
-the linked SVG file with Inkscape per default. This setting can be changed in
-the preferences' 'Imported Images' section.
+    The drop shadow is now optional for mouse cursors. You can turn it off in Edit → Preferences → Interface → Mouse cursors: Show drop shadow (MR #3352).
 
-The displaying of the dialog can be disabled by checking the 'Don't ask me
-again' option.
+Icons
 
-Linked and embedded SVG images are displayed as their raster representations.
+    Multiple icons in the Multicolor icons set got small retouches and other improvements to readability or contrast, e.g. the green color is now a little brighter when using a dark theme, to improve contrast.
+    Cursors and icons in Multicolor icon theme for the Bézier tool and the Calligraphy tool in the tool bar now use the same imagery [to be confirmed]
+    Align and distribute icons are now smaller, some were redesigned to fit in to 16x16 grid.
+    The icon sizes for the tool bar and the control / tool controls bar can now be adjusted smoothly on a continuous scale from from 100% to 300% in Edit → Preferences → Interface → Toolbars: Toolbox icon size / Control bar icon size. Changing the size no longer requires a restart.
 
-The resolution used for displaying them [TBC: can be set per image? can be set
-in the xxx dialog for the selected image] is the default image import
-resolution set in the preferences' 'Imported Images' section. A change in this
-option will take effect upon closing and reopening the file, and will affect
-all linked SVG images in the file.
+Themes
 
-Export PNG images
+    A contrast slider was added for fine tuning the selected theme's colors at Edit → Preferences → Interface → Theming: Contrast (MR #906)
 
-The export dialog has received several new options which are available when you
-expand the 'Advanced' section.
-
-  • Enable interlacing (ADAM7): when loading images, they will be displayed
-    faster
-  • Bit depth: set the number of bits that code for the color of a pixel,
-    supports grayscale and up to 16bit
-  • Compression type: choose strength of lossless compression
-  • pHYs dpi: force-set a dpi value for the image
-  • Antialiasing: choose type of antialiasing or disable it
+    The contrast slider allows to fine-tune the theme's colors
 
 
-  • PNG export options
+macOS-specific Changes
 
-    PNG export options
+On macOS, enable all special menu items in the application menu and hide them from other menus (MR #3767)
 
-  • PNG bit depth options
 
-    PNG bit depth options
+Windows-specific Changes
 
-  • PNG compression options
-
-    PNG compression options
-
-  • PNG antialiasing options
-
-    PNG antialiasing options
-
+Modifier keys now work with pen input (Commit #46c12b)
 Extensions
 
-Extension development
+    Add option to limit output extension to save copy (MR #3600)
+    Added Python app dirs dependency (MR #3568) [Is this a bug fix?]
 
-  • All INX Parameters now have the common attribute indent="n" where n
-    specifies the level of indentation in the extension UI.
-  • Add appearance="url" for INX Parameters of type "description". You can now
-    add clickable links to your extension UI.
+Command line
 
-Plot extension
+    'verbs' have been removed. All verbs are available as 'actions' now (see below for more context)(MR #3884, MR #3880, MR #3874).
+    A new action for scaling by a factor has been added, it replaces the previous one, which is now called 'grow' (MR #3880).
 
-The new option 'Convert objects to paths' will take care of converting
-everything to a path non-destructively before the data is sent to the plotter.
-[gives wrong error message, maybe not working? https://gitlab.com/inkscape/
-inkscape/-/commit/dd3b6aa099175e2244e1e04dde45bf21a966425e#note_100908512]
+Behind the curtains
 
-Palettes
-
-The Munsell palette has been added to Inkscape's set of stock palettes.
-
-  • Munsell palette
-
-    Munsell palette
-
-Templates
-
-  • The Desktop template has new options for 4k, 5k and 8k screens.
-  • A new template for an A4 3-fold roll flyer was added.
-
-  • New template options for 'Desktop' template
-
-    New template options for 'Desktop' template
-
-  • New A4 3-fold roll flyer template
-
-    New A4 3-fold roll flyer template
-
-SVG and CSS
-
-  • Dashes: Inkscape can now load and display files with dashes and/or
-    dashoffsets defined in other units than the unitless user unit (e.g. %, mm)
-    correctly. There is no user interface for editing these values currently,
-    except for the XML editor. Values for the dasharray that are entered in
-    other units (except for %) will be converted to user units when the new
-    values are set.
-
-  • [Please fill in]
-
-Dialogs
-
-Document Properties
-
-  • When resizing the page, the page margin fields can now be locked, so the
-    same value will be used for all margins, but only needs to be entered once.
-  • The guides panel now has controls to lock or unlock all guides, create
-    guides around the page, and delete all guides. These actions also appear on
-    the Edit menu, making it possible to assign custom keyboard shortcuts.
-  • Grids can now be aligned to the corners, edge midpoints, or centre of the
-    page with a button click in the grids panel.
-
-  • Lock to set same margins for page resizing
-
-    Lock to set same margins for page resizing
-
-  • Document properties: Toggle guide lock for document, create page border
-    guides, remove all guides
-
-    Document properties: Toggle guide lock for document, create page border
-    guides, remove all guides
-
-  • Grid alignment options in document properties
-
-    Grid alignment options in document properties
-
-Preferences
-
-  • The Bitmaps subsection has been renamed to Imported Images, as it now
-    applies to both imported (embedded or linked) raster images as well as to
-    imported (embedded or linked) SVG images (i.e. to everything in <img>
-    tags).
-  • The System subsection lists more relevant folders and offers buttons to
-    open those folders with the system's file browser. This makes it easier to
-    find the correct folder, e.g. for resetting the preferences or for adding
-    an extension or a new icon set.
-  • The System subsection now has a button for quickly resetting all Inkscape
-    preferences.
-  • An option for scaling a stroke's dash pattern when scaling the stroke width
-    has been added and can be found at Behaviour → Dashes. It is activated by
-    default.
-  • Autosave is now enabled by default. The default directory has changed (the
-    path is displayed in Edit > Preferences > Input/Output > Autosave: Autosave
-    directory).
-
-  • Important folders can be opened from the preferences
-
-    Important folders can be opened from the preferences
+    Gio::Actions: The old 'verbs' were converted to 'actions'. This work was done to prepare for migrating to Gtk4. It also makes it possible to reach them all from the commands palette, to assign keyboard shortcuts them and to use them on the command line. A big part of this work was done by Google Summer of Code student SUSHANT A.A. with the mentors Alexander Valavanis, Ted Gould and Tavmjong Bah.
 
 Symbols
 
-  • The Symbols dialog can now handle a lot of symbols without delay on
-    startup, and also allows searching. Symbols and symbol sets now displayed
-    in alphabetical order.
+Add support for x, y, width and height SVG2 attributes on <symbol>. Follows logic of <svg> element, which already supported these attributes (MR #3828)
+Notable bugfixes
+Crash fixes
+
+    Check knot still exists before updating (MR #717)
+    Masive colection of crash fixes releted to number of LPE (copy, stampe, duplicate) (MR #3479)
+    Action after grouping 3D boxes crash Fix (MR #3698)
+    Fix for crashing of inkscape while Quiting (MR #3681)
+    Fix crash due to invalid or malformed direct-action string (MR #3663)
+    Bezier curve tool Backspace crash (MR #3715)
+    Fix crash scrolling across line height units (MR #3541)
+    Fix adding a path effect to symbol causes crash (MR #3520)
+    Fix drag-and-drop svgs, stops crash (MR #3710)
+    Handle two items in spray tool's single path mode (MR #3470)
+    Icon preview crash (MR #3439)
+    Prevents crashing during 3D box import (MR #3592)
+    Fill between Paths LPE crash on selecting (MR #3801)
 
 
-  • Symbol sets ordered alphabetically
+Other bug fixes
 
-    Symbol sets ordered alphabetically
+    Inkscape no longer slows down when using grids and havign the Document Properties dialog open on macOS
+    Calligraphy tool: use correct tool tilt direction (MR #3782, Bug #1692)
+    duplicated gradeint does not get deleted (MR #3361)
+    Last line in paragraph is not justified anymore (MR #3780)
+    Fix #1034 - Recursively flatten css style when copying (MR #3656)
+    new boolean operation algorithm (MR #3724)
+    Respect mouse down before mouse move coordinates (WIN) (MR #3735)
+    Remove mandatory break from end of paragraphs, added in Pango 1.49 (MR #3630)
+    Fix: Subsequent font changes to words in the same textbox now apply (MR #3631)
+    Fix numpad input for unimode in text tool (MR #3689)
+    Restore refresh of units trackers (MR #3665)
+    Fix find and replace if text has description, nested tspans (MR #3551)
+    all canvas knots should have same size and be controlled form preferences (MR #3679, MR #3699)
+    Fix multiline vertical text positioning in browsers (MR #3537)
+    Stop changing line height when units change (MR #3544)
+    Fix Clone Tiler menu item, action mismatch (MR #3650)
+    fix: Cannot quit Inkscape on macOS Big Sur from welcome screen (MAC) (MR #2762)
+    Fix: Position of flowed text no longer applies extra transforms on text (MR #3695)
+    Fix default value for saturate in color matrix filter (MR #3626)
+    nodes widget no longer appears on startup in align and distribute dialog (MR #3677)
+    fixes #2621. Clicking on fill/stroke in the status bar now reopens the dialog if it is hidden (MR #3754)
+    Fix KP_2,4,6,8 shortcuts for rect tool (MR #3773)
+    Transform handle modifiers are now displayed on status bar (MR #3809)
 
-  • Searching for symbols
+Even more bug fixes
 
-    Searching for symbols
+There were even more issues fixed than those listed above, but these probably only affect a small portion of users, or are relevant for development and packaging only.
 
-Filter Editor
-
-  • The filter primitives now also have a symbolic icon (one whose color can be
-    changed).
-
-Customization
-
-Customize all files in the share folder
-
-All files in /share can be over-ridden by placing files in the user's
-configuration folder (e.g. ~/.config/inkscape). Configurable contents now
-includes extensions, filters, fonts, gradients, icons, keyboard shortcuts,
-preset markers, palettes, patterns, about screen, symbol sets, templates,
-tutorials and some user interface configuration files. Only the file
-'units.xml' cannot be overridden.
-
-Fonts
-
-  • Inkscape can now load fonts that are not installed on the system. By
-    default Inkscape will load additional fonts from Inkscape's share folder (/
-    share/inkscape/fonts) and the user's configuration folder (~/.config/
-    inkscape/fonts). Custom folders can be set in preferences (see Tools → Text
-    → Additional font directories).
-
-  • Set custom font folders
-
-    Set custom font folders
-
-Keyboard shortcuts
-
-  • Allow to use "Super", "Hyper" and "Meta" modifier keys
-  • Improve shortcut handling code. This should fix a lot of issues and allow
-    to use a lot of shortcuts which were inaccessible before, especially on
-    non-English keyboard layouts.
-
-User interface customization
-
-  • Inkscape is starting to use glade files for its dialogs so they can be
-    reconfigured by users. Only one is currently supported (filter editor).
-  • The contents of the menus can be configured by customizing the menus.xml
-    file.
-  • Toolbar contents for the command bar (toolbar-commands.ui), the snap bar
-    (toolbar-snap.ui), the tool controls bars for each tool
-    (toolbar-select.ui), the toolbox (tool-toolbar.ui) is now configurable.
-  • The file keybindings.rc allows you to... (TODO: do what? What does it do in
-    comparison to keys.xml? Seems to not work at all... seems to be ancient.
-    Can be deleted?)
-  • The interface colors and some more UI styles can be customized in style.css
-    (very raw themeing support).
-
-Theme selection
-
-In 'Edit > Preferences > User Interface > Theme', users can set a custom GTK3
-theme for Inkscape. If the theme comes with a dark variant, activating the 'Use
-dark theme' checkbox will result in the dark variant being used. The new theme
-will be applied immediately.
-
-New theme folders can be added to the directory indicated in Edit > Preferences
-> System : User themes. A large selection of (more or less current) GTK3 themes
-is available for download at gnome-look.org
-
-Icon set selection
-
-In 'Edit > Preferences > User Interface > Theme', the icon set to use can be
-selected. By default, Inkscape comes with 'hicolor' and 'Tango' icons. In
-addition to this, it offers to use the system icons.
-
-Inkscape also comes with a default symbolic icon set as part of the hicolor
-icon set. These icons can be colorized in a custom color.
-
-Changes to the icon set take effect when Inkscape is restarted, or when the
-entire user interface is reloaded by clicking on the 'Reload icons' button.
-This rebuilds all Inkscape windows. Rebuild takes a couple of seconds, during
-which the Inkscape interface will be invisible.
-
-
-  • Light theme and Tango icon set
-
-    Light theme with Tango icon set
-
-  • Light theme and hicolor icon set
-
-    Light theme with hicolor icon set
-
-  • Dark theme and symbolic icon set
-
-    Dark theme with symbolic icon set
-
-  • Dark theme with custom colored symbolic icon set
-
-    Dark theme with symbolic icon set and a custom icon color
-
-Saving the current file as template
-
-A new entry for saving the current file as a template has been added to the
-'File' menu. You need to specify a name for it, and optionally, you can add the
-template's author, a description and some keywords. A checkbox allows you to
-set the new template as the default template.
-
-  • Save current file as a template
-
-    Save current file as a template
-
-Custom page sizes in Document Properties
-
-Inkscape now creates a CSV file (comma separated values) called "pages.csv". It
-is located in your Inkscape user preferences folder, next to your
-'preferences.xml' file. This file contains the default page sizes that you can
-choose from in the 'Page' tab of the 'Document properties' dialog. You can edit
-the pages.csv file to remove the page sizes you won't use, or to add new ones.
-
-Inkview
-
-Inkview was considerably improved and got some new features:
-
-  • Support folders as input (will load all SVG files from the specified
-    folder)
-    The -r or --recursive option will even allow to search subfolders
-    recursively.
-  • Implement -t or --timer option which allows to set a time after which the
-    next file will be automatically loaded.
-  • Add -s or --scale option to set a factor by which to scale the displayed
-    image.
-  • Add -f or --fullscreen option to launch Inkview in fullscreen mode
-  • Many smaller fixes and improvements
-
-
-Command Line
-
-The Inkscape command line has undergone a large overhaul. The most important
-changes are:
-
-  • verbs/actions .......
-  • order of commands .......
-  • parallel exports ....
-  • shell mode(s)....
-  • ........
-
-  • Probably not in release: xverbs (command line commands that take
-    parameters, e.g. for saving the selection under a specified filename as svg
-    file) (mailing list thread)
-  • New verb allows to swap fill and stroke from command line:
-    EditSwapFillStroke (a keyboard shortcut can now be assigned to it) (bug
-    675690)
-  • Files can now also be saved as Inkscape SVG without calling the GUI save
-    dialog (new command: --export-inkscape-svg)
-  • Inkscape can now import a specific page of a PDF file from the command
-    line, for batch processing (new option: --pdf-page N) - does this still
-    work after Tav's changes?
-
-Translations [as of 2019-01-08]
-
-Translations were updated for:
-
-  • Basque
-  • British English
-  • Catalan
-  • Croatian
-  • Czech
-  • French
-  • German
-  • Hungarian
-  • Icelandic
-  • Italian
-  • Latvian
-  • Romanian
-  • Russian
-  • Slovak
-  • Spanish
-  • Ukrainian
-  • Swedish
-
-The installer was translated to:
-
-  • Korean
-
-Notable Bugfixes
-
-  • Symbols: Visio Stencils loaded from .vss files now use their actual name
-    instead of a placeholder derived from the symbol file's name (bug 1676144)
-  • Shapes on Pen and Pencil tools now retain color and width (bug:1707899).
-  • Text and Font dialog: The font selection no longer jumps to the top of the
-    list when clicking Apply.
-  • Docked dialogs now open on their own when the corresponding functionality
-    is called from a menu or button [TBC: Bug: if minimized, this requires a
-    second click]
-  • The icon preview dialog now correctly shows the page background (Bug #
-    1537497).
-  • Improved UI performance of handling large paths and selections:
-      □ Accelerated path break-apart and Boolean operations by disabling
-        intermittent canvas rendering during these operations.
-      □ Accelerated "deselect" speed by improving internal data structure
-        algorithms.
-
-For an exhaustive list of bugs that have been fixed, please see the milestones
-page for Inkscape 1.0.
-
-Known Issues
-
-[Please fill in]
-
-
-
-For information on prior releases, please see:
-
-    http://wiki.inkscape.org/wiki/index.php/Inkscape
+For a complete list, visit our GitLab issue tracker and see the commit history. 
 

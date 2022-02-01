@@ -41,11 +41,38 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.1-alpha" date="2021-01-17">
+    <release version="1.2-alpha" date="2020-02-05">
       <description>
-        <p>Inkscape 1.1-alpha</p>
+        <p>Inkscape 1.2</p>
         <ul>
-          <li>Alpha release</li>
+          <li>Multiple pages support</li>
+          <li>Editable markers and dash patterns</li>
+          <li>On-canvas alignment and snapping</li>
+          <li>Selectable origin for numerical transforms</li>
+          <li>Single dialog for alignment options</li>
+          <li>Gradient editing in Fill and Stroke dialog</li>
+          <li>Layers and Objects dialog merged</li>
+          <li>New UI for Snap settings</li>
+          <li>More customization options</li>
+          <li>Various performance improvements and bugfixes</li>
+        </ul>
+      </description>
+      <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.2</url>
+    </release>
+    <release version="1.1" date="2021-05-24">
+      <description>
+        <p>Inkscape 1.1</p>
+        <ul>
+          <li>Welcome dialog</li>
+          <li>Command palette to search for functions</li>
+          <li>Copypaste parts of paths</li>
+          <li>Complete rework of the dialog docking system</li>
+          <li>New outline overlay mode</li>
+          <li>Search field in Preferences dialog</li>
+          <li>Improved Export PNG dialog</li>
+          <li>Ability to directly export JPG, TIFF, optimized PNG, and WebP</li>
+          <li>Paste now pastes directly above selected object</li>
+          <li>Beta Extension Manager</li>
         </ul>
       </description>
       <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.1</url>
