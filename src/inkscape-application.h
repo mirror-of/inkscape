@@ -153,6 +153,9 @@ protected:
     InkFileExportCmd _file_export;
 
     // Actions from the command line or file.
+    // Must read in on_handle_local_options() but parse in on_startup(). This is done as we must
+    // have a valid app before initializing extensions which must be done before parsing.
+    Glib::ustring _command_line_actions_input;
     action_vector_t _command_line_actions;
 
     // Extra data associated with actions (Label, Section, Tooltip/Help).
@@ -163,6 +166,7 @@ protected:
                                                                        // inabilitiy to get the
                                                                        // corresponding Gio::Action
                                                                        // from a Gtk::MenuItem.
+    void on_startup();
     void on_activate();
     void on_open(const Gio::Application::type_vec_files &files, const Glib::ustring &hint);
     void process_document(SPDocument* document, std::string output_path);

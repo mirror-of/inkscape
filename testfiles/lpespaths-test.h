@@ -15,6 +15,7 @@
 #include <src/inkscape.h>
 #include <src/object/sp-root.h>
 #include <src/svg/svg.h>
+#include "src/extension/init.h"
 
 #include <2geom/pathvector.h>
 
@@ -37,6 +38,7 @@ protected:
     {
         // setup hidden dependency
         Application::create(false);
+        Inkscape::Extension::init();
         const testing::TestInfo* const test_info =
         testing::UnitTest::GetInstance()->current_test_info();
         svg = test_info->file();;

@@ -15,6 +15,7 @@
 #include "doc-per-case-test.h"
 #include <glibmm.h>
 
+#include "extension/init.h"
 #include "extension/db.h"
 #include "extension/find_extension_by_mime.h"
 #include "extension/internal/svgz.h"
@@ -24,17 +25,21 @@
 
 #include "gtest/gtest.h"
 
-
+#include <iostream>
 class SvgzImportTest : public DocPerCaseTest {
   public:
     void TestBody() override
     {
+        Inkscape::Extension::init();
         ASSERT_TRUE(_doc != nullptr);
         ASSERT_TRUE(_doc->getRoot() != nullptr);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool("/dialogs/import/ask_svg", true);
         prefs->setBool("/options/onimport", true);
         auto ext = Inkscape::Extension::find_by_mime("image/svg+xml-compressed");
+        if (!ext) {
+            std::cerr << "SvgzImportTest: Failed to find mime type!" << std::endl;
+        }
         ext->set_gui(true);
 
         using namespace Inkscape::IO::Resource;

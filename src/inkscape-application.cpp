@@ -8,6 +8,34 @@
  *
  */
 
+/* Application flow:
+ *   main() -> InkscapeApplication::singleton().gio_app()->run(argc, argv);
+ *
+ *     InkscapeApplication::InkscapeApplication
+ *       Initialized: GC, Debug, Gettext, Autosave, Actions, Commandline
+ *     InkscapeApplication::on_handle_local_options
+ *       InkscapeAppllication::parse_actions
+ *
+ *     -- Switch to main instance if new Inkscape instance is merged with existing instance. --
+ *        New instances are merged with existing instnce unless app_id is changed, see below.
+ *
+ *     InkscapeApplication::on_startup                   | Only called for main instance
+ *
+ *     InkscapeApplication::on_activate (no file specified) OR InkscapeApplication::on_open (file specified)
+ *       InkscapeApplication::process_document           | Will use command-line actions from main instance!
+ *
+ *       InkscapeApplication::create_window (document)
+ *         Inkscape::Shortcuts
+ *
+ *     InkscapeApplication::create_window (file)         |
+ *       InkscapeApplication::create_window (document)   | Open/Close document
+ *     InkscapeApplication::destroy_window               |
+ *
+ *     InkscapeApplication::on_quit
+ *       InkscapeApplication::destroy_all
+ *       InkscapeApplication::destroy_window
+ */
+
 #include <iostream>
 #include <iomanip>
 #include <cerrno>  // History file
@@ -41,6 +69,8 @@
 
 #include "inkgc/gc-core.h"          // Garbage Collecting init
 #include "debug/logger.h"           // INKSCAPE_DEBUG_LOG support
+
+#include "extension/init.h"
 
 #include "io/file.h"                // File open (command line).
 #include "io/resource.h"            // TEMPLATE
@@ -582,6 +612,7 @@ InkscapeApplication::InkscapeApplication()
 
     auto *gapp = gio_app();
 
+    gapp->signal_startup().connect([this]() { this->on_startup(); });
     gapp->signal_activate().connect([this]() { this->on_activate(); });
     gapp->signal_open().connect(sigc::mem_fun(*this, &InkscapeApplication::on_open));
 
@@ -730,30 +761,6 @@ InkscapeApplication::InkscapeApplication()
         //   - system menu "Quit"
         gtk_app()->property_register_session() = true;
     }
-}
-
-void
-InkscapeApplication::on_startup2()
-{
-    // This should be completely rewritten.
-    Inkscape::Application::create(_with_gui);
-
-    if (!_with_gui) {
-        return;
-    }
-
-    auto *gapp = gio_app();
-
-    // ======================= Actions (GUI) ======================
-    gapp->add_action("new",    sigc::mem_fun(*this, &InkscapeApplication::on_new   ));
-    gapp->add_action("quit",   sigc::mem_fun(*this, &InkscapeApplication::on_quit  ));
-
-    // ========================= GUI Init =========================
-    Gtk::Window::set_default_icon_name("org.inkscape.Inkscape");
-
-    // build_menu(); // Builds and adds menu to app. Used by all Inkscape windows. This can be done
-                     // before all actions defined. * For the moment done by each window so we can add
-                     // window action info to menu_label_to_tooltip map.
 }
 
 /** Create a window given a document. This is used internally in InkscapeApplication.
@@ -965,13 +972,44 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
     }
 }
 
+/*
+ * Called on first Inkscape instance creation. Not called if a new Inkscape instance is merged
+ * with an existing instance.
+ */
+void
+InkscapeApplication::on_startup()
+{
+    // Deprecated...
+    Inkscape::Application::create(_with_gui);
+
+    // Extensions
+    Inkscape::Extension::init();
+
+    // Command line execution. Must be after Extensions are initialized.
+    parse_actions(_command_line_actions_input, _command_line_actions);
+
+    if (!_with_gui) {
+        return;
+    }
+
+    auto *gapp = gio_app();
+
+    // ======================= Actions (GUI) ======================
+    gapp->add_action("new",    sigc::mem_fun(*this, &InkscapeApplication::on_new   ));
+    gapp->add_action("quit",   sigc::mem_fun(*this, &InkscapeApplication::on_quit  ));
+
+    // ========================= GUI Init =========================
+    Gtk::Window::set_default_icon_name("org.inkscape.Inkscape");
+
+    // build_menu(); // Builds and adds menu to app. Used by all Inkscape windows. This can be done
+                     // before all actions defined. * For the moment done by each window so we can add
+                     // window action info to menu_label_to_tooltip map.
+}
 
 // Open document window with default document or pipe. Either this or on_open() is called.
 void
 InkscapeApplication::on_activate()
 {
-    on_startup2();
-
     std::string output;
 
     // Create new document, either from pipe or from template.
@@ -1020,7 +1058,6 @@ InkscapeApplication::on_activate()
 void
 InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
-    on_startup2();
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
     if(_pdf_page)
@@ -1127,6 +1164,8 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
                 // Stateless (i.e. no value).
                 action_vector.push_back( std::make_pair( action, Glib::VariantBase() ) );
             }
+        } else {
+            std::cerr << "InkscapeApplication::parse_actions: could not find action for: " << action << std::endl;
         }
     }
 }
@@ -1425,8 +1464,8 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     // Actions will be processed in order that they are given in argument.
     Glib::ustring actions;
     if (options->contains("actions")) {
-        options->lookup_value("actions", actions);
-        parse_actions(actions, _command_line_actions);
+        options->lookup_value("actions", _command_line_actions_input);
+        // Parsing done after extensions initialized.
     }
 
     // This must be done after the app has been registered!
