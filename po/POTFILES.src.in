@@ -210,7 +210,6 @@
 ../src/live_effects/parameter/transformedpoint.cpp
 ../src/live_effects/parameter/unit.cpp
 ../src/live_effects/parameter/vector.cpp
-../src/menus-skeleton.h
 ../src/object/box3d.cpp
 ../src/object/color-profile.cpp
 ../src/object/persp3d.cpp

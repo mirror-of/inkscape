@@ -137,7 +137,6 @@ set(inkscape_SRC
   line-geometry.h
   line-snapper.h
   media.h
-  menus-skeleton.h
   message-context.h
   message-stack.h
   message.h
