@@ -73,8 +73,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         return;
     }
 
-    if (!INKSCAPE.use_gui() or !Inkscape::Application::exists()) {
-        // std::cerr << "effect: uses GUI!: " << get_id() << std::endl;
+    if (!Inkscape::Application::exists()) {
         return;
     }
 
@@ -127,7 +126,6 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     static auto gapp = InkscapeApplication::instance()->gtk_app();
     gapp->add_action( this->get_id(), sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, true));
     gapp->add_action( Glib::ustring(get_id()) + ".noprefs", sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, false));
-
     if (!hidden) {
         // Submenu retrieval as a list of strings (to handle nested menus).
         std::list<Glib::ustring> sub_menu_list;
