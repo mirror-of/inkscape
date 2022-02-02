@@ -69,7 +69,8 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     static auto app = InkscapeApplication::instance();
 
     if (!app) {
-        std::cerr << "effect: no app!" << std::endl;
+        // This happens during tests.
+        // std::cerr << "Effect::Effect:: no app!" << std::endl;
         return;
     }
 
