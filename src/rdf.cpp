@@ -1086,7 +1086,9 @@ struct rdf_license_t *RDFImpl::getLicense(SPDocument *document)
         for ( struct rdf_license_t * license = rdf_licenses; license->name; license++ ) {
             if ( rdf_match_license( repr, license ) ) {
                 license_by_properties = license;
-                break;
+                if (license == license_by_uri) {
+                    break;
+                }
             }
         }
     }
@@ -1104,11 +1106,10 @@ struct rdf_license_t *RDFImpl::getLicense(SPDocument *document)
                       license_by_uri->uri,
                       XML_TAG_NAME_LICENSE,
                       license_by_properties->uri);
+            // Reset license structure to match so the document is consistent
+            // (and this will also silence the warning above on repeated calls).
+            setLicense(document, license_by_uri);
         }
-
-        // Reset license structure to match so the document is consistent
-        // (and this will also silence the warning above on repeated calls).
-        setLicense(document, license_by_uri);
 
         return license_by_uri;
     }
