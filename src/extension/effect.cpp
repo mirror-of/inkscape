@@ -125,8 +125,12 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     std::string action_id = "app." + std::string(get_id());
 
     static auto gapp = InkscapeApplication::instance()->gtk_app();
-    gapp->add_action( this->get_id(), sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, true));
-    gapp->add_action( Glib::ustring(get_id()) + ".noprefs", sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, false));
+    if (gapp) {
+        // Might be in command line mode without GUI (testing).
+        gapp->add_action( this->get_id(), sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, true));
+        gapp->add_action( Glib::ustring(get_id()) + ".noprefs", sigc::bind<Effect*>(sigc::ptr_fun(&action_effect), this, false));
+    }
+
     if (!hidden) {
         // Submenu retrieval as a list of strings (to handle nested menus).
         std::list<Glib::ustring> sub_menu_list;
