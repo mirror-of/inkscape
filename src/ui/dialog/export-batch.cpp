@@ -66,6 +66,7 @@ public:
     bool isActive() { return _selector.get_active(); }
     void refresh(bool hide = false);
     void refreshHide(const std::vector<SPItem *> *list) { _preview.refreshHide(list); }
+    void setDocument(SPDocument *doc) { _preview.setDocument(doc); }
 
 private:
     void init(SPDocument *doc, Glib::ustring label);
@@ -734,7 +735,9 @@ unsigned int BatchExport::onProgressCallback(float value, void *dlg)
 
 void BatchExport::setDocument(SPDocument *document)
 {
-    if (_desktop) return;
+    if (!_desktop) {
+        document = nullptr;
+    }
 
     _document = document;
     _pages_changed_connection.disconnect();
@@ -742,6 +745,9 @@ void BatchExport::setDocument(SPDocument *document)
         // when the page selected is changes, update the export area
         _page_manager = document->getNamedView()->getPageManager();
         _pages_changed_connection = _page_manager->connectPagesChanged([=]() { pagesChanged(); });
+    }
+    for (auto &[key, val] : current_items) {
+        val->setDocument(document);
     }
 }
 

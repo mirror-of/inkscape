@@ -88,15 +88,15 @@ Export::Export()
     builder->get_widget_derived("Batch Export", batch_export);
     batch_export->initialise(builder);
 
-    container->signal_realize().connect(sigc::mem_fun(*this, &Export::onRealize));
-    export_notebook->signal_switch_page().connect(sigc::mem_fun(*this, &Export::onNotebookPageSwitch));
-}
-
-void Export::onRealize()
-{
-    single_image->setup();
-    batch_export->setup();
-    setDefaultNotebookPage();
+    container->signal_realize().connect([=]() {
+        single_image->setup();
+        batch_export->setup();
+        setDefaultNotebookPage();
+        notebook_signal = export_notebook->signal_switch_page().connect(sigc::mem_fun(*this, &Export::onNotebookPageSwitch));
+    });
+    container->signal_unrealize().connect([=]() {
+        notebook_signal.disconnect();
+    });
 }
 
 // Set current page based on preference/last visited page

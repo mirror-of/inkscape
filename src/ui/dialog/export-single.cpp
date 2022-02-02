@@ -962,7 +962,9 @@ void SingleExport::refreshPreview()
 
 void SingleExport::setDocument(SPDocument *document)
 {
-    if (_desktop) return;
+    if (!_desktop) {
+        document = nullptr;
+    }
 
     _page_selected_connection.disconnect();
     if (document) {

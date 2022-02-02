@@ -93,8 +93,9 @@ private:
     void setDefaultNotebookPage();
     std::map<notebook_page, int> pages;
 
+    sigc::connection notebook_signal;
+
     // signals callback
-    void onRealize();
     void onNotebookPageSwitch(Widget *page, guint page_number);
     void documentReplaced() override;
     void desktopReplaced() override;
