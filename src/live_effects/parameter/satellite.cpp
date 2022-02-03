@@ -241,7 +241,8 @@ void SatelliteParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *
             if (hreflist.size()) {
                 SPLPEItem *sp_lpe_item = dynamic_cast<SPLPEItem *>(*hreflist.begin());
                 if (sp_lpe_item) {
-                    if (selection->includes(moved_item)) {
+                    SPLPEItem *lpe_item_moved = dynamic_cast<SPLPEItem *>(moved_item);
+                    if (selection->includes(moved_item) && lpe_item_moved && lpe_item_moved->optimizeTransforms()) {
                         SPItem *item = sp_lpe_item;
                         Geom::Affine m(*rel_transf);
                         Inkscape::Preferences *prefs = Inkscape::Preferences::get();

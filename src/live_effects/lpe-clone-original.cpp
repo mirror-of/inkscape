@@ -163,6 +163,8 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
             Inkscape::GC::release(dup);
         }
         sp_lpe_item_enable_path_effects(sp_lpe_item, true);
+    } else if (group_origin || group_dest) {
+        g_warning("LPE Clone Original: for this path effect to work properly, the same type and the same number of children are required");
     }
     if (group_origin && group_dest) {
         std::vector< SPObject * > childs = group_origin->childList(true);
