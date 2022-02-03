@@ -1,5 +1,4 @@
 ../share/extensions/convert2dashes.py
-../share/extensions/dxf_input.py
 ../share/extensions/funcplot.py
 ../share/extensions/generate_voronoi.py
 ../share/extensions/gimp_xcf.py
