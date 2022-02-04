@@ -275,6 +275,11 @@ void SPDesktop::destroy()
     canvas->set_desktop(nullptr);
     canvas->set_drawing(nullptr);
 
+    if (event_context) {
+        delete event_context;
+        event_context = nullptr;
+    }
+
     if (snapindicator) {
         delete snapindicator;
         snapindicator = nullptr;
@@ -306,11 +311,6 @@ void SPDesktop::destroy()
         doc()->getRoot()->invoke_hide(dkey);
         delete canvas_drawing; // Why is canvas_drawing special?
         canvas_drawing = nullptr;
-    }
-
-    if (event_context) {
-        delete event_context;
-        event_context = nullptr;
     }
 
     _guides_message_context = nullptr;
