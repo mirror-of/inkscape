@@ -324,12 +324,11 @@ bool SPLPEItem::optimizeTransforms()
     if (dynamic_cast<SPGroup *>(this)) {
         return false;
     }
-    // this next towo check could be brong on stars or spirals without transforms
-    // while finish transform change from optimiced to unoptimized
-    if (dynamic_cast<SPSpiral *>(this) && this->getAttribute("transform")) {
+
+    if (dynamic_cast<SPSpiral *>(this) && !this->transform.isUniformScale()) {
         return false;
     }
-    if (dynamic_cast<SPStar *>(this) && this->getAttribute("transform")) {
+    if (dynamic_cast<SPStar *>(this) && !this->transform.isUniformScale()) {
         return false;
     }
     auto* mask_path = this->getMaskObject();
