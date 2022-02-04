@@ -74,24 +74,24 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     lpesatellites(_("lpesatellites"), _("Items satellites"), "lpesatellites", &wr, this, false),
     num_cols(_("Columns"), _("Number of columns of copies"), "num_cols", &wr, this, 3),
     num_rows(_("Rows"), _("Number of rows of copies"), "num_rows", &wr, this, 3),
-    gapx(_("Gap X"), _("Gap space between copies in X"), "gapx", &wr, this, 0.0),
-    gapy(_("Gap Y"), _("Gap space between copies in Y"), "gapy", &wr, this, 0.0),
+    gapx(_("Gap X"), _("Gap between copies in X"), "gapx", &wr, this, 0.0),
+    gapy(_("Gap Y"), _("Gap between copies in Y"), "gapy", &wr, this, 0.0),
     scale(_("Scale %"), _("Scale copies"), "scale", &wr, this, 100.0),
-    rotate(_("Rotate°"), _("Rotate copies"), "rotate", &wr, this, 0.0),
-    offset(_("Offset %"), _("Offset %"), "offset", &wr, this, 0.0),
+    rotate(_("Rotate °"), _("Rotate copies"), "rotate", &wr, this, 0.0),
+    offset(_("Offset %"), _("Offset copies"), "offset", &wr, this, 0.0),
     offset_type(_("Offset type"), _("Offset Type (rows/cols)"), "offset_type", &wr, this, false),
     interpolate_scalex(_("Interpolate scale X"), _("Interpolate rotate X"), "interpolate_scalex", &wr, this, false),
     interpolate_scaley(_("Interpolate scale Y"), _("Interpolate rotate Y"), "interpolate_scaley", &wr, this, false),
-    shrink_interp(_("Shirnk gap"), _("Minimice offsets on scale interpolated, not works with rotations"), "shrink_interp", &wr, this, false),
+    shrink_interp(_("Shrink gap"), _("Minimize gaps between scaled objects (does not work with rotation)"), "shrink_interp", &wr, this, false),
     interpolate_rotatex(_("Interpolate rotate X"), _("Interpolate rotate X"), "interpolate_rotatex", &wr, this, false),
     interpolate_rotatey(_("Interpolate rotate Y"), _("Interpolate rotate Y"), "interpolate_rotatey", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, so each can have its own style"), "split_items", &wr, this, false),
     mirrorrowsx(_("Mirror rows in X"), _("Mirror rows in X"), "mirrorrowsx", &wr, this, false),
     mirrorrowsy(_("Mirror rows in Y"), _("Mirror rows in Y"), "mirrorrowsy", &wr, this, false),
-    mirrorcolsx(_("Mirror cols in X"), _("Mirror cols in X"), "mirrorcolsx", &wr, this, false),
-    mirrorcolsy(_("Mirror cols in Y"), _("Mirror cols in Y"), "mirrorcolsy", &wr, this, false),
+    mirrorcolsx(_("Mirror cols in X"), _("Mirror columns in X"), "mirrorcolsx", &wr, this, false),
+    mirrorcolsy(_("Mirror cols in Y"), _("Mirror columns in Y"), "mirrorcolsy", &wr, this, false),
     mirrortrans(_("Mirror transforms"), _("Mirror transforms"), "mirrortrans", &wr, this, false),
-    link_styles(_("Link styles"), _("Link styles on split mode"), "link_styles", &wr, this, false)
+    link_styles(_("Link styles"), _("Link styles in split mode"), "link_styles", &wr, this, false)
     
 {
     show_orig_path = true;
@@ -1174,12 +1174,12 @@ void LPECopy::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
     _knotholder = knotholder;
     KnotHolderEntity *e = new CoS::KnotHolderEntityCopyGapX(this);
     e->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:CopiesGapX",
-              _("<b>Gap Y for the copies</b>: drag to gap all copies, <b>Shift+click</b> reset o origin"));
+              _("<b>Gap X for the copies</b>: drag to gap all copies, <b>Shift+click</b> reset to origin"));
     knotholder->add(e);
 
     KnotHolderEntity *f = new CoS::KnotHolderEntityCopyGapY(this);
     f->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:CopiesGapY",
-              _("<b>Gap Y for the copies</b>: drag to gap all copies, <b>Shift+click</b> reset o origin"));
+              _("<b>Gap Y for the copies</b>: drag to gap all copies, <b>Shift+click</b> reset to origin"));
     knotholder->add(f);
 }
 
