@@ -61,4 +61,3 @@ sed -i '' -e '/MeasureSegments/ s/^#*/\/\//g' \
 ninja tests   # build tests
 
 ctest -V
-
