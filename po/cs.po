@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2022-02-01 17:31+0100\n"
+"PO-Revision-Date: 2022-02-04 17:05+0100\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek (osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik.marny@gmail.com); Návody: Lukáš Hess\n"
 "Language: cs\n"
@@ -1044,13 +1044,12 @@ msgid "Thick painting effect with turbulence"
 msgstr "Efekt hustého nátěru s turbulencí"
 
 #: ../share/filters/filters.svg.h:470
-#, fuzzy
 msgid "Burst"
 msgstr "Roztržení"
 
 #: ../share/filters/filters.svg.h:472
 msgid "Burst balloon texture crumpled and with holes"
-msgstr "Popraskaná bublinová zmačkaná textura s otvory"
+msgstr "Textura vybuchlého balónku, zmačkaného a perforovaného"
 
 #: ../share/filters/filters.svg.h:474
 msgid "Embossed Leather"
@@ -1137,7 +1136,6 @@ msgid "Marbled transparency effect which conforms to image detected edges"
 msgstr "Mramorovaný efekt průhlednosti, který odpovídá okrajům obrázku"
 
 #: ../share/filters/filters.svg.h:514
-#, fuzzy
 msgid "Thick Acrylic"
 msgstr "Hustý akryl"
 
@@ -1428,9 +1426,8 @@ msgid "Adds a colorizable opaque background"
 msgstr "Přidá barevně nastavitelné neprůhledné pozadí"
 
 #: ../share/filters/filters.svg.h:654
-#, fuzzy
 msgid "Flatten Transparency"
-msgstr "Ztlumte průhlednost"
+msgstr "Sloučit průhlednost"
 
 #: ../share/filters/filters.svg.h:656
 msgid "Adds a white opaque background"
@@ -1463,9 +1460,8 @@ msgid "Enhance and redraw edges around posterized areas"
 msgstr "Vylepšit a překreslit okraje kolem posterizovaných oblastí"
 
 #: ../share/filters/filters.svg.h:670
-#, fuzzy
 msgid "Cross Noise Poster"
-msgstr "Plakát s křížovým šumem"
+msgstr "Posterizace šumem"
 
 #: ../share/filters/filters.svg.h:672
 #, fuzzy
@@ -1473,9 +1469,8 @@ msgid "Overlay with a small scale screen like noise"
 msgstr "Překryv s malým měřítkem jako šum"
 
 #: ../share/filters/filters.svg.h:674
-#, fuzzy
 msgid "Cross Noise Poster B"
-msgstr "Plakát s křížovým šumem B"
+msgstr "Posterizace šumem B"
 
 #: ../share/filters/filters.svg.h:676
 #, fuzzy
@@ -1498,21 +1493,18 @@ msgid "Adds roughness to one of the two channels of the Poster paint filter"
 msgstr "Přidá drsnost do jednoho ze dvou kanálů filtru pro barvu plakátu"
 
 #: ../share/filters/filters.svg.h:686
-#, fuzzy
 msgid "Alpha Monochrome Cracked"
-msgstr "Alfa monochromatické prasknutí"
+msgstr "Alfa monochromatický, popraskaný"
 
 #: ../share/filters/filters.svg.h:688 ../share/filters/filters.svg.h:692 ../share/filters/filters.svg.h:696 ../share/filters/filters.svg.h:708 ../share/filters/filters.svg.h:712 ../share/filters/filters.svg.h:716
 msgid "Basic noise fill texture; adjust color in Flood"
 msgstr "Základní textura šumové výplně; upravte barvu vyplnění"
 
 #: ../share/filters/filters.svg.h:690
-#, fuzzy
 msgid "Alpha Turbulent"
-msgstr "Alpha Turbulentní"
+msgstr "Alfa turbulentní"
 
 #: ../share/filters/filters.svg.h:694
-#, fuzzy
 msgid "Colorize Turbulent"
 msgstr "Turbulentní zbarvení"
 
@@ -1535,9 +1527,8 @@ msgid "Adds a small scale screen like graininess"
 msgstr "Přidá obrazovku malého měřítka jako zrnitost"
 
 #: ../share/filters/filters.svg.h:706
-#, fuzzy
 msgid "Duotone Turbulent"
-msgstr "Dvoubarevné turbulence"
+msgstr "Dvoutónové turbulence"
 
 #: ../share/filters/filters.svg.h:710
 msgid "Light Eraser Cracked"
@@ -1808,9 +1799,8 @@ msgid "Contouring Table"
 msgstr "Konturovací tabulka"
 
 #: ../share/filters/filters.svg.h:840
-#, fuzzy
 msgid "Blurred multiple contours for objects"
-msgstr "Rozmazané více obrysů pro objekty"
+msgstr "Rozostřené vícenásobné obrysy objektů"
 
 #: ../share/filters/filters.svg.h:842
 msgid "Posterized Blur"
@@ -1821,13 +1811,12 @@ msgid "Converts blurred contour to posterized steps"
 msgstr "Převede rozostřený obrys na posterizované kroky"
 
 #: ../share/filters/filters.svg.h:846
-#, fuzzy
 msgid "Contouring Discrete"
-msgstr "Diskrétní konturování"
+msgstr "Oddělené obrysy"
 
 #: ../share/filters/filters.svg.h:848
 msgid "Sharp multiple contour for objects"
-msgstr "Ostré vícenásobné kontury objektů"
+msgstr "Ostré vícenásobné obrysy objektů"
 
 #: ../share/palettes/palettes.h:2
 msgctxt "Palette"
@@ -6582,7 +6571,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:522 ../src/filter-enums.cpp:25
 msgid "Component Transfer"
-msgstr ""
+msgstr "Přenos složky"
 
 #: ../src/extension/internal/filter/color.h:525 ../src/filter-enums.cpp:93
 msgid "Identity"
@@ -6708,7 +6697,7 @@ msgstr "Průhledný"
 
 #: ../src/extension/internal/filter/color.h:947
 msgid "Customize greyscale components"
-msgstr ""
+msgstr "Přizpůsobit složky stupňů šedé"
 
 #: ../src/extension/internal/filter/color.h:1024 ../src/ui/widget/selected-style.cpp:257
 msgid "Invert"
@@ -7065,7 +7054,7 @@ msgstr "Zjištění barevných hran v objektu"
 
 #: ../src/extension/internal/filter/morphology.h:60
 msgid "Cross-smooth"
-msgstr ""
+msgstr "Hladký přechod"
 
 #: ../src/extension/internal/filter/morphology.h:63 ../src/extension/internal/filter/shadows.h:68
 msgid "Inner"
@@ -7077,7 +7066,7 @@ msgstr "Vnější"
 
 #: ../src/extension/internal/filter/morphology.h:65 ../src/ui/dialog/command-palette.cpp:262 ../src/ui/widget/preferences-widget.cpp:931
 msgid "Open"
-msgstr "Otevřít"
+msgstr "Otevřený"
 
 #: ../src/extension/internal/filter/morphology.h:67 ../src/ui/tools/measure-tool.cpp:1239 ../src/ui/widget/page-sizer.cpp:59 ../share/extensions/interp_att_g.inx:8
 msgid "Width"
@@ -34542,6 +34531,11 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Nástroj pro nahrazení textu fonty založenými na tahu\n"
+"\n"
+"Verze 3.0.4, z 1. 6. 2020\n"
+"\n"
+"\n"
 
 #: ../share/extensions/hershey.inx:20
 msgid "Font face:"
