@@ -176,6 +176,15 @@ Inkscape::SelTrans::~SelTrans()
         }
     }
 
+    if (_stamped) {
+        for (auto old_obj :_stamp_cache) {
+            SPLPEItem *oldLPEObj = dynamic_cast<SPLPEItem *>(old_obj);
+            if (oldLPEObj) {
+                sp_lpe_item_enable_path_effects(oldLPEObj,true);
+            }
+        }
+    }
+
     for (auto & _item : _items) {
         sp_object_unref(_item, nullptr);
     }
