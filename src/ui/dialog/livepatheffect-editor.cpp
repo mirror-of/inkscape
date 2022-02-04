@@ -23,7 +23,7 @@
 #include "livepatheffect-add.h"
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
-
+#include "svg/svg.h"
 #include "ui/icon-loader.h"
 
 #include "live_effects/effect.h"
@@ -442,7 +442,12 @@ void LivePathEffectEditor::onAdd()
                         // Check that the cloning was successful. We don't want to change the ID of the original referenced path!
                         if (new_item && (new_item != orig)) {
                             new_item->setAttribute("id", id);
-                            new_item->setAttribute("transform", transform);
+                            if (transform) {
+                                Geom::Affine item_t(Geom::identity());
+                                sp_svg_transform_read(transform, &item_t);
+                                new_item->transform *= item_t;
+                                new_item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                            }
                             new_item->setAttribute("class", "fromclone");
                         }
                         g_free(id);

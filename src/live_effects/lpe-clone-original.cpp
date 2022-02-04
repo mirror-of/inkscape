@@ -147,26 +147,10 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
     if (!document || !origin || !dest) {
         return;
     }
+    bool root = dest == sp_lpe_item;
     SPGroup * group_origin = dynamic_cast<SPGroup *>(origin);
     SPGroup * group_dest = dynamic_cast<SPGroup *>(dest);
-    if (group_origin && group_dest && group_origin->getItemCount() != group_dest->getItemCount()) {
-        sp_lpe_item_enable_path_effects(sp_lpe_item, false);
-        std::vector< SPObject * > childs = group_origin->childList(true);
-        std::vector< SPObject * > childsdest = group_dest->childList(true);
-        for (auto & child : childsdest) {
-            child->deleteObject(true);
-        }
-        for (auto & child : childs) {
-            Inkscape::XML::Document *xml_doc = document->getReprDoc();
-            Inkscape::XML::Node* dup = child->getRepr()->duplicate(xml_doc);
-            dest->getRepr()->appendChild(dup);
-            Inkscape::GC::release(dup);
-        }
-        sp_lpe_item_enable_path_effects(sp_lpe_item, true);
-    } else if (group_origin || group_dest) {
-        g_warning("LPE Clone Original: for this path effect to work properly, the same type and the same number of children are required");
-    }
-    if (group_origin && group_dest) {
+    if (group_origin && group_dest && group_origin->getItemCount() == group_dest->getItemCount()) {
         std::vector< SPObject * > childs = group_origin->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
@@ -174,6 +158,11 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
             cloneAttributes(child, dest_child, attributes, css_properties, init);
             index++;
         }
+    } else if ((!group_origin &&  group_dest) ||
+               ( group_origin && !group_dest)) 
+    {
+        g_warning("LPE Clone Original: for this path effect to work properly, the same type and the same number of children are required");
+        return;
     }
     //Attributes
     SPShape * shape_origin = dynamic_cast<SPShape *>(origin);
@@ -252,7 +241,7 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
                 } else if(method == CLM_D){
                     c = SPCurve::copy(shape_origin->curve());
                 }
-                if (c && allow_transforms) {
+                if (c && allow_transforms && root) {
                     const gchar *trans = origin->getAttribute("transform");
                     if (trans) {
                         Geom::Affine t;
@@ -278,8 +267,9 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
         }
         iter++;
     }
-    if (!allow_transforms) {
+    if (!allow_transforms || !root) {
         dest->setAttribute("transform", origin->getAttribute("transform"));
+        dest->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
     g_strfreev(attarray);
 
@@ -323,6 +313,20 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
 }
 
 void
+sp_add_class(SPItem *item, Glib::ustring classglib) {
+    gchar const *classlpe = item->getAttribute("class");
+    if (classlpe) {
+        classglib = classlpe;
+        if (classglib.find("UnoptimicedTransforms") == Glib::ustring::npos) {
+            classglib += " UnoptimicedTransforms";
+            item->setAttribute("class",classglib.c_str());
+        }
+    } else {
+        item->setAttribute("class","UnoptimicedTransforms");
+    }
+}
+
+void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -349,22 +353,13 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         auto lpeitems = getCurrrentLPEItems();
         if (lpeitems.size()) {
             sp_lpe_item = lpeitems[0];
-            gchar const *classlpe = sp_lpe_item->getAttribute("class");
-            Glib::ustring classglib = "UnoptimicedTransforms";
-            if (classlpe) {
-                classglib = classlpe;
-                if (classglib.find("UnoptimicedTransforms") == Glib::ustring::npos) {
-                    classglib += " UnoptimicedTransforms";
-                    sp_lpe_item->setAttribute("class",classglib.c_str());
-                }
-            } else {
-                sp_lpe_item->setAttribute("class","UnoptimicedTransforms");
-            }
+            sp_add_class(sp_lpe_item, "UnoptimicedTransforms");
         }
         SPItem *orig = dynamic_cast<SPItem *>(linkeditem.getObject());
         if(!orig) {
             return;
         }
+        sp_add_class(orig, "UnoptimicedTransforms");
         SPText  *text_origin = dynamic_cast<SPText *>(orig);
         SPItem *dest = dynamic_cast<SPItem *>(sp_lpe_item);
         const gchar * id = orig->getId();
@@ -377,9 +372,6 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             std::unique_ptr<SPCurve> curve = text_origin->getNormalizedBpath();
             dest->setAttribute("inkscape:original-d", sp_svg_write_path(curve->get_pathvector()));
             attr = "";
-        }
-        if (!allow_transforms) {
-            attr += Glib::ustring("transform") + Glib::ustring(",");
         }
         if (g_strcmp0(linked.c_str(), id) && !is_load) {
             dest->setAttribute("transform", nullptr);
