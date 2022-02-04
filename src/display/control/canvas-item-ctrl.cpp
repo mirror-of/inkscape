@@ -336,7 +336,11 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
                 *pb++ = argb32_from_rgba(cc | 0x000000ff);
             } else if (ac == 0) {
                 *pb++ = base;
-            } else if (_mode == CANVAS_ITEM_CTRL_MODE_XOR) {
+            } else if (
+                _mode == CANVAS_ITEM_CTRL_MODE_XOR || 
+                _mode == CANVAS_ITEM_CTRL_MODE_GRAYSCALED_XOR ||
+                _mode == CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR) 
+            {
                 EXTRACT_ARGB32(base, ab,rb,gb,bb)
                 // here we get canvas color and if color to draw
                 // has opacity, we override base colors
@@ -351,6 +355,21 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
                 guint32 ro = compose_xor(rb, (cc & 0xff000000) >> 24, ac);
                 guint32 go = compose_xor(gb, (cc & 0x00ff0000) >> 16, ac);
                 guint32 bo = compose_xor(bb, (cc & 0x0000ff00) >>  8, ac);
+                if (_mode == CANVAS_ITEM_CTRL_MODE_GRAYSCALED_XOR ||
+                    _mode == CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR) {
+                    guint32 gray = ro * 0.299 + go * 0.587 + bo * 0.114;
+                    if (_mode == CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR) {
+                        double f = 0.85; // desaturate by 15%
+                        double  p = sqrt(ro * ro * 0.299 + go * go *  0.587 + bo * bo * 0.114);
+                        ro = p + (ro - p) * f;
+                        go = p + (go - p) * f;
+                        bo = p + (bo - p) * f;
+                    } else {
+                        ro = gray;
+                        go = gray;
+                        bo = gray;
+                    }
+                }
                 ASSEMBLE_ARGB32(px, ab,ro,go,bo)
                 *pb++ = px;
             } else {

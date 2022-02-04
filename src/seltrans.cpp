@@ -40,6 +40,7 @@
 #include "display/control/snap-indicator.h"
 #include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-curve.h"
+#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-group.h"
 #include "live_effects/effect-enum.h"
 #include "live_effects/effect.h"
@@ -695,7 +696,6 @@ void Inkscape::SelTrans::_updateHandles()
     if ( _state == STATE_SCALE ) {
         _showHandles(HANDLE_STRETCH);
         _showHandles(HANDLE_SCALE);
-        _showHandles(HANDLE_CENTER);
     } else if(_state == STATE_ALIGN) {
        _showHandles(HANDLE_SIDE_ALIGN);
        _showHandles(HANDLE_CORNER_ALIGN);
@@ -828,7 +828,7 @@ void Inkscape::SelTrans::_makeHandles()
         }
 
         knots[i]->setAnchor(hands[i].anchor);
-        knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_XOR);
+        knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR);
         knots[i]->setFill(DEF_COLOR[0], DEF_COLOR[1], DEF_COLOR[1], DEF_COLOR[2]);
         knots[i]->setStroke(DEF_COLOR[3], DEF_COLOR[4], DEF_COLOR[4], DEF_COLOR[4]);
 
