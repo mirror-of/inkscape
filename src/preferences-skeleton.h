@@ -403,11 +403,25 @@ static char const preferences_skeleton[] =
      id="toolbox"
      icononly="1"
      secondary="1"
+     simplesnap="1"
      small="1">
     <group
        id="tools"
        icononly="1"
-       small="0" />
+       small="0"
+       iconsize="16">
+      <group
+         id="buttons" />
+    </group>
+    <group
+       id="controlbars"
+       iconsize="16" />
+  </group>
+
+  <group
+     id="statusbar">
+    <group
+       id="visibility" />
   </group>
 
   <group
