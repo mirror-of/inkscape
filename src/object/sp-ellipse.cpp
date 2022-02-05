@@ -524,6 +524,13 @@ Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
     this->set_shape();
 
     // Adjust stroke width
+    if (!g_strcmp0(getAttribute("sodipodi:arc-type"), "slice") || 
+        !g_strcmp0(getAttribute("sodipodi:arc-type"), "chord") ||
+        !g_strcmp0(getAttribute("sodipodi:arc-type"), "arc")) 
+    {
+        double const expansion = transform.descrim();
+        adjust_stroke_width_recursive(expansion);
+    }
     this->adjust_stroke(sqrt(fabs(sw * sh)));
 
     // Adjust pattern fill
@@ -531,7 +538,7 @@ Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
-    
+
     return ret;
 }
 
