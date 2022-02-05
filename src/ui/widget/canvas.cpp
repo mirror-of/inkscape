@@ -449,7 +449,8 @@ public:
     // Events system. Events that interact with the Canvas are placed into the event bucket until the start of the next frame.
     std::vector<std::unique_ptr<GdkEvent>> bucket;
     bool pending_draw = false;
-    sigc::connection bucket_emptier;
+    sigc::connection bucket_emptier_ondraw;
+    std::optional<guint> bucket_emptier_onevent;
     int bucket_pos;
     GdkEvent *ignore = nullptr;
 
@@ -745,8 +746,9 @@ CanvasPrivate::add_to_bucket(GdkEvent *event)
 
     // If this is the first event, make sure the bucket will be emptied in the near future.
     if (bucket.empty() && !pending_draw) {
-        q->add_tick_callback([this] (const Glib::RefPtr<Gdk::FrameClock>&) {
+        bucket_emptier_onevent = q->add_tick_callback([this] (const Glib::RefPtr<Gdk::FrameClock>&) {
             empty_bucket();
+            bucket_emptier_onevent.reset();
             return false;
         });
     }
@@ -1235,6 +1237,8 @@ Canvas::~Canvas()
     // Disconnect signals. Otherwise called after destructor and crashes.
     d->hipri_idle.disconnect();
     d->lopri_idle.disconnect();
+    d->bucket_emptier_ondraw.disconnect();
+    if (d->bucket_emptier_onevent) remove_tick_callback(*d->bucket_emptier_onevent);
 
     // Remove entire CanvasItem tree.
     delete _canvas_item_root;
@@ -1820,10 +1824,10 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
     // a frame to get out as soon as possible, and processing events may take a while. Instead, we schedule
     // it with a signal callback that runs as soon as this function is completed.
     if (!d->bucket.empty()) {
-        Glib::signal_idle().connect([this] {
+        d->bucket_emptier_ondraw = Glib::signal_idle().connect([this] {
             d->empty_bucket();
             return false;
-        }, G_PRIORITY_DEFAULT_IDLE - 5); // before lopri_idle
+        }, G_PRIORITY_HIGH_IDLE + 14); // before hipri_idle
     }
 
     // Record the fact that a draw is no longer pending.
@@ -2467,7 +2471,7 @@ CanvasPrivate::paint_rect_internal(Geom::IntRect const &rect)
 
         // Schedule repaint
         queue_draw_area(repaint_rect); // Guarantees on_draw will be called in the future.
-        bucket_emptier.disconnect();
+        if (bucket_emptier_onevent) {q->remove_tick_callback(*bucket_emptier_onevent); bucket_emptier_onevent.reset();}
         pending_draw = true;
     } else {
         // Get rectangle needing repaint (transform into screen space, take bounding box, round outwards)
@@ -2482,7 +2486,7 @@ CanvasPrivate::paint_rect_internal(Geom::IntRect const &rect)
         if (repaint_rect & screen_rect) {
             // Schedule repaint
             queue_draw_area(repaint_rect);
-            bucket_emptier.disconnect();
+            if (bucket_emptier_onevent) {q->remove_tick_callback(*bucket_emptier_onevent); bucket_emptier_onevent.reset();}
             pending_draw = true;
         }
     }
