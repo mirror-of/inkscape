@@ -63,8 +63,8 @@ public:
                     "<option value=\"fractalNoise\">" N_("Fractal noise") "</option>\n"
                     "<option value=\"turbulence\">" N_("Turbulence") "</option>\n"
                   "</param>\n"
-                  "<param name=\"hfreq\" gui-text=\"" N_("Horizontal frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"10000.00\">20</param>\n"
-                  "<param name=\"vfreq\" gui-text=\"" N_("Vertical frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"10000.00\">40</param>\n"
+                  "<param name=\"hfreq\" gui-text=\"" N_("Horizontal frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"100.00\">20</param>\n"
+                  "<param name=\"vfreq\" gui-text=\"" N_("Vertical frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"100.00\">40</param>\n"
                   "<param name=\"complexity\" gui-text=\"" N_("Complexity:") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"5\">5</param>\n"
                   "<param name=\"variation\" gui-text=\"" N_("Variation:") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"360\">0</param>\n"
                   "<param name=\"dilat\" gui-text=\"" N_("Dilatation:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"1\" max=\"50\">3</param>\n"
@@ -109,8 +109,8 @@ NoiseFill::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream inverted;
 
     type << ext->get_param_optiongroup("type");
-    hfreq << (ext->get_param_float("hfreq") / 1000);
-    vfreq << (ext->get_param_float("vfreq") / 1000);
+    hfreq << (ext->get_param_float("hfreq"));
+    vfreq << (ext->get_param_float("vfreq"));
     complexity << ext->get_param_int("complexity");
     variation << ext->get_param_int("variation");
     dilat << ext->get_param_float("dilat");

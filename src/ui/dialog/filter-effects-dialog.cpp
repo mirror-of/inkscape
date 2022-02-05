@@ -2821,7 +2821,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->type(NR_FILTER_TURBULENCE);
 //    _settings->add_checkbutton(false, SPAttr::STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
     _settings->add_combo(TURBULENCE_TURBULENCE, SPAttr::TYPE, _("Type:"), TurbulenceTypeConverter, _("Indicates whether the filter primitive should perform a noise or turbulence function."));
-    _settings->add_dualspinscale(SPAttr::BASEFREQUENCY, _("Base Frequency:"), 0, 1, 0.001, 0.01, 3);
+    _settings->add_dualspinscale(SPAttr::BASEFREQUENCY, _("Base Frequency:"), 0, 100, 0.1, 2, 2);
     _settings->add_spinscale(1, SPAttr::NUMOCTAVES, _("Octaves:"), 1, 10, 1, 1, 0);
     _settings->add_spinscale(0, SPAttr::SEED, _("Seed:"), 0, 1000, 1, 1, 0, _("The starting number for the pseudo random number generator."));
 }
