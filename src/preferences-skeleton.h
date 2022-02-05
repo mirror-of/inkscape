@@ -97,7 +97,7 @@ static char const preferences_skeleton[] =
 
     <group id="freehand"
          style="fill:none;stroke:black;stroke-opacity:1;stroke-linejoin:miter;stroke-linecap:butt;">
-      <eventcontext id="pencil" tolerance="4.0" selcue="1" style="stroke-width:1px;" usecurrent="1" average_all_sketches="1"/>
+      <eventcontext id="pencil" tolerance="15.0" selcue="1" style="stroke-width:1px;" usecurrent="1" average_all_sketches="1"/>
       <eventcontext id="pen" mode="drag" selcue="1" style="stroke-width:1px;" usecurrent="1"/>
     </group>
 
@@ -141,6 +141,9 @@ static char const preferences_skeleton[] =
     <eventcontext id="select" selcue="1" gradientdrag="0"/>
     <eventcontext id="connector" style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-linejoin:miter;stroke-width:1px;stroke-linecap:butt;" selcue="1"/>
     <eventcontext id="paintbucket" style="fill:#a0a0a0;stroke:none;" usecurrent="1"/>
+    <group
+       id="geometric"
+       mode="drag" />
   </group>
 
   <group id="palette">
@@ -219,7 +222,7 @@ static char const preferences_skeleton[] =
     <group id="open" enable_preview="1" path=""/>
     <group id="import" enable_preview="1" path="" ask="1" ask_svg="1" link="link" scale="optimizeSpeed"/>
     <group id="debug" redirect="0"/>
-    <group id="clonetiler" />
+    <group id="clonetiler" dotrace="0" />
     <group id="gridtiler" />
     <group id="extension-error" show-on-startup="0"/>
     <group id="memory" />
@@ -240,7 +243,8 @@ static char const preferences_skeleton[] =
     <group id="debug" add-label-comments="0"/>
   </group>
 
-  <group id="options">
+  <group id="options"
+     rotationlock="1">
     <group id="renderingcache" size="512" />
     <group id="useoldpdfexporter" value="0" />
     <group id="highlightoriginal" value="1" />
@@ -253,7 +257,7 @@ static char const preferences_skeleton[] =
     <group id="rotationsnapsperpi" value="12"/>
     <group id="cursortolerance" value="8.0"/>
     <group id="dragtolerance" value="4.0"/>
-    <group id="grabsize" value="3"/>
+    <group id="grabsize" value="4"/>
     <group
        id="displayprofile"
        enable="0"
@@ -344,7 +348,7 @@ static char const preferences_skeleton[] =
     </group>
     <group id="forkgradientvectors" value="1"/>
     <group id="iconrender" named_nodelay="0"/>
-    <group id="autosave" enable="1" interval="10" path="" max="10"/>
+    <group id="autosave" enable="1" interval="10" path="" max="50"/>
     <group id="grids"
       no_emphasize_when_zoomedout="0">
       <group id="xy"
@@ -367,13 +371,16 @@ static char const preferences_skeleton[] =
     <group id="workarounds"
            colorsontop="0"
            partialdynamic="0"/>
+    <group
+       id="font"
+       unitType="2" />
   </group>
 
   <group id="extensions">
   </group>
 
   <group id="desktop"
-         style="">
+         style="fill:#000000">
     <group
        width="640"
        height="480"
@@ -491,7 +498,9 @@ static char const preferences_skeleton[] =
   </group>
   <group id="ui"
     language=""/>
-
+  <group
+     id="live_effects"
+     flattening="0" />
 </inkscape>
 )=====";
 
