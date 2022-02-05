@@ -84,6 +84,7 @@ apt_bundle \
     python3-cssselect \
     python3-distutils \
     python3-packaging \
+    python3-appdirs \
     python3-gi \
     python3-pil \
     gir1.2-glib-2.0 \
