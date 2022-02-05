@@ -32,28 +32,28 @@ public:
     SelectTool(SPDesktop *desktop);
     ~SelectTool() override;
 
-	bool dragging;
-	bool moved;
-	guint button_press_state;
+    bool dragging;
+    bool moved;
+    guint button_press_state;
 
         std::vector<SPItem *> cycling_items;
         std::vector<SPItem *> cycling_items_cmp;
         SPItem *cycling_cur_item;
-	bool cycling_wrap;
+    bool cycling_wrap;
 
-	SPItem *item;
+    SPItem *item;
         Inkscape::CanvasItem *grabbed = nullptr;
-	Inkscape::SelTrans *_seltrans;
-	Inkscape::SelectionDescriber *_describer;
-	gchar *no_selection_msg = nullptr;
+    Inkscape::SelTrans *_seltrans;
+    Inkscape::SelectionDescriber *_describer;
+    gchar *no_selection_msg = nullptr;
 
-	void set(const Inkscape::Preferences::Entry& val) override;
-	bool root_handler(GdkEvent* event) override;
-	bool item_handler(SPItem* item, GdkEvent* event) override;
+    void set(const Inkscape::Preferences::Entry& val) override;
+    bool root_handler(GdkEvent* event) override;
+    bool item_handler(SPItem* item, GdkEvent* event) override;
 private:
-	bool sp_select_context_abort();
-	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event);
-	void sp_select_context_reset_opacities();
+    bool sp_select_context_abort();
+    void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event);
+    void sp_select_context_reset_opacities();
 
     bool _alt_on;
     bool _force_dragging;
@@ -61,9 +61,9 @@ private:
     std::string _default_cursor;
 };
 
-}
-}
-}
+} // namespace Tools
+} // namespace UI
+} // namespace Inkscape
 
 #endif
 

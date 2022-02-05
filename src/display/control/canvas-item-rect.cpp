@@ -199,7 +199,7 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
         buf->cr->restore();
     }
 
-    cairo_pattern_t *pattern = _canvas->get_background_store()->cobj();
+    cairo_pattern_t *pattern = _canvas->get_background_pattern()->cobj();
     guint32 backcolor = ink_cairo_pattern_get_argb32(pattern);
     EXTRACT_ARGB32(backcolor, ab,rb,gb,bb)
 

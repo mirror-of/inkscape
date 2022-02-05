@@ -322,7 +322,6 @@ void SPNamedView::update(SPCtx *ctx, guint flags)
 }
 
 void SPNamedView::set(SPAttr key, const gchar* value) {
-
     // Send page attributes to the page manager.
     if (this->_page_manager && this->_page_manager->subset(key, value)) {
         this->requestModified(SP_OBJECT_MODIFIED_FLAG);

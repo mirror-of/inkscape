@@ -452,7 +452,6 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
 
-                forced_redraws_start(3);
                 set_high_motion_precision();
                 this->is_drawing = true;
                 this->just_started_drawing = true;
@@ -731,7 +730,6 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
         ungrabCanvasEvents();
 
-        forced_redraws_stop();
         set_high_motion_precision(false);
         this->is_drawing = false;
 

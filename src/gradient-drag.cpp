@@ -1062,8 +1062,6 @@ static void gr_knot_mousedown_handler(SPKnot */*knot*/, unsigned int /*state*/, 
     if (dragger_corner) {
         dragger_corner->highlightCorner(true);
     }
-
-    dragger->parent->desktop->getCanvas()->forced_redraws_start(5);
 }
 
 /**
@@ -1072,8 +1070,6 @@ static void gr_knot_mousedown_handler(SPKnot */*knot*/, unsigned int /*state*/, 
 static void gr_knot_ungrabbed_handler(SPKnot *knot, unsigned int state, gpointer data)
 {
     GrDragger *dragger = (GrDragger *) data;
-
-    dragger->parent->desktop->getCanvas()->forced_redraws_stop();
 
     dragger->point_original = dragger->point = knot->pos;
 
@@ -2822,7 +2818,7 @@ bool GrDrag::key_press_handler(GdkEvent *event)
 
     y_dir *= -desktop->yaxisdir();
 
-    gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(keyval, 0); // with any mask
+    gint mul = 1 + desktop->canvas->gobble_key_events(keyval, 0); // with any mask
 
     if (MOD__SHIFT(event)) {
         mul *= 10;

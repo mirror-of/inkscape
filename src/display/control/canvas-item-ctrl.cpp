@@ -320,7 +320,7 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
     unsigned char *pxb = work->get_data();
 
     // this code allow background become isolated from rendering so we can do things like outline overlay
-    cairo_pattern_t *pattern = _canvas->get_background_store()->cobj();
+    cairo_pattern_t *pattern = _canvas->get_background_pattern()->cobj();
     guint32 backcolor = ink_cairo_pattern_get_argb32(pattern);
     guint32 *p = _cache;
     for (int i = 0; i < height; ++i) {

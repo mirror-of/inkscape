@@ -1146,7 +1146,6 @@ bool TweakTool::root_handler(GdkEvent* event) {
 
                 sp_tweak_extinput(this, event);
 
-                forced_redraws_start(3);
                 this->is_drawing = true;
                 this->is_dilating = true;
                 this->has_dilated = false;
@@ -1195,7 +1194,6 @@ bool TweakTool::root_handler(GdkEvent* event) {
             Geom::Point const motion_w(event->button.x, event->button.y);
             Geom::Point const motion_dt(_desktop->w2d(motion_w));
 
-            forced_redraws_stop();
             this->is_drawing = false;
 
             if (this->is_dilating && event->button.button == 1) {

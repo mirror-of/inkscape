@@ -40,7 +40,6 @@
 #include "style.h"
 
 #include "ui/icon-names.h"
-#include "ui/widget/canvas.h"  // Forced redraws
 
 // These can be deleted once we sort out the libart dependence.
 
@@ -411,22 +410,11 @@ void FillNStroke::updateFromPaint(bool switch_style)
         }
 
         case UI::Widget::PaintSelector::MODE_SOLID_COLOR: {
-            if (kind == FILL) {
-                // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed; here it results in
-                // losing release events
-                _desktop->getCanvas()->forced_redraws_start(0);
-            }
-
             _psel->setFlatColor(_desktop, (kind == FILL) ? "fill" : "stroke",
                                 (kind == FILL) ? "fill-opacity" : "stroke-opacity");
             DocumentUndo::maybeDone(_desktop->getDocument(), (kind == FILL) ? undo_F_label : undo_S_label,
                                     (kind == FILL) ? _("Set fill color") : _("Set stroke color"),
                                     INKSCAPE_ICON("dialog-fill-and-stroke"));
-
-            if (kind == FILL) {
-                // resume interruptibility
-                _desktop->getCanvas()->forced_redraws_stop();
-            }
 
             // on release, toggle undo_label so that the next drag will not be lumped with this one
             if (undo_F_label == undo_F_label_1) {

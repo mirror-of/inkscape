@@ -1754,8 +1754,8 @@ SPDesktopWidget::update_scrollbars(double scale)
 
     /* Canvas region we always show unconditionally */
     double const y_dir = desktop->yaxisdir();
-    Geom::Rect carea( Geom::Point(deskarea->left() * scale - 64, (deskarea->top() * scale + 64) * y_dir),
-                    Geom::Point(deskarea->right() * scale + 64, (deskarea->bottom() * scale - 64) * y_dir)  );
+    Geom::Rect carea( Geom::Point(deskarea->left()  * scale - 64, (deskarea->top()    * scale + 64) * y_dir),
+                      Geom::Point(deskarea->right() * scale + 64, (deskarea->bottom() * scale - 64) * y_dir) );
 
     Geom::Rect viewbox = _canvas->get_area_world();
 

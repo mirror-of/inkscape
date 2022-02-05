@@ -240,8 +240,6 @@ NodeTool::~NodeTool()
     delete data.outline_group;
     delete data.dragpoint_group;
     delete _transform_handle_group;
-
-    forced_redraws_stop();
 }
 
 void NodeTool::deleteSelected()
@@ -433,8 +431,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
      * 3. some keybindings
      */
     using namespace Inkscape::UI; // pull in event helpers
-
-    forced_redraws_start(5);
 
     Inkscape::Selection *selection = _desktop->selection;
     static Inkscape::Preferences *prefs = Inkscape::Preferences::get();

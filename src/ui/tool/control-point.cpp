@@ -274,11 +274,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
                 _drag_origin = _position;
                 transferred = grabbed(&event->motion);
                 // _drag_initiated might change during the above virtual call
-                if (!_drag_initiated) {
-                    // this guarantees smooth redraws while dragging
-                    _desktop->getCanvas()->forced_redraws_start(5);
-                    _drag_initiated = true;
-                }
+                _drag_initiated = true;
             }
 
             if (!transferred) {
@@ -317,7 +313,6 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
 
             if (_drag_initiated) {
                 // it is the end of a drag
-                _desktop->getCanvas()->forced_redraws_stop();
                 _drag_initiated = false;
                 ungrabbed(&event->button);
                 return true;
@@ -344,9 +339,6 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
         if (_event_grab && !event->grab_broken.keyboard) {
             {
                 ungrabbed(nullptr);
-                if (_drag_initiated) {
-                    _desktop->getCanvas()->forced_redraws_stop();
-                }
             }
             _setState(STATE_NORMAL);
             _event_grab = false;
@@ -393,7 +385,6 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
 
             _canvas_item_ctrl->ungrab();
             _clearMouseover(); // this will also reset state to normal
-            _desktop->getCanvas()->forced_redraws_stop();
             _event_grab = false;
             _drag_initiated = false;
 
@@ -510,10 +501,7 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, GdkEventMotion *event)
     prev_point->_canvas_item_ctrl->ungrab();
     _canvas_item_ctrl->grab(_grab_event_mask, nullptr); // cursor is null
 
-    if (!_drag_initiated) {
-        _desktop->getCanvas()->forced_redraws_start(5);
-        _drag_initiated = true;
-    }
+    _drag_initiated = true;
 
     prev_point->_setState(STATE_NORMAL);
     _setMouseover(this, event->state);

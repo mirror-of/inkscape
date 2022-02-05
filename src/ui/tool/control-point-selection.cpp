@@ -19,6 +19,7 @@
 #include "ui/tool/transform-handle-set.h"
 #include "ui/tool/node.h"
 #include "display/control/snap-indicator.h"
+#include "ui/widget/canvas.h"
 
 
 
@@ -515,7 +516,7 @@ void ControlPointSelection::_updateTransformHandles(bool preserve_center)
 bool ControlPointSelection::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
 {
     if (held_control(event)) return false;
-    unsigned num = 1 + combine_key_events(shortcut_key(event), 0);
+    unsigned num = 1 + _desktop->canvas->gobble_key_events(shortcut_key(event), 0);
 
     Geom::Point delta = dir * num; 
     if (held_shift(event)) delta *= 10;

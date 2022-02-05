@@ -298,7 +298,6 @@ void SPDesktop::destroy()
     namedview->hide(this);
 
     _sel_changed_connection.disconnect();
-    _commit_connection.disconnect();
     _reconstruction_start_connection.disconnect();
     _reconstruction_finish_connection.disconnect();
 
@@ -581,9 +580,8 @@ SPDesktop::set_display_area (bool log)
 
     // Scroll
     Geom::Point offset = _current_affine.getOffset();
-    canvas->scroll_to(offset, true);
+    canvas->scroll_to(offset);
     canvas->set_affine(_current_affine.d2w()); // For CanvasItem's.
-    // To do: if transform unchanged call with 'false' (redraw only newly exposed areas).
 
     /* Update perspective lines if we are in the 3D box tool (so that infinite ones are shown
      * correctly) */
@@ -625,7 +623,7 @@ void
 SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
 {
     // Create a rectangle the size of the window aligned with origin.
-    Geom::Rect w( Geom::Point(), canvas->get_area_world().dimensions() );
+    Geom::Rect w( Geom::Point(), canvas->get_dimensions() );
 
     // Shrink window to account for border padding.
     w.expandBy( -border );
@@ -651,10 +649,10 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
 /**
  * Return canvas viewbox in desktop coordinates
  */
-Geom::Parallelogram SPDesktop::get_display_area(bool use_integer_viewbox) const
+Geom::Parallelogram SPDesktop::get_display_area() const
 {
     // viewbox in world coordinates
-    Geom::Rect const viewbox = use_integer_viewbox ? canvas->get_area_world_int() : canvas->get_area_world();
+    Geom::Rect const viewbox = canvas->get_area_world();
 
     // display area in desktop coordinates
     return Geom::Parallelogram(viewbox) * w2d();
@@ -769,7 +767,7 @@ SPDesktop::zoom_selection()
 }
 
 Geom::Point SPDesktop::current_center() const {
-    return canvas->get_area_world().midpoint() * _current_affine.w2d();
+    return Geom::Rect(canvas->get_area_world()).midpoint() * _current_affine.w2d();
 }
 
 /**
@@ -895,7 +893,6 @@ SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
     set_display_area(c, viewbox.midpoint());
 }
 
-
 /**
  * Set new flip direction, keeping the point 'c' fixed in the desktop window.
  *
@@ -968,7 +965,7 @@ SPDesktop::is_flipped (CanvasFlip flip)
 void
 SPDesktop::scroll_absolute (Geom::Point const &point, bool is_scrolling)
 {
-    canvas->scroll_to(point, false);
+    canvas->scroll_to(point);
     _current_affine.setOffset( point );
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
@@ -1285,11 +1282,6 @@ sigc::connection SPDesktop::connectToolSubselectionChangedEx(const sigc::slot<vo
     return _tool_subselection_changed.connect(slot);
 }
 
-void SPDesktop::updateNow()
-{
-    canvas->redraw_now();
-}
-
 void SPDesktop::updateDialogs()
 {
     getContainer()->set_inkscape_window(getInkscapeWindow());
@@ -1409,9 +1401,6 @@ SPDesktop::setDocument (SPDocument *doc)
     }
 
     selection->setDocument(doc);
-
-    _commit_connection.disconnect();
-    _commit_connection = doc->connectCommit(sigc::mem_fun(*this, &SPDesktop::updateNow));
 
     /// \todo fixme: This condition exists to make sure the code
     /// inside is NOT called on initialization, only on replacement. But there

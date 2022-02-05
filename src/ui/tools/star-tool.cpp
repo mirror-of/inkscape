@@ -332,8 +332,6 @@ void StarTool::drag(Geom::Point p, guint state)
         Inkscape::GC::release(repr);
         this->star->transform = currentLayer()->i2doc_affine().inverse();
         this->star->updateRepr();
-
-        forced_redraws_start(5);
     }
 
     /* Snap corner point with no constraints */
@@ -391,7 +389,6 @@ void StarTool::finishItem() {
         double const expansion = this->star->transform.descrim();
         this->star->doWriteTransform(this->star->transform, nullptr, true);
         this->star->adjust_stroke_width_recursive(expansion);
-        forced_redraws_stop();
 
         _desktop->getSelection()->set(this->star);
         DocumentUndo::done(_desktop->getDocument(), _("Create star"), INKSCAPE_ICON("draw-polygon-star"));
@@ -413,8 +410,6 @@ void StarTool::cancel() {
     this->xp = 0;
     this->yp = 0;
     this->item_to_select = nullptr;
-
-    forced_redraws_stop();
 
     DocumentUndo::cancel(_desktop->getDocument());
 }

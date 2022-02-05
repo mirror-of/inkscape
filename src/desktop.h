@@ -354,7 +354,7 @@ public:
     void set_display_area (bool log = true);
     void set_display_area (Geom::Point const &c, Geom::Point const &w, bool log = true);
     void set_display_area (Geom::Rect const &a, Geom::Coord border, bool log = true);
-    Geom::Parallelogram get_display_area(bool use_integer_viewbox = false) const;
+    Geom::Parallelogram get_display_area() const;
     void set_display_width(Geom::Rect const &a, Geom::Coord border);
     void set_display_center(Geom::Rect const &a);
 
@@ -419,7 +419,6 @@ public:
     Gtk::Widget *get_toolbox() const;
     void setToolboxAdjustmentValue (gchar const* id, double val);
     bool isToolboxButtonActive (gchar const *id);
-    void updateNow();
     void updateCanvasNow();
     void updateDialogs();
     void storeDesktopPosition();
@@ -614,7 +613,6 @@ private:
     sigc::connection _sel_changed_connection;
     sigc::connection _reconstruction_start_connection;
     sigc::connection _reconstruction_finish_connection;
-    sigc::connection _commit_connection;
 
     void onResized (double, double) override;
     void onRedrawRequested() override;

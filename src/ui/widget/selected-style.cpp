@@ -1147,21 +1147,9 @@ void SelectedStyle::on_opacity_changed ()
     Inkscape::CSSOStringStream os;
     os << CLAMP ((_opacity_adjustment->get_value() / 100), 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
-
-    // FIXME: workaround for GTK breakage: display interruptibility sometimes results in GTK
-    // sending multiple value-changed events. As if when Inkscape interrupts redraw for main loop
-    // iterations, GTK discovers that this callback hasn't finished yet, and for some weird reason
-    // decides to add yet another value-changed event to the queue. Totally braindead if you ask
-    // me. As a result, scrolling the spinbutton once results in runaway change until it hits 1.0
-    // or 0.0. (And no, this is not a race with ::update, I checked that.)
-    // Sigh. So we disable interruptibility while we're setting the new value.
-    _desktop->getCanvas()->forced_redraws_start(0);
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     DocumentUndo::maybeDone(_desktop->getDocument(), "fillstroke:opacity", _("Change opacity"), INKSCAPE_ICON("dialog-fill-and-stroke"));
-
-    // resume interruptibility
-    _desktop->getCanvas()->forced_redraws_stop();
     _opacity_blocked = false;
 }
 

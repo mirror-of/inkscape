@@ -331,6 +331,12 @@ protected:
     UI::Widget::PrefRadioButton _mask_grouping_all;
     UI::Widget::PrefCheckButton _mask_ungrouping;
 
+    UI::Widget::PrefSpinButton  _filter_multi_threaded;
+    UI::Widget::PrefSpinButton  _rendering_cache_size;
+    UI::Widget::PrefSpinButton  _rendering_tile_multiplier;
+    UI::Widget::PrefSpinButton  _rendering_xray_radius;
+    UI::Widget::PrefSpinButton  _rendering_outline_overlay_opacity;
+    UI::Widget::PrefCombo       _canvas_update_strategy;
     UI::Widget::PrefRadioButton _blur_quality_best;
     UI::Widget::PrefRadioButton _blur_quality_better;
     UI::Widget::PrefRadioButton _blur_quality_normal;
@@ -341,17 +347,30 @@ protected:
     UI::Widget::PrefRadioButton _filter_quality_normal;
     UI::Widget::PrefRadioButton _filter_quality_worse;
     UI::Widget::PrefRadioButton _filter_quality_worst;
-    UI::Widget::PrefCheckButton _show_filters_info_box;
-    UI::Widget::PrefCheckButton _rendering_image_outline;
-    UI::Widget::PrefSpinButton  _rendering_cache_size;
-    UI::Widget::PrefSpinButton  _rendering_tile_multiplier;
-    UI::Widget::PrefSpinButton  _rendering_xray_radius;
-    UI::Widget::PrefSpinButton  _rendering_outline_overlay_opacity;
-    UI::Widget::PrefCombo       _rendering_redraw_priority;
-    UI::Widget::PrefSpinButton  _filter_multi_threaded;
 #ifdef CAIRO_HAS_DITHER
     UI::Widget::PrefCheckButton _cairo_dithering;
 #endif
+
+    UI::Widget::PrefCheckButton _canvas_developer_mode_enabled;
+    UI::Widget::PrefSpinButton  _canvas_render_time_limit;
+    UI::Widget::PrefCheckButton _canvas_use_new_bisector;
+    UI::Widget::PrefSpinButton  _canvas_new_bisector_size;
+    UI::Widget::PrefSpinButton  _rendering_tile_size;
+    UI::Widget::PrefSpinButton  _canvas_max_affine_diff;
+    UI::Widget::PrefSpinButton  _canvas_pad;
+    UI::Widget::PrefSpinButton  _canvas_coarsener_min_size;
+    UI::Widget::PrefSpinButton  _canvas_coarsener_glue_size;
+    UI::Widget::PrefSpinButton  _canvas_coarsener_min_fullness;
+    UI::Widget::PrefCheckButton _canvas_debug_framecheck;
+    UI::Widget::PrefCheckButton _canvas_debug_logging;
+    UI::Widget::PrefCheckButton _canvas_debug_slow_redraw;
+    UI::Widget::PrefSpinButton  _canvas_debug_slow_redraw_time;
+    UI::Widget::PrefCheckButton _canvas_debug_show_redraw;
+    UI::Widget::PrefCheckButton _canvas_debug_show_unclean;
+    UI::Widget::PrefCheckButton _canvas_debug_show_snapshot;
+    UI::Widget::PrefCheckButton _canvas_debug_show_clean;
+    UI::Widget::PrefCheckButton _canvas_debug_disable_redraw;
+    UI::Widget::PrefCheckButton _canvas_debug_sticky_decoupled;
 
     UI::Widget::PrefCheckButton _trans_scale_stroke;
     UI::Widget::PrefCheckButton _trans_scale_corner;
@@ -383,6 +402,7 @@ protected:
     UI::Widget::PrefSpinButton  _importexport_export_res;
     UI::Widget::PrefSpinButton  _importexport_import_res;
     UI::Widget::PrefCheckButton _importexport_import_res_override;
+    UI::Widget::PrefCheckButton _rendering_image_outline;
     UI::Widget::PrefSlider      _snap_delay;
     UI::Widget::PrefSlider      _snap_weight;
     UI::Widget::PrefSlider      _snap_persistence;
@@ -435,6 +455,7 @@ protected:
     UI::Widget::PrefCheckButton _ui_realworldzoom;
     UI::Widget::PrefCheckButton _ui_partialdynamic;
     UI::Widget::ZoomCorrRulerSlider _ui_zoom_correction;
+    UI::Widget::PrefCheckButton _show_filters_info_box;
     UI::Widget::PrefCheckButton _ui_yaxisdown;
     UI::Widget::PrefCheckButton _ui_rotationlock;
     UI::Widget::PrefCheckButton _ui_cursorscaling;

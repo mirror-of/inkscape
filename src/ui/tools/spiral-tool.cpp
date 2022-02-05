@@ -318,8 +318,6 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
         Inkscape::GC::release(repr);
         this->spiral->transform = currentLayer()->i2doc_affine().inverse();
         this->spiral->updateRepr();
-
-        forced_redraws_start(5);
     }
 
     SnapManager &m = _desktop->namedview->snap_manager;
@@ -372,7 +370,6 @@ void SpiralTool::finishItem() {
         double const expansion = spiral->transform.descrim();
         spiral->doWriteTransform(spiral->transform, nullptr, true);
         spiral->adjust_stroke_width_recursive(expansion);
-        forced_redraws_stop();
 
         _desktop->getSelection()->set(this->spiral);
         DocumentUndo::done(_desktop->getDocument(), _("Create spiral"), INKSCAPE_ICON("draw-spiral"));
@@ -394,8 +391,6 @@ void SpiralTool::cancel() {
     this->xp = 0;
     this->yp = 0;
     this->item_to_select = nullptr;
-
-    forced_redraws_stop();
 
     DocumentUndo::cancel(_desktop->getDocument());
 }

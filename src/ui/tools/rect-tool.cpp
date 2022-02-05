@@ -344,8 +344,6 @@ void RectTool::drag(Geom::Point const pt, guint state) {
 
         this->rect->transform = currentLayer()->i2doc_affine().inverse();
         this->rect->updateRepr();
-
-        forced_redraws_start(5);
     }
 
     Geom::Rect const r = Inkscape::snap_rectangular_box(_desktop, this->rect, pt, this->center, state);
@@ -426,8 +424,6 @@ void RectTool::finishItem() {
         this->rect->updateRepr();
         this->rect->doWriteTransform(this->rect->transform, nullptr, true);
 
-        forced_redraws_stop();
-
         _desktop->getSelection()->set(this->rect);
 
         DocumentUndo::done(_desktop->getDocument(), _("Create rectangle"), INKSCAPE_ICON("draw-rectangle"));
@@ -449,8 +445,6 @@ void RectTool::cancel(){
     this->xp = 0;
     this->yp = 0;
     this->item_to_select = nullptr;
-
-    forced_redraws_stop();
 
     DocumentUndo::cancel(_desktop->getDocument());
 }

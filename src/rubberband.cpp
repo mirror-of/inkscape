@@ -57,7 +57,6 @@ void Inkscape::Rubberband::start(SPDesktop *d, Geom::Point const &p)
     _points.push_back(_desktop->d2w(p));
 
     delete_canvas_items();
-    _desktop->getCanvas()->forced_redraws_start(5);
 }
 
 void Inkscape::Rubberband::stop()
@@ -69,10 +68,6 @@ void Inkscape::Rubberband::stop()
     _touchpath_curve->reset();
 
     delete_canvas_items();
-
-    if (_desktop && _desktop->getCanvas()) {
-        _desktop->getCanvas()->forced_redraws_stop();
-    }
 }
 
 void Inkscape::Rubberband::move(Geom::Point const &p)

@@ -153,9 +153,9 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
 void
 CanvasGrid::UpdateRulers()
 {
-    Geom::Rect viewbox = _dtw->desktop->get_display_area(true).bounds();
-    // "true" means: Use integer values of the canvas for calculating the display area, similar
-    // to the integer values used for positioning the grid lines. (see SPCanvas::scrollTo(), 
+    Geom::Rect viewbox = _dtw->desktop->get_display_area().bounds();
+    // Use integer values of the canvas for calculating the display area, similar
+    // to the integer values used for positioning the grid lines. (see Canvas::scrollTo(), 
     // where ix and iy are rounded integer values; these values are stored in CanvasItemBuffer->rect,
     // and used for drawing the grid). By using the integer values here too, the ruler ticks 
     // will be perfectly aligned to the grid

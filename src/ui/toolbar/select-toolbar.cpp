@@ -430,9 +430,6 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
 
     if (actionkey != nullptr) {
 
-        // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed
-        desktop->getCanvas()->forced_redraws_start(0);
-
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
         bool preserve = prefs->getBool("/options/preservetransform/value", false);
@@ -450,9 +447,6 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
 
         selection->applyAffine(scaler);
         DocumentUndo::maybeDone(document, actionkey, _("Transform by toolbar"), INKSCAPE_ICON("tool-pointer"));
-
-        // resume interruptibility
-        desktop->getCanvas()->forced_redraws_stop();
     }
 
     _update = false;

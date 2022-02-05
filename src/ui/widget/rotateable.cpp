@@ -104,7 +104,6 @@ bool Rotateable::on_motion(GdkEventMotion *event) {
                 do_motion(force, modifier);
             }
         }
-        Inkscape::UI::Tools::gobble_motion_events(GDK_BUTTON1_MASK);
         return true;
 		} 
 		return false; 

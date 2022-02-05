@@ -156,8 +156,6 @@ void PenTool::_cancel() {
     cl1->hide();
     this->message_context->clear();
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
-
-    forced_redraws_stop();
 }
 
 /**
@@ -1193,8 +1191,6 @@ void PenTool::_setInitialPoint(Geom::Point const p) {
     this->p[1] = p;
     this->npoints = 2;
     this->red_bpath->set_bpath(nullptr);
-
-    forced_redraws_start(5);
 }
 
 /**
@@ -1940,8 +1936,6 @@ void PenTool::_finish(gboolean const closed) {
     cl1->hide();
 
     this->green_anchor.reset();
-
-    forced_redraws_stop();
 
     this->_enableEvents();
 }
