@@ -30,7 +30,7 @@ else                  # not running GitLab CI
 
   # Allow using a custom branch.
   if [ -z "$INK_BRANCH" ]; then
-    INK_BRANCH=master
+    INK_BRANCH=1.1.x
   fi
 fi
 
@@ -65,6 +65,9 @@ cp${INK_PYTHON_VER/./}-cp${INK_PYTHON_VER/./}-macosx_10_9_x86_64.whl
 
 # https://github.com/numpy/numpy
 INK_PYTHON_NUMPY=numpy==1.19.1
+
+# https://pypi.org/project/Pillow/
+INK_PYTHON_PILLOW=Pillow==9.0.0
 
 # https://pygobject.readthedocs.io/en/latest/
 INK_PYTHON_PYGOBJECT=PyGObject==3.36.1
