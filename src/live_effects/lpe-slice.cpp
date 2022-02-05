@@ -456,7 +456,6 @@ LPESlice::split(SPItem* item, SPCurve *curve, std::vector<std::pair<Geom::Line, 
             elemref = container->appendChildRepr(phantom);
             Inkscape::GC::release(phantom);
             lpesatellites.link(elemref, objindex);
-            elemref->setAttribute("class", "UnoptimicedTransforms");
         }
     }
     SPItem *other = dynamic_cast<SPItem *>(elemref);

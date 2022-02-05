@@ -232,59 +232,7 @@ void SatelliteParam::linked_modified(SPObject *linked_obj, guint flags)
 
 void SatelliteParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item)
 {
-    last_transform = *rel_transf;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        Inkscape::Selection *selection = desktop->getSelection();
-        if (effectType() == CLONE_ORIGINAL) {
-            auto hreflist = param_effect->getLPEObj()->hrefList;
-            if (hreflist.size()) {
-                SPLPEItem *sp_lpe_item = dynamic_cast<SPLPEItem *>(*hreflist.begin());
-                if (sp_lpe_item) {
-                    SPGroup *movedgroup = dynamic_cast<SPGroup *>(moved_item);
-                    if (selection->includes(moved_item) && !movedgroup) {
-                        SPItem *item = sp_lpe_item;
-                        Geom::Affine m(*rel_transf);
-                        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                        guint mode = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_PARALLEL);
-                        if (!selection->includes(item) &&
-                            (!(m.isTranslation()) || mode == SP_CLONE_COMPENSATION_NONE)) {
-                            if (!param_effect->is_load) {
-                                item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                                update_satellites();
-                            }
-                            return;
-                        }
-                        // calculate the compensation matrix and the advertized movement matrix
-                        item->readAttr(SPAttr::TRANSFORM);
-
-                        Geom::Affine t = item->transform;
-                        Geom::Affine offset_move = t.inverse() * m * t;
-
-                        Geom::Affine advertized_move;
-                        if (mode == SP_CLONE_COMPENSATION_PARALLEL) {
-                            offset_move = offset_move.inverse() * m;
-                            advertized_move = m;
-                        } else if (mode == SP_CLONE_COMPENSATION_UNMOVED) {
-                            offset_move = offset_move.inverse();
-                            advertized_move.setIdentity();
-                        } else {
-                            g_assert_not_reached();
-                        }
-                        if (selection->includes(item)) {
-                            advertized_move = m;
-                        }
-                        item->transform *= offset_move;
-                        item->doWriteTransform(item->transform, &advertized_move);
-                        item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                    }
-                }
-            }
-        } else {
-            update_satellites();
-        }
-    }
-    
+    update_satellites();
 }
 
 // UI

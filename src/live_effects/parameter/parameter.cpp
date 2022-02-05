@@ -75,6 +75,20 @@ ParamType Parameter::paramType() const
     return INVALID_PARAM;
 };
 
+void
+sp_add_class(SPObject *item, Glib::ustring classglib) {
+    gchar const *classlpe = item->getAttribute("class");
+    if (classlpe) {
+        classglib = classlpe;
+        if (classglib.find("UnoptimicedTransforms") == Glib::ustring::npos) {
+            classglib += " UnoptimicedTransforms";
+            item->setAttribute("class",classglib.c_str());
+        }
+    } else {
+        item->setAttribute("class","UnoptimicedTransforms");
+    }
+}
+
 /*
  * sometimes for example on ungrouping or loading documents we need to relay in stored value instead the volatile
  * version in the parameter
@@ -91,13 +105,15 @@ void Parameter::param_higlight(bool highlight, bool select)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
-        std::vector<SPLPEItem *> lpeitems;
+        std::vector<SPLPEItem *> lpeitems = param_effect->getCurrrentLPEItems();
+        if (lpeitems.size()) {
+            sp_add_class(lpeitems[0], "UnoptimicedTransforms");
+        }
         if (!highlight && ownerlocator) {
             desktop->remove_temporary_canvasitem(ownerlocator);
             ownerlocator = nullptr;
         }
         if (highlight) {
-            lpeitems = param_effect->getCurrrentLPEItems();
             if (lpeitems.size() == 1 && param_effect->is_visible) {
                 if (select && !lpeitems[0]->isHidden()) {
                     desktop->selection->clear();
@@ -107,6 +123,7 @@ void Parameter::param_higlight(bool highlight, bool select)
                 auto c = std::make_unique<SPCurve>();
                 std::vector<Geom::PathVector> cs; // = param_effect->getCanvasIndicators(lpeitems[0]);
                 Geom::OptRect bbox = lpeitems[0]->documentVisualBounds();
+
                 if (param_effect->helperLineSatellites) {
                     std::vector<SPObject *> satellites = param_get_satellites();
                     for (auto iter : satellites) {
@@ -176,6 +193,7 @@ void Parameter::update_satellites(bool updatelpe)
                     }
                     // we always start hidding helper path
                     for (auto iter : satellites) {
+                        sp_add_class(iter, "UnoptimicedTransforms");
                         // if selection is current ref we highlight original sp_lpe_item to
                         // give visual feedback to the user to know whats the LPE item that generate the selection
                         if (iter && selection->includes(iter)) {

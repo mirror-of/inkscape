@@ -241,14 +241,6 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
                 } else if(method == CLM_D){
                     c = SPCurve::copy(shape_origin->curve());
                 }
-                if (c && allow_transforms && root) {
-                    const gchar *trans = origin->getAttribute("transform");
-                    if (trans) {
-                        Geom::Affine t;
-                        sp_svg_transform_read(trans, &t);
-                        c->transform(t);
-                    }
-                }
                 if (c && method != CLM_NONE) {
                     Geom::PathVector c_pv = c->get_pathvector();
                     c->set_pathvector(c_pv);
@@ -313,20 +305,6 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
 }
 
 void
-sp_add_class(SPItem *item, Glib::ustring classglib) {
-    gchar const *classlpe = item->getAttribute("class");
-    if (classlpe) {
-        classglib = classlpe;
-        if (classglib.find("UnoptimicedTransforms") == Glib::ustring::npos) {
-            classglib += " UnoptimicedTransforms";
-            item->setAttribute("class",classglib.c_str());
-        }
-    } else {
-        item->setAttribute("class","UnoptimicedTransforms");
-    }
-}
-
-void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -353,13 +331,11 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         auto lpeitems = getCurrrentLPEItems();
         if (lpeitems.size()) {
             sp_lpe_item = lpeitems[0];
-            sp_add_class(sp_lpe_item, "UnoptimicedTransforms");
         }
         SPItem *orig = dynamic_cast<SPItem *>(linkeditem.getObject());
         if(!orig) {
             return;
         }
-        sp_add_class(orig, "UnoptimicedTransforms");
         SPText  *text_origin = dynamic_cast<SPText *>(orig);
         SPItem *dest = dynamic_cast<SPItem *>(sp_lpe_item);
         const gchar * id = orig->getId();

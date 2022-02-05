@@ -349,18 +349,14 @@ bool SPLPEItem::optimizeTransforms()
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
             if (lpe) {
                 if (dynamic_cast<Inkscape::LivePathEffect::LPEMeasureSegments *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPECloneOriginal *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPESlice *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPEBool *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPECopy *>(lpe)) {
+                    dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe))
+                {
                     return false;
                 }
             }
         }
     }
+    // LPEs with satellites (and his satellites) has this class auto
     gchar *classes = g_strdup(getRepr()->attribute("class"));
     if (classes) {
         Glib::ustring classdata = classes;
