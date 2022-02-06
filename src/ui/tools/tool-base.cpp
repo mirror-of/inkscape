@@ -1158,6 +1158,9 @@ gint ToolBase::tool_root_handler(GdkEvent *event)
     // Just set the on buttons for now. later, behave as intended.
     this->set_on_buttons(event);
 
+    // refresh coordinates UI here while 'event' is still valid
+    set_event_location(_desktop, event);
+
     // Panning has priority over tool-specific event handling
     if (this->is_panning()) {
         ret = ToolBase::root_handler(event);
@@ -1165,7 +1168,7 @@ gint ToolBase::tool_root_handler(GdkEvent *event)
         ret = this->root_handler(event);
     }
 
-    set_event_location(_desktop, event);
+    // at this point 'event' could be deleted already (after ctrl+w document close)
 
     return ret;
 }
