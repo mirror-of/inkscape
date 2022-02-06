@@ -469,7 +469,7 @@ stroke_average_width (const std::vector<SPItem*> &objects)
         double width = item->style->stroke_width.computed * i2dt.descrim();
 
         // Width becomes NaN when scaling a diagonal line to a horizontal line (lp:825840)
-        if ( std::isnan(width)) {
+        if ( not item->style->stroke.set || std::isnan(width) ) {
             ++n_notstroked;   // do not count nonstroked objects
             continue;
         } else {
