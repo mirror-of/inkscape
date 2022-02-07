@@ -19,6 +19,8 @@
  
 #include "inkgc/gc-core.h"
 
+#include <memory>
+#include <mutex>
 #include <windows.h>
 
 
@@ -232,12 +234,7 @@ private:
     /// This mutex is used to ensure that the worker thread
     /// that calls GetOpenFileName cannot collide with the
     /// main Inkscape thread
-#if GLIB_CHECK_VERSION(2,32,0)
-    Glib::Threads::Mutex *_mutex;
-#else
-    Glib::Mutex *_mutex;
-#endif
-
+    std::unique_ptr<std::mutex> _mutex;
 
     /// The controller function for the thread which calls
     /// GetOpenFileName

@@ -22,6 +22,7 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 #include <list>
+#include <thread>
 #include <vector>
 
 //Inkscape includes
@@ -1492,29 +1493,21 @@ FileOpenDialogImplWin32::show()
     // We can only run one worker thread at a time
     if(_mutex != NULL) return false;
 
-#if !GLIB_CHECK_VERSION(2,32,0)
-    if(!Glib::thread_supported())
-        Glib::thread_init();
-#endif
-
     _result = false;
     _finished = false;
     _file_selected = false;
     _main_loop = g_main_loop_new(g_main_context_default(), FALSE);
 
-#if GLIB_CHECK_VERSION(2,32,0)
-    _mutex = new Glib::Threads::Mutex();
-    if(Glib::Threads::Thread::create(sigc::mem_fun(*this, &FileOpenDialogImplWin32::GetOpenFileName_thread)))
-#else
-    _mutex = new Glib::Mutex();
-    if(Glib::Thread::create(sigc::mem_fun(*this, &FileOpenDialogImplWin32::GetOpenFileName_thread), true))
-#endif
+    _mutex = std::make_unique<std::mutex>();
+
+    std::thread thethread([this] { GetOpenFileName_thread(); });
+
     {
         while(1)
         {
             g_main_context_iteration(g_main_context_default(), FALSE);
 
-            if(_mutex->trylock())
+            if(_mutex->try_lock())
             {
                 // Read mutexed data
                 const bool finished = _finished;
@@ -1530,8 +1523,9 @@ FileOpenDialogImplWin32::show()
         }
     }
 
+    thethread.join();
+
     // Tidy up
-    delete _mutex;
     _mutex = NULL;
 
     return _result;
@@ -1804,25 +1798,18 @@ void FileSaveDialogImplWin32::GetSaveFileName_thread()
 bool
 FileSaveDialogImplWin32::show()
 {
-#if !GLIB_CHECK_VERSION(2,32,0)
-    if(!Glib::thread_supported())
-        Glib::thread_init();
-#endif
-
     _result = false;
     _main_loop = g_main_loop_new(g_main_context_default(), FALSE);
 
     if(_main_loop != NULL)
     {
-#if GLIB_CHECK_VERSION(2,32,0)
-        if(Glib::Threads::Thread::create(sigc::mem_fun(*this, &FileSaveDialogImplWin32::GetSaveFileName_thread)))
-#else
-        if(Glib::Thread::create(sigc::mem_fun(*this, &FileSaveDialogImplWin32::GetSaveFileName_thread), true))
-#endif
-            g_main_loop_run(_main_loop);
+        std::thread thethread([this] { GetSaveFileName_thread(); });
+        g_main_loop_run(_main_loop);
 
         if(_result && _extension)
             appendExtension(myFilename, (Inkscape::Extension::Output*)_extension);
+
+        thethread.join();
     }
 
     return _result;

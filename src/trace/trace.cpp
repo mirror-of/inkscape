@@ -551,18 +551,7 @@ void Tracer::trace(TracingEngine *theEngine)
 
     engine = theEngine;
 
-#if HAVE_THREADS
-    //Ensure that thread support is running
-    if (!Glib::thread_supported())
-        Glib::thread_init();
-
-    //Create our thread and run it
-    Glib::Thread::create(
-        sigc::mem_fun(*this, &Tracer::traceThread), false);
-#else
     traceThread();
-#endif
-
 }
 
 
