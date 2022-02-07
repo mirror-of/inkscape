@@ -31,6 +31,7 @@ static double const MIN_HUE = 0.0;
 static double const MIN_SATURATION = 0.0;
 static double const MIN_LIGHTNESS = 0.0;
 static double const OUTER_CIRCLE_DASH_SIZE = 10.0;
+static double const VERTEX_EPSILON = 0.01;
 
 using Hsluv::Line;
 
@@ -50,6 +51,7 @@ public:
     double b;
 };
 
+/* FIXME: replace with Geom::Point */
 class Point {
 public:
     Point();
@@ -78,8 +80,7 @@ static double distance_line_from_origin(Line line);
 static double angle_from_origin(Point point);
 static double normalize_angle(double angle);
 static double lerp(double v0, double v1, double t0, double t1, double t);
-static ColorPoint lerp(ColorPoint const &v0, ColorPoint const &v1, double t0, double t1,
-        double t);
+static ColorPoint lerp(ColorPoint const &v0, ColorPoint const &v1, double t0, double t1, double t);
 static guint32 hsv_to_rgb(double h, double s, double v);
 static double luminance(guint32 color);
 static Point to_pixel_coordinate(Point const &point, double scale, double resize);
@@ -125,10 +126,7 @@ ColorWheel::ColorWheel()
 {
     set_name("ColorWheel");
 
-    add_events(Gdk::BUTTON_PRESS_MASK	|
-	       Gdk::BUTTON_RELEASE_MASK	|
-	       Gdk::BUTTON_MOTION_MASK	|
-	       Gdk::KEY_PRESS_MASK	);
+    add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::BUTTON_MOTION_MASK | Gdk::KEY_PRESS_MASK);
     set_can_focus();
 }
 
@@ -170,10 +168,10 @@ void ColorWheel::_set_from_xy(double const x, double const y)
 bool ColorWheel::on_key_release_event(GdkEventKey* key_event)
 {
     unsigned int key = 0;
-    gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
-                                         key_event->hardware_keycode,
-                                         (GdkModifierType)key_event->state,
-                                         0, &key, nullptr, nullptr, nullptr );
+    gdk_keymap_translate_keyboard_state(Gdk::Display::get_default()->get_keymap(),
+                                        key_event->hardware_keycode,
+                                        (GdkModifierType)key_event->state,
+                                        0, &key, nullptr, nullptr, nullptr);
 
     switch (key) {
         case GDK_KEY_Up:
@@ -334,7 +332,7 @@ bool ColorWheelHSL::on_draw(::Cairo::RefPtr<::Cairo::Context> const &cr)
         Glib::RefPtr<Gtk::StyleContext> style_context = get_style_context();
         style_context->render_focus(cr, 0, 0, width, height);
     }
-  
+
     // Paint triangle.
     /* The triangle is painted by first finding color points on the
      * edges of the triangle at the same y value via linearly
@@ -558,7 +556,7 @@ bool ColorWheelHSL::_is_in_ring(double x, double y)
     double dx = x - cx;
     double dy = y - cy;
     double r2 = dx * dx + dy * dy;
-  
+
     return (r2_min < r2 && r2 < r2_max);
 }
 
@@ -567,11 +565,11 @@ bool ColorWheelHSL::_is_in_triangle(double x, double y)
     double x0, y0, x1, y1, x2, y2;
     _triangle_corners(x0, y0, x1, y1, x2, y2);
 
-    double det = (x2-x1) * (y0-y1) - (y2-y1) * (x0-x1);
-    double s = ((x -x1) * (y0-y1) - (y -y1) * (x0-x1)) / det; 
-    double t = ((x2-x1) * (y -y1) - (y2-y1) * (x -x1)) / det; 
+    double det = (x2 - x1) * (y0 - y1) - (y2 - y1) * (x0 - x1);
+    double s = ((x - x1) * (y0 - y1) - (y - y1) * (x0 - x1)) / det;
+    double t = ((x2 - x1) * (y - y1) - (y2 - y1) * (x - x1)) / det;
 
-    return (s >= 0.0 && t >= 0.0 && s+t <= 1.0);
+    return (s >= 0.0 && t >= 0.0 && s + t <= 1.0);
 }
 
 void ColorWheelHSL::_update_triangle_color(double x, double y)
@@ -836,10 +834,6 @@ bool ColorWheelHSLuv::on_draw(::Cairo::RefPtr<::Cairo::Context> const &cr)
     int const cx = width/2;
     int const cy = height/2;
 
-    if (_values[2] < 1e-4 || _values[2] > 99.9999) {
-        return true;
-    }
-
     double const resize = std::min(width, height) / static_cast<double>(SIZE);
 
     int const marginX = std::max(0.0, (width - height) / 2.0);
@@ -852,24 +846,28 @@ bool ColorWheelHSLuv::on_draw(::Cairo::RefPtr<::Cairo::Context> const &cr)
         point.y += marginY;
     }
 
+    // Detect if we're at the top or bottom vertex of the color space
+    bool is_vertex = (_values[2] < VERTEX_EPSILON || _values[2] > 100.0 - VERTEX_EPSILON);
+
     cr->set_antialias(Cairo::ANTIALIAS_SUBPIXEL);
 
     if (width > _square_size && height > _square_size) {
         if (_cache_width != width || _cache_height != height) {
             _update_polygon();
         }
-
-        // Paint with surface, clipping to polygon
-        cr->save();
-        cr->set_source(_surface_polygon, 0, 0);
-        cr->move_to(shapePointsPixel[0].x, shapePointsPixel[0].y);
-        for (int i = 1; i < shapePointsPixel.size(); i++) {
-            Point const &point = shapePointsPixel[i];
-            cr->line_to(point.x, point.y);
+        if (!is_vertex) {
+            // Paint with surface, clipping to polygon
+            cr->save();
+            cr->set_source(_surface_polygon, 0, 0);
+            cr->move_to(shapePointsPixel[0].x, shapePointsPixel[0].y);
+            for (size_t i = 1; i < shapePointsPixel.size(); i++) {
+                Point const &point = shapePointsPixel[i];
+                cr->line_to(point.x, point.y);
+            }
+            cr->close_path();
+            cr->fill();
+            cr->restore();
         }
-        cr->close_path();
-        cr->fill();
-        cr->restore();
     }
 
     // Draw foreground
@@ -896,9 +894,10 @@ bool ColorWheelHSLuv::on_draw(::Cairo::RefPtr<::Cairo::Context> const &cr)
     cr->set_source_rgb(a, a, a);
 
     // Pastel circle
+    double const innerRadius = is_vertex ? 0.01 : _picker_geometry->innerCircleRadius;
     cr->set_line_width(2);
     cr->begin_new_path();
-    cr->arc(cx, cy, _scale * resize * _picker_geometry->innerCircleRadius, 0, 2 * M_PI);
+    cr->arc(cx, cy, _scale * resize * innerRadius, 0, 2 * M_PI);
     cr->stroke();
 
     // Center
@@ -961,10 +960,6 @@ void ColorWheelHSLuv::_set_from_xy(double const x, double const y)
 
 void ColorWheelHSLuv::_update_polygon()
 {
-    if (_values[2] < 1e-4 || _values[2] > 99.9999) {
-        return;
-    }
-
     Gtk::Allocation allocation = get_allocation();
     int const width = allocation.get_width();
     int const height = allocation.get_height();
@@ -1026,7 +1021,7 @@ void ColorWheelHSLuv::_update_polygon()
             ), _scale, resize);
 
             double r, g ,b;
-            Hsluv::luv_to_rgb(_values[2], point.x, point.y, &r, &g, &b);
+            Hsluv::luv_to_rgb(_values[2], point.x, point.y, &r, &g, &b); // safe with _values[2] == 0
 
             r = std::clamp(r, 0.0, 1.0);
             g = std::clamp(g, 0.0, 1.0);
@@ -1205,6 +1200,7 @@ Intersection::Intersection(int line1, int line2, Point intersectionPoint,
     , relativeAngle(relativeAngle)
 {}
 
+/* FIXME: replace these utility functions with calls into lib2geom */
 /* Utility functions */
 static Point intersect_line_line(Line a, Line b)
 {
@@ -1411,8 +1407,7 @@ void draw_vertical_padding(ColorPoint p0, ColorPoint p1, int padding, bool pad_u
     }
 }
 
-static void Inkscape::UI::Widget::get_picker_geometry(PickerGeometry *pickerGeometry,
-        double lightness)
+static void Inkscape::UI::Widget::get_picker_geometry(PickerGeometry *pickerGeometry, double lightness)
 {
     // Add a lambda to avoid overlapping intersections
     lightness = std::clamp(lightness + 0.01, 0.1, 99.9);

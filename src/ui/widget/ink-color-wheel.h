@@ -21,8 +21,8 @@
 namespace Inkscape {
 namespace UI {
 namespace Widget {
-  
-class PickerGeometry;
+
+struct PickerGeometry;
 
 /**
  * @class ColorWheel
