@@ -97,6 +97,9 @@ ColorScales<MODE>::ColorScales(SelectedColor &color)
 template <SPColorScalesMode MODE>
 ColorScales<MODE>::~ColorScales()
 {
+    _color_changed.disconnect();
+    _color_dragged.disconnect();
+
     for (gint i = 0; i < 5; i++) {
         _l[i] = nullptr;
         _s[i] = nullptr;
@@ -705,8 +708,8 @@ void ColorScales<MODE>::_wheelChanged()
     _wheel->getRgbV(rgb);
     SPColor color(rgb[0], rgb[1], rgb[2]);
 
-    _color_changed->block();
-    _color_dragged->block();
+    _color_changed.block();
+    _color_dragged.block();
 
     // Color
     _color.preserveICC();
@@ -716,8 +719,8 @@ void ColorScales<MODE>::_wheelChanged()
     // Sliders
     _updateDisplay(false);
 
-    _color_changed->unblock();
-    _color_dragged->unblock();
+    _color_changed.unblock();
+    _color_dragged.unblock();
 
     _updating = false;
 }

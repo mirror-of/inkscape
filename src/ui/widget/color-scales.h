@@ -91,8 +91,8 @@ protected:
     const Glib::ustring _prefs = "/color_scales";
     static gchar const * const _pref_wheel_visibility;
 
-    sigc::slot_iterator<sigc::slot<void ()>> _color_changed;
-    sigc::slot_iterator<sigc::slot<void ()>> _color_dragged;
+    sigc::connection _color_changed;
+    sigc::connection _color_dragged;
 
 private:
     // By default, disallow copy constructor and assignment operator
