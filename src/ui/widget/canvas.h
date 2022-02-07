@@ -48,7 +48,7 @@ public:
     ~Canvas() override;
 
     // Structure TODO: Remove desktop dependency.
-    void set_desktop(SPDesktop *desktop) { _desktop = desktop; }
+    void set_desktop(SPDesktop *desktop);
     SPDesktop *get_desktop() const { return _desktop; }
 
     // Geometry
@@ -95,8 +95,8 @@ public:
     Cairo::RefPtr<Cairo::ImageSurface> get_backing_store() const; // Background rotation preview
     Cairo::RefPtr<Cairo::Pattern>      get_background_pattern() const { return _background; }
 
-    int gobble_key_events(guint keyval, guint mask) const; // tool-base.cpp
-    void gobble_motion_events(guint mask) const; // tool-base.cpp
+    int gobble_key_events(guint keyval, guint mask); // tool-base.cpp
+    void gobble_motion_events(guint mask); // tool-base.cpp
 
     // Canvas Items
     CanvasItemGroup *get_canvas_item_root() const { return _canvas_item_root; }
@@ -180,11 +180,6 @@ private:
 
     std::string _cms_key;
     bool _cms_active = false;
-
-    // Some objects (e.g. grids) when destroyed will request redraws. We need to block them when canvas
-    // is destructed. (Windows are destroyed before documents as a document may have several windows.
-    // Changes to documents should not be triggering changes to closed windows. This fix is a hack.)
-    bool _in_destruction = false;
 
     Cairo::RefPtr<Cairo::Pattern> _background; ///< The background of the widget.
 

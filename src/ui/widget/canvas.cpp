@@ -446,19 +446,30 @@ public:
     // The updater; tracks the unclean region and decides how to redraw it.
     std::unique_ptr<Updater> updater;
 
-    // Events system. Events that interact with the Canvas are placed into the event bucket until the start of the next frame.
-    std::vector<std::unique_ptr<GdkEvent>> bucket;
-    bool pending_draw = false;
-    sigc::connection bucket_emptier_ondraw;
-    std::optional<guint> bucket_emptier_onevent;
-    int bucket_pos;
-    GdkEvent *ignore = nullptr;
-
+    // Event processor. Events that interact with the Canvas are buffered here until the start of the next frame. They are processed by a separate object so that deleting the Canvas mid-event can be done safely.
+    struct EventProcessor
+    {
+        struct GdkEventFreer {void operator()(GdkEvent *ev) const {gdk_event_free(ev);}};
+        std::vector<std::unique_ptr<GdkEvent, GdkEventFreer>> events;
+        int pos;
+        GdkEvent *ignore = nullptr;
+        CanvasPrivate *canvasprivate; // Nulled when it is destroyed.
+        bool in_processing = false; // For handling recursion due to nested GTK main loops.
+        void process();
+        int gobble_key_events(guint keyval, guint mask);
+        void gobble_motion_events(guint mask);
+    };
+    std::shared_ptr<EventProcessor> eventprocessor; // Usually held by the Canvas, but temporarily also held by itself while processing so that it is not deleted when the Canvas is.
     bool add_to_bucket(GdkEvent*);
-    void empty_bucket();
     bool process_bucketed_event(const GdkEvent&);
     bool pick_current_item(const GdkEvent&);
     bool emit_event(const GdkEvent&);
+
+    // State for determining when to run event processor.
+    bool pending_draw = false;
+    sigc::connection bucket_emptier;
+    std::optional<guint> bucket_emptier_tick_callback;
+    void schedule_bucket_emptier();
 
     // Idle system. The high priority idle ensures at least one idle cycle between add_idle and on_draw.
     void add_idle();
@@ -501,6 +512,9 @@ public:
 
     // For tracking the last known mouse position. (The function Gdk::Window::get_device_position cannot be used because of slow X11 round-trips. Remove this workaround when X11 dies.)
     std::optional<Geom::Point> last_mouse;
+
+    // For shutting down safely after unrealization has started.
+    bool in_unrealization = false;
 };
 
 /*
@@ -739,69 +753,112 @@ CanvasPrivate::add_to_bucket(GdkEvent *event)
 {
     framecheck_whole_function(this)
 
-    // Prevent re-fired events from going through again.
-    if (event == ignore) {
+    if (in_unrealization) {
+        std::cerr << "Canvas::add_to_bucket: Called after canvas unrealization begun!" << std::endl;
         return false;
     }
 
-    // If this is the first event, make sure the bucket will be emptied in the near future.
-    if (bucket.empty() && !pending_draw) {
-        bucket_emptier_onevent = q->add_tick_callback([this] (const Glib::RefPtr<Gdk::FrameClock>&) {
-            empty_bucket();
-            bucket_emptier_onevent.reset();
+    // Prevent re-fired events from going through again.
+    if (event == eventprocessor->ignore) {
+        return false;
+    }
+
+    // If this is the first event, ensure event processing will run on the main loop as soon as possible after the next frame has started.
+    if (eventprocessor->events.empty() && !pending_draw) {
+        bucket_emptier_tick_callback = q->add_tick_callback([this] (const Glib::RefPtr<Gdk::FrameClock>&) {
+            bucket_emptier_tick_callback.reset();
+            schedule_bucket_emptier();
             return false;
         });
     }
 
     // Add a copy to the queue.
-    bucket.emplace_back(std::make_unique<GdkEvent>(*event));
+    eventprocessor->events.emplace_back(gdk_event_copy(event));
 
     // Tell GTK the event was handled.
     return true;
 }
 
-// The following functions run at the start of the next frame.
+void CanvasPrivate::schedule_bucket_emptier()
+{
+    if (in_unrealization) {
+        std::cerr << "Canvas::schedule_bucket_emptier: Called after canvas unrealization begun!" << std::endl;
+        return;
+    }
+
+    bucket_emptier = Glib::signal_idle().connect([this] {
+        eventprocessor->process();
+        return false;
+    }, G_PRIORITY_HIGH_IDLE + 14); // before hipri_idle
+}
+
+// The following functions run at the start of the next frame on the GTK main loop.
+// (Note: It is crucial that it runs on the main loop and not in any frame clock tick callbacks. GTK does not allow widgets to be deleted in the latter; only the former.)
 
 // Process bucketed events.
 void
-CanvasPrivate::empty_bucket()
+CanvasPrivate::EventProcessor::process()
 {
-    framecheck_whole_function(this)
+    framecheck_whole_function(canvasprivate)
 
-    // Initialise iteration index; may be incremented externally by gobblers.
-    bucket_pos = 0;
+    // Ensure the EventProcessor continues to live even if the Canvas is destroyed during event processing.
+    auto self = canvasprivate->eventprocessor;
 
-    while (bucket_pos < bucket.size()) {
+    // Check if toplevel or recursive. (Recursive calls happen if processing an event starts its own nested GTK main loop.)
+    bool toplevel = !in_processing;
+    in_processing = true;
+
+    // If toplevel, initialise the iteration index. It may be incremented externally by gobblers or recursive calls.
+    if (toplevel) {
+        pos = 0;
+    }
+
+    while (pos < events.size()) {
         // Extract next event.
-        auto event = std::move(bucket[bucket_pos]);
-        bucket_pos++;
+        auto event = std::move(events[pos]);
+        pos++;
 
-        // Process the event and see if it was handled.
-        bool handled = process_bucketed_event(*event);
+        // Fire the event at the CanvasItems and see if it was handled.
+        bool handled = canvasprivate->process_bucketed_event(*event);
 
         if (!handled) {
             // Re-fire the event at the window, and ignore it when it comes back here again.
             ignore = event.get();
-            q->get_toplevel()->event(event.get());
+            canvasprivate->q->get_toplevel()->event(event.get());
             ignore = nullptr;
+
+            // If the Canvas began unrealization during event processing, exit now.
+            if (!canvasprivate) return;
         }
     }
 
-    bucket.clear();
+    // Otherwise, clear the list of events that was just processed.
+    events.clear();
+
+    // Reset the variable to track recursive calls.
+    if (toplevel) {
+        in_processing = false;
+    }
 }
 
-// Called during 'empty_bucket' by some tools to batch backlogs of key events that may have built up after a freeze.
+// Called during event processing by some tools to batch backlogs of key events that may have built up after a freeze.
 int
-Canvas::gobble_key_events(guint keyval, guint mask) const
+Canvas::gobble_key_events(guint keyval, guint mask)
+{
+    return d->eventprocessor->gobble_key_events(keyval, mask);
+}
+
+int
+CanvasPrivate::EventProcessor::gobble_key_events(guint keyval, guint mask)
 {
     int count = 0;
 
-    while (d->bucket_pos < d->bucket.size()) {
-        auto &event = d->bucket[d->bucket_pos];
+    while (pos < events.size()) {
+        auto &event = events[pos];
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE) && event->key.keyval == keyval && (!mask || (event->key.state & mask))) {
             // Discard event and continue.
             if (event->type == GDK_KEY_PRESS) count++;
-            d->bucket_pos++;
+            pos++;
         }
         else {
             // Stop discarding.
@@ -809,23 +866,29 @@ Canvas::gobble_key_events(guint keyval, guint mask) const
         }
     }
 
-    if (count > 0 && d->prefs.debug_logging) std::cout << "Gobbled " << count << " key press(es)" << std::endl;
+    if (count > 0 && canvasprivate->prefs.debug_logging) std::cout << "Gobbled " << count << " key press(es)" << std::endl;
 
     return count;
 }
 
-// Called during 'empty_bucket' by some tools to ignore backlogs of motion events that may have built up after a freeze.
+// Called during event processing by some tools to ignore backlogs of motion events that may have built up after a freeze.
 void
-Canvas::gobble_motion_events(guint mask) const
+Canvas::gobble_motion_events(guint mask)
+{
+    d->eventprocessor->gobble_motion_events(mask);
+}
+
+void
+CanvasPrivate::EventProcessor::gobble_motion_events(guint mask)
 {
     int count = 0;
 
-    while (d->bucket_pos < d->bucket.size()) {
-        auto &event = d->bucket[d->bucket_pos];
+    while (pos < events.size()) {
+        auto &event = events[pos];
         if (event->type == GDK_MOTION_NOTIFY && (event->motion.state & mask)) {
             // Discard event and continue.
             count++;
-            d->bucket_pos++;
+            pos++;
         }
         else {
             // Stop discarding.
@@ -833,7 +896,7 @@ Canvas::gobble_motion_events(guint mask) const
         }
     }
 
-    if (count > 0 && d->prefs.debug_logging) std::cout << "Gobbled " << count << " motion event(s)" << std::endl;
+    if (count > 0 && canvasprivate->prefs.debug_logging) std::cout << "Gobbled " << count << " motion event(s)" << std::endl;
 }
 
 // From now on Inkscape's regular event processing logic takes place. The only thing to remember is that
@@ -1197,6 +1260,10 @@ Canvas::Canvas()
                Gdk::POINTER_MOTION_MASK |
                Gdk::SCROLL_MASK         |
                Gdk::SMOOTH_SCROLL_MASK  );
+    
+    // Set up EventProcessor
+    d->eventprocessor = std::make_shared<CanvasPrivate::EventProcessor>();
+    d->eventprocessor->canvasprivate = d.get();
 
     // Preferences
     d->prefs.grabsize.action = [=] {_canvas_item_root->update_canvas_item_ctrl_sizes(d->prefs.grabsize);};
@@ -1227,18 +1294,30 @@ Canvas::Canvas()
     _canvas_item_root->set_canvas(this);
 }
 
+void Canvas::set_desktop(SPDesktop *desktop)
+{
+     _desktop = desktop;
+    
+     // Nulling the desktop indicates the start of unrealization.
+     if (!desktop) {
+        // Disconnect signals and timeouts.
+        d->hipri_idle.disconnect();
+        d->lopri_idle.disconnect();
+        d->bucket_emptier.disconnect();
+        if (d->bucket_emptier_tick_callback) remove_tick_callback(*d->bucket_emptier_tick_callback);
+
+        // And promise never to schedule them again.
+        d->in_unrealization = true;
+
+        // Indicate start of unrealization to EventProcessor.
+        d->eventprocessor->canvasprivate = nullptr;
+     }
+}
+
 Canvas::~Canvas()
 {
+    // Should have been explicitly nulled before destruction.
     assert(!_desktop);
-
-    _drawing = nullptr;
-    _in_destruction = true;
-
-    // Disconnect signals. Otherwise called after destructor and crashes.
-    d->hipri_idle.disconnect();
-    d->lopri_idle.disconnect();
-    d->bucket_emptier_ondraw.disconnect();
-    if (d->bucket_emptier_onevent) remove_tick_callback(*d->bucket_emptier_onevent);
 
     // Remove entire CanvasItem tree.
     delete _canvas_item_root;
@@ -1305,7 +1384,7 @@ void CanvasPrivate::queue_draw_area(Geom::IntRect &rect)
 void
 Canvas::redraw_all()
 {
-    if (_in_destruction) {
+    if (d->in_unrealization) {
         // CanvasItems redraw their area when being deleted... which happens when the Canvas is destroyed.
         // We need to ignore their requests!
         return;
@@ -1321,7 +1400,7 @@ Canvas::redraw_all()
 void
 Canvas::redraw_area(int x0, int y0, int x1, int y1)
 {
-    if (_in_destruction) {
+    if (d->in_unrealization) {
         // CanvasItems redraw their area when being deleted... which happens when the Canvas is destroyed.
         // We need to ignore their requests!
         return;
@@ -1822,13 +1901,8 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
 
     // Process bucketed events as soon as possible after draw. We cannot process them now, because we have
     // a frame to get out as soon as possible, and processing events may take a while. Instead, we schedule
-    // it with a signal callback that runs as soon as this function is completed.
-    if (!d->bucket.empty()) {
-        d->bucket_emptier_ondraw = Glib::signal_idle().connect([this] {
-            d->empty_bucket();
-            return false;
-        }, G_PRIORITY_HIGH_IDLE + 14); // before hipri_idle
-    }
+    // it with a signal callback on the main loop that runs as soon as this function is completed.
+    if (!d->eventprocessor->events.empty()) d->schedule_bucket_emptier();
 
     // Record the fact that a draw is no longer pending.
     d->pending_draw = false;
@@ -1879,8 +1953,8 @@ CanvasPrivate::add_idle()
 {
     framecheck_whole_function(this)
 
-    if (q->_in_destruction) {
-        std::cerr << "Canvas::add_idle: Called after canvas destroyed!" << std::endl;
+    if (in_unrealization) {
+        //std::cerr << "Canvas::add_idle: Called after canvas unrealization begun!" << std::endl; // Prints too often.
         return;
     }
 
@@ -2102,7 +2176,7 @@ CanvasPrivate::on_idle()
 
     assert(q->_canvas_item_root);
 
-    if (q->_in_destruction) {
+    if (in_unrealization) {
         std::cerr << "Canvas::on_idle: Called after canvas destroyed!" << std::endl;
         return false;
     }
@@ -2471,7 +2545,7 @@ CanvasPrivate::paint_rect_internal(Geom::IntRect const &rect)
 
         // Schedule repaint
         queue_draw_area(repaint_rect); // Guarantees on_draw will be called in the future.
-        if (bucket_emptier_onevent) {q->remove_tick_callback(*bucket_emptier_onevent); bucket_emptier_onevent.reset();}
+        if (bucket_emptier_tick_callback) {q->remove_tick_callback(*bucket_emptier_tick_callback); bucket_emptier_tick_callback.reset();}
         pending_draw = true;
     } else {
         // Get rectangle needing repaint (transform into screen space, take bounding box, round outwards)
@@ -2486,7 +2560,7 @@ CanvasPrivate::paint_rect_internal(Geom::IntRect const &rect)
         if (repaint_rect & screen_rect) {
             // Schedule repaint
             queue_draw_area(repaint_rect);
-            if (bucket_emptier_onevent) {q->remove_tick_callback(*bucket_emptier_onevent); bucket_emptier_onevent.reset();}
+            if (bucket_emptier_tick_callback) {q->remove_tick_callback(*bucket_emptier_tick_callback); bucket_emptier_tick_callback.reset();}
             pending_draw = true;
         }
     }
