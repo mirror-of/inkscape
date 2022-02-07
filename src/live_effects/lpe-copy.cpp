@@ -598,11 +598,11 @@ Gtk::Widget * LPECopy::newWidget()
                         Gtk::Box * vbox2 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
                         Gtk::Box * hbox3 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                         Gtk::Box * hbox4 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
-                        vbox2->set_margin_left(5);
+                        vbox2->set_margin_start(5);
                         cbox->pack_start(*vbox1, false, false, 0);
                         cbox->pack_start(*vbox2, false, false, 0);
-                        cbox->set_margin_left(3);
-                        cbox->set_margin_right(3);
+                        cbox->set_margin_start(3);
+                        cbox->set_margin_end(3);
                         cbox->set_margin_bottom(3);
                         frame->add(*cbox);
                         vbox->pack_start(*frame, false, false, 0);
@@ -762,7 +762,7 @@ LPECopy::generate_buttons(Gtk::Box *container, Gtk::RadioButton::Group &group, g
             tooltip.erase(tooltip.size()-1);
         }
         button->set_tooltip_text(tooltip);
-        button->set_margin_left(1);
+        button->set_margin_start(1);
         container->pack_start(*button, false, false, 1);
     }
 }
