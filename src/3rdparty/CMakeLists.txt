@@ -26,7 +26,7 @@ if(WITH_INTERNAL_CAIRO)
         GIT_TAG 1.17.4
         GIT_SHALLOW TRUE
         SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cairo
-        PATCH_COMMAND git checkout ${CMAKE_CURRENT_SOURCE_DIR}/cairo/src && git apply --unsafe-paths --directory ${CMAKE_CURRENT_SOURCE_DIR}/cairo/ ${CMAKE_SOURCE_DIR}/packaging/cairo.patch
+        PATCH_COMMAND git checkout ${CMAKE_CURRENT_SOURCE_DIR}/cairo/src && git apply --unsafe-paths --directory ${CMAKE_CURRENT_SOURCE_DIR}/cairo/ ${CMAKE_SOURCE_DIR}/packaging/cairo_dither.patch ${CMAKE_SOURCE_DIR}/packaging/cairo_pdf_valid_font.patch
         BUILD_COMMAND make -j16
         CONFIGURE_COMMAND ${CAIRO_CONF}
         )
