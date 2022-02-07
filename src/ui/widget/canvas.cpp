@@ -80,6 +80,17 @@ namespace UI {
 namespace Widget {
 
 /*
+ * GDK event utilities
+ */
+
+// GdkEvents can only be safely copied using gdk_event_copy. However, this function allocates. Therefore, we need the following smart pointer to wrap the result.
+struct GdkEventFreer {void operator()(GdkEvent *ev) const {gdk_event_free(ev);}};
+using GdkEventUniqPtr = std::unique_ptr<GdkEvent, GdkEventFreer>;
+
+// Copies a GdkEvent, returning the result as a smart pointer.
+auto make_unique_copy(const GdkEvent &ev) {return GdkEventUniqPtr(gdk_event_copy(&ev));}
+
+/*
  * Preferences system
  */
 
@@ -449,8 +460,7 @@ public:
     // Event processor. Events that interact with the Canvas are buffered here until the start of the next frame. They are processed by a separate object so that deleting the Canvas mid-event can be done safely.
     struct EventProcessor
     {
-        struct GdkEventFreer {void operator()(GdkEvent *ev) const {gdk_event_free(ev);}};
-        std::vector<std::unique_ptr<GdkEvent, GdkEventFreer>> events;
+        std::vector<GdkEventUniqPtr> events;
         int pos;
         GdkEvent *ignore = nullptr;
         CanvasPrivate *canvasprivate; // Nulled when it is destroyed.
@@ -946,10 +956,10 @@ CanvasPrivate::process_bucketed_event(const GdkEvent &event)
             bool retval = emit_event(event);
 
             // ...then repick after the button has been released.
-            auto event_copy = event;
-            event_copy.button.state ^= calc_button_mask();
-            q->_state = event_copy.button.state;
-            pick_current_item(event_copy);
+            auto event_copy = make_unique_copy(event);
+            event_copy->button.state ^= calc_button_mask();
+            q->_state = event_copy->button.state;
+            pick_current_item(*event_copy);
 
             return retval;
         }
@@ -1198,18 +1208,19 @@ CanvasPrivate::emit_event(const GdkEvent &event)
        y = p.y();
     };
 
-    auto event_copy = event;
+    auto event_copy = make_unique_copy(event);
+
     switch (event.type) {
         case GDK_ENTER_NOTIFY:
         case GDK_LEAVE_NOTIFY:
-            conv(event_copy.crossing.x, event_copy.crossing.y);
+            conv(event_copy->crossing.x, event_copy->crossing.y);
             break;
         case GDK_MOTION_NOTIFY:
         case GDK_BUTTON_PRESS:
         case GDK_2BUTTON_PRESS:
         case GDK_3BUTTON_PRESS:
         case GDK_BUTTON_RELEASE:
-            conv(event_copy.motion.x, event_copy.motion.y);
+            conv(event_copy->motion.x, event_copy->motion.y);
             break;
         default:
             break;
@@ -1232,7 +1243,7 @@ CanvasPrivate::emit_event(const GdkEvent &event)
 
         // Propagate the event up the canvas item hierarchy until handled.
         while (item) {
-            if (item->handle_event(&event_copy)) return true;
+            if (item->handle_event(event_copy.get())) return true;
             item = item->get_parent();
         }
     }
