@@ -30,6 +30,13 @@ else()
     list(APPEND INKSCAPE_CXX_FLAGS "-D_FORTIFY_SOURCE=2")
 endif()
 
+# Disable deprecated Gtk and friends
+list(APPEND INKSCAPE_CXX_FLAGS "-DGLIBMM_DISABLE_DEPRECATED")
+list(APPEND INKSCAPE_CXX_FLAGS "-DGTKMM_DISABLE_DEPRECATED")
+list(APPEND INKSCAPE_CXX_FLAGS "-DGDKMM_DISABLE_DEPRECATED")
+list(APPEND INKSCAPE_CXX_FLAGS "-DGTK_DISABLE_DEPRECATED")
+list(APPEND INKSCAPE_CXX_FLAGS "-DGDK_DISABLE_DEPRECATED")
+
 # Errors for common mistakes
 list(APPEND INKSCAPE_CXX_FLAGS "-fstack-protector-strong")
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
