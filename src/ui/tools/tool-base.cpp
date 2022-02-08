@@ -168,7 +168,7 @@ Glib::RefPtr<Gdk::Cursor> ToolBase::get_cursor(Glib::RefPtr<Gdk::Window> window,
 }
 
 /**
- * Uses the saved cursor, based on the saved fiilename.
+ * Uses the saved cursor, based on the saved filename.
  */
 void ToolBase::use_tool_cursor() {
     if (auto window = _desktop->getCanvas()->get_window()) {

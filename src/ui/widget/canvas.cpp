@@ -481,6 +481,7 @@ public:
     bool process_bucketed_event(const GdkEvent&);
     bool pick_current_item(const GdkEvent&);
     bool emit_event(const GdkEvent&);
+    Inkscape::CanvasItem *pre_scroll_grabbed_item;
 
     // State for determining when to run event processor.
     bool pending_draw = false;
@@ -599,6 +600,7 @@ void CanvasPrivate::activate()
     q->_current_canvas_item_new = nullptr;
     q->_grabbed_canvas_item     = nullptr;
     q->_grabbed_event_mask = (Gdk::EventMask)0;
+    pre_scroll_grabbed_item = nullptr;
 
     // Drawing
     q->_drawing_disabled = false;
@@ -1066,7 +1068,7 @@ CanvasPrivate::process_bucketed_event(const GdkEvent &event)
 {
     auto calc_button_mask = [&] () -> int {
         switch (event.button.button) {
-            case 1:  return GDK_BUTTON1_MASK; break; // Fixme: These all used to be GDK_BUTTON1_MASK! Was that intentional? I changed it just in case. Revert on breakage.
+            case 1:  return GDK_BUTTON1_MASK; break;
             case 2:  return GDK_BUTTON2_MASK; break;
             case 3:  return GDK_BUTTON3_MASK; break;
             case 4:  return GDK_BUTTON4_MASK; break;
@@ -1079,12 +1081,31 @@ CanvasPrivate::process_bucketed_event(const GdkEvent &event)
     switch (event.type) {
 
         case GDK_SCROLL:
-            return emit_event(event);
+        {
+            // Save the current event-receiving item just before scrolling starts. It will continue to receive scroll events until the mouse is moved.
+            if (!pre_scroll_grabbed_item) {
+                pre_scroll_grabbed_item = q->_current_canvas_item;
+                if (q->_grabbed_canvas_item && !q->_current_canvas_item->is_descendant_of(q->_grabbed_canvas_item)) {
+                    pre_scroll_grabbed_item = q->_grabbed_canvas_item;
+                }
+            }
+
+            // Process the scroll event...
+            bool retval = emit_event(event);
+
+            // ...then repick.
+            q->_state = event.scroll.state;
+            pick_current_item(event);
+
+            return retval;
+        }
 
         case GDK_BUTTON_PRESS:
         case GDK_2BUTTON_PRESS:
         case GDK_3BUTTON_PRESS:
         {
+            pre_scroll_grabbed_item = nullptr;
+
             // Pick the current item as if the button were not pressed...
             q->_state = event.button.state;
             pick_current_item(event);
@@ -1098,6 +1119,8 @@ CanvasPrivate::process_bucketed_event(const GdkEvent &event)
 
         case GDK_BUTTON_RELEASE:
         {
+            pre_scroll_grabbed_item = nullptr;
+
             // Process the event as if the button were pressed...
             q->_state = event.button.state;
             bool retval = emit_event(event);
@@ -1112,10 +1135,12 @@ CanvasPrivate::process_bucketed_event(const GdkEvent &event)
         }
 
         case GDK_ENTER_NOTIFY:
+            pre_scroll_grabbed_item = nullptr;
             q->_state = event.crossing.state;
             return pick_current_item(event);
 
         case GDK_LEAVE_NOTIFY:
+            pre_scroll_grabbed_item = nullptr;
             q->_state = event.crossing.state;
             // This is needed to remove alignment or distribution snap indicators.
             if (q->_desktop) {
@@ -1128,6 +1153,7 @@ CanvasPrivate::process_bucketed_event(const GdkEvent &event)
             return emit_event(event);
 
         case GDK_MOTION_NOTIFY:
+            pre_scroll_grabbed_item = nullptr;
             q->_state = event.motion.state;
             pick_current_item(event);
             return emit_event(event);
@@ -1152,11 +1178,9 @@ CanvasPrivate::process_bucketed_event(const GdkEvent &event)
 bool
 CanvasPrivate::pick_current_item(const GdkEvent &event)
 {
-    // Ensure geometry is correct.
-    auto affine = decoupled_mode ? _store_affine : q->_affine;
-    if (q->_need_update || geom_affine != affine) {
-        q->_canvas_item_root->update(affine);
-        geom_affine = affine;
+    // Ensure requested geometry updates are performed first.
+    if (q->_need_update) {
+        q->_canvas_item_root->update(geom_affine);
         q->_need_update = false;
     }
 
@@ -1180,10 +1204,10 @@ CanvasPrivate::pick_current_item(const GdkEvent &event)
     // re-pick the current item if the current one gets deleted.  Also,
     // synthesize an enter event.
     if (&event != &q->_pick_event) {
-        if (event.type == GDK_MOTION_NOTIFY || event.type == GDK_BUTTON_RELEASE) {
+        if (event.type == GDK_MOTION_NOTIFY || event.type == GDK_SCROLL || event.type == GDK_BUTTON_RELEASE) {
             // Convert to GDK_ENTER_NOTIFY
 
-            // These fields have the same offsets in both types of events.
+            // These fields have the same offsets in all types of events.
             q->_pick_event.crossing.type       = GDK_ENTER_NOTIFY;
             q->_pick_event.crossing.window     = event.motion.window;
             q->_pick_event.crossing.send_event = event.motion.send_event;
@@ -1193,15 +1217,28 @@ CanvasPrivate::pick_current_item(const GdkEvent &event)
             q->_pick_event.crossing.mode       = GDK_CROSSING_NORMAL;
             q->_pick_event.crossing.detail     = GDK_NOTIFY_NONLINEAR;
             q->_pick_event.crossing.focus      = false;
-            q->_pick_event.crossing.state      = event.motion.state;
 
-            // These fields don't have the same offsets in both types of events.
-            if (event.type == GDK_MOTION_NOTIFY) {
-                q->_pick_event.crossing.x_root = event.motion.x_root;
-                q->_pick_event.crossing.y_root = event.motion.y_root;
-            } else {
-                q->_pick_event.crossing.x_root = event.button.x_root;
-                q->_pick_event.crossing.y_root = event.button.y_root;
+            // These fields don't have the same offsets in all types of events.
+            // (Todo: With C++20, can reduce the code repetition here using a templated lambda.)
+            switch (event.type)
+            {
+                case GDK_MOTION_NOTIFY:
+                    q->_pick_event.crossing.state  = event.motion.state;
+                    q->_pick_event.crossing.x_root = event.motion.x_root;
+                    q->_pick_event.crossing.y_root = event.motion.y_root;
+                    break;
+                case GDK_SCROLL:
+                    q->_pick_event.crossing.state  = event.scroll.state;
+                    q->_pick_event.crossing.x_root = event.scroll.x_root;
+                    q->_pick_event.crossing.y_root = event.scroll.y_root;
+                    break;
+                case GDK_BUTTON_RELEASE:
+                    q->_pick_event.crossing.state  = event.button.state;
+                    q->_pick_event.crossing.x_root = event.button.x_root;
+                    q->_pick_event.crossing.y_root = event.button.y_root;
+                    break;
+                default:
+                    assert(false);
             }
 
         } else {
@@ -1388,6 +1425,10 @@ CanvasPrivate::emit_event(const GdkEvent &event)
 
         if (q->_grabbed_canvas_item && !q->_current_canvas_item->is_descendant_of(q->_grabbed_canvas_item)) {
             item = q->_grabbed_canvas_item;
+        }
+
+        if (pre_scroll_grabbed_item && event.type == GDK_SCROLL) {
+            item = pre_scroll_grabbed_item;
         }
 
         // Propagate the event up the canvas item hierarchy until handled.
@@ -1657,6 +1698,10 @@ Canvas::canvas_item_destructed(Inkscape::CanvasItem* item)
         auto const display = Gdk::Display::get_default();
         auto const seat    = display->get_default_seat();
         seat->ungrab();
+    }
+
+    if (item == d->pre_scroll_grabbed_item) {
+        d->pre_scroll_grabbed_item = nullptr;
     }
 }
 
