@@ -1532,7 +1532,10 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         gpointer knot = dse->getItem2();
         check_if_knot_deleted(knot);
         if (knot && SP_IS_KNOT(knot)) {
+            bool was_grabbed = SP_KNOT(knot)->is_grabbed();
+            SP_KNOT(knot)->setFlag(SP_KNOT_GRABBED, true); // Must be grabbed for Inkscape::SelTrans::handleRequest() to pass
             sp_knot_handler_request_position(dse->getEvent(), SP_KNOT(knot));
+            SP_KNOT(knot)->setFlag(SP_KNOT_GRABBED, was_grabbed);
         }
     }
         break;
