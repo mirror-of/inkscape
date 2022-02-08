@@ -1560,7 +1560,7 @@ ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha)
 /** 
  * Draw drop shadow around the 'rect' with given 'size' and 'color'; shadow extends to the right and bottom of rect.
  */
-void ink_cairo_draw_drop_shadow(Cairo::RefPtr<Cairo::Context> ctx, const Geom::Rect& rect, int size, guint32 color, double color_alpha) {
+void ink_cairo_draw_drop_shadow(Cairo::RefPtr<Cairo::Context> ctx, const Geom::Rect& rect, double size, guint32 color, double color_alpha) {
     // draw fake drop shadow built from gradients
     const auto r = SP_RGBA32_R_F(color);
     const auto g = SP_RGBA32_G_F(color);
