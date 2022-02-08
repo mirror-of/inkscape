@@ -323,7 +323,7 @@ add_actions_object(InkscapeApplication* app)
     gapp->add_action(                "object-release-mask",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_release),           app));
 
     gapp->add_action(                "object-rotate-90-cw",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),           app));
-    gapp->add_action(                "object-rotate-90-ccw",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),           app));
+    gapp->add_action(                "object-rotate-90-ccw",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_ccw),          app));
     gapp->add_action(                "object-flip-horizontal",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_horizontal),        app));
     gapp->add_action(                "object-flip-vertical",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_vertical),          app));
     // clang-format on
