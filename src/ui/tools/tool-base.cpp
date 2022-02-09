@@ -272,12 +272,10 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
         delta *= nudge;
     }
 
-    bool moved = false;
     if (shape_editor && shape_editor->has_knotholder()) {
         KnotHolder * knotholder = shape_editor->knotholder;
         if (knotholder && knotholder->knot_selected()) {
             knotholder->transform_selected(Geom::Translate(delta));
-            moved = true;
         }
     } else {
         auto nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(_desktop->event_context);
@@ -288,14 +286,14 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
                     KnotHolder * knotholder = shape_editor->knotholder;
                     if (knotholder && knotholder->knot_selected()) {
                         knotholder->transform_selected(Geom::Translate(delta));
-                        moved = true;
                     }
                 }
             }
         }
     }
 
-    return moved;
+    // always return true so canvas remains in focus
+    return true;
 }
 
 
