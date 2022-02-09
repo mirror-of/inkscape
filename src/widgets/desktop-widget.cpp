@@ -314,7 +314,8 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
     set_visible_buttons(tool_toolbox);
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
-    dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
+    // desktop widgets owns it
+    _canvas_grid = new Inkscape::UI::Widget::CanvasGrid(this);
 
     /* Canvas */
     dtw->_canvas = _canvas_grid->GetCanvas();
@@ -588,7 +589,9 @@ SPDesktopWidget::on_unrealize()
     parent_type::on_unrealize();
 }
 
-SPDesktopWidget::~SPDesktopWidget() {}
+SPDesktopWidget::~SPDesktopWidget() {
+    delete _canvas_grid;
+}
 
 /**
  * Set the title in the desktop-window (if desktop has an own window).

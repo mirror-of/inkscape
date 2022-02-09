@@ -35,6 +35,7 @@ class CanvasGrid : public Gtk::Grid
 public:
 
     CanvasGrid(SPDesktopWidget *dtw);
+    ~CanvasGrid() override;
 
     void ShowScrollbars(bool state = true);
     void ToggleScrollbars();

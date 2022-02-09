@@ -432,6 +432,15 @@ DialogMultipaned::~DialogMultipaned()
         }
     }
 
+    // need to remove CanvasGrid from this container to avoid on idle repainting and crash:
+    //   Gtk:ERROR:../gtk/gtkwidget.c:5871:gtk_widget_get_frame_clock: assertion failed: (window != NULL)
+    //   Bail out! Gtk:ERROR:../gtk/gtkwidget.c:5871:gtk_widget_get_frame_clock: assertion failed: (window != NULL)
+    for (auto child : children) {
+        if (dynamic_cast<Inkscape::UI::Widget::CanvasGrid*>(child)) {
+            remove(*child);
+        }
+    }
+
     children.clear();
 }
 

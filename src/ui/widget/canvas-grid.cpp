@@ -148,6 +148,9 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     show_all();
 }
 
+CanvasGrid::~CanvasGrid() {
+}
+
 // _dt2r should be a member of _canvas.
 // get_display_area should be a member of _canvas.
 void
