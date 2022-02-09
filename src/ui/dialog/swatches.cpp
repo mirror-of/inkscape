@@ -809,12 +809,10 @@ SwatchesPanel::~SwatchesPanel()
     }
     docTrackings.clear();
 
-    if ( _clear ) {
-        delete _clear;
-    }
-    if ( _remove ) {
-        delete _remove;
-    }
+    docPerPanel.erase(this);
+
+    delete _clear;
+    delete _remove;
 }
 
 /**
