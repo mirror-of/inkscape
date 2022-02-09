@@ -184,10 +184,10 @@ void ink_cairo_draw_drop_shadow(Cairo::RefPtr<Cairo::Context> ctx, const Geom::R
 
 GdkPixbuf *ink_pixbuf_create_from_cairo_surface(cairo_surface_t *s);
 void convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int rs);
-void convert_pixels_argb32_to_pixbuf(guchar *data, int w, int h, int rs);
+void convert_pixels_argb32_to_pixbuf(guchar *data, int w, int h, int rs, guint32 bgcolor=0);
 
 G_GNUC_CONST guint32 argb32_from_pixbuf(guint32 in);
-G_GNUC_CONST guint32 pixbuf_from_argb32(guint32 in);
+G_GNUC_CONST guint32 pixbuf_from_argb32(guint32 in, guint32 bgcolor=0);
 const guchar* pixbuf_to_png(guchar const**rows, guchar* px, int nrows, int ncols, int stride, int color_type, int bit_depth);
 
 /** Convert a pixel in 0xRRGGBBAA format to Cairo ARGB32 format. */

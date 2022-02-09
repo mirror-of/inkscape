@@ -1714,20 +1714,35 @@ guint32 argb32_from_pixbuf(guint32 c)
     return o;
 }
 
-guint32 pixbuf_from_argb32(guint32 c)
+/**
+ * Convert one pixel from ARGB to GdkPixbuf format.
+ *
+ * @param c ARGB color
+ * @param bgcolor Color to use if c.alpha is zero (bgcolor.alpha is ignored)
+ */
+guint32 pixbuf_from_argb32(guint32 c, guint32 bgcolor)
 {
     guint32 a = (c & 0xff000000) >> 24;
-    if (a == 0) return 0;
+    if (a == 0) {
+        assert(c == 0);
+        c = bgcolor;
+    }
 
     // extract color components
     guint32 r = (c & 0x00ff0000) >> 16;
     guint32 g = (c & 0x0000ff00) >> 8;
     guint32 b = (c & 0x000000ff);
-    // unpremultiply; adding a/2 gives correct rounding
-    // (taken from Cairo sources)
-    r = (r * 255 + a/2) / a;
-    b = (b * 255 + a/2) / a;
-    g = (g * 255 + a/2) / a;
+
+    if (a != 0) {
+        assert(r <= a);
+        assert(g <= a);
+        assert(b <= a);
+
+        r = unpremul_alpha(r, a);
+        g = unpremul_alpha(g, a);
+        b = unpremul_alpha(b, a);
+    }
+
     // combine into output
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN
     guint32 o = (r) | (g << 8) | (b << 16) | (a << 24);
@@ -1766,7 +1781,7 @@ convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int stride)
  * This involves premultiplying alpha and shuffling around the channels.
  */
 void
-convert_pixels_argb32_to_pixbuf(guchar *data, int w, int h, int stride)
+convert_pixels_argb32_to_pixbuf(guchar *data, int w, int h, int stride, guint32 bgcolor)
 {
     if (!data || w < 1 || h < 1 || stride < 1) {
         return;
@@ -1774,7 +1789,7 @@ convert_pixels_argb32_to_pixbuf(guchar *data, int w, int h, int stride)
     for (size_t i = 0; i < h; ++i) {
         guint32 *px = reinterpret_cast<guint32*>(data + i*stride);
         for (size_t j = 0; j < w; ++j) {
-            *px = pixbuf_from_argb32(*px);
+            *px = pixbuf_from_argb32(*px, bgcolor);
             ++px;
         }
     }

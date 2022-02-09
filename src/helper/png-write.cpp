@@ -360,7 +360,8 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
 
     // PNG stores data as unpremultiplied big-endian RGBA, which means
     // it's identical to the GdkPixbuf format.
-    convert_pixels_argb32_to_pixbuf(px, ebp->width, num_rows, stride);
+    convert_pixels_argb32_to_pixbuf(px, ebp->width, num_rows, stride,
+                                    /* RGBA to ARGB with A=0 */ ebp->background >> 8);
     
     // If a custom bit depth or color type is asked, then convert rgb to grayscale, etc.
     const guchar* new_data = pixbuf_to_png(rows, px, num_rows, ebp->width, stride, color_type, bit_depth);
