@@ -604,6 +604,7 @@ SPDesktopWidget::updateTitle(gchar const* uri)
     if (window) {
 
         SPDocument *doc = this->desktop->doc();
+        auto namedview = doc->getNamedView();
 
         std::string Name;
         if (doc->isModifiedSinceSave()) {
@@ -612,9 +613,9 @@ SPDesktopWidget::updateTitle(gchar const* uri)
 
         Name += uri;
 
-        if (desktop->number > 1) {
+        if (namedview->getViewCount() > 1) {
             Name += ": ";
-            Name += std::to_string(desktop->number);
+            Name += std::to_string(namedview->getViewCount());
         }
         Name += " (";
 
@@ -1530,10 +1531,8 @@ SPDesktopWidget::zoom_populate_popup(Gtk::Menu *menu)
     auto sep = Gtk::manage(new Gtk::SeparatorMenuItem());
     menu->append(*sep);
 
-    auto pm = desktop->getNamedView()->getPageManager();
-
     auto item_page = Gtk::manage(new Gtk::MenuItem(_("Page")));
-    item_page->signal_activate().connect([=]() { pm->zoomToSelectedPage(desktop); });
+    item_page->signal_activate().connect([=]() { desktop->getDocument()->getPageManager().zoomToSelectedPage(desktop); });
     menu->append(*item_page);
 
     auto item_drawing = Gtk::manage(new Gtk::MenuItem(_("Drawing")));
@@ -1545,7 +1544,7 @@ SPDesktopWidget::zoom_populate_popup(Gtk::Menu *menu)
     menu->append(*item_selection);
 
     auto item_center_page = Gtk::manage(new Gtk::MenuItem(_("Centre Page")));
-    item_center_page->signal_activate().connect([=]() { pm->centerToSelectedPage(desktop); });
+    item_center_page->signal_activate().connect([=]() { desktop->getDocument()->getPageManager().centerToSelectedPage(desktop); });
     menu->append(*item_center_page);
 
     menu->show_all();
@@ -1728,11 +1727,7 @@ SPDesktopWidget::update_scrollbars(double scale)
     deskarea->expandBy(doc->getDimensions()); // Double size
 
     /* The total size of pages should be added unconditionally */
-    if (auto manager = doc->getNamedView()->getPageManager()) {
-        deskarea->unionWith(manager->getDesktopRect());
-    } else {
-        g_warning("No page manager available!");
-    }
+    deskarea->unionWith(doc->getPageManager().getDesktopRect());
 
     if (Inkscape::Preferences::get()->getInt("/tools/bounding_box") == 0) {
         deskarea->unionWith(doc->getRoot()->desktopVisualBounds());

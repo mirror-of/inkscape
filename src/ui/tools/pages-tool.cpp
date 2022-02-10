@@ -42,8 +42,6 @@ namespace Tools {
 PagesTool::PagesTool(SPDesktop *desktop)
     : ToolBase(desktop, "/tools/pages", "select.svg")
 {
-    _page_manager = desktop->getNamedView()->getPageManager();
-
     // Stash the regular object selection so we don't modify them in base-tools root handler.
     desktop->selection->setBackup();
     desktop->selection->clear();
@@ -76,13 +74,14 @@ PagesTool::PagesTool(SPDesktop *desktop)
         drag_group = new Inkscape::CanvasItemGroup(desktop->getCanvasTemp());
         drag_group->set_name("CanvasItemGroup:PagesDragShapes");
     }
+    auto &page_manager = desktop->getDocument()->getPageManager();
     _selector_changed_connection =
-            _page_manager->connectPageSelected(sigc::mem_fun(*this, &PagesTool::selectionChanged));
-    selectionChanged(_page_manager->getSelected());
+            page_manager.connectPageSelected(sigc::mem_fun(*this, &PagesTool::selectionChanged));
+    selectionChanged(page_manager.getSelected());
 
     _doc_modified_connection = desktop->getDocument()->connectModified([=](guint){
         // This readjusts the knot when in single page mode.
-        if (!_page_manager->hasPages()) {
+        if (!desktop->getDocument()->getPageManager().hasPages()) {
             selectionChanged(nullptr);
         }
     });
@@ -90,7 +89,7 @@ PagesTool::PagesTool(SPDesktop *desktop)
     _zoom_connection = desktop->signal_zoom_changed.connect([=](double) {
         // This readjusts the knot on zoom because the viewbox position
         // becomes detached on zoom, likely a precision problem.
-        if (!_page_manager->hasPages()) {
+        if (!desktop->getDocument()->getPageManager().hasPages()) {
             selectionChanged(nullptr);
         }
     });
@@ -130,7 +129,7 @@ void PagesTool::resizeKnotMoved(SPKnot *knot, Geom::Point const &ppointer, guint
 {
     Geom::Rect rect;
 
-    auto page = _page_manager->getSelected();
+    auto page = _desktop->getDocument()->getPageManager().getSelected();
     if (page) {
         // Resizing a specific selected page
         rect = page->getDesktopRect();
@@ -171,7 +170,8 @@ Geom::Point PagesTool::getSnappedResizePoint(Geom::Point point, guint state, Geo
 void PagesTool::resizeKnotFinished(SPKnot *knot, guint state)
 {
     if (on_screen_rect) {
-        _page_manager->resizePage(on_screen_rect->width(), on_screen_rect->height());
+        _desktop->getDocument()->getPageManager().resizePage(
+                on_screen_rect->width(), on_screen_rect->height());
         Inkscape::DocumentUndo::done(_desktop->getDocument(), "Resize page", INKSCAPE_ICON("tool-pages"));
         on_screen_rect = {};
     }
@@ -182,6 +182,7 @@ void PagesTool::resizeKnotFinished(SPKnot *knot, guint state)
 bool PagesTool::root_handler(GdkEvent *event)
 {
     bool ret = false;
+    auto &page_manager = _desktop->getDocument()->getPageManager();
 
     switch (event->type) {
         case GDK_BUTTON_PRESS: {
@@ -192,7 +193,7 @@ bool PagesTool::root_handler(GdkEvent *event)
                 ret = true;
                 if (auto page = pageUnder(drag_origin_dt)) {
                     // Select the clicked on page. Manager ignores the same-page.
-                    _page_manager->selectPage(page);
+                    _desktop->getDocument()->getPageManager().selectPage(page);
                     this->set_cursor("page-dragging.svg");
                 } else if (viewboxUnder(drag_origin_dt)) {
                     dragging_viewbox = true;
@@ -235,7 +236,7 @@ bool PagesTool::root_handler(GdkEvent *event)
                     // Starting to drag page around the screen, the pageUnder must
                     // be the drag_origin as small movements can kill the UX feel.
                     dragging_item = page;
-                    _page_manager->selectPage(page);
+                    page_manager.selectPage(page);
                     addDragShapes(page, Geom::Affine());
                     grabPage(page);
                 } else if (viewboxUnder(drag_origin_dt)) {
@@ -262,7 +263,7 @@ bool PagesTool::root_handler(GdkEvent *event)
             if (dragging_viewbox || dragging_item) {
                 if (dragging_viewbox || dragging_item->isViewportPage()) {
                     // Move the document's viewport first
-                    auto page_items = _page_manager->getOverlappingItems(_desktop, dragging_item);
+                    auto page_items = page_manager.getOverlappingItems(_desktop, dragging_item);
                     auto rect = document->preferredBounds();
                     auto affine = moveTo(point_dt, snap);
                     document->fitToRect(*rect * affine, false);
@@ -272,17 +273,17 @@ bool PagesTool::root_handler(GdkEvent *event)
                         dragging_item->setDesktopRect(*rect);
                     }
                     // We have a custom move object because item detection is fubar after fitToRect
-                    if (_page_manager->move_objects()) {
-                        _page_manager->moveItems(affine, page_items);
+                    if (page_manager.move_objects()) {
+                        page_manager.moveItems(affine, page_items);
                     }
                 } else {
                     // Move the page object on the canvas.
-                    dragging_item->movePage(moveTo(point_dt, snap), _page_manager->move_objects());
+                    dragging_item->movePage(moveTo(point_dt, snap), page_manager.move_objects());
                 }
                 Inkscape::DocumentUndo::done(_desktop->getDocument(), "Move page position", INKSCAPE_ICON("tool-pages"));
             } else if (on_screen_rect) {
                 // conclude box here (make new page)
-                _page_manager->selectPage(_page_manager->newDesktopPage(*on_screen_rect));
+                page_manager.selectPage(page_manager.newDesktopPage(*on_screen_rect));
                 Inkscape::DocumentUndo::done(_desktop->getDocument(), "Create new drawn page", INKSCAPE_ICON("tool-pages"));
             }
             mouse_is_pressed = false;
@@ -299,7 +300,7 @@ bool PagesTool::root_handler(GdkEvent *event)
                 ret = true;
             }
             if (event->key.keyval == GDK_KEY_Delete) {
-                _page_manager->deletePage(_page_manager->move_objects());
+                page_manager.deletePage(page_manager.move_objects());
 
                 Inkscape::DocumentUndo::done(_desktop->getDocument(), "Delete Page", INKSCAPE_ICON("tool-pages"));
                 ret = true;
@@ -386,15 +387,16 @@ Geom::Affine PagesTool::moveTo(Geom::Point xy, bool snap)
 void PagesTool::addDragShapes(SPPage *page, Geom::Affine tr)
 {
     clearDragShapes();
+    auto doc = _desktop->getDocument();
 
     if (page) {
         addDragShape(Geom::PathVector(Geom::Path(page->getDesktopRect())), tr);
     } else {
-        auto doc_rect = _desktop->getDocument()->preferredBounds();
+        auto doc_rect = doc->preferredBounds();
         addDragShape(Geom::PathVector(Geom::Path(*doc_rect)), tr);
     }
     if (Inkscape::Preferences::get()->getBool("/tools/pages/move_objects", true)) {
-        for (auto &item : _page_manager->getOverlappingItems(_desktop, page)) {
+        for (auto &item : doc->getPageManager().getOverlappingItems(_desktop, page)) {
             addDragShape(item, tr);
         }
     }
@@ -438,14 +440,14 @@ void PagesTool::clearDragShapes()
 SPPage *PagesTool::pageUnder(Geom::Point pt)
 {
     // If the point is still on the selected, favour that one.
-    if (auto selected = _page_manager->getSelected()) {
+    if (auto selected = _desktop->getDocument()->getPageManager().getSelected()) {
         if (selected->getSensitiveRect().contains(pt)) {
             return selected;
         }
     }
     // If multiple pages are at the same point; this currently only gives
     // you the bottom-most page (the first in the stack).
-    for (auto &page : _page_manager->getPages()) {
+    for (auto &page : _desktop->getDocument()->getPageManager().getPages()) {
         if (page->getSensitiveRect().contains(pt)) {
             return page;
         }
@@ -462,7 +464,7 @@ bool PagesTool::viewboxUnder(Geom::Point pt)
     if (auto document = _desktop->getDocument()) {
         auto rect = document->preferredBounds();
         rect->expandBy(-0.1); // see sp-page getSensitiveRect
-        return !_page_manager->hasPages() && rect.contains(pt);
+        return !document->getPageManager().hasPages() && rect.contains(pt);
     }
     return true;
 }
@@ -475,7 +477,7 @@ void PagesTool::selectionChanged(SPPage *page)
     }
 
     // Loop existing pages because highlight_item is unsafe.
-    for (auto &possible : _page_manager->getPages()) {
+    for (auto &possible : _desktop->getDocument()->getPageManager().getPages()) {
         if (highlight_item == possible) {
             highlight_item->setSelected(false);
         }

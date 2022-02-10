@@ -50,6 +50,7 @@ PageManager::~PageManager()
  */
 void PageManager::addPage(SPPage *page)
 {
+    g_assert(page->document == _document);
     if (auto next = page->getNextPage()) {
         // Inserted in the middle, probably an undo.
         auto it = std::find(pages.begin(), pages.end(), next);
@@ -60,7 +61,6 @@ void PageManager::addPage(SPPage *page)
     } else {
         pages.push_back(page);
     }
-    page->setManager(this);
     pagesChanged();
 }
 

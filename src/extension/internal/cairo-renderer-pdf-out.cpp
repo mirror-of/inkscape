@@ -106,7 +106,7 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
         /* Render document */
         ret = renderer->setupDocument(ctx, doc, pageBoundingBox, bleedmargin_px, base);
 
-        auto pages = doc->getNamedView()->getPageManager()->getPages();
+        auto pages = doc->getPageManager().getPages();
         if (pages.size() == 0) {
             // Output the page bounding box as already set up in the initial setupDocument.
             renderer->renderItem(ctx, root);

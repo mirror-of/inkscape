@@ -23,39 +23,33 @@
 
 void page_new(SPDocument *document)
 {
-    if (auto manager = document->getNamedView()->getPageManager()) {
-        manager->selectPage(manager->newPage());
-        Inkscape::DocumentUndo::done(document, "New Automatic Page", INKSCAPE_ICON("tool-pages"));
-    }
+    document->getPageManager().selectPage(document->getPageManager().newPage());
+    Inkscape::DocumentUndo::done(document, "New Automatic Page", INKSCAPE_ICON("tool-pages"));
 }
 
 void page_delete(SPDocument *document)
 {
-    if (auto manager = document->getNamedView()->getPageManager()) {
-        // Delete page's content if move_objects is checked.
-        manager->deletePage(manager->move_objects());
-        Inkscape::DocumentUndo::done(document, "Delete Page", INKSCAPE_ICON("tool-pages"));
-    }
+    // Delete page's content if move_objects is checked.
+    document->getPageManager().deletePage(document->getPageManager().move_objects());
+    Inkscape::DocumentUndo::done(document, "Delete Page", INKSCAPE_ICON("tool-pages"));
 }
 
 void page_backward(SPDocument *document)
 {
-    if (auto manager = document->getNamedView()->getPageManager()) {
-        if (auto page = manager->getSelected()) {
-            if (page->setPageIndex(page->getPageIndex() - 1, manager->move_objects())) {
-                Inkscape::DocumentUndo::done(document, "Shift Page Backwards", INKSCAPE_ICON("tool-pages"));
-            }
+    auto &page_manager = document->getPageManager();
+    if (auto page = page_manager.getSelected()) {
+        if (page->setPageIndex(page->getPageIndex() - 1, page_manager.move_objects())) {
+            Inkscape::DocumentUndo::done(document, "Shift Page Backwards", INKSCAPE_ICON("tool-pages"));
         }
     }
 }
 
 void page_forward(SPDocument *document)
 {
-    if (auto manager = document->getNamedView()->getPageManager()) {
-        if (auto page = manager->getSelected()) {
-            if (page->setPageIndex(page->getPageIndex() + 1, manager->move_objects())) {
-                Inkscape::DocumentUndo::done(document, "Shift Page Forewards", INKSCAPE_ICON("tool-pages"));
-            }
+    auto &page_manager = document->getPageManager();
+    if (auto page = page_manager.getSelected()) {
+        if (page->setPageIndex(page->getPageIndex() + 1, page_manager.move_objects())) {
+            Inkscape::DocumentUndo::done(document, "Shift Page Forewards", INKSCAPE_ICON("tool-pages"));
         }
     }
 }

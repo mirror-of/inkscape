@@ -24,10 +24,10 @@
 #include "object/sp-page.h"
 
 class SPDesktop;
+class SPDocument;
 class SPPage;
 
 namespace Inkscape {
-class PageManager;
 namespace UI {
 namespace Widget {
 
@@ -49,7 +49,7 @@ private:
     };
 
     SPDesktop *_desktop;
-    Inkscape::PageManager *_page_manager;
+    SPDocument *_document;
 
     Gtk::ComboBox _selector;
     Gtk::Button _prev_button;

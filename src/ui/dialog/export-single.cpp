@@ -93,15 +93,15 @@ void SingleExport::initialise(const Glib::RefPtr<Gtk::Builder> &builder)
 
     builder->get_widget("page_prev", page_prev);
     page_prev->signal_clicked().connect([=]() {
-        if (_page_manager && _page_manager->selectPrevPage()) {
-            _page_manager->zoomToSelectedPage(_desktop);
+        if (_document && _document->getPageManager().selectPrevPage()) {
+            _document->getPageManager().zoomToSelectedPage(_desktop);
         }
     });
 
     builder->get_widget("page_next", page_next);
     page_next->signal_clicked().connect([=]() {
-        if (_page_manager && _page_manager->selectNextPage()) {
-            _page_manager->zoomToSelectedPage(_desktop);
+        if (_document && _document->getPageManager().selectNextPage()) {
+            _document->getPageManager().zoomToSelectedPage(_desktop);
         }
     });
 
@@ -133,15 +133,10 @@ void SingleExport::selectionModified(Inkscape::Selection *selection, guint flags
     if (!(flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
         return;
     }
-    Geom::OptRect bbox;
-    SPDocument *doc = _desktop->getDocument();
-
-    if (!doc) {
-        return;
+    if (!_document) {
+        refreshArea();
+        loadExportHints();
     }
-
-    refreshArea();
-    loadExportHints();
 }
 
 void SingleExport::selectionChanged(Inkscape::Selection *selection)
@@ -271,11 +266,9 @@ void SingleExport::setupSpinButton(Gtk::SpinButton *sb, double val, double min, 
 
 void SingleExport::refreshArea()
 {
-    if (_desktop) {
-        SPDocument *doc;
+    if (_document) {
         Geom::OptRect bbox;
-        doc = _desktop->getDocument();
-        doc->ensureUpToDate();
+        _document->ensureUpToDate();
 
         switch (current_key) {
             case SELECTION_SELECTION:
@@ -284,12 +277,12 @@ void SingleExport::refreshArea()
                     break;
                 }
             case SELECTION_DRAWING:
-                bbox = doc->getRoot()->desktopVisualBounds();
+                bbox = _document->getRoot()->desktopVisualBounds();
                 if (bbox) {
                     break;
                 }
             case SELECTION_PAGE:
-                bbox = _page_manager->getSelectedPageRect();
+                bbox = _document->getPageManager().getSelectedPageRect();
                 break;
             case SELECTION_CUSTOM:
                 break;
@@ -310,10 +303,11 @@ void SingleExport::refreshPage()
     page_prev->set_visible(pages);
     page_next->set_visible(pages);
 
-    page_prev->set_sensitive(_page_manager->hasPrevPage());
-    page_next->set_sensitive(_page_manager->hasNextPage());
+    auto &page_manager = _document->getPageManager();
+    page_prev->set_sensitive(page_manager.hasPrevPage());
+    page_next->set_sensitive(page_manager.hasNextPage());
 
-    if (auto page = _page_manager->getSelected()) {
+    if (auto page = page_manager.getSelected()) {
         if (auto label = page->label()) {
             si_name_label->set_text(label);
         } else {
@@ -328,17 +322,16 @@ void SingleExport::loadExportHints()
 {
     if (filename_modified) return;
 
-    SPDocument *doc = _desktop->getDocument();
     Glib::ustring old_filename = si_filename_entry->get_text();
     Glib::ustring filename;
     Geom::Point dpi;
     switch (current_key) {
         case SELECTION_PAGE:
-            if (auto page = _page_manager->getSelected()) {
+            if (auto page = _document->getPageManager().getSelected()) {
                 dpi = page->getExportDpi();
                 filename = page->getExportFilename();
                 if (filename.empty()) {
-                    filename = Export::filePathFromId(doc, page->getLabel(), old_filename);
+                    filename = Export::filePathFromId(_document, page->getLabel(), old_filename);
                 }
                 break;
             }
@@ -346,8 +339,8 @@ void SingleExport::loadExportHints()
         case SELECTION_CUSTOM:
         case SELECTION_DRAWING:
         {
-            dpi = doc->getRoot()->getExportDpi();
-            filename = doc->getRoot()->getExportFilename();
+            dpi = _document->getRoot()->getExportDpi();
+            filename = _document->getRoot()->getExportFilename();
             break;
         }
         case SELECTION_SELECTION:
@@ -366,7 +359,7 @@ void SingleExport::loadExportHints()
             }
 
             if (filename.empty()) {
-                filename = Export::filePathFromObject(doc, selection->firstItem(), old_filename);
+                filename = Export::filePathFromObject(_document, selection->firstItem(), old_filename);
             }
             break;
         }
@@ -374,7 +367,7 @@ void SingleExport::loadExportHints()
             break;
     }
     if (filename.empty()) {
-        filename = Export::defaultFilename(doc, old_filename, ".png");
+        filename = Export::defaultFilename(_document, old_filename, ".png");
     }
     if (auto ext = si_extension_cb->getExtension()) {
         si_extension_cb->removeExtension(filename);
@@ -517,11 +510,11 @@ void SingleExport::onExtensionChanged()
 void SingleExport::onExport()
 {
     interrupted = false;
-    if (!_desktop)
+    if (!_desktop || !_document)
         return;
 
+    auto &page_manager = _document->getPageManager();
     auto selection = _desktop->getSelection();
-    SPDocument *doc = _desktop->getDocument();
     si_export->set_sensitive(false);
     bool exportSuccessful = false;
     auto omod = si_extension_cb->getExtension();
@@ -563,7 +556,7 @@ void SingleExport::onExport()
     } else {
         setExporting(true, Glib::ustring::compose(_("Exporting %1"), filename));
 
-        auto copy_doc = doc->copy();
+        auto copy_doc = _document->copy();
 
         std::vector<SPItem *> items;
         if (selected_only) {
@@ -575,14 +568,12 @@ void SingleExport::onExport()
         }
 
         SPPage *page;
-        if (current_key == SELECTION_PAGE && _page_manager->hasPages()) {
-            page = _page_manager->getSelected();
+        if (current_key == SELECTION_PAGE && page_manager.hasPages()) {
+            page = page_manager.getSelected();
         } else {
             // To get the right kind of export, we're going to make a page
             // This allows all the same raster options to work for vectors
-            if (auto _copy_pm = copy_doc->getNamedView()->getPageManager()) {
-                page = _copy_pm->newDesktopPage(area);
-            }
+            page = copy_doc->getPageManager().newDesktopPage(area);
         }
 
         exportSuccessful = Export::exportVector(omod, copy_doc.get(), filename, false, &items, page);
@@ -597,12 +588,12 @@ void SingleExport::onExport()
         switch (current_key) {
             case SELECTION_CUSTOM:
             case SELECTION_DRAWING:
-                target = doc->getRoot();
+                target = _document->getRoot();
                 break;
             case SELECTION_PAGE:
-                target = _page_manager->getSelected();
+                target = page_manager.getSelected();
                 if (!target)
-                    target = doc->getRoot();
+                    target = _document->getRoot();
                 break;
             case SELECTION_SELECTION:
                 target = _desktop->getSelection()->firstItem();
@@ -612,7 +603,7 @@ void SingleExport::onExport()
         }
         if (target) {
             saveExportHints(target);
-            DocumentUndo::done(doc, _("Set Export Options"), INKSCAPE_ICON("export"));
+            DocumentUndo::done(_document, _("Set Export Options"), INKSCAPE_ICON("export"));
         }
     }
     setExporting(false);
@@ -624,7 +615,7 @@ void SingleExport::onExport()
 
 void SingleExport::onBrowse(Gtk::EntryIconPosition pos, const GdkEventButton *ev)
 {
-    if (!_app) {
+    if (!_app || !_document) {
         return;
     }
     Gtk::Window *window = _app->get_active_window();
@@ -633,7 +624,7 @@ void SingleExport::onBrowse(Gtk::EntryIconPosition pos, const GdkEventButton *ev
 
     if (filename.empty()) {
         Glib::ustring tmp;
-        filename = Export::filePathFromId(_desktop->getDocument(), tmp, tmp);
+        filename = Export::filePathFromId(_document, tmp, tmp);
     }
 
     Inkscape::UI::Dialog::FileSaveDialog *dialog = Inkscape::UI::Dialog::FileSaveDialog::create(
@@ -835,11 +826,7 @@ void SingleExport::setDefaultSelectionMode()
         }
         if (current_key == SELECTION_CUSTOM &&
             (spin_buttons[SPIN_HEIGHT]->get_value() == 0 || spin_buttons[SPIN_WIDTH]->get_value() == 0)) {
-            SPDocument *doc;
-            Geom::OptRect bbox;
-            doc = _desktop->getDocument();
-            bbox = Geom::Rect(Geom::Point(0.0, 0.0),
-                              Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px")));
+            Geom::OptRect bbox = _document->preferredBounds();
             setArea(bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y]);
         }
     } else {
@@ -962,15 +949,11 @@ void SingleExport::refreshPreview()
 
 void SingleExport::setDocument(SPDocument *document)
 {
-    if (!_desktop) {
-        document = nullptr;
-    }
-
+    _document = document;
     _page_selected_connection.disconnect();
     if (document) {
         // when the page selected is changes, update the export area
-        _page_manager = document->getNamedView()->getPageManager();
-        _page_selected_connection = _page_manager->connectPageSelected([=](SPPage *page) {
+        _page_selected_connection = document->getPageManager().connectPageSelected([=](SPPage *page) {
             refreshPage();
             refresh();
         });

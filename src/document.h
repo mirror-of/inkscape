@@ -80,6 +80,7 @@ namespace Inkscape {
     class UndoStackObserver;
     class EventLog;
     class ProfileManager;
+    class PageManager;
     namespace XML {
         struct Document;
         class Node;
@@ -164,9 +165,15 @@ public:
 
     Inkscape::EventLog* get_event_log() { return _event_log; }
 
+    Inkscape::PageManager& getPageManager() { return *_page_manager; }
+    const Inkscape::PageManager& getPageManager() const { return *_page_manager; }
+
+
 private:
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
     SPObject *_activexmltree;
+
+    std::unique_ptr<Inkscape::PageManager> _page_manager;
 
 public:
     void importDefs(SPDocument *source);

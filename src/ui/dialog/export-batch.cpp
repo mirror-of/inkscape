@@ -239,11 +239,12 @@ void BatchExport::selectionChanged(Inkscape::Selection *selection)
 
 void BatchExport::pagesChanged()
 {
-    if (!_desktop || !_page_manager) return;
+    if (!_desktop || !_document) return;
 
-    selection_buttons[SELECTION_PAGE]->set_sensitive(_page_manager->hasPages());
+    bool has_pages = _document->getPageManager().hasPages();
+    selection_buttons[SELECTION_PAGE]->set_sensitive(has_pages);
 
-    if (current_key == SELECTION_PAGE && !_page_manager->hasPages()) {
+    if (current_key == SELECTION_PAGE && !has_pages) {
         current_key = SELECTION_LAYER;
         selection_buttons[SELECTION_LAYER]->set_active();
     }
@@ -316,7 +317,7 @@ void BatchExport::refreshItems()
             break;
         }
         case SELECTION_PAGE: {
-            for (auto page : _desktop->getNamedView()->getPageManager()->getPages()) {
+            for (auto page : _desktop->getDocument()->getPageManager().getPages()) {
                 pageList.insert(page);
             }
             num_str = g_strdup_printf(ngettext("%d Page", "%d Pages", pageList.size()), (int)pageList.size());
@@ -632,9 +633,7 @@ void BatchExport::setDefaultSelectionMode()
         if (auto _sel = _desktop->getSelection()) {
             selection_buttons[SELECTION_SELECTION]->set_sensitive(!_sel->isEmpty());
         }
-        if (_page_manager) {
-            selection_buttons[SELECTION_PAGE]->set_sensitive(_page_manager->hasPages());
-        }
+        selection_buttons[SELECTION_PAGE]->set_sensitive(_document->getPageManager().hasPages());
     }
     if (!selection_buttons[current_key]->get_sensitive()) {
         current_key = SELECTION_LAYER;
@@ -743,8 +742,7 @@ void BatchExport::setDocument(SPDocument *document)
     _pages_changed_connection.disconnect();
     if (document) {
         // when the page selected is changes, update the export area
-        _page_manager = document->getNamedView()->getPageManager();
-        _pages_changed_connection = _page_manager->connectPagesChanged([=]() { pagesChanged(); });
+        _pages_changed_connection = document->getPageManager().connectPagesChanged([=]() { pagesChanged(); });
     }
     for (auto &[key, val] : current_items) {
         val->setDocument(document);

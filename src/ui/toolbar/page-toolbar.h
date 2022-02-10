@@ -23,7 +23,6 @@ class SPDocument;
 class SPPage;
 
 namespace Inkscape {
-class PageManager;
 class PaperSize;
 namespace UI {
 namespace Tools {
@@ -48,7 +47,6 @@ protected:
 private:
     SPDesktop *_desktop;
     SPDocument *_document;
-    PageManager *_page_manager;
 
     void toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *ec);
     void pagesChanged();

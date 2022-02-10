@@ -447,14 +447,12 @@ void DocumentProperties::build_page()
         if (_wr.isUpdating() || !_wr.desktop()) return;
 
         if (auto document = getDocument()) {
-            if (auto pm = document->getNamedView()->getPageManager()) {
-                pm->selectPage(0);
-                // fit page to selection or content, if there's no selection
-                pm->fitToSelection(_wr.desktop()->getSelection());
-                DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
-
-                update_widgets();
-            }
+            auto &page_manager = document->getPageManager();
+            page_manager.selectPage(0);
+            // fit page to selection or content, if there's no selection
+            page_manager.fitToSelection(_wr.desktop()->getSelection());
+            DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
+            update_widgets();
         }
     });
 }
@@ -1457,7 +1455,7 @@ void DocumentProperties::update_widgets()
     if (_wr.isUpdating() || !document) return;
 
     auto nv = desktop->getNamedView();
-    auto pm = nv->getPageManager();
+    auto &page_manager = document->getPageManager();
 
     _wr.setUpdating(true);
 
@@ -1496,11 +1494,11 @@ void DocumentProperties::update_widgets()
     }
     _page->set_check(PageProperties::Check::Checkerboard, nv->desk_checkerboard);
     _page->set_color(PageProperties::Color::Desk, nv->desk_color);
-    _page->set_color(PageProperties::Color::Background, pm->background_color);
-    _page->set_check(PageProperties::Check::Border, pm->border_show);
-    _page->set_check(PageProperties::Check::BorderOnTop, pm->border_on_top);
-    _page->set_color(PageProperties::Color::Border, pm->border_color);
-    _page->set_check(PageProperties::Check::Shadow, pm->shadow_show);
+    _page->set_color(PageProperties::Color::Background, page_manager.background_color);
+    _page->set_check(PageProperties::Check::Border, page_manager.border_show);
+    _page->set_check(PageProperties::Check::BorderOnTop, page_manager.border_on_top);
+    _page->set_color(PageProperties::Color::Border, page_manager.border_color);
+    _page->set_check(PageProperties::Check::Shadow, page_manager.shadow_show);
 
     _page->set_check(PageProperties::Check::AntiAlias, root->style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
 

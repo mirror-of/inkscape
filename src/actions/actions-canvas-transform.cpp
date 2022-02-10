@@ -71,6 +71,7 @@ void
 canvas_transform(InkscapeWindow *win, const int& option)
 {
     SPDesktop* dt = win->get_desktop();
+    SPDocument *doc = dt->getDocument();
 
     // The following might be better done elsewhere:
 
@@ -116,15 +117,15 @@ canvas_transform(InkscapeWindow *win, const int& option)
             break;
 
         case INK_CANVAS_ZOOM_PAGE:
-            dt->getNamedView()->getPageManager()->zoomToSelectedPage(dt, false);
+            doc->getPageManager().zoomToSelectedPage(dt, false);
             break;
 
         case INK_CANVAS_ZOOM_PAGE_WIDTH:
-            dt->getNamedView()->getPageManager()->zoomToSelectedPage(dt, true);
+            doc->getPageManager().zoomToSelectedPage(dt, true);
             break;
 
         case INK_CANVAS_ZOOM_CENTER_PAGE:
-            dt->getNamedView()->getPageManager()->centerToSelectedPage(dt);
+            doc->getPageManager().centerToSelectedPage(dt);
             break;
 
         case INK_CANVAS_ZOOM_PREV:

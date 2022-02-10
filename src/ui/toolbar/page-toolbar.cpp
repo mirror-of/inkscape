@@ -82,19 +82,16 @@ void PageToolbar::toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase 
         _page_selected.disconnect();
         _pages_changed.disconnect();
         _document = nullptr;
-        _page_manager = nullptr;
     }
     if (dynamic_cast<Inkscape::UI::Tools::PagesTool *>(ec)) {
         // Save the document and page_manager for future use.
         if ((_document = desktop->getDocument())) {
-            if ((_page_manager = _document->getNamedView()->getPageManager())) {
-                // Connect the page changed signal and indicate changed
-                _pages_changed = _page_manager->connectPagesChanged(sigc::mem_fun(*this, &PageToolbar::pagesChanged));
-                _page_selected =
-                    _page_manager->connectPageSelected(sigc::mem_fun(*this, &PageToolbar::selectionChanged));
-                // Update everything now.
-                pagesChanged();
-            }
+            auto &page_manager = _document->getPageManager();
+            // Connect the page changed signal and indicate changed
+            _pages_changed = page_manager.connectPagesChanged(sigc::mem_fun(*this, &PageToolbar::pagesChanged));
+            _page_selected = page_manager.connectPageSelected(sigc::mem_fun(*this, &PageToolbar::selectionChanged));
+            // Update everything now.
+            pagesChanged();
         }
     }
 }
@@ -102,11 +99,9 @@ void PageToolbar::toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase 
 void PageToolbar::labelEdited()
 {
     auto text = text_page_label->get_text();
-    if (_page_manager) {
-        if (auto page = _page_manager->getSelected()) {
-            page->setLabel(text.empty() ? nullptr : text.c_str());
-            DocumentUndo::maybeDone(_document, "page-relabel", _("Relabel Page"), INKSCAPE_ICON("tool-pages"));
-        }
+    if (auto page = _document->getPageManager().getSelected()) {
+        page->setLabel(text.empty() ? nullptr : text.c_str());
+        DocumentUndo::maybeDone(_document, "page-relabel", _("Relabel Page"), INKSCAPE_ICON("tool-pages"));
     }
 }
 
@@ -119,7 +114,7 @@ void PageToolbar::sizeChoose()
             auto&& ps = page_sizes[page_id];
             auto smaller = ps.unit->convert(ps.smaller, "px");
             auto larger = ps.unit->convert(ps.larger, "px");
-            _page_manager->resizePage(smaller, larger);
+            _document->getPageManager().resizePage(smaller, larger);
             DocumentUndo::maybeDone(_document, "page-resize", _("Resize Page"), INKSCAPE_ICON("tool-pages"));
         }
     } catch (std::invalid_argument const &e) {
@@ -171,10 +166,10 @@ void PageToolbar::sizeChanged()
         double height = _unit_to_size(matches[4], matches[5], matches[2]);
         if (width > 0 && height > 0) {
             auto scale = _document->getDocumentScale()[0];
-            _page_manager->resizePage(width * scale, height * scale);
+            _document->getPageManager().resizePage(width * scale, height * scale);
         }
     }
-    setSizeText(_page_manager->getSelected());
+    setSizeText(_document->getPageManager().getSelected());
 }
 
 /**
@@ -202,22 +197,19 @@ void PageToolbar::setSizeText(SPPage *page)
 
 void PageToolbar::pagesChanged()
 {
-    selectionChanged(_page_manager->getSelected());
+    selectionChanged(_document->getPageManager().getSelected());
 }
 
 void PageToolbar::selectionChanged(SPPage *page)
 {
     _page_modified.disconnect();
-    if (!_page_manager) return;
+    auto &page_manager = _document->getPageManager();
     text_page_label->set_tooltip_text(_("Page label"));
 
     // Set label widget content with page label.
     if (page) {
         text_page_label->set_sensitive(true);
-
-        gchar *format = g_strdup_printf(_("Page %d"), page->getPagePosition());
-        text_page_label->set_placeholder_text(format);
-        g_free(format);
+        text_page_label->set_placeholder_text(page->getDefaultLabel());
 
         if (auto label = page->label()) {
             text_page_label->set_text(label);
@@ -226,7 +218,7 @@ void PageToolbar::selectionChanged(SPPage *page)
         }
 
         // Set the position label
-        gchar *pos = g_strdup_printf(_("%d/%d"), page->getPagePosition(), _page_manager->getPageCount());
+        gchar *pos = g_strdup_printf(_("%d/%d"), page->getPagePosition(), page_manager.getPageCount());
         label_page_pos->set_label(pos);
         g_free(pos);
 
@@ -241,7 +233,7 @@ void PageToolbar::selectionChanged(SPPage *page)
         text_page_label->set_placeholder_text(_("Single Page Document"));
         label_page_pos->set_label("-");
     }
-    if (!_page_manager->hasPrevPage() && !_page_manager->hasNextPage() && !page) {
+    if (!page_manager.hasPrevPage() && !page_manager.hasNextPage() && !page) {
         sep1->set_visible(false);
         label_page_pos->get_parent()->set_visible(false);
         btn_page_backward->set_visible(false);
@@ -254,8 +246,8 @@ void PageToolbar::selectionChanged(SPPage *page)
         label_page_pos->get_parent()->set_visible(true);
         btn_page_backward->set_visible(true);
         btn_page_foreward->set_visible(true);
-        btn_page_backward->set_sensitive(_page_manager->hasPrevPage());
-        btn_page_foreward->set_sensitive(_page_manager->hasNextPage());
+        btn_page_backward->set_sensitive(page_manager.hasPrevPage());
+        btn_page_foreward->set_sensitive(page_manager.hasNextPage());
         btn_page_delete->set_visible(true);
         btn_move_toggle->set_sensitive(true);
     }

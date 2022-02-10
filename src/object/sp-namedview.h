@@ -25,7 +25,6 @@
 
 namespace Inkscape {
     class CanvasPage;
-    class PageManager;
     class CanvasGrid;
     namespace Util {
         class Unit;
@@ -107,13 +106,10 @@ public:
     // sync desk colors
     void set_desk_color(SPDesktop* desktop);
 
-    Inkscape::PageManager *getPageManager() const { return _page_manager; }
-
 private:
     double getMarginLength(gchar const * const key,Inkscape::Util::Unit const * const margin_units,Inkscape::Util::Unit const * const return_units,double const width,double const height,bool const use_width);
     friend class SPDocument;
 
-    Inkscape::PageManager *_page_manager = nullptr;
     Inkscape::CanvasPage *_viewport = nullptr;
 
 protected:

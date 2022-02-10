@@ -198,12 +198,6 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
 void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPObjectGroup::build(document, repr);
 
-    // Do this before reading attributes.
-    if (_page_manager) {
-        delete _page_manager;
-    }
-    _page_manager = new Inkscape::PageManager(document);
-
     this->readAttr(SPAttr::INKSCAPE_DOCUMENT_UNITS);
     this->readAttr(SPAttr::UNITS);
     this->readAttr(SPAttr::VIEWONLY);
@@ -250,7 +244,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
             guide->readAttr(SPAttr::INKSCAPE_COLOR);
         }
         if (auto page = dynamic_cast<SPPage *>(&child)) {
-            _page_manager->addPage(page);
+            document->getPageManager().addPage(page);
         }
     }
 
@@ -265,8 +259,6 @@ void SPNamedView::release() {
     for(auto grid : this->grids)
         delete grid;
     this->grids.clear();
-    delete this->_page_manager;
-    this->_page_manager = nullptr;
     SPObjectGroup::release();
 }
 
@@ -283,11 +275,12 @@ void SPNamedView::set_desk_color(SPDesktop* desktop) {
 void SPNamedView::modified(unsigned int flags)
 {
     // Copy the page style for the default viewport attributes
-    if (_page_manager && flags & SP_OBJECT_MODIFIED_FLAG) {
-        _page_manager->setDefaultAttributes(_viewport);
+    auto &page_manager = document->getPageManager();
+    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+        page_manager.setDefaultAttributes(_viewport);
         updateViewPort();
         // Pass modifications to the page manager to update the page items.
-        for (auto &page : _page_manager->getPages()) {
+        for (auto &page : page_manager.getPages()) {
             page->setDefaultAttributes();
         }
     }
@@ -323,7 +316,7 @@ void SPNamedView::update(SPCtx *ctx, guint flags)
 
 void SPNamedView::set(SPAttr key, const gchar* value) {
     // Send page attributes to the page manager.
-    if (this->_page_manager && this->_page_manager->subset(key, value)) {
+    if (document->getPageManager().subset(key, value)) {
         this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         return;
     }
@@ -541,14 +534,14 @@ sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *des
 void SPNamedView::updateViewPort()
 {
     auto box = document->preferredBounds();
-    if (auto page = _page_manager->getPageAt(box->corner(0))) {
+    if (auto page = document->getPageManager().getPageAt(box->corner(0))) {
         // An existing page is set as the main page, so hide th viewport canvas item.
         _viewport->hide();
         page->setDesktopRect(*box);
     } else {
         // Otherwise we are showing the viewport item.
         _viewport->show();
-        _viewport->update(*box, nullptr, _page_manager->hasPages());
+        _viewport->update(*box, nullptr, document->getPageManager().hasPages());
     }
 }
 
@@ -563,7 +556,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
         sp_namedview_add_grid(this, child, nullptr);
     } else if (!strcmp(child->name(), "inkscape:page")) {
         if (auto page = dynamic_cast<SPPage *>(no)) {
-            this->_page_manager->addPage(page);
+            document->getPageManager().addPage(page);
             for (auto view : this->views) {
                 page->showPage(view->getCanvasPagesBg(), view->getCanvasPagesFg());
             }
@@ -602,7 +595,7 @@ void SPNamedView::remove_child(Inkscape::XML::Node *child) {
             }
         }
     } else if (!strcmp(child->name(), "inkscape:page")) {
-        _page_manager->removePage(child);
+        document->getPageManager().removePage(child);
     } else {
         for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
             if ( (*it)->getRepr() == child ) {
@@ -620,7 +613,7 @@ void SPNamedView::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node 
 {
     SPObjectGroup::order_changed(child, old_repr, new_repr);
     if (!strcmp(child->name(), "inkscape:page")) {
-        _page_manager->reorderPage(child);
+        document->getPageManager().reorderPage(child);
     }
 }
 
@@ -652,10 +645,10 @@ void SPNamedView::show(SPDesktop *desktop)
 
     auto box = document->preferredBounds();
     _viewport->add(*box, desktop->getCanvasPagesBg(), desktop->getCanvasPagesFg());
-    _page_manager->setDefaultAttributes(_viewport);
+    document->getPageManager().setDefaultAttributes(_viewport);
     updateViewPort();
 
-    for (auto page : _page_manager->getPages()) {
+    for (auto page : document->getPageManager().getPages()) {
         page->showPage(desktop->getCanvasPagesBg(), desktop->getCanvasPagesFg());
     }
 
@@ -765,8 +758,9 @@ void sp_namedview_zoom_and_view_from_document(SPDesktop *desktop)
         && nv->cx != HUGE_VAL && !std::isnan(nv->cx)
         && nv->cy != HUGE_VAL && !std::isnan(nv->cy)) {
         desktop->zoom_absolute( Geom::Point(nv->cx, nv->cy), nv->zoom, false );
-    } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
-        nv->getPageManager()->zoomToSelectedPage(desktop);
+    } else if (auto document = desktop->getDocument()) {
+        // document without saved zoom, zoom to its page
+        document->getPageManager().zoomToSelectedPage(desktop);
     }
     if (nv->rotation != 0 && nv->rotation != HUGE_VAL && !std::isnan(nv->rotation)) {
         Geom::Point p;
@@ -858,7 +852,7 @@ void SPNamedView::hide(SPDesktop const *desktop)
         guide->hideSPGuide(desktop->getCanvas());
     }
     _viewport->remove(desktop->getCanvas());
-    for (auto &page : this->_page_manager->getPages()) {
+    for (auto &page : document->getPageManager().getPages()) {
         page->hidePage(desktop->getCanvas());
     }
     views.erase(std::remove(views.begin(),views.end(),desktop),views.end());

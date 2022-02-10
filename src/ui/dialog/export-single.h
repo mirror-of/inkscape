@@ -24,7 +24,6 @@ class SPObject;
 namespace Inkscape {
     class Selection;
     class Preferences;
-    class PageManager;
 
 namespace Util {
     class Unit;
@@ -49,7 +48,7 @@ public:
 private:
     InkscapeApplication *_app = nullptr;
     SPDesktop *_desktop = nullptr;
-    PageManager *_page_manager = nullptr;
+    SPDocument *_document = nullptr;
 
 private:
     bool setupDone = false; // To prevent setup() call add connections again.

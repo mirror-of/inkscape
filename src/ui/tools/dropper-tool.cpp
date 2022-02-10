@@ -244,7 +244,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
                 if (pick == SP_DROPPER_PICK_VISIBLE) {
                     // compose with page color
-                    auto bg = _desktop->getNamedView()->getPageManager()->getDefaultBackgroundColor();
+                    auto bg = _desktop->getDocument()->getPageManager().getDefaultBackgroundColor();
                     R = R + bg[0] * (1 - A);
                     G = G + bg[1] * (1 - A);
                     B = B + bg[2] * (1 - A);

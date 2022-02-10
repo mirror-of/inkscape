@@ -143,10 +143,8 @@ page_fit_to_selection(InkscapeApplication *app)
         return;
     }
 
-    if (auto manager = document->getNamedView()->getPageManager()) {
-        manager->fitToSelection(selection);
-        Inkscape::DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
-    }
+    document->getPageManager().fitToSelection(selection);
+    Inkscape::DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_selection_object =

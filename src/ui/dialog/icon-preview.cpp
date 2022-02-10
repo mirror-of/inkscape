@@ -554,7 +554,7 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
                     CAIRO_FORMAT_ARGB32, psize, psize, stride);
                 Inkscape::DrawingContext dc(s, ua.min());
 
-                auto bg = doc->getNamedView()->getPageManager()->getDefaultBackgroundColor();
+                auto bg = doc->getPageManager().getDefaultBackgroundColor();
 
                 cairo_t *cr = cairo_create(s);
                 cairo_set_source_rgba(cr, bg[0], bg[1], bg[2], bg[3]);

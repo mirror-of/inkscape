@@ -91,9 +91,9 @@ public:
     bool subset(SPAttr key, const gchar *value);
     bool setDefaultAttributes(CanvasPage *item);
 
-    static void enablePages(SPDocument *document) { document->getNamedView()->getPageManager()->enablePages(); }
-    static void disablePages(SPDocument *document) { document->getNamedView()->getPageManager()->disablePages(); }
-    static SPPage *newPage(SPDocument *document) { return document->getNamedView()->getPageManager()->newPage(); }
+    static void enablePages(SPDocument *document) { document->getPageManager().enablePages(); }
+    static void disablePages(SPDocument *document) { document->getPageManager().disablePages(); }
+    static SPPage *newPage(SPDocument *document) { return document->getPageManager().newPage(); }
 
     sigc::connection connectPageSelected(const sigc::slot<void, SPPage *> &slot)
     {

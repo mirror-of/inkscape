@@ -75,17 +75,15 @@ PageSelector::~PageSelector()
 
 void PageSelector::setDocument(SPDocument *document)
 {
-    if (_page_manager) {
-        _page_manager = nullptr;
-        _pages_changed_connection.disconnect();
-        _page_selected_connection.disconnect();
-    }
+    _document = document;
+    _pages_changed_connection.disconnect();
+    _page_selected_connection.disconnect();
     if (document) {
-        _page_manager = document->getNamedView()->getPageManager();
+        auto &page_manager = document->getPageManager();
         _pages_changed_connection =
-            _page_manager->connectPagesChanged(sigc::mem_fun(*this, &PageSelector::pagesChanged));
+            page_manager.connectPagesChanged(sigc::mem_fun(*this, &PageSelector::pagesChanged));
         _page_selected_connection =
-            _page_manager->connectPageSelected(sigc::mem_fun(*this, &PageSelector::selectonChanged));
+            page_manager.connectPageSelected(sigc::mem_fun(*this, &PageSelector::selectonChanged));
         pagesChanged();
     }
 }
@@ -93,6 +91,7 @@ void PageSelector::setDocument(SPDocument *document)
 void PageSelector::pagesChanged()
 {
     _selector_changed_connection.block();
+    auto &page_manager = _document->getPageManager();
 
     // Destroy all existing pages in the model.
     while (!_page_model->children().empty()) {
@@ -102,24 +101,24 @@ void PageSelector::pagesChanged()
     }
 
     // Hide myself when there's no pages (single page document)
-    this->set_visible(_page_manager->hasPages());
+    this->set_visible(page_manager.hasPages());
 
     // Add in pages, do not use getResourcelist("page") because the items
     // are not guarenteed to be in node order, they are in first-seen order.
-    for (auto &page : _page_manager->getPages()) {
+    for (auto &page : page_manager.getPages()) {
         Gtk::ListStore::iterator row(_page_model->append());
         row->set_value(_model_columns.object, page);
     }
 
-    selectonChanged(_page_manager->getSelected());
+    selectonChanged(page_manager.getSelected());
 
     _selector_changed_connection.unblock();
 }
 
 void PageSelector::selectonChanged(SPPage *page)
 {
-    _next_button.set_sensitive(_page_manager->hasNextPage());
-    _prev_button.set_sensitive(_page_manager->hasPrevPage());
+    _next_button.set_sensitive(_document->getPageManager().hasNextPage());
+    _prev_button.set_sensitive(_document->getPageManager().hasPrevPage());
 
     auto active = _selector.get_active();
 
@@ -162,22 +161,22 @@ void PageSelector::renderPageLabel(Gtk::TreeModel::const_iterator const &row)
 void PageSelector::setSelectedPage()
 {
     SPPage *page = _selector.get_active()->get_value(_model_columns.object);
-    if (page && _page_manager->selectPage(page)) {
-        _page_manager->zoomToSelectedPage(_desktop);
+    if (page && _document->getPageManager().selectPage(page)) {
+        _document->getPageManager().zoomToSelectedPage(_desktop);
     }
 }
 
 void PageSelector::nextPage()
 {
-    if (_page_manager->selectNextPage()) {
-        _page_manager->zoomToSelectedPage(_desktop);
+    if (_document->getPageManager().selectNextPage()) {
+        _document->getPageManager().zoomToSelectedPage(_desktop);
     }
 }
 
 void PageSelector::prevPage()
 {
-    if (_page_manager->selectPrevPage()) {
-        _page_manager->zoomToSelectedPage(_desktop);
+    if (_document->getPageManager().selectPrevPage()) {
+        _document->getPageManager().zoomToSelectedPage(_desktop);
     }
 }
 

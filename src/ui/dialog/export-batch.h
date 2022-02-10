@@ -23,7 +23,6 @@ class SPDocument;
 class SPDesktop;
 
 namespace Inkscape {
-    class PageManager;
     class Preferences;
     class Selection;
 
@@ -46,7 +45,6 @@ private:
     InkscapeApplication *_app;
     SPDesktop *_desktop = nullptr;
     SPDocument *_document = nullptr;
-    PageManager *_page_manager = nullptr;
 
 private:
     bool setupDone = false; // To prevent setup() call add connections again.

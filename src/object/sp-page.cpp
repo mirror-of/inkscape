@@ -82,16 +82,6 @@ void SPPage::set(SPAttr key, const gchar *value)
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void SPPage::setManager(Inkscape::PageManager *manager)
-{
-    if (_manager != manager) {
-        if (manager && _manager) {
-            g_warning("Overwriting page manager for %s!", this->getId());
-        }
-        _manager = manager;
-    }
-}
-
 /**
  * Gets the rectangle in document units
  */
@@ -213,7 +203,7 @@ void SPPage::showPage(Inkscape::CanvasItemGroup *fg, Inkscape::CanvasItemGroup *
  */
 bool SPPage::setDefaultAttributes()
 {
-    if (_manager->setDefaultAttributes(_canvas_item)) {
+    if (document->getPageManager().setDefaultAttributes(_canvas_item)) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         return true;
     }
@@ -234,10 +224,7 @@ void SPPage::setSelected(bool sel)
  */
 int SPPage::getPageIndex() const
 {
-    if (_manager) {
-        return _manager->getPageIndex(this);
-    }
-    return -5;
+    return document->getPageManager().getPageIndex(this);
 }
 
 /**
@@ -252,19 +239,21 @@ bool SPPage::setPageIndex(int index, bool swap_page)
 {
     int current = getPageIndex();
 
-    if (_manager && current != index) {
+    if (current != index) {
+        auto &page_manager = document->getPageManager();
+
         // The page we're going to be shifting to
-        auto sibling = _manager->getPage(index);
+        auto sibling = page_manager.getPage(index);
 
         // Insertions are done to the right of the sibling
         if (index < current) {
             index -= 1;
         }
-        auto insert_after = _manager->getPage(index);
+        auto insert_after = page_manager.getPage(index);
 
         // We may have selected an index off the end, so attach it after the last page.
         if (!insert_after && index > 0) {
-            insert_after = _manager->getLastPage();
+            insert_after = page_manager.getLastPage();
             sibling = nullptr; // disable swap
         }
 
@@ -277,7 +266,7 @@ bool SPPage::setPageIndex(int index, bool swap_page)
             getRepr()->parent()->changeOrder(getRepr(), insert_after->getRepr());
         } else {
             // Attach to before any existing page
-            sibling = _manager->getFirstPage();
+            sibling = page_manager.getFirstPage();
             getRepr()->parent()->changeOrder(getRepr(), nullptr);
         }
         if (sibling && swap_page) {

@@ -103,9 +103,7 @@ void Selection::_emitModified(guint flags) {
     if (_desktop) {
         if (auto item = singleItem()) {
             // If the selected items have been moved to a new page...
-            if (auto page_manager = _desktop->getNamedView()->getPageManager()) {
-                page_manager->selectPage(item, false);
-            }
+            _desktop->getDocument()->getPageManager().selectPage(item, false);
         }
     }
 }
@@ -131,10 +129,8 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
             if (layer && layer != _selection_context) {
                 _desktop->layerManager().setCurrentLayer(layer);
             }
-            if (auto page_manager = _desktop->getNamedView()->getPageManager()) {
-                // This could be more complex if we want to be smarter.
-                page_manager->selectPage(item, false);
-            }
+            // This could be more complex if we want to be smarter.
+            _desktop->getDocument()->getPageManager().selectPage(item, false);
         }
     }
 

@@ -780,8 +780,7 @@ static void sp_flood_do_flood_fill(SPDesktop *desktop, GdkEvent *event,
         Inkscape::DrawingContext dc(s, Geom::Point(0,0));
         // cairo_translate not necessary here - surface origin is at 0,0
 
-        auto pm = desktop->getNamedView()->getPageManager();
-        bgcolor = pm->background_color;
+        bgcolor = document->getPageManager().background_color;
 
         // bgcolor is 0xrrggbbaa, we need 0xaarrggbb
         dtc = (bgcolor >> 8) | (bgcolor << 24);

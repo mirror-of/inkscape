@@ -42,8 +42,6 @@ public:
     void showPage() { _canvas_item->show(); }
     void hidePage() { _canvas_item->hide(); }
 
-    void setManager(Inkscape::PageManager *manager);
-
     void setSelected(bool selected);
     bool setDefaultAttributes();
     int getPageIndex() const;
@@ -76,7 +74,6 @@ protected:
 
 private:
     Inkscape::CanvasPage *_canvas_item = nullptr;
-    Inkscape::PageManager *_manager = nullptr;
 
     SVGLength x;
     SVGLength y;

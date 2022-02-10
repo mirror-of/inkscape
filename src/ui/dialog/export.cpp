@@ -209,7 +209,6 @@ bool Export::exportRaster(
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop)
         return false;
-    SPNamedView *nv = desktop->getNamedView();
     SPDocument *doc = desktop->getDocument();
 
     if (area.hasZeroArea() || width == 0 || height == 0) {
@@ -278,7 +277,7 @@ bool Export::exportRaster(
         selected = *items;
     }
 
-    auto bg_color = nv->getPageManager()->background_color;
+    auto bg_color = doc->getPageManager().background_color;
     ExportResult result = sp_export_png_file(desktop->getDocument(), png_filename.c_str(), area, width, height, pHYs,
                                              pHYs, // previously xdpi, ydpi.
                                              bg_color, callback, (void *)prog_dialog, true, selected,
@@ -365,7 +364,6 @@ bool Export::exportVector(
     doc->ensureUpToDate();
     auto copy_doc = doc->copy();
     copy_doc->ensureUpToDate();
-    auto copy_pm = copy_doc->getNamedView()->getPageManager();
 
     std::vector<SPItem *> objects = *items;
     std::set<std::string> page_ids;
@@ -389,7 +387,7 @@ bool Export::exportVector(
     Geom::OptRect page_rect = page ? page->getDesktopRect() : Geom::OptRect();
 
     // We never export multiple pages here, must be done before fitToRect and fitCanvas
-    copy_pm->disablePages();
+    copy_doc->getPageManager().disablePages();
 
     // Page export ALWAYS restricts, even if nothing would be on the page.
     if (objects.size() > 0 || page) {

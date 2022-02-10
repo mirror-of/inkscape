@@ -1056,7 +1056,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         // The extension should set it's pages enabled or disabled when opening
         // in order to indicate if pages are being imported or if objects are.
-        if (doc->getNamedView()->getPageManager()->hasPages()) {
+        if (doc->getPageManager().hasPages()) {
             file_import_pages(in_doc, doc);
             DocumentUndo::done(in_doc, _("Import Pages"), INKSCAPE_ICON("document-import"));
             // This return is only used by dbus in document-interface.cpp (now removed).
@@ -1177,15 +1177,15 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
  */
 void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
 {
-    auto this_pm = this_doc->getNamedView()->getPageManager();
-    auto that_pm = that_doc->getNamedView()->getPageManager();
+    auto &this_pm = this_doc->getPageManager();
+    auto &that_pm = that_doc->getPageManager();
 
     // Make sure objects have visualBounds created for import
     that_doc->ensureUpToDate();
 
     std::vector <SPItem *> imported_items;
-    for (auto &that_page : that_pm->getPages()) {
-        this_pm->newPage(that_page);
+    for (auto &that_page : that_pm.getPages()) {
+        this_pm.newPage(that_page);
     }
 }
 

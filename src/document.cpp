@@ -157,6 +157,8 @@ SPDocument::SPDocument() :
     add_actions_edit_document(this);
     add_actions_pages(this);
     add_actions_undo_document(this);
+
+    _page_manager = std::make_unique<Inkscape::PageManager>(this);
 }
 
 SPDocument::~SPDocument() {
@@ -310,9 +312,9 @@ void SPDocument::initialize_current_persp3d()
 void SPDocument::setPages(bool enabled)
 {
     if (enabled) {
-        getNamedView()->getPageManager()->enablePages();
+        _page_manager->enablePages();
     } else {
-        getNamedView()->getPageManager()->disablePages();
+        _page_manager->disablePages();
     }
 }
 
@@ -881,7 +883,7 @@ Geom::OptRect SPDocument::preferredBounds() const
  */
 Geom::OptRect SPDocument::pageBounds()
 {
-    if (auto page = getNamedView()->getPageManager()->getSelected()) {
+    if (auto page = _page_manager->getSelected()) {
         return page->getDesktopRect();
     }
     return preferredBounds();
@@ -947,7 +949,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
         Geom::Translate tr2(-rect_with_margins_dt_old.min());
         nv->translateGuides(tr2);
         nv->translateGrids(tr2);
-        nv->getPageManager()->movePages(tr2);
+        _page_manager->movePages(tr2);
 
         // update the viewport so the drawing appears to stay where it was
         nv->scrollAllDesktops(-tr2[0], -tr2[1] * y_dir, false);

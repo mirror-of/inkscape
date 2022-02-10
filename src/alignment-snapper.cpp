@@ -69,15 +69,13 @@ void Inkscape::AlignmentSnapper::_collectBBoxPoints(bool const &first_point) con
     if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_CORNER)) {
         if (auto document = _snapmanager->getDocument()) {
             auto ignore_page = _snapmanager->getPageToIgnore();
-            if (auto pm = document->getNamedView()->getPageManager()) {
-                for (auto page : pm->getPages()) {
-                    if (ignore_page == page)
-                        continue;
-                    getBBoxPoints(page->getDesktopRect(), _points_to_snap_to.get(), true,
-                        SNAPSOURCE_ALIGNMENT_PAGE_CORNER, SNAPTARGET_ALIGNMENT_PAGE_CORNER,
-                        SNAPSOURCE_UNDEFINED, SNAPTARGET_UNDEFINED, // No edges
-                        SNAPSOURCE_ALIGNMENT_PAGE_CENTER, SNAPTARGET_ALIGNMENT_PAGE_CENTER);
-                }
+            for (auto page : document->getPageManager().getPages()) {
+                if (ignore_page == page)
+                    continue;
+                getBBoxPoints(page->getDesktopRect(), _points_to_snap_to.get(), true,
+                    SNAPSOURCE_ALIGNMENT_PAGE_CORNER, SNAPTARGET_ALIGNMENT_PAGE_CORNER,
+                    SNAPSOURCE_UNDEFINED, SNAPTARGET_UNDEFINED, // No edges
+                    SNAPSOURCE_ALIGNMENT_PAGE_CENTER, SNAPTARGET_ALIGNMENT_PAGE_CENTER);
             }
             getBBoxPoints(document->preferredBounds(), _points_to_snap_to.get(), true,
                 SNAPSOURCE_ALIGNMENT_PAGE_CORNER, SNAPTARGET_ALIGNMENT_PAGE_CORNER,

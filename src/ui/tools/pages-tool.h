@@ -30,7 +30,6 @@ class SnapCandidatePoint;
 class CanvasItemGroup;
 class CanvasItemRect;
 class CanvasItemBpath;
-class PageManager;
 
 namespace UI {
 namespace Tools {
@@ -71,7 +70,6 @@ private:
     Geom::Point drag_origin_dt;
     int drag_tolerance = 5;
 
-    PageManager *_page_manager = nullptr;
     SPKnot *resize_knot = nullptr;
     SPPage *highlight_item = nullptr;
     SPPage *dragging_item = nullptr;
