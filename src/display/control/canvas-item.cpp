@@ -43,7 +43,7 @@ CanvasItem::~CanvasItem()
     request_redraw();
 
     // Clear any pointers to this object in canvas.
-    _canvas->canvas_item_clear(this);
+    _canvas->canvas_item_destructed(this);
 }
 
 bool CanvasItem::is_descendant_of(CanvasItem *ancestor)
@@ -144,7 +144,6 @@ void CanvasItem::show()
     // update bounds when visibility changes
     request_update();
     request_redraw();
-    _canvas->set_need_repick();
 }
 
 int CanvasItem::grab(Gdk::EventMask event_mask, GdkCursor *cursor)
@@ -199,7 +198,6 @@ void CanvasItem::hide()
     // update bounds when visibility changes
     request_update();
     request_redraw();
-    _canvas->set_need_repick();
 }
 
 void CanvasItem::set_fill(guint32 rgba)

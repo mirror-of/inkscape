@@ -38,7 +38,7 @@ namespace View {
 /**
  * A light-weight widget containing an Inkscape canvas for rendering an SVG.
  */
-class SVGViewWidget : public Gtk::ScrolledWindow {
+class SVGViewWidget : public Gtk::Bin {
 
 public:
     SVGViewWidget(SPDocument* document);

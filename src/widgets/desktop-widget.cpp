@@ -556,7 +556,8 @@ SPDesktopWidget::on_unrealize()
         }
 
         // Canvas
-        dtw->_canvas->set_desktop(nullptr); // Canvas may still attempt to draw during destruction.
+        dtw->_canvas->set_drawing(nullptr); // Ensures deactivation
+        dtw->_canvas->set_desktop(nullptr); // Todo: Remove desktop dependency.
 
         // Zoom
         dtw->_zoom_status_input_connection.disconnect();

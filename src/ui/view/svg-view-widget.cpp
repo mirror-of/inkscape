@@ -106,12 +106,10 @@ static bool _drawing_handler(GdkEvent *event, Inkscape::DrawingItem *drawing_ite
 
 /**
  * A light-weight widget containing an SPCanvas for rendering an SVG.
- * It's derived from a Gtk::ScrolledWindow like the previous C version, but that doesn't seem to be
- * too useful.
  */
 SVGViewWidget::SVGViewWidget(SPDocument* document)
 {
-    _canvas = Gtk::manage(new Inkscape::UI::Widget::Canvas());
+    _canvas = Gtk::make_managed<Inkscape::UI::Widget::Canvas>();
     add(*_canvas);
 
     _parent = new Inkscape::CanvasItemGroup(_canvas->get_canvas_item_root());
@@ -144,7 +142,7 @@ SVGViewWidget::setDocument(SPDocument* document)
         _document = document;
 
         Inkscape::DrawingItem *drawing_item = document->getRoot()->invoke_show(
-            *(_drawing->get_drawing()),
+            *_drawing->get_drawing(),
             _dkey,
             SP_ITEM_SHOW_DISPLAY);
 
@@ -175,7 +173,7 @@ SVGViewWidget::on_size_allocate(Gtk::Allocation& allocation)
 
         if (width < 0.0 || height < 0.0) {
             std::cerr << "SVGViewWidget::size_allocate: negative dimensions!" << std::endl;
-            Gtk::ScrolledWindow::on_size_allocate(allocation);
+            Gtk::Bin::on_size_allocate(allocation);
             return;
         }
 
@@ -184,11 +182,10 @@ SVGViewWidget::on_size_allocate(Gtk::Allocation& allocation)
         _width = width;
         _height = height;
 
-        _canvas->redraw_all(); // Must redraw everything!
         doRescale ();
     }
 
-    Gtk::ScrolledWindow::on_size_allocate(allocation);
+    Gtk::Bin::on_size_allocate(allocation);
 }
 
 void
@@ -217,17 +214,17 @@ SVGViewWidget::doRescale()
         if (_keepaspect) {
             if (_hscale > _vscale) {
                 _hscale = _vscale;
-                x_offset = (_width  - _document->getWidth().value("px")  * _vscale)/2.0;
+                x_offset = (_document->getWidth().value("px") * _hscale - _width) / 2.0;
             } else {
                 _vscale = _hscale;
-                y_offset = (_height - _document->getHeight().value("px") * _hscale)/2.0;
+                y_offset = (_document->getHeight().value("px") * _vscale - _height) / 2.0;
             }
         }
     }
 
     if (_drawing) {
-        _canvas->set_affine(Geom::Scale(_hscale, _vscale) * Geom::Translate(x_offset, y_offset));
-        _canvas->request_update();
+        _canvas->set_affine(Geom::Scale(_hscale, _vscale));
+        _canvas->set_pos(Geom::Point(x_offset, y_offset));
     }
 }
 

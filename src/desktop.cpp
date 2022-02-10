@@ -274,8 +274,8 @@ void SPDesktop::destroy()
 {
     _destroy_signal.emit(this);
 
-    canvas->set_desktop(nullptr);
-    canvas->set_drawing(nullptr);
+    canvas->set_drawing(nullptr); // Ensures deactivation
+    canvas->set_desktop(nullptr); // Todo: Remove desktop dependency.
 
     if (event_context) {
         delete event_context;
@@ -582,7 +582,7 @@ SPDesktop::set_display_area (bool log)
 
     // Scroll
     Geom::Point offset = _current_affine.getOffset();
-    canvas->scroll_to(offset);
+    canvas->set_pos(offset);
     canvas->set_affine(_current_affine.d2w()); // For CanvasItem's.
 
     /* Update perspective lines if we are in the 3D box tool (so that infinite ones are shown
@@ -967,7 +967,7 @@ SPDesktop::is_flipped (CanvasFlip flip)
 void
 SPDesktop::scroll_absolute (Geom::Point const &point, bool is_scrolling)
 {
-    canvas->scroll_to(point);
+    canvas->set_pos(point);
     _current_affine.setOffset( point );
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */

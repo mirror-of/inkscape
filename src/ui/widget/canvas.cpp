@@ -91,7 +91,7 @@ using GdkEventUniqPtr = std::unique_ptr<GdkEvent, GdkEventFreer>;
 auto make_unique_copy(const GdkEvent &ev) {return GdkEventUniqPtr(gdk_event_copy(&ev));}
 
 /*
- * Preferences system
+ * Preferences
  */
 
 template<typename T>
@@ -451,10 +451,16 @@ public:
     Canvas *q;
     CanvasPrivate(Canvas *q) : q(q) {}
 
-    // Preferences system
+    // Lifecycle
+    bool active = false;
+    void update_active();
+    void activate();
+    void deactivate();
+
+    // Preferences
     Prefs prefs;
 
-    // The updater; tracks the unclean region and decides how to redraw it.
+    // Update strategy; tracks the unclean region and decides how to redraw it.
     std::unique_ptr<Updater> updater;
 
     // Event processor. Events that interact with the Canvas are buffered here until the start of the next frame. They are processed by a separate object so that deleting the Canvas mid-event can be done safely.
@@ -463,13 +469,13 @@ public:
         std::vector<GdkEventUniqPtr> events;
         int pos;
         GdkEvent *ignore = nullptr;
-        CanvasPrivate *canvasprivate; // Nulled when it is destroyed.
+        CanvasPrivate *canvasprivate; // Nulled on destruction.
         bool in_processing = false; // For handling recursion due to nested GTK main loops.
         void process();
         int gobble_key_events(guint keyval, guint mask);
         void gobble_motion_events(guint mask);
     };
-    std::shared_ptr<EventProcessor> eventprocessor; // Usually held by the Canvas, but temporarily also held by itself while processing so that it is not deleted when the Canvas is.
+    std::shared_ptr<EventProcessor> eventprocessor; // Usually held by CanvasPrivate, but temporarily also held by itself while processing so that it is not deleted mid-event.
     bool add_to_bucket(GdkEvent*);
     bool process_bucketed_event(const GdkEvent&);
     bool pick_current_item(const GdkEvent&);
@@ -522,10 +528,143 @@ public:
 
     // For tracking the last known mouse position. (The function Gdk::Window::get_device_position cannot be used because of slow X11 round-trips. Remove this workaround when X11 dies.)
     std::optional<Geom::Point> last_mouse;
-
-    // For shutting down safely after unrealization has started.
-    bool in_unrealization = false;
 };
+
+/*
+ * Lifecycle
+ */
+
+Canvas::Canvas()
+    : d(std::make_unique<CanvasPrivate>(this))
+{
+    set_name("InkscapeCanvas");
+
+    // Events
+    add_events(Gdk::BUTTON_PRESS_MASK   |
+               Gdk::BUTTON_RELEASE_MASK |
+               Gdk::ENTER_NOTIFY_MASK   |
+               Gdk::LEAVE_NOTIFY_MASK   |
+               Gdk::FOCUS_CHANGE_MASK   |
+               Gdk::KEY_PRESS_MASK      |
+               Gdk::KEY_RELEASE_MASK    |
+               Gdk::POINTER_MOTION_MASK |
+               Gdk::SCROLL_MASK         |
+               Gdk::SMOOTH_SCROLL_MASK  );
+
+    // Set up EventProcessor
+    d->eventprocessor = std::make_shared<CanvasPrivate::EventProcessor>();
+    d->eventprocessor->canvasprivate = d.get();
+
+    // Updater
+    d->updater = make_updater(d->prefs.update_strategy);
+
+    // Preferences
+    d->prefs.grabsize.action = [=] {_canvas_item_root->update_canvas_item_ctrl_sizes(d->prefs.grabsize);};
+    d->prefs.debug_show_unclean.action = [=] {queue_draw();};
+    d->prefs.debug_show_clean.action = [=] {queue_draw();};
+    d->prefs.debug_disable_redraw.action = [=] {d->add_idle();};
+    d->prefs.debug_sticky_decoupled.action = [=] {d->add_idle();};
+    d->prefs.update_strategy.action = [=] {d->updater = make_updater(d->prefs.update_strategy, std::move(d->updater->clean_region));};
+    d->prefs.outline_overlay_opacity.action = [=] {queue_draw();};
+
+    // Developer mode master switch
+    d->prefs.devmode.action = [=] {d->prefs.set_devmode(d->prefs.devmode);};
+    d->prefs.devmode.action();
+
+    // Cavas item root
+    _canvas_item_root = new Inkscape::CanvasItemGroup(nullptr);
+    _canvas_item_root->set_name("CanvasItemGroup:Root");
+    _canvas_item_root->set_canvas(this);
+
+    // Background
+    _background = Cairo::SolidPattern::create_rgb(1.0, 1.0, 1.0);
+    d->solid_background = true;
+}
+
+void CanvasPrivate::activate()
+{
+    // Event handling/item picking
+    q->_pick_event.type = GDK_LEAVE_NOTIFY;
+    q->_pick_event.crossing.x = 0;
+    q->_pick_event.crossing.y = 0;
+
+    q->_in_repick         = false;
+    q->_left_grabbed_item = false;
+    q->_all_enter_events  = false;
+    q->_is_dragging       = false;
+    q->_state             = 0;
+
+    q->_current_canvas_item     = nullptr;
+    q->_current_canvas_item_new = nullptr;
+    q->_grabbed_canvas_item     = nullptr;
+    q->_grabbed_event_mask = (Gdk::EventMask)0;
+
+    // Drawing
+    q->_drawing_disabled = false;
+    q->_need_update = true;
+
+    // Split view
+    q->_split_direction = Inkscape::SplitDirection::EAST;
+    q->_split_position = {-1, -1}; // initialize with off-canvas coordinates
+    q->_hover_direction = Inkscape::SplitDirection::NONE;
+    q->_split_dragging = false;
+
+    add_idle();
+}
+
+void CanvasPrivate::deactivate()
+{
+    // Disconnect signals and timeouts. (Note: They will never be rescheduled while inactive.)
+    hipri_idle.disconnect();
+    lopri_idle.disconnect();
+    bucket_emptier.disconnect();
+    if (bucket_emptier_tick_callback) q->remove_tick_callback(*bucket_emptier_tick_callback);
+}
+
+Canvas::~Canvas()
+{
+    // Not necessary as GTK guarantees realization is always followed by unrealization. But just in case that invariant breaks, we deal with it.
+    if (d->active) {
+        std::cerr << "Canvas destructed while realized!" << std::endl;
+        d->deactivate();
+    }
+
+    // Disconnect from EventProcessor.
+    d->eventprocessor->canvasprivate = nullptr;
+
+    // Remove entire CanvasItem tree.
+    delete _canvas_item_root;
+}
+
+void CanvasPrivate::update_active()
+{
+    bool new_active = q->_drawing && q->get_realized();
+    if (new_active != active) {
+        active = new_active;
+        active ? activate() : deactivate();
+    }
+}
+
+void Canvas::set_drawing(Drawing *drawing)
+{
+    _drawing = drawing;
+    d->update_active();
+}
+
+void
+Canvas::on_realize()
+{
+    parent_type::on_realize();
+    assert(get_realized());
+    d->update_active();
+}
+
+void Canvas::on_unrealize()
+{
+    parent_type::on_unrealize();
+    assert(!get_realized());
+    d->update_active();
+}
 
 /*
  * Events system
@@ -642,112 +781,110 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
     d->last_mouse = Geom::Point(motion_event->x, motion_event->y);
 
     // Handle interactions with the split view controller.
-    if (_desktop) {
-        Geom::IntPoint cursor_position = Geom::IntPoint(motion_event->x, motion_event->y);
+    Geom::IntPoint cursor_position = Geom::IntPoint(motion_event->x, motion_event->y);
 
-        // Check if we are near the edge. If so, revert to normal mode.
-        if (_split_mode == Inkscape::SplitMode::SPLIT && _split_dragging) {
-            if (cursor_position.x() < 5                                  ||
-                cursor_position.y() < 5                                  ||
-                cursor_position.x() - get_allocation().get_width()  > -5 ||
-                cursor_position.y() - get_allocation().get_height() > -5 ) {
+    // Check if we are near the edge. If so, revert to normal mode.
+    if (_split_mode == Inkscape::SplitMode::SPLIT && _split_dragging) {
+        if (cursor_position.x() < 5                                  ||
+            cursor_position.y() < 5                                  ||
+            cursor_position.x() - get_allocation().get_width()  > -5 ||
+            cursor_position.y() - get_allocation().get_height() > -5 ) {
 
-                // Reset everything.
-                _split_mode = Inkscape::SplitMode::NORMAL;
-                _split_position = Geom::Point(-1, -1);
-                _hover_direction = Inkscape::SplitDirection::NONE;
-                set_cursor();
-                queue_draw();
+            // Reset everything.
+            _split_mode = Inkscape::SplitMode::NORMAL;
+            _split_position = Geom::Point(-1, -1);
+            _hover_direction = Inkscape::SplitDirection::NONE;
+            set_cursor();
+            queue_draw();
 
-                // Update action (turn into utility function?).
-                auto window = dynamic_cast<Gtk::ApplicationWindow *>(get_toplevel());
-                if (!window) {
-                    std::cerr << "Canvas::on_motion_notify_event: window missing!" << std::endl;
-                    return true;
-                }
-
-                auto action = window->lookup_action("canvas-split-mode");
-                if (!action) {
-                    std::cerr << "Canvas::on_motion_notify_event: action 'canvas-split-mode' missing!" << std::endl;
-                    return true;
-                }
-
-                auto saction = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(action);
-                if (!saction) {
-                    std::cerr << "Canvas::on_motion_notify_event: action 'canvas-split-mode' not SimpleAction!" << std::endl;
-                    return true;
-                }
-
-                saction->change_state((int)Inkscape::SplitMode::NORMAL);
-
+            // Update action (turn into utility function?).
+            auto window = dynamic_cast<Gtk::ApplicationWindow *>(get_toplevel());
+            if (!window) {
+                std::cerr << "Canvas::on_motion_notify_event: window missing!" << std::endl;
                 return true;
+            }
+
+            auto action = window->lookup_action("canvas-split-mode");
+            if (!action) {
+                std::cerr << "Canvas::on_motion_notify_event: action 'canvas-split-mode' missing!" << std::endl;
+                return true;
+            }
+
+            auto saction = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(action);
+            if (!saction) {
+                std::cerr << "Canvas::on_motion_notify_event: action 'canvas-split-mode' not SimpleAction!" << std::endl;
+                return true;
+            }
+
+            saction->change_state((int)Inkscape::SplitMode::NORMAL);
+
+            return true;
+        }
+    }
+
+    if (_split_mode == Inkscape::SplitMode::XRAY) {
+        _split_position = cursor_position;
+        queue_draw();
+    }
+
+    if (_split_mode == Inkscape::SplitMode::SPLIT) {
+        Inkscape::SplitDirection hover_direction = Inkscape::SplitDirection::NONE;
+        Geom::Point difference(cursor_position - _split_position);
+
+        // Move controller
+        if (_split_dragging) {
+            Geom::Point delta = cursor_position - _split_drag_start; // We don't use _split_position
+            if (_hover_direction == Inkscape::SplitDirection::HORIZONTAL) {
+                _split_position += Geom::Point(0, delta.y());
+            } else if (_hover_direction == Inkscape::SplitDirection::VERTICAL) {
+                _split_position += Geom::Point(delta.x(), 0);
+            } else {
+                _split_position += delta;
+            }
+            _split_drag_start = cursor_position;
+            queue_draw();
+            return true;
+        }
+
+        if (Geom::distance(cursor_position, _split_position) < 20 * d->_device_scale) {
+            // We're hovering over circle, figure out which direction we are in.
+            if (difference.y() - difference.x() > 0) {
+                if (difference.y() + difference.x() > 0) {
+                    hover_direction = Inkscape::SplitDirection::SOUTH;
+                } else {
+                    hover_direction = Inkscape::SplitDirection::WEST;
+                }
+            } else {
+                if (difference.y() + difference.x() > 0) {
+                    hover_direction = Inkscape::SplitDirection::EAST;
+                } else {
+                    hover_direction = Inkscape::SplitDirection::NORTH;
+                }
+            }
+        } else if (_split_direction == Inkscape::SplitDirection::NORTH ||
+                   _split_direction == Inkscape::SplitDirection::SOUTH) {
+            if (std::abs(difference.y()) < 3 * d->_device_scale) {
+                // We're hovering over horizontal line
+                hover_direction = Inkscape::SplitDirection::HORIZONTAL;
+            }
+        } else {
+            if (std::abs(difference.x()) < 3 * d->_device_scale) {
+               // We're hovering over vertical line
+                hover_direction = Inkscape::SplitDirection::VERTICAL;
             }
         }
 
-        if (_split_mode == Inkscape::SplitMode::XRAY) {
-            _split_position = cursor_position;
+        if (_hover_direction != hover_direction) {
+            _hover_direction = hover_direction;
+            set_cursor();
             queue_draw();
         }
 
-        if (_split_mode == Inkscape::SplitMode::SPLIT) {
-            Inkscape::SplitDirection hover_direction = Inkscape::SplitDirection::NONE;
-            Geom::Point difference(cursor_position - _split_position);
-
-            // Move controller
-            if (_split_dragging) {
-                Geom::Point delta = cursor_position - _split_drag_start; // We don't use _split_position
-                if (_hover_direction == Inkscape::SplitDirection::HORIZONTAL) {
-                    _split_position += Geom::Point(0, delta.y());
-                } else if (_hover_direction == Inkscape::SplitDirection::VERTICAL) {
-                    _split_position += Geom::Point(delta.x(), 0);
-                } else {
-                    _split_position += delta;
-                }
-                _split_drag_start = cursor_position;
-                queue_draw();
-                return true;
-            }
-
-            if (Geom::distance(cursor_position, _split_position) < 20 * d->_device_scale) {
-                // We're hovering over circle, figure out which direction we are in.
-                if (difference.y() - difference.x() > 0) {
-                    if (difference.y() + difference.x() > 0) {
-                        hover_direction = Inkscape::SplitDirection::SOUTH;
-                    } else {
-                        hover_direction = Inkscape::SplitDirection::WEST;
-                    }
-                } else {
-                    if (difference.y() + difference.x() > 0) {
-                        hover_direction = Inkscape::SplitDirection::EAST;
-                    } else {
-                        hover_direction = Inkscape::SplitDirection::NORTH;
-                    }
-                }
-            } else if (_split_direction == Inkscape::SplitDirection::NORTH ||
-                       _split_direction == Inkscape::SplitDirection::SOUTH) {
-                if (std::abs(difference.y()) < 3 * d->_device_scale) {
-                    // We're hovering over horizontal line
-                    hover_direction = Inkscape::SplitDirection::HORIZONTAL;
-                }
-            } else {
-                if (std::abs(difference.x()) < 3 * d->_device_scale) {
-                   // We're hovering over vertical line
-                    hover_direction = Inkscape::SplitDirection::VERTICAL;
-                }
-            }
-
-            if (_hover_direction != hover_direction) {
-                _hover_direction = hover_direction;
-                set_cursor();
-                queue_draw();
-            }
-
-            if (_hover_direction != Inkscape::SplitDirection::NONE) {
-                // We're hovering, don't pick or emit event.
-                return true;
-            }
+        if (_hover_direction != Inkscape::SplitDirection::NONE) {
+            // We're hovering, don't pick or emit event.
+            return true;
         }
-    } // if (_desktop)
+    }
 
     // Otherwise, handle as a delayed event.
     return d->add_to_bucket(reinterpret_cast<GdkEvent*>(motion_event));
@@ -763,8 +900,8 @@ CanvasPrivate::add_to_bucket(GdkEvent *event)
 {
     framecheck_whole_function(this)
 
-    if (in_unrealization) {
-        std::cerr << "Canvas::add_to_bucket: Called after canvas unrealization begun!" << std::endl;
+    if (!active) {
+        std::cerr << "Canvas::add_to_bucket: Called while not active!" << std::endl;
         return false;
     }
 
@@ -775,7 +912,9 @@ CanvasPrivate::add_to_bucket(GdkEvent *event)
 
     // If this is the first event, ensure event processing will run on the main loop as soon as possible after the next frame has started.
     if (eventprocessor->events.empty() && !pending_draw) {
+        assert(!bucket_emptier_tick_callback);
         bucket_emptier_tick_callback = q->add_tick_callback([this] (const Glib::RefPtr<Gdk::FrameClock>&) {
+            assert(active);
             bucket_emptier_tick_callback.reset();
             schedule_bucket_emptier();
             return false;
@@ -791,15 +930,18 @@ CanvasPrivate::add_to_bucket(GdkEvent *event)
 
 void CanvasPrivate::schedule_bucket_emptier()
 {
-    if (in_unrealization) {
-        std::cerr << "Canvas::schedule_bucket_emptier: Called after canvas unrealization begun!" << std::endl;
+    if (!active) {
+        std::cerr << "Canvas::schedule_bucket_emptier: Called while not active!" << std::endl;
         return;
     }
 
-    bucket_emptier = Glib::signal_idle().connect([this] {
-        eventprocessor->process();
-        return false;
-    }, G_PRIORITY_HIGH_IDLE + 14); // before hipri_idle
+    if (!bucket_emptier.connected()) {
+        bucket_emptier = Glib::signal_idle().connect([this] {
+            assert(active);
+            eventprocessor->process();
+            return false;
+        }, G_PRIORITY_HIGH_IDLE + 14); // before hipri_idle
+    }
 }
 
 // The following functions run at the start of the next frame on the GTK main loop.
@@ -836,10 +978,10 @@ CanvasPrivate::EventProcessor::process()
             ignore = event.get();
             canvasprivate->q->get_toplevel()->event(event.get());
             ignore = nullptr;
-
-            // If the Canvas began unrealization during event processing, exit now.
-            if (!canvasprivate) return;
         }
+
+        // If the Canvas was destroyed or deactivated during event processing, exit now.
+        if (!canvasprivate || !canvasprivate->active) return;
     }
 
     // Otherwise, clear the list of events that was just processed.
@@ -1252,87 +1394,8 @@ CanvasPrivate::emit_event(const GdkEvent &event)
 }
 
 /*
- * Canvas
+ * Protected functions
  */
-
-Canvas::Canvas()
-    : d(std::make_unique<CanvasPrivate>(this))
-{
-    set_name("InkscapeCanvas");
-
-    // Events
-    add_events(Gdk::BUTTON_PRESS_MASK   |
-               Gdk::BUTTON_RELEASE_MASK |
-               Gdk::ENTER_NOTIFY_MASK   |
-               Gdk::LEAVE_NOTIFY_MASK   |
-               Gdk::FOCUS_CHANGE_MASK   |
-               Gdk::KEY_PRESS_MASK      |
-               Gdk::KEY_RELEASE_MASK    |
-               Gdk::POINTER_MOTION_MASK |
-               Gdk::SCROLL_MASK         |
-               Gdk::SMOOTH_SCROLL_MASK  );
-    
-    // Set up EventProcessor
-    d->eventprocessor = std::make_shared<CanvasPrivate::EventProcessor>();
-    d->eventprocessor->canvasprivate = d.get();
-
-    // Preferences
-    d->prefs.grabsize.action = [=] {_canvas_item_root->update_canvas_item_ctrl_sizes(d->prefs.grabsize);};
-    d->prefs.debug_show_unclean.action = [=] {queue_draw();};
-    d->prefs.debug_show_clean.action = [=] {queue_draw();};
-    d->prefs.debug_disable_redraw.action = [=] {d->add_idle();};
-    d->prefs.debug_sticky_decoupled.action = [=] {d->add_idle();};
-    d->prefs.update_strategy.action = [=] {d->updater = make_updater(d->prefs.update_strategy, std::move(d->updater->clean_region));};
-    d->prefs.outline_overlay_opacity.action = [=] {queue_draw();};
-
-    // Developer mode master switch
-    d->prefs.devmode.action = [=] {d->prefs.set_devmode(d->prefs.devmode);};
-    d->prefs.devmode.action();
-
-    // Give _pick_event an initial definition.
-    _pick_event.type = GDK_LEAVE_NOTIFY;
-    _pick_event.crossing.x = 0;
-    _pick_event.crossing.y = 0;
-
-    // Drawing
-    d->updater = make_updater(d->prefs.update_strategy);
-
-    _background = Cairo::SolidPattern::create_rgb(1.0, 1.0, 1.0);
-    d->solid_background = true;
-
-    _canvas_item_root = new Inkscape::CanvasItemGroup(nullptr);
-    _canvas_item_root->set_name("CanvasItemGroup:Root");
-    _canvas_item_root->set_canvas(this);
-}
-
-void Canvas::set_desktop(SPDesktop *desktop)
-{
-     _desktop = desktop;
-    
-     // Nulling the desktop indicates the start of unrealization.
-     if (!desktop) {
-        // Disconnect signals and timeouts.
-        d->hipri_idle.disconnect();
-        d->lopri_idle.disconnect();
-        d->bucket_emptier.disconnect();
-        if (d->bucket_emptier_tick_callback) remove_tick_callback(*d->bucket_emptier_tick_callback);
-
-        // And promise never to schedule them again.
-        d->in_unrealization = true;
-
-        // Indicate start of unrealization to EventProcessor.
-        d->eventprocessor->canvasprivate = nullptr;
-     }
-}
-
-Canvas::~Canvas()
-{
-    // Should have been explicitly nulled before destruction.
-    assert(!_desktop);
-
-    // Remove entire CanvasItem tree.
-    delete _canvas_item_root;
-}
 
 Geom::IntPoint
 Canvas::get_dimensions() const
@@ -1395,7 +1458,7 @@ void CanvasPrivate::queue_draw_area(Geom::IntRect &rect)
 void
 Canvas::redraw_all()
 {
-    if (d->in_unrealization) {
+    if (!d->active) {
         // CanvasItems redraw their area when being deleted... which happens when the Canvas is destroyed.
         // We need to ignore their requests!
         return;
@@ -1411,7 +1474,7 @@ Canvas::redraw_all()
 void
 Canvas::redraw_area(int x0, int y0, int x1, int y1)
 {
-    if (d->in_unrealization) {
+    if (!d->active) {
         // CanvasItems redraw their area when being deleted... which happens when the Canvas is destroyed.
         // We need to ignore their requests!
         return;
@@ -1473,19 +1536,16 @@ Canvas::request_update()
 }
 
 /**
- * This is the first function called (after constructor) for Inkscape (not Inkview).
- * Scroll window so drawing point 'c' is at upper left corner of canvas.
+ * Scroll window so drawing point 'pos' is at upper left corner of canvas.
  */
 void
-Canvas::scroll_to(Geom::Point const &c)
+Canvas::set_pos(Geom::IntPoint const &pos)
 {
-    auto newpos = c.round();
-
-    if (newpos == _pos) {
+    if (pos == _pos) {
         return;
     }
 
-    _pos = newpos;
+    _pos = pos;
 
     d->add_idle();
     queue_draw();
@@ -1564,15 +1624,6 @@ Canvas::set_split_mode(Inkscape::SplitMode mode)
     }
 }
 
-void
-Canvas::set_split_direction(Inkscape::SplitDirection dir)
-{
-    if (_split_direction != dir) {
-        _split_direction = dir;
-        redraw_all();
-    }
-}
-
 Cairo::RefPtr<Cairo::ImageSurface>
 Canvas::get_backing_store() const
 {
@@ -1583,16 +1634,14 @@ Canvas::get_backing_store() const
  * Clear current and grabbed items.
  */
 void
-Canvas::canvas_item_clear(Inkscape::CanvasItem* item)
+Canvas::canvas_item_destructed(Inkscape::CanvasItem* item)
 {
     if (item == _current_canvas_item) {
         _current_canvas_item = nullptr;
-        _need_repick = true;
     }
 
     if (item == _current_canvas_item_new) {
         _current_canvas_item_new = nullptr;
-        _need_repick = true;
     }
 
     if (item == _grabbed_canvas_item) {
@@ -1669,13 +1718,6 @@ Canvas::on_size_allocate(Gtk::Allocation &allocation)
     d->add_idle(); // Trigger the size update to be applied to the stores before the next call to on_draw.
 }
 
-void
-Canvas::on_realize()
-{
-    parent_type::on_realize();
-    d->add_idle();
-}
-
 /*
  * Drawing
  */
@@ -1694,6 +1736,11 @@ bool
 Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
 {
     auto f = FrameCheck::Event();
+
+    if (!d->active) {
+        std::cerr << "Canvas::on_draw: Called while not active!" << std::endl;
+        return true;
+    }
 
     // sp_canvas_item_recursive_print_tree(0, _root);
     // canvas_item_print_tree(_canvas_item_root);
@@ -1964,13 +2011,8 @@ CanvasPrivate::add_idle()
 {
     framecheck_whole_function(this)
 
-    if (in_unrealization) {
-        //std::cerr << "Canvas::add_idle: Called after canvas unrealization begun!" << std::endl; // Prints too often.
-        return;
-    }
-
-    if (!q->get_realized()) {
-        // We can safely discard events until realized, because we will run add_idle in the on_realize handler later in initialisation.
+    if (!active) {
+        // We can safely discard events until active, because we will run add_idle on activation later in initialisation.
         return;
     }
 
@@ -2165,6 +2207,7 @@ CanvasPrivate::new_bisector(const Geom::IntRect &rect)
 bool
 CanvasPrivate::on_hipri_idle()
 {
+    assert(active);
     if (idle_running) {
         idle_running = on_idle();
     }
@@ -2174,6 +2217,7 @@ CanvasPrivate::on_hipri_idle()
 bool
 CanvasPrivate::on_lopri_idle()
 {
+    assert(active);
     if (idle_running) {
         idle_running = on_idle();
     }
@@ -2186,11 +2230,6 @@ CanvasPrivate::on_idle()
     framecheck_whole_function(this)
 
     assert(q->_canvas_item_root);
-
-    if (in_unrealization) {
-        std::cerr << "Canvas::on_idle: Called after canvas destroyed!" << std::endl;
-        return false;
-    }
 
     // Quit idle process if not supposed to be drawing.
     if (!q->_drawing || q->_drawing_disabled) {
