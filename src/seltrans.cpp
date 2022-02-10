@@ -1125,14 +1125,12 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
         // These lines below are duplicated in stretchRequest
         //TODO: Eliminate this code duplication
         if (bb->best_snapped_point.getSnapped() || sn->best_snapped_point.getSnapped()) {
-            if (bb->best_snapped_point.getSnapped()) {
-                if (!bb->best_snapped_point.isOtherSnapBetter(sn->best_snapped_point, false)) {
-                    // We snapped the bbox (which is either visual or geometric)
-                    _desktop->snapindicator->set_new_snaptarget(bb->best_snapped_point);
-                    default_scale = bb->getScaleSnapped();
-                    // Calculate the new transformation and update the handle position
-                    pt = _calcAbsAffineDefault(default_scale);
-                }
+            if (bb->best_snapped_point.getSnapped() && !bb->best_snapped_point.isOtherSnapBetter(sn->best_snapped_point, false)) {
+                // We snapped the bbox (which is either visual or geometric)
+                _desktop->snapindicator->set_new_snaptarget(bb->best_snapped_point);
+                default_scale = bb->getScaleSnapped();
+                // Calculate the new transformation and update the handle position
+                pt = _calcAbsAffineDefault(default_scale);
             } else if (sn->best_snapped_point.getSnapped()) {
                 _desktop->snapindicator->set_new_snaptarget(sn->best_snapped_point);
                 // We snapped the special points (e.g. nodes), which are not at the visual bbox
@@ -1233,14 +1231,12 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, Geom
 
         // These lines below are duplicated in scaleRequest
         if (bb.best_snapped_point.getSnapped() || sn.best_snapped_point.getSnapped()) {
-            if (bb.best_snapped_point.getSnapped()) {
-                if (!bb.best_snapped_point.isOtherSnapBetter(sn.best_snapped_point, false)) {
-                    // We snapped the bbox (which is either visual or geometric)
-                    _desktop->snapindicator->set_new_snaptarget(bb.best_snapped_point);
-                    default_scale = bb.getStretchSnapped();
-                    // Calculate the new transformation and update the handle position
-                    pt = _calcAbsAffineDefault(default_scale);
-                }
+            if (bb.best_snapped_point.getSnapped() && !bb.best_snapped_point.isOtherSnapBetter(sn.best_snapped_point, false)) {
+                // We snapped the bbox (which is either visual or geometric)
+                _desktop->snapindicator->set_new_snaptarget(bb.best_snapped_point);
+                default_scale = bb.getStretchSnapped();
+                // Calculate the new transformation and update the handle position
+                pt = _calcAbsAffineDefault(default_scale);
             } else if (sn.best_snapped_point.getSnapped()) {
                 _desktop->snapindicator->set_new_snaptarget(sn.best_snapped_point);
                 // We snapped the special points (e.g. nodes), which are not at the visual bbox
