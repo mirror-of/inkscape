@@ -1,12 +1,12 @@
 ../share/extensions/addnodes.inx
 ../share/extensions/aisvg.inx
-../share/extensions/color_HSL_adjust.inx
 ../share/extensions/color_blackandwhite.inx
 ../share/extensions/color_brighter.inx
 ../share/extensions/color_custom.inx
 ../share/extensions/color_darker.inx
 ../share/extensions/color_desaturate.inx
 ../share/extensions/color_grayscale.inx
+../share/extensions/color_hsl_adjust.inx
 ../share/extensions/color_lesshue.inx
 ../share/extensions/color_lesslight.inx
 ../share/extensions/color_lesssaturation.inx
