@@ -14,7 +14,6 @@
 #include <glibmm/i18n.h>
 
 #include "ui/interface.h"
-#include "ui/uxmanager.h"
 #include "ui/view/view.h"
 
 #include "actions-canvas-mode.h"

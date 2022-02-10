@@ -40,13 +40,11 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/box3d-tool.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/spin-button-tool-item.h"
 
 #include "xml/node-event-vector.h"
 
-using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 
 static Inkscape::XML::NodeEventVector box3d_persp_tb_repr_events =

@@ -40,14 +40,12 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/star-tool.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 
 #include "xml/node-event-vector.h"
 
-using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 
 static Inkscape::XML::NodeEventVector star_tb_repr_events =

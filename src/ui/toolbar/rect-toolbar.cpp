@@ -41,7 +41,6 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/rect-tool.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/label-tool-item.h"
@@ -54,7 +53,6 @@
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::Widget::UnitTracker;
-using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;

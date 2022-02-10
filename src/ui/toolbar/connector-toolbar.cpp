@@ -45,13 +45,11 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/spin-button-tool-item.h"
 
 #include "xml/node-event-vector.h"
 
-using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 
 static Inkscape::XML::NodeEventVector connector_tb_repr_events = {

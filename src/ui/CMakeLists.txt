@@ -20,7 +20,6 @@ set(ui_SRC
 	themes.cpp
 	tool-factory.cpp
 	util.cpp
-	uxmanager.cpp
 	modifiers.cpp
 
 	cache/svg_preview_cache.cpp
@@ -266,7 +265,6 @@ set(ui_SRC
 	themes.h
 	tool-factory.h
 	util.h
-	uxmanager.h
 	modifiers.h
 
 	cache/svg_preview_cache.h

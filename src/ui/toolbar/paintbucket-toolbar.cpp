@@ -35,7 +35,6 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/flood-tool.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"

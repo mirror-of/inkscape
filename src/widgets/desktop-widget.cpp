@@ -55,12 +55,12 @@
 #include "ui/dialog/swatches.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
+#include "ui/monitor.h"   // Monitor aspect ratio
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-window.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/util.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/combo-tool-item.h"
@@ -89,7 +89,6 @@ using Inkscape::UI::Dialog::DialogContainer;
 using Inkscape::UI::Dialog::DialogMultipaned;
 using Inkscape::UI::Dialog::DialogWindow;
 using Inkscape::UI::Widget::UnitTracker;
-using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::Util::unit_table;
 
@@ -234,6 +233,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
     dtw->_vbox->pack_end(*dtw->_hbox, true, true);
 
     dtw->_top_toolbars = Gtk::make_managed<Gtk::Grid>();
+    dtw->_top_toolbars->set_name("TopToolbars");
     dtw->_vbox->pack_end(*dtw->_top_toolbars, false, true);
 
     /* Toolboxes */
@@ -545,8 +545,6 @@ void
 SPDesktopWidget::on_unrealize()
 {
     auto dtw = this;
-
-    UXManager::getInstance()->delTrack(dtw);
 
     if (dtw->desktop) {
         if ( watcher ) {
@@ -1082,7 +1080,8 @@ SPDesktopWidget::fullscreen()
 }
 
 /**
- * Hide whatever the user does not want to see in the window
+ * Hide whatever the user does not want to see in the window.
+ * Also move command toolbar to top or side as required.
  */
 void SPDesktopWidget::layoutWidgets()
 {
@@ -1139,9 +1138,63 @@ void SPDesktopWidget::layoutWidgets()
     _canvas_grid->ShowScrollbars(prefs->getBool(pref_root + "scrollbars/state", true));
     _canvas_grid->ShowRulers(    prefs->getBool(pref_root + "rulers/state",     true));
 
+    // Move command toolbar as required.
+
+    // If interface_mode unset, use screen aspect ratio. Needs to be synced with "canvas-interface-mode" action.
+    Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_primary();
+    double const width  = monitor_geometry.get_width();
+    double const height = monitor_geometry.get_height();
+    bool widescreen = (height > 0 && width/height > 1.65);
+    widescreen = prefs->getInt(pref_root + "interface_mode", widescreen);
+
+    auto commands_toolbox_cpp = dynamic_cast<Gtk::Bin *>(Glib::wrap(commands_toolbox));
+    if (commands_toolbox_cpp) {
+
+        // Unlink command toolbar.
+        commands_toolbox_cpp->reference(); // So toolbox is not deleted.
+        auto parent = commands_toolbox_cpp->get_parent();
+        parent->remove(*commands_toolbox_cpp);
+
+        auto orientation = Gtk::ORIENTATION_HORIZONTAL;
+        auto orientation_c = GTK_ORIENTATION_HORIZONTAL;
+        // Link command toolbar back.
+        if (!widescreen) {
+            _top_toolbars->attach(*commands_toolbox_cpp, 0, 0); // Always first
+            gtk_box_set_child_packing(_vbox->gobj(), commands_toolbox, false, true, 0, GTK_PACK_START); // expand, fill, padding, pack_type
+            orientation = Gtk::ORIENTATION_HORIZONTAL;
+            orientation_c = GTK_ORIENTATION_HORIZONTAL;
+            commands_toolbox_cpp->set_hexpand(true);
+        } else {
+            _hbox->add(*commands_toolbox_cpp);
+            gtk_box_set_child_packing(_hbox->gobj(), commands_toolbox, false, true, 0, GTK_PACK_START); // expand, fill, padding, pack_type
+            orientation = Gtk::ORIENTATION_VERTICAL;
+            orientation_c = GTK_ORIENTATION_VERTICAL;
+            commands_toolbox_cpp->set_hexpand(false);
+        }
+        commands_toolbox_cpp->unreference();
+
+        auto box = dynamic_cast<Gtk::Box *>(commands_toolbox_cpp->get_child());
+        if (box) {
+            box->set_orientation(orientation);
+            for (auto child : box->get_children()) {
+                if (auto toolbar = dynamic_cast<Gtk::Toolbar *>(child)) {
+                    gtk_orientable_set_orientation(GTK_ORIENTABLE(toolbar->gobj()), orientation_c);
+                    //toolbar->set_orientation(orientation); // Missing in C++ interface!
+                }
+            }
+        }
+    } else {
+        std::cerr << "SPDesktopWidget::layoutWidgets(): Wrong widget type for command toolbar!" << std::endl;
+    }
+
+    // Temporary for Gtk3: Gtk toolbar resets icon sizes, so reapply them.
+    // TODO: remove this call in Gtk4 after Gtk::Toolbar is eliminated.
+    apply_ctrlbar_settings();
+
     auto& snap = *Glib::wrap(snap_toolbox);
     auto& aux = *Glib::wrap(aux_toolbox);
 
+    // This ensures that the Snap toolbox is on the top and only takes the needed space.
     if (_top_toolbars->get_children().size() == 3 && gtk_widget_get_visible(commands_toolbox)) {
         _top_toolbars->child_property_height(snap) =  1;
         _top_toolbars->child_property_width(aux) = 2;
@@ -1236,68 +1289,6 @@ SPDesktopWidget::isToolboxButtonActive (const gchar* id)
     return isActive;
 }
 
-void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionType pos)
-{
-    // Note - later on these won't be individual member variables.
-    GtkWidget* toolbox = nullptr;
-    if (id == "AuxToolbar") {
-        toolbox = aux_toolbox;
-    } else if (id == "CommandsToolbar") {
-        toolbox = commands_toolbox;
-    }
-
-    if (!toolbox) return;
-
-    bool horizontal = true;
-
-    switch(pos) {
-        case GTK_POS_TOP:
-        case GTK_POS_BOTTOM:
-            if (gtk_widget_is_ancestor(toolbox, GTK_WIDGET(_hbox->gobj()))) {
-                // Removing a widget can reduce ref count to zero
-                g_object_ref(G_OBJECT(toolbox));
-                _hbox->remove(*Glib::wrap(toolbox));
-                int row = id == "CommandsToolbar" ? 0 : 1;
-                _top_toolbars->attach(*Glib::wrap(toolbox), 0, row);
-                g_object_unref(G_OBJECT(toolbox));
-
-                // Function doesn't seem to be in Gtkmm wrapper yet
-                gtk_box_set_child_packing(_vbox->gobj(), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
-            }
-            ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_HORIZONTAL);
-            break;
-        case GTK_POS_LEFT:
-        case GTK_POS_RIGHT:
-            horizontal = false;
-            if (!gtk_widget_is_ancestor(toolbox, GTK_WIDGET(_hbox->gobj()))) {
-                g_object_ref(G_OBJECT(toolbox));
-                _top_toolbars->remove(*Glib::wrap(toolbox));
-                _hbox->add(*Glib::wrap(toolbox));
-                g_object_unref(G_OBJECT(toolbox));
-
-                // Function doesn't seem to be in Gtkmm wrapper yet
-                gtk_box_set_child_packing(_hbox->gobj(), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
-                if (pos == GTK_POS_LEFT) {
-                    _hbox->reorder_child(*Glib::wrap(toolbox), 0);
-                }
-            }
-            ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_VERTICAL);
-            break;
-    }
-
-    if (id == "CommandsToolbar") {
-        auto cmd = Glib::wrap(commands_toolbox);
-        cmd->set_hexpand(horizontal);
-    }
-
-    layoutWidgets();
-
-    // temporary for Gtk3: Gtk toolbar resets icon sizes, so reapply them
-    // TODO: remove this call in Gtk4 after Gtk::Toolbar is eliminated
-    apply_ctrlbar_settings();
-}
-
-
 SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *document)
     : SPDesktopWidget(inkscape_window)
 {
@@ -1337,18 +1328,11 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     _page_selector = Gtk::manage(new Inkscape::UI::Widget::PageSelector(desktop));
     _statusbar->pack_end(*_page_selector, false, false);
 
+    ToolboxFactory::setToolboxDesktop(dtw->aux_toolbox, dtw->desktop);
+
     dtw->layoutWidgets();
 
-    std::vector<GtkWidget *> toolboxes;
-    toolboxes.push_back(dtw->tool_toolbox);
-    toolboxes.push_back(dtw->aux_toolbox);
-    toolboxes.push_back(dtw->commands_toolbox);
-    toolboxes.push_back(dtw->snap_toolbox);
-
     dtw->_panels->setDesktop(dtw->desktop);
-
-    UXManager::getInstance()->addTrack(dtw);
-    UXManager::getInstance()->connectToDesktop( toolboxes, dtw->desktop );
 }
 
 

@@ -15,5 +15,6 @@
 class InkscapeWindow;
 
 void add_actions_view_mode(InkscapeWindow* win);
+void view_set_gui(InkscapeWindow* win);
 
 #endif // INK_ACTIONS_VIEW_MODE_H

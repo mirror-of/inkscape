@@ -28,7 +28,6 @@ static char const preferences_skeleton[] =
   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
   <group id="window">
-    <group id="task" />
     <group id="menu"        state="1"/>
     <group id="commands"    state="1"/>
     <group id="snaptoolbox" state="1"/>
@@ -40,7 +39,6 @@ static char const preferences_skeleton[] =
     <group id="scrollbars"  state="1"/>
   </group>
   <group id="fullscreen">
-    <group id="task" />
     <group id="menu"        state="1"/>
     <group id="commands"    state="1"/>
     <group id="snaptoolbox" state="1"/>
@@ -52,7 +50,6 @@ static char const preferences_skeleton[] =
     <group id="scrollbars"  state="1"/>
   </group>
   <group id="focus">
-    <group id="task" />
     <group id="menu"        state="0"/>
     <group id="commands"    state="0"/>
     <group id="snaptoolbox" state="0"/>

@@ -46,13 +46,10 @@
 #include "ui/tools/freehand-base.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
-
-using Inkscape::UI::UXManager;
 
 namespace Inkscape {
 namespace UI {

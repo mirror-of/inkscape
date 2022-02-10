@@ -628,14 +628,8 @@
     </section>
     <section>
       <item>
-        <attribute name='label' translatable="yes">Default</attribute>
+        <attribute name='label' translatable="yes">Wide Screen</attribute>
         <attribute name='action'>win.canvas-interface-mode</attribute>
-        <attribute name='target' type='i'>0</attribute>
-      </item>
-      <item>
-        <attribute name='label' translatable="yes">Wide</attribute>
-        <attribute name='action'>win.canvas-interface-mode</attribute>
-        <attribute name='target' type='i'>2</attribute>
       </item>
     </section>
   </submenu>

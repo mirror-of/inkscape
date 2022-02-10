@@ -40,6 +40,8 @@
 #include "message-context.h"
 #include "message-stack.h"
 
+#include "actions/actions-view-mode.h" // To update View menu
+
 #include "display/drawing.h"
 #include "display/control/canvas-temporary-item-list.h"
 #include "display/control/canvas-grid.h" // Grid types
@@ -1208,6 +1210,7 @@ SPDesktop::onWindowStateEvent (GdkEventWindowState* event)
     GdkWindowState changed = event->changed_mask;
     if (changed & (GDK_WINDOW_STATE_FULLSCREEN|GDK_WINDOW_STATE_MAXIMIZED)) {
         layoutWidget();
+        view_set_gui(getInkscapeWindow()); // Updates View menu
     }
 
     return false;
