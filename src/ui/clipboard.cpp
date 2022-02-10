@@ -1084,10 +1084,9 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     }
 
     // For 3D boxes, copy perspectives
-    {
-        SPBox3D *box = dynamic_cast<SPBox3D *>(item);
-        if (box) {
-            _copyNode(box->get_perspective()->getRepr(), _doc, _defs);
+    if (SPBox3D *box = dynamic_cast<SPBox3D *>(item)) {
+        if (auto perspective = box->get_perspective()) {
+            _copyNode(perspective->getRepr(), _doc, _defs);
         }
     }
 
