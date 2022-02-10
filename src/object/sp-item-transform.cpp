@@ -341,7 +341,7 @@ Geom::Rect get_visual_bbox(Geom::OptRect const &initial_geom_bbox, Geom::Affine 
     
     // Find the new geometric bounding box; Do this by transforming each corner of
     // the initial geometric bounding box individually and fitting a new boundingbox
-    // around the transformerd corners  
+    // around the transformed corners
     Geom::Point const p0 = Geom::Point(initial_geom_bbox->corner(0)) * abs_affine;    
     Geom::Rect new_geom_bbox(p0, p0);
     for (unsigned i = 1 ; i < 4 ; i++) {

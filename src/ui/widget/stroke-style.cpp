@@ -163,9 +163,7 @@ StrokeStyle::StrokeStyle() :
 // TODO: when this is gtkmmified, use an Inkscape::UI::Widget::ScalarUnit instead of the separate
 // spinbutton and unit selector for stroke width. In sp_stroke_style_line_update, use
 // setHundredPercent to remember the averaged width corresponding to 100%. Then the
-// stroke_width_set_unit will be removed (because ScalarUnit takes care of conversions itself), and
-// with it, the two remaining calls of stroke_average_width, allowing us to get rid of that
-// function in desktop-style.
+// stroke_width_set_unit will be removed (because ScalarUnit takes care of conversions itself)
     widthAdj = new Glib::RefPtr<Gtk::Adjustment>(Gtk::Adjustment::create(1.0, 0.0, 1000.0, 0.1, 10.0, 0.0));
     widthSpin = new Inkscape::UI::Widget::SpinButton(*widthAdj, 0.1, 3);
     widthSpin->set_tooltip_text(_("Stroke width"));

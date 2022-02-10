@@ -449,7 +449,6 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
 }
 
 /** Determine average stroke width, simple method */
-// see TODO in dialogs/stroke-style.cpp on how to get rid of this eventually
 gdouble
 stroke_average_width (const std::vector<SPItem*> &objects)
 {
@@ -469,7 +468,7 @@ stroke_average_width (const std::vector<SPItem*> &objects)
         double width = item->style->stroke_width.computed * i2dt.descrim();
 
         // Width becomes NaN when scaling a diagonal line to a horizontal line (lp:825840)
-        if ( not item->style->stroke.set || std::isnan(width) ) {
+        if (item->style->stroke.isNone() || std::isnan(width)) {
             ++n_notstroked;   // do not count nonstroked objects
             continue;
         } else {
