@@ -214,14 +214,10 @@ void PageToolbar::selectionChanged(SPPage *page)
     // Set label widget content with page label.
     if (page) {
         text_page_label->set_sensitive(true);
-<<<<<<< HEAD
-        text_page_label->set_placeholder_text(page->getDefaultLabel());
-=======
 
         gchar *format = g_strdup_printf(_("Page %d"), page->getPagePosition());
         text_page_label->set_placeholder_text(format);
         g_free(format);
->>>>>>> 3cc5022acc (Remove code duplication and correct eg. spelling)
 
         if (auto label = page->label()) {
             text_page_label->set_text(label);
