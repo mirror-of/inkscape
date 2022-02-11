@@ -83,7 +83,7 @@ public:
     CairoRenderContext *cloneMe(double width, double height) const;
     bool finish(bool finish_surface = true);
     bool finishPage();
-    bool nextPage(double width, double height);
+    bool nextPage(double width, double height, char const *label);
 
     CairoRenderer *getRenderer() const;
     cairo_t *getCairoContext() const;

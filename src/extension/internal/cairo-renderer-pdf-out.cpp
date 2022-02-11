@@ -128,7 +128,7 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
                 auto rect = page->getRect();
                 // Conclude previous page and set new page width and height.
                 auto big_rect = rect * scale;
-                ctx->nextPage(big_rect.width() * pt, big_rect.height() * pt);
+                ctx->nextPage(big_rect.width() * pt, big_rect.height() * pt, page->label());
 
                 // Set up page transformation which pushes objects back into the 0,0 location
                 ctx->transform(Geom::Translate(rect.corner(0)).inverse());

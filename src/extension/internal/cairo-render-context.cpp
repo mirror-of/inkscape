@@ -962,7 +962,7 @@ CairoRenderContext::finishPage()
  * When writing multiple pages, resize the next page.
  */
 bool
-CairoRenderContext::nextPage(double width, double height)
+CairoRenderContext::nextPage(double width, double height, char const *label)
 {
     g_assert(_is_valid);
     if (!_vector_based_target)
@@ -972,6 +972,10 @@ CairoRenderContext::nextPage(double width, double height)
     _height = height;
     _is_show_page = false;
     cairo_pdf_surface_set_size(_surface, width, height);
+
+    if (label) {
+        cairo_pdf_surface_set_page_label(_surface, label);
+    }
 
     auto status = cairo_surface_status(_surface);
     if (status != CAIRO_STATUS_SUCCESS) {
