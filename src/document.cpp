@@ -416,8 +416,14 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     nv->setDefaultAttribute("inkscape:pageshadow",       "/template/base/pageshadow", "2");
     nv->setDefaultAttribute("inkscape:pageopacity",      "/template/base/pageopacity", "0.0");
     nv->setDefaultAttribute("inkscape:pagecheckerboard", "/template/base/pagecheckerboard", "0");
-    nv->setDefaultAttribute("blackoutcolor",             "/template/base/blackoutcolor", "");
-    nv->setDefaultAttribute("inkscape:blackoutopacity",  "/template/base/blackoutopacity", "0.0");
+    if (!nv->getAttribute("inkscape:deskcolor")) {
+        auto page = nv->getAttribute("pagecolor");
+        auto color = "#d1d1d1"; // default gray desk
+        if (page && strcasecmp(page, "#ffffff") != 0) {
+            color = page;
+        }
+        nv->setDefaultAttribute("inkscape:deskcolor",    "/template/base/deskcolor", color);
+    }
 
     // If no units are set in the document, try and guess them from the width/height
     if (document->root->width.isAbsolute()) {

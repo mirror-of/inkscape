@@ -391,16 +391,10 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
         }
         break;
     case SPAttr::PAGECOLOR:
-        // if desk color is not defined in a document, then use page color
-        if (value && _default_desk_color) {
-            desk_color = sp_svg_read_color(value, desk_color);
-            _default_desk_color = false;
-        }
         break;
     case SPAttr::INKSCAPE_DESK_COLOR:
         if (value) {
             desk_color = sp_svg_read_color(value, desk_color);
-            _default_desk_color = false;
         }
         break;
     case SPAttr::INKSCAPE_DESK_CHECKERBOARD:

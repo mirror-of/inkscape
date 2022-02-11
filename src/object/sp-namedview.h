@@ -115,7 +115,6 @@ private:
 
     Inkscape::PageManager *_page_manager = nullptr;
     Inkscape::CanvasPage *_viewport = nullptr;
-    bool _default_desk_color = true;
 
 protected:
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
