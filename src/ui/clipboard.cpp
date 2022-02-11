@@ -290,18 +290,37 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
             _createInternalClipboard();
 
             // Were any nodes actually copied?
-            if (!pathv.empty()) {
+            if (!pathv.empty() && first_path) {
                 Inkscape::XML::Node *pathRepr = _doc->createElement("svg:path");
 
-                pathRepr->setAttribute("d", sp_svg_write_path(pathv));
+                // Remove the source document's scale from path as clipboard is 1:1
+                auto source_scale = first_path->document->getDocumentScale();
+                pathRepr->setAttribute("d", sp_svg_write_path(pathv * source_scale.inverse()));
 
-                if(first_path) {
-                    pathRepr->setAttribute("style", first_path->style->write(SP_STYLE_FLAG_IFSET) );
+                // Group the path to make it consistant with other copy processes
+                auto group = _doc->createElement("svg:g");
+                _root->appendChild(group);
+                Inkscape::GC::release(group);
+
+                // Store the style for paste-as-object operations. Ignored if pasting into an other path.
+                pathRepr->setAttribute("style", first_path->style->write(SP_STYLE_FLAG_IFSET) );
+                group->appendChild(pathRepr);
+                Inkscape::GC::release(pathRepr);
+
+                // Store the parent transformation, and scaling factor of the copied object
+                if (auto parent = dynamic_cast<SPItem *>(first_path->parent)) {
+                      auto transform_str = sp_svg_transform_write(parent->i2doc_affine());
+                      group->setAttributeOrRemoveIfEmpty("transform", transform_str);
                 }
 
-                _root->appendChild(pathRepr);
-                Inkscape::GC::release(pathRepr);
-                fit_canvas_to_drawing(_clipboardSPDoc.get());
+                // Set the translation for paste-in-place operation, must be done after repr appends
+                if (auto path_obj = dynamic_cast<SPPath *>(_clipboardSPDoc->getObjectByRepr(pathRepr))) {
+                    // we could use pathv.boundsFast here, but that box doesn't include stroke width
+                    // so we must take the value from the visualBox of the new shape instead.
+                    auto bbox = *(path_obj->visualBounds()) * source_scale;
+                    _clipnode->setAttributePoint("min", bbox.min());
+                    _clipnode->setAttributePoint("max", bbox.max());
+                }
                 _setClipboardTargets();
                 return;
             }
@@ -485,10 +504,9 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
      *   one path in source
      */
     auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
-    if (node_tool && desktop->selection->objects().size() == 1) { 
+    if (node_tool && desktop->selection->objects().size() == 1) {
         SPObject *obj = desktop->selection->objects().back();
-        auto target_path = SP_PATH(obj);
-        if (target_path) {
+        if (auto target_path = dynamic_cast<SPPath *>(obj)) {
             auto clipdoc = tempdoc.get();
             auto source_scale = clipdoc->getDocumentScale();
             auto target_trans = target_path->i2doc_affine();
@@ -496,19 +514,41 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
             node_tool->_selected_nodes->selectAll();
 
             for (auto node = clipdoc->getReprRoot()->firstChild(); node ;node = node->next()) {
-                auto source_path = SP_PATH(clipdoc->getObjectByRepr(node));
-                if (source_path) {
+
+                auto source_obj = clipdoc->getObjectByRepr(node);
+                auto group_affine = Geom::Affine();
+
+                // Unpack group that may have a transformation inside it.
+                if (auto source_group = dynamic_cast<SPGroup *>(source_obj)) {
+                    if (source_group->children.size() == 1) {
+                        source_obj = source_group->firstChild();
+                        group_affine = source_group->i2doc_affine();
+                    }
+                }
+
+                if (auto source_path = dynamic_cast<SPPath *>(source_obj)) {
                     auto source_curve = SPCurve::copy(source_path->curveForEdit());
                     auto target_curve = SPCurve::copy(target_path->curveForEdit());
+
+                    // Apply group transformation which is usually the old translation plus document scaling factor
+                    source_curve->transform(group_affine);
 
                     // Convert curve from source units (usually px so 1:1)
                     source_curve->transform(source_scale);
 
-                    // Move the source curve to the mouse pointer, units are px so do before target_trans
-                    auto to_mouse = Geom::Translate(desktop->point() - source_path->geometricBounds()->midpoint());
-                    source_curve->transform(to_mouse);
+                    if (!in_place) {
+                        // Move the source curve to the mouse pointer, units are px so do before target_trans
+                        auto bbox = *(source_path->geometricBounds()) * group_affine;
+                        auto to_mouse = Geom::Translate(desktop->point() - bbox.midpoint());
+                        source_curve->transform(to_mouse);
+                    } else if (auto clipnode = sp_repr_lookup_name(clipdoc->getReprRoot(), "inkscape:clipboard", 1)) {
+                        // Force translation so a foreign path will end up in the right place.
+                        auto bbox = *(source_path->visualBounds()) * group_affine;
+                        auto to_origin = Geom::Translate(clipnode->getAttributePoint("min") - bbox.min());
+                        source_curve->transform(to_origin);
+                    }
 
-                    // Finally convert the curve into path's item tcoordinate system
+                    // Finally convert the curve into path item's coordinate system
                     source_curve->transform(target_trans.inverse());
 
                     // Add the source curve to the target copy
