@@ -613,9 +613,9 @@ SPDesktopWidget::updateTitle(gchar const* uri)
 
         Name += uri;
 
-        if (namedview->getViewCount() > 1) {
+        if (namedview->viewcount > 1) {
             Name += ": ";
-            Name += std::to_string(namedview->getViewCount());
+            Name += std::to_string(namedview->viewcount);
         }
         Name += " (";
 

@@ -86,7 +86,6 @@ public:
     void setDefaultAttribute(std::string attribute, std::string preference, std::string fallback);
     void activateGuides(void* desktop, bool active);
     char const *getName() const;
-    unsigned int getViewCount();
     std::vector<SPDesktop *> const getViewList() const;
     Inkscape::Util::Unit const * getDisplayUnit() const;
 

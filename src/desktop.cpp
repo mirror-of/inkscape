@@ -108,7 +108,6 @@ SPDesktop::SPDesktop()
     , current(nullptr)  // current style
     , _focusMode(false)
     , dkey(0)
-    , number(0)
     , window_state(0)
     , interaction_disabled_counter(0)
     , waiting_cursor(false)
@@ -169,7 +168,7 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     /* Connect document */
     setDocument (document);
 
-    number = namedview->getViewCount();
+    namedview->viewcount++;
 
     /* Setup Canvas */
     namedview->set_desk_color(this); // Background page sits on.
@@ -1412,7 +1411,7 @@ SPDesktop::setDocument (SPDocument *doc)
     if (canvas_drawing) {
 
         namedview = sp_document_namedview (doc, nullptr);
-        number = namedview->getViewCount();
+        namedview->viewcount++;
 
         Inkscape::DrawingItem *drawing_item = doc->getRoot()->invoke_show(
             *(canvas_drawing->get_drawing()),

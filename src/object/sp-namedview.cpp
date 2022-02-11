@@ -970,11 +970,6 @@ gchar const *SPNamedView::getName() const
     return this->getAttribute("id");
 }
 
-guint SPNamedView::getViewCount()
-{
-    return ++viewcount;
-}
-
 std::vector<SPDesktop *> const SPNamedView::getViewList() const
 {
     return views;
