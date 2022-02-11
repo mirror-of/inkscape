@@ -190,7 +190,7 @@ void PageToolbar::setSizeText(SPPage *page)
         width = rect.width();
         height = rect.height();
     }
-    entry_page_sizes->set_placeholder_text("ex.: 100x100cm");
+    entry_page_sizes->set_placeholder_text(_("ex.: 100x100cm"));
     entry_page_sizes->set_tooltip_text(_("Type in width & height of a page. (ex.: 100x100cm, 10cmx100mm)\n"
                                         "or choose preset from dropdown."));
     if (auto page_size = Inkscape::PaperSize::findPaperSize(width, height, unit)) {
