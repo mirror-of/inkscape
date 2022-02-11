@@ -163,11 +163,17 @@ DB::unregister_ext (Extension * module)
 	when it is no longer needed.
 */
 Extension *
-DB::get (const gchar *key)
+DB::get (const gchar *key) const
 {
         if (key == nullptr) return nullptr;
 
-	Extension *mod = moduledict[key];
+	auto it = moduledict.find(key);
+	if (it == moduledict.end())
+		return nullptr;
+
+	Extension *mod = it->second;
+	assert(mod);
+
 	if ( !mod || mod->deactivated() )
 		return nullptr;
 

@@ -57,7 +57,7 @@ private:
 
 public:
     DB ();
-    Extension * get (const gchar *key);
+    Extension * get (const gchar *key) const;
     void register_ext (Extension *module);
     void unregister_ext (Extension *module);
     void foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data);
