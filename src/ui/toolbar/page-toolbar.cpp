@@ -72,17 +72,17 @@ PageToolbar::PageToolbar(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builde
 PageToolbar::~PageToolbar()
 {
     _ec_connection.disconnect();
-    _page_modified.disconnect();
+    toolChanged(nullptr, nullptr);
 }
 
 void PageToolbar::toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *ec)
 {
     // Disconnect previous page changed signal
-    if (_page_selected) {
-        _page_selected.disconnect();
-        _pages_changed.disconnect();
-        _document = nullptr;
-    }
+    _page_selected.disconnect();
+    _pages_changed.disconnect();
+    _page_modified.disconnect();
+    _document = nullptr;
+
     if (dynamic_cast<Inkscape::UI::Tools::PagesTool *>(ec)) {
         // Save the document and page_manager for future use.
         if ((_document = desktop->getDocument())) {
