@@ -12,6 +12,12 @@ foreach(pixmap_size ${PIXMAP_SIZES})
   endforeach(content)
 endforeach(pixmap_size)
 
+FILE(GLOB CURSOR_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cursors/*.svg)
+install(FILES ${CURSOR_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/cursors)
+
+FILE(GLOB CURSOR_CSS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cursors/*.css)
+install(FILES ${CURSOR_CSS_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/cursors)
+
 if(WIN32)
     install(CODE "execute_process(COMMAND gtk-update-icon-cache \${CMAKE_INSTALL_PREFIX}/${INKSCAPE_SHARE_INSTALL}/icons/${THEME})")
 endif()
