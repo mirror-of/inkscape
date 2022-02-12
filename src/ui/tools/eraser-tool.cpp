@@ -670,12 +670,19 @@ void EraserTool::_setToAccumulated()
                 if (mode == EraserToolMode::CUT) {
                     for (auto i : to_work_on) { // TODO: Move the loop body to a separate function
                         SPItem *item = i;
-                        SPUse *use = dynamic_cast<SPUse *>(item);
+
+                        // Unlink a clone before cutting it
+                        if (SPUse *use = dynamic_cast<SPUse *>(item)) {
+                            item = use->unlink();
+                            if (!item) {
+                                continue;
+                            }
+                        }
                         if (SP_IS_PATH(item) && SP_PATH(item)->nodesInPath() == 2) {
                             SPItem *item = i;
                             item->deleteObject(true);
                             work_done = true;
-                        } else if (!SP_IS_GROUP(item) && !use) {
+                        } else if (!SP_IS_GROUP(item)) {
                             Geom::OptRect bbox = item->documentVisualBounds();
                             if (bbox && bbox->intersects(*eraser_bbox)) {
                                 Inkscape::XML::Node *dup = repr->duplicate(xml_doc);
