@@ -706,7 +706,7 @@ void EraserTool::_setToAccumulated()
                                 if (!break_apart) {
                                     w_selection.combine(true);
                                 } else if (!nowidth) {
-                                    w_selection.breakApart(true);
+                                    w_selection.breakApart(true, false);
                                 }
                                 if (!w_selection.isEmpty()) {
                                     // If the item was not completely erased, track the new remainder.
