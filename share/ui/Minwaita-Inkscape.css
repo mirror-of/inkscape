@@ -129,3 +129,17 @@ spinbutton button{
 spinbutton entry{
   padding:0 0 0 3px;
 }
+
+/* checked buttons: light theme version */
+button.radio:checked,
+button.toggle:checked {
+    background-color: transparent;
+    background-image: image(linear-gradient(rgba(0,0,0,0.16), rgba(0,0,0,0.04)));
+}
+
+/* checked buttons: dark theme version */
+.dark button.radio:checked,
+.dark button.toggle:checked {
+    background-color: transparent;
+    background-image: image(@theme_selected_bg_color);
+}
