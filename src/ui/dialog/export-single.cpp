@@ -947,6 +947,14 @@ void SingleExport::refreshPreview()
     preview->queueRefresh();
 }
 
+void SingleExport::setDesktop(SPDesktop *desktop)
+{
+    if (desktop != _desktop) {
+        _page_selected_connection.disconnect();
+        _desktop = desktop;
+    }
+}
+
 void SingleExport::setDocument(SPDocument *document)
 {
     _document = document;

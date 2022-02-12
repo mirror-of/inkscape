@@ -732,6 +732,14 @@ unsigned int BatchExport::onProgressCallback(float value, void *dlg)
     return TRUE;
 }
 
+void BatchExport::setDesktop(SPDesktop *desktop)
+{
+    if (desktop != _desktop) {
+        _pages_changed_connection.disconnect();
+        _desktop = desktop;
+    }
+}
+
 void BatchExport::setDocument(SPDocument *document)
 {
     if (!_desktop) {
