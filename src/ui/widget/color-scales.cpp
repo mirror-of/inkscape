@@ -131,7 +131,8 @@ void ColorScales<MODE>::_initUI()
         _wheel->set_valign(Gtk::ALIGN_FILL);
         _wheel->set_hexpand(true);
         _wheel->set_vexpand(true);
-        _wheel->set_margin_bottom(4 * YPAD);
+        _wheel->set_name("ColorWheel");
+        _wheel->set_size_request(-1, 130); // minimal size
 
         /* Signal */
         _wheel->signal_color_changed().connect([this](){ _wheelChanged(); });
@@ -159,7 +160,7 @@ void ColorScales<MODE>::_initUI()
         wheel_frame->set_margin_start(2 * XPAD);
         wheel_frame->set_margin_end(XPAD);
         wheel_frame->set_margin_top(2 * YPAD);
-        wheel_frame->set_margin_bottom(5 * YPAD);
+        wheel_frame->set_margin_bottom(2 * YPAD);
         wheel_frame->set_halign(Gtk::ALIGN_FILL);
         wheel_frame->set_valign(Gtk::ALIGN_FILL);
         wheel_frame->set_hexpand(true);
