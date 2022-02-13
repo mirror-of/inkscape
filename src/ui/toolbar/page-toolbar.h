@@ -51,12 +51,14 @@ private:
     void toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *ec);
     void pagesChanged();
     void selectionChanged(SPPage *page);
+    void on_parent_changed(Gtk::Widget *prev) override;
 
     sigc::connection _ec_connection;
     sigc::connection _pages_changed;
     sigc::connection _page_selected;
     sigc::connection _page_modified;
 
+    bool was_referenced;
     Gtk::ComboBoxText *combo_page_sizes;
     Gtk::Entry *entry_page_sizes;
     Gtk::Entry *text_page_label;

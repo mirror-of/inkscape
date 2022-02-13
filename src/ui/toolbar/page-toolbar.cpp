@@ -67,6 +67,19 @@ PageToolbar::PageToolbar(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builde
 
     // Watch for when the tool changes
     _ec_connection = _desktop->connectEventContextChanged(sigc::mem_fun(*this, &PageToolbar::toolChanged));
+
+    // Constructed by a builder, so we're going to protect the widget from destruction.
+    this->reference();
+    was_referenced = true;
+}
+
+void PageToolbar::on_parent_changed(Gtk::Widget *)
+{
+    if (was_referenced) {
+        // Undo the gtkbuilder protection now that we have a parent
+        this->unreference();
+        was_referenced = false;
+    }
 }
 
 PageToolbar::~PageToolbar()
@@ -257,26 +270,26 @@ void PageToolbar::selectionChanged(SPPage *page)
 GtkWidget *PageToolbar::create(SPDesktop *desktop)
 {
     Glib::ustring page_toolbar_builder_file = get_filename(UIS, "toolbar-page.ui");
-    auto builder = Gtk::Builder::create();
+    PageToolbar *toolbar = nullptr;
+
     try {
-        builder->add_from_file(page_toolbar_builder_file);
+        auto builder = Gtk::Builder::create_from_file(page_toolbar_builder_file);
+        builder->get_widget_derived("page-toolbar", toolbar, desktop);
+
+        if (!toolbar) {
+            std::cerr << "InkscapeWindow: Failed to load page toolbar!" << std::endl;
+            return nullptr;
+        }
+        // Usually we should be packing this widget into a parent before the builder
+        // is destroyed, but the create method expects a blind widget so this widget
+        // contains a special keep-alive pattern which can be removed when refactoring.
     } catch (const Glib::Error &ex) {
         std::cerr << "PageToolbar: " << page_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
     }
-
-    PageToolbar *toolbar = nullptr;
-    builder->get_widget_derived("page-toolbar", toolbar, desktop);
-    if (!toolbar) {
-        std::cerr << "InkscapeWindow: Failed to load page toolbar!" << std::endl;
-        return nullptr;
-    }
-
-    toolbar->reference(); // Or it will be deleted when builder is destroyed since we haven't added
-                          // it to a container yet. This probably causes a memory leak but we'll
-                          // fix it when all toolbars are converted to use Gio::Actions.
-
     return GTK_WIDGET(toolbar->gobj());
 }
+
+
 } // namespace Toolbar
 } // namespace UI
 } // namespace Inkscape
