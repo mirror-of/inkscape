@@ -728,8 +728,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
     case GDK_SCROLL: {
         int constexpr WHEEL_SCROLL_DEFAULT = 40;
+        
+        // previously we did two wheel_scrolls for each mouse scroll
         int const wheel_scroll = prefs->getIntLimited(
-                "/options/wheelscroll/value", WHEEL_SCROLL_DEFAULT, 0, 1000);
+                "/options/wheelscroll/value", WHEEL_SCROLL_DEFAULT, 0, 1000) * 2;
 
         // Size of smooth-scrolls (only used in GTK+ 3)
         gdouble delta_x = 0;
@@ -772,6 +774,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             if (rotate_inc != 0.0) {
                 Geom::Point const scroll_dt = _desktop->point();
                 _desktop->rotate_relative_keep_point(scroll_dt, rotate_inc);
+                ret = TRUE;
             }
 
         } else if (action == Type::CANVAS_PAN_X) {
@@ -781,11 +784,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
             case GDK_SCROLL_UP:
             case GDK_SCROLL_LEFT:
                 _desktop->scroll_relative(Geom::Point(wheel_scroll, 0));
+                ret = TRUE;
                 break;
 
             case GDK_SCROLL_DOWN:
             case GDK_SCROLL_RIGHT:
                 _desktop->scroll_relative(Geom::Point(-wheel_scroll, 0));
+                ret = TRUE;
                 break;
 
             case GDK_SCROLL_SMOOTH: {
@@ -795,6 +800,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 delta_y /= WHEEL_SCROLL_DEFAULT;
 #endif
                 _desktop->scroll_relative(Geom::Point(wheel_scroll * -delta_y, 0));
+                ret = TRUE;
                 break;
             }
 
@@ -841,6 +847,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             if (rel_zoom != 0.0) {
                 Geom::Point const scroll_dt = _desktop->point();
                 _desktop->zoom_relative(scroll_dt, rel_zoom);
+                ret = TRUE;
             }
 
             /* no modifier, pan up--down (left--right on multiwheel mice?) */
@@ -872,6 +879,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 _desktop->scroll_relative(Geom::Point(-wheel_scroll * delta_x, -wheel_scroll * delta_y));
                 break;
             }
+            ret = TRUE;
         } else {
             g_warning("unhandled scroll event with scroll.state=0x%x", event->scroll.state);
         }
