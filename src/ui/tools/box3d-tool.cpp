@@ -91,15 +91,8 @@ Box3dTool::~Box3dTool() {
     delete (this->_vpdrag);
     this->_vpdrag = nullptr;
 
-    this->sel_changed_connection.disconnect();
-
     delete this->shape_editor;
     this->shape_editor = nullptr;
-
-    /* fixme: This is necessary because we do not grab */
-    if (this->box3d) {
-        this->finishItem();
-    }
 }
 
 /**
@@ -296,7 +289,8 @@ bool Box3dTool::root_handler(GdkEvent* event) {
 
             if (!this->within_tolerance) {
                 // we've been dragging, finish the box
-                this->finishItem();
+                _desktop->getSelection()->set(this->box3d); // Updating the selection will send signals to the box3d-toolbar ...
+                this->finishItem(); // .. but finishItem() will be called from the deconstructor too and shall NOT fire such signals!
             } else if (this->item_to_select) {
                 // no dragging, select clicked box3d if any
                 if (event->button.state & GDK_SHIFT_MASK) {
@@ -423,7 +417,8 @@ bool Box3dTool::root_handler(GdkEvent* event) {
                 this->discard_delayed_snap_event();
                 if (!this->within_tolerance) {
                     // we've been dragging, finish the box
-                    this->finishItem();
+                    _desktop->getSelection()->set(this->box3d); // Updating the selection will send signals to the box3d-toolbar ...
+                    this->finishItem(); // .. but finishItem() will be called from the deconstructor too and shall NOT fire such signals!
                 }
                 // do not return true, so that space would work switching to selector
             }
@@ -545,7 +540,6 @@ void Box3dTool::finishItem() {
 
         this->box3d->relabel_corners();
 
-        _desktop->getSelection()->set(this->box3d);
         DocumentUndo::done(_desktop->getDocument(), _("Create 3D box"), INKSCAPE_ICON("draw-cuboid"));
 
         this->box3d = nullptr;

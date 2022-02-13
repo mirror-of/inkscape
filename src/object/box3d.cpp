@@ -165,7 +165,8 @@ void SPBox3D::set(SPAttr key, const gchar* value) {
 static void
 box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box)
 {
-    if (old_ref) {
+    if (old_ref && G_TYPE_CHECK_INSTANCE((gpointer)old_ref)) { // See issue 2390 (crash when quitting while dragging a 3D Box) ...
+        //... G_TYPE_CHECK_INSTANCE prevents triggering a glib assert after the SPObject has been deleted; a warning will still be thrown though
         sp_signal_disconnect_by_data(old_ref, box);
         Persp3D *oldPersp = dynamic_cast<Persp3D *>(old_ref);
         if (oldPersp) {
