@@ -47,8 +47,8 @@ enum GridType {
 
 #define GRID_MAXTYPENR 1
 
-#define GRID_DEFAULT_COLOR 0x3F3FFF20
-#define GRID_DEFAULT_EMPCOLOR 0x3F3FFF40
+#define GRID_DEFAULT_COLOR    0x0099e526
+#define GRID_DEFAULT_EMPCOLOR 0x0099e54d
 
 class CanvasGrid {
 public:

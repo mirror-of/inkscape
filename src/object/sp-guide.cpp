@@ -50,7 +50,7 @@ SPGuide::SPGuide()
     , locked(false)
     , normal_to_line(Geom::Point(0.,1.))
     , point_on_line(Geom::Point(0.,0.))
-    , color(0x0000ff7f)
+    , color(0x0086e599)
     , hicolor(0xff00007f)
 {}
 
