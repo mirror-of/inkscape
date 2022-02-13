@@ -37,7 +37,7 @@ public:
     void param_set_default() override;
     void param_set_randomsign(bool randomsign) {_randomsign = randomsign;};
     Gtk::Widget * param_newWidget() override;
-
+    double param_get_random_number() { return rand(); };
     void param_set_value(gdouble val, long newseed);
     void param_make_integer(bool yes = true);
     void param_set_range(gdouble min, gdouble max);

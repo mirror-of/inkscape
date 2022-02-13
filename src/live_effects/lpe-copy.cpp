@@ -77,27 +77,34 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     gapx(_("Gap X"), _("Gap between copies in X"), "gapx", &wr, this, 0.0),
     gapy(_("Gap Y"), _("Gap between copies in Y"), "gapy", &wr, this, 0.0),
     scale(_("Scale %"), _("Scale copies"), "scale", &wr, this, 100.0),
-    rotate(_("Rotate °"), _("Rotate copies"), "rotate", &wr, this, 0.0),
+    rotate(_("Rotate°"), _("Rotate copies"), "rotate", &wr, this, 0.0),
     offset(_("Offset %"), _("Offset copies"), "offset", &wr, this, 0.0),
     offset_type(_("Offset type"), _("Offset Type (rows/cols)"), "offset_type", &wr, this, false),
     interpolate_scalex(_("Interpolate scale X"), _("Interpolate rotate X"), "interpolate_scalex", &wr, this, false),
-    interpolate_scaley(_("Interpolate scale Y"), _("Interpolate rotate Y"), "interpolate_scaley", &wr, this, false),
+    interpolate_scaley(_("Interpolate scale Y"), _("Interpolate rotate Y"), "interpolate_scaley", &wr, this, true),
     shrink_interp(_("Shrink gap"), _("Minimize gaps between scaled objects (does not work with rotation)"), "shrink_interp", &wr, this, false),
     interpolate_rotatex(_("Interpolate rotate X"), _("Interpolate rotate X"), "interpolate_rotatex", &wr, this, false),
-    interpolate_rotatey(_("Interpolate rotate Y"), _("Interpolate rotate Y"), "interpolate_rotatey", &wr, this, false),
+    interpolate_rotatey(_("Interpolate rotate Y"), _("Interpolate rotate Y"), "interpolate_rotatey", &wr, this, true),
     split_items(_("Split elements"), _("Split elements, so each can have its own style"), "split_items", &wr, this, false),
     mirrorrowsx(_("Mirror rows in X"), _("Mirror rows in X"), "mirrorrowsx", &wr, this, false),
     mirrorrowsy(_("Mirror rows in Y"), _("Mirror rows in Y"), "mirrorrowsy", &wr, this, false),
     mirrorcolsx(_("Mirror cols in X"), _("Mirror columns in X"), "mirrorcolsx", &wr, this, false),
     mirrorcolsy(_("Mirror cols in Y"), _("Mirror columns in Y"), "mirrorcolsy", &wr, this, false),
     mirrortrans(_("Mirror transforms"), _("Mirror transforms"), "mirrortrans", &wr, this, false),
-    link_styles(_("Link styles"), _("Link styles in split mode"), "link_styles", &wr, this, false)
+    link_styles(_("Link styles"), _("Link styles in split mode"), "link_styles", &wr, this, false),
+    random_gap_x(_("random_gap_x"), _("random_gap_x"), "random_gap_x", &wr, this, false),
+    random_gap_y(_("random_gap_y"), _("random_gap_y"), "random_gap_y", &wr, this, false),
+    random_rotate(_("random_rotate"), _("random_rotate"), "random_rotate", &wr, this, false),
+    random_scale(_("random_scale"), _("random_scale"), "random_scale", &wr, this, false),
+    seed(_("Seed"), _("Randomice seed"), "seed", &wr, this, 1.)
     
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
     // register all your parameters here, so Inkscape knows which parameters this effect has:
+    // please intense work on this widget and is important reorder parameters very carefuly
     registerParameter(&unit);
+    registerParameter(&seed);
     registerParameter(&lpesatellites);
     registerParameter(&num_rows);
     registerParameter(&num_cols);
@@ -119,27 +126,37 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     registerParameter(&interpolate_scaley);
     registerParameter(&interpolate_rotatex);
     registerParameter(&interpolate_rotatey);
+    registerParameter(&random_scale);
+    registerParameter(&random_rotate);
+    registerParameter(&random_gap_y);
+    registerParameter(&random_gap_x);
     
-    num_cols.param_set_range(1, std::numeric_limits<gint>::max());
+    num_cols.param_set_range(1, 9999);// we neeed the input a bit tiny so this seems enought
     num_cols.param_make_integer();
-    num_cols.param_set_increments(1.0, 10.0);
-    num_rows.param_set_range(1, std::numeric_limits<gint>::max());
+    num_cols.param_set_increments(1, 10);
+    num_rows.param_set_range(1, 9999);
     num_rows.param_make_integer();
-    num_rows.param_set_increments(1.0, 10.0);
-    scale.param_set_range(-9999,9999); // we neeed the input a bit tiny so this seems enought
+    num_rows.param_set_increments(1, 10);
+    scale.param_set_range(-9999,9999); 
     scale.param_make_integer();
-    scale.param_set_increments(1.0, 10.0);
+    scale.param_set_increments(1, 10);
+    gapx.param_set_range(-99999,99999); 
+    gapx.param_set_increments(1.0, 10.0);
+    gapy.param_set_range(-99999,99999); 
+    gapy.param_set_increments(1.0, 10.0);
     rotate.param_set_increments(1.0, 10.0);
     rotate.param_set_range(-900, 900);
     offset.param_set_range(-300, 300);
     offset.param_set_increments(1.0, 10.0);
-
+    seed.param_set_range(.0,1.0);
+    seed.param_set_randomsign(true);
     apply_to_clippath_and_mask = true;
     _provides_knotholder_entities = true;
     prev_num_cols = num_cols;
     prev_num_rows = num_rows;
     _knotholder = nullptr;
     reset = link_styles;
+    prev_unit = unit.get_abbreviation();
 }
 
 LPECopy::~LPECopy()
@@ -210,11 +227,11 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         Geom::Point center = (*gap_bbox).midpoint();
         bool forcewrite = false;
         Geom::Affine origin = Geom::Translate(center).inverse();
-        if (!interpolate_rotatex && !interpolate_rotatey) {
+        if (!interpolate_rotatex && !interpolate_rotatey && !random_rotate) {
             origin *= Geom::Rotate::from_degrees(rotate);
         }
-        if (!interpolate_scalex && !interpolate_scaley) {
-            origin *= Geom::Scale(scale/100.0,scale/100.0);
+        if (!interpolate_scalex && !interpolate_scaley && !random_scale) {
+            origin *= Geom::Scale(scaleok, scaleok);
         }
         origin *= Geom::Translate(center);
         origin = origin.inverse();
@@ -296,7 +313,7 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                     rotatein *=-1;
                 }
                 double scalein = 1;
-                double scalegap = scale/100.0 - scalein;
+                double scalegap = scaleok - scalein;
                 if (interpolate_scalex && interpolate_scaley) {
                     scalein = (scalegap*fract) + 1;
                 } else if (interpolate_scalex) {
@@ -307,26 +324,39 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                     //scalein = scale/100.0;
                 }
                 r *= Geom::Translate(center).inverse();
-                if (!interpolate_rotatex && !interpolate_rotatey) {
+                if (!interpolate_rotatex && !interpolate_rotatey && !random_rotate) {
                     r *= Geom::Rotate::from_degrees(rotatein).inverse();
                 }
+                if (random_scale && scaleok != 1.0) {
+                    double max = std::max(1.0, scaleok);
+                    double min = std::min(1.0, scaleok);
+                    scalein = seed.param_get_random_number()  * (max - min) + min;
+                }
+                if (random_rotate && rotate) {
+                    rotatein = (seed.param_get_random_number() - seed.param_get_random_number()) * rotate;
+                }
                 r *= Geom::Rotate::from_degrees(rotatein);
+                r *= randomrotatebase.inverse();
                 r *= Geom::Scale(scalein, scalein);
                 r *= Geom::Translate(center);
-                double heightrows = original_height * (scale/100.0);
-                double widthcols = original_width * (scale/100.0);
+                gdouble scale_fix = scaleok;
+                if (random_scale || interpolate_scalex || interpolate_scaley) {
+                    scale_fix = std::max(scaleok, 1.0);
+                }
+                double heightrows = original_height * scale_fix;
+                double widthcols = original_width * scale_fix;
                 double fixed_heightrows = heightrows;
                 double fixed_widthcols = widthcols;
                 bool shrink_interpove = shrink_interp;
                 if (rotatein) {
                     shrink_interpove = false;
                 }
-                if (scale != 100 && (interpolate_scalex || interpolate_scaley)) {// && !interpolate_rotatex && !interpolate_rotatey) {
+                if (scaleok != 1.0 && (interpolate_scalex || interpolate_scaley)) {
                     maxheight = std::max(maxheight,(*bbox).height() * scalein);
                     maxwidth = std::max(maxwidth,(*bbox).width() * scalein);
                     minheight = std::min(minheight,(*bbox).height() * scalein);
-                    widthcols = std::max(original_width * (scale/100.0),original_width);
-                    heightrows = std::max(original_height * (scale/100.0),original_height);
+                    widthcols = std::max(original_width * scaleok, original_width);
+                    heightrows = std::max(original_height * scaleok, original_height);
                     fixed_widthcols = widthcols;
                     fixed_heightrows = heightrows;
                     double cx = (*bbox).width() * scalein;
@@ -392,7 +422,15 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                             offset_x = fixed_widthcols/(100.0/(double)offset);
                         }
                     }
-                    r *= Geom::Translate(Geom::Point(xset + offset_x,yset + offset_y));
+                    double ran_x = 0;
+                    double ran_y = 0;
+                    if (random_gap_x && gapx) {
+                        ran_x = seed.param_get_random_number() * gapx_unit;
+                    }
+                    if (random_gap_y && gapy) {
+                        ran_y = seed.param_get_random_number() * gapy_unit;
+                    }
+                    r *= Geom::Translate(Geom::Point(xset + offset_x - ran_x, yset + offset_y - ran_y));
                     item->transform = r * sp_item_transform_repr(sp_lpe_item);
                     item->doWriteTransform(item->transform);
                     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -575,6 +613,14 @@ Gtk::Widget * LPECopy::newWidget()
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);
     Gtk::Widget *combo = nullptr;
+    Gtk::Widget *randbutton = nullptr;
+    Gtk::Box *containerstart = nullptr;
+    Gtk::Box *containerend = nullptr;
+    Gtk::Box *movestart = nullptr;
+    Gtk::Box *moveend = nullptr;
+    Gtk::Box *transformstart = nullptr;
+    Gtk::Box *transformend = nullptr;
+    Gtk::Box *rowcols = nullptr;
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool usemirroricons = prefs->getBool("/live_effects/copy/mirroricons",true);
@@ -617,8 +663,25 @@ Gtk::Widget * LPECopy::newWidget()
                     }
                     ++it;
                     continue;
-                }
-                if (param->param_key == "offset_type" || 
+                } else if (param->param_key == "seed"){
+                    auto widgrand = dynamic_cast<Inkscape::UI::Widget::RegisteredRandom*>(widg);
+                    delete widgrand->get_children()[0];
+                    widgrand->get_children()[0]->hide();
+                    widgrand->get_children()[0]->set_no_show_all(true);
+                    auto button = dynamic_cast<Gtk::Button*>(widgrand->get_children()[1]);
+                    button->set_always_show_image(true);
+                    button->set_label(_("Randomize"));
+                    button->set_tooltip_markup(_("Randomize seed for random mode on scale, rotate and gaps"));
+                    button->set_relief(Gtk::RELIEF_NORMAL);
+                    button->set_image_from_icon_name(INKSCAPE_ICON("randomize"), Gtk::IconSize(Gtk::ICON_SIZE_BUTTON));
+                    widgrand->set_vexpand(false);
+                    widgrand->set_hexpand(true);
+                    widgrand->set_valign(Gtk::ALIGN_START);
+                    widgrand->set_halign(Gtk::ALIGN_START);
+                    randbutton = dynamic_cast<Gtk::Widget*>(Gtk::manage(widgrand));
+                    ++it;
+                    continue;
+                } else if (param->param_key == "offset_type" || 
                     param->param_key == "mirrorrowsx" && usemirroricons ||
                     param->param_key == "mirrorrowsy" && usemirroricons ||
                     param->param_key == "mirrorcolsx" && usemirroricons ||
@@ -626,19 +689,28 @@ Gtk::Widget * LPECopy::newWidget()
                     param->param_key == "interpolate_rotatex" ||
                     param->param_key == "interpolate_rotatey" ||
                     param->param_key == "interpolate_scalex" ||
-                    param->param_key == "interpolate_scaley")
+                    param->param_key == "interpolate_scaley" ||
+                    param->param_key == "random_scale" ||
+                    param->param_key == "random_rotate" ||
+                    param->param_key == "random_gap_x" ||
+                    param->param_key == "random_gap_y")
                 {
                     ++it;
                     continue;
-                }
-                if (param->param_key == "offset") {
-                    Gtk::Box *bwidg = dynamic_cast<Gtk::Box *>(widg);
+                } else if (param->param_key == "offset") {
+                    movestart->pack_start(*widg, false, false, 1);
+                    /* widg->set_halign(Gtk::ALIGN_END); */
+                    /* widg->set_hexpand(true); */
+                    /* auto widgscalar = dynamic_cast<Inkscape::UI::Widget::RegisteredScalar *>(widg);
+                    widgscalar->get_children()[0]->set_halign(Gtk::ALIGN_START); */
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                     Gtk::RadioButton::Group group;
                     Gtk::RadioToolButton * rows = Gtk::manage(new Gtk::RadioToolButton(group, _("Offset rows")));
                     rows->set_icon_name(INKSCAPE_ICON("rows"));
+                    rows->set_tooltip_markup(_("Offset alternate rows"));
                     Gtk::RadioToolButton * cols = Gtk::manage(new Gtk::RadioToolButton(group, _("Offset cols")));
                     cols->set_icon_name(INKSCAPE_ICON("cols"));
+                    cols->set_tooltip_markup(_("Offset alternate cols"));
                     if (offset_type) {
                         cols->set_active();
                     } else {
@@ -648,10 +720,11 @@ Gtk::Widget * LPECopy::newWidget()
                     container->pack_start(*cols, false, false, 1);
                     cols->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetCols));
                     rows->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetRows));
-                    bwidg->pack_start(*container, false, false, 0);
-                    vbox->pack_start(*bwidg, true, true, 2);
+                    moveend->pack_start(*container, false, false, 1);
                 } else if (param->param_key == "scale") {
-                    Gtk::Box *bwidg = dynamic_cast<Gtk::Box *>(widg);
+                    Gtk::Box *wrapper = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+                    transformstart = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+                    transformend = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                     Gtk::RadioButton::Group group;
                     Gtk::RadioToolButton * cols = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate X")));
@@ -662,27 +735,41 @@ Gtk::Widget * LPECopy::newWidget()
                     both->set_icon_name(INKSCAPE_ICON("interpolate-scale-both"));
                     Gtk::RadioToolButton * none = Gtk::manage(new Gtk::RadioToolButton(group, _("interpolate none")));
                     none->set_icon_name(INKSCAPE_ICON("interpolate-scale-none"));
+                    Gtk::RadioToolButton * rand = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate random")));
+                    rand->set_icon_name(INKSCAPE_ICON("scale-random"));
                     if (interpolate_scalex && interpolate_scaley) {
                         both->set_active();
                     } else if (interpolate_scalex) {
                         cols->set_active();
                     } else if (interpolate_scaley) {
                         rows->set_active();
+                    } else if (random_scale) {
+                        rand->set_active();
                     } else {
                         none->set_active();
                     }
+                    cols->set_tooltip_markup(_("Blend scale from <b>left to right</b> (left is original scale, right is new scale)"));
+                    rows->set_tooltip_markup(_("Blend scale from <b>top to bottom</b> (top is original scale, bottom is new scale)"));
+                    both->set_tooltip_markup(_("Blend scale in <b>Z-patten</b> (top left clone is original scale, bottom right is new scale)"));
+                    none->set_tooltip_markup(_("Uniform scale"));
+                    rand->set_tooltip_markup(_("Random scale (hit <b>randomize</b> button to shuffle order)"));
                     container->pack_start(*rows, false, false, 1);
                     container->pack_start(*cols, false, false, 1);
                     container->pack_start(*both, false, false, 1);
                     container->pack_start(*none, false, false, 1);
+                    container->pack_start(*rand, false, false, 1);
+                    rand->signal_clicked().connect(sigc::mem_fun(*this, &LPECopy::setScaleRandom));
                     none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), false, false));
                     cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), true, false));
                     rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), false, true));
                     both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), true, true));
-                    bwidg->pack_start(*container, false, false, 0);
-                    vbox->pack_start(*bwidg, true, true, 2);
+                    transformstart->pack_start(*widg, false, false, 1);
+                    transformend->pack_start(*container, false, false, 0);
+                    wrapper->pack_start(*transformstart, false, false, 0);
+                    wrapper->pack_start(*transformend, false, false, 0);
+                    vbox->pack_start(*wrapper, true, true, 2);
                 } else if (param->param_key == "rotate") {
-                    Gtk::Box *bwidg = dynamic_cast<Gtk::Box *>(widg);
+                    transformstart->pack_start(*widg, false, false, 1);
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                     Gtk::RadioButton::Group group;
                     Gtk::RadioToolButton * cols = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate X")));
@@ -693,36 +780,124 @@ Gtk::Widget * LPECopy::newWidget()
                     both->set_icon_name(INKSCAPE_ICON("interpolate-rotate-both"));
                     Gtk::RadioToolButton * none = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate none")));
                     none->set_icon_name(INKSCAPE_ICON("interpolate-rotate-none"));
+                    Gtk::RadioToolButton * rand = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate random")));
+                    rand->set_icon_name(INKSCAPE_ICON("rotate-random"));
                     if (interpolate_rotatex && interpolate_rotatey) {
                         both->set_active();
                     } else if (interpolate_rotatex) {
                         cols->set_active();
                     } else if (interpolate_rotatey) {
                         rows->set_active();
+                    } else if (random_rotate) {
+                        rand->set_active();
                     } else {
                         none->set_active();
                     }
+                    cols->set_tooltip_markup(_("Blend rotation from <b>left to right</b> (left is original rotation, right is new rotation)"));
+                    rows->set_tooltip_markup(_("Blend rotation from <b>top to bottom</b> (top is original rotation, bottom is new rotation)"));
+                    both->set_tooltip_markup(_("Blend rotation in <b>Z-patten</b> (top left clone is original rotation, bottom right is new rotation)"));
+                    none->set_tooltip_markup(_("Uniform rotation"));
+                    rand->set_tooltip_markup(_("Random rotation (hit <b>randomize</b> button to shuffle order)"));
                     container->pack_start(*rows, false, false, 1);
                     container->pack_start(*cols, false, false, 1);
                     container->pack_start(*both, false, false, 1);
                     container->pack_start(*none, false, false, 1);
+                    container->pack_start(*rand, false, false, 1);
+                    rand->signal_clicked().connect(sigc::mem_fun(*this, &LPECopy::setRotateRandom));
                     none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), false, false));
                     cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), true, false));
                     rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), false, true));
                     both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), true, true));
-                    bwidg->pack_start(*container, false, false, 0);
-                    vbox->pack_start(*bwidg, true, true, 2);
-                } else if (param->param_key == "gapx") {
-                    Gtk::Box *bwidg = dynamic_cast<Gtk::Box *>(widg);
-                    bwidg->pack_start(*combo, true, true, 2);
-                    vbox->pack_start(*bwidg, true, true, 2);
+                    transformend->pack_start(*container, false, false, 0);
+                 } else if (param->param_key == "gapx") {
+                    Gtk::Box *wrapper = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+                    movestart = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+                    moveend = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+                    Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+                    Gtk::RadioButton::Group group;
+                    Gtk::RadioToolButton * normal = Gtk::manage(new Gtk::RadioToolButton(group, _("Normal")));
+                    normal->set_icon_name(INKSCAPE_ICON("interpolate-scale-none")); // same icon
+                    Gtk::RadioToolButton * randx = Gtk::manage(new Gtk::RadioToolButton(group, _("Random")));
+                    randx->set_icon_name(INKSCAPE_ICON("gap-random-x"));
+                    if (random_gap_x) {
+                        randx->set_active();
+                    } else {
+                        normal->set_active();
+                    }
+                    normal->set_tooltip_markup(_("Keep uniform gaps in rows (X)"));
+                    randx->set_tooltip_markup(_("Make gaps random (hit <b>randomize</b> button to shuffle order)"));
+                    normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapXMode), false));
+                    randx->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapXMode), true));
+                    container->pack_start(*normal, false, false, 1);
+                    container->pack_start(*randx, false, false, 1);
+                    container->pack_end(*combo, false, false, 1);
+                    movestart->pack_start(*widg, false, false, 1);
+                    moveend->pack_start(*container, true, true, 1);
+                    wrapper->pack_start(*movestart, false, false, 0);
+                    wrapper->pack_start(*moveend, false, false, 0);
+                    //bwidg->set_hexpand(true);
+                    combo->set_halign(Gtk::ALIGN_END);
+                    widg->set_halign(Gtk::ALIGN_START);
+                    vbox->pack_start(*wrapper, true, true, 2);
+                } else if (param->param_key == "gapy") {
+                    movestart->pack_start(*widg, true, true, 0);
+                    Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+                    Gtk::RadioButton::Group group;
+                    Gtk::RadioToolButton * normal = Gtk::manage(new Gtk::RadioToolButton(group, _("Normal")));
+                    normal->set_icon_name(INKSCAPE_ICON("interpolate-scale-none")); // same icon
+                    Gtk::RadioToolButton * randy = Gtk::manage(new Gtk::RadioToolButton(group, _("Random")));
+                    randy->set_icon_name(INKSCAPE_ICON("gap-random-y"));
+                    if (random_gap_y) {
+                        randy->set_active();
+                    } else {
+                        normal->set_active();
+                    }
+                    normal->set_tooltip_markup(_("Keep uniform gaps in rows (Y)"));
+                    randy->set_tooltip_markup(_("Make gaps random (hit <b>randomize</b> button to shuffle order)"));
+                    normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapYMode), false));
+                    randy->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapYMode), true));
+                    container->pack_start(*normal, false, false, 1);
+                    container->pack_start(*randy, false, false, 1);
+                    widg->set_halign(Gtk::ALIGN_START);
+                    moveend->pack_start(*container, false, false, 1);
+                } else if (param->param_key == "mirrortrans"){
+                    Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+                    Gtk::Box *containerwraper = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+                    containerend = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+                    containerstart = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+                    container->pack_start(*containerwraper, true, true, 0);
+                    containerwraper->pack_start(*containerstart, true, true, 0);
+                    containerwraper->pack_start(*containerend, true, true, 0);
+                    containerend->pack_end(*randbutton, true, true, 2);
+                    containerstart->pack_start(*widg, true, true, 2);
+                    container->set_hexpand(true);
+                    containerwraper->set_hexpand(true);
+                    containerend->set_hexpand(true);
+                    containerstart->set_hexpand(true);
+                    vbox->pack_start(*container, true, true, 2);
+                } else if (
+                    param->param_key == "split_items" ||
+                    param->param_key == "link_styles" ||
+                    param->param_key == "shrink_interp")
+                { 
+                    containerstart->pack_start(*widg, true, true, 2);
+                    widg->set_vexpand(false);
+                    widg->set_hexpand(false);
+                    widg->set_valign(Gtk::ALIGN_START);
+                    widg->set_halign(Gtk::ALIGN_START);
+                } else if (param->param_key == "num_rows") { 
+                    rowcols = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+                    rowcols->pack_start(*widg, false, false, 2);
+                    vbox->pack_start(*rowcols, true, true, 2);
+                } else if (param->param_key == "num_cols") { 
+                    rowcols->pack_start(*widg, false, false, 2);
                 } else {
                     vbox->pack_start(*widg, true, true, 2);
                 }
                 if (tip) {
-                    widg->set_tooltip_text(*tip);
+                    widg->set_tooltip_markup(*tip);
                 } else {
-                    widg->set_tooltip_text("");
+                    widg->set_tooltip_markup("");
                     widg->set_has_tooltip(false);
                 }                
             }
@@ -761,7 +936,7 @@ LPECopy::generate_buttons(Gtk::Box *container, Gtk::RadioButton::Group &group, g
         if (tooltip.size()) {
             tooltip.erase(tooltip.size()-1);
         }
-        button->set_tooltip_text(tooltip);
+        button->set_tooltip_markup(tooltip);
         button->set_margin_start(1);
         container->pack_start(*button, false, false, 1);
     }
@@ -847,6 +1022,7 @@ void
 LPECopy::setRotateInterpolate(bool x, bool y){
     interpolate_rotatex.param_setValue(x);
     interpolate_rotatey.param_setValue(y);
+    random_rotate.param_setValue(false);
     writeParamsToSVG();
 }
 
@@ -854,6 +1030,35 @@ void
 LPECopy::setScaleInterpolate(bool x, bool y){
     interpolate_scalex.param_setValue(x);
     interpolate_scaley.param_setValue(y);
+    random_scale.param_setValue(false);
+    writeParamsToSVG();
+}
+
+void
+LPECopy::setRotateRandom() {
+    interpolate_rotatex.param_setValue(false);
+    interpolate_rotatey.param_setValue(false);
+    random_rotate.param_setValue(true);
+    writeParamsToSVG();
+}
+
+void
+LPECopy::setScaleRandom() {
+    interpolate_scalex.param_setValue(false);
+    interpolate_scaley.param_setValue(false);
+    random_scale.param_setValue(true);
+    writeParamsToSVG();
+}
+
+void
+LPECopy::setGapXMode(bool random) {
+    random_gap_x.param_setValue(random);
+    writeParamsToSVG();
+}
+
+void
+LPECopy::setGapYMode(bool random) {
+    random_gap_y.param_setValue(random);
     writeParamsToSVG();
 }
 
@@ -872,7 +1077,15 @@ LPECopy::doOnApply(SPLPEItem const* lpeitem)
     if (!gap_bbox) {
         return;
     }
-    (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale/100) * Geom::Translate((*originalbbox).midpoint());
+    scaleok = scale / 100.0;
+    if (scaleok == 0) {
+        scaleok = 0.00000001;
+    }
+    gdouble scale_fix = scaleok;
+    if (random_scale || interpolate_scalex || interpolate_scaley) {
+        scale_fix = std::max(scaleok,1.0);
+    }
+    (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*originalbbox).midpoint());
     original_width = (*gap_bbox).width();
     original_height = (*gap_bbox).height();
 }
@@ -881,6 +1094,26 @@ void
 LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
+    seed.resetRandomizer();
+    random_x.clear();
+    random_y.clear();
+    random_s.clear();
+    random_r.clear();
+    if (prev_unit != unit.get_abbreviation()) {
+        double newgapx = Inkscape::Util::Quantity::convert(gapx, prev_unit, unit.get_abbreviation());
+        double newgapy = Inkscape::Util::Quantity::convert(gapy, prev_unit, unit.get_abbreviation());
+        gapx.param_set_value(newgapx);
+        gapy.param_set_value(newgapy);
+        prev_unit = unit.get_abbreviation();
+        writeParamsToSVG();
+    }
+    scaleok = scale / 100.0;
+    if (scaleok == 0) {
+        scaleok = 0.00000001;
+    }
+    if (random_rotate) {
+        randomrotatebase = Geom::Rotate::from_degrees((seed.param_get_random_number() - seed.param_get_random_number()) * rotate);
+    }
     if (!split_items && lpesatellites.data().size()) {
         processObjects(LPE_ERASE);
     }
@@ -904,7 +1137,11 @@ LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
     if (!gap_bbox) {
         return;
     }
-    (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale/100) * Geom::Translate((*originalbbox).midpoint());
+    gdouble scale_fix = scaleok;
+    if (random_scale || interpolate_scalex || interpolate_scaley) {
+        scale_fix = std::max(scaleok, 1.0);
+    }
+    (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*originalbbox).midpoint());
     original_width = (*gap_bbox).width();
     original_height = (*gap_bbox).height();
 }
@@ -938,17 +1175,20 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
     if (split_items) {
         Geom::PathVector output_pv = pathv_to_linear_and_cubic_beziers(path_in);
         output_pv *= Geom::Translate(center).inverse();
-        if (!interpolate_rotatex && !interpolate_rotatey) {
+        if (!interpolate_rotatex && !interpolate_rotatey && !random_rotate) {
             output_pv *= Geom::Rotate::from_degrees(rotate);
         }
-        if (!interpolate_scalex && !interpolate_scaley) {
-            output_pv *= Geom::Scale(scale/100.0,scale/100.0);
+        if (random_rotate) {
+            output_pv *= randomrotatebase;
+        }
+        if (!interpolate_scalex && !interpolate_scaley && !random_scale) {
+            output_pv *= Geom::Scale(scaleok, scaleok);
         }
         output_pv *= Geom::Translate(center); 
         return output_pv;
     }
     Geom::PathVector output;
-    size_t counter = 0;
+    gint counter = 0;
     size_t total = num_rows * num_cols;
     Geom::OptRect prev_bbox;
     double gapscalex = 0;
@@ -1031,7 +1271,7 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
                 rotatein *=-1;
             }
             double scalein = 1;
-            double scalegap = scale/100.0 - scalein;
+            double scalegap = scaleok - scalein;
             if (interpolate_scalex && interpolate_scaley) {
                 scalein = (scalegap*fract) + 1;
             } else if (interpolate_scalex) {
@@ -1039,7 +1279,21 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
             } else if (interpolate_scaley) {
                 scalein = (scalegap*fracyin) + 1;
             } else {
-                scalein = scale/100.0;
+                scalein = scaleok;
+            }
+            if (random_scale && scaleok != 1.0) {
+                if (random_s.size() == counter) {
+                    double max = std::max(1.0,scaleok);
+                    double min = std::min(1.0,scaleok);
+                    random_s.emplace_back(seed.param_get_random_number()  * (max - min) + min);
+                }
+                scalein = random_s[counter];
+            }
+            if (random_rotate && rotate) {
+                if (random_r.size() == counter) {
+                    random_r.emplace_back((seed.param_get_random_number() - seed.param_get_random_number()) * rotate);
+                }
+                rotatein = random_r[counter];
             }
             r *= Geom::Translate(center).inverse();
             r *= Geom::Scale(scalein, scalein);
@@ -1047,8 +1301,12 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
             r *= Geom::Translate(center);
             Geom::PathVector output_pv = pathv_to_linear_and_cubic_beziers(path_in);
             output_pv *= r;
-            double heightrows = original_height * (scale/100.0);
-            double widthcols = original_width * (scale/100.0);
+            gdouble scale_fix = scaleok;
+            if (random_scale || interpolate_scalex || interpolate_scaley) {
+                scale_fix = std::max(scaleok,1.0);
+            }
+            double heightrows = original_height * scale_fix;
+            double widthcols = original_width * scale_fix;
             double fixed_heightrows = heightrows;
             double fixed_widthcols = widthcols;
 
@@ -1057,14 +1315,14 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
                 shrink_interp.write_to_SVG();
                 return path_in;
             }
-            if (scale != 100 && (interpolate_scalex || interpolate_scaley )) {//&& !interpolate_rotatex && !interpolate_rotatey) {
+            if (scaleok != 1.0 && (interpolate_scalex || interpolate_scaley )) {
                 Geom::OptRect bbox = output_pv.boundsFast();
                 if (bbox) {
                     maxheight = std::max(maxheight,(*bbox).height());
                     maxwidth = std::max(maxwidth,(*bbox).width());
                     minheight = std::min(minheight,(*bbox).height());
-                    widthcols = std::max(original_width * (scale/100.0),original_width);
-                    heightrows = std::max(original_height * (scale/100.0),original_height);
+                    widthcols = std::max(original_width * scaleok,original_width);
+                    heightrows = std::max(original_height * scaleok,original_height);
                     fixed_widthcols = widthcols;
                     fixed_heightrows = heightrows;
                     double cx = (*bbox).width();
@@ -1088,13 +1346,17 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
                                 gapscalex = 0;
                             }
                         } else {
-                            x = (std::max(original_width * (scale/100.0),original_width) + posx) * j;
+                            x = (std::max(original_width * scaleok, original_width) + posx) * j;
                         }
                         if (interpolate_scalex && i == 1) {
                             y[j] = maxheight * factory;
+                        } else if(i == 0) {
+                            y[j] = 0;
                         }
                         if (i == 1 && !interpolate_scalex) {
                             gap[j] = ((cy * factory) - y[j])/2.0;
+                        } else if (i == 0) {
+                            gap[j] = 0;
                         }
                         yset = y[j] + (gap[j] * i);
                         if (interpolate_scaley) {
@@ -1123,7 +1385,21 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
                     offset_x = fixed_widthcols/(100.0/(double)offset);
                 }
             }
-            output_pv *= Geom::Translate(Geom::Point(xset + offset_x,yset + offset_y));
+            if (random_x.size() == counter) {
+                if (random_gap_x && gapx_unit) {
+                    random_x.emplace_back((seed.param_get_random_number() * gapx_unit)); // avoid overlaping
+                } else {
+                    random_x.emplace_back(0);
+                }
+            }
+            if (random_y.size() == counter) {
+                if (random_gap_y && gapy_unit) {
+                    random_y.emplace_back((seed.param_get_random_number() * gapy_unit)); // avoid overlaping
+                } else {
+                    random_y.emplace_back(0);
+                }
+            }
+            output_pv *= Geom::Translate(Geom::Point(xset + offset_x - random_x[counter],yset + offset_y - random_y[counter]));
             output.insert(output.end(), output_pv.begin(), output_pv.end());
             counter++;
         }
@@ -1140,7 +1416,11 @@ LPECopy::addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVec
     using namespace Geom;
     hp_vec.clear();
     Geom::Path hp = Geom::Path(*gap_bbox);
-    hp *= Geom::Translate((*gap_bbox).midpoint()).inverse() * Geom::Scale(scale/100) * Geom::Translate((*gap_bbox).midpoint());
+    gdouble scale_fix = scaleok;
+    if (random_scale || interpolate_scalex || interpolate_scaley) {
+        scale_fix = std::max(scaleok,1.0);
+    }
+    hp *= Geom::Translate((*gap_bbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*gap_bbox).midpoint());
     Geom::PathVector pathv;
     pathv.push_back(hp);
     hp_vec.push_back(pathv);
@@ -1249,7 +1529,7 @@ void KnotHolderEntityCopyGapX::knot_set(Geom::Point const &p, Geom::Point const&
     if (lpe->originalbbox) {
         double value = (((*lpe->originalbbox).corner(1)[Geom::X] - s[Geom::X]) * -1);
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
-        value = Inkscape::Util::Quantity::convert((value/(lpe->scale/100.0)) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
+        value = Inkscape::Util::Quantity::convert((value/lpe->scaleok) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
         lpe->gapx.param_set_value(value);
         lpe->refresh_widgets = true;
         lpe->gapx.write_to_SVG();
@@ -1264,7 +1544,7 @@ void KnotHolderEntityCopyGapY::knot_set(Geom::Point const &p, Geom::Point const&
     if (lpe->originalbbox) {
         double value = (((*lpe->originalbbox).corner(3)[Geom::Y] - s[Geom::Y]) * -1);
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
-        value = Inkscape::Util::Quantity::convert((value/(lpe->scale/100.0)) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
+        value = Inkscape::Util::Quantity::convert((value/lpe->scaleok) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
         lpe->gapy.param_set_value(value);
         lpe->refresh_widgets = true;
         lpe->gapy.write_to_SVG();
@@ -1277,7 +1557,7 @@ Geom::Point KnotHolderEntityCopyGapX::knot_get() const
     if (lpe->originalbbox) {
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         double value = Inkscape::Util::Quantity::convert(lpe->gapx, lpe->unit.get_abbreviation(), display_unit.c_str());
-        return (*lpe->originalbbox).corner(1) + Geom::Point((value*(lpe->scale/100.0))/2.0,0);
+        return (*lpe->originalbbox).corner(1) + Geom::Point((value * lpe->scaleok)/2.0,0);
     }
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }
@@ -1288,7 +1568,7 @@ Geom::Point KnotHolderEntityCopyGapY::knot_get() const
     if (lpe->originalbbox) {
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         double value = Inkscape::Util::Quantity::convert(lpe->gapy, lpe->unit.get_abbreviation(), display_unit.c_str());
-        return (*lpe->originalbbox).corner(3) + Geom::Point(0,(value*(lpe->scale/100.0))/2.0);
+        return (*lpe->originalbbox).corner(3) + Geom::Point(0,(value * lpe->scaleok)/2.0);
     }
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }

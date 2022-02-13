@@ -23,6 +23,7 @@
 #include "live_effects/parameter/satellitearray.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/unit.h"
+#include "live_effects/parameter/random.h"
 // this is only to fillrule
 #include "livarot/Shape.h"
 
@@ -70,6 +71,10 @@ private:
     void setOffsetRows();
     void setScaleInterpolate(bool x, bool y);
     void setRotateInterpolate(bool x, bool y);
+    void setScaleRandom();
+    void setRotateRandom();
+    void setGapXMode(bool random);
+    void setGapYMode(bool random);
     bool getActiveMirror(gint index);
     bool _updating = false;
     void setMirroring(gint index);
@@ -85,6 +90,11 @@ private:
     ScalarParam scale;
     ScalarParam offset;
     BoolParam offset_type;
+    BoolParam random_scale;
+    BoolParam random_rotate;
+    BoolParam random_gap_x;
+    BoolParam random_gap_y;
+    RandomParam seed;
     BoolParam interpolate_scalex;
     BoolParam interpolate_rotatex;
     BoolParam interpolate_scaley;
@@ -104,6 +114,13 @@ private:
     double prev_num_cols;
     double prev_num_rows;
     bool reset;
+    gdouble scaleok = 1.0;
+    Glib::ustring prev_unit = "px";
+    std::vector<double> random_x;
+    std::vector<double> random_y;
+    std::vector<double> random_s;
+    std::vector<double> random_r;
+    Geom::Rotate randomrotatebase = Geom::Rotate::from_degrees(0);
     bool prev_split = false;
     SPObject *container;
     LPECopy(const LPECopy&) = delete;
