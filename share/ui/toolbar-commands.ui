@@ -80,7 +80,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.undo</property>
+        <property name="action_name">doc.undo</property>
         <property name="icon_name">edit-undo</property>
         <property name="label" translatable="true">_Undo</property>
         <property name="use-underline">True</property>
@@ -89,7 +89,7 @@
     <child>
       <object class="GtkToolButton">
         <property name="visible">True</property>
-        <property name="action_name">win.redo</property>
+        <property name="action_name">doc.redo</property>
         <property name="icon_name">edit-redo</property>
         <property name="label" translatable="true">_Redo</property>
         <property name="use-underline">True</property>
