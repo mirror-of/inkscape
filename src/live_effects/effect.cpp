@@ -1502,6 +1502,9 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
     doBeforeEffect(lpeitem);
+    if (is_load) {
+        update_satellites(false);
+    }
     update_helperpath();
 }
 
