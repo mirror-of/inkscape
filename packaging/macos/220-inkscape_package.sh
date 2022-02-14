@@ -71,10 +71,10 @@ lib_change_paths @loader_path/.. "$INK_APP_LIB_DIR" \
 #------------------------------------------------------ use rpath in cache files
 
 sed -i '' \
-  's/@executable_path\/..\/Resources\/lib/@rpath/g' \
+  's|@executable_path/../Resources/lib|@rpath|g' \
   "$INK_APP_LIB_DIR"/gtk-3.0/3.0.0/immodules.cache
 sed -i '' \
-  's/@executable_path\/..\/Resources\/lib/@rpath/g' \
+  's|@executable_path/../Resources/lib|@rpath|g' \
   "$INK_APP_LIB_DIR"/gdk-pixbuf-2.0/2.10.0/loaders.cache
 
 #------------------------------------------------------------- modify Info.plist
@@ -143,7 +143,6 @@ ink_pipinstall "$INK_PYTHON_PKG_APPDIRS"         # extension manager
 ink_pipinstall "$INK_PYTHON_PKG_BEAUTIFULSOUP4"  # extension manager
 ink_pipinstall "$INK_PYTHON_PKG_CACHECONTROL"    # extension manager
 ink_pipinstall "$INK_PYTHON_PKG_CSSSELECT"
-ink_pipinstall "$INK_PYTHON_PKG_GTKME"           # extension manager
 ink_pipinstall "$INK_PYTHON_PKG_LXML"
 ink_pipinstall "$INK_PYTHON_PKG_NUMPY"
 ink_pipinstall "$INK_PYTHON_PKG_PILLOW"          # export raster extension
@@ -172,7 +171,7 @@ cp "$SELF_DIR"/fonts.conf "$INK_APP_ETC_DIR"/fonts
 #-------------------------------- use rpath for GObject introspection repository
 
 for gir in "$INK_APP_RES_DIR"/share/gir-1.0/*.gir; do
-  sed "s/@executable_path\/../@rpath/g" "$gir" > "$TMP_DIR/$(basename "$gir")"
+  sed "s|@executable_path/..|@rpath|g" "$gir" > "$TMP_DIR/$(basename "$gir")"
 done
 
 mv "$TMP_DIR"/*.gir "$INK_APP_RES_DIR"/share/gir-1.0

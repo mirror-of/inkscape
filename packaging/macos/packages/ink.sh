@@ -99,9 +99,6 @@ INK_PYTHON_PKG_CACHECONTROL="\
 # https://pypi.org/project/cssselect/
 INK_PYTHON_PKG_CSSSELECT=cssselect==1.1.0
 
-# https://pypi.org/project/gtkme/
-INK_PYTHON_PKG_GTKME=gtkme==1.5.3
-
 # https://pypi.org/project/lxml/
 INK_PYTHON_PKG_LXML=lxml==4.7.1
 
@@ -219,11 +216,11 @@ function ink_pipinstall_lxml
 
 function ink_pipinstall_numpy
 {
-  sed -i '' '1s/.*/#!\/usr\/bin\/env python'"$INK_PYTHON_VER_MAJOR"'/' \
+  sed -i '' '1s|.*|#!/usr/bin/env python'"$INK_PYTHON_VER_MAJOR"'|' \
     "$INK_APP_BIN_DIR"/f2py
-  sed -i '' '1s/.*/#!\/usr\/bin\/env python'"$INK_PYTHON_VER_MAJOR"'/' \
+  sed -i '' '1s|.*|#!/usr/bin/env python'"$INK_PYTHON_VER_MAJOR"'|' \
     "$INK_APP_BIN_DIR"/f2py$INK_PYTHON_VER_MAJOR
-  sed -i '' '1s/.*/#!\/usr\/bin\/env python'"$INK_PYTHON_VER_MAJOR"'/' \
+  sed -i '' '1s|.*|#!/usr/bin/env python'"$INK_PYTHON_VER_MAJOR"'|' \
     "$INK_APP_BIN_DIR"/f2py$INK_PYTHON_VER
 }
 
@@ -240,14 +237,14 @@ function ink_pipinstall_pygobject
 function ink_pipinstall_pyserial
 {
   find "$INK_APP_SPK_DIR"/serial -type f -name "*.pyc" -exec rm {} \;
-  sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' \
+  sed -i '' '1s|.*|#!/usr/bin/env python3|' \
     "$INK_APP_BIN_DIR"/pyserial-miniterm
-  sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' "$INK_APP_BIN_DIR"/pyserial-ports
+  sed -i '' '1s|.*|#!/usr/bin/env python3|' "$INK_APP_BIN_DIR"/pyserial-ports
 }
 
 function ink_pipinstall_scour
 {
-  sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' "$INK_APP_BIN_DIR"/scour
+  sed -i '' '1s|.*|#!/usr/bin/env python3|' "$INK_APP_BIN_DIR"/scour
 }
 
 function ink_download_python
