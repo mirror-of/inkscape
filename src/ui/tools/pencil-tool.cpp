@@ -923,7 +923,7 @@ void PencilTool::_interpolate() {
     using Geom::X;
     using Geom::Y;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0) * 0.4;
+    double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) * 0.4;
     bool simplify = prefs->getInt("/tools/freehand/pencil/simplify", 0);
     if(simplify){
         double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 0.0, 100.0) * 0.4;
@@ -932,7 +932,8 @@ void PencilTool::_interpolate() {
     this->green_curve->reset();
     this->red_curve->reset();
     this->red_curve_is_valid = false;
-    double tolerance_sq = square(_desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
+
+    double tolerance_sq = 0.02 * square(_desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
 
     g_assert(is_zero(this->_req_tangent) || is_unit_vector(this->_req_tangent));
 
