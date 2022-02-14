@@ -627,11 +627,11 @@ void LPEOffset::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 }
 
 namespace OfS {
+
 void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
     using namespace Geom;
     LPEOffset* lpe = dynamic_cast<LPEOffset *>(_effect);
-    lpe->refresh_widgets = true;
     Geom::Point s = snap_knot_position(p, state);
     double offset = lpe->sp_get_offset(s);
     lpe->offset_pt = s;

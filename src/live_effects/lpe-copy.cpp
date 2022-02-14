@@ -1485,6 +1485,7 @@ void KnotHolderEntityCopyGapX::knot_ungrabbed(Geom::Point const &p, Geom::Point 
 {
     LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
     startpos = lpe->gapx_unit;
+    lpe->refresh_widgets = true;
     lpe->gapx.write_to_SVG();
 }
 
@@ -1492,6 +1493,7 @@ void KnotHolderEntityCopyGapY::knot_ungrabbed(Geom::Point const &p, Geom::Point 
 {
     LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
     startpos = lpe->gapy_unit;
+    lpe->refresh_widgets = true;
     lpe->gapy.write_to_SVG();
 }
 
@@ -1531,7 +1533,6 @@ void KnotHolderEntityCopyGapX::knot_set(Geom::Point const &p, Geom::Point const&
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         value = Inkscape::Util::Quantity::convert((value/lpe->scaleok) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
         lpe->gapx.param_set_value(value);
-        lpe->refresh_widgets = true;
         lpe->gapx.write_to_SVG();
     }
 }
@@ -1546,7 +1547,6 @@ void KnotHolderEntityCopyGapY::knot_set(Geom::Point const &p, Geom::Point const&
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         value = Inkscape::Util::Quantity::convert((value/lpe->scaleok) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
         lpe->gapy.param_set_value(value);
-        lpe->refresh_widgets = true;
         lpe->gapy.write_to_SVG();
     }
 }
