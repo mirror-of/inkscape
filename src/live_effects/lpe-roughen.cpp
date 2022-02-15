@@ -110,7 +110,7 @@ void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
             ++it;
         }
     }
-    lpeversion.param_setValue("1.1", true);
+    lpeversion.param_setValue("1.2", true);
 }
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)

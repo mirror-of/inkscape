@@ -111,6 +111,15 @@ RandomParam::param_set_value(gdouble val, long newseed)
         value = min;
 
     startseed = setup_seed(newseed);
+    // we reach maximun value so randomize over to fix duple in next cycle
+    Glib::ustring version = param_effect->lpeversion.param_getSVGValue();
+    if (startseed == 2147483646 && ((
+        effectType() != ROUGH_HATCHES &&
+        effectType() != ROUGHEN) || 
+        version >= "1.2")) 
+    {
+        startseed = rand() * startseed;
+    }
     seed = startseed;
 }
 

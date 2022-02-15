@@ -32,6 +32,8 @@ public:
     Geom::Piecewise<Geom::D2<Geom::SBasis> >
     doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
+    void doOnApply(SPLPEItem const *lpeitem) override;
+
     void resetDefaults(SPItem const* item) override;
 
     void doBeforeEffect(SPLPEItem const* item) override;
