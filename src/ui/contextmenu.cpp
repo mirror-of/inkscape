@@ -253,9 +253,13 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_
 
     bind_model(gmenu, true);
 
-
+    // Do not install this CSS provider; it messes up menus with icons (like popup menu with all dialogs).
+    // It doesn't work well with context menu either, introducing disturbing visual glitch 
+    // where menu shifts upon opening.
+#if 0
     // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
     signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(shift_icons), this));
+#endif
 
     // Set the style and icon theme of the new menu based on the desktop
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
