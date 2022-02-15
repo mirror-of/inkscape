@@ -120,7 +120,7 @@ private:
     std::vector<double> random_y;
     std::vector<double> random_s;
     std::vector<double> random_r;
-    Geom::Rotate randomrotatebase = Geom::Rotate::from_degrees(0);
+    Geom::Affine affinebase = Geom::identity();
     bool prev_split = false;
     SPObject *container;
     LPECopy(const LPECopy&) = delete;

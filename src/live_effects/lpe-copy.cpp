@@ -148,7 +148,7 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     rotate.param_set_range(-900, 900);
     offset.param_set_range(-300, 300);
     offset.param_set_increments(1.0, 10.0);
-    seed.param_set_range(.0,1.0);
+    seed.param_set_range(1.0, 1.0);
     seed.param_set_randomsign(true);
     apply_to_clippath_and_mask = true;
     _provides_knotholder_entities = true;
@@ -262,6 +262,9 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 }
                 double fract = counter / (double)total;
                 Geom::Affine r = Geom::identity();
+                r *= Geom::Translate(center).inverse();
+                r *= affinebase.inverse();
+                r *= Geom::Translate(center);
                 if(mirrorrowsx || mirrorrowsy || mirrorcolsx || mirrorcolsy) {
                     gint mx = 1;
                     gint my = 1;
@@ -336,7 +339,6 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                     rotatein = (seed.param_get_random_number() - seed.param_get_random_number()) * rotate;
                 }
                 r *= Geom::Rotate::from_degrees(rotatein);
-                r *= randomrotatebase.inverse();
                 r *= Geom::Scale(scalein, scalein);
                 r *= Geom::Translate(center);
                 gdouble scale_fix = scaleok;
@@ -1111,8 +1113,19 @@ LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
     if (scaleok == 0) {
         scaleok = 0.00000001;
     }
-    if (random_rotate) {
-        randomrotatebase = Geom::Rotate::from_degrees((seed.param_get_random_number() - seed.param_get_random_number()) * rotate);
+    double seedset = seed.param_get_random_number() - seed.param_get_random_number();
+    affinebase = Geom::identity();
+    if (random_rotate && rotate) {
+        affinebase *= Geom::Rotate::from_degrees(seedset * rotate);
+    }
+    if (random_scale && scaleok != 1) {
+        affinebase *= Geom::Scale(seed.param_get_random_number() * (std::max(scaleok,1.0) - std::min(scaleok,1.0)) + std::min(scaleok,1.0));
+    }
+    if (random_gap_x && gapx_unit) {
+        affinebase *= Geom::Translate(seed.param_get_random_number() * gapx_unit * -1, 0);
+    }
+    if (random_gap_y && gapy_unit) {
+        affinebase *= Geom::Translate(0,seed.param_get_random_number() * gapy_unit * -1);
     }
     if (!split_items && lpesatellites.data().size()) {
         processObjects(LPE_ERASE);
@@ -1175,11 +1188,9 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
     if (split_items) {
         Geom::PathVector output_pv = pathv_to_linear_and_cubic_beziers(path_in);
         output_pv *= Geom::Translate(center).inverse();
+        output_pv *= affinebase;
         if (!interpolate_rotatex && !interpolate_rotatey && !random_rotate) {
             output_pv *= Geom::Rotate::from_degrees(rotate);
-        }
-        if (random_rotate) {
-            output_pv *= randomrotatebase;
         }
         if (!interpolate_scalex && !interpolate_scaley && !random_scale) {
             output_pv *= Geom::Scale(scaleok, scaleok);
