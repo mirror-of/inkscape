@@ -18,6 +18,13 @@
 
 #define noLPERANDOMPARAM_DEBUG
 
+/* RNG stolen from /display/nr-filter-turbulence.cpp */
+#define RAND_m 2147483647 /* 2**31 - 1 */
+#define RAND_a 16807 /* 7**5; primitive root of m */
+#define RAND_q 127773 /* m / a */
+#define RAND_r 2836 /* m % a */
+#define BSize 0x100
+
 namespace Inkscape {
 
 namespace LivePathEffect {
@@ -113,7 +120,7 @@ RandomParam::param_set_value(gdouble val, long newseed)
     startseed = setup_seed(newseed);
     // we reach maximun value so randomize over to fix duple in next cycle
     Glib::ustring version = param_effect->lpeversion.param_getSVGValue();
-    if (startseed == 2147483646 && ((
+    if (startseed == RAND_m - 1 && ((
         effectType() != ROUGH_HATCHES &&
         effectType() != ROUGHEN) || 
         version >= "1.2")) 
@@ -182,12 +189,6 @@ RandomParam::operator gdouble()
     }
 };
 
-/* RNG stolen from /display/nr-filter-turbulence.cpp */
-#define RAND_m 2147483647 /* 2**31 - 1 */
-#define RAND_a 16807 /* 7**5; primitive root of m */
-#define RAND_q 127773 /* m / a */
-#define RAND_r 2836 /* m % a */
-#define BSize 0x100
 
 long
 RandomParam::setup_seed(long lSeed)
