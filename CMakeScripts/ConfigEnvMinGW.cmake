@@ -70,15 +70,6 @@ endif()
 # Add MinGW toolchain libraries to linker path.
 link_directories(${MINGW_ARCH_LIB})
 
-set(MINGW_ARCH_INCLUDE "${MINGW_ARCH_PATH}/include")
-
-if(NOT EXISTS ${MINGW_ARCH_INCLUDE})
-  message(FATAL_ERROR "MinGW-w64 toolchain include directory does not exist: ${MINGW_ARCH_INCLUDE}")
-endif()
-
-# Add MinGW toolchain headers to compiler include path.
-include_directories(${MINGW_ARCH_INCLUDE})
-
 # -----------------------------------------------------------------------------
 # MSYS CHECKS
 # -----------------------------------------------------------------------------
