@@ -97,6 +97,14 @@ using Inkscape::IO::Resource::UIS;
     x.erase(0, x.find_first_not_of(' '));                                                                              \
     x.erase(x.find_last_not_of(' ') + 1);
 
+std::function<Gtk::Image*()> reset_icon = []() {
+    auto image = Gtk::make_managed<Gtk::Image>();
+    image->set_from_icon_name("reset", Gtk::ICON_SIZE_BUTTON);
+    image->set_opacity(0.6);
+    image->set_tooltip_text(_("Requires restart to take effect"));
+    return image;
+};
+
 /**
  * Case-insensitive and unicode normalized search of `pattern` in `string`.
  *
@@ -1564,8 +1572,8 @@ void InkscapePreferences::initPageUI()
     }
 
     _ui_languages.init( "/ui/language", languages, langValues, G_N_ELEMENTS(languages), languages[0]);
-    _page_ui.add_line( false, _("Language (requires restart):"), _ui_languages, "",
-                              _("Set the language for menus and number formats"), true);
+    _page_ui.add_line( false, _("Language:"), _ui_languages, "",
+                              _("Set the language for menus and number formats"), false, reset_icon());
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1591,13 +1599,13 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line( false, "", _ui_realworldzoom, "", _("Zoom percentage can be either by the physical units or by pixels."));
 
     /* show infobox */
-    _show_filters_info_box.init( _("Show filter primitives infobox (requires restart)"), "/options/showfiltersinfobox/value", true);
+    _show_filters_info_box.init( _("Show filter primitives infobox"), "/options/showfiltersinfobox/value", true);
     _page_ui.add_line(false, "", _show_filters_info_box, "",
-                        _("Show icons and descriptions for the filter primitives available at the filter effects dialog"));
+                        _("Show icons and descriptions for the filter primitives available at the filter effects dialog"), false, reset_icon());
 
-    _ui_yaxisdown.init( _("Origin at upper left with y-axis pointing down (requires restart)"), "/options/yaxisdown", true);
+    _ui_yaxisdown.init( _("Origin at upper left with y-axis pointing down"), "/options/yaxisdown", true);
     _page_ui.add_line( false, "", _ui_yaxisdown, "",
-                       _("When off, origin is at lower left corner and y-axis points up"), true);
+                       _("When off, origin is at lower left corner and y-axis points up"), false, reset_icon());
 
     _ui_rotationlock.init(_("Lock canvas rotation by default"), "/options/rotationlock", false);
     _page_ui.add_line(false, "", _ui_rotationlock, "",
@@ -1812,8 +1820,8 @@ void InkscapePreferences::initPageUI()
         Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Theme decides")};
         int menu_icons_values[] = {1, -1, 0};
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
-        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, _("(requires restart)"),
-                             _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.ui' file determines whether to display icons in menus."), false);
+        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, _(""),
+                             _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.ui' file determines whether to display icons in menus."), false, reset_icon());
 
 
     this->AddPage(_page_theme, _("Theming"), iter_ui, PREFS_PAGE_UI_THEME);
@@ -1924,14 +1932,6 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, "", _win_gtk, "",
                             _("Use GTK open and save dialogs "));
 #endif
-
-    auto reset_icon = []() {
-        auto image = Gtk::make_managed<Gtk::Image>();
-        image->set_from_icon_name("reset", Gtk::ICON_SIZE_BUTTON);
-        image->set_opacity(0.6);
-        image->set_tooltip_text(_("Requires restart to take effect"));
-        return image;
-    };
     _page_windows.add_group_header(_("Dialogs settings"), 4);
 
     std::vector<PrefItem> dock = {
@@ -2111,19 +2111,19 @@ void InkscapePreferences::initPageIO()
 
     // Input devices options
     _mouse_sens.init ( "/options/cursortolerance/value", 0.0, 30.0, 1.0, 1.0, 8.0, true, false);
-    _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels (requires restart)"),
-                           _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), false);
+    _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels"),
+                           _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), false, reset_icon()); 
     _mouse_thres.init ( "/options/dragtolerance/value", 0.0, 100.0, 1.0, 1.0, 8.0, true, false);
     _page_mouse.add_line( false, _("_Click/drag threshold:"), _mouse_thres, _("pixels"),
                            _("Maximum mouse drag (in screen pixels) which is considered a click, not a drag"), false);
 
-    _mouse_use_ext_input.init( _("Use pressure-sensitive tablet (requires restart)"), "/options/useextinput/value", true);
+    _mouse_use_ext_input.init( _("Use pressure-sensitive tablet"), "/options/useextinput/value", true);
     _page_mouse.add_line(false, "",_mouse_use_ext_input, "",
-                        _("Use the capabilities of a tablet or other pressure-sensitive device. Disable this only if you have problems with the tablet (you can still use it as a mouse)"));
+                        _("Use the capabilities of a tablet or other pressure-sensitive device. Disable this only if you have problems with the tablet (you can still use it as a mouse)"), false, reset_icon());
 
-    _mouse_switch_on_ext_input.init( _("Switch tool based on tablet device (requires restart)"), "/options/switchonextinput/value", false);
+    _mouse_switch_on_ext_input.init( _("Switch tool based on tablet device"), "/options/switchonextinput/value", false);
     _page_mouse.add_line(false, "",_mouse_switch_on_ext_input, "",
-                        _("Change tool as different devices are used on the tablet (pen, eraser, mouse)"));
+                        _("Change tool as different devices are used on the tablet (pen, eraser, mouse)"), false, reset_icon());
     this->AddPage(_page_mouse, _("Input devices"), iter_io, PREFS_PAGE_IO_MOUSE);
 
     // SVG output options
@@ -2641,7 +2641,7 @@ void InkscapePreferences::initPageRendering()
 {
     /* threaded blur */ //related comments/widgets/functions should be renamed and option should be moved elsewhere when inkscape is fully multi-threaded
     _filter_multi_threaded.init("/options/threading/numthreads", 1.0, 8.0, 1.0, 2.0, 4.0, true, false);
-    _page_rendering.add_line( false, _("Number of _Threads:"), _filter_multi_threaded, _("(requires restart)"), _("Configure number of processors/threads to use when rendering filters"), false);
+    _page_rendering.add_line( false, _("Number of _Threads:"), _filter_multi_threaded, _(""), _("Configure number of processors/threads to use when rendering filters"), false, reset_icon());
 
     // rendering cache
     _rendering_cache_size.init("/options/renderingcache/size", 0.0, 4096.0, 1.0, 32.0, 64.0, true, false);
@@ -3454,8 +3454,8 @@ static void appendList(Glib::ustring& tmp, const std::vector<string_type> &listi
 void InkscapePreferences::initPageSystem()
 {
     _misc_latency_skew.init("/debug/latency/skew", 0.5, 2.0, 0.01, 0.10, 1.0, false, false);
-    _page_system.add_line( false, _("Latency _skew:"), _misc_latency_skew, _("(requires restart)"),
-                           _("Factor by which the event clock is skewed from the actual time (0.9766 on some systems)"), false);
+    _page_system.add_line( false, _("Latency _skew:"), _misc_latency_skew, _(""),
+                           _("Factor by which the event clock is skewed from the actual time (0.9766 on some systems)"), false, reset_icon());
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _misc_namedicon_delay.init( _("Pre-render named icons"), "/options/iconrender/named_nodelay", false);
     _page_system.add_line( false, "", _misc_namedicon_delay, "",

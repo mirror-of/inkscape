@@ -83,11 +83,6 @@ void DialogPage::add_line(bool                 indent,
     hb->set_spacing(12);
     hb->set_hexpand(true);
     hb->pack_start(widget, expand_widget, expand_widget);
-        
-    // Pack an additional widget into a box with the widget if desired 
-    if (other_widget)
-        hb->pack_start(*other_widget, expand_widget, expand_widget);
-    
     hb->set_valign(Gtk::ALIGN_CENTER);
     
     // Add a label in the first column if provided
@@ -130,6 +125,9 @@ void DialogPage::add_line(bool                 indent,
         hb->pack_start(*suffix_widget,false,false);
     }
 
+    // Pack an additional widget into a box with the widget if desired
+    if (other_widget)
+        hb->pack_start(*other_widget, expand_widget, expand_widget);
 }
 
 void DialogPage::add_group_header(Glib::ustring name, int columns)
