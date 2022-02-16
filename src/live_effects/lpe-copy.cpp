@@ -408,10 +408,12 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 if (heightrows) {
                     yset = heightrows * i; 
                 }
-
-                toItem(counter -1, reset, write);
-                SPItem * item = dynamic_cast<SPItem *>(lpesatellites.data()[counter-1]->getObject());
+                SPItem * item = toItem(counter - 1, reset, write); 
                 if (item) {
+                    if (!(lpesatellites.data().size() > counter - 1 && lpesatellites.data()[counter - 1])) {
+                        item->deleteObject(true);
+                        return;
+                    }
                     prev_bbox = item->geometricBounds();
                     (*prev_bbox) *= r;
                     double offset_x = 0;
@@ -436,8 +438,8 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                     item->transform = r * sp_item_transform_repr(sp_lpe_item);
                     item->doWriteTransform(item->transform);
                     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                    forcewrite = forcewrite || write;
                 }
-                forcewrite = forcewrite || write;
                 counter++;
             }
         }
@@ -569,18 +571,19 @@ LPECopy::createPathBase(SPObject *elemref) {
     return resultnode;
 }
 
-void
+
+SPItem *
 LPECopy::toItem(size_t i, bool reset, bool &write)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
-        return;
+        return nullptr;
     }
     
     SPObject *elemref = nullptr;
     if (container != sp_lpe_item->parent) {
         lpesatellites.read_from_SVG();
-        return;
+        return nullptr;
     }
     if (lpesatellites.data().size() > i && lpesatellites.data()[i]) {
         elemref = lpesatellites.data()[i]->getObject();
@@ -602,7 +605,8 @@ LPECopy::toItem(size_t i, bool reset, bool &write)
     if (creation) {
         write = true;
         lpesatellites.link(elemref, i);
-    } 
+    }
+    return dynamic_cast<SPItem *>(elemref);
 }
 
 Gtk::Widget * LPECopy::newWidget()

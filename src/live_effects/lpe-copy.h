@@ -54,7 +54,7 @@ public:
     Gtk::Widget * newWidget() override;
     void cloneStyle(SPObject *orig, SPObject *dest);
     Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule);
-    void toItem(size_t i, bool reset, bool &write);
+    SPItem * toItem(size_t i, bool reset, bool &write);
     void cloneD(SPObject *orig, SPObject *dest);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
     friend class CoS::KnotHolderEntityCopyGapX;
