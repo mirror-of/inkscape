@@ -342,6 +342,12 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
 
     // Layer Selector
     _layer_selector = Gtk::manage(new Inkscape::UI::Widget::LayerSelector(nullptr));
+    // separate layer selector buttons from status text
+    auto vseparator = Gtk::make_managed<Gtk::Separator>(Gtk::ORIENTATION_VERTICAL);
+    vseparator->set_margin_end(6);
+    vseparator->set_margin_top(6);
+    vseparator->set_margin_bottom(6);
+    _layer_selector->pack_end(*vseparator);
     _layer_selector->show_all();
     _layer_selector->set_no_show_all();
     dtw->_statusbar->pack_start(*_layer_selector, false, false, 1);
