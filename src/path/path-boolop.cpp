@@ -211,7 +211,7 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
             }
             return out;
         } catch (...) {
-            g_warning("Path Intersection Graph failed boolops, fallback to livarot");
+            g_debug("Path Intersection Graph failed boolops, fallback to livarot");
         }
     }
     error = 1;
