@@ -1820,7 +1820,7 @@ void InkscapePreferences::initPageUI()
         Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Theme decides")};
         int menu_icons_values[] = {1, -1, 0};
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
-        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, _(""),
+        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
                              _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.ui' file determines whether to display icons in menus."), false, reset_icon());
 
 
@@ -1957,7 +1957,7 @@ void InkscapePreferences::initPageUI()
 
     auto save_dlg = Gtk::make_managed<PrefCheckButton>();
     save_dlg->init(_("Save and restore dialogs' status"), "/options/savedialogposition/value", true);
-    _page_windows.add_line(true, "", *save_dlg, "", _("Save and restore dialogs' status (the last open windows dialogs are saved when it closes)")); 
+    _page_windows.add_line(true, "", *save_dlg, "", _("Save and restore dialogs' status (the last open windows dialogs are saved when it closes)"));
 
 #ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
     _page_windows.add_line( true, "", _win_hide_task, "",
@@ -2112,7 +2112,7 @@ void InkscapePreferences::initPageIO()
     // Input devices options
     _mouse_sens.init ( "/options/cursortolerance/value", 0.0, 30.0, 1.0, 1.0, 8.0, true, false);
     _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels"),
-                           _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), false, reset_icon()); 
+                           _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), false, reset_icon());
     _mouse_thres.init ( "/options/dragtolerance/value", 0.0, 100.0, 1.0, 1.0, 8.0, true, false);
     _page_mouse.add_line( false, _("_Click/drag threshold:"), _mouse_thres, _("pixels"),
                            _("Maximum mouse drag (in screen pixels) which is considered a click, not a drag"), false);
@@ -2641,7 +2641,7 @@ void InkscapePreferences::initPageRendering()
 {
     /* threaded blur */ //related comments/widgets/functions should be renamed and option should be moved elsewhere when inkscape is fully multi-threaded
     _filter_multi_threaded.init("/options/threading/numthreads", 1.0, 8.0, 1.0, 2.0, 4.0, true, false);
-    _page_rendering.add_line( false, _("Number of _Threads:"), _filter_multi_threaded, _(""), _("Configure number of processors/threads to use when rendering filters"), false, reset_icon());
+    _page_rendering.add_line( false, _("Number of _Threads:"), _filter_multi_threaded, "", _("Configure number of processors/threads to use when rendering filters"), false, reset_icon());
 
     // rendering cache
     _rendering_cache_size.init("/options/renderingcache/size", 0.0, 4096.0, 1.0, 32.0, 64.0, true, false);
@@ -3454,7 +3454,7 @@ static void appendList(Glib::ustring& tmp, const std::vector<string_type> &listi
 void InkscapePreferences::initPageSystem()
 {
     _misc_latency_skew.init("/debug/latency/skew", 0.5, 2.0, 0.01, 0.10, 1.0, false, false);
-    _page_system.add_line( false, _("Latency _skew:"), _misc_latency_skew, _(""),
+    _page_system.add_line( false, _("Latency _skew:"), _misc_latency_skew, "",
                            _("Factor by which the event clock is skewed from the actual time (0.9766 on some systems)"), false, reset_icon());
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _misc_namedicon_delay.init( _("Pre-render named icons"), "/options/iconrender/named_nodelay", false);
