@@ -397,7 +397,9 @@ void PagesTool::addDragShapes(SPPage *page, Geom::Affine tr)
     }
     if (Inkscape::Preferences::get()->getBool("/tools/pages/move_objects", true)) {
         for (auto &item : doc->getPageManager().getOverlappingItems(_desktop, page)) {
-            addDragShape(item, tr);
+            if (item && !item->isLocked()) {
+                addDragShape(item, tr);
+            }
         }
     }
 }
@@ -415,7 +417,7 @@ void PagesTool::addDragShape(SPItem *item, Geom::Affine tr)
 /**
  * Add a shape to the set of dragging shapes, these are deleted when dragging stops.
  */
-void PagesTool::addDragShape(Geom::PathVector pth, Geom::Affine tr)
+void PagesTool::addDragShape(Geom::PathVector &&pth, Geom::Affine tr)
 {
     auto shape = new CanvasItemBpath(drag_group, pth * tr, false);
     shape->set_stroke(0x00ff007f);

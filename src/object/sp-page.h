@@ -34,7 +34,7 @@ public:
 
     void movePage(Geom::Affine translate, bool with_objects);
     void swapPage(SPPage *other, bool with_objects);
-    void moveItems(Geom::Affine translae, std::vector<SPItem *> const objects);
+    void moveItems(Geom::Affine translate, std::vector<SPItem *> const &objects);
 
     // Canvas visualisation
     void showPage(Inkscape::CanvasItemGroup *fg, Inkscape::CanvasItemGroup *bg);

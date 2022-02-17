@@ -322,9 +322,12 @@ void SPPage::movePage(Geom::Affine translate, bool with_objects)
     }
 }
 
-void SPPage::moveItems(Geom::Affine translate, std::vector<SPItem *> const objects)
+void SPPage::moveItems(Geom::Affine translate, std::vector<SPItem *> const &objects)
 {
     for (auto &item : objects) {
+        if (item->isLocked()) {
+            continue;
+        }
         if (auto parent_item = dynamic_cast<SPItem *>(item->parent)) {
             auto move = item->i2dt_affine() * (translate * parent_item->i2doc_affine().inverse());
             item->doWriteTransform(move, &move, false);

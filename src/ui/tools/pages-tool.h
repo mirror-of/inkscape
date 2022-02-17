@@ -47,7 +47,7 @@ private:
     bool viewboxUnder(Geom::Point pt);
     void addDragShapes(SPPage *page, Geom::Affine tr);
     void addDragShape(SPItem *item, Geom::Affine tr);
-    void addDragShape(Geom::PathVector pth, Geom::Affine tr);
+    void addDragShape(Geom::PathVector &&pth, Geom::Affine tr);
     void clearDragShapes();
 
     Geom::Point getSnappedResizePoint(Geom::Point point, guint state, Geom::Point origin, SPObject *target = nullptr);

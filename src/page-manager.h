@@ -106,7 +106,7 @@ public:
 
     void movePages(Geom::Affine tr);
     std::vector<SPItem *> getOverlappingItems(SPDesktop *desktop, SPPage *page);
-    void moveItems(Geom::Affine translate, std::vector<SPItem *> const objects);
+    void moveItems(Geom::Affine translate, std::vector<SPItem *> const &objects);
 
 protected:
     friend class Inkscape::UI::Dialog::DocumentProperties;
