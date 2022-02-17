@@ -275,10 +275,12 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
         delta *= nudge;
     }
 
+    bool moved = false;
     if (shape_editor && shape_editor->has_knotholder()) {
         KnotHolder * knotholder = shape_editor->knotholder;
         if (knotholder && knotholder->knot_selected()) {
             knotholder->transform_selected(Geom::Translate(delta));
+            moved = true;
         }
     } else {
         auto nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(_desktop->event_context);
@@ -289,14 +291,14 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
                     KnotHolder * knotholder = shape_editor->knotholder;
                     if (knotholder && knotholder->knot_selected()) {
                         knotholder->transform_selected(Geom::Translate(delta));
+                        moved = true;
                     }
                 }
             }
         }
     }
 
-    // always return true so canvas remains in focus
-    return true;
+    return moved;
 }
 
 
@@ -595,10 +597,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 _desktop->scroll_relative(Geom::Point(i, 0));
-                ret = TRUE;
-            } else {
-                ret = _keyboardMove(event->key, Geom::Point(-1, 0));
+            } else if (!_keyboardMove(event->key, Geom::Point(-1, 0))) {
+                Inkscape::Shortcuts::getInstance().invoke_action(&event->key);
             }
+            ret = true;
             break;
 
         case GDK_KEY_Up: // Ctrl Up
@@ -609,10 +611,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 _desktop->scroll_relative(Geom::Point(0, i));
-                ret = TRUE;
-            } else {
-                ret = _keyboardMove(event->key, Geom::Point(0, -_desktop->yaxisdir()));
+            } else if (!_keyboardMove(event->key, Geom::Point(0, -_desktop->yaxisdir()))) {
+                Inkscape::Shortcuts::getInstance().invoke_action(&event->key);
             }
+            ret = true;
             break;
 
         case GDK_KEY_Right: // Ctrl Right
@@ -623,10 +625,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 _desktop->scroll_relative(Geom::Point(-i, 0));
-                ret = TRUE;
-            } else {
-                ret = _keyboardMove(event->key, Geom::Point(1, 0));
+            } else if (!_keyboardMove(event->key, Geom::Point(1, 0))) {
+                Inkscape::Shortcuts::getInstance().invoke_action(&event->key);
             }
+            ret = true;
             break;
 
         case GDK_KEY_Down: // Ctrl Down
@@ -637,10 +639,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 _desktop->scroll_relative(Geom::Point(0, -i));
-                ret = TRUE;
-            } else {
-                ret = _keyboardMove(event->key, Geom::Point(0, _desktop->yaxisdir()));
+            } else if (!_keyboardMove(event->key, Geom::Point(0, _desktop->yaxisdir()))) {
+                Inkscape::Shortcuts::getInstance().invoke_action(&event->key);
             }
+            ret = true;
             break;
 
         case GDK_KEY_Menu:
