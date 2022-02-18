@@ -189,21 +189,26 @@ void PathManipulator::writeXML()
         _updateOutline();
 
     _setGeometry();
-
-    if (_path) {
-        _observer->block();
-        if (!empty()) {
-            _path->updateRepr();
-            _getXMLNode()->setAttribute(_nodetypesKey(), _createTypeString());
-        }
-        else {
-            // this manipulator will have to be destroyed right after this call
-            _getXMLNode()->removeObserver(*_observer);
-            _path->deleteObject(true, true);
-            _path = nullptr;
-        }
-        _observer->unblock();
+    if (!_path) {
+        return;
     }
+
+    XML::Node *node = _getXMLNode();
+    if (!node) {
+        return;
+    }
+
+    _observer->block();
+    if (!empty()) {
+        _path->updateRepr();
+        node->setAttribute(_nodetypesKey(), _createTypeString());
+    } else {
+        // this manipulator will have to be destroyed right after this call
+        node->removeObserver(*_observer);
+        _path->deleteObject(true, true);
+        _path = nullptr;
+    }
+    _observer->unblock();
 }
 
 /** Remove all nodes from the path. */

@@ -1135,7 +1135,7 @@ void SPShape::_setCurve(std::unique_ptr<SPCurve> &&new_curve, bool update_displa
 {
     _curve = std::move(new_curve);
 
-    if (update_display) {
+    if (update_display && document) {
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
