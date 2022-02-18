@@ -158,7 +158,6 @@ public:
     void on_kerning_value_changed();
     void on_setfontdata_changed();
     void add_font();
-    Geom::PathVector flip_coordinate_system(Geom::PathVector pathv);
 
     // Used for font-family
     class AttrEntry

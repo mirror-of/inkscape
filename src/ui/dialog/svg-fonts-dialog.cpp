@@ -36,8 +36,11 @@
 #include "object/sp-font.h"
 #include "object/sp-glyph-kerning.h"
 #include "object/sp-glyph.h"
+#include "object/sp-guide.h"
 #include "object/sp-missing-glyph.h"
+#include "object/sp-path.h"
 #include "svg/svg.h"
+#include "util/units.h"
 #include "xml/repr.h"
 
 SvgFontDrawingArea::SvgFontDrawingArea():
@@ -184,7 +187,7 @@ SvgFontsDialog::AttrSpin::AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring 
     _label->show();
     _label->set_halign(Gtk::ALIGN_START);
     spin.set_range(0, 4096);
-    spin.set_increments(16, 0);
+    spin.set_increments(10, 0);
     spin.signal_value_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::AttrSpin::on_attr_changed));
 }
 
@@ -556,6 +559,14 @@ void SvgFontsDialog::update_sensitiveness(){
     }
 }
 
+Glib::ustring get_font_label(SPFont* font) {
+    if (!font) return Glib::ustring();
+
+    const gchar* label = font->label();
+    const gchar* id = font->getId();
+    return Glib::ustring(label ? label : (id ? id : "font"));
+};
+
 /** Add all fonts in the getDocument() to the combobox.
  * This function is called when new document is selected as well as when SVG "definition" section changes.
  * Try to detect if font(s) have actually been modified to eliminate some expensive refreshes.
@@ -586,12 +597,6 @@ void SvgFontsDialog::update_fonts(bool document_replaced)
         }
     }
 
-    auto get_label = [](SPFont* font) {
-        const gchar* label = font->label();
-        const gchar* id = font->getId();
-        return Glib::ustring(label ? label : (id ? id : "font"));
-    };
-
     // rebuild model if list of fonts is different
     if (!equal) {
         _model->clear();
@@ -600,7 +605,7 @@ void SvgFontsDialog::update_fonts(bool document_replaced)
             SPFont* f = SP_FONT(font);
             row[_columns.spfont] = f;
             row[_columns.svgfont] = new SvgFont(f);
-            row[_columns.label] = get_label(f);
+            row[_columns.label] = get_font_label(f);
         }
         if (!fonts.empty()) {
             // select a font, this dialog is disabled without a font
@@ -616,7 +621,7 @@ void SvgFontsDialog::update_fonts(bool document_replaced)
         auto it = fonts.begin();
         for (auto&& node : children) {
             if (auto font = dynamic_cast<SPFont*>(*it++)) {
-                node[_columns.label] = get_label(font);
+                node[_columns.label] = get_font_label(font);
             }
         }
     }
@@ -768,6 +773,65 @@ void SvgFontsDialog::set_selected_glyph(SPGlyph* glyph) {
     });
 }
 
+SPGuide* get_guide(SPDocument& doc, const Glib::ustring& id) {
+    auto object = doc.getObjectById(id);
+    if (!object) return nullptr;
+
+    // get guide line
+    if (auto guide = dynamic_cast<SPGuide*>(object)) {
+        return guide;
+    }
+    // remove colliding object
+    object->deleteObject();
+    return nullptr;
+}
+
+SPGuide* create_guide(SPDocument& doc, double x0, double y0, double x1, double y1) {
+    return SPGuide::createSPGuide(&doc, Geom::Point(x0, y1), Geom::Point(x1, y1));
+}
+
+void set_up_typography_canvas(SPDocument* document, double em, double asc, double cap, double xheight, double des) {
+    if (!document || em <= 0) return;
+
+    // set size and viewbox
+    auto size = Inkscape::Util::Quantity(em, "px");
+    bool change_size = false;
+    document->setWidthAndHeight(size, size, change_size);
+    document->setViewBox(Geom::Rect::from_xywh(0, 0, em, em));
+
+    // baseline
+    double base = des;
+
+    // add/move guide lines
+    struct { double pos; const char* name; const char* id; } guides[5] = {
+        {base + asc, _("ascender"), "ink-font-guide-ascender"},
+        {base + cap, _("caps"), "ink-font-guide-caps"},
+        {base + xheight, _("x-height"), "ink-font-guide-x-height"},
+        {base, _("baseline"), "ink-font-guide-baseline"},
+        {base - des, _("descender"), "ink-font-guide-descender"},
+    };
+
+    double left = 0;
+    double right = em;
+
+    for (auto&& g : guides) {
+        double y = em - g.pos;
+        auto guide = get_guide(*document, g.id);
+        if (guide) {
+            guide->set_locked(false, true);
+            guide->moveto(Geom::Point(left, y), true);
+        }
+        else {
+            guide = create_guide(*document, left, y, right, y);
+            guide->getRepr()->setAttributeOrRemoveIfEmpty("id", g.id);
+        }
+        guide->set_label(g.name, true);
+        guide->set_locked(true, true);
+    }
+
+    DocumentUndo::done(document, _("Set up typography canvas"), "");
+}
+
 const int MARGIN_SPACE = 4;
 
 Gtk::Box* SvgFontsDialog::global_settings_tab(){
@@ -835,6 +899,20 @@ Gtk::Box* SvgFontsDialog::global_settings_tab(){
         _grid.attach(*spin->get_label(), 0, row);
         _grid.attach(*spin->getSpin(), 1, row++);
     }
+    auto setup = Gtk::make_managed<Gtk::Button>(_("Set up canvas"));
+    _grid.attach(*setup, 0, row++, 2);
+    setup->set_halign(Gtk::ALIGN_START);
+    setup->signal_clicked().connect([=](){
+        // set up typography canvas
+        set_up_typography_canvas(
+            getDocument(),
+            _units_per_em_spin->getSpin()->get_value(),
+            _ascent_spin->getSpin()->get_value(),
+            _cap_height_spin->getSpin()->get_value(),
+            _x_height_spin->getSpin()->get_value(),
+            _descent_spin->getSpin()->get_value()
+        );
+    });
 
     global_vbox.set_border_width(2);
     global_vbox.pack_start(_grid, false, true);
@@ -985,22 +1063,37 @@ void SvgFontsDialog::add_glyph(){
     set_selected_glyph(glyph);
 }
 
-Geom::PathVector
-SvgFontsDialog::flip_coordinate_system(Geom::PathVector pathv){
-    double units_per_em = 1024;
-    for (auto& obj: get_selected_spfont()->children) {
-        if (SP_IS_FONTFACE(&obj)){
-            //XML Tree being directly used here while it shouldn't be.
-            units_per_em = obj.getRepr()->getAttributeDouble("units-per-em", units_per_em);
+double get_font_units_per_em(const SPFont* font) {
+    double units_per_em = 0.0;
+    if (font) {
+        for (auto& obj: font->children) {
+            if (SP_IS_FONTFACE(&obj)){
+                //XML Tree being directly used here while it shouldn't be.
+                units_per_em = obj.getRepr()->getAttributeDouble("units-per-em", units_per_em);
+                break;
+            }
         }
     }
-    double baseline_offset = units_per_em - get_selected_spfont()->horiz_origin_y;
-    //This matrix flips y-axis and places the origin at baseline
-    Geom::Affine m(Geom::Coord(1),Geom::Coord(0),Geom::Coord(0),Geom::Coord(-1),Geom::Coord(0),Geom::Coord(baseline_offset));
-    return pathv*m;
+    return units_per_em;
 }
 
-void SvgFontsDialog::set_glyph_description_from_selected_path(){
+Geom::PathVector flip_coordinate_system(Geom::PathVector pathv, const SPFont* font, double units_per_em) {
+    if (!font) return pathv;
+
+    if (units_per_em <= 0) {
+        g_warning("Units per em not defined, path will be misplaced.");
+    }
+
+    double baseline_offset = units_per_em - font->horiz_origin_y;
+    // This matrix flips y-axis and places the origin at baseline
+    Geom::Affine m(1, 0, 0, -1, 0, baseline_offset);
+    return pathv * m;
+}
+
+void SvgFontsDialog::set_glyph_description_from_selected_path() {
+    auto font = get_selected_spfont();
+    if (!font) return;
+
     auto selection = getSelection();
     if (!selection)
         return;
@@ -1029,14 +1122,18 @@ void SvgFontsDialog::set_glyph_description_from_selected_path(){
 
     Geom::PathVector pathv = sp_svg_read_pathv(node->attribute("d"));
 
+    auto units_per_em = get_font_units_per_em(font);
 	//XML Tree being directly used here while it shouldn't be.
-    glyph->setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv)));
+    glyph->setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv, font, units_per_em)));
     DocumentUndo::done(getDocument(), _("Set glyph curves"), "");
 
     update_glyphs(glyph);
 }
 
 void SvgFontsDialog::missing_glyph_description_from_selected_path(){
+    auto font = get_selected_spfont();
+    if (!font) return;
+
     auto selection = getSelection();
     if (!selection)
         return;
@@ -1058,11 +1155,11 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
 
     Geom::PathVector pathv = sp_svg_read_pathv(node->attribute("d"));
 
-    for (auto& obj: get_selected_spfont()->children) {
+    auto units_per_em = get_font_units_per_em(font);
+    for (auto& obj: font->children) {
         if (SP_IS_MISSING_GLYPH(&obj)){
-
             //XML Tree being directly used here while it shouldn't be.
-            obj.setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv)));
+            obj.setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv, font, units_per_em)));
             DocumentUndo::done(getDocument(),  _("Set glyph curves"), "");
         }
     }
@@ -1182,6 +1279,16 @@ void SvgFontsDialog::remove_selected_kerning_pair() {
     update_glyphs();
 }
 
+Inkscape::XML::Node* create_path_from_glyph(const SPGlyph& glyph) {
+    Geom::PathVector pathv = sp_svg_read_pathv(glyph.getAttribute("d"));
+    auto path = glyph.document->getReprDoc()->createElement("svg:path");
+    // auto path = new SPPath();
+    auto font = dynamic_cast<SPFont*>(glyph.parent);
+    auto units_per_em = get_font_units_per_em(font);
+    path->setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv, font, units_per_em)));
+    return path;
+}
+
 // switch to a glyph layer (and create this dedicated layer if necessary)
 void SvgFontsDialog::edit_glyph(SPGlyph* glyph) {
     if (!glyph || !glyph->parent) return;
@@ -1195,11 +1302,21 @@ void SvgFontsDialog::edit_glyph(SPGlyph* glyph) {
     auto name = get_glyph_full_name(*glyph);
     if (name.empty()) return;
     // font's name to match parent layer name
-    auto font_label = glyph->parent->label();
-    if (!font_label) return;
+    auto font_label = get_font_label(dynamic_cast<SPFont*>(glyph->parent));
+    if (font_label.empty()) return;
 
     auto layer = get_or_create_layer_for_glyph(desktop, font_label, name);
     if (!layer) return;
+
+    // is layer empty?
+    if (!layer->hasChildren()) {
+        // since layer is empty try to initialize it by copying font glyph into it
+        auto path = create_path_from_glyph(*glyph);
+        if (path) {
+            // layer->attach(path, nullptr);
+            layer->addChild(path);
+        }
+    }
 
     auto& layers = desktop->layerManager();
     // set layer as "solo" - only one visible and unlocked
@@ -1497,22 +1614,26 @@ SPFont *new_font(SPDocument *document)
     // create a new font
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:font");
 
-    //By default, set the horizontal advance to 1024 units
-    repr->setAttribute("horiz-adv-x", "1024");
+    //By default, set the horizontal advance to 1000 units
+    repr->setAttribute("horiz-adv-x", "1000");
 
     // Append the new font node to defs
     defs->getRepr()->appendChild(repr);
 
-    //create a missing glyph
+    // add some default values
     Inkscape::XML::Node *fontface;
     fontface = xml_doc->createElement("svg:font-face");
-    fontface->setAttribute("units-per-em", "1024");
+    fontface->setAttribute("units-per-em", "1000");
+    fontface->setAttribute("ascent", "750");
+    fontface->setAttribute("cap-height", "600");
+    fontface->setAttribute("x-height", "400");
+    fontface->setAttribute("descent", "200");
     repr->appendChild(fontface);
 
     //create a missing glyph
     Inkscape::XML::Node *mg;
     mg = xml_doc->createElement("svg:missing-glyph");
-    mg->setAttribute("d", "M0,0h1000v1024h-1000z");
+    mg->setAttribute("d", "M0,0h1000v1000h-1000z");
     repr->appendChild(mg);
 
     // get corresponding object
@@ -1555,7 +1676,7 @@ void SvgFontsDialog::add_font(){
     }
 
     update_fonts(false);
-//    select_font(font);
+    on_font_selection_changed();
 
     DocumentUndo::done(doc, _("Add font"), "");
 }
