@@ -167,18 +167,18 @@ public:
     double pow24(double x);
 
     /**
-     * Squared Euclidian distance between this and another color
+     * Squared Euclidean distance between this and another color
      */
     float diffSq(const CieLab &other);
 
     /**
-     * Computes squared euclidian distance in CieLab space for two colors
+     * Computes squared euclidean distance in CieLab space for two colors
      * given as RGB values.
      */
     static float diffSq(unsigned int rgb1, unsigned int rgb2);
 
     /**
-     * Computes squared euclidian distance in CieLab space for two colors
+     * Computes squared euclidean distance in CieLab space for two colors
      * given as RGB values.
      */
     static float diff(unsigned int rgb0, unsigned int rgb1);
@@ -636,9 +636,9 @@ private:
                   float f1, float f2, float f3);
 
     /**
-     * Squared Euclidian distance of p and q.
+     * Squared Euclidean distance of p and q.
      */
-    float sqrEuclidianDist(float *p, int pSize, float *q);
+    float sqrEuclideanDist(float *p, int pSize, float *q);
 
 };
 

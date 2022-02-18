@@ -239,7 +239,7 @@ unsigned long CieLab::toRGB()
 
 
 /**
- * Squared Euclidian distance between this and another color
+ * Squared Euclidean distance between this and another color
  */
 float CieLab::diffSq(const CieLab &other)
 {
@@ -251,7 +251,7 @@ float CieLab::diffSq(const CieLab &other)
 }
 
 /**
- * Computes squared euclidian distance in CieLab space for two colors
+ * Computes squared euclidean distance in CieLab space for two colors
  * given as RGB values.
  */
 float CieLab::diffSq(unsigned int rgb1, unsigned int rgb2)
@@ -264,7 +264,7 @@ float CieLab::diffSq(unsigned int rgb1, unsigned int rgb2)
 
 
 /**
- * Computes squared euclidian distance in CieLab space for two colors
+ * Computes squared euclidean distance in CieLab space for two colors
  * given as RGB values.
  */
 float CieLab::diff(unsigned int rgb0, unsigned int rgb1)
@@ -1110,7 +1110,7 @@ void Siox::init()
     negLimits[1] = -limits[1];
     negLimits[2] = -limits[2];
 
-    clusterSize = sqrEuclidianDist(limits, 3, negLimits);
+    clusterSize = sqrEuclideanDist(limits, 3, negLimits);
 }
 
 
@@ -1709,9 +1709,9 @@ void Siox::smooth(float *cm, int xres, int yres,
 }
 
 /**
- * Squared Euclidian distance of p and q.
+ * Squared Euclidean distance of p and q.
  */
-float Siox::sqrEuclidianDist(float *p, int pSize, float *q)
+float Siox::sqrEuclideanDist(float *p, int pSize, float *q)
 {
     float sum=0.0;
     for (int i=0; i<pSize; i++)
