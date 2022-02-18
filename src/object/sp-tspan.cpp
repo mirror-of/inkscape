@@ -330,19 +330,18 @@ void SPTextPath::update(SPCtx *ctx, guint flags) {
 
     this->isUpdating = false;
 
-    SPItem::update(ctx, flags);
-
+    unsigned childflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+        childflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
-
-    flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     for (auto& ochild: children) {
-        if ( flags || ( ochild.uflags & SP_OBJECT_MODIFIED_FLAG )) {
-            ochild.updateDisplay(ctx, flags);
+        if (childflags || (ochild.uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+            ochild.updateDisplay(ctx, childflags);
         }
     }
+
+    SPItem::update(ctx, flags);
 
     if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG |
                   SP_OBJECT_CHILD_MODIFIED_FLAG |
