@@ -912,7 +912,11 @@ CanvasPrivate::add_to_bucket(GdkEvent *event)
 
     // If this is the first event, ensure event processing will run on the main loop as soon as possible after the next frame has started.
     if (eventprocessor->events.empty() && !pending_draw) {
-        assert(!bucket_emptier_tick_callback);
+#ifndef NDEBUG
+        if (bucket_emptier_tick_callback) {
+            g_warning("bucket_emptier_tick_callback not empty");
+        }
+#endif
         bucket_emptier_tick_callback = q->add_tick_callback([this] (const Glib::RefPtr<Gdk::FrameClock>&) {
             assert(active);
             bucket_emptier_tick_callback.reset();
