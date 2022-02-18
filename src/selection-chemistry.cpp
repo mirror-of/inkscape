@@ -1581,6 +1581,14 @@ void ObjectSet::toLayer(SPObject *moveto, bool skip_undo, Inkscape::XML::Node *a
         return;
     }
 
+    // check for aliasing: the object corresponding to `after` shouldn't belong to us:
+    if (after) {
+        auto obj = document()->getObjectByRepr(after);
+        if (obj && includes(obj)) {
+            return;
+        }
+    }
+
     std::vector<SPItem*> items_copy(items().begin(), items().end());
 
     if (moveto) {
