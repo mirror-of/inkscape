@@ -371,6 +371,9 @@ static char const preferences_skeleton[] =
     <group
        id="font"
        unitType="2" />
+    <group
+       id="boot"
+       theme="colorful" />
   </group>
 
   <group id="extensions">
@@ -498,6 +501,12 @@ static char const preferences_skeleton[] =
   <group
      id="live_effects"
      flattening="0" />
+  <group
+     id="theme"
+     defaultPreferDarkTheme="1"
+     narrowSpinButton="1"
+     preferDarkTheme="1"
+     darkTheme="1" />
 </inkscape>
 )=====";
 
