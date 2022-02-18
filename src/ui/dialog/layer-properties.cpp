@@ -385,12 +385,19 @@ void LayerPropertiesDialog::Move::setup(LayerPropertiesDialog &dialog) {
     dialog._layer_name_entry.set_text(_("Layer"));
     dialog._apply_button.set_label(_("_Move"));
     dialog._setup_layers_controls();
+
+    auto root = dialog._desktop->doc()->getRoot();
+    size_t layer_count = dialog._desktop->layerManager().childCount(root);
+    if (!layer_count) {
+        dialog._apply_button.set_sensitive(false);
+    }
 }
 
 void LayerPropertiesDialog::Move::perform(LayerPropertiesDialog &dialog) {
 
-    SPObject *moveto = dialog._selectedLayer();
-    dialog._desktop->selection->toLayer(moveto);
+    if (auto moveto = dialog._selectedLayer()) {
+        dialog._desktop->selection->toLayer(moveto);
+    }
 }
 
 void LayerPropertiesDialog::_setDesktop(SPDesktop *desktop) {
