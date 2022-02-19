@@ -172,21 +172,23 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
 
     // scale marker transform with parent stroke width
     SPStyle *style = shape->style;
-    Geom::Scale scale = _desktop->getDocument()->getDocumentScale();
+    SPDocument *doc = _desktop->getDocument();
+    Geom::Scale scale = doc->getDocumentScale();
 
     if(sp_marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
-        scale = Geom::Scale(style->stroke_width.computed * _desktop->getDocument()->getDocumentScale()[Geom::X]);
+        scale *= Geom::Scale(style->stroke_width.computed);
     }
 
     Geom::PathVector const &pathv = shape->curve()->get_pathvector();
     Geom::Affine ret = Geom::identity(); //edit_transform
     double angle = 0.0; // edit_rotation - tangent angle used for auto orientation
+    Geom::Point p;
     
     if(marker_type == SP_MARKER_LOC_START) {
 
         Geom::Curve const &c = pathv.begin()->front();
-        Geom::Point p = c.pointAt(0);
-        ret = Geom::Translate(p * parent_item->i2dt_affine());
+        p = c.pointAt(0);
+        ret = Geom::Translate(p * parent_item->i2doc_affine());
 
         if (!c.isDegenerate()) {
             Geom::Point tang = c.unitTangentAt(0);
@@ -205,8 +207,8 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
             if (path_it != pathv.begin() && ! ((path_it == (pathv.end()-1)) && (path_it->size_default() == 0)))
             {
                 Geom::Curve const &c = path_it->front();
-                Geom::Point p = c.pointAt(0);
-                ret = Geom::Translate(p * parent_item->i2dt_affine());
+                p = c.pointAt(0);
+                ret = Geom::Translate(p * parent_item->i2doc_affine());
 
                 if (!c.isDegenerate()) {
                     Geom::Point tang = c.unitTangentAt(0);
@@ -225,8 +227,7 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
                     Geom::Curve const & c1 = *curve_it1;
                     Geom::Curve const & c2 = *curve_it2;
 
-                    Geom::Point p = c1.pointAt(1);
-                    
+                    p = c1.pointAt(1);
                     Geom::Curve * c1_reverse = c1.reverse();
                     Geom::Point tang1 = - c1_reverse->unitTangentAt(0);
                     delete c1_reverse;
@@ -241,7 +242,7 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
                         angle += M_PI;
                     }
 
-                    ret = Geom::Rotate(angle) * Geom::Translate(p * parent_item->i2dt_affine());
+                    ret = Geom::Rotate(angle) * Geom::Translate(p * parent_item->i2doc_affine());
 
                     ++curve_it1;
                     ++curve_it2;
@@ -252,8 +253,8 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
             // mid marker end position
             if ( path_it != (pathv.end()-1) && !path_it->empty()) {
                 Geom::Curve const &c = path_it->back_default();
-                Geom::Point p = c.pointAt(1);
-                ret = Geom::Translate(p * parent_item->i2dt_affine());
+                p = c.pointAt(1);
+                ret = Geom::Translate(p * parent_item->i2doc_affine());
 
                 if ( !c.isDegenerate() ) {
                     Geom::Curve * c_reverse = c.reverse();
@@ -273,8 +274,8 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
         if (index > 0) index--;
 
         Geom::Curve const &c = path_last[index];
-        Geom::Point p = c.pointAt(1);
-        ret = Geom::Translate(p * parent_item->i2dt_affine());
+        p = c.pointAt(1);
+        ret = Geom::Translate(p * parent_item->i2doc_affine());
 
         if ( !c.isDegenerate() ) {
             Geom::Curve * c_reverse = c.reverse();
