@@ -394,6 +394,15 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
     return outres;
 }
 
+/**
+ * Workaround for buggy Path::Transform() which incorrectly transforms arc commands.
+ *
+ * TODO: Fix PathDescrArcTo::transform() and then remove this workaround.
+ */
+static void transformLivarotPath(Path *res, Geom::Affine const &affine)
+{
+    res->LoadPathVector(res->MakePathVector() * affine);
+}
 
 // boolean operations on the desktop
 // take the source paths from the file, do the operation, delete the originals and add the results
@@ -797,9 +806,6 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     // to get a correct style attribute for the new path
     SPItem* item_source = SP_ITEM(source);
     Geom::Affine i2doc(item_source->i2doc_affine());
-    item_source->adjust_stroke(i2doc.descrim());
-    item_source->adjust_pattern(i2doc);
-    item_source->adjust_gradient(i2doc);
 
     Inkscape::XML::Node *repr_source = source->getRepr();
 
@@ -815,10 +821,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         }
     }
 
-    // premultiply by the inverse of parent's repr
-    SPItem *parent_item = SP_ITEM(doc->getObjectByRepr(parent));
-    Geom::Affine local (parent_item->i2doc_affine());
-    auto transform = sp_svg_transform_write(local.inverse());
+    auto const source2doc_inverse = i2doc.inverse();
+    char const *const old_transform_attibute = repr_source->attribute("transform");
 
     // now that we have the result, add it on the canvas
     if ( bop == bool_op_cut || bop == bool_op_slice ) {
@@ -845,6 +849,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         // add all the pieces resulting from cut or slice
         std::vector <Inkscape::XML::Node*> selection;
         for (int i=0;i<nbRP;i++) {
+            transformLivarotPath(resPath[i], source2doc_inverse);
             gchar *d = resPath[i]->svg_dump_path();
 
             Inkscape::XML::Document *xml_doc = doc->getReprDoc();
@@ -873,7 +878,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
                 sp_repr_css_attr_unref(css);
             }
 
-            repr->setAttributeOrRemoveIfEmpty("transform", transform);
+            repr->setAttributeOrRemoveIfEmpty("transform", old_transform_attibute);
 
             // add the new repr to the parent
             // move to the saved position
@@ -888,6 +893,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         if ( resPath ) free(resPath);
 
     } else {
+        transformLivarotPath(res, source2doc_inverse);
         gchar *d = res->svg_dump_path();
 
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
@@ -901,7 +907,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         repr->setAttribute("d", d);
         g_free(d);
 
-        repr->setAttributeOrRemoveIfEmpty("transform", transform);
+        repr->setAttributeOrRemoveIfEmpty("transform", old_transform_attibute);
 
         parent->addChildAtPos(repr, pos);
 
