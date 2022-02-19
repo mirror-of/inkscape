@@ -410,6 +410,12 @@ add_cli_test(export-text-to-path_eps PARAMETERS --export-text-to-path --export-t
                                      INPUT_FILENAME text.svg OUTPUT_FILENAME export-text-to-path.eps
                                      TEST_SCRIPT match_regex_fail.sh "export-text-to-path.eps" "^%%BeginResource: font")
 
+# Regression test for https://gitlab.com/inkscape/inkscape/-/issues/1364
+add_cli_test(regression-1364         PARAMETERS --select=large,small --actions=path-intersection
+                                     INPUT_FILENAME regression-1364.svg
+                                     OUTPUT_FILENAME regression-1364_output.svg
+                                     TEST_SCRIPT testcases/regression-1364_script.py)
+
 # Regression test for https://gitlab.com/inkscape/inkscape/-/issues/2602
 add_cli_test(regression-2602         PARAMETERS --export-text-to-path
                                      INPUT_FILENAME regression-2602.svg
