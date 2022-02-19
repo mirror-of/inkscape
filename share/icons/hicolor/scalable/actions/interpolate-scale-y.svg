@@ -30,7 +30,7 @@
      inkscape:document-units="px"
      showgrid="true"
      inkscape:zoom="30.382065"
-     inkscape:cx="8.7716222"
+     inkscape:cx="8.6564228"
      inkscape:cy="5.7599771"
      inkscape:window-width="1280"
      inkscape:window-height="987"
@@ -66,8 +66,8 @@
        mirrortrans="false"
        shirnk_interp="false"
        split_items="true"
-       interpolate_scalex="true"
-       interpolate_scaley="false"
+       interpolate_scalex="false"
+       interpolate_scaley="true"
        interpolate_rotatex="false"
        interpolate_rotatey="false" />
     <inkscape:path-effect
@@ -151,38 +151,38 @@
          style="fill-opacity:1" />
       <path
          id="path11732"
-         d="M 9.499997,4.500003 H 6.4999985 l -1.5e-6,-2.9999985 3,-1.5e-6 z"
+         d="M 9.999997,5.000003 H 5.999999 l -2e-6,-3.999998 4,-2e-6 z"
          style="fill-opacity:1;stroke-width:0.75" />
       <path
          id="path11734"
-         d="m 13.999997,4.000003 h -1.999999 l -10e-7,-1.999999 2,-1e-6 z"
+         d="m 14.999997,5.000003 h -3.999998 l -2e-6,-3.999998 4,-2e-6 z"
          style="fill-opacity:1;stroke-width:0.5" />
       <path
          id="path11736"
-         d="M 4.999997,10.000003 H 0.999999 l -2e-6,-3.999998 4,-2e-6 z"
-         style="fill-opacity:1" />
+         d="M 4.499997,9.500003 H 1.4999985 l -1.5e-6,-2.9999985 3,-1.5e-6 z"
+         style="fill-opacity:1;stroke-width:0.5625" />
       <path
          id="path11738"
          d="M 9.499997,9.500003 H 6.4999985 l -1.5e-6,-2.9999985 3,-1.5e-6 z"
-         style="fill-opacity:1;stroke-width:0.75" />
+         style="fill-opacity:1;stroke-width:0.421875" />
       <path
          id="path11740"
-         d="m 13.999997,9.000003 h -1.999999 l -10e-7,-1.999999 2,-10e-7 z"
-         style="fill-opacity:1;stroke-width:0.5" />
+         d="m 14.499997,9.500003 h -2.999998 l -2e-6,-2.9999985 3,-1.5e-6 z"
+         style="fill-opacity:1;stroke-width:0.28125" />
       <path
          id="path11742"
-         d="M 4.999997,15.000003 H 0.999999 l -2e-6,-3.999998 4,-2e-6 z"
+         d="M 3.999997,14.000003 H 1.999998 l -10e-7,-1.999999 2,-1e-6 z"
          inkscape:transform-center-x="0.63609657"
          inkscape:transform-center-y="-4.1684921"
-         style="fill-opacity:1" />
+         style="fill-opacity:1;stroke-width:0.25" />
       <path
          id="path16736"
          d="m 13.999997,14.000003 h -1.999999 l -10e-7,-1.999999 2,-1e-6 z"
-         style="fill-opacity:1;stroke-width:0.5" />
+         style="fill-opacity:1;stroke-width:0.125" />
       <path
          id="path17266"
-         d="M 9.499997,14.500003 H 6.4999985 l -1.5e-6,-2.999999 3,-1e-6 z"
-         style="fill-opacity:1;stroke-width:0.75" />
+         d="M 8.999997,14.000003 H 6.999998 l -1e-6,-1.999999 2,-1e-6 z"
+         style="fill-opacity:1;stroke-width:0.1875" />
     </g>
   </g>
 </svg>
