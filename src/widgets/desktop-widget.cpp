@@ -1394,7 +1394,7 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                         // Don't apply to text toolbar. We want to be able to
                         // use different units for text. (Bug 1562217)
                         const Glib::ustring name = j->get_name();
-                        if ( name == "TextToolbar" || name == "MeasureToolbar")
+                        if ( name == "TextToolbar" || name == "MeasureToolbar" || name == "CalligraphicToolbar" )
                             continue;
 
                         auto tracker = dynamic_cast<Inkscape::UI::Widget::ComboToolItem*>(sp_search_by_name_recursive(j, "unit-tracker"));

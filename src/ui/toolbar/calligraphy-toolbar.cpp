@@ -67,9 +67,9 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _tracker->prependUnit(unit_table.getUnit("px"));
     _tracker->changeLabel("%", 0, true);
-    prefs->getBool("/tools/calligraphic/abs_width")
-        ? _tracker->setActiveUnitByLabel(prefs->getString("/tools/calligraphic/unit"))
-        : _tracker->setActiveUnitByLabel("%");
+    if (prefs->getBool("/tools/calligraphic/abs_width")) {
+        _tracker->setActiveUnitByLabel(prefs->getString("/tools/calligraphic/unit"));
+    }
 
     /*calligraphic profile */
     {
@@ -294,8 +294,7 @@ CalligraphyToolbar::width_value_changed()
     Unit const *unit = _tracker->getActiveUnit();
     g_return_if_fail(unit != nullptr);
     auto prefs = Inkscape::Preferences::get();
-    _tracker->getCurrentLabel() == "%" ? prefs->setBool("/tools/calligraphic/abs_width", false)
-                                         : prefs->setBool("/tools/calligraphic/abs_width", true);
+    prefs->setBool("/tools/calligraphic/abs_width", _tracker->getCurrentLabel() != "%");
     prefs->setDouble("/tools/calligraphic/width", Quantity::convert(_width_adj->get_value(), unit, "px"));
     update_presets_list();
 }
@@ -514,8 +513,7 @@ void CalligraphyToolbar::unit_changed(int /* NotUsed */)
     Unit const *unit = _tracker->getActiveUnit();
     g_return_if_fail(unit != nullptr);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _tracker->getCurrentLabel() == "%" ? prefs->setBool("/tools/calligraphic/abs_width", false)
-                                        : prefs->setBool("/tools/calligraphic/abs_width", true);
+    prefs->setBool("/tools/calligraphic/abs_width", _tracker->getCurrentLabel() != "%");
     prefs->setDouble("/tools/calligraphic/width",
                      CLAMP(prefs->getDouble("/tools/calligraphic/width"), Quantity::convert(0.001, unit, "px"),
                            Quantity::convert(100, unit, "px")));
