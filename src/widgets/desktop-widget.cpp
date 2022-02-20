@@ -252,6 +252,10 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
     dtw->_tbbox->pack1(*Glib::wrap(dtw->tool_toolbox), false, true);
+    auto tbox_width = prefs->getEntry("/toolbox/tools/width");
+    if (tbox_width.isValid()) {
+        _tbbox->set_position(tbox_width.getIntLimited(32, 8, 500));
+    }
 
     auto set_visible_buttons = [=](GtkWidget* tb) {
         int buttons_before_separator = 0;
@@ -551,6 +555,10 @@ void
 SPDesktopWidget::on_unrealize()
 {
     auto dtw = this;
+
+    if (_tbbox) {
+        Inkscape::Preferences::get()->setInt("/toolbox/tools/width", _tbbox->get_position());
+    }
 
     if (dtw->desktop) {
         if ( watcher ) {
