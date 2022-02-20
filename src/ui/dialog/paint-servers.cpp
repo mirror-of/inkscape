@@ -115,7 +115,7 @@ PaintServersDialog::PaintServersDialog()
     ));
     icon_view->set_tooltip_column(0);
     icon_view->set_pixbuf_column(2);
-    icon_view->set_size_request(200, 300);
+    icon_view->set_size_request(200, -1);
     icon_view->show_all_children();
     icon_view->set_selection_mode(Gtk::SELECTION_SINGLE);
     icon_view->set_activate_on_single_click(true);
@@ -125,7 +125,9 @@ PaintServersDialog::PaintServersDialog()
     scroller->set_hexpand();
     scroller->set_vexpand();
     scroller->add(*icon_view);
+    scroller->set_overlay_scrolling(false);
     grid->attach(*scroller, 0, 2, 2, 1);
+    fix_inner_scroll(scroller);
 
     // Events
     target_dropdown->signal_changed().connect(

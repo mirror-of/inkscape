@@ -1366,6 +1366,7 @@ Gtk::Box* SvgFontsDialog::glyphs_tab() {
 
     _GlyphsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
     _GlyphsListScroller.add(_GlyphsList);
+    fix_inner_scroll(&_GlyphsListScroller);
     _GlyphsList.set_model(_GlyphsListStore);
     _GlyphsList.set_enable_search(false);
 

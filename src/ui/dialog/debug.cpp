@@ -64,7 +64,7 @@ void DebugDialogImpl::clear()
 DebugDialogImpl::DebugDialogImpl()
 {
     set_title(_("Messages"));
-    set_size_request(300, 400);
+    set_size_request(300, -1);
     auto mainVBox = get_content_area();
 
     //## Add a menu for clear()

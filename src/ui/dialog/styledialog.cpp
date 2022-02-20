@@ -219,7 +219,7 @@ StyleDialog::StyleDialog()
     : DialogBase("/dialogs/style", "Style")
     , _updating(false)
     , _textNode(nullptr)
-    , _scroolpos(0)
+    , _scrollpos(0)
     , _deleted_pos(0)
     , _deletion(false)
 {
@@ -234,8 +234,9 @@ StyleDialog::StyleDialog()
     _styleBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _styleBox.set_valign(Gtk::ALIGN_START);
     _scrolledWindow.add(_styleBox);
+    _scrolledWindow.set_overlay_scrolling(false);
     _vadj = _scrolledWindow.get_vadjustment();
-    _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
+    _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscroll));
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
@@ -246,13 +247,13 @@ StyleDialog::~StyleDialog()
     removeObservers();
 }
 
-void StyleDialog::_vscrool()
+void StyleDialog::_vscroll()
 {
-    if (!_scroollock) {
-        _scroolpos = _vadj->get_value();
+    if (!_scrollock) {
+        _scrollpos = _vadj->get_value();
     } else {
-        _vadj->set_value(_scroolpos);
-        _scroollock = false;
+        _vadj->set_value(_scrollpos);
+        _scrollock = false;
     }
 }
 
@@ -394,7 +395,7 @@ void StyleDialog::readStyleElement()
     if (_updating || !document)
         return; // Don't read if we wrote style element.
     _updating = true;
-    _scroollock = true;
+    _scrollock = true;
     Inkscape::XML::Node *textNode = _getStyleTextNode();
 
     // Get content from style text node.
@@ -1055,7 +1056,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     auto selection = getSelection();
     if (_updating && selection)
         return;
-    _scroollock = true;
+    _scrollock = true;
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
@@ -1245,7 +1246,7 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
 {
     g_debug("StyleDialog::_startValueEdit");
     _deletion = false;
-    _scroollock = true;
+    _scrollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
         Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
@@ -1308,7 +1309,7 @@ void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &p
 {
     _deletion = false;
     g_debug("StyleDialog::_startNameEdit");
-    _scroollock = true;
+    _scrollock = true;
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
     entry_completion->set_model(completionModel);
@@ -1353,7 +1354,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
 {
     g_debug("StyleDialog::_nameEdited");
 
-    _scroollock = true;
+    _scrollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     _current_path = (Gtk::TreeModel::Path)*store->get_iter(path);
 
@@ -1418,7 +1419,7 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
 {
     g_debug("StyleDialog::_valueEdited");
 
-    _scroollock = true;
+    _scrollock = true;
 
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
@@ -1459,7 +1460,7 @@ void StyleDialog::_activeToggled(const Glib::ustring &path, Glib::RefPtr<Gtk::Tr
 {
     g_debug("StyleDialog::_activeToggled");
 
-    _scroollock = true;
+    _scrollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
         row[_mColumns._colActive] = !row[_mColumns._colActive];
@@ -1593,7 +1594,7 @@ void StyleDialog::documentReplaced()
  */
 void StyleDialog::selectionChanged(Selection * /*selection*/)
 {
-    _scroolpos = 0;
+    _scrollpos = 0;
     _vadj->set_value(0);
     // Sometimes the selection changes because inkscape is closing.
     if (getDesktop()) {

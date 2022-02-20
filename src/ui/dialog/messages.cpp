@@ -70,7 +70,7 @@ Messages::Messages()
     pack_start(buttonBox, Gtk::PACK_SHRINK);
 
     // sick of this thing shrinking too much
-    set_size_request(400, 300);
+    set_size_request(400, -1);
 
     show_all_children();
 

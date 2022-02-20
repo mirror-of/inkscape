@@ -18,6 +18,7 @@
 #include <glibmm/refptr.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/notebook.h>
+#include <gtkmm/scrolledwindow.h>
 #include <iostream>
 
 #include "inkscape.h"
@@ -202,6 +203,41 @@ void DialogBase::setDesktop(SPDesktop *new_desktop)
     }
 
     desktopReplaced();
+}
+
+//
+void DialogBase::fix_inner_scroll(Gtk::Widget *scrollwindow)
+{
+    auto scrollwin = dynamic_cast<Gtk::ScrolledWindow *>(scrollwindow);
+    auto viewport = dynamic_cast<Gtk::ScrolledWindow *>(scrollwin->get_child());
+    Gtk::Widget *child = nullptr;
+    if (viewport) { //some widgets has viewportother not
+        child = viewport->get_child();
+    } else {
+        child = scrollwin->get_child();
+    }
+    if (child && scrollwin) {
+        Glib::RefPtr<Gtk::Adjustment> adjustment = scrollwin->get_vadjustment();
+        child->signal_scroll_event().connect([=](GdkEventScroll* event) { 
+            auto container = dynamic_cast<Gtk::Container *>(this);
+            if (container) {
+                std::vector<Gtk::Widget*> widgets = container->get_children();
+                if (widgets.size()) {
+                    auto parentscroll = dynamic_cast<Gtk::ScrolledWindow *>(widgets[0]);
+                    if (parentscroll) {
+                        if (event->delta_y > 0 && (adjustment->get_value() + adjustment->get_page_size()) == adjustment->get_upper()) {
+                            parentscroll->event((GdkEvent*)event);
+                            return true;
+                        } else if (event->delta_y < 0 && adjustment->get_value() == adjustment->get_lower()) {
+                            parentscroll->event((GdkEvent*)event);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        });
+    }
 }
 
 /**

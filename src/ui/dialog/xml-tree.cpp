@@ -171,6 +171,7 @@ XmlTree::XmlTree()
     tree_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     tree_scroller->set_shadow_type(Gtk::SHADOW_IN);
     tree_scroller->add(*Gtk::manage(Glib::wrap(GTK_WIDGET(tree))));
+    fix_inner_scroll(tree_scroller);
 
     node_box.pack_start(*Gtk::manage(tree_scroller));
 
@@ -225,7 +226,7 @@ XmlTree::XmlTree()
 
     set_name("XMLAndAttributesDialog");
     set_spacing(0);
-    set_size_request(320, 260);
+    set_size_request(320, -1);
     show_all();
 
     int panedpos = prefs->getInt("/dialogs/xml/panedpos", 200);

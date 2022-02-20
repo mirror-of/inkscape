@@ -82,7 +82,7 @@ void SelectorsDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /
 {
 
     g_debug("SelectorsDialog::NodeObserver::notifyContentChanged");
-    _selectorsdialog->_scroollock = true;
+    _selectorsdialog->_scrollock = true;
     _selectorsdialog->_updating = false;
     _selectorsdialog->_readStyleElement();
     _selectorsdialog->_selectRow();
@@ -150,7 +150,7 @@ void SelectorsDialog::_nodeChanged(Inkscape::XML::Node &object)
 
     g_debug("SelectorsDialog::NodeChanged");
 
-    _scroollock = true;
+    _scrollock = true;
 
     _readStyleElement();
     _selectRow();
@@ -222,8 +222,8 @@ SelectorsDialog::SelectorsDialog()
     : DialogBase("/dialogs/selectors", "Selectors")
     , _updating(false)
     , _textNode(nullptr)
-    , _scroolpos(0)
-    , _scroollock(false)
+    , _scrollpos(0)
+    , _scrollock(false)
 {
     g_debug("SelectorsDialog::SelectorsDialog");
 
@@ -278,13 +278,13 @@ SelectorsDialog::SelectorsDialog()
 }
 
 
-void SelectorsDialog::_vscrool()
+void SelectorsDialog::_vscroll()
 {
-    if (!_scroollock) {
-        _scroolpos = _vadj->get_value();
+    if (!_scrollock) {
+        _scrollpos = _vadj->get_value();
     } else {
-        _vadj->set_value(_scroolpos);
-        _scroollock = false;
+        _vadj->set_value(_scrollpos);
+         false;
     }
 }
 
@@ -300,8 +300,9 @@ void SelectorsDialog::_showWidgets()
     _selectors_box.set_name("SelectorsDialog");
     _scrolled_window_selectors.add(_treeView);
     _scrolled_window_selectors.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _scrolled_window_selectors.set_overlay_scrolling(false);
     _vadj = _scrolled_window_selectors.get_vadjustment();
-    _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_vscrool));
+    _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_vscroll));
     _selectors_box.pack_start(_scrolled_window_selectors, Gtk::PACK_EXPAND_WIDGET);
     /* Gtk::Label *dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
     dirtogglerlabel->get_style_context()->add_class("inksmall");
@@ -339,55 +340,13 @@ void SelectorsDialog::_showWidgets()
     contents->pack_start(_button_box, false, false, 0);
     contents->set_valign(Gtk::ALIGN_FILL);
     contents->child_property_fill(_paned);
-    Gtk::ScrolledWindow *dialog_scroller = new Gtk::ScrolledWindow();
-    dialog_scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    dialog_scroller->set_shadow_type(Gtk::SHADOW_IN);
-    dialog_scroller->add(*Gtk::manage(contents));
-    pack_start(*dialog_scroller, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*contents, Gtk::PACK_EXPAND_WIDGET);
     show_all();
-    int widthpos = _paned.property_max_position() - _paned.property_min_position();
-    int panedpos = prefs->getInt("/dialogs/selectors/panedpos", widthpos / 2);
-    _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_childresized));
-    _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedresized));
     _updating = true;
-    _paned.property_position() = panedpos;
+    _paned.property_position() = 200;
     _updating = false;
-    set_size_request(320, 260);
+    set_size_request(320, -1);
     set_name("SelectorsAndStyleDialog");
-}
-
-void SelectorsDialog::_panedresized(Gtk::Allocation allocation)
-{
-    g_debug("SelectorsDialog::_panedresized");
-    _resized();
-}
-
-void SelectorsDialog::_childresized()
-{
-    g_debug("SelectorsDialog::_childresized");
-    _resized();
-}
-
-void SelectorsDialog::_resized()
-{
-    g_debug("SelectorsDialog::_resized");
-    _scroollock = true;
-    if (_updating) {
-        return;
-    }
-    _updating = true;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int max = int(_paned.property_max_position() * 0.95);
-    int min = int(_paned.property_max_position() * 0.05);
-    if (_paned.property_position() > max) {
-        _paned.property_position() = max;
-    }
-    if (_paned.property_position() < min) {
-        _paned.property_position() = min;
-    }
-
-    prefs->setInt("/dialogs/selectors/panedpos", _paned.property_position());
-    _updating = false;
 }
 
 void SelectorsDialog::_toggleDirection(Gtk::RadioButton *vertical)
@@ -438,7 +397,7 @@ void SelectorsDialog::_readStyleElement()
 
     if (_updating) return; // Don't read if we wrote style element.
     _updating = true;
-    _scroollock = true;
+    _scrollock = true;
     Inkscape::XML::Node * textNode = _getStyleTextNode();
 
     // Get content from style text node.
@@ -572,8 +531,8 @@ void SelectorsDialog::_readStyleElement()
     if (rewrite) {
         _writeStyleElement();
     }
-    _scroollock = false;
-    _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
+    _scrollock = false;
+    _vadj->set_value(std::min(_scrollpos, _vadj->get_upper()));
 }
 
 void SelectorsDialog::_rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path)
@@ -601,7 +560,7 @@ void SelectorsDialog::_writeStyleElement()
 
     g_debug("SelectorsDialog::_writeStyleElement");
 
-    _scroollock = true;
+    _scrollock = true;
     _updating = true;
     Glib::ustring styleContent = "";
     for (auto& row: _store->children()) {
@@ -637,8 +596,8 @@ void SelectorsDialog::_writeStyleElement()
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, _("Edited style element."), INKSCAPE_ICON("dialog-selectors"));
 
     _updating = false;
-    _scroollock = false;
-    _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
+    _scrollock = false;
+    _vadj->set_value(std::min(_scrollpos, _vadj->get_upper()));
     g_debug("SelectorsDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }
 
@@ -808,7 +767,7 @@ void SelectorsDialog::_removeFromSelector(Gtk::TreeModel::Row row)
 {
     g_debug("SelectorsDialog::_removeFromSelector: Entrance");
     if (*row) {
-        _scroollock = true;
+        _scrollock = true;
         _updating = true;
         SPObject *obj = nullptr;
         Glib::ustring objectLabel = row[_mColumns._colSelector];
@@ -851,8 +810,8 @@ void SelectorsDialog::_removeFromSelector(Gtk::TreeModel::Row row)
         _writeStyleElement();
         obj->style->readFromObject(obj);
         obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-        _scroollock = false;
-        _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
+        _scrollock = false;
+        _vadj->set_value(std::min(_scrollpos, _vadj->get_upper()));
     }
 }
 
@@ -1039,7 +998,7 @@ void SelectorsDialog::_selectObjects(int eventX, int eventY)
 void SelectorsDialog::_addSelector()
 {
     g_debug("SelectorsDialog::_addSelector: Entrance");
-    _scroollock = true;
+    _scrollock = true;
     // Store list of selected elements on desktop (not to be confused with selector).
     Inkscape::Selection* selection = getDesktop()->getSelection();
     std::vector<SPObject *> objVec( selection->objects().begin(),
@@ -1169,8 +1128,8 @@ void SelectorsDialog::_addSelector()
     }
     // Add entry to style element
     _writeStyleElement();
-    _scroollock = false;
-    _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
+    _scrollock = false;
+    _vadj->set_value(std::min(_scrollpos, _vadj->get_upper()));
 }
 
 void SelectorsDialog::_closeDialog(Gtk::Dialog *textDialogPtr) { textDialogPtr->response(Gtk::RESPONSE_OK); }
@@ -1183,11 +1142,11 @@ void SelectorsDialog::_delSelector()
 {
     g_debug("SelectorsDialog::_delSelector");
 
-    _scroollock = true;
+    _scrollock = true;
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     if (iter) {
-        _vscrool();
+        _vscroll();
         Gtk::TreeModel::Row row = *iter;
         if (row.children().size() > 2) {
             return;
@@ -1197,8 +1156,8 @@ void SelectorsDialog::_delSelector()
         _updating = false;
         _writeStyleElement();
         _del.hide();
-        _scroollock = false;
-        _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
+        _scrollock = false;
+        _vadj->set_value(std::min(_scrollpos, _vadj->get_upper()));
     }
 }
 
@@ -1214,7 +1173,7 @@ bool SelectorsDialog::_handleButtonEvent(GdkEventButton *event)
 {
     g_debug("SelectorsDialog::_handleButtonEvent: Entrance");
     if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
-        _scroollock = true;
+        _scrollock = true;
         Gtk::TreeViewColumn *col = nullptr;
         Gtk::TreeModel::Path path;
         int x = static_cast<int>(event->x);
@@ -1224,7 +1183,7 @@ bool SelectorsDialog::_handleButtonEvent(GdkEventButton *event)
 
         if (_treeView.get_path_at_pos(x, y, path, col, x2, y2)) {
             if (col == _treeView.get_column(0)) {
-                _vscrool();
+                _vscroll();
                 Gtk::TreeModel::iterator iter = _store->get_iter(path);
                 Gtk::TreeModel::Row row = *iter;
                 if (!row.parent()) {
@@ -1232,7 +1191,7 @@ bool SelectorsDialog::_handleButtonEvent(GdkEventButton *event)
                 } else {
                     _removeFromSelector(row);
                 }
-                _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
+                _vadj->set_value(std::min(_scrollpos, _vadj->get_upper()));
             }
         }
     }
@@ -1332,7 +1291,7 @@ void SelectorsDialog::_buttonEventsSelectObjs(GdkEventButton *event)
  */
 void SelectorsDialog::_selectRow()
 {
-    _scroollock = true;
+    _scrollock = true;
     g_debug("SelectorsDialog::_selectRow: updating: %s", (_updating ? "true" : "false"));
     _del.hide();
     std::vector<Gtk::TreeModel::Path> selectedrows = _treeView.get_selection()->get_selected_rows();
@@ -1394,7 +1353,7 @@ void SelectorsDialog::_selectRow()
             _treeView.expand_to_path(Gtk::TreePath(row));
         }
     }
-    _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
+    _vadj->set_value(std::min(_scrollpos, _vadj->get_upper()));
 }
 
 /**

@@ -105,6 +105,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolled_window.set_shadow_type(Gtk::SHADOW_IN);
     scrolled_window.set_size_request(210, 70);
+    fix_inner_scroll(&scrolled_window);
 
     effectcontrol_vbox.set_spacing(4);
 

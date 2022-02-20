@@ -161,7 +161,7 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
   // Giving the iconview a small minimum size will help users understand
   // What the dialog does.
   icon_view->set_size_request( 100, 250 );
-
+  icon_view->set_vexpand(true);
   std::vector< Gtk::TargetEntry > targets;
   targets.emplace_back( "application/x-inkscape-paste");
 
@@ -172,17 +172,21 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
       icon_view->signal_selection_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::iconChanged)));
 
   scroller = new Gtk::ScrolledWindow();
-  scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
+  scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
   scroller->add(*Gtk::manage(icon_view));
   scroller->set_hexpand();
   scroller->set_vexpand();
-
+  scroller->set_overlay_scrolling(false);
+  // here we fix scoller to allow pass the scroll to parent scroll when reach upper or lower limit
+  // this must be added to al scrolleing window in dialogs. We dont do auto because dialogs can be recreated
+  // in the dialog code so think is safer call inside
+  fix_inner_scroll(scroller);
   overlay = new Gtk::Overlay();
   overlay->set_hexpand();
   overlay->set_vexpand();
   overlay->add(* scroller);
   overlay->get_style_context()->add_class("forcebright");
-  scroller->set_size_request(100, 250);
+  scroller->set_size_request(100, -1);
   table->attach(*Gtk::manage(overlay), 0, row, 2, 1);
 
   /*************************Overlays******************************/
@@ -190,26 +194,29 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
   overlay_opacity->set_halign(Gtk::ALIGN_START);
   overlay_opacity->set_valign(Gtk::ALIGN_START);
   overlay_opacity->get_style_context()->add_class("rawstyle");
-
+  overlay_opacity->set_no_show_all(true);
   // No results
   overlay_icon = sp_get_icon_image("searching", Gtk::ICON_SIZE_DIALOG);
   overlay_icon->set_pixel_size(110);
   overlay_icon->set_halign(Gtk::ALIGN_CENTER);
   overlay_icon->set_valign(Gtk::ALIGN_START);
 
-  overlay_icon->set_margin_top(45);
+  overlay_icon->set_margin_top(25);
+  overlay_icon->set_no_show_all(true);
 
   overlay_title = new Gtk::Label();
   overlay_title->set_halign(Gtk::ALIGN_CENTER );
   overlay_title->set_valign(Gtk::ALIGN_START );
   overlay_title->set_justify(Gtk::JUSTIFY_CENTER);
-  overlay_title->set_margin_top(155);
+  overlay_title->set_margin_top(135);
+  overlay_title->set_no_show_all(true);
 
   overlay_desc = new Gtk::Label();
   overlay_desc->set_halign(Gtk::ALIGN_CENTER);
   overlay_desc->set_valign(Gtk::ALIGN_START);
-  overlay_desc->set_margin_top(180);
+  overlay_desc->set_margin_top(160);
   overlay_desc->set_justify(Gtk::JUSTIFY_CENTER);
+  overlay_desc->set_no_show_all(true);
 
   overlay->add_overlay(*overlay_opacity);
   overlay->add_overlay(*overlay_icon);

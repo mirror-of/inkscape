@@ -159,9 +159,9 @@ public:
     void _setAutocompletion(Gtk::Entry *entry, Glib::ustring name);
     bool _on_foreach_iter(const Gtk::TreeModel::iterator &iter);
     void _reload();
-    void _vscrool();
-    bool _scroollock;
-    double _scroolpos;
+    void _vscroll();
+    bool _scrollock;
+    double _scrollpos;
     Glib::ustring _current_selector;
 
     // Update watchers

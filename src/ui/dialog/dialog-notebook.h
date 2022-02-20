@@ -56,7 +56,7 @@ public:
     void close_tab_callback();
     void close_notebook_callback();
     DialogWindow* pop_tab_callback();
-
+    Gtk::ScrolledWindow * get_current_scrolledwindow(bool skip_scroll_provider);
 private:
     // Widgets
     DialogContainer *_container;
@@ -100,8 +100,8 @@ private:
     bool on_tab_click_event(GdkEventButton *event, Gtk::Widget *page);
     void on_close_button_click_event(Gtk::Widget *page);
     void on_page_switch(Gtk::Widget *page, guint page_number);
-
     // Helpers
+    bool provide_scroll(Gtk::Widget &page);
     void preventOverflow();
     void change_page(size_t pagenum);
     void reload_tab_menu();

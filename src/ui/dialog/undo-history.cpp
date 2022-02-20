@@ -96,7 +96,7 @@ UndoHistory::UndoHistory()
 {
     auto *_columns = &EventLog::getColumns();
 
-    set_size_request(-1, 95);
+    set_size_request(-1, -1);
 
     pack_start(_scrolled_window);
     _scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
@@ -135,7 +135,7 @@ UndoHistory::UndoHistory()
     _event_list_view.set_expander_column( *_event_list_view.get_column(cols_count-1) );
 
     _scrolled_window.add(_event_list_view);
-
+    _scrolled_window.set_overlay_scrolling(false);
     // connect EventLog callbacks
     _callback_connections[EventLog::CALLB_SELECTION_CHANGE] =
         _event_list_selection->signal_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onListSelectionChange));

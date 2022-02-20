@@ -152,14 +152,11 @@ public:
     void _removeClass(SPObject *obj, const Glib::ustring &className, bool all = false);
     void _toggleDirection(Gtk::RadioButton *vertical);
     void _showWidgets();
-    void _resized();
-    void _childresized();
-    void _panedresized(Gtk::Allocation allocation);
 
     void _selectObjects(int, int);
     // Variables
-    double _scroolpos;
-    bool _scroollock;
+    double _scrollpos;
+    bool _scrollock;
     bool _updating;                 // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
     Inkscape::XML::Node *m_root = nullptr;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
@@ -176,7 +173,7 @@ public:
     bool _handleButtonEvent(GdkEventButton *event);
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectRow(); // Select row in tree when selection changed.
-    void _vscrool();
+    void _vscroll();
 
     // GUI
     void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);

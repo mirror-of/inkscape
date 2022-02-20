@@ -29,8 +29,8 @@
                 <property name="double-buffered">False</property>
                 <property name="vexpand">True</property>
                 <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">external</property>
                 <property name="window-placement-set">False</property>
+                <property name="overlay-scrolling">False</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">True</property>
@@ -845,8 +845,8 @@
                 <property name="can-focus">True</property>
                 <property name="vexpand">True</property>
                 <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">external</property>
                 <property name="window-placement-set">False</property>
+                <property name="overlay-scrolling">False</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">True</property>

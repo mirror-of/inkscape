@@ -106,6 +106,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
         Glib::ustring order;
         Glib::ustring icon_name;
         DialogData::Category category;
+        ScrollProvider provide_scroll;
     };
     std::vector<Dialog> all_dialogs;
     all_dialogs.reserve(dialog_data.size());
@@ -119,7 +120,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
         if (underscore != Glib::ustring::npos) {
             order = order.erase(underscore, 1);
         }
-        all_dialogs.push_back(Dialog { .key = key, .label = data.label, .order = order, .icon_name = data.icon_name, .category = data.category });
+        all_dialogs.push_back(Dialog { .key = key, .label = data.label, .order = order, .icon_name = data.icon_name, .category = data.category, .provide_scroll = data.provide_scroll});
     }
     // sort by categories and then by names
     std::sort(all_dialogs.begin(), all_dialogs.end(), [](const Dialog& a, const Dialog& b){
@@ -238,6 +239,50 @@ void DialogNotebook::remove_highlight_header()
     style->remove_class("nb-highlight");
 }
 
+auto dialog_notebook_handle_unmap = [](Gtk::Widget *child) {
+    child->hide();
+};
+
+/**
+ * get provide scroll
+ */
+bool 
+DialogNotebook::provide_scroll(Gtk::Widget &page) {
+    auto dialogbase = dynamic_cast<DialogBase*>(&page);
+    if (dialogbase) {
+        auto data = dialog_data.find(dialogbase->get_type());
+        if ((*data).second.provide_scroll == ScrollProvider::PROVIDE) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Set provide scroll
+ */
+Gtk::ScrolledWindow *
+DialogNotebook::get_current_scrolledwindow(bool skip_scroll_provider) {
+
+    gint pagenum = _notebook.get_current_page();
+    Gtk::Widget *page = _notebook.get_nth_page(pagenum);
+    if (page) {
+        if (skip_scroll_provider && provide_scroll(*page)) {
+            return nullptr;
+        }
+        auto container = dynamic_cast<Gtk::Container *>(page);
+        if (container) {
+            for (auto widg : container->get_children()) {
+                auto scrolledwindow = dynamic_cast<Gtk::ScrolledWindow *>(widg);
+                if (scrolledwindow) {
+                    return scrolledwindow;
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
 /**
  * Adds a widget as a new page with a tab.
  */
@@ -247,6 +292,43 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
     page.set_vexpand();
 
     int page_number = _notebook.append_page(page, tab);
+    auto container = dynamic_cast<Gtk::Box *>(&page);
+    if (container) {
+        auto swin = dynamic_cast<Gtk::ScrolledWindow *>(_notebook.get_parent()->get_parent());
+        if (swin) {
+            swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+            auto *wrapper = Gtk::manage(new Gtk::ScrolledWindow());
+            auto *wrapperbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+            std::vector<Gtk::Widget *> widgs = container->get_children();
+            for (auto widg : widgs) {
+                bool expand = container->child_property_expand(*widg);
+                bool fill = container->child_property_fill(*widg);
+                guint padding = container->child_property_expand(*widg);
+                Gtk::PackType pack_type = container->child_property_pack_type(*widg);
+                container->remove(*widg);
+                if (pack_type == Gtk::PACK_START) {
+                    wrapperbox->pack_start(*widg, expand, fill, padding);
+                } else {
+                    wrapperbox->pack_end  (*widg, expand, fill, padding);
+                }
+            } 
+            wrapperbox->set_valign(Gtk::ALIGN_FILL);
+            wrapper->add(*wrapperbox);
+            container->add(*wrapper);
+            if (provide_scroll(page)) {
+                wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_EXTERNAL);
+            } else {
+                wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+            }
+            wrapper->set_propagate_natural_height(true);
+            wrapper->set_valign(Gtk::ALIGN_FILL);
+            wrapper->set_overlay_scrolling(false);
+            wrapper->set_vexpand(true);
+            wrapper->get_style_context()->add_class("noborder");
+            wrapper->signal_unmap().connect([=]() { dialog_notebook_handle_unmap(wrapper);});
+        }
+    }
+    
     _notebook.set_tab_reorderable(page);
     _notebook.set_tab_detachable(page);
     _notebook.show_all();
@@ -522,7 +604,10 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
     const int MIN_HEIGHT = 60;
 
     // set or unset scrollbars to completely hide a notebook
-    property_vscrollbar_policy().set_value(a.get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
+    Gtk::ScrolledWindow * sw = get_current_scrolledwindow(true);
+    if (sw) {
+        sw->property_vscrollbar_policy().set_value(sw->get_allocation().get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
+    }
 
     set_allocation(a);
     // only update notebook tabs on horizontal changes
@@ -764,6 +849,10 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
 
 void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 {
+    auto container = dynamic_cast<Gtk::Container *>(curr_page);
+    if (container) {
+        container->show_all_children();
+    }
     for (auto const &page : _notebook.get_children()) {
         if (_prev_alloc_width) {
             auto dialogbase = dynamic_cast<DialogBase*>(page);
@@ -825,6 +914,10 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 void DialogNotebook::change_page(size_t pagenum)
 {
     _notebook.set_current_page(pagenum);
+    auto container = dynamic_cast<Gtk::Container *>(_notebook.get_nth_page(pagenum));
+    if (container) {
+        container->show_all_children();
+    }
 }
 
 /**
