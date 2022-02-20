@@ -18,10 +18,11 @@
 #include <gtkmm.h>
 
 #include <giomm/file.h>
-#include <giomm/file.h>
+#include <giomm/action.h>
 
 #include "document.h"
 #include "inkscape.h"
+#include "inkscape-application.h"
 #include "preferences.h"
 #include "extension/output.h"
 #include "extension/input.h"
@@ -828,7 +829,15 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 
     bool import = prefs->getBool("/options/onimport", false);
     bool import_pages = (import_mode_svg == "pages");
-
+    // Do we "import" as <image>?
+    if (uri && import && import_mode_svg == "new") {
+        prefs->setBool("/options/onimport", false);
+        static auto gapp = InkscapeApplication::instance()->gtk_app();
+        auto action = gapp->lookup_action("file-open-window");
+        auto file_dnd = Glib::Variant<Glib::ustring>::create(uri);
+        action->activate(file_dnd);
+        return SPDocument::createNewDoc (nullptr, true, true);
+    }
     // Do we "import" as <image>?
     if (import && import_mode_svg != "include" && !import_pages) {
         // We import!
