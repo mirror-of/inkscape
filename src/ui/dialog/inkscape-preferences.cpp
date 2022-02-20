@@ -1718,7 +1718,6 @@ void InkscapePreferences::initPageUI()
     _page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
                          _("Make background brighter or darker to adjust contrast"), true, space);
     _contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastThemeChange));
-    _contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastThemeChange));
 
     if (dark_themes[current_theme]) {
         _dark_theme.get_parent()->set_no_show_all(false);
