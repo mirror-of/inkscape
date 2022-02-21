@@ -119,9 +119,6 @@ void SingleExport::initialise(const Glib::RefPtr<Gtk::Builder> &builder)
     builder->get_widget("si_export", si_export);
 
     builder->get_widget("si_progress", _prog);
-
-    Inkscape::UI::Widget::ScrollTransfer<Gtk::ScrolledWindow> *temp = nullptr;
-    builder->get_widget_derived("s_scroll", temp);
 }
 
 // Inkscape Selection Modified CallBack
@@ -623,8 +620,7 @@ void SingleExport::onBrowse(Gtk::EntryIconPosition pos, const GdkEventButton *ev
     Glib::ustring filename = Glib::filename_from_utf8(si_filename_entry->get_text());
 
     if (filename.empty()) {
-        Glib::ustring tmp;
-        filename = Export::filePathFromId(_document, tmp, tmp);
+        filename = Export::defaultFilename(_document, filename, ".png");
     }
 
     Inkscape::UI::Dialog::FileSaveDialog *dialog = Inkscape::UI::Dialog::FileSaveDialog::create(

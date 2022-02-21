@@ -588,8 +588,7 @@ void BatchExport::onBrowse(Gtk::EntryIconPosition pos, const GdkEventButton *ev)
     Glib::ustring filename = Glib::filename_from_utf8(filename_entry->get_text());
 
     if (filename.empty()) {
-        Glib::ustring tmp;
-        filename = Export::filePathFromId(_desktop->getDocument(), tmp, tmp);
+        filename = Export::defaultFilename(_document, filename, ".png");
     }
 
     Inkscape::UI::Dialog::FileSaveDialog *dialog = Inkscape::UI::Dialog::FileSaveDialog::create(
