@@ -239,10 +239,6 @@ void DialogNotebook::remove_highlight_header()
     style->remove_class("nb-highlight");
 }
 
-auto dialog_notebook_handle_unmap = [](Gtk::Widget *child) {
-    child->hide();
-};
-
 /**
  * get provide scroll
  */
@@ -298,7 +294,14 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
         if (swin) {
             swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
             auto *wrapper = Gtk::manage(new Gtk::ScrolledWindow());
+            wrapper->set_vexpand(true);
+            wrapper->set_propagate_natural_height(true);
+            wrapper->set_valign(Gtk::ALIGN_FILL);
+            wrapper->set_overlay_scrolling(false);
+            wrapper->get_style_context()->add_class("noborder");
             auto *wrapperbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+            wrapperbox->set_valign(Gtk::ALIGN_FILL);
+            wrapperbox->set_vexpand(true);
             std::vector<Gtk::Widget *> widgs = container->get_children();
             for (auto widg : widgs) {
                 bool expand = container->child_property_expand(*widg);
@@ -312,7 +315,6 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
                     wrapperbox->pack_end  (*widg, expand, fill, padding);
                 }
             } 
-            wrapperbox->set_valign(Gtk::ALIGN_FILL);
             wrapper->add(*wrapperbox);
             container->add(*wrapper);
             if (provide_scroll(page)) {
@@ -320,12 +322,17 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
             } else {
                 wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
             }
-            wrapper->set_propagate_natural_height(true);
-            wrapper->set_valign(Gtk::ALIGN_FILL);
-            wrapper->set_overlay_scrolling(false);
-            wrapper->set_vexpand(true);
-            wrapper->get_style_context()->add_class("noborder");
-            wrapper->signal_unmap().connect([=]() { dialog_notebook_handle_unmap(wrapper);});
+            // TODO: uncomenting get a issue with some dialogs (fill&stroke and document propetries both with subnotebook)
+            // the issue is the dialog scroll but not the scrollbar
+            // if we fix we can shirnk till the min width of visible tab
+            /* 
+            wrapper->signal_unmap().connect([=]() {
+                wrapperbox->hide();
+            });
+            wrapper->signal_map().connect([=]() {
+                wrapperbox->show_all();
+            }); 
+            */
         }
     }
     
@@ -605,7 +612,7 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
 
     // set or unset scrollbars to completely hide a notebook
     Gtk::ScrolledWindow * sw = get_current_scrolledwindow(true);
-    if (sw) {
+    if (sw && sw->get_allocation().get_height() > 1) {
         sw->property_vscrollbar_policy().set_value(sw->get_allocation().get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
     }
 
@@ -849,10 +856,6 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
 
 void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 {
-    auto container = dynamic_cast<Gtk::Container *>(curr_page);
-    if (container) {
-        container->show_all_children();
-    }
     for (auto const &page : _notebook.get_children()) {
         if (_prev_alloc_width) {
             auto dialogbase = dynamic_cast<DialogBase*>(page);
@@ -914,10 +917,6 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 void DialogNotebook::change_page(size_t pagenum)
 {
     _notebook.set_current_page(pagenum);
-    auto container = dynamic_cast<Gtk::Container *>(_notebook.get_nth_page(pagenum));
-    if (container) {
-        container->show_all_children();
-    }
 }
 
 /**
