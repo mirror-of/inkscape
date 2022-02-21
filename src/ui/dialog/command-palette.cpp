@@ -123,6 +123,8 @@ CommandPalette::CommandPalette()
 
         // setup recent files
         {
+            //TODO: refactor this ==============================
+            // this code is repeated in menubar.cpp
             auto recent_manager = Gtk::RecentManager::get_default();
             auto recent_files = recent_manager->get_items(); // all recent files not necessarily inkscape only
 
@@ -150,6 +152,7 @@ CommandPalette::CommandPalette()
                 append_recent_file_operation(recent_file->get_uri_display(), true,
                                              true); // import - last param true for import operation
             }
+            // ==================================================
         }
     }
 

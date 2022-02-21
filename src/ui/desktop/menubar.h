@@ -30,9 +30,9 @@ enum class UseIcons {
 
 // Rebuild menu with icons enabled or disabled. Recursive.
 #if GTK_CHECK_VERSION(4, 0, 0)
-void rebuild_menu (std::shared_ptr<Gio::MenuModel> menu, std::shared_ptr<Gio::Menu> menu_copy, UseIcons useIcons);
+void rebuild_menu (std::shared_ptr<Gio::MenuModel> menu, std::shared_ptr<Gio::Menu> menu_copy, UseIcons useIcons, Glib::Quark quark, Glib::RefPtr<Gio::Menu>& recent_files);
 #else
-void rebuild_menu (Glib::RefPtr<Gio::MenuModel>    menu, Glib::RefPtr<Gio::Menu>    menu_copy, UseIcons useIcons);
+void rebuild_menu (Glib::RefPtr<Gio::MenuModel>    menu, Glib::RefPtr<Gio::Menu>    menu_copy, UseIcons useIcons, Glib::Quark quark, Glib::RefPtr<Gio::Menu>& recent_files);
 #endif
 
 #endif // SEEN_DESKTOP_MENUBAR_H
