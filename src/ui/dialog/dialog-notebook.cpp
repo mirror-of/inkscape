@@ -856,10 +856,6 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
 
 void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 {
-    auto container = dynamic_cast<Gtk::Container *>(curr_page);
-    if (container) {
-        container->show_all_children();
-    }
     for (auto const &page : _notebook.get_children()) {
         if (_prev_alloc_width) {
             auto dialogbase = dynamic_cast<DialogBase*>(page);
@@ -921,10 +917,6 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 void DialogNotebook::change_page(size_t pagenum)
 {
     _notebook.set_current_page(pagenum);
-    auto container = dynamic_cast<Gtk::Container *>(_notebook.get_nth_page(pagenum));
-    if (container) {
-        container->show_all_children();
-    }
 }
 
 /**

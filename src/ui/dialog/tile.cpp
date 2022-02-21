@@ -81,7 +81,6 @@ ArrangeDialog::ArrangeDialog()
 
     show();
     show_all_children();
-    set_no_show_all();
     update_arrange_btn();
 }
 
