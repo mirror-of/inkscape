@@ -775,6 +775,7 @@ void EraserTool::_clipErase(SPItem *item, SPObject *parent, Geom::OptRect &erase
     Inkscape::GC::release(dup); // parent takes over
     w_selection.set(dup);
     w_selection.pathUnion(true);
+    bool delete_old_clip_path = false;
     if (bbox && bbox->intersects(*eraser_box)) {
         SPClipPath *clip_path = item->getClipObject();
         if (clip_path) {
@@ -795,7 +796,7 @@ void EraserTool::_clipErase(SPItem *item, SPObject *parent, Geom::OptRect &erase
                     if (dup_clip_obj) {
                         dup_clip_obj->transform *= item->getRelativeTransform(SP_ITEM(parent));
                         dup_clip_obj->updateRepr();
-                        clip_path->deleteObject(true);
+                        delete_old_clip_path = true;
                         w_selection.raiseToTop(true);
                         w_selection.add(dup_clip);
                         w_selection.pathDiff(true, true);
@@ -819,6 +820,9 @@ void EraserTool::_clipErase(SPItem *item, SPObject *parent, Geom::OptRect &erase
         w_selection.raiseToTop(true);
         w_selection.add(item);
         w_selection.setMask(true, false, true);
+        if (delete_old_clip_path) {
+            clip_path->deleteObject(true);
+        }
     } else {
         SPItem *erase_clip = w_selection.singleItem();
         if (erase_clip) {
