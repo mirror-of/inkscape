@@ -32,52 +32,38 @@ namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
-class LayerPropertiesDialog : public Gtk::Dialog {
- public:
-    LayerPropertiesDialog();
-    ~LayerPropertiesDialog() override;
+/* FIXME: split the LayerPropertiesDialog class into three separate dialogs */
+enum class LayerPropertiesDialogType
+{
+    NONE,
+    CREATE,
+    MOVE,
+    RENAME
+};
 
-    Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
+class LayerPropertiesDialog : public Gtk::Dialog {
+public:
+    LayerPropertiesDialog(LayerPropertiesDialogType type);
+    ~LayerPropertiesDialog() override;
+    LayerPropertiesDialog(LayerPropertiesDialog const &) = delete; // no copy
+    LayerPropertiesDialog &operator=(LayerPropertiesDialog const &) = delete; // no assign
+
+    Glib::ustring getName() const { return "LayerPropertiesDialog"; }
 
     static void showRename(SPDesktop *desktop, SPObject *layer) {
-        _showDialog(Rename::instance(), desktop, layer);
+        _showDialog(LayerPropertiesDialogType::RENAME, desktop, layer);
     }
     static void showCreate(SPDesktop *desktop, SPObject *layer) {
-        _showDialog(Create::instance(), desktop, layer);
+        _showDialog(LayerPropertiesDialogType::CREATE, desktop, layer);
     }
     static void showMove(SPDesktop *desktop, SPObject *layer) {
-        _showDialog(Move::instance(), desktop, layer);
+        _showDialog(LayerPropertiesDialogType::MOVE, desktop, layer);
     }
 
-protected:
-    struct Strategy {
-        virtual ~Strategy() = default;
-        virtual void setup(LayerPropertiesDialog &)=0;
-        virtual void perform(LayerPropertiesDialog &)=0;
-    };
-    struct Rename : public Strategy {
-        static Rename &instance() { static Rename instance; return instance; }
-        void setup(LayerPropertiesDialog &dialog) override;
-        void perform(LayerPropertiesDialog &dialog) override;
-    };
-    struct Create : public Strategy {
-        static Create &instance() { static Create instance; return instance; }
-        void setup(LayerPropertiesDialog &dialog) override;
-        void perform(LayerPropertiesDialog &dialog) override;
-    };
-    struct Move : public Strategy {
-        static Move &instance() { static Move instance; return instance; }
-        void setup(LayerPropertiesDialog &dialog) override;
-        void perform(LayerPropertiesDialog &dialog) override;
-    };
-
-    friend struct Rename;
-    friend struct Create;
-    friend struct Move;
-
-    Strategy *_strategy;
-    SPDesktop *_desktop;
-    SPObject *_layer;
+private:
+    LayerPropertiesDialogType _type = LayerPropertiesDialogType::NONE;
+    SPDesktop *_desktop = nullptr;
+    SPObject *_layer = nullptr;
 
     class PositionDropdownColumns : public Gtk::TreeModel::ColumnRecord {
     public:
@@ -95,7 +81,7 @@ protected:
     Gtk::ComboBox     _layer_position_combo;
     Gtk::Grid         _layout_table;
 
-    bool              _position_visible;
+    bool              _position_visible = false;
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
@@ -126,20 +112,15 @@ protected:
     Gtk::CellRendererText _label_renderer;
     Glib::RefPtr<Gtk::ListStore> _dropdown_list;
 
-    Gtk::Button       _close_button;
-    Gtk::Button       _apply_button;
+    Gtk::Button _close_button;
+    Gtk::Button _apply_button;
 
-    sigc::connection    _destroy_connection;
+    sigc::connection _destroy_connection;
 
-    static LayerPropertiesDialog &_instance() {
-        static LayerPropertiesDialog instance;
-        return instance;
-    }
-
-    void _setDesktop(SPDesktop *desktop);
+    void _setDesktop(SPDesktop *desktop) { _desktop = desktop; };
     void _setLayer(SPObject *layer);
 
-    static void _showDialog(Strategy &strategy, SPDesktop *desktop, SPObject *layer);
+    static void _showDialog(LayerPropertiesDialogType type, SPDesktop *desktop, SPObject *layer);
     void _apply();
     void _close();
 
@@ -147,14 +128,15 @@ protected:
     void _setup_layers_controls();
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 
-    void _addLayer( SPDocument* doc, SPObject* layer, Gtk::TreeModel::Row* parentRow, SPObject* target, int level );
+    void _addLayer(SPObject* layer, Gtk::TreeModel::Row* parentRow, SPObject* target, int level);
     SPObject* _selectedLayer();
     bool _handleKeyEvent(GdkEventKey *event);
     void _handleButtonEvent(GdkEventButton* event);
 
-private:
-    LayerPropertiesDialog(LayerPropertiesDialog const &) = delete; // no copy
-    LayerPropertiesDialog &operator=(LayerPropertiesDialog const &) = delete; // no assign
+    void _doCreate();
+    void _doMove();
+    void _doRename();
+    void _setup();
 };
 
 } // namespace

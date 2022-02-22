@@ -17,11 +17,10 @@
 
 #include "document-subset.h"
 #include "inkgc/gc-soft-ptr.h"
+#include "object/sp-item-group.h"
 
 class SPDesktop;
 class SPDocument;
-class SPGroup;
-class SPItem;
 
 namespace Inkscape {
     class ObjectHierarchy;
@@ -41,6 +40,8 @@ public:
 
     SPGroup *currentRoot() const;
     SPGroup *currentLayer() const;
+
+    unsigned getLayerCount() const { return childCount(currentRoot()); }
 
     void reset();
     void setCurrentLayer(SPObject *object, bool clear=false);
