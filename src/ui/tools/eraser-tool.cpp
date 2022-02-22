@@ -656,9 +656,12 @@ void EraserTool::_setToAccumulated()
             } else {
                 if (mode == EraserToolMode::DELETE) {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(_desktop);
+                    auto selected_items = selection->items();
                     std::vector<SPItem *> touched = document->getItemsAtPoints(_desktop->dkey, r->getPoints());
-                    for (auto i : touched) {
-                        if (selection->includes(i)) {
+                    for (auto i : selected_items) {
+                        if (std::find(touched.begin(), touched.end(), i) == touched.end()) {
+                            remaining_items.push_back(i);
+                        } else {
                             to_work_on.push_back(i);
                         }
                     }
@@ -713,8 +716,6 @@ void EraserTool::_setToAccumulated()
                     for (auto item : to_work_on) {
                         item->deleteObject(true);
                     }
-                    selection->deleteItems();
-                    remaining_items.clear();
                     work_done = true;
                     _clearStatusBar();
                 }
