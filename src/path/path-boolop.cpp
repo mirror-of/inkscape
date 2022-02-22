@@ -56,43 +56,49 @@ Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who)
 }
 
 
-bool Inkscape::ObjectSet::pathUnion(const bool skip_undo) {
-    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, false, INKSCAPE_ICON("path-union"), _("Union"));
+bool Inkscape::ObjectSet::pathUnion(const bool skip_undo, bool silent) {
+    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, false, INKSCAPE_ICON("path-union"),
+                                     _("Union"), silent);
     return DONE == result;
 }
 
 bool
-Inkscape::ObjectSet::pathIntersect(const bool skip_undo)
+Inkscape::ObjectSet::pathIntersect(const bool skip_undo, bool silent)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, false, INKSCAPE_ICON("path-intersection"), _("Intersection"));
+    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, false, INKSCAPE_ICON("path-intersection"),
+                                     _("Intersection"), silent);
     return DONE == result;
 }
 
 bool
-Inkscape::ObjectSet::pathDiff(const bool skip_undo)
+Inkscape::ObjectSet::pathDiff(const bool skip_undo, bool silent)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, false, INKSCAPE_ICON("path-difference"), _("Difference"));
+    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, false, INKSCAPE_ICON("path-difference"),
+                                     _("Difference"), silent);
     return DONE == result;
 }
 
 bool
-Inkscape::ObjectSet::pathSymDiff(const bool skip_undo)
+Inkscape::ObjectSet::pathSymDiff(const bool skip_undo, bool silent)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, false, INKSCAPE_ICON("path-exclusion"), _("Exclusion"));
+    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, false, INKSCAPE_ICON("path-exclusion"),
+                                     _("Exclusion"), silent);
     return DONE == result;
 }
 
 bool
-Inkscape::ObjectSet::pathCut(const bool skip_undo)
+Inkscape::ObjectSet::pathCut(const bool skip_undo, bool silent)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, false, INKSCAPE_ICON("path-division"), _("Division"));
+    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, false, INKSCAPE_ICON("path-division"),
+                                     _("Division"), silent);
     return DONE == result;
 }
 
 bool
-Inkscape::ObjectSet::pathSlice(const bool skip_undo)
+Inkscape::ObjectSet::pathSlice(const bool skip_undo, bool silent)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, false, INKSCAPE_ICON("path-cut"), _("Cut path"));
+    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, false, INKSCAPE_ICON("path-cut"),
+                                     _("Cut path"), silent);
     return DONE == result;
 }
 
@@ -410,7 +416,9 @@ static void transformLivarotPath(Path *res, Geom::Affine const &affine)
 
 // boolean operations on the desktop
 // take the source paths from the file, do the operation, delete the originals and add the results
-BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const bool checked, const Glib::ustring icon_name, const Glib::ustring description)
+BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const bool checked,
+                                             const Glib::ustring icon_name, const Glib::ustring description,
+                                             bool const silent)
 {
     if (nullptr != desktop() && !checked) {
         SPDocument *doc = desktop()->getDocument();
@@ -421,16 +429,28 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
         switch(returnCode) {
         case ERR_TOO_LESS_PATHS_1:
-            boolop_display_error_message(desktop(), _("Select <b>at least 1 path</b> to perform a boolean union."));
+            if (!silent) {
+                boolop_display_error_message(desktop(),
+                                             _("Select <b>at least 1 path</b> to perform a boolean union."));
+            }
             break;
         case ERR_TOO_LESS_PATHS_2:
-            boolop_display_error_message(desktop(), _("Select <b>at least 2 paths</b> to perform a boolean operation."));
+            if (!silent) {
+                boolop_display_error_message(desktop(),
+                                             _("Select <b>at least 2 paths</b> to perform a boolean operation."));
+            }
             break;
         case ERR_NO_PATHS:
-            boolop_display_error_message(desktop(), _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
+            if (!silent) {
+                boolop_display_error_message(desktop(),
+                                             _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
+            }
             break;
         case ERR_Z_ORDER:
-            boolop_display_error_message(desktop(), _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
+            if (!silent) {
+                boolop_display_error_message(desktop(),
+                                             _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
+            }
             break;
         case DONE_NO_PATH:
             if (!skip_undo) { 

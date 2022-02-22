@@ -448,8 +448,8 @@ public:
     
     //path operations
     //in path-chemistry.cpp
-    void combine(bool skip_undo = false);
-    void breakApart(bool skip_undo = false, bool overlapping = true);
+    void combine(bool skip_undo = false, bool silent = false);
+    void breakApart(bool skip_undo = false, bool overlapping = true, bool silent = false);
     void toCurves(bool skip_undo = false);
     void toLPEItems();
     void pathReverse();
@@ -461,12 +461,12 @@ public:
 
     // Boolean operations
     // in splivarot.cpp
-    bool pathUnion(const bool skip_undo = false);
-    bool pathIntersect(const bool skip_undo = false);
-    bool pathDiff(const bool skip_undo = false);
-    bool pathSymDiff(const bool skip_undo = false);
-    bool pathCut(const bool skip_undo = false);
-    bool pathSlice(const bool skip_undo = false);
+    bool pathUnion(const bool skip_undo = false, bool silent = false);
+    bool pathIntersect(const bool skip_undo = false, bool silent = false);
+    bool pathDiff(const bool skip_undo = false, bool silent = false);
+    bool pathSymDiff(const bool skip_undo = false, bool silent = false);
+    bool pathCut(const bool skip_undo = false, bool silent = false);
+    bool pathSlice(const bool skip_undo = false, bool silent = false);
 
     //Other path operations
     //in selection-chemistry.cpp
@@ -534,7 +534,9 @@ protected:
     std::unordered_map<SPObject*, sigc::connection> _releaseConnections;
 
 private:
-    BoolOpErrors pathBoolOp(bool_op bop, const bool skip_undo, const bool checked = false, const Glib::ustring icon_name = nullptr, const Glib::ustring description = "");
+    BoolOpErrors pathBoolOp(bool_op bop, const bool skip_undo, const bool checked = false,
+                            const Glib::ustring icon_name = nullptr, const Glib::ustring description = "",
+                            bool silent = false);
     void _disconnect(SPObject* object);
     std::map<SPObject *, SiblingState> _sibling_state;
 

@@ -58,7 +58,7 @@ inline bool less_than_items(SPItem const *first, SPItem const *second)
 }
 
 void
-ObjectSet::combine(bool skip_undo)
+ObjectSet::combine(bool skip_undo, bool silent)
 {
     //Inkscape::Selection *selection = desktop->getSelection();
     //Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -66,13 +66,15 @@ ObjectSet::combine(bool skip_undo)
     std::vector<SPItem*> items_copy(items().begin(), items().end());
     
     if (items_copy.size() < 1) {
-        if(desktop())
+        if(desktop() && !silent)
             desktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to combine."));
         return;
     }
 
     if(desktop()){
-        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Combining paths..."));
+        if (!silent) {
+            desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Combining paths..."));
+        }
         // set "busy" cursor
         desktop()->setWaitingCursor();
     }
@@ -180,9 +182,8 @@ ObjectSet::combine(bool skip_undo)
 
         Inkscape::GC::release(repr);
 
-    } else {
-        if(desktop())
-            desktop()->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to combine in the selection."));
+    } else if (desktop() && !silent) {
+        desktop()->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to combine in the selection."));
     }
 
     if(desktop())
@@ -190,15 +191,17 @@ ObjectSet::combine(bool skip_undo)
 }
 
 void
-ObjectSet::breakApart(bool skip_undo, bool overlapping)
+ObjectSet::breakApart(bool skip_undo, bool overlapping, bool silent)
 {
     if (isEmpty()) {
-        if(desktop())
+        if(desktop() && !silent)
             desktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to break apart."));
         return;
     }
     if(desktop()){
-        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Breaking apart paths..."));
+        if (!silent) {
+            desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Breaking apart paths..."));
+        }
         // set "busy" cursor
         desktop()->setWaitingCursor();
         // disable redrawing during the break-apart operation for remarkable speedup for large paths
@@ -277,9 +280,8 @@ ObjectSet::breakApart(bool skip_undo, bool overlapping)
         if ( !skip_undo ) {
             DocumentUndo::done(document(), _("Break apart"), INKSCAPE_ICON("path-break-apart"));
         }
-    } else {
-        if(desktop())
-            desktop()->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
+    } else if (desktop() && !silent) {
+        desktop()->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
     }
 }
 

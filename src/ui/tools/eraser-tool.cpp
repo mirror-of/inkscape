@@ -687,7 +687,7 @@ void EraserTool::_setToAccumulated()
                                 Inkscape::ObjectSet w_selection(_desktop);
                                 w_selection.set(dup);
                                 if (!nowidth) {
-                                    w_selection.pathUnion(true);
+                                    w_selection.pathUnion(true, true);
                                 }
                                 w_selection.add(item);
                                 if (item->style->fill_rule.value == SP_WIND_RULE_EVENODD) {
@@ -697,19 +697,19 @@ void EraserTool::_setToAccumulated()
                                     sp_repr_css_attr_unref(css);
                                     css = nullptr;
                                 }
-                                if (nowidth) {
-                                    w_selection.pathCut(true);
-                                } else {
-                                    w_selection.pathDiff(true);
+
+                                bool success = (nowidth ? w_selection.pathCut(true, true)
+                                                        : w_selection.pathDiff(true, true));
+                                if (success) {
+                                    work_done = true;
                                 }
-                                work_done = true; // TODO set this only if something was cut.
 
                                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);
                                 if (!break_apart) {
-                                    w_selection.combine(true);
+                                    w_selection.combine(true, true);
                                 } else if (!nowidth) {
-                                    w_selection.breakApart(true, false);
+                                    w_selection.breakApart(true, false, true);
                                 }
                                 if (!w_selection.isEmpty()) {
                                     // If the item was not completely erased, track the new remainder.
@@ -798,7 +798,7 @@ void EraserTool::_clipErase(SPItem *item, SPObject *parent, Geom::OptRect &erase
                         clip_path->deleteObject(true);
                         w_selection.raiseToTop(true);
                         w_selection.add(dup_clip);
-                        w_selection.pathDiff(true);
+                        w_selection.pathDiff(true, true);
                     }
                 }
             }
@@ -814,7 +814,7 @@ void EraserTool::_clipErase(SPItem *item, SPObject *parent, Geom::OptRect &erase
             rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             w_selection.raiseToTop(true);
             w_selection.add(rect);
-            w_selection.pathDiff(true);
+            w_selection.pathDiff(true, true);
         }
         w_selection.raiseToTop(true);
         w_selection.add(item);
