@@ -902,10 +902,21 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
         close->hide();
         label->hide();
     }
-    if (_prev_alloc_width && !_label_visible) {
-        queue_allocate(); 
+    if (_prev_alloc_width) {
+        if (!_label_visible) {
+            queue_allocate(); 
+        }
+        auto window = dynamic_cast<DialogWindow*>(_container->get_toplevel());
+        if (window) {
+            resize_widget_children(window->get_container());
+        } else {
+            if (auto desktop = SP_ACTIVE_DESKTOP) {
+                if (auto container = desktop->getContainer()) {
+                    resize_widget_children(container);
+                }
+            }
+        }
     }
-    resize_widget_children(get_toplevel());
 }
 
 /**
