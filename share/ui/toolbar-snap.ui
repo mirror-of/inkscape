@@ -33,7 +33,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-bbox">
-            <property name="label" translatable="yes">Snap to bounding boxes</property>
+            <property name="label" translatable="yes">Snap bounding boxes</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -109,7 +109,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-nodes">
-            <property name="label" translatable="yes">Snap to nodes</property>
+            <property name="label" translatable="yes">Snap nodes</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -215,7 +215,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-other">
-            <property name="label" translatable="yes">Snap to other points</property>
+            <property name="label" translatable="yes">Snap other points</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
