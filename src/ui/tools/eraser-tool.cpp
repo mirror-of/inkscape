@@ -678,11 +678,7 @@ void EraserTool::_setToAccumulated()
                                 continue;
                             }
                         }
-                        if (SP_IS_PATH(item) && SP_PATH(item)->nodesInPath() == 2) {
-                            SPItem *item = i;
-                            item->deleteObject(true);
-                            work_done = true;
-                        } else if (!SP_IS_GROUP(item)) {
+                        if (!SP_IS_GROUP(item)) {
                             Geom::OptRect bbox = item->documentVisualBounds();
                             if (bbox && bbox->intersects(*eraser_bbox)) {
                                 Inkscape::XML::Node *dup = repr->duplicate(xml_doc);
