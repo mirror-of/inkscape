@@ -16,6 +16,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <set>
 #include <glibmm/ustring.h>
 #include "util/const_char_ptr.h"
 /* SPObject flags */
@@ -188,6 +189,8 @@ public:
      * Returns the objects current ID string.
      */
     char const* getId() const;
+
+    void getIds(std::set<std::string> &ret) const;
 
     /**
      * Get the id in a URL format.

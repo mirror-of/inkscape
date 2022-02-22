@@ -377,9 +377,7 @@ bool Export::exportVector(
             objects = page_items;
         } else {
             for (auto &item : page_items) {
-                if (auto _id = item->getId()) {
-                    page_ids.insert(std::string(_id));
-                }
+                item->getIds(page_ids);
             }
         }
     }

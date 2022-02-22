@@ -228,6 +228,18 @@ gchar const* SPObject::getId() const {
 }
 
 /**
+ * Accumulate this id and all it's descendants ids
+ */
+void SPObject::getIds(std::set<std::string> &ret) const {
+    if (id) {
+        ret.insert(std::string(id));
+    }
+    for (auto &child : children) {
+        child.getIds(ret);
+    }
+}
+
+/**
  * Returns the id as a url param, in the form 'url(#{id})'
  */
 std::string SPObject::getUrl() const {
