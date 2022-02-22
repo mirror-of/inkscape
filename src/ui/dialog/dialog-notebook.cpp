@@ -315,17 +315,6 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
         } else {
             wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
         }
-        // TODO: uncomenting get a issue with some dialogs (fill&stroke and document propetries both with subnotebook)
-        // the issue is the dialog scroll but not the scrollbar
-        // if we fix we can shirnk till the min width of visible tab
-        /* 
-        wrapper->signal_unmap().connect([=]() {
-            wrapper->property_hscrollbar_policy().set_value(Gtk::POLICY_AUTOMATIC);
-        });
-        wrapper->signal_map().connect([=]() {
-            wrapper->property_hscrollbar_policy().set_value(Gtk::POLICY_NEVER);
-        });  
-        */
     }
     _notebook.set_tab_reorderable(page);
     _notebook.set_tab_detachable(page);
@@ -856,9 +845,17 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
 void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
 {
     for (auto const &page : _notebook.get_children()) {
-        if (_prev_alloc_width) {
-            auto dialogbase = dynamic_cast<DialogBase*>(page);
-            if (dialogbase) {
+        auto dialogbase = dynamic_cast<DialogBase*>(page);
+        if (dialogbase) {
+            std::vector<Gtk::Widget *> widgs = dialogbase->get_children();
+            if (widgs.size()) {
+                if (curr_page == page) {
+                    widgs[0]->show_now();
+                } else {
+                    widgs[0]->hide();
+                }
+            }
+            if (_prev_alloc_width) {
                 dialogbase->setShowing(curr_page == page);
             }
         }
@@ -908,6 +905,7 @@ void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
     if (_prev_alloc_width && !_label_visible) {
         queue_allocate(); 
     }
+    resize_widget_children(get_toplevel());
 }
 
 /**
