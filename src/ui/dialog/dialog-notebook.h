@@ -63,9 +63,6 @@ private:
     Gtk::Menu _menu;
     Gtk::Menu _menutabs;
     Gtk::Notebook _notebook;
-    Gtk::RadioMenuItem _labels_auto_button;
-    Gtk::RadioMenuItem _labels_active_button;
-    Gtk::RadioMenuItem _labels_off_button;
 
     // State variables
     bool _label_visible;
@@ -96,7 +93,6 @@ private:
     void on_page_removed(Gtk::Widget *page, int page_num);
     void on_size_allocate_scroll(Gtk::Allocation &allocation);
     void on_size_allocate_notebook(Gtk::Allocation &allocation);
-    void on_labels_changed();
     bool on_tab_click_event(GdkEventButton *event, Gtk::Widget *page);
     void on_close_button_click_event(Gtk::Widget *page);
     void on_page_switch(Gtk::Widget *page, guint page_number);

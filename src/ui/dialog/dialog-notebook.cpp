@@ -51,7 +51,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     , _label_visible(true)
 {
     set_name("DialogNotebook");
-    set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
     set_shadow_type(Gtk::SHADOW_NONE);
     set_vexpand(true);
     set_hexpand(true);
@@ -172,11 +172,6 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
         _menu.get_style_context()->add_class("symbolic");
     }
 
-    _conn.emplace_back(
-        _labels_auto_button.signal_toggled().connect(sigc::mem_fun(*this, &DialogNotebook::on_labels_changed)));
-    _conn.emplace_back(
-        _labels_active_button.signal_toggled().connect(sigc::mem_fun(*this, &DialogNotebook::on_labels_changed)));
-
     _menu.show_all_children();
 
     Gtk::Button* menubtn = Gtk::manage(new Gtk::Button());
@@ -268,8 +263,9 @@ DialogNotebook::get_current_scrolledwindow(bool skip_scroll_provider) {
         }
         auto container = dynamic_cast<Gtk::Container *>(page);
         if (container) {
-            for (auto widg : container->get_children()) {
-                auto scrolledwindow = dynamic_cast<Gtk::ScrolledWindow *>(widg);
+            std::vector<Gtk::Widget *> widgs = container->get_children();
+            if (widgs.size()) {
+                auto scrolledwindow = dynamic_cast<Gtk::ScrolledWindow *>(widgs[0]);
                 if (scrolledwindow) {
                     return scrolledwindow;
                 }
@@ -290,52 +286,47 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
     int page_number = _notebook.append_page(page, tab);
     auto container = dynamic_cast<Gtk::Box *>(&page);
     if (container) {
-        auto swin = dynamic_cast<Gtk::ScrolledWindow *>(_notebook.get_parent()->get_parent());
-        if (swin) {
-            swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
-            auto *wrapper = Gtk::manage(new Gtk::ScrolledWindow());
-            wrapper->set_vexpand(true);
-            wrapper->set_propagate_natural_height(true);
-            wrapper->set_valign(Gtk::ALIGN_FILL);
-            wrapper->set_overlay_scrolling(false);
-            wrapper->get_style_context()->add_class("noborder");
-            auto *wrapperbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
-            wrapperbox->set_valign(Gtk::ALIGN_FILL);
-            wrapperbox->set_vexpand(true);
-            std::vector<Gtk::Widget *> widgs = container->get_children();
-            for (auto widg : widgs) {
-                bool expand = container->child_property_expand(*widg);
-                bool fill = container->child_property_fill(*widg);
-                guint padding = container->child_property_expand(*widg);
-                Gtk::PackType pack_type = container->child_property_pack_type(*widg);
-                container->remove(*widg);
-                if (pack_type == Gtk::PACK_START) {
-                    wrapperbox->pack_start(*widg, expand, fill, padding);
-                } else {
-                    wrapperbox->pack_end  (*widg, expand, fill, padding);
-                }
-            } 
-            wrapper->add(*wrapperbox);
-            container->add(*wrapper);
-            if (provide_scroll(page)) {
-                wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_EXTERNAL);
+        auto *wrapper = Gtk::manage(new Gtk::ScrolledWindow());
+        wrapper->set_vexpand(true);
+        wrapper->set_propagate_natural_height(true);
+        wrapper->set_valign(Gtk::ALIGN_FILL);
+        wrapper->set_overlay_scrolling(false);
+        wrapper->get_style_context()->add_class("noborder");
+        auto *wrapperbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
+        wrapperbox->set_valign(Gtk::ALIGN_FILL);
+        wrapperbox->set_vexpand(true);
+        std::vector<Gtk::Widget *> widgs = container->get_children();
+        for (auto widg : widgs) {
+            bool expand = container->child_property_expand(*widg);
+            bool fill = container->child_property_fill(*widg);
+            guint padding = container->child_property_expand(*widg);
+            Gtk::PackType pack_type = container->child_property_pack_type(*widg);
+            container->remove(*widg);
+            if (pack_type == Gtk::PACK_START) {
+                wrapperbox->pack_start(*widg, expand, fill, padding);
             } else {
-                wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+                wrapperbox->pack_end  (*widg, expand, fill, padding);
             }
-            // TODO: uncomenting get a issue with some dialogs (fill&stroke and document propetries both with subnotebook)
-            // the issue is the dialog scroll but not the scrollbar
-            // if we fix we can shirnk till the min width of visible tab
-            /* 
-            wrapper->signal_unmap().connect([=]() {
-                wrapperbox->hide();
-            });
-            wrapper->signal_map().connect([=]() {
-                wrapperbox->show_all();
-            }); 
-            */
+        } 
+        wrapper->add(*wrapperbox);
+        container->add(*wrapper);
+        if (provide_scroll(page)) {
+            wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_EXTERNAL);
+        } else {
+            wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
         }
+        // TODO: uncomenting get a issue with some dialogs (fill&stroke and document propetries both with subnotebook)
+        // the issue is the dialog scroll but not the scrollbar
+        // if we fix we can shirnk till the min width of visible tab
+        /* 
+        wrapper->signal_unmap().connect([=]() {
+            wrapper->property_hscrollbar_policy().set_value(Gtk::POLICY_AUTOMATIC);
+        });
+        wrapper->signal_map().connect([=]() {
+            wrapper->property_hscrollbar_policy().set_value(Gtk::POLICY_NEVER);
+        });  
+        */
     }
-    
     _notebook.set_tab_reorderable(page);
     _notebook.set_tab_detachable(page);
     _notebook.show_all();
@@ -609,12 +600,33 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
 {
     // magic number
     const int MIN_HEIGHT = 60;
-
-    // set or unset scrollbars to completely hide a notebook
-    Gtk::ScrolledWindow * sw = get_current_scrolledwindow(true);
-    if (sw && sw->get_allocation().get_height() > 1) {
-        sw->property_vscrollbar_policy().set_value(sw->get_allocation().get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
+    //  set or unset scrollbars to completely hide a notebook
+    // because we have a "blocking" scroll per tab we need to loop to aboid
+    // other page stop out scroll
+    for (auto const &page : _notebook.get_children()) {
+        auto *container = dynamic_cast<Gtk::Container *>(page);
+        if (container && !provide_scroll(*page)) {
+            std::vector<Gtk::Widget *> widgs = container->get_children();
+            if (widgs.size()) {
+                auto scrolledwindow = dynamic_cast<Gtk::ScrolledWindow *>(widgs[0]);
+                if (scrolledwindow) {
+                    double height = scrolledwindow->get_allocation().get_height();
+                    if (height > 1) {
+                        Gtk::PolicyType policy = scrolledwindow->property_vscrollbar_policy().get_value();
+                        if (height >= MIN_HEIGHT && policy != Gtk::POLICY_AUTOMATIC) {
+                            scrolledwindow->property_vscrollbar_policy().set_value(Gtk::POLICY_AUTOMATIC);
+                        } else if(height < MIN_HEIGHT && policy != Gtk::POLICY_EXTERNAL) {
+                            scrolledwindow->property_vscrollbar_policy().set_value(Gtk::POLICY_EXTERNAL);
+                        } else {
+                            // we dont need to update break 
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
+
 
     set_allocation(a);
     // only update notebook tabs on horizontal changes
@@ -697,19 +709,6 @@ void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
     _prev_alloc_width = alloc_width;
     bool show = tabstatus == TabsStatus::ALL;
     toggle_tab_labels_callback(show);
-}
-
-/**
- * Signal handler to toggle the tab labels internal state.
- */
-void DialogNotebook::on_labels_changed() {
-    _labels_auto = _labels_auto_button.get_active();
-    _labels_off = _labels_off_button.get_active();
-    _labels_set_off = false;
-    if (_labels_active_button.get_active()) {
-        tabstatus = TabsStatus::SINGLE;
-    }
-    toggle_tab_labels_callback(_labels_auto);
 }
 
 /**
