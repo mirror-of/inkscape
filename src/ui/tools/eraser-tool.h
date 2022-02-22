@@ -22,6 +22,7 @@
 
 #include <2geom/point.h>
 
+#include "message-stack.h"
 #include "style.h"
 #include "ui/tools/dynamic-base.h"
 
@@ -43,6 +44,7 @@ private:
     // non-static data:
     EraserToolMode mode = DEFAULT_ERASER_MODE;
     bool nowidth = false;
+    std::vector<MessageId> _our_messages;
 
     // static data:
     inline static guint32 const trace_color_rgba   = 0xff0000ff; // RGBA red
@@ -72,6 +74,14 @@ public:
     ~EraserTool() override;
     bool root_handler(GdkEvent *event) final;
 
+    using Error = std::uint64_t;
+    inline static Error const ALL_GOOD      = 0x0;
+    inline static Error const NOT_IN_BOUNDS = 0x1 << 0;
+    inline static Error const NON_EXISTENT  = 0x1 << 1;
+    inline static Error const NO_AREA_PATH  = 0x1 << 2;
+    inline static Error const RASTER_IMAGE  = 0x1 << 3;
+    inline static Error const ERROR_GROUP   = 0x1 << 4;
+
 private:
     // private member functions
     void _reset(Geom::Point p);
@@ -89,12 +99,18 @@ private:
     void _failedBezierFallback();
     void _fitDrawLastPoint();
     void _clipErase(SPItem *item, SPObject *parent, Geom::OptRect &eraser_box);
+    Error _cutErase(SPItem *item, Geom::OptRect const &eraser_bbox, std::vector<SPItem *> &survivers);
+    void _booleanErase(SPItem *erasee, std::vector<SPItem*> &survivers) const;
+    void _handleStrokeStyle(SPItem *item) const;
     void _updateMode();
     void _removeTemporarySegments();
+    void _setStatusBarMessage(char *message);
+    void _clearStatusBar();
 
     static void _generateNormalDist2(double &r1, double &r2);
     static void _addCap(SPCurve &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
                         Geom::Point const &post, double rounding);
+    static bool _isSingleStraightSegment(SPItem *path);
 };
 
 } // namespace Tools
