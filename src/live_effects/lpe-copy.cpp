@@ -236,7 +236,6 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         origin *= Geom::Translate(center);
         origin = origin.inverse();
         size_t counter = 0;
-        size_t total = num_rows * num_cols;
         double gapscalex = 0;
         double maxheight = 0;
         double maxwidth = 0;
@@ -260,7 +259,6 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 if (num_cols != 1) {
                     fracx = j/(double)(num_cols - 1);
                 }
-                double fract = counter / (double)total;
                 Geom::Affine r = Geom::identity();
                 r *= Geom::Translate(center).inverse();
                 r *= affinebase.inverse();
@@ -302,11 +300,11 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 } */
                 double rotatein = rotate;
                 if (interpolate_rotatex && interpolate_rotatey) {
-                    rotatein = rotatein*fract;
+                    rotatein = rotatein * (i + j);
                 } else if (interpolate_rotatex) {
-                    rotatein = rotatein*fracx;
+                    rotatein = rotatein  * j;
                 } else if (interpolate_rotatey) {
-                    rotatein = rotatein*fracyin;
+                    rotatein = rotatein * i;
                 }
                 if (mirrortrans && 
                     ((interpolate_rotatex && i%2 != 0) ||
@@ -318,13 +316,13 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 double scalein = 1;
                 double scalegap = scaleok - scalein;
                 if (interpolate_scalex && interpolate_scaley) {
-                    scalein = (scalegap*fract) + 1;
+                    scalein = (scalegap * (i + j)) + 1;
                 } else if (interpolate_scalex) {
-                    scalein = (scalegap*fracx) + 1;
+                    scalein = (scalegap * j) + 1;
                 } else if (interpolate_scaley) {
-                    scalein = (scalegap*fracyin) + 1;
+                    scalein = (scalegap * i) + 1;
                 } else {
-                    //scalein = scale/100.0;
+                    scalein = scaleok;
                 }
                 r *= Geom::Translate(center).inverse();
                 if (!interpolate_rotatex && !interpolate_rotatey && !random_rotate) {
@@ -341,10 +339,7 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 r *= Geom::Rotate::from_degrees(rotatein);
                 r *= Geom::Scale(scalein, scalein);
                 r *= Geom::Translate(center);
-                gdouble scale_fix = scaleok;
-                if (random_scale || interpolate_scalex || interpolate_scaley) {
-                    scale_fix = std::max(scaleok, 1.0);
-                }
+                double scale_fix = end_scale(scaleok, true);
                 double heightrows = original_height * scale_fix;
                 double widthcols = original_width * scale_fix;
                 double fixed_heightrows = heightrows;
@@ -357,8 +352,8 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                     maxheight = std::max(maxheight,(*bbox).height() * scalein);
                     maxwidth = std::max(maxwidth,(*bbox).width() * scalein);
                     minheight = std::min(minheight,(*bbox).height() * scalein);
-                    widthcols = std::max(original_width * scaleok, original_width);
-                    heightrows = std::max(original_height * scaleok, original_height);
+                    widthcols = std::max(original_width * end_scale(scaleok, false), original_width);
+                    heightrows = std::max(original_height * end_scale(scaleok, false), original_height);
                     fixed_widthcols = widthcols;
                     fixed_heightrows = heightrows;
                     double cx = (*bbox).width() * scalein;
@@ -1087,10 +1082,7 @@ LPECopy::doOnApply(SPLPEItem const* lpeitem)
     if (scaleok == 0) {
         scaleok = 0.00000001;
     }
-    gdouble scale_fix = scaleok;
-    if (random_scale || interpolate_scalex || interpolate_scaley) {
-        scale_fix = std::max(scaleok,1.0);
-    }
+    double scale_fix = end_scale(scaleok, true);
     (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*originalbbox).midpoint());
     original_width = (*gap_bbox).width();
     original_height = (*gap_bbox).height();
@@ -1154,15 +1146,26 @@ LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
     if (!gap_bbox) {
         return;
     }
-    gdouble scale_fix = scaleok;
-    if (random_scale || interpolate_scalex || interpolate_scaley) {
-        scale_fix = std::max(scaleok, 1.0);
-    }
+    double scale_fix = end_scale(scaleok, true);
     (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*originalbbox).midpoint());
     original_width = (*gap_bbox).width();
     original_height = (*gap_bbox).height();
 }
 
+double
+LPECopy::end_scale(double scale_fix, bool tomax) const {
+    if (interpolate_scalex && interpolate_scaley) {
+        scale_fix = 1 + ((scale_fix - 1) * (num_rows + num_cols -1)); 
+    } else if (interpolate_scalex) {
+        scale_fix = 1 + ((scale_fix - 1) * (num_cols -1)); 
+    } else if (interpolate_scaley) {
+        scale_fix = 1 + ((scale_fix - 1) * (num_rows -1)); 
+    }
+    if (tomax && (random_scale || interpolate_scalex || interpolate_scaley)) {
+        scale_fix = std::max(scale_fix, 1.0);
+    }
+    return scale_fix;
+}
 
 Geom::PathVector
 LPECopy::doEffect_path (Geom::PathVector const & path_in)
@@ -1204,7 +1207,6 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
     }
     Geom::PathVector output;
     gint counter = 0;
-    size_t total = num_rows * num_cols;
     Geom::OptRect prev_bbox;
     double gapscalex = 0;
     double maxheight = 0;
@@ -1216,7 +1218,6 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
     }
 
     double posx = ((*gap_bbox).left() - (*bbox).left()) / (*gap_bbox).width();
-    //double posy = ((*gap_bbox).top() - (*bbox).top()) / (*gap_bbox).height() ;
     double factorx = original_width/(*bbox).width();
     double factory = original_height/(*bbox).height();
     double y[(int)num_cols]; 
@@ -1233,7 +1234,6 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
             if (num_cols != 1) {
                 fracx = j/(double)(num_cols - 1);
             }
-            double fract = counter / (double)total;
             Geom::Affine r = Geom::identity();
             if(mirrorrowsx || mirrorrowsy || mirrorcolsx || mirrorcolsy) {
                 gint mx = 1;
@@ -1272,11 +1272,11 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
             } */
             double rotatein = rotate;
             if (interpolate_rotatex && interpolate_rotatey) {
-                rotatein = rotatein*fract;
+                rotatein = rotatein * (i + j);
             } else if (interpolate_rotatex) {
-                rotatein = rotatein*fracx;
+                rotatein = rotatein * j;
             } else if (interpolate_rotatey) {
-                rotatein = rotatein*fracyin;
+                rotatein = rotatein * i;
             }
             if (mirrortrans && 
                 ((interpolate_rotatex && i%2 != 0) ||
@@ -1288,11 +1288,11 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
             double scalein = 1;
             double scalegap = scaleok - scalein;
             if (interpolate_scalex && interpolate_scaley) {
-                scalein = (scalegap*fract) + 1;
+                scalein = (scalegap * (i + j)) + 1;
             } else if (interpolate_scalex) {
-                scalein = (scalegap*fracx) + 1;
+                scalein = (scalegap * j) + 1;
             } else if (interpolate_scaley) {
-                scalein = (scalegap*fracyin) + 1;
+                scalein = (scalegap * i) + 1;
             } else {
                 scalein = scaleok;
             }
@@ -1316,10 +1316,7 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
             r *= Geom::Translate(center);
             Geom::PathVector output_pv = pathv_to_linear_and_cubic_beziers(path_in);
             output_pv *= r;
-            gdouble scale_fix = scaleok;
-            if (random_scale || interpolate_scalex || interpolate_scaley) {
-                scale_fix = std::max(scaleok,1.0);
-            }
+            double scale_fix = end_scale(scaleok, true);
             double heightrows = original_height * scale_fix;
             double widthcols = original_width * scale_fix;
             double fixed_heightrows = heightrows;
@@ -1336,8 +1333,8 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
                     maxheight = std::max(maxheight,(*bbox).height());
                     maxwidth = std::max(maxwidth,(*bbox).width());
                     minheight = std::min(minheight,(*bbox).height());
-                    widthcols = std::max(original_width * scaleok,original_width);
-                    heightrows = std::max(original_height * scaleok,original_height);
+                    widthcols = std::max(original_width * end_scale(scaleok, false),original_width);
+                    heightrows = std::max(original_height * end_scale(scaleok, false),original_height);
                     fixed_widthcols = widthcols;
                     fixed_heightrows = heightrows;
                     double cx = (*bbox).width();
@@ -1361,7 +1358,7 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
                                 gapscalex = 0;
                             }
                         } else {
-                            x = (std::max(original_width * scaleok, original_width) + posx) * j;
+                            x = (std::max(original_width * end_scale(scaleok, false), original_width) + posx) * j;
                         }
                         if (interpolate_scalex && i == 1) {
                             y[j] = maxheight * factory;
@@ -1431,10 +1428,7 @@ LPECopy::addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVec
     using namespace Geom;
     hp_vec.clear();
     Geom::Path hp = Geom::Path(*gap_bbox);
-    gdouble scale_fix = scaleok;
-    if (random_scale || interpolate_scalex || interpolate_scaley) {
-        scale_fix = std::max(scaleok,1.0);
-    }
+    double scale_fix = end_scale(scaleok, true);
     hp *= Geom::Translate((*gap_bbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*gap_bbox).midpoint());
     Geom::PathVector pathv;
     pathv.push_back(hp);
@@ -1546,7 +1540,7 @@ void KnotHolderEntityCopyGapX::knot_set(Geom::Point const &p, Geom::Point const&
     if (lpe->originalbbox) {
         double value = (((*lpe->originalbbox).corner(1)[Geom::X] - s[Geom::X]) * -1);
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
-        value = Inkscape::Util::Quantity::convert((value/lpe->scaleok) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
+        value = Inkscape::Util::Quantity::convert((value/lpe->end_scale(lpe->scaleok, false)) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
         lpe->gapx.param_set_value(value);
         lpe->gapx.write_to_SVG();
     }
@@ -1560,7 +1554,7 @@ void KnotHolderEntityCopyGapY::knot_set(Geom::Point const &p, Geom::Point const&
     if (lpe->originalbbox) {
         double value = (((*lpe->originalbbox).corner(3)[Geom::Y] - s[Geom::Y]) * -1);
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
-        value = Inkscape::Util::Quantity::convert((value/lpe->scaleok) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
+        value = Inkscape::Util::Quantity::convert((value/lpe->end_scale(lpe->scaleok, false)) * 2, display_unit.c_str(),lpe->unit.get_abbreviation());
         lpe->gapy.param_set_value(value);
         lpe->gapy.write_to_SVG();
     }
@@ -1572,7 +1566,8 @@ Geom::Point KnotHolderEntityCopyGapX::knot_get() const
     if (lpe->originalbbox) {
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         double value = Inkscape::Util::Quantity::convert(lpe->gapx, lpe->unit.get_abbreviation(), display_unit.c_str());
-        return (*lpe->originalbbox).corner(1) + Geom::Point((value * lpe->scaleok)/2.0,0);
+        double scale = lpe->scaleok;
+        return (*lpe->originalbbox).corner(1) + Geom::Point((value * lpe->end_scale(scale, false))/2.0,0);
     }
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }
@@ -1583,7 +1578,8 @@ Geom::Point KnotHolderEntityCopyGapY::knot_get() const
     if (lpe->originalbbox) {
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         double value = Inkscape::Util::Quantity::convert(lpe->gapy, lpe->unit.get_abbreviation(), display_unit.c_str());
-        return (*lpe->originalbbox).corner(3) + Geom::Point(0,(value * lpe->scaleok)/2.0);
+        double scale = lpe->scaleok;
+        return (*lpe->originalbbox).corner(3) + Geom::Point(0,(value * lpe->end_scale(scale, false))/2.0);
     }
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }

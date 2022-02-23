@@ -76,6 +76,7 @@ private:
     void setGapXMode(bool random);
     void setGapYMode(bool random);
     bool getActiveMirror(gint index);
+    double end_scale(double scale_fix, bool tomax) const;
     bool _updating = false;
     void setMirroring(gint index);
     Glib::ustring getMirrorMap(gint index);
