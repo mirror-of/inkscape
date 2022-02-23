@@ -5,19 +5,6 @@
  * Keep as small as possible
  */
 
-spinbutton {
-    padding: 0;
-    outline-style: none;
-}
-
-spinbutton undershoot {
-    outline-style: none;
-}
-
-spinbutton undershoot {
-    outline-style: none;
-}
-
 .inkswitch slider {
     min-width: 18px;
     min-height: 18px;
@@ -71,4 +58,14 @@ notebook notebook header image {
 #StrokeSelector{
     padding:0px;
     margin:0px;
+}
+
+#AlignDistribute .toggle,
+#AlignDistribute .radio,
+#AlignDistribute button{
+    padding:4px;
+}
+
+#AlignDistribute #align {
+    margin-top:-15px;
 }

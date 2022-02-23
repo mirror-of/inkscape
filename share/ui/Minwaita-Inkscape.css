@@ -120,16 +120,6 @@ notebook notebook header image {
     margin:-1px 0 -1px -3px;
 }
 
-spinbutton button{
-  -gtk-icon-transform:scale(0.6) translatex(-0.6px);
-  margin:0 -0.6px 0 0;
-  padding:0;
-}
-
-spinbutton entry{
-  padding:0 0 0 3px;
-}
-
 /* checked buttons: light theme version */
 button.radio:checked,
 button.toggle:checked {
