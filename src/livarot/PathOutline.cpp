@@ -1074,6 +1074,10 @@ void Path::TangentOnArcAt(double at, const Geom::Point &iS, PathDescrArcTo const
 		rad = len * dot(tgt, tgt) / (tgt[0] * dtgt[1] - tgt[1] * dtgt[0]);
 		tgt /= len;
 	}
+
+	if (!wise) {
+		tgt = -tgt;
+	}
 }
 void
 Path::TangentOnCubAt (double at, Geom::Point const &iS, PathDescrCubicTo const &fin, bool before,

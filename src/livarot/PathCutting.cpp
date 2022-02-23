@@ -459,18 +459,8 @@ void  Path::LoadPathVector(Geom::PathVector const &pv, Geom::Affine const &tr, b
     SetBackData (false);
     Reset();
 
-    // FIXME: 2geom is currently unable to maintain SVGElliptical arcs through transformation, and
-    // sometimes it crashes on a continuity error during conversions, therefore convert to beziers here.
-    // (the fix is of course to fix 2geom and then remove this if-statement, and just execute the 'else'-clause)
-    if (doTransformation) {
-        Geom::PathVector pvbezier = pathv_to_linear_and_cubic_beziers(pv);
-        for(const auto & it : pvbezier) {
-            LoadPath(it, tr, doTransformation, true);
-        }
-    } else {
-        for(const auto & it : pv) {
-            LoadPath(it, tr, doTransformation, true);
-        }
+    for(const auto & it : pv) {
+        LoadPath(it, tr, doTransformation, true);
     }
 }
 
