@@ -458,12 +458,12 @@ SPCanvas {
     margin: 2px 4px;
 }
 
-#InkSpinScale spinbutton {
-    box-shadow: none;
-    padding: 0 0 0 1px;
-    min-height: 10px;
+#InkSpinScale trough,
+#InkSpinScale slider,
+#InkSpinScale highlight {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
-
 
 /* Hide slider */
 #InkSpinScale slider {
@@ -476,27 +476,30 @@ SPCanvas {
     margin: 0px;
 }
 
-#InkSpinScale slider,
-#InkSpinScale highlight {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
 #InkSpinScale scale {
     padding: 0px;
+    margin:0;
 }
 
 #InkSpinScale trough {
     min-height: 26px;
-    margin: 2px; /* some themes have humongous scale margins; rein in */
+    padding: 2px; /* some themes have humongous scale margins; rein in */
 }
 
 #InkSpinScale box.active {
     box-shadow: 0 0 0 1px rgb(74, 144, 217);
 }
 
+#InkSpinScale spinbutton {
+    box-shadow: none;
+    min-height: 10px;
+    border-left:0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
 #InkSpinScale spinbutton entry {
-    padding: 0;
+    min-height: 30px;
     outline-style: none;
 }
 
