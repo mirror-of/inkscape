@@ -191,11 +191,11 @@ void Parameter::update_satellites(bool updatelpe)
                     if (param_effect->isOnClipboard()) {
                         return;
                     }
-                    // we always start hidding helper path
+                    // we always start hiding helper path
                     for (auto iter : satellites) {
                         sp_add_class(iter, "UnoptimicedTransforms");
                         // if selection is current ref we highlight original sp_lpe_item to
-                        // give visual feedback to the user to know whats the LPE item that generate the selection
+                        // give visual feedback to the user to know what's the LPE item that generated the selection
                         if (iter && selection->includes(iter)) {
                             const gchar *classtoparentchar = iter->getAttribute("class");
                             if (classtoparentchar) {

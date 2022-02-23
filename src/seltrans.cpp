@@ -576,9 +576,9 @@ void Inkscape::SelTrans::stamp()
             }
         }
         std::vector<Inkscape::XML::Node *> copies;
-        // special case on clones when draging a clone without his original
-        // we check if his satellite is selected  if has clone original
-        // to allow preform the write stament on line:616
+        // special case on clones when dragging a clone without its original
+        // we check if its satellite is selected. if it has a clone original
+        // to allow perform the write statement on line:616
         bool lpewritetransforms = true;
         for (auto old_obj : l) {
             SPLPEItem *oldLPEObj = dynamic_cast<SPLPEItem *>(old_obj);
@@ -631,8 +631,8 @@ void Inkscape::SelTrans::stamp()
             SPLPEItem *newLPEObj = dynamic_cast<SPLPEItem *>(copy_item);
             if (newLPEObj) {
                 // disable LPE bool on dowrite to prevent move of selection original satellite
-                // when unselected (lpe perform a transform function that move satellite and on
-                // unselect, go to the wrong place)
+                // when unselected (lpe performs a transform function that moves satellite and
+                // on unselect, goes to the wrong place)
                 if (newLPEObj->hasPathEffectOfType(Inkscape::LivePathEffect::BOOL_OP)) {
                     sp_lpe_item_enable_path_effects(newLPEObj,false);
                 }
@@ -656,13 +656,13 @@ void Inkscape::SelTrans::stamp()
             if (newLPEObj) {
                 sp_lpe_item_enable_path_effects(newLPEObj,true);
                 // we need 0 to force fork, we are sure we need new LPE and with 
-                // 1 sometimes (slice LPE) dont work
+                // 1 sometimes (slice LPE) doesn't work
                 newLPEObj->forkPathEffectsIfNecessary(0);
                 sp_lpe_item_update_patheffect(newLPEObj, false, true);
             }
         }
         for(auto original_item : l) {
-            // unrefering tmp _sucessor (not needed more) used on fork to keep new satellite 
+            // unrefering tmp _sucessor (not needed anymore) used on fork to keep new satellite 
             // items forked along the LPEs
             if (original_item->_successor) {
                 sp_object_unref(original_item->_successor, nullptr);

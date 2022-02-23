@@ -148,7 +148,7 @@ private:
     void _setClipboardColor(guint32);
     void _userWarn(SPDesktop *, char const *);
 
-    // private properites
+    // private properties
     std::unique_ptr<SPDocument> _clipboardSPDoc; ///< Document that stores the clipboard until someone requests it
     Inkscape::XML::Node *_defs; ///< Reference to the clipboard document's defs node
     Inkscape::XML::Node *_root; ///< Reference to the clipboard's root node
@@ -1057,7 +1057,7 @@ void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node 
     sp_repr_css_attr_unref(css);
 
     if (dynamic_cast<SPGroup *>(item)) {
-        // Recursivly go through chldren too
+        // Recursively go through chldren too
         auto source_child = source->firstChild();
         auto target_child = target->firstChild();
         while (source_child && target_child) {

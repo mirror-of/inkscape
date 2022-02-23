@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  *
- * Command Palette input placehoder hint data
+ * Command Palette input placeholder hint data
  *
  * Authors:
  *   Sushant A A <sushant.co19@gmail.com>
@@ -28,7 +28,7 @@ InkActionHintData::get_actions()
 Glib::ustring
 InkActionHintData::get_tooltip_hint_for_action(Glib::ustring const &action_name, bool translated)
 {
-    // Hint for a perticular Action
+    // Hint for a particular Action
     Glib::ustring value;
     auto search = data.find(action_name);
     if (search != data.end()) {

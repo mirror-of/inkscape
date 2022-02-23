@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Gio::Actions for aligning and distrbuting objects without GUI.
+ * Gio::Actions for aligning and distributing objects without GUI.
  *
  * Copyright (C) 2020 Tavmjong Bah
  *

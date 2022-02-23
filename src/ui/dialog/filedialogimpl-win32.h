@@ -161,7 +161,7 @@ public:
 
     /// Add a custom file filter menu item
     /// @param name - Name of the filter (such as "Javscript")
-    /// @param pattern - File filtering patter (such as "*.js")
+    /// @param pattern - File filtering pattern (such as "*.js")
     /// Use the FileDialogType::CUSTOM_TYPE in constructor to not include other file types
     virtual void addFilterMenu(Glib::ustring name, Glib::ustring pattern);
 

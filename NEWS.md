@@ -156,7 +156,7 @@ Align and distribute
 
     The formerly separate Arrange dialog is now integrated with the Align and Distribute dialog. With its three tabs, more user-friendly names and some small visual tweaks, the dialog now holds everything that is needed for aligning, distributing and arranging objects in your drawing (MR #3382, MR #3667).
     The icons inside this dialog are now smaller.
-    Node aligment and distribution is nolonger shown on first run Just when you use node editing tool
+    Node alignment and distribution is nolonger shown on first run Just when you use node editing tool
 Document Properties
 
 The 'Snapping' tab was removed in favor of a global snapping preference, see Snapping section.
@@ -300,7 +300,7 @@ TODO: needs more info
 MR #3479
 Copy LPE
 
-New Copies Lpe. This will allows you to quickly copy large number of objects non distractively. Has many advanced features like mirroring or transformations to create interesting grids and pattrens and variations quickly.
+New Copies Lpe. This will allows you to quickly copy large number of objects non distractively. Has many advanced features like mirroring or transformations to create interesting grids and patterns and variations quickly.
 
 Features:
 
@@ -381,9 +381,9 @@ Notable bugfixes
 Crash fixes
 
     Check knot still exists before updating (MR #717)
-    Masive colection of crash fixes releted to number of LPE (copy, stampe, duplicate) (MR #3479)
+    Massive collection of crash fixes related to number of LPE (copy, stampe, duplicate) (MR #3479)
     Action after grouping 3D boxes crash Fix (MR #3698)
-    Fix for crashing of inkscape while Quiting (MR #3681)
+    Fix for crashing of inkscape while Quitting (MR #3681)
     Fix crash due to invalid or malformed direct-action string (MR #3663)
     Bezier curve tool Backspace crash (MR #3715)
     Fix crash scrolling across line height units (MR #3541)

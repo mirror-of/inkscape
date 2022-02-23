@@ -159,7 +159,7 @@ void SatelliteArrayParam::on_active_toggled(const Glib::ustring &item)
     }
     auto full = param_getSVGValue();
     param_write_to_repr(full.c_str());
-    DocumentUndo::done(param_effect->getSPDoc(), _("Actived switched"), "");
+    DocumentUndo::done(param_effect->getSPDoc(), _("Active switched"), "");
 }
 
 bool SatelliteArrayParam::param_readSVGValue(const gchar *strvalue)

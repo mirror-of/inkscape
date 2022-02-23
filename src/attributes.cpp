@@ -426,7 +426,7 @@ static SPStyleProp const props[] = {
     {SPAttr::TEXT_EXCLUDE,"inkscape:excludeShape"},
     {SPAttr::LAYOUT_OPTIONS,"inkscape:layoutOptions"},
 
-    /* CSS & SVG Properites */
+    /* CSS & SVG Properties */
 
     /* SVG 2 Attributes promoted to properties */
     {SPAttr::D, "d"},

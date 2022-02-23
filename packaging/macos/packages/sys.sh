@@ -101,7 +101,7 @@ function sys_check_usr_local
       echo_w "You chose to continue anyway, good luck!        "
     else
       echo_e "Found files in '/usr/local/[include|lib|share]. Will not continue"
-      echo_e "as this is an unsupported configuraiton, known to cause trouble. "
+      echo_e "as this is an unsupported configuration, known to cause trouble. "
       echo_e "However, you can use                                             "
       echo_e "                                                                 "
       echo_e "    export SYS_IGNORE_USR_LOCAL=true                             "

@@ -9,7 +9,7 @@
 ### shellcheck #################################################################
 
 # shellcheck shell=bash # no shebang as this file is intended to be sourced
-# shellcheck disable=SC2034 # multipe vars only used outside this script
+# shellcheck disable=SC2034 # multiple vars only used outside this script
 
 ### dependencies ###############################################################
 

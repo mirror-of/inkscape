@@ -356,7 +356,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     fill_opacity(           ),
     fill_rule(              SP_WIND_RULE_NONZERO),
 
-    // Stroke properites
+    // Stroke properties
     stroke(                 ),  // SPIPaint
     stroke_width(           1.0),  // SPILength
     stroke_linecap(         SP_STROKE_LINECAP_BUTT),
@@ -595,7 +595,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
 
     /* 3 Presentation attributes */
     for (auto * p : _properties) {
-        // Shorthands are not allowed as presentation properites. Note: text-decoration and
+        // Shorthands are not allowed as presentation properties. Note: text-decoration and
         // font-variant are converted to shorthands in CSS 3 but can still be read as a
         // non-shorthand for compatibility with older renders, so they should not be in this list.
         if (p->id() != SPAttr::FONT && p->id() != SPAttr::MARKER) {

@@ -388,7 +388,7 @@ LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
     if (Geom::are_near(boundingbox_X.min(),boundingbox_X.max()) || 
         Geom::are_near(boundingbox_Y.min(),boundingbox_Y.max())) 
     {
-        g_warning("Coulden`t appy perspective/envelope to a element with geometric width or height equal 0 we add a temporary bounding box to allow handle");
+        g_warning("Couldn`t apply perspective/envelope to a element with geometric width or height equal 0 we add a temporary bounding box to allow handle");
         if (Geom::are_near(boundingbox_X.min(), boundingbox_X.max())) {
             boundingbox_X = Geom::Interval(boundingbox_X.min() - 3, boundingbox_X.max() + 3);
         }

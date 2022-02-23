@@ -432,7 +432,7 @@ LPESlice::split(SPItem* item, SPCurve *curve, std::vector<std::pair<Geom::Line, 
         elemref_id += Glib::ustring::format(slicer[splitindex].second);
         elemref_id += "-";
         Glib::ustring clean_id = item->getId();
-        //First check is to allow effects on "satellittes"
+        //First check is to allow effects on "satellites"
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (!lpeitem) {
             return splited;

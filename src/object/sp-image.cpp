@@ -647,7 +647,7 @@ Inkscape::Pixbuf *SPImage::getBrokenImage(double width, double height)
     copy.replace(copy.find("{width}"), std::string("{width}").size(), std::to_string(width));
     copy.replace(copy.find("{height}"), std::string("{height}").size(), std::to_string(height));
 
-    // Aspect attemps to make the image better for different ratios of images we might be dropped into
+    // Aspect attempts to make the image better for different ratios of images we might be dropped into
     copy.replace(copy.find("{aspect}"), std::string("{aspect}").size(), 
             width > height ? "xMinYMid" : "xMidYMin");
 

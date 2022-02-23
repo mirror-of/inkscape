@@ -8,7 +8,7 @@ echo.
 echo After Inkscape starts, try to force the crash.
 echo The backtrace will be recorded automatically.
 echo.
-echo Gathering sytem info...
+echo Gathering system info...
 
 echo --- INKSCAPE VERSION --- > %TRACEFILE%
 inkscape.com -V >> %TRACEFILE%

@@ -630,8 +630,8 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
 void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
 {
     
-    // we unsetset scrollable happen when FULL mode on to prevent overflow with 
-    // container at full size that make a unmaximice desctop freeze 
+    // we unset scrollable when FULL mode on to prevent overflow with 
+    // container at full size that makes an unmaximized desktop freeze 
     _notebook.set_scrollable(false);
     if (!_labels_set_off && !_labels_auto) {
         toggle_tab_labels_callback(false);
@@ -641,7 +641,7 @@ void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
     }
 
     int alloc_width = get_allocation().get_width();
-    // Dont update on closed dialog container, prevent console errors
+    // Don't update on closed dialog container, prevent console errors
     if (alloc_width < 2) {
         _notebook.set_scrollable(true);
         return;

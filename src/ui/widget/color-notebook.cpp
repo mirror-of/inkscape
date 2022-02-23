@@ -102,7 +102,7 @@ void ColorNotebook::_initUI()
     // mode selection switcher widget shows all buttons for color mode selection, side by side
     _switcher = Gtk::make_managed<Gtk::StackSwitcher>();
     _switcher->set_stack(*_book);
-    // cannot leave it homogenous - in some themes switcher gets very wide
+    // cannot leave it homogeneous - in some themes switcher gets very wide
     _switcher->set_homogeneous(false);
     _switcher->set_halign(Gtk::ALIGN_CENTER);
     _switcher->show();

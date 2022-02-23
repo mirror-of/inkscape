@@ -265,7 +265,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
         }
         //if is not clip or mask or LPE apply to clip and mask
         if (!is_clip_or_mask || lpe->apply_to_clippath_and_mask) {
-            // Uncoment to know updates
+            // Uncomment to get updates
             // g_debug("LPE running:: %s",Inkscape::LivePathEffect::LPETypeConverter.get_key(lpe->effectType()).c_str());
             lpe->setCurrentShape(current);
             if (!SP_IS_GROUP(this)) {

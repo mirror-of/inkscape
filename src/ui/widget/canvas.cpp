@@ -241,13 +241,13 @@ void region_to_path(const Cairo::RefPtr<Cairo::Context> &cr, const Cairo::RefPtr
 class Updater
 {
 public:
-    // The subgregion of the store with up-to-date content.
+    // The subregion of the store with up-to-date content.
     Cairo::RefPtr<Cairo::Region> clean_region;
 
     Updater(Cairo::RefPtr<Cairo::Region> clean_region) : clean_region(std::move(clean_region)) {}
 
     virtual void reset()                               {clean_region = Cairo::Region::create();}       // Reset the clean region to empty.
-    virtual void intersect (const Geom::IntRect &rect) {clean_region->intersect(geom_to_cairo(rect));} // Called when the store changes position; clip everthing to the new store rectangle.
+    virtual void intersect (const Geom::IntRect &rect) {clean_region->intersect(geom_to_cairo(rect));} // Called when the store changes position; clip everything to the new store rectangle.
     virtual void mark_dirty(const Geom::IntRect &rect) {clean_region->subtract (geom_to_cairo(rect));} // Called on every invalidate event.
     virtual void mark_clean(const Geom::IntRect &rect) {clean_region->do_union (geom_to_cairo(rect));} // Called on every rectangle redrawn.
 

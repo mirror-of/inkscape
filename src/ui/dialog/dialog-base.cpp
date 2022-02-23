@@ -261,7 +261,7 @@ DialogBase::selectionModified_impl(Inkscape::Selection *selection, guint flags) 
 }
 
 /**
- * function called from notebook dialog that preform an update of the dialog and set the dialog showed state true
+ * function called from notebook dialog that performs an update of the dialog and sets the dialog showing state true
  */
 void 
 DialogBase::setShowing(bool showing) {

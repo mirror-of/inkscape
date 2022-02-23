@@ -386,7 +386,7 @@ public:
     void setValue(Geom::Point const & p, Geom::Point const & origin);
 
     /**
-     * Changes the widgets text to polar coordinates. The SVG output will still be a normal carthesian vector.
+     * Changes the widgets text to polar coordinates. The SVG output will still be a normal cartesian vector.
      * Careful: when calling getValue(), the return value's X-coord will be the angle, Y-value will be the distance/length. 
      * After changing the coords type (polar/non-polar), the value has to be reset (setValue).
      */

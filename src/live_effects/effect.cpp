@@ -1214,7 +1214,7 @@ Effect::isNodePointSelected(Geom::Point const &nodePoint) const
     return false;
 }
 
-// this is done in each action commited to undo and allow do things when all operations pending are done in this undo
+// this is done in each action committed to undo and allow do things when all operations pending are done in this undo
 // stack
 void Effect::doOnBeforeCommit()
 {

@@ -65,7 +65,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 {
     Inkscape::XML::Node * local_effects_menu = nullptr;
 
-    // cant use document level because it is not defined
+    // can't use document level because it is not defined
     static auto app = InkscapeApplication::instance();
 
     if (!app) {

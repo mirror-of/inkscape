@@ -2798,7 +2798,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->add_fileorelement(SPAttr::XLINK_HREF, _("Source of Image:"));
     _image_x = _settings->add_entry(SPAttr::X,_("X"),_("X"));
     _image_x->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::image_x_changed));
-    //This commented because we want the default empty value of X or Y and couldent get it from SpinButton
+    //This is commented out because we want the default empty value of X or Y and couldn't get it from SpinButton
     //_image_y = _settings->add_spinbutton(0, SPAttr::Y, _("Y:"), -DBL_MAX, DBL_MAX, 1, 1, 5, _("Y"));
     _image_y = _settings->add_entry(SPAttr::Y,_("Y"),_("Y"));
     _image_y->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::image_y_changed));

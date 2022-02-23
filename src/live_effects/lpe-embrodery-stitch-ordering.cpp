@@ -73,7 +73,7 @@ void fill_increasing(OutputIterator begin, OutputIterator end, Counter counter)
     }
 }
 
-// check if an iteratable sequence contains an element
+// check if an iterable sequence contains an element
 
 template<class InputIterator, class Element>
 bool contains(InputIterator begin, InputIterator end, const Element &elem)

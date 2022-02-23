@@ -982,8 +982,8 @@ void SPGroup::update_patheffect(bool write) {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
     for (auto sub_item : item_list) {
         if (sub_item) {
-            // not need lpe version < 1 (issue only relpy on lower LPE on nested LPEs
-            // this not happends because is done at very first stage
+            // don't need lpe version < 1 (issue only reply on lower LPE on nested LPEs
+            // this doesn't happen because it's done at very first stage
             // we need to be sure performed to inform lpe original bounds ok, 
             // if not original_bbox function fail on update groups
             SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);

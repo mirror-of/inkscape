@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Gio::Actions for aligning and distrbuting objects without GUI.
+ * Gio::Actions for aligning and distributing objects without GUI.
  *
  * Copyright (C) 2020 Tavmjong Bah
  *
@@ -627,7 +627,7 @@ void randomize(Inkscape::Selection* selection)
     // Do 'x' and 'y' independently.
     for (int i = 0; i < 2; i++) {
 
-        // First, find maximum and minumum centers.
+        // First, find maximum and minimum centers.
         double min = std::numeric_limits<double>::max();
         double max = std::numeric_limits<double>::min();
 
@@ -642,7 +642,7 @@ void randomize(Inkscape::Selection* selection)
         }
 
 
-        // Second, assign minimum/maxiumum values to two different items randomly.
+        // Second, assign minimum/maximum values to two different items randomly.
         int nitems = items.size();
         int imin = rand() % nitems;
         int imax = rand() % nitems;
@@ -728,7 +728,7 @@ object_remove_overlaps(const Glib::VariantBase& value, InkscapeApplication *app)
         return;
     }
 
-    // We used tuple so as not to convert from double to string and back again (from Align and Distrobute dialog).
+    // We used tuple so as not to convert from double to string and back again (from Align and Distribute dialog).
     if (value.get_type_string() != "(dd)") {
         std::cerr << "object_remove_overlaps:  wrong variant type: " << value.get_type_string() << " (should be '(dd)')" << std::endl;
     }

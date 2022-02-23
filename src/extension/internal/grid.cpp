@@ -163,7 +163,7 @@ PrefAdjustment::val_changed ()
     return;
 }
 
-/** \brief  A function to get the prefences for the grid
+/** \brief  A function to get the preferences for the grid
     \param  module  Module which holds the params
     \param  view     Unused today - may get style information in the future.
 

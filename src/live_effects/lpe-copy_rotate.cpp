@@ -211,7 +211,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
             toItem(t, i-1, reset, write);
             forcewrite = forcewrite || write;
         }
-        //we keep satelites connected and actived if write needed
+        //we keep satellites connected and active if write needed
         bool connected = lpesatellites.is_connected();
         if (forcewrite || !connected) {
             lpesatellites.write_to_SVG();
@@ -372,7 +372,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset, bool &write)
     cloneD(sp_lpe_item, elemref, transform);
     elemref->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     reset = link_styles;
-    // allow use on clones even in diferent parent
+    // allow use on clones even in different parent
     /* if (elemref->parent != container) {
         if (!creation) {
             lpesatellites.unlink(elemref);

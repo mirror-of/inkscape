@@ -104,7 +104,7 @@ void PageSelector::pagesChanged()
     this->set_visible(page_manager.hasPages());
 
     // Add in pages, do not use getResourcelist("page") because the items
-    // are not guarenteed to be in node order, they are in first-seen order.
+    // are not guaranteed to be in node order, they are in first-seen order.
     for (auto &page : page_manager.getPages()) {
         Gtk::ListStore::iterator row(_page_model->append());
         row->set_value(_model_columns.object, page);

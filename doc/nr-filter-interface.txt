@@ -135,7 +135,7 @@ Returns the amount of pixels the rendering area should be enlarged
 to prevent visual artefacts when filter needs to read pixels that
 are outside its output area (e.g. gaussian blur)
 
-void Fiter::bbox_enlarge(NRRectL &bbox)
+void Filter::bbox_enlarge(NRRectL &bbox)
 Given an object bounding box, this function enlarges it so that it
 contains the filter effect area
 

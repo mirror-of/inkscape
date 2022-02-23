@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Inkscape pages implmentation
+ * Inkscape pages implementation
  *
  * Authors:
  *   Martin Owens <doctormo@geek-2.com>
@@ -166,7 +166,7 @@ std::vector<SPItem *> SPPage::getOverlappingItems() const
 }
 
 /**
- * Return true if this item is contained within the page boundry.
+ * Return true if this item is contained within the page boundary.
  */
 bool SPPage::itemOnPage(SPItem *item, bool contains) const
 {

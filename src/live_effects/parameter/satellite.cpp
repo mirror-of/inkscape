@@ -242,7 +242,7 @@ void SatelliteParam::addCanvasIndicators(SPLPEItem const * /*lpeitem*/, std::vec
 void SatelliteParam::on_link_button_click()
 {
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
-    // here prevent item is reseted tranform on link
+    // here prevent item is reseted transform on link
     if (effectType() == CLONE_ORIGINAL) {
         param_effect->is_load = false;
     }

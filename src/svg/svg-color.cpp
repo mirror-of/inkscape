@@ -644,7 +644,7 @@ bool sp_svg_read_icc_color( gchar const *str, SVGICCColor* dest )
 
 /**
  * Reading inkscape colors, for things like namedviews, guides, etc.
- * Non-CSS / SVG specification formatted. Ususally just a number.
+ * Non-CSS / SVG specification formatted. Usually just a number.
  */
 bool sp_ink_read_opacity(char const *str, guint32 *color, guint32 default_color)
 {

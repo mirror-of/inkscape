@@ -124,7 +124,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_
                 AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Trace')",                     _("_Trace Bitmap..."),      "bitmap-trace"          );
                 auto image = dynamic_cast<SPImage*>(item);
                 if (strncmp(image->href, "data", 4) == 0) {
-                    // Image is embeded.
+                    // Image is embedded.
                     AppendItemFromAction( gmenu_dialogs, "app.org.inkscape.filter.extract_image",        _("Extract Image..."),      ""                      );
                 } else {
                     // Image is linked.

@@ -80,7 +80,7 @@ PathParam::~PathParam()
 {
     unlink();
 //TODO: Removed to fix a bug https://bugs.launchpad.net/inkscape/+bug/1716926
-//      Maybe wee need to resurrect, not know when this code is added, but seems also not working now in a few test I do.
+//      Maybe we need to resurrect, not know when this code is added, but seems also not working now in a few test I do.
 //      in the future and do a deeper fix in multi-path-manipulator
 //    using namespace Inkscape::UI;
 //    SPDesktop *desktop = SP_ACTIVE_DESKTOP;

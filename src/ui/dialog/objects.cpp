@@ -197,7 +197,7 @@ ObjectsPanel& ObjectsPanel::getInstance()
 }
 
 /**
- * Creates a new ObjectWatcher, a gtk TreeView interated watching device.
+ * Creates a new ObjectWatcher, a gtk TreeView iterated watching device.
  *
  * @param panel The panel to which the object watcher belongs
  * @param obj The object to watch
@@ -1114,7 +1114,7 @@ void ObjectsPanel::_handleTransparentHover(bool enabled)
     if (item == _solid_item)
         return;
 
-    // Set the target item, this prevents reruning too.
+    // Set the target item, this prevents rerunning too.
     _solid_item = item;
     auto desktop = getDesktop();
 
@@ -1204,7 +1204,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         // Right-click selects too to set up the stage for context menu which frequently relies on current selection!
         if (!_is_editing && (event->type == GDK_BUTTON_RELEASE || context_menu)) {
             if (event->state & GDK_SHIFT_MASK && !selection->isEmpty()) {
-                // Select everything between this row and the last seleced item
+                // Select everything between this row and the last selected item
                 selection->setBetween(item);
             } else if (event->state & GDK_CONTROL_MASK) {
                 selection->toggle(item);
@@ -1425,7 +1425,7 @@ void ObjectsPanel::on_drag_start(const Glib::RefPtr<Gdk::DragContext> &context)
 
     if (current_item && !obj_selection->includes(current_item)) {
         // This means the item the user started to drag is not one that is selected
-        // So we'll deselect everything and start draging this item instead.
+        // So we'll deselect everything and start dragging this item instead.
         auto watcher = getWatcher(current_item->getRepr());
         if (watcher) {
             auto path = watcher->getTreePath();

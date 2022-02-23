@@ -79,7 +79,7 @@ protected:
         std::cout << "[ WARN     ] Curve reversed. We not block here. We reverse the path and test node positions on reverse" << std::endl;
         bpv.reverse();
         } else if (initial != 0) {
-        std::cout << "[ WARN     ] Diferent starting node. We not block here. We gap the origin to " << initial << " de " << totala << " and test with the pathvector reindexed" << std::endl;
+        std::cout << "[ WARN     ] Different starting node. We not block here. We gap the origin to " << initial << " de " << totala << " and test with the pathvector reindexed" << std::endl;
         }
         for (size_t i = 0; i < apv.curveCount(); i++) {
         if (initial >= totala) {

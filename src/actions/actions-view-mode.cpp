@@ -254,8 +254,8 @@ view_set_gui(InkscapeWindow* win)
     bool statusbar_state   = prefs->getBool(pref_root + "statusbar/state", true);
     bool scrollbars_state  = prefs->getBool(pref_root + "scrollbars/state", true);
     bool rulers_state      = prefs->getBool(pref_root + "rulers/state", true);
-    bool guides_state      = win->get_desktop()->namedview->getRepr()->getAttributeBoolean("showguides", true);    // Should set it true or retrive the state (every time it set to true on restart)
-    bool  interface_mode    = prefs->getInt(pref_root + "interface_mode", false);
+    bool guides_state      = win->get_desktop()->namedview->getRepr()->getAttributeBoolean("showguides", true);    // Should set it true or retrieve the state (every time it set to true on restart)
+    bool interface_mode    = prefs->getInt(pref_root + "interface_mode", false);
 
     canvas_set_state(win, "canvas-commands-bar",      commands_state);
     canvas_set_state(win, "canvas-snap-controls-bar", snaptoolbox_state);
@@ -317,7 +317,7 @@ add_actions_view_mode(InkscapeWindow* win)
     bool widescreen = (height > 0 && width/height > 1.65);
 
     // clang-format off
-    bool guides_toggle      = win->get_desktop()->namedview->getRepr()->getAttributeBoolean("showguides", true);    // Should set it true or retrive the state (every time it set to true on restart)
+    bool guides_toggle      = win->get_desktop()->namedview->getRepr()->getAttributeBoolean("showguides", true);    // Should set it true or retrieve the state (every time it set to true on restart)
 
     bool commands_toggle    = prefs->getBool(pref_root + "commands/state", true);
     bool snaptoolbox_toggle = prefs->getBool(pref_root + "snaptoolbox/state", true);

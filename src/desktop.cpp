@@ -708,7 +708,7 @@ SPDesktop::zoom_realworld(Geom::Point const &center, double ratio)
 
 
 /**
- * Set display area in only the width dimention.
+ * Set display area in only the width dimension.
  */
 void SPDesktop::set_display_width(Geom::Rect const &rect, Geom::Coord border)
 {

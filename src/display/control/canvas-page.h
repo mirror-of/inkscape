@@ -46,7 +46,7 @@ public:
 private:
     // This may make this look like a CanvasItemGroup, but it's not one. This
     // isn't a collection of items, but a set of items in multiple Canvases.
-    // Each item can belong in either a foreground or backgrund group.
+    // Each item can belong in either a foreground or background group.
     std::vector<Inkscape::CanvasItem *> canvas_items;
 
     int _shadow_size = 0;

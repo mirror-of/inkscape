@@ -1067,12 +1067,12 @@ int CommandPalette::on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2)
         if (fuzzy_tolerance_search(cp_name_1->get_tooltip_text(), _search_text)) {
             text_len_1 = cp_name_1->get_tooltip_text().length();
             fuzzy_points_count_1 = fuzzy_tolerance_points(cp_name_1->get_tooltip_text(), _search_text) +
-                                   TOOLTIP_PENALTY; // Adding a constant intiger to decrease the prefrence
+                                   TOOLTIP_PENALTY; // Adding a constant integer to decrease the prefrence
         }
         if (fuzzy_tolerance_search(cp_name_2->get_tooltip_text(), _search_text)) {
             text_len_2 = cp_name_2->get_tooltip_text().length();
             fuzzy_points_count_2 = fuzzy_tolerance_points(cp_name_2->get_tooltip_text(), _search_text) +
-                                   TOOLTIP_PENALTY; // Adding a constant intiger to decrease the prefrence
+                                   TOOLTIP_PENALTY; // Adding a constant integer to decrease the prefrence
         }
         points_compare = fuzzy_points_compare(fuzzy_points_count_1, fuzzy_points_count_2, text_len_1, text_len_2);
         if (points_compare != 0) {
@@ -1083,12 +1083,12 @@ int CommandPalette::on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2)
     if (cp_description_1 && normal_search(cp_description_1->get_text(), _search_text)) {
         text_len_1 = cp_description_1->get_text().length();
         fuzzy_points_count_1 = fuzzy_points(cp_description_1->get_text(), _search_text) +
-                               DESCRIPTION_PENALTY; // Adding a constant intiger to decrease the prefrence
+                               DESCRIPTION_PENALTY; // Adding a constant integer to decrease the prefrence
     }
     if (cp_description_2 && normal_search(cp_description_2->get_text(), _search_text)) {
         text_len_2 = cp_description_2->get_text().length();
         fuzzy_points_count_2 = fuzzy_points(cp_description_2->get_text(), _search_text) +
-                               DESCRIPTION_PENALTY; // Adding a constant intiger to decrease the prefrence
+                               DESCRIPTION_PENALTY; // Adding a constant integer to decrease the prefrence
     }
 
     points_compare = fuzzy_points_compare(fuzzy_points_count_1, fuzzy_points_count_2, text_len_1, text_len_2);

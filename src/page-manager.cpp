@@ -375,7 +375,7 @@ bool PageManager::selectPage(SPItem *item, bool contains)
 }
 
 /**
- * Get the page at the given positon or return nullptr if out of range.
+ * Get the page at the given position or return nullptr if out of range.
  *
  * @param index - The page index (from 0) of the page.
  */
@@ -608,7 +608,7 @@ bool PageManager::subset(SPAttr key, const gchar *value)
         case SPAttr::INKSCAPE_PAGEOPACITY:
             sp_ink_read_opacity(value, &this->background_color, 0xffffff00);
             break;
-        case SPAttr::SHOWPAGESHADOW: // Depricated
+        case SPAttr::SHOWPAGESHADOW: // Deprecated
             this->shadow_show.readOrUnset(value);
             break;
         case SPAttr::INKSCAPE_DESK_CHECKERBOARD:

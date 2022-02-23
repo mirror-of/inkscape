@@ -126,7 +126,7 @@ void image_edit(InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_element_image =
 {
     // clang-format off
-    {"app.element-image-edit",          N_("Edit externally"),   "Image",    N_("Edit image externally (image must be selected and not embeded).")    },
+    {"app.element-image-edit",          N_("Edit externally"),   "Image",    N_("Edit image externally (image must be selected and not embedded).")    },
     // clang-format on
 };
 

@@ -22,7 +22,7 @@
  * order in an SVG file is  (optionally) determined by the order here.
  * This makes comparing different versions of a drawing easier using
  * line-by-line comparison. Also, inorder for proper parsing, some
- * properites must be before others (e.g. 'font' before 'font-family').
+ * properties must be before others (e.g. 'font' before 'font-family').
  */
 enum class SPAttr {
     INVALID,  ///< Must have value 0.

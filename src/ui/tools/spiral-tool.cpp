@@ -366,7 +366,7 @@ void SpiralTool::finishItem() {
 
         spiral->set_shape();
         spiral->updateRepr(SP_OBJECT_WRITE_EXT);
-        // compensate stroke scaling couldent be done in doWriteTransform
+        // compensate stroke scaling couldn't be done in doWriteTransform
         double const expansion = spiral->transform.descrim();
         spiral->doWriteTransform(spiral->transform, nullptr, true);
         spiral->adjust_stroke_width_recursive(expansion);

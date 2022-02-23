@@ -80,7 +80,7 @@ void ExtensionList::setup()
         if (omod->deactivated())
             continue;
         this->append(oid, omod->get_filetypename());
-        // Record exensions map for filename-to-combo selections
+        // Record extensions map for filename-to-combo selections
         auto ext = omod->get_extension();
         if (!ext_to_mod[ext]) {
             // Some extensions have multiple of the same extension (for example PNG)
@@ -100,7 +100,7 @@ Inkscape::Extension::Output *ExtensionList::getExtension()
 }
 
 /**
- * Returns the file extension (file ending) of the curretly selected extension.
+ * Returns the file extension (file ending) of the currently selected extension.
  */
 Glib::ustring ExtensionList::getFileExtension()
 {

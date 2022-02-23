@@ -1159,7 +1159,7 @@ void InkscapePreferences::resetIconsColors(bool themechange)
         }
         // This colors are set on style.css of inkscape
         Gdk::RGBA base_color = _symbolic_base_color.get_style_context()->get_color();
-        // This is a hack to fix a proble style is not updated enough fast on
+        // This is a hack to fix a problematic style which isn't updated fast enough on
         // change from dark to bright themes
         if (themechange) {
             auto sc = _symbolic_base_color.get_style_context();

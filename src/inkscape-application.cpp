@@ -17,7 +17,7 @@
  *       InkscapeAppllication::parse_actions
  *
  *     -- Switch to main instance if new Inkscape instance is merged with existing instance. --
- *        New instances are merged with existing instnce unless app_id is changed, see below.
+ *        New instances are merged with existing instance unless app_id is changed, see below.
  *
  *     InkscapeApplication::on_startup                   | Only called for main instance
  *

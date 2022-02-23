@@ -385,7 +385,7 @@ void StarTool::finishItem() {
         this->star->setCenter(this->center);
         this->star->set_shape();
         this->star->updateRepr(SP_OBJECT_WRITE_EXT);
-        // compensate stroke scaling couldent be done in doWriteTransform
+        // compensate stroke scaling couldn't be done in doWriteTransform
         double const expansion = this->star->transform.descrim();
         this->star->doWriteTransform(this->star->transform, nullptr, true);
         this->star->adjust_stroke_width_recursive(expansion);

@@ -1381,7 +1381,7 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
 }
 // this two functions are commented because are used on clipboard
 // and because slow the text pastinbg and usage a lot
-// and couldent get it working properly we miss font size font style or never work
+// and couldn't get it working properly we miss font size font style or never work
 // and user usually want paste as plain text and get the position context
 // style. Anyway I retain for further usage.
 

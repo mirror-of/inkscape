@@ -1247,7 +1247,7 @@ LPEMeasureSegments::doOnRemove (SPLPEItem const* /*lpeitem*/)
     items.clear();
 }
 
-// we override processObjects because sattellite items are not selectable and dont surf any issues
+// we override processObjects because satellite items are not selectable and dont surf any issues
 void
 LPEMeasureSegments::processObjects(LPEAction lpe_action)
 {

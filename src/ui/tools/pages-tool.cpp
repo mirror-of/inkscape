@@ -151,7 +151,7 @@ void PagesTool::resizeKnotMoved(SPKnot *knot, Geom::Point const &ppointer, guint
 }
 
 /**
- * Resize snapping allows knot and tool point snapping consistancy.
+ * Resize snapping allows knot and tool point snapping consistency.
  */
 Geom::Point PagesTool::getSnappedResizePoint(Geom::Point point, guint state, Geom::Point origin, SPObject *target)
 {
@@ -212,7 +212,7 @@ bool PagesTool::root_handler(GdkEvent *event)
 
             if (event->motion.state & GDK_BUTTON1_MASK) {
                 if (!mouse_is_pressed) {
-                    // this sometims happens if the mouse was off the edge when the event started
+                    // this sometimes happens if the mouse was off the edge when the event started
                     drag_origin_w = point_w;
                     drag_origin_dt = point_dt;
                     mouse_is_pressed = true;
@@ -222,7 +222,7 @@ bool PagesTool::root_handler(GdkEvent *event)
                     // Continue to drag item.
                     Geom::Affine tr = moveTo(point_dt, snap);
                     // XXX Moving the existing shapes would be much better, but it has
-                    //  weird bug which stops it from working well.
+                    // a weird bug which stops it from working well.
                     // drag_group->update(tr * drag_group->get_parent()->get_affine());
                     addDragShapes(dragging_item, tr);
                 } else if (on_screen_rect) {
@@ -230,7 +230,7 @@ bool PagesTool::root_handler(GdkEvent *event)
                     point_dt = getSnappedResizePoint(point_dt, event->motion.state, drag_origin_dt);
                     on_screen_rect = Geom::Rect(drag_origin_dt, point_dt);
                 } else if (Geom::distance(drag_origin_w, point_w) < drag_tolerance) {
-                    // do not start draging anything new if we're within tolerance from origin.
+                    // do not start dragging anything new if we're within tolerance from origin.
                     // pass
                 } else if (auto page = pageUnder(drag_origin_dt)) {
                     // Starting to drag page around the screen, the pageUnder must

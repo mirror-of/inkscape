@@ -21,7 +21,7 @@
   <repository type="system" name="system"/>
 
   <!-- This module set works a bit differently than for example the
-       GNOME ones do. It's split up in seperate pieces:
+       GNOME ones do. It's split up in separate pieces:
 
        - gtk-osx-bootstrap: contains bootstrap-like modules that you
          don't want to rebuild all the time.
@@ -29,7 +29,7 @@
        - gtk-osx.modules: contains the core GTK+ stack. This does not
          have a hard dependency on the bootstrap modules, in order to
          make it easy to rebuild the whole core stack without redoing
-         the bootstrap parts. They have a soft, "after", depencency.
+         the bootstrap parts. They have a soft, "after", dependency.
 
        - gtk-osx-python.modules: Python bindings for Gtk.
        - gtk-osx-gtkmm.modules: C++ wrappers for Gtk.
