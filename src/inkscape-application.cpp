@@ -183,11 +183,10 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file, bool *ca
     if (document) {
         document->setVirgin(false); // Prevents replacing document in same window during file open.
 
-        // add/promote recent file
+        // Add/promote recent file; when we call add_item and file is on a recent list already,
+        // then apparently only "modified" time changes.
         auto recentmanager = Gtk::RecentManager::get_default();
-        recentmanager->remove_item(file->get_uri());
         recentmanager->add_item(file->get_uri());
-        g_warning("promote: %s", file->get_uri().c_str());
 
         document_add (document);
     } else if (cancelled == nullptr || !(*cancelled)) {
