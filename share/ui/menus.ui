@@ -1179,7 +1179,7 @@
     <section>
       <item>
         <attribute name='label' translatable="yes">Manage Extensions...</attribute>
-        <attribute name='action'>app.org.inkscape.extensions.manager</attribute>
+        <attribute name='action'>app.org.inkscape.extension.manager</attribute>
       </item>
     </section>
   </submenu>

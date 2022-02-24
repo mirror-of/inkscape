@@ -25,13 +25,17 @@ install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL}
     PATTERN "tests" EXCLUDE
     PATTERN "*.pyc" EXCLUDE
     PATTERN "print_win32_vector.*" EXCLUDE
-    PATTERN "extension-manager-bootstrap.*" EXCLUDE
+    PATTERN "other/inkman" EXCLUDE
+    PATTERN "other/*/*/tests" EXCLUDE
+    PATTERN "other/*/*/MANIFEST.in" EXCLUDE
+    PATTERN "other/*/*/requirements.txt" EXCLUDE
 )
 
-install(
-    FILES extensions/extension-manager-bootstrap.py extensions/extension-manager-bootstrap.inx
-    DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions
+install(DIRECTORY extensions/other/inkman DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions/inkman/
     COMPONENT extension_manager
+    PATTERN "tests" EXCLUDE
+    PATTERN "MANIFEST.in" EXCLUDE
+    PATTERN "requirements.txt" EXCLUDE
 )
 
 if(WIN32)

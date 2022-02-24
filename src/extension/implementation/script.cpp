@@ -596,7 +596,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
         // Hack to allow for extension manager to reload extensions
         // TODO: Find a better way to do this, e.g. implement an action and have extensions (or users)
         //       call that instead when there's a change that requires extensions to reload
-        if (!g_strcmp0(module->get_id(), "org.inkscape.extensions.manager")) {
+        if (!g_strcmp0(module->get_id(), "org.inkscape.extension.manager")) {
             Inkscape::Extension::refresh_user_extensions();
             build_menu(); // Rebuild main menubar.
         }
