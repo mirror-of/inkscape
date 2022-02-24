@@ -567,7 +567,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                 gap = 0;
             }
             Geom::Path tmp =
-                half_outline(i.reversed(), std::abs(to_offset - gap),
+                half_outline(i.reversed(), std::abs(to_offset + gap),
                              (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit), join, tolerance);
             // not remember why i instead tmp, afete 1.1 release we can switch to tmp to tests
             if (i.closed()) {
