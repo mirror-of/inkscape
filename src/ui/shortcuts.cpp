@@ -368,17 +368,17 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
     document->appendChild(node);
 
     // Actions: write out all actions with accelerators.
-    for (auto action_description : app->list_action_descriptions()) {
+    for (auto action_name : list_all_detailed_action_names()) {
         if ( what == All                                 ||
-            (what == System && !action_user_set[action_description]) ||
-            (what == User   &&  action_user_set[action_description]) )
+            (what == System && !action_user_set[action_name]) ||
+            (what == User   &&  action_user_set[action_name]) )
         {
-            std::vector<Glib::ustring> accels = app->get_accels_for_action(action_description);
+            std::vector<Glib::ustring> accels = app->get_accels_for_action(action_name);
             if (!accels.empty()) {
 
                 XML::Node * node = document->createElement("bind");
 
-                node->setAttribute("gaction", action_description);
+                node->setAttribute("gaction", action_name);
 
                 Glib::ustring keys;
                 for (auto accel : accels) {

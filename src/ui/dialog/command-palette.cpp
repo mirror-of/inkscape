@@ -1403,7 +1403,7 @@ void CommandPalette::load_win_doc_actions()
                     generate_action_operation(get_action_ptr_name("doc." + action), true);
                 }
             } else {
-                std::cerr << "CommandPalette::list_all_actions: No document map!" << std::endl;
+                std::cerr << "CommandPalette::load_win_doc_actions: No document map!" << std::endl;
             }
         }
     }
