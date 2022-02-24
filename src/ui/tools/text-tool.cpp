@@ -1741,8 +1741,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
                     copy->Copy(uncross);
                 }
                 copy->ConvertToForme(padded);
-                padded->Transform(tc->text->i2dt_affine());
-                tc->padding_frame->set_bpath(padded->MakePathVector());
+                tc->padding_frame->set_bpath(padded->MakePathVector() * tc->text->i2dt_affine());
                 tc->padding_frame->show();
 
                 delete temp;

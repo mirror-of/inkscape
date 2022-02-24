@@ -46,7 +46,6 @@ struct PathDescr
 
     virtual void dumpSVG(Inkscape::SVGOStringStream &/*s*/, Geom::Point const &/*last*/) const {}
     virtual PathDescr *clone() const = 0;
-    virtual void transform(Geom::Affine const &/*t*/) {}
     virtual void dump(std::ostream &/*s*/) const {}
 
   int    flags;         // most notably contains the path command no
@@ -62,7 +61,6 @@ struct PathDescrMoveTo : public PathDescr
 
   void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
   PathDescr *clone() const override;
-  void transform(Geom::Affine const &t) override;
   void dump(std::ostream &s) const override;
 
   Geom::Point p;
@@ -75,7 +73,6 @@ struct PathDescrLineTo : public PathDescr
 
   void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
   PathDescr *clone() const override;
-  void transform(Geom::Affine const &t) override;
   void dump(std::ostream &s) const override;
 
   Geom::Point p;
@@ -88,7 +85,6 @@ struct PathDescrBezierTo : public PathDescr
     : PathDescr(descr_bezierto), p(pp), nb(n) {}
 
   PathDescr *clone() const override;
-  void transform(Geom::Affine const &t) override;
   void dump(std::ostream &s) const override;
 
   Geom::Point p;        // the endpoint's coordinates
@@ -104,7 +100,6 @@ struct PathDescrIntermBezierTo : public PathDescr
     : PathDescr(descr_interm_bezier), p(pp) {}
 
   PathDescr *clone() const override;
-  void transform(Geom::Affine const &t) override;
   void dump(std::ostream &s) const override;
 
   Geom::Point p;                  // control point coordinates
@@ -118,7 +113,6 @@ struct PathDescrCubicTo : public PathDescr
 
   void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
   PathDescr *clone() const override;
-  void transform(Geom::Affine const &t) override;
   void dump(std::ostream &s) const override;
 
   Geom::Point p;
@@ -134,7 +128,6 @@ struct PathDescrArcTo : public PathDescr
 
   void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
   PathDescr *clone() const override;
-  void transform(Geom::Affine const &t) override;
   void dump(std::ostream &s) const override;
 
   Geom::Point p;

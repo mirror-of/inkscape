@@ -12,6 +12,9 @@
 
 #include <glib.h>
 #include "Path.h"
+
+#include <2geom/pathvector.h>
+
 #include "livarot/path-description.h"
 
 /*
@@ -695,11 +698,14 @@ void Path::PointAndTangentAt(int piece, double at, Geom::Point &pos, Geom::Point
     }
 }
 
+/**
+ * Apply a transform in-place.
+ *
+ * Note: Converts to Geom::PathVector, applies the transform, and converts back.
+ */
 void Path::Transform(const Geom::Affine &trans)
 {
-    for (auto & i : descr_cmd) {
-        i->transform(trans);
-    }
+    LoadPathVector(MakePathVector() * trans);
 }
 
 void Path::FastBBox(double &l,double &t,double &r,double &b)
