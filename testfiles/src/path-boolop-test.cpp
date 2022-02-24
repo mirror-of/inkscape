@@ -74,11 +74,10 @@ TEST_F(PathBoolopTest, DifferenceInside){
 TEST_F(PathBoolopTest, DifferenceOutside){
     // test that the difference of two objects where one is completely outside the other is multiple shapes
     Geom::PathVector pvRectangleDifference = sp_pathvector_boolop(pvRectangleSmaller, pvRectangleBigger, bool_op_diff, fill_oddEven, fill_oddEven);
-    std::string bothPaths = rectangle_bigger + rectangle_smaller;
     Geom::PathVector pvBothPaths = pvRectangleBigger;
     
     for(Geom::Path _path : pvRectangleSmaller){
-        pvBothPaths.push_back(_path);
+        pvBothPaths.push_back(_path.reversed());
     }
 
     comparePaths(pvRectangleDifference, pvBothPaths);
