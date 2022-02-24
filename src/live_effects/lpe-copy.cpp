@@ -137,7 +137,7 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     num_rows.param_set_range(1, 9999);
     num_rows.param_make_integer();
     num_rows.param_set_increments(1, 10);
-    scale.param_set_range(-9999,9999); 
+    scale.param_set_range(1,9999); 
     scale.param_make_integer();
     scale.param_set_increments(1, 10);
     gapx.param_set_range(-99999,99999); 
@@ -295,9 +295,6 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 if (mirrortrans && interpolate_scaley && j%2 != 0) {
                     fracyin = 1-fracyin;
                 }
-                /* if (mirrortrans && interpolate_scaley && interpolate_scalex) {
-                    fract = 1-fract;
-                } */
                 double rotatein = rotate;
                 if (interpolate_rotatex && interpolate_rotatey) {
                     rotatein = rotatein * (i + j);
@@ -1079,9 +1076,6 @@ LPECopy::doOnApply(SPLPEItem const* lpeitem)
         return;
     }
     scaleok = scale / 100.0;
-    if (scaleok == 0) {
-        scaleok = 0.00000001;
-    }
     double scale_fix = end_scale(scaleok, true);
     (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*originalbbox).midpoint());
     original_width = (*gap_bbox).width();
@@ -1106,9 +1100,6 @@ LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
         writeParamsToSVG();
     }
     scaleok = scale / 100.0;
-    if (scaleok == 0) {
-        scaleok = 0.00000001;
-    }
     double seedset = seed.param_get_random_number() - seed.param_get_random_number();
     affinebase = Geom::identity();
     if (random_rotate && rotate) {
