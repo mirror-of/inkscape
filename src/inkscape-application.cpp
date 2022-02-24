@@ -185,8 +185,9 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file, bool *ca
 
         // Add/promote recent file; when we call add_item and file is on a recent list already,
         // then apparently only "modified" time changes.
-        auto recentmanager = Gtk::RecentManager::get_default();
-        recentmanager->add_item(file->get_uri());
+        if (auto recentmanager = Gtk::RecentManager::get_default()) {
+            recentmanager->add_item(file->get_uri());
+        }
 
         document_add (document);
     } else if (cancelled == nullptr || !(*cancelled)) {
