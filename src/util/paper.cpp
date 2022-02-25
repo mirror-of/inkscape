@@ -63,34 +63,49 @@ const std::vector<PaperSize>& PaperSize::getPageSizes()
 
 PaperSize::PaperSize()
     : name("")
-    , smaller(0.0)
-    , larger(0.0)
+    , width(0.0)
+    , height(0.0)
 {
     unit = Inkscape::Util::unit_table.getUnit("px");
 }
 
 
-PaperSize::PaperSize(std::string name, double smaller, double larger, Inkscape::Util::Unit const *unit)
+PaperSize::PaperSize(std::string name, double width, double height, Inkscape::Util::Unit const *unit)
     : name(std::move(name))
-    , smaller(smaller)
-    , larger(larger)
+    , width(width)
+    , height(height)
     , unit(unit) 
 {}
 
-std::string PaperSize::getDescription() const { return toDescription(name, smaller, larger, unit); }
+std::string PaperSize::getDescription(bool landscape) const {
+    return toDescription(name, size[landscape], size[!landscape], unit);
+}
+
 std::string PaperSize::toDescription(std::string name, double x, double y, Inkscape::Util::Unit const *unit)
 {
-    char buf[80];
-    snprintf(buf, 79, "%s (%0.1fx%0.1f %s)", name.c_str(), x, y, unit->abbr.c_str());
-    return std::string(buf);
+    return name + " (" + formatNumber(x) + " x " + formatNumber(y) + " " + unit->abbr + ")";
+}
+
+std::string PaperSize::formatNumber(double val)
+{
+    char buf[20];
+    snprintf(buf, 19, "%0.1f", val);
+    auto ret = std::string(buf);
+    // C++ doesn't provide a good number formatting control, so hack off trailing zeros.
+    if ((ret.length() > 2) && (ret.back() == '0')) {
+        ret = ret.substr(0, ret.length() - 2);
+    }
+    return ret;
 }
 
 void PaperSize::assign(const PaperSize &other)
 {
-    name    = other.name;
-    smaller = other.smaller;
-    larger  = other.larger;
-    unit    = other.unit;
+    name = other.name;
+    width = other.width;
+    height = other.height;
+    auto [smaller, larger] = std::minmax(width, height);
+    size = Geom::Point(smaller, larger);
+    unit = other.unit;
 }
 
 /**
@@ -98,14 +113,18 @@ void PaperSize::assign(const PaperSize &other)
  */
 const PaperSize *PaperSize::findPaperSize(double width, double height, Inkscape::Util::Unit const *unit)
 {
-    double smaller = width;
-    double larger = height;
-    if (width > height) {
-        smaller = height;
-        larger = width;
-    }
+    auto [smaller, larger] = std::minmax(width, height);
+    auto size = Geom::Point(smaller, larger);
+    auto px = Inkscape::Util::unit_table.getUnit("px");
+
     for (auto&& page_size : Inkscape::PaperSize::getPageSizes()) {
-        if (page_size.smaller == smaller && page_size.larger == larger && page_size.unit == unit) {
+        auto cmp = Geom::Point(
+            unit->convert(size[0], page_size.unit),
+            unit->convert(size[1], page_size.unit)
+        );
+        // We want a half a pixel tollerance to catch floating point errors
+        auto tollerance = px->convert(0.5, page_size.unit);
+        if (Geom::are_near(page_size.size, cmp, tollerance)) {
             return &page_size;
         }
     }

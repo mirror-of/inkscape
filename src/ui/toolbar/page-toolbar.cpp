@@ -57,11 +57,18 @@ PageToolbar::PageToolbar(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builde
         combo_page_sizes->signal_changed().connect(sigc::mem_fun(*this, &PageToolbar::sizeChoose));
         entry_page_sizes = dynamic_cast<Gtk::Entry *>(combo_page_sizes->get_child());
         if (entry_page_sizes) {
+            entry_page_sizes->set_placeholder_text(_("ex.: 100x100cm"));
+            entry_page_sizes->set_tooltip_text(_("Type in width & height of a page. (ex.: 15x10cm, 10in x 100mm)\n"
+                                                 "or choose preset from dropdown."));
             entry_page_sizes->signal_activate().connect(sigc::mem_fun(*this, &PageToolbar::sizeChanged));
+            entry_page_sizes->signal_focus_in_event().connect([=](GdkEventFocus* focus){
+                entry_page_sizes->set_text("");
+                return false;
+            });
         }
         auto& page_sizes = Inkscape::PaperSize::getPageSizes();
         for (int i = 0; i < page_sizes.size(); i++) {
-            combo_page_sizes->append(std::to_string(i), page_sizes[i].getDescription());
+            combo_page_sizes->append(std::to_string(i), page_sizes[i].getDescription(false));
         }
     }
 
@@ -125,9 +132,9 @@ void PageToolbar::sizeChoose()
         auto& page_sizes = Inkscape::PaperSize::getPageSizes();
         if (page_id >= 0 && page_id < page_sizes.size()) {
             auto&& ps = page_sizes[page_id];
-            auto smaller = ps.unit->convert(ps.smaller, "px");
-            auto larger = ps.unit->convert(ps.larger, "px");
-            _document->getPageManager().resizePage(smaller, larger);
+            auto width = ps.unit->convert(ps.width, "px");
+            auto height = ps.unit->convert(ps.height, "px");
+            _document->getPageManager().resizePage(width, height);
             DocumentUndo::maybeDone(_document, "page-resize", _("Resize Page"), INKSCAPE_ICON("tool-pages"));
         }
     } catch (std::invalid_argument const &e) {
@@ -142,18 +149,21 @@ double PageToolbar::_unit_to_size(std::string number, std::string unit_str, std:
     double value = std::stod(number);
 
     // Get the best unit, for example 50x40cm means cm for both
-    auto unit = _document->getDisplayUnit();
     if (unit_str.empty() && !backup.empty())
         unit_str = backup;
     if (unit_str == "\"")
         unit_str = "in";
 
+    // Output is always in px as it's the most useful.
+    auto px = Inkscape::Util::unit_table.getUnit("px");
+
     // Convert from user entered unit to display unit
     if (!unit_str.empty())
-        return Inkscape::Util::Quantity::convert(value, unit_str, unit);
+        return Inkscape::Util::Quantity::convert(value, unit_str, px);
 
-    // Default unit
-    return value;
+    // Default unit is the document's display unit
+    auto unit = _document->getDisplayUnit();
+    return Inkscape::Util::Quantity::convert(value, unit, px);
 }
 
 /**
@@ -169,17 +179,16 @@ void PageToolbar::sizeChanged()
     // Parse the size out of the typed text if possible.
     auto text = std::string(combo_page_sizes->get_active_text());
     // This does not support negative values, because pages can not be negatively sized.
-    static std::string arg = "([\\d,\\.]+)(px|mm|cm|in|\\\")?";
+    static std::string arg = "([0-9]+[\\.,]?[0-9]*|\\.[0-9]+) ?(px|mm|cm|in|\\\")?";
     // We can't support × here since it's UTF8 and this doesn't match
-    static std::regex re_size("^ *" + arg + " ?([Xx,\\-]) ?" + arg + " *$");
+    static std::regex re_size("^ *" + arg + " *([ *Xx,\\-]) *" + arg + " *$");
 
     std::smatch matches;
     if (std::regex_match(text, matches, re_size)) {
         double width = _unit_to_size(matches[1], matches[2], matches[5]);
         double height = _unit_to_size(matches[4], matches[5], matches[2]);
         if (width > 0 && height > 0) {
-            auto scale = _document->getDocumentScale()[0];
-            _document->getPageManager().resizePage(width * scale, height * scale);
+            _document->getPageManager().resizePage(width, height);
         }
     }
     setSizeText(_document->getPageManager().getSelected());
@@ -194,17 +203,19 @@ void PageToolbar::setSizeText(SPPage *page)
     double width = _document->getWidth().value(unit);
     double height = _document->getHeight().value(unit);
     if (page) {
-        auto rect = page->getRect();
-        width = rect.width();
-        height = rect.height();
+        auto px = Inkscape::Util::unit_table.getUnit("px");
+        auto rect = page->getDesktopRect();
+        width = px->convert(rect.width(), unit);
+        height = px->convert(rect.height(), unit);
     }
-    entry_page_sizes->set_placeholder_text(_("ex.: 100x100cm"));
-    entry_page_sizes->set_tooltip_text(_("Type in width & height of a page. (ex.: 100x100cm, 10cmx100mm)\n"
-                                        "or choose preset from dropdown."));
     if (auto page_size = Inkscape::PaperSize::findPaperSize(width, height, unit)) {
-        entry_page_sizes->set_text(page_size->getDescription());
+        entry_page_sizes->set_text(page_size->getDescription(width > height));
     } else {
         entry_page_sizes->set_text(Inkscape::PaperSize::toDescription(_("Custom"), width, height, unit));
+    }
+    // Select text if box is currently in focus.
+    if (entry_page_sizes->has_focus()) {
+        entry_page_sizes->select_region(0, -1);
     }
 }
 

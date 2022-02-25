@@ -123,7 +123,7 @@ public:
         _page_units->signal_changed().connect([=](){ set_page_unit(); });
 
         for (auto&& page : PaperSize::getPageSizes()) {
-            auto item = new Gtk::MenuItem(page.getDescription());
+            auto item = Gtk::manage(new Gtk::MenuItem(page.getDescription(false)));
             item->show();
             _page_templates_menu.append(*item);
             item->signal_activate().connect([=](){ set_page_template(page); });
@@ -220,8 +220,8 @@ private:
 
         {
             auto scoped(_update.block());
-            auto width = page.larger;
-            auto height = page.smaller;
+            auto width = page.width;
+            auto height = page.height;
             if (_landscape.get_active() != (width > height)) {
                 std::swap(width, height);
             }
@@ -430,8 +430,8 @@ private:
 
         const double eps = 1e-6;
         for (auto&& page : PaperSize::getPageSizes()) {
-            Quantity pw(std::min(page.larger, page.smaller), page.unit);
-            Quantity ph(std::max(page.larger, page.smaller), page.unit);
+            Quantity pw(std::min(page.width, page.height), page.unit);
+            Quantity ph(std::max(page.width, page.height), page.unit);
 
             if (are_near(w, pw, eps) && are_near(h, ph, eps)) {
                 return &page;

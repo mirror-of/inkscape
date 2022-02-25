@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <2geom/point.h>
 
 #include "units.h"
 
@@ -26,25 +27,27 @@ class PaperSize
 {
 public:
     PaperSize();
-    PaperSize(std::string name, double smaller, double larger, Inkscape::Util::Unit const *unit);
+    PaperSize(std::string name, double width, double height, Inkscape::Util::Unit const *unit);
     PaperSize(const PaperSize &other) { assign(other); } 
     PaperSize &operator=(const PaperSize &other) { assign(other); return *this; }
 
     ~PaperSize() = default;
 
     std::string name;
-    double smaller;
-    double larger;
+    Geom::Point size;
+    double width;
+    double height;
     Inkscape::Util::Unit const *unit; /// pointer to object in UnitTable, do not delete
 
-    std::string getDescription() const;
+    std::string getDescription(bool landscape) const;
 
     static const std::vector<PaperSize>& getPageSizes();
     static const PaperSize *findPaperSize(double width, double height, Inkscape::Util::Unit const *unit);
-    static std::string toDescription(std::string name, double x, double y, Inkscape::Util::Unit const *unit);
 
+    static std::string toDescription(std::string name, double x, double y, Inkscape::Util::Unit const *unit);
 private:
     void assign(const PaperSize &other);
+    static std::string formatNumber(double val);
 };
 
 } // namespace Inkscape
