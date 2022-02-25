@@ -51,13 +51,19 @@ PageManager::~PageManager()
 void PageManager::addPage(SPPage *page)
 {
     g_assert(page->document == _document);
+    if (std::find(pages.begin(), pages.end(), page) != pages.end()) {
+        // Refuse to double add pages to list.
+        return;
+    }
     if (auto next = page->getNextPage()) {
         // Inserted in the middle, probably an undo.
         auto it = std::find(pages.begin(), pages.end(), next);
         if (it != pages.end()) {
-            return; // Already in pages, likely called from namedview build during cloning.
+            pages.insert(it, page);
+        } else {
+            // This means the next page is not yet added either
+            pages.push_back(page);
         }
-        pages.insert(it, page);
     } else {
         pages.push_back(page);
     }
@@ -70,8 +76,21 @@ void PageManager::addPage(SPPage *page)
 void PageManager::removePage(Inkscape::XML::Node *child)
 {
     for (auto it = pages.begin(); it != pages.end(); ++it) {
-        if ((*it)->getRepr() == child) {
+        SPPage *page = *it;
+        if (page->getRepr() == child) {
             pages.erase(it);
+
+            // Reselect because this page is gone.
+            if (_selected_page == page) {
+                if (auto next = page->getNextPage()) {
+                    selectPage(next);
+                } else if (auto prev = page->getPreviousPage()) {
+                    selectPage(prev);
+                } else {
+                    selectPage(nullptr);
+                }
+            }
+
             pagesChanged();
             break;
         }
@@ -235,15 +254,6 @@ void PageManager::deletePage(SPPage *page, bool content)
                 if (getPagesFor(item, false).size() == 1) {
                     item->deleteObject();
                 }
-            }
-        }
-        if (_selected_page == page) {
-            if (auto next = page->getNextPage()) {
-                selectPage(next);
-            } else if (auto prev = page->getPreviousPage()) {
-                selectPage(prev);
-            } else {
-                selectPage(nullptr);
             }
         }
         // Only adjust if there will be a page after viewport page is deleted

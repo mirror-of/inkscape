@@ -235,9 +235,12 @@ void PageToolbar::selectionChanged(SPPage *page)
         label_page_pos->set_label(pos);
         g_free(pos);
 
-        _page_modified = page->connectModified([=](SPObject *obj, unsigned int /*flags*/) {
+        _page_modified = page->connectModified([=](SPObject *obj, unsigned int flags) {
             if (auto page = dynamic_cast<SPPage *>(obj)) {
-                selectionChanged(page);
+                // Make sure we don't 'select' on removal of the page
+                if (flags & SP_OBJECT_MODIFIED_FLAG) {
+                    selectionChanged(page);
+                }
             }
         });
     } else {
