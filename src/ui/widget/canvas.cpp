@@ -254,6 +254,7 @@ public:
     virtual Cairo::RefPtr<Cairo::Region> get_next_clean_region() {return clean_region;}; // Called by on_idle to determine what regions to consider clean for the current redraw.
     virtual bool                         report_finished      () {return false;}         // Called in on_idle if the redraw has finished. Returns true to indicate that further redraws are required with a different clean region.
     virtual void                         frame                () {}                      // Called by on_draw to notify the updater of the display of the frame.
+    virtual ~Updater() = default;
 };
 
 // Responsive updater: As soon as a region is invalidated, redraw it.
