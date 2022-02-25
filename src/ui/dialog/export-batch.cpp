@@ -528,6 +528,10 @@ void BatchExport::onExport()
             auto omod = extensions[i];
             float dpi = dpis[i];
 
+            if (!omod) {
+                continue;
+            }
+
             Glib::ustring item_filename = filename + "_" + id;
             if (!suffixs[i].empty()) {
                 item_filename = item_filename + "_" + suffixs[i];
@@ -536,9 +540,10 @@ void BatchExport::onExport()
                 item_filename = item_filename + "_" + std::to_string((int)dpi);
             }
 
-            if (!omod) {
-                continue;
+            if (count == 0 && !omod->prefs()) {
+                continue; // cancel button
             }
+
             if (prog_dlg) {
                 delete prog_dlg;
                 prog_dlg = nullptr;
@@ -562,7 +567,7 @@ void BatchExport::onExport()
 
                 exportSuccessful = Export::exportRaster(
                     area, width, height, dpi, item_filename, true, onProgressCallback,
-                    prog_dlg, omod, hide ? &show_only : nullptr, count);
+                    prog_dlg, omod, hide ? &show_only : nullptr);
             } else {
                 setExporting(true, Glib::ustring::compose(_("Exporting %1"), filename));
                 auto copy_doc = _document->copy();

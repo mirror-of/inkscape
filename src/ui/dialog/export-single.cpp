@@ -112,6 +112,7 @@ void SingleExport::initialise(const Glib::RefPtr<Gtk::Builder> &builder)
 
     builder->get_widget("si_hide_all", si_hide_all);
     builder->get_widget("si_show_preview", si_show_preview);
+    builder->get_widget("si_default_opts", si_default_opts);
     builder->get_widget_derived("si_preview", preview);
 
     builder->get_widget_derived("si_extention", si_extension_cb);
@@ -529,6 +530,13 @@ void SingleExport::onExport()
     float y0 = unit->convert(spin_buttons[SPIN_Y0]->get_value(), "px");
     float y1 = unit->convert(spin_buttons[SPIN_Y1]->get_value(), "px");
     auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1));
+
+    if (!si_default_opts->get_active()) {
+        if (!omod->prefs()) {
+            si_export->set_sensitive(true);
+            return; // cancel button
+        }
+    }
 
     if (omod->is_raster()) {
         area *= _desktop->dt2doc();

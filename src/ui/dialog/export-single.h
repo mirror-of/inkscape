@@ -95,8 +95,9 @@ private:
     Gtk::Label *si_name_label = nullptr;
 
     Gtk::CheckButton *si_hide_all = nullptr;
-
     Gtk::CheckButton *si_show_preview = nullptr;
+    Gtk::CheckButton *si_default_opts = nullptr;
+
     ExportPreview *preview = nullptr;
 
     ExtensionList *si_extension_cb = nullptr;
@@ -107,7 +108,7 @@ private:
     Gtk::Button *page_prev = nullptr;
     Gtk::Button *page_next = nullptr;
 
-    bool filename_modified;
+    bool filename_modified = false;
     Glib::ustring original_name;
     Glib::ustring doc_export_name;
 

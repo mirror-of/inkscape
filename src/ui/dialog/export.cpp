@@ -205,7 +205,7 @@ bool Export::exportRaster(
         Geom::Rect const &area, unsigned long int const &width, unsigned long int const &height,
         float const &dpi, Glib::ustring const &filename, bool overwrite,
         unsigned (*callback)(float, void *), ExportProgressDialog *&prog_dialog,
-        Inkscape::Extension::Output *extension, std::vector<SPItem *> *items, int run)
+        Inkscape::Extension::Output *extension, std::vector<SPItem *> *items)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop)
@@ -227,11 +227,6 @@ bool Export::exportRaster(
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Raster Export Error"));
         sp_ui_error_dialog(_("Raster export Method is used for NON RASTER EXTENSION"));
         return false;
-    }
-
-    // Get the preferences by popping up the extension prefs
-    if (run == 0 && !extension->prefs()) {
-        return false; // cancel button
     }
 
     float pHYs = extension->get_param_float("png_phys", dpi);
@@ -428,8 +423,7 @@ bool Export::exportVector(
     copy_doc->vacuumDocument();
 
     try {
-        Inkscape::Extension::save(dynamic_cast<Inkscape::Extension::Extension *>(extension), copy_doc.get(), path.c_str(),
-                                  false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+        extension->save(copy_doc.get(), path.c_str());
     } catch (Inkscape::Extension::Output::save_failed &e) {
         Glib::ustring safeFile = Inkscape::IO::sanitizeString(path.c_str());
         Glib::ustring error = g_strdup_printf(_("Could not export to filename <b>%s</b>.\n"), safeFile.c_str());

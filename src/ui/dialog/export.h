@@ -113,7 +113,7 @@ public:
         Geom::Rect const &area, unsigned long int const &width, unsigned long int const &height,
         float const &dpi, Glib::ustring const &filename, bool overwrite,
         unsigned (*callback)(float, void *), ExportProgressDialog *&prog_dialog,
-        Inkscape::Extension::Output *extension, std::vector<SPItem *> *items = nullptr, int run = 0);
+        Inkscape::Extension::Output *extension, std::vector<SPItem *> *items = nullptr);
   
     static bool exportVector(
         Inkscape::Extension::Output *extension, SPDocument *doc, Glib::ustring const &filename,
