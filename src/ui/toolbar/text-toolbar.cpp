@@ -436,7 +436,9 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 
     auto positioning_button = Gtk::manage(new Gtk::MenuButton);
     positioning_button->set_image_from_icon_name(INKSCAPE_ICON("text_horz_kern"));
+    positioning_button->set_always_show_image(true);
     positioning_button->set_tooltip_text(_("Kerning, word spacing, character positioning"));
+    positioning_button->set_label(_("Spacing"));
     positioning_item->add(*positioning_button);
 
     auto positioning_popover = Gtk::manage(new Gtk::Popover(*positioning_button));
