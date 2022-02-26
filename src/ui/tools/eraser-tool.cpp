@@ -750,18 +750,10 @@ void EraserTool::_setToAccumulated()
 EraserTool::Error EraserTool::_cutErase(SPItem* item, Geom::OptRect const &eraser_bbox,
                                         std::vector<SPItem *> &survivers)
 {
-    // Unlink a clone before cutting it
-    if (SPUse *use = dynamic_cast<SPUse *>(item)) {
-        item = use->unlink();
-    }
-    if (!item) {
-        return NON_EXISTENT;
-    } else if (dynamic_cast<SPGroup *>(item)) {
-        survivers.push_back(item); // TODO: handle groups in the future
-        return ERROR_GROUP;
-    } else if (dynamic_cast<SPImage *>(item)) {
+    // If the item cannot be cut, preserve it
+    if (Error error = EraserTool::_uncuttableItemType(item)) {
         survivers.push_back(item);
-        return RASTER_IMAGE;
+        return error;
     }
 
     Geom::OptRect bbox = item->documentVisualBounds();
@@ -770,17 +762,44 @@ EraserTool::Error EraserTool::_cutErase(SPItem* item, Geom::OptRect const &erase
         return NOT_IN_BOUNDS;
     }
 
-    // The handling of two-node paths is special: in the case of a straight line segment,
-    // the path does not enclose any area and therefore cannot be meaningfully cut out from.
-    // So we leave it as it is and display a warning to the user.
-    if (_isSingleStraightSegment(item)) {
-        survivers.push_back(item);
-        return NO_AREA_PATH;
+    // If the item is a clone, we check if the original is cuttable before unlinking it
+    if (SPUse *use = dynamic_cast<SPUse *>(item)) {
+        int depth = use->cloneDepth();
+        if (depth < 0) {
+            survivers.push_back(item);
+            return NON_EXISTENT;
+        }
+        // We recurse into the chain of uses until we reach the original item
+        SPItem *original_item = item;
+        for (int i = 0; i < depth; ++i) {
+            SPUse *intermediate_clone = dynamic_cast<SPUse *>(original_item);
+            original_item = intermediate_clone->get_original();
+        }
+        if (Error error = EraserTool::_uncuttableItemType(original_item)) {
+            survivers.push_back(item);
+            return error;
+        }
+        item = use->unlink();
     }
 
     _booleanErase(item, survivers);
-
     return ALL_GOOD;
+}
+
+/** Returns error flags for items that cannot be meaningfully erased in CUT mode */
+EraserTool::Error EraserTool::_uncuttableItemType(SPItem *item)
+{
+    if (!item) {
+        return NON_EXISTENT;
+    } else if (dynamic_cast<SPGroup *>(item)) {
+        return ERROR_GROUP; // TODO: handle groups in the future
+    } else if (dynamic_cast<SPImage *>(item)) {
+        return RASTER_IMAGE;
+    } else if (_isStraightSegment(item)) {
+        return NO_AREA_PATH;
+    } else {
+        return ALL_GOOD;
+    }
 }
 
 /**
@@ -917,37 +936,36 @@ void EraserTool::_clipErase(SPItem *item, SPObject *parent, Geom::OptRect &erase
     }
 }
 
-/** Detects whether the given path is a single straight line segment which encloses no area */
-bool EraserTool::_isSingleStraightSegment(SPItem *path)
+/** Detects whether the given path is a straight line segment which encloses no area
+ or consists of several such segments */
+bool EraserTool::_isStraightSegment(SPItem *path)
 {
     SPPath *as_path = dynamic_cast<SPPath *>(path);
     if (!as_path) {
         return false;
     }
 
-    int const num_nodes = as_path->nodesInPath();
-    if (num_nodes < 2) {
-        return true; // degenerate segment (single M instruction)
-    } else if (num_nodes > 2) {
+    auto const &curve = as_path->curve();
+    if (!curve) {
         return false;
     }
+    auto const &pathvector = curve->get_pathvector();
 
-    // Handle paths with two nodes
-    bool result = false;
-    if (auto curve = as_path->curve()) {
-        if (curve->get_segment_count() == 2 && curve->is_closed()) {
-            auto seg1 = curve->first_segment();
-            auto seg2 = curve->last_segment();
-            if (seg1 && seg2) {
-                result = (seg1->isLineSegment() && seg2->isLineSegment());
-            }
-        } else if (curve->get_segment_count() == 1) {
-            if (auto seg = curve->first_segment()) {
-                result = seg->isLineSegment();
+    // Check if all segments are straight and collinear
+    for (auto const &path : pathvector) {
+        Geom::Point initial_tangent = path.front().unitTangentAt(0.0);
+        for (auto const &segment : path) {
+            if (!segment.isLineSegment()) {
+                return false;
+            } else {
+                Geom::Point dir = segment.unitTangentAt(0.0);
+                if (!Geom::are_near(dir, initial_tangent) && !Geom::are_near(-dir, initial_tangent)) {
+                    return false;
+                }
             }
         }
     }
-    return result;
+    return true;
 }
 
 void EraserTool::_addCap(SPCurve &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
