@@ -10,6 +10,8 @@
 
 #include <iomanip>
 #include <sstream>
+#include <unordered_map>
+#include <boost/functional/hash.hpp>
 
 #include "cursor-utils.h"
 
@@ -32,6 +34,13 @@ using Inkscape::IO::Resource::SYSTEM;
 using Inkscape::IO::Resource::ICONS;
 
 namespace Inkscape {
+
+// SVG cursor unique ID/key
+typedef std::tuple<std::string, std::string, std::string, guint32, guint32, double, double, bool, int> Key;
+
+struct KeyHasher {
+    std::size_t operator () (const Key& k) const { return boost::hash_value(k); }
+};
 
 /**
  * Loads an SVG cursor from the specified file name.
@@ -72,6 +81,34 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
     // Our default
     theme_names.emplace_back("hicolor");
 
+    // quantize opacity to limit number of cursor variations we generate
+    fill_opacity   = std::floor(std::clamp(fill_opacity,   0.0, 1.0) * 100) / 100;
+    stroke_opacity = std::floor(std::clamp(stroke_opacity, 0.0, 1.0) * 100) / 100;
+
+    const auto enable_drop_shadow = prefs->getBool("/options/cursor-drop-shadow", true);
+
+    // Find the rendered size of the icon.
+    int scale = 1;
+    bool cursor_scaling = false;
+#ifndef GDK_WINDOWING_QUARTZ
+    // Default cursor size (get_default_cursor_size()) fixed to 32 on Quartz. Cursor scaling handled elsewhere.
+
+    cursor_scaling = prefs->getBool("/options/cursorscaling"); // Fractional scaling is broken but we can't detect it.
+    if (cursor_scaling) {
+        scale = window->get_scale_factor(); // Adjust for HiDPI screens.
+    }
+#endif
+    static std::unordered_map<Key, Glib::RefPtr<Gdk::Cursor>, KeyHasher> cursor_cache;
+    Key cursor_key;
+
+    const auto cache_enabled = prefs->getBool("/options/cache_svg_cursors", true);
+    if (cache_enabled) {
+        // construct a key
+        cursor_key = std::make_tuple(std::string(theme_names[0]), std::string(theme_names[1]), file_name, fill, stroke, fill_opacity, stroke_opacity, enable_drop_shadow, scale);
+        if (auto cursor = cursor_cache[cursor_key]) {
+            return cursor;
+        }
+    }
 
     // Find theme paths.
     auto screen = display->get_default_screen();
@@ -130,19 +167,6 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
     root->changeCSS(css, "style");
     sp_repr_css_attr_unref(css);
 
-    // Find the rendered size of the icon.
-    int scale = 1;
-    bool cursor_scaling = false;
-#ifndef GDK_WINDOWING_QUARTZ
-    // Default cursor size (get_default_cursor_size()) fixed to 32 on Quartz. Cursor scaling handled elsewhere.
-
-    cursor_scaling = prefs->getBool("/options/cursorscaling"); // Fractional scaling is broken but we can't detect it.
-    if (cursor_scaling) {
-        scale = window->get_scale_factor(); // Adjust for HiDPI screens.
-    }
-#endif
-
-    auto enable_drop_shadow = prefs->getBool("/options/cursor-drop-shadow", true);
     if (!enable_drop_shadow) {
         // turn off drop shadow, if any
         Glib::ustring shadow("drop-shadow");
@@ -203,6 +227,11 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
     // Explicit delete required for SPDocument to be freed
     // see https://gitlab.com/inkscape/inkscape/-/issues/2723
     delete document.release();
+
+    if (cache_enabled) {
+        cursor_cache[cursor_key] = cursor;
+    }
+
     return cursor;
 }
 
