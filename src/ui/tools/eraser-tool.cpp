@@ -819,6 +819,7 @@ void EraserTool::_booleanErase(SPItem *erasee, std::vector<SPItem *> &survivers)
         operands.pathUnion(true, true);
     }
     operands.add(erasee);
+    operands.removeLPESRecursive(true);
 
     _handleStrokeStyle(erasee);
 
