@@ -34,69 +34,57 @@
 #include "ui/icon-names.h"
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 
-    /*
-     *    Sort items by their x coordinates, taking account of y (keeps rows intact)
-     *
-     *    <0 *elem1 goes before *elem2
-     *    0  *elem1 == *elem2
-     *    >0  *elem1 goes after *elem2
-     */
-    static bool sp_compare_x_position(SPItem *first, SPItem *second)
-    {
-        using Geom::X;
-        using Geom::Y;
 
-        Geom::OptRect a = first->documentVisualBounds();
-        Geom::OptRect b = second->documentVisualBounds();
+/**
+ * Sort ObjectSet by an existing grid arrangement
+ *
+ * This is based on this paper here: DOI:10.1049/iet-ipr.2015.0126
+ *
+ * @param items - The unsorted object set to sort.
+ * @returns a new grid-sorted std::vector of SPItems.
+ */
+static std::vector<SPItem *> grid_item_sort(Inkscape::ObjectSet *items)
+{
+    std::vector<SPItem *> results;
+    Inkscape::ObjectSet rest;
 
-        if ( !a || !b ) {
-            // FIXME?
-            return false;
+    // 1. Find top Y position
+    auto target = items->visualBounds()->min()[Geom::Y];
+
+    // 2. Loop through all remaining items
+    for (auto item : items->items()) {
+        // Items without visual bounds are completely ignored.
+        if (auto item_box = item->desktopVisualBounds()) {
+            auto radius = item_box->height() / 2;
+            auto min = item_box->min()[Geom::Y] - radius;
+            auto max = item_box->max()[Geom::Y] - radius;
+
+            if (max > target && min < target) {
+                // 2a. if the item's radius falls on the Y position above
+                results.push_back(item);
+            } else {
+                // 2b. Save items not in this row for later
+                rest.add(item);
+            }
         }
-
-        double const a_height = a->dimensions()[Y];
-        double const b_height = b->dimensions()[Y];
-
-        bool a_in_b_vert = false;
-        if ((a->min()[Y] < b->min()[Y] + 0.1) && (a->min()[Y] > b->min()[Y] - b_height)) {
-            a_in_b_vert = true;
-        } else if ((b->min()[Y] < a->min()[Y] + 0.1) && (b->min()[Y] > a->min()[Y] - a_height)) {
-            a_in_b_vert = true;
-        } else if (b->min()[Y] == a->min()[Y]) {
-            a_in_b_vert = true;
-        } else {
-            a_in_b_vert = false;
-        }
-
-        if (!a_in_b_vert) { // a and b are not in the same row
-            return (a->min()[Y] < b->min()[Y]);
-        }
-        return (a->min()[X] < b->min()[X]);
     }
 
-    /*
-     *    Sort items by their y coordinates.
-     */
-    static bool sp_compare_y_position(SPItem *first, SPItem *second)
-    {
-        Geom::OptRect a = first->documentVisualBounds();
-        Geom::OptRect b = second->documentVisualBounds();
+    // 3. Sort this single row according to the X position
+    std::sort(results.begin(), results.end(), [](SPItem *a, SPItem *b) {
+        // These boxes always exist because of the above filtering.
+        return (a->desktopVisualBounds()->min()[Geom::X] < b->desktopVisualBounds()->min()[Geom::X]);
+    });
 
-        if ( !a || !b ) {
-            // FIXME?
-            return false;
-        }
-
-        if (a->min()[Geom::Y] > b->min()[Geom::Y]) {
-            return false;
-        }
-        if (a->min()[Geom::Y] < b->min()[Geom::Y]) {
-            return true;
-        }
-
-        return false;
+    if (results.size() == 0) {
+        g_warning("Bad grid detection when sorting items!");
+    } else if (!rest.isEmpty()) {
+        // 4. If there's any remaining, run this function again.
+        auto sorted_rest = grid_item_sort(&rest);
+        results.reserve(items->size());
+        results.insert(results.end(), sorted_rest.begin(), sorted_rest.end());
     }
-
+    return results;
+}
 
     namespace Inkscape {
     namespace UI {
@@ -186,16 +174,10 @@
 
 
         // require the sorting done before we can calculate row heights etc.
-
         g_return_if_fail(selection);
-        std::vector<SPItem*> sorted(selection->items().begin(), selection->items().end());
-        sort(sorted.begin(),sorted.end(),sp_compare_y_position);
-        sort(sorted.begin(),sorted.end(),sp_compare_x_position);
-
+        auto sorted = grid_item_sort(selection);
 
         // Calculate individual Row and Column sizes if necessary
-
-
             cnt=0;
             const std::vector<SPItem*> sizes(sorted);
             for (auto item : sizes) {
