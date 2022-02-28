@@ -1001,14 +1001,12 @@ void EraserTool::_accumulate()
 {
     // construct a crude outline of the eraser's path.
     // this desperately needs to be rewritten to use the path outliner...
-    if (cal1->is_empty() || cal2->is_empty()) {
+    if (!cal1->get_segment_count() || !cal2->get_segment_count()) {
         return;
     }
-    accumulated->reset(); /*  Is this required ?? */
+
     auto rev_cal2 = cal2->create_reverse();
 
-    g_assert(cal1->get_segment_count() > 0);
-    g_assert(rev_cal2->get_segment_count() > 0);
     g_assert(!cal1->first_path()->closed());
     g_assert(!rev_cal2->first_path()->closed());
 
