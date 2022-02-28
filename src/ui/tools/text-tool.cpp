@@ -670,11 +670,14 @@ bool TextTool::root_handler(GdkEvent* event) {
             if ((this->text) || (this->nascent_object)) {
                 // there is an active text object in this context, or a new object was just created
 
-                if (this->unimode || !this->imc
-                    || (MOD__CTRL(event) && MOD__SHIFT(event))    // input methods tend to steal this for unimode,
-                                                    // but we have our own so make sure they don't swallow it
+                // Input methods often use Ctrl+Shift+U for preediting (unimode).
+                // Override it so we can use our unimode.
+                bool preedit_activation = (MOD__CTRL(event) && MOD__SHIFT(event) && !MOD__ALT(event))
+                                          && (group0_keyval == GDK_KEY_U || group0_keyval == GDK_KEY_u);
+
+                if (this->unimode || !this->imc || preedit_activation
                     || !gtk_im_context_filter_keypress(this->imc, (GdkEventKey*) event)) {
-                    //IM did not consume the key, or we're in unimode
+                    // IM did not consume the key, or we're in unimode
 
                     if (!MOD__CTRL_ONLY(event) && this->unimode) {
                             /* TODO: ISO 14755 (section 3 Definitions) says that we should also
