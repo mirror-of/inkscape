@@ -1734,10 +1734,6 @@ guint32 pixbuf_from_argb32(guint32 c, guint32 bgcolor)
     guint32 b = (c & 0x000000ff);
 
     if (a != 0) {
-        assert(r <= a);
-        assert(g <= a);
-        assert(b <= a);
-
         r = unpremul_alpha(r, a);
         g = unpremul_alpha(g, a);
         b = unpremul_alpha(b, a);

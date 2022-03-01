@@ -203,7 +203,8 @@ premul_alpha(const guint32 color, const guint32 alpha)
 G_GNUC_CONST inline guint32
 unpremul_alpha(const guint32 color, const guint32 alpha)
 {
-    // NOTE: you must check for alpha != 0 yourself.
+    if (color >= alpha)
+        return 0xff;
     return (255 * color + alpha/2) / alpha;
 }
 
