@@ -17,6 +17,7 @@
 //#define DEBUG_GRID_ARRANGE 1
 
 #include "ui/dialog/grid-arrange-tab.h"
+#include <numeric>
 #include <glibmm/i18n.h>
 
 #include <gtkmm/grid.h>
@@ -115,150 +116,83 @@ static std::vector<SPItem *> grid_item_sort(Inkscape::ObjectSet *items)
 
     void GridArrangeTab::arrange()
     {
-
-        int cnt,row_cnt,col_cnt,a,row,col;
-        double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y;
-        double total_col_width,total_row_height;
-        col_width = 0;
-        row_height = 0;
-        total_col_width=0;
-        total_row_height=0;
-
         // check for correct numbers in the row- and col-spinners
         on_col_spinbutton_changed();
         on_row_spinbutton_changed();
 
         // set padding to manual values
-        paddingx = XPadding.getValue("px");
-        paddingy = YPadding.getValue("px");
-
-        std::vector<double> row_heights;
-        std::vector<double> col_widths;
-        std::vector<double> row_ys;
-        std::vector<double> col_xs;
-
+        double paddingx = XPadding.getValue("px");
+        double paddingy = YPadding.getValue("px");
         int NoOfCols = NoOfColsSpinner.get_value_as_int();
         int NoOfRows = NoOfRowsSpinner.get_value_as_int();
 
-        width = 0;
-        for (a=0;a<NoOfCols; a++){
-            col_widths.push_back(width);
-        }
-
-        height = 0;
-        for (a=0;a<NoOfRows; a++){
-            row_heights.push_back(height);
-        }
-        grid_left = 99999;
-        grid_top = 99999;
-
         SPDesktop *desktop = Parent->getDesktop();
         desktop->getDocument()->ensureUpToDate();
-
         Inkscape::Selection *selection = desktop->getSelection();
-        std::vector<SPItem*> items;
-        if (selection) {
-            items.insert(items.end(), selection->items().begin(), selection->items().end());
-        }
+        if (!selection) return;
 
-        for(auto item : items){
-            Geom::OptRect b = item->documentVisualBounds();
-            if (!b) {
-                continue;
-            }
-
-            width = b->dimensions()[Geom::X];
-            height = b->dimensions()[Geom::Y];
-
-            if (b->min()[Geom::X] < grid_left) {
-                grid_left = b->min()[Geom::X];
-            }
-            if (b->min()[Geom::Y] < grid_top) {
-                grid_top = b->min()[Geom::Y];
-            }
-            if (width > col_width) {
-                col_width = width;
-            }
-            if (height > row_height) {
-                row_height = height;
-            }
-        }
-
+        auto sel_box = selection->documentBounds(SPItem::VISUAL_BBOX);
+        double grid_left = sel_box->min()[Geom::X];
+        double grid_top = sel_box->min()[Geom::Y];
 
         // require the sorting done before we can calculate row heights etc.
-        g_return_if_fail(selection);
         auto sorted = grid_item_sort(selection);
 
         // Calculate individual Row and Column sizes if necessary
-            cnt=0;
-            const std::vector<SPItem*> sizes(sorted);
-            for (auto item : sizes) {
-                Geom::OptRect b = item->documentVisualBounds();
-                if (b) {
-                    width = b->dimensions()[Geom::X];
-                    height = b->dimensions()[Geom::Y];
-                    if (width > col_widths[(cnt % NoOfCols)]) {
-                        col_widths[(cnt % NoOfCols)] = width;
-                    }
-                    if (height > row_heights[(cnt / NoOfCols)]) {
-                        row_heights[(cnt / NoOfCols)] = height;
-                    }
+        auto row_heights = std::vector<double>(NoOfRows, 0.0);
+        auto col_widths = std::vector<double>(NoOfCols, 0.0);
+        for(int i = 0; i < sorted.size(); i++) {
+            if (Geom::OptRect box = sorted[i]->documentVisualBounds()) {
+                double width = box->dimensions()[Geom::X];
+                double height = box->dimensions()[Geom::Y];
+                if (width > col_widths[(i % NoOfCols)]) {
+                    col_widths[(i % NoOfCols)] = width;
                 }
-
-                cnt++;
+                if (height > row_heights[(i / NoOfCols)]) {
+                    row_heights[(i / NoOfCols)] = height;
+                }
             }
+        }
 
+        double col_width = *std::max_element(std::begin(col_widths), std::end(col_widths));
+        double row_height = *std::max_element(std::begin(row_heights), std::end(row_heights));
 
         /// Make sure the top and left of the grid don't move by compensating for align values.
-    if (RowHeightButton.get_active()){
-        grid_top = grid_top - (((row_height - row_heights[0]) / 2)*(VertAlign));
-    }
-    if (ColumnWidthButton.get_active()){
-        grid_left = grid_left - (((col_width - col_widths[0]) /2)*(HorizAlign));
-    }
-
-    #ifdef DEBUG_GRID_ARRANGE
-     g_print("\n cx = %f cy= %f gridleft=%f",cx,cy,grid_left);
-    #endif
-
-    // Calculate total widths and heights, allowing for columns and rows non uniformly sized.
-
-    if (ColumnWidthButton.get_active()){
-        total_col_width = col_width * NoOfCols;
-        col_widths.clear();
-        for (a=0;a<NoOfCols; a++){
-            col_widths.push_back(col_width);
+        if (RowHeightButton.get_active()){
+            grid_top = grid_top - (((row_height - row_heights[0]) / 2)*(VertAlign));
         }
-    } else {
-        for (a = 0; a < (int)col_widths.size(); a++)
-        {
-          total_col_width += col_widths[a] ;
+        if (ColumnWidthButton.get_active()){
+            grid_left = grid_left - (((col_width - col_widths[0]) /2)*(HorizAlign));
         }
-    }
 
-    if (RowHeightButton.get_active()){
-        total_row_height = row_height * NoOfRows;
-        row_heights.clear();
-        for (a=0;a<NoOfRows; a++){
-            row_heights.push_back(row_height);
+        // Calculate total widths and heights, allowing for columns and rows non uniformly sized.
+        double last_col_padding = 0.0;
+        double total_col_width = 0.0;
+        if (ColumnWidthButton.get_active()){
+            total_col_width = col_width * NoOfCols;
+            // Remember the amount of padding the box will lose on the right side
+            last_col_padding = (col_width - col_widths[NoOfCols-1]) / 2;
+            std::fill(col_widths.begin(), col_widths.end(), col_width);
+        } else {
+            total_col_width = std::accumulate(col_widths.begin(), col_widths.end(), 0);
         }
-    } else {
-        for (a = 0; a < (int)row_heights.size(); a++)
-        {
-          total_row_height += row_heights[a] ;
+
+        double last_row_padding = 0.0;
+        double total_row_height = 0.0;
+        if (RowHeightButton.get_active()){
+            total_row_height = row_height * NoOfRows;
+            // Remember the amount of padding the box will lose on the bottom side
+            last_row_padding = (row_height - row_heights[NoOfRows-1]) / 2;
+            std::fill(row_heights.begin(), row_heights.end(), row_height);
+        } else {
+            total_row_height = std::accumulate(row_heights.begin(), row_heights.end(), 0);
         }
-    }
 
-
-    Geom::OptRect sel_bbox = selection->visualBounds();
-    // Fit to bbox, calculate padding between rows accordingly.
-    if ( sel_bbox && !SpaceManualRadioButton.get_active() ){
-#ifdef DEBUG_GRID_ARRANGE
-g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_height,total_col_width, b.extent(Geom::X), b.extent(Geom::Y));
-#endif
-        paddingx = (sel_bbox->width() - total_col_width) / (NoOfCols -1);
-        paddingy = (sel_bbox->height() - total_row_height) / (NoOfRows -1);
-    }
+        // Fit to bbox, calculate padding between rows accordingly.
+        if (SpaceByBBoxRadioButton.get_active()) {
+            paddingx = (sel_box->width() - total_col_width + last_col_padding) / (NoOfCols -1);
+            paddingy = (sel_box->height() - total_row_height + last_row_padding) / (NoOfRows -1);
+        }
 
 /*
     Horizontal align  - Left    = 0
@@ -276,46 +210,41 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
 */
 
     // Calculate row and column x and y coords required to allow for columns and rows which are non uniformly sized.
+        std::vector<double> col_xs = {0.0};
+        for (int col=1; col < NoOfCols; col++) {
+            col_xs.push_back(col_widths[col-1] + paddingx + col_xs[col-1]);
+        }
 
-    for (a=0;a<NoOfCols; a++){
-        if (a<1) col_xs.push_back(0);
-        else col_xs.push_back(col_widths[a-1]+paddingx+col_xs[a-1]);
-    }
+        std::vector<double> row_ys = {0.0};
+        for (int row=1; row < NoOfRows; row++) {
+            row_ys.push_back(row_heights[row-1] + paddingy + row_ys[row-1]);
+        }
 
-
-    for (a=0;a<NoOfRows; a++){
-        if (a<1) row_ys.push_back(0);
-        else row_ys.push_back(row_heights[a-1]+paddingy+row_ys[a-1]);
-    }
-
-    cnt=0;
+    int cnt = 0;
     std::vector<SPItem*>::iterator it = sorted.begin();
-    for (row_cnt=0; ((it != sorted.end()) && (row_cnt<NoOfRows)); ++row_cnt) {
+    for (int row_cnt=0; ((it != sorted.end()) && (row_cnt<NoOfRows)); ++row_cnt) {
 
              std::vector<SPItem *> current_row;
-             col_cnt = 0;
+             int col_cnt = 0;
              for(;it!=sorted.end()&&col_cnt<NoOfCols;++it) {
                  current_row.push_back(*it);
                  col_cnt++;
              }
 
              for (auto item:current_row) {
-                 Geom::OptRect b = item->documentVisualBounds();
-                 Geom::Point min;
-                 if (b) {
-                     width = b->dimensions()[Geom::X];
-                     height = b->dimensions()[Geom::Y];
-                     min = b->min();
-                 } else {
-                     width = height = 0;
-                     min = Geom::Point(0, 0);
+                 auto min = Geom::Point(0, 0);
+                 double width, height = 0;
+                 if (auto vbox = item->documentVisualBounds()) {
+                     width = vbox->dimensions()[Geom::X];
+                     height = vbox->dimensions()[Geom::Y];
+                     min = vbox->min();
                  }
 
-                 row = cnt / NoOfCols;
-                 col = cnt % NoOfCols;
+                 int row = cnt / NoOfCols;
+                 int col = cnt % NoOfCols;
 
-                 new_x = grid_left + (((col_widths[col] - width)/2)*HorizAlign) + col_xs[col];
-                 new_y = grid_top + (((row_heights[row] - height)/2)*VertAlign) + row_ys[row];
+                 double new_x = grid_left + (((col_widths[col] - width)/2)*HorizAlign) + col_xs[col];
+                 double new_y = grid_top + (((row_heights[row] - height)/2)*VertAlign) + row_ys[row];
 
                  Geom::Point move = Geom::Point(new_x, new_y) - min;
                  Geom::Affine const affine = Geom::Affine(Geom::Translate(move));
