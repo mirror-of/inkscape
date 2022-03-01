@@ -988,7 +988,6 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
     <property name="is_focus">True</property>
     <property name="can_default">True</property>
     <property name="has_default">True</property>
-    <property name="title" translatable="yes">Inkscape 1.1</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="default_width">700</property>

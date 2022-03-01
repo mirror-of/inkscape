@@ -303,6 +303,7 @@
 ../src/ui/dialog/save-template-dialog.cpp
 ../src/ui/dialog/selectorsdialog.cpp
 ../src/ui/dialog/spellcheck.cpp
+../src/ui/dialog/startup.cpp
 ../src/ui/dialog/styledialog.cpp
 ../src/ui/dialog/svg-fonts-dialog.cpp
 ../src/ui/dialog/svg-preview.cpp

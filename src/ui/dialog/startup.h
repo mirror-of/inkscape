@@ -28,6 +28,7 @@ public:
 
 protected:
     bool on_key_press_event(GdkEventKey* event) override;
+    void on_response(int response_id) override;
 
 private:
     void notebook_next(Gtk::Widget *button);
@@ -45,8 +46,8 @@ private:
     void refresh_theme(Glib::ustring theme_name);
     void refresh_dark_switch();
 
-    void new_now();
-    void load_now();
+    void new_document();
+    void load_document();
     void on_recent_changed();
     void on_kind_changed(Gtk::Widget *tab, guint page_num);
 
