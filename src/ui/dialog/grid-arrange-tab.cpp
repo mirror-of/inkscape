@@ -48,16 +48,28 @@ static std::vector<SPItem *> grid_item_sort(Inkscape::ObjectSet *items)
     std::vector<SPItem *> results;
     Inkscape::ObjectSet rest;
 
-    // 1. Find top Y position
-    auto target = items->visualBounds()->min()[Geom::Y];
+    // 1. Find middle Y position of the largest top object.
+    double box_top = items->visualBounds()->min()[Geom::Y];
+    double last_height = 0.0;
+    double target = box_top;
+    for (auto item : items->items()) {
+        if (auto item_box = item->desktopVisualBounds()) {
+            if (Geom::are_near(item_box->min()[Geom::Y], box_top, 2.0)) {
+                if (item_box->height() > last_height) {
+                    last_height = item_box->height();
+                    target = item_box->midpoint()[Geom::Y];
+                }
+            }
+        }
+    }
 
     // 2. Loop through all remaining items
     for (auto item : items->items()) {
         // Items without visual bounds are completely ignored.
         if (auto item_box = item->desktopVisualBounds()) {
             auto radius = item_box->height() / 2;
-            auto min = item_box->min()[Geom::Y] - radius;
-            auto max = item_box->max()[Geom::Y] - radius;
+            auto min = item_box->midpoint()[Geom::Y] - radius;
+            auto max = item_box->midpoint()[Geom::Y] + radius;
 
             if (max > target && min < target) {
                 // 2a. if the item's radius falls on the Y position above
