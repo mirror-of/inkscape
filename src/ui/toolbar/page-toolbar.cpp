@@ -241,10 +241,9 @@ void PageToolbar::selectionChanged(SPPage *page)
             text_page_label->set_text("");
         }
 
-        // Set the position label
-        gchar *pos = g_strdup_printf(_("%d/%d"), page->getPagePosition(), page_manager.getPageCount());
-        label_page_pos->set_label(pos);
-        g_free(pos);
+        // TRANSLATORS: "%1" is replaced with the page we are on, and "%2" is the total number of pages.
+        auto label = Glib::ustring::compose(_("%1/%2"), page->getPagePosition(), page_manager.getPageCount());
+        label_page_pos->set_label(label);
 
         _page_modified = page->connectModified([=](SPObject *obj, unsigned int flags) {
             if (auto page = dynamic_cast<SPPage *>(obj)) {
@@ -258,7 +257,7 @@ void PageToolbar::selectionChanged(SPPage *page)
         text_page_label->set_text("");
         text_page_label->set_sensitive(false);
         text_page_label->set_placeholder_text(_("Single Page Document"));
-        label_page_pos->set_label("-");
+        label_page_pos->set_label(_("1/-"));
     }
     if (!page_manager.hasPrevPage() && !page_manager.hasNextPage() && !page) {
         sep1->set_visible(false);

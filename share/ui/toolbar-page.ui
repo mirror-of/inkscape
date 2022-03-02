@@ -89,6 +89,7 @@
           <object class="GtkLabel" id="page_pos">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <!--TRANSLATORS: This is a fixed value meaning a single page document-->
             <property name="label" translatable="yes">1/-</property>
           </object>
         </child>
