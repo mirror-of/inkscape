@@ -108,7 +108,7 @@ PenTool::~PenTool() {
     if (this->npoints != 0) {
         // switching context - finish path
         this->ea = nullptr; // unset end anchor if set (otherwise crashes)
-        this->_finish(false);
+        this->_finish(false); // FIXME: this crashes when the window is being closed
     }
 
     if (this->c0) {
@@ -1148,6 +1148,12 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
             ret = _undoLastPoint();
+            break;
+        case GDK_KEY_Z:
+        case GDK_KEY_z:
+            if (event->key.state & INK_GDK_PRIMARY_MASK) {
+                ret = _undoLastPoint();
+            }
             break;
         default:
             break;
