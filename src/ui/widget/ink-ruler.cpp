@@ -311,7 +311,7 @@ Ruler::draw_scale(const::Cairo::RefPtr<::Cairo::Context>& cr_in)
 
             if (_orientation == Gtk::ORIENTATION_HORIZONTAL) {
                 layout->set_text(label);
-                cr->move_to (position+2, border.get_top());
+                cr->move_to (position+4, border.get_top()); // Magic number offset lables
                 layout->show_in_cairo_context(cr);
             } else {
                 cr->move_to (border.get_left(), position);
@@ -323,7 +323,7 @@ Ruler::draw_scale(const::Cairo::RefPtr<::Cairo::Context>& cr_in)
                     int text_height;
                     layout->get_pixel_size(text_width, text_height);
                     cr->move_to(border.get_left() + (aheight-text_width)/2.0 - 1,
-                                position + n*0.7*text_height - 1);
+                                position + n*0.8*text_height + 1);
                     layout->show_in_cairo_context(cr);
                     ++n;
                 }
