@@ -319,23 +319,7 @@ int InkFileExportCmd::do_export_svg(SPDocument *doc, std::string const &filename
 {
     // Start with options that are once per document.
     if (export_text_to_path) {
-        std::vector<SPItem*> items;
-        SPRoot *root = doc->getRoot();
-        doc->ensureUpToDate();
-        for (auto& iter: root->children) {
-            SPItem* item = (SPItem*) &iter;
-            if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
-                continue;
-            }
-
-            te_update_layout_now_recursive(item);
-            items.push_back(item);
-        }
-
-        std::vector<SPItem*> selected;  // Not used
-        std::vector<Inkscape::XML::Node*> to_select;  // Not used
-
-        sp_item_list_to_curves(items, selected, to_select);
+        Inkscape::convert_text_to_curves(doc);
     }
 
     if (export_margin != 0) {

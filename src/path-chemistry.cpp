@@ -36,6 +36,7 @@
 #include "object/object-set.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-path.h"
+#include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "style.h"
 
@@ -448,6 +449,32 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
     }
     
     return did;
+}
+
+/**
+ * Convert all text in the document to path, in-place.
+ */
+void Inkscape::convert_text_to_curves(SPDocument *doc)
+{
+    std::vector<SPItem *> items;
+    doc->ensureUpToDate();
+
+    for (auto &child : doc->getRoot()->children) {
+        auto item = dynamic_cast<SPItem *>(&child);
+        if (!(SP_IS_TEXT(item) ||     //
+              SP_IS_FLOWTEXT(item) || //
+              SP_IS_GROUP(item))) {
+            continue;
+        }
+
+        te_update_layout_now_recursive(item);
+        items.push_back(item);
+    }
+
+    std::vector<SPItem *> selected;               // Not used
+    std::vector<Inkscape::XML::Node *> to_select; // Not used
+
+    sp_item_list_to_curves(items, selected, to_select);
 }
 
 Inkscape::XML::Node *

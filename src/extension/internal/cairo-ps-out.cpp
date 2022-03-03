@@ -23,6 +23,7 @@
 #include "cairo-render-context.h"
 #include "cairo-renderer.h"
 #include "latex-text-renderer.h"
+#include "path-chemistry.h"
 #include <print.h>
 #include "extension/system.h"
 #include "extension/print.h"
@@ -64,6 +65,14 @@ static bool
 ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int level, bool texttopath, bool omittext,
                           bool filtertobitmap, int resolution, const gchar * const exportId, bool exportDrawing, bool exportCanvas, double bleedmargin_px, bool eps = false)
 {
+    if (texttopath) {
+        assert(!omittext);
+        // Cairo's text-to-path method has numerical precision and font matching
+        // issues (https://gitlab.com/inkscape/inkscape/-/issues/1979).
+        // We get better results by using Inkscape's Object-to-Path method.
+        Inkscape::convert_text_to_curves(doc);
+    }
+
     doc->ensureUpToDate();
 
     SPRoot *root = doc->getRoot();

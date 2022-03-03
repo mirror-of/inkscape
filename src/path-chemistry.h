@@ -17,6 +17,7 @@
 #include <vector>
 
 class SPDesktop;
+class SPDocument;
 class SPItem;
 
 namespace Inkscape {
@@ -26,6 +27,7 @@ namespace XML {
 class Node;
 } // namespace XML
 
+void convert_text_to_curves(SPDocument *);
 void copy_object_properties(XML::Node *dest, XML::Node const *src);
 } // namespace Inkscape
 
