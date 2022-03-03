@@ -1484,17 +1484,15 @@ KnotHolderEntityCopyGapY::~KnotHolderEntityCopyGapY()
 void KnotHolderEntityCopyGapX::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
     LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
-    startpos = lpe->gapx_unit;
     lpe->refresh_widgets = true;
-    lpe->gapx.write_to_SVG();
+    sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
 }
 
 void KnotHolderEntityCopyGapY::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
     LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
-    startpos = lpe->gapy_unit;
     lpe->refresh_widgets = true;
-    lpe->gapy.write_to_SVG();
+    sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
 }
 
 void KnotHolderEntityCopyGapX::knot_click(guint state)
