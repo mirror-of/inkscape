@@ -19,7 +19,11 @@
  */
 
 #include <map>
+#include <string>
+
 #include <glibmm/i18n.h>
+#include <glibmm/ustring.h>
+
 #include "ui/icon-names.h"  // INKSCAPE_ICON macro
 
 enum class ScrollProvider {

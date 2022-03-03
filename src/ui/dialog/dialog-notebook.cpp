@@ -278,12 +278,11 @@ DialogNotebook::get_current_scrolledwindow(bool skip_scroll_provider) {
 /**
  * Adds a widget as a new page with a tab.
  */
-void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring label)
+void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring)
 {
     _reload_context = true;
     page.set_vexpand();
 
-    int page_number = _notebook.append_page(page, tab);
     auto container = dynamic_cast<Gtk::Box *>(&page);
     if (container) {
         auto *wrapper = Gtk::manage(new Gtk::ScrolledWindow());
@@ -307,7 +306,7 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
             } else {
                 wrapperbox->pack_end  (*widg, expand, fill, padding);
             }
-        } 
+        }
         wrapper->add(*wrapperbox);
         container->add(*wrapper);
         if (provide_scroll(page)) {
@@ -316,6 +315,8 @@ void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring
             wrapper->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
         }
     }
+
+    int page_number = _notebook.append_page(page, tab);
     _notebook.set_tab_reorderable(page);
     _notebook.set_tab_detachable(page);
     _notebook.show_all();
@@ -454,7 +455,7 @@ DialogWindow* DialogNotebook::pop_tab_callback()
  *
  * BUG: this has inconsistent behavior on Wayland.
  */
-void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
+void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> &context)
 {
     // Remove dropzone highlights
     MyDropZone::remove_highlight_instances();
@@ -506,7 +507,7 @@ void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
     on_size_allocate_scroll(allocation);
 }
 
-void DialogNotebook::on_drag_begin(const Glib::RefPtr<Gdk::DragContext> context)
+void DialogNotebook::on_drag_begin(const Glib::RefPtr<Gdk::DragContext> &context)
 {
     MyDropZone::add_highlight_instances();
     for (auto instance : _instances) {
@@ -607,7 +608,7 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
                         } else if(height < MIN_HEIGHT && policy != Gtk::POLICY_EXTERNAL) {
                             scrolledwindow->property_vscrollbar_policy().set_value(Gtk::POLICY_EXTERNAL);
                         } else {
-                            // we dont need to update break 
+                            // we don't need to update; break
                             break;
                         }
                     }
@@ -842,8 +843,11 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
     }
 }
 
-void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page_number)
+void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint)
 {
+    if (auto container = dynamic_cast<Gtk::Container *>(curr_page)) {
+        container->show_all_children();
+    }
     for (auto const &page : _notebook.get_children()) {
         auto dialogbase = dynamic_cast<DialogBase*>(page);
         if (dialogbase) {
