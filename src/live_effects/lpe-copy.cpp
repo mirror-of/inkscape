@@ -76,7 +76,7 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     num_rows(_("Rows"), _("Number of rows of copies"), "num_rows", &wr, this, 3),
     gapx(_("Gap X"), _("Gap between copies in X"), "gapx", &wr, this, 0.0),
     gapy(_("Gap Y"), _("Gap between copies in Y"), "gapy", &wr, this, 0.0),
-    scale(_("Scale %"), _("Scale copies"), "scale", &wr, this, 100.0),
+    scale(_("Scale %"), _("Scale copies"), "scale", &wr, this, 0.0),
     rotate(_("Rotate°"), _("Rotate copies"), "rotate", &wr, this, 0.0),
     offset(_("Offset %"), _("Offset copies"), "offset", &wr, this, 0.0),
     offset_type(_("Offset type"), _("Offset Type (rows/cols)"), "offset_type", &wr, this, false),
@@ -137,7 +137,7 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     num_rows.param_set_range(1, 9999);
     num_rows.param_make_integer();
     num_rows.param_set_increments(1, 10);
-    scale.param_set_range(1,9999); 
+    scale.param_set_range(-9999,9999); 
     scale.param_make_integer();
     scale.param_set_increments(1, 10);
     gapx.param_set_range(-99999,99999); 
@@ -1075,7 +1075,7 @@ LPECopy::doOnApply(SPLPEItem const* lpeitem)
     if (!gap_bbox) {
         return;
     }
-    scaleok = scale / 100.0;
+    scaleok = (scale + 100) / 100.0;
     double scale_fix = end_scale(scaleok, true);
     (*originalbbox) *= Geom::Translate((*originalbbox).midpoint()).inverse() * Geom::Scale(scale_fix) * Geom::Translate((*originalbbox).midpoint());
     original_width = (*gap_bbox).width();
@@ -1099,7 +1099,7 @@ LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
         prev_unit = unit.get_abbreviation();
         writeParamsToSVG();
     }
-    scaleok = scale / 100.0;
+    scaleok = (scale + 100) / 100.0;
     double seedset = seed.param_get_random_number() - seed.param_get_random_number();
     affinebase = Geom::identity();
     if (random_rotate && rotate) {
