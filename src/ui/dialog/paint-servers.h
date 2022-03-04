@@ -71,6 +71,7 @@ private:
     Gtk::ComboBoxText *dropdown;
     Gtk::IconView *icon_view;
     Gtk::ComboBoxText *target_dropdown;
+    void _cleanupUnused();
 };
 
 } // namespace Dialog

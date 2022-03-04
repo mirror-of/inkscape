@@ -430,9 +430,9 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
     Glib::ustring id = (*iter)[columns->id];
     Glib::ustring paint = (*iter)[columns->paint];
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*iter)[columns->pixbuf];
-    Glib::ustring document_title = (*iter)[columns->document];
-    SPDocument *document = document_map[document_title];
-    SPObject *paint_server = document->getObjectById(id);
+    Glib::ustring hatches_document_title = (*iter)[columns->document];
+    SPDocument *hatches_document = document_map[hatches_document_title];
+    SPObject *paint_server = hatches_document->getObjectById(id);
 
     bool paint_server_exists = false;
     for (auto server : store[CURRENTDOC]->children()) {
@@ -442,6 +442,7 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
         }
     }
 
+    SPDocument *document = getDocument();
     if (!paint_server_exists) {
         // Add the paint server to the current document definition
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -454,7 +455,7 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
         (*iter)[columns->id] = id;
         (*iter)[columns->paint] = paint;
         (*iter)[columns->pixbuf] = pixbuf;
-        (*iter)[columns->document] = document_title;
+        (*iter)[columns->document] = CURRENTDOC;
     }
 
     // Recursively find elements in groups, if any
@@ -469,7 +470,37 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
         item->updateRepr();
     }
 
-    document->collectOrphans();
+    _cleanupUnused();
+}
+
+/** Cleans up hatches that aren't used in the document anymore and updates our store accordingly */
+void PaintServersDialog::_cleanupUnused()
+{
+    auto doc = getDocument();
+    if (!doc) {
+        return;
+    }
+    doc->collectOrphans();
+
+    // We check if the removal of orphans deleted some of our hatches from the defs,
+    // and then remove these from our tree store.
+    std::vector<Gtk::ListStore::Path> removed;
+    auto const id_column = getColumns()->id;
+
+    store[CURRENTDOC]->foreach(
+        [&removed, &id_column, doc](const Gtk::ListStore::Path &path,
+                                    const Gtk::ListStore::iterator &it) -> bool
+        {
+            if (!doc->getObjectById((*it)[id_column])) {
+                removed.push_back(path);
+            }
+            return false;
+        }
+    );
+
+    for (auto &path : removed) {
+        store[CURRENTDOC]->erase(store[CURRENTDOC]->get_iter(path));
+    }
 }
 
 std::vector<SPObject*> PaintServersDialog::extract_elements(SPObject* item)
