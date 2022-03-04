@@ -137,8 +137,7 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     num_rows.param_set_range(1, 9999);
     num_rows.param_make_integer();
     num_rows.param_set_increments(1, 10);
-    scale.param_set_range(-9999,9999); 
-    scale.param_make_integer();
+    scale.param_set_range(-9999.99,9999.99); 
     scale.param_set_increments(1, 10);
     gapx.param_set_range(-99999,99999); 
     gapx.param_set_increments(1.0, 10.0);
@@ -609,15 +608,13 @@ Gtk::Widget * LPECopy::newWidget()
 
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
-    vbox->set_spacing(2);
+    vbox->set_spacing(0);
     Gtk::Widget *combo = nullptr;
     Gtk::Widget *randbutton = nullptr;
     Gtk::Box *containerstart = nullptr;
     Gtk::Box *containerend = nullptr;
     Gtk::Box *movestart = nullptr;
     Gtk::Box *moveend = nullptr;
-    Gtk::Box *transformstart = nullptr;
-    Gtk::Box *transformend = nullptr;
     Gtk::Box *rowcols = nullptr;
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -649,7 +646,7 @@ Gtk::Widget * LPECopy::newWidget()
                         cbox->set_margin_end(3);
                         cbox->set_margin_bottom(3);
                         frame->add(*cbox);
-                        vbox->pack_start(*frame, false, false, 0);
+                        vbox->pack_start(*frame, false, false, 1);
                         vbox1->pack_start(*hbox1, false, false, 0);
                         vbox1->pack_start(*hbox2, false, false, 0);
                         vbox2->pack_start(*hbox3, false, false, 0);
@@ -696,7 +693,7 @@ Gtk::Widget * LPECopy::newWidget()
                     ++it;
                     continue;
                 } else if (param->param_key == "offset") {
-                    movestart->pack_start(*widg, false, false, 1);
+                    movestart->pack_start(*widg, false, false, 2);
                     /* widg->set_halign(Gtk::ALIGN_END); */
                     /* widg->set_hexpand(true); */
                     /* auto widgscalar = dynamic_cast<Inkscape::UI::Widget::RegisteredScalar *>(widg);
@@ -718,11 +715,8 @@ Gtk::Widget * LPECopy::newWidget()
                     container->pack_start(*cols, false, false, 1);
                     cols->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetCols));
                     rows->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetRows));
-                    moveend->pack_start(*container, false, false, 1);
+                    moveend->pack_start(*container, false, false, 2);
                 } else if (param->param_key == "scale") {
-                    Gtk::Box *wrapper = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
-                    transformstart = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
-                    transformend = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                     Gtk::RadioButton::Group group;
                     Gtk::RadioToolButton * cols = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate X")));
@@ -761,13 +755,10 @@ Gtk::Widget * LPECopy::newWidget()
                     cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), true, false));
                     rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), false, true));
                     both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), true, true));
-                    transformstart->pack_start(*widg, false, false, 1);
-                    transformend->pack_start(*container, false, false, 0);
-                    wrapper->pack_start(*transformstart, false, false, 0);
-                    wrapper->pack_start(*transformend, false, false, 0);
-                    vbox->pack_start(*wrapper, true, true, 2);
+                    movestart->pack_start(*widg, false, false, 2);
+                    moveend->pack_start(*container, false, false, 2);
                 } else if (param->param_key == "rotate") {
-                    transformstart->pack_start(*widg, false, false, 1);
+                    movestart->pack_start(*widg, false, false, 2);
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                     Gtk::RadioButton::Group group;
                     Gtk::RadioToolButton * cols = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate X")));
@@ -806,7 +797,7 @@ Gtk::Widget * LPECopy::newWidget()
                     cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), true, false));
                     rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), false, true));
                     both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), true, true));
-                    transformend->pack_start(*container, false, false, 0);
+                    moveend->pack_start(*container, false, false, 2);
                  } else if (param->param_key == "gapx") {
                     Gtk::Box *wrapper = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                     movestart = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
@@ -829,16 +820,16 @@ Gtk::Widget * LPECopy::newWidget()
                     container->pack_start(*normal, false, false, 1);
                     container->pack_start(*randx, false, false, 1);
                     container->pack_end(*combo, false, false, 1);
-                    movestart->pack_start(*widg, false, false, 1);
-                    moveend->pack_start(*container, true, true, 1);
+                    movestart->pack_start(*widg, false, false, 2);
+                    moveend->pack_start(*container, true, true, 2);
                     wrapper->pack_start(*movestart, false, false, 0);
                     wrapper->pack_start(*moveend, false, false, 0);
                     //bwidg->set_hexpand(true);
                     combo->set_halign(Gtk::ALIGN_END);
                     widg->set_halign(Gtk::ALIGN_START);
-                    vbox->pack_start(*wrapper, true, true, 2);
+                    vbox->pack_start(*wrapper, true, true, 0);
                 } else if (param->param_key == "gapy") {
-                    movestart->pack_start(*widg, true, true, 0);
+                    movestart->pack_start(*widg, true, true, 2);
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
                     Gtk::RadioButton::Group group;
                     Gtk::RadioToolButton * normal = Gtk::manage(new Gtk::RadioToolButton(group, _("Normal")));
@@ -857,7 +848,7 @@ Gtk::Widget * LPECopy::newWidget()
                     container->pack_start(*normal, false, false, 1);
                     container->pack_start(*randy, false, false, 1);
                     widg->set_halign(Gtk::ALIGN_START);
-                    moveend->pack_start(*container, false, false, 1);
+                    moveend->pack_start(*container, false, false, 2);
                 } else if (param->param_key == "mirrortrans"){
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL,0));
                     Gtk::Box *containerwraper = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
@@ -872,7 +863,7 @@ Gtk::Widget * LPECopy::newWidget()
                     containerwraper->set_hexpand(true);
                     containerend->set_hexpand(true);
                     containerstart->set_hexpand(true);
-                    vbox->pack_start(*container, true, true, 2);
+                    vbox->pack_start(*container, true, true, 1);
                 } else if (
                     param->param_key == "split_items" ||
                     param->param_key == "link_styles" ||
