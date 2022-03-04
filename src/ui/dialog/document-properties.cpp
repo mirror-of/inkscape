@@ -221,16 +221,17 @@ void set_color(SPDesktop* desktop, Glib::ustring operation, unsigned int rgba, S
 void set_document_dimensions(SPDesktop* desktop, double width, double height, const Inkscape::Util::Unit* unit) {
     if (!desktop) return;
 
-    Inkscape::Util::Quantity w = Inkscape::Util::Quantity(width, unit);
-    Inkscape::Util::Quantity h = Inkscape::Util::Quantity(height, unit);
+    Inkscape::Util::Quantity width_quantity  = Inkscape::Util::Quantity(width, unit);
+    Inkscape::Util::Quantity height_quantity = Inkscape::Util::Quantity(height, unit);
     SPDocument* doc = desktop->getDocument();
     Inkscape::Util::Quantity const old_height = doc->getHeight();
-    bool change_size = true;
-    doc->setWidthAndHeight(w, h, change_size);
+    auto rect = Geom::Rect(Geom::Point(0, 0), Geom::Point(width_quantity.value("px"), height_quantity.value("px")));
+    doc->fitToRect(rect, false);
+
     // The origin for the user is in the lower left corner; this point should remain stationary when
     // changing the page size. The SVG's origin however is in the upper left corner, so we must compensate for this
-    if (change_size && !doc->is_yaxisdown()) {
-        Geom::Translate const vert_offset(Geom::Point(0, (old_height.value("px") - h.value("px"))));
+    if (!doc->is_yaxisdown()) {
+        Geom::Translate const vert_offset(Geom::Point(0, (old_height.value("px") - height_quantity.value("px"))));
         doc->getRoot()->translateChildItems(vert_offset);
     }
     // units: this is most likely not needed, units are part of document size attributes
