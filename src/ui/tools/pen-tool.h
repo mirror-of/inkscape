@@ -43,7 +43,8 @@ public:
         POINT,
         CONTROL,
         CLOSE,
-        STOP
+        STOP,
+        DEAD
     };
 
     Geom::Point p[5];

@@ -100,6 +100,8 @@ PenTool::PenTool(SPDesktop *desktop, std::string prefs_path, const std::string &
     if (prefs->getBool("/tools/freehand/pen/selcue")) {
         this->enableSelectionCue();
     }
+
+    _desktop->connectDestroy([=](SPDesktop *) {state = State::DEAD;});
 }
 
 PenTool::~PenTool() {
@@ -108,7 +110,9 @@ PenTool::~PenTool() {
     if (this->npoints != 0) {
         // switching context - finish path
         this->ea = nullptr; // unset end anchor if set (otherwise crashes)
-        this->_finish(false); // FIXME: this crashes when the window is being closed
+        if (state != State::DEAD) {
+            _finish(false);
+        }
     }
 
     if (this->c0) {
