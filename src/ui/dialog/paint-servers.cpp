@@ -230,7 +230,7 @@ void PaintServersDialog::load_sources()
     }
 
     // Extract out paints from files in share/paint.
-    for (auto &path : get_filenames(Inkscape::IO::Resource::PAINT, { ".svg" })) {
+    for (auto const &path : get_filenames(Inkscape::IO::Resource::PAINT, { ".svg" })) {
         SPDocument *doc = SPDocument::createNewDoc(path.c_str(), FALSE);
         load_document(doc);
     }
@@ -323,7 +323,7 @@ void PaintServersDialog::load_document(SPDocument *document)
     }
 
     // iterating though servers
-    for (auto paint : paints) {
+    for (auto const &paint : paints) {
         Glib::RefPtr<Gdk::Pixbuf> pixbuf(nullptr);
         Glib::ustring id;
         pixbuf = get_pixbuf(document, paint, &id);
@@ -377,9 +377,8 @@ void PaintServersDialog::load_current_document()
         }
     }
 
-    for (auto s : paints) {
+    for (auto const &s : paints) {
         if (std::find(paints_current.begin(), paints_current.end(), s) == paints_current.end()) {
-            std::cout << "missing " << s << std::endl;
             paints_missing.push_back(s);
         }
     }
@@ -388,7 +387,7 @@ void PaintServersDialog::load_current_document()
         return;
     }
 
-    for (auto paint : paints_missing) {
+    for (auto const &paint : paints_missing) {
         Glib::RefPtr<Gdk::Pixbuf> pixbuf(nullptr);
         Glib::ustring id;
         pixbuf = get_pixbuf(getDocument(), paint, &id);
@@ -435,7 +434,7 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
     SPObject *paint_server = hatches_document->getObjectById(id);
 
     bool paint_server_exists = false;
-    for (auto server : store[CURRENTDOC]->children()) {
+    for (auto const &server : store[CURRENTDOC]->children()) {
         if (server[columns->id] == id) {
             paint_server_exists = true;
             break;
@@ -498,7 +497,7 @@ void PaintServersDialog::_cleanupUnused()
         }
     );
 
-    for (auto &path : removed) {
+    for (auto const &path : removed) {
         store[CURRENTDOC]->erase(store[CURRENTDOC]->get_iter(path));
     }
 }
