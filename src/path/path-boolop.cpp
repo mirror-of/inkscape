@@ -217,9 +217,12 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
                     out.insert(out.end(), tmp.begin(), tmp.end()); 
                 } else if (bop == bool_op_slice) {
                     // go to livarot
+                    livarotonly = true;
                 }
             }
-            return out;
+            if (!livarotonly) {
+                return out;
+            }
         } catch (...) {
             g_debug("Path Intersection Graph failed boolops, fallback to livarot");
         }

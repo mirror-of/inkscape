@@ -71,6 +71,7 @@ private:
     EnumParam<fill_typ> fill_type_operand;
     BoolParam swap_operands;
     BoolParam rmv_inner;
+    bool legacytest_livarotonly = false;
     bool onremove = false;
     SPItem *operand = nullptr;
     SPObject *parentlpe = nullptr;
