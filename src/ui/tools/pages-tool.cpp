@@ -255,6 +255,9 @@ bool PagesTool::root_handler(GdkEvent *event)
             break;
         }
         case GDK_BUTTON_RELEASE: {
+            if (event->button.button != 1) {
+                break;
+            }
             auto point_w = Geom::Point(event->button.x, event->button.y);
             auto point_dt = _desktop->w2d(point_w);
             bool snap = !(event->button.state & GDK_SHIFT_MASK);
