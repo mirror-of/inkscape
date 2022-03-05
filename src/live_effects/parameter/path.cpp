@@ -475,7 +475,9 @@ PathParam::linked_delete(SPObject */*deleted*/)
 
 void PathParam::linked_modified(SPObject *linked_obj, guint flags)
 {
-    linked_modified_callback(linked_obj, flags);
+    if (!param_effect->is_load || ownerlocator || !SP_ACTIVE_DESKTOP) {
+        linked_modified_callback(linked_obj, flags);
+    }
 }
 
 void PathParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item)

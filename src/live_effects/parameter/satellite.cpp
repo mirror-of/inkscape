@@ -220,8 +220,10 @@ void SatelliteParam::linked_released(SPObject *released)
 
 void SatelliteParam::linked_modified(SPObject *linked_obj, guint flags)
 {
-    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
-                 SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+    if ((!param_effect->is_load || ownerlocator || !SP_ACTIVE_DESKTOP) &&
+        flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+                 SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) 
+    {
         param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
         last_transform = Geom::identity();
         if (effectType() != CLONE_ORIGINAL) {
