@@ -4,6 +4,7 @@
  */
 /* Authors:
  *   Valentin Ionita
+ *   Rafael Siejakowski <rs@rs-math.net>
  *
  * Copyright (C) 2019 Valentin Ionita
  *
@@ -13,7 +14,6 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
-#include <utility>
 
 #include <giomm/listmodel.h>
 #include <glibmm/regex.h>
@@ -34,7 +34,6 @@
 #include "object/sp-hatch.h"
 #include "object/sp-pattern.h"
 #include "object/sp-root.h"
-#include "object/sp-shape.h"
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/widget/scrollprotected.h"
 
@@ -50,34 +49,18 @@ static Glib::ustring const wrapper = R"=====(
 </svg>
 )=====";
 
-class PaintServersColumns : public Gtk::TreeModel::ColumnRecord {
-  public:
-    Gtk::TreeModelColumn<Glib::ustring> id;
-    Gtk::TreeModelColumn<Glib::ustring> paint;
-    Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> pixbuf;
-    Gtk::TreeModelColumn<Glib::ustring> document;
-
-    PaintServersColumns() {
-    add(id);
-    add(paint);
-    add(pixbuf);
-    add(document);
-    }
-};
-
-PaintServersColumns *PaintServersDialog::getColumns() { return new PaintServersColumns(); }
-
 // Constructor
 PaintServersDialog::PaintServersDialog()
     : DialogBase("/dialogs/paint", "PaintServers")
     , target_selected(true)
     , ALLDOCS(_("All paint servers"))
     , CURRENTDOC(_("Current document"))
+    , columns()
 {
     current_store = ALLDOCS;
 
-    store[ALLDOCS] = Gtk::ListStore::create(*getColumns());
-    store[CURRENTDOC] = Gtk::ListStore::create(*getColumns());
+    store[ALLDOCS] = Gtk::ListStore::create(columns);
+    store[CURRENTDOC] = Gtk::ListStore::create(columns);
 
     // Grid holding the contents
     Gtk::Grid *grid = Gtk::manage(new Gtk::Grid());
@@ -134,13 +117,8 @@ PaintServersDialog::PaintServersDialog()
         sigc::mem_fun(*this, &PaintServersDialog::on_target_changed)
     );
 
-    dropdown->signal_changed().connect(
-        sigc::mem_fun(*this, &PaintServersDialog::on_document_changed)
-    );
-
-    icon_view->signal_item_activated().connect(
-        sigc::mem_fun(*this, &PaintServersDialog::on_item_activated)
-    );
+    dropdown->signal_changed().connect([=]() {onPaintSourceDocumentChanged();});
+    icon_view->signal_item_activated().connect([=](Gtk::TreeModel::Path const &p) {onPaintClicked(p);});
 
     // Get wrapper document (rectangle to fill with paint server).
     preview_document = SPDocument::createNewDocFromMem(wrapper.c_str(), wrapper.length(), true);
@@ -156,15 +134,19 @@ PaintServersDialog::PaintServersDialog()
     preview_document->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     preview_document->ensureUpToDate();
     renderDrawing.setRoot(preview_document->getRoot()->invoke_show(renderDrawing, key, SP_ITEM_SHOW_DISPLAY));
+
+    _loadStockPaints();
 }
 
 void PaintServersDialog::documentReplaced()
 {
-    if (auto document = getDocument()) {
-        document_map[CURRENTDOC] = document;
-        load_sources();
-        load_current_document();
+    auto document = getDocument();
+    if (!document) {
+        return;
     }
+    document_map[CURRENTDOC] = document;
+    _loadFromCurrentDocument();
+    _regenerateAll();
 }
 
 PaintServersDialog::~PaintServersDialog() = default;
@@ -221,22 +203,151 @@ void recurse_find_paint(SPObject* in, std::vector<Glib::ustring>& list)
     }
 }
 
-// Load paint servers from all the files associated
-void PaintServersDialog::load_sources()
+/** Load stock paints from files in share/paint */
+void PaintServersDialog::_loadStockPaints()
 {
-    // Extract paints from the current file
-    if (auto document = getDocument()) {
-        load_document(document);
-    }
+    std::vector<PaintDescription> paints;
 
     // Extract out paints from files in share/paint.
-    for (auto const &path : get_filenames(Inkscape::IO::Resource::PAINT, { ".svg" })) {
-        SPDocument *doc = SPDocument::createNewDoc(path.c_str(), FALSE);
-        load_document(doc);
+    for (auto const &path : get_filenames(Inkscape::IO::Resource::PAINT, {".svg"})) {
+        SPDocument *doc = SPDocument::createNewDoc(path.c_str(), false);
+        _loadPaintsFromDocument(doc, paints);
+    }
+
+    _createPaints(paints);
+}
+
+/** Load paint servers from the <defs> of the current document */
+void PaintServersDialog::_loadFromCurrentDocument()
+{
+    auto document = getDocument();
+    if (!document) {
+        return;
+    }
+
+    std::vector<PaintDescription> paints;
+    _loadPaintsFromDocument(document, paints);
+
+    // There can only be one current document, so we clear the corresponding store
+    store[CURRENTDOC]->clear();
+    _createPaints(paints);
+}
+
+/** Creates a collection of paints from the given vector of descriptions */
+void PaintServersDialog::_createPaints(std::vector<PaintDescription> &collection)
+{
+    // Sort and remove duplicates.
+    auto paints_cmp = [](PaintDescription const &a, PaintDescription const &b) -> bool {
+        return a.url < b.url;
+    };
+    std::sort(collection.begin(), collection.end(), paints_cmp);
+    collection.erase(std::unique(collection.begin(), collection.end()), collection.end());
+
+    for (auto &paint : collection) {
+        _instantiatePaint(paint);
     }
 }
 
-Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, Glib::ustring paint, Glib::ustring *id)
+/** Create a paint from a description and generate its bitmap preview */
+void PaintServersDialog::_instantiatePaint(PaintDescription &paint)
+{
+    if (store.find(paint.doc_title) == store.end()) {
+        store[paint.doc_title] = Gtk::ListStore::create(columns);
+    }
+
+    Glib::ustring id;
+    paint.bitmap = get_pixbuf(paint.source_document, paint.url, id);
+    if (!paint.bitmap) {
+        return;
+    }
+
+    Gtk::ListStore::iterator iter = store[paint.doc_title]->append();
+    (*iter)[columns.id] = id;
+    (*iter)[columns.paint] = paint.url;
+    (*iter)[columns.pixbuf] = paint.bitmap;
+    (*iter)[columns.document] = paint.doc_title;
+
+    if (document_map.find(paint.doc_title) == document_map.end()) {
+        document_map[paint.doc_title] = paint.source_document;
+        dropdown->append(paint.doc_title);
+    }
+}
+
+/** Returns a PaintDescription for a paint already present in the store */
+PaintDescription PaintServersDialog::_descriptionFromIterator(Gtk::ListStore::iterator const &iter) const
+{
+    Glib::ustring doc_title = (*iter)[columns.document];
+    SPDocument *doc_ptr;
+    try {
+        doc_ptr = document_map.at(doc_title);
+    } catch (std::out_of_range &exception) {
+        doc_ptr = nullptr;
+    }
+    Glib::ustring paint_url = (*iter)[columns.paint];
+    PaintDescription result(doc_ptr, doc_title, std::move(paint_url));
+
+    // Fill in fields that are set only on instantiation
+    result.id = (*iter)[columns.id];
+    result.bitmap = (*iter)[columns.pixbuf];
+    return result;
+}
+
+/** Regenerates the list of all paint servers from the already loaded paints */
+void PaintServersDialog::_regenerateAll()
+{
+    // Save active item
+    bool showing_all = (current_store == ALLDOCS);
+    Gtk::TreePath active;
+    if (showing_all) {
+        std::vector<Gtk::TreePath> selected = icon_view->get_selected_items();
+        if (selected.empty()) {
+            showing_all = false;
+        } else {
+            active = selected[0];
+        }
+    }
+
+    std::vector<PaintDescription> all_paints;
+
+    for (auto const &[doc, paint_list] : store) {
+        if (doc == ALLDOCS) {
+            continue; // ignore the target store
+        }
+        paint_list->foreach_iter([&](Gtk::ListStore::iterator const &paint) -> bool
+        {
+            all_paints.push_back(_descriptionFromIterator(paint));
+            return false;
+        });
+    }
+
+    // Sort and remove duplicates. When the duplicate entry is from the current document,
+    // we remove it preferentially, keeping the stock paint if available.
+    std::sort(all_paints.begin(), all_paints.end(),
+        [=](PaintDescription const &a, PaintDescription const &b) -> bool
+        {
+            return (a.url < b.url) || ((a.url == b.url) && a.doc_title != CURRENTDOC);
+        });
+    all_paints.erase(std::unique(all_paints.begin(), all_paints.end()), all_paints.end());
+
+    store[ALLDOCS]->clear();
+
+    // Add paints from the cleaned up list to the store
+    for (auto &&paint : all_paints) {
+        Gtk::ListStore::iterator iter = store[ALLDOCS]->append();
+        (*iter)[columns.id] = std::move(paint.id);
+        (*iter)[columns.paint] = std::move(paint.url);
+        (*iter)[columns.pixbuf] = std::move(paint.bitmap);
+        (*iter)[columns.document] = std::move(paint.doc_title);
+    }
+
+    // Restore active item
+    if (showing_all) {
+        icon_view->select_path(active);
+    }
+}
+
+Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, Glib::ustring const &paint,
+                                                         Glib::ustring &id)
 {
 
     SPObject *rect = preview_document->getObjectById("Rect");
@@ -258,7 +369,7 @@ Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, G
     static Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("url\\(#([A-Za-z0-9#._-]*)\\)");
     regex->match(paint, matchInfo);
     if (matchInfo.matches()) {
-        *id = matchInfo.fetch(1);
+        id = matchInfo.fetch(1);
 
         // Delete old paint if necessary
         std::vector<SPObject *> old_paints = preview_document->getObjectsBySelector("defs > *");
@@ -267,9 +378,9 @@ Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, G
         }
 
         // Add new paint
-        SPObject *new_paint = document->getObjectById(*id);
+        SPObject *new_paint = document->getObjectById(id);
         if (!new_paint) {
-            std::cerr << "PaintServersDialog::load_document: cannot find paint server: " << id << std::endl;
+            std::cerr << "PaintServersDialog::get_pixbuf: cannot find paint server: " << id << std::endl;
             return pixbuf;
         }
 
@@ -298,108 +409,24 @@ Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, G
     return pixbuf;
 }
 
-// Load paint server from the given document
-void PaintServersDialog::load_document(SPDocument *document)
+/** @brief Load paint servers from the given source document
+ *  @param document - the source document
+ *  @param output - the paint descriptions will be added to this vector */
+void PaintServersDialog::_loadPaintsFromDocument(SPDocument *document, std::vector<PaintDescription> &output)
 {
-    PaintServersColumns *columns = getColumns();
     Glib::ustring document_title;
     if (!document->getRoot()->title()) {
         document_title = CURRENTDOC;
     } else {
         document_title = Glib::ustring(document->getRoot()->title());
     }
-    bool has_server_elements = false;
 
     // Find all paints
-    std::vector<Glib::ustring> paints;
-    recurse_find_paint(document->getRoot(), paints);
+    std::vector<Glib::ustring> urls;
+    recurse_find_paint(document->getRoot(), urls);
 
-    // Sort and remove duplicates.
-    std::sort(paints.begin(), paints.end());
-    paints.erase(std::unique(paints.begin(), paints.end()), paints.end());
-
-    if (paints.size() && store.find(document_title) == store.end()) {
-        store[document_title] = Gtk::ListStore::create(*getColumns());
-    }
-
-    // iterating though servers
-    for (auto const &paint : paints) {
-        Glib::RefPtr<Gdk::Pixbuf> pixbuf(nullptr);
-        Glib::ustring id;
-        pixbuf = get_pixbuf(document, paint, &id);
-        if (!pixbuf) {
-            continue;
-        }
-
-        // Save as a ListStore column
-        Gtk::ListStore::iterator iter = store[ALLDOCS]->append();
-        (*iter)[columns->id] = id;
-        (*iter)[columns->paint] = paint;
-        (*iter)[columns->pixbuf] = pixbuf;
-        (*iter)[columns->document] = document_title;
-
-        iter = store[document_title]->append();
-        (*iter)[columns->id] = id;
-        (*iter)[columns->paint] = paint;
-        (*iter)[columns->pixbuf] = pixbuf;
-        (*iter)[columns->document] = document_title;
-        has_server_elements = true;
-    }
-
-    if (has_server_elements && document_map.find(document_title) == document_map.end()) {
-        document_map[document_title] = document;
-        dropdown->append(document_title);
-    }
-}
-
-void PaintServersDialog::load_current_document()
-{
-    std::unique_ptr<PaintServersColumns> columns(getColumns());
-    Glib::RefPtr<Gtk::ListStore> current = store[CURRENTDOC];
-
-    std::vector<Glib::ustring> paints;
-    std::vector<Glib::ustring> paints_current;
-    std::vector<Glib::ustring> paints_missing;
-    recurse_find_paint(getDocument()->getDefs(), paints);
-
-    std::sort(paints.begin(), paints.end());
-    paints.erase(std::unique(paints.begin(), paints.end()), paints.end());
-
-    // Delete the server from the store if it doesn't exist in the current document
-    for (auto iter = current->children().begin(); iter != current->children().end();) {
-        Gtk::TreeRow server = *iter;
-
-        if (std::find(paints.begin(), paints.end(), server[columns->paint]) == paints.end()) {
-            iter = current->erase(server);
-        } else {
-            paints_current.push_back(server[columns->paint]);
-            iter++;
-        }
-    }
-
-    for (auto const &s : paints) {
-        if (std::find(paints_current.begin(), paints_current.end(), s) == paints_current.end()) {
-            paints_missing.push_back(s);
-        }
-    }
-
-    if (!paints_missing.size()) {
-        return;
-    }
-
-    for (auto const &paint : paints_missing) {
-        Glib::RefPtr<Gdk::Pixbuf> pixbuf(nullptr);
-        Glib::ustring id;
-        pixbuf = get_pixbuf(getDocument(), paint, &id);
-        if (!pixbuf) {
-            continue;
-        }
-
-        Gtk::ListStore::iterator iter = current->append();
-        (*iter)[columns->id] = id;
-        (*iter)[columns->paint] = paint;
-        (*iter)[columns->pixbuf] = pixbuf;
-        (*iter)[columns->document] = CURRENTDOC;
+    for (auto const &url : urls) {
+        output.emplace_back(document, document_title, std::move(url));
     }
 }
 
@@ -408,34 +435,35 @@ void PaintServersDialog::on_target_changed()
     target_selected = !target_selected;
 }
 
-void PaintServersDialog::on_document_changed()
+/** Handles the change of the dropdown for selecting paint sources */
+void PaintServersDialog::onPaintSourceDocumentChanged()
 {
     current_store = dropdown->get_active_text();
     icon_view->set_model(store[current_store]);
 }
 
-void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
+/** Event handler for when a paint entry in the dialog has been activated */
+void PaintServersDialog::onPaintClicked(Gtk::TreeModel::Path const &path)
 {
     // Get the current selected elements
     Selection *selection = getSelection();
     std::vector<SPObject*> const selected_items(selection->items().begin(), selection->items().end());
 
-    if (!selected_items.size()) {
+    if (selected_items.empty()) {
         return;
     }
 
-    PaintServersColumns *columns = getColumns();
     Gtk::ListStore::iterator iter = store[current_store]->get_iter(path);
-    Glib::ustring id = (*iter)[columns->id];
-    Glib::ustring paint = (*iter)[columns->paint];
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*iter)[columns->pixbuf];
-    Glib::ustring hatches_document_title = (*iter)[columns->document];
+    Glib::ustring id = (*iter)[columns.id];
+    Glib::ustring paint = (*iter)[columns.paint];
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*iter)[columns.pixbuf];
+    Glib::ustring hatches_document_title = (*iter)[columns.document];
     SPDocument *hatches_document = document_map[hatches_document_title];
     SPObject *paint_server = hatches_document->getObjectById(id);
 
     bool paint_server_exists = false;
     for (auto const &server : store[CURRENTDOC]->children()) {
-        if (server[columns->id] == id) {
+        if (server[columns.id] == id) {
             paint_server_exists = true;
             break;
         }
@@ -451,10 +479,10 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
 
         // Add the pixbuf to the current document store
         iter = store[CURRENTDOC]->append();
-        (*iter)[columns->id] = id;
-        (*iter)[columns->paint] = paint;
-        (*iter)[columns->pixbuf] = pixbuf;
-        (*iter)[columns->document] = CURRENTDOC;
+        (*iter)[columns.id] = id;
+        (*iter)[columns.paint] = paint;
+        (*iter)[columns.pixbuf] = pixbuf;
+        (*iter)[columns.document] = CURRENTDOC;
     }
 
     // Recursively find elements in groups, if any
@@ -472,7 +500,7 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
     _cleanupUnused();
 }
 
-/** Cleans up hatches that aren't used in the document anymore and updates our store accordingly */
+/** Cleans up paints that aren't used in the document anymore and updates our store accordingly */
 void PaintServersDialog::_cleanupUnused()
 {
     auto doc = getDocument();
@@ -481,16 +509,15 @@ void PaintServersDialog::_cleanupUnused()
     }
     doc->collectOrphans();
 
-    // We check if the removal of orphans deleted some of our hatches from the defs,
-    // and then remove these from our tree store.
+    // We check if the removal of orphans deleted some paints for which we're still
+    // holding representations in the dialog. If that happened, we must remove these
+    // entries from our list store.
     std::vector<Gtk::ListStore::Path> removed;
-    auto const id_column = getColumns()->id;
 
     store[CURRENTDOC]->foreach(
-        [&removed, &id_column, doc](const Gtk::ListStore::Path &path,
-                                    const Gtk::ListStore::iterator &it) -> bool
+        [=, &removed](const Gtk::ListStore::Path &path, const Gtk::ListStore::iterator &it) -> bool
         {
-            if (!doc->getObjectById((*it)[id_column])) {
+            if (!doc->getObjectById((*it)[columns.id])) {
                 removed.push_back(path);
             }
             return false;
@@ -500,8 +527,13 @@ void PaintServersDialog::_cleanupUnused()
     for (auto const &path : removed) {
         store[CURRENTDOC]->erase(store[CURRENTDOC]->get_iter(path));
     }
+
+    if (!removed.empty()) {
+        _regenerateAll();
+    }
 }
 
+/** Recursively extracts elements from groups, if any */
 std::vector<SPObject*> PaintServersDialog::extract_elements(SPObject* item)
 {
     std::vector<SPObject*> elements;
