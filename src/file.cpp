@@ -929,6 +929,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             clipboard = obj;
             continue;
         }
+
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
         target_parent->addChild(obj_copy, node_after);
         node_after = obj_copy;
@@ -1047,6 +1048,10 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
     }
 
     if (doc != nullptr) {
+        // Always preserve any imported text kerning / formatting
+        auto root_repr = in_doc->getReprRoot();
+        root_repr->setAttribute("xml:space", "preserve");
+
         Inkscape::XML::rebase_hrefs(doc, in_doc->getDocumentBase(), false);
         Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
         prevent_id_clashes(doc, in_doc, true);
@@ -1183,7 +1188,6 @@ void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
     // Make sure objects have visualBounds created for import
     that_doc->ensureUpToDate();
 
-    std::vector <SPItem *> imported_items;
     for (auto &that_page : that_pm.getPages()) {
         this_pm.newPage(that_page);
     }

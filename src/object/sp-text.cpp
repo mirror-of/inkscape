@@ -247,6 +247,8 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr) {
             repr = xml_doc->createElement("svg:text");
+	    // we preserve spaces in the text objects we create
+            repr->setAttribute("xml:space", "preserve");
         }
 
         std::vector<Inkscape::XML::Node *> l;

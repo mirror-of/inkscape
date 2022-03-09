@@ -85,7 +85,6 @@ SvgBuilder::SvgBuilder(SPDocument *document, gchar *docname, XRef *xref)
     _xref = xref;
     _xml_doc = _doc->getReprDoc();
     _container = _root = _doc->getReprRoot();
-    _root->setAttribute("xml:space", "preserve");
     _init();
 
     // Set default preference settings
@@ -1291,6 +1290,10 @@ void SvgBuilder::_flushText() {
     }
 
     Inkscape::XML::Node *text_node = _xml_doc->createElement("svg:text");
+
+    // we preserve spaces in the text objects we create, this applies to any descendant
+    text_node->setAttribute("xml:space", "preserve");
+
     // Set text matrix
     Geom::Affine text_transform(_text_matrix);
     text_transform[4] = first_glyph.position[0];

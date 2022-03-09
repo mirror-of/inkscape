@@ -1617,6 +1617,9 @@ void ClipboardManagerImpl::_createInternalClipboard()
         _doc = _clipboardSPDoc->getReprDoc();
         _root = _clipboardSPDoc->getReprRoot();
 
+        // Preserve ANY copied text kerning
+        _root->setAttribute("xml:space", "preserve");
+
         if (SP_ACTIVE_DOCUMENT) {
             _clipboardSPDoc->setDocumentBase(SP_ACTIVE_DOCUMENT->getDocumentBase());
         }
