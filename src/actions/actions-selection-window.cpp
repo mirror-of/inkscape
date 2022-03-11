@@ -108,24 +108,6 @@ select_none(InkscapeWindow* win)
     Inkscape::SelectionHelper::selectNone(dt);
 }
 
-void
-select_next(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Select next
-    Inkscape::SelectionHelper::selectNext(dt);
-}
-
-void
-select_previous(InkscapeWindow* win)
-{
-    SPDesktop* dt = win->get_desktop();
-
-    // Select previous
-    Inkscape::SelectionHelper::selectPrev(dt);
-}
-
 std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
 {
     // clang-format off
@@ -138,8 +120,7 @@ std::vector<std::vector<Glib::ustring>> raw_selection_dekstop_data =
     {"win.select-same-object-type",             N_("Object Type"),                  "Select",        N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
     {"win.select-invert",                       N_("Invert Selection"),             "Select",        N_("Invert selection (unselect what is selected and select everything else)")},
     {"win.select-none",                         N_("Deselect"),                     "Select",        N_("Deselect any selected objects or nodes")},
-    {"win.select-next",                         N_("Select Next"),                  "Select",        N_("Select next object in stack")},
-    {"win.select-previous",                     N_("Select Previous"),              "Select",        N_("Select previous object in stack")},
+    // DO NOT ADD select-next or select-previous here as their default keys conflict with Gtk's widget navigation.
 
     // clang-format on
 };
@@ -157,8 +138,6 @@ add_actions_select_window(InkscapeWindow* win)
     win->add_action( "select-same-object-type",         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_same_object_type), win));
     win->add_action( "select-invert",                   sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_invert), win));
     win->add_action( "select-none",                     sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_none), win));
-    win->add_action( "select-next",                     sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_next), win));
-    win->add_action( "select-previous",                 sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&select_previous), win));
     // clang-format on
 
     auto app = InkscapeApplication::instance();

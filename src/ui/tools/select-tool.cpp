@@ -310,13 +310,17 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
             } else if (get_latin_keyval (&event->key) == GDK_KEY_Tab) {
                 if (this->dragging && this->grabbed) {
                     _seltrans->getNextClosestPoint(false);
-                    ret = TRUE;
+                } else {
+                    sp_selection_item_next(_desktop);
                 }
+                ret = TRUE;
             } else if (get_latin_keyval (&event->key) == GDK_KEY_ISO_Left_Tab) {
                 if (this->dragging && this->grabbed) {
                     _seltrans->getNextClosestPoint(true);
-                    ret = TRUE;
+                } else {
+                    sp_selection_item_prev(_desktop);
                 }
+                ret = TRUE;
             }
             break;
 

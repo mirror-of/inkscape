@@ -226,40 +226,6 @@ void SelectionHelper::reverse(SPDesktop *dt)
     }
 }
 
-void SelectionHelper::selectNext(SPDesktop *dt)
-{
-    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
-    if (nt) {
-        nt->_multipath->shiftSelection(1);
-        return;
-    }
-
-    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
-    GradientTool *gt = dynamic_cast<GradientTool*>(ec);
-    if (gt && ec->hasGradientDrag()) {
-        gt->select_next();
-    } else {
-        sp_selection_item_next(dt);
-    }
-}
-
-void SelectionHelper::selectPrev(SPDesktop *dt)
-{
-    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
-    if (nt) {
-        nt->_multipath->shiftSelection(-1);
-        return;
-    }
-
-    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
-    GradientTool *gt = dynamic_cast<GradientTool*>(ec);
-    if (gt && ec->hasGradientDrag()) {
-        gt->select_prev();
-    } else {
-        sp_selection_item_prev(dt);
-    }
-}
-
 /*
  * Fixes the current selection, removing locked objects from it
  */

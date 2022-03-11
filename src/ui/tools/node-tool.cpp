@@ -555,6 +555,15 @@ bool NodeTool::root_handler(GdkEvent* event) {
             }
             break;
 
+        case GDK_KEY_Tab:
+            _multipath->shiftSelection(1);
+            return TRUE;
+            break;
+        case GDK_KEY_ISO_Left_Tab:
+            _multipath->shiftSelection(-1);
+            return TRUE;
+            break;
+
         default:
             break;
         }

@@ -166,8 +166,6 @@ override) the bindings in the main default.xml.
   <bind gaction="win.select-same-object-type"            keys="&lt;shift&gt;&lt;alt&gt;a" />
   <bind gaction="win.select-invert"                      keys="exclam ,&lt;shift&gt;exclam"/>
   <bind gaction="win.select-none"                        keys="Escape"/>
-  <bind gaction="win.select-next"                        keys="Tab"/>
-  <bind gaction="win.select-previous"                    keys="ISO_Left_Tab"/>
 
   <!-- View -->
   <!-- Canvas Transform -->

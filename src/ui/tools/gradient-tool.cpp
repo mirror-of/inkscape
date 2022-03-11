@@ -685,6 +685,20 @@ bool GradientTool::root_handler(GdkEvent* event) {
             ret = this->deleteSelectedDrag(MOD__CTRL_ONLY(event));
             break;
 
+        case GDK_KEY_Tab:
+            if (hasGradientDrag()) {
+                select_next();
+                ret = TRUE;
+            }
+            break;
+
+        case GDK_KEY_ISO_Left_Tab:
+            if (hasGradientDrag()) {
+                select_prev();
+                ret = TRUE;
+            }
+            break;
+
         default:
             ret = drag->key_press_handler(event);
             break;
