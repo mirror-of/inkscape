@@ -109,35 +109,39 @@ void CanvasItemText::update(Geom::Affine const &affine)
     // Measure text size
     auto surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, 1, 1);
     auto context = Cairo::Context::create(surface);
-    context->select_font_face("sans-serif", Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL);
+    context->select_font_face(_fontname, Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL);
     context->set_font_size(_fontsize);
     Cairo::TextExtents extents;
     context->get_text_extents(_text, extents);
 
+    // extents.width doesn't include spaces or glyph adjustments
+    // the following will work for horz text only, and not vertical
+    double total_width = extents.x_advance;
+    double total_height = extents.height;
 
     // Adjust for anchor.
-    double offset_x =  extents.width/2.0;
-    double offset_y = -extents.height/2.0;
+    double offset_x =  total_width/2.0;
+    double offset_y = -total_height/2.0;
     switch (_anchor){
         case CANVAS_ITEM_TEXT_ANCHOR_LEFT:
             offset_x = 0.0;
             break;
         case CANVAS_ITEM_TEXT_ANCHOR_RIGHT:
-            offset_x = extents.width;
+            offset_x = total_width;
             break;
         case CANVAS_ITEM_TEXT_ANCHOR_BOTTOM:
             offset_y = 0;
             break;
         case CANVAS_ITEM_TEXT_ANCHOR_TOP:
-            offset_y = -extents.height;
+            offset_y = -total_height;
             break;
         case CANVAS_ITEM_TEXT_ANCHOR_ZERO:
             offset_x = 0;
             offset_y = 0;
             break;
         case CANVAS_ITEM_TEXT_ANCHOR_MANUAL:
-            offset_x =  (1 + _anchor_position_manual.x()) * extents.width/2;
-            offset_y = -(1 + _anchor_position_manual.y()) * extents.height/2;
+            offset_x =  (1 + _anchor_position_manual.x()) * total_width/2;
+            offset_y = -(1 + _anchor_position_manual.y()) * total_height/2;
             break;
         case CANVAS_ITEM_TEXT_ANCHOR_CENTER:
         default:
@@ -149,9 +153,9 @@ void CanvasItemText::update(Geom::Affine const &affine)
 
     // See note at bottom.
     _bounds = Geom::Rect::from_xywh(p.x(),
-                                    p.y() - extents.height,
-                                    extents.width,
-                                    extents.height);
+                                    p.y() - total_height,
+                                    total_width,
+                                    total_height);
     _bounds.expandBy(_border);
     _bounds *= Geom::Translate(-_anchor_offset);
 
@@ -228,20 +232,21 @@ void CanvasItemText::render(Inkscape::CanvasItemBuffer *buf)
 
     // Text
     buf->cr->move_to(p.x(), p.y());
+    buf->cr->select_font_face(_fontname, Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL);
     buf->cr->set_font_size(_fontsize);
     buf->cr->text_path(_text);
     buf->cr->set_source_rgba(SP_RGBA32_R_F(_fill), SP_RGBA32_G_F(_fill),
                              SP_RGBA32_B_F(_fill), SP_RGBA32_A_F(_fill));
     buf->cr->fill();
 
-
-    // Uncomment to show bounds
-    // Geom::Rect bounds = _bounds;
-    // bounds.expandBy(-1);
-    // bounds -= buf->rect.min();
-    // buf->cr->set_source_rgba(1.0, 0.0, 0.0, 1.0);
-    // buf->cr->rectangle(bounds.min().x(), bounds.min().y(), bounds.width(), bounds.height());
-    // buf->cr->stroke();
+#ifdef CANVAS_ITEM_DEBUG
+    Geom::Rect bounds = _bounds;
+    bounds.expandBy(-1);
+    bounds -= buf->rect.min();
+    buf->cr->set_source_rgba(1.0, 0.0, 0.0, 1.0);
+    buf->cr->rectangle(bounds.min().x(), bounds.min().y(), bounds.width(), bounds.height());
+    buf->cr->stroke();
+#endif
 
     buf->cr->restore();
 }

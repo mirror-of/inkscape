@@ -66,6 +66,7 @@ protected:
     Geom::Point _anchor_offset;
     Geom::Point _anchor_position_manual;
     Glib::ustring _text;
+    std::string _fontname = "sans-serif";
     double _fontsize = 10;
     double _bg_rad = 0;
     guint32 _background = 0x0000007f;
