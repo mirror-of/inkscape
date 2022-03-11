@@ -68,6 +68,7 @@ public:
     void hideSPGuide(Inkscape::UI::Widget::Canvas *canvas);
     void showSPGuide(); // argument-free versions
     void hideSPGuide();
+    bool remove(bool force=false);
 
     void sensitize(Inkscape::UI::Widget::Canvas *canvas, bool sensitive);
 
@@ -98,7 +99,6 @@ void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Poin
 void sp_guide_create_guides_around_page(SPDocument *doc);
 void sp_guide_delete_all_guides(SPDocument *doc);
 
-void sp_guide_remove(SPGuide *guide);
 
 MAKE_SP_OBJECT_DOWNCAST_FUNCTIONS(SP_GUIDE, SPGuide)
 MAKE_SP_OBJECT_TYPECHECK_FUNCTIONS(SP_IS_GUIDE, SPGuide)

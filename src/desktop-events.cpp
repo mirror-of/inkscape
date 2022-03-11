@@ -133,7 +133,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
             break;
 
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1) {
+            if (event->button.button == 1 && !guide->getLocked()) {
                 Geom::Point const event_w(event->button.x, event->button.y);
                 Geom::Point const event_dt(desktop->w2d(event_w));
 
@@ -331,7 +331,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                         /* Undo movement of any attached shapes. */
                         guide->moveto(guide->getPoint(), false);
                         guide->set_normal(guide->getNormal(), false);
-                        sp_guide_remove(guide);
+                        guide->remove();
                         guide_item = nullptr;
                         desktop->event_context->use_tool_cursor();
 
@@ -396,7 +396,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                 {
                     SPDocument *doc = guide->document;
                     if (!guide->getLocked()) {
-                        sp_guide_remove(guide);
+                        guide->remove();
                         guide_item = nullptr;
                         DocumentUndo::done(doc, _("Delete guide"), "");
                         ret = true;

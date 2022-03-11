@@ -142,8 +142,8 @@ void GuidelinePropertiesDialog::_onOKimpl()
 void GuidelinePropertiesDialog::_onDelete()
 {
     SPDocument *doc = _guide->document;
-    sp_guide_remove(_guide);
-    DocumentUndo::done(doc, _("Delete guide"), "");
+    if (_guide->remove(true))
+        DocumentUndo::done(doc, _("Delete guide"), "");
 }
 
 void GuidelinePropertiesDialog::_onDuplicate()

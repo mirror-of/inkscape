@@ -290,7 +290,7 @@ void sp_guide_delete_all_guides(SPDocument *doc)
     std::vector<SPObject *> current = doc->getResourceList("guide");
     while (!current.empty()){
         SPGuide* guide = SP_GUIDE(*(current.begin()));
-        sp_guide_remove(guide);
+        guide->remove(true);
         current = doc->getResourceList("guide");
     }
 
@@ -523,12 +523,15 @@ char* SPGuide::description(bool const verbose) const
     return descr;
 }
 
-void sp_guide_remove(SPGuide *guide)
+bool SPGuide::remove(bool force)
 {
-    g_assert(SP_IS_GUIDE(guide));
+    if (this->locked && !force)
+        return false;
 
     //XML Tree being used directly while it shouldn't be.
-    sp_repr_unparent(guide->getRepr());
+    sp_repr_unparent(this->getRepr());
+
+    return true;
 }
 
 /*
