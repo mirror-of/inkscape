@@ -1753,9 +1753,11 @@ Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
         fracpart != 1.0 &&
         dist < stroke_tolerance)
     {
+        // stroke_tolerance is at least two.
+        int tolerance = std::max(2, (int)stroke_tolerance);
         _dragpoint->setVisible(true);
         _dragpoint->setPosition(_desktop->w2d(nearest_pt));
-        _dragpoint->setSize(2 * (int)stroke_tolerance - 1); // stroke_tolerance is at least two.
+        _dragpoint->setSize(2 * tolerance - 1);
         _dragpoint->setTimeValue(fracpart);
         _dragpoint->setIterator(first);
     } else {
