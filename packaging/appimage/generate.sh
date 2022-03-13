@@ -81,11 +81,17 @@ apt_bundle \
     python3-numpy \
     python3-six \
     python3-scour \
+    python3-requests \
+    python3-urllib3 \
+    python3-chardet \
+    python3-certifi \
+    python3-idna \
     python3-cssselect \
     python3-distutils \
     python3-packaging \
     python3-appdirs \
     python3-gi \
+    python3-gi-cairo \
     python3-pil \
     gir1.2-glib-2.0 \
     gir1.2-gtk-3.0 \

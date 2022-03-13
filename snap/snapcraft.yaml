@@ -67,7 +67,6 @@ parts:
       - pkg-config
       - zlib1g-dev
     stage-packages:
-      - git # For master extension manager, remove before releasing
       - libatkmm-1.6-1v5
       - libboost-filesystem1.71.0
       - libcairomm-1.0-1v5
@@ -97,6 +96,7 @@ parts:
       - transfig
       - libsvg-perl
       - libxml-xql-perl
+      - python3-pil
       - python3-gi
       - python3-gi-cairo
     prime:
@@ -111,10 +111,14 @@ parts:
   python-deps:
     plugin: python
     python-packages:
+      - six
       - lxml
       - numpy
       - cssselect
+      - distutils
       - pip
+      - appdirs
+      - requests
       - pyserial
       - packaging
       - scour
