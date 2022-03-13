@@ -126,11 +126,13 @@ private:
     void _copyPattern(SPPattern *);
     void _copyHatch(SPHatch *);
     void _copyTextPath(SPTextPath *);
+    bool _copyNodes(SPDesktop *desktop, ObjectSet *set);
     Inkscape::XML::Node *_copyNode(Inkscape::XML::Node *, Inkscape::XML::Document *, Inkscape::XML::Node *);
     Inkscape::XML::Node *_copyIgnoreDup(Inkscape::XML::Node *, Inkscape::XML::Document *, Inkscape::XML::Node *);
 
     bool _pasteImage(SPDocument *doc);
     bool _pasteText(SPDesktop *desktop);
+    bool _pasteNodes(SPDesktop *desktop, SPDocument *clipdoc, bool in_place);
     void _applyPathEffect(SPItem *, gchar const *);
     std::unique_ptr<SPDocument> _retrieveClipboard(Glib::ustring = "");
 
@@ -270,60 +272,8 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
         }
 
         // Special case for copying part of a path instead of the whole selected object.
-        auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
-        if (node_tool && node_tool->_selected_nodes) {
-            SPObject *first_path = nullptr;
-            for (auto obj : set->items()) {
-                if(SP_IS_PATH(obj)) {
-                    first_path = obj;
-                    break;
-                }
-            }
-
-            auto builder = new Geom::PathBuilder();
-            node_tool->_multipath->copySelectedPath(builder);
-            Geom::PathVector pathv = builder->peek();
-
-            // discardInternalClipboard done after copy, as deleting clipboard
-            // document may trigger tool switch (as in PathParam::~PathParam)
-            _discardInternalClipboard();
-            _createInternalClipboard();
-
-            // Were any nodes actually copied?
-            if (!pathv.empty() && first_path) {
-                Inkscape::XML::Node *pathRepr = _doc->createElement("svg:path");
-
-                // Remove the source document's scale from path as clipboard is 1:1
-                auto source_scale = first_path->document->getDocumentScale();
-                pathRepr->setAttribute("d", sp_svg_write_path(pathv * source_scale.inverse()));
-
-                // Group the path to make it consistant with other copy processes
-                auto group = _doc->createElement("svg:g");
-                _root->appendChild(group);
-                Inkscape::GC::release(group);
-
-                // Store the style for paste-as-object operations. Ignored if pasting into an other path.
-                pathRepr->setAttribute("style", first_path->style->write(SP_STYLE_FLAG_IFSET) );
-                group->appendChild(pathRepr);
-                Inkscape::GC::release(pathRepr);
-
-                // Store the parent transformation, and scaling factor of the copied object
-                if (auto parent = dynamic_cast<SPItem *>(first_path->parent)) {
-                      auto transform_str = sp_svg_transform_write(parent->i2doc_affine());
-                      group->setAttributeOrRemoveIfEmpty("transform", transform_str);
-                }
-
-                // Set the translation for paste-in-place operation, must be done after repr appends
-                if (auto path_obj = dynamic_cast<SPPath *>(_clipboardSPDoc->getObjectByRepr(pathRepr))) {
-                    // we could use pathv.boundsFast here, but that box doesn't include stroke width
-                    // so we must take the value from the visualBox of the new shape instead.
-                    auto bbox = *(path_obj->visualBounds()) * source_scale;
-                    _clipnode->setAttributePoint("min", bbox.min());
-                    _clipnode->setAttributePoint("max", bbox.max());
-                }
-                _setClipboardTargets();
-                return;
-            }
+        if (_copyNodes(desktop, set)) {
+            return;
         }
     }
     if (set->isEmpty()) {  // check whether something is selected
@@ -498,72 +448,10 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
         }
     }
 
-    /* Special paste nodes handle; only if:
-     *   node tool selected
-     *   one path selected in target
-     *   one path in source
-     */
-    auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
-    if (node_tool && desktop->selection->objects().size() == 1) {
-        SPObject *obj = desktop->selection->objects().back();
-        if (auto target_path = dynamic_cast<SPPath *>(obj)) {
-            auto clipdoc = tempdoc.get();
-            auto source_scale = clipdoc->getDocumentScale();
-            auto target_trans = target_path->i2doc_affine();
-            // Select all nodes prior to pasting in, for later inversion.
-            node_tool->_selected_nodes->selectAll();
-
-            for (auto node = clipdoc->getReprRoot()->firstChild(); node ;node = node->next()) {
-
-                auto source_obj = clipdoc->getObjectByRepr(node);
-                auto group_affine = Geom::Affine();
-
-                // Unpack group that may have a transformation inside it.
-                if (auto source_group = dynamic_cast<SPGroup *>(source_obj)) {
-                    if (source_group->children.size() == 1) {
-                        source_obj = source_group->firstChild();
-                        group_affine = source_group->i2doc_affine();
-                    }
-                }
-
-                if (auto source_path = dynamic_cast<SPPath *>(source_obj)) {
-                    auto source_curve = SPCurve::copy(source_path->curveForEdit());
-                    auto target_curve = SPCurve::copy(target_path->curveForEdit());
-
-                    // Apply group transformation which is usually the old translation plus document scaling factor
-                    source_curve->transform(group_affine);
-
-                    // Convert curve from source units (usually px so 1:1)
-                    source_curve->transform(source_scale);
-
-                    if (!in_place) {
-                        // Move the source curve to the mouse pointer, units are px so do before target_trans
-                        auto bbox = *(source_path->geometricBounds()) * group_affine;
-                        auto to_mouse = Geom::Translate(desktop->point() - bbox.midpoint());
-                        source_curve->transform(to_mouse);
-                    } else if (auto clipnode = sp_repr_lookup_name(clipdoc->getReprRoot(), "inkscape:clipboard", 1)) {
-                        // Force translation so a foreign path will end up in the right place.
-                        auto bbox = *(source_path->visualBounds()) * group_affine;
-                        auto to_origin = Geom::Translate(clipnode->getAttributePoint("min") - bbox.min());
-                        source_curve->transform(to_origin);
-                    }
-
-                    // Finally convert the curve into path item's coordinate system
-                    source_curve->transform(target_trans.inverse());
-
-                    // Add the source curve to the target copy
-                    target_curve->append(*source_curve);
-
-                    // Set the attribute to keep the document up to date (fixes undo)
-                    auto str = sp_svg_write_path(target_curve->get_pathvector());
-                    target_path->setAttribute("d", str);
-                }
-            }
-            // Finally we invert the selection, this selects all newly added nodes.
-            node_tool->_selected_nodes->invertSelection();
-            return true;
-        }
+    if (_pasteNodes(desktop, tempdoc.get(), in_place)) {
+        return true;
     }
+
     // copy definitions
     prevent_id_clashes(tempdoc.get(), desktop->getDocument(), true);
     sp_import_document(desktop, tempdoc.get(), in_place);
@@ -584,6 +472,139 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
         }
     }
 
+    return true;
+}
+
+/**
+ * Copy any selected nodes and return true if there were nodes.
+ */
+bool ClipboardManagerImpl::_copyNodes(SPDesktop *desktop, ObjectSet *set)
+{
+    auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
+    if (!node_tool || !node_tool->_selected_nodes)
+        return false;
+
+    SPObject *first_path = nullptr;
+    for (auto obj : set->items()) {
+        if(SP_IS_PATH(obj)) {
+            first_path = obj;
+            break;
+        }
+    }
+
+    auto builder = new Geom::PathBuilder();
+    node_tool->_multipath->copySelectedPath(builder);
+    Geom::PathVector pathv = builder->peek();
+
+    // discardInternalClipboard done after copy, as deleting clipboard
+    // document may trigger tool switch (as in PathParam::~PathParam)
+    _discardInternalClipboard();
+    _createInternalClipboard();
+
+    // Were any nodes actually copied?
+    if (pathv.empty() || !first_path)
+        return false;
+
+    Inkscape::XML::Node *pathRepr = _doc->createElement("svg:path");
+
+    // Remove the source document's scale from path as clipboard is 1:1
+    auto source_scale = first_path->document->getDocumentScale();
+    pathRepr->setAttribute("d", sp_svg_write_path(pathv * source_scale.inverse()));
+
+    // Group the path to make it consistant with other copy processes
+    auto group = _doc->createElement("svg:g");
+    _root->appendChild(group);
+    Inkscape::GC::release(group);
+
+    // Store the style for paste-as-object operations. Ignored if pasting into an other path.
+    pathRepr->setAttribute("style", first_path->style->write(SP_STYLE_FLAG_IFSET) );
+    group->appendChild(pathRepr);
+    Inkscape::GC::release(pathRepr);
+
+    // Store the parent transformation, and scaling factor of the copied object
+    if (auto parent = dynamic_cast<SPItem *>(first_path->parent)) {
+          auto transform_str = sp_svg_transform_write(parent->i2doc_affine());
+          group->setAttributeOrRemoveIfEmpty("transform", transform_str);
+    }
+
+    // Set the translation for paste-in-place operation, must be done after repr appends
+    if (auto path_obj = dynamic_cast<SPPath *>(_clipboardSPDoc->getObjectByRepr(pathRepr))) {
+        // we could use pathv.boundsFast here, but that box doesn't include stroke width
+        // so we must take the value from the visualBox of the new shape instead.
+        auto bbox = *(path_obj->visualBounds()) * source_scale;
+        _clipnode->setAttributePoint("min", bbox.min());
+        _clipnode->setAttributePoint("max", bbox.max());
+    }
+    _setClipboardTargets();
+    return true;
+}
+
+/**
+ * Paste nodes into a selected path and return true if it's possible.
+ *   if the node tool selected
+ *   and one path selected in target
+ *   and one path in source
+ */
+bool ClipboardManagerImpl::_pasteNodes(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
+{
+    SPObject *obj = desktop->selection->objects().back();
+    auto target_path = dynamic_cast<SPPath *>(obj);
+    auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
+    if (!target_path || !node_tool || desktop->selection->objects().size() != 1)
+        return false;
+
+    auto source_scale = clipdoc->getDocumentScale();
+    auto target_trans = target_path->i2doc_affine();
+    // Select all nodes prior to pasting in, for later inversion.
+    node_tool->_selected_nodes->selectAll();
+
+    for (auto node = clipdoc->getReprRoot()->firstChild(); node ;node = node->next()) {
+
+        auto source_obj = clipdoc->getObjectByRepr(node);
+        auto group_affine = Geom::Affine();
+
+        // Unpack group that may have a transformation inside it.
+        if (auto source_group = dynamic_cast<SPGroup *>(source_obj)) {
+            if (source_group->children.size() == 1) {
+                source_obj = source_group->firstChild();
+                group_affine = source_group->i2doc_affine();
+            }
+        }
+
+        if (auto source_path = dynamic_cast<SPPath *>(source_obj)) {
+            auto source_curve = SPCurve::copy(source_path->curveForEdit());
+            auto target_curve = SPCurve::copy(target_path->curveForEdit());
+
+            // Apply group transformation which is usually the old translation plus document scaling factor
+            source_curve->transform(group_affine);
+            // Convert curve from source units (usually px so 1:1)
+            source_curve->transform(source_scale);
+
+            if (!in_place) {
+                // Move the source curve to the mouse pointer, units are px so do before target_trans
+                auto bbox = *(source_path->geometricBounds()) * group_affine;
+                auto to_mouse = Geom::Translate(desktop->point() - bbox.midpoint());
+                source_curve->transform(to_mouse);
+            } else if (auto clipnode = sp_repr_lookup_name(clipdoc->getReprRoot(), "inkscape:clipboard", 1)) {
+                // Force translation so a foreign path will end up in the right place.
+                auto bbox = *(source_path->visualBounds()) * group_affine;
+                auto to_origin = Geom::Translate(clipnode->getAttributePoint("min") - bbox.min());
+                source_curve->transform(to_origin);
+            }
+
+            // Finally convert the curve into path item's coordinate system
+            source_curve->transform(target_trans.inverse());
+
+            // Add the source curve to the target copy
+            target_curve->append(*source_curve);
+
+            // Set the attribute to keep the document up to date (fixes undo)
+            auto str = sp_svg_write_path(target_curve->get_pathvector());
+            target_path->setAttribute("d", str);
+        }
+    }
+    // Finally we invert the selection, this selects all newly added nodes.
+    node_tool->_selected_nodes->invertSelection();
     return true;
 }
 
@@ -815,19 +836,26 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
  */
 Glib::ustring ClipboardManagerImpl::getPathParameter(SPDesktop* desktop)
 {
-    auto tempdoc = _retrieveClipboard(); // any target will do here
-    if ( tempdoc == nullptr ) {
+    auto doc = _retrieveClipboard(); // any target will do here
+    if (!doc) {
         _userWarn(desktop, _("Nothing on the clipboard."));
         return "";
     }
-    Inkscape::XML::Node *root = tempdoc->getReprRoot();
-    Inkscape::XML::Node *path = sp_repr_lookup_name(root, "svg:path", -1); // unlimited search depth
-    if ( path == nullptr ) {
+
+    // unlimited search depth
+    auto repr = sp_repr_lookup_name(doc->getReprRoot(), "svg:path", -1);
+    SPItem *item = dynamic_cast<SPItem *>(doc->getObjectByRepr(repr));
+
+    if (!item) {
         _userWarn(desktop, _("Clipboard does not contain a path."));
         return "";
     }
-    gchar const *svgd = path->attribute("d");
-    return svgd ? svgd : "";
+
+    // Adjust any copied path into the target document transform.
+    auto tr_p = item->i2doc_affine();
+    auto tr_s = doc->getDocumentScale().inverse();
+    auto pathv = sp_svg_read_pathv(repr->attribute("d"));
+    return sp_svg_write_path(pathv * tr_s * tr_p);
 }
 
 
