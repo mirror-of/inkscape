@@ -975,29 +975,6 @@ std::vector<SPDesktop *> const SPNamedView::getViewList() const
     return views;
 }
 
-SPNamedView *sp_document_namedview(SPDocument *document, const gchar *id)
-{
-    g_return_val_if_fail(document != nullptr, NULL);
-
-    SPObject *nv = sp_item_group_get_child_by_name(document->getRoot(), nullptr, "sodipodi:namedview");
-    g_assert(nv != nullptr);
-
-    if (id == nullptr) {
-        return (SPNamedView *) nv;
-    }
-
-    while (nv && strcmp(nv->getId(), id)) {
-        nv = sp_item_group_get_child_by_name(document->getRoot(), nv, "sodipodi:namedview");
-    }
-
-    return (SPNamedView *) nv;
-}
-
-SPNamedView const *sp_document_namedview(SPDocument const *document, const gchar *id)
-{
-    return sp_document_namedview(const_cast<SPDocument *>(document), id);  // use a const_cast here to avoid duplicating code
-}
-
 void SPNamedView::toggleGuides()
 {
     bool v = this->getGuides();

@@ -1312,7 +1312,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
 
     SPDesktopWidget *dtw = this;
 
-    SPNamedView *namedview = sp_document_namedview(document, nullptr);
+    SPNamedView *namedview = document->getNamedView();
 
     dtw->_dt2r = 1. / namedview->display_units->factor;
 

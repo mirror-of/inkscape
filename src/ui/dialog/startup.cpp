@@ -435,7 +435,7 @@ StartScreen::new_document()
 
     // If it was a template file, modify the document according to user's input.
     _document = app->document_new (filename);
-    auto nv = sp_document_namedview (_document, nullptr);
+    auto nv = _document->getNamedView();
 
     if (!width.empty()) {
         // Set the width, height and default display units for the selected template

@@ -183,7 +183,7 @@ void Metafile::setViewBoxIfMissing(SPDocument *doc) {
         doc->ensureUpToDate();
         
         // Set document unit
-        Inkscape::XML::Node *repr = sp_document_namedview(doc, nullptr)->getRepr();
+        Inkscape::XML::Node *repr = doc->getNamedView()->getRepr();
         Inkscape::SVGOStringStream os;
         Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
         os << doc_unit->abbr;

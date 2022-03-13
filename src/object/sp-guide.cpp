@@ -236,7 +236,7 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
     repr->setAttributePoint("position", Geom::Point( newx, newy ));
     repr->setAttributePoint("orientation", n);
 
-    SPNamedView *namedview = sp_document_namedview(doc, nullptr);
+    SPNamedView *namedview = doc->getNamedView();
     if (namedview) {
         if (namedview->lockguides) {
             repr->setAttribute("inkscape:locked", "true");
@@ -488,7 +488,7 @@ char* SPGuide::description(bool const verbose) const
         // Guide has probably been deleted and no longer has an attached namedview.
         descr = g_strdup(_("Deleted"));
     } else {
-        SPNamedView *namedview = sp_document_namedview(this->document, nullptr);
+        SPNamedView *namedview = this->document->getNamedView();
 
         Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(this->point_on_line[X], "px");
         Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(this->point_on_line[Y], "px");

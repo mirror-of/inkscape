@@ -1410,7 +1410,7 @@ SPDesktop::setDocument (SPDocument *doc)
     // TODO since the comment had reversed logic, check the intent of this block of code:
     if (canvas_drawing) {
 
-        namedview = sp_document_namedview (doc, nullptr);
+        namedview = doc->getNamedView();
         namedview->viewcount++;
 
         Inkscape::DrawingItem *drawing_item = doc->getRoot()->invoke_show(

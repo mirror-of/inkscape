@@ -327,7 +327,7 @@ int InkFileExportCmd::do_export_svg(SPDocument *doc, std::string const &filename
         doc->ensureUpToDate();
         SPNamedView *nv;
         Inkscape::XML::Node *nv_repr;
-        if ((nv = sp_document_namedview(doc, nullptr)) && (nv_repr = nv->getRepr())) {
+        if ((nv = doc->getNamedView()) && (nv_repr = nv->getRepr())) {
             nv_repr->setAttributeSvgDouble("fit-margin-top", margin);
             nv_repr->setAttributeSvgDouble("fit-margin-left", margin);
             nv_repr->setAttributeSvgDouble("fit-margin-right", margin);

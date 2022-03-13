@@ -906,7 +906,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     Inkscape::Util::Unit const *nv_units = unit_table.getUnit("px");
     if (root->height.unit && (root->height.unit != SVGLength::PERCENT))
         nv_units = unit_table.getUnit(root->height.unit);
-    SPNamedView *nv = sp_document_namedview(this, nullptr);
+    SPNamedView *nv = this->getNamedView();
 
     /* in px */
     double margin_top = 0.0;
