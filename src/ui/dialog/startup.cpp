@@ -256,7 +256,6 @@ StartScreen::StartScreen()
     set_position(Gtk::WIN_POS_CENTER_ALWAYS);
     property_resizable() = false;
     set_default_size(700, 360);
-    theme_changed();
     show();
 }
 

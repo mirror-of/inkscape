@@ -506,7 +506,12 @@ static char const preferences_skeleton[] =
      defaultPreferDarkTheme="1"
      narrowSpinButton="1"
      preferDarkTheme="1"
-     darkTheme="1" />
+     darkTheme="1"
+     gtkTheme="Adwaita"
+     iconTheme="multicolor"
+     symbolicIcons="1"
+     symbolicDefaultBaseColors="0"
+     symbolicDefaultHighColors="0"/>
 </inkscape>
 )=====";
 
