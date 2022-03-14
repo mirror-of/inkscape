@@ -15,6 +15,7 @@
 #include <glibmm/i18n.h>
 #include <string>
 #include <iomanip>
+#include <unordered_map>
 
 #include "snap-indicator.h"
 
@@ -35,7 +36,7 @@
 namespace Inkscape {
 namespace Display {
 
-std::unordered_map<SnapSourceType, Glib::ustring> SnapIndicator::source2string = {
+static std::map<SnapSourceType, Glib::ustring> source2string = {
     {SNAPSOURCE_UNDEFINED, _("UNDEFINED")},
     {SNAPSOURCE_BBOX_CORNER, _("Bounding box corner")},
     {SNAPSOURCE_BBOX_MIDPOINT, _("Bounding box midpoint")},
@@ -60,7 +61,7 @@ std::unordered_map<SnapSourceType, Glib::ustring> SnapIndicator::source2string =
     {SNAPSOURCE_PAGE_CENTER, _("Page center")},
 };
 
-std::unordered_map<SnapTargetType, Glib::ustring> SnapIndicator::target2string = {
+static std::map<SnapTargetType, Glib::ustring> target2string = {
     {SNAPTARGET_UNDEFINED, _("UNDEFINED")},
     {SNAPTARGET_BBOX_CORNER, _("bounding box corner")},
     {SNAPTARGET_BBOX_EDGE, _("bounding box side")},
@@ -153,8 +154,8 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             if (source2string.find(p.getSource()) == source2string.end())
                 g_warning("Source type %i not present in target2string", p.getSource());
 
-            target_name = target2string[p.getTarget()];
-            source_name = source2string[p.getSource()];
+            target_name = _(target2string[p.getTarget()].c_str());
+            source_name = _(source2string[p.getSource()].c_str());
         }
         //std::cout << "Snapped " << source_name << " to " << target_name << std::endl;
 

@@ -23,7 +23,6 @@
 
 #include <glib.h>
 #include <glibmm/i18n.h>
-#include <unordered_map>
 
 class SPDesktop;
 
@@ -67,9 +66,6 @@ private:
     guint32 get_guide_color(SnapTargetType t);
     Inkscape::CanvasItemCurve* make_stub_line_h(Geom::Point const &p);
     Inkscape::CanvasItemCurve* make_stub_line_v(Geom::Point const &p);
-    
-    static std::unordered_map<SnapSourceType, Glib::ustring> source2string;
-    static std::unordered_map<SnapTargetType, Glib::ustring> target2string;
 };
 
 } //namespace Display
