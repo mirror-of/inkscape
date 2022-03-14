@@ -162,35 +162,40 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         // std::cout << "|" << std::endl;
 
         // Add submenu to effect data
-        app->get_action_effect_data().add_data(get_id(), sub_menu_list, get_name() );
+        gchar *ellipsized_name = widget_visible_count() ? g_strdup_printf(_("%s..."), get_name()) : nullptr;
+        Glib::ustring menu_name = ellipsized_name ? ellipsized_name : get_name();
+        app->get_action_effect_data().add_data(get_id(), sub_menu_list, menu_name);
+        g_free(ellipsized_name);
     }
 }
 
 void
 Effect::get_menu (Inkscape::XML::Node * pattern, std::list<Glib::ustring>& sub_menu_list)
 {
+    if (!pattern) {
+        return;
+    }
+
     Glib::ustring merge_name;
 
-    if (pattern == nullptr) {
-        merge_name = get_name();
+    gchar const *menu_name = pattern->attribute("name");
+    if (!menu_name) {
+        menu_name = pattern->attribute("_name");
+    }
+    if (!menu_name) {
+        return;
+    }
+
+    if (_translation_enabled) {
+        merge_name = get_translation(menu_name);
     } else {
-        gchar const *menu_name = pattern->attribute("name");
-        if (menu_name == nullptr) menu_name = pattern->attribute("_name");
-        if (menu_name == nullptr) return;
-
-        if (_translation_enabled) {
-            merge_name = get_translation(menu_name);
-        } else {
-            merge_name = _(menu_name);
-        }
-
-        // Making sub menu string
-        sub_menu_list.push_back(merge_name);
+        merge_name = _(menu_name);
     }
 
-    if (pattern != nullptr) {
-        get_menu( pattern->firstChild(), sub_menu_list);
-    }
+    // Making sub menu string
+    sub_menu_list.push_back(merge_name);
+
+    get_menu(pattern->firstChild(), sub_menu_list);
 }
 
 Effect::~Effect ()
