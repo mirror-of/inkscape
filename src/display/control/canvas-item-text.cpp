@@ -18,6 +18,7 @@
 
 #include <cmath>
 #include <utility> // std::move
+#include <glibmm/i18n.h>
 
 #include "color.h" // SP_RGBA_x_F
 
@@ -111,55 +112,29 @@ void CanvasItemText::update(Geom::Affine const &affine)
     auto context = Cairo::Context::create(surface);
     context->select_font_face(_fontname, Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL);
     context->set_font_size(_fontsize);
-    Cairo::TextExtents extents;
-    context->get_text_extents(_text, extents);
+    context->get_text_extents(_text, _text_size);
 
-    // extents.width doesn't include spaces or glyph adjustments
-    // the following will work for horz text only, and not vertical
-    double total_width = extents.x_advance;
-    double total_height = extents.height;
-
-    // Adjust for anchor.
-    double offset_x =  total_width/2.0;
-    double offset_y = -total_height/2.0;
-    switch (_anchor){
-        case CANVAS_ITEM_TEXT_ANCHOR_LEFT:
-            offset_x = 0.0;
-            break;
-        case CANVAS_ITEM_TEXT_ANCHOR_RIGHT:
-            offset_x = total_width;
-            break;
-        case CANVAS_ITEM_TEXT_ANCHOR_BOTTOM:
-            offset_y = 0;
-            break;
-        case CANVAS_ITEM_TEXT_ANCHOR_TOP:
-            offset_y = -total_height;
-            break;
-        case CANVAS_ITEM_TEXT_ANCHOR_ZERO:
-            offset_x = 0;
-            offset_y = 0;
-            break;
-        case CANVAS_ITEM_TEXT_ANCHOR_MANUAL:
-            offset_x =  (1 + _anchor_position_manual.x()) * total_width/2;
-            offset_y = -(1 + _anchor_position_manual.y()) * total_height/2;
-            break;
-        case CANVAS_ITEM_TEXT_ANCHOR_CENTER:
-        default:
-            break;
+    if (_fixed_line) {
+        // TRANSLATORS: This is a set of letters to test for font accender and decenders.
+        context->get_text_extents(_("lg1p$"), _text_extent);
+    } else {
+        _text_extent = _text_size;
     }
-    offset_x += _adjust_offset.x();
-    offset_y += _adjust_offset.y();
-    _anchor_offset = Geom::Point(offset_x, offset_y);
 
     // See note at bottom.
-    _bounds = Geom::Rect::from_xywh(p.x(),
-                                    p.y() - total_height,
-                                    total_width,
-                                    total_height);
-    _bounds.expandBy(_border);
-    _bounds *= Geom::Translate(-_anchor_offset);
+    _bounds = Geom::Rect::from_xywh(0, 0,
+                                    _text_size.x_advance + (_border * 2),
+                                    _text_extent.height + (_border * 2));
 
-    _bounds = _bounds.roundOutwards(); // Pixel alignment of background. Avoid aliasing artifacts on redraw.
+    // Offset relative to requested point
+    double offset_x = -(_anchor_position.x() * _bounds.width());
+    double offset_y = -(_anchor_position.y() * _bounds.height());
+    offset_x += p.x() + _adjust_offset.x();
+    offset_y += p.y() + _adjust_offset.y();
+    _bounds *= Geom::Translate(Geom::Point(int(offset_x), int(offset_y)));
+
+    // Pixel alignment of background. Avoid aliasing artifacts on redraw.
+    _bounds = _bounds.roundOutwards();
 
     // Queue redraw of new area
     request_redraw();
@@ -182,25 +157,18 @@ void CanvasItemText::render(Inkscape::CanvasItemBuffer *buf)
         return;
     }
 
-    // Document to canvas
-    Geom::Point p = _p * _affine;
-
-    // Canvas to screen
-    p *= Geom::Translate(-buf->rect.min());
-
-    // Anchor offset
-    p *= Geom::Translate(-_anchor_offset);
-
     buf->cr->save();
+
+    double x = _bounds.min().x() - buf->rect.min().x();
+    double y = _bounds.min().y() - buf->rect.min().y();
 
     // Background
     if (_use_background) {
-        double x = _bounds.min().x() - buf->rect.min().x();
-        double y = _bounds.min().y() - buf->rect.min().y();
         if (_bg_rad == 0) {
             buf->cr->rectangle(x, y, _bounds.width(), _bounds.height());
         } else {
-            double radius = _bg_rad * (_bounds.width()/_bounds.height());
+            double smallest = std::min(_bounds.width(), _bounds.height());
+            double radius = _bg_rad * (smallest / 2);
             buf->cr->arc(x + _bounds.width() - radius,
                          y + radius,
                          radius,
@@ -230,8 +198,12 @@ void CanvasItemText::render(Inkscape::CanvasItemBuffer *buf)
         buf->cr->fill();
     }
 
-    // Text
-    buf->cr->move_to(p.x(), p.y());
+    // Center the text inside the draw background box
+    auto bx = x + _bounds.width()/2.0;
+    auto by = y + _bounds.height()/2.0;
+    buf->cr->move_to(int(bx - _text_size.x_bearing - _text_size.width/2.0),
+                     int(by - _text_size.y_bearing - _text_extent.height/2.0));
+
     buf->cr->select_font_face(_fontname, Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL);
     buf->cr->set_font_size(_fontsize);
     buf->cr->text_path(_text);
@@ -276,20 +248,14 @@ void CanvasItemText::set_background(guint32 background)
     _use_background = true;
 }
 
-void CanvasItemText::set_anchor(CanvasItemTextAnchor anchor)
-{
-    if (_anchor != anchor) {
-        _anchor = anchor;
-        _canvas->request_update(); // Might be larger than before!
-    }
-}
-
+/**
+ * Set the anchor point, x and y between 0.0 and 1.0.
+ */
 void CanvasItemText::set_anchor(Geom::Point const &anchor_pt)
 {
-    // Used by LPE tool and live_effects/parameter/text.cpp
-    if (_anchor_position_manual != anchor_pt || _anchor != CANVAS_ITEM_TEXT_ANCHOR_MANUAL) {
-        _anchor_position_manual  = anchor_pt;   _anchor  = CANVAS_ITEM_TEXT_ANCHOR_MANUAL;
-        _canvas->request_update(); // Might be larger than before!
+    if (_anchor_position != anchor_pt) {
+        _anchor_position = anchor_pt;
+        _canvas->request_update();
     }
 }
 
@@ -300,6 +266,15 @@ void CanvasItemText::set_adjust(Geom::Point const &adjust_pt)
         _canvas->request_update();
     }
 }
+
+void CanvasItemText::set_fixed_line(bool fixed_line)
+{
+    if (_fixed_line != fixed_line) {
+        _fixed_line = fixed_line;
+        _canvas->request_update();
+    }
+}
+
 } // namespace Inkscape
 
 /* FROM: http://lists.cairographics.org/archives/cairo-bugs/2009-March/003014.html

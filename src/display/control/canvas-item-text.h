@@ -55,22 +55,23 @@ public:
     void set_text(Glib::ustring const &text);
     void set_fontsize(double fontsize);
     void set_background(guint32 background);
-    void set_anchor(CanvasItemTextAnchor anchor);
     void set_anchor(Geom::Point const &anchor_pt);
     void set_adjust(Geom::Point const &adjust_pt);
+    void set_fixed_line(bool fixed_line);
 
 protected:
     Geom::Point _p;  // Position of text (not box around text).
-    CanvasItemTextAnchor _anchor = CANVAS_ITEM_TEXT_ANCHOR_CENTER;
+    Cairo::TextExtents _text_extent;
+    Cairo::TextExtents _text_size;
+    Geom::Point _anchor_position;
     Geom::Point _adjust_offset;
-    Geom::Point _anchor_offset;
-    Geom::Point _anchor_position_manual;
     Glib::ustring _text;
     std::string _fontname = "sans-serif";
     double _fontsize = 10;
     double _bg_rad = 0;
     guint32 _background = 0x0000007f;
     bool _use_background = false;
+    bool _fixed_line = false; // Correction for font heights
     const double _border = 3; // Must be a const to allow alignment with other text boxes.
 };
 

@@ -61,7 +61,7 @@ public:
                  Inkscape::XML::Node *measure_repr = nullptr);
     void setMeasureCanvasText(bool is_angle, double precision, double amount, double fontsize,
                               Glib::ustring unit_name, Geom::Point position, guint32 background,
-                              Inkscape::CanvasItemTextAnchor text_anchor, bool to_item, bool to_phantom,
+                              bool to_left, bool to_item, bool to_phantom,
                               Inkscape::XML::Node *measure_repr);
     void setMeasureCanvasItem(Geom::Point position, bool to_item, bool to_phantom,
                               Inkscape::XML::Node *measure_repr);
@@ -69,8 +69,7 @@ public:
                                      Inkscape::CanvasItemColor color, Inkscape::XML::Node *measure_repr);
     void setLabelText(Glib::ustring const &value, Geom::Point pos, double fontsize, Geom::Coord angle,
                       guint32 background,
-                      Inkscape::XML::Node *measure_repr = nullptr,
-                      Inkscape::CanvasItemTextAnchor text_anchor = Inkscape::CANVAS_ITEM_TEXT_ANCHOR_CENTER);
+                      Inkscape::XML::Node *measure_repr = nullptr);
 
     void knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);

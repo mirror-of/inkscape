@@ -852,8 +852,7 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
 }
 
 void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, double fontsize, Geom::Coord angle,
-                               guint32 background, Inkscape::XML::Node *measure_repr,
-                               Inkscape::CanvasItemTextAnchor text_anchor)
+                               guint32 background, Inkscape::XML::Node *measure_repr)
 {
     Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
     /* Create <text> */
@@ -947,7 +946,7 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
         Inkscape::GC::release(rrect);
         SPItem *text_item_box = SP_ITEM(layer->appendChildRepr(rgroup));
         Geom::Scale scale = Geom::Scale(_desktop->current_zoom()).inverse();
-        if(bbox && text_anchor == Inkscape::CANVAS_ITEM_TEXT_ANCHOR_CENTER) {
+        if(bbox) {
             text_item_box->transform *= Geom::Translate(bbox->midpoint() - Geom::Point(1.0,1.0)).inverse();
         }
         text_item_box->transform *= scale;
@@ -981,7 +980,7 @@ void MeasureTool::reset()
 
 void MeasureTool::setMeasureCanvasText(bool is_angle, double precision, double amount, double fontsize,
                                        Glib::ustring unit_name, Geom::Point position, guint32 background,
-                                       Inkscape::CanvasItemTextAnchor text_anchor, bool to_item,
+                                       bool to_left, bool to_item,
                                        bool to_phantom, Inkscape::XML::Node *measure_repr)
 {
     Glib::ustring measure = Glib::ustring::format(std::setprecision(precision), std::fixed, amount);
@@ -991,7 +990,11 @@ void MeasureTool::setMeasureCanvasText(bool is_angle, double precision, double a
     canvas_tooltip->set_fontsize(fontsize);
     canvas_tooltip->set_fill(0xffffffff);
     canvas_tooltip->set_background(background);
-    canvas_tooltip->set_anchor(text_anchor);
+    if (to_left) {
+        canvas_tooltip->set_anchor(Geom::Point(0, 0.5));
+    } else {
+        canvas_tooltip->set_anchor(Geom::Point(0.5, 0.5));
+    }
 
     if (to_phantom){
         canvas_tooltip->set_background(0x4444447f);
@@ -1063,6 +1066,7 @@ void MeasureTool::showItemInfoText(Geom::Point pos, Glib::ustring const &measure
     canvas_tooltip->set_fill(0xffffffff);
     canvas_tooltip->set_background(0x00000099);
     canvas_tooltip->set_anchor(Geom::Point(0, 0));
+    canvas_tooltip->set_fixed_line(true);
     canvas_tooltip->show();
     measure_item.push_back(canvas_tooltip);
 }
@@ -1303,19 +1307,19 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     repositionOverlappingLabels(placements, _desktop, windowNormal, fontsize, precision);
     for (auto & place : placements) {
         setMeasureCanvasText(false, precision, place.lengthVal * scale, fontsize, unit_name, place.end, 0x0000007f,
-                             Inkscape::CANVAS_ITEM_TEXT_ANCHOR_CENTER, to_item, to_phantom, measure_repr);
+                             false, to_item, to_phantom, measure_repr);
     }
     Geom::Point angleDisplayPt = calcAngleDisplayAnchor(_desktop, angle, baseAngle, start_p, end_p, fontsize);
 
     setMeasureCanvasText(true, precision, Geom::deg_from_rad(angle), fontsize, unit_name, angleDisplayPt, 0x337f337f,
-                         Inkscape::CANVAS_ITEM_TEXT_ANCHOR_CENTER, to_item, to_phantom, measure_repr);
+                         false, to_item, to_phantom, measure_repr);
 
     {
         double totallengthval = (end_p - start_p).length();
         totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
         Geom::Point origin = end_p + _desktop->w2d(Geom::Point(3 * fontsize, -fontsize));
         setMeasureCanvasText(false, precision, totallengthval * scale, fontsize, unit_name, origin, 0x3333337f,
-                             Inkscape::CANVAS_ITEM_TEXT_ANCHOR_LEFT, to_item, to_phantom, measure_repr);
+                             true, to_item, to_phantom, measure_repr);
     }
 
     if (intersections.size() > 2) {
@@ -1323,7 +1327,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
         totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
         Geom::Point origin = _desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * dimension_offset;
         setMeasureCanvasText(false, precision, totallengthval * scale, fontsize, unit_name, origin, 0x33337f7f,
-                             Inkscape::CANVAS_ITEM_TEXT_ANCHOR_CENTER, to_item, to_phantom, measure_repr);
+                             false, to_item, to_phantom, measure_repr);
     }
 
     // Initial point

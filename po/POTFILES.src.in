@@ -44,6 +44,7 @@
 ../src/desktop.cpp
 ../src/display/control/canvas-axonomgrid.cpp
 ../src/display/control/canvas-grid.cpp
+../src/display/control/canvas-item-text.cpp
 ../src/display/control/snap-indicator.cpp
 ../src/document.cpp
 ../src/event-log.cpp

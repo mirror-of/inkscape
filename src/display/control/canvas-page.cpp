@@ -48,9 +48,9 @@ void CanvasPage::add(Geom::Rect size, CanvasItemGroup *background_group, CanvasI
         label->set_fontsize(10.0);
         label->set_fill(0xffffffff);
         label->set_background(0x00000099);
-        label->set_bg_radius(1.0);
-        label->set_anchor(Geom::Point(-1.0, -1.5));
-        label->set_adjust(Geom::Point(-3, 0));
+        label->set_bg_radius(0.2);
+        label->set_anchor(Geom::Point(0.0, 1.0));
+        label->set_fixed_line(true);
         canvas_items.push_back(label);
     }
 }
