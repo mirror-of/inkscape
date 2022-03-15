@@ -215,6 +215,21 @@ view_fullscreen(InkscapeWindow *win)
 }
 
 void
+view_full_screen_focus(InkscapeWindow *win)
+{
+    SPDesktop* dt = win->get_desktop();    
+    dt->fullscreen();
+    dt->focusMode(!dt->is_fullscreen());
+}
+
+void
+view_focus_toggle(InkscapeWindow *win)
+{
+    SPDesktop* dt = win->get_desktop();
+    dt->focusMode(!dt->is_focusMode());
+}
+
+void
 canvas_command_palette(InkscapeWindow *win)
 {
     SPDesktop* dt = win->get_desktop();
@@ -286,6 +301,9 @@ std::vector<std::vector<Glib::ustring>> raw_data_view_mode =
 
     {"win.canvas-command-palette",          N_("Command Palette"),          "Canvas Display",   N_("Show or hide the on-canvas command palette")},
     {"win.view-fullscreen",                 N_("Fullscreen"),               "Canvas Display",   N_("Stretch this document window to full screen")},
+    
+    {"win.view-full-screen-focus",          N_("Fullscreen & Focus Mode"),  "Canvas Display",   N_("Stretch this document window to full screen")},
+    {"win.view-focus-toggle",               N_("Focus Mode"),               "Canvas Display",   N_("Remove excess toolbars to focus on drawing")},
 
     {"win.canvas-interface-mode",           N_("Interface Mode"),           "Canvas Display",   N_("Toggle wide or narrow screen setup")},
     // clang-format on
@@ -344,6 +362,9 @@ add_actions_view_mode(InkscapeWindow* win)
 
     win->add_action_bool (         "canvas-interface-mode",         sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_interface_mode),              win), interface_mode);
     win->add_action(               "view-fullscreen",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&view_fullscreen),                    win));
+    
+    win->add_action(               "view-full-screen-focus",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&view_full_screen_focus),                    win));
+    win->add_action(               "view-focus-toggle",               sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&view_focus_toggle),                    win));
 
     win->add_action(               "canvas-command-palette",        sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_command_palette),             win));
     // clang-format on

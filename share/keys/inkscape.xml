@@ -221,6 +221,8 @@ override) the bindings in the main default.xml.
   <bind gaction="win.window-next"                        keys="&lt;ctrl&gt;Tab, &lt;meta&gt;grave" />
   <bind gaction="win.window-new" />
   <bind gaction="win.view-fullscreen"                    keys="F11, &lt;ctrl&gt;&lt;meta&gt;f" />
+  <bind gaction="win.view-full-screen-focus"             keys="&lt;primary&gt;F11" />
+  <bind gaction="win.view-focus-toggle"                  keys="&lt;shift&gt;F11" />
 
   <!-- Layers -->
   <bind gaction="win.layer-new"                          keys="&lt;primary&gt;&lt;shift&gt;n" />
