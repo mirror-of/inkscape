@@ -619,10 +619,7 @@ void SvgBuilder::setTransform(double c0, double c1, double c2, double c3,
 
     // Add page transformation only once (see scaledCTM in pdf-parser.cpp)
     if ( _container->parent() == _root && _is_top_level && _page_offset) {
-        // Page position is in pixels from pushPage, translate in pt
-        auto _left = Inkscape::Util::Quantity::convert(_page_left, "px", "pt");
-        auto _top = Inkscape::Util::Quantity::convert(_page_top, "px", "pt");
-        matrix = Geom::Translate(_left, _top) * matrix;
+        matrix = matrix * Geom::Translate(_page_left, _page_top);
         _page_offset = false;
     }
 
