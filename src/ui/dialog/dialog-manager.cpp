@@ -6,13 +6,11 @@
 #include <limits>
 #ifdef G_OS_WIN32
 #include <filesystem>
-using fs = std::filesystem;
-using fs_path = fs::u8path;
+namespace filesystem = std::filesystem;
 #else
 // Waiting for compiler on MacOS to catch up to C++x17
 #include <boost/filesystem.hpp>
-using fs = boost::filesystem;
-using fs_path = fs::path;
+namespace filesystem = boost::filesystem;
 #endif
 
 #include "io/resource.h"
@@ -247,7 +245,14 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
     try {
         auto keyfile = std::make_unique<Glib::KeyFile>();
         std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), dialogs_state);
-        if (fs::exists(fs_path(filename)) && keyfile->load_from_file(filename)) {
+
+#ifdef G_OS_WIN32
+        bool exists = filesystem::exists(filesystem::u8path(filename));
+#else
+        bool exists = filesystem::exists(filesystem::path(filename));
+#endif
+
+        if (exists && keyfile->load_from_file(filename)) {
             // restore visible dialogs first; that state is up-to-date
             docking_container->load_container_state(keyfile.get(), include_floating);
 
