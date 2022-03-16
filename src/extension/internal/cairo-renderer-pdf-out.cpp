@@ -142,7 +142,7 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
                 // Set up page transformation which pushes objects back into the 0,0 location
                 ctx->transform(Geom::Translate(rect.corner(0)).inverse());
 
-                for (auto &child : page->getOverlappingItems()) {
+                for (auto &child : page->getOverlappingItems(false)) {
                     ctx->pushState();
 
                     // This process does not return layers, so those affines are added manually.

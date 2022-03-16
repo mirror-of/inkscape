@@ -151,18 +151,22 @@ void SPPage::setDesktopSize(double width, double height)
  * This ignores layers so items in the same layer which are shared
  * between pages are not moved around or exported into pages they
  * shouldn't be.
+ *
+ * @param hidden - Return hidden items (default: true)
  */
-std::vector<SPItem *> SPPage::getExclusiveItems() const
+std::vector<SPItem *> SPPage::getExclusiveItems(bool hidden) const
 {
-    return document->getItemsInBox(0, getDesktopRect(), true, true, true, false);
+    return document->getItemsInBox(0, getDesktopRect(), hidden, true, true, false);
 }
 
 /**
  * Like ExcludiveItems above but get all the items which are inside or overlapping.
+ *
+ * @param hidden - Return hidden items (default: true)
  */
-std::vector<SPItem *> SPPage::getOverlappingItems() const
+std::vector<SPItem *> SPPage::getOverlappingItems(bool hidden) const
 {
-    return document->getItemsPartiallyInBox(0, getDesktopRect(), true, true, true, false);
+    return document->getItemsPartiallyInBox(0, getDesktopRect(), hidden, true, true, false);
 }
 
 /**

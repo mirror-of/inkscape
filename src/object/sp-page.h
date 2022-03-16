@@ -58,8 +58,8 @@ public:
     void setRect(Geom::Rect rect);
     void setDesktopRect(Geom::Rect rect);
     void setDesktopSize(double width, double height);
-    std::vector<SPItem *> getExclusiveItems() const;
-    std::vector<SPItem *> getOverlappingItems() const;
+    std::vector<SPItem *> getExclusiveItems(bool hidden = true) const;
+    std::vector<SPItem *> getOverlappingItems(bool hidden = true) const;
     bool itemOnPage(SPItem *item, bool contains = false) const;
     bool isViewportPage() const;
     std::string getDefaultLabel() const;
