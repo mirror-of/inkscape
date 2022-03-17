@@ -339,6 +339,20 @@ bool PagesTool::root_handler(GdkEvent *event)
     return ret ? true : ToolBase::root_handler(event);
 }
 
+void PagesTool::menu_popup(GdkEvent *event, SPObject *obj)
+{
+    auto &page_manager = _desktop->getDocument()->getPageManager();
+    SPPage *page = page_manager.getSelected();
+    if (event->type != GDK_KEY_PRESS) {
+        drag_origin_w = Geom::Point(event->button.x, event->button.y);
+        drag_origin_dt = _desktop->w2d(drag_origin_w);
+        page = pageUnder(drag_origin_dt);
+    }
+    if (page) {
+        ToolBase::menu_popup(event, page);
+    }
+}
+
 /**
  * Creates the right snapping setup for dragging items around.
  */

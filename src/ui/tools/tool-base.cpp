@@ -402,7 +402,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                  Gdk::POINTER_MOTION_MASK );
                 ret = TRUE;
             } else if (!are_buttons_1_and_3_on(event)) {
-                sp_event_root_menu_popup(_desktop, nullptr, event);
+                this->menu_popup(event);
                 ret = TRUE;
             }
             break;
@@ -646,13 +646,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_Menu:
-            sp_event_root_menu_popup(_desktop, nullptr, event);
+            this->menu_popup(event);
             ret = TRUE;
             break;
 
         case GDK_KEY_F10:
             if (MOD__SHIFT_ONLY(event)) {
-                sp_event_root_menu_popup(_desktop, nullptr, event);
+                this->menu_popup(event);
                 ret = TRUE;
             }
             break;
@@ -969,7 +969,7 @@ bool ToolBase::item_handler(SPItem* item, GdkEvent* event) {
     case GDK_BUTTON_PRESS:
         if (!are_buttons_1_and_3_on(event) && event->button.button == 3 &&
             !((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK))) {
-            sp_event_root_menu_popup(_desktop, item, event);
+            this->menu_popup(event);
             ret = TRUE;
         }
         break;
@@ -1257,20 +1257,21 @@ static void set_event_location(SPDesktop *desktop, GdkEvent *event) {
 /**
  * Create popup menu and tell Gtk to show it.
  */
-void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event) {
+void ToolBase::menu_popup(GdkEvent *event, SPObject *obj) {
 
-    // It seems the param item is the SPItem at the bottom of the z-order
-    // Using the same function call used on left click in sp_select_context_item_handler() to get top of z-order
-    // fixme: sp_canvas_arena should set the top z-order object as arena->active
-    item = sp_event_context_find_item (desktop,
-                              Geom::Point(event->button.x, event->button.y), FALSE, FALSE);
-
-    if (event->type == GDK_KEY_PRESS && !desktop->getSelection()->isEmpty()) {
-        item = desktop->getSelection()->items().front();
+    if (!obj) {
+        if (event->type == GDK_KEY_PRESS && !_desktop->getSelection()->isEmpty()) {
+            obj = _desktop->getSelection()->items().front();
+        } else {
+            // Using the same function call used on left click in sp_select_context_item_handler() to get top of z-order
+            // fixme: sp_canvas_arena should set the top z-order object as arena->active
+            auto p = Geom::Point(event->button.x, event->button.y);
+            obj = sp_event_context_find_item (_desktop, p, false, false);
+        }
     }
 
-    ContextMenu* menu = new ContextMenu(desktop, item);
-    menu->attach_to_widget(*(desktop->getCanvas())); // So actions work!
+    ContextMenu* menu = new ContextMenu(_desktop, obj);
+    menu->attach_to_widget(*(_desktop->getCanvas())); // So actions work!
     menu->show();
 
     switch (event->type) {

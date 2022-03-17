@@ -20,6 +20,7 @@
 
 class SPDesktop;
 class SPDocument;
+class SPObject;
 class SPItem;
 
 /**
@@ -28,7 +29,7 @@ class SPItem;
 class ContextMenu : public Gtk::Menu
 {
 public:
-    ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_objects_menu_item = false);
+    ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_and_objects_menu_item = false);
     ~ContextMenu() override = default;
 
 private:
