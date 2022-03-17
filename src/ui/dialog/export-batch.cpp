@@ -454,7 +454,6 @@ void BatchExport::onExport()
     if (!_desktop)
         return;
     export_btn->set_sensitive(false);
-    bool exportSuccessful = true;
 
     // If there are no selected button, simply flash message in status bar
     int num = current_items.size();
@@ -467,8 +466,6 @@ void BatchExport::onExport()
     // Find and remove any extension from filename so that we can add suffix to it.
     Glib::ustring filename = filename_entry->get_text();
     export_list->removeExtension(filename);
-
-    int count = 0;
 
     // create vector of exports
     int num_rows = export_list->get_rows();
@@ -490,64 +487,62 @@ void BatchExport::onExport()
     std::vector<SPItem *> selected_items(sels.begin(), sels.end());
 
     // Start Exporting Each Item
-    for (auto i = current_items.begin(); i != current_items.end() && !interrupted; ++i) {
-        BatchItem *batchItem = i->second;
-        if (!batchItem->isActive()) {
-            count++;
+    for (int i = 0; i < num_rows; i++) {
+        auto suffix = suffixs[i];
+        auto omod = extensions[i];
+        float dpi = dpis[i];
+
+        if (!omod || omod->deactivated() || !omod->prefs()) {
             continue;
         }
 
-        SPItem *item = batchItem->getItem();
-        SPPage *page = batchItem->getPage();
+        int count = 0;
+        for (auto i = current_items.begin(); i != current_items.end() && !interrupted; ++i) {
+            count++;
 
-        std::vector<SPItem *> show_only;
-        Geom::Rect area;
-        if (item) {
-            if (auto bounds = item->documentVisualBounds()) {
-                area = *bounds;
-            } else {
-                count++;
+            BatchItem *batchItem = i->second;
+            if (!batchItem->isActive()) {
                 continue;
             }
-            show_only.emplace_back(item);
-        } else if (page) {
-            area = page->getDesktopRect();
-            show_only = selected_items; // Maybe stuff here
-        } else {
-            count++;
-            continue;
-        }
 
-        Glib::ustring id = batchItem->getLabel();
-        if (id.empty()) {
-            count++;
-            continue;
-        }
+            SPItem *item = batchItem->getItem();
+            SPPage *page = batchItem->getPage();
 
-        for (int i = 0; i < num_rows; i++) {
-            auto omod = extensions[i];
-            float dpi = dpis[i];
+            std::vector<SPItem *> show_only;
+            Geom::Rect area;
+            if (item) {
+                if (auto bounds = item->documentVisualBounds()) {
+                    area = *bounds;
+                } else {
+                    continue;
+                }
+                show_only.emplace_back(item);
+            } else if (page) {
+                area = page->getDesktopRect();
+                show_only = selected_items; // Maybe stuff here
+            } else {
+                continue;
+            }
 
-            if (!omod) {
+            Glib::ustring id = batchItem->getLabel();
+            if (id.empty()) {
                 continue;
             }
 
             Glib::ustring item_filename = filename + "_" + id;
-            if (!suffixs[i].empty()) {
-                item_filename = item_filename + "_" + suffixs[i];
+            if (!suffix.empty()) {
+                item_filename = item_filename + "_" + suffix;
             }
             if (omod->is_raster()) {
                 item_filename = item_filename + "_" + std::to_string((int)dpi);
             }
 
-            if (count == 0 && !omod->prefs()) {
-                continue; // cancel button
+            bool found = Export::unConflictFilename(_document, item_filename, omod->get_extension());
+            if (!found) {
+                continue;
             }
 
-            if (prog_dlg) {
-                delete prog_dlg;
-                prog_dlg = nullptr;
-            }
+            delete prog_dlg;
             prog_dlg = create_progress_dialog(Glib::ustring::compose(_("Exporting %1 files"), num));
             prog_dlg->set_export_panel(this);
             setExporting(true, Glib::ustring::compose(_("Exporting %1 files"), num));
@@ -555,30 +550,25 @@ void BatchExport::onExport()
             prog_dlg->set_total(num);
 
             onProgressCallback(0.0, prog_dlg);
-            bool found = Export::unConflictFilename(_document, item_filename, extensions[i]->get_extension());
-            if (!found) {
-                count++;
-                continue;
-            }
 
             if (omod->is_raster()) {
                 unsigned long int width = (int)(area.width() * dpi / DPI_BASE + 0.5);
                 unsigned long int height = (int)(area.height() * dpi / DPI_BASE + 0.5);
 
-                exportSuccessful = Export::exportRaster(
+                Export::exportRaster(
                     area, width, height, dpi, item_filename, true, onProgressCallback,
                     prog_dlg, omod, hide ? &show_only : nullptr);
             } else {
                 setExporting(true, Glib::ustring::compose(_("Exporting %1"), filename));
                 auto copy_doc = _document->copy();
-                exportSuccessful = Export::exportVector(omod, copy_doc.get(), item_filename, true, &show_only, page);
+                Export::exportVector(omod, copy_doc.get(), item_filename, true, &show_only, page);
             }
-            count++;
             setExporting(false);
-        }
-        if (prog_dlg) {
-            delete prog_dlg;
-            prog_dlg = nullptr;
+
+            if (prog_dlg) {
+                delete prog_dlg;
+                prog_dlg = nullptr;
+            }
         }
     }
 }

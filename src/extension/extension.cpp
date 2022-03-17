@@ -240,7 +240,6 @@ Extension::set_state (state_t in_state)
 
                 break;
             case STATE_UNLOADED:
-                // std::cout << "Unloading: " << name << std::endl;
                 imp->unload(this);
                 _state = STATE_UNLOADED;
 

@@ -246,11 +246,16 @@ Output::prefs ()
 void
 Output::save(SPDocument *doc, gchar const *filename, bool detachbase)
 {
-    imp->setDetachBase(detachbase);
-    auto new_doc = doc->copy();
-    imp->save(this, new_doc.get(), filename);
-    // This shouldn't be needed, but the unique_ptr is not destroying this SPDocument.
-    delete new_doc.release();
+    if (!loaded())
+        set_state(Extension::STATE_LOADED);
+
+    if (loaded()) {
+        imp->setDetachBase(detachbase);
+        auto new_doc = doc->copy();
+        imp->save(this, new_doc.get(), filename);
+        // This shouldn't be needed, but the unique_ptr is not destroying this SPDocument.
+        delete new_doc.release();
+    }
 }
 
 /**
@@ -263,9 +268,13 @@ Output::save(SPDocument *doc, gchar const *filename, bool detachbase)
 void
 Output::export_raster(const SPDocument *doc, std::string png_filename, gchar const *filename, bool detachbase)
 {
-    imp->setDetachBase(detachbase);
-    imp->export_raster(this, doc, png_filename, filename);
-    return;
+    if (!loaded())
+        set_state(Extension::STATE_LOADED);
+
+    if (loaded()) {
+        imp->setDetachBase(detachbase);
+        imp->export_raster(this, doc, png_filename, filename);
+    }
 }
 
 /**
