@@ -547,10 +547,13 @@ bool ClipboardManagerImpl::_copyNodes(SPDesktop *desktop, ObjectSet *set)
  */
 bool ClipboardManagerImpl::_pasteNodes(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
 {
+    auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
+    if (!node_tool || desktop->selection->objects().size() != 1)
+        return false;
+
     SPObject *obj = desktop->selection->objects().back();
     auto target_path = dynamic_cast<SPPath *>(obj);
-    auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
-    if (!target_path || !node_tool || desktop->selection->objects().size() != 1)
+    if (!target_path)
         return false;
 
     auto source_scale = clipdoc->getDocumentScale();
