@@ -328,10 +328,10 @@ class MultiscaleUpdater : public Updater
 {
     // Whether we are currently in the middle of a redraw.
     bool inprogress = false;
-    
+
     // Whether damage events occurred during the current redraw.
     bool activated = false;
-    
+
     int counter; // A steadily incrementing counter from which the current scale is derived.
     int scale; // The current scale to process updates at.
     int elapsed; // How much time has been spent at the current scale.
@@ -366,7 +366,7 @@ public:
             activated = true;
         }
     }
-    
+
     void mark_clean(const Geom::IntRect &rect) override
     {
         Updater::mark_clean(rect);
@@ -520,7 +520,7 @@ public:
     // Drawing
     bool on_idle();
     void paint_rect_internal(Geom::IntRect const &rect);
-    void paint_single_buffer(Geom::IntRect const &paint_rect, Cairo::RefPtr<Cairo::ImageSurface> const &store);
+    void paint_single_buffer(Geom::IntRect const &paint_rect, Cairo::RefPtr<Cairo::ImageSurface> const &store, bool is_backing_store, bool outline_overlay_pass);
     std::optional<Geom::Dim2> old_bisector(const Geom::IntRect &rect);
     std::optional<Geom::Dim2> new_bisector(const Geom::IntRect &rect);
 
@@ -1771,12 +1771,12 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
         cr->restore();
     }
 
-    auto draw_store = [&, this] (const Cairo::RefPtr<Cairo::ImageSurface> &store, const Cairo::RefPtr<Cairo::ImageSurface> &snapshot_store) {
+    auto draw_store = [&, this] (const Cairo::RefPtr<Cairo::ImageSurface> &store, const Cairo::RefPtr<Cairo::ImageSurface> &snapshot_store, bool is_backing_store) {
         if (!d->decoupled_mode) {
             // Blit store to screen.
             if (d->prefs.debug_framecheck) f = FrameCheck::Event("draw");
             cr->save();
-            cr->set_operator(d->solid_background ? Cairo::OPERATOR_SOURCE : Cairo::OPERATOR_OVER);
+            cr->set_operator(is_backing_store && d->solid_background ? Cairo::OPERATOR_SOURCE : Cairo::OPERATOR_OVER);
             cr->set_source(store, d->_store_rect.left() - _pos.x(), d->_store_rect.top() - _pos.y());
             cr->paint();
             cr->restore();
@@ -1785,7 +1785,7 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
             cr->set_antialias(Cairo::ANTIALIAS_NONE);
 
             // Blit background to complement of both clean regions, if solid (and therefore not already drawn).
-            if (d->solid_background) {
+            if (is_backing_store && d->solid_background) {
                 if (d->prefs.debug_framecheck) f = FrameCheck::Event("composite", 2);
                 cr->save();
                 cr->set_fill_rule(Cairo::FILL_RULE_EVEN_ODD);
@@ -1816,7 +1816,7 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
             region_to_path(cr, d->_snapshot_clean_region);
             cr->clip();
             cr->set_source(snapshot_store, d->_snapshot_rect.left(), d->_snapshot_rect.top());
-            cr->set_operator(d->solid_background ? Cairo::OPERATOR_SOURCE : Cairo::OPERATOR_OVER);
+            cr->set_operator(is_backing_store && d->solid_background ? Cairo::OPERATOR_SOURCE : Cairo::OPERATOR_OVER);
             Cairo::SurfacePattern(cr->get_source()->cobj()).set_filter(Cairo::FILTER_FAST);
             cr->paint();
             if (d->prefs.debug_show_snapshot) {
@@ -1834,7 +1834,7 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
             region_to_path(cr, d->updater->clean_region);
             cr->clip();
             cr->set_source(store, d->_store_rect.left(), d->_store_rect.top());
-            cr->set_operator(d->solid_background ? Cairo::OPERATOR_SOURCE : Cairo::OPERATOR_OVER);
+            cr->set_operator(is_backing_store && d->solid_background ? Cairo::OPERATOR_SOURCE : Cairo::OPERATOR_OVER);
             Cairo::SurfacePattern(cr->get_source()->cobj()).set_filter(Cairo::FILTER_FAST);
             cr->paint();
             cr->restore();
@@ -1842,7 +1842,7 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
     };
 
     // Draw the backing store.
-    draw_store(d->_backing_store, d->_snapshot_store);
+    draw_store(d->_backing_store, d->_snapshot_store, true);
 
     // Draw overlay if required.
     if (_render_mode == Inkscape::RenderMode::OUTLINE_OVERLAY) {
@@ -1855,7 +1855,7 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
         cr->paint_with_alpha(outline_overlay_opacity);
 
         // Overlay outline.
-        draw_store(d->_outline_store, d->_snapshot_outline_store);
+        draw_store(d->_outline_store, d->_snapshot_outline_store, false);
     }
 
     // Draw split if required.
@@ -1879,7 +1879,7 @@ Canvas::on_draw(const Cairo::RefPtr<::Cairo::Context> &cr)
         // Add clipping path and draw outline store.
         cr->save();
         add_clippath(cr);
-        draw_store(d->_outline_store, d->_snapshot_outline_store);
+        draw_store(d->_outline_store, d->_snapshot_outline_store, false);
         cr->restore();
     }
 
@@ -2576,11 +2576,11 @@ CanvasPrivate::paint_rect_internal(Geom::IntRect const &rect)
     // Paint the rectangle.
     q->_drawing->setColorMode(q->_color_mode);
     q->_drawing->setRenderMode(q->_render_mode);
-    paint_single_buffer(rect, _backing_store);
+    paint_single_buffer(rect, _backing_store, true, false);
 
     if (_outline_store) {
         q->_drawing->setRenderMode(Inkscape::RenderMode::OUTLINE);
-        paint_single_buffer(rect, _outline_store);
+        paint_single_buffer(rect, _outline_store, false, q->_render_mode == Inkscape::RenderMode::OUTLINE_OVERLAY);
     }
 
     // Introduce an artificial delay for each rectangle.
@@ -2622,7 +2622,7 @@ CanvasPrivate::paint_rect_internal(Geom::IntRect const &rect)
 }
 
 void
-CanvasPrivate::paint_single_buffer(Geom::IntRect const &paint_rect, const Cairo::RefPtr<Cairo::ImageSurface> &store)
+CanvasPrivate::paint_single_buffer(Geom::IntRect const &paint_rect, const Cairo::RefPtr<Cairo::ImageSurface> &store, bool is_backing_store, bool outline_overlay_pass)
 {
     // Make sure the following code does not go outside of store's data.
     assert(store);
@@ -2656,7 +2656,7 @@ CanvasPrivate::paint_single_buffer(Geom::IntRect const &paint_rect, const Cairo:
 
     // Clear background
     cr->save();
-    if (solid_background) {
+    if (is_backing_store && solid_background) {
         cr->set_source(q->_background);
         cr->set_operator(Cairo::OPERATOR_SOURCE);
     } else {
@@ -2667,7 +2667,7 @@ CanvasPrivate::paint_single_buffer(Geom::IntRect const &paint_rect, const Cairo:
 
     // Render drawing on top of background.
     if (q->_canvas_item_root->is_visible()) {
-        auto buf = Inkscape::CanvasItemBuffer{ paint_rect, _device_scale, cr };
+        auto buf = Inkscape::CanvasItemBuffer{ paint_rect, _device_scale, outline_overlay_pass, cr };
         q->_canvas_item_root->render(&buf);
     }
 

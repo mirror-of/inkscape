@@ -187,7 +187,7 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
     }
 
     // fill background?
-    if (_background) {
+    if (_background && !buf->outline_overlay_pass) {
         buf->cr->save();
         Cairo::Matrix m(_affine[0], _affine[1], _affine[2], _affine[3], _affine[4], _affine[5]);
         buf->cr->transform(m);

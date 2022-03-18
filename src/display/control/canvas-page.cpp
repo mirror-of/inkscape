@@ -129,8 +129,8 @@ void CanvasPage::update(Geom::Rect size, const char *txt, bool outline)
                     rect->set_background_checkerboard(_background_color, true);
                 }
                 else {
-    // TODO: This ignores the requested transparency to paint the background.
-    // there is disagreement between developers about this feature.
+                    // TODO: This ignores the requested transparency to paint the background.
+                    // there is disagreement between developers about this feature.
                     rect->set_background(_background_color | 0xff);
                 }
             }
