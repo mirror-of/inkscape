@@ -5,16 +5,16 @@
 # Alessio Frusciante <algol@firenze.linux.it>, 2002-2003.
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <lucab@debian.org>, 2005-2009.
-# Firas Hanife <FirasHanife@gmail.com>, 2014-2021.
+# Firas Hanife <FirasHanife@gmail.com>, 2014-2022.
 # Germano Gasparini <grigio60@gmail.com>, 2019.
-# Marco Riva <oelimar@mail.com>, 2019, 2021.
+# Marco Riva <oelimar@mail.com>, 2019, 2021-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 1.1\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2022-01-11 17:04+0100\n"
-"PO-Revision-Date: 2021-05-22 13:00+0200\n"
+"POT-Creation-Date: 2022-01-28 02:11+0000\n"
+"PO-Revision-Date: 2022-03-26 17:12+0100\n"
 "Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -3715,12 +3715,12 @@ msgstr "Simboli logici"
 #: ../share/symbols/symbols.h:178
 msgctxt "Symbol"
 msgid "Xnor Gate"
-msgstr "Xnor Gate"
+msgstr "Porta Xnor"
 
 #: ../share/symbols/symbols.h:179
 msgctxt "Symbol"
 msgid "Xor Gate"
-msgstr "Xor Gate"
+msgstr "Porta Xor"
 
 #: ../share/symbols/symbols.h:180
 msgctxt "Symbol"
@@ -3915,7 +3915,7 @@ msgstr "Ufficio postale"
 #: ../share/symbols/symbols.h:253 ../share/symbols/symbols.h:254
 msgctxt "Symbol"
 msgid "Ranger Station"
-msgstr "Stazione dei ranger"
+msgstr "Stazione dei Ranger"
 
 #: ../share/symbols/symbols.h:255 ../share/symbols/symbols.h:256
 msgctxt "Symbol"
@@ -5109,12 +5109,12 @@ msgstr ""
 msgid "Move guide"
 msgstr "Muovi guida"
 
-#: ../src/desktop-events.cpp:339 ../src/desktop-events.cpp:396
+#: ../src/desktop-events.cpp:340 ../src/desktop-events.cpp:400
 #: ../src/ui/dialog/guides.cpp:149
 msgid "Delete guide"
 msgstr "Elimina guida"
 
-#: ../src/desktop-events.cpp:372
+#: ../src/desktop-events.cpp:375
 #, c-format
 msgid "<b>Guideline</b>: %s"
 msgstr "<b>Linea guida</b>: %s"
@@ -7279,7 +7279,7 @@ msgstr "Simula la cecità ai colori"
 
 #: ../src/extension/internal/filter/color.h:344
 msgid "Color Shift"
-msgstr "Spostamento colore"
+msgstr "Scostamento colore"
 
 #: ../src/extension/internal/filter/color.h:346
 msgid "Shift (°)"
@@ -7544,7 +7544,7 @@ msgstr "Sposta RGB"
 
 #: ../src/extension/internal/filter/color.h:1325
 msgid "Red offset"
-msgstr "Spostamento rosso"
+msgstr "Scostamento rosso"
 
 #: ../src/extension/internal/filter/color.h:1326
 #: ../src/extension/internal/filter/color.h:1329
@@ -7571,11 +7571,11 @@ msgstr "Y"
 
 #: ../src/extension/internal/filter/color.h:1328
 msgid "Green offset"
-msgstr "Spostamento verde"
+msgstr "Scostamento verde"
 
 #: ../src/extension/internal/filter/color.h:1331
 msgid "Blue offset"
-msgstr "Spostamento blu"
+msgstr "Scostamento blu"
 
 #: ../src/extension/internal/filter/color.h:1346
 msgid ""
@@ -7590,15 +7590,15 @@ msgstr "Sposta CMY"
 
 #: ../src/extension/internal/filter/color.h:1441
 msgid "Cyan offset"
-msgstr "Spostamento ciano"
+msgstr "Scostamento ciano"
 
 #: ../src/extension/internal/filter/color.h:1444
 msgid "Magenta offset"
-msgstr "Spostamento magenta"
+msgstr "Scostamento magenta"
 
 #: ../src/extension/internal/filter/color.h:1447
 msgid "Yellow offset"
-msgstr "Spostamento giallo"
+msgstr "Scostamento giallo"
 
 #: ../src/extension/internal/filter/color.h:1462
 msgid ""
@@ -9422,9 +9422,8 @@ msgid "Destination Atop"
 msgstr "Destinazione Atop"
 
 #: ../src/filter-enums.cpp:83
-#, fuzzy
 msgid "Lighter"
-msgstr "Illumina"
+msgstr "Più leggero"
 
 #: ../src/filter-enums.cpp:85
 msgid "Arithmetic"
@@ -12814,7 +12813,7 @@ msgstr "Scarta tracciato originale"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
 msgid "Only keep mirrored part of the path, remove the original."
-msgstr "Rimuove il tracciato originale e mantiene solo quello riflesso"
+msgstr "Rimuove il tracciato originale, mantenendo solo quello riflesso"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
 msgid "Fuse original path and mirror image into a single path"
@@ -13493,7 +13492,7 @@ msgstr "Genera tracciato sottile/spesso"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Simulate a stroke of varying width"
-msgstr "Simula un contorno a larghezza variabile"
+msgstr "Simula un contorno di larghezza variabile"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 msgid "Bend hatches"
@@ -14198,7 +14197,7 @@ msgstr "Cambia indice nodo"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:801
 #: ../src/ui/widget/preferences-widget.cpp:751
 msgid "Reset"
-msgstr "Reimposta "
+msgstr "Reimposta"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:45
 msgid "N_r of generations:"
@@ -14823,7 +14822,7 @@ msgstr "[orfano]"
 
 #: ../src/object/sp-tspan.cpp:235
 msgid "Text Span"
-msgstr ""
+msgstr "Ampiezza testo"
 
 #: ../src/object/sp-use.cpp:235
 #: ../share/extensions/render_barcode_qrcode.inx:42
@@ -15030,7 +15029,7 @@ msgstr "Pennello"
 
 #: ../src/preferences-skeleton.h:497
 msgid "Wiggly"
-msgstr "Strisciante"
+msgstr "Ondulato"
 
 #: ../src/preferences-skeleton.h:498
 msgid "Splotchy"
@@ -15630,9 +15629,8 @@ msgid "Group to symbol"
 msgstr "Gruppo a simbolo"
 
 #: ../src/selection-chemistry.cpp:3366
-#, fuzzy
 msgid "Remove symbol for editing"
-msgstr "Converti simbolo in gruppo per modificarlo"
+msgstr "Rimuovi simbolo per modificarlo"
 
 #: ../src/selection-chemistry.cpp:3380
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -16085,48 +16083,48 @@ msgstr "Vettorizza bitmap"
 msgid "Trace: Done. %ld nodes created"
 msgstr "Vettorizza: Eseguito. %ld nodi creati"
 
-#: ../src/ui/clipboard.cpp:314
+#: ../src/ui/clipboard.cpp:315
 msgid "Nothing was copied."
 msgstr "Niente da copiare."
 
-#: ../src/ui/clipboard.cpp:451
+#: ../src/ui/clipboard.cpp:452
 msgid "Can't paste text outside of the text tool."
 msgstr "Impossibile incollare il testo al di fuori dello strumento Testo."
 
-#: ../src/ui/clipboard.cpp:454 ../src/ui/clipboard.cpp:730
-#: ../src/ui/clipboard.cpp:758 ../src/ui/clipboard.cpp:799
+#: ../src/ui/clipboard.cpp:455 ../src/ui/clipboard.cpp:747
+#: ../src/ui/clipboard.cpp:775 ../src/ui/clipboard.cpp:816
 msgid "Nothing on the clipboard."
 msgstr "Niente negli appunti."
 
-#: ../src/ui/clipboard.cpp:572
+#: ../src/ui/clipboard.cpp:588
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Seleziona l'<b>oggetto</b> a cui incollare lo stile."
 
-#: ../src/ui/clipboard.cpp:583 ../src/ui/clipboard.cpp:600
+#: ../src/ui/clipboard.cpp:600 ../src/ui/clipboard.cpp:617
 msgid "No style on the clipboard."
 msgstr "Nessun stile negli appunti."
 
-#: ../src/ui/clipboard.cpp:625
+#: ../src/ui/clipboard.cpp:642
 msgid "Select <b>object(s)</b> to paste size to."
 msgstr "Seleziona l'<b>oggetto</b> a cui incollare la dimensione."
 
-#: ../src/ui/clipboard.cpp:633
+#: ../src/ui/clipboard.cpp:650
 msgid "No size on the clipboard."
 msgstr "Nessuna dimensione negli appunti."
 
-#: ../src/ui/clipboard.cpp:690
+#: ../src/ui/clipboard.cpp:707
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr "Seleziona l'<b>oggetto</b> a cui incollare l'effetto su tracciato."
 
-#: ../src/ui/clipboard.cpp:717
+#: ../src/ui/clipboard.cpp:734
 msgid "No effect on the clipboard."
 msgstr "Nessun effetto negli appunti."
 
-#: ../src/ui/clipboard.cpp:736 ../src/ui/clipboard.cpp:782
+#: ../src/ui/clipboard.cpp:753 ../src/ui/clipboard.cpp:799
 msgid "Clipboard does not contain a path."
 msgstr "Nessun tracciato negli appunti."
 
-#: ../src/ui/clipboard.cpp:829
+#: ../src/ui/clipboard.cpp:846
 msgid "Clipboard does not contain any objects of type \"%1\"."
 msgstr "Nessun oggetto di tipo \"%1\" negli appunti."
 
@@ -20202,7 +20200,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:368
 msgid "Private Use Area"
-msgstr ""
+msgstr "Area Privata"
 
 #: ../src/ui/dialog/glyphs.cpp:369
 msgid "CJK Compatibility Ideographs"
@@ -20210,15 +20208,15 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:370
 msgid "Alphabetic Presentation Forms"
-msgstr ""
+msgstr "Moduli di presentazione alfabetici"
 
 #: ../src/ui/dialog/glyphs.cpp:371
 msgid "Arabic Presentation Forms-A"
-msgstr ""
+msgstr "Moduli di presentazione araba-A"
 
 #: ../src/ui/dialog/glyphs.cpp:372
 msgid "Variation Selectors"
-msgstr ""
+msgstr "Selettori di variazione"
 
 #: ../src/ui/dialog/glyphs.cpp:373
 msgid "Vertical Forms"
@@ -20230,7 +20228,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:375
 msgid "CJK Compatibility Forms"
-msgstr ""
+msgstr "Moduli di compatibilità CJK"
 
 #: ../src/ui/dialog/glyphs.cpp:376
 msgid "Small Form Variants"
@@ -20238,7 +20236,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:377
 msgid "Arabic Presentation Forms-B"
-msgstr ""
+msgstr "Moduli di presentazione araba-B"
 
 #: ../src/ui/dialog/glyphs.cpp:378
 msgid "Halfwidth and Fullwidth Forms"
@@ -22148,7 +22146,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1998
 msgid "Use pressure-sensitive tablet (requires restart)"
-msgstr "Utilizza una tavoletta con sensore di pressione (richiede riapertura)"
+msgstr "Utilizza una tavoletta con sensore di pressione (richiede riavvio)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2000
 msgid ""
@@ -24059,7 +24057,7 @@ msgstr "pad"
 
 #: ../src/ui/dialog/input.cpp:903
 msgid "_Use pressure-sensitive tablet (requires restart)"
-msgstr "_Utilizza una tavoletta con sensore di pressione (richiede riapertura)"
+msgstr "_Utilizza una tavoletta con sensore di pressione (richiede riavvio)"
 
 #: ../src/ui/dialog/input.cpp:908
 msgid "Axes"
@@ -25125,7 +25123,7 @@ msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:469
 msgid "x Height:"
-msgstr "Altezza della minuscola:"
+msgstr "Altezza x:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:469
 msgid ""
@@ -27057,7 +27055,7 @@ msgstr "(lieve assottigliamento, predefinito)"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:154
 #: ../src/ui/toolbar/eraser-toolbar.cpp:128
 msgid "(speed deflates stroke)"
-msgstr "(assotigliato dalla velocità)"
+msgstr "(assottigliato dalla velocità)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:158
 #: ../src/ui/toolbar/eraser-toolbar.cpp:132
@@ -27678,7 +27676,7 @@ msgstr "Traccia dimensione"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:218
 msgid "Mark dimension offset"
-msgstr "Spostamento traccia dimensione"
+msgstr "Evidenzia spostamento dimensione"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:309
 msgid "Measures only selected."
@@ -27809,7 +27807,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:300
 msgid "Scale mesh to bounding box:"
-msgstr "Ridimensiona gradiente al riquadro"
+msgstr "Ridimensiona gradiente al riquadro:"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:301
 msgid "Scale mesh to fit inside bounding box."
@@ -28180,7 +28178,7 @@ msgstr "Forma dei nuovi tracciati disegnati con questo strumento"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:446
 msgid "Scale of the width of the power stroke shape."
-msgstr "Ridimensiona la larghezza della forma del contorno evoluto"
+msgstr "Ridimensiona la larghezza del contorno evoluto"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:515
 msgctxt "Cap"
@@ -28812,7 +28810,7 @@ msgstr "Stella: Cambia numero di vertici"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:358
 msgid "Star: Change spoke ratio"
-msgstr "Stella: Cambia rapporto raggi"
+msgstr "Stella: Cambia rapporto tra raggi"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:396
 msgid "Star: Change rounding"
@@ -29044,7 +29042,7 @@ msgstr "Direzione testo"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:621
 msgid "Text direction for normally horizontal text."
-msgstr "Direzione del testo disposto orizzontalmente"
+msgstr "Direzione del testo normalmente disposto in modo orizzontale"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:731
 msgid "Text: Change font family"
@@ -29252,7 +29250,7 @@ msgstr "(grezzo, semplificato)"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:182
 msgid "(fine, but many nodes)"
-msgstr "(buono, ma con molti nodi)"
+msgstr "(accurato, ma con molti nodi)"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:187
 msgid "Fidelity:"
@@ -29842,7 +29840,7 @@ msgstr "Misura"
 
 #: ../src/ui/tools/measure-tool.cpp:740
 msgid "Base"
-msgstr ""
+msgstr "Base"
 
 #: ../src/ui/tools/measure-tool.cpp:749
 msgid "Add guides from measure tool"
@@ -29906,7 +29904,7 @@ msgstr[1] ""
 
 #: ../src/ui/tools/mesh-tool.cpp:277
 msgid "Split mesh row/column"
-msgstr ""
+msgstr "Separa riga o colonna della maglia"
 
 #: ../src/ui/tools/mesh-tool.cpp:367
 msgid "Toggled mesh path type."
@@ -29914,7 +29912,7 @@ msgstr "Commuta tipo tracciato gradiente a maglia"
 
 #: ../src/ui/tools/mesh-tool.cpp:372
 msgid "Approximated arc for mesh side."
-msgstr "Approssima ad arco lato gradiente a maglia"
+msgstr "Lato gradiente a maglia approssimato ad un arco"
 
 #: ../src/ui/tools/mesh-tool.cpp:377
 msgid "Toggled mesh tensors."
@@ -34282,12 +34280,11 @@ msgstr "Manuale di Inkscape"
 
 #: ../src/verbs.cpp:2925
 msgid "Donate"
-msgstr ""
+msgstr "Dona"
 
 #: ../src/verbs.cpp:2925
-#, fuzzy
 msgid "Donate to Inkscape"
-msgstr "Inform_azioni su Inkscape"
+msgstr "Dona ad Inkscape"
 
 #: ../src/verbs.cpp:2926 ../src/verbs.cpp:2927
 msgid "SVG 1.1 Specification"
@@ -35076,7 +35073,7 @@ msgid ""
 "<big><b>Do you want to get involved with Inkscape? <a href=\"https://"
 "inkscape.org/contribute/\">Check this page!</a></b></big>"
 msgstr ""
-"<big><b>Vuoi prendere parte in Inkscape? <a href=\"https://inkscape.org/"
+"<big><b>Vuoi contribuire ad Inkscape? <a href=\"https://inkscape.org/"
 "contribute/\">Guarda questa pagina!</a></b></big>"
 
 #: ../share/ui/inkscape-about.glade:118
@@ -35334,11 +35331,11 @@ msgstr "Desktop SD"
 
 #: ../share/ui/inkscape-start.glade:500
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../share/ui/inkscape-start.glade:508
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../share/ui/inkscape-start.glade:516
 msgid "Mobile-smallest"
@@ -35346,7 +35343,7 @@ msgstr "Mobile-più-piccolo"
 
 #: ../share/ui/inkscape-start.glade:524
 msgid "iPad Pro"
-msgstr ""
+msgstr "iPad Pro"
 
 #: ../share/ui/inkscape-start.glade:532
 msgid "Tablet-smallest"
@@ -35744,7 +35741,7 @@ msgstr "Movimenti"
 
 #: ../share/extensions/hpgl_decoder.py:41
 msgid "Pen "
-msgstr ""
+msgstr "Penna"
 
 #: ../share/extensions/hpgl_input.py:47
 msgid "No HPGL data found."
@@ -35980,7 +35977,7 @@ msgstr "Valore non valido per un campo numerico: {}, {}."
 
 #: ../share/extensions/interp_att_g.py:113
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
-msgstr ""
+msgstr "Hai selezionato ‘Altro’. Immetti un attributo da interpolare."
 
 #: ../share/extensions/interp_att_g.py:134
 msgid "There is no selection to interpolate"
@@ -36289,32 +36286,28 @@ msgstr ""
 "caratteri con'."
 
 #: ../share/extensions/setup_typography_canvas.py:67
-#, fuzzy
 msgid "baseline"
 msgstr "linea base del testo"
 
 #: ../share/extensions/setup_typography_canvas.py:68
-#, fuzzy
 msgid "ascender"
-msgstr "Ascendente:"
+msgstr "ascendente"
 
 #: ../share/extensions/setup_typography_canvas.py:69
 msgid "caps"
-msgstr ""
+msgstr "estremità"
 
 #: ../share/extensions/setup_typography_canvas.py:70
-#, fuzzy
 msgid "xheight"
-msgstr "altezza-x"
+msgstr "altezza x"
 
 #: ../share/extensions/setup_typography_canvas.py:71
-#, fuzzy
 msgid "descender"
-msgstr "Discendente:"
+msgstr "discendente"
 
 #: ../share/extensions/voronoi2svg.py:153
 msgid "Please select objects!"
-msgstr "Seleziona degli oggetti."
+msgstr "Seleziona degli oggetti!"
 
 #: ../share/extensions/web_set_att.py:47
 #: ../share/extensions/web_transmit_att.py:38
@@ -36907,39 +36900,39 @@ msgstr "Input DXF"
 # File: ../share/extensions/dxf_input.inx, line: 8
 #: ../share/extensions/dxf_input.inx:7
 msgid "Method of Scaling:"
-msgstr ""
+msgstr "Metodo di scalatura:"
 
 #: ../share/extensions/dxf_input.inx:8
 msgid "Manual scale"
-msgstr ""
+msgstr "Scalatura manuale"
 
 #: ../share/extensions/dxf_input.inx:9
 msgid "Automatic scaling to size A4"
-msgstr ""
+msgstr "Scalatura automatica al formato A4"
 
 #: ../share/extensions/dxf_input.inx:10
 msgid "Read from file"
-msgstr ""
+msgstr "Leggi da file"
 
 #: ../share/extensions/dxf_input.inx:12
 msgid "Manual scale factor:"
-msgstr ""
+msgstr "Fattore di scalatura manuale:"
 
 #
 # File: ../share/extensions/dxf_input.inx, line: 14
 #: ../share/extensions/dxf_input.inx:13
 msgid "Manual x-axis origin (mm):"
-msgstr ""
+msgstr "Origine manuale asse x (mm):"
 
 #
 # File: ../share/extensions/dxf_input.inx, line: 15
 #: ../share/extensions/dxf_input.inx:14
 msgid "Manual y-axis origin (mm):"
-msgstr ""
+msgstr "Origine manuale asse y (mm):"
 
 #: ../share/extensions/dxf_input.inx:15
 msgid "Text scale factor:"
-msgstr ""
+msgstr "Fattore di scalatura testo:"
 
 #
 # File: ../share/extensions/dxf_input.inx, line: 16
@@ -36954,7 +36947,7 @@ msgstr "Codifica caratteri:"
 
 #: ../share/extensions/dxf_input.inx:25
 msgid "Text Font:"
-msgstr ""
+msgstr "Carattere del testo:"
 
 #: ../share/extensions/dxf_input.inx:28
 msgid ""
@@ -36983,11 +36976,11 @@ msgstr "Desktop Cutting Plotter R14"
 
 #: ../share/extensions/dxf_outlines.inx:8
 msgid "use ROBO-Master type of spline output"
-msgstr ""
+msgstr "usa ROBO-Master come tipo di linea per l’esportazione"
 
 #: ../share/extensions/dxf_outlines.inx:9
 msgid "use LWPOLYLINE type of line output"
-msgstr ""
+msgstr "usa LWPOLYLINE come tipo di linea per l’esportazione"
 
 #: ../share/extensions/dxf_outlines.inx:10
 msgid "Base unit:"
@@ -37046,7 +37039,7 @@ msgstr "ft"
 
 #: ../share/extensions/dxf_outlines.inx:20
 msgid "Character Encoding:"
-msgstr ""
+msgstr "Codifica caratteri:"
 
 #: ../share/extensions/dxf_outlines.inx:27
 msgid "Layer export selection:"
@@ -37054,19 +37047,19 @@ msgstr ""
 
 #: ../share/extensions/dxf_outlines.inx:28
 msgid "All (default)"
-msgstr ""
+msgstr "Tutto (default)"
 
 #: ../share/extensions/dxf_outlines.inx:29
 msgid "Visible only"
-msgstr ""
+msgstr "Solo visibile"
 
 #: ../share/extensions/dxf_outlines.inx:30
 msgid "By name match"
-msgstr ""
+msgstr "Per corrispondenza del nome"
 
 #: ../share/extensions/dxf_outlines.inx:32
 msgid "Layer match name:"
-msgstr ""
+msgstr "Nome corrispondente del livello:"
 
 #: ../share/extensions/dxf_outlines.inx:35
 msgid ""
@@ -37298,7 +37291,7 @@ msgstr "Le funzioni matematiche standard di Python sono disponibili:"
 
 #: ../share/extensions/funcplot.inx:42 ../share/extensions/param_curves.inx:37
 msgid "The constants pi, e and tau are also available."
-msgstr ""
+msgstr "Sono anche disponibili le costanti pi, tau ed e."
 
 #: ../share/extensions/funcplot.inx:44 ../share/extensions/param_curves.inx:39
 msgid ""
@@ -37308,13 +37301,15 @@ msgstr ""
 
 #: ../share/extensions/funcplot.inx:48
 msgid "This extension creates a plot of a function (in variable x)."
-msgstr ""
+msgstr "Questa estensione crea il disegno di una funzione (con variabile x)."
 
 #: ../share/extensions/funcplot.inx:50 ../share/extensions/param_curves.inx:45
 msgid ""
 "In order to use the extension, select a rectangle first. The rectangle will "
 "serve as bounding box of the plot."
 msgstr ""
+"Per usare l’estensione devi prima selezionare un rettangolo, che servirà "
+"come riquadro di selezione del disegno."
 
 #: ../share/extensions/funcplot.inx:53
 msgid "Function:"
@@ -37425,7 +37420,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_area.inx:10
 msgid "Area width:"
-msgstr ""
+msgstr "Larghezza area:"
 
 #
 # File: ../share/extensions/gcodetools_area.inx, line: 12
@@ -37451,7 +37446,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_area.inx:21
 msgid "Fill area"
-msgstr ""
+msgstr "Area di riempimento"
 
 #: ../share/extensions/gcodetools_area.inx:22
 msgid "Area fill angle"
@@ -37464,7 +37459,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_area.inx:25
 msgid "Filling method"
-msgstr ""
+msgstr "Metodo di riempimento"
 
 #: ../share/extensions/gcodetools_area.inx:26
 msgid "Zig zag"
@@ -37519,7 +37514,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_path_to_gcode.inx:4
 #: ../share/extensions/gcodetools_path_to_gcode.inx:8
 msgid "Path to Gcode"
-msgstr ""
+msgstr "Da tracciato a Gcode"
 
 #: ../share/extensions/gcodetools_area.inx:49
 #: ../share/extensions/gcodetools_lathe.inx:29
@@ -37555,13 +37550,13 @@ msgstr "Di tracciato in tracciato"
 #: ../share/extensions/gcodetools_lathe.inx:34
 #: ../share/extensions/gcodetools_path_to_gcode.inx:14
 msgid "Pass by Pass"
-msgstr ""
+msgstr "Passo a passo"
 
 #: ../share/extensions/gcodetools_area.inx:57
 #: ../share/extensions/gcodetools_lathe.inx:37
 #: ../share/extensions/gcodetools_path_to_gcode.inx:17
 msgid "Depth function:"
-msgstr ""
+msgstr "Funzione profondità:"
 
 #
 # File: ../share/extensions/gcodetools_area.inx, line: 59
@@ -37713,7 +37708,7 @@ msgstr "Unità (mm o in):"
 #: ../share/extensions/gcodetools_lathe.inx:68
 #: ../share/extensions/gcodetools_path_to_gcode.inx:48
 msgid "Post-processor:"
-msgstr ""
+msgstr "Post-processore:"
 
 #: ../share/extensions/gcodetools_area.inx:89
 #: ../share/extensions/gcodetools_dxf_points.inx:35
@@ -37732,7 +37727,7 @@ msgstr "Nessuno"
 #: ../share/extensions/gcodetools_lathe.inx:70
 #: ../share/extensions/gcodetools_path_to_gcode.inx:50
 msgid "Parameterize Gcode"
-msgstr ""
+msgstr "Parametrizza Gcode"
 
 #: ../share/extensions/gcodetools_area.inx:91
 #: ../share/extensions/gcodetools_dxf_points.inx:37
@@ -37741,7 +37736,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_lathe.inx:71
 #: ../share/extensions/gcodetools_path_to_gcode.inx:51
 msgid "Flip y axis and parameterize Gcode"
-msgstr ""
+msgstr "Capovolgi l’asse y e parametrizza Gcode"
 
 #: ../share/extensions/gcodetools_area.inx:92
 #: ../share/extensions/gcodetools_dxf_points.inx:38
@@ -37750,7 +37745,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_lathe.inx:72
 #: ../share/extensions/gcodetools_path_to_gcode.inx:52
 msgid "Round all values to 4 digits"
-msgstr ""
+msgstr "Approssima tutti i valori alle 4 cifre"
 
 #: ../share/extensions/gcodetools_area.inx:93
 #: ../share/extensions/gcodetools_dxf_points.inx:39
@@ -37888,7 +37883,7 @@ msgstr "Lunghezza massima del segmento (px):"
 
 #: ../share/extensions/gcodetools_graffiti.inx:10
 msgid "Minimal connector radius:"
-msgstr ""
+msgstr "Raggio minimo del connettore:"
 
 #: ../share/extensions/gcodetools_graffiti.inx:11
 msgid "Start position (x;y):"
@@ -37938,7 +37933,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:33
 #: ../share/extensions/gcodetools_orientation_points.inx:15
 msgid "Z surface:"
-msgstr ""
+msgstr "Superficie Z:"
 
 #: ../share/extensions/gcodetools_graffiti.inx:34
 #: ../share/extensions/gcodetools_orientation_points.inx:16
@@ -37993,7 +37988,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_lathe.inx:13
 msgid "Move path"
-msgstr ""
+msgstr "Muovi il tracciato"
 
 #: ../share/extensions/gcodetools_lathe.inx:14
 msgid "Offset path"
@@ -39034,9 +39029,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:29
-#, fuzzy
 msgid "Tool (Knife) offset correction (mm):"
-msgstr "Strumento (Coltello), correzione spostamento (mm):"
+msgstr "Correzione spostamento (mm) dello strumento Coltello:"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 30
@@ -39064,7 +39058,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx:31 ../share/extensions/plotter.inx:89
 #, fuzzy
 msgid "Curve flatness:"
-msgstr "Appiattimento"
+msgstr "Appiattimento curva:"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 32
@@ -39078,7 +39072,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx:32 ../share/extensions/plotter.inx:90
 #, fuzzy
 msgid "Auto align"
-msgstr "Allineamento"
+msgstr "Auto allineamento"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 33
@@ -40262,7 +40256,7 @@ msgstr "Assegna colore contorno"
 
 #: ../share/extensions/markers_strokepaint.inx:28
 msgid "Modify in Place"
-msgstr ""
+msgstr "Modifica sul posto"
 
 #: ../share/extensions/measure.inx:3
 msgid "Measure Path"
@@ -41229,28 +41223,32 @@ msgid "Duplicate the pattern before deformation"
 msgstr "Duplica il motivo prima della deformazione"
 
 #: ../share/extensions/pathalongpath.inx:25
-#, fuzzy
 msgid ""
 "This extension bends a pattern along the curvature of selected path objects."
-msgstr "Questa estensione richiede due oggetti selezionati."
+msgstr ""
+"Questa estensione deforma un motivo lungo la curvatura del tracciato degli "
+"oggetti selezionati."
 
 #: ../share/extensions/pathalongpath.inx:26
-#, fuzzy
 msgid ""
 "There must only be a single pattern object. The pattern object must be the "
 "topmost object in the selection. For the pattern, groups of paths, shapes or "
 "clones are allowed. Text must be converted to path before using it as a "
 "pattern."
 msgstr ""
-"Questo effetto sparge elementi di un motivo lungo tracciati \"scheletro\" "
-"arbitrari. Il motivo deve essere l'oggetto in cima alla selezione. Sono "
-"permessi gruppi di tracciati, forme e cloni."
+"L'oggetto usato come motivo deve essere uno solo. L'oggetto motivo deve "
+"essere l'oggetto più alto nella selezione. Come motivo sono permessi gruppi "
+"di tracciati, forme o cloni. Il testo deve essere convertito a tracciato "
+"prima di usarlo come motivo."
 
 #: ../share/extensions/pathalongpath.inx:27
 msgid ""
 "The pattern can be bent along multiple paths at once, the only condition is "
 "that these must be path objects, no other object types are allowed."
 msgstr ""
+"Il motivo può essere deformato su più tracciati contemporaneamente a "
+"condizione che questi siano oggetti tracciato, nessun altro tipo di oggetto "
+"è permesso."
 
 #: ../share/extensions/pathalongpath.inx:28
 msgid ""
@@ -41258,12 +41256,17 @@ msgid ""
 "will rotate along with the path direction. With \"Ribbon\", the pattern will "
 "stay upright, so the result will look like a printed ribbon."
 msgstr ""
+"Sono presenti due tipi di deformazione. \"Serpente\", il motivo sarà ruotato "
+"con la direzione del tracciato. \"Nastro\", il motivo resterà diritto, "
+"ottenendo un risultato simile ad un nastro stampato."
 
 #: ../share/extensions/pathalongpath.inx:30
 msgid ""
 "The option \"Pattern is vertical\" rotates the pattern by 90 degrees before "
 "applying it to the path."
 msgstr ""
+"L'opzione \"Motivo verticale\" ruota il motivo di 90 gradi prima di "
+"applicarlo al tracciato."
 
 #: ../share/extensions/pathalongpath.inx:32
 msgid ""
@@ -41282,9 +41285,8 @@ msgid "Stretch spaces to fit skeleton length"
 msgstr "Stira gli spazi per adattarsi alla lunghezza dello scheletro"
 
 #: ../share/extensions/pathscatter.inx:13
-#, fuzzy
 msgid "Rotate pattern 90° clockwise"
-msgstr "Ruota la selezione di 90° orari"
+msgstr "Ruota motivo di 90° orari"
 
 #: ../share/extensions/pathscatter.inx:14
 msgid "Original pattern will be:"
@@ -41295,9 +41297,8 @@ msgid "Moved"
 msgstr "Spostato"
 
 #: ../share/extensions/pathscatter.inx:16
-#, fuzzy
 msgid "Duplicated"
-msgstr "Duplica"
+msgstr "Duplicato"
 
 #: ../share/extensions/pathscatter.inx:17
 msgid "Cloned"
@@ -41309,7 +41310,7 @@ msgstr "Se il motivo è un gruppo, prendi membri del gruppo"
 
 #: ../share/extensions/pathscatter.inx:19
 msgid "Only for options 'moved' and 'duplicated'"
-msgstr ""
+msgstr "Solo per opzioni 'spostato' e 'duplicato'"
 
 #: ../share/extensions/pathscatter.inx:20
 msgid "Pick group members:"
@@ -41659,7 +41660,6 @@ msgstr "Numero di penne da utilizzare (standard: '1')"
 # File: ../share/extensions/hpgl_output.inx, line: 14
 # File: ../share/extensions/plotter.inx, line: 72
 #: ../share/extensions/plotter.inx:71
-#, fuzzy
 msgid ""
 "The force pushing down the pen in grams. Set to 0 to omit command; most "
 "plotters ignore this command (default: 0)"
@@ -41741,7 +41741,7 @@ msgstr ""
 #: ../share/extensions/plotter.inx:87
 #, fuzzy
 msgid "Tool (knife) offset correction (mm):"
-msgstr "Strumento (Coltello), correzione spostamento (mm):"
+msgstr "Correzione spostamento (mm) dello strumento Coltello:"
 
 #: ../share/extensions/plotter.inx:87
 msgid ""
@@ -43586,7 +43586,7 @@ msgstr ""
 
 #: ../share/extensions/web_interactive_mockup.inx:3
 msgid "Interactive Mockup"
-msgstr ""
+msgstr "Simulacro interattivo"
 
 #: ../share/extensions/web_interactive_mockup.inx:8
 msgid "click"
@@ -43633,6 +43633,9 @@ msgid ""
 "This extension allows you to create interactive elements in your drawing. "
 "These will react to user actions when the file is viewed in a web browser."
 msgstr ""
+"Questa estensione permette di creare degli elementi interattivi all’interno "
+"del disegno. Questi interagiranno con le azioni dell’utente quando il file "
+"sarà mostrato in un web browser."
 
 #: ../share/extensions/web_interactive_mockup.inx:22
 msgid ""
@@ -43640,6 +43643,9 @@ msgid ""
 "like a button), the view will shift to another element. This is achieved by "
 "changing the viewbox of the SVG with JavaScript."
 msgstr ""
+"Quando è richiesta un’interazione (ad esempio cliccando su un oggetto a "
+"forma di bottone), la vista si sposterà su di un altro elemento. Questo è "
+"ottenuto cambiando la visualizzazione dell’SVG tramite JavaScript."
 
 #: ../share/extensions/web_interactive_mockup.inx:23
 msgid ""
