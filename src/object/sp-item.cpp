@@ -350,12 +350,14 @@ bool SPItem::lowerOne() {
     auto next_lower = std::find_if(start, list.rend(), &is_item);
     if (next_lower != list.rend()) {
         auto next = list.iterator_to(*next_lower);
-        if (next != list.begin()) {
+        if (next == list.begin()) {
+            getRepr()->parent()->changeOrder(getRepr(), nullptr);
+        } else {
             --next;
             auto ref = next->getRepr();
             getRepr()->parent()->changeOrder(getRepr(), ref);
-            return true;
         }
+        return true;
     }
     return false;
 }
