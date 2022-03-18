@@ -54,13 +54,14 @@ namespace Toolbar {
 SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     Toolbar(desktop),
     _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR)),
-    _update(false),
     _lock_btn(Gtk::manage(new Gtk::ToggleToolButton())),
     _select_touch_btn(Gtk::manage(new Gtk::ToggleToolButton())),
     _transform_stroke_btn(Gtk::manage(new Gtk::ToggleToolButton())),
     _transform_corners_btn(Gtk::manage(new Gtk::ToggleToolButton())),
     _transform_gradient_btn(Gtk::manage(new Gtk::ToggleToolButton())),
-    _transform_pattern_btn(Gtk::manage(new Gtk::ToggleToolButton()))
+    _transform_pattern_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+    _update(false),
+    _action_prefix("selector:toolbar:")
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -418,15 +419,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
         sv = Quantity::convert(sv, "px", unit);
     }
 
-    // do the action only if one of the scales/moves is greater than half the last significant
-    // digit in the spinbox (currently spinboxes have 3 fractional digits, so that makes 0.0005). If
-    // the value was changed by the user, the difference will be at least that much; otherwise it's
-    // just rounding difference between the spinbox value and actual value, so no action is
-    // performed
-    char const * const actionkey = ( mh > 5e-4 ? "selector:toolbar:move:horizontal" :
-                                     sh > 5e-4 ? "selector:toolbar:scale:horizontal" :
-                                     mv > 5e-4 ? "selector:toolbar:move:vertical" :
-                                     sv > 5e-4 ? "selector:toolbar:scale:vertical" : nullptr );
+    char const *const actionkey = get_action_key(mh, sh, mv, sv);
 
     if (actionkey != nullptr) {
 
@@ -521,7 +514,27 @@ SelectToolbar::on_inkscape_selection_changed(Inkscape::Selection *selection)
         }
 
         layout_widget_update(selection);
+        _selection_seq++;
     }
+}
+
+char const *SelectToolbar::get_action_key(double mh, double sh, double mv, double sv)
+{
+    // do the action only if one of the scales/moves is greater than half the last significant
+    // digit in the spinbox (currently spinboxes have 3 fractional digits, so that makes 0.0005). If
+    // the value was changed by the user, the difference will be at least that much; otherwise it's
+    // just rounding difference between the spinbox value and actual value, so no action is
+    // performed
+    double const threshold = 5e-4;
+    char const *const action = ( mh > threshold ? "move:horizontal:" :
+                                 sh > threshold ? "scale:horizontal:" :
+                                 mv > threshold ? "move:vertical:" :
+                                 sv > threshold ? "scale:vertical:" : nullptr );
+    if (!action) {
+        return nullptr;
+    }
+    _action_key = _action_prefix + action + std::to_string(_selection_seq);
+    return _action_key.c_str();
 }
 
 void
