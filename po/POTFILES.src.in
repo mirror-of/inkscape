@@ -381,6 +381,7 @@
 ../src/ui/widget/combo-enums.h
 ../src/ui/widget/dash-selector.cpp
 ../src/ui/widget/entity-entry.cpp
+../src/ui/widget/export-lists.cpp
 ../src/ui/widget/fill-style.cpp
 ../src/ui/widget/filter-effect-chooser.cpp
 ../src/ui/widget/font-selector-toolbar.cpp

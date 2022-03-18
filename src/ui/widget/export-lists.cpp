@@ -139,21 +139,21 @@ void ExportList::setup()
     default_dpi = prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE);
 
     Gtk::Button *add_button = Gtk::manage(new Gtk::Button());
-    Glib::ustring label = "Add Export";
+    Glib::ustring label = _("Add Export");
     add_button->set_label(label);
     this->attach(*add_button, 0, 0, 4, 1);
 
     this->insert_row(0);
 
-    Gtk::Label *suffix_label = Gtk::manage(new Gtk::Label("Suffix"));
+    Gtk::Label *suffix_label = Gtk::manage(new Gtk::Label(_("Suffix")));
     this->attach(*suffix_label, _suffix_col, 0, 1, 1);
     suffix_label->show();
 
-    Gtk::Label *extension_label = Gtk::manage(new Gtk::Label("Format"));
+    Gtk::Label *extension_label = Gtk::manage(new Gtk::Label(_("Format")));
     this->attach(*extension_label, _extension_col, 0, 1, 1);
     extension_label->show();
 
-    Gtk::Label *dpi_label = Gtk::manage(new Gtk::Label("DPI"));
+    Gtk::Label *dpi_label = Gtk::manage(new Gtk::Label(_("DPI")));
     this->attach(*dpi_label, _dpi_col, 0, 1, 1);
     dpi_label->show();
 
@@ -185,7 +185,7 @@ void ExportList::append_row()
     this->attach(*suffix, _suffix_col, current_row, 1, 1);
     suffix->set_width_chars(2);
     suffix->set_hexpand(true);
-    suffix->set_placeholder_text("Suffix");
+    suffix->set_placeholder_text(_("Suffix"));
     suffix->show();
 
     ExtensionList *extension = Gtk::manage(new ExtensionList());
