@@ -137,18 +137,18 @@ Here comes the rendering part which could be put into the 'render' methods of SP
 */
 
 /* The below functions are copy&pasted plus slightly modified from *_invoke_print functions. */
-static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx);
+static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx, SPItem *origin = nullptr);
 static void sp_group_render(SPGroup *group, CairoRenderContext *ctx);
 static void sp_anchor_render(SPAnchor *a, CairoRenderContext *ctx);
 static void sp_use_render(SPUse *use, CairoRenderContext *ctx);
-static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx);
+static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx, SPItem *origin = nullptr);
 static void sp_text_render(SPText *text, CairoRenderContext *ctx);
 static void sp_flowtext_render(SPFlowtext *flowtext, CairoRenderContext *ctx);
 static void sp_image_render(SPImage *image, CairoRenderContext *ctx);
 static void sp_symbol_render(SPSymbol *symbol, CairoRenderContext *ctx);
 static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx);
 
-static void sp_shape_render_invoke_marker_rendering(SPMarker* marker, Geom::Affine tr, SPStyle* style, CairoRenderContext *ctx)
+static void sp_shape_render_invoke_marker_rendering(SPMarker* marker, Geom::Affine tr, SPStyle* style, CairoRenderContext *ctx, SPItem *origin)
 {
     bool render = true;
     if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
@@ -165,13 +165,13 @@ static void sp_shape_render_invoke_marker_rendering(SPMarker* marker, Geom::Affi
             tr = (Geom::Affine)marker_item->transform * (Geom::Affine)marker->c2p * tr;
             Geom::Affine old_tr = marker_item->transform;
             marker_item->transform = tr;
-            ctx->getRenderer()->renderItem (ctx, marker_item);
+            ctx->getRenderer()->renderItem (ctx, marker_item, origin);
             marker_item->transform = old_tr;
         }
     }
 }
 
-static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
+static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx, SPItem *origin)
 {
     if (!shape->curve()) {
         return;
@@ -180,6 +180,8 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
     Geom::OptRect pbox = shape->geometricBounds();
     
     SPStyle* style = shape->style;
+    auto fill_origin = style->fill.paintOrigin;
+    auto stroke_origin = style->stroke.paintOrigin;
 
     SPObject *defs = dynamic_cast<SPObject *>(shape->document->getDefs());
     if (defs && defs->isAncestorOf(shape)) {
@@ -189,9 +191,10 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
             parentobj = dynamic_cast<SPObject *>(parentobj->parent);
             marker = dynamic_cast<SPMarker *>(parentobj);
         }
-        SPObject *origin = nullptr;
         if (marker) {
-            origin = (*marker->hrefList.begin());
+            // Origin will ultimately be either the original object the marker
+            // was added to OR a use tag. See sp_use_render for where this object
+            // comes from when it's a clone.
             if (origin) {
                 SPStyle* styleorig = origin->style;
                 bool iscolorfill   = styleorig->fill.isColor() || (styleorig->fill.isPaintserver() && !styleorig->getFillPaintServer()->isValid());
@@ -200,6 +203,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
                 bool fillctxstroke   = style->fill.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE;
                 bool strokectxfill   = style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL;
                 bool strokectxstroke = style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE;
+
                 if (fillctxfill || fillctxstroke) {
                     if (fillctxfill ? iscolorfill : iscolorstroke) {
                         style->fill.setColor(fillctxfill ? styleorig->fill.value.color : styleorig->stroke.value.color);
@@ -256,7 +260,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
             } else {
                 tr = Geom::Rotate::from_degrees(marker->orient.computed) * Geom::Translate(pathv.begin()->front().pointAt(0));
             }
-            sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx);
+            sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx, origin ? origin : shape);
         }
     }
     // MID marker
@@ -274,7 +278,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
                 } else {
                     tr = Geom::Rotate::from_degrees(marker->orient.computed) * Geom::Translate(path_it->front().pointAt(0));
                 }
-                sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx);
+                sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx, origin ? origin : shape);
             }
             // MID position
             if (path_it->size_default() > 1) {
@@ -292,7 +296,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
                         tr = Geom::Rotate::from_degrees(marker->orient.computed) * Geom::Translate(curve_it1->pointAt(1));
                     }
 
-                    sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx);
+                    sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx, origin ? origin : shape);
 
                     ++curve_it1;
                     ++curve_it2;
@@ -307,7 +311,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
                 } else {
                     tr = Geom::Rotate::from_degrees(marker->orient.computed) * Geom::Translate(lastcurve.pointAt(1));
                 }
-                sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx);
+                sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx, origin ? origin : shape);
             }
         }
     }
@@ -332,7 +336,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
                 tr = Geom::Rotate::from_degrees(marker->orient.computed) * Geom::Translate(lastcurve.pointAt(1));
             }
 
-            sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx);
+            sp_shape_render_invoke_marker_rendering(marker, tr, style, ctx, origin ? origin : shape);
         }
     }
 
@@ -350,6 +354,10 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::FILL_ONLY);
     }
 
+    // Put the style's paint origin back, in case this shape is a marker
+    // which is rendered multple times.
+    style->fill.paintOrigin = fill_origin;
+    style->stroke.paintOrigin = stroke_origin;
 }
 
 static void sp_group_render(SPGroup *group, CairoRenderContext *ctx)
@@ -378,7 +386,9 @@ static void sp_use_render(SPUse *use, CairoRenderContext *ctx)
     }
 
     if (use->child) {
-        renderer->renderItem(ctx, use->child);
+        // Padding in the use object as the origin here ensures markers
+        // are rendered with their correct context-fill.
+        renderer->renderItem(ctx, use->child, use);
     }
 
     if (translated) {
@@ -581,7 +591,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
 }
 
 
-static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
+static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx, SPItem *origin)
 {
     // Check item's visibility
     if (item->isHidden()) {
@@ -621,7 +631,7 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
                 SPShape *shape = dynamic_cast<SPShape *>(item);
                 if (shape) {
                     TRACE(("shape\n"));
-                    sp_shape_render(shape, ctx);
+                    sp_shape_render(shape, ctx, origin);
                 } else {
                     SPUse *use = dynamic_cast<SPUse *>(item);
                     if (use) {
@@ -681,7 +691,7 @@ CairoRenderer::setStateForItem(CairoRenderContext *ctx, SPItem const *item)
 }
 
 // TODO change this to accept a const SPItem:
-void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
+void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item, SPItem *origin)
 {
     ctx->pushState();
     setStateForItem(ctx, item);
@@ -701,7 +711,7 @@ void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
         ctx->pushLayer();
     }
     ctx->transform(item->transform);
-    sp_item_invoke_render(item, ctx);
+    sp_item_invoke_render(item, ctx, origin);
 
     if (state->need_layer) {
         if (blend) {

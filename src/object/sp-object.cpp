@@ -304,9 +304,9 @@ void SPObject::hrefObject(SPObject* owner)
 
 void SPObject::unhrefObject(SPObject* owner)
 {
-    g_return_if_fail(hrefcount > 0);
-
     if (!owner || !owner->cloned) {
+        g_return_if_fail(hrefcount > 0);
+
         hrefcount--;
         _updateTotalHRefCount(-1);
     }
