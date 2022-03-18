@@ -54,7 +54,7 @@ static std::vector<std::string> splitPath( std::string const &path )
     return parts;
 }
 
-static std::string convertPathToRelative( std::string const &path, std::string const &docbase )
+std::string convertPathToRelative( std::string const &path, std::string const &docbase )
 {
     std::string result = path;
 

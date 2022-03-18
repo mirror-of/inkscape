@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <glibmm.h>
 
 #include <boost/range/adaptor/transformed.hpp>
 
@@ -29,6 +30,7 @@
 #include "attribute-rel-util.h"
 #include "color-profile.h"
 #include "document.h"
+#include "io/fix-broken-links.h"
 #include "preferences.h"
 #include "style.h"
 #include "live_effects/lpeobject.h"
@@ -1739,6 +1741,11 @@ Glib::ustring SPObject::getExportFilename() const
 
 void SPObject::setExportFilename(Glib::ustring filename)
 {
+    // Is this svg has been saved before.
+    const char *doc_filename = document->getDocumentFilename();
+    std::string base = Glib::path_get_dirname(doc_filename ? doc_filename : filename);
+
+    filename = Inkscape::convertPathToRelative(filename, base);
     repr->setAttributeOrRemoveIfEmpty("inkscape:export-filename", filename.c_str());
 }
 
