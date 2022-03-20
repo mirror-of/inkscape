@@ -1006,7 +1006,7 @@
         <attribute name='use-icon'>true</attribute>
       </item>
       <item>
-        <attribute name='label' translatable="yes">Split Paths</attribute>
+        <attribute name='label' translatable="yes">Split Pat_h</attribute>
         <attribute name='action'>app.path-split</attribute>
         <attribute name='icon'>path-split</attribute>
         <attribute name='use-icon'>true</attribute>
