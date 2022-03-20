@@ -1033,7 +1033,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             if(cloned_elements.find(item)==cloned_elements.end())
                 obj_copy = _copyNode(obj, _doc, group);
             else
-                obj_copy = _copyNode(obj, _doc, _defs);
+                obj_copy = _copyNode(obj, _doc, _clipnode);
 
             // copy complete inherited style
             _copyCompleteStyle(item, obj_copy);

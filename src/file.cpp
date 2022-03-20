@@ -963,6 +963,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             pasted_objects_not.push_back(obj_copy);
         }
     }
+    target_document->ensureUpToDate();
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects_not);
 
