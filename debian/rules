@@ -14,7 +14,7 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 	dh $@ \
 		--buildsystem cmake \
 		--parallel          \
-		--with bash-completion,gnome,python3
+		--with gnome,python3
 
 override_dh_gnome_clean:
 	dh_gnome_clean --no-control

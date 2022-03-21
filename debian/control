@@ -6,7 +6,6 @@ Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
            Alex Valavanis <valavanisalex@gmail.com>
 Build-Depends:
- bash-completion,
  cmake,
  debhelper (>= 11),
  dh-python,
