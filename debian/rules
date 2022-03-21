@@ -14,7 +14,7 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 	dh $@ \
 		--buildsystem cmake \
 		--parallel          \
-		--with gnome,python3
+		--with python3
 
 override_dh_gnome_clean:
 	dh_gnome_clean --no-control
@@ -37,8 +37,3 @@ override_dh_auto_configure:
 override_dh_auto_test:
 #	export CTEST_OUTPUT_ON_FAILURE=1
 #	make check
-
-# Don't run scour, there is no need for it at all, and the defaults are not
-# appropriate for Inkscape's SVGs
-# https://bugs.launchpad.net/ubuntu/+source/inkscape/+bug/1638373
-override_dh_scour:
