@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Inkscape developers <inkscape-devel@lists.sourceforge.net> 
 Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
-           Alex Valavanis <valavanisalex@gmail.com>
+           Alex Valavanis <valavanisalex@gmail.com>,
 Build-Depends:
  cmake,
  debhelper (>= 11),
@@ -48,7 +48,7 @@ Build-Depends:
  pkg-config,
  python3-dev,
  python3-lxml,
- zlib1g-dev
+ zlib1g-dev,
 Build-Conflicts:
  libpng12-dev
 Standards-Version: 4.6.0.2
@@ -62,7 +62,7 @@ Depends:
  ${misc:Depends},
  ${python3:Depends},
  ${shlibs:Depends},
- inkscape-trunk-data
+ inkscape-trunk-data,
 Recommends:
  aspell,
  imagemagick,
@@ -77,17 +77,17 @@ Recommends:
  python3-gi-cairo,
  python3-appdirs,
  gir1.2-gtk-3.0,
- adwaita-icon-theme-full
+ adwaita-icon-theme-full,
 Suggests:
  dia, 
  libsvg-perl, 
  libxml-xql-perl, 
  pstoedit,
  ruby, 
- transfig
+ transfig,
 Conflicts:
  inkscape,
- inkscape-trunk-gtk3
+ inkscape-trunk-gtk3,
 Replaces:
  inkscape-trunk-gtk3
 Description: vector-based drawing program (trunk build)
@@ -123,7 +123,7 @@ Architecture: all
 Depends:
  ${misc:Depends},
  ${python3:Depends},
- ruby | ruby-interpreter
+ ruby | ruby-interpreter,
 Conflicts:
  inkscape
 Description: Data files for Inkscape
