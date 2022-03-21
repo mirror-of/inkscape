@@ -7,7 +7,7 @@ Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Alex Valavanis <valavanisalex@gmail.com>,
 Build-Depends:
  cmake,
- debhelper (>= 11),
+ debhelper-compat (= 13),
  dh-python,
  google-mock,
  libaspell-dev,
