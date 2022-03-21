@@ -115,11 +115,11 @@ Description: vector-based drawing program (trunk build)
  recommended for users wanting stable and bug-free software!
  .
  Between the suggested packages:
- * dia: to export Dia shapes;
- * libsvg-perl: to import .txt files (txt2svg extension);
- * libxml-xql-perl: to use the shadow effect;
- * pstoedit: to work with eps files;
- * ruby: there are several extensions written in ruby
+  * dia: to export Dia shapes;
+  * libsvg-perl: to import .txt files (txt2svg extension);
+  * libxml-xql-perl: to use the shadow effect;
+  * pstoedit: to work with eps files;
+  * ruby: there are several extensions written in ruby
 
 Package: inkscape-trunk-data
 Architecture: all
