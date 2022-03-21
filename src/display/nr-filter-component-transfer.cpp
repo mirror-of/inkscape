@@ -46,8 +46,6 @@ struct UnmultiplyAlpha {
 struct MultiplyAlpha {
     guint32 operator()(guint32 in) {
         EXTRACT_ARGB32(in, a, r, g, b);
-        if (a == 0 )
-            return in;
         r = premul_alpha(r, a);
         g = premul_alpha(g, a);
         b = premul_alpha(b, a);
