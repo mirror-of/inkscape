@@ -83,7 +83,6 @@ Suggests:
  dia,
  fig2dev,
  libsvg-perl,
- libxml-xql-perl,
  pstoedit,
  ruby,
 Conflicts:
