@@ -8,7 +8,7 @@ Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
 Build-Depends:
  bash-completion,
  cmake,
- debhelper (>= 10),
+ debhelper (>= 11),
  dh-python,
  google-mock,
  gnome-pkg-tools,
