@@ -668,8 +668,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 
     // poppler does not use glib g_open. So on win32 we must use unicode call. code was copied from
     // glib gstdio.c
-    GooString *filename_goo = new GooString(uri);
-    pdf_doc = std::make_shared<PDFDoc>(filename_goo, nullptr, nullptr, nullptr);   // TODO: Could ask for password
+    pdf_doc = _POPPLER_MAKE_SHARED_PDFDOC(uri); // TODO: Could ask for password
 
     if (!pdf_doc->isOk()) {
         int error = pdf_doc->getErrorCode();
