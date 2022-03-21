@@ -81,7 +81,7 @@ Recommends:
  gir1.2-gtk-3.0,
  adwaita-icon-theme-full
 Suggests:
- dia | dia-gnome, 
+ dia, 
  libsvg-perl, 
  libxml-xql-perl, 
  pstoedit,
