@@ -14,6 +14,12 @@
 
 #include <glib/poppler-features.h>
 
+#if POPPLER_CHECK_VERSION(22, 3, 0)
+#define _POPPLER_MAKE_SHARED_PDFDOC(uri) std::make_shared<PDFDoc>(std::make_unique<GooString>(uri))
+#else
+#define _POPPLER_MAKE_SHARED_PDFDOC(uri) std::make_shared<PDFDoc>(new GooString(uri), nullptr, nullptr, nullptr)
+#endif
+
 #if POPPLER_CHECK_VERSION(0, 83, 0)
 #define _POPPLER_CONST_83 const
 #else
