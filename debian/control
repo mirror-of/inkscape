@@ -54,7 +54,7 @@ Build-Depends:
  zlib1g-dev
 Build-Conflicts:
  libpng12-dev
-Standards-Version: 3.9.8
+Standards-Version: 4.6.0.2
 Homepage: http://www.inkscape.org
 Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 Vcs-bzr: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
