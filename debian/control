@@ -19,7 +19,6 @@ Build-Depends:
  libdbus-1-dev,
  libdbus-glib-1-dev,
  libgc-dev (>= 1:6.8),
- libgdl-3-dev (>= 3.4),
  libglib2.0-dev (>= 2.64),
  libgmock-dev,
  libgsl-dev,
