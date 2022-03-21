@@ -8,19 +8,11 @@ export DH_VERBOSE=1
 
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
-# Drop the --parallel flag as soon as we bump to compat 10
-# We can do this once we drop support for Ubuntu Xenial and earlier
 %:
-	dh $@ \
-		--buildsystem cmake \
-		--parallel          \
-		--with python3
+	dh $@ --buildsystem cmake --with python3 --without autoreconf
 
 override_dh_gnome_clean:
 	dh_gnome_clean --no-control
-
-# No need for autoreconf in CMake builds
-override_dh_autoreconf:
 
 override_dh_auto_configure:
 	dh_auto_configure --   \
