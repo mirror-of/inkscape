@@ -9,6 +9,7 @@ Build-Depends:
  cmake,
  debhelper-compat (= 13),
  dh-python,
+ dh-sequence-python3,
  libaspell-dev,
  libgspell-1-dev,
  libboost-dev,
