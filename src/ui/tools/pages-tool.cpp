@@ -191,7 +191,7 @@ bool PagesTool::root_handler(GdkEvent *event)
                 drag_origin_w = Geom::Point(event->button.x, event->button.y);
                 drag_origin_dt = _desktop->w2d(drag_origin_w);
                 ret = true;
-                if (auto page = pageUnder(drag_origin_dt)) {
+                if (auto page = pageUnder(drag_origin_dt, false)) {
                     // Select the clicked on page. Manager ignores the same-page.
                     _desktop->getDocument()->getPageManager().selectPage(page);
                     this->set_cursor("page-dragging.svg");
@@ -442,22 +442,31 @@ void PagesTool::clearDragShapes()
 /**
  * Find a page under the cursor point.
  */
-SPPage *PagesTool::pageUnder(Geom::Point pt)
+SPPage *PagesTool::pageUnder(Geom::Point pt, bool retain_selected)
 {
+    auto &pm = _desktop->getDocument()->getPageManager();
+
     // If the point is still on the selected, favour that one.
-    if (auto selected = _desktop->getDocument()->getPageManager().getSelected()) {
-        if (selected->getSensitiveRect().contains(pt)) {
+    if (auto selected = pm.getSelected()) {
+        if (retain_selected && selected->getSensitiveRect().contains(pt)) {
             return selected;
         }
     }
-    // If multiple pages are at the same point; this currently only gives
-    // you the bottom-most page (the first in the stack).
-    for (auto &page : _desktop->getDocument()->getPageManager().getPages()) {
-        if (page->getSensitiveRect().contains(pt)) {
-            return page;
+    // This provides a simple way of selecting a page based on their layering
+    // Pages which are entirely contained within another are selected before
+    // their larger parents.
+    SPPage* ret = nullptr;
+    for (auto &page : pm.getPages()) {
+        auto rect = page->getSensitiveRect();
+        // If the point is inside the page boundry
+        if (rect.contains(pt)) {
+            // If we don't have a page yet, or the new page is inside the old one.
+            if (!ret || ret->getSensitiveRect().contains(rect)) {
+                ret = page;
+            }
         }
     }
-    return nullptr;
+    return ret;
 }
 
 /**
