@@ -10,7 +10,6 @@ Build-Depends:
  debhelper (>= 11),
  dh-python,
  google-mock,
- libart-2.0-dev (>= 2.3.10),
  libaspell-dev,
  libgspell-1-dev,
  libboost-dev,
