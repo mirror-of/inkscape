@@ -55,7 +55,7 @@ Build-Depends:
 Build-Conflicts:
  libpng12-dev
 Standards-Version: 3.9.8
-Homepage: http://www.inkscape.org/
+Homepage: http://www.inkscape.org
 Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 Vcs-bzr: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 
