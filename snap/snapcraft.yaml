@@ -68,6 +68,7 @@ parts:
       - pkg-config
       - zlib1g-dev
     stage-packages:
+      - heif-gdk-pixbuf
       - libatkmm-1.6-1v5
       - libboost-filesystem1.71.0
       - libcairomm-1.0-1v5
