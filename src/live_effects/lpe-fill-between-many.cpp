@@ -76,7 +76,7 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
     if (desktop) {
         selection = desktop->selection;
     }
-    if (!autoreverse || linked_paths._vector.size() == 2) {
+    if (!autoreverse) {
         for (auto & iter : linked_paths._vector) {
             SPObject *obj;
             if (iter->ref.isAttached() && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj) &&
