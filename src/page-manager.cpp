@@ -492,6 +492,15 @@ void PageManager::resizePage(double width, double height)
 }
 
 /**
+ * Change page orientation, landscape to portrait and back.
+ */
+void PageManager::changeOrientation()
+{
+    auto rect = getSelectedPageRect();
+    resizePage(rect.height(), rect.width());
+}
+
+/**
  * Resize the page to the given selection. If nothing is selected,
  * Resize to all the items on the selected page.
  */
