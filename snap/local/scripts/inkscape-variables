@@ -2,15 +2,21 @@
 # Set all the Inkscape specific environment variables
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-REALHOME=`getent passwd $UID | cut -d ':' -f 6`
+# If we're on an older snapd that doesn't have SNAP_REAL_HOME try
+# to fake it
+if [ -z $SNAP_REAL_HOME ]; then
+SNAP_REAL_HOME=`getent passwd $UID | cut -d ':' -f 6`
 # fallback to pre-1.2 behaviour in case getent doesn't work due to apparmor
 # could suggest to install unscd to proxy requests to blocked nss module
-REALHOME=${REALHOME:-${SNAP_USER_DATA}/../../..}
+SNAP_REAL_HOME=${SNAP_REAL_HOME:-${SNAP_USER_DATA}/../../..}
+fi
 
-export INKSCAPE_PROFILE_DIR=${REALHOME}/.config/inkscape
+export INKSCAPE_PROFILE_DIR=${SNAP_REAL_HOME}/.config/inkscape
 export INKSCAPE_LOCALEDIR=${SNAP}/share/locale
 export INKSCAPE_DATADIR=${SNAP}/share
 
 export GTK_USE_PORTAL=1
+
+cd $SNAP_REAL_HOME
 
 exec "$@"
