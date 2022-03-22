@@ -333,7 +333,7 @@
                             <property name="image">image-align-on-canvas</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Enable on-canvas alignment handles.</property>
+                            <property name="tooltip-text" translatable="yes">Enable on-canvas alignment handles</property>
                             <property name="action-name">app.object-align-on-canvas</property>
                           </object>
                           <packing>
@@ -349,7 +349,7 @@
                             <property name="image">image-align-sel-as-group</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Treat selection as group.</property>
+                            <property name="tooltip-text" translatable="yes">Treat selection as group</property>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -361,7 +361,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="margin-start">4</property>
-                            <property name="label" translatable="yes">Alignment handles with third click.</property>
+                            <property name="label" translatable="yes">Alignment handles with third click</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -374,7 +374,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="margin-start">4</property>
-                            <property name="label" translatable="yes">Move/align selection as group.</property>
+                            <property name="label" translatable="yes">Move/align selection as group</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -446,7 +446,7 @@
                             <property name="image">image-align-horizontal-right-to-anchor</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align right edges of objects to the left edge of anchor.</property>
+                            <property name="tooltip-text" translatable="yes">Align right edges of objects to the left edge of anchor</property>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -461,7 +461,7 @@
                             <property name="image">image-align-horizontal-left</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align left edges.</property>
+                            <property name="tooltip-text" translatable="yes">Align left edges</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -476,7 +476,7 @@
                             <property name="image">image-align-horizontal-center</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Center of vertical axis.</property>
+                            <property name="tooltip-text" translatable="yes">Center on vertical axis</property>
                           </object>
                           <packing>
                             <property name="left-attach">2</property>
@@ -491,7 +491,7 @@
                             <property name="image">image-align-horizontal-right</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align right edges.</property>
+                            <property name="tooltip-text" translatable="yes">Align right edges</property>
                           </object>
                           <packing>
                             <property name="left-attach">3</property>
@@ -506,7 +506,7 @@
                             <property name="image">image-align-horizontal-left-to-anchor</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align left edges of objects to the right edge of anchor.</property>
+                            <property name="tooltip-text" translatable="yes">Align left edges of objects to the right edge of anchor</property>
                           </object>
                           <packing>
                             <property name="left-attach">4</property>
@@ -521,7 +521,7 @@
                             <property name="image">image-align-horizontal-baseline</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align baseline anchors of texts horizontally.</property>
+                            <property name="tooltip-text" translatable="yes">Align baseline anchors of texts horizontally</property>
                           </object>
                           <packing>
                             <property name="left-attach">5</property>
@@ -536,7 +536,7 @@
                             <property name="image">image-align-vertical-bottom-to-anchor</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align bottom edges of objects to the top edge of anchor.</property>
+                            <property name="tooltip-text" translatable="yes">Align bottom edges of objects to the top edge of anchor</property>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -551,7 +551,7 @@
                             <property name="image">image-align-vertical-top</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align top edges.</property>
+                            <property name="tooltip-text" translatable="yes">Align top edges</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -566,7 +566,7 @@
                             <property name="image">image-align-vertical-center</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Center on horizontal axis.</property>
+                            <property name="tooltip-text" translatable="yes">Center on horizontal axis</property>
                           </object>
                           <packing>
                             <property name="left-attach">2</property>
@@ -581,7 +581,7 @@
                             <property name="image">image-align-vertical-bottom</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align bottom edges.</property>
+                            <property name="tooltip-text" translatable="yes">Align bottom edges</property>
                           </object>
                           <packing>
                             <property name="left-attach">3</property>
@@ -596,7 +596,7 @@
                             <property name="image">image-align-vertical-top-to-anchor</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align top edges of objects to bottom edge of anchor.</property>
+                            <property name="tooltip-text" translatable="yes">Align top edges of objects to bottom edge of anchor</property>
                           </object>
                           <packing>
                             <property name="left-attach">4</property>
@@ -611,7 +611,7 @@
                             <property name="image">image-align-vertical-baseline</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align baselines of texts.</property>
+                            <property name="tooltip-text" translatable="yes">Align baselines of texts</property>
                           </object>
                           <packing>
                             <property name="left-attach">5</property>
@@ -1015,7 +1015,7 @@
                         <property name="input-purpose">number</property>
                         <property name="adjustment">RemoveOverlap_HGap</property>
                         <property name="numeric">True</property>
-                        <property name="tooltip-text" translatable="yes">Mininum horizontal gap (in pixel units) between bounding boxes.</property>
+                        <property name="tooltip-text" translatable="yes">Minimum horizontal gap (in pixel units) between bounding boxes</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1043,7 +1043,7 @@
                         <property name="input-purpose">number</property>
                         <property name="adjustment">RemoveOverlap_VGap</property>
                         <property name="numeric">True</property>
-                        <property name="tooltip-text" translatable="yes">Mininum vertical gap (in pixel units) between bounding boxes.</property>
+                        <property name="tooltip-text" translatable="yes">Mininum vertical gap (in pixel units) between bounding boxes</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1060,7 +1060,7 @@
                         <property name="image">image-distribute-remove-overlaps</property>
                         <property name="relief">none</property>
                         <property name="always-show-image">True</property>
-                        <property name="tooltip-text" translatable="yes">Move objects as little as possible so that their bounding boxes do not overlap.</property>
+                        <property name="tooltip-text" translatable="yes">Move objects as little as possible so that their bounding boxes do not overlap</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1177,7 +1177,7 @@
                             <property name="image">image-align-vertical-node</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align selected nodes to a common horizontal line.</property>
+                            <property name="tooltip-text" translatable="yes">Align selected nodes to a common horizontal line</property>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -1192,7 +1192,7 @@
                             <property name="image">image-align-horizontal-node</property>
                             <property name="relief">none</property>
                             <property name="always-show-image">True</property>
-                            <property name="tooltip-text" translatable="yes">Align selected nodes to a common vertical line.</property>
+                            <property name="tooltip-text" translatable="yes">Align selected nodes to a common vertical line</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
