@@ -112,6 +112,9 @@ parts:
       INKSCAPE_VERSION=`g++ -I${SNAPCRAFT_PART_SRC}/src ${SNAPCRAFT_PART_BUILD}/src/inkscape-version.cpp ${SNAPCRAFT_PROJECT_DIR}/snap/local/print-inkscape-version.cpp -o print-inkscape-version && ./print-inkscape-version`
       echo "Inkscape Version: ${INKSCAPE_VERSION}"
       snapcraftctl set-version "${INKSCAPE_VERSION}"
+    override-prime: |
+      snapcraftctl prime
+      sed -i "s| inkscape| inkscape.inkscape|" $SNAPCRAFT_PRIME/share/bash-completion/completions/inkscape
     parse-info: [ share/metainfo/org.inkscape.Inkscape.appdata.xml ]
   python-deps:
     plugin: python
