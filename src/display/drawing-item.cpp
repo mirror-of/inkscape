@@ -495,7 +495,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
     }
 
     bool render_filters = _drawing.renderFilters();
-    bool outline = _drawing.outline();
+    bool outline = _drawing.outline() || _drawing.outlineOverlay();
 
     // Set reset flags according to propagation status
     reset |= _propagate_state;
@@ -1085,7 +1085,7 @@ DrawingItem::_markForRendering()
     // TODO: this function does too much work when a large subtree
     // is invalidated - fix
 
-    bool outline = _drawing.outline();
+    bool outline = _drawing.outline() || _drawing.outlineOverlay();
     Geom::OptIntRect dirty = outline ? _bbox : _drawbox;
     if (!dirty) return;
 

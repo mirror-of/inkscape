@@ -71,7 +71,7 @@ unsigned
 DrawingGroup::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, unsigned flags, unsigned reset)
 {
     unsigned beststate = STATE_ALL;
-    bool outline = _drawing.outline();
+    bool outline = _drawing.outline() || _drawing.outlineOverlay();
 
     UpdateContext child_ctx(ctx);
     if (_child_transform) {

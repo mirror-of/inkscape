@@ -1232,7 +1232,6 @@ CanvasPrivate::pick_current_item(const GdkEvent &event)
         }
 
         // If in split mode, look at where cursor is to see if one should pick with outline mode.
-        q->_drawing->setRenderMode(q->_render_mode);
         if (q->_split_mode == Inkscape::SplitMode::SPLIT && q->_render_mode != Inkscape::RenderMode::OUTLINE_OVERLAY) {
             if ((q->_split_direction == Inkscape::SplitDirection::NORTH && y > q->_split_position.y()) ||
                 (q->_split_direction == Inkscape::SplitDirection::SOUTH && y < q->_split_position.y()) ||
@@ -1253,6 +1252,9 @@ CanvasPrivate::pick_current_item(const GdkEvent &event)
         // } else {
         //     std::cout << "  PICKING: DID NOT FIND ITEM" << std::endl;
         // }
+
+        // Reset the drawing back to the requested render mode.
+        q->_drawing->setRenderMode(q->_render_mode);
     }
 
     if (q->_current_canvas_item_new == q->_current_canvas_item && !q->_left_grabbed_item) {
@@ -1601,6 +1603,7 @@ Canvas::set_render_mode(Inkscape::RenderMode mode)
 {
     if (_render_mode != mode) {
         _render_mode = mode;
+        _drawing->setRenderMode(_render_mode);
         redraw_all();
     }
     if (_desktop) {
@@ -2575,12 +2578,12 @@ CanvasPrivate::paint_rect_internal(Geom::IntRect const &rect)
 {
     // Paint the rectangle.
     q->_drawing->setColorMode(q->_color_mode);
-    q->_drawing->setRenderMode(q->_render_mode);
     paint_single_buffer(rect, _backing_store, true, false);
 
     if (_outline_store) {
         q->_drawing->setRenderMode(Inkscape::RenderMode::OUTLINE);
         paint_single_buffer(rect, _outline_store, false, q->_render_mode == Inkscape::RenderMode::OUTLINE_OVERLAY);
+        q->_drawing->setRenderMode(q->_render_mode); // Leave the drawing in the requested render mode.
     }
 
     // Introduce an artificial delay for each rectangle.
