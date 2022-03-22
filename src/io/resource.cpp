@@ -59,6 +59,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
 
     char const *name = nullptr;
     char const *sysdir = nullptr;
+    char const *envor = nullptr;
 
     switch (domain) {
         case CREATE: {
@@ -81,7 +82,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case ATTRIBUTES: name = "attributes"; break;
                 case DOCS: name = "doc"; break;
                 case EXAMPLES: name = "examples"; break;
-                case EXTENSIONS: name = "extensions"; break;
+                case EXTENSIONS: name = "extensions"; envor = "INKSCAPE_EXTENSIONS_DIR"; break;
                 case FILTERS: name = "filters"; break;
                 case FONTS: name = "fonts"; break;
                 case ICONS: name = "icons"; break;
@@ -100,6 +101,13 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                          return nullptr;
             }
         } break;
+    }
+    // Look for an over-ride in the local environment
+    if (envor) {
+        std::string env_dir = Glib::getenv(envor);
+        if (!env_dir.empty()) {
+            return g_build_filename(env_dir.c_str(), filename, nullptr);
+        }
     }
 
     if (!name) {
