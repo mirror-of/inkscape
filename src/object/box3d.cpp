@@ -1224,7 +1224,10 @@ SPBox3D::extract_boxes(SPObject *obj) {
 
 Persp3D *
 SPBox3D::get_perspective() const {
-    return this->persp_ref->getObject();
+    if(this->persp_ref) {
+        return this->persp_ref->getObject();
+    }
+    return nullptr;
 }
 
 void

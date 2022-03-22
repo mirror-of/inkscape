@@ -247,6 +247,12 @@ Box3DToolbar::check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec)
     } else {
         if (_changed)
             _changed.disconnect();
+
+        if (_repr) { // remove old listener
+            _repr->removeListenerByData(this);
+            Inkscape::GC::release(_repr);
+            _repr = nullptr;
+        }
     }
 }
 
@@ -384,7 +390,9 @@ Box3DToolbar::event_attr_changed(Inkscape::XML::Node *repr,
 //    }
 
     Persp3D *persp = Persp3D::get_from_repr(repr);
-    persp->update_box_reprs();
+    if (persp) {
+        persp->update_box_reprs();
+    }
 
     toolbar->_freeze = false;
 }
