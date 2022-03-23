@@ -547,7 +547,6 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     if(_pm()._isBSpline() && !held_shift(*event) && !held_control(*event)){
         new_pos=_last_drag_origin();
     }
-    move(new_pos); // needed for correct update, even though it's redundant
     _pm().update();
 }
 
@@ -824,14 +823,12 @@ void Node::move(Geom::Point const &new_pos)
         nextNodeWeight = _pm()._bsplineHandlePosition(nextNode->back());
     }
 
-    setPosition(new_pos);
+    // Save original position for post-processing
+    _unfixed_pos = std::optional<Geom::Point>(position());
 
+    setPosition(new_pos);
     _front.setPosition(_front.position() + delta);
     _back.setPosition(_back.position() + delta);
-
-    // if the node has a smooth handle after a line segment, it should be kept collinear
-    // with the segment
-    _fixNeighbors(old_pos, new_pos);
 
     // move the affected handles. First the node ones, later the adjoining ones.
     if(_pm()._isBSpline()){
@@ -844,14 +841,10 @@ void Node::move(Geom::Point const &new_pos)
             nextNode->back()->setPosition(_pm()._bsplineHandleReposition(nextNode->back(), nextNodeWeight));
         }
     }
-    Inkscape::UI::Tools::sp_update_helperpath(_desktop);
 }
 
 void Node::transform(Geom::Affine const &m)
 {
-
-    Geom::Point old_pos = position();
-
     // save the previous nodes strength to apply it again once the node is moved 
     double nodeWeight = NO_POWER;
     double nextNodeWeight = NO_POWER;
@@ -867,13 +860,12 @@ void Node::transform(Geom::Affine const &m)
         nextNodeWeight = _pm()._bsplineHandlePosition(nextNode->back());
     }
 
+    // Save original position for post-processing
+    _unfixed_pos = std::optional<Geom::Point>(position());
+
     setPosition(position() * m);
     _front.setPosition(_front.position() * m);
     _back.setPosition(_back.position() * m);
-
-    /* Affine transforms keep handle invariants for smooth and symmetric nodes,
-     * but smooth nodes at ends of linear segments and auto nodes need special treatment */
-    _fixNeighbors(old_pos, position());
 
     // move the involved handles. First the node ones, later the adjoining ones.
     if(_pm()._isBSpline()){
@@ -896,14 +888,26 @@ Geom::Rect Node::bounds() const
     return b;
 }
 
-void Node::_fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos)
+/**
+ * Affine transforms keep handle invariants for smooth and symmetric nodes,
+ * but smooth nodes at ends of linear segments and auto nodes need special treatment
+ *
+ * Call this function once you have finished called ::move or ::transform on ALL nodes
+ * that are being transformed in that one operation to avoid problematic bugs.
+ */
+void Node::fixNeighbors()
 {
+    if (!_unfixed_pos)
+        return;
+
+    Geom::Point const new_pos = position();
+
     // This method restores handle invariants for neighboring nodes,
     // and invariants that are based on positions of those nodes for this one.
 
     // Fix auto handles
     if (_type == NODE_AUTO) _updateAutoHandles();
-    if (old_pos != new_pos) {
+    if (*_unfixed_pos != new_pos) {
         if (_next() && _next()->_type == NODE_AUTO) _next()->_updateAutoHandles();
         if (_prev() && _prev()->_type == NODE_AUTO) _prev()->_updateAutoHandles();
     }
@@ -930,6 +934,8 @@ void Node::_fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos)
     if (other->_type == NODE_SMOOTH && !other_handle->isDegenerate()) {
         other_handle->setDirection(new_pos, other->position());
     }
+
+    _unfixed_pos.reset();
 }
 
 void Node::_updateAutoHandles()

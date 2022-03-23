@@ -131,6 +131,13 @@ public:
      * The default implementation simply moves the point according to the transform.
      */
     virtual void transform(Geom::Affine const &m);
+
+    /**
+     * Apply any node repairs, by default no fixing is applied but Nodes will update
+     * smooth nodes to make sure nodes are kept consistent.
+     */
+    virtual void fixNeighbors() {};
+
     /// @}
     
     /// @name Toggle the point's visibility
