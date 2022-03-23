@@ -218,7 +218,7 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
     }
 }
 
-Geom::OptRect Layout::bounds(Geom::Affine const &transform, int start, int length) const
+Geom::OptRect Layout::bounds(Geom::Affine const &transform, bool with_stroke, int start, int length) const
 {
     Geom::OptRect bbox;
     for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; glyph_index++) {
@@ -238,7 +238,18 @@ Geom::OptRect Layout::bounds(Geom::Affine const &transform, int start, int lengt
         if(_glyphs[glyph_index].span(this).font) {
             Geom::OptRect glyph_rect = _glyphs[glyph_index].span(this).font->BBox(_glyphs[glyph_index].glyph);
             if (glyph_rect) {
-                bbox.unionWith(*glyph_rect * total_transform);
+                auto glyph_box = *glyph_rect * total_transform;
+                // FIXME: Expand rectangle by half stroke width, this doesn't include meters
+                // and so is not the most ideal calculation, we could use the glyph Path here.
+                if (with_stroke) {
+                    Span const &span = _spans[_characters[_glyphs[glyph_index].in_character].in_span];
+                    auto text_source = static_cast<InputStreamTextSource const *>(_input_stream[span.in_input_stream_item]);
+                    if (!text_source->style->stroke.isNone()) {
+                        double scale = transform.descrim();
+                        glyph_box.expandBy(0.5 * text_source->style->stroke_width.computed * scale);
+                    }
+                }
+                bbox.unionWith(glyph_box);
             }
         }
     }

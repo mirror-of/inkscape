@@ -298,15 +298,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
 
 Geom::OptRect SPText::bbox(Geom::Affine const &transform, SPItem::BBoxType type) const {
-    Geom::OptRect bbox = this->layout.bounds(transform);
-
-    // FIXME this code is incorrect
-    if (bbox && type == SPItem::VISUAL_BBOX && !this->style->stroke.isNone()) {
-        double scale = transform.descrim();
-        bbox->expandBy(0.5 * this->style->stroke_width.computed * scale);
-    }
-
-    return bbox;
+    return this->layout.bounds(transform, type == SPItem::VISUAL_BBOX);
 }
 
 Inkscape::DrawingItem* SPText::show(Inkscape::Drawing &drawing, unsigned /*key*/, unsigned /*flags*/) {
