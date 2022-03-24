@@ -16,6 +16,7 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm.h>
+#include <sigc++/sigc++.h>
 
 #include "display/drawing.h"
 #include "ui/dialog/dialog-base.h"
@@ -95,9 +96,9 @@ private:
     PaintServersDialog(PaintServersDialog const &d) = delete;
     PaintServersDialog operator=(PaintServersDialog const &d) = delete;
 
-    void _cleanupUnused();
     void _createPaints(std::vector<PaintDescription> &collection);
     PaintDescription _descriptionFromIterator(Gtk::ListStore::iterator const &iter) const;
+    void _documentClosed();
     std::vector<SPObject *> extract_elements(SPObject *item);
     Glib::RefPtr<Gdk::Pixbuf> get_pixbuf(SPDocument *, Glib::ustring const &, Glib::ustring &);
     void _instantiatePaint(PaintDescription &paint);
@@ -121,6 +122,7 @@ private:
     Gtk::IconView *icon_view;
     Gtk::ComboBoxText *target_dropdown;
     PaintServersColumns const columns;
+    sigc::connection _defs_changed, _document_closed;
 };
 
 } // namespace Dialog

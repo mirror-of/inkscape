@@ -140,6 +140,9 @@ PaintServersDialog::PaintServersDialog()
 
 void PaintServersDialog::documentReplaced()
 {
+    _defs_changed.disconnect();
+    _document_closed.disconnect();
+
     auto document = getDocument();
     if (!document) {
         return;
@@ -147,9 +150,32 @@ void PaintServersDialog::documentReplaced()
     document_map[CURRENTDOC] = document;
     _loadFromCurrentDocument();
     _regenerateAll();
+
+    if (auto const defs = document->getDefs()) {
+        _defs_changed = defs->connectModified([=](SPObject *, unsigned) -> void {
+            _loadFromCurrentDocument();
+            _regenerateAll();
+        });
+    }
+    _document_closed = document->connectDestroy([=]() { _documentClosed(); });
 }
 
-PaintServersDialog::~PaintServersDialog() = default;
+/** Handles the destruction of the current document */
+void PaintServersDialog::_documentClosed()
+{
+    _defs_changed.disconnect();
+    _document_closed.disconnect();
+
+    document_map.erase(CURRENTDOC);
+    store[CURRENTDOC]->clear();
+    _regenerateAll();
+}
+
+PaintServersDialog::~PaintServersDialog()
+{
+    _defs_changed.disconnect();
+    _document_closed.disconnect();
+}
 
 // Get url or color value.
 Glib::ustring get_url(Glib::ustring paint)
@@ -497,40 +523,7 @@ void PaintServersDialog::onPaintClicked(Gtk::TreeModel::Path const &path)
         item->updateRepr();
     }
 
-    _cleanupUnused();
-}
-
-/** Cleans up paints that aren't used in the document anymore and updates our store accordingly */
-void PaintServersDialog::_cleanupUnused()
-{
-    auto doc = getDocument();
-    if (!doc) {
-        return;
-    }
-    doc->collectOrphans();
-
-    // We check if the removal of orphans deleted some paints for which we're still
-    // holding representations in the dialog. If that happened, we must remove these
-    // entries from our list store.
-    std::vector<Gtk::ListStore::Path> removed;
-
-    store[CURRENTDOC]->foreach(
-        [=, &removed](const Gtk::ListStore::Path &path, const Gtk::ListStore::iterator &it) -> bool
-        {
-            if (!doc->getObjectById((*it)[columns.id])) {
-                removed.push_back(path);
-            }
-            return false;
-        }
-    );
-
-    for (auto const &path : removed) {
-        store[CURRENTDOC]->erase(store[CURRENTDOC]->get_iter(path));
-    }
-
-    if (!removed.empty()) {
-        _regenerateAll();
-    }
+    document->collectOrphans();
 }
 
 /** Recursively extracts elements from groups, if any */
