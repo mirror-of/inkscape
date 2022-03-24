@@ -145,7 +145,7 @@ StrokeStyle::StrokeStyle() :
     _old_unit(nullptr)
 {
     set_name("StrokeSelector");
-    table = new Gtk::Grid();
+    table = Gtk::manage(new Gtk::Grid());
     table->set_border_width(4);
     table->set_row_spacing(4);
     table->set_hexpand(false);
@@ -173,9 +173,8 @@ StrokeStyle::StrokeStyle() :
     sp_dialog_defocus_on_enter_cpp(widthSpin);
 
     hb->pack_start(*widthSpin, false, false, 0);
-    unitSelector = new Inkscape::UI::Widget::UnitMenu();
+    unitSelector = Gtk::manage(new Inkscape::UI::Widget::UnitMenu());
     unitSelector->setUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
-    Gtk::Widget *us = Gtk::manage(unitSelector);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unitSelector->addUnit(*unit_table.getUnit("%"));
@@ -186,12 +185,11 @@ StrokeStyle::StrokeStyle() :
         _old_unit = desktop->getNamedView()->display_units;
     }
     widthSpin->setUnitMenu(unitSelector);
-    unitChangedConn = unitSelector->signal_changed().connect(sigc::mem_fun(*this, &StrokeStyle::unitChangedCB));
-    
-    us->show();
+    unitSelector->signal_changed().connect(sigc::mem_fun(*this, &StrokeStyle::unitChangedCB));
+    unitSelector->show();
 
-    hb->pack_start(*us, FALSE, FALSE, 0);
-    (*widthAdj)->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::widthChangedCB));
+    hb->pack_start(*unitSelector, FALSE, FALSE, 0);
+    (*widthAdj)->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::setStrokeWidth));
 
     i++;
 
@@ -209,7 +207,7 @@ StrokeStyle::StrokeStyle() :
     dashSelector->set_halign(Gtk::ALIGN_FILL);
     dashSelector->set_valign(Gtk::ALIGN_CENTER);
     table->attach(*dashSelector, 1, i, 3, 1);
-    dashSelector->changed_signal.connect(sigc::mem_fun(*this, &StrokeStyle::lineDashChangedCB));
+    dashSelector->changed_signal.connect(sigc::mem_fun(*this, &StrokeStyle::setStrokeDash));
 
     i++;
 
@@ -226,7 +224,7 @@ StrokeStyle::StrokeStyle() :
         update = true;
         dashSelector->set_dash(pat, dashSelector->get_offset());
         update = false;
-        scaleLine();
+        setStrokeDash();
         _editing_pattern = false;
     });
     update_pattern(0, nullptr);
@@ -316,7 +314,7 @@ StrokeStyle::StrokeStyle() :
     sp_dialog_defocus_on_enter_cpp(miterLimitSpin);
 
     hb->pack_start(*miterLimitSpin, false, false, 0);
-    (*miterLimitAdj)->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::miterLimitChangedCB));
+    (*miterLimitAdj)->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::setStrokeMiter));
     i++;
 
     /* Cap type */
@@ -544,16 +542,11 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const
  */
 void StrokeStyle::unitChangedCB()
 {
-    if (update) {
-        return;
-    }
-
     // If the unit selector is set to hairline, don't do the normal conversion.
     if (isHairlineSelected()) {
-        scaleLine();
+        setStrokeWidth();
         return;
     }
-
 
     Inkscape::Util::Unit const *new_unit = unitSelector->getUnit();
     if (new_unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
@@ -596,30 +589,40 @@ StrokeStyle::selectionChangedCB()
 }
 
 /**
+ * Get a dash array and offset from the style.
+ *
+ * Both values are de-scaled by the style's width if needed.
+ */
+std::vector<double>
+StrokeStyle::getDashFromStyle(SPStyle *style, double &offset)
+{
+    auto prefs = Inkscape::Preferences::get();
+
+    std::vector<double> ret;
+    size_t len = style->stroke_dasharray.values.size();
+
+    double scaledash = 1.0;
+    if (prefs->getBool("/options/dash/scale", true) && style->stroke_width.computed) {
+        scaledash = style->stroke_width.computed;
+    }
+
+    offset = style->stroke_dashoffset.value / scaledash;
+    for (unsigned i = 0; i < len; i++) {
+        ret.push_back(style->stroke_dasharray.values[i].value / scaledash);
+    }
+    return ret;
+}
+
+/**
  * Sets selector widgets' dash style from an SPStyle object.
  */
 void
 StrokeStyle::setDashSelectorFromStyle(Inkscape::UI::Widget::DashSelector *dsel, SPStyle *style)
 {
-    if (!style->stroke_dasharray.values.empty()) {
-        std::vector<double> d;
-        size_t len = style->stroke_dasharray.values.size();
-        /* Set dash */
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gboolean scale = prefs->getBool("/options/dash/scale", true);
-        double scaledash = 1.0;
-        if (scale) {
-            scaledash = style->stroke_width.computed;
-        }
-        for (unsigned i = 0; i < len; i++) {
-            if (style->stroke_width.computed != 0)
-                d.push_back(style->stroke_dasharray.values[i].value / scaledash);
-            else
-                d.push_back(style->stroke_dasharray.values[i].value); // is there a better thing to do for stroke_width==0?
-        }
-        dsel->set_dash(d,
-                       style->stroke_width.computed != 0 ? style->stroke_dashoffset.value / scaledash
-                                                         : style->stroke_dashoffset.value);
+    double offset = 0;
+    auto d = getDashFromStyle(style, offset);
+    if (!d.empty()) {
+        dsel->set_dash(d, offset);
         update_pattern(d.size(), d.data());
     } else {
         dsel->set_dash(std::vector<double>(), 0.0);
@@ -890,101 +893,124 @@ StrokeStyle::setScaledDash(SPCSSAttr *css,
 
 static inline double calcScaleLineWidth(const double width_typed, SPItem *const item, Inkscape::Util::Unit const *const unit)
 {
-    if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-        return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
-    } else { // percentage
+    if (unit->abbr == "%") {
+        auto scale = item->i2doc_affine().descrim();;
         const gdouble old_w = item->style->stroke_width.computed;
-        return old_w * width_typed / 100;
+        return (old_w * width_typed / 100) * scale;
+    } else if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
+        return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
     }
+    return width_typed;
 }
 
 /**
- * Sets line properties like width, dashes, markers, etc. on all currently selected items.
+ * Set the stroke width and adjust the dash pattern if needed.
  */
-void
-StrokeStyle::scaleLine()
+void StrokeStyle::setStrokeWidth()
 {
-    if (!desktop) {
+    double width_typed = (*widthAdj)->get_value();
+
+    // Don't change the selection if an update is happening,
+    // but also store the value for later comparison.
+    if (update || fabs(_last_width - width_typed) < 1E-6) {
+	_last_width = width_typed;
         return;
     }
-
-    if (update) {
-        return;
-    }
-
     update = true;
-    
-    SPDocument *document = desktop->getDocument();
-    Inkscape::Selection *selection = desktop->getSelection();
-    auto items= selection->items();
 
-    /* TODO: Create some standardized method */
+    auto prefs = Inkscape::Preferences::get();
+    auto unit = unitSelector->getUnit();
+
     SPCSSAttr *css = sp_repr_css_attr_new();
-
-    if (!items.empty()) {
-        double width_typed = (*widthAdj)->get_value();
-        double const miterlimit = (*miterLimitAdj)->get_value();
-
-        Inkscape::Util::Unit const *const unit = unitSelector->getUnit();
-
-        double offset;
-        const auto& dash = dashSelector->get_dash(&offset);
-        update_pattern(dash.size(), dash.data());
-
-        for(auto i=items.begin();i!=items.end();++i){
-            /* Set stroke width */
-            const double width = calcScaleLineWidth(width_typed, (*i), unit);
-
-            /* For renderers that don't understand -inkscape-stroke:hairline, fall back to 1px non-scaling */
-            if (isHairlineSelected()) {
-                const double width1px = calcScaleLineWidth(1, (*i), unit);
-                Inkscape::CSSOStringStream os_width;
-                os_width << width1px;
-                sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
-                sp_repr_css_set_property(css, "vector-effect", "non-scaling-stroke");
-                sp_repr_css_set_property(css, "-inkscape-stroke", "hairline");
-            } else {
-                Inkscape::CSSOStringStream os_width;
-                os_width << width;
-                sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
-                sp_repr_css_unset_property(css, "vector-effect");
-                sp_repr_css_unset_property(css, "-inkscape-stroke");
-            }
-
-            {
-                Inkscape::CSSOStringStream os_ml;
-                os_ml << miterlimit;
-                sp_repr_css_set_property(css, "stroke-miterlimit", os_ml.str().c_str());
-            }
-
-            /* Set dash */
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            gboolean scale = prefs->getBool("/options/dash/scale", true);
-            if (scale) {
-                setScaledDash(css, dash.size(), dash.data(), offset, width);
-            }
-            else {
-                setScaledDash(css, dash.size(), dash.data(), offset, document->getDocumentScale()[0]);
-            }
-            sp_desktop_apply_css_recursive ((*i), css, true);
-        }
-
-        if (unit->type != Inkscape::Util::UNIT_TYPE_LINEAR) {
-            // reset to 100 percent
-            (*widthAdj)->set_value(100.0);
-        }
-
+    if (isHairlineSelected()) {
+        /* For renderers that don't understand -inkscape-stroke:hairline, fall back to 1px non-scaling */
+        width_typed = 1;
+        sp_repr_css_set_property(css, "vector-effect", "non-scaling-stroke");
+        sp_repr_css_set_property(css, "-inkscape-stroke", "hairline");
+    } else {
+        sp_repr_css_unset_property(css, "vector-effect");
+        sp_repr_css_unset_property(css, "-inkscape-stroke");
     }
 
-    // we have already changed the items, so set style without changing selection
-    // FIXME: move the above stroke-setting stuff, including percentages, to desktop-style
+    for (auto item : desktop->getSelection()->items()) {
+        const double width = calcScaleLineWidth(width_typed, item, unit);
+        sp_repr_css_set_property_double(css, "stroke-width", width);
+
+        if (prefs->getBool("/options/dash/scale", true)) {
+            // This will read the old stroke-width to un-scale the pattern.
+            double offset = 0;
+            auto dash = getDashFromStyle(item->style, offset);
+            setScaledDash(css, dash.size(), dash.data(), offset, width);
+        }
+        sp_desktop_apply_css_recursive (item, css, true);
+    }
     sp_desktop_set_style (desktop, css, false);
 
     sp_repr_css_attr_unref(css);
-    css = nullptr;
+    DocumentUndo::done(desktop->getDocument(), _("Set stroke width"),
+                       INKSCAPE_ICON("dialog-fill-and-stroke"));
 
-    DocumentUndo::done(document, _("Set stroke style"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+    if (unit->abbr == "%") {
+        // reset to 100 percent
+	_last_width = 100.0;
+        (*widthAdj)->set_value(100.0);
+    } else {
+	_last_width = width_typed;
+    }
+    update = false;
+}
 
+/**
+ * Set the stroke dash pattern, scale to the existing width if needed
+ */
+void StrokeStyle::setStrokeDash()
+{
+    if (update) return;
+    update = true;
+
+    auto document = desktop->getDocument();
+    auto prefs = Inkscape::Preferences::get();
+
+    double offset = 0;
+    const auto& dash = dashSelector->get_dash(&offset);
+    update_pattern(dash.size(), dash.data());
+
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    for (auto item : desktop->getSelection()->items()) {
+	double scale = item->i2doc_affine().descrim();
+        if(prefs->getBool("/options/dash/scale", true)) {
+            scale = item->style->stroke_width.computed * scale;
+        }
+
+        setScaledDash(css, dash.size(), dash.data(), offset, scale);
+        sp_desktop_apply_css_recursive (item, css, true);
+    }
+    sp_desktop_set_style (desktop, css, false);
+
+    sp_repr_css_attr_unref(css);
+    DocumentUndo::done(document, _("Set stroke dash"),
+                       INKSCAPE_ICON("dialog-fill-and-stroke"));
+    update = false;
+}
+
+/**
+ * Set the Miter Limit value only.
+ */
+void StrokeStyle::setStrokeMiter()
+{
+    if (update) return;
+    update = true;
+
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    auto value = (*miterLimitAdj)->get_value();
+    sp_repr_css_set_property_double(css, "stroke-miterlimit", value);
+
+    for (auto item : desktop->getSelection()->items()) {
+        sp_desktop_apply_css_recursive(item, css, true);
+    }
+    sp_repr_css_attr_unref(css);
+    DocumentUndo::done(desktop->getDocument(), _("Set stroke miter"),
+                       INKSCAPE_ICON("dialog-fill-and-stroke"));
     update = false;
 }
 
@@ -998,48 +1024,6 @@ StrokeStyle::isHairlineSelected() const
     return unitSelector->get_active_id() == "hairline";
 }
 
-/**
- * Callback for when the stroke style's width changes.
- * Causes all line styles to be applied to all selected items.
- */
-void
-StrokeStyle::widthChangedCB()
-{
-    if (update) {
-        return;
-    }
-
-    scaleLine();
-}
-
-/**
- * Callback for when the stroke style's miterlimit changes.
- * Causes all line styles to be applied to all selected items.
- */
-void
-StrokeStyle::miterLimitChangedCB()
-{
-    if (update) {
-        return;
-    }
-
-    scaleLine();
-}
-
-/**
- * Callback for when the stroke style's dash changes.
- * Causes all line styles to be applied to all selected items.
- */
-
-void
-StrokeStyle::lineDashChangedCB()
-{
-    if (update) {
-        return;
-    }
-
-    scaleLine();
-}
 
 /**
  * This routine handles toggle events for buttons in the stroke style dialog.

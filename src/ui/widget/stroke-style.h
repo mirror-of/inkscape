@@ -77,6 +77,7 @@ struct { gchar const *key; gint value; } const SPMarkerNames[] = {
     {nullptr, -1}
 };
 
+
 SPObject *getMarkerObj(gchar const *n, SPDocument *doc);
 
 namespace Inkscape {
@@ -100,7 +101,7 @@ private:
         STROKE_STYLE_BUTTON_CAP,  ///< A button to set the line-cap style
         STROKE_STYLE_BUTTON_ORDER ///< A button to set the paint-order style
     };
-    
+
     /**
      * A custom radio-button for setting the stroke style.  It can be configured
      * to set either the join or cap style by setting the button_type field.
@@ -123,6 +124,8 @@ private:
             gchar const *stroke_style;         ///< The stroke style associated with the button
     };
 
+    std::vector<double> getDashFromStyle(SPStyle *style, double &offset);
+
     void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
     void setDashSelectorFromStyle(Inkscape::UI::Widget::DashSelector *dsel, SPStyle *style);
     void setJoinType (unsigned const jointype);
@@ -131,7 +134,9 @@ private:
     void setJoinButtons(Gtk::ToggleButton *active);
     void setCapButtons(Gtk::ToggleButton *active);
     void setPaintOrderButtons(Gtk::ToggleButton *active);
-    void scaleLine();
+    void setStrokeWidth();
+    void setStrokeDash();
+    void setStrokeMiter();
     void setScaledDash(SPCSSAttr *css, int ndash, const double *dash, double offset, double scale);
     bool isHairlineSelected() const;
 
@@ -142,9 +147,6 @@ private:
                                         gchar const           *stroke_style);
 
     // Callback functions
-    void widthChangedCB();
-    void miterLimitChangedCB();
-    void lineDashChangedCB();
     void unitChangedCB();
     bool areMarkersBeingUpdated();
     void markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const which);
@@ -180,11 +182,11 @@ private:
     bool _editing_pattern = false;
 
     gboolean update;
+    double _last_width = 0.0;
     SPDesktop *desktop;
     sigc::connection startMarkerConn;
     sigc::connection midMarkerConn;
     sigc::connection endMarkerConn;
-    sigc::connection unitChangedConn;
     
     Inkscape::Util::Unit const *_old_unit;
 
