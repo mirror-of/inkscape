@@ -1658,12 +1658,10 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
         Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
         int const nChars = layout->iteratorToCharIndex(layout->end());
-        char const *trunc = "";
-        bool truncated = false;
-        if (layout->inputTruncated()) {
-            truncated = true;
-            trunc = _(" [truncated]");
-        }
+        char const *edit_message = ngettext("Type or edit text (%d character%s); <b>Enter</b> to start new line.", "Type or edit text (%d characters%s); <b>Enter</b> to start new line.", nChars);
+        char const *edit_message_flowed = ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars);
+        bool truncated = layout->inputTruncated();
+        char const *trunc = truncated ? _(" [truncated]") : "";
 
         if (truncated) {
             tc->frame->set_stroke(0xff0000ff);
@@ -1680,7 +1678,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (nullptr); // first frame only
             shapes.push_back(frame);
 
-            tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
+            tc->message_context->setF(Inkscape::NORMAL_MESSAGE, edit_message_flowed, nChars, trunc);
 
         } else if (auto text = dynamic_cast<SPText *>(tc->text)) {
             if (text->style->shape_inside.set) {
@@ -1695,17 +1693,15 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
                     // Find union of all exclusion shapes for later use
                     exclusion_shape = text->getExclusionShape();
                 }
+                tc->message_context->setF(Inkscape::NORMAL_MESSAGE, edit_message_flowed, nChars, trunc);
             } else {
                 for (SPObject &child : tc->text->children) {
                     if (auto textpath = dynamic_cast<SPTextPath *>(&child)) {
                         shapes.push_back(sp_textpath_get_path_item(textpath));
                     }
                 }
+                tc->message_context->setF(Inkscape::NORMAL_MESSAGE, edit_message, nChars, trunc);
             }
-
-        } else {
-
-            tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit text (%d character%s); <b>Enter</b> to start new line.", "Type or edit text (%d characters%s); <b>Enter</b> to start new line.", nChars), nChars, trunc);
         }
 
         SPCurve curve;
