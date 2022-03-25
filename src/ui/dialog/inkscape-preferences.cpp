@@ -2415,6 +2415,7 @@ void InkscapePreferences::initPageBehavior()
     _trans_scale_corner.init ( _("Scale rounded corners in rectangles"), "/options/transform/rectcorners", false);
     _trans_gradient.init ( _("Transform gradients"), "/options/transform/gradient", true);
     _trans_pattern.init ( _("Transform patterns"), "/options/transform/pattern", false);
+    _trans_dash_scale.init(_("Scale dashes with stroke"), "/options/dash/scale", true);
     _trans_optimized.init ( _("Optimized"), "/options/preservetransform/value", 0, true, nullptr);
     _trans_preserved.init ( _("Preserved"), "/options/preservetransform/value", 1, false, &_trans_optimized);
 
@@ -2426,18 +2427,14 @@ void InkscapePreferences::initPageBehavior()
                                _("Move gradients (in fill or stroke) along with the objects"));
     _page_transforms.add_line( false, "", _trans_pattern, "",
                                _("Move patterns (in fill or stroke) along with the objects"));
+    _page_transforms.add_line(false, "", _trans_dash_scale, "", _("When changing stroke width, scale dash array"));
     _page_transforms.add_group_header( _("Store transformation"));
     _page_transforms.add_line( true, "", _trans_optimized, "",
                                _("If possible, apply transformation to objects without adding a transform= attribute"));
     _page_transforms.add_line( true, "", _trans_preserved, "",
                                _("Always store transformation as a transform= attribute on objects"));
-
+    
     this->AddPage(_page_transforms, _("Transforms"), iter_behavior, PREFS_PAGE_BEHAVIOR_TRANSFORMS);
-
-    _dash_scale.init(_("Scale dashes with stroke"), "/options/dash/scale", true);
-    _page_dashes.add_line(false, "", _dash_scale, "", _("When changing stroke width, scale dash array"));
-
-    this->AddPage(_page_dashes, _("Dashes"), iter_behavior, PREFS_PAGE_BEHAVIOR_DASHES);
 
     // Scrolling options
     _scroll_wheel.init ( "/options/wheelscroll/value", 0.0, 1000.0, 1.0, 1.0, 40.0, true, false);
