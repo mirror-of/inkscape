@@ -409,11 +409,35 @@ Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, G
             std::cerr << "PaintServersDialog::get_pixbuf: cannot find paint server: " << id << std::endl;
             return pixbuf;
         }
+        std::vector<SPObject *> encountered{new_paint}; ///< For the prevention of cyclic refs
 
-        // Create a copy repr of the paint
         Inkscape::XML::Document *xml_doc = preview_document->getReprDoc();
-        Inkscape::XML::Node *repr = new_paint->getRepr()->duplicate(xml_doc);
-        defs->appendChild(repr);
+        while (new_paint) {
+            auto const new_repr = new_paint->getRepr();
+            if (!new_repr) {
+                break;
+            }
+
+            // Create a copy repr of the paint
+            defs->appendChild(new_repr->duplicate(xml_doc));
+
+            // Check for cross-references in the paint
+            auto const xlink = new_repr->attribute("xlink:href");
+            auto const href = new_repr->attribute("href");
+            if (xlink || href) {
+                // Paint is cross-referencing another object (probably another paint);
+                // we must copy the referenced object as well
+                auto const ref = (href ? href : xlink); // Prefer "href" since "xlink:href" is obsolete
+                new_paint = document->getObjectByHref(ref);
+                if (std::find(std::begin(encountered), std::end(encountered), new_paint) == std::end(encountered)) {
+                    encountered.push_back(new_paint);
+                } else {
+                    break; // Break reference cycle
+                }
+            } else {
+                break;
+            }
+        }
     } else {
         // Temporary block solid color fills.
         return pixbuf;
