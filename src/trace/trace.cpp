@@ -439,7 +439,6 @@ void Tracer::traceThread()
         }
 
     msgStack->flash(Inkscape::NORMAL_MESSAGE, _("Trace: Starting trace..."));
-    desktop->updateCanvasNow();
 
     std::vector<TracingEngineResult> results =
                 engine->trace(pixbuf);

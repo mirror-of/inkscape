@@ -799,15 +799,6 @@ Application::sole_desktop_for_document(SPDesktop const &desktop) {
 # HELPERS
 #####################*/
 
-void
-Application::refresh_display ()
-{
-    for (auto & _desktop : *_desktops) {
-        _desktop->requestRedraw();
-    }
-}
-
-
 /**
  *  Handler for Inkscape's Exit verb.  This emits the shutdown signal,
  *  saves the preferences if appropriate, and quits.

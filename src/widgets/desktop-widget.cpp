@@ -100,13 +100,11 @@ class CMSPrefWatcher {
 public:
     CMSPrefWatcher() :
         _dpw(*this),
-        _spw(*this),
         _tracker(ege_color_prof_tracker_new(nullptr))
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         g_signal_connect( G_OBJECT(_tracker), "modified", G_CALLBACK(hook), this );
         prefs->addObserver(_dpw);
-        prefs->addObserver(_spw);
     }
     virtual ~CMSPrefWatcher() = default;
 
@@ -127,7 +125,6 @@ private:
         void notify(Inkscape::Preferences::Entry const &/*val*/) override {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             _pw._setCmsSensitive(!prefs->getString("/options/displayprofile/uri").empty());
-            _pw._refreshAll();
         }
     private:
         CMSPrefWatcher &_pw;
@@ -135,26 +132,12 @@ private:
 
     DisplayProfileWatcher _dpw;
 
-    class SoftProofWatcher : public Inkscape::Preferences::Observer {
-    public:
-        SoftProofWatcher(CMSPrefWatcher &pw) : Observer("/options/softproof"), _pw(pw) {}
-        void notify(Inkscape::Preferences::Entry const &) override {
-            _pw._refreshAll();
-        }
-    private:
-        CMSPrefWatcher &_pw;
-    };
-
-    SoftProofWatcher _spw;
-
-    void _refreshAll();
     void _setCmsSensitive(bool value);
 
     std::list<SPDesktopWidget*> _widget_list;
     EgeColorProfTracker *_tracker;
 
     friend class DisplayProfileWatcher;
-    friend class SoftproofWatcher;
 };
 
 void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint monitor, CMSPrefWatcher * /*watcher*/)
@@ -164,13 +147,6 @@ void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint monitor, CMSPr
 
     ege_color_prof_tracker_get_profile_for( monitor, reinterpret_cast<gpointer*>(&buf), &len );
     Glib::ustring id = Inkscape::CMSSystem::setDisplayPer( buf, len, monitor );
-}
-
-void CMSPrefWatcher::_refreshAll()
-{
-    for (auto & it : _widget_list) {
-        it->requestCanvasUpdate();
-    }
 }
 
 void CMSPrefWatcher::_setCmsSensitive(bool enabled)
@@ -323,7 +299,6 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow* inkscape_window)
 
     /* Canvas */
     dtw->_canvas = _canvas_grid->GetCanvas();
-
     dtw->_canvas->set_cms_active(prefs->getBool("/options/displayprofile/enable"));
 
     /* Dialog Container */
@@ -829,7 +804,6 @@ SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktop
 
     Glib::ustring id = Inkscape::CMSSystem::getDisplayId( monitorNum );
     dtw->_canvas->set_cms_key(id);
-    dtw->requestCanvasUpdate();
     dtw->cms_adjust_set_sensitive(!id.empty());
 }
 
@@ -860,7 +834,6 @@ SPDesktopWidget::cms_adjust_toggled()
     bool down = _cms_adjust->get_active();
     if ( down != _canvas->get_cms_active() ) {
         _canvas->set_cms_active(down);
-        desktop->redrawDesktop();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool("/options/displayprofile/enable", down);
         if (down) {
@@ -903,25 +876,6 @@ void SPDesktopWidget::storeDesktopPosition(bool store_maximize)
         prefs->setInt("/desktop/geometry/x", x);
         prefs->setInt("/desktop/geometry/y", y);
     }
-}
-
-/**
- * \pre this->desktop->main != 0
- */
-void
-SPDesktopWidget::requestCanvasUpdate() {
-    // ^^ also this->desktop != 0
-    g_return_if_fail(this->desktop != nullptr);
-    desktop->getCanvas()->queue_draw();
-}
-
-void
-SPDesktopWidget::requestCanvasUpdateAndWait() {
-    requestCanvasUpdate();
-
-    while (gtk_events_pending())
-      gtk_main_iteration_do(FALSE);
-
 }
 
 void

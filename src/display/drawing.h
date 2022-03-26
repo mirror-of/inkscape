@@ -82,10 +82,6 @@ public:
 
     void average_color(Geom::IntRect const &area, double &R, double &G, double &B, double &A);
 
-    sigc::signal<void, DrawingItem *> signal_request_update;
-    sigc::signal<void, Geom::IntRect const &> signal_request_render;
-    sigc::signal<void, DrawingItem *> signal_item_deleted;
-
 private:
     void _pickItemsForCaching();
 

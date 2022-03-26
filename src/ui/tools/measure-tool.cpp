@@ -1189,7 +1189,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     measure_tmp_items.clear();
 
     //TODO:Calculate the measure area for current length and origin
-    // and use canvas->requestRedraw. In the calculation need a gap for outside text
+    // and use canvas->redraw_all(). In the calculation need a gap for outside text
     // maybe this remove the trash lines on measure use
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool show_in_between = prefs->getBool("/tools/measure/show_in_between", true);

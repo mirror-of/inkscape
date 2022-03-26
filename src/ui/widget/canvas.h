@@ -79,10 +79,7 @@ public:
     Inkscape::SplitMode  get_split_mode()  const { return _split_mode; }
 
     // CMS
-    void set_cms_key(std::string key) {
-        _cms_key = std::move(key);
-        _cms_active = !_cms_key.empty();
-    }
+    void set_cms_key(std::string key);
     const std::string& get_cms_key() const { return _cms_key; }
     void set_cms_active(bool active) { _cms_active = active; }
     bool get_cms_active() const { return _cms_active; }

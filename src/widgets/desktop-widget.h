@@ -184,8 +184,6 @@ public:
     bool isToolboxButtonActive (gchar const *id);
     void setCoordinateStatus(Geom::Point p);
     void storeDesktopPosition(bool store_maximize = true);
-    void requestCanvasUpdate();
-    void requestCanvasUpdateAndWait();
     void enableInteraction();
     void disableInteraction();
     void updateTitle(gchar const *uri);

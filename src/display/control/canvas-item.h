@@ -44,7 +44,7 @@ class SPItem;
 
 namespace Inkscape {
 
-static guint32 CANVAS_ITEM_COLORS[] = { 0x0000ff7f, 0xff00007f, 0xffff007f };
+static constexpr uint32_t CANVAS_ITEM_COLORS[] = { 0x0000ff7f, 0xff00007f, 0xffff007f };
 
 namespace UI::Widget {
 class Canvas;

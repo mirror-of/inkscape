@@ -12,7 +12,6 @@ set(display_SRC
 	drawing-surface.cpp
 	drawing-text.cpp
 	drawing.cpp
-	grayscale.cpp
 	nr-3dutils.cpp
 	nr-filter-blend.cpp
 	nr-filter-colormatrix.cpp
@@ -74,7 +73,6 @@ set(display_SRC
 	drawing-surface.h
 	drawing-text.h
 	drawing.h
-	grayscale.h
 	nr-3dutils.h
 	nr-filter-blend.h
 	nr-filter-colormatrix.h

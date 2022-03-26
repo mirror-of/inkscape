@@ -1108,7 +1108,6 @@ DrawingItem::_markForRendering()
         bkg_root->_invalidateFilterBackground(*dirty);
     }
 
-    //_drawing.signal_request_render.emit(*dirty);
     if (drawing().getCanvasItemDrawing()) {
         Geom::Rect area = *dirty;
         drawing().getCanvasItemDrawing()->get_canvas()->redraw_area(area);

@@ -48,17 +48,13 @@ namespace Gtk
 // ------- Inkscape --------
 class SPCSSAttr;
 class SPDesktopWidget;
-struct DesktopPrefObserver;
 class SPItem;
 class SPNamedView;
 class SPObject;
 class SPStyle;
 class SPStop;
-typedef struct _DocumentInterface DocumentInterface;//struct DocumentInterface;
 
 class InkscapeWindow;
-
-typedef int sp_verb_t;
 
 struct _GdkEventAny;
 typedef struct _GdkEventAny GdkEventAny;
@@ -284,51 +280,6 @@ public:
     Inkscape::Display::TemporaryItem * add_temporary_canvasitem (Inkscape::CanvasItem *item, guint lifetime, bool move_to_bottom = true);
     void remove_temporary_canvasitem (Inkscape::Display::TemporaryItem * tempitem);
 
-    void redrawDesktop();
-
-    void _setDisplayMode(Inkscape::RenderMode mode);
-    bool setDisplayModeNormal()
-    {
-        _setDisplayMode(Inkscape::RenderMode::NORMAL);
-        return true;
-    }
-    bool setDisplayModeNoFilters()
-    {
-        _setDisplayMode(Inkscape::RenderMode::NO_FILTERS);
-        return true;
-    }
-    bool setDisplayModeOutline()
-    {
-        _setDisplayMode(Inkscape::RenderMode::OUTLINE);
-        return true;
-    }
-    bool setDisplayModeVisibleHairlines()
-    {
-        _setDisplayMode(Inkscape::RenderMode::VISIBLE_HAIRLINES);
-        return true;
-    }
-    bool displayModeToggle();
-    Inkscape::RenderMode _display_mode;
-    Inkscape::RenderMode getMode() const { return _display_mode; }
-
-    void _setDisplayColorMode(Inkscape::ColorMode mode);
-    bool setDisplayColorModeNormal()
-    {
-        _setDisplayColorMode(Inkscape::ColorMode::NORMAL);
-        return true;
-    }
-    bool setDisplayColorModeGrayscale()
-    {
-        _setDisplayColorMode(Inkscape::ColorMode::GRAYSCALE);
-        return true;
-    }
-//    void setDisplayColorModePrintColorsPreview() {
-//        _setDisplayColorMode(Inkscape::COLORMODE_PRINT_COLORS_PREVIEW);
-//    }
-    bool displayColorModeToggle();
-    Inkscape::ColorMode _display_color_mode;
-    Inkscape::ColorMode getColorMode() const { return _display_color_mode; }
-
     Inkscape::UI::Dialog::DialogContainer *getContainer();
 
     bool isWithinViewport(SPItem *item) const;
@@ -336,7 +287,6 @@ public:
 
     void activate_guides (bool activate);
     void change_document (SPDocument *document);
-
 
     void setEventContext(const std::string& toolName);
 
@@ -418,7 +368,6 @@ public:
     Gtk::Widget *get_toolbox() const;
     void setToolboxAdjustmentValue (gchar const* id, double val);
     bool isToolboxButtonActive (gchar const *id);
-    void updateCanvasNow();
     void updateDialogs();
     void storeDesktopPosition();
 
@@ -576,26 +525,6 @@ private:
     bool _quick_zoom_enabled; ///< Signifies that currently we're in quick zoom mode
     DesktopAffine _quick_zoom_affine;  ///< The transform of the screen before quick zoom
 
-    /*
-     * Allow redrawing or refreshing if preferences change
-     */
-    class DesktopPrefObserver : public Inkscape::Preferences::Observer {
-      public:
-        DesktopPrefObserver(SPDesktop *desktop, Glib::ustring const &path)
-            : Inkscape::Preferences::Observer(path)
-            , _desktop(desktop) {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            prefs->addObserver(*this);
-        }
-      private:
-        void notify(Inkscape::Preferences::Entry const &entry) override {
-            _desktop->redrawDesktop();
-        }
-        SPDesktop *_desktop;
-    };
-
-    DesktopPrefObserver _image_render_observer;
-
     bool grids_visible; /* don't set this variable directly, use the method below */
     void set_grids_visible(bool visible);
 
@@ -609,12 +538,10 @@ private:
     sigc::signal<void, void*, Inkscape::UI::ControlPointSelection*> _control_point_selected;
     sigc::signal<void, void*, Inkscape::UI::Tools::TextTool*> _text_cursor_moved;
 
-    sigc::connection _sel_changed_connection;
     sigc::connection _reconstruction_start_connection;
     sigc::connection _reconstruction_finish_connection;
 
     void onResized (double, double) override;
-    void onRedrawRequested() override;
     void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
     void onDocumentFilenameSet(gchar const* filename) override;
 };

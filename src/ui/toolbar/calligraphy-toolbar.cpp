@@ -585,10 +585,7 @@ void CalligraphyToolbar::save_profile(GtkWidget * /*widget*/)
         g_free(profile_id);
     }
 
-    for (auto map_item : _widget_map) {
-        auto widget_name = map_item.first;
-        auto widget      = map_item.second;
-
+    for (auto const &[widget_name, widget] : _widget_map) {
         if (widget) {
             if (GTK_IS_ADJUSTMENT(widget)) {
                 GtkAdjustment* adj = GTK_ADJUSTMENT(widget);

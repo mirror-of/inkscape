@@ -108,9 +108,6 @@ public:
     void add_document (SPDocument *document);
     bool remove_document (SPDocument *document);
     
-    // fixme: This has to be rethought
-    void refresh_display ();
-    
     // fixme: This also
     void exit ();
     

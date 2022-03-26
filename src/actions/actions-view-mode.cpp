@@ -270,7 +270,6 @@ view_set_gui(InkscapeWindow* win)
     bool scrollbars_state  = prefs->getBool(pref_root + "scrollbars/state", true);
     bool rulers_state      = prefs->getBool(pref_root + "rulers/state", true);
     bool guides_state      = win->get_desktop()->namedview->getRepr()->getAttributeBoolean("showguides", true);    // Should set it true or retrieve the state (every time it set to true on restart)
-    bool interface_mode    = prefs->getInt(pref_root + "interface_mode", false);
 
     canvas_set_state(win, "canvas-commands-bar",      commands_state);
     canvas_set_state(win, "canvas-snap-controls-bar", snaptoolbox_state);

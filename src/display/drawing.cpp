@@ -24,7 +24,7 @@
 namespace Inkscape {
 
 // hardcoded grayscale color matrix values as default
-static const gdouble grayscale_value_matrix[20] = {
+static constexpr double grayscale_value_matrix[20] = {
     0.21, 0.72, 0.072, 0, 0,
     0.21, 0.72, 0.072, 0, 0,
     0.21, 0.72, 0.072, 0, 0,

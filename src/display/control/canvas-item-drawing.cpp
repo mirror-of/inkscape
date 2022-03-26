@@ -68,10 +68,6 @@ CanvasItemDrawing::CanvasItemDrawing(CanvasItemGroup *group)
     root->setPickChildren(true);
     _drawing->setRoot(root);
 
-    // _drawing->signal_request_update.connect(...);  Not needed now.
-    // _drawing->signal_request_render.connect(...);  Not needed now.
-    // _drawing->signal_item_deleted.connect(...);    Not needed now.
-
     _observer = new CachePref2Observer(this);
 }
 

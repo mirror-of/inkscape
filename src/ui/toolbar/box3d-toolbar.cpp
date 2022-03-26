@@ -241,7 +241,7 @@ Box3DToolbar::vp_state_changed(Proj::Axis axis)
 void
 Box3DToolbar::check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec)
 {
-    if (SP_IS_BOX3D_CONTEXT(ec)) {
+    if (dynamic_cast<Inkscape::UI::Tools::Box3dTool*>(ec)) {
         _changed = desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &Box3DToolbar::selection_changed));
         selection_changed(desktop->getSelection());
     } else {
