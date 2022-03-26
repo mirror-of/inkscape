@@ -216,17 +216,18 @@ SPPage *PageManager::newPage(SPPage *page)
         if (auto new_item = dynamic_cast<SPItem *>(sp_root->appendChildRepr(new_repr))) {
             Geom::Affine affine = Geom::Affine();
 
-            // 1. apply parent transform (for layers that have been ignored by getOverlappingItems)
+            // a. Add the object's original transform back in.
+            affine *= item->transform;
+
+            // b. apply parent transform (for layers that have been ignored by getOverlappingItems)
             if (auto parent = dynamic_cast<SPItem *>(item->parent)) {
                 affine *= parent->i2doc_affine();
             }
-            // 2. unit conversion, add in _document->getDocumentScale()
+
+            // c. unit conversion, add in _document->getDocumentScale()
             affine *= _document->getDocumentScale().inverse();
 
-            // 3. Add the object's original transform back in.
-            affine *= item->transform;
-
-            // 4. apply item_move to offset it.
+            // d. apply item_move to offset it.
             affine *= item_move;
 
             new_item->doWriteTransform(affine, &affine, false);
