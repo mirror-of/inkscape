@@ -559,6 +559,7 @@ PathParam::paste_param_path(const char *svgd)
         if (item != nullptr) {
             Geom::PathVector path_clipboard =  sp_svg_read_pathv(svgd);
             path_clipboard *= item->i2doc_affine().inverse();
+            path_clipboard *= item->document->getDocumentScale();
             svgd_new = sp_svg_write_path(path_clipboard);
             svgd = svgd_new.c_str();
         }
