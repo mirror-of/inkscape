@@ -77,7 +77,7 @@ TEST_F(PathBoolopTest, DifferenceOutside){
     Geom::PathVector pvBothPaths = pvRectangleBigger;
     
     for(Geom::Path _path : pvRectangleSmaller){
-        pvBothPaths.push_back(_path.reversed());
+        pvBothPaths.push_back(_path);
     }
 
     comparePaths(pvRectangleDifference, pvBothPaths);
