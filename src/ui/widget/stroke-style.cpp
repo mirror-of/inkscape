@@ -913,7 +913,7 @@ void StrokeStyle::setStrokeWidth()
     // Don't change the selection if an update is happening,
     // but also store the value for later comparison.
     if (update || fabs(_last_width - width_typed) < 1E-6) {
-	_last_width = width_typed;
+        _last_width = width_typed;
         return;
     }
     update = true;
@@ -952,10 +952,10 @@ void StrokeStyle::setStrokeWidth()
 
     if (unit->abbr == "%") {
         // reset to 100 percent
-	_last_width = 100.0;
+        _last_width = 100.0;
         (*widthAdj)->set_value(100.0);
     } else {
-	_last_width = width_typed;
+        _last_width = width_typed;
     }
     update = false;
 }
@@ -977,7 +977,7 @@ void StrokeStyle::setStrokeDash()
 
     SPCSSAttr *css = sp_repr_css_attr_new();
     for (auto item : desktop->getSelection()->items()) {
-	double scale = item->i2doc_affine().descrim();
+        double scale = item->i2doc_affine().descrim();
         if(prefs->getBool("/options/dash/scale", true)) {
             scale = item->style->stroke_width.computed * scale;
         }
@@ -1008,6 +1008,7 @@ void StrokeStyle::setStrokeMiter()
     for (auto item : desktop->getSelection()->items()) {
         sp_desktop_apply_css_recursive(item, css, true);
     }
+    sp_desktop_set_style (desktop, css, false);
     sp_repr_css_attr_unref(css);
     DocumentUndo::done(desktop->getDocument(), _("Set stroke miter"),
                        INKSCAPE_ICON("dialog-fill-and-stroke"));
