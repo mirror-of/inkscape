@@ -101,10 +101,11 @@ PenTool::PenTool(SPDesktop *desktop, std::string prefs_path, const std::string &
         this->enableSelectionCue();
     }
 
-    _desktop->connectDestroy([=](SPDesktop *) {state = State::DEAD;});
+    _desktop_destroy = _desktop->connectDestroy([=](SPDesktop *) { state = State::DEAD; });
 }
 
 PenTool::~PenTool() {
+    _desktop_destroy.disconnect();
     this->discard_delayed_snap_event();
 
     if (this->npoints != 0) {

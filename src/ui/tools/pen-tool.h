@@ -10,6 +10,8 @@
 #ifndef SEEN_PEN_CONTEXT_H
 #define SEEN_PEN_CONTEXT_H
 
+#include <sigc++/sigc++.h>
+
 #include "ui/tools/freehand-base.h"
 #include "live_effects/effect.h"
 
@@ -141,6 +143,8 @@ private:
     void _endpointSnap(Geom::Point &p, guint const state);
 
     void _cancel();
+
+    sigc::connection _desktop_destroy;
 };
 
 }
