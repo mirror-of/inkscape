@@ -121,7 +121,7 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
                     counter++;
                     continue;
                 }
-                if (obj && transf != Geom::identity() && selection && !selection->includes(obj->getRepr())) {
+                if (is_load && obj && transf != Geom::identity() && selection && !selection->includes(obj->getRepr())) {
                     SP_ITEM(obj)->doWriteTransform(transf);
                 }
                 if (counter == 0) {
