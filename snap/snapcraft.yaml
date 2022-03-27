@@ -119,6 +119,7 @@ parts:
       - pip
       - appdirs
       - requests
+      - cachecontrol[filecache]
       - pyserial
       - packaging
       - scour

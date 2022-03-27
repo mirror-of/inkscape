@@ -82,6 +82,7 @@ apt_bundle \
     python3-six \
     python3-scour \
     python3-requests \
+    python3-cachecontrol \
     python3-urllib3 \
     python3-chardet \
     python3-certifi \
