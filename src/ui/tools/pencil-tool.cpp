@@ -17,6 +17,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <numeric> // For std::accumulate
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
@@ -779,10 +780,6 @@ void PencilTool::addPowerStrokePencil()
                 pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
                 pspreview->getRepr()->setAttribute("sort_points", "true");
                 pspreview->getRepr()->setAttribute("not_jump", "true");
-                if (!this->points.size()) {
-                    Geom::Point default_point((path.size()/2.0), 0.5);
-                    this->points.push_back(default_point);
-                }
                 pspreview->offset_points.param_set_and_write_new_value(this->points);
                 sp_lpe_item_enable_path_effects(lpeitem, true);
                 sp_lpe_item_update_patheffect(lpeitem, false, true);
@@ -911,7 +908,15 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
             prev_pressure = point[Geom::Y];
         }
     }
-    tmp_points.clear();
+    if (points.empty() && !_wps.empty()) {
+        // Synthesize a pressure data point based on the average pressure
+        double average_pressure = std::accumulate(_wps.begin(), _wps.end(), 0.0,
+            [](double const &sum_so_far, Geom::Point const &point) -> double {
+                return sum_so_far + point[Geom::Y];
+        }) / (double)_wps.size();
+        points.emplace_back(0.5 * path.size(), /* place halfway along the path */
+                            2.0 * average_pressure /* 2.0 - for correct average thickness of a kite */);
+    }
 }
 
 void PencilTool::_interpolate() {
