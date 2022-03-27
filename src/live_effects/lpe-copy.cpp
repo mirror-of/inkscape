@@ -102,7 +102,7 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     show_orig_path = true;
     _provides_knotholder_entities = true;
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    // please intense work on this widget and is important reorder parameters very carefuly
+    // please intense work on this widget and is important reorder parameters very carefully
     registerParameter(&unit);
     registerParameter(&seed);
     registerParameter(&lpesatellites);
@@ -131,7 +131,7 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     registerParameter(&random_gap_y);
     registerParameter(&random_gap_x);
     
-    num_cols.param_set_range(1, 9999);// we neeed the input a bit tiny so this seems enought
+    num_cols.param_set_range(1, 9999);// we need the input a bit tiny so this seems enough
     num_cols.param_make_integer();
     num_cols.param_set_increments(1, 10);
     num_rows.param_set_range(1, 9999);
@@ -434,7 +434,7 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 counter++;
             }
         }
-        //we keep satelites connected and actived if write needed
+        //we keep satellites connected and active if write needed
         bool connected = lpesatellites.is_connected();
         if (forcewrite || !connected) {
             lpesatellites.write_to_SVG();
@@ -1381,14 +1381,14 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
             }
             if (random_x.size() == counter) {
                 if (random_gap_x && gapx_unit) {
-                    random_x.emplace_back((seed.param_get_random_number() * gapx_unit)); // avoid overlaping
+                    random_x.emplace_back((seed.param_get_random_number() * gapx_unit)); // avoid overlapping
                 } else {
                     random_x.emplace_back(0);
                 }
             }
             if (random_y.size() == counter) {
                 if (random_gap_y && gapy_unit) {
-                    random_y.emplace_back((seed.param_get_random_number() * gapy_unit)); // avoid overlaping
+                    random_y.emplace_back((seed.param_get_random_number() * gapy_unit)); // avoid overlapping
                 } else {
                     random_y.emplace_back(0);
                 }
