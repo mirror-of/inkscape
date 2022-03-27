@@ -1873,6 +1873,7 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
                                 cr_parsing_location_copy 
                                         (&add_sel->location, 
                                          &pseudo->location) ;
+                                pseudo = NULL;
                                 add_sel_list =
                                         cr_additional_sel_append
                                         (add_sel_list, add_sel);
