@@ -87,6 +87,8 @@ apt_bundle \
     python3-chardet \
     python3-certifi \
     python3-idna \
+    python3-msgpack \
+    python3-lockfile \
     python3-cssselect \
     python3-distutils \
     python3-packaging \
