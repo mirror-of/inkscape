@@ -359,6 +359,7 @@ public:
     Geom::OptRect bounds(SPItem::BBoxType type) const;
     Geom::OptRect visualBounds() const;
     Geom::OptRect geometricBounds() const;
+    Geom::OptRect strokedBounds() const;
 
     /**
      * Returns either the visual or geometric bounding rectangle of the selection, based on the

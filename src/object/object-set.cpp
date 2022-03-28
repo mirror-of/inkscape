@@ -391,6 +391,20 @@ Geom::OptRect ObjectSet::visualBounds() const
     return bbox;
 }
 
+Geom::OptRect ObjectSet::strokedBounds() const
+{
+    auto items = const_cast<ObjectSet *>(this)->items();
+
+    Geom::OptRect bbox;
+    for (auto *item : items) {
+        bbox.unionWith(item->visualBounds(item->i2doc_affine(), false, true, true));
+    }
+    if (bbox) {
+        *bbox *= _desktop->getDocument()->doc2dt();
+    }
+    return bbox;
+}
+
 Geom::OptRect ObjectSet::preferredBounds() const
 {
     if (Inkscape::Preferences::get()->getInt("/tools/bounding_box") == 0) {

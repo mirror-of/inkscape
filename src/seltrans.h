@@ -154,7 +154,7 @@ private:
     SPItem::BBoxType _snap_bbox_type;
 
     Geom::OptRect _bbox;
-    Geom::OptRect _visual_bbox;
+    Geom::OptRect _stroked_bbox;
     Geom::OptRect _geometric_bbox;
     double _strokewidth;
 

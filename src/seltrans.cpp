@@ -104,7 +104,7 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     _state(STATE_SCALE),
     _show(SHOW_CONTENT),
     _bbox(),
-    _visual_bbox(),
+    _stroked_bbox(),
     _message_context(desktop->messageStack()),
     _bounding_box_prefs_observer(*this)
 {
@@ -279,7 +279,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
 
     // First, determine the bounding box
     _bbox = selection->bounds(_snap_bbox_type);
-    _visual_bbox = selection->visualBounds(); // Used for correctly scaling the strokewidth
+    _stroked_bbox = selection->strokedBounds(); // Used for correctly scaling the strokewidth
     _geometric_bbox = selection->geometricBounds();
 
     _point = p;
@@ -741,7 +741,7 @@ void Inkscape::SelTrans::_updateVolatileState()
 
     //Update the bboxes
     _bbox = selection->bounds(_snap_bbox_type);
-    _visual_bbox = selection->visualBounds();
+    _stroked_bbox = selection->strokedBounds();
 
     if (!_bbox) {
         _empty = true;
@@ -1747,8 +1747,8 @@ Geom::Scale Inkscape::calcScaleFactors(Geom::Point const &initial_point, Geom::P
 Geom::Point Inkscape::SelTrans::_calcAbsAffineDefault(Geom::Scale const default_scale)
 {
     Geom::Affine abs_affine = Geom::Translate(-_origin) * Geom::Affine(default_scale) * Geom::Translate(_origin);
-    Geom::Point new_bbox_min = _visual_bbox->min() * abs_affine;
-    Geom::Point new_bbox_max = _visual_bbox->max() * abs_affine;
+    Geom::Point new_bbox_min = _stroked_bbox->min() * abs_affine;
+    Geom::Point new_bbox_max = _stroked_bbox->max() * abs_affine;
 
     bool transform_stroke = false;
     bool preserve = false;
@@ -1759,11 +1759,11 @@ Geom::Point Inkscape::SelTrans::_calcAbsAffineDefault(Geom::Scale const default_
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         transform_stroke = prefs->getBool("/options/transform/stroke", true);
         preserve = prefs->getBool("/options/preservetransform/value", false);
-        stroke_x = _visual_bbox->width() - _geometric_bbox->width();
-        stroke_y = _visual_bbox->height() - _geometric_bbox->height();
+        stroke_x = _stroked_bbox->width() - _geometric_bbox->width();
+        stroke_y = _stroked_bbox->height() - _geometric_bbox->height();
     }
 
-    _absolute_affine = get_scale_transform_for_uniform_stroke (*_visual_bbox, stroke_x, stroke_y, transform_stroke, preserve,
+    _absolute_affine = get_scale_transform_for_uniform_stroke (*_stroked_bbox, stroke_x, stroke_y, transform_stroke, preserve,
                     new_bbox_min[Geom::X], new_bbox_min[Geom::Y], new_bbox_max[Geom::X], new_bbox_max[Geom::Y]);
 
     // return the new handle position
