@@ -104,7 +104,7 @@ class ClipboardManagerImpl : public ClipboardManager {
 public:
     void copy(ObjectSet *set) override;
     void copyPathParameter(Inkscape::LivePathEffect::PathParam *) override;
-    void copySymbol(Inkscape::XML::Node* symbol, gchar const* style, bool user_symbol) override;
+    void copySymbol(Inkscape::XML::Node* symbol, gchar const* style, SPDocument *source) override;
     bool paste(SPDesktop *desktop, bool in_place) override;
     bool pasteStyle(ObjectSet *set) override;
     bool pasteSize(ObjectSet *set, bool separately, bool apply_x, bool apply_y) override;
@@ -317,38 +317,13 @@ void ClipboardManagerImpl::copyPathParameter(Inkscape::LivePathEffect::PathParam
 }
 
 /**
- * If the symbol has a viewBox but no width or height, then take width and
- * height from the viewBox and set them on the use element. Otherwise, the
- * use element will have 100% document width and height!
- */
-static void setWidthHeightFromSymbol( //
-    Inkscape::XML::Node *use,         //
-    Inkscape::XML::Node const *symbol)
-{
-    auto widthAttr = symbol->attribute("width");
-    auto heightAttr = symbol->attribute("height");
-    auto viewBoxAttr = symbol->attribute("viewBox");
-
-    if (viewBoxAttr && !(heightAttr || widthAttr)) {
-        SPViewBox vb;
-        vb.set_viewBox(viewBoxAttr);
-        if (vb.viewBox_set) {
-            use->setAttributeSvgDouble("width", vb.viewBox.width());
-            use->setAttributeSvgDouble("height", vb.viewBox.height());
-        }
-    }
-}
-
-/**
  * Copy a symbol from the symbol dialog.
  * @param symbol The Inkscape::XML::Node for the symbol.
  */
-void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* style, bool user_symbol)
+void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* style, SPDocument *source)
 {
-    //std::cout << "ClipboardManagerImpl::copySymbol" << std::endl;
-    if ( symbol == nullptr ) {
+    if (!symbol)
         return;
-    }
 
     _discardInternalClipboard();
     _createInternalClipboard();
@@ -360,40 +335,47 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
     Glib::ustring symbol_name = repr->attribute("id");
 
     symbol_name += "_inkscape_duplicate";
-    repr->setAttribute("id",    symbol_name);
+    repr->setAttribute("id", symbol_name);
     _defs->appendChild(repr);
 
-    Glib::ustring id("#");
-    id += symbol->attribute("id");
+    auto scale = _clipboardSPDoc->getDocumentScale();
+    if (auto group = dynamic_cast<SPGroup *>(_clipboardSPDoc->getObjectByRepr(repr))) {
+        // Convert scale from source to clipboard user units
+        group->scaleChildItemsRec(scale, Geom::Point(0, 0), false);
+    }
 
-    gdouble scale_units = 1; // scale from "px" to "document-units"
-    Inkscape::XML::Node *nv_repr = SP_ACTIVE_DESKTOP->getNamedView()->getRepr();
-    if (nv_repr->attribute("inkscape:document-units"))
-        scale_units = Inkscape::Util::Quantity::convert(1, "px", nv_repr->attribute("inkscape:document-units"));
-    SPObject *cmobj = _clipboardSPDoc->getObjectByRepr(repr);
-    if (cmobj && !user_symbol) { // convert only stock symbols
-        if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {
-            auto group = dynamic_cast<SPGroup *>(cmobj);
-            assert(group);
-            group->scaleChildItemsRec(
-                Geom::Scale(scale_units), Geom::Point(0, SP_ACTIVE_DESKTOP->getDocument()->getHeight().value("px")),
-                false);
+    auto href = Glib::ustring("#") + symbol->attribute("id");
+    Inkscape::XML::Node *use_repr = _doc->createElement("svg:use");
+    use_repr->setAttribute("xlink:href", href);
+
+    /**
+     * If the symbol has a viewBox but no width or height, then take width and
+     * height from the viewBox and set them on the use element. Otherwise, the
+     * use element will have 100% document width and height!
+     */
+    {
+        auto widthAttr = symbol->attribute("width");
+        auto heightAttr = symbol->attribute("height");
+        auto viewBoxAttr = symbol->attribute("viewBox");
+
+        if (viewBoxAttr && !(heightAttr || widthAttr)) {
+            SPViewBox vb;
+            vb.set_viewBox(viewBoxAttr);
+            if (vb.viewBox_set) {
+                use_repr->setAttributeSvgDouble("width", vb.viewBox.width());
+                use_repr->setAttributeSvgDouble("height", vb.viewBox.height());
+            }
         }
     }
 
-    Inkscape::XML::Node *use = _doc->createElement("svg:use");
-    use->setAttribute("xlink:href", id );
-
-    setWidthHeightFromSymbol(use, symbol);
-
     // Set a default style in <use> rather than <symbol> so it can be changed.
-    use->setAttribute("style", style );
-    if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {
-        auto transform_str = sp_svg_transform_write(Geom::Scale(1.0 / scale_units));
-        assert(!transform_str.empty());
-        use->setAttribute("transform", transform_str);
+    use_repr->setAttribute("style", style);
+    _root->appendChild(use_repr);
+
+    if (auto use = dynamic_cast<SPUse *>(_clipboardSPDoc->getObjectByRepr(use_repr))) {
+        Geom::Affine affine = source->getDocumentScale();
+        use->doWriteTransform(affine, &affine, false);
     }
-    _root->appendChild(use);
 
     // This min and max sets offsets, we don't have any so set to zero.
     _clipnode->setAttributePoint("min", Geom::Point(0, 0));

@@ -641,7 +641,7 @@ void SymbolsDialog::iconChanged() {
       }
 
       ClipboardManager *cm = ClipboardManager::get();
-      cm->copySymbol(symbol->getRepr(), style, symbol_document == getDocument());
+      cm->copySymbol(symbol->getRepr(), style, symbol_document);
     }
   }
 }
