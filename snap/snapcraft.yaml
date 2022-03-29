@@ -104,7 +104,6 @@ parts:
       - python3-gi-cairo
     prime:
       - -lib/inkscape/*.a
-      - -share/inkscape/extensions/extension-manager* # Writes executables to config directory, which doesn't work on snaps
       - -*canberra*so* # We don't have sound permissions anyway
       - -usr/lib/*/gtk-2.0
     override-build: |
@@ -182,6 +181,7 @@ apps:
       - unity7
       - dot-config-inkscape
       - raw-usb # plotter support
+      - network # for extension manager
 # TODO: Remove with portals
       - home
       - removable-media
