@@ -103,30 +103,6 @@ std::array<Line, 6> getBounds(double l)
 }
 
 /**
- * Calculate X coordinate of the intersection point of the two passed in lines.
- *
- * @param line1 The first line.
- * @param line2 The second line.
- * @return X coordinate of the intersection point.
- */
-static double intersectLineLine(const Line &line1, const Line &line2)
-{
-    return (line1.intercept - line2.intercept) / (line2.slope - line1.slope);
-}
-
-/**
- * Calculate the squared distance of the passed in point to the pole/origin.
- *
- * @param x X coordinate.
- * @param y Y coordinate.
- * @return Squared distance of point to pole.
- */
-static double distFromPoleSquared(double x, double y)
-{
-    return x * x + y * y;
-}
-
-/**
  * Calculate the length of a ray at a given angle until it intersects with the
  * passed in line.
  *
@@ -137,34 +113,6 @@ static double distFromPoleSquared(double x, double y)
 static double rayLengthUntilIntersect(double theta, const Line &line)
 {
     return line.intercept / (std::sin(theta) - line.slope * std::cos(theta));
-}
-
-/**
- * Calculate the largest safe chromaticity for the given luminance l.
- * Safe here means that it guarantees to not go out of gamut for every hue.
- *
- * @param l Lightness.
- * @return The maximum safe chromaticity for l.
- */
-static double maxSafeChromaForL(double l)
-{
-    double min_len_squared = std::numeric_limits<double>::max();
-    std::array<Line, 6> bounds = getBounds(l);
-    int i;
-
-    for (i = 0; i < 6; i++) {
-        double m1 = bounds[i].slope;
-        double b1 = bounds[i].intercept;
-        /* x where line intersects with perpendicular running though (0, 0) */
-        Line line2 = { -1.0 / m1, 0.0 };
-        double x = intersectLineLine(bounds[i], line2);
-        double distance = distFromPoleSquared(x, b1 + x * m1);
-
-        if (distance < min_len_squared)
-            min_len_squared = distance;
-    }
-
-    return std::sqrt(min_len_squared);
 }
 
 /**
@@ -447,60 +395,6 @@ static void lch2hsluv(Triplet* in_out)
         s = 0.0;
     else
         s = c / maxChromaForLh(l, h) * 100.0;
-
-    /* Grays: disambiguate hue */
-    if (c < 0.00000001)
-        h = 0.0;
-
-    (*in_out)[0] = h;
-    (*in_out)[1] = s;
-    (*in_out)[2] = l;
-}
-
-/**
- * Convert a color from the the HPLuv colorspace to the LCH colorspace.
- *
- * @param in_out[in,out] The HPLuv color converted to a LCH color.
- */
-static void hpluv2lch(Triplet* in_out)
-{
-    double h = (*in_out)[0];
-    double s = (*in_out)[1];
-    double l = (*in_out)[2];
-    double c;
-
-    /* White and black: disambiguate chroma */
-    if(l > 99.9999999 || l < 0.00000001)
-        c = 0.0;
-    else
-        c = maxSafeChromaForL(l) / 100.0 * s;
-
-    /* Grays: disambiguate hue */
-    if (s < 0.00000001)
-        h = 0.0;
-
-    (*in_out)[0] = l;
-    (*in_out)[1] = c;
-    (*in_out)[2] = h;
-}
-
-/**
- * Convert a color from the the LCH colorspace to the HPLuv colorspace.
- *
- * @param in_out[in,out] The LCH color converted to a HPLuv color.
- */
-static void lch2hpluv(Triplet* in_out)
-{
-    double l = (*in_out)[0];
-    double c = (*in_out)[1];
-    double h = (*in_out)[2];
-    double s;
-
-    /* White and black: disambiguate saturation */
-    if (l > 99.9999999 || l < 0.00000001)
-        s = 0.0;
-    else
-        s = c / maxSafeChromaForL(l) * 100.0;
 
     /* Grays: disambiguate hue */
     if (c < 0.00000001)

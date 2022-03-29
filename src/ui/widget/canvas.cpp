@@ -94,60 +94,6 @@ auto make_unique_copy(const GdkEvent &ev) {return GdkEventUniqPtr(gdk_event_copy
  * Preferences
  */
 
-template<typename T>
-struct Pref {};
-
-template<typename T>
-struct PrefBase
-{
-    const char *path;
-    T t, def;
-    std::unique_ptr<Preferences::PreferencesObserver> obs;
-    std::function<void()> action;
-    operator T() const {return t;}
-    PrefBase(const char *path, T def) : path(path), def(def) {enable();}
-    void act() {if (action) action();}
-    void assign(T t2) {if (t != t2) {t = t2; act();}}
-    void enable() {assign(static_cast<Pref<T>*>(this)->read()); obs = Inkscape::Preferences::get()->createObserver(path, [this] (const Preferences::Entry &e) {assign(static_cast<Pref<T>*>(this)->changed(e));});}
-    void disable() {assign(def); obs.reset();}
-    void set_enabled(bool enabled) {enabled ? enable() : disable();}
-};
-
-template<>
-struct Pref<void>
-{
-    std::unique_ptr<Preferences::PreferencesObserver> obs;
-    std::function<void()> action;
-    Pref(const char *path) : obs(Inkscape::Preferences::get()->createObserver(path, [this] (const Preferences::Entry&) {act();})) {}
-    void act() {if (action) action();}
-};
-
-template<>
-struct Pref<bool> : PrefBase<bool>
-{
-    Pref(const char *path, bool def = false) : PrefBase(path, def) {}
-    bool read() {return Inkscape::Preferences::get()->getBool(path, def);}
-    bool changed(const Preferences::Entry &e) {return e.getBool(def);}
-};
-
-template<>
-struct Pref<int> : PrefBase<int>
-{
-    int min, max;
-    Pref(const char *path, int def, int min, int max) : min(min), max(max), PrefBase(path, def) {}
-    int read() {return Inkscape::Preferences::get()->getIntLimited(path, def, min, max);}
-    int changed(const Preferences::Entry &e) {return e.getIntLimited(def, min, max);}
-};
-
-template<>
-struct Pref<double> : PrefBase<double>
-{
-    double min, max;
-    Pref(const char *path, double def, double min, double max) : min(min), max(max), PrefBase(path, def) {}
-    double read() {return Inkscape::Preferences::get()->getDoubleLimited(path, def, min, max);}
-    double changed(const Preferences::Entry &e) {return e.getDoubleLimited(def, min, max);}
-};
-
 struct Prefs
 {
     // Original parameters
@@ -572,6 +518,10 @@ Canvas::Canvas()
     d->eventprocessor = std::make_shared<CanvasPrivate::EventProcessor>();
     d->eventprocessor->canvasprivate = d.get();
 
+    // Developer mode master switch
+    d->prefs.devmode.action = [=] {d->prefs.set_devmode(d->prefs.devmode);};
+    d->prefs.devmode.action();
+
     // Updater
     d->updater = make_updater(d->prefs.update_strategy);
 
@@ -586,10 +536,6 @@ Canvas::Canvas()
     d->prefs.softproof.action = [=] {redraw_all();};
     d->prefs.displayprofile.action = [=] {redraw_all();};
     d->prefs.imageoutlinemode.action = [=] {redraw_all();};
-
-    // Developer mode master switch
-    d->prefs.devmode.action = [=] {d->prefs.set_devmode(d->prefs.devmode);};
-    d->prefs.devmode.action();
 
     // Cavas item root
     _canvas_item_root = new Inkscape::CanvasItemGroup(nullptr);

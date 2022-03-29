@@ -164,8 +164,8 @@ private:
     CanvasItemGroup *_canvas_item_root = nullptr;
 
     // Geometry
-    Geom::IntPoint _pos;   ///< Coordinates of top-left pixel of canvas view within canvas.
-    Geom::Affine _affine;  ///< The affine that we have been requested to draw at.
+    Geom::IntPoint _pos = {0, 0}; ///< Coordinates of top-left pixel of canvas view within canvas.
+    Geom::Affine _affine; ///< The affine that we have been requested to draw at.
 
     // Background
     Cairo::RefPtr<Cairo::Pattern> _background; ///< The background of the widget.

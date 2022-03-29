@@ -16,6 +16,7 @@
 
 #include <climits>
 #include <cfloat>
+#include <functional>
 #include <glibmm/ustring.h>
 #include <map>
 #include <memory>
@@ -793,6 +794,114 @@ inline Glib::ustring Preferences::Entry::getEntryName() const
     path_base.erase(0, path_base.rfind('/') + 1);
     return path_base;
 }
+
+/**
+ * @brief Proxy object providing a "live value" interface.
+ *
+ * A Pref<T> tracks a preference value. For the most part it behaves just like a T. For example
+ *
+ *     auto mybool = Pref<bool>("/path/to/mybool");
+ *
+ * can be used as a bool. The only difference is that it updates whenever the preference updates,
+ * and allows you to perform an action when it does. For example,
+ *
+ *     mybool.action = [&] { std::cout << mybool << std::endl; };
+ *
+ * will cause the new value to be printed after each subsequent change. Pref<T> can be temporarily
+ * disabled with a call to
+ * 
+ *     mybool.set_enabled(false);
+ * 
+ * during which time it will revert to its default value and ignore further updates until
+ * re-enabled again.
+ *
+ *  - Most common types T are implemented. Feel free to add more as needed.
+ *
+ *  - Pref<void> allows listening for updates to a whole group of preferences. Although this
+ *    entirely duplicates existing preferences functionality, it is provided for consistency.
+ *
+ */
+
+template<typename T>
+struct Pref {};
+
+template<typename T>
+class PrefBase : public Preferences::Observer
+{
+protected:
+    T val;
+
+    PrefBase(Glib::ustring path, T def) : Observer(std::move(path)), def(std::move(def)) {}
+    PrefBase(const PrefBase&) = delete;
+
+    void init() { val = static_cast<Pref<T>*>(this)->read(); Inkscape::Preferences::get()->addObserver(*this); }
+    void act() { if (action) action(); }
+    void assign(const T &val2) { if (val != val2) { val = val2; act(); } }
+    void enable() { assign(static_cast<Pref<T>*>(this)->read()); Inkscape::Preferences::get()->addObserver(*this); }
+    void disable() { assign(def); Inkscape::Preferences::get()->removeObserver(*this); }
+    void notify(const Preferences::Entry &e) override { assign(static_cast<Pref<T>*>(this)->changed(e)); }
+
+public:
+    /// The default value.
+    T def;
+
+    /// The current value.
+    operator const T&() const { return val; }
+
+    /// The action to perform when the value changes, if any.
+    std::function<void()> action;
+
+    /// Disable switch. If disabled, the Pref will stick at its default value.
+    void set_enabled(bool enabled) { enabled ? enable() : disable(); }
+};
+
+template<>
+class Pref<bool> : public PrefBase<bool>
+{
+    friend PrefBase;
+    auto read() const { return Inkscape::Preferences::get()->getBool(observed_path, def); }
+    auto changed(const Preferences::Entry &e) const { return e.getBool(def); }
+public:
+    Pref(Glib::ustring path, bool def = false) : PrefBase(std::move(path), def) { init(); }
+};
+
+template<>
+class Pref<int> : public PrefBase<int>
+{
+    friend PrefBase;
+    auto read() const { return Inkscape::Preferences::get()->getIntLimited(observed_path, def, min, max); }
+    auto changed(const Preferences::Entry &e) const { return e.getIntLimited(def, min, max); }
+public:
+    int min, max;
+    Pref(Glib::ustring path, int def = 0, int min = INT_MIN, int max = INT_MAX) : PrefBase(std::move(path), def), min(min), max(max) { init(); }
+};
+
+template<>
+class Pref<double> : public PrefBase<double>
+{
+    friend PrefBase;
+    auto read() const { return Inkscape::Preferences::get()->getDoubleLimited(observed_path, def, min, max); }
+    auto changed(const Preferences::Entry &e) const { return e.getDoubleLimited(def, min, max); }
+public:
+    double min, max;
+    Pref(Glib::ustring path, double def = 0.0, double min = DBL_MIN, double max = DBL_MAX) : PrefBase(std::move(path), def), min(min), max(max) { init(); }
+};
+
+template<>
+class Pref<void> : public Preferences::Observer
+{
+    void enable() { Inkscape::Preferences::get()->addObserver(*this); }
+    void disable() { Inkscape::Preferences::get()->removeObserver(*this); }
+    void notify(const Preferences::Entry &e) override { if (action) action(); }
+
+public:
+    std::function<void()> action;
+
+    Pref(Glib::ustring path) : Observer(std::move(path)) {}
+    Pref(const Pref&) = delete;
+
+    void set_enabled(bool enabled) { enabled ? enable() : disable(); }
+};
 
 } // namespace Inkscape
 
