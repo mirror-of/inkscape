@@ -200,6 +200,7 @@ void DialogBase::setDesktop(SPDesktop *new_desktop)
         if (desktop->selection) {
             this->selectionChanged(selection);
         }
+        set_sensitive(true);
     }
 
     desktopReplaced();
@@ -287,6 +288,7 @@ void DialogBase::desktopDestroyed(SPDesktop* old_desktop)
 {
     if (old_desktop == desktop && desktop) {
         unsetDesktop();
+        set_sensitive(false);
     }
 }
 
