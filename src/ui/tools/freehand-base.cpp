@@ -332,7 +332,10 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     lpe->getRepr()->setAttribute("prop_scale", os.str());
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
     lpe->getRepr()->setAttribute("vertical", "false");
-    static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
+    Geom::PathVector path_clipboard =  sp_svg_read_pathv(svgd);
+    path_clipboard *= item->i2doc_affine().inverse();
+    Glib::ustring svgd_new = sp_svg_write_path(path_clipboard);
+    static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd_new.c_str());
 }
 
 static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem *item)

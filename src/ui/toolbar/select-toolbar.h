@@ -52,7 +52,11 @@ private:
     std::vector<sigc::connection> _connections;
 
     bool _update;
+    std::uint64_t _selection_seq = 0; ///< Increment to prevent coalescing of consecutive undo events
+    std::string _action_key;
+    std::string const _action_prefix;
 
+    char const *get_action_key(double mh, double sh, double mv, double sv);
     void any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj);
     void layout_widget_update(Inkscape::Selection *sel);
     void on_inkscape_selection_modified(Inkscape::Selection *selection, guint flags);

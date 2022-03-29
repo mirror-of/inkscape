@@ -76,7 +76,7 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
     if (desktop) {
         selection = desktop->selection;
     }
-    if (!autoreverse || linked_paths._vector.size() == 2) {
+    if (!autoreverse) {
         for (auto & iter : linked_paths._vector) {
             SPObject *obj;
             if (iter->ref.isAttached() && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj) &&
@@ -121,7 +121,7 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
                     counter++;
                     continue;
                 }
-                if (obj && transf != Geom::identity() && selection && !selection->includes(obj->getRepr())) {
+                if (is_load && obj && transf != Geom::identity() && selection && !selection->includes(obj->getRepr())) {
                     SP_ITEM(obj)->doWriteTransform(transf);
                 }
                 if (counter == 0) {

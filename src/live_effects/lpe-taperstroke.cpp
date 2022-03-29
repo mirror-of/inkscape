@@ -177,8 +177,10 @@ static Geom::Path return_at_first_cusp(Geom::Path const & path_in, double /*smoo
 
     for (unsigned i = 0; i < path_in.size(); i++) {
         temp.append(path_in[i]);
-        if (Geom::get_nodetype(path_in[i], path_in[i + 1]) != Geom::NODE_SMOOTH ) {
-            break;
+        if (path_in.size() > i+1) {
+            if (Geom::get_nodetype(path_in[i], path_in[i + 1]) != Geom::NODE_SMOOTH ) {
+                break;
+            }
         }
     }
     

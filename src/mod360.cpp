@@ -17,15 +17,16 @@
 **/
 double mod360(double const x)
 {
-    double const m = fmod(x, 360.0);
-    double const ret = ( std::isnan(m)
-                         ? 0.0
-                         : ( m < 0
-                             ? m + 360
-                             : m ) );
-    g_return_val_if_fail(0.0 <= ret && ret < 360.0,
-                         0.0);
-    return ret;
+    double m = fmod(x, 360.0);
+    if (std::isnan(m)) {
+        m = 0.0;
+    } else if (m < 0) {
+        m += 360.0;
+    }
+    if (m < 0.0 || m >= 360.0) {
+        m = 0.0;
+    }
+    return m;
 }
 
 /** Returns \a x wrapped around to between -180 and less than 180,

@@ -206,6 +206,7 @@ void SingleExport::setup()
     si_show_preview->signal_toggled().connect(sigc::mem_fun(*this, &SingleExport::refreshPreview));
     si_hide_all->signal_toggled().connect(sigc::mem_fun(*this, &SingleExport::refreshPreview));
 
+    si_default_opts->set_active(prefs->getBool("/dialogs/export/defaultopts", true));
 }
 
 // Setup units combobox
@@ -531,11 +532,11 @@ void SingleExport::onExport()
     float y1 = unit->convert(spin_buttons[SPIN_Y1]->get_value(), "px");
     auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1));
 
-    if (!si_default_opts->get_active()) {
-        if (!omod->prefs()) {
-            si_export->set_sensitive(true);
-            return; // cancel button
-        }
+    bool default_opts = si_default_opts->get_active();
+    prefs->setBool("/dialogs/export/defaultopts", default_opts);
+    if (!default_opts && !omod->prefs()) {
+        si_export->set_sensitive(true);
+        return; // cancel button
     }
 
     if (omod->is_raster()) {

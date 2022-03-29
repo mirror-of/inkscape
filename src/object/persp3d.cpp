@@ -448,7 +448,7 @@ void
 Persp3D::update_box_reprs () {
     Persp3DImpl *persp_impl = this->perspective_impl;
 
-    if (persp_impl->boxes.empty())
+    if (!persp_impl || persp_impl->boxes.empty())
         return;
     for (auto & boxe : persp_impl->boxes) {
         boxe->updateRepr(SP_OBJECT_WRITE_EXT);
@@ -460,7 +460,7 @@ void
 Persp3D::update_z_orders () {
     Persp3DImpl *persp_impl = this->perspective_impl;
 
-    if (persp_impl->boxes.empty())
+    if (!persp_impl || persp_impl->boxes.empty())
         return;
     for (auto & boxe : persp_impl->boxes) {
         boxe->set_z_orders();

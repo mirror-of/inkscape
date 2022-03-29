@@ -61,6 +61,10 @@ PageToolbar::PageToolbar(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builde
             entry_page_sizes->set_tooltip_text(_("Type in width & height of a page. (ex.: 15x10cm, 10in x 100mm)\n"
                                                  "or choose preset from dropdown."));
             entry_page_sizes->signal_activate().connect(sigc::mem_fun(*this, &PageToolbar::sizeChanged));
+            entry_page_sizes->signal_icon_press().connect([=](Gtk::EntryIconPosition, const GdkEventButton*){
+                _document->getPageManager().changeOrientation();
+                setSizeText();
+            });
             entry_page_sizes->signal_focus_in_event().connect([=](GdkEventFocus* focus){
                 entry_page_sizes->set_text("");
                 return false;
@@ -127,14 +131,20 @@ void PageToolbar::labelEdited()
 
 void PageToolbar::sizeChoose()
 {
+    auto &pm = _document->getPageManager();
     try {
+        auto p_rect = pm.getSelectedPageRect();
+        bool landscape = p_rect.width() > p_rect.height();
+
         auto page_id = std::stoi(combo_page_sizes->get_active_id());
         auto& page_sizes = Inkscape::PaperSize::getPageSizes();
         if (page_id >= 0 && page_id < page_sizes.size()) {
             auto&& ps = page_sizes[page_id];
-            auto width = ps.unit->convert(ps.width, "px");
-            auto height = ps.unit->convert(ps.height, "px");
-            _document->getPageManager().resizePage(width, height);
+            // Keep page orientation while selecting size
+            auto width = ps.unit->convert(ps.size[landscape], "px");
+            auto height = ps.unit->convert(ps.size[!landscape], "px");
+            pm.resizePage(width, height);
+            setSizeText();
             DocumentUndo::maybeDone(_document, "page-resize", _("Resize Page"), INKSCAPE_ICON("tool-pages"));
         }
     } catch (std::invalid_argument const &e) {
@@ -191,7 +201,7 @@ void PageToolbar::sizeChanged()
             _document->getPageManager().resizePage(width, height);
         }
     }
-    setSizeText(_document->getPageManager().getSelected());
+    setSizeText();
 }
 
 /**
@@ -199,6 +209,9 @@ void PageToolbar::sizeChanged()
  */
 void PageToolbar::setSizeText(SPPage *page)
 {
+    if (!page)
+        page = _document->getPageManager().getSelected();
+
     auto unit = _document->getDisplayUnit();
     double width = _document->getWidth().value(unit);
     double height = _document->getHeight().value(unit);
@@ -208,6 +221,14 @@ void PageToolbar::setSizeText(SPPage *page)
         width = px->convert(rect.width(), unit);
         height = px->convert(rect.height(), unit);
     }
+    // Orientation button
+    std::string icon = width > height ? "page-landscape" : "page-portrait";
+    if (width == height) {
+        entry_page_sizes->unset_icon(Gtk::ENTRY_ICON_SECONDARY);
+    } else {
+        entry_page_sizes->set_icon_from_icon_name(INKSCAPE_ICON(icon), Gtk::ENTRY_ICON_SECONDARY);
+    }
+
     if (auto page_size = Inkscape::PaperSize::findPaperSize(width, height, unit)) {
         entry_page_sizes->set_text(page_size->getDescription(width > height));
     } else {

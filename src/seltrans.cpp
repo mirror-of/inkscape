@@ -263,7 +263,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         _items_centers.push_back(it->getCenter()); // for content-dragging, we need to remember original centers
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(it);
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
-            sp_lpe_item_update_patheffect(lpeitem, false, false);
+            sp_lpe_item_update_patheffect(lpeitem, true, false);
         }
     }
 
@@ -399,6 +399,10 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
 
             Geom::Affine const &prev_transform = _items_affines[i];
             item.set_i2d_affine(prev_transform * affine);
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item.parent);
+            if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+                sp_lpe_item_update_patheffect(lpeitem, true, false);
+            }
             // The new affine will only have been applied if the transformation is different from the previous one, see SPItem::set_item_transform
         }
     } else {

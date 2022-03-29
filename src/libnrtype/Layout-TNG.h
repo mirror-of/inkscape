@@ -377,7 +377,7 @@ public:
       \param transform     The transform to be applied to the entire object
                            prior to calculating its bounds.
     */
-    Geom::OptRect bounds(Geom::Affine const &transform, int start = -1, int length = -1) const;
+    Geom::OptRect bounds(Geom::Affine const &transform, bool with_stroke = false, int start = -1, int length = -1) const;
 
     /** Sends all the glyphs to the given print context.
      \param ctx   I have

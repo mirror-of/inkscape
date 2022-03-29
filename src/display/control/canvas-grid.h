@@ -76,6 +76,7 @@ public:
     virtual void onReprAttrChanged (Inkscape::XML::Node * /*repr*/, char const */*key*/, char const */*oldval*/, char const */*newval*/, bool /*is_interactive*/) = 0;
 
     Gtk::Widget * newWidget();
+    static void *notifyWidgetsDestroyed(void *data);
 
     void setOrigin(Geom::Point const &origin_px); /**< writes new origin (specified in px units) to SVG */
     Geom::Point origin;     /**< Origin of the grid */

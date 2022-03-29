@@ -55,7 +55,7 @@ Gtk::Label * spw_label(Gtk::Grid *table, const gchar *label_text, int col, int r
 Gtk::Box * spw_hbox(Gtk::Grid * table, int width, int col, int row)
 {
   /* Create a new hbox with a 4-pixel spacing between children */
-  Gtk::Box *hb = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4);
+  Gtk::Box *hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
   g_assert(hb != nullptr);
   hb->show();
   hb->set_hexpand();

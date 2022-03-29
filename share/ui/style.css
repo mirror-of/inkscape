@@ -96,6 +96,10 @@
     -gtk-icon-style: symbolic;
 }
 
+.titlebutton > image {
+    -gtk-icon-style: requested;
+}
+
 .inverted,
 .dark .forcebright,
 .bright .forcedark {

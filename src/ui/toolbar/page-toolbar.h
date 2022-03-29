@@ -42,7 +42,7 @@ protected:
     void labelEdited();
     void sizeChoose();
     void sizeChanged();
-    void setSizeText(SPPage *);
+    void setSizeText(SPPage *page = nullptr);
 
 private:
     SPDesktop *_desktop;

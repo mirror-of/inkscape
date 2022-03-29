@@ -7,10 +7,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <string>
+
 class SPDocument;
 
 namespace Inkscape {
 
+std::string convertPathToRelative(std::string const &path, std::string const &docbase);
 bool fixBrokenLinks(SPDocument *doc);
 
 }

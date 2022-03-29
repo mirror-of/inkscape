@@ -28,6 +28,7 @@
 
 class GrDrag;
 class SPDesktop;
+class SPObject;
 class SPItem;
 class SPGroup;
 class KnotHolder;
@@ -145,6 +146,7 @@ public:
     virtual void set(const Inkscape::Preferences::Entry& val);
     virtual bool root_handler(GdkEvent *event);
     virtual bool item_handler(SPItem *item, GdkEvent *event);
+    virtual void menu_popup(GdkEvent *event, SPObject *obj = nullptr);
 
     void set_on_buttons(GdkEvent *event);
     bool are_buttons_1_and_3_on() const;

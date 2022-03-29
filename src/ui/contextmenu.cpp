@@ -31,18 +31,22 @@
 #include "desktop.h"
 #include "document.h"
 #include "layer-manager.h"
+#include "page-manager.h"
 #include "selection.h"
 
 #include "object/sp-anchor.h"
 #include "object/sp-image.h"
+#include "object/sp-page.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
 #include "ui/desktop/menu-icon-shift.h"
 
-ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_objects_menu_item)
+ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_and_objects_menu_item)
 {
     set_name("ContextMenu");
+
+    SPItem *item = dynamic_cast<SPItem *>(object);
 
     // std::cout << "ContextMenu::ContextMenu: " << (item ? item->getId() : "no item") << std::endl;
     action_group = Gio::SimpleActionGroup::create();
@@ -56,14 +60,6 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_
 
     auto layer = Inkscape::LayerManager::asLayer(item);  // Layers have their own context menu in the Object and Layers dialog.
     auto root = desktop->layerManager().currentRoot();
-
-    // "item" is the object that was under the mouse when right-clicked. It determines what is shown
-    // in the menu thus it makes the most sense that it is either selected or part of the current
-    // selection.
-    auto selection = desktop->selection;
-    if (item && !selection->includes(item)) {
-        selection->set(item);
-    }
 
     // Get a list of items under the cursor, used for unhiding and unlocking.
     auto point_document = desktop->point() * desktop->dt2doc();
@@ -92,7 +88,28 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item, bool hide_layers_and_
     // AppendItemFromAction(gmenu_section, "doc.redo",      _("Redo"),       "edit-redo");
     // gmenu->append_section(gmenu_section);
 
-    if (!layer) {
+    if (auto page = dynamic_cast<SPPage *>(object)) {
+        auto &page_manager = document->getPageManager();
+        page_manager.selectPage(page);
+
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section, "doc.page-new", _("_New Page"), "pages-add");
+        gmenu->append_section(gmenu_section);
+
+        gmenu_section = Gio::Menu::create();
+        AppendItemFromAction(gmenu_section, "doc.page-delete", _("_Delete Page"), "pages-remove");
+        AppendItemFromAction(gmenu_section, "doc.page-move-backward", _("Move Page _Backward"), "pages-order-backwards");
+        AppendItemFromAction(gmenu_section, "doc.page-move-forward", _("Move Page _Forward"), "pages-order-forwards");
+        gmenu->append_section(gmenu_section);
+
+    } else if (!layer) {
+        // "item" is the object that was under the mouse when right-clicked. It determines what is shown
+        // in the menu thus it makes the most sense that it is either selected or part of the current
+        // selection.
+        auto selection = desktop->selection;
+        if (object && !selection->includes(object)) {
+            selection->set(object);
+        }
 
         gmenu_section = Gio::Menu::create();
         AppendItemFromAction(gmenu_section, "app.cut",       _("Cu_t"),       "edit-cut");

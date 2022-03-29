@@ -207,18 +207,15 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
             
             } else if (bop == bool_op_symdiff) {
                 out = pig.getXOR();
-            } else {
-                auto rpig = Geom::PathIntersectionGraph(a.reversed(), b, Geom::EPSILON);
-                if (bop == bool_op_diff) {
-                    out = rpig.getBminusA(); //livarot order...
-                } else if (bop == bool_op_cut) {
-                    out = rpig.getBminusA();
-                    auto tmp = pig.getIntersection();
-                    out.insert(out.end(), tmp.begin(), tmp.end()); 
-                } else if (bop == bool_op_slice) {
-                    // go to livarot
-                    livarotonly = true;
-                }
+            } else if (bop == bool_op_diff) {
+                out = pig.getBminusA(); //livarot order...
+            } else if (bop == bool_op_cut) {
+                out = pig.getBminusA();
+                auto tmp = pig.getIntersection();
+                out.insert(out.end(), tmp.begin(), tmp.end()); 
+            } else if (bop == bool_op_slice) {
+                // go to livarot
+                livarotonly = true;
             }
             if (!livarotonly) {
                 return out;

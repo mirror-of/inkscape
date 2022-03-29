@@ -259,16 +259,7 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
 }
 
 Geom::OptRect SPFlowtext::bbox(Geom::Affine const &transform, SPItem::BBoxType type) const {
-    Geom::OptRect bbox = this->layout.bounds(transform);
-
-    // Add stroke width
-    // FIXME this code is incorrect
-    if (bbox && type == SPItem::VISUAL_BBOX && !this->style->stroke.isNone()) {
-        double scale = transform.descrim();
-        bbox->expandBy(0.5 * this->style->stroke_width.computed * scale);
-    }
-
-    return bbox;
+    return this->layout.bounds(transform, type == SPItem::VISUAL_BBOX);
 }
 
 void SPFlowtext::print(SPPrintContext *ctx) {

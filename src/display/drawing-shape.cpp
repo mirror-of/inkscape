@@ -104,7 +104,7 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
     }
 
     boundingbox = Geom::OptRect();
-    bool outline = _drawing.outline();
+    bool outline = _drawing.outline() || _drawing.outlineOverlay();
 
     // clear Cairo data to force update
     _nrstyle.update();

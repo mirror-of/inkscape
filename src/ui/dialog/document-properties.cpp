@@ -239,6 +239,8 @@ void set_document_dimensions(SPDesktop* desktop, double width, double height, co
         // set_namedview_value(desktop, "", SPAttr::UNITS)
         // write_str_to_xml(desktop, _("Set document unit"), "unit", unit->abbr.c_str());
     // }
+    doc->setWidthAndHeight(width_quantity, height_quantity, true);
+
     DocumentUndo::done(doc, _("Set page size"), "");
 }
 

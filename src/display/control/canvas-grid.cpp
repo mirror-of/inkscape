@@ -96,6 +96,10 @@ CanvasGrid::~CanvasGrid()
         repr->removeListenerByData (this);
     }
 
+    if (_rcb_enabled) {
+        _rcb_enabled->remove_destroy_notify_callback(this);
+    }
+
     for (auto grid : canvas_item_grids) {
         delete grid;
     }
@@ -255,6 +259,8 @@ CanvasGrid::newWidget()
             _("_Enabled"),
             _("Makes the grid available for working with on the canvas."),
             "enabled", _wr, false, repr, doc) );
+    // _rcb_enabled serves as a canary that tells us that the widgets have been destroyed
+    _rcb_enabled->add_destroy_notify_callback(this, &CanvasGrid::notifyWidgetsDestroyed);
 
     _rcb_snap_visible_only = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
             _("Snap to visible _grid lines only"),
@@ -312,6 +318,22 @@ CanvasGrid::newWidget()
     }
     _wr.setUpdating (false);
     return dynamic_cast<Gtk::Widget *> (vbox);
+}
+
+/**
+ * @brief Zeroes out our pointers to the widgets when the widgets are destroyed
+ * @param data - a pointer to the CanvasGrid object holding the widget pointers
+ * @return always returns nullptr
+ */
+void *CanvasGrid::notifyWidgetsDestroyed(void *data)
+{
+    CanvasGrid *obj = (CanvasGrid *)(data);
+    obj->_rcb_enabled = nullptr;
+    obj->_rcb_snap_visible_only = nullptr;
+    obj->_rcb_visible = nullptr;
+    obj->_rcb_dotted = nullptr;
+    obj->_as_alignment = nullptr;
+    return nullptr;
 }
 
 void

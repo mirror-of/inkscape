@@ -238,6 +238,10 @@ void ControlPointSelection::transform(Geom::Affine const &m)
     for (auto cur : _points) {
         cur->transform(m);
     }
+    for (auto cur : _points) {
+        cur->fixNeighbors();
+    }
+
     _updateBounds();
     // TODO preserving the rotation radius needs some rethinking...
     if (_rot_radius) (*_rot_radius) *= m.descrim();
@@ -438,6 +442,9 @@ void ControlPointSelection::_pointDragged(Geom::Point &new_pos, GdkEventMotion *
             cur->move(_original_positions[cur] + abs_delta);
         }
         _handles->rotationCenter().move(_handles->rotationCenter().position() + delta);
+    }
+    for (auto cur : _points) {
+        cur->fixNeighbors();
     }
     signal_update.emit();
 }

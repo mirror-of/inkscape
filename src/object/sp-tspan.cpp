@@ -168,20 +168,10 @@ Geom::OptRect SPTSpan::bbox(Geom::Affine const &transform, SPItem::BBoxType type
     }
 
     // get the bbox of our portion of the layout
-    bbox = SP_TEXT(parent_text)->layout.bounds(transform, sp_text_get_length_upto(parent_text, this), sp_text_get_length_upto(this, nullptr) - 1);
-    
-    if (!bbox) {
-    	return bbox;
-    }
-
-    // Add stroke width
-    // FIXME this code is incorrect
-    if (type == SPItem::VISUAL_BBOX && !this->style->stroke.isNone()) {
-        double scale = transform.descrim();
-        bbox->expandBy(0.5 * this->style->stroke_width.computed * scale);
-    }
-    
-    return bbox;
+    return SP_TEXT(parent_text)->layout.bounds(transform,
+            type == SPItem::VISUAL_BBOX,
+            sp_text_get_length_upto(parent_text, this),
+            sp_text_get_length_upto(this, nullptr) - 1);
 }
 
 Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

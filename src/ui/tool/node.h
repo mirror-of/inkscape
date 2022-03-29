@@ -148,6 +148,7 @@ public:
 
     void move(Geom::Point const &p) override;
     void transform(Geom::Affine const &m) override;
+    void fixNeighbors() override;
     Geom::Rect bounds() const override;
 
     NodeType type() const { return _type; }
@@ -233,7 +234,6 @@ protected:
 
 private:
 
-    void _fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos);
     void _updateAutoHandles();
 
     /**
@@ -262,6 +262,10 @@ private:
     NodeType _type; ///< Type of node - cusp, smooth...
     bool _handles_shown;
     static ColorSet node_colors;
+
+    // This is used by fixNeighbors to repair smooth nodes after all move
+    // operations have been completed. If this is empty, no fixing is needed.
+    std::optional<Geom::Point> _unfixed_pos;
 
     friend class Handle;
     friend class NodeList;

@@ -41,9 +41,10 @@ public:
     ~PagesTool() override;
 
     bool root_handler(GdkEvent *event) override;
+    void menu_popup(GdkEvent *event, SPObject *obj = nullptr) override;
 private:
     void selectionChanged(SPPage *page);
-    SPPage *pageUnder(Geom::Point pt);
+    SPPage *pageUnder(Geom::Point pt, bool retain_selected = true);
     bool viewboxUnder(Geom::Point pt);
     void addDragShapes(SPPage *page, Geom::Affine tr);
     void addDragShape(SPItem *item, Geom::Affine tr);

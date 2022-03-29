@@ -127,6 +127,7 @@ parts:
       - appdirs
       - requests
       - pillow
+      - cachecontrol[filecache]
       - pyserial
       - packaging
       - scour
