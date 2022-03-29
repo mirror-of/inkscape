@@ -3,8 +3,7 @@ name: inkscape
 adopt-info: inkscape
 license: GPL-3.0
 confinement: strict
-grade: stable
-base: core20
+base: core22
 compression: lzo
 
 plugs:
@@ -70,15 +69,15 @@ parts:
     stage-packages:
       - heif-gdk-pixbuf
       - libatkmm-1.6-1v5
-      - libboost-filesystem1.71.0
+      - libboost-filesystem1.74.0
       - libcairomm-1.0-1v5
       - libcdr-0.1-1
       - libdouble-conversion3
-      - libgc1c2
+      - libgc1
       - libgdk-pixbuf2.0-0
       - libglibmm-2.4-1v5
       - libglib2.0-bin
-      - libgsl23
+      - libgsl27
       - libgslcblas0
       - libgspell-1-2
       - libgtkmm-3.0-1v5
@@ -87,7 +86,9 @@ parts:
       - libpangomm-1.4-1v5
       - libpoppler-glib8
       - libpotrace0
+      - libpsl5
       - librevenge-0.0-0
+      - libsoup2.4-1
       - libvisio-0.1-1
       - libwpg-0.3-3
       - libxslt1.1
@@ -145,7 +146,7 @@ parts:
       - libgtk-3-dev
     stage-packages:
       - libxkbcommon0  # XKB_CONFIG_ROOT
-      - ttf-ubuntu-font-family
+      - fonts-ubuntu
       - dmz-cursor-theme
       - light-themes
       - adwaita-icon-theme
