@@ -33,7 +33,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-bbox">
-            <property name="label" translatable="yes">Snap bounding boxes</property>
+            <property name="label" translatable="yes">Bounding boxes</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -94,7 +94,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-bbox-center">
-            <property name="label" translatable="yes">Box center</property>
+            <property name="label" translatable="yes">Centers</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -109,7 +109,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-nodes">
-            <property name="label" translatable="yes">Snap nodes</property>
+            <property name="label" translatable="yes">Nodes</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -200,7 +200,7 @@
         </child>
         <child>
           <object class="GtkCheckButton">
-            <property name="label" translatable="yes">Object midpoint</property>
+            <property name="label" translatable="yes">Object midpoints</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -215,7 +215,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-other">
-            <property name="label" translatable="yes">Snap other points</property>
+            <property name="label" translatable="yes">Other points</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -231,7 +231,7 @@
         </child>
         <child>
           <object class="GtkCheckButton">
-            <property name="label" translatable="yes">Object rotation center</property>
+            <property name="label" translatable="yes">Object rotation centers</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -246,7 +246,7 @@
         </child>
         <child>
           <object class="GtkCheckButton">
-            <property name="label" translatable="yes">Text baseline and anchors</property>
+            <property name="label" translatable="yes">Text baselines and anchors</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -261,7 +261,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-grid">
-            <property name="label" translatable="yes">Snap to grid</property>
+            <property name="label" translatable="yes">Grids</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -277,7 +277,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-guides">
-            <property name="label" translatable="yes">Snap to guide lines</property>
+            <property name="label" translatable="yes">Guide lines</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -293,7 +293,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="snap-page-border">
-            <property name="label" translatable="yes">Snap to page border</property>
+            <property name="label" translatable="yes">Page borders</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -309,7 +309,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="align-sna">
-            <property name="label" translatable="yes">Alignment snapping</property>
+            <property name="label" translatable="yes">Alignment</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -325,7 +325,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="align-snap-self">
-            <property name="label" translatable="yes">Self snap path nodes</property>
+            <property name="label" translatable="yes">Nodes in same path</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -340,7 +340,7 @@
         </child>
         <child>
           <object class="GtkLinkButton" id="simple-link">
-            <property name="label" translatable="yes">Reset to simple</property>
+            <property name="label" translatable="yes">Reset to simple snapping mode</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
@@ -550,7 +550,7 @@
         </child>
         <child>
           <object class="GtkCheckButton">
-            <property name="label" translatable="yes">Path mask</property>
+            <property name="label" translatable="yes">Masks</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -565,7 +565,7 @@
         </child>
         <child>
           <object class="GtkCheckButton">
-            <property name="label" translatable="yes">Path clip</property>
+            <property name="label" translatable="yes">Clips</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -606,7 +606,7 @@
         </child>
         <child>
           <object class="GtkCheckButton">
-            <property name="label" translatable="yes">Distribution snap</property>
+            <property name="label" translatable="yes">Same distances</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -952,20 +952,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin-top">8</property>
-            <property name="label" translatable="yes">Include:</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkToggleButton" id="simple-snap-bbox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -1036,7 +1022,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Alignment snap</property>
+            <property name="label" translatable="yes">Alignment</property>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -1059,7 +1045,7 @@
         </child>
         <child>
           <object class="GtkLinkButton" id="advanced-link">
-            <property name="label" translatable="yes">Advanced</property>
+            <property name="label" translatable="yes">Advanced mode</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
@@ -1159,7 +1145,6 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="action-name">win.snap-global-toggle</property>
-        <property name="label" translatable="yes">Snapping New</property>
         <property name="icon-name">snap</property>
       </object>
       <packing>
