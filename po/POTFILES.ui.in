@@ -4,6 +4,7 @@
 ../share/ui/dialog-export.glade
 ../share/ui/dialog-livepatheffect-add.glade
 ../share/ui/dialog-livepatheffect-effect.glade
+../share/ui/dialog-paint-servers.glade
 ../share/ui/dialog-save-template.glade
 ../share/ui/dialog-text-edit.glade
 ../share/ui/dialog-trace.glade

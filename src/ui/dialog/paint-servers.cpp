@@ -48,10 +48,9 @@ static Glib::ustring const wrapper = R"=====(
 </svg>
 )=====";
 
-// Constructor
 PaintServersDialog::PaintServersDialog()
     : DialogBase("/dialogs/paint", "PaintServers")
-    , target_selected(true)
+    , _targetting_fill(true)
     , ALLDOCS(_("All paint servers"))
     , CURRENTDOC(_("Current document"))
     , columns()
@@ -60,77 +59,20 @@ PaintServersDialog::PaintServersDialog()
     store[ALLDOCS] = Gtk::ListStore::create(columns);
     store[CURRENTDOC] = Gtk::ListStore::create(columns);
 
-    // Grid holding the contents
-    Gtk::Grid *grid = Gtk::manage(new Gtk::Grid());
-    grid->set_margin_start(3);
-    grid->set_margin_end(3);
-    grid->set_margin_top(3);
-    grid->set_row_spacing(3);
-    pack_start(*grid, Gtk::PACK_EXPAND_WIDGET);
-
-    // Grid row 0
-    Gtk::Label *file_label = Gtk::manage(new Gtk::Label(Glib::ustring(_("Server")) + ": "));
-    grid->attach(*file_label, 0, 0, 1, 1);
-
-    dropdown = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText>());
-    dropdown->append(ALLDOCS);
-    dropdown->append(CURRENTDOC);
-    dropdown->set_active_text(ALLDOCS);
-    dropdown->set_hexpand();
-    grid->attach(*dropdown, 1, 0, 1, 1);
-
-    // Grid row 1
-    Gtk::Label *fill_label = Gtk::manage(new Gtk::Label(Glib::ustring(_("Change")) + ": "));
-    grid->attach(*fill_label, 0, 1, 1, 1);
-
-    target_dropdown = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText>());
-    target_dropdown->append(_("Fill"));
-    target_dropdown->append(_("Stroke"));
-    target_dropdown->set_active_text(_("Fill"));
-    target_dropdown->set_hexpand();
-    grid->attach(*target_dropdown, 1, 1, 1, 1);
-
-    // Grid row 2
-    icon_view = Gtk::manage(new Gtk::IconView(
-        static_cast<Glib::RefPtr<Gtk::TreeModel>>(store[current_store])
-    ));
-    icon_view->set_tooltip_column(0);
-    icon_view->set_pixbuf_column(2);
-    icon_view->set_size_request(200, -1);
-    icon_view->show_all_children();
-    icon_view->set_selection_mode(Gtk::SELECTION_SINGLE);
-    icon_view->set_activate_on_single_click(true);
-
-    Gtk::ScrolledWindow *scroller = Gtk::manage(new Gtk::ScrolledWindow());
-    scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
-    scroller->set_hexpand();
-    scroller->set_vexpand();
-    scroller->add(*icon_view);
-    scroller->set_overlay_scrolling(false);
-    grid->attach(*scroller, 0, 2, 2, 1);
-    fix_inner_scroll(scroller);
-
-    // Events
-    target_dropdown->signal_changed().connect([=]() { target_selected = !target_selected; });
-    dropdown->signal_changed().connect([=]() { onPaintSourceDocumentChanged(); });
-    icon_view->signal_item_activated().connect([=](Gtk::TreeModel::Path const &p) { onPaintClicked(p); });
-
     // Get wrapper document (rectangle to fill with paint server).
     preview_document = SPDocument::createNewDocFromMem(wrapper.c_str(), wrapper.length(), true);
-
     SPObject *rect = preview_document->getObjectById("Rect");
     SPObject *defs = preview_document->getObjectById("Defs");
     if (!rect || !defs) {
         g_warn_message("Inkscape", __FILE__, __LINE__, __func__,
                        "Failed to get wrapper defs or rectangle for preview document!");
     }
-
-    // Set up preview document.
     unsigned key = SPItem::display_key_new(1);
     preview_document->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     preview_document->ensureUpToDate();
     renderDrawing.setRoot(preview_document->getRoot()->invoke_show(renderDrawing, key, SP_ITEM_SHOW_DISPLAY));
 
+    _buildDialogWindow("dialog-paint-servers.glade");
     _loadStockPaints();
 }
 
@@ -162,6 +104,47 @@ void PaintServersDialog::documentReplaced()
         });
     }
     _document_closed = document->connectDestroy([=]() { _documentClosed(); });
+}
+
+/** Builds the dialog window from a Glade file and attaches event handlers */
+void PaintServersDialog::_buildDialogWindow(char const *const glade_file)
+{
+    // Load the dialog from the Glade file
+    auto file_path = get_filename_string(IO::Resource::UIS, glade_file);
+    Glib::RefPtr<Gtk::Builder> builder;
+    try {
+        builder = Gtk::Builder::create_from_file(file_path);
+    } catch (Glib::Error const &e) {
+        Glib::ustring message{"Could not load the Glade file for the Paint Servers dialog: "};
+        message += file_path + "\n" + e.what();
+        g_warn_message("Inkscape", __FILE__, __LINE__, __func__, message.c_str());
+        return;
+    }
+
+    // Place top-level grid container in the window
+    Gtk::Grid *container = nullptr;
+    builder->get_widget("PaintServersContainerGrid", container);
+    if (container) {
+        pack_start(*container, Gtk::PACK_EXPAND_WIDGET);
+    } else {
+        return;
+    }
+
+    builder->get_widget("ServersDropdown", dropdown);
+    dropdown->append(ALLDOCS);
+    dropdown->append(CURRENTDOC);
+    dropdown->set_active_text(ALLDOCS);
+    dropdown->signal_changed().connect([=]() { onPaintSourceDocumentChanged(); });
+
+    builder->get_widget("PaintIcons", icon_view);
+    icon_view->set_model(static_cast<Glib::RefPtr<Gtk::TreeModel>>(store[current_store]));
+    icon_view->set_tooltip_column(columns.id.index());
+    icon_view->set_pixbuf_column(columns.pixbuf.index());
+    icon_view->signal_item_activated().connect([=](Gtk::TreeModel::Path const &p) { onPaintClicked(p); });
+
+    Gtk::RadioButton *fill_radio = nullptr;
+    builder->get_widget("TargetRadioFill", fill_radio);
+    fill_radio->signal_toggled().connect([=]() { _targetting_fill = fill_radio->get_active(); });
 }
 
 /** Handles the destruction of the current document */
@@ -521,7 +504,7 @@ void PaintServersDialog::onPaintClicked(Gtk::TreeModel::Path const &path)
     }
 
     for (auto item : items) {
-        item->style->getFillOrStroke(target_selected)->read(paint.c_str());
+        item->style->getFillOrStroke(_targetting_fill)->read(paint.c_str());
         item->updateRepr();
     }
 

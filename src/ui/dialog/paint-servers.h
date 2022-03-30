@@ -94,6 +94,7 @@ private:
     PaintServersDialog operator=(PaintServersDialog const &d) = delete;
 
     void _addToStore(PaintDescription &paint);
+    void _buildDialogWindow(char const *const glade_file);
     void _createPaints(std::vector<PaintDescription> &collection);
     PaintDescription _descriptionFromIterator(Gtk::ListStore::iterator const &iter) const;
     void _documentClosed();
@@ -108,7 +109,7 @@ private:
     void onPaintClicked(const Gtk::TreeModel::Path &path);
     void onPaintSourceDocumentChanged();
 
-    bool target_selected; ///< whether setting fill (true) or stroke (false)
+    bool _targetting_fill; ///< whether setting fill (true) or stroke (false)
     const Glib::ustring ALLDOCS;
     const Glib::ustring CURRENTDOC;
     std::map<Glib::ustring, Glib::RefPtr<Gtk::ListStore>> store;
@@ -119,7 +120,6 @@ private:
     Inkscape::Drawing renderDrawing;
     Gtk::ComboBoxText *dropdown = nullptr;
     Gtk::IconView *icon_view = nullptr;
-    Gtk::ComboBoxText *target_dropdown = nullptr;
     PaintServersColumns const columns;
     sigc::connection _defs_changed, _document_closed;
 };
