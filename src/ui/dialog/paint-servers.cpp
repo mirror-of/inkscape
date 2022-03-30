@@ -12,7 +12,6 @@
  */
 
 #include <algorithm>
-#include <iostream>
 #include <map>
 
 #include <giomm/listmodel.h>
@@ -58,7 +57,6 @@ PaintServersDialog::PaintServersDialog()
     , columns()
 {
     current_store = ALLDOCS;
-
     store[ALLDOCS] = Gtk::ListStore::create(columns);
     store[CURRENTDOC] = Gtk::ListStore::create(columns);
 
@@ -113,12 +111,9 @@ PaintServersDialog::PaintServersDialog()
     fix_inner_scroll(scroller);
 
     // Events
-    target_dropdown->signal_changed().connect(
-        sigc::mem_fun(*this, &PaintServersDialog::on_target_changed)
-    );
-
-    dropdown->signal_changed().connect([=]() {onPaintSourceDocumentChanged();});
-    icon_view->signal_item_activated().connect([=](Gtk::TreeModel::Path const &p) {onPaintClicked(p);});
+    target_dropdown->signal_changed().connect([=]() { target_selected = !target_selected; });
+    dropdown->signal_changed().connect([=]() { onPaintSourceDocumentChanged(); });
+    icon_view->signal_item_activated().connect([=](Gtk::TreeModel::Path const &p) { onPaintClicked(p); });
 
     // Get wrapper document (rectangle to fill with paint server).
     preview_document = SPDocument::createNewDocFromMem(wrapper.c_str(), wrapper.length(), true);
@@ -126,7 +121,8 @@ PaintServersDialog::PaintServersDialog()
     SPObject *rect = preview_document->getObjectById("Rect");
     SPObject *defs = preview_document->getObjectById("Defs");
     if (!rect || !defs) {
-        std::cerr << "PaintServersDialog::PaintServersDialog: Failed to get wrapper defs or rectangle!!" << std::endl;
+        g_warn_message("Inkscape", __FILE__, __LINE__, __func__,
+                       "Failed to get wrapper defs or rectangle for preview document!");
     }
 
     // Set up preview document.
@@ -138,6 +134,14 @@ PaintServersDialog::PaintServersDialog()
     _loadStockPaints();
 }
 
+
+PaintServersDialog::~PaintServersDialog()
+{
+    _defs_changed.disconnect();
+    _document_closed.disconnect();
+}
+
+/** Handles the replacement of the document that we edit */
 void PaintServersDialog::documentReplaced()
 {
     _defs_changed.disconnect();
@@ -171,48 +175,19 @@ void PaintServersDialog::_documentClosed()
     _regenerateAll();
 }
 
-PaintServersDialog::~PaintServersDialog()
+/** Finds paints used by an object and (recursively) by its descendants
+ *  @param in - the object whose paints to grab
+ *  @param list - the paints will be added to this vector as strings usable in the `fill` CSS property
+ */
+void PaintServersDialog::_findPaints(SPObject *in, std::vector<Glib::ustring> &list)
 {
-    _defs_changed.disconnect();
-    _document_closed.disconnect();
-}
-
-// Get url or color value.
-Glib::ustring get_url(Glib::ustring paint)
-{
-
-    Glib::MatchInfo matchInfo;
-
-    // Paint server
-    static Glib::RefPtr<Glib::Regex> regex1 = Glib::Regex::create(":(url\\(#([A-z0-9\\-_\\.#])*\\))");
-    regex1->match(paint, matchInfo);
-
-    if (matchInfo.matches()) {
-        return matchInfo.fetch(1);
-    }
-
-    // Color
-    static Glib::RefPtr<Glib::Regex> regex2 = Glib::Regex::create(":(([A-z0-9#])*)");
-    regex2->match(paint, matchInfo);
-
-    if (matchInfo.matches()) {
-        return matchInfo.fetch(1);
-    }
-
-    return Glib::ustring();
-}
-
-// This is too complicated to use selectors!
-void recurse_find_paint(SPObject* in, std::vector<Glib::ustring>& list)
-{
-
     g_return_if_fail(in != nullptr);
 
     // Add paint servers in <defs> section.
     if (dynamic_cast<SPPaintServer *>(in)) {
         if (in->getId()) {
             // Need to check as one can't construct Glib::ustring with nullptr.
-            list.push_back (Glib::ustring("url(#") + in->getId() + ")");
+            list.push_back(Glib::ustring("url(#") + in->getId() + ")");
         }
         // Don't recurse into paint servers.
         return;
@@ -220,12 +195,13 @@ void recurse_find_paint(SPObject* in, std::vector<Glib::ustring>& list)
 
     // Add paint servers referenced by shapes.
     if (dynamic_cast<SPShape *>(in)) {
-        list.push_back (get_url(in->style->fill.write()));
-        list.push_back (get_url(in->style->stroke.write()));
+        auto const style = in->style;
+        list.push_back(style->fill.get_value());
+        list.push_back(style->stroke.get_value());
     }
 
     for (auto child: in->childList(false)) {
-        recurse_find_paint(child, list);
+        PaintServersDialog::_findPaints(child, list);
     }
 }
 
@@ -236,8 +212,18 @@ void PaintServersDialog::_loadStockPaints()
 
     // Extract out paints from files in share/paint.
     for (auto const &path : get_filenames(Inkscape::IO::Resource::PAINT, {".svg"})) {
-        SPDocument *doc = SPDocument::createNewDoc(path.c_str(), false);
-        _loadPaintsFromDocument(doc, paints);
+        try { // createNewDoc throws
+            auto doc = std::unique_ptr<SPDocument>(SPDocument::createNewDoc(path.c_str(), false));
+            if (!doc) {
+                throw std::exception();
+            }
+            _loadPaintsFromDocument(doc.get(), paints);
+            _stock_documents.push_back(std::move(doc)); // Ensures eventual destruction in our dtor
+        } catch (std::exception &e) {
+            auto message = Glib::ustring{"Cannot open paint server resource file '"} + path + "'!";
+            g_warn_message("Inkscape", __FILE__, __LINE__, __func__, message.c_str());
+            continue;
+        }
     }
 
     _createPaints(paints);
@@ -277,21 +263,23 @@ void PaintServersDialog::_createPaints(std::vector<PaintDescription> &collection
 /** Create a paint from a description and generate its bitmap preview */
 void PaintServersDialog::_instantiatePaint(PaintDescription &paint)
 {
+    if (!paint.has_preview()) {
+        _generateBitmapPreview(paint);
+    }
+    if (paint.has_preview()) { // don't add the paint if preview generation failed.
+        _addToStore(paint);
+    }
+}
+
+/** Adds a paint to store */
+void PaintServersDialog::_addToStore(PaintDescription &paint)
+{
     if (store.find(paint.doc_title) == store.end()) {
         store[paint.doc_title] = Gtk::ListStore::create(columns);
     }
 
-    Glib::ustring id;
-    paint.bitmap = get_pixbuf(paint.source_document, paint.url, id);
-    if (!paint.bitmap) {
-        return;
-    }
-
-    Gtk::ListStore::iterator iter = store[paint.doc_title]->append();
-    (*iter)[columns.id] = id;
-    (*iter)[columns.paint] = paint.url;
-    (*iter)[columns.pixbuf] = paint.bitmap;
-    (*iter)[columns.document] = paint.doc_title;
+    auto iter = store[paint.doc_title]->append();
+    paint.write_to_iterator(iter, &columns);
 
     if (document_map.find(paint.doc_title) == document_map.end()) {
         document_map[paint.doc_title] = paint.source_document;
@@ -359,11 +347,8 @@ void PaintServersDialog::_regenerateAll()
 
     // Add paints from the cleaned up list to the store
     for (auto &&paint : all_paints) {
-        Gtk::ListStore::iterator iter = store[ALLDOCS]->append();
-        (*iter)[columns.id] = std::move(paint.id);
-        (*iter)[columns.paint] = std::move(paint.url);
-        (*iter)[columns.pixbuf] = std::move(paint.bitmap);
-        (*iter)[columns.document] = std::move(paint.doc_title);
+        auto iter = store[ALLDOCS]->append();
+        paint.write_to_iterator(iter, &columns);
     }
 
     // Restore active item
@@ -372,91 +357,90 @@ void PaintServersDialog::_regenerateAll()
     }
 }
 
-Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, Glib::ustring const &paint,
-                                                         Glib::ustring &id)
+/** Generates the bitmap preview for the given paint */
+void PaintServersDialog::_generateBitmapPreview(PaintDescription &paint)
 {
-
     SPObject *rect = preview_document->getObjectById("Rect");
     SPObject *defs = preview_document->getObjectById("Defs");
 
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf(nullptr);
-    if (paint.empty()) {
-        return pixbuf;
+    paint.bitmap = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
+    if (paint.url.empty()) {
+        return;
     }
 
-    // Set style on wrapper
+    // Set style on the preview rectangle
     SPCSSAttr *css = sp_repr_css_attr_new();
-    sp_repr_css_set_property(css, "fill", paint.c_str());
+    sp_repr_css_set_property(css, "fill", paint.url.c_str());
     rect->changeCSS(css, "style");
     sp_repr_css_attr_unref(css);
 
-    // Insert paint into defs if required
+    // Insert paint into the defs of the preview document if required
     Glib::MatchInfo matchInfo;
     static Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("url\\(#([A-Za-z0-9#._-]*)\\)");
-    regex->match(paint, matchInfo);
-    if (matchInfo.matches()) {
-        id = matchInfo.fetch(1);
 
-        // Delete old paint if necessary
-        std::vector<SPObject *> old_paints = preview_document->getObjectsBySelector("defs > *");
-        for (auto paint : old_paints) {
-            paint->deleteObject(false);
+    regex->match(paint.url, matchInfo);
+    if (!matchInfo.matches()) {
+        // Currently we only show previews for hatches/patterns of the form url(#some-id)
+        // TODO: handle colors, gradients, etc.
+        // See https://wiki.inkscape.org/wiki/Google_Summer_of_Code#P11._Improvements_to_Paint_Server_Dialog
+        return;
+    }
+    paint.id = matchInfo.fetch(1);
+
+    // Delete old paints if necessary
+    std::vector<SPObject *> old_paints = preview_document->getObjectsBySelector("defs > *");
+    for (auto paint : old_paints) {
+        paint->deleteObject(false);
+    }
+
+    // Find the new paint
+    SPObject *new_paint = paint.source_document->getObjectById(paint.id);
+    if (!new_paint) {
+        Glib::ustring error_message = Glib::ustring{"Cannot find paint server: "} + paint.id;
+        g_warn_message("Inkscape", __FILE__, __LINE__, __func__, error_message.c_str());
+        return;
+    }
+
+    // Add the new paint along with all paints it refers to
+    XML::Document *xml_doc = preview_document->getReprDoc();
+    std::vector<SPObject *> encountered{new_paint}; ///< For the prevention of cyclic refs
+
+    while (new_paint) {
+        auto const *new_repr = new_paint->getRepr();
+        if (!new_repr) {
+            break;
         }
 
-        // Add new paint
-        SPObject *new_paint = document->getObjectById(id);
-        if (!new_paint) {
-            std::cerr << "PaintServersDialog::get_pixbuf: cannot find paint server: " << id << std::endl;
-            return pixbuf;
-        }
-        std::vector<SPObject *> encountered{new_paint}; ///< For the prevention of cyclic refs
+        // Create a copy repr of the paint
+        defs->appendChild(new_repr->duplicate(xml_doc));
 
-        Inkscape::XML::Document *xml_doc = preview_document->getReprDoc();
-        while (new_paint) {
-            auto const new_repr = new_paint->getRepr();
-            if (!new_repr) {
-                break;
-            }
-
-            // Create a copy repr of the paint
-            defs->appendChild(new_repr->duplicate(xml_doc));
-
-            // Check for cross-references in the paint
-            auto const xlink = new_repr->attribute("xlink:href");
-            auto const href = new_repr->attribute("href");
-            if (xlink || href) {
-                // Paint is cross-referencing another object (probably another paint);
-                // we must copy the referenced object as well
-                auto const ref = (href ? href : xlink); // Prefer "href" since "xlink:href" is obsolete
-                new_paint = document->getObjectByHref(ref);
-                if (std::find(std::begin(encountered), std::end(encountered), new_paint) == std::end(encountered)) {
-                    encountered.push_back(new_paint);
-                } else {
-                    break; // Break reference cycle
-                }
+        // Check for cross-references in the paint
+        auto const xlink = new_repr->attribute("xlink:href");
+        auto const href = new_repr->attribute("href");
+        if (xlink || href) {
+            // Paint is cross-referencing another object (probably another paint);
+            // we must copy the referenced object as well
+            auto const ref = (href ? href : xlink); // Prefer "href" since "xlink:href" is obsolete
+            new_paint = paint.source_document->getObjectByHref(ref);
+            using namespace std;
+            if (find(begin(encountered), end(encountered), new_paint) == end(encountered)) {
+                encountered.push_back(new_paint);
             } else {
-                break;
+                break; // Break reference cycle
             }
+        } else { // No more hrefs
+            break;
         }
-    } else {
-        // Temporary block solid color fills.
-        return pixbuf;
     }
 
     preview_document->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     preview_document->ensureUpToDate();
 
-    Geom::OptRect dbox = static_cast<SPItem *>(rect)->visualBounds();
-
-    if (!dbox) {
-        return pixbuf;
+    if (Geom::OptRect dbox = static_cast<SPItem *>(rect)->visualBounds())
+    {
+        unsigned size = std::ceil(std::max(dbox->width(), dbox->height()));
+        paint.bitmap = Glib::wrap(render_pixbuf(renderDrawing, 1, *dbox, size));
     }
-
-    double size = std::max(dbox->width(), dbox->height());
-
-    pixbuf = Glib::wrap(render_pixbuf(renderDrawing, 1, *dbox, size));
-
-    return pixbuf;
 }
 
 /** @brief Load paint servers from the given source document
@@ -473,16 +457,11 @@ void PaintServersDialog::_loadPaintsFromDocument(SPDocument *document, std::vect
 
     // Find all paints
     std::vector<Glib::ustring> urls;
-    recurse_find_paint(document->getRoot(), urls);
+    _findPaints(document->getRoot(), urls);
 
     for (auto const &url : urls) {
         output.emplace_back(document, document_title, std::move(url));
     }
-}
-
-void PaintServersDialog::on_target_changed()
-{
-    target_selected = !target_selected;
 }
 
 /** Handles the change of the dropdown for selecting paint sources */
@@ -538,8 +517,7 @@ void PaintServersDialog::onPaintClicked(Gtk::TreeModel::Path const &path)
     // Recursively find elements in groups, if any
     std::vector<SPObject*> items;
     for (auto item : selected_items) {
-        std::vector<SPObject*> current_items = extract_elements(item);
-        items.insert(std::end(items), std::begin(current_items), std::end(current_items));
+        _unpackGroups(item, items);
     }
 
     for (auto item : items) {
@@ -550,21 +528,41 @@ void PaintServersDialog::onPaintClicked(Gtk::TreeModel::Path const &path)
     document->collectOrphans();
 }
 
-/** Recursively extracts elements from groups, if any */
-std::vector<SPObject*> PaintServersDialog::extract_elements(SPObject* item)
+/**
+ * Recursively extracts non-group elements from groups, if any
+ * @param parent - the parent object which will be unpacked recursively
+ * @param output - the resulting SPObject pointers will be added to this vector
+ */
+void PaintServersDialog::_unpackGroups(SPObject *parent, std::vector<SPObject *> &output) const
 {
-    std::vector<SPObject*> elements;
-    std::vector<SPObject*> children = item->childList(false);
-    if (!children.size()) {
-        elements.push_back(item);
+    std::vector<SPObject *> children = parent->childList(false);
+    if (children.empty()) {
+        output.push_back(parent);
     } else {
-        for (auto e : children) {
-            std::vector<SPObject*> current_items = extract_elements(e);
-            elements.insert(std::end(elements), std::begin(current_items), std::end(current_items));
+        for (auto child : children) {
+            _unpackGroups(child, output);
         }
     }
+}
 
-    return elements;
+//----------------------------------------------------------------------------------------------------
+
+PaintDescription::PaintDescription(SPDocument *source_doc, Glib::ustring title, Glib::ustring const &&paint_url)
+    : source_document{source_doc}
+    , doc_title{std::move(title)}
+    , id{} // id will be filled in when generating the bitmap
+    , url{paint_url}
+    , bitmap{nullptr}
+{}
+
+/** Write the data stored in this struct to a list store
+ * @param it - the iterator to the ListStore to write to
+ */
+void PaintDescription::write_to_iterator(Gtk::ListStore::iterator &it, PaintServersColumns const *cols) const {
+    (*it)[cols->id] = id;
+    (*it)[cols->paint] = url;
+    (*it)[cols->pixbuf] = bitmap;
+    (*it)[cols->document] = doc_title;
 }
 
 } // namespace Dialog
