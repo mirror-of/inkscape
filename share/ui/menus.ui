@@ -57,6 +57,11 @@
         <attribute name='icon'>document-import</attribute>
       </item>
       <item>
+        <attribute name='label' translatable="yes">Import _Web Image...</attribute>
+        <attribute name='action'>app.org.inkscape.import_web_image</attribute>
+        <attribute name='icon'>document-import-web</attribute>
+      </item>
+      <item>
         <attribute name='label' translatable="yes">_Export...</attribute>
         <attribute name='action'>win.dialog-open</attribute>
         <attribute name='target'>Export</attribute>

@@ -51,12 +51,15 @@
 ../share/extensions/path_number_nodes.py
 ../share/extensions/pathalongpath.py
 ../share/extensions/pathscatter.py
+../share/extensions/pdflatex.py
 ../share/extensions/perspective.py
 ../share/extensions/pixelsnap.py
 ../share/extensions/plotter.py
 ../share/extensions/polyhedron_3d.py
 ../share/extensions/print_win32_vector.py
 ../share/extensions/printing_marks.py
+../share/extensions/ps_input.py
+../share/extensions/raster_output_png.py
 ../share/extensions/render_barcode_datamatrix.py
 ../share/extensions/render_barcode_qrcode.py
 ../share/extensions/replace_font.py
@@ -64,6 +67,7 @@
 ../share/extensions/scribus_export_pdf.py
 ../share/extensions/setup_typography_canvas.py
 ../share/extensions/svgcalendar.py
+../share/extensions/synfig_prepare.py
 ../share/extensions/text_split.py
 ../share/extensions/triangle.py
 ../share/extensions/voronoi2svg.py

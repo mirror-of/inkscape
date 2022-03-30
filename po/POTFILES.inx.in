@@ -57,6 +57,7 @@
 ../share/extensions/image_embed.inx
 ../share/extensions/image_embed_selected.inx
 ../share/extensions/image_extract.inx
+../share/extensions/image_extract_selected.inx
 ../share/extensions/ink2canvas.inx
 ../share/extensions/inkscape_follow_link.inx
 ../share/extensions/interp.inx
@@ -87,7 +88,7 @@
 ../share/extensions/new_glyph_layer.inx
 ../share/extensions/next_glyph_layer.inx
 ../share/extensions/nicechart.inx
-../share/extensions/other/clipart/import_from_internet.inx
+../share/extensions/other/clipart/import_web_image.inx
 ../share/extensions/other/gcodetools/gcodetools_about.inx
 ../share/extensions/other/gcodetools/gcodetools_area.inx
 ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx
