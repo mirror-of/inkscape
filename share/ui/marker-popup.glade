@@ -65,7 +65,7 @@
     <property name="icon-name">object-flip-horizontal-symbolic</property>
   </object>
   <object class="GtkRadioButton" id="radio-orient">
-    <property name="label" translatable="yes">radiobutton</property>
+    <property name="label">radiobutton</property>
     <property name="visible">True</property>
     <property name="can-focus">True</property>
     <property name="receives-default">False</property>
@@ -148,7 +148,6 @@
               <object class="GtkSpinButton" id="scale-x">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="text" translatable="yes">0</property>
                 <property name="adjustment">adjustment-scale</property>
                 <property name="digits">3</property>
                 <property name="numeric">True</property>
@@ -175,7 +174,6 @@
               <object class="GtkSpinButton" id="scale-y">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="text" translatable="yes">0</property>
                 <property name="adjustment">adjustment-scale-2</property>
                 <property name="digits">3</property>
                 <property name="numeric">True</property>
@@ -225,7 +223,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes">Orient along the path reverseing at the start</property>
+                    <property name="tooltip-text" translatable="yes">Orient along the path, reversing at the start</property>
                     <property name="image">image1</property>
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">False</property>
