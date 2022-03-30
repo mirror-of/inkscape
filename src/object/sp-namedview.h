@@ -88,6 +88,8 @@ public:
     char const *getName() const;
     std::vector<SPDesktop *> const getViewList() const;
     Inkscape::Util::Unit const * getDisplayUnit() const;
+    void setDisplayUnit(std::string unit);
+    void setDisplayUnit(Inkscape::Util::Unit const *unit);
 
     void translateGuides(Geom::Translate const &translation);
     void translateGrids(Geom::Translate const &translation);

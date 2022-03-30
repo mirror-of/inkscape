@@ -228,7 +228,7 @@ public:
 
 
     // Document geometry ------------------------
-    Inkscape::Util::Unit const* getDisplayUnit() const;
+    Inkscape::Util::Unit const* getDisplayUnit();
 
     void setDocumentScale( const double scaleX, const double scaleY );
     void setDocumentScale( const double scale );

@@ -1042,6 +1042,22 @@ Inkscape::Util::Unit const * SPNamedView::getDisplayUnit() const
 }
 
 /**
+ * Set the display unit to the given value.
+ */
+void SPNamedView::setDisplayUnit(std::string unit)
+{
+    setDisplayUnit(unit_table.getUnit(unit));
+}
+
+void SPNamedView::setDisplayUnit(Inkscape::Util::Unit const *unit)
+{
+    // If this is unset, it will be returned as px by getDisplayUnit
+    display_units = unit;
+    getRepr()->setAttributeOrRemoveIfEmpty("inkscape:document-units",
+                                           unit ? unit->abbr.c_str() : nullptr);
+}
+
+/**
  * Returns the first grid it could find that isEnabled(). Returns NULL, if none is enabled
  */
 Inkscape::CanvasGrid * sp_namedview_get_first_enabled_grid(SPNamedView *namedview)

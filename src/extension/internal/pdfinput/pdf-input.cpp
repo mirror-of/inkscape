@@ -490,11 +490,15 @@ void PdfImportDialog::_onToggleImport() {
         _localFontsCheck->set_sensitive(false);
         _embedImagesCheck->set_sensitive(false);
         hbox6->set_sensitive(false);
+        _pageAllPages->set_sensitive(false);
+        _pageAllPages->set_active(false);
     } else {
         hbox3->set_sensitive();
         _localFontsCheck->set_sensitive();
         _embedImagesCheck->set_sensitive();
         hbox6->set_sensitive();
+        _pageAllPages->set_sensitive(true);
+        _pageAllPages->set_active(true);
     }
 }
 #endif
@@ -818,6 +822,9 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
             Glib::ustring output;
             cairo_surface_t* surface = cairo_svg_surface_create_for_stream(Inkscape::Extension::Internal::_write_ustring_cb,
                                                                            &output, width, height);
+
+            // Reset back to PT for cairo 1.17.6 and above which sets to UNIT_USER
+            cairo_svg_surface_set_document_unit(surface, CAIRO_SVG_UNIT_PT);
 
             // This magical function results in more fine-grain fallbacks. In particular, a mesh
             // gradient won't necessarily result in the whole PDF being rasterized. Of course, SVG

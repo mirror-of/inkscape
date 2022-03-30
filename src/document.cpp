@@ -428,6 +428,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     }
 
     // If no units are set in the document, try and guess them from the width/height
+    // XXX Replace these calls with nv->setDocumentUnit(document->root->width.getUnit());
     if (document->root->width.isAbsolute()) {
         nv->setDefaultAttribute("inkscape:document-units", "", document->root->width.getUnit());
     } else if (document->root->height.isAbsolute()) {
@@ -663,15 +664,9 @@ std::unique_ptr<SPDocument const> SPDocument::doRef() const
 }
 
 /// guaranteed not to return nullptr
-Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
+Inkscape::Util::Unit const* SPDocument::getDisplayUnit()
 {
-    // The document may not have a namedview (cleaned) so don't crash if it doesn't exist.
-    auto nv_repr = sp_repr_lookup_name (rroot, "sodipodi:namedview");
-    if (!nv_repr) {
-        return unit_table.getUnit("px");
-    }
-    auto nv = dynamic_cast<SPNamedView *> (getObjectByRepr(nv_repr));
-    return nv ? nv->getDisplayUnit() : unit_table.getUnit("px");
+    return getNamedView()->getDisplayUnit();
 }
 
 /// Sets document scale (by changing viewBox)
