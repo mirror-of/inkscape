@@ -129,7 +129,7 @@
           <object class="GtkSpinButton" id="page-width">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="tooltip-text" translatable="yes">Width of front page.</property>
+            <property name="tooltip-text" translatable="yes">Width of front page</property>
             <property name="width-chars">9</property>
             <property name="adjustment">adj-page-width</property>
             <property name="digits">3</property>
@@ -144,7 +144,7 @@
           <object class="GtkSpinButton" id="page-height">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="tooltip-text" translatable="yes">Height of front page.</property>
+            <property name="tooltip-text" translatable="yes">Height of front page</property>
             <property name="width-chars">9</property>
             <property name="adjustment">adj-page-height</property>
             <property name="digits">3</property>
@@ -454,7 +454,7 @@ SVG element positions are expressed in user units.</property>
             <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Predefined paper sizes to choose from.</property>
+            <property name="tooltip-text" translatable="yes">Predefined paper sizes to choose from</property>
             <property name="margin-end">2</property>
             <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
@@ -481,7 +481,7 @@ SVG element positions are expressed in user units.</property>
           <object class="GtkComboBoxText" id="page-units">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="tooltip-text" translatable="yes">Document's units used to specify document size only.</property>
+            <property name="tooltip-text" translatable="yes">Document's units used to specify document size only</property>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -501,7 +501,7 @@ SVG element positions are expressed in user units.</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes">Advanced viewbox scaling options.</property>
+                <property name="tooltip-text" translatable="yes">Advanced viewbox scaling options</property>
                 <property name="label" translatable="yes">Viewbox</property>
               </object>
             </child>
@@ -566,7 +566,7 @@ SVG element positions are expressed in user units.</property>
               <object class="GtkLabel" id="user-units">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">xx</property>
+                <property name="label">xx</property>
                 <style>
                   <class name="small-font"/>
                 </style>
@@ -707,7 +707,7 @@ SVG element positions are expressed in user units.</property>
           <object class="GtkComboBoxText" id="display-units">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="tooltip-text" translatable="yes">Units used throughout the user interface.</property>
+            <property name="tooltip-text" translatable="yes">Units used throughout the user interface</property>
             <property name="halign">end</property>
           </object>
           <packing>
@@ -745,7 +745,7 @@ SVG element positions are expressed in user units.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes">Page background color used  during editing and exporting.</property>
+                <property name="tooltip-text" translatable="yes">Page background color used during editing and exporting</property>
                 <property name="halign">center</property>
               </object>
               <packing>
@@ -758,7 +758,7 @@ SVG element positions are expressed in user units.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes">Page border and drop shadow color.</property>
+                <property name="tooltip-text" translatable="yes">Page border and drop shadow color</property>
                 <property name="halign">center</property>
               </object>
               <packing>
@@ -771,7 +771,7 @@ SVG element positions are expressed in user units.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes">Desk background color surrounding pages.</property>
+                <property name="tooltip-text" translatable="yes">Desk background color surrounding pages</property>
                 <property name="halign">center</property>
               </object>
               <packing>
@@ -850,7 +850,7 @@ SVG element positions are expressed in user units.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes">If set, rectangular page border is shown.</property>
+                <property name="tooltip-text" translatable="yes">If set, a rectangular page border is shown.</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="draw-indicator">True</property>
@@ -867,7 +867,7 @@ SVG element positions are expressed in user units.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes">If set, border is always on top of the drawing.</property>
+                <property name="tooltip-text" translatable="yes">If set, the page border is always on top of the drawing.</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="draw-indicator">True</property>
@@ -887,7 +887,7 @@ SVG element positions are expressed in user units.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes">If set, page border shows a shadow on its right and lower side.</property>
+                <property name="tooltip-text" translatable="yes">If set, the page border shows a shadow on its right and lower side.</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="draw-indicator">True</property>
