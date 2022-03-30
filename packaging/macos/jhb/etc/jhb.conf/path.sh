@@ -1,24 +1,18 @@
-#!/usr/bin/env bash
-#
 # SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ### description ################################################################
 
-# Compile and package Inkscape
+# Set PATH.
 
 ### shellcheck #################################################################
 
-# Nothing here.
-
-### dependencies ###############################################################
-
-# Nothing here.
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### variables ##################################################################
 
-SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
+export PATH=$BIN_DIR:$USR_DIR/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 ### functions ##################################################################
 
@@ -26,8 +20,4 @@ SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 ### main #######################################################################
 
-set -e
-
-for script in "$SELF_DIR"/2??-*.sh; do
-  $script
-done
+# Nothing here.

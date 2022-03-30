@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<moduleset>
+
+  <repository name="gnu" type="tarball" href="http://ftp.halifax.rwth-aachen.de/gnu/"/>
+
+  <!-- GNU sed https://www.gnu.org/software/sed/ -->
+  <autotools
+    id="sed"
+    autogen-sh="configure"
+    autogenargs="--prefix=$JHBUILD_PREFIX/usr --program-prefix=g">
+    <branch
+      module="sed/sed-4.8.tar.xz"
+      version="4.8"
+      hash="sha256:f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633"
+      repo="gnu">
+    </branch>
+  </autotools>
+
+  <!-- GNU core utilities https://www.gnu.org/software/coreutils/ -->
+  <autotools
+    id="coreutils"
+    autogen-sh="configure"
+    autogenargs="--prefix=$JHBUILD_PREFIX/usr --program-prefix=g">
+    <branch
+      module="coreutils/coreutils-8.32.tar.xz"
+      version="8.32"
+      hash="sha256:4458d8de7849df44ccab15e16b1548b285224dbba5f08fac070c1c0e0bcc4cfa"
+      repo="gnu">
+    </branch>
+  </autotools>
+
+  <!-- GNU Tar https://www.gnu.org/software/tar/ -->
+  <autotools
+    id="tar"
+    autogen-sh="configure"
+    autogenargs="--prefix=$JHBUILD_PREFIX/usr --program-prefix=g">
+    <branch
+      module="tar/tar-1.34.tar.xz"
+      version="1.34"
+      hash="sha256:63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d28"
+      repo="gnu">
+    </branch>
+  </autotools>
+
+</moduleset>

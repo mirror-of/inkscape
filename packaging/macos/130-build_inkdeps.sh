@@ -6,7 +6,8 @@
 
 ### description ################################################################
 
-# Uninstall a previously installed toolset: unmount the disk images.
+# Install remaining Inkscape dependencies, i.e. everything besides the GTK3
+# stack.
 
 ### shellcheck #################################################################
 
@@ -14,12 +15,9 @@
 
 ### dependencies ###############################################################
 
-source "$(dirname "${BASH_SOURCE[0]}")"/jhb-custom.conf.sh
 source "$(dirname "${BASH_SOURCE[0]}")"/jhb/etc/jhb.conf.sh
-source "$(dirname "${BASH_SOURCE[0]}")"/src/toolset.sh
 
-bash_d_include echo
-bash_d_include error
+source "$(dirname "${BASH_SOURCE[0]}")"/src/ink.sh
 
 ### variables ##################################################################
 
@@ -31,16 +29,20 @@ bash_d_include error
 
 ### main #######################################################################
 
-error_trace_enable
+#------------------------------------------------------ dependencies besides GTK
 
-case "$1" in
-  save_overlay) # save files from build stage (to be used later in test stage)
-    toolset_save_overlay
-    ;;
-  save_testfiles) # save files from test stage (test evidence)
-    tar -C "$VAR_DIR" -cp testfiles |
-      XZ_OPT=-T0 xz > "$ARTIFACT_DIR"/testfiles.tar.xz
-    ;;
-esac
+jhb build meta-inkscape-dependencies
 
-toolset_uninstall
+#------------------------------------------------- run time dependencies: Python
+
+# Download custom Python runtime.
+
+ink_download_python
+
+# Build Python wheels and save them to our package cache.
+
+ink_build_wheels
+
+# To provide backward compatibility, wheels are also built externally on a
+# machine running the minimum supported OS version. CI takes care of
+# acquiring those and puts them as wheels.tar.xz into PKG_DIR.

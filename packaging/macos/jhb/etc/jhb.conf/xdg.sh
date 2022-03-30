@@ -1,24 +1,20 @@
-#!/usr/bin/env bash
-#
 # SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ### description ################################################################
 
-# Compile and package Inkscape
+# Redirect some XDG directories.
 
 ### shellcheck #################################################################
 
-# Nothing here.
-
-### dependencies ###############################################################
-
-# Nothing here.
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
+# shellcheck disable=SC2034 # we only use exports if we really need them
 
 ### variables ##################################################################
 
-SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
+export XDG_CACHE_HOME=$VAR_DIR/cache  # instead ~/.cache
+export XDG_CONFIG_HOME=$ETC_DIR       # instead ~/.config
 
 ### functions ##################################################################
 
@@ -26,8 +22,4 @@ SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 ### main #######################################################################
 
-set -e
-
-for script in "$SELF_DIR"/2??-*.sh; do
-  $script
-done
+# Nothing here.

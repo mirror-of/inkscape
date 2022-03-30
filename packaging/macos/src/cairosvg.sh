@@ -1,16 +1,14 @@
-#!/usr/bin/env bash
-#
 # SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ### description ################################################################
 
-# Compile and package Inkscape
+# cairosvg is a Python package so we can convert svg to png.
 
 ### shellcheck #################################################################
 
-# Nothing here.
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### dependencies ###############################################################
 
@@ -18,16 +16,23 @@
 
 ### variables ##################################################################
 
-SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
+# https://cairocffi.readthedocs.io/en/stable/
+# https://github.com/Kozea/cairocffi
+# https://cairosvg.org
+# https://github.com/Kozea/CairoSVG
+CAIROSVG_PIP="\
+  cairocffi==1.2.0\
+  cairosvg==2.5.2\
+"
 
 ### functions ##################################################################
 
-# Nothing here.
+function cairosvg_install
+{
+  # shellcheck disable=SC2086 # we need word splitting here
+  jhb run pip3 install $CAIROSVG_PIP
+}
 
 ### main #######################################################################
 
-set -e
-
-for script in "$SELF_DIR"/2??-*.sh; do
-  $script
-done
+# Nothing here.

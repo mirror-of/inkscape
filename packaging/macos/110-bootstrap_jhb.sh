@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 #
-# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+# SPDX-FileCopyrightText: 2022 René de Hesselle <dehesselle@web.de>
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ### description ################################################################
 
-# Compile and package Inkscape
+# Bootstrap jhb. We want to use our own versioning and naming (so mutiple
+# versions can coexist independent from each other on one machine), therefore we
+# cannot use the pre-built bootstrap archive.
 
 ### shellcheck #################################################################
 
@@ -26,8 +28,10 @@ SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 ### main #######################################################################
 
-set -e
+#-------------------------------------------------- install custom configuration
 
-for script in "$SELF_DIR"/2??-*.sh; do
-  $script
-done
+cp "$SELF_DIR"/jhb-custom.conf.sh "$SELF_DIR"/jhb/etc
+
+#----------------------------------------------------------------- run bootstrap
+
+"$SELF_DIR"/jhb/usr/bin/bootstrap

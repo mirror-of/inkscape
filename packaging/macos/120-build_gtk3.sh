@@ -6,7 +6,7 @@
 
 ### description ################################################################
 
-# Uninstall a previously installed toolset: unmount the disk images.
+# Install GTK3 libraries and their dependencies.
 
 ### shellcheck #################################################################
 
@@ -14,16 +14,11 @@
 
 ### dependencies ###############################################################
 
-source "$(dirname "${BASH_SOURCE[0]}")"/jhb-custom.conf.sh
 source "$(dirname "${BASH_SOURCE[0]}")"/jhb/etc/jhb.conf.sh
-source "$(dirname "${BASH_SOURCE[0]}")"/src/toolset.sh
-
-bash_d_include echo
-bash_d_include error
 
 ### variables ##################################################################
 
-# Nothing here.
+SELF_DIR=$(dirname "$(greadlink -f "$0")")
 
 ### functions ##################################################################
 
@@ -31,16 +26,14 @@ bash_d_include error
 
 ### main #######################################################################
 
-error_trace_enable
+jhb configure "$SELF_DIR"/modulesets/inkscape.modules
 
-case "$1" in
-  save_overlay) # save files from build stage (to be used later in test stage)
-    toolset_save_overlay
-    ;;
-  save_testfiles) # save files from test stage (test evidence)
-    tar -C "$VAR_DIR" -cp testfiles |
-      XZ_OPT=-T0 xz > "$ARTIFACT_DIR"/testfiles.tar.xz
-    ;;
-esac
+jhb build \
+  libxml2 \
+  pygments \
+  python3
 
-toolset_uninstall
+jhb build \
+  meta-gtk-osx-bootstrap \
+  meta-gtk-osx-gtk3 \
+  gtkmm3

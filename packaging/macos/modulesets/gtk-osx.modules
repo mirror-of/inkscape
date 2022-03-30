@@ -1,0 +1,309 @@
+<?xml version="1.0"?><!--*- mode: nxml; indent-tabs-mode: nil -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<moduleset>
+  <repository type="tarball" name="ftp.gnome.org" default="yes"
+              href="http://ftp.gnome.org/pub/GNOME/sources/"/>
+  <repository type="tarball" name="sourceforge"
+              href="http://downloads.sourceforge.net/sourceforge/"/>
+  <repository type="tarball" name="cairographics"
+              href="https://www.cairographics.org/releases/"/>
+  <repository type="tarball" name="ftp.gnu.org"
+              href="https://ftp.gnu.org/gnu/"/>
+  <repository type="tarball" name="freedesktop"
+              href="ftp://ftp.freedesktop.org/pub/"/>
+  <repository type="tarball" name="fontconfig"
+	      href="http://www.freedesktop.org/software/fontconfig/release/"/>
+  <repository type="tarball" name="hicolor"
+              href="https://icon-theme.freedesktop.org/releases/"/>
+  <repository type="git" name="github" href="git://github.com/"/>
+  <repository type="tarball" name="github-tarball" href="https://github.com/"/>
+  <repository type="system" name="system"/>
+
+  <!-- This module set works a bit differently than for example the
+       GNOME ones do. It's split up in seperate pieces:
+
+       - gtk-osx-bootstrap: contains bootstrap-like modules that you
+         don't want to rebuild all the time.
+
+       - gtk-osx.modules: contains the core GTK+ stack. This does not
+         have a hard dependency on the bootstrap modules, in order to
+         make it easy to rebuild the whole core stack without redoing
+         the bootstrap parts. They have a soft, "after", depencency.
+
+       - gtk-osx-python.modules: Python bindings for Gtk.
+       - gtk-osx-gtkmm.modules: C++ wrappers for Gtk.
+       - gtk-osx-network.modules: The network/crypto stack and WebKit.
+       - gtk-osx-random.modules: "random stuff", has apps for testing GTK+.
+  -->
+
+  <include href="gtk-osx-bootstrap.modules"/>
+  <include href="gtk-osx-gtkmm.modules"/>
+  <include href="gtk-osx-network.modules"/>
+  <include href="gtk-osx-python.modules"/>
+  <include href="gtk-osx-random.modules"/>
+
+  <!-- Dummy meson module to shut up a jhbuild warning. -->
+  <systemmodule id="meson">
+    <branch repo="system"/>
+  </systemmodule>
+
+  <metamodule id="meta-gtk-osx-gtk3">
+    <dependencies>
+      <dep package="gtk+-3.0"/>
+      <dep package="adwaita-icon-theme"/>
+    </dependencies>
+    <after>
+      <dep package="meta-gtk-osx-bootstrap"/>
+    </after>
+  </metamodule>
+
+  <autotools id="libffi" autogenargs="--disable-builddir"
+             autogen-sh="configure">
+    <branch module="libffi/libffi/releases/download/v3.3/libffi-3.3.tar.gz"
+            repo="github-tarball" version="3.3"
+            hash="sha256:72fba7922703ddfa7a028d513ac15a85c8d54c8d67f55fa5a4802885dc652056"/>
+  </autotools>
+
+  <meson id="glib" mesonargs="-Dinternal_pcre=true -Dlibmount=disabled">
+    <branch module="glib/2.68/glib-2.68.0.tar.xz"  version="2.68.0"
+            hash="sha256:67734f584f3a05a2872f57e9a8db38f3b06c7087fb531c5a839d9171968103ea">
+    </branch>
+    <dependencies>
+      <dep package="libffi"/>
+    </dependencies>
+  </meson>
+
+  <!-- To build Freetype *with* harfbuzz requires harfbuzz to be built
+       with freetype so we first have to build it *without* harfbuzz,
+       then build harfbuzz without cairo because cairo requires
+       harfbuzz. -->
+  <cmake id="freetype-no-harfbuzz" cmakeargs="-DCMAKE_DISABLE_FIND_PACKAGE_HarfBuzz=TRUE -DCMAKE_DISABLE_FIND_PACKAGE_BZip2=TRUE -D BUILD_SHARED_LIBS=true -D CMAKE_BUILD_TYPE=Release">
+    <branch module="freetype/freetype-2.10.4.tar.gz" version="2.10.4"
+            repo="sourceforge"
+            hash="sha256:5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac"/>
+    <dependencies>
+      <dep package="zlib"/>
+    </dependencies>
+  </cmake>
+
+  <meson id="harfbuzz-no-cairo" mesonargs="-Dcoretext=enabled -Ddocs=disabled -Dbenchmark=disabled">
+    <branch repo="github-tarball" version="2.8.0"
+            module="harfbuzz/harfbuzz/releases/download/2.8.0/harfbuzz-2.8.0.tar.xz" 
+            hash="sha256:a1079fd021adaf5683351f34587a255975cc3bcadba31246ae40ebebb95ecd42">
+    </branch>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="freetype-no-harfbuzz"/>
+      <dep package="icu"/>
+    </dependencies>
+  </meson>
+
+  <cmake id="freetype" cmakeargs="-DCMAKE_DISABLE_FIND_PACKAGE_BZip2=TRUE -D BUILD_SHARED_LIBS=true -D CMAKE_BUILD_TYPE=Release">
+    <branch module="freetype/freetype-2.10.4.tar.gz" version="2.10.4"
+            repo="sourceforge"/>
+    <dependencies>
+      <dep package="harfbuzz-no-cairo"/>
+      <dep package="zlib"/>
+    </dependencies>
+  </cmake>
+
+  <autotools id="fontconfig" autogen-sh="configure"
+             autogenargs="--disable-docs --with-default-fonts=/System/Library/Fonts --with-add-fonts=/Library/Fonts">
+    <branch repo="fontconfig" version="2.13.1"
+            module="fontconfig-2.13.1.tar.bz2"
+            hash="sha256:f655dd2a986d7aa97e052261b36aa67b0a64989496361eca8d604e6414006741"/>
+    <dependencies>
+      <dep package="freetype"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="pixman" autogenargs="--disable-gtk --disable-mmx"
+             autogen-sh="configure">
+    <branch version="0.40.0" module="pixman-0.40.0.tar.gz"
+            repo="cairographics"
+            hash="sha512:063776e132f5d59a6d3f94497da41d6fc1c7dca0d269149c78247f0e0d7f520a25208d908cf5e421d1564889a91da44267b12d61c0bd7934cd54261729a7de5f">
+    </branch>
+    <after>
+      <dep package="meta-gtk-osx-bootstrap"/>
+    </after>
+  </autotools>
+
+  <!-- cairo doesn't really need fontconfig, but if Pango finds
+       freetype it insists that it has to have fontconfig too and that
+       they are both built into cairo. -->
+  <autotools id="cairo"  autogen-sh="autoreconf"
+             autogenargs="--enable-pdf --enable-quartz --disable-xlib --without-x">
+    <branch module="cairo-1.16.0.tar.xz"  version="1.16.0"
+            repo="cairographics"
+            hash="sha256:5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331">
+      <patch file="cairo-freetype-font-variations.patch" strip="1"/>
+      <patch file="Cairo-quartz-surface-create-internal.patch" strip="1"/>
+      <patch file="cairo_pdf_add_missing_flush.patch" strip="1"/>
+      <patch file="cairo-pixman_dithering.patch" strip="1"/>
+    </branch>
+    <dependencies>
+      <dep package="pixman"/>
+      <dep package="meta-gtk-osx-bootstrap"/>
+      <dep package="harfbuzz-no-cairo"/>
+      <dep package="fontconfig"/>
+    </dependencies>
+  </autotools>
+
+  <meson id="gobject-introspection">
+    <branch module="gobject-introspection/1.70/gobject-introspection-1.70.0.tar.xz"
+            version="1.70.0"
+            hash="sha256:902b4906e3102d17aa2fcb6dad1c19971c70f2a82a159ddc4a94df73a3cafc4a">
+      <patch file="gobject-introspection-1.70.0-obsolet.patch" strip="1"/>
+      <patch file="girscanner-objc.patch" strip="1"/>
+    </branch>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="cairo"/>
+    </dependencies>
+    <after>
+      <dep package='python3'/>
+    </after>
+  </meson>
+
+  <meson id="harfbuzz" mesonargs="-Dcoretext=enabled -Ddocs=disabled -Dbenchmark=disabled">
+    <branch repo="github-tarball" version="2.8.0"
+            module="harfbuzz/harfbuzz/releases/download/2.8.0/harfbuzz-2.8.0.tar.xz" 
+>
+    </branch>
+    <dependencies>
+      <dep package="gobject-introspection"/>
+      <dep package="cairo"/>
+      <dep package="fontconfig"/>
+    </dependencies>
+  </meson>
+
+  <meson id="fribidi" mesonargs="-Ddocs=false">
+    <branch module="fribidi/fribidi/releases/download/v1.0.10/fribidi-1.0.10.tar.xz"
+            repo="github-tarball" version="1.0.10"
+            hash="sha256:7f1c687c7831499bcacae5e8675945a39bacbad16ecaa945e9454a32df653c01"/>
+    <dependencies>
+      <!--dep package="c2man"/ -->
+    </dependencies>
+  </meson>
+
+  <meson id="pango" mesonargs="-Dfontconfig=enabled">
+    <branch version="1.48.4" module="pango/1.48/pango-1.48.4.tar.xz"
+            hash="sha256:418913fb062071a075846244989d4a67aa5c80bf0eae8ee4555a092fd566a37a">
+    </branch>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="cairo"/>
+      <dep package="harfbuzz"/>
+      <dep package="fribidi"/>
+    </dependencies>
+    <after>
+      <dep package="gobject-introspection"/>
+      <dep package="meta-gtk-osx-bootstrap"/>
+    </after>
+  </meson>
+  
+  <meson id="atk">
+    <branch module="atk/2.36/atk-2.36.0.tar.xz" version="2.36.0"
+            hash="sha256:fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652788"/>
+    <dependencies>
+    </dependencies>
+    <after>
+      <dep package="glib"/>
+      <dep package="meta-gtk-osx-bootstrap"/>
+      <dep package="gobject-introspection"/>
+    </after>
+  </meson>
+
+  <!--
+    upstream has mesonargs="-Drelocatable=true -Dman=false"
+    but that breaks the following two tests in Inkscape:
+      - <symbol> geometric properties (SVG 2.0 feature
+      - .otf font with compressed SVG glyphs
+  -->
+  <meson id="gdk-pixbuf" mesonargs="-Dx11=false -Dman=false">
+    <branch module="gdk-pixbuf/2.42/gdk-pixbuf-2.42.4.tar.xz" version="2.42.4"
+            hash="sha256:fe9c5dd88f486194ea2bc09b8814c1ed895bb6c530f37cbbf259757c4e482e4d">
+      <patch file="gdk-pixbuf-loader-name.patch" strip="1"/>
+    </branch>
+    <after>
+      <dep package="pango"/>
+      <dep package="gobject-introspection"/>
+    </after>
+  </meson>
+
+  <autotools id="hicolor-icon-theme">
+    <branch module="hicolor-icon-theme-0.17.tar.xz" version="0.17"
+            repo="hicolor"/>
+  </autotools>
+
+  <autotools id="xorg-util-macros">
+    <branch repo="freedesktop" version="1.19.2"
+            module="xorg/individual/util/util-macros-1.19.2.tar.bz2"
+            hash="sha256:d7e43376ad220411499a79735020f9d145fdc159284867e99467e0d771f3e712"/>
+  </autotools>
+
+  <meson id="libepoxy">
+    <branch repo="github-tarball" version="1.5.4"
+            hash="sha256:0bd2cc681dfeffdef739cb29913f8c3caa47a88a451fd2bc6e606c02997289d2"
+            module="anholt/libepoxy/releases/download/1.5.4/libepoxy-1.5.4.tar.xz"/>
+    <dependencies>
+      <dep package="xorg-util-macros"/>
+    </dependencies>
+  </meson>
+
+  <!-- gtk3 is in maintenance mode with 3.24 the final release series. -->
+  <meson id="gtk+-3.0" mesonargs="-Dx11_backend=false">
+    <branch module="gtk+/3.24/gtk+-3.24.31.tar.xz" version="3.24.31"
+            hash="sha256:423c3e7fdb4c459ee889e35fd4d71fd2623562541c1041b11c07e5ad1ff10bf9">
+      <patch file="gtk-mr4298_fix_mr4265_performance_patch.patch" strip="1"/>
+      <patch file="gtk-mr4299_dock_quit_invokes_app_quit.patch" strip="1"/>
+    </branch>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="pango"/>
+      <dep package="atk"/>
+      <dep package="gdk-pixbuf"/>
+      <dep package="gobject-introspection"/>
+      <dep package="libepoxy"/>
+      <dep package="hicolor-icon-theme"/>
+    </dependencies>
+    <after>
+      <dep package="meta-gtk-osx-bootstrap"/>
+    </after>
+  </meson>
+
+  <autotools id="libcroco" autogenargs="--disable-Bsymbolic"
+             autogen-sh="configure">
+    <branch module="libcroco/0.6/libcroco-0.6.13.tar.xz" version="0.6.13"
+            hash="sha256:767ec234ae7aa684695b3a735548224888132e063f92db585759b422570621d4"/>
+  </autotools>
+
+  <autotools id="librsvg" autogen-sh="autoreconf"
+             autogenargs="--disable-Bsymbolic">
+    <branch module="librsvg/2.51/librsvg-2.51.0.tar.xz" version="2.51.0"
+            hash="sha256:89d32e38445025e1b1d9af3dd9d3aeb9f6fce527aeecbecf38b369b34c80c038"/>
+    <dependencies>
+      <dep package="libcroco"/>
+      <dep package="freetype"/>
+      <dep package="rust"/>
+    </dependencies>
+    <after>
+      <!-- Circular dependency if we depend on meta-gtk-osx or meta-gtk-osx-gtk3 -->
+      <dep package="gtk+-3.0"/>
+    </after>
+  </autotools>
+
+  <autotools id="adwaita-icon-theme" autogen-sh="configure">
+    <branch module="adwaita-icon-theme/3.38/adwaita-icon-theme-3.38.0.tar.xz"
+            version="3.38.0"
+            hash="sha256:6683a1aaf2430ccd9ea638dd4bfe1002bc92b412050c3dba20e480f979faaf97"/>
+    <dependencies>
+      <dep package="librsvg"/>
+    </dependencies>
+  </autotools>
+
+  <!-- Null metamodule, provided so as not to break modules that use it. -->
+  <metamodule id="meta-gtk-osx-freetype" />
+
+</moduleset>

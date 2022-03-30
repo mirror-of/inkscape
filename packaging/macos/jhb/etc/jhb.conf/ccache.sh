@@ -1,24 +1,18 @@
-#!/usr/bin/env bash
-#
-# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+# SPDX-FileCopyrightText: 2022 René de Hesselle <dehesselle@web.de>
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ### description ################################################################
 
-# Compile and package Inkscape
+# Set cache directory for ccache.
 
 ### shellcheck #################################################################
 
-# Nothing here.
-
-### dependencies ###############################################################
-
-# Nothing here.
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### variables ##################################################################
 
-SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
+export CCACHE_DIR=${CCACHE_DIR:-$WRK_DIR/ccache}
 
 ### functions ##################################################################
 
@@ -26,8 +20,4 @@ SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 ### main #######################################################################
 
-set -e
-
-for script in "$SELF_DIR"/2??-*.sh; do
-  $script
-done
+# Nothing here.

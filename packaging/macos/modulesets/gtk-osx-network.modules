@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<moduleset>
+  <repository name="ftp.gnome.org" type="tarball" default="yes"
+              href="http://ftp.gnome.org/pub/GNOME/sources/"/>
+  <repository name="openssl" type="tarball"
+              href="https://www.openssl.org/source/"/>
+  <repository name="ftp.gnu.org" type="tarball"
+              href="https://ftp.gnu.org/gnu/"/>
+  <repository name="sourceforge" type="tarball"
+              href="http://downloads.sourceforge.net/sourceforge/"/>
+  <repository name='gnupg.org' type='tarball' href="https://gnupg.org/ftp/" />
+  <repository name="webm" type="tarball"
+              href="http://downloads.webmproject.org/releases/"/>
+  <repository type="tarball" name="github-tarball" href="https://github.com/"/>
+
+  <!-- of the many arguments such as prefix and libdir that jhbuild might pass
+  to configure, openssl only understands prefix, and only with =. -->
+  <autotools id="openssl" autogen-sh="Configure" autogenargs="shared "
+             autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --openssldir=%(prefix)s/etc/ssl %(autogenargs)s"
+             makeinstallargs="install_sw" supports-non-srcdir-builds="no">
+    <branch module="openssl-1.1.1n.tar.gz" version="1.1.n" repo="openssl"
+            hash="sha256:40dceb51a4f6a5275bde0e6bf20ef4b91bfc32ed57c0552e2e8e15463372b17a"/>
+  </autotools>
+
+  <!-- Rudely demands TeX to build documentation -->
+  <!-- libnettle 3.7 doesn't have arm64 assembler support and the support that's added in master is for arm-64-neutron that's incompatible with Apple Silicon. -->
+  <if condition-set="arm64">
+    <autotools id="libnettle" autogen-sh="configure"
+               autogenargs="--disable-documentation --disable-assembler">
+      <branch repo="ftp.gnu.org" version="3.7.2"
+              module="nettle/nettle-3.7.2.tar.gz"
+              hash="sha256:8d2a604ef1cde4cd5fb77e422531ea25ad064679ff0adf956e78b3352e0ef162">
+      </branch>
+      <dependencies>
+        <dep package="gmp"/>
+        <dep package="openssl"/>
+      </dependencies>
+    </autotools>
+  </if>
+  <if condition-unset="arm64">
+    <autotools id="libnettle" autogen-sh="configure"
+               autogenargs="--disable-documentation">
+      <branch repo="ftp.gnu.org" version="3.7.2"
+              module="nettle/nettle-3.7.2.tar.gz"
+              hash="sha256:8d2a604ef1cde4cd5fb77e422531ea25ad064679ff0adf956e78b3352e0ef162">
+      </branch>
+      <dependencies>
+        <dep package="gmp"/>
+        <dep package="openssl"/>
+      </dependencies>
+    </autotools>
+  </if>
+
+  <autotools id="libtasn1" autogen-sh="configure">
+    <branch repo="ftp.gnu.org" version="4.17.0"
+            module="libtasn1/libtasn1-4.17.0.tar.gz"
+            hash="sha256:ece7551cea7922b8e10d7ebc70bc2248d1fdd73351646a2d6a8d68a9421c45a5">
+      <patch file="libtasn1-inline-fix.patch" strip="1"/>
+    </branch>
+  </autotools>
+
+  <autotools id="zlib" autogen-sh="configure" skip-autogen="never"
+             supports-non-srcdir-builds="no">
+    <branch repo="sourceforge" version="1.2.11"
+            module="libpng/zlib-1.2.11.tar.xz"
+            hash="sha256:4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066"/>
+  </autotools>
+
+  <autotools id="p11-kit" autogen-sh="configure"
+             autogenargs="--without-trust-paths">
+    <branch repo="github-tarball" version="0.23.22"
+            module="p11-glue/p11-kit/releases/download/0.23.22/p11-kit-0.23.22.tar.xz"
+            hash="sha256:8a8f40153dd5a3f8e7c03e641f8db400133fb2a6a9ab2aee1b6d0cb0495ec6b6">
+    </branch>
+    <dependencies>
+      <dep package="libffi"/>
+      <dep package="libtasn1"/>
+    </dependencies>
+  </autotools>
+
+  <if condition-unset="pre-Mavericks">
+    <autotools id="gnutls" autogen-sh="autoreconf"
+               autogenargs="--disable-gtk-doc-html --with-included-unistring">
+      <branch repo="gnupg.org" version="3.7.1"
+              module="gcrypt/gnutls/v3.7/gnutls-3.7.1.tar.xz"
+              hash="sha256:3777d7963eca5e06eb315686163b7b3f5045e2baac5e54e038ace9835e5cac6f">
+      </branch>
+      <dependencies>
+        <dep package="libnettle"/>
+        <dep package="libtasn1"/>
+        <dep package="zlib"/>
+        <dep package="p11-kit"/>
+        <dep package="libgcrypt"/>
+      </dependencies>
+    </autotools>
+  </if>
+
+  <autotools id="libgpg-error" autogen-sh="autoreconf"
+             autogenargs="--disable-doc">
+    <branch repo="gnupg.org" version="1.42"
+            module="gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2"
+            hash="sha256:fc07e70f6c615f8c4f590a8e37a9b8dd2e2ca1e9408f8e60459c67452b925e23">
+    </branch>
+  </autotools>
+
+ <autotools id="libgcrypt" autogen-sh="configure">
+    <branch repo="gnupg.org" version="1.9.2"
+            module="gcrypt/libgcrypt/libgcrypt-1.9.2.tar.bz2"
+            hash="sha256:b2c10d091513b271e47177274607b1ffba3d95b188bbfa8797f948aec9053c5a"/>
+    <dependencies>
+      <dep package="libgpg-error"/>
+    </dependencies>
+  </autotools>
+
+
+  <meson id="glib-networking" mesonargs="-Dopenssl=enabled">
+    <branch module="glib-networking/2.68/glib-networking-2.68.0.tar.xz"
+            version="2.68.0"
+            hash="sha256:0b235e85ad26b3c0d12255d0963c460e5a639c4722f78e2a03e969e224b29f6e"/>
+    <dependencies>
+      <if condition-unset="pre-Mavericks">
+        <dep package="gnutls"/>
+      </if>
+      <dep package="glib"/>
+    </dependencies>
+  </meson>
+
+  <autotools id="libpsl" autogen-sh='configure'>
+    <branch repo="github-tarball" version="0.21.0"
+            module="rockdaboot/libpsl/releases/download/0.21.1/libpsl-0.21.1.tar.gz"
+            hash="sha256:ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c"/>
+  </autotools>
+
+  <meson id="libsoup" mesonargs="-Dvapi=disabled">
+    <branch module="libsoup/2.72/libsoup-2.72.0.tar.xz" version="2.72.0"
+            hash="sha256:170c3f8446b0f65f8e4b93603349172b1085fb8917c181d10962f02bb85f5387">
+    </branch>
+    <dependencies>
+      <dep package="libpsl"/>
+      <dep package="python3"/>
+      <dep package="glib"/>
+      <dep package="glib-networking"/>
+      <dep package="sqlite"/>
+      <dep package="vala"/>
+    </dependencies>
+  </meson>
+</moduleset>

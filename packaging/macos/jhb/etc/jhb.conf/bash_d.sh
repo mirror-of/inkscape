@@ -1,24 +1,23 @@
-#!/usr/bin/env bash
-#
-# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+# SPDX-FileCopyrightText: 2022 René de Hesselle <dehesselle@web.de>
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ### description ################################################################
 
-# Compile and package Inkscape
+# Enable bash_d usage by providing bash_d_include function.
 
 ### shellcheck #################################################################
 
-# Nothing here.
+# shellcheck shell=bash # no shebang as this file is intended to be sourced
 
 ### dependencies ###############################################################
 
-# Nothing here.
+# shellcheck source=../../usr/src/bash_d/bash_d.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/../../usr/src/bash_d/bash_d.sh
 
 ### variables ##################################################################
 
-SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
+# Nothing here.
 
 ### functions ##################################################################
 
@@ -26,8 +25,4 @@ SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 ### main #######################################################################
 
-set -e
-
-for script in "$SELF_DIR"/2??-*.sh; do
-  $script
-done
+# Nothing here.

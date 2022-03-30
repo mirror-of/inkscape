@@ -14,14 +14,18 @@
 
 ### dependencies ###############################################################
 
-# shellcheck disable=SC1090 # can't point to a single source here
-for script in "$(dirname "${BASH_SOURCE[0]}")"/0??-*.sh; do
-  source "$script";
-done
+source "$(dirname "${BASH_SOURCE[0]}")"/jhb/etc/jhb.conf.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/src/cairosvg.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/src/ink.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/src/png2icns.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/src/svg2icns.sh
+
+bash_d_include error
+bash_d_include lib
 
 ### variables ##################################################################
 
-# Nothing here.
+SELF_DIR=$(dirname "$(greadlink -f "$0")")
 
 ### functions ##################################################################
 
@@ -40,7 +44,7 @@ error_trace_enable
 
   cd "$INK_BLD_DIR" || exit 1
   export ARTIFACT_DIR=$ARTIFACT_DIR   # referenced in inkscape.bundle
-  jhbuild run gtk-mac-bundler inkscape.bundle
+  jhb run gtk-mac-bundler inkscape.bundle
 )
 
 # Rename to get from lowercase "i" to capitalized "I" as the app bundle name
@@ -139,16 +143,16 @@ else
 fi
 
 # Install wheels.
-ink_pipinstall "$INK_PYTHON_PKG_APPDIRS"         # extension manager
-ink_pipinstall "$INK_PYTHON_PKG_BEAUTIFULSOUP4"  # extension manager
-ink_pipinstall "$INK_PYTHON_PKG_CACHECONTROL"    # extension manager
-ink_pipinstall "$INK_PYTHON_PKG_CSSSELECT"
-ink_pipinstall "$INK_PYTHON_PKG_LXML"
-ink_pipinstall "$INK_PYTHON_PKG_NUMPY"
-ink_pipinstall "$INK_PYTHON_PKG_PILLOW"          # export raster extension
-ink_pipinstall "$INK_PYTHON_PKG_PYGOBJECT"
-ink_pipinstall "$INK_PYTHON_PKG_PYSERIAL"
-ink_pipinstall "$INK_PYTHON_PKG_SCOUR"
+ink_pipinstall INK_PYTHON_PKG_APPDIRS         # extension manager
+ink_pipinstall INK_PYTHON_PKG_BEAUTIFULSOUP4  # extension manager
+ink_pipinstall INK_PYTHON_PKG_CACHECONTROL    # extension manager
+ink_pipinstall INK_PYTHON_PKG_CSSSELECT
+ink_pipinstall INK_PYTHON_PKG_LXML
+ink_pipinstall INK_PYTHON_PKG_NUMPY
+ink_pipinstall INK_PYTHON_PKG_PILLOW          # export raster extension
+ink_pipinstall INK_PYTHON_PKG_PYGOBJECT
+ink_pipinstall INK_PYTHON_PKG_PYSERIAL
+ink_pipinstall INK_PYTHON_PKG_SCOUR
 
 #----------------------------------------------------- remove Python cache files
 
@@ -178,7 +182,7 @@ mv "$TMP_DIR"/*.gir "$INK_APP_RES_DIR"/share/gir-1.0
 
 # compile *.gir into *.typelib files
 for gir in "$INK_APP_RES_DIR"/share/gir-1.0/*.gir; do
-  jhbuild run g-ir-compiler \
+  jhb run g-ir-compiler \
     -o "$INK_APP_LIB_DIR/girepository-1.0/$(basename -s .gir "$gir")".typelib \
     "$gir"
 done

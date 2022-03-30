@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+#
+# SPDX-FileCopyrightText: 2021 René de Hesselle <dehesselle@web.de>
+#
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+### description ################################################################
+
+# This script is a wrapper around the jhbuild binary to run it in our
+# configured environment (etc/jhb.conf).
+
+### shellcheck #################################################################
+
+# Nothing here.
+
+### dependencies ###############################################################
+
+#---------------------------------------------------------- source configuration
+
+source "$(dirname "${BASH_SOURCE[0]}")"/../../etc/jhb.conf.sh
+
+#------------------------------------------- source common functions from bash_d
+
+# bash_d is already available (it's part of etc/jhb.conf)
+
+bash_d_include echo
+bash_d_include error
+
+#--------------------------------------------------- source additional functions
+
+source "$(dirname "${BASH_SOURCE[0]}")"/../../usr/src/jhb/ccache.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/../../usr/src/jhb/jhbuild.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/../../usr/src/jhb/sys.sh
+
+### variables ##################################################################
+
+# Nothing here.
+
+### functions ##################################################################
+
+# Nothing here.
+
+### main #######################################################################
+
+if $CI; then   # break in CI, otherwise we get interactive prompt by JHBuild
+  error_trace_enable
+fi
+
+case "$1" in
+  debug)
+    echo_d "doing nothing"
+    ;;
+  install_jhb)
+    curl -L "$JHB_URL" | tar -C "$WRK_DIR" -xJ
+    ;;
+  configure)
+    jhbuild_configure "$2"   # e.g. 'jhbuild/myapp.modules'
+    ccache_configure
+    ;;
+  *)
+    if  sys_check_wrkdir &&
+        sys_check_sdkroot &&
+        sys_check_usr_local; then
+      sys_check_versions
+    else
+      exit 1    # cannot continue
+    fi
+    "$USR_DIR"/bin/jhbuild "$@"
+    ;;
+esac
