@@ -485,7 +485,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="focus-on-click">False</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Export selected Objects</property>
+                                <property name="tooltip-text" translatable="yes">Export selected objects</property>
                                 <property name="hexpand">True</property>
                                 <property name="draw-indicator">False</property>
                                 <property name="group">si_s_document</property>
@@ -503,7 +503,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="focus-on-click">False</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Export everything inside Document</property>
+                                <property name="tooltip-text" translatable="yes">Export everything inside document</property>
                                 <property name="hexpand">True</property>
                                 <property name="active">True</property>
                                 <property name="draw-indicator">False</property>
@@ -539,7 +539,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="focus-on-click">False</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Export Custom Area by specifying coordinates</property>
+                                <property name="tooltip-text" translatable="yes">Export custom area by specifying coordinates</property>
                                 <property name="hexpand">True</property>
                                 <property name="draw-indicator">False</property>
                                 <property name="group">si_s_document</property>
@@ -585,7 +585,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="margin-top">5</property>
                                 <property name="margin-bottom">5</property>
-                                <property name="label" translatable="yes">{name}</property>
+                                <property name="label">{name}</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -779,7 +779,7 @@
                     <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="secondary-icon-name">folder-open</property>
-                    <property name="secondary-icon-tooltip-text" translatable="yes">Browse Export Directory</property>
+                    <property name="secondary-icon-tooltip-text" translatable="yes">Browse export directory</property>
                     <property name="placeholder-text" translatable="yes">Filename</property>
                   </object>
                   <packing>
@@ -924,7 +924,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Export selected Objects/Groups to separate file</property>
+                                <property name="tooltip-text" translatable="yes">Export selected objects to separate files</property>
                                 <property name="active">True</property>
                                 <property name="draw-indicator">False</property>
                               </object>
@@ -941,7 +941,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Export Layers as separate files</property>
+                                <property name="tooltip-text" translatable="yes">Export layers as separate files</property>
                                 <property name="active">True</property>
                                 <property name="draw-indicator">False</property>
                                 <property name="group">b_s_selection</property>
@@ -959,7 +959,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Export Pages as separate files</property>
+                                <property name="tooltip-text" translatable="yes">Export pages as separate files</property>
                                 <property name="active">True</property>
                                 <property name="draw-indicator">False</property>
                                 <property name="group">b_s_selection</property>
@@ -998,7 +998,7 @@
                           <object class="GtkLabel" id="b_num_elements">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes">5 Items</property>
+                            <property name="label">5 Items</property>
                           </object>
                           <packing>
                             <property name="left-attach">5</property>
@@ -1122,6 +1122,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes">Export to multiple files and file formats</property>
             <property name="label" translatable="yes">Batch Export</property>
           </object>
           <packing>
