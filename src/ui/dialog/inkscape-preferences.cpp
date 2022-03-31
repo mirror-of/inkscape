@@ -1943,7 +1943,7 @@ void InkscapePreferences::initPageUI()
     std::vector<PrefItem> on_top = {
         { C_("Dialog on top", "None"), PREFS_DIALOGS_WINDOWS_NONE, _("Dialogs are treated as regular windows") },
         { _("Normal"),    PREFS_DIALOGS_WINDOWS_NORMAL,     _("Dialogs stay on top of document windows"), true },
-        { _("Aggresive"), PREFS_DIALOGS_WINDOWS_AGGRESSIVE, _("Same as Normal but may work better with some window managers") }
+        { _("Aggressive"), PREFS_DIALOGS_WINDOWS_AGGRESSIVE, _("Same as Normal but may work better with some window managers") }
     };
     _page_windows.add_line(true, _("Dialog on top"), *Gtk::make_managed<PrefRadioButtons>(on_top, "/options/transientpolicy/value"), "", "");
 #endif
