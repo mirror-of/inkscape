@@ -2761,27 +2761,29 @@ void InkscapePreferences::initPageRendering()
         grid->add(*label_widget);
     };
 
+    //TRANSLATORS: The following are options for fine-tuning rendering, meant to be used by developers, 
+    //find more explanations at https://gitlab.com/inkscape/inbox/-/issues/6544#note_886540227
     add_devmode_group_header(_("Low-level tuning options"));
     _canvas_render_time_limit.init("/options/rendering/render_time_limit", 100.0, 1000000.0, 1.0, 0.0, 1000.0, true, false);
     add_devmode_line(_("Render time limit"), _canvas_render_time_limit, C_("microsecond abbreviation", "μs"), _("The maximum time allowed for a rendering time slice"));
     _canvas_use_new_bisector.init("", "/options/rendering/use_new_bisector", true);
-    add_devmode_line(_("Use new bisector"), _canvas_use_new_bisector, "", _("Use an alternative, more obvious bisection strategy: just chop in half along the larger dimension until small enough"));
+    add_devmode_line(_("Use new bisector algorithm"), _canvas_use_new_bisector, "", _("Use an alternative, more obvious bisection strategy: just chop tile in half along the larger dimension until small enough"));
     _canvas_new_bisector_size.init("/options/rendering/new_bisector_size", 1.0, 10000.0, 1.0, 0.0, 500.0, true, false);
-    add_devmode_line(_("New bisector tile size"), _canvas_new_bisector_size, C_("pixel abbreviation", "px"), _("Chop rectangles until largest dimension is this small"));
+    add_devmode_line(_("Smallest tile size for new bisector"), _canvas_new_bisector_size, C_("pixel abbreviation", "px"), _("Halve rendering tile rectangles until their largest dimension is this small"));
     _rendering_tile_size.init("/options/rendering/tile-size", 1.0, 10000.0, 1.0, 0.0, 16.0, true, false);
     add_devmode_line(_("Tile size:"), _rendering_tile_size, "", _("The \"tile size\" parameter previously hard-coded into Inkscape's original tile bisector."));
     _canvas_max_affine_diff.init("/options/rendering/max_affine_diff", 0.0, 100.0, 0.1, 0.0, 1.8, false, false);
-    add_devmode_line(_("Max affine diff"), _canvas_max_affine_diff, "", _("How much the viewing transformation can change before throwing away the current redraw and starting again"));
+    add_devmode_line(_("Transformation threshold"), _canvas_max_affine_diff, "", _("How much the viewing transformation can change before throwing away the current redraw and starting again"));
     _canvas_pad.init("/options/rendering/pad", 0.0, 1000.0, 1.0, 0.0, 200.0, true, false);
-    add_devmode_line(_("Buffer padding"), _canvas_pad, C_("pixel abbreviation", "px"), _("Use buffers bigger than the window by this amount"));
+    add_devmode_line(_("Buffer padding"), _canvas_pad, C_("pixel abbreviation", "px"), _("Increase the pre-rendered area around the window by this amount"));
     _canvas_coarsener_min_size.init("/options/rendering/coarsener_min_size", 0.0, 1000.0, 1.0, 0.0, 200.0, true, false);
-    add_devmode_line(_("Coarsener min size"), _canvas_coarsener_min_size, C_("pixel abbreviation", "px"), _("Only coarsen rectangles smaller/thinner than this."));
+    add_devmode_line(_("Min size for coarsener algorithm"), _canvas_coarsener_min_size, C_("pixel abbreviation", "px"), _("Coarsener algorithm only processes rectangles smaller/thinner than this."));
     _canvas_coarsener_glue_size.init("/options/rendering/coarsener_glue_size", 0.0, 1000.0, 1.0, 0.0, 80.0, true, false);
-    add_devmode_line(_("Coarsener glue size"), _canvas_coarsener_glue_size, C_("pixel abbreviation", "px"), _("Absorb nearby rectangles within this distance."));
+    add_devmode_line(_("Glue size for coarsener algorithm"), _canvas_coarsener_glue_size, C_("pixel abbreviation", "px"), _("Coarsener algorithm absorbs nearby rectangles within this distance."));
     _canvas_coarsener_min_fullness.init("/options/rendering/coarsener_min_fullness", 0.0, 1.0, 0.0, 0.0, 0.3, false, false);
-    add_devmode_line(_("Coarsener min fullness"), _canvas_coarsener_min_fullness, "", _("Refuse coarsening attempt if result would be more empty than this."));
+    add_devmode_line(_("Min fullness for coarsener algorithm"), _canvas_coarsener_min_fullness, "", _("Refuse coarsening algorithm's attempt if the result would be more empty than this."));
 
-    add_devmode_group_header(_("Debugging, profiling, and experiments"));
+    add_devmode_group_header(_("Debugging, profiling and experiments"));
     _canvas_debug_framecheck.init("", "/options/rendering/debug_framecheck", false);
     add_devmode_line(_("Framecheck"), _canvas_debug_framecheck, "", _("Print profiling data of selected operations to a file"));
     _canvas_debug_logging.init("", "/options/rendering/debug_logging", false);
@@ -2793,11 +2795,11 @@ void InkscapePreferences::initPageRendering()
     _canvas_debug_show_redraw.init("", "/options/rendering/debug_show_redraw", false);
     add_devmode_line(_("Show redraw"), _canvas_debug_show_redraw, "", _("Paint a translucent random colour over each newly drawn tile"));
     _canvas_debug_show_unclean.init("", "/options/rendering/debug_show_unclean", false);
-    add_devmode_line(_("Show unclean region"), _canvas_debug_show_unclean, "", _("Show the unclean region in red"));
+    add_devmode_line(_("Show unclean region"), _canvas_debug_show_unclean, "", _("Show the region that needs to be redrawn in red"));
     _canvas_debug_show_snapshot.init("", "/options/rendering/debug_show_snapshot", false);
-    add_devmode_line(_("Show snapshot"), _canvas_debug_show_snapshot, "", _("Show the snapshot region in blue"));
+    add_devmode_line(_("Show snapshot region"), _canvas_debug_show_snapshot, "", _("Show the region that still contains a saved copy of previously rendered content in blue"));
     _canvas_debug_show_clean.init("", "/options/rendering/debug_show_clean", false);
-    add_devmode_line(_("Show clean fragmentation"), _canvas_debug_show_clean, "", _("Show the outlines of the rectangles in the clean region in green"));
+    add_devmode_line(_("Show clean region's fragmentation"), _canvas_debug_show_clean, "", _("Show the outlines of the rectangles in the region where rendering is complete in green"));
     _canvas_debug_disable_redraw.init("", "/options/rendering/debug_disable_redraw", false);
     add_devmode_line(_("Disable redraw"), _canvas_debug_disable_redraw, "", _("Temporarily disable the idle redraw process completely"));
     _canvas_debug_sticky_decoupled.init("", "/options/rendering/debug_sticky_decoupled", false);
