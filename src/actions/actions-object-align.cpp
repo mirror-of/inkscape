@@ -755,6 +755,14 @@ std::vector<std::vector<Glib::ustring>> raw_data_object_align =
     {"app.object-align-on-canvas",         N_("Enable on-canvas alignment"),  "Object", N_("Enable on-canvas alignment handles."                                                                                           )},
 
     {"app.object-align",                   N_("Align objects"),      "Object", N_("Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?")},
+
+    {"app.object-align('left')",           N_("Align to selection's left edge"),             "Object", N_("Align selection horizontally to selection's left edge."                                                         )},
+    {"app.object-align('hcenter')",        N_("Align to selection's horizontal center"),     "Object", N_("Align selection horizontally to the selection's center."                                                        )},
+    {"app.object-align('right')",          N_("Align to selection's right edge"),            "Object", N_("Align selection horizontally to selection's right edge."                                                        )},
+    {"app.object-align('top')",            N_("Align to selection's top edge"),              "Object", N_("Align selection vertically to selection's top edge."                                                            )},
+    {"app.object-align('bottom')",         N_("Align to selection's bottom edge"),           "Object", N_("Align selection vertically to selection's bottom edge."                                                         )},
+    {"app.object-align('vcenter')",        N_("Align to selection's vertical center"),       "Object", N_("Align selection vertically to the selection's center."                                                          )},
+    {"app.object-align('hcenter vcenter')", N_("Align to selection's center"),               "Object", N_("Align selection to the selection's center."                                                                     )},
     {"app.object-align-text",              N_("Align text objects"), "Object", N_("Align selected text alignment points; usage: [[vertical | horizontal] [last|first|biggest|smallest|page|drawing|selection]?"            )},
 
     {"app.object-distribute",              N_("Distribute objects"),          "Object", N_("Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | top | vcenter | bottom]"                           )},
@@ -765,7 +773,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_object_align =
     {"app.object-distribute('vgap')",      N_("Even vertical gaps"),          "Object", N_("Distribute vertically with even vertical gaps."                                                                                )},
     {"app.object-distribute('top')",       N_("Even top edges"),              "Object", N_("Distribute vertically with even spacing between top edges."                                                                    )},
     {"app.object-distribute('vcenter')",   N_("Even vertical centers"),       "Object", N_("Distribute vertically with even spacing between centers."                                                                      )},
-    {"app.object-distribute('bottom')",    N_("Even bottom edges"),           "Object", N_("Distribute vertically with even spacing between bottom edges."                                                                 )}, 
+    {"app.object-distribute('bottom')",    N_("Even bottom edges"),           "Object", N_("Distribute vertically with even spacing between bottom edges."                                                                 )},
 
     {"app.object-distribute-text",         N_("Distribute text objects"),     "Object", N_("Distribute text alignment points; usage [vertical | horizontal ]"                                                              )},
     {"app.object-distribute-text('horizontal')", N_("Distribute text objects"),     "Object", N_("Distribute text alignment points horizontally"                                                                           )},
