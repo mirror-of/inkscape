@@ -786,10 +786,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_object_align =
 std::vector<std::vector<Glib::ustring>> hint_data_object_align =
 {
     // clang-format off
-    {"app.object-align",           N_("Give String input for  Relativity  <space>   Alignment")                                        },
-    {"app.object-distribute",      N_("Give String input for  Distribution (hgap, left, hcenter, right, vgap, top, vcenter, bottom)")  },
-    {"app.object-rearrange",       N_("Give String input for  Method: (graph, exchange, exchangez, rotate, randomize, unclump)")       },
-    {"app.object-remove-overlaps", N_("Give two comma separated numbers")                                                              },
+    {"app.object-align",           N_("Enter anchor<space>alignment<space>optional second alignment. Possible anchors: last, first, biggest, smallest, page, drawing, selection; possible alignments: left, hcenter, right, top, vcenter, bottom.")                                        },
+    {"app.object-distribute",      N_("Enter distribution type. Possible values: left, hcenter, right, top, vcenter, bottom, hgap, vgap.")  },
+    {"app.object-rearrange",       N_("Enter arrange method. Possible values: graph, exchange, exchangez, rotate, randomize, unclump.")       },
+    {"app.object-remove-overlaps", N_("Enter two comma-separated numbers: horizontal,vertical")                                                              },
     // clang-format on
 };
 
