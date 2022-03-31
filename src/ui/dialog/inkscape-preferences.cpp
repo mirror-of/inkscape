@@ -1045,12 +1045,12 @@ void InkscapePreferences::initPageTools()
     _page_gradient.add_line( false, _("Linear gradient _angle:"), _misc_gradientangle, "",
                            _("Default angle of new linear gradients in degrees (clockwise from horizontal)"), false);
 
-    _misc_gradient_collect.init(_("Auto delete gradients that are not used"), "/option/gradient/auto_collect", true);
+    _misc_gradient_collect.init(_("Auto-delete unused gradients"), "/option/gradient/auto_collect", true);
     _page_gradient.add_line(
         false, "", _misc_gradient_collect, "",
-        _("When enabled, the gradients that are not used will be auto deleted (auto collected) "
-          "from the SVG file. If disabled, the gradients that are not used will be preserved in "
-          "the SVG file for latter use.(Note: This setting will be applied only on the new gradients.)"),
+        _("When enabled, gradients that are not used will be deleted (auto-collected) automatically "
+          "from the SVG file. When disabled, unused gradients will be preserved in "
+          "the file for later use. (Note: This setting only affects new gradients.)"),
         true);
 
     //Dropper
