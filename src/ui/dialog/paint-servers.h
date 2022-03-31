@@ -81,6 +81,7 @@ struct PaintDescription
  */
 class PaintServersDialog : public DialogBase
 {
+    using MaybeString = std::optional<Glib::ustring>;
 public:
     ~PaintServersDialog() override;
     static PaintServersDialog &getInstance() { return *new PaintServersDialog(); }
@@ -98,6 +99,7 @@ private:
     void _createPaints(std::vector<PaintDescription> &collection);
     PaintDescription _descriptionFromIterator(Gtk::ListStore::iterator const &iter) const;
     void _documentClosed();
+    std::tuple<MaybeString, MaybeString> _findCommonFillAndStroke(std::vector<SPObject *> const &objects) const;
     static void _findPaints(SPObject *in, std::vector<Glib::ustring> &list);
     void _generateBitmapPreview(PaintDescription& paint);
     void _instantiatePaint(PaintDescription &paint);
@@ -106,8 +108,11 @@ private:
     void _loadStockPaints();
     void _regenerateAll();
     void _unpackGroups(SPObject *parent, std::vector<SPObject *> &output) const;
+    std::vector<SPObject *> _unpackSelection(Selection *selection) const;
+    void _updateActiveItem();
     void onPaintClicked(const Gtk::TreeModel::Path &path);
     void onPaintSourceDocumentChanged();
+    void selectionChanged(Selection *selection) final;
 
     bool _targetting_fill; ///< whether setting fill (true) or stroke (false)
     const Glib::ustring ALLDOCS;
@@ -122,6 +127,8 @@ private:
     Gtk::IconView *icon_view = nullptr;
     PaintServersColumns const columns;
     sigc::connection _defs_changed, _document_closed;
+    MaybeString _common_stroke, _common_fill; ///< Common fill/stroke to all selected elements
+    sigc::connection _item_activated;
 };
 
 } // namespace Dialog

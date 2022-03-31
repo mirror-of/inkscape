@@ -140,11 +140,16 @@ void PaintServersDialog::_buildDialogWindow(char const *const glade_file)
     icon_view->set_model(static_cast<Glib::RefPtr<Gtk::TreeModel>>(store[current_store]));
     icon_view->set_tooltip_column(columns.id.index());
     icon_view->set_pixbuf_column(columns.pixbuf.index());
-    icon_view->signal_item_activated().connect([=](Gtk::TreeModel::Path const &p) { onPaintClicked(p); });
+    _item_activated = icon_view->signal_item_activated().connect([=](Gtk::TreeModel::Path const &p) {
+        onPaintClicked(p);
+    });
 
     Gtk::RadioButton *fill_radio = nullptr;
     builder->get_widget("TargetRadioFill", fill_radio);
-    fill_radio->signal_toggled().connect([=]() { _targetting_fill = fill_radio->get_active(); });
+    fill_radio->signal_toggled().connect([=]() {
+        _targetting_fill = fill_radio->get_active();
+        _updateActiveItem();
+    });
 }
 
 /** Handles the destruction of the current document */
@@ -156,6 +161,42 @@ void PaintServersDialog::_documentClosed()
     document_map.erase(CURRENTDOC);
     store[CURRENTDOC]->clear();
     _regenerateAll();
+}
+
+/**
+ * @brief Returns the Fill and Stroke, in this order, common to a list of objects
+ * @param objects - a vector of pointers to objects whose fill and stroke will be analysed
+ * @return a tuple of optionals which are empty when the vector of objects is empty or
+ *         when either fill or stroke are not common to all of them. Otherwise, the first
+ *         element of the tuple is the common fill, as a Glib::ustring, and the second one
+ *         is the common stroke.
+ */
+std::tuple<std::optional<Glib::ustring>, std::optional<Glib::ustring>>
+PaintServersDialog::_findCommonFillAndStroke(std::vector<SPObject *> const &objects) const
+{
+    MaybeString common_fill, common_stroke;
+    if (!objects.empty()) {
+        Glib::ustring candidate_fill = objects[0]->style->fill.get_value();
+        Glib::ustring candidate_stroke = objects[0]->style->stroke.get_value();
+        bool fills_agree = true;
+        bool strokes_agree = true;
+        size_t const count = objects.size();
+        for (size_t i = 1; i < count; i++) {
+            if (fills_agree && candidate_fill != objects[i]->style->fill.get_value()) {
+                fills_agree = false;
+            }
+            if (strokes_agree && candidate_stroke != objects[i]->style->stroke.get_value()) {
+                strokes_agree = false;
+            }
+        }
+        if (fills_agree) {
+            common_fill = candidate_fill;
+        }
+        if (strokes_agree) {
+            common_stroke = candidate_stroke;
+        }
+    }
+    return std::tuple(common_fill, common_stroke);
 }
 
 /** Finds paints used by an object and (recursively) by its descendants
@@ -292,18 +333,7 @@ PaintDescription PaintServersDialog::_descriptionFromIterator(Gtk::ListStore::it
 /** Regenerates the list of all paint servers from the already loaded paints */
 void PaintServersDialog::_regenerateAll()
 {
-    // Save active item
     bool showing_all = (current_store == ALLDOCS);
-    Gtk::TreePath active;
-    if (showing_all) {
-        std::vector<Gtk::TreePath> selected = icon_view->get_selected_items();
-        if (selected.empty()) {
-            showing_all = false;
-        } else {
-            active = selected[0];
-        }
-    }
-
     std::vector<PaintDescription> all_paints;
 
     for (auto const &[doc, paint_list] : store) {
@@ -334,9 +364,8 @@ void PaintServersDialog::_regenerateAll()
         paint.write_to_iterator(iter, &columns);
     }
 
-    // Restore active item
     if (showing_all) {
-        icon_view->select_path(active);
+        selectionChanged(getSelection());
     }
 }
 
@@ -452,6 +481,7 @@ void PaintServersDialog::onPaintSourceDocumentChanged()
 {
     current_store = dropdown->get_active_text();
     icon_view->set_model(store[current_store]);
+    _updateActiveItem();
 }
 
 /** Event handler for when a paint entry in the dialog has been activated */
@@ -459,9 +489,9 @@ void PaintServersDialog::onPaintClicked(Gtk::TreeModel::Path const &path)
 {
     // Get the current selected elements
     Selection *selection = getSelection();
-    std::vector<SPObject*> const selected_items(selection->items().begin(), selection->items().end());
+    std::vector<SPObject *> items = _unpackSelection(selection);
 
-    if (selected_items.empty()) {
+    if (items.empty()) {
         return;
     }
 
@@ -497,18 +527,30 @@ void PaintServersDialog::onPaintClicked(Gtk::TreeModel::Path const &path)
         (*iter)[columns.document] = CURRENTDOC;
     }
 
-    // Recursively find elements in groups, if any
-    std::vector<SPObject*> items;
-    for (auto item : selected_items) {
-        _unpackGroups(item, items);
-    }
-
     for (auto item : items) {
         item->style->getFillOrStroke(_targetting_fill)->read(paint.c_str());
         item->updateRepr();
     }
 
     document->collectOrphans();
+}
+
+/**
+ * @brief Handles the change in the selection, finding common fill or stroke for selected objects
+ * @param selection - the new selection
+ */
+void PaintServersDialog::selectionChanged(Selection* selection)
+{
+    if (!selection || selection->isEmpty()) {
+        _common_fill.reset();
+        _common_stroke.reset();
+    } else {
+        auto const selected_items = _unpackSelection(selection);
+        auto const &[fill, stroke] = _findCommonFillAndStroke(selected_items);
+        _common_fill = std::move(fill);
+        _common_stroke = std::move(stroke);
+    }
+    _updateActiveItem();
 }
 
 /**
@@ -526,6 +568,53 @@ void PaintServersDialog::_unpackGroups(SPObject *parent, std::vector<SPObject *>
             _unpackGroups(child, output);
         }
     }
+}
+
+/**
+ * @brief Recursively unpacks groups in the given selection
+ * @param selection - a pointer to an Inkscape::Selection object to be unpacked
+ * @return a vector of SPObject pointers to the unpacked selected items.
+ */
+std::vector<SPObject *> PaintServersDialog::_unpackSelection(Selection *selection) const
+{
+    std::vector<SPObject *> result;
+    if (!selection) {
+        return result;
+    }
+
+    auto const &selected_range = selection->items();
+    for (auto const item : selected_range) {
+        _unpackGroups(static_cast<SPObject *>(item), result);
+    }
+    return result;
+}
+
+/**
+ * @brief Updates the active item in the icon view to reflect the common paint of the
+ *        fill or stroke of selected objects
+ */
+void PaintServersDialog::_updateActiveItem()
+{
+    _item_activated.block();
+    MaybeString &common = (_targetting_fill ? _common_fill : _common_stroke);
+    if (common) {
+        bool found = false;
+        store[current_store]->foreach(
+            [&](Gtk::ListStore::Path const &path, Gtk::ListStore::iterator const &icon) -> bool {
+                if ((*icon)[columns.paint] == *common) {
+                    icon_view->select_path(path);
+                    found = true;
+                    return true; // Finish iterating
+                }
+                return false;
+            });
+        if (!found) {
+            icon_view->unselect_all();
+        }
+    } else {
+        icon_view->unselect_all();
+    }
+    _item_activated.unblock();
 }
 
 //----------------------------------------------------------------------------------------------------
