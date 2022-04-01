@@ -453,7 +453,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_layer =
 {
     // clang-format off
     {"win.layer-new",                       N_("Add Layer"),                        "Layers",     N_("Create a new layer")},
-    {"win.layer-duplicate",                 N_("Duplicate Current Layer"),          "Layers",     N_("Duplicate an existing layer")},
+    {"win.layer-duplicate",                 N_("Duplicate Current Layer"),          "Layers",     N_("Duplicate the current layer")},
     {"win.layer-delete",                    N_("Delete Current Layer"),             "Layers",     N_("Delete the current layer")},
     {"win.layer-rename",                    N_("Rename Layer"),                     "Layers",     N_("Rename the current layer")},
 

@@ -191,8 +191,8 @@ hide_lock_lock_selected(InkscapeApplication* app, bool lock)
 std::vector<std::vector<Glib::ustring>> raw_data_hide_lock =
 {
     // clang-format off
-    {"app.unhide-all",              N_("Unhide All"),         "Hide and Lock",      N_("Unhide all objects in the current layer")      },
-    {"app.unlock-all",              N_("Unlock All"),         "Hide and Lock",      N_("Unlock all objects in the current layer")      },
+    {"app.unhide-all",              N_("Unhide All"),         "Hide and Lock",      N_("Unhide all objects")      },
+    {"app.unlock-all",              N_("Unlock All"),         "Hide and Lock",      N_("Unlock all objects")      },
 
     {"app.selection-hide",          N_("Hide selection"),     "Hide and Lock",      N_("Hide all selected objects")                    },
     {"app.selection-unhide",        N_("Unhide selection"),   "Hide and Lock",      N_("Unhide all selected objects")                  },

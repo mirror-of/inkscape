@@ -80,7 +80,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit_window =
 {
     // clang-format off
     {"win.paste",                               N_("Paste"),                            "Edit",     N_("Paste objects from clipboard to mouse point, or paste text")},
-    {"win.paste-in-place",                      N_("Paste In Place"),                   "Edit",     N_("Paste objects from clipboard to mouse point, or paste text")},
+    {"win.paste-in-place",                      N_("Paste In Place"),                   "Edit",     N_("Paste objects from clipboard to the original position of the copied objects")},
     {"win.lock-all-guides",                     N_("Lock All Guides"),                  "Edit",     N_("Toggle lock of all guides in the document")},
     {"win.path-effect-parameter-next",          N_("Next path effect parameter"),       "Edit",     N_("Show next editable path effect parameter")}
     // clang-format on

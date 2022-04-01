@@ -741,7 +741,7 @@ Gtk::Widget * LPETiling::newWidget()
                     }
                     cols->set_tooltip_markup(_("Blend scale from <b>left to right</b> (left is original scale, right is new scale)"));
                     rows->set_tooltip_markup(_("Blend scale from <b>top to bottom</b> (top is original scale, bottom is new scale)"));
-                    both->set_tooltip_markup(_("Blend scale in <b>Z-patten</b> (top left clone is original scale, bottom right is new scale)"));
+                    both->set_tooltip_markup(_("Blend scale <b>diagonally</b> (top left clone is original scale, bottom right is new scale)"));
                     none->set_tooltip_markup(_("Uniform scale"));
                     rand->set_tooltip_markup(_("Random scale (hit <b>randomize</b> button to shuffle order)"));
                     container->pack_start(*rows, false, false, 1);
@@ -783,7 +783,7 @@ Gtk::Widget * LPETiling::newWidget()
                     }
                     cols->set_tooltip_markup(_("Blend rotation from <b>left to right</b> (left is original rotation, right is new rotation)"));
                     rows->set_tooltip_markup(_("Blend rotation from <b>top to bottom</b> (top is original rotation, bottom is new rotation)"));
-                    both->set_tooltip_markup(_("Blend rotation in <b>Z-patten</b> (top left clone is original rotation, bottom right is new rotation)"));
+                    both->set_tooltip_markup(_("Blend rotation <b>diagonally</b> (top left clone is original rotation, bottom right is new rotation)"));
                     none->set_tooltip_markup(_("Uniform rotation"));
                     rand->set_tooltip_markup(_("Random rotation (hit <b>randomize</b> button to shuffle order)"));
                     container->pack_start(*rows, false, false, 1);

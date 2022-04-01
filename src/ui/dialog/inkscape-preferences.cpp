@@ -1820,7 +1820,7 @@ void InkscapePreferences::initPageUI()
         int menu_icons_values[] = {1, -1, 0};
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
         _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
-                             _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.ui' file determines whether to display icons in menus."), false, reset_icon());
+                             _("You can either enable or disable all icons in menus. By default, the setting for the 'use-icon' attribute in the 'menus.ui' file determines whether to display icons in menus."), false, reset_icon());
 
 
     this->AddPage(_page_theme, _("Theming"), iter_ui, PREFS_PAGE_UI_THEME);
@@ -2626,10 +2626,10 @@ void InkscapePreferences::initPageBehavior()
                            _("Remove unused swatches when doing a document cleanup")); // tooltip
     this->AddPage(_page_cleanup, _("Cleanup"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLEANUP);
 
-    _page_lpe.add_group_header( _("Copy"));
-    _lpe_copy_mirroricons.init ( _("Use icons instead less checks on LPE copy"), "/live_effects/copy/mirroricons", true); // text label
+    _page_lpe.add_group_header( _("Copies"));
+    _lpe_copy_mirroricons.init ( _("Add advanced tiling options"), "/live_effects/copy/mirroricons", true); // text label
     _page_lpe.add_line( true, "", _lpe_copy_mirroricons, "",
-                           _("Use 16 icons instead 4 checks on LPE copy in mirror zone")); // tooltip
+                           _("Enables using 16 advanced mirror options between the copies (so there can be copies that are mirrored differently between the rows and the columns) for Copies LPE")); // tooltip
     this->AddPage(_page_lpe, _("Live Path Effects (LPE)"), iter_behavior, PREFS_PAGE_BEHAVIOR_LPE);
 }
 
