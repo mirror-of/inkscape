@@ -113,7 +113,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_dialog_window =
 {
     // clang-format off
     {"win.document-new",                N_("New"),                  "Window-File",     N_("Create new document from the default template")},
-    {"win.document-dialog-templates",   N_("New from  Template"),   "Window-File",     N_("Create new project from template")},
+    {"win.document-dialog-templates",   N_("New from Template"),   "Window-File",     N_("Create new project from template")},
     {"win.document-open",               N_("Open File Dialog"),     "Window-File",     N_("Open an existing document")},
     {"win.document-revert",             N_("Revert"),               "Window-File",     N_("Revert to the last saved version of document (changes will be lost)")},
     {"win.document-save",               N_("Save"),                 "Window-File",     N_("Save document")},
