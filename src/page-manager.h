@@ -82,6 +82,7 @@ public:
     SPPage *newPage(double width, double height);
     SPPage *newPage(Geom::Rect rect, bool first_page = false);
     SPPage *newDesktopPage(Geom::Rect rect, bool first_page = false);
+    SPPage *newDocumentPage(Geom::Rect rect, bool first_page = false);
     void deletePage(SPPage *page, bool contents = false);
     void deletePage(bool contents = false);
     void resizePage(double width, double height);
@@ -107,7 +108,6 @@ public:
 
     void movePages(Geom::Affine tr);
     std::vector<SPItem *> getOverlappingItems(SPDesktop *desktop, SPPage *page);
-    void moveItems(Geom::Affine translate, std::vector<SPItem *> const &objects);
 
 protected:
     friend class Inkscape::UI::Dialog::DocumentProperties;

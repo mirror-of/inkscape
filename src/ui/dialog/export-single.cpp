@@ -579,7 +579,7 @@ void SingleExport::onExport()
         } else {
             // To get the right kind of export, we're going to make a page
             // This allows all the same raster options to work for vectors
-            page = copy_doc->getPageManager().newDesktopPage(area);
+            page = copy_doc->getPageManager().newDocumentPage(area);
         }
 
         exportSuccessful = Export::exportVector(omod, copy_doc.get(), filename, false, &items, page);

@@ -92,9 +92,19 @@ Geom::Rect SPPage::getRect() const
 }
 
 /**
- * Get the rectangle of the page, scaled to the document.
+ * Get the rectangle of the page, in desktop units
  */
 Geom::Rect SPPage::getDesktopRect() const
+{
+    auto rect = getDocumentRect();
+    rect *= document->dt2doc();
+    return rect;
+}
+
+/**
+ * Get the rectangle of the page, scaled to the document.
+ */
+Geom::Rect SPPage::getDocumentRect() const
 {
     return getRect() * document->getDocumentScale();
 }
@@ -132,6 +142,7 @@ void SPPage::setRect(Geom::Rect rect)
  */
 void SPPage::setDesktopRect(Geom::Rect rect)
 {
+    rect *= document->doc2dt();
     setRect(rect * document->getDocumentScale().inverse());
 }
 
@@ -156,7 +167,7 @@ void SPPage::setDesktopSize(double width, double height)
  */
 std::vector<SPItem *> SPPage::getExclusiveItems(bool hidden) const
 {
-    return document->getItemsInBox(0, getDesktopRect(), hidden, true, true, false);
+    return document->getItemsInBox(0, getDocumentRect(), hidden, true, true, false);
 }
 
 /**
@@ -166,7 +177,7 @@ std::vector<SPItem *> SPPage::getExclusiveItems(bool hidden) const
  */
 std::vector<SPItem *> SPPage::getOverlappingItems(bool hidden) const
 {
-    return document->getItemsPartiallyInBox(0, getDesktopRect(), hidden, true, true, false);
+    return document->getItemsPartiallyInBox(0, getDocumentRect(), hidden, true, true, false);
 }
 
 /**
@@ -320,12 +331,18 @@ void SPPage::movePage(Geom::Affine translate, bool with_objects)
     if (translate.isTranslation()) {
         if (with_objects) {
             // Move each item that is overlapping this page too
-            moveItems(translate, getOverlappingItems());
+            moveItems(translate * document->dt2doc(), getOverlappingItems());
         }
         setDesktopRect(getDesktopRect() * translate);
     }
 }
 
+/**
+ * Move the given items by the given translation in document units.
+ *
+ * @param translate - The movement to be applied
+ * @param objects - a vector of SPItems to move
+ */
 void SPPage::moveItems(Geom::Affine translate, std::vector<SPItem *> const &objects)
 {
     for (auto &item : objects) {

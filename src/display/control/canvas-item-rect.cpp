@@ -209,12 +209,13 @@ void CanvasItemRect::render(Inkscape::CanvasItemBuffer *buf)
         // transparency as is, it is boosted by this function, since shadow attenuates it
         const auto a = (exp(-3 * SP_RGBA32_A_F(_shadow_color)) - 1) / (exp(-3) - 1);
         buf->cr->save();
-        Cairo::Matrix m(_affine[0], _affine[1], _affine[2], _affine[3], _affine[4], _affine[5]);
-        // if Y axis is pointing up, flip drop shadow
-        if (_canvas && _canvas->get_desktop() && !_canvas->get_desktop()->is_yaxisdown()) {
-            m.translate(0, rect.height());
-            m.scale(1, -1);
+
+        auto affine = _affine;
+        if (auto desktop = _canvas->get_desktop()) {
+            rect *= desktop->doc2dt();
+            affine = desktop->doc2dt() * affine;
         }
+        Cairo::Matrix m(affine[0], affine[1], affine[2], affine[3], affine[4], affine[5]);
         buf->cr->transform(m);
         ink_cairo_draw_drop_shadow(buf->cr, rect, get_shadow_size(), _shadow_color, a);
         buf->cr->restore();

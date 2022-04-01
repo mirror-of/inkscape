@@ -52,6 +52,7 @@ private:
     void clearDragShapes();
 
     Geom::Point getSnappedResizePoint(Geom::Point point, guint state, Geom::Point origin, SPObject *target = nullptr);
+    void resizeKnotSet(Geom::Rect rect);
     void resizeKnotMoved(SPKnot *knot, Geom::Point const &ppointer, guint state);
     void resizeKnotFinished(SPKnot *knot, guint state);
     void pageModified(SPObject *object, guint flags);
@@ -71,7 +72,7 @@ private:
     Geom::Point drag_origin_dt;
     int drag_tolerance = 5;
 
-    SPKnot *resize_knot = nullptr;
+    std::vector<SPKnot *> resize_knots;
     SPPage *highlight_item = nullptr;
     SPPage *dragging_item = nullptr;
     std::optional<Geom::Rect> on_screen_rect;

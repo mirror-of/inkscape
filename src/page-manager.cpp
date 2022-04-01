@@ -119,7 +119,7 @@ void PageManager::reorderPage(Inkscape::XML::Node *child)
 void PageManager::enablePages()
 {
     if (!hasPages()) {
-        _selected_page = newDesktopPage(*_document->preferredBounds(), true);
+        _selected_page = newDocumentPage(*_document->preferredBounds(), true);
     }
 }
 
@@ -192,6 +192,15 @@ SPPage *PageManager::newPage(Geom::Rect rect, bool first_page)
  */
 SPPage *PageManager::newDesktopPage(Geom::Rect rect, bool first_page)
 {
+    rect *= _document->dt2doc();
+    return newDocumentPage(rect, first_page);
+}
+
+/**
+ * Create a new page, using document coordinates.
+ */
+SPPage *PageManager::newDocumentPage(Geom::Rect rect, bool first_page)
+{
     return newPage(rect * _document->getDocumentScale().inverse(), first_page);
 }
 
@@ -207,7 +216,7 @@ SPPage *PageManager::newPage(SPPage *page)
     // Record the new location of the new page.
     enablePages();
     auto new_loc = nextPageLocation();
-    auto new_page = newDesktopPage(page->getDesktopRect(), false);
+    auto new_page = newDocumentPage(page->getDocumentRect(), false);
     Geom::Affine page_move = Geom::Translate((new_loc * _document->getDocumentScale()) - new_page->getDesktopRect().min());
     Geom::Affine item_move = Geom::Translate(new_loc - new_page->getRect().min());
 
@@ -540,7 +549,7 @@ void PageManager::fitToSelection(ObjectSet *selection)
             std::set_difference(prev_items.begin(), prev_items.end(), selected.begin(), selected.end(),
                                 std::insert_iterator<std::vector<SPItem *> >(page_items, page_items.begin()));
 
-            moveItems(Geom::Translate(rect->min() - origin), page_items);
+            SPPage::moveItems(Geom::Translate(rect->min() - origin), page_items);
         } else {
             fitToRect(rect, _selected_page);
         }
@@ -579,23 +588,6 @@ std::vector<SPItem *> PageManager::getOverlappingItems(SPDesktop *desktop, SPPag
     auto doc_rect = _document->preferredBounds();
     return _document->getItemsPartiallyInBox(desktop->dkey, *doc_rect, true, true, true, false);
 }
-
-/**
- * Move the given items by the given affine (surely this already exists somewhere?)
- */
-void PageManager::moveItems(Geom::Affine translate, std::vector<SPItem *> const &objects)
-{
-    for (auto &item : objects) {
-        if (item->isLocked()) {
-            continue;
-        }
-        if (auto parent_item = dynamic_cast<SPItem *>(item->parent)) {
-            auto move = item->i2dt_affine() * (translate * parent_item->i2doc_affine().inverse());
-            item->doWriteTransform(move, &move, false);
-        }
-    }
-}
-
 
 /**
  * Manage the page subset of attributes from sp-namedview and store them.
