@@ -127,9 +127,9 @@ SPDocument *open(Extension *key, gchar const *filename)
     if (!doc) {
         if (last_chance_svg) {
             if ( INKSCAPE.use_gui() ) {
-                sp_ui_error_dialog(_("Could not detect file format. Tried to open it as an svg anyway but this also failed."));
+                sp_ui_error_dialog(_("Could not detect file format. Tried to open it as an SVG anyway but this also failed."));
             } else {
-                g_warning("%s", _("Could not detect file format. Tried to open it as an svg anyway but this also failed."));
+                g_warning("%s", _("Could not detect file format. Tried to open it as an SVG anyway but this also failed."));
             }
         }
         throw Input::open_failed();
