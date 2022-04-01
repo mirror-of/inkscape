@@ -80,11 +80,11 @@
        hide_knots="false" />
     <marker
        style="overflow:visible"
-       id="arrow1"
+       id="Arrow1"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="arrow1"
+       inkscape:stockid="Arrow1"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1">
@@ -97,7 +97,7 @@
     </marker>
     <marker
        style="overflow:visible"
-       id="Arow3"
+       id="Arrow3"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
@@ -145,11 +145,11 @@
     </marker>
     <marker
        style="overflow:visible"
-       id="Arrow 5"
+       id="Arrow5"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Arrow 5"
+       inkscape:stockid="Arrow5"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1">
@@ -209,11 +209,11 @@
     </marker>
     <marker
        style="overflow:visible"
-       id="Rounded Arrow"
+       id="RoundedArrow"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Rounded Arrow"
+       inkscape:stockid="RoundedArrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1">
