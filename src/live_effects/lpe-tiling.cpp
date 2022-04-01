@@ -1,18 +1,17 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
- * LPE <copy_rotate> implementation
+ * LPE <tilling> implementation
  */
 /*
  * Authors:
- *   Maximilian Albert <maximilian.albert@gmail.com>
- *   Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
  *   Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
- * Copyright (C) Authors 2007-2012
+ *   Adam Belis <>
+ * Copyright (C) Authors 2022-2022
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpe-copy.h"
+#include "live_effects/lpe-tiling.h"
 
 #include <2geom/intersection-graph.h>
 #include <2geom/path-intersection.h>
@@ -47,27 +46,27 @@ namespace LivePathEffect {
 namespace CoS {
     class KnotHolderEntityCopyGapX : public LPEKnotHolderEntity {
     public:
-        KnotHolderEntityCopyGapX(LPECopy * effect) : LPEKnotHolderEntity(effect) {};
+        KnotHolderEntityCopyGapX(LPETiling * effect) : LPEKnotHolderEntity(effect) {};
         ~KnotHolderEntityCopyGapX() override;
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         void knot_click(guint state) override;
         void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         Geom::Point knot_get() const override;
-        double startpos = dynamic_cast<LPECopy const*> (_effect)->gapx_unit;
+        double startpos = dynamic_cast<LPETiling const*> (_effect)->gapx_unit;
     };
     class KnotHolderEntityCopyGapY : public LPEKnotHolderEntity {
     public:
-        KnotHolderEntityCopyGapY(LPECopy * effect) : LPEKnotHolderEntity(effect) {};
+        KnotHolderEntityCopyGapY(LPETiling * effect) : LPEKnotHolderEntity(effect) {};
         ~KnotHolderEntityCopyGapY() override;
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         void knot_click(guint state) override;
         void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         Geom::Point knot_get() const override;
-        double startpos = dynamic_cast<LPECopy const*> (_effect)->gapy_unit;
+        double startpos = dynamic_cast<LPETiling const*> (_effect)->gapy_unit;
     };
 } // CoS
 
-LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
+LPETiling::LPETiling(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     // do not change name of this parameter us used in oncommit
     unit(_("Unit:"), _("Unit"), "unit", &wr, this, "px"),
@@ -158,13 +157,13 @@ LPECopy::LPECopy(LivePathEffectObject *lpeobject) :
     prev_unit = unit.get_abbreviation();
 }
 
-LPECopy::~LPECopy()
+LPETiling::~LPETiling()
 {
     keep_paths = false;
     doOnRemove(nullptr);
 };
 
-bool LPECopy::doOnOpen(SPLPEItem const *lpeitem)
+bool LPETiling::doOnOpen(SPLPEItem const *lpeitem)
 {
     bool fixed = false;
     if (!is_load || is_applied) {
@@ -179,7 +178,7 @@ bool LPECopy::doOnOpen(SPLPEItem const *lpeitem)
 }
 
 void
-LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
+LPETiling::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
 {
     if (split_items) {
         SPDocument *document = getSPDoc();
@@ -445,7 +444,7 @@ LPECopy::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
     }
 }
 
-void LPECopy::cloneStyle(SPObject *orig, SPObject *dest)
+void LPETiling::cloneStyle(SPObject *orig, SPObject *dest)
 {
     dest->setAttribute("transform", orig->getAttribute("transform"));
     dest->setAttribute("style", orig->getAttribute("style"));
@@ -465,7 +464,7 @@ void LPECopy::cloneStyle(SPObject *orig, SPObject *dest)
     } 
 }
 
-void LPECopy::cloneD(SPObject *orig, SPObject *dest)
+void LPETiling::cloneD(SPObject *orig, SPObject *dest)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -528,7 +527,7 @@ void LPECopy::cloneD(SPObject *orig, SPObject *dest)
 }
 
 Inkscape::XML::Node *
-LPECopy::createPathBase(SPObject *elemref) {
+LPETiling::createPathBase(SPObject *elemref) {
     SPDocument *document = getSPDoc();
     if (!document) {
         return nullptr;
@@ -564,7 +563,7 @@ LPECopy::createPathBase(SPObject *elemref) {
 
 
 SPItem *
-LPECopy::toItem(size_t i, bool reset, bool &write)
+LPETiling::toItem(size_t i, bool reset, bool &write)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -600,7 +599,7 @@ LPECopy::toItem(size_t i, bool reset, bool &write)
     return dynamic_cast<SPItem *>(elemref);
 }
 
-Gtk::Widget * LPECopy::newWidget()
+Gtk::Widget * LPETiling::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might
     // still be pointing to this widget.
@@ -713,8 +712,8 @@ Gtk::Widget * LPECopy::newWidget()
                     }
                     container->pack_start(*rows, false, false, 1);
                     container->pack_start(*cols, false, false, 1);
-                    cols->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetCols));
-                    rows->signal_clicked().connect(sigc::mem_fun (*this, &LPECopy::setOffsetRows));
+                    cols->signal_clicked().connect(sigc::mem_fun (*this, &LPETiling::setOffsetCols));
+                    rows->signal_clicked().connect(sigc::mem_fun (*this, &LPETiling::setOffsetRows));
                     moveend->pack_start(*container, false, false, 2);
                 } else if (param->param_key == "scale") {
                     Gtk::Box *container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
@@ -750,11 +749,11 @@ Gtk::Widget * LPECopy::newWidget()
                     container->pack_start(*both, false, false, 1);
                     container->pack_start(*none, false, false, 1);
                     container->pack_start(*rand, false, false, 1);
-                    rand->signal_clicked().connect(sigc::mem_fun(*this, &LPECopy::setScaleRandom));
-                    none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), false, false));
-                    cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), true, false));
-                    rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), false, true));
-                    both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setScaleInterpolate), true, true));
+                    rand->signal_clicked().connect(sigc::mem_fun(*this, &LPETiling::setScaleRandom));
+                    none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setScaleInterpolate), false, false));
+                    cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setScaleInterpolate), true, false));
+                    rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setScaleInterpolate), false, true));
+                    both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setScaleInterpolate), true, true));
                     movestart->pack_start(*widg, false, false, 2);
                     moveend->pack_start(*container, false, false, 2);
                 } else if (param->param_key == "rotate") {
@@ -792,11 +791,11 @@ Gtk::Widget * LPECopy::newWidget()
                     container->pack_start(*both, false, false, 1);
                     container->pack_start(*none, false, false, 1);
                     container->pack_start(*rand, false, false, 1);
-                    rand->signal_clicked().connect(sigc::mem_fun(*this, &LPECopy::setRotateRandom));
-                    none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), false, false));
-                    cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), true, false));
-                    rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), false, true));
-                    both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPECopy::setRotateInterpolate), true, true));
+                    rand->signal_clicked().connect(sigc::mem_fun(*this, &LPETiling::setRotateRandom));
+                    none->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setRotateInterpolate), false, false));
+                    cols->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setRotateInterpolate), true, false));
+                    rows->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setRotateInterpolate), false, true));
+                    both->signal_clicked().connect(sigc::bind<bool,bool>(sigc::mem_fun(*this, &LPETiling::setRotateInterpolate), true, true));
                     moveend->pack_start(*container, false, false, 2);
                  } else if (param->param_key == "gapx") {
                     Gtk::Box *wrapper = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
@@ -815,8 +814,8 @@ Gtk::Widget * LPECopy::newWidget()
                     }
                     normal->set_tooltip_markup(_("Keep uniform gaps in rows (X)"));
                     randx->set_tooltip_markup(_("Make gaps random (hit <b>randomize</b> button to shuffle order)"));
-                    normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapXMode), false));
-                    randx->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapXMode), true));
+                    normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapXMode), false));
+                    randx->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapXMode), true));
                     container->pack_start(*normal, false, false, 1);
                     container->pack_start(*randx, false, false, 1);
                     container->pack_end(*combo, false, false, 1);
@@ -843,8 +842,8 @@ Gtk::Widget * LPECopy::newWidget()
                     }
                     normal->set_tooltip_markup(_("Keep uniform gaps in rows (Y)"));
                     randy->set_tooltip_markup(_("Make gaps random (hit <b>randomize</b> button to shuffle order)"));
-                    normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapYMode), false));
-                    randy->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPECopy::setGapYMode), true));
+                    normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapYMode), false));
+                    randy->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapYMode), true));
                     container->pack_start(*normal, false, false, 1);
                     container->pack_start(*randy, false, false, 1);
                     widg->set_halign(Gtk::ALIGN_START);
@@ -901,7 +900,7 @@ Gtk::Widget * LPECopy::newWidget()
 }
 
 void
-LPECopy::generate_buttons(Gtk::Box *container, Gtk::RadioButton::Group &group, gint pos)
+LPETiling::generate_buttons(Gtk::Box *container, Gtk::RadioButton::Group &group, gint pos)
 {
     for (int i = 0; i < 4; i++) {
         gint position = (pos * 4) + i;
@@ -916,7 +915,7 @@ LPECopy::generate_buttons(Gtk::Box *container, Gtk::RadioButton::Group &group, g
             button->set_active();
             _updating = false;
         }
-        button->signal_clicked().connect(sigc::bind<gint>(sigc::mem_fun(*this, &LPECopy::setMirroring),position));
+        button->signal_clicked().connect(sigc::bind<gint>(sigc::mem_fun(*this, &LPETiling::setMirroring),position));
         gint zero = Glib::ustring("0")[0];
         Glib::ustring tooltip = result[0] == zero ? "" : "rx+";
         tooltip += result[1] == zero ? "" : "ry+";
@@ -932,7 +931,7 @@ LPECopy::generate_buttons(Gtk::Box *container, Gtk::RadioButton::Group &group, g
 }
 
 Glib::ustring 
-LPECopy::getMirrorMap(gint index)
+LPETiling::getMirrorMap(gint index)
 {
     Glib::ustring result = "0000";
     if (index == 1) {
@@ -970,7 +969,7 @@ LPECopy::getMirrorMap(gint index)
 }
 
 bool
-LPECopy::getActiveMirror(gint index)
+LPETiling::getActiveMirror(gint index)
 {
     Glib::ustring result = getMirrorMap(index);
     return result[0] == Glib::ustring::format(mirrorrowsx)[0] && 
@@ -980,7 +979,7 @@ LPECopy::getActiveMirror(gint index)
 }
 
 void 
-LPECopy::setMirroring(gint index)
+LPETiling::setMirroring(gint index)
 {
     if (_updating) {
         return;
@@ -997,18 +996,18 @@ LPECopy::setMirroring(gint index)
 }
 
 void
-LPECopy::setOffsetCols(){
+LPETiling::setOffsetCols(){
     offset_type.param_setValue(true);
     offset_type.write_to_SVG();
 }
 void
-LPECopy::setOffsetRows(){
+LPETiling::setOffsetRows(){
     offset_type.param_setValue(false);
     offset_type.write_to_SVG();
 }
 
 void
-LPECopy::setRotateInterpolate(bool x, bool y){
+LPETiling::setRotateInterpolate(bool x, bool y){
     interpolate_rotatex.param_setValue(x);
     interpolate_rotatey.param_setValue(y);
     random_rotate.param_setValue(false);
@@ -1016,7 +1015,7 @@ LPECopy::setRotateInterpolate(bool x, bool y){
 }
 
 void
-LPECopy::setScaleInterpolate(bool x, bool y){
+LPETiling::setScaleInterpolate(bool x, bool y){
     interpolate_scalex.param_setValue(x);
     interpolate_scaley.param_setValue(y);
     random_scale.param_setValue(false);
@@ -1024,7 +1023,7 @@ LPECopy::setScaleInterpolate(bool x, bool y){
 }
 
 void
-LPECopy::setRotateRandom() {
+LPETiling::setRotateRandom() {
     interpolate_rotatex.param_setValue(false);
     interpolate_rotatey.param_setValue(false);
     random_rotate.param_setValue(true);
@@ -1032,7 +1031,7 @@ LPECopy::setRotateRandom() {
 }
 
 void
-LPECopy::setScaleRandom() {
+LPETiling::setScaleRandom() {
     interpolate_scalex.param_setValue(false);
     interpolate_scaley.param_setValue(false);
     random_scale.param_setValue(true);
@@ -1040,19 +1039,19 @@ LPECopy::setScaleRandom() {
 }
 
 void
-LPECopy::setGapXMode(bool random) {
+LPETiling::setGapXMode(bool random) {
     random_gap_x.param_setValue(random);
     writeParamsToSVG();
 }
 
 void
-LPECopy::setGapYMode(bool random) {
+LPETiling::setGapYMode(bool random) {
     random_gap_y.param_setValue(random);
     writeParamsToSVG();
 }
 
 void
-LPECopy::doOnApply(SPLPEItem const* lpeitem)
+LPETiling::doOnApply(SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem, false, true);
@@ -1074,7 +1073,7 @@ LPECopy::doOnApply(SPLPEItem const* lpeitem)
 }
 
 void
-LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
+LPETiling::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     seed.resetRandomizer();
@@ -1135,7 +1134,7 @@ LPECopy::doBeforeEffect (SPLPEItem const* lpeitem)
 }
 
 double
-LPECopy::end_scale(double scale_fix, bool tomax) const {
+LPETiling::end_scale(double scale_fix, bool tomax) const {
     if (interpolate_scalex && interpolate_scaley) {
         scale_fix = 1 + ((scale_fix - 1) * (num_rows + num_cols -1)); 
     } else if (interpolate_scalex) {
@@ -1150,7 +1149,7 @@ LPECopy::end_scale(double scale_fix, bool tomax) const {
 }
 
 Geom::PathVector
-LPECopy::doEffect_path (Geom::PathVector const & path_in)
+LPETiling::doEffect_path (Geom::PathVector const & path_in)
 {    
     Geom::PathVector path_out;
     FillRuleBool fillrule = fill_nonZero;
@@ -1168,7 +1167,7 @@ LPECopy::doEffect_path (Geom::PathVector const & path_in)
 }
 
 Geom::PathVector
-LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule)
+LPETiling::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule)
 {
     if (!gap_bbox) {
         return path_in;
@@ -1402,7 +1401,7 @@ LPECopy::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fill
 }
 
 void
-LPECopy::addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec)
+LPETiling::addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec)
 {
     if (!gap_bbox) {
         return;
@@ -1418,20 +1417,20 @@ LPECopy::addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVec
 }
 
 void
-LPECopy::resetDefaults(SPItem const* item)
+LPETiling::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
     original_bbox(SP_LPE_ITEM(item), false, true);
 }
 
 void
-LPECopy::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
+LPETiling::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
     processObjects(LPE_VISIBILITY);
 }
 
 void 
-LPECopy::doOnRemove (SPLPEItem const* lpeitem)
+LPETiling::doOnRemove (SPLPEItem const* lpeitem)
 {
     if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);
@@ -1440,7 +1439,7 @@ LPECopy::doOnRemove (SPLPEItem const* lpeitem)
     processObjects(LPE_ERASE);
 }
 
-void LPECopy::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
+void LPETiling::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knotholder = knotholder;
     KnotHolderEntity *e = new CoS::KnotHolderEntityCopyGapX(this);
@@ -1458,7 +1457,7 @@ namespace CoS {
 
 KnotHolderEntityCopyGapX::~KnotHolderEntityCopyGapX()
 {
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
     if (lpe) {
         lpe->_knotholder = nullptr;
     }
@@ -1466,7 +1465,7 @@ KnotHolderEntityCopyGapX::~KnotHolderEntityCopyGapX()
 
 KnotHolderEntityCopyGapY::~KnotHolderEntityCopyGapY()
 {
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
     if (lpe) {
         lpe->_knotholder = nullptr;
     }
@@ -1474,14 +1473,14 @@ KnotHolderEntityCopyGapY::~KnotHolderEntityCopyGapY()
 
 void KnotHolderEntityCopyGapX::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
     lpe->refresh_widgets = true;
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
 }
 
 void KnotHolderEntityCopyGapY::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
     lpe->refresh_widgets = true;
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
 }
@@ -1492,7 +1491,7 @@ void KnotHolderEntityCopyGapX::knot_click(guint state)
         return;
     }
 
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
 
     lpe->gapx.param_set_value(0);
     startpos = 0;
@@ -1505,7 +1504,7 @@ void KnotHolderEntityCopyGapY::knot_click(guint state)
         return;
     }
 
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
 
     lpe->gapy.param_set_value(0);
     startpos = 0;
@@ -1514,7 +1513,7 @@ void KnotHolderEntityCopyGapY::knot_click(guint state)
 
 void KnotHolderEntityCopyGapX::knot_set(Geom::Point const &p, Geom::Point const&/*origin*/, guint state)
 {
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
 
     Geom::Point const s = snap_knot_position(p, state);
     if (lpe->originalbbox) {
@@ -1528,7 +1527,7 @@ void KnotHolderEntityCopyGapX::knot_set(Geom::Point const &p, Geom::Point const&
 
 void KnotHolderEntityCopyGapY::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
-    LPECopy* lpe = dynamic_cast<LPECopy *>(_effect);
+    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
 
     Geom::Point const s = snap_knot_position(p, state);
     if (lpe->originalbbox) {
@@ -1542,7 +1541,7 @@ void KnotHolderEntityCopyGapY::knot_set(Geom::Point const &p, Geom::Point const&
 
 Geom::Point KnotHolderEntityCopyGapX::knot_get() const
 {
-    LPECopy const * lpe = dynamic_cast<LPECopy const*> (_effect);
+    LPETiling const * lpe = dynamic_cast<LPETiling const*> (_effect);
     if (lpe->originalbbox) {
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         double value = Inkscape::Util::Quantity::convert(lpe->gapx, lpe->unit.get_abbreviation(), display_unit.c_str());
@@ -1554,7 +1553,7 @@ Geom::Point KnotHolderEntityCopyGapX::knot_get() const
 
 Geom::Point KnotHolderEntityCopyGapY::knot_get() const
 {
-    LPECopy const * lpe = dynamic_cast<LPECopy const*> (_effect);
+    LPETiling const * lpe = dynamic_cast<LPETiling const*> (_effect);
     if (lpe->originalbbox) {
         Glib::ustring display_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
         double value = Inkscape::Util::Quantity::convert(lpe->gapy, lpe->unit.get_abbreviation(), display_unit.c_str());

@@ -150,7 +150,6 @@
 ../src/live_effects/lpe-circle_with_radius.cpp
 ../src/live_effects/lpe-clone-original.cpp
 ../src/live_effects/lpe-constructgrid.cpp
-../src/live_effects/lpe-copy.cpp
 ../src/live_effects/lpe-copy_rotate.cpp
 ../src/live_effects/lpe-curvestitch.cpp
 ../src/live_effects/lpe-dashed-stroke.cpp
@@ -189,6 +188,7 @@
 ../src/live_effects/lpe-slice.cpp
 ../src/live_effects/lpe-tangent_to_curve.cpp
 ../src/live_effects/lpe-taperstroke.cpp
+../src/live_effects/lpe-tiling.cpp
 ../src/live_effects/lpe-transform_2pts.cpp
 ../src/live_effects/lpe-vonkoch.cpp
 ../src/live_effects/parameter/bool.cpp

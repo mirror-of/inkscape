@@ -32,7 +32,6 @@
 #include "live_effects/lpe-clone-original.h"
 #include "live_effects/lpe-constructgrid.h"
 #include "live_effects/lpe-copy_rotate.h"
-#include "live_effects/lpe-copy.h"
 #include "live_effects/lpe-curvestitch.h"
 #include "live_effects/lpe-dashed-stroke.h"
 #include "live_effects/lpe-dynastroke.h"
@@ -76,6 +75,7 @@
 #include "live_effects/lpe-taperstroke.h"
 #include "live_effects/lpe-test-doEffect-stack.h"
 #include "live_effects/lpe-text_label.h"
+#include "live_effects/lpe-tiling.h"
 #include "live_effects/lpe-transform_2pts.h"
 #include "live_effects/lpe-vonkoch.h"
 #include "live_effects/lpeobject.h"
@@ -639,10 +639,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
     },
     /* 1.2 */
     {
-        COPY,
-        NC_("path effect", "Copies") ,//label
-        "copy" ,//key
-        "copy" ,//icon
+        TILING,
+        NC_("path effect", "Tiling") ,//label
+        "tiling" ,//key
+        "tiling" ,//icon
         N_("Create multiple copies of an object. The copies can be styled independently.") ,//description
         true  ,//on_path
         true  ,//on_shape
@@ -1040,8 +1040,8 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case SLICE:
             neweffect = static_cast<Effect *>(new LPESlice(lpeobj));
             break;
-        case COPY:
-            neweffect = static_cast<Effect*> ( new LPECopy(lpeobj) );
+        case TILING:
+            neweffect = static_cast<Effect*> ( new LPETiling(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);

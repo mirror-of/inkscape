@@ -1,17 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef INKSCAPE_LPE_COPY_H
-#define INKSCAPE_LPE_COPY_H
+#ifndef INKSCAPE_LPE_TILING_H
+#define INKSCAPE_LPE_TILING_H
 
 /** \file
- * LPE <copy> implementation, see lpe-copy.cpp.
- */
-
-/*
- * Authors:
- *   Johan Engelen
- *
- * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
- *
+ * LPE <tiling> implementation, see lpe-tiling.cpp.
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
@@ -38,10 +30,10 @@ class KnotHolderEntityCopyGapY;
 
 typedef FillRule FillRuleBool;
 
-class LPECopy : public Effect, GroupBBoxEffect {
+class LPETiling : public Effect, GroupBBoxEffect {
 public:
-    LPECopy(LivePathEffectObject *lpeobject);
-    ~LPECopy() override;
+    LPETiling(LivePathEffectObject *lpeobject);
+    ~LPETiling() override;
     void doOnApply (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
@@ -124,8 +116,8 @@ private:
     Geom::Affine affinebase = Geom::identity();
     bool prev_split = false;
     SPObject *container;
-    LPECopy(const LPECopy&) = delete;
-    LPECopy& operator=(const LPECopy&) = delete;
+    LPETiling(const LPETiling&) = delete;
+    LPETiling& operator=(const LPETiling&) = delete;
 };
 
 } //namespace LivePathEffect
