@@ -103,7 +103,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
         } break;
     }
     // Look for an over-ride in the local environment
-    if (envor) {
+    if (envor && domain == USER) {
         std::string env_dir = Glib::getenv(envor);
         if (!env_dir.empty()) {
             return g_build_filename(env_dir.c_str(), filename, nullptr);
