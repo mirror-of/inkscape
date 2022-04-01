@@ -510,7 +510,7 @@ static char const preferences_skeleton[] =
      gtkTheme="Adwaita"
      iconTheme="multicolor"
      symbolicIcons="1"
-     symbolicDefaultBaseColors="0"
+     symbolicDefaultBaseColors="1"
      symbolicDefaultHighColors="0"/>
 </inkscape>
 )=====";
