@@ -643,7 +643,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         NC_("path effect", "Tiling") ,//label
         "tiling" ,//key
         "tiling" ,//icon
-        N_("Create multiple copies of an object. The copies can be styled independently.") ,//description
+        N_("Create multiple copies of an object following a grid layout. Customize size, rotation, distances, style and tiling symmetry.") ,//description
         true  ,//on_path
         true  ,//on_shape
         true  ,//on_group
@@ -651,7 +651,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//on_text
         false ,//experimental
     },
-    // VISIBLE experimental LPE
+    // VISIBLE experimental LPEs
     {
         ANGLE_BISECTOR,
         NC_("path effect", "Angle bisector") ,//label

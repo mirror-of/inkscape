@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
- * LPE <tilling> implementation
+ * LPE <tiling> implementation
  */
 /*
  * Authors:
@@ -68,34 +68,34 @@ namespace CoS {
 
 LPETiling::LPETiling(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    // do not change name of this parameter us used in oncommit
+    // do not change name of this parameter is used in oncommit
     unit(_("Unit:"), _("Unit"), "unit", &wr, this, "px"),
     lpesatellites(_("lpesatellites"), _("Items satellites"), "lpesatellites", &wr, this, false),
-    num_cols(_("Columns"), _("Number of columns of copies"), "num_cols", &wr, this, 3),
-    num_rows(_("Rows"), _("Number of rows of copies"), "num_rows", &wr, this, 3),
-    gapx(_("Gap X"), _("Gap between copies in X"), "gapx", &wr, this, 0.0),
-    gapy(_("Gap Y"), _("Gap between copies in Y"), "gapy", &wr, this, 0.0),
-    scale(_("Scale %"), _("Scale copies"), "scale", &wr, this, 0.0),
-    rotate(_("Rotate°"), _("Rotate copies"), "rotate", &wr, this, 0.0),
-    offset(_("Offset %"), _("Offset copies"), "offset", &wr, this, 0.0),
-    offset_type(_("Offset type"), _("Offset Type (rows/cols)"), "offset_type", &wr, this, false),
-    interpolate_scalex(_("Interpolate scale X"), _("Interpolate rotate X"), "interpolate_scalex", &wr, this, false),
-    interpolate_scaley(_("Interpolate scale Y"), _("Interpolate rotate Y"), "interpolate_scaley", &wr, this, true),
-    shrink_interp(_("Shrink gap"), _("Minimize gaps between scaled objects (does not work with rotation)"), "shrink_interp", &wr, this, false),
-    interpolate_rotatex(_("Interpolate rotate X"), _("Interpolate rotate X"), "interpolate_rotatex", &wr, this, false),
-    interpolate_rotatey(_("Interpolate rotate Y"), _("Interpolate rotate Y"), "interpolate_rotatey", &wr, this, true),
-    split_items(_("Split elements"), _("Split elements, so each can have its own style"), "split_items", &wr, this, false),
-    mirrorrowsx(_("Mirror rows in X"), _("Mirror rows in X"), "mirrorrowsx", &wr, this, false),
-    mirrorrowsy(_("Mirror rows in Y"), _("Mirror rows in Y"), "mirrorrowsy", &wr, this, false),
-    mirrorcolsx(_("Mirror cols in X"), _("Mirror columns in X"), "mirrorcolsx", &wr, this, false),
-    mirrorcolsy(_("Mirror cols in Y"), _("Mirror columns in Y"), "mirrorcolsy", &wr, this, false),
-    mirrortrans(_("Mirror transforms"), _("Mirror transforms"), "mirrortrans", &wr, this, false),
-    link_styles(_("Link styles"), _("Link styles in split mode"), "link_styles", &wr, this, false),
-    random_gap_x(_("random_gap_x"), _("random_gap_x"), "random_gap_x", &wr, this, false),
-    random_gap_y(_("random_gap_y"), _("random_gap_y"), "random_gap_y", &wr, this, false),
-    random_rotate(_("random_rotate"), _("random_rotate"), "random_rotate", &wr, this, false),
-    random_scale(_("random_scale"), _("random_scale"), "random_scale", &wr, this, false),
-    seed(_("Seed"), _("Randomice seed"), "seed", &wr, this, 1.)
+    num_cols(_("Columns"), _("Number of columns"), "num_cols", &wr, this, 3),
+    num_rows(_("Rows"), _("Number of rows"), "num_rows", &wr, this, 3),
+    gapx(_("Gap X"), _("Horizontal gap between tiles (uses selected unit)"), "gapx", &wr, this, 0.0),
+    gapy(_("Gap Y"), _("Vertical gap between tiles (uses selected unit)"), "gapy", &wr, this, 0.0),
+    scale(_("Scale %"), _("Scale tiles by this percentage"), "scale", &wr, this, 0.0),
+    rotate(_("Rotate °"), _("Rotate tiles by this amount of degrees"), "rotate", &wr, this, 0.0),
+    offset(_("Offset %"), _("Offset tiles by this percentage of width/height"), "offset", &wr, this, 0.0),
+    offset_type(_("Offset type"), _("Choose whether to offset rows or columns"), "offset_type", &wr, this, false),
+    interpolate_scalex(_("Interpolate scale X"), _("Interpolate tile size in each row"), "interpolate_scalex", &wr, this, false),
+    interpolate_scaley(_("Interpolate scale Y"), _("Interpolate tile size in each column"), "interpolate_scaley", &wr, this, true),
+    shrink_interp(_("Minimize gaps"), _("Minimize gaps between scaled objects (does not work with rotation/diagonal mode)"), "shrink_interp", &wr, this, false),
+    interpolate_rotatex(_("Interpolate rotation X"), _("Interpolate tile rotation in row"), "interpolate_rotatex", &wr, this, false),
+    interpolate_rotatey(_("Interpolate rotation Y"), _("Interpolate tile rotation in column"), "interpolate_rotatey", &wr, this, true),
+    split_items(_("Split elements"), _("Split elements, so they can be selected, styled, and moved (if grouped) independently"), "split_items", &wr, this, false),
+    mirrorrowsx(_("Mirror rows in X"), _("Mirror rows horizontally"), "mirrorrowsx", &wr, this, false),
+    mirrorrowsy(_("Mirror rows in Y"), _("Mirror rows vertically"), "mirrorrowsy", &wr, this, false),
+    mirrorcolsx(_("Mirror cols in X"), _("Mirror columns horizontally"), "mirrorcolsx", &wr, this, false),
+    mirrorcolsy(_("Mirror cols in Y"), _("Mirror columns vertically"), "mirrorcolsy", &wr, this, false),
+    mirrortrans(_("Mirror transforms"), _("Mirror transformations"), "mirrortrans", &wr, this, false),
+    link_styles(_("Link styles"), _("Link styles in split mode, can also be used to reset style of copies"), "link_styles", &wr, this, false),
+    random_gap_x(_("Random gaps X"), _("Randomize horizontal gaps"), "random_gap_x", &wr, this, false),
+    random_gap_y(_("Random gaps Y"), _("Randomize vertical gaps"), "random_gap_y", &wr, this, false),
+    random_rotate(_("Random rotation"), _("Randomize tile rotation"), "random_rotate", &wr, this, false),
+    random_scale(_("Random scale"), _("Randomize scale"), "random_scale", &wr, this, false),
+    seed(_("Seed"), _("Randomization seed"), "seed", &wr, this, 1.)
     
 {
     show_orig_path = true;
@@ -665,7 +665,7 @@ Gtk::Widget * LPETiling::newWidget()
                     auto button = dynamic_cast<Gtk::Button*>(widgrand->get_children()[1]);
                     button->set_always_show_image(true);
                     button->set_label(_("Randomize"));
-                    button->set_tooltip_markup(_("Randomize seed for random mode on scale, rotate and gaps"));
+                    button->set_tooltip_markup(_("Randomization seed for random mode for scaling, rotation and gaps"));
                     button->set_relief(Gtk::RELIEF_NORMAL);
                     button->set_image_from_icon_name(INKSCAPE_ICON("randomize"), Gtk::IconSize(Gtk::ICON_SIZE_BUTTON));
                     widgrand->set_vexpand(false);
@@ -724,7 +724,7 @@ Gtk::Widget * LPETiling::newWidget()
                     rows->set_icon_name(INKSCAPE_ICON("interpolate-scale-y"));
                     Gtk::RadioToolButton * both = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate both")));
                     both->set_icon_name(INKSCAPE_ICON("interpolate-scale-both"));
-                    Gtk::RadioToolButton * none = Gtk::manage(new Gtk::RadioToolButton(group, _("interpolate none")));
+                    Gtk::RadioToolButton * none = Gtk::manage(new Gtk::RadioToolButton(group, _("No interpolation")));
                     none->set_icon_name(INKSCAPE_ICON("interpolate-scale-none"));
                     Gtk::RadioToolButton * rand = Gtk::manage(new Gtk::RadioToolButton(group, _("Interpolate random")));
                     rand->set_icon_name(INKSCAPE_ICON("scale-random"));
@@ -739,11 +739,11 @@ Gtk::Widget * LPETiling::newWidget()
                     } else {
                         none->set_active();
                     }
-                    cols->set_tooltip_markup(_("Blend scale from <b>left to right</b> (left is original scale, right is new scale)"));
-                    rows->set_tooltip_markup(_("Blend scale from <b>top to bottom</b> (top is original scale, bottom is new scale)"));
-                    both->set_tooltip_markup(_("Blend scale <b>diagonally</b> (top left clone is original scale, bottom right is new scale)"));
+                    cols->set_tooltip_markup(_("Blend scale from <b>left to right</b> (left column uses original scale, right column uses new scale)"));
+                    rows->set_tooltip_markup(_("Blend scale from <b>top to bottom</b> (top row uses original scale, bottom row uses new scale)"));
+                    both->set_tooltip_markup(_("Blend scale <b>diagonally</b> (top left tile uses original scale, bottom right tile uses new scale)"));
                     none->set_tooltip_markup(_("Uniform scale"));
-                    rand->set_tooltip_markup(_("Random scale (hit <b>randomize</b> button to shuffle order)"));
+                    rand->set_tooltip_markup(_("Random scale (hit <b>Randomize</b> button to shuffle)"));
                     container->pack_start(*rows, false, false, 1);
                     container->pack_start(*cols, false, false, 1);
                     container->pack_start(*both, false, false, 1);
@@ -781,11 +781,11 @@ Gtk::Widget * LPETiling::newWidget()
                     } else {
                         none->set_active();
                     }
-                    cols->set_tooltip_markup(_("Blend rotation from <b>left to right</b> (left is original rotation, right is new rotation)"));
-                    rows->set_tooltip_markup(_("Blend rotation from <b>top to bottom</b> (top is original rotation, bottom is new rotation)"));
-                    both->set_tooltip_markup(_("Blend rotation <b>diagonally</b> (top left clone is original rotation, bottom right is new rotation)"));
+                    cols->set_tooltip_markup(_("Blend rotation from <b>left to right</b> (left column uses original rotation, right column uses new rotation)"));
+                    rows->set_tooltip_markup(_("Blend rotation from <b>top to bottom</b> (top row uses original rotation, bottom row uses new rotation)"));
+                    both->set_tooltip_markup(_("Blend rotation <b>diagonally</b> (top left tile uses original rotation, bottom right tile uses new rotation)"));
                     none->set_tooltip_markup(_("Uniform rotation"));
-                    rand->set_tooltip_markup(_("Random rotation (hit <b>randomize</b> button to shuffle order)"));
+                    rand->set_tooltip_markup(_("Random rotation (hit <b>Randomize</b> button to shuffle)"));
                     container->pack_start(*rows, false, false, 1);
                     container->pack_start(*cols, false, false, 1);
                     container->pack_start(*both, false, false, 1);
@@ -812,8 +812,8 @@ Gtk::Widget * LPETiling::newWidget()
                     } else {
                         normal->set_active();
                     }
-                    normal->set_tooltip_markup(_("Keep uniform gaps in rows (X)"));
-                    randx->set_tooltip_markup(_("Make gaps random (hit <b>randomize</b> button to shuffle order)"));
+                    normal->set_tooltip_markup(_("All horizontal gaps have the same width"));
+                    randx->set_tooltip_markup(_("Random horizontal gaps (hit <b>Randomize</b> button to shuffle)"));
                     normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapXMode), false));
                     randx->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapXMode), true));
                     container->pack_start(*normal, false, false, 1);
@@ -840,8 +840,8 @@ Gtk::Widget * LPETiling::newWidget()
                     } else {
                         normal->set_active();
                     }
-                    normal->set_tooltip_markup(_("Keep uniform gaps in rows (Y)"));
-                    randy->set_tooltip_markup(_("Make gaps random (hit <b>randomize</b> button to shuffle order)"));
+                    normal->set_tooltip_markup(_("All vertical gaps have the same height"));
+                    randy->set_tooltip_markup(_("Random vertical gaps (hit <b>Randomize</b> button to shuffle)"));
                     normal->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapYMode), false));
                     randy->signal_clicked().connect(sigc::bind<bool>(sigc::mem_fun(*this, &LPETiling::setGapYMode), true));
                     container->pack_start(*normal, false, false, 1);
@@ -1444,12 +1444,12 @@ void LPETiling::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
     _knotholder = knotholder;
     KnotHolderEntity *e = new CoS::KnotHolderEntityCopyGapX(this);
     e->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:CopiesGapX",
-              _("<b>Gap X for the copies</b>: drag to gap all copies, <b>Shift+click</b> reset to origin"));
+              _("<b>Horizontal gaps between tiles</b>: drag to adjust, <b>Shift+click</b> to reset"));
     knotholder->add(e);
 
     KnotHolderEntity *f = new CoS::KnotHolderEntityCopyGapY(this);
     f->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:CopiesGapY",
-              _("<b>Gap Y for the copies</b>: drag to gap all copies, <b>Shift+click</b> reset to origin"));
+              _("<b>Vertical gaps between tiles</b>: drag to adjust, <b>Shift+click</b> to reset"));
     knotholder->add(f);
 }
 
