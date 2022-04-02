@@ -67,10 +67,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_text =
     {"app.text-put-on-path",            N_("Put on Path"),                   "Text",             N_("Put text on path")},
     {"app.text-remove-from-path",       N_("Remove from Path"),              "Text",             N_("Remove text from path")},
     {"app.text-flow-into-frame",        N_("Flow into Frame"),               "Text",             N_("Put text into a frame (path or shape), creating a flowed text linked to the frame object")},
-    {"app.text-flow-subtract-frame",    N_("Set _Subtraction Frames"),       "Text",             N_("Flow text around a frame (path or shape), only available for SVG 2.0 Flow text.")},
-    {"app.text-unflow",                 N_("_Unflow"),                       "Text",             N_("Remove text from frame (creates a single-line text object)")},
-    {"app.text-convert-to-regular",     N_("_Convert to Text"),              "Text",             N_("Convert flowed text to regular text object (preserves appearance)")},
-    {"app.text-unkern",                 N_("Remove Manual _Kerns"),          "Text",             N_("Remove all manual kerns and glyph rotations from a text object")}
+    {"app.text-flow-subtract-frame",    N_("Set Subtraction Frames"),        "Text",             N_("Flow text around a frame (path or shape), only available for SVG 2.0 Flow text.")},
+    {"app.text-unflow",                 N_("Unflow"),                        "Text",             N_("Remove text from frame (creates a single-line text object)")},
+    {"app.text-convert-to-regular",     N_("Convert to Text"),               "Text",             N_("Convert flowed text to regular text object (preserves appearance)")},
+    {"app.text-unkern",                 N_("Remove Manual Kerns"),           "Text",             N_("Remove all manual kerns and glyph rotations from a text object")}
     // clang-format on
 };
 

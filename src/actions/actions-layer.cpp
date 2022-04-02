@@ -460,11 +460,11 @@ std::vector<std::vector<Glib::ustring>> raw_data_layer =
     {"win.layer-toggle-hide",               N_("Show/Hide Current Layer"),          "Layers",     N_("Toggle visibility of current layer")},
     {"win.layer-toggle-lock",               N_("Lock/Unlock Current Layer"),        "Layers",     N_("Toggle lock on current layer")},
 
-    {"win.layer-previous",                  N_("Switch to Layer Abov_e"),           "Layers",     N_("Switch to the layer above the current")},
-    {"win.layer-next",                      N_("Switch to Layer Belo_w"),           "Layers",     N_("Switch to the layer below the current")},
+    {"win.layer-previous",                  N_("Switch to Layer Above"),            "Layers",     N_("Switch to the layer above the current")},
+    {"win.layer-next",                      N_("Switch to Layer Below"),            "Layers",     N_("Switch to the layer below the current")},
 
     {"win.selection-move-to-layer-above",   N_("Move Selection to Layer Above"),    "Layers",     N_("Move selection to the layer above the current")},
-    {"win.selection-move-to-layer-below",   N_("Move Selection to Layer Bel_ow"),   "Layers",     N_("Move selection to the layer below the current")},
+    {"win.selection-move-to-layer-below",   N_("Move Selection to Layer Below"),    "Layers",     N_("Move selection to the layer below the current")},
     {"win.selection-move-to-layer",         N_("Move Selection to Layer..."),       "Layers",     N_("Move selection to layer")},
 
     {"win.layer-top",                       N_("Layer to Top"),                     "Layers",     N_("Raise the current layer to the top")},
