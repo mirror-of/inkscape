@@ -807,15 +807,15 @@
         <attribute name='label' translatable='yes'>Cli_p</attribute>
         <section>
           <item>
-            <attribute name='label' translatable="yes">_Set</attribute>
+            <attribute name='label' translatable="yes">_Set Clip</attribute>
             <attribute name='action'>app.object-set-clip</attribute>
           </item>
           <item>
-            <attribute name='label' translatable="yes">_Set Inverse (LPE)</attribute>
+            <attribute name='label' translatable="yes">_Set Inverse Clip (LPE)</attribute>
             <attribute name='action'>app.object-set-inverse-clip</attribute>
           </item>
           <item>
-            <attribute name='label' translatable="yes">_Release</attribute>
+            <attribute name='label' translatable="yes">_Release Clip</attribute>
             <attribute name='action'>app.object-release-clip</attribute>
           </item>
         </section>
@@ -825,15 +825,15 @@
       <attribute name='label' translatable='yes'>Mas_k</attribute>
       <section>
         <item>
-          <attribute name='label' translatable="yes">_Set</attribute>
+          <attribute name='label' translatable="yes">_Set Mask</attribute>
           <attribute name='action'>app.object-set-mask</attribute>
         </item>
         <item>
-          <attribute name='label' translatable="yes">_Set Inverse (LPE)</attribute>
+          <attribute name='label' translatable="yes">_Set Inverse Mask (LPE)</attribute>
           <attribute name='action'>app.object-set-inverse-mask</attribute>
         </item>
         <item>
-          <attribute name='label' translatable="yes">_Release</attribute>
+          <attribute name='label' translatable="yes">_Release Mask</attribute>
           <attribute name='action'>app.object-release-mask</attribute>
         </item>
       </section>
