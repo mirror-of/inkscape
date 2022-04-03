@@ -2775,7 +2775,7 @@ void InkscapePreferences::initPageRendering()
     _canvas_max_affine_diff.init("/options/rendering/max_affine_diff", 0.0, 100.0, 0.1, 0.0, 1.8, false, false);
     add_devmode_line(_("Transformation threshold"), _canvas_max_affine_diff, "", _("How much the viewing transformation can change before throwing away the current redraw and starting again"));
     _canvas_pad.init("/options/rendering/pad", 0.0, 1000.0, 1.0, 0.0, 200.0, true, false);
-    add_devmode_line(_("Buffer padding"), _canvas_pad, C_("pixel abbreviation", "px"), _("Increase the pre-rendered area around the window by this amount"));
+    add_devmode_line(_("Buffer padding"), _canvas_pad, C_("pixel abbreviation", "px"), _("Do not throw away rendered content in this area around the window yet"));
     _canvas_coarsener_min_size.init("/options/rendering/coarsener_min_size", 0.0, 1000.0, 1.0, 0.0, 200.0, true, false);
     add_devmode_line(_("Min size for coarsener algorithm"), _canvas_coarsener_min_size, C_("pixel abbreviation", "px"), _("Coarsener algorithm only processes rectangles smaller/thinner than this."));
     _canvas_coarsener_glue_size.init("/options/rendering/coarsener_glue_size", 0.0, 1000.0, 1.0, 0.0, 80.0, true, false);
