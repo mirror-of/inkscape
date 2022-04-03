@@ -262,15 +262,13 @@ Glib::ustring StyleDialog::fixCSSSelectors(Glib::ustring selector)
     g_debug("SelectorsDialog::fixCSSSelectors");
     REMOVE_SPACES(selector);
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", selector);
-    Glib::ustring my_selector = selector + " {"; // Parsing fails sometimes without '{'. Fix me
-    CRSelector *cr_selector = cr_selector_parse_from_buf((guchar *)my_selector.c_str(), CR_UTF_8);
+    CRSelector *cr_selector = cr_selector_parse_from_buf((guchar const *)selector.c_str(), CR_UTF_8);
     for (auto token : tokens) {
         REMOVE_SPACES(token);
         std::vector<Glib::ustring> subtokens = Glib::Regex::split_simple("[ ]+", token);
         for (auto subtoken : subtokens) {
             REMOVE_SPACES(subtoken);
-            Glib::ustring my_selector = subtoken + " {"; // Parsing fails sometimes without '{'. Fix me
-            CRSelector *cr_selector = cr_selector_parse_from_buf((guchar *)my_selector.c_str(), CR_UTF_8);
+            CRSelector *cr_selector = cr_selector_parse_from_buf((guchar const *)subtoken.c_str(), CR_UTF_8);
             gchar *selectorchar = reinterpret_cast<gchar *>(cr_selector_to_string(cr_selector));
             if (selectorchar) {
                 Glib::ustring toadd = Glib::ustring(selectorchar);

@@ -1197,8 +1197,7 @@ std::vector<SPObject *> SPDocument::getObjectsBySelector(Glib::ustring const &se
         sel_eng = cr_sel_eng_new(&Inkscape::XML::croco_node_iface);
     }
 
-    Glib::ustring my_selector = selector + " {";  // Parsing fails sometimes without '{'. Fix me
-    CRSelector *cr_selector = cr_selector_parse_from_buf ((guchar*)my_selector.c_str(), CR_UTF_8);
+    CRSelector *cr_selector = cr_selector_parse_from_buf((guchar const *)selector.c_str(), CR_UTF_8);
     // char * cr_string = (char*)cr_selector_to_string( cr_selector );
     // std::cout << "  selector: |" << (cr_string?cr_string:"Empty") << "|" << std::endl;
     CRSelector const *cur = nullptr;

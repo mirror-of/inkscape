@@ -86,6 +86,8 @@ cr_selector_parse_from_buf (const guchar * a_char_buf, enum CREncoding a_enc)
                 }
         }
 
+        cr_parser_destroy(parser);
+
         return selector;
 }
 

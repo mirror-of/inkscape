@@ -1733,7 +1733,7 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
 
         cr_parser_try_to_skip_spaces_and_comments (a_this);
 
-        for (;;) {
+        while (cr_tknzr_get_nb_bytes_left ((PRIVATE (a_this)->tknzr))) {
                 if (token) {
                         cr_token_destroy (token);
                         token = NULL;
@@ -1978,7 +1978,12 @@ cr_parser_parse_simple_sels (CRParser * a_this,
 
                 sel = NULL;
 
-                PEEK_NEXT_CHAR (a_this, &next_char);
+                status =
+                    cr_tknzr_peek_char (PRIVATE (a_this)->tknzr, &next_char);
+                if (status == CR_END_OF_INPUT_ERROR)
+                        break;
+                if (status != CR_OK)
+                        goto error;
 
                 if (next_char == '+') {
                         READ_NEXT_CHAR (a_this, &cur_char);
