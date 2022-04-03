@@ -168,6 +168,7 @@ StartScreen::StartScreen()
     Gtk::ComboBox* keys = nullptr;
     Gtk::Button* save = nullptr;
     Gtk::Button* thanks = nullptr;
+    Gtk::Button* close_btn = nullptr;
     Gtk::Button* new_btn = nullptr;
     Gtk::Button* show_toggle = nullptr;
     Gtk::Switch* dark_toggle = nullptr;
@@ -179,6 +180,7 @@ StartScreen::StartScreen()
     builder->get_widget("dark_toggle", dark_toggle);
     builder->get_widget("load", load_btn);
     builder->get_widget("new", new_btn);
+    builder->get_widget("close_window", close_btn);
 
     // Unparent to move to our dialog window.
     auto parent = banners->get_parent();
@@ -235,6 +237,7 @@ StartScreen::StartScreen()
     show_toggle->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::show_toggle));
     load_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
     new_btn->signal_clicked().connect([=] { response(GTK_RESPONSE_APPLY); });
+    close_btn->signal_clicked().connect([=] { response(GTK_RESPONSE_CANCEL); });
 
     // Reparent to our dialog window
     set_titlebar(*banners);
@@ -244,7 +247,8 @@ StartScreen::StartScreen()
     // Show the first tab ONLY on the first run for this version
     std::string opt_shown = "/options/boot/shown/ver";
     opt_shown += Inkscape::version_string_without_revision;
-    if(!prefs->getBool(opt_shown, false)) {
+    _first_open = prefs->getBool(opt_shown, false);
+    if(!_first_open) {
         tabs->set_current_page(0);
         prefs->setBool(opt_shown, true);
     } else {
@@ -314,9 +318,10 @@ StartScreen::notebook_switch(Gtk::Widget *tab, guint page_num)
 {
     int page = 0;
     for (auto banner : banners->get_children()) {
-        auto revealer = dynamic_cast<Gtk::Revealer *>(banner);
-        revealer->set_reveal_child(page == page_num);
-        page++;
+        if (auto revealer = dynamic_cast<Gtk::Revealer *>(banner)) {
+            revealer->set_reveal_child(page == page_num);
+            page++;
+        }
     }
 }
 
@@ -546,8 +551,17 @@ StartScreen::on_key_press_event(GdkEventKey* event)
 void
 StartScreen::on_response(int response_id)
 {
+    if (response_id == GTK_RESPONSE_DELETE_EVENT) {
+        // Don't open a window for force closing.
+        return;
+    }
     if (response_id == GTK_RESPONSE_CANCEL) {
         kinds = nullptr;
+        if (_first_open) {
+            // Disable the screen if the user cancels on their first run.
+            auto prefs = Inkscape::Preferences::get();
+            prefs->setBool("/options/boot/enabled", false);
+        }
     }
     if (response_id != GTK_RESPONSE_OK) {
         // Most actions cause a new document to appear.

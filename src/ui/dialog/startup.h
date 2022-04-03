@@ -63,6 +63,8 @@ private:
     Gtk::Button   *load_btn = nullptr;
 
     SPDocument* _document = nullptr;
+
+    bool _first_open = false;
 };
 
 

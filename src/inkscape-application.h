@@ -107,6 +107,7 @@ public:
     InkscapeWindow*       window_open(SPDocument* document);
     void                  window_close(InkscapeWindow* window);
     void                  window_close_active();
+    void                  startup_close();
 
     // Update all windows connected to a document.
     void                  windows_update(SPDocument* document);

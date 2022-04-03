@@ -818,6 +818,7 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
     bool cancelled = false;
 
     if (file) {
+        startup_close();
         document = document_open(file, &cancelled);
         if (document) {
             // Remember document so much that we'll add it to recent documents
@@ -1030,7 +1031,10 @@ InkscapeApplication::on_activate()
         document = document_open (s);
         output = "-";
 
-    } else if(prefs->getBool("/options/boot/enabled", true) && !_use_command_line_argument) {
+    } else if(prefs->getBool("/options/boot/enabled", true)
+               && !_use_command_line_argument
+               && (gtk_app() && gtk_app()->get_windows().empty())) {
+
         Inkscape::UI::Dialog::StartScreen start_screen;
 
         // add start window to gtk_app to ensure proper closing on quit
@@ -1038,12 +1042,12 @@ InkscapeApplication::on_activate()
 
         start_screen.run();
         document = start_screen.get_document();
-
     } else {
 
         // Create a blank document from template
         document = document_new();
     }
+    startup_close();
 
     if (!document) {
         std::cerr << "ConcreteInkscapeApplication::on_activate: failed to create document!" << std::endl;
@@ -1056,6 +1060,19 @@ InkscapeApplication::on_activate()
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
+    }
+}
+
+void
+InkscapeApplication::startup_close()
+{
+    if (auto app = gtk_app()) {
+        // Close any open start screens preventing double opens
+        for (auto win : app->get_windows()) {
+            if (auto start = dynamic_cast<Inkscape::UI::Dialog::StartScreen *>(win)) {
+                start->close();
+            }
+        }
     }
 }
 
@@ -1078,6 +1095,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         return;
     }
 
+    startup_close();
     for (auto file : files) {
 
         // Open file
