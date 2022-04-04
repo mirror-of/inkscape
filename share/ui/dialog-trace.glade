@@ -699,7 +699,6 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="tooltip-text" translatable="yes">The desired number of scans</property>
-                        <property name="text" translatable="yes">8</property>
                         <property name="adjustment">MS_scans</property>
                         <property name="value">8</property>
                       </object>
@@ -744,7 +743,6 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="tooltip-text" translatable="yes">Speckles of up to this many pixels will be suppressed</property>
-                        <property name="text" translatable="yes">2</property>
                         <property name="adjustment">speckles</property>
                         <property name="value">2</property>
                       </object>
@@ -804,7 +802,6 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="tooltip-text" translatable="yes">Increase this to smooth corners more</property>
-                        <property name="text" translatable="yes">1.00</property>
                         <property name="adjustment">smooth</property>
                         <property name="digits">2</property>
                         <property name="value">1</property>
@@ -849,7 +846,6 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="tooltip-text" translatable="yes">Increase this to reduce the number of nodes in the trace by more aggressive optimization</property>
-                        <property name="text" translatable="yes">0.200</property>
                         <property name="adjustment">optimize</property>
                         <property name="digits">3</property>
                         <property name="value">0.20</property>

@@ -969,7 +969,7 @@ SVG element positions are expressed in user units.</property>
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">        </property>
+        <property name="label">        </property>
       </object>
       <packing>
         <property name="left-attach">1</property>

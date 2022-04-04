@@ -62,15 +62,15 @@ gchar const *ColorScales<MODE>::SUBMODE_NAMES[] = { N_("None"), N_("RGB"), N_("H
 // Preference name for the saved state of toggle-able color wheel
 template <>
 gchar const * const ColorScales<SPColorScalesMode::HSL>::_pref_wheel_visibility =
-    N_("/wheel_vis_hsl");
+    "/wheel_vis_hsl";
 
 template <>
 gchar const * const ColorScales<SPColorScalesMode::HSV>::_pref_wheel_visibility =
-    N_("/wheel_vis_hsv");
+    "/wheel_vis_hsv";
 
 template <>
 gchar const * const ColorScales<SPColorScalesMode::HSLUV>::_pref_wheel_visibility =
-    N_("/wheel_vis_hsluv");
+    "/wheel_vis_hsluv";
 
 
 template <SPColorScalesMode MODE>
@@ -140,7 +140,7 @@ void ColorScales<MODE>::_initUI()
         /* Expander */
         // Label icon
         Gtk::Image *expander_icon = Gtk::manage(
-                sp_get_icon_image(_("color-wheel"), Gtk::ICON_SIZE_BUTTON)
+                sp_get_icon_image("color-wheel", Gtk::ICON_SIZE_BUTTON)
         );
         expander_icon->show();
         expander_icon->set_margin_start(2 * XPAD);
