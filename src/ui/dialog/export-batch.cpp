@@ -18,6 +18,7 @@
 #include <glibmm/miscutils.h>
 #include <gtkmm.h>
 #include <png.h>
+#include <regex>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -531,10 +532,11 @@ void BatchExport::onExport()
 
             Glib::ustring item_filename = filename + "_" + id;
             if (!suffix.empty()) {
+                if (omod->is_raster()) {
+                    // Put the dpi in at the user's requested location.
+                    suffix = std::regex_replace(suffix.c_str(), std::regex("\\{dpi\\}"), std::to_string((int)dpi));
+                }
                 item_filename = item_filename + "_" + suffix;
-            }
-            if (omod->is_raster()) {
-                item_filename = item_filename + "_" + std::to_string((int)dpi);
             }
 
             bool found = Export::unConflictFilename(_document, item_filename, omod->get_extension());
