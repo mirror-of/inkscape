@@ -102,8 +102,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_node_align =
 std::vector<std::vector<Glib::ustring>> hint_data_node_align =
 {
     // clang-format off
-    {"app.node-align-horizontal",      N_("Give String input for alignment reference point: [first|last|middle|min|max]")},
-    {"app.node-align-vertical",        N_("Give String input for alignment reference point: [first|last|middle|min|max]")},
+    {"app.node-align-horizontal",      N_("Enter string for alignment anchor, one of: first/last/middle/min/max")},
+    {"app.node-align-vertical",        N_("Enter string for alignment anchor, one of: first/last/middle/min/max")},
     // clang-format on
 };
 

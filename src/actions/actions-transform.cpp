@@ -124,12 +124,12 @@ std::vector<std::vector<Glib::ustring>> raw_data_transform =
 std::vector<std::vector<Glib::ustring>> hint_data_transform =
 {
     // clang-format off
-    {"app.transform-translate",     N_("Give two comma separated numbers")},
-    {"app.transform-rotate",        N_("Give input for angle of Clockwise Rotation")},
-    {"app.transform-scale",         N_("Give input for Scale")},
-    {"app.transform-grow",          N_("Give 1.0 or -1.0 to grow or shrink selection by preference amount")},
-    {"app.transform-grow-step",     N_("Give positive or negative number to grow or shrink selection relative to preference value")},
-    {"app.transform-grow-screen",   N_("Give positive or negative number to grow or shrink selection relative to zoom level")},
+    {"app.transform-translate",     N_("Enter two comma-separated numbers, e.g. 50,-2.5")},
+    {"app.transform-rotate",        N_("Enter angle (in degrees) for clockwise rotation")},
+    {"app.transform-scale",         N_("Enter scaling factor, e.g. 1.5")},
+    {"app.transform-grow",          N_("Enter positive or negative number to grow/shrink selection")},
+    {"app.transform-grow-step",     N_("Enter positive or negative number to grow or shrink selection relative to preference step value")},
+    {"app.transform-grow-screen",   N_("Enter positive or negative number to grow or shrink selection relative to zoom level")},
     // clang-format on
 };
 

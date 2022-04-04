@@ -118,7 +118,7 @@ object_clip_set_inverse(InkscapeApplication *app)
     // Object Clip Set Inverse
     selection->setMask(true, false);
     Inkscape::LivePathEffect::sp_inverse_powerclip(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Set Inverse Clip(LPE)"), "");
 }
 
 void
@@ -158,7 +158,7 @@ object_mask_set_inverse(InkscapeApplication *app)
     // Object Mask Set Inverse
     selection->setMask(false, false);
     Inkscape::LivePathEffect::sp_inverse_powermask(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("_Set Inverse (LPE)"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), _("Set Inverse Mask (LPE)"), "");
 }
 
 void
@@ -291,8 +291,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
 std::vector<std::vector<Glib::ustring>> hint_data_object =
 {
     // clang-format off
-    {"app.object-set-attribute",        N_("Give two String input for Attribute Name, Attribute Value") },
-    {"app.object-set-property",         N_("Give two String input for Property Name, Property Value")  }
+    {"app.object-set-attribute",        N_("Enter comma-separated string for attribute name, attribute value") },
+    {"app.object-set-property",         N_("Enter comma-separated string for property name, property value")  }
     // clang-format on
 };
 

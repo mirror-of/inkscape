@@ -265,33 +265,33 @@ std::vector<std::vector<Glib::ustring>> raw_data_output =
 std::vector<std::vector<Glib::ustring>> hint_data_output =
 {
     // clang-format off
-    {"app.export-type",               N_("Give String input for Type")                                           },
-    {"app.export-filename",           N_("Give String input for File Name")                                      },
-    {"app.export-overwrite",          N_("Give input 0/1 for No/Yes to Export Overwrite")             },
+    {"app.export-type",               N_("Enter string for the file type")                               },
+    {"app.export-filename",           N_("Enter string for the file name")                               },
+    {"app.export-overwrite",          N_("Enter 1/0 for Yes/No to overwrite exported file")              },
 
-    {"app.export-area",               N_("Give String input for Area")                          },
-    {"app.export-area-drawing",       N_("Give input 0/1 for No/Yes to Export Area Drawing")    },
-    {"app.export-area-page",          N_("Give input 0/1 for No/Yes to Export Area Page")       },
-    {"app.export-margin",             N_("Give Integer input for Margin")                       },
-    {"app.export-area-snap",          N_("Give input 0/1 for No/Yes to Export Area Snap")       },
-    {"app.export-width",              N_("Give Integer input for Width")                        },
-    {"app.export-height",             N_("Give Integer input for Height")                       },
+    {"app.export-area",               N_("Enter string for export area, formatted like x0:y0:x1:y1")     },
+    {"app.export-area-drawing",       N_("Enter 1/0 for Yes/No to export drawing area")                  },
+    {"app.export-area-page",          N_("Enter 1/0 for Yes/No to export page area")                     },
+    {"app.export-margin",             N_("Enter integer number for margin")                              },
+    {"app.export-area-snap",          N_("Enter 1/0 for Yes/No to snap the export area")                 },
+    {"app.export-width",              N_("Enter integer number for width")                               },
+    {"app.export-height",             N_("Enter integer number for height")                              },
 
-    {"app.export-id",                 N_("Give String input for Export  ID")                    },
-    {"app.export-id-only",            N_("Give input 0/1 for No/Yes to Export ID Only")         },
+    {"app.export-id",                 N_("Enter string for export ID")                                   },
+    {"app.export-id-only",            N_("Enter 1/0 for Yes/No to export only given ID")                 },
 
-    {"app.export-plain-svg",          N_("Give input 0/1 for No/Yes to Export Plain SVG")       },
-    {"app.export-dpi",                N_("Give input 0/1 for No/Yes to Export DPI")             },
-    {"app.export-ignore-filters",     N_("Give input 0/1 for No/Yes to Export Ignore Filters")  },
-    {"app.export-text-to-path",       N_("Give input 0/1 for No/Yes to Export Text to Path")    },
-    {"app.export-ps-level",           N_("Give Integer input for PS Level")                     },
-    {"app.export-pdf-version",        N_("Give String input for PDF Version")                   },
-    {"app.export-latex",              N_("Give input 0/1 for No/Yes to Export LaTeX")           },
-    {"app.export-use-hints",          N_("Give input 0/1 for No/Yes to Export Use Hints")       },
-    {"app.export-background",         N_("Give String input Background")                        },
-    {"app.export-background-opacity", N_("Give input 0/1 for No/Yes to Background Opacity")     },
-    {"app.export-png-color-mode",     N_("Give String input PNG Color Mode")                    },
-    {"app.export-png-use-dithering",  N_("Give input 0/1 for No/Yes to use dithering")          }
+    {"app.export-plain-svg",          N_("Enter 1/0 for Yes/No to export plain SVG")                     },
+    {"app.export-dpi",                N_("Enter integer number for export DPI")                          },
+    {"app.export-ignore-filters",     N_("Enter 1/0 for Yes/No to export ignoring filters")              },
+    {"app.export-text-to-path",       N_("Enter 1/0 for Yes/No to convert text to path on export")       },
+    {"app.export-ps-level",           N_("Enter integer number 2 or 3 for PS Level")                     },
+    {"app.export-pdf-version",        N_("Enter string for PDF Version, e.g. 1.4 or 1.5")                },
+    {"app.export-latex",              N_("Enter 1/0 for Yes/No to export to PDF and LaTeX")              },
+    {"app.export-use-hints",          N_("Enter 1/0 for Yes/No to use export hints from document")       },
+    {"app.export-background",         N_("Enter string for background color, e.g. #ff007f or rgb(255, 0, 128)")                 },
+    {"app.export-background-opacity", N_("Enter number for background opacity, either between 0.0 and 1.0, or 1 up to 255")     },
+    {"app.export-png-color-mode",     N_("Enter string for PNG Color Mode, one of Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16")},
+    {"app.export-png-use-dithering",  N_("Enter 1/0 for Yes/No to use dithering")          }
     // clang-format on
 };
 

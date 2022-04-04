@@ -101,9 +101,9 @@ std::vector<std::vector<Glib::ustring>> raw_data_file =
 std::vector<std::vector<Glib::ustring>> hint_data_file =
 {
     // clang-format off
-    {"app.file-open",               N_("Give String input for File name")},
-    {"app.file-new",                N_("Give String input for File name")},
-    {"app.file-open-window",        N_("Give String input for File name")}
+    {"app.file-open",               N_("Enter file name")},
+    {"app.file-new",                N_("Enter file name")},
+    {"app.file-open-window",        N_("Enter file name")}
     // clang-format on
 };
 
