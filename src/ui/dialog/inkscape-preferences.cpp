@@ -2626,10 +2626,10 @@ void InkscapePreferences::initPageBehavior()
                            _("Remove unused swatches when doing a document cleanup")); // tooltip
     this->AddPage(_page_cleanup, _("Cleanup"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLEANUP);
 
-    _page_lpe.add_group_header( _("Copies"));
+    _page_lpe.add_group_header( _("Tiling"));
     _lpe_copy_mirroricons.init ( _("Add advanced tiling options"), "/live_effects/copy/mirroricons", true); // text label
     _page_lpe.add_line( true, "", _lpe_copy_mirroricons, "",
-                           _("Enables using 16 advanced mirror options between the copies (so there can be copies that are mirrored differently between the rows and the columns) for Copies LPE")); // tooltip
+                           _("Enables using 16 advanced mirror options between the copies (so there can be copies that are mirrored differently between the rows and the columns) for Tiling LPE")); // tooltip
     this->AddPage(_page_lpe, _("Live Path Effects (LPE)"), iter_behavior, PREFS_PAGE_BEHAVIOR_LPE);
 }
 
