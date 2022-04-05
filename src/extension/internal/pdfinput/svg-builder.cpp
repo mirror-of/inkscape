@@ -108,7 +108,6 @@ SvgBuilder::~SvgBuilder() = default;
 
 void SvgBuilder::_init() {
     _font_style = nullptr;
-    _current_font = nullptr;
     _font_specification = nullptr;
     _font_scaling = 1;
     _need_font_update = true;
@@ -1064,11 +1063,8 @@ void SvgBuilder::updateFont(GfxState *state) {
     _need_font_update = false;
     updateTextMatrix(state);    // Ensure that we have a text matrix built
 
-    if (_font_style) {
-        //sp_repr_css_attr_unref(_font_style);
-    }
     _font_style = sp_repr_css_attr_new();
-    GfxFont *font = state->getFont();
+    auto font = state->getFont();
     // Store original name
     if (font->getName()) {
         _font_specification = font->getName()->getCString();
@@ -1213,7 +1209,6 @@ void SvgBuilder::updateFont(GfxState *state) {
         sp_repr_css_set_property(_font_style, "writing-mode", "tb");
     }
 
-    _current_font = font;
     _invalidated_style = true;
 }
 
