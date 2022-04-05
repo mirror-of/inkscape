@@ -66,13 +66,13 @@ void PngOutput::init()
                "<option value='4'>" N_("Gray 16") "</option>"
             "</param>"
             "<param name='png_compression' type='optiongroup' appearance='combo' gui-text='" N_("Compression") "'>"
-               "<option value='6'>" N_("6 - Default Compression") "</option>" // First because it's default (and broken)
                "<option value='0'>" N_("0 - No Compression") "</option>"
                "<option value='1'>" N_("1 - Best Speed") "</option>"
                "<option value='2'>2</option>"
                "<option value='3'>3</option>"
                "<option value='4'>4</option>"
                "<option value='5'>5</option>"
+               "<option value='6'>" N_("6 - Default Compression") "</option>" // First because it's default (and broken)
                "<option value='7'>7</option>"
                "<option value='8'>8</option>"
                "<option value='9'>" N_("9 - Best Compression") "</option>"

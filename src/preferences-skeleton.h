@@ -376,7 +376,11 @@ static char const preferences_skeleton[] =
        theme="colorful" />
   </group>
 
-  <group id="extensions">
+  <group
+     id="extensions"
+     org.inkscape.output.png.inkscape.png_bitdepth="99"
+     org.inkscape.output.png.inkscape.png_compression="6"
+     org.inkscape.output.png.inkscape.png_antialias="2" />
   </group>
 
   <group id="desktop"
