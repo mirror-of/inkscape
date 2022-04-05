@@ -14,6 +14,12 @@
 
 #include <glib/poppler-features.h>
 
+#if POPPLER_CHECK_VERSION(22, 4, 0)
+#define _POPPLER_FONTPTR_TO_GFX8(font_ptr) ((Gfx8BitFont *)font_ptr.get())
+#else
+#define _POPPLER_FONTPTR_TO_GFX8(font_ptr) ((Gfx8BitFont *)font_ptr)
+#endif
+
 #if POPPLER_CHECK_VERSION(22, 3, 0)
 #define _POPPLER_MAKE_SHARED_PDFDOC(uri) std::make_shared<PDFDoc>(std::make_unique<GooString>(uri))
 #else
