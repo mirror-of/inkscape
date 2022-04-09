@@ -542,14 +542,23 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const
  */
 void StrokeStyle::unitChangedCB()
 {
+    Inkscape::Util::Unit const *new_unit = unitSelector->getUnit();
+
+    if (_old_unit == new_unit)
+        return;
+
     // If the unit selector is set to hairline, don't do the normal conversion.
     if (isHairlineSelected()) {
+        // Force update in setStrokeWidth
+        _old_unit = new_unit;
+        _last_width = -1;
         setStrokeWidth();
         return;
     }
 
-    Inkscape::Util::Unit const *new_unit = unitSelector->getUnit();
     if (new_unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
+        // Prevent update in setStrokeWidth
+        _last_width = 100.0;
         widthSpin->set_value(100);
     } else {
         // Remove the non-scaling-stroke effect and the hairline extensions
@@ -559,8 +568,16 @@ void StrokeStyle::unitChangedCB()
         sp_desktop_set_style(desktop, css);
         sp_repr_css_attr_unref(css);
         css = nullptr;
+        if (_old_unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
+            // Prevent update of unit (inf-loop) in updateLine
+            _old_unit = new_unit;
+            // Going from % to any other unit means our widthSpin is completely invalid.
+            updateLine();
+        } else {
+            // Scale the value and record the old_unit
+            widthSpin->set_value(Inkscape::Util::Quantity::convert(widthSpin->get_value(), _old_unit, new_unit));
+        }
     }
-    widthSpin->set_value(Inkscape::Util::Quantity::convert(widthSpin->get_value(), _old_unit, new_unit));
     _old_unit = new_unit;
 }
 
@@ -776,13 +793,13 @@ StrokeStyle::updateLine()
     int result_ml = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_STROKEMITERLIMIT);
     int result_cap = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_STROKECAP);
     int result_join = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_STROKEJOIN);
-
     int result_order = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_PAINTORDER);
 
     SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
 
     {
         table->set_sensitive(true);
+        widthSpin->set_sensitive(true);
 
         if (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED) {
             unitSelector->setUnit("%");
@@ -799,7 +816,8 @@ StrokeStyle::updateLine()
         Inkscape::Util::Unit const *unit = unitSelector->getUnit();
 
         if (query.stroke_extensions.hairline) {
-            (*widthAdj)->set_value(0);
+            widthSpin->set_sensitive(false);
+            (*widthAdj)->set_value(1);
         } else if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
             double avgwidth = Inkscape::Util::Quantity::convert(query.stroke_width.computed, "px", unit);
             (*widthAdj)->set_value(avgwidth);
