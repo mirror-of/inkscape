@@ -866,7 +866,7 @@ void SnapManager::_findCandidates(SPObject* parent,
                     stop = true;
                 }
             }
-            if (stop) {
+            if (stop && it) {
                 stop = false;
                 for (auto skipitem : *it) {
                     if (skipitem && skipitem->style) {
