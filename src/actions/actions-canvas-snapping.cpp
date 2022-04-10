@@ -55,8 +55,8 @@ SnapVector snap_node = {
     { "snap-node-cusp",          SNAPTARGET_NODE_CUSP,          true },
     { "snap-node-smooth",        SNAPTARGET_NODE_SMOOTH,        true },
     { "snap-line-midpoint",      SNAPTARGET_LINE_MIDPOINT,      true },
-    { "snap-line-tangential",    SNAPTARGET_PATH_TANGENTIAL,    true },
-    { "snap-line-perpendicular", SNAPTARGET_PATH_PERPENDICULAR, true },
+    { "snap-line-tangential",    SNAPTARGET_PATH_TANGENTIAL,    false },
+    { "snap-line-perpendicular", SNAPTARGET_PATH_PERPENDICULAR, false },
 };
 
 SnapVector snap_alignment = {
